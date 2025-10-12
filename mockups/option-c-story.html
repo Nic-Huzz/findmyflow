@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option C: Story/Profile Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+        
+        .story-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            padding: 80px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin: 0 auto 30px;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+        
+        .essence-section {
+            padding: 80px 40px;
+            background: linear-gradient(135deg, rgba(94, 23, 235, 0.05), rgba(255, 221, 39, 0.05));
+            text-align: center;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            color: #5e17eb;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 50px;
+        }
+        
+        .archetype-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .archetype-card:hover {
+            border-color: #5e17eb;
+            transform: translateY(-5px);
+        }
+        
+        .archetype-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 30px;
+        }
+        
+        .archetype-name {
+            font-size: 2rem;
+            color: #5e17eb;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .archetype-description {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+        
+        .expand-content {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .expand-content.show {
+            display: block;
+        }
+        
+        .expand-btn {
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .expand-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(94, 23, 235, 0.3);
+        }
+        
+        .persona-section {
+            padding: 80px 40px;
+            background: white;
+            text-align: center;
+        }
+        
+        .persona-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(94, 23, 235, 0.3);
+        }
+        
+        .persona-description {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .continue-section {
+            padding: 80px 40px;
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            text-align: center;
+        }
+        
+        .continue-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .continue-description {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-3px);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #5e17eb;
+            border: 2px solid white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-secondary:hover {
+            background: transparent;
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .footer {
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .hero-section, .essence-section, .persona-section, .continue-section {
+                padding: 40px 20px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="story-container">
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="profile-avatar">👤</div>
+                <h1 class="hero-title">Your Archetype Journey</h1>
+                <p class="hero-subtitle">Discover the patterns that shape you and unlock your true potential</p>
+            </div>
+        </div>
+        
+        <div class="essence-section">
+            <h2 class="section-title">Your Essence Archetype</h2>
+            <p class="section-subtitle">The real you that's been waiting to emerge</p>
+            
+            <div class="archetype-card">
+                <div class="archetype-icon">🔥</div>
+                <h3 class="archetype-name">Radiant Rebel</h3>
+                <p class="archetype-description">You are fire with a heartbeat — designed to disrupt what's false and awaken what's real. You carry a frequency that others feel, even when they can't name it.</p>
+                <button class="expand-btn" onclick="toggleExpand('essence-details')">Discover Your Full Potential ↓</button>
+                <div class="expand-content" id="essence-details">
+                    <h4 style="color: #5e17eb; margin-bottom: 15px;">Your Superpower</h4>
+                    <p style="margin-bottom: 20px;">You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck.</p>
+                    <h4 style="color: #5e17eb; margin-bottom: 15px;">Your North Star</h4>
+                    <p style="margin-bottom: 20px;">Use rebellion to liberate, not just provoke. Let your why guide your wow.</p>
+                    <h4 style="color: #5e17eb; margin-bottom: 15px;">Your Vision</h4>
+                    <p>What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="essence-section" style="background: white;">
+            <h2 class="section-title">Your Protective Pattern</h2>
+            <p class="section-subtitle">The armor you've developed to keep yourself safe</p>
+            
+            <div class="archetype-card">
+                <div class="archetype-icon">🛡️</div>
+                <h3 class="archetype-name">Perfectionist</h3>
+                <p class="archetype-description">This archetype developed to protect you from criticism and failure. It whispers: "If I can just get it perfect, then I'll be safe from judgment."</p>
+                <button class="expand-btn" onclick="toggleExpand('protective-details')">Understand Your Pattern ↓</button>
+                <div class="expand-content" id="protective-details">
+                    <h4 style="color: #5e17eb; margin-bottom: 15px;">How It Shows Up</h4>
+                    <p style="margin-bottom: 20px;">But perfectionism often becomes procrastination in disguise — keeping you stuck in endless prep mode. Exhausting, isn't it?</p>
+                    <h4 style="color: #5e17eb; margin-bottom: 15px;">Breaking Free</h4>
+                    <p>Remember: done is better than perfect. Progress over perfection. Your essence is waiting to emerge.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="persona-section">
+            <h2 class="section-title">Your Journey Stage</h2>
+            <div class="persona-badge">Vibe Riser</div>
+            <p class="persona-description">Connected but wanting to live more in alignment with your essence. You're ready to take the next step in your journey.</p>
+        </div>
+        
+        <div class="continue-section">
+            <h2 class="continue-title">Ready for What's Next?</h2>
+            <p class="continue-description">Your journey doesn't end here. Dive deeper with the Healing Compass flow and unlock your 7-day challenge.</p>
+            <div class="action-buttons">
+                <a href="#" class="btn-primary">Start Healing Compass</a>
+                <a href="#" class="btn-secondary">Share My Profile</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Your archetype journey continues...</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleExpand(id) {
+            const content = document.getElementById(id);
+            const btn = content.previousElementSibling;
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                btn.textContent = btn.textContent.replace('↑', '↓');
+            } else {
+                content.classList.add('show');
+                btn.textContent = btn.textContent.replace('↓', '↑');
+            }
+        }
+    </script>
+</body>
+</html>

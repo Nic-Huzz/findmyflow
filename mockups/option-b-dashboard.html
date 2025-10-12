@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option B: Dashboard Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(5px);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .nav-text {
+            font-weight: 600;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #5e17eb;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 20px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: 700;
+        }
+        
+        .archetype-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .archetype-detail {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #5e17eb;
+        }
+        
+        .archetype-detail.essence {
+            border-left-color: #ffdd27;
+            background: linear-gradient(135deg, rgba(94, 23, 235, 0.05), rgba(255, 221, 39, 0.05));
+        }
+        
+        .archetype-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #5e17eb;
+            margin-bottom: 10px;
+        }
+        
+        .archetype-detail.essence .archetype-name {
+            color: #ffdd27;
+        }
+        
+        .archetype-summary {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .expand-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .expand-section.show {
+            display: block;
+        }
+        
+        .expand-btn {
+            background: #5e17eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .expand-btn:hover {
+            background: #4a14c7;
+            transform: translateY(-2px);
+        }
+        
+        .persona-section {
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .persona-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .continue-section {
+            background: white;
+            border: 2px solid #5e17eb;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .continue-btn {
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(94, 23, 235, 0.3);
+        }
+        
+        .share-btn {
+            background: white;
+            color: #5e17eb;
+            border: 2px solid #5e17eb;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .share-btn:hover {
+            background: #5e17eb;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .archetype-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="sidebar">
+            <h2>Your Profile</h2>
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">Overview</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🔥</div>
+                <div class="nav-text">Essence Archetype</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🛡️</div>
+                <div class="nav-text">Protective Archetype</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-text">Your Journey</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🚀</div>
+                <div class="nav-text">Next Steps</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <h1>Welcome back, Sarah!</h1>
+                <p>Here's your personalized archetype profile</p>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">🔥</div>
+                    <div class="section-title">Your Archetypes</div>
+                </div>
+                
+                <div class="archetype-info">
+                    <div class="archetype-detail essence">
+                        <div class="archetype-name">Radiant Rebel</div>
+                        <div class="archetype-summary">You are fire with a heartbeat — designed to disrupt what's false and awaken what's real.</div>
+                        <button class="expand-btn" onclick="toggleExpand('essence')">Learn More ↓</button>
+                        <div class="expand-section" id="essence">
+                            <h4>Your Superpower</h4>
+                            <p>You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck.</p>
+                            <h4>Your North Star</h4>
+                            <p>Use rebellion to liberate, not just provoke. Let your why guide your wow.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="archetype-detail">
+                        <div class="archetype-name">Perfectionist</div>
+                        <div class="archetype-summary">This archetype developed to protect you from criticism and failure.</div>
+                        <button class="expand-btn" onclick="toggleExpand('protective')">Learn More ↓</button>
+                        <div class="expand-section" id="protective">
+                            <h4>How It Shows Up</h4>
+                            <p>It whispers: "If I can just get it perfect, then I'll be safe from judgment." But perfectionism often becomes procrastination in disguise.</p>
+                            <h4>Breaking Free</h4>
+                            <p>Remember: done is better than perfect. Progress over perfection.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">🎯</div>
+                    <div class="section-title">Your Journey Stage</div>
+                </div>
+                
+                <div class="persona-section">
+                    <div class="persona-badge">Vibe Riser</div>
+                    <p>Connected but wanting to live more in alignment with your essence</p>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">🚀</div>
+                    <div class="section-title">Continue Your Journey</div>
+                </div>
+                
+                <div class="continue-section">
+                    <h3>Ready for the next step?</h3>
+                    <p>Dive deeper with the Healing Compass flow</p>
+                    <button class="continue-btn">Start Healing Compass</button>
+                    <button class="share-btn">Share Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleExpand(id) {
+            const section = document.getElementById(id);
+            const btn = section.previousElementSibling;
+            
+            if (section.classList.contains('show')) {
+                section.classList.remove('show');
+                btn.textContent = 'Learn More ↓';
+            } else {
+                section.classList.add('show');
+                btn.textContent = 'Show Less ↑';
+            }
+        }
+    </script>
+</body>
+</html>
