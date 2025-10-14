@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
+import { useAuth } from './auth/AuthProvider'
 
 function App() {
+  const { signInWithMagicLink } = useAuth()
   const [flow, setFlow] = useState(null)
   const [messages, setMessages] = useState([])
   const [context, setContext] = useState({})
@@ -142,6 +144,15 @@ function App() {
           throw error
         }
         console.log('✅ Profile saved successfully:', data)
+        
+        // Send magic link after saving profile
+        console.log('📧 Sending magic link to:', trimmedInput)
+        const magicLinkResult = await signInWithMagicLink(trimmedInput)
+        if (magicLinkResult.success) {
+          console.log('✅ Magic link sent successfully')
+        } else {
+          console.error('❌ Magic link failed:', magicLinkResult.message)
+        }
       } catch (err) {
         console.error('❌ Failed to save profile:', err)
         // Continue with flow even if save fails
@@ -176,7 +187,7 @@ function App() {
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
-        text: "🎉 Congratulations! You've completed the flow. Check your email for your profile link!",
+        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or <a href='/me' style='color: #5e17eb; text-decoration: underline;'>click here to view your profile</a>!",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -235,7 +246,7 @@ function App() {
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
-        text: "🎉 Congratulations! You've completed the flow. Check your email for your profile link!",
+        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or <a href='/me' style='color: #5e17eb; text-decoration: underline;'>click here to view your profile</a>!",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -285,7 +296,7 @@ function App() {
           {messages.map(message => (
             <div key={message.id} className={`message ${message.isAI ? 'ai' : 'user'}`}>
               <div className="bubble">
-                <div className="text">{message.text}</div>
+                <div className="text" dangerouslySetInnerHTML={{ __html: message.text }} />
                 <div className="timestamp">{message.timestamp}</div>
               </div>
             </div>

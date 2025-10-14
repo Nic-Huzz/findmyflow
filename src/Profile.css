@@ -1,0 +1,278 @@
+/* Profile Page Styles */
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.header {
+  background: #5e17eb;
+  color: white;
+  padding: 30px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-text {
+  text-align: left;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-email {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.logout-button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.content {
+  padding: 40px;
+}
+
+.archetype-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.archetype-card {
+  background: #f8f9fa;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.archetype-card:hover {
+  border-color: #5e17eb;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(94, 23, 235, 0.2);
+}
+
+.archetype-card.essence {
+  background: #ffdd27;
+  color: #333;
+}
+
+.archetype-card.essence:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(94, 23, 235, 0.3);
+}
+
+.archetype-hero {
+  aspect-ratio: 361.24 / 541.87;
+  width: 100%;
+  max-height: 420px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.archetype-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.archetype-content {
+  padding: 30px;
+}
+
+.archetype-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.archetype-card.essence .archetype-name {
+  color: #333;
+}
+
+.archetype-summary {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  color: #666;
+}
+
+.archetype-card.essence .archetype-summary {
+  color: #555;
+}
+
+.expand-btn {
+  background: rgba(94, 23, 235, 0.1);
+  border: 2px solid #5e17eb;
+  color: #5e17eb;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.expand-btn:hover {
+  background: #5e17eb;
+  color: white;
+}
+
+.archetype-card.essence .expand-btn {
+  background: rgba(94, 23, 235, 0.1);
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.archetype-card.essence .expand-btn:hover {
+  background: #5e17eb;
+  color: white;
+}
+
+.expand-content {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 25px;
+  margin-top: 20px;
+  border-left: 4px solid #5e17eb;
+}
+
+.expand-content.show {
+  display: block;
+}
+
+.expand-content h4 {
+  color: #5e17eb;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.expand-content p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.archetype-card.essence .expand-content {
+  background: rgba(255, 221, 39, 0.1);
+  border-left-color: #ffdd27;
+}
+
+.archetype-card.essence .expand-content h4 {
+  color: #333;
+}
+
+.persona-section {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.persona-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #5e17eb, #ffdd27);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.continue-section {
+  background: linear-gradient(135deg, #5e17eb, #ffdd27);
+  color: white;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+}
+
+.continue-btn {
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.continue-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+.share-btn {
+  background: white;
+  color: #5e17eb;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .archetype-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  .archetype-hero {
+    max-height: 300px;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+}

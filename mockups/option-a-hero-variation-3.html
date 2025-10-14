@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option A: Card-Based with Hero Images - Variation 3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .profile-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #5e17eb;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .archetype-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .archetype-card {
+            background: #f8f9fa;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .archetype-card:hover {
+            border-color: #5e17eb;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(94, 23, 235, 0.2);
+        }
+        
+        .archetype-card.essence {
+            background: #ffdd27;
+            color: #333;
+        }
+        
+        .archetype-card.essence:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(94, 23, 235, 0.3);
+        }
+        
+        .archetype-hero {
+            aspect-ratio: 361.24 / 541.87;
+            width: 100%;
+            max-height: 420px;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .archetype-card.essence .archetype-hero {
+        }
+        
+        .archetype-card:not(.essence) .archetype-hero {
+        }
+        
+        .archetype-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        
+        
+        .archetype-icon {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+            z-index: 1;
+            border: 4px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .archetype-content {
+            padding: 30px;
+        }
+        
+        .archetype-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .archetype-card.essence .archetype-name {
+            color: #333;
+        }
+        
+        .archetype-summary {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #666;
+        }
+        
+        .archetype-card.essence .archetype-summary {
+            color: #555;
+        }
+        
+        .expand-btn {
+            background: rgba(94, 23, 235, 0.1);
+            border: 2px solid #5e17eb;
+            color: #5e17eb;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .expand-btn:hover {
+            background: #5e17eb;
+            color: white;
+        }
+        
+        .archetype-card.essence .expand-btn {
+            background: rgba(94, 23, 235, 0.1);
+            border-color: #5e17eb;
+            color: #5e17eb;
+        }
+        
+        .archetype-card.essence .expand-btn:hover {
+            background: #5e17eb;
+            color: white;
+        }
+        
+        .persona-section {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .persona-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .continue-section {
+            background: linear-gradient(135deg, #5e17eb, #ffdd27);
+            color: white;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .continue-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .continue-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .share-btn {
+            background: white;
+            color: #5e17eb;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .expand-content {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+            border-left: 4px solid #5e17eb;
+        }
+        
+        .expand-content.show {
+            display: block;
+        }
+        
+        .expand-content h4 {
+            color: #5e17eb;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .expand-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .archetype-card.essence .expand-content {
+            background: rgba(255, 221, 39, 0.1);
+            border-left-color: #ffdd27;
+        }
+        
+        .archetype-card.essence .expand-content h4 {
+            color: #333;
+        }
+        
+        @media (max-width: 768px) {
+            .archetype-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .archetype-hero {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="header">
+            <h1>Your Profile</h1>
+            <p>Discover your archetypes and unlock your potential</p>
+        </div>
+        
+        <div class="content">
+            <div class="archetype-cards">
+                <div class="archetype-card essence">
+                    <div class="archetype-hero">
+                        <img src="../public/images/archetypes/essence/playful-creator.PNG" alt="Playful Creator" />
+                    </div>
+                    <div class="archetype-content">
+                        <div class="archetype-name">Playful Creator</div>
+                        <div class="archetype-summary">You are joy in motion — color that moves, laughter that builds, a spark dressed in creativity.</div>
+                        <button class="expand-btn" onclick="toggleExpand('essence-details')">Learn More ↓</button>
+                        <div class="expand-content" id="essence-details">
+                            <h4>Your Superpower</h4>
+                            <p>You alchemize boredom into magic. You make joy contagious, creativity safe, and weirdness welcome.</p>
+                            <h4>Your North Star</h4>
+                            <p>Channel your joy into containers that scale. Play can be the portal to mastery.</p>
+                            <h4>Your Vision</h4>
+                            <p>What if your joy was the funnel? What if your weirdness was the strategy? You weren't born to fit into boxes — you were born to make confetti out of them.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="archetype-card">
+                    <div class="archetype-hero">
+                        <img src="../public/images/archetypes/protective/perfectionist.PNG" alt="Perfectionist" />
+                    </div>
+                    <div class="archetype-content">
+                        <div class="archetype-name">Perfectionist</div>
+                        <div class="archetype-summary">This archetype developed to protect you from criticism and failure.</div>
+                        <button class="expand-btn" onclick="toggleExpand('protective-details')">Learn More ↓</button>
+                        <div class="expand-content" id="protective-details">
+                            <h4>How It Shows Up</h4>
+                            <p>It whispers: "If I can just get it perfect, then I'll be safe from judgment." But perfectionism often becomes procrastination in disguise — keeping you stuck in endless prep mode. Exhausting, isn't it?</p>
+                            <h4>Breaking Free</h4>
+                            <p>Remember: done is better than perfect. Progress over perfection. Your essence is waiting to emerge.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="persona-section">
+                <h3>Your Journey Stage</h3>
+                <div class="persona-badge">Vibe Riser</div>
+                <p style="margin-top: 15px; color: #666;">Connected but wanting to live more in alignment with your essence</p>
+            </div>
+            
+            <div class="continue-section">
+                <h3>Continue Your Journey</h3>
+                <p>Ready to dive deeper into your healing compass?</p>
+                <button class="continue-btn">Start Healing Compass</button>
+                <button class="share-btn">Share Profile</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleExpand(id) {
+            const content = document.getElementById(id);
+            const btn = content.previousElementSibling;
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                btn.textContent = 'Learn More ↓';
+            } else {
+                content.classList.add('show');
+                btn.textContent = 'Show Less ↑';
+            }
+        }
+    </script>
+</body>
+</html>
