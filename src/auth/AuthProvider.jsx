@@ -42,12 +42,8 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true)
       
-      // Use environment variable for production redirect, fallback to current origin for local dev
-      // If VITE_MAGIC_LINK_REDIRECT is set, use it (should be full URL like https://domain.com/me)
-      // Otherwise, use current origin (works for localhost during development)
-      const redirectUrl = import.meta.env.VITE_MAGIC_LINK_REDIRECT 
-        ? import.meta.env.VITE_MAGIC_LINK_REDIRECT
-        : `${window.location.origin}/me`
+      // Use current origin for redirect (works for both localhost and production)
+      const redirectUrl = `${window.location.origin}/me`
       
       console.log('🔐 Attempting magic link for:', email)
       console.log('🔐 Redirect URL:', redirectUrl)
