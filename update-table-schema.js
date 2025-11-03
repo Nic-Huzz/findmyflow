@@ -1,8 +1,17 @@
 // Script to update the healing_compass_responses table schema
 import { createClient } from '@supabase/supabase-js'
+import { config } from 'dotenv'
 
-const supabaseUrl = 'https://qlwfcfypnoptsocdpxuv.supabase.co'
-const supabaseKey = 'sb_publishable_Qizrwuj2oqRtuK2tJx7uxg_M7Bb9WZH'
+// Load environment variables from .env.local
+config({ path: '.env.local' })
+
+const supabaseUrl = process.env.VITE_SUPABASE_URL
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error('❌ Missing Supabase credentials. Please create .env.local file.')
+  process.exit(1)
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 
