@@ -12,29 +12,29 @@ export function renderEssenceReveal(key) {
     return "We couldn't find that archetype. Please try again."
   }
 
-  const tpl = `You are the **{{essence_archetype}}**.
+  const tpl = `You are the {{essence_archetype}}.
 
-*{{poetic_line}}*
+{{poetic_line}}
 
-You carry a frequency that others feel — even when they can't name it.
-**{{energetic_transmission}}**
+You carry a frequency that others feel — even when they can't name it:
+{{energetic_transmission}}
 
 At your core, your essence is:
-**{{essence}}**
+{{essence}}
 
 Your natural superpower — the way you shift spaces and people is —
-**{{superpower}}**
+{{superpower}}
 
 Let your path be guided by this deeper truth:
-**{{north_star}}**
+{{north_star}}
 
 I see a vision for your future. To fulfil it, ask yourself:
-*{{poetic_vision}}*
+{{poetic_vision}}
 
 When you live this truth out loud — not just in theory but in embodiment —
-**{{vision_in_action}}**
+{{vision_in_action}}
 
-**Does this feel like you?**`
+Does this feel like you?`
 
   return tpl
     .replaceAll('{{essence_archetype}}', key)
