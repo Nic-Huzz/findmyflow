@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
@@ -97,6 +98,10 @@ function App() {
     if (currentStep.tag_as) {
       newContext[currentStep.tag_as] = trimmedInput
       console.log('📝 Stored in context:', currentStep.tag_as, '=', trimmedInput)
+      // If persona was just selected, update Supabase immediately
+      if (currentStep.tag_as === 'persona_selection') {
+        await updatePersonaInSupabase(newContext)
+      }
     }
     if (currentStep.store_as) {
       newContext[currentStep.store_as] = true
@@ -108,11 +113,12 @@ function App() {
     setMessages(prev => [...prev, userMessage])
     setInputText('')
 
-    // Check if this is the email step - save to Supabase
-    console.log('🔍 Checking if this is email step:', currentStep.step === 'lead_q7_email_capture')
+    // Check if this step should persist profile to Supabase (flagged in flow JSON)
+    const shouldSaveToDb = Boolean(currentStep.save_to_db) || currentStep.step === 'lead_q7_email_capture' // backward compatibility
+    console.log('🔍 Should save to DB:', shouldSaveToDb)
     console.log('🔍 Supabase available:', !!supabase)
     
-    if (currentStep.step === 'lead_q7_email_capture' && supabase) {
+    if (shouldSaveToDb && supabase) {
       console.log('💾 SAVING TO SUPABASE - Email step detected!')
       try {
         // Generate session ID for anonymous users
@@ -150,14 +156,32 @@ function App() {
         const magicLinkResult = await signInWithMagicLink(trimmedInput)
         if (magicLinkResult.success) {
           console.log('✅ Magic link sent successfully')
+          setMessages(prev => [
+            ...prev,
+            {
+              id: `ai-${Date.now()}`,
+              isAI: true,
+              text: `I\'ve sent a magic link to ${trimmedInput}. Please check your inbox (and spam folder).`,
+              timestamp: new Date().toLocaleTimeString()
+            }
+          ])
         } else {
           console.error('❌ Magic link failed:', magicLinkResult.message)
+          setMessages(prev => [
+            ...prev,
+            {
+              id: `ai-${Date.now()}`,
+              isAI: true,
+              text: `Hmm, I couldn\'t send the magic link: ${magicLinkResult.message}. Please double-check your email or try again in a moment.`,
+              timestamp: new Date().toLocaleTimeString()
+            }
+          ])
         }
       } catch (err) {
         console.error('❌ Failed to save profile:', err)
         // Continue with flow even if save fails
       }
-    } else if (currentStep.step === 'lead_q7_email_capture' && !supabase) {
+    } else if (shouldSaveToDb && !supabase) {
       console.warn('⚠️ Supabase not configured - profile not saved')
     } else {
       console.log('ℹ️ Not email step or Supabase not available')
@@ -187,7 +211,8 @@ function App() {
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
-        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or <a href='/me' style='color: #5e17eb; text-decoration: underline;'>click here to view your profile</a>!",
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or click below to view your profile:",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -214,6 +239,10 @@ function App() {
     const newContext = { ...context }
     if (currentStep.tag_as) {
       newContext[currentStep.tag_as] = optionValue
+      // If persona was just selected, update Supabase immediately
+      if (currentStep.tag_as === 'persona_selection') {
+        await updatePersonaInSupabase(newContext)
+      }
     }
     if (currentStep.store_as) {
       newContext[currentStep.store_as] = true
@@ -246,7 +275,8 @@ function App() {
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
-        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or <a href='/me' style='color: #5e17eb; text-decoration: underline;'>click here to view your profile</a>!",
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or click below to view your profile:",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -296,7 +326,18 @@ function App() {
           {messages.map(message => (
             <div key={message.id} className={`message ${message.isAI ? 'ai' : 'user'}`}>
               <div className="bubble">
-                <div className="text" dangerouslySetInnerHTML={{ __html: message.text }} />
+                {message.kind === 'completion' ? (
+                  <div className="text">
+                    {message.text}
+                    <div style={{ marginTop: 8 }}>
+                      <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
+                        View your profile
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text">{message.text}</div>
+                )}
                 <div className="timestamp">{message.timestamp}</div>
               </div>
             </div>

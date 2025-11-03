@@ -1,3 +1,4 @@
+
 /* Brand colors */
 :root {
   --purple: #5e17eb;
@@ -124,6 +125,7 @@ body {
   color: var(--text-gray);
   border-radius: 20px 20px 20px 4px;
 }
+
 
 .text { 
   white-space: pre-wrap; 
@@ -344,25 +346,6 @@ body {
   font-weight: 500;
 }
 
-/* Link button for navigation */
-.link-button {
-  display: inline-block;
-  background: linear-gradient(135deg, var(--purple) 0%, #7c3aed 100%);
-  color: var(--white);
-  text-decoration: none;
-  padding: 12px 24px;
-  border-radius: 16px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
-  margin-top: 8px;
-}
-
-.link-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
-}
-
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .app {
@@ -418,12 +401,5 @@ body {
   
   .text {
     font-size: 15px;
-  }
-}
-
-/* iOS viewport fix */
-@supports (-webkit-touch-callout: none) {
-  body {
-    height: -webkit-fill-available;
   }
 }

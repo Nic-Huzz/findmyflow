@@ -50,3 +50,5 @@ export function resolvePrompt(step, answers = {}) {
   const expanded = resolveMacros(base, answers);
   return interpolateVars(expanded, answers);
 }
+
+

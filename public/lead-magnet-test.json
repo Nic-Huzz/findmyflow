@@ -1,0 +1,71 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "name": "Lead Magnet Flow - Test Version",
+    "description": "A short introduction flow to help users identify their Protective and Essence Archetypes and unlock their profile."
+  },
+  "steps": [
+    {
+      "step": "lead_q1_intro_name",
+      "step_order_index": 1.0,
+      "prompt": "Hey I'm Alfred, an AI designed to help you find your flow.\n\nIf you're someone who:\n- Believes you're here to make a positive impact\n- You're keen to scale your impact\n- And you believe in the universe\n\nThen you'll love what we're about to do.\n\nTo start, what do I call you?",
+      "tag_as": "user_name",
+      "store_as": "lead_q1_name_complete",
+      "instructions_to_gpt": "Wait for short name. Store exactly as provided. Do not proceed until captured."
+    },
+    {
+      "step": "lead_q2_protective_intro",
+      "step_order_index": 2.0,
+      "required_inputs": ["lead_q1_name_complete"],
+      "prompt": "We'll start with identifying what's blocking your flow.\n\nThe gap between aligning your internal flow and the external is action. And the thing that stops us taking action is our protective patterns — brilliant but outdated protective behaviours.\n\nWhen it comes to your ambitions, which protective patterns sound familiar? Swipe right on the ones that resonate, left on the ones that don't.",
+      "options": [
+        { "label": "Yes, let's go!", "value": "yes" }
+      ],
+      "tag_as": "lead_q2_protective_intro",
+      "store_as": "lead_q2_protective_intro_complete"
+    },
+    {
+      "step": "lead_q3_protective_swipe",
+      "step_order_index": 3.0,
+      "required_inputs": ["lead_q2_protective_intro_complete"],
+      "step_type": "hybrid_swipe",
+      "archetype_type": "protective",
+      "prompt": "We'll start with identifying what's blocking your flow.\n\nThe gap between aligning your internal flow and the external is action. And the thing that stops us taking action is our protective patterns — brilliant but outdated protective behaviours.\n\nWhen it comes to your ambitions, which protective patterns sound familiar? Swipe right on the ones that resonate, left on the ones that don't.",
+      "tag_as": "protective_archetype_selection",
+      "store_as": "lead_q3_protective_archetype_complete"
+    },
+    {
+      "step": "lead_q4_essence_swipe",
+      "step_order_index": 4.0,
+      "required_inputs": ["lead_q3_protective_archetype_complete"],
+      "step_type": "hybrid_swipe",
+      "archetype_type": "essence",
+      "prompt": "Now we're looking to reconnect to the essence that sits underneath this protective pattern. I call this your Essence Archetype.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
+      "tag_as": "essence_archetype_selection",
+      "store_as": "lead_q4_essence_archetype_complete"
+    },
+    {
+      "step": "lead_q5_email_capture",
+      "step_order_index": 5.0,
+      "required_inputs": ["lead_q4_essence_archetype_complete"],
+      "prompt": "Keen to learn more about your Protective Archetype and your Essence Archetype?\n\nAnd ways to overcome the Protective Archetype that's blocking your ambitions so you can live from your Essence Archetype?\n\nEnter your email below. You'll receive a link to your profile.",
+      "tag_as": "user_email",
+      "store_as": "lead_q5_email_capture_complete",
+      "instructions_to_gpt": "Capture valid email address and store. Trigger Supabase profile creation.",
+      "save_to_db": true
+    },
+    {
+      "step": "lead_q6_persona",
+      "step_order_index": 6.0,
+      "required_inputs": ["lead_q5_email_capture_complete"],
+      "prompt": "Sweet — you just received an email to see your profile.\n\nFinal question: where are you now on your return to that essence?\n\n1) Vibe Seeker: Disconnected but ready to reconnect\n2) Vibe Riser: Connected but wanting to live more in alignment with it\n3) Movement Maker: Already leading from it and wanting to scale my impact",
+      "options": [
+        { "label": "Vibe Seeker", "value": "Vibe Seeker" },
+        { "label": "Vibe Riser", "value": "Vibe Riser" },
+        { "label": "Movement Maker", "value": "Movement Maker" }
+      ],
+      "tag_as": "persona_selection",
+      "store_as": "lead_q6_persona_complete"
+    }
+  ]
+}

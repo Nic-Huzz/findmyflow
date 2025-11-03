@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
@@ -199,7 +200,8 @@ function HealingCompass() {
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
-        text: "🎉 Congratulations! You've completed the Healing Compass flow. <a href='/me' style='color: #5e17eb; text-decoration: underline;'>Return to your profile</a> to continue your journey!",
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -288,7 +290,8 @@ function HealingCompass() {
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
-        text: "🎉 Congratulations! You've completed the Healing Compass flow. <a href='/me' style='color: #5e17eb; text-decoration: underline;'>Return to your profile</a> to continue your journey!",
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -338,7 +341,18 @@ function HealingCompass() {
           {messages.map(message => (
             <div key={message.id} className={`message ${message.isAI ? 'ai' : 'user'}`}>
               <div className="bubble">
-                <div className="text" dangerouslySetInnerHTML={{ __html: message.text }} />
+                {message.kind === 'completion' ? (
+                  <div className="text">
+                    {message.text}
+                    <div style={{ marginTop: 8 }}>
+                      <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
+                        Return to your profile
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text">{message.text}</div>
+                )}
                 <div className="timestamp">{message.timestamp}</div>
               </div>
             </div>

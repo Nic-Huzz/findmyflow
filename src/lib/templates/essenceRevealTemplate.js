@@ -6,6 +6,7 @@ import { essenceProfiles } from '../data/essenceProfiles'
  * @returns {string} - Fully formatted reveal text
  */
 export function renderEssenceReveal(key) {
+  console.log('EssenceReveal called with key:', key, 'Available keys:', Object.keys(essenceProfiles))
   const d = essenceProfiles[key]
   if (!d) {
     return "We couldn't find that archetype. Please try again."
@@ -45,3 +46,4 @@ When you live this truth out loud — not just in theory but in embodiment —
     .replaceAll('{{poetic_vision}}', d.poetic_vision)
     .replaceAll('{{vision_in_action}}', d.vision_in_action)
 }
+

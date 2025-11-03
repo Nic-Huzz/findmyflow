@@ -89,7 +89,8 @@
       "prompt": "Keen to learn more about your Protective Archetype and your Essence Archetype?\n\nAnd ways to overcome the Protective Archetype that's blocking your ambitions so you can live from your Essence Archetype?\n\nEnter your email below. You'll receive a link to your profile.",
       "tag_as": "user_email",
       "store_as": "lead_q7_email_capture_complete",
-      "instructions_to_gpt": "Capture valid email address and store. Trigger Supabase profile creation."
+      "instructions_to_gpt": "Capture valid email address and store. Trigger Supabase profile creation.",
+      "save_to_db": true
     },
     {
       "step": "lead_q8_persona",

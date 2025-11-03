@@ -1,0 +1,549 @@
+/* Hybrid Essence Flow Styles */
+.hybrid-flow {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--white);
+  box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+/* Messages Container */
+.messages {
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Input Bar */
+.input-bar {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  background: var(--white);
+  border-top: 1px solid var(--border-gray);
+  border-radius: 24px 24px 0 0;
+}
+
+.message-input {
+  flex: 1;
+  resize: none;
+  border: 2px solid var(--soft-gray);
+  background: var(--warm-gray);
+  color: var(--text-gray);
+  border-radius: 16px;
+  padding: 16px 20px;
+  outline: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.message-input:focus {
+  border-color: var(--purple);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.message-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.send-button {
+  background: linear-gradient(135deg, var(--purple) 0%, #7c3aed 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 16px;
+  padding: 16px 24px;
+  cursor: pointer;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  white-space: nowrap;
+}
+
+.send-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.send-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
+}
+}
+
+.message {
+  display: flex;
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.ai {
+  justify-content: flex-start;
+}
+
+.bubble {
+  max-width: 70%;
+  padding: 15px 20px;
+  border-radius: 20px;
+  position: relative;
+}
+
+.message.user .bubble {
+  background: #5e17eb;
+  color: white;
+  border-bottom-right-radius: 5px;
+}
+
+.message.ai .bubble {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.text {
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 5px;
+}
+
+.timestamp {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: white;
+  text-align: center;
+}
+
+.loading p {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+/* Swipe Container */
+.swipe-container {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 20px;
+  margin-top: auto;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #666;
+}
+
+/* Swipe Progress Info */
+.swipe-progress-info {
+  text-align: center;
+  margin: 15px 0 10px 0;
+  font-weight: 600;
+  color: var(--purple);
+  font-size: 14px;
+}
+
+/* Card Stack */
+.card-stack {
+  position: relative;
+  height: calc(100vh - 200px); /* Use most of viewport height, leaving space for header and buttons */
+  min-height: 500px; /* Ensure minimum height for good proportions */
+  max-height: 600px; /* Prevent cards from getting too tall */
+  margin-bottom: 30px;
+}
+
+.swipe-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.swipe-card:active {
+  cursor: grabbing;
+}
+
+.card-image {
+  width: 100%;
+  height: 70%; /* Increased from 60% to 75% - image extends closer to description */
+  object-fit: contain;
+  border-radius: 16px 16px 0 0;
+  background: #f8f9fa;
+}
+
+.card-content {
+  padding: 20px;
+  height: 25%; /* Reduced from 40% to 25% - smaller text area */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers text vertically */
+  align-items: center; /* Centers text horizontally */
+  text-align: center; /* Centers the text content */
+}
+
+.card-content h2 {
+  margin: 0 0 10px 0;
+  color: #5e17eb;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.card-content p {
+  margin: 0;
+  color: #666;
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+/* Swipe Instruction */
+.swipe-instruction {
+  text-align: center;
+  color: var(--text-gray);
+  font-size: 14px;
+  margin: 10px 0 20px 0;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Swipe Actions */
+.swipe-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.swipe-left-btn,
+.swipe-right-btn {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.swipe-left-btn {
+  background: var(--purple);
+  color: white;
+}
+
+.swipe-left-btn:hover {
+  background: #4a14c7;
+  transform: translateY(-2px);
+}
+
+.swipe-right-btn {
+  background: var(--gold);
+  color: #333;
+}
+
+.swipe-right-btn:hover {
+  background: #e6c200;
+  transform: translateY(-2px);
+}
+
+/* Battle Phase */
+.battle-container {
+  background: white;
+}
+
+.battle-instruction {
+  text-align: center;
+  color: var(--text-gray);
+  font-size: 14px;
+  margin: 15px 0 20px 0;
+  font-style: italic;
+  opacity: 0.8;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.undo-button {
+  background: none;
+  border: 1px solid var(--text-gray);
+  color: var(--text-gray);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.undo-button:hover {
+  background: var(--text-gray);
+  color: white;
+  opacity: 1;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e1e5e9;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+  transition: width 0.3s ease;
+}
+
+.battle-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.battle-card {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.battle-card:hover {
+  border-color: #5e17eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(94, 23, 235, 0.2);
+}
+
+.battle-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  background: #f8f9fa;
+}
+
+.battle-card h3 {
+  margin: 0 0 10px 0;
+  color: #5e17eb;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.battle-card p {
+  margin: 0;
+  color: #666;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.vs-divider {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #5e17eb;
+  margin: 10px 0;
+}
+
+/* Result Phase */
+.result-container {
+  background: white;
+  border-radius: 20px 20px 0 0;
+  padding: 40px;
+  margin-top: auto;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.result-card {
+  background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.result-image {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 4px solid white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.result-card h2 {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+}
+
+.result-description {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.reset-button {
+  background: #5e17eb;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  background: #4a14c7;
+  transform: translateY(-2px);
+}
+
+.continue-button {
+  background: #5e17eb;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 10px;
+}
+
+.continue-button:hover {
+  background: #4a14c7;
+  transform: translateY(-2px);
+}
+
+.back-button {
+  background: transparent;
+  color: #5e17eb;
+  border: 2px solid #5e17eb;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 10px;
+}
+
+.back-button:hover {
+  background: #5e17eb;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.result-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hybrid-flow {
+    height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  
+  .messages {
+    padding: 16px 0;
+  }
+  
+  .bubble {
+    max-width: 85%;
+    padding: 12px 16px;
+  }
+  
+  .swipe-container,
+  .battle-container,
+  .result-container {
+    padding: 20px;
+  }
+  
+  .card-stack {
+    height: 350px;
+  }
+  
+  .swipe-actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .swipe-left-btn,
+  .swipe-right-btn {
+    width: 100%;
+  }
+  
+  .battle-card img {
+    height: 120px;
+  }
+  
+  .result-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* iOS viewport fix */
+@supports (-webkit-touch-callout: none) {
+  .hybrid-flow {
+    height: -webkit-fill-available;
+  }
+}

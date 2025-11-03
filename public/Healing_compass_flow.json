@@ -9,7 +9,7 @@
       "required_inputs": [
         "{{user_name}}"
       ],
-      "prompt": "Give yourself permission to think big {{user_name}}.\\n\\nIn your career or business, where do you feel \"stuck\", stagnant, not making progress as quick as you like right now?",
+      "prompt": "Give yourself permission to think big {{user_name}}.\n\nIn your career or business, where do you feel \"stuck\", stagnant, not making progress as quick as you like right now?",
       "tag_as": "stuck_gap_description",
       "store_as": "step_1_stuck_gap_complete",
       "instructions_to_gpt": "Wait for an open response describing where they feel stuck. Reflect their answer briefly before moving on."
@@ -20,7 +20,7 @@
       "required_inputs": [
         "step_1_stuck_gap_complete"
       ],
-      "prompt": "And why do you believe you're stuck?\\n\\nWhat are the reasons your mind provides?",
+      "prompt": "And why do you believe you're stuck?\n\nWhat are the reasons your mind provides?",
       "tag_as": "stuck_reason_list",
       "store_as": "step_2_stuck_reason_complete",
       "instructions_to_gpt": "Wait for them to share the reasons they believe they are stuck. Validate their insight and continue."
@@ -69,7 +69,7 @@
         "step_3_stuck_emotion_complete",
         "{{protective_archetype}}"
       ],
-      "prompt": "You previously identified {{protective_archetype}} as a pattern that has blocked your ambitions. I'm assuming you didn't wake up today and decide to be this protective archetype...\\n\\nSo there's something from the time you were a kid to today, that has caused it to show up.\\n\\nThis is the emotional splinter we're looking to pull out.\\n\\nTo help us identify this emotional splinter, can you think of another time in your life where you struggled or failed to make your ambitions become your reality?",
+      "prompt": "You previously identified {{protective_archetype}} as a pattern that has blocked your ambitions. I'm assuming you didn't wake up today and decide to be this protective archetype...\n\nSo there's something from the time you were a kid to today, that has caused it to show up.\n\nThis is the emotional splinter we're looking to pull out.\n\nTo help us identify this emotional splinter, can you think of another time in your life where you struggled or failed to make your ambitions become your reality?",
       "tag_as": "past_parallel_story",
       "store_as": "step_4_past_parallel_complete",
       "instructions_to_gpt": "Invite a reflective story. Allow pauses. Validate whatever they share and keep the tone gentle."
@@ -91,7 +91,7 @@
       "required_inputs": [
         "step_5_emotions_complete"
       ],
-      "prompt": "Thinking back to what you felt back then - what made you feel that?\\n\\nWhat did you believe about yourself or the world before this happened?",
+      "prompt": "Thinking back to what you felt back then - what made you feel that?\n\nWhat did you believe about yourself or the world before this happened?",
       "tag_as": "splinter_interpretation",
       "store_as": "step_6_meaning_complete",
       "instructions_to_gpt": "Invite them to explore the belief underneath the feeling. Reflect their self-awareness gently."
@@ -116,7 +116,7 @@
         "{{past_event_emotions}}",
         "{{splinter_interpretation}}"
       ],
-      "prompt": "So this experience you identified growing up - {{past_parallel_story}} - was so impactful to your system, and you hated feeling {{past_event_emotions}} so much.\\n\\nIt now doesn't feel safe doing anything that might cause {{splinter_interpretation}} again.\\n\\nMake sense?",
+      "prompt": "So this experience you identified growing up - {{past_parallel_story}} - was so impactful to your system, and you hated feeling {{past_event_emotions}} so much.\n\nIt now doesn't feel safe doing anything that might cause {{splinter_interpretation}} again.\n\nMake sense?",
       "tag_as": "connect_dots_acknowledged",
       "store_as": "step_8_connect_dots_ack_complete",
       "instructions_to_gpt": "Wait for confirmation or questions. If they seem unsure, clarify the link with warmth."
@@ -127,7 +127,7 @@
       "required_inputs": [
         "step_8_connect_dots_ack_complete"
       ],
-      "prompt": "So why do you feel stuck?\\n\\nBecause you believe you're good enough to do whatever this ambition is.\\n\\nBut you've had an emotional splinter that's made it feel terrifying to take action.\\n\\nKeen to remove the emotional splinter?",
+      "prompt": "So why do you feel stuck?\n\nBecause you believe you're good enough to do whatever this ambition is.\n\nBut you've had an emotional splinter that's made it feel terrifying to take action.\n\nKeen to remove the emotional splinter?",
       "tag_as": "splinter_removal_consent",
       "store_as": "step_9_splinter_opt_in_complete",
       "instructions_to_gpt": "Accept a yes/no style response. If yes, celebrate their readiness. If not, honor their pace and offer reassurance."

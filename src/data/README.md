@@ -43,3 +43,5 @@ import { personaProfiles } from '@/data/personaProfiles'
 const profile = protectiveProfiles["Perfectionist"]
 const image = profile.detailed.image
 ```
+
+

@@ -27,6 +27,7 @@ But hiding keeps you from the very connection and opportunities you crave — cr
  * @returns {string} - Fully formatted mirror text
  */
 export function renderProtectiveMirror(key) {
+  console.log('ProtectiveMirror called with key:', key, 'Available keys:', Object.keys(protectiveProfiles))
   const d = protectiveProfiles[key]
   if (!d) {
     return "We couldn't find that archetype. Please try again."
@@ -34,3 +35,4 @@ export function renderProtectiveMirror(key) {
 
   return d
 }
+

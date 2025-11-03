@@ -120,3 +120,5 @@ export const essenceProfiles = {
       "They speak what no one else will — and somehow, it lands like liberation, not attack.",
   },
 }
+
+

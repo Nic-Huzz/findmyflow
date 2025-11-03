@@ -1,0 +1,29 @@
+{
+  "archetypes": [
+    {
+      "name": "Perfectionist",
+      "description": "It's safer for me to endlessly improve than finish and possibly fail",
+      "image": "perfectionist.png"
+    },
+    {
+      "name": "People Pleaser",
+      "description": "It's safer for me to stay agreeable, helpful, and low-maintenance than possibly upset others",
+      "image": "people-pleaser.png"
+    },
+    {
+      "name": "Controller",
+      "description": "It's safer for me to manage everything to ensure the outcome is positive",
+      "image": "the-controller.png"
+    },
+    {
+      "name": "Performer",
+      "description": "It's safer for me to do what's needed to be liked than leave it to chance",
+      "image": "the-performer.png"
+    },
+    {
+      "name": "Ghost",
+      "description": "It's safer for me to hide or withdraw than show up and possibly be hurt",
+      "image": "the-ghost.png"
+    }
+  ]
+}

@@ -1,0 +1,314 @@
+/* Essence Test Styles */
+.essence-test {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  color: white;
+}
+
+.loading p {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+/* Swipe Container */
+.swipe-container {
+  max-width: 400px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #666;
+}
+
+/* Card Stack */
+.card-stack {
+  position: relative;
+  height: 500px;
+  margin-bottom: 30px;
+}
+
+.swipe-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.swipe-card:active {
+  cursor: grabbing;
+}
+
+.card-image {
+  width: 100%;
+  height: 60%;
+  object-fit: contain;
+  border-radius: 16px 16px 0 0;
+  background: #f8f9fa;
+}
+
+.card-content {
+  padding: 20px;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-content h2 {
+  margin: 0 0 10px 0;
+  color: #5e17eb;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.card-content p {
+  margin: 0;
+  color: #666;
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+/* Swipe Actions */
+.swipe-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.swipe-left-btn,
+.swipe-right-btn {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.swipe-left-btn {
+  background: #ff6b6b;
+  color: white;
+}
+
+.swipe-left-btn:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+}
+
+.swipe-right-btn {
+  background: #4ecdc4;
+  color: white;
+}
+
+.swipe-right-btn:hover {
+  background: #26a69a;
+  transform: translateY(-2px);
+}
+
+/* Battle Phase */
+.battle-container {
+  max-width: 600px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e1e5e9;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+  transition: width 0.3s ease;
+}
+
+.battle-container h2 {
+  text-align: center;
+  color: #5e17eb;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.battle-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.battle-card {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.battle-card:hover {
+  border-color: #5e17eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(94, 23, 235, 0.2);
+}
+
+.battle-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  background: #f8f9fa;
+}
+
+.battle-card h3 {
+  margin: 0 0 10px 0;
+  color: #5e17eb;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.battle-card p {
+  margin: 0;
+  color: #666;
+  line-height: 1.4;
+}
+
+.vs-divider {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #5e17eb;
+  margin: 10px 0;
+}
+
+/* Result Phase */
+.result-container {
+  max-width: 500px;
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.result-container h1 {
+  color: #5e17eb;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.result-card {
+  background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.result-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 4px solid white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.result-card h2 {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+}
+
+.result-description {
+  margin: 0;
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+.reset-button {
+  background: #5e17eb;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  background: #4a14c7;
+  transform: translateY(-2px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .essence-test {
+    padding: 10px;
+  }
+  
+  .swipe-container,
+  .battle-container,
+  .result-container {
+    padding: 20px;
+  }
+  
+  .card-stack {
+    height: 400px;
+  }
+  
+  .swipe-actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .swipe-left-btn,
+  .swipe-right-btn {
+    width: 100%;
+  }
+  
+  .battle-card img {
+    height: 150px;
+  }
+  
+  .result-image {
+    width: 150px;
+    height: 150px;
+  }
+}
