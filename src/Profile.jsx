@@ -210,10 +210,17 @@ const Profile = () => {
         {/* Continue Section */}
         <div className="continue-section">
           <h3>Continue Your Journey</h3>
-          <p>Ready to dive deeper into your healing compass?</p>
-          <button 
+          <p>Ready to embark on a 7-day transformation journey?</p>
+          <button
+            className="continue-btn"
+            onClick={() => navigate('/7-day-challenge')}
+          >
+            Start 7-Day Challenge
+          </button>
+          <button
             className="continue-btn"
             onClick={() => navigate('/healing-compass')}
+            style={{ marginTop: '10px', background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' }}
           >
             Start Healing Compass
           </button>
