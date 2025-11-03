@@ -19,11 +19,7 @@ export function renderProtectiveMirror(key) {
     return "We couldn't find that archetype. Please try again."
   }
 
-  return tpl
-    .replaceAll('{{perfectionist}}', d.perfectionist)
-    .replaceAll('{{people_pleaser}}', d.people_pleaser)
-    .replaceAll('{{controller}}', d.controller)
-    .replaceAll('{{performer}}', d.performer)
-    .replaceAll('{{ghost}}', d.ghost)
+  // Return the formatted string for the selected protective archetype
+  return d
 }
 

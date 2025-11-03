@@ -15,32 +15,55 @@ const Profile = () => {
   const [expandedCard, setExpandedCard] = useState(null)
 
   useEffect(() => {
-    loadUserProfile()
-  }, [])
+    // Only load profile when user is available
+    if (user?.email) {
+      loadUserProfile()
+    } else if (user === null) {
+      // User is not authenticated
+      setLoading(false)
+      setError('Please sign in to view your profile')
+    }
+    // If user is still loading (undefined), keep loading state
+  }, [user])
 
   const loadUserProfile = async () => {
+    if (!user?.email) {
+      setError('No user email available')
+      setLoading(false)
+      return
+    }
+
     try {
-      console.log('🔍 Loading user profile for:', user?.email)
+      console.log('🔍 Loading user profile for:', user.email)
       
       // Get the most recent profile for this authenticated user
       const { data, error } = await supabase
         .from('lead_flow_profiles')
         .select('*')
-        .eq('email', user?.email) // Filter by authenticated user's email
+        .eq('email', user.email) // Filter by authenticated user's email
         .order('created_at', { ascending: false })
         .limit(1)
-        .single()
 
       if (error) {
         console.error('Error loading profile:', error)
-        setError('Failed to load profile')
+        setError(`Failed to load profile: ${error.message}`)
+        setLoading(false)
         return
       }
 
-      setUserData(data)
+      if (!data || data.length === 0) {
+        console.warn('⚠️ No profile found for email:', user.email)
+        setError(null) // Clear error, will show "No profile data found" message
+        setUserData(null)
+        setLoading(false)
+        return
+      }
+
+      console.log('✅ Profile loaded:', data[0])
+      setUserData(data[0])
     } catch (err) {
       console.error('Error:', err)
-      setError('Failed to load profile')
+      setError(`Failed to load profile: ${err.message}`)
     } finally {
       setLoading(false)
     }
