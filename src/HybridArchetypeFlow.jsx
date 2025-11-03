@@ -39,7 +39,7 @@ const HybridArchetypeFlow = ({
   useEffect(() => {
     const loadArchetypes = async () => {
       try {
-        const fileName = archetypeType === 'protective' ? 'Protective-test.json' : 'Essence-test.json'
+        const fileName = archetypeType === 'protective' ? 'protective-archetypes.json' : 'essence-archetypes.json'
         const response = await fetch(`/${fileName}`)
         const data = await response.json()
         setArchetypes(data.archetypes || [])

@@ -41,13 +41,21 @@ export const AuthProvider = ({ children }) => {
   const signInWithMagicLink = async (email) => {
     try {
       setLoading(true)
+      
+      // Use environment variable for production redirect, fallback to current origin for local dev
+      // If VITE_MAGIC_LINK_REDIRECT is set, use it (should be full URL like https://domain.com/me)
+      // Otherwise, use current origin (works for localhost during development)
+      const redirectUrl = import.meta.env.VITE_MAGIC_LINK_REDIRECT 
+        ? import.meta.env.VITE_MAGIC_LINK_REDIRECT
+        : `${window.location.origin}/me`
+      
       console.log('🔐 Attempting magic link for:', email)
-      console.log('🔐 Redirect URL:', `${window.location.origin}/me`)
+      console.log('🔐 Redirect URL:', redirectUrl)
       
       const { data, error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/me`
+          emailRedirectTo: redirectUrl
         }
       })
       

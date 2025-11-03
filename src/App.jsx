@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import HybridArchetypeFlow from './HybridArchetypeFlow'
 
 function App() {
   const { signInWithMagicLink } = useAuth()
@@ -13,13 +14,15 @@ function App() {
   const [inputText, setInputText] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showHybridFlow, setShowHybridFlow] = useState(false)
+  const [hybridFlowType, setHybridFlowType] = useState(null) // 'protective' or 'essence'
   const messagesEndRef = useRef(null)
 
   // Load flow JSON
   useEffect(() => {
     const loadFlow = async () => {
       try {
-        const response = await fetch('/lead-magnet.json')
+        const response = await fetch('/lead-magnet-slide-flow.json')
         if (!response.ok) throw new Error('Failed to load flow')
         const data = await response.json()
         
@@ -50,6 +53,72 @@ function App() {
   }, [messages])
 
   const currentStep = flow?.steps?.[currentIndex]
+
+  // Handle hybrid flow completion
+  const handleHybridFlowComplete = (result) => {
+    console.log('✅ Hybrid flow completed:', result)
+    setShowHybridFlow(false)
+    
+    // Update context with the result
+    const fieldName = hybridFlowType === 'protective' ? 'protective_archetype_selection' : 'essence_archetype_selection'
+    const newContext = {
+      ...context,
+      [fieldName]: result.name,
+      // Store completion flag
+      [currentStep?.store_as]: true
+    }
+    console.log('📝 Storing archetype result:', { fieldName, archetypeName: result.name })
+    setContext(newContext)
+    
+    // Move to next step
+    const nextIndex = currentIndex + 1
+    const nextStep = flow?.steps?.[nextIndex]
+    
+    if (nextStep) {
+      // Add AI response with resolved prompt
+      const responseText = resolvePrompt(nextStep, newContext)
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: responseText,
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages(prev => [...prev, aiMessage])
+      setCurrentIndex(nextIndex)
+    }
+  }
+
+  // Move to next step - checks for hybrid_swipe type
+  const moveToNextStep = (updatedContext, skipHybridCheck = false) => {
+    const contextToUse = updatedContext || context
+    const nextIndex = currentIndex + 1
+    const nextStep = flow?.steps?.[nextIndex]
+
+    if (nextStep) {
+      // Check if next step is hybrid flow
+      if (!skipHybridCheck && nextStep.step_type === 'hybrid_swipe') {
+        // Update index first so hybrid flow completion knows which step to store
+        setCurrentIndex(nextIndex)
+        setHybridFlowType(nextStep.archetype_type)
+        setShowHybridFlow(true)
+      } else {
+        // Regular step - add AI message with resolved prompt
+        const responseText = resolvePrompt(nextStep, contextToUse)
+        const aiMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          text: responseText,
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, aiMessage])
+        setCurrentIndex(nextIndex)
+      }
+    } else {
+      // Flow completed
+      return true // Signal completion
+    }
+    return false
+  }
 
   // Function to update persona in Supabase
   const updatePersonaInSupabase = async (context) => {
@@ -114,7 +183,7 @@ function App() {
     setInputText('')
 
     // Check if this step should persist profile to Supabase (flagged in flow JSON)
-    const shouldSaveToDb = Boolean(currentStep.save_to_db) || currentStep.step === 'lead_q7_email_capture' // backward compatibility
+    const shouldSaveToDb = Boolean(currentStep.save_to_db) || currentStep.step === 'lead_q8_email_capture' // fallback check for step name
     console.log('🔍 Should save to DB:', shouldSaveToDb)
     console.log('🔍 Supabase available:', !!supabase)
     
@@ -187,27 +256,13 @@ function App() {
       console.log('ℹ️ Not email step or Supabase not available')
     }
 
-    // Move to next step
-    const nextIndex = currentIndex + 1
-    const nextStep = flow?.steps?.[nextIndex]
-
-    if (nextStep) {
-      // Add AI response
-      const responseText = resolvePrompt(nextStep, newContext)
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString()
-      }
-
-      setMessages(prev => [...prev, aiMessage])
-      setCurrentIndex(nextIndex)
-    } else {
+    // Move to next step (check for hybrid flow)
+    const flowCompleted = moveToNextStep(newContext)
+    
+    if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
       
-      // Flow completed
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
@@ -226,6 +281,60 @@ function App() {
 
     const optionValue = option.value || option.label
     setIsLoading(true)
+
+    // Handle "change" or "no" option - go back to swipe flow (dynamic approach)
+    if (optionValue === 'change' || optionValue === 'no') {
+      // Get the required input (which is the store_as from the previous swipe step)
+      const requiredStoreAs = currentStep?.required_inputs?.[0]
+      
+      if (!requiredStoreAs) {
+        console.warn('⚠️ No required_inputs found for current step')
+        setIsLoading(false)
+        return
+      }
+
+      // Find the swipe step that has this as its store_as
+      const swipeStep = flow?.steps.find(step => step.store_as === requiredStoreAs)
+      
+      // Validate: ensure we found a hybrid_swipe step
+      if (swipeStep && swipeStep.step_type === 'hybrid_swipe') {
+        // Find the step index
+        const targetStepIndex = flow?.steps.findIndex(step => step.step === swipeStep.step)
+        
+        if (targetStepIndex !== -1) {
+          // Clear the previous selection and related context
+          const newContext = { ...context }
+          
+          // Clear the archetype selection (tag_as from swipe step)
+          if (swipeStep.tag_as) {
+            delete newContext[swipeStep.tag_as]
+          }
+          
+          // Clear the swipe step completion flag (store_as from swipe step)
+          if (swipeStep.store_as) {
+            delete newContext[swipeStep.store_as]
+          }
+          
+          // Clear the reflection step completion flag (store_as from current step)
+          if (currentStep.store_as) {
+            delete newContext[currentStep.store_as]
+          }
+          
+          setContext(newContext)
+          
+          // Go back to swipe flow using the step's archetype_type
+          setCurrentIndex(targetStepIndex)
+          setShowHybridFlow(true)
+          setHybridFlowType(swipeStep.archetype_type)
+          setIsLoading(false)
+          return
+        }
+      } else {
+        console.warn('⚠️ Swipe step not found or invalid step_type:', { requiredStoreAs, swipeStep })
+        setIsLoading(false)
+        return
+      }
+    }
 
     // Add user message
     const userMessage = {
@@ -251,27 +360,13 @@ function App() {
     setContext(newContext)
     setMessages(prev => [...prev, userMessage])
 
-    // Move to next step
-    const nextIndex = currentIndex + 1
-    const nextStep = flow?.steps?.[nextIndex]
-
-    if (nextStep) {
-      // Add AI response
-      const responseText = resolvePrompt(nextStep, newContext)
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString()
-      }
-
-      setMessages(prev => [...prev, aiMessage])
-      setCurrentIndex(nextIndex)
-    } else {
+    // Move to next step (check for hybrid flow)
+    const flowCompleted = moveToNextStep(newContext)
+    
+    if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
       
-      // Flow completed
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
@@ -310,6 +405,25 @@ function App() {
             <span></span><span></span><span></span>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  // Render hybrid flow if active
+  if (showHybridFlow && hybridFlowType) {
+    return (
+      <div className="app">
+        <HybridArchetypeFlow
+          archetypeType={hybridFlowType}
+          onComplete={handleHybridFlowComplete}
+          onBack={() => {
+            setShowHybridFlow(false)
+            // Optionally go back to previous step
+            if (currentIndex > 0) {
+              setCurrentIndex(currentIndex - 1)
+            }
+          }}
+        />
       </div>
     )
   }
@@ -355,43 +469,43 @@ function App() {
           
           <div ref={messagesEndRef} />
         </div>
-
-        {currentStep?.options && currentStep.options.length > 0 && (
-          <div className="options-container">
-            {currentStep.options.map((option, index) => (
-              <button
-                key={index}
-                className="option-button"
-                onClick={() => handleOptionClick(option)}
-                disabled={isLoading}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {currentStep && !currentStep.options && (
-          <div className="input-bar">
-            <textarea
-              className="message-input"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder={currentStep.tag_as === 'user_name' ? 'Type your name...' : 'Share your thoughts...'}
-              disabled={isLoading}
-              rows={1}
-            />
-            <button
-              className="send-button"
-              onClick={handleSubmit}
-              disabled={isLoading || !inputText.trim()}
-            >
-              Send
-            </button>
-          </div>
-        )}
       </main>
+
+      {currentStep?.options && currentStep.options.length > 0 && (
+        <div className="options-container">
+          {currentStep.options.map((option, index) => (
+            <button
+              key={index}
+              className="option-button"
+              onClick={() => handleOptionClick(option)}
+              disabled={isLoading}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {currentStep && !currentStep.options && (
+        <div className="input-bar">
+          <textarea
+            className="message-input"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder={currentStep.tag_as === 'user_name' ? 'Type your name...' : 'Share your thoughts...'}
+            disabled={isLoading}
+            rows={1}
+          />
+          <button
+            className="send-button"
+            onClick={handleSubmit}
+            disabled={isLoading || !inputText.trim()}
+          >
+            Send
+          </button>
+        </div>
+      )}
     </div>
   )
 }

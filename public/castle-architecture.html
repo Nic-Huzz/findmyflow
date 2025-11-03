@@ -104,7 +104,7 @@ graph TB
     %% Data Layer
     subgraph DataLayer["📚 DATA & TEMPLATES"]
         direction TB
-        FLOW_JSON["lead-magnet.json<br/>Flow Scrolls"]
+        FLOW_JSON["lead-magnet-slide-flow.json<br/>Flow Scrolls"]
         ESSENCE_PROF["essenceProfiles.js<br/>Treasure Vault"]
         PROT_PROF["protectiveProfiles.js<br/>Treasure Vault"]
         PERSONA_PROF["personaProfiles.js<br/>Treasure Vault"]
@@ -229,7 +229,7 @@ sequenceDiagram
     HTML->>Main: Loads React app
     Main->>Router: Renders AppRouter
     Router->>App: Routes to "/" (Home)
-    App->>Flow: Loads lead-magnet.json
+    App->>Flow: Loads lead-magnet-slide-flow.json
     Flow-->>App: Returns flow steps
     App->>User: Shows first prompt
     

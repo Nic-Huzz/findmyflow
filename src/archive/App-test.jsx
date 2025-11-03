@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     const loadFlow = async () => {
       try {
-        const response = await fetch('/lead-magnet-test-nic.json')
+        const response = await fetch('/lead-magnet-slide-flow.json')
         const data = await response.json()
         setFlowData(data)
         
