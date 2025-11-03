@@ -138,9 +138,9 @@ const Profile = () => {
           {/* Essence Archetype Card */}
           <div className="archetype-card essence">
             <div className="archetype-hero">
-              <img 
-                src={`/images/archetypes/essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`} 
-                alt={userData.essence_archetype} 
+              <img
+                src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
+                alt={userData.essence_archetype}
               />
             </div>
             <div className="archetype-content">
@@ -170,9 +170,9 @@ const Profile = () => {
           {/* Protective Archetype Card */}
           <div className="archetype-card">
             <div className="archetype-hero">
-              <img 
-                src={`/images/archetypes/protective/${userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`} 
-                alt={userData.protective_archetype} 
+              <img
+                src={`/images/archetypes/lead-magnet-protective/${userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-')}.png`}
+                alt={userData.protective_archetype}
               />
             </div>
             <div className="archetype-content">
