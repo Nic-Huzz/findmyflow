@@ -77,7 +77,11 @@ const HybridArchetypeFlow = ({
         action: 'right',
         timestamp: Date.now()
       }
-      setSwipeHistory(prev => [...prev, currentState])
+      setSwipeHistory(prev => {
+        const newHistory = [...prev, currentState]
+        console.log('Swipe history updated:', newHistory.length, 'items')
+        return newHistory
+      })
 
       const currentArchetype = archetypes[currentIndex]
       setSwipedRight(prev => [...prev, currentArchetype])
@@ -171,6 +175,7 @@ const HybridArchetypeFlow = ({
 
       // Update drag delta state for overlays
       setDragDelta(deltaX)
+      console.log('Drag delta:', deltaX, 'Show YES?', deltaX > 50, 'Show NO?', deltaX < -50)
 
       if (cardRef.current) {
         const rotation = deltaX * 0.1

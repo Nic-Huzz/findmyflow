@@ -196,9 +196,10 @@
 
 .swipe-card-next {
   transform: scale(0.95) translateY(10px);
-  opacity: 0.5;
+  opacity: 0.7; /* Increased from 0.5 to make it more visible */
   z-index: 1;
   pointer-events: none;
+  filter: blur(2px); /* Add blur to distinguish from current card */
 }
 
 .swipe-card-current {
@@ -215,6 +216,8 @@
   object-fit: contain;
   border-radius: 16px 16px 0 0;
   background: #f8f9fa;
+  position: relative;
+  z-index: 1;
 }
 
 .card-content {
@@ -225,6 +228,8 @@
   justify-content: center; /* Centers text vertically */
   align-items: center; /* Centers text horizontally */
   text-align: center; /* Centers the text content */
+  position: relative;
+  z-index: 1;
 }
 
 .card-content h2 {
@@ -254,17 +259,19 @@
   border-radius: 16px;
   pointer-events: none;
   transition: opacity 0.2s ease;
-  z-index: 10;
+  z-index: 100; /* Increased from 10 to ensure it's on top */
 }
 
 .swipe-overlay-yes {
-  background: rgba(74, 222, 128, 0.15);
+  background: rgba(74, 222, 128, 0.25); /* Increased opacity for visibility */
   backdrop-filter: blur(2px);
+  border: 3px solid rgba(74, 222, 128, 0.5);
 }
 
 .swipe-overlay-no {
-  background: rgba(248, 113, 113, 0.15);
+  background: rgba(248, 113, 113, 0.25); /* Increased opacity for visibility */
   backdrop-filter: blur(2px);
+  border: 3px solid rgba(248, 113, 113, 0.5);
 }
 
 .overlay-text {
