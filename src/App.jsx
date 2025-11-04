@@ -230,7 +230,7 @@ function App() {
             {
               id: `ai-${Date.now()}`,
               isAI: true,
-              text: `I\'ve sent a magic link to ${trimmedInput}. Please check your inbox (and spam folder).`,
+              text: `I've sent a magic link to ${trimmedInput}. Please check your inbox (and spam folder).`,
               timestamp: new Date().toLocaleTimeString()
             }
           ])
@@ -241,7 +241,7 @@ function App() {
             {
               id: `ai-${Date.now()}`,
               isAI: true,
-              text: `Hmm, I couldn\'t send the magic link: ${magicLinkResult.message}. Please double-check your email or try again in a moment.`,
+              text: `Hmm, I couldn't send the magic link: ${magicLinkResult.message}. Please double-check your email or try again in a moment.`,
               timestamp: new Date().toLocaleTimeString()
             }
           ])

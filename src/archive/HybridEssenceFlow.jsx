@@ -343,7 +343,7 @@ const HybridEssenceFlow = () => {
           
           <div className="message ai">
             <div className="bubble">
-              <div className="text">Now let's narrow it down! Which resonates more with you?</div>
+              <div className="text">Now let&apos;s narrow it down! Which resonates more with you?</div>
               <div className="timestamp">{new Date().toLocaleTimeString()}</div>
             </div>
           </div>
@@ -404,7 +404,7 @@ const HybridEssenceFlow = () => {
           
           <div className="message ai">
             <div className="bubble">
-              <div className="text">Swipe right if this resonates with you, left if it doesn't:</div>
+              <div className="text">Swipe right if this resonates with you, left if it doesn&apos;t:</div>
               <div className="timestamp">{new Date().toLocaleTimeString()}</div>
             </div>
           </div>

@@ -342,7 +342,7 @@ const HybridProtectiveFlow = () => {
           
           <div className="message ai">
             <div className="bubble">
-              <div className="text">Now let's narrow it down! Which protective pattern resonates more with you?</div>
+              <div className="text">Now let&apos;s narrow it down! Which protective pattern resonates more with you?</div>
               <div className="timestamp">{new Date().toLocaleTimeString()}</div>
             </div>
           </div>
@@ -405,7 +405,7 @@ const HybridProtectiveFlow = () => {
           
           <div className="message ai">
             <div className="bubble">
-              <div className="text">Swipe right if this protective pattern sounds familiar, left if it doesn't:</div>
+              <div className="text">Swipe right if this protective pattern sounds familiar, left if it doesn&apos;t:</div>
               <div className="timestamp">{new Date().toLocaleTimeString()}</div>
             </div>
           </div>
