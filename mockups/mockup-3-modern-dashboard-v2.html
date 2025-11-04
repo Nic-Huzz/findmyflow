@@ -154,19 +154,6 @@
       background: rgba(255,255,255,0.15);
     }
 
-    /* Mobile Overlay */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 99;
-    }
-
-    .sidebar-overlay.show {
-      display: block;
-    }
-
     /* Main Content */
     .main-content {
       margin-left: 280px;
@@ -555,9 +542,6 @@
     </div>
   </div>
 
-  <!-- Sidebar Overlay for Mobile -->
-  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="logo">FindMyFlow</div>
@@ -662,10 +646,7 @@
   <script>
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
-
       sidebar.classList.toggle('mobile-hidden');
-      overlay.classList.toggle('show');
     }
 
     // Close sidebar when clicking on nav items on mobile
@@ -680,11 +661,9 @@
     // On desktop, ensure sidebar is always visible
     window.addEventListener('resize', () => {
       const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebarOverlay');
 
       if (window.innerWidth > 768) {
         sidebar.classList.remove('mobile-hidden');
-        overlay.classList.remove('show');
       }
     });
 
