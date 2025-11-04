@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/me Page Design Mockups</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .header p {
+      font-size: 1.3rem;
+      opacity: 0.95;
+    }
+
+    .mockups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .mockup-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .mockup-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .mockup-preview {
+      height: 350px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mockup-preview::after {
+      content: 'Click to View';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mockup-card:hover .mockup-preview::after {
+      opacity: 1;
+    }
+
+    .mockup-card.mockup-1 .mockup-preview {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .mockup-card.mockup-2 .mockup-preview {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .mockup-card.mockup-3 .mockup-preview {
+      background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+    }
+
+    .mockup-card.mockup-4 .mockup-preview {
+      background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    }
+
+    .mockup-info {
+      padding: 30px;
+    }
+
+    .mockup-number {
+      display: inline-block;
+      background: linear-gradient(135deg, #5e17eb, #ffdd27);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .mockup-title {
+      font-size: 1.8rem;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+
+    .mockup-description {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .mockup-features {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+
+    .mockup-features li {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .mockup-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #5e17eb;
+      font-weight: bold;
+    }
+
+    .view-button {
+      display: block;
+      width: 100%;
+      background: #5e17eb;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .view-button:hover {
+      background: #4912c4;
+    }
+
+    .comparison {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .comparison h2 {
+      font-size: 2rem;
+      color: #1a1a1a;
+      margin-bottom: 30px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .comparison-table th {
+      background: #f5f7fa;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .comparison-table td {
+      color: #555;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .mockups-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 /me Page Design Mockups</h1>
+      <p>Choose your favorite design direction</p>
+    </div>
+
+    <div class="mockups-grid">
+      <!-- Mockup 1 -->
+      <div class="mockup-card mockup-1" onclick="window.location.href='mockup-1-hero-profile.html'">
+        <div class="mockup-preview">🦸</div>
+        <div class="mockup-info">
+          <div class="mockup-number">Mockup 1</div>
+          <h2 class="mockup-title">Hero Profile Design</h2>
+          <p class="mockup-description">
+            A bold, centered hero section with clean card-based archetypes. Perfect for making a strong first impression.
+          </p>
+          <ul class="mockup-features">
+            <li>Prominent avatar and user info</li>
+            <li>Large, interactive archetype cards</li>
+            <li>Modern gradient backgrounds</li>
+            <li>Strong visual hierarchy</li>
+          </ul>
+          <a href="mockup-1-hero-profile.html" class="view-button">View Mockup →</a>
+        </div>
+      </div>
+
+      <!-- Mockup 2 -->
+      <div class="mockup-card mockup-2" onclick="window.location.href='mockup-2-timeline-journey.html'">
+        <div class="mockup-preview">🗺️</div>
+        <div class="mockup-info">
+          <div class="mockup-number">Mockup 2</div>
+          <h2 class="mockup-title">Timeline Journey Design</h2>
+          <p class="mockup-description">
+            Vertical storytelling layout with a visual timeline showing progression through the transformation journey.
+          </p>
+          <ul class="mockup-features">
+            <li>Timeline-based narrative flow</li>
+            <li>Progressive disclosure of insights</li>
+            <li>Journey-focused storytelling</li>
+            <li>Emotional engagement through progression</li>
+          </ul>
+          <a href="mockup-2-timeline-journey.html" class="view-button">View Mockup →</a>
+        </div>
+      </div>
+
+      <!-- Mockup 3 -->
+      <div class="mockup-card mockup-3" onclick="window.location.href='mockup-3-modern-dashboard.html'">
+        <div class="mockup-preview">📊</div>
+        <div class="mockup-info">
+          <div class="mockup-number">Mockup 3</div>
+          <h2 class="mockup-title">Modern Dashboard Design</h2>
+          <p class="mockup-description">
+            App-style dashboard with sidebar navigation and data visualization. Great for users who want quick access to all features.
+          </p>
+          <ul class="mockup-features">
+            <li>Persistent sidebar navigation</li>
+            <li>Stats cards with key insights</li>
+            <li>Dashboard-style information architecture</li>
+            <li>Room for future features expansion</li>
+          </ul>
+          <a href="mockup-3-modern-dashboard.html" class="view-button">View Mockup →</a>
+        </div>
+      </div>
+
+      <!-- Mockup 4 -->
+      <div class="mockup-card mockup-4" onclick="window.location.href='mockup-4-minimal-elegant.html'">
+        <div class="mockup-preview">✨</div>
+        <div class="mockup-info">
+          <div class="mockup-number">Mockup 4</div>
+          <h2 class="mockup-title">Minimal Elegant Design</h2>
+          <p class="mockup-description">
+            Magazine-style minimal layout focused on typography and content. Perfect for a sophisticated, meditative experience.
+          </p>
+          <ul class="mockup-features">
+            <li>Editorial typography approach</li>
+            <li>Focus on content readability</li>
+            <li>Minimal, sophisticated aesthetic</li>
+            <li>Calming, contemplative experience</li>
+          </ul>
+          <a href="mockup-4-minimal-elegant.html" class="view-button">View Mockup →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="comparison">
+      <h2>Quick Comparison</h2>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Mockup 1</th>
+            <th>Mockup 2</th>
+            <th>Mockup 3</th>
+            <th>Mockup 4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Style</strong></td>
+            <td>Bold & Modern</td>
+            <td>Storytelling</td>
+            <td>Dashboard</td>
+            <td>Minimal & Elegant</td>
+          </tr>
+          <tr>
+            <td><strong>Best For</strong></td>
+            <td>First impressions</td>
+            <td>Engagement</td>
+            <td>Feature-rich apps</td>
+            <td>Premium feel</td>
+          </tr>
+          <tr>
+            <td><strong>Complexity</strong></td>
+            <td>Medium</td>
+            <td>Medium</td>
+            <td>High</td>
+            <td>Low</td>
+          </tr>
+          <tr>
+            <td><strong>Development Time</strong></td>
+            <td>Moderate</td>
+            <td>Moderate</td>
+            <td>Longer</td>
+            <td>Shorter</td>
+          </tr>
+          <tr>
+            <td><strong>Mobile Experience</strong></td>
+            <td>Excellent</td>
+            <td>Excellent</td>
+            <td>Good</td>
+            <td>Excellent</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

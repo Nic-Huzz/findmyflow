@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup 4: Minimal Elegant Design</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #ffffff;
+      min-height: 100vh;
+      color: #1a1a1a;
+    }
+
+    .mockup-label {
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding-bottom: 60px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 60px;
+    }
+
+    .header-eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #999;
+      margin-bottom: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 500;
+    }
+
+    .header-title {
+      font-size: 3.5rem;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      font-weight: 400;
+      color: #1a1a1a;
+    }
+
+    .header-subtitle {
+      font-size: 1.3rem;
+      color: #666;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .header-meta {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.9rem;
+      color: #999;
+    }
+
+    .header-meta a {
+      color: #5e17eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .header-meta a:hover {
+      text-decoration: underline;
+    }
+
+    /* Journey Badge */
+    .journey-badge {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .badge-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #999;
+      margin-bottom: 15px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .badge-content {
+      display: inline-block;
+      position: relative;
+    }
+
+    .badge-content::before,
+    .badge-content::after {
+      content: '·';
+      color: #5e17eb;
+      font-size: 2rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .badge-content::before {
+      left: -40px;
+    }
+
+    .badge-content::after {
+      right: -40px;
+    }
+
+    .badge-name {
+      font-size: 1.8rem;
+      color: #5e17eb;
+      font-weight: 400;
+    }
+
+    /* Archetype Sections */
+    .archetype-section {
+      margin-bottom: 100px;
+    }
+
+    .archetype-number {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ccc;
+      margin-bottom: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .archetype-type {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #999;
+      margin-bottom: 15px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 500;
+    }
+
+    .archetype-name {
+      font-size: 3rem;
+      line-height: 1.2;
+      margin-bottom: 30px;
+      font-weight: 400;
+      color: #1a1a1a;
+    }
+
+    .archetype-quote {
+      font-size: 1.4rem;
+      line-height: 1.8;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 40px;
+      padding-left: 30px;
+      border-left: 3px solid #5e17eb;
+    }
+
+    .section.essence .archetype-quote {
+      border-left-color: #ffdd27;
+    }
+
+    .archetype-description {
+      font-size: 1.1rem;
+      line-height: 2;
+      color: #444;
+      margin-bottom: 35px;
+    }
+
+    .archetype-details {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .detail-item {
+      margin-bottom: 30px;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #999;
+      margin-bottom: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 500;
+    }
+
+    .detail-content {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #444;
+    }
+
+    .read-more {
+      font-size: 0.95rem;
+      color: #5e17eb;
+      text-decoration: none;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .read-more:hover {
+      text-decoration: underline;
+    }
+
+    .read-more::after {
+      content: '→';
+    }
+
+    /* Divider */
+    .divider {
+      text-align: center;
+      margin: 80px 0;
+      position: relative;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    .divider-symbol {
+      display: inline-block;
+      background: white;
+      padding: 0 30px;
+      font-size: 1.5rem;
+      color: #ccc;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      text-align: center;
+      padding: 80px 0;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 80px;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      font-weight: 400;
+      color: #1a1a1a;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      color: #666;
+      font-style: italic;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 18px 40px;
+      border-radius: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #1a1a1a;
+      color: white;
+      border: 2px solid #1a1a1a;
+    }
+
+    .btn-primary:hover {
+      background: transparent;
+      color: #1a1a1a;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #1a1a1a;
+      border: 2px solid #1a1a1a;
+    }
+
+    .btn-secondary:hover {
+      background: #1a1a1a;
+      color: white;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 40px 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 0.85rem;
+      color: #999;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 80px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 50px 25px;
+      }
+
+      .header-title {
+        font-size: 2.5rem;
+      }
+
+      .header-meta {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .archetype-name {
+        font-size: 2rem;
+      }
+
+      .archetype-quote {
+        font-size: 1.2rem;
+      }
+
+      .badge-content::before,
+      .badge-content::after {
+        display: none;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mockup-label">
+    <h2>📐 Mockup 4: Minimal Elegant Design</h2>
+    <p>Magazine-style minimal layout with focus on typography and content</p>
+  </div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-eyebrow">Your Profile</div>
+      <h1 class="header-title">The Journey Within</h1>
+      <p class="header-subtitle">Discovering the layers of your authentic self</p>
+      <div class="header-meta">
+        <span>john@example.com</span>
+        <span>·</span>
+        <a href="#">Sign Out</a>
+      </div>
+    </header>
+
+    <!-- Journey Stage -->
+    <div class="journey-badge">
+      <div class="badge-label">Current Stage</div>
+      <div class="badge-content">
+        <div class="badge-name">Awakening Seeker</div>
+      </div>
+    </div>
+
+    <!-- Essence Archetype -->
+    <section class="archetype-section essence">
+      <div class="archetype-number">01</div>
+      <div class="archetype-type">Your Essence</div>
+      <h2 class="archetype-name">The Visionary</h2>
+
+      <blockquote class="archetype-quote">
+        "You see beyond what is, into what could be."
+      </blockquote>
+
+      <p class="archetype-description">
+        Your gift is to inspire others with your bold vision of the future. You naturally perceive possibilities that others miss, creating pathways where none existed before. This rare ability to imagine and articulate a compelling future makes you a natural catalyst for transformation.
+      </p>
+
+      <div class="archetype-details">
+        <div class="detail-item">
+          <div class="detail-label">Your Superpower</div>
+          <div class="detail-content">Transforming possibility into reality through the power of imagination and strategic action.</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Your North Star</div>
+          <div class="detail-content">Creating meaningful impact through innovation that serves the greater good.</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Your Vision</div>
+          <div class="detail-content">A world where imagination shapes tomorrow and every person discovers their unique contribution.</div>
+        </div>
+      </div>
+
+      <a href="#" class="read-more">Explore deeper insights</a>
+    </section>
+
+    <!-- Divider -->
+    <div class="divider">
+      <span class="divider-symbol">✦</span>
+    </div>
+
+    <!-- Protective Archetype -->
+    <section class="archetype-section protective">
+      <div class="archetype-number">02</div>
+      <div class="archetype-type">Your Protective Pattern</div>
+      <h2 class="archetype-name">The Perfectionist</h2>
+
+      <blockquote class="archetype-quote">
+        "You seek control through excellence, creating safety in precision."
+      </blockquote>
+
+      <p class="archetype-description">
+        This protective pattern emerged to keep you safe through achievement and high standards. While it has served you well in many ways, it may also limit your freedom to be authentic, vulnerable, and to embrace the natural imperfections of being human.
+      </p>
+
+      <div class="archetype-details">
+        <div class="detail-item">
+          <div class="detail-label">How It Shows Up</div>
+          <div class="detail-content">High standards for yourself and others, self-criticism when expectations aren't met, and difficulty accepting imperfection as part of the creative process.</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">The Gift Within</div>
+          <div class="detail-content">Exceptional attention to quality, detail, and craftsmanship that elevates everything you touch.</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Breaking Free</div>
+          <div class="detail-content">Learning to embrace imperfection as part of growth, seeing mistakes as essential feedback, and finding safety in vulnerability.</div>
+        </div>
+      </div>
+
+      <a href="#" class="read-more">Learn how to transform this pattern</a>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <h2 class="cta-title">Continue Your Journey</h2>
+      <p class="cta-description">
+        Unlock your full potential with the Healing Compass
+      </p>
+      <div class="cta-buttons">
+        <button class="btn btn-primary">Start Healing Compass</button>
+        <button class="btn btn-secondary">Share Your Profile</button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2024 FindMyFlow · Your journey of self-discovery</p>
+    </footer>
+  </div>
+</body>
+</html>
