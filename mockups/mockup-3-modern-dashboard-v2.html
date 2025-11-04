@@ -75,7 +75,7 @@
     }
 
     .sidebar.mobile-hidden {
-      transform: translateX(-100%);
+      transform: translateY(-100%);
     }
 
     .logo {
@@ -478,18 +478,21 @@
         display: block;
       }
 
-      /* Sidebar becomes full-screen overlay on mobile */
+      /* Sidebar becomes dropdown from top on mobile */
       .sidebar {
         position: fixed;
-        width: 280px;
-        top: 0;
+        width: 100%;
+        top: 60px; /* Below the topbar */
         left: 0;
-        height: 100vh;
+        height: auto;
+        max-height: calc(100vh - 60px);
+        overflow-y: auto;
         z-index: 100;
+        padding: 30px 20px;
       }
 
       .sidebar .logo {
-        display: block;
+        display: none; /* Hide logo on mobile since it's in topbar */
       }
 
       /* Main content takes full width */
@@ -541,7 +544,7 @@
 <body>
   <div class="mockup-label">
     <h2>📐 Mockup 3 v2: Modern Dashboard Design (Mobile-First)</h2>
-    <p>Dashboard with collapsible mobile menu + real archetype data</p>
+    <p>Dashboard with dropdown mobile menu + real archetype data + images</p>
   </div>
 
   <!-- Mobile Top Bar (shows only on mobile) -->
@@ -598,7 +601,7 @@
       <div class="stat-card gradient">
         <div class="stat-icon">🌟</div>
         <div class="stat-label">Journey Stage</div>
-        <div class="stat-value">Awakening Seeker</div>
+        <div class="stat-value">Vibe Seeker</div>
       </div>
     </div>
 
@@ -613,7 +616,7 @@
         <!-- Essence Card - Using real data -->
         <div class="archetype-card essence">
           <div class="archetype-header">
-            <img src="/images/archetypes/essence/radiant-rebel.PNG" alt="Radiant Rebel">
+            <img src="/images/archetypes/lead-magnet-essence/radiant-rebel.PNG" alt="Radiant Rebel">
             <div class="archetype-tag">Your Essence</div>
           </div>
           <div class="archetype-body">
