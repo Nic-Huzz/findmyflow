@@ -49,6 +49,17 @@
   padding: 1rem 2rem;
   border-radius: 16px;
   backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+}
+
+.total-points.clickable {
+  cursor: pointer;
+}
+
+.total-points.clickable:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
 
 .points-label {
@@ -223,6 +234,27 @@
 
 .category-point-item.total .point-value {
   color: white;
+}
+
+/* Leaderboard Button */
+.category-point-item.leaderboard-button {
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  color: #212529;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  font-size: 0.9375rem;
+}
+
+.category-point-item.leaderboard-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(255, 221, 39, 0.4);
+}
+
+.category-point-item.leaderboard-button span {
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 /* Quest Sections */
@@ -770,5 +802,143 @@
 
   .leaderboard-points {
     font-size: 1.125rem;
+  }
+}
+
+/* Leaderboard Modal */
+.leaderboard-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.leaderboard-modal {
+  background: white;
+  border-radius: 24px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.leaderboard-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.leaderboard-modal-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: #212529;
+}
+
+.modal-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #e9ecef;
+  color: #495057;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.modal-close-btn:hover {
+  background: #dee2e6;
+  transform: rotate(90deg);
+}
+
+.leaderboard-modal .leaderboard-toggle {
+  margin: 1.5rem 2rem 0;
+}
+
+.leaderboard-modal .leaderboard-list {
+  padding: 1.5rem 2rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Scrollbar styling for modal */
+.leaderboard-modal .leaderboard-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.leaderboard-modal .leaderboard-list::-webkit-scrollbar-track {
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.leaderboard-modal .leaderboard-list::-webkit-scrollbar-thumb {
+  background: #dee2e6;
+  border-radius: 4px;
+}
+
+.leaderboard-modal .leaderboard-list::-webkit-scrollbar-thumb:hover {
+  background: #adb5bd;
+}
+
+/* Mobile modal */
+@media (max-width: 768px) {
+  .leaderboard-modal {
+    max-height: 90vh;
+    border-radius: 24px 24px 0 0;
+    margin-top: auto;
+  }
+
+  .leaderboard-modal-header {
+    padding: 1.5rem;
+  }
+
+  .leaderboard-modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .leaderboard-modal .leaderboard-toggle {
+    margin: 1rem 1.5rem 0;
+  }
+
+  .leaderboard-modal .leaderboard-list {
+    padding: 1rem 1.5rem 1.5rem;
   }
 }
