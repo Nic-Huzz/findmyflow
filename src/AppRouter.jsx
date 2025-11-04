@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './App'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
+import Challenge from './Challenge'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import './App.css'
 import './Profile.css'
 import './Auth.css'
 import './HybridEssenceFlow.css'
+import './Challenge.css'
 
 function AppRouter() {
   return (
@@ -24,6 +26,11 @@ function AppRouter() {
           <Route path="/healing-compass" element={
             <AuthGate>
               <HealingCompass />
+            </AuthGate>
+          } />
+          <Route path="/7-day-challenge" element={
+            <AuthGate>
+              <Challenge />
             </AuthGate>
           } />
         </Routes>

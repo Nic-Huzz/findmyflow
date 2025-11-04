@@ -138,9 +138,9 @@ const Profile = () => {
           {/* Essence Archetype Card */}
           <div className="archetype-card essence">
             <div className="archetype-hero">
-              <img 
-                src={`/images/archetypes/essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`} 
-                alt={userData.essence_archetype} 
+              <img
+                src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
+                alt={userData.essence_archetype}
               />
             </div>
             <div className="archetype-content">
@@ -170,9 +170,9 @@ const Profile = () => {
           {/* Protective Archetype Card */}
           <div className="archetype-card">
             <div className="archetype-hero">
-              <img 
-                src={`/images/archetypes/protective/${userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`} 
-                alt={userData.protective_archetype} 
+              <img
+                src={`/images/archetypes/lead-magnet-protective/${userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-')}.png`}
+                alt={userData.protective_archetype}
               />
             </div>
             <div className="archetype-content">
@@ -210,10 +210,17 @@ const Profile = () => {
         {/* Continue Section */}
         <div className="continue-section">
           <h3>Continue Your Journey</h3>
-          <p>Ready to dive deeper into your healing compass?</p>
-          <button 
+          <p>Ready to embark on a 7-day transformation journey?</p>
+          <button
+            className="continue-btn"
+            onClick={() => navigate('/7-day-challenge')}
+          >
+            Start 7-Day Challenge
+          </button>
+          <button
             className="continue-btn"
             onClick={() => navigate('/healing-compass')}
+            style={{ marginTop: '10px', background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' }}
           >
             Start Healing Compass
           </button>
