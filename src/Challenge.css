@@ -195,6 +195,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -303,6 +305,47 @@
   line-height: 1.6;
   margin: 0 0 1.5rem 0;
   font-size: 0.9375rem;
+}
+
+/* Daily Streak Bubbles */
+.daily-streak {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.streak-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #e9ecef;
+  color: #adb5bd;
+  border: 2px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.streak-bubble.completed {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  border-color: #5e17eb;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.3);
+  transform: scale(1.05);
+}
+
+/* Responsive streak bubbles */
+@media (max-width: 480px) {
+  .streak-bubble {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
 }
 
 /* Quest Input Area */

@@ -417,6 +417,33 @@ function Challenge() {
     }
   }
 
+  const getDailyStreak = (questId) => {
+    if (!progress) return [false, false, false, false, false, false, false]
+
+    const challengeStart = new Date(progress.challenge_start_date)
+    challengeStart.setHours(0, 0, 0, 0)
+
+    // Get all completions for this quest
+    const questCompletions = completions.filter(c => c.quest_id === questId)
+
+    // Create array for 7 days [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+    const streak = [false, false, false, false, false, false, false]
+
+    questCompletions.forEach(completion => {
+      const completionDate = new Date(completion.completed_at)
+      completionDate.setHours(0, 0, 0, 0)
+
+      // Calculate which day of the challenge this was (0-6)
+      const daysSinceStart = Math.floor((completionDate - challengeStart) / (1000 * 60 * 60 * 24))
+
+      if (daysSinceStart >= 0 && daysSinceStart < 7) {
+        streak[daysSinceStart] = true
+      }
+    })
+
+    return streak
+  }
+
   const filteredQuests = challengeData?.quests.filter(q => q.category === activeCategory) || []
   const dailyQuests = filteredQuests.filter(q => q.type === 'daily')
   const weeklyQuests = filteredQuests.filter(q => q.type === 'weekly')
@@ -427,7 +454,7 @@ function Challenge() {
       <div className="challenge-container">
         <div className="challenge-onboarding">
           <div className="onboarding-content">
-            <h1>🚀 Welcome to the 7-Day Challenge</h1>
+            <h1>🚀 Welcome to the Vibe Rise Game</h1>
             <p className="onboarding-intro">
               Embark on a transformational journey to embody your essence archetype.
               Over the next 7 days, you'll complete quests across four categories:
@@ -491,7 +518,7 @@ function Challenge() {
     <div className="challenge-container">
       <header className="challenge-header">
         <div className="challenge-header-top">
-          <h1>7-Day Challenge</h1>
+          <h1>Vibe Rise Game</h1>
           <div className="challenge-day">Day {progress.current_day}/7</div>
         </div>
         <div className="challenge-points">
@@ -648,12 +675,29 @@ function Challenge() {
             <div className="quest-grid">
               {dailyQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
+                const streak = getDailyStreak(quest.id)
+                const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+
                 return (
                   <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
                     <div className="quest-header">
                       <h3 className="quest-name">{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
                     </div>
+
+                    {/* Daily Streak Bubbles */}
+                    <div className="daily-streak">
+                      {dayLabels.map((label, index) => (
+                        <div
+                          key={index}
+                          className={`streak-bubble ${streak[index] ? 'completed' : ''}`}
+                          title={`Day ${index + 1}`}
+                        >
+                          {label}
+                        </div>
+                      ))}
+                    </div>
+
                     <p className="quest-description">{quest.description}</p>
 
                     {!completed && (
