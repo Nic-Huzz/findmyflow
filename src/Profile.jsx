@@ -13,6 +13,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [expandedCard, setExpandedCard] = useState(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     // Only load profile when user is available
@@ -73,6 +74,19 @@ const Profile = () => {
     setExpandedCard(expandedCard === cardId ? null : cardId)
   }
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
+  const getUserInitials = (email) => {
+    if (!email) return '?'
+    const parts = email.split('@')[0].split(/[._-]/)
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase()
+    }
+    return email.substring(0, 2).toUpperCase()
+  }
+
   if (loading) {
     return (
       <div className="app">
@@ -114,117 +128,169 @@ const Profile = () => {
   const personaData = personaProfiles[userData.persona]
 
   return (
-    <div className="profile-container">
-      <div className="header">
-        <div className="header-content">
-          <div className="header-text">
-            <h1>Your Profile</h1>
-            <p>Discover your archetypes and unlock your potential</p>
-          </div>
-          <div className="header-actions">
-            <span className="user-email">{user?.email}</span>
-            <button 
-              className="logout-button"
-              onClick={signOut}
-            >
-              Sign Out
-            </button>
-          </div>
+    <div className="dashboard-container">
+      {/* Mobile Top Bar */}
+      <div className="mobile-topbar">
+        <div className="topbar-content">
+          <div className="topbar-logo">FindMyFlow</div>
+          <button className="hamburger-btn" onClick={toggleSidebar}>
+            ☰
+          </button>
         </div>
       </div>
-      
-      <div className="content">
-        <div className="archetype-cards">
-          {/* Essence Archetype Card */}
-          <div className="archetype-card essence">
-            <div className="archetype-hero">
-              <img
-                src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
-                alt={userData.essence_archetype}
-              />
-            </div>
-            <div className="archetype-content">
-              <div className="archetype-name">{userData.essence_archetype}</div>
-              <div className="archetype-summary">
-                {essenceData?.poetic_line || 'Your essence archetype'}
-              </div>
-              <button 
-                className="expand-btn" 
-                onClick={() => toggleExpand('essence')}
-              >
-                {expandedCard === 'essence' ? 'Show Less ↑' : 'Learn More ↓'}
-              </button>
-              {expandedCard === 'essence' && essenceData && (
-                <div className="expand-content show">
-                  <h4>Your Superpower</h4>
-                  <p>{essenceData.superpower}</p>
-                  <h4>Your North Star</h4>
-                  <p>{essenceData.north_star}</p>
-                  <h4>Your Vision</h4>
-                  <p>{essenceData.poetic_vision}</p>
-                </div>
-              )}
-            </div>
+
+      {/* Sidebar Overlay for Mobile */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+      )}
+
+      {/* Sidebar */}
+      <div className={`sidebar ${sidebarOpen ? '' : 'mobile-hidden'}`}>
+        <div className="logo">FindMyFlow</div>
+
+        <div className="user-profile">
+          <div className="user-avatar">{getUserInitials(user?.email)}</div>
+          <div className="user-name">{user?.email?.split('@')[0] || 'User'}</div>
+          <div className="user-email">{user?.email}</div>
+        </div>
+
+        <ul className="nav-menu">
+          <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
+            📊 Dashboard
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/healing-compass'); setSidebarOpen(false); }}>
+            🧭 Healing Compass
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
+            📈 7-Day Challenge
+          </li>
+        </ul>
+
+        <div className="signout-link" onClick={signOut}>
+          Sign Out
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <div className="page-header">
+          <h1 className="page-title">Welcome Back, {user?.email?.split('@')[0] || 'User'}</h1>
+          <p className="page-subtitle">Here's your transformation journey at a glance</p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="stats-grid">
+          <div className="stat-card purple">
+            <div className="stat-icon">✨</div>
+            <div className="stat-label">Essence</div>
+            <div className="stat-value">{userData.essence_archetype}</div>
           </div>
-          
-          {/* Protective Archetype Card */}
-          <div className="archetype-card">
-            <div className="archetype-hero">
-              <img
-                src={`/images/archetypes/lead-magnet-protective/${userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-')}.png`}
-                alt={userData.protective_archetype}
-              />
-            </div>
-            <div className="archetype-content">
-              <div className="archetype-name">{userData.protective_archetype}</div>
-              <div className="archetype-summary">
-                {protectiveData?.summary || 'Your protective archetype'}
+          <div className="stat-card yellow">
+            <div className="stat-icon">🛡️</div>
+            <div className="stat-label">Protective</div>
+            <div className="stat-value">{userData.protective_archetype}</div>
+          </div>
+          <div className="stat-card gradient">
+            <div className="stat-icon">🌟</div>
+            <div className="stat-label">Journey Stage</div>
+            <div className="stat-value">{userData.persona}</div>
+          </div>
+        </div>
+
+        {/* Archetypes Section */}
+        <div className="archetypes-section">
+          <div className="section-header">
+            <h2 className="section-title">Your Archetypes</h2>
+          </div>
+
+          <div className="archetype-cards-grid">
+            {/* Essence Card */}
+            <div className="archetype-card essence">
+              <div className="archetype-header">
+                <img
+                  src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
+                  alt={userData.essence_archetype}
+                />
+                <div className="archetype-tag">Your Essence</div>
               </div>
-              <button 
-                className="expand-btn" 
-                onClick={() => toggleExpand('protective')}
-              >
-                {expandedCard === 'protective' ? 'Show Less ↑' : 'Learn More ↓'}
-              </button>
-              {expandedCard === 'protective' && protectiveData && (
-                <div className="expand-content show">
-                  <h4>How It Shows Up</h4>
-                  <p>{protectiveData.detailed?.howItShowsUp}</p>
-                  <h4>Breaking Free</h4>
-                  <p>{protectiveData.detailed?.breakingFree}</p>
-                </div>
-              )}
+              <div className="archetype-body">
+                <h3 className="archetype-name">{userData.essence_archetype}</h3>
+                <p className="archetype-description">
+                  {essenceData?.poetic_line || 'Your essence archetype'}
+                </p>
+                <button
+                  className="explore-button"
+                  onClick={() => toggleExpand('essence')}
+                >
+                  {expandedCard === 'essence' ? 'Show Less ↑' : 'Explore Deeper ↓'}
+                </button>
+                {expandedCard === 'essence' && essenceData && (
+                  <div className="expand-content show">
+                    <h4>Your Superpower</h4>
+                    <p>{essenceData.superpower}</p>
+                    <h4>Your North Star</h4>
+                    <p>{essenceData.north_star}</p>
+                    <h4>Your Vision</h4>
+                    <p>{essenceData.poetic_vision}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Protective Card */}
+            <div className="archetype-card">
+              <div className="archetype-header">
+                <img
+                  src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
+                  alt={userData.protective_archetype}
+                />
+                <div className="archetype-tag">Protective</div>
+              </div>
+              <div className="archetype-body">
+                <h3 className="archetype-name">{userData.protective_archetype}</h3>
+                <p className="archetype-description">
+                  {protectiveData?.summary || 'Your protective archetype'}
+                </p>
+                <button
+                  className="explore-button"
+                  onClick={() => toggleExpand('protective')}
+                >
+                  {expandedCard === 'protective' ? 'Show Less ↑' : 'Learn More ↓'}
+                </button>
+                {expandedCard === 'protective' && protectiveData && (
+                  <div className="expand-content show">
+                    <h4>How It Shows Up</h4>
+                    <p>{protectiveData.detailed?.howItShowsUp}</p>
+                    <h4>Breaking Free</h4>
+                    <p>{protectiveData.detailed?.breakingFree}</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-        
-        {/* Persona Section */}
-        <div className="persona-section">
-          <h3>Your Journey Stage</h3>
-          <div className="persona-badge">{userData.persona}</div>
-          <p style={{ marginTop: '15px', color: '#666' }}>
-            {personaData?.summary || 'Your current journey stage'}
-          </p>
-        </div>
-        
-        {/* Continue Section */}
-        <div className="continue-section">
-          <h3>Continue Your Journey</h3>
-          <p>Ready to embark on a 7-day transformation journey?</p>
-          <button
-            className="continue-btn"
-            onClick={() => navigate('/7-day-challenge')}
-          >
-            Start 7-Day Challenge
-          </button>
-          <button
-            className="continue-btn"
-            onClick={() => navigate('/healing-compass')}
-            style={{ marginTop: '10px', background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' }}
-          >
-            Start Healing Compass
-          </button>
-          <button className="share-btn">Share Profile</button>
+
+        {/* CTA Banner */}
+        <div className="cta-banner">
+          <div className="cta-content">
+            <h3>Ready to Dive Deeper?</h3>
+            <p>Continue your transformation journey with the Healing Compass</p>
+            <div className="cta-buttons">
+              <button
+                className="btn-white"
+                onClick={() => navigate('/healing-compass')}
+              >
+                Start Healing Compass →
+              </button>
+              <button
+                className="btn-white"
+                onClick={() => navigate('/7-day-challenge')}
+              >
+                Join 7-Day Challenge 🔥
+              </button>
+              <button className="btn-outline">Share Your Profile</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
