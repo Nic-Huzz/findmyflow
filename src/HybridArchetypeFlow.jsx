@@ -19,6 +19,7 @@ const HybridArchetypeFlow = ({
   const [isAnimating, setIsAnimating] = useState(false)
   const [swipeDirection, setSwipeDirection] = useState(null) // 'left' or 'right'
   const [swipeHistory, setSwipeHistory] = useState([]) // Track swipe history for undo
+  const [dragDelta, setDragDelta] = useState(0) // Track current drag distance for overlays
 
   const cardRef = useRef(null)
   const startX = useRef(0)
@@ -154,6 +155,7 @@ const HybridArchetypeFlow = ({
     isDragging.current = true
     startX.current = e.type.startsWith('mouse') ? e.clientX : e.touches[0].clientX
     currentX.current = startX.current
+    setDragDelta(0)
   }
 
   const handleMove = (e) => {
@@ -166,6 +168,9 @@ const HybridArchetypeFlow = ({
 
     animationFrameId.current = requestAnimationFrame(() => {
       const deltaX = currentX.current - startX.current
+
+      // Update drag delta state for overlays
+      setDragDelta(deltaX)
 
       if (cardRef.current) {
         const rotation = deltaX * 0.1
@@ -225,6 +230,7 @@ const HybridArchetypeFlow = ({
         }
         setIsAnimating(false)
         setSwipeDirection(null)
+        setDragDelta(0) // Reset drag delta
 
         if (cardRef.current) {
           cardRef.current.style.transition = ''
@@ -234,6 +240,8 @@ const HybridArchetypeFlow = ({
       }, 400)
     } else {
       // Spring back animation
+      setDragDelta(0) // Reset drag delta
+
       if (cardRef.current) {
         cardRef.current.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease'
         cardRef.current.style.transform = ''
@@ -518,12 +526,14 @@ const HybridArchetypeFlow = ({
             >
               {/* YES/NO Overlays */}
               <div className="swipe-overlay swipe-overlay-yes" style={{
-                opacity: isDragging.current && (currentX.current - startX.current) > 50 ? 1 : 0
+                opacity: dragDelta > 50 ? 1 : 0,
+                transition: 'opacity 0.2s ease'
               }}>
                 <span className="overlay-text">✅ YES</span>
               </div>
               <div className="swipe-overlay swipe-overlay-no" style={{
-                opacity: isDragging.current && (currentX.current - startX.current) < -50 ? 1 : 0
+                opacity: dragDelta < -50 ? 1 : 0,
+                transition: 'opacity 0.2s ease'
               }}>
                 <span className="overlay-text">❌ NO</span>
               </div>
