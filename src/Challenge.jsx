@@ -15,8 +15,9 @@ function Challenge() {
   const [leaderboard, setLeaderboard] = useState([])
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
+  const [showLeaderboardModal, setShowLeaderboardModal] = useState(false)
 
-  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Leaderboard']
+  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
   useEffect(() => {
     loadChallengeData()
@@ -400,6 +401,21 @@ function Challenge() {
     return { daily, weekly, total: daily + weekly }
   }
 
+  const getPointsToday = (category) => {
+    if (!completions || completions.length === 0) return 0
+
+    const today = new Date().setHours(0, 0, 0, 0)
+
+    // Filter completions for this category that were completed today
+    const todayCompletions = completions.filter(c => {
+      const completionDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
+      return c.quest_category === category && completionDate === today
+    })
+
+    // Sum up the points
+    return todayCompletions.reduce((sum, completion) => sum + (completion.points_earned || 0), 0)
+  }
+
   const getArtifactProgress = (category) => {
     if (!challengeData) return null
 
@@ -527,9 +543,13 @@ function Challenge() {
             <span className="points-value">{progress.total_points || 0}</span>
           </div>
           {userRank && (
-            <div className="total-points">
+            <div
+              className="total-points clickable"
+              onClick={() => setShowLeaderboardModal(true)}
+              title="Click to view leaderboard"
+            >
               <span className="points-label">Your Rank</span>
-              <span className="points-value">#{userRank}</span>
+              <span className="points-value">#{userRank} 🏆</span>
             </div>
           )}
         </div>
@@ -548,64 +568,6 @@ function Challenge() {
       </div>
 
       <div className="challenge-content">
-        {/* Leaderboard Tab */}
-        {activeCategory === 'Leaderboard' && (
-          <div className="leaderboard-section">
-            <div className="leaderboard-header">
-              <h2 className="section-title">🏆 Leaderboard</h2>
-              <div className="leaderboard-toggle">
-                <button
-                  className={`toggle-btn ${leaderboardView === 'weekly' ? 'active' : ''}`}
-                  onClick={() => setLeaderboardView('weekly')}
-                >
-                  This Week
-                </button>
-                <button
-                  className={`toggle-btn ${leaderboardView === 'alltime' ? 'active' : ''}`}
-                  onClick={() => setLeaderboardView('alltime')}
-                >
-                  All Time
-                </button>
-              </div>
-            </div>
-
-            <div className="leaderboard-list">
-              {leaderboard.length === 0 && (
-                <div className="leaderboard-empty">
-                  <p>No participants yet. Be the first to complete a quest!</p>
-                </div>
-              )}
-
-              {leaderboard.map((entry) => (
-                <div
-                  key={entry.userId}
-                  className={`leaderboard-entry ${entry.isCurrentUser ? 'current-user' : ''}`}
-                >
-                  <div className="leaderboard-rank">
-                    {entry.rank === 1 && '🥇'}
-                    {entry.rank === 2 && '🥈'}
-                    {entry.rank === 3 && '🥉'}
-                    {entry.rank > 3 && `#${entry.rank}`}
-                  </div>
-                  <div className="leaderboard-info">
-                    <div className="leaderboard-name">
-                      {entry.name}
-                      {entry.isCurrentUser && <span className="you-badge">You</span>}
-                    </div>
-                    <div className="leaderboard-meta">Day {entry.currentDay}/7</div>
-                  </div>
-                  <div className="leaderboard-points">
-                    {entry.totalPoints} pts
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Quest Content - only show if not on Leaderboard tab */}
-        {activeCategory !== 'Leaderboard' && (
-          <>
         {/* Artifact Progress */}
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
@@ -654,18 +616,20 @@ function Challenge() {
 
         {/* Category Points Summary */}
         <div className="category-points-summary">
-          <div className="category-point-item">
-            <span>Daily Points</span>
-            <span className="point-value">{categoryPoints.daily}</span>
-          </div>
-          <div className="category-point-item">
-            <span>Weekly Points</span>
-            <span className="point-value">{categoryPoints.weekly}</span>
-          </div>
           <div className="category-point-item total">
             <span>Category Total</span>
             <span className="point-value">{categoryPoints.total}</span>
           </div>
+          <div className="category-point-item">
+            <span>Points Today</span>
+            <span className="point-value">{getPointsToday(activeCategory)}</span>
+          </div>
+          <button
+            className="category-point-item leaderboard-button"
+            onClick={() => setShowLeaderboardModal(true)}
+          >
+            <span>🏆 Leaderboard</span>
+          </button>
         </div>
 
         {/* Daily Quests */}
@@ -843,9 +807,71 @@ function Challenge() {
             </div>
           </div>
         )}
-        </>
-        )}
       </div>
+
+      {/* Leaderboard Modal */}
+      {showLeaderboardModal && (
+        <div className="leaderboard-modal-overlay" onClick={() => setShowLeaderboardModal(false)}>
+          <div className="leaderboard-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="leaderboard-modal-header">
+              <h2>🏆 Leaderboard</h2>
+              <button
+                className="modal-close-btn"
+                onClick={() => setShowLeaderboardModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="leaderboard-toggle">
+              <button
+                className={`toggle-btn ${leaderboardView === 'weekly' ? 'active' : ''}`}
+                onClick={() => setLeaderboardView('weekly')}
+              >
+                This Week
+              </button>
+              <button
+                className={`toggle-btn ${leaderboardView === 'alltime' ? 'active' : ''}`}
+                onClick={() => setLeaderboardView('alltime')}
+              >
+                All Time
+              </button>
+            </div>
+
+            <div className="leaderboard-list">
+              {leaderboard.length === 0 && (
+                <div className="leaderboard-empty">
+                  <p>No participants yet. Be the first to complete a quest!</p>
+                </div>
+              )}
+
+              {leaderboard.map((entry) => (
+                <div
+                  key={entry.userId}
+                  className={`leaderboard-entry ${entry.isCurrentUser ? 'current-user' : ''}`}
+                >
+                  <div className="leaderboard-rank">
+                    {entry.rank === 1 && '🥇'}
+                    {entry.rank === 2 && '🥈'}
+                    {entry.rank === 3 && '🥉'}
+                    {entry.rank > 3 && `#${entry.rank}`}
+                  </div>
+                  <div className="leaderboard-info">
+                    <div className="leaderboard-name">
+                      {entry.name}
+                      {entry.isCurrentUser && <span className="you-badge">You</span>}
+                    </div>
+                    <div className="leaderboard-meta">Day {entry.currentDay}/7</div>
+                  </div>
+                  <div className="leaderboard-points">
+                    {entry.totalPoints} pts
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
