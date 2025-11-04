@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup 1: Hero Profile Design</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .mockup-label {
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: white;
+      border-radius: 24px;
+      padding: 60px;
+      text-align: center;
+      margin-bottom: 30px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #5e17eb, #ffdd27);
+      margin: 0 auto 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      color: #1a1a1a;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .hero-email {
+      color: #999;
+      font-size: 0.95rem;
+    }
+
+    .journey-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #5e17eb, #ffdd27);
+      color: white;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 600;
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+
+    /* Archetypes Grid */
+    .archetypes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .archetype-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .archetype-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+    }
+
+    .archetype-image {
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .archetype-card.essence .archetype-image {
+      background: linear-gradient(135deg, #ffdd27 0%, #ff9d00 100%);
+      color: #333;
+    }
+
+    .archetype-card.protective .archetype-image {
+      background: linear-gradient(135deg, #5e17eb 0%, #3d0f99 100%);
+    }
+
+    .archetype-body {
+      padding: 40px;
+    }
+
+    .archetype-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .archetype-name {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .archetype-description {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .explore-btn {
+      background: #5e17eb;
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .explore-btn:hover {
+      background: #4912c4;
+      transform: scale(1.05);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: white;
+      border-radius: 24px;
+      padding: 50px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .cta-title {
+      font-size: 2.2rem;
+      color: #1a1a1a;
+      margin-bottom: 15px;
+      font-weight: 800;
+    }
+
+    .cta-description {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #5e17eb, #ffdd27);
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(94, 23, 235, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #5e17eb;
+      border: 2px solid #5e17eb;
+      padding: 16px 38px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #5e17eb;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 40px 30px;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .archetypes-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-section {
+        padding: 35px 25px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mockup-label">
+    <h2>📐 Mockup 1: Hero Profile Design</h2>
+    <p>Centered, bold hero section with clean card-based archetypes</p>
+  </div>
+
+  <div class="container">
+    <!-- Hero Profile Section -->
+    <div class="hero-section">
+      <div class="profile-avatar">JD</div>
+      <h1 class="hero-title">Welcome Back, John</h1>
+      <p class="hero-subtitle">Your Transformation Journey</p>
+      <p class="hero-email">john@example.com</p>
+      <div class="journey-badge">✨ Awakening Seeker</div>
+    </div>
+
+    <!-- Archetypes Grid -->
+    <div class="archetypes-grid">
+      <!-- Essence Archetype -->
+      <div class="archetype-card essence">
+        <div class="archetype-image">
+          [Essence Image]
+        </div>
+        <div class="archetype-body">
+          <div class="archetype-label">Your Essence</div>
+          <h2 class="archetype-name">The Visionary</h2>
+          <p class="archetype-description">
+            You see beyond what is, into what could be. Your gift is to inspire others with your bold vision of the future.
+          </p>
+          <button class="explore-btn">Explore Your Essence</button>
+        </div>
+      </div>
+
+      <!-- Protective Archetype -->
+      <div class="archetype-card protective">
+        <div class="archetype-image">
+          [Protective Image]
+        </div>
+        <div class="archetype-body">
+          <div class="archetype-label">Your Protective Pattern</div>
+          <h2 class="archetype-name">The Perfectionist</h2>
+          <p class="archetype-description">
+            You seek control through excellence, but this pattern may limit your freedom to be authentic and vulnerable.
+          </p>
+          <button class="explore-btn">Understand Your Pattern</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+      <h2 class="cta-title">Continue Your Journey</h2>
+      <p class="cta-description">
+        Ready to dive deeper into your healing compass and unlock your full potential?
+      </p>
+      <div class="cta-buttons">
+        <button class="btn-primary">Start Healing Compass →</button>
+        <button class="btn-secondary">Share Your Profile</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
