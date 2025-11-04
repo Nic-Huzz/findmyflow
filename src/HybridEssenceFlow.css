@@ -190,6 +190,20 @@
   cursor: grab;
   user-select: none;
   transition: transform 0.2s ease;
+  border: 3px solid transparent;
+  will-change: transform;
+}
+
+.swipe-card-next {
+  transform: scale(0.95) translateY(10px);
+  opacity: 0.7; /* Increased from 0.5 to make it more visible */
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(2px); /* Add blur to distinguish from current card */
+}
+
+.swipe-card-current {
+  z-index: 2;
 }
 
 .swipe-card:active {
@@ -202,6 +216,8 @@
   object-fit: contain;
   border-radius: 16px 16px 0 0;
   background: #f8f9fa;
+  position: relative;
+  z-index: 1;
 }
 
 .card-content {
@@ -212,6 +228,8 @@
   justify-content: center; /* Centers text vertically */
   align-items: center; /* Centers text horizontally */
   text-align: center; /* Centers the text content */
+  position: relative;
+  z-index: 1;
 }
 
 .card-content h2 {
@@ -228,6 +246,55 @@
   font-size: 16px;
 }
 
+/* Swipe Overlays */
+.swipe-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100; /* Increased from 10 to ensure it's on top */
+}
+
+.swipe-overlay-yes {
+  background: rgba(74, 222, 128, 0.25); /* Increased opacity for visibility */
+  backdrop-filter: blur(2px);
+  border: 3px solid rgba(74, 222, 128, 0.5);
+}
+
+.swipe-overlay-no {
+  background: rgba(248, 113, 113, 0.25); /* Increased opacity for visibility */
+  backdrop-filter: blur(2px);
+  border: 3px solid rgba(248, 113, 113, 0.5);
+}
+
+.overlay-text {
+  font-size: 48px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.swipe-overlay-yes .overlay-text {
+  color: #16a34a;
+  border: 4px solid #4ade80;
+}
+
+.swipe-overlay-no .overlay-text {
+  color: #dc2626;
+  border: 4px solid #f87171;
+}
+
 /* Swipe Instruction */
 .swipe-instruction {
   text-align: center;
@@ -236,6 +303,12 @@
   margin: 10px 0 20px 0;
   font-style: italic;
   opacity: 0.8;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* Swipe Actions */
