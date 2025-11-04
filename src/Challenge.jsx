@@ -15,9 +15,8 @@ function Challenge() {
   const [leaderboard, setLeaderboard] = useState([])
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
-  const [showLeaderboardModal, setShowLeaderboardModal] = useState(false)
 
-  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
+  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus', 'Leaderboard']
 
   useEffect(() => {
     loadChallengeData()
@@ -543,13 +542,9 @@ function Challenge() {
             <span className="points-value">{progress.total_points || 0}</span>
           </div>
           {userRank && (
-            <div
-              className="total-points clickable"
-              onClick={() => setShowLeaderboardModal(true)}
-              title="Click to view leaderboard"
-            >
+            <div className="total-points">
               <span className="points-label">Your Rank</span>
-              <span className="points-value">#{userRank} 🏆</span>
+              <span className="points-value">#{userRank}</span>
             </div>
           )}
         </div>
@@ -568,6 +563,64 @@ function Challenge() {
       </div>
 
       <div className="challenge-content">
+        {/* Leaderboard Tab */}
+        {activeCategory === 'Leaderboard' && (
+          <div className="leaderboard-section">
+            <div className="leaderboard-header">
+              <h2 className="section-title">🏆 Leaderboard</h2>
+              <div className="leaderboard-toggle">
+                <button
+                  className={`toggle-btn ${leaderboardView === 'weekly' ? 'active' : ''}`}
+                  onClick={() => setLeaderboardView('weekly')}
+                >
+                  This Week
+                </button>
+                <button
+                  className={`toggle-btn ${leaderboardView === 'alltime' ? 'active' : ''}`}
+                  onClick={() => setLeaderboardView('alltime')}
+                >
+                  All Time
+                </button>
+              </div>
+            </div>
+
+            <div className="leaderboard-list">
+              {leaderboard.length === 0 && (
+                <div className="leaderboard-empty">
+                  <p>No participants yet. Be the first to complete a quest!</p>
+                </div>
+              )}
+
+              {leaderboard.map((entry) => (
+                <div
+                  key={entry.userId}
+                  className={`leaderboard-entry ${entry.isCurrentUser ? 'current-user' : ''}`}
+                >
+                  <div className="leaderboard-rank">
+                    {entry.rank === 1 && '🥇'}
+                    {entry.rank === 2 && '🥈'}
+                    {entry.rank === 3 && '🥉'}
+                    {entry.rank > 3 && `#${entry.rank}`}
+                  </div>
+                  <div className="leaderboard-info">
+                    <div className="leaderboard-name">
+                      {entry.name}
+                      {entry.isCurrentUser && <span className="you-badge">You</span>}
+                    </div>
+                    <div className="leaderboard-meta">Day {entry.currentDay}/7</div>
+                  </div>
+                  <div className="leaderboard-points">
+                    {entry.totalPoints} pts
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quest Content - only show if not on Leaderboard tab */}
+        {activeCategory !== 'Leaderboard' && (
+          <>
         {/* Artifact Progress */}
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
@@ -626,9 +679,10 @@ function Challenge() {
           </div>
           <button
             className="category-point-item leaderboard-button"
-            onClick={() => setShowLeaderboardModal(true)}
+            onClick={() => setActiveCategory('Leaderboard')}
           >
-            <span>🏆 Leaderboard</span>
+            <span className="leaderboard-button-label">Leaderboard</span>
+            <span className="leaderboard-button-value">🏆</span>
           </button>
         </div>
 
@@ -755,8 +809,8 @@ function Challenge() {
           </div>
         )}
 
-        {/* Bonus Quests - only show if we're on the Recognise tab */}
-        {activeCategory === 'Recognise' && bonusQuests.length > 0 && (
+        {/* Bonus Quests - only show if we're on the Bonus tab */}
+        {activeCategory === 'Bonus' && bonusQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Bonus Quests</h2>
             <div className="quest-grid">
@@ -807,71 +861,9 @@ function Challenge() {
             </div>
           </div>
         )}
+        </>
+        )}
       </div>
-
-      {/* Leaderboard Modal */}
-      {showLeaderboardModal && (
-        <div className="leaderboard-modal-overlay" onClick={() => setShowLeaderboardModal(false)}>
-          <div className="leaderboard-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="leaderboard-modal-header">
-              <h2>🏆 Leaderboard</h2>
-              <button
-                className="modal-close-btn"
-                onClick={() => setShowLeaderboardModal(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="leaderboard-toggle">
-              <button
-                className={`toggle-btn ${leaderboardView === 'weekly' ? 'active' : ''}`}
-                onClick={() => setLeaderboardView('weekly')}
-              >
-                This Week
-              </button>
-              <button
-                className={`toggle-btn ${leaderboardView === 'alltime' ? 'active' : ''}`}
-                onClick={() => setLeaderboardView('alltime')}
-              >
-                All Time
-              </button>
-            </div>
-
-            <div className="leaderboard-list">
-              {leaderboard.length === 0 && (
-                <div className="leaderboard-empty">
-                  <p>No participants yet. Be the first to complete a quest!</p>
-                </div>
-              )}
-
-              {leaderboard.map((entry) => (
-                <div
-                  key={entry.userId}
-                  className={`leaderboard-entry ${entry.isCurrentUser ? 'current-user' : ''}`}
-                >
-                  <div className="leaderboard-rank">
-                    {entry.rank === 1 && '🥇'}
-                    {entry.rank === 2 && '🥈'}
-                    {entry.rank === 3 && '🥉'}
-                    {entry.rank > 3 && `#${entry.rank}`}
-                  </div>
-                  <div className="leaderboard-info">
-                    <div className="leaderboard-name">
-                      {entry.name}
-                      {entry.isCurrentUser && <span className="you-badge">You</span>}
-                    </div>
-                    <div className="leaderboard-meta">Day {entry.currentDay}/7</div>
-                  </div>
-                  <div className="leaderboard-points">
-                    {entry.totalPoints} pts
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

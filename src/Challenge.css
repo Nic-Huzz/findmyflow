@@ -49,17 +49,6 @@
   padding: 1rem 2rem;
   border-radius: 16px;
   backdrop-filter: blur(10px);
-  transition: all 0.2s ease;
-}
-
-.total-points.clickable {
-  cursor: pointer;
-}
-
-.total-points.clickable:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
 
 .points-label {
@@ -240,11 +229,9 @@
 .category-point-item.leaderboard-button {
   background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
   color: #212529;
-  font-weight: 700;
   cursor: pointer;
   border: none;
   transition: all 0.2s ease;
-  font-size: 0.9375rem;
 }
 
 .category-point-item.leaderboard-button:hover {
@@ -252,9 +239,17 @@
   box-shadow: 0 6px 16px rgba(255, 221, 39, 0.4);
 }
 
-.category-point-item.leaderboard-button span {
-  font-size: 1rem;
+.leaderboard-button-label {
+  font-size: 0.875rem;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.leaderboard-button-value {
+  font-size: 2.5rem;
   font-weight: 700;
+  line-height: 1;
+  color: #212529;
 }
 
 /* Quest Sections */
