@@ -178,12 +178,10 @@ function Challenge() {
     try {
       if (!user) return
 
-      let query = supabase
+      // Build the query for challenge_progress
+      let challengeQuery = supabase
         .from('challenge_progress')
-        .select(`
-          *,
-          lead_flow_profiles!inner(user_name)
-        `)
+        .select('*')
         .order('total_points', { ascending: false })
 
       // Filter by weekly cohort if in weekly view
@@ -194,27 +192,59 @@ function Challenge() {
         const weekEnd = new Date(weekStart)
         weekEnd.setDate(weekEnd.getDate() + 7)
 
-        query = query
+        challengeQuery = challengeQuery
           .gte('challenge_start_date', weekStart.toISOString())
           .lt('challenge_start_date', weekEnd.toISOString())
       }
 
-      const { data, error } = await query
+      const { data: challengeData, error: challengeError } = await challengeQuery
 
-      if (error) {
-        console.error('Error loading leaderboard:', error)
+      if (challengeError) {
+        console.error('Error loading leaderboard:', challengeError)
         return
       }
 
+      if (!challengeData || challengeData.length === 0) {
+        setLeaderboard([])
+        setUserRank(null)
+        return
+      }
+
+      // Get all session_ids to fetch profiles
+      const sessionIds = challengeData.map(entry => entry.session_id).filter(Boolean)
+
+      // Fetch user names from lead_flow_profiles
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('lead_flow_profiles')
+        .select('session_id, user_name, email')
+        .in('session_id', sessionIds)
+
+      if (profilesError) {
+        console.error('Error loading profiles:', profilesError)
+      }
+
+      // Create a map of session_id to user_name
+      const profileMap = {}
+      if (profilesData) {
+        profilesData.forEach(profile => {
+          profileMap[profile.session_id] = profile.user_name
+        })
+      }
+
       // Process leaderboard data
-      const leaderboardData = (data || []).map((entry, index) => ({
-        rank: index + 1,
-        userId: entry.user_id,
-        name: entry.lead_flow_profiles?.user_name?.split(' ')[0] || 'Anonymous', // First name only
-        totalPoints: entry.total_points || 0,
-        currentDay: entry.current_day,
-        isCurrentUser: entry.user_id === user.id
-      }))
+      const leaderboardData = challengeData.map((entry, index) => {
+        const userName = profileMap[entry.session_id] || 'Anonymous'
+        const firstName = userName.split(' ')[0] // First name only
+
+        return {
+          rank: index + 1,
+          userId: entry.user_id,
+          name: firstName,
+          totalPoints: entry.total_points || 0,
+          currentDay: entry.current_day,
+          isCurrentUser: entry.user_id === user.id
+        }
+      })
 
       setLeaderboard(leaderboardData)
 
