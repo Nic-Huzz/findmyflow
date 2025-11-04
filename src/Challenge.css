@@ -556,3 +556,176 @@
     width: 100%;
   }
 }
+
+/* Leaderboard Styles */
+.leaderboard-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.leaderboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.leaderboard-toggle {
+  display: flex;
+  gap: 0.5rem;
+  background: #e9ecef;
+  padding: 0.25rem;
+  border-radius: 12px;
+}
+
+.toggle-btn {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9375rem;
+}
+
+.toggle-btn:hover {
+  background: rgba(94, 23, 235, 0.1);
+  color: #5e17eb;
+}
+
+.toggle-btn.active {
+  background: white;
+  color: #5e17eb;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.leaderboard-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #6c757d;
+  font-size: 1.125rem;
+}
+
+.leaderboard-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.leaderboard-entry:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-entry.current-user {
+  background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+  border-color: #ffdd27;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+}
+
+.leaderboard-rank {
+  font-size: 1.5rem;
+  font-weight: 700;
+  min-width: 50px;
+  text-align: center;
+  color: #5e17eb;
+}
+
+.leaderboard-entry:nth-child(1) .leaderboard-rank,
+.leaderboard-entry:nth-child(2) .leaderboard-rank,
+.leaderboard-entry:nth-child(3) .leaderboard-rank {
+  font-size: 2rem;
+}
+
+.leaderboard-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.leaderboard-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.you-badge {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  padding: 0.125rem 0.625rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.leaderboard-meta {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.leaderboard-points {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #5e17eb;
+  white-space: nowrap;
+}
+
+/* Responsive Leaderboard */
+@media (max-width: 768px) {
+  .leaderboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .leaderboard-toggle {
+    width: 100%;
+  }
+
+  .toggle-btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  .leaderboard-entry {
+    padding: 1rem;
+  }
+
+  .leaderboard-rank {
+    min-width: 40px;
+    font-size: 1.25rem;
+  }
+
+  .leaderboard-entry:nth-child(1) .leaderboard-rank,
+  .leaderboard-entry:nth-child(2) .leaderboard-rank,
+  .leaderboard-entry:nth-child(3) .leaderboard-rank {
+    font-size: 1.5rem;
+  }
+
+  .leaderboard-name {
+    font-size: 1rem;
+  }
+
+  .leaderboard-points {
+    font-size: 1.125rem;
+  }
+}

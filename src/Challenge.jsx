@@ -12,8 +12,11 @@ function Challenge() {
   const [completions, setCompletions] = useState([])
   const [questInputs, setQuestInputs] = useState({})
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [leaderboard, setLeaderboard] = useState([])
+  const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
+  const [userRank, setUserRank] = useState(null)
 
-  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect']
+  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Leaderboard']
 
   useEffect(() => {
     loadChallengeData()
@@ -22,8 +25,35 @@ function Challenge() {
   useEffect(() => {
     if (user) {
       loadUserProgress()
+      loadLeaderboard()
     }
   }, [user])
+
+  useEffect(() => {
+    if (user && progress) {
+      loadLeaderboard()
+    }
+  }, [leaderboardView, progress])
+
+  // Set up real-time subscription for leaderboard updates
+  useEffect(() => {
+    if (!user) return
+
+    const subscription = supabase
+      .channel('challenge_progress_changes')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'challenge_progress' },
+        (payload) => {
+          console.log('Leaderboard update:', payload)
+          loadLeaderboard()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [user, leaderboardView])
 
   const loadChallengeData = async () => {
     try {
@@ -141,6 +171,59 @@ function Challenge() {
     } catch (error) {
       console.error('Error in startChallenge:', error)
       alert('Error starting challenge. Please try again.')
+    }
+  }
+
+  const loadLeaderboard = async () => {
+    try {
+      if (!user) return
+
+      let query = supabase
+        .from('challenge_progress')
+        .select(`
+          *,
+          lead_flow_profiles!inner(user_name)
+        `)
+        .order('total_points', { ascending: false })
+
+      // Filter by weekly cohort if in weekly view
+      if (leaderboardView === 'weekly' && progress) {
+        const startDate = new Date(progress.challenge_start_date)
+        const weekStart = new Date(startDate)
+        weekStart.setDate(weekStart.getDate() - ((startDate.getDay() + 6) % 7)) // Start of week (Monday)
+        const weekEnd = new Date(weekStart)
+        weekEnd.setDate(weekEnd.getDate() + 7)
+
+        query = query
+          .gte('challenge_start_date', weekStart.toISOString())
+          .lt('challenge_start_date', weekEnd.toISOString())
+      }
+
+      const { data, error } = await query
+
+      if (error) {
+        console.error('Error loading leaderboard:', error)
+        return
+      }
+
+      // Process leaderboard data
+      const leaderboardData = (data || []).map((entry, index) => ({
+        rank: index + 1,
+        userId: entry.user_id,
+        name: entry.lead_flow_profiles?.user_name?.split(' ')[0] || 'Anonymous', // First name only
+        totalPoints: entry.total_points || 0,
+        currentDay: entry.current_day,
+        isCurrentUser: entry.user_id === user.id
+      }))
+
+      setLeaderboard(leaderboardData)
+
+      // Set current user's rank
+      const userEntry = leaderboardData.find(entry => entry.isCurrentUser)
+      setUserRank(userEntry?.rank || null)
+
+    } catch (error) {
+      console.error('Error in loadLeaderboard:', error)
     }
   }
 
@@ -386,6 +469,12 @@ function Challenge() {
             <span className="points-label">Total Points</span>
             <span className="points-value">{progress.total_points || 0}</span>
           </div>
+          {userRank && (
+            <div className="total-points">
+              <span className="points-label">Your Rank</span>
+              <span className="points-value">#{userRank}</span>
+            </div>
+          )}
         </div>
       </header>
 
@@ -402,6 +491,64 @@ function Challenge() {
       </div>
 
       <div className="challenge-content">
+        {/* Leaderboard Tab */}
+        {activeCategory === 'Leaderboard' && (
+          <div className="leaderboard-section">
+            <div className="leaderboard-header">
+              <h2 className="section-title">🏆 Leaderboard</h2>
+              <div className="leaderboard-toggle">
+                <button
+                  className={`toggle-btn ${leaderboardView === 'weekly' ? 'active' : ''}`}
+                  onClick={() => setLeaderboardView('weekly')}
+                >
+                  This Week
+                </button>
+                <button
+                  className={`toggle-btn ${leaderboardView === 'alltime' ? 'active' : ''}`}
+                  onClick={() => setLeaderboardView('alltime')}
+                >
+                  All Time
+                </button>
+              </div>
+            </div>
+
+            <div className="leaderboard-list">
+              {leaderboard.length === 0 && (
+                <div className="leaderboard-empty">
+                  <p>No participants yet. Be the first to complete a quest!</p>
+                </div>
+              )}
+
+              {leaderboard.map((entry) => (
+                <div
+                  key={entry.userId}
+                  className={`leaderboard-entry ${entry.isCurrentUser ? 'current-user' : ''}`}
+                >
+                  <div className="leaderboard-rank">
+                    {entry.rank === 1 && '🥇'}
+                    {entry.rank === 2 && '🥈'}
+                    {entry.rank === 3 && '🥉'}
+                    {entry.rank > 3 && `#${entry.rank}`}
+                  </div>
+                  <div className="leaderboard-info">
+                    <div className="leaderboard-name">
+                      {entry.name}
+                      {entry.isCurrentUser && <span className="you-badge">You</span>}
+                    </div>
+                    <div className="leaderboard-meta">Day {entry.currentDay}/7</div>
+                  </div>
+                  <div className="leaderboard-points">
+                    {entry.totalPoints} pts
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quest Content - only show if not on Leaderboard tab */}
+        {activeCategory !== 'Leaderboard' && (
+          <>
         {/* Artifact Progress */}
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
@@ -621,6 +768,8 @@ function Challenge() {
               })}
             </div>
           </div>
+        )}
+        </>
         )}
       </div>
     </div>
