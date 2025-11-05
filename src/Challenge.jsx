@@ -16,7 +16,7 @@ function Challenge() {
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
 
-  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus', 'Leaderboard']
+  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
   useEffect(() => {
     loadChallengeData()
@@ -469,7 +469,7 @@ function Challenge() {
       <div className="challenge-container">
         <div className="challenge-onboarding">
           <div className="onboarding-content">
-            <h1>🚀 Welcome to the Vibe Rise Game</h1>
+            <h1>🚀 Welcome to Gamify Your Ambitions</h1>
             <p className="onboarding-intro">
               Embark on a transformational journey to embody your essence archetype.
               Over the next 7 days, you'll complete quests across four categories:
@@ -533,20 +533,21 @@ function Challenge() {
     <div className="challenge-container">
       <header className="challenge-header">
         <div className="challenge-header-top">
-          <h1>Vibe Rise Game</h1>
+          <h1>Gamify Your Ambitions</h1>
           <div className="challenge-day">Day {progress.current_day}/7</div>
         </div>
         <div className="challenge-points">
-          <div className="total-points">
+          <div className="total-points clickable" onClick={() => setActiveCategory('Leaderboard')}>
             <span className="points-label">Total Points</span>
             <span className="points-value">{progress.total_points || 0}</span>
+            {userRank && (
+              <>
+                <span className="points-separator">•</span>
+                <span className="points-label">Your Rank</span>
+                <span className="points-value">#{userRank}</span>
+              </>
+            )}
           </div>
-          {userRank && (
-            <div className="total-points">
-              <span className="points-label">Your Rank</span>
-              <span className="points-value">#{userRank}</span>
-            </div>
-          )}
         </div>
       </header>
 
@@ -563,7 +564,7 @@ function Challenge() {
       </div>
 
       <div className="challenge-content">
-        {/* Leaderboard Tab */}
+        {/* Leaderboard - show if activeCategory is Leaderboard even though not in tabs */}
         {activeCategory === 'Leaderboard' && (
           <div className="leaderboard-section">
             <div className="leaderboard-header">
