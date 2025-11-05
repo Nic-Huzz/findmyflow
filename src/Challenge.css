@@ -43,12 +43,27 @@
 
 .total-points {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  gap: 1rem;
   background: rgba(255, 255, 255, 0.15);
   padding: 1rem 2rem;
   border-radius: 16px;
   backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.total-points:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+.points-separator {
+  font-size: 1.5rem;
+  opacity: 0.5;
+  margin: 0 0.5rem;
 }
 
 .points-label {
