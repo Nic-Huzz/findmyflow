@@ -174,14 +174,16 @@ function HealingCompass() {
             .insert([{
               user_name: newContext.user_name || 'Anonymous',
               stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
+              stuck_reason: newContext.stuck_reason_list,
               stuck_emotional_response: newContext.stuck_emotional_response,
               past_parallel_story: newContext.past_parallel_story,
+              past_event_details: newContext.past_event_details,
               past_event_emotions: newContext.past_event_emotions,
               splinter_interpretation: newContext.splinter_interpretation,
               connect_dots_consent: newContext.connect_dots_consent,
               connect_dots_acknowledged: newContext.connect_dots_acknowledged,
               splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
               context: newContext
             }])
 
@@ -264,14 +266,16 @@ function HealingCompass() {
             .insert([{
               user_name: newContext.user_name || 'Anonymous',
               stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
+              stuck_reason: newContext.stuck_reason_list,
               stuck_emotional_response: newContext.stuck_emotional_response,
               past_parallel_story: newContext.past_parallel_story,
+              past_event_details: newContext.past_event_details,
               past_event_emotions: newContext.past_event_emotions,
               splinter_interpretation: newContext.splinter_interpretation,
               connect_dots_consent: newContext.connect_dots_consent,
               connect_dots_acknowledged: newContext.connect_dots_acknowledged,
               splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
               context: newContext
             }])
 
