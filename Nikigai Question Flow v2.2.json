@@ -204,13 +204,13 @@
     {
       "id": "5.0",
       "step_order_index": 16,
-      "assistant_prompt": "Who has inspired you the most — real or fictional?\n\nList 3–5 names or characters, and add a note on the qualities or values you admire in them.\n\nExample: *Tony Stark — creativity + confidence* or *my grandmother — kindness + resilience.*",
+      "assistant_prompt": "Who has inspired you the most — real or fictional?\n\nFor each person or character, share:\n• **Who they are**\n• **What impact they've had** that makes them a role model for you\n\nList 3–5 role models.\n\nExample: *Brené Brown — Her work on vulnerability helped me accept imperfection and show up authentically.*",
       "expected_inputs": [
         {
           "type": "object_list",
           "schema": {
             "name_or_character": "string",
-            "qualities_admired": "text_list"
+            "impact_they_had": "string"
           }
         }
       ],
@@ -218,23 +218,23 @@
       "next_step_rules": [{ "on_success": "5.1" }]
     },
 
-    /* ---------- POSTPROCESS #4: Show PEOPLE/VALUES clusters from role models ---------- */
+    /* ---------- POSTPROCESS #4: Enrich PROBLEMS clusters from role model impact ---------- */
     {
       "id": "5.1",
       "step_order_index": 17,
       "assistant_postprocess": {
         "tag_from": ["life_map.role_models"],
-        "cluster": {
-          "target": "values",
-          "source_tags": ["value", "character_trait"],
-          "target_clusters_min": 3,
-          "target_clusters_max": 5
+        "weighting": { "meaning_from": ["life_map.role_models.*.impact_they_had"] },
+        "cluster_enrich": {
+          "target": "problems",
+          "merge_into": "problems.preview.from_chapters",
+          "source_tags": ["problem_theme", "value", "change_theme"]
         },
-        "store_as": "values.preview.from_role_models"
+        "store_as": "problems.preview.with_role_models"
       },
-      "assistant_prompt": "✨ The qualities you admire reveal your values.\n\nHere are **Value clusters** from your role models:\n\n{values.preview.from_role_models}\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ The impact your role models have made reveals problems you care about.\n\nUpdated **Problem/Change themes** with insights from your role models:\n\n{problems.preview.with_role_models}\n\nKeep/edit/skip?",
       "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
-      "store_as": "values.preview_choice.role_models",
+      "store_as": "problems.preview_choice.role_models",
       "next_step_rules": [
         { "on_selection": "Keep", "go_to": "6.0" },
         { "on_selection": "Edit", "go_to": "5.1.edit" },
@@ -244,12 +244,12 @@
     {
       "id": "5.1.edit",
       "step_order_index": 18,
-      "assistant_prompt": "Edit the **Value clusters** (label + 3–5 example values).",
+      "assistant_prompt": "Edit the **Problem/Change themes** (label + 3–5 example problems).",
       "expected_inputs": [
         { "type": "object_list",
-          "schema": { "label": "string", "values": "text_list" } }
+          "schema": { "label": "string", "examples": "text_list" } }
       ],
-      "store_as": "values.preview.from_role_models",
+      "store_as": "problems.preview.with_role_models",
       "next_step_rules": [{ "on_success": "6.0" }]
     },
 
@@ -342,7 +342,7 @@
           },
           {
             "target": "problems",
-            "merge_into": "problems.preview.from_chapters",
+            "merge_into": "problems.preview.with_role_models",
             "source_tags": ["problem_theme", "value"]
           }
         ],
@@ -411,7 +411,7 @@
             "target": "problems",
             "sources": [
               "problems.preview.with_work",
-              "problems.preview.from_chapters"
+              "problems.preview.with_role_models"
             ],
             "dedupe": true,
             "sort_by": "weight"
@@ -512,13 +512,43 @@
       "store_as": "life_map_v2.reflection_review",
       "next_step_rules": [{ "on_success": "12.0" }]
     },
+    /* ----------------------- NIKIGAI FRAMEWORK INTRODUCTION ----------------------- */
     {
       "id": "12.0",
       "step_order_index": 36,
-      "assistant_prompt": "Amazing — we've laid out all your puzzle pieces.\n\nNext, we'll start connecting these dots into the four Nikigai lenses: **Skills**, **Problems**, **People**, and **Market** — to reveal your unique purpose pathway.\n\nReady to continue?",
+      "assistant_prompt": "Amazing — we've laid out all your puzzle pieces.\n\nNow we're going to organize them using the **Nikigai Framework.**\n\nThe Nikigai Framework organises your stickies so that you identify:\n• A problem you're passionate about solving\n• People you're passionate about helping\n• Skills you're passionate about using\n\nWhy identify these things?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "nikigai.intro_part1",
+      "next_step_rules": [{ "on_success": "12.1" }]
+    },
+    {
+      "id": "12.1",
+      "step_order_index": 37,
+      "assistant_prompt": "Because what does a business do?\n\nThey **solve a problem, for a person, using specific skills.**\n\nThis empowers us to identify your mission and map your answers to fulfilling and meaningful career paths — whether you're looking for your dream job OR building your own entrepreneurial venture.\n\nReady to see how?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "nikigai.intro_part2",
+      "next_step_rules": [{ "on_success": "12.2" }]
+    },
+    {
+      "id": "12.2",
+      "step_order_index": 38,
+      "assistant_prompt": "Here's how the Nikigai lenses work:\n\n**For people looking for a job:**\n• The **skills** you identify connect to job titles you're passionate about.\n• The **problems** you identify show you the industries you're passionate about.\n• The **person** you identify becomes the industry sector you're passionate about.\n• Your **mission** identifies specific companies you'd love to work for.\n\n**For entrepreneurs building something:**\n• The **skills** you identify become your core offerings.\n• The **problems** you identify reveal the transformation you create.\n• The **person** you identify defines your ideal customer or community.\n• Your **mission** becomes the foundation of your business purpose.\n\nWhich path feels more relevant to you right now?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Career / Job Clarity", "Entrepreneurial Opportunity", "Both - explore all options"]
+        }
+      ],
+      "store_as": "nikigai.path_type",
+      "next_step_rules": [{ "on_success": "12.3" }]
+    },
+    {
+      "id": "12.3",
+      "step_order_index": 39,
+      "assistant_prompt": "Perfect. Let's begin connecting your dots.\n\nWe'll move through the four Nikigai lenses to reveal your:\n1. **Skills** you love using\n2. **Problems** you love solving\n3. **People** you love serving\n4. **Market** opportunities that align\n\nThen we'll integrate everything into your unique mission and opportunity map.\n\nReady to start with the Skills lens?",
       "expected_inputs": ["confirmation"],
       "store_as": "life_map_v2.ready_for_nikigai",
-      "next_step_rules": [{ "on_success": "next_module_transition_to_framework" }]
+      "next_step_rules": [{ "on_success": "next_module_skills_lens" }]
     }
   ]
 }
