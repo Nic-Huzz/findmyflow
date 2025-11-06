@@ -361,7 +361,7 @@ function HealingCompass() {
               </div>
             </div>
           ))}
-          
+
           {isLoading && (
             <div className="message ai">
               <div className="bubble">
@@ -371,46 +371,46 @@ function HealingCompass() {
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
-
-        {currentStep?.options && currentStep.options.length > 0 && (
-          <div className="options-container">
-            {currentStep.options.map((option, index) => (
-              <button
-                key={index}
-                className="option-button"
-                onClick={() => handleOptionClick(option)}
-                disabled={isLoading}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {currentStep && !currentStep.options && (
-          <div className="input-bar">
-            <textarea
-              className="message-input"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Share your thoughts..."
-              disabled={isLoading}
-              rows={1}
-            />
-            <button
-              className="send-button"
-              onClick={handleSubmit}
-              disabled={isLoading || !inputText.trim()}
-            >
-              Send
-            </button>
-          </div>
-        )}
       </main>
+
+      {currentStep?.options && currentStep.options.length > 0 && (
+        <div className="options-container">
+          {currentStep.options.map((option, index) => (
+            <button
+              key={index}
+              className="option-button"
+              onClick={() => handleOptionClick(option)}
+              disabled={isLoading}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {currentStep && !currentStep.options && (
+        <div className="input-bar">
+          <textarea
+            className="message-input"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Share your thoughts..."
+            disabled={isLoading}
+            rows={1}
+          />
+          <button
+            className="send-button"
+            onClick={handleSubmit}
+            disabled={isLoading || !inputText.trim()}
+          >
+            Send
+          </button>
+        </div>
+      )}
     </div>
   )
 }
