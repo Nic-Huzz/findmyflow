@@ -140,13 +140,30 @@ function Challenge() {
 
       setProgress(progressData)
 
-      // Check if we need to advance the day
-      const lastActive = new Date(progressData.last_active_date)
+      // Calculate current day based on Thailand timezone (UTC+7)
+      // Reset happens at midnight Thailand time (17:00 UTC previous day)
+      // This ensures consistent day progression regardless of user's location
+      // Example: If challenge starts on Monday in Thailand, Day 2 begins at Tuesday 00:00 ICT
+      const challengeStart = new Date(progressData.challenge_start_date)
       const now = new Date()
-      const daysSinceLastActive = Math.floor((now - lastActive) / (1000 * 60 * 60 * 24))
 
-      if (daysSinceLastActive >= 1 && progressData.current_day < 7) {
-        await advanceDay(progressData)
+      // Convert to Thailand time by adding 7 hours (in milliseconds)
+      const thailandOffset = 7 * 60 * 60 * 1000
+      const startThailand = new Date(challengeStart.getTime() + thailandOffset)
+      const nowThailand = new Date(now.getTime() + thailandOffset)
+
+      // Get midnight of the start date in Thailand
+      const startMidnight = new Date(startThailand.getFullYear(), startThailand.getMonth(), startThailand.getDate())
+      // Get midnight of current date in Thailand
+      const currentMidnight = new Date(nowThailand.getFullYear(), nowThailand.getMonth(), nowThailand.getDate())
+
+      // Calculate how many Thailand calendar days have passed
+      const daysSinceStart = Math.floor((currentMidnight - startMidnight) / (1000 * 60 * 60 * 24))
+      const calculatedDay = Math.min(daysSinceStart + 1, 7)
+
+      // Update if the calculated day is different from stored day
+      if (calculatedDay !== progressData.current_day && calculatedDay <= 7) {
+        await updateDay(progressData, calculatedDay)
       }
 
       // Load quest completions for this challenge instance
@@ -169,13 +186,11 @@ function Challenge() {
     }
   }
 
-  const advanceDay = async (currentProgress) => {
-    const newDay = Math.min(currentProgress.current_day + 1, 7)
-
+  const updateDay = async (currentProgress, calculatedDay) => {
     const { data, error} = await supabase
       .from('challenge_progress')
       .update({
-        current_day: newDay,
+        current_day: calculatedDay,
         last_active_date: new Date().toISOString()
       })
       .eq('user_id', user.id)
@@ -184,6 +199,8 @@ function Challenge() {
 
     if (!error) {
       setProgress(data)
+    } else {
+      console.error('Error updating day:', error)
     }
   }
 
