@@ -12,6 +12,11 @@ function Challenge() {
   const [completions, setCompletions] = useState([])
   const [questInputs, setQuestInputs] = useState({})
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [showGroupSelection, setShowGroupSelection] = useState(false)
+  const [groupMode, setGroupMode] = useState(null) // 'create', 'join', or null for solo
+  const [groupCode, setGroupCode] = useState('')
+  const [groupCodeInput, setGroupCodeInput] = useState('')
+  const [groupData, setGroupData] = useState(null)
   const [leaderboard, setLeaderboard] = useState([])
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
@@ -32,8 +37,28 @@ function Challenge() {
   useEffect(() => {
     if (user && progress) {
       loadLeaderboard()
+      loadGroupInfo()
     }
   }, [leaderboardView, progress])
+
+  const loadGroupInfo = async () => {
+    if (!progress || !progress.group_id) return
+
+    try {
+      const { data, error } = await supabase
+        .from('challenge_groups')
+        .select('*')
+        .eq('id', progress.group_id)
+        .single()
+
+      if (!error && data) {
+        setGroupData(data)
+        setGroupCode(data.code)
+      }
+    } catch (error) {
+      console.error('Error loading group info:', error)
+    }
+  }
 
   // Set up real-time subscription for leaderboard updates
   useEffect(() => {
@@ -69,19 +94,22 @@ function Challenge() {
     try {
       setLoading(true)
 
-      // Load challenge progress
+      // Load active challenge progress only
       const { data: progressData, error: progressError } = await supabase
         .from('challenge_progress')
         .select('*')
         .eq('user_id', user.id)
-        .single()
+        .eq('status', 'active')
+        .order('challenge_start_date', { ascending: false })
+        .limit(1)
+        .maybeSingle()
 
       if (progressError && progressError.code !== 'PGRST116') {
         console.error('Error loading progress:', progressError)
       }
 
       if (!progressData) {
-        // First time - show onboarding
+        // No active challenge - show onboarding
         setShowOnboarding(true)
         setLoading(false)
         return
@@ -98,11 +126,12 @@ function Challenge() {
         await advanceDay(progressData)
       }
 
-      // Load quest completions
+      // Load quest completions for this challenge instance
       const { data: completionsData, error: completionsError } = await supabase
         .from('quest_completions')
         .select('*')
         .eq('user_id', user.id)
+        .eq('challenge_instance_id', progressData.challenge_instance_id)
 
       if (completionsError) {
         console.error('Error loading completions:', completionsError)
@@ -120,7 +149,7 @@ function Challenge() {
   const advanceDay = async (currentProgress) => {
     const newDay = Math.min(currentProgress.current_day + 1, 7)
 
-    const { data, error } = await supabase
+    const { data, error} = await supabase
       .from('challenge_progress')
       .update({
         current_day: newDay,
@@ -135,8 +164,107 @@ function Challenge() {
     }
   }
 
-  const startChallenge = async () => {
+  const showGroupSelectionModal = () => {
+    setShowOnboarding(false)
+    setShowGroupSelection(true)
+  }
+
+  const handlePlaySolo = () => {
+    setGroupMode(null)
+    setShowGroupSelection(false)
+    startChallenge(null)
+  }
+
+  const handleCreateGroup = async () => {
     try {
+      // Call Supabase function to generate unique code
+      const { data, error } = await supabase.rpc('generate_group_code')
+
+      if (error) throw error
+
+      const newCode = data
+
+      // Create group
+      const { data: groupData, error: groupError } = await supabase
+        .from('challenge_groups')
+        .insert([{
+          code: newCode,
+          created_by: user.id,
+          start_date: new Date().toISOString().split('T')[0]
+        }])
+        .select()
+        .single()
+
+      if (groupError) throw groupError
+
+      setGroupCode(newCode)
+      setGroupData(groupData)
+      setGroupMode('create')
+
+      // Start challenge with group_id
+      await startChallenge(groupData.id)
+
+      // Add user to participants
+      await supabase
+        .from('challenge_participants')
+        .insert([{
+          group_id: groupData.id,
+          user_id: user.id
+        }])
+
+      setShowGroupSelection(false)
+    } catch (error) {
+      console.error('Error creating group:', error)
+      alert('Error creating group. Please try again.')
+    }
+  }
+
+  const handleJoinGroup = async () => {
+    if (!groupCodeInput || groupCodeInput.trim() === '') {
+      alert('Please enter a group code')
+      return
+    }
+
+    try {
+      // Find group by code
+      const { data: groupData, error: groupError } = await supabase
+        .from('challenge_groups')
+        .select('*')
+        .eq('code', groupCodeInput.trim().toUpperCase())
+        .single()
+
+      if (groupError || !groupData) {
+        alert('Invalid group code. Please check and try again.')
+        return
+      }
+
+      setGroupData(groupData)
+      setGroupCode(groupData.code)
+      setGroupMode('join')
+
+      // Start challenge with group_id
+      await startChallenge(groupData.id)
+
+      // Add user to participants
+      await supabase
+        .from('challenge_participants')
+        .insert([{
+          group_id: groupData.id,
+          user_id: user.id
+        }])
+
+      setShowGroupSelection(false)
+    } catch (error) {
+      console.error('Error joining group:', error)
+      alert('Error joining group. Please try again.')
+    }
+  }
+
+  const startChallenge = async (groupId = null) => {
+    try {
+      // First, abandon any active challenges for this user
+      await supabase.rpc('abandon_active_challenges', { p_user_id: user.id })
+
       // Get session_id from lead_flow_profiles
       const { data: profileData } = await supabase
         .from('lead_flow_profiles')
@@ -148,15 +276,26 @@ function Challenge() {
 
       const sessionId = profileData?.session_id || `session_${Date.now()}`
 
+      // Generate new challenge instance ID
+      const challengeInstanceId = crypto.randomUUID()
+
+      const insertData = {
+        user_id: user.id,
+        session_id: sessionId,
+        challenge_instance_id: challengeInstanceId,
+        current_day: 1,
+        status: 'active',
+        challenge_start_date: new Date().toISOString(),
+        last_active_date: new Date().toISOString()
+      }
+
+      if (groupId) {
+        insertData.group_id = groupId
+      }
+
       const { data, error } = await supabase
         .from('challenge_progress')
-        .insert([{
-          user_id: user.id,
-          session_id: sessionId,
-          current_day: 1,
-          challenge_start_date: new Date().toISOString(),
-          last_active_date: new Date().toISOString()
-        }])
+        .insert([insertData])
         .select()
         .single()
 
@@ -184,8 +323,11 @@ function Challenge() {
         .select('*')
         .order('total_points', { ascending: false })
 
-      // Filter by weekly cohort if in weekly view
-      if (leaderboardView === 'weekly' && progress) {
+      // If user has a group, filter by group members
+      if (progress && progress.group_id) {
+        challengeQuery = challengeQuery.eq('group_id', progress.group_id)
+      } else if (leaderboardView === 'weekly' && progress) {
+        // Filter by weekly cohort if in weekly view (for non-group users)
         const startDate = new Date(progress.challenge_start_date)
         const weekStart = new Date(startDate)
         weekStart.setDate(weekStart.getDate() - ((startDate.getDay() + 6) % 7)) // Start of week (Monday)
@@ -300,6 +442,7 @@ function Challenge() {
         .from('quest_completions')
         .insert([{
           user_id: user.id,
+          challenge_instance_id: progress.challenge_instance_id,
           quest_id: quest.id,
           quest_category: quest.category,
           quest_type: quest.type,
@@ -354,11 +497,12 @@ function Challenge() {
 
       setProgress(updatedProgress)
 
-      // Reload completions
+      // Reload completions for this challenge instance
       const { data: newCompletions } = await supabase
         .from('quest_completions')
         .select('*')
         .eq('user_id', user.id)
+        .eq('challenge_instance_id', progress.challenge_instance_id)
 
       setCompletions(newCompletions || [])
 
@@ -490,7 +634,7 @@ function Challenge() {
               </div>
               <div className="onboarding-category">
                 <h3>🌊 Reconnect</h3>
-                <p>Anchor into your true self through daily practices</p>
+                <p>Live from your essence through daily practices</p>
               </div>
             </div>
 
@@ -499,9 +643,55 @@ function Challenge() {
               <p>Complete quests to unlock the Essence Boat, Captain's Hat, Treasure Map, and Sailing Sails.</p>
             </div>
 
-            <button className="start-challenge-btn" onClick={startChallenge}>
+            <button className="start-challenge-btn" onClick={showGroupSelectionModal}>
               Start My 7-Day Journey
             </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (showGroupSelection) {
+    return (
+      <div className="challenge-container">
+        <div className="challenge-onboarding">
+          <div className="onboarding-content">
+            <h1>🎯 Choose Your Challenge Mode</h1>
+            <p className="onboarding-intro">
+              Play solo or create/join a group to compete with friends and family!
+            </p>
+
+            <div className="group-selection-buttons">
+              <button className="group-mode-btn solo" onClick={handlePlaySolo}>
+                <div className="mode-icon">🎯</div>
+                <h3>Play Solo</h3>
+                <p>Complete the challenge on your own</p>
+              </button>
+
+              <button className="group-mode-btn create" onClick={handleCreateGroup}>
+                <div className="mode-icon">👥</div>
+                <h3>Create Group</h3>
+                <p>Start a new group and invite others</p>
+              </button>
+
+              <div className="group-mode-btn join">
+                <div className="mode-icon">🔗</div>
+                <h3>Join Group</h3>
+                <p>Enter a group code to join</p>
+                <input
+                  type="text"
+                  className="group-code-input"
+                  placeholder="Enter 6-digit code"
+                  value={groupCodeInput}
+                  onChange={(e) => setGroupCodeInput(e.target.value.toUpperCase())}
+                  maxLength={6}
+                />
+                <button className="join-group-btn" onClick={handleJoinGroup}>
+                  Join Group
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -534,8 +724,16 @@ function Challenge() {
       <header className="challenge-header">
         <div className="challenge-header-top">
           <h1>Gamify Your Ambitions</h1>
-          <div className="challenge-day">Day {progress.current_day}/7</div>
+          <div className="challenge-header-badges">
+            <div className="challenge-day">Day {progress.current_day}/7</div>
+            {groupCode && (
+              <div className="challenge-day group-code-badge" title="Share this code with friends!">
+                👥 {groupCode}
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="challenge-points">
           <div className="total-points clickable" onClick={() => setActiveCategory('Leaderboard')}>
             <span className="points-label">Total Points</span>
