@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import { completeFlowQuest } from './lib/questCompletion'
 
 function HealingCompass() {
   const { user } = useAuth()
@@ -190,6 +191,22 @@ function HealingCompass() {
             throw error
           }
           console.log('✅ Healing compass data saved successfully:', data)
+
+          // Auto-complete challenge quest if user has active challenge
+          if (user?.id) {
+            console.log('🎯 Attempting to complete flow quest for healing_compass')
+            const questResult = await completeFlowQuest({
+              userId: user.id,
+              flowId: 'healing_compass',
+              pointsEarned: 20
+            })
+
+            if (questResult.success) {
+              console.log('✅ Quest completed!', questResult.message)
+            } else {
+              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+            }
+          }
         } catch (err) {
           console.error('❌ Failed to save healing compass data:', err)
           // Continue with flow even if save fails
@@ -280,6 +297,22 @@ function HealingCompass() {
             throw error
           }
           console.log('✅ Healing compass data saved successfully:', data)
+
+          // Auto-complete challenge quest if user has active challenge
+          if (user?.id) {
+            console.log('🎯 Attempting to complete flow quest for healing_compass')
+            const questResult = await completeFlowQuest({
+              userId: user.id,
+              flowId: 'healing_compass',
+              pointsEarned: 20
+            })
+
+            if (questResult.success) {
+              console.log('✅ Quest completed!', questResult.message)
+            } else {
+              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+            }
+          }
         } catch (err) {
           console.error('❌ Failed to save healing compass data:', err)
           // Continue with flow even if save fails

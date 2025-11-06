@@ -158,6 +158,9 @@ const Profile = () => {
           <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
             📊 Dashboard
           </li>
+          <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
+            ✨ Archetypes
+          </li>
           <li className="nav-item" onClick={() => { navigate('/healing-compass'); setSidebarOpen(false); }}>
             🧭 Healing Compass
           </li>
@@ -181,12 +184,30 @@ const Profile = () => {
         {/* Stats Grid */}
         <div className="stats-grid">
           <div className="stat-card purple">
-            <div className="stat-icon">✨</div>
+            <div className="stat-icon">
+              <img
+                src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
+                alt={userData.essence_archetype}
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                  e.target.parentElement.innerHTML = '✨'
+                }}
+              />
+            </div>
             <div className="stat-label">Essence</div>
             <div className="stat-value">{userData.essence_archetype}</div>
           </div>
           <div className="stat-card yellow">
-            <div className="stat-icon">🛡️</div>
+            <div className="stat-icon">
+              <img
+                src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
+                alt={userData.protective_archetype}
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                  e.target.parentElement.innerHTML = '🛡️'
+                }}
+              />
+            </div>
             <div className="stat-label">Protective</div>
             <div className="stat-value">{userData.protective_archetype}</div>
           </div>
@@ -220,20 +241,10 @@ const Profile = () => {
                 </p>
                 <button
                   className="explore-button"
-                  onClick={() => toggleExpand('essence')}
+                  onClick={() => navigate('/archetypes/essence')}
                 >
-                  {expandedCard === 'essence' ? 'Show Less ↑' : 'Explore Deeper ↓'}
+                  Explore Deeper →
                 </button>
-                {expandedCard === 'essence' && essenceData && (
-                  <div className="expand-content show">
-                    <h4>Your Superpower</h4>
-                    <p>{essenceData.superpower}</p>
-                    <h4>Your North Star</h4>
-                    <p>{essenceData.north_star}</p>
-                    <h4>Your Vision</h4>
-                    <p>{essenceData.poetic_vision}</p>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -253,18 +264,10 @@ const Profile = () => {
                 </p>
                 <button
                   className="explore-button"
-                  onClick={() => toggleExpand('protective')}
+                  onClick={() => navigate('/archetypes/protective')}
                 >
-                  {expandedCard === 'protective' ? 'Show Less ↑' : 'Learn More ↓'}
+                  Learn More →
                 </button>
-                {expandedCard === 'protective' && protectiveData && (
-                  <div className="expand-content show">
-                    <h4>How It Shows Up</h4>
-                    <p>{protectiveData.detailed?.howItShowsUp}</p>
-                    <h4>Breaking Free</h4>
-                    <p>{protectiveData.detailed?.breakingFree}</p>
-                  </div>
-                )}
               </div>
             </div>
           </div>

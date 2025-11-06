@@ -57,7 +57,9 @@
       "name": "Healing Compass",
       "description": "Identify the wound/s causing your Protective Archetype to protect you",
       "points": 20,
-      "inputType": "checkbox"
+      "inputType": "flow",
+      "flow_id": "healing_compass",
+      "flow_route": "/healing-compass"
     },
     {
       "id": "recognise_ikigai",
@@ -66,8 +68,9 @@
       "name": "Nikigai",
       "description": "The Ikigai process modernised to identify business opportunities",
       "points": 25,
-      "inputType": "text",
-      "placeholder": "Share your Nikigai insights"
+      "inputType": "flow",
+      "flow_id": "nikigai",
+      "flow_route": "/nikigai"
     },
     {
       "id": "recognise_consciousness_quiz",
@@ -76,8 +79,9 @@
       "name": "Spiral Dynamics Quiz",
       "description": "Discover where you operate on the consciousness spectrum. Understand your current state and opportunities for growth.",
       "points": 15,
-      "inputType": "text",
-      "placeholder": "Share your Spiral Dynamics stage and insights"
+      "inputType": "flow",
+      "flow_id": "spiral_dynamics",
+      "flow_route": "/spiral-dynamics"
     },
     {
       "id": "recognise_nervous_system",
@@ -86,8 +90,9 @@
       "name": "Map The Boundaries Of Your Nervous System",
       "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
       "points": 15,
-      "inputType": "text",
-      "placeholder": "Share what you discovered about your nervous system"
+      "inputType": "flow",
+      "flow_id": "nervous_system",
+      "flow_route": "/nervous-system"
     },
     {
       "id": "recognise_define_success",
