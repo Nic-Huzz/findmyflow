@@ -205,7 +205,7 @@ function App() {
           essence_archetype: newContext.essence_archetype_selection,
           essence_confirm: newContext.essence_archetype_reflect,
           persona: newContext.persona_selection || null, // Will be null since persona comes after email
-          email: trimmedInput,
+          email: trimmedInput.toLowerCase(), // Normalize to lowercase to match Supabase Auth
           context: newContext
         }
         
@@ -222,8 +222,8 @@ function App() {
         console.log('✅ Profile saved successfully:', data)
         
         // Send magic link after saving profile
-        console.log('📧 Sending magic link to:', trimmedInput)
-        const magicLinkResult = await signInWithMagicLink(trimmedInput)
+        console.log('📧 Sending magic link to:', trimmedInput.toLowerCase())
+        const magicLinkResult = await signInWithMagicLink(trimmedInput.toLowerCase())
         if (magicLinkResult.success) {
           console.log('✅ Magic link sent successfully')
           setMessages(prev => [
@@ -389,7 +389,7 @@ function App() {
   }
 
   const handleResendEmail = async () => {
-    const email = context.user_email || context.email
+    const email = (context.user_email || context.email)?.toLowerCase()
     if (!email) {
       console.error('No email found in context')
       return
