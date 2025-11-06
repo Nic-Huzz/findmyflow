@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from './auth/AuthProvider'
 import { supabase } from './lib/supabaseClient'
 import './Challenge.css'
@@ -929,27 +930,41 @@ function Challenge() {
 
                     {!completed && (
                       <div className="quest-input-area">
-                        {quest.inputType === 'text' ? (
-                          <textarea
-                            className="quest-textarea"
-                            placeholder={quest.placeholder}
-                            value={questInputs[quest.id] || ''}
-                            onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            rows={3}
-                          />
+                        {quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
+                        ) : quest.inputType === 'text' ? (
+                          <>
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                            />
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         ) : (
-                          <div className="quest-checkbox-area">
-                            <label className="quest-checkbox-label">
-                              Mark as complete
-                            </label>
-                          </div>
+                          <>
+                            <div className="quest-checkbox-area">
+                              <label className="quest-checkbox-label">
+                                Mark as complete
+                              </label>
+                            </div>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         )}
-                        <button
-                          className="quest-complete-btn"
-                          onClick={() => handleQuestComplete(quest)}
-                        >
-                          Complete Quest
-                        </button>
                       </div>
                     )}
 
@@ -982,27 +997,41 @@ function Challenge() {
 
                     {!completed && (
                       <div className="quest-input-area">
-                        {quest.inputType === 'text' ? (
-                          <textarea
-                            className="quest-textarea"
-                            placeholder={quest.placeholder}
-                            value={questInputs[quest.id] || ''}
-                            onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            rows={3}
-                          />
+                        {quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
+                        ) : quest.inputType === 'text' ? (
+                          <>
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                            />
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         ) : (
-                          <div className="quest-checkbox-area">
-                            <label className="quest-checkbox-label">
-                              Mark as complete
-                            </label>
-                          </div>
+                          <>
+                            <div className="quest-checkbox-area">
+                              <label className="quest-checkbox-label">
+                                Mark as complete
+                              </label>
+                            </div>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         )}
-                        <button
-                          className="quest-complete-btn"
-                          onClick={() => handleQuestComplete(quest)}
-                        >
-                          Complete Quest
-                        </button>
                       </div>
                     )}
 
@@ -1035,27 +1064,41 @@ function Challenge() {
 
                     {!completed && (
                       <div className="quest-input-area">
-                        {quest.inputType === 'text' ? (
-                          <textarea
-                            className="quest-textarea"
-                            placeholder={quest.placeholder}
-                            value={questInputs[quest.id] || ''}
-                            onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            rows={3}
-                          />
+                        {quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
+                        ) : quest.inputType === 'text' ? (
+                          <>
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                            />
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         ) : (
-                          <div className="quest-checkbox-area">
-                            <label className="quest-checkbox-label">
-                              Mark as complete
-                            </label>
-                          </div>
+                          <>
+                            <div className="quest-checkbox-area">
+                              <label className="quest-checkbox-label">
+                                Mark as complete
+                              </label>
+                            </div>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         )}
-                        <button
-                          className="quest-complete-btn"
-                          onClick={() => handleQuestComplete(quest)}
-                        >
-                          Complete Quest
-                        </button>
                       </div>
                     )}
 

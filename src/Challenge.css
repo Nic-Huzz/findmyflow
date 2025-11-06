@@ -460,6 +460,30 @@
   transform: translateY(0);
 }
 
+.quest-flow-btn {
+  display: block;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  text-align: center;
+}
+
+.quest-flow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.quest-flow-btn:active {
+  transform: translateY(0);
+}
+
 .quest-completed-badge {
   background: #d4edda;
   color: #155724;
