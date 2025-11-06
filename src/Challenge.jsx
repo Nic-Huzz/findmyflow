@@ -460,21 +460,28 @@ function Challenge() {
       // Calculate new points
       const categoryLower = quest.category.toLowerCase()
       const typeKey = quest.type === 'daily' ? 'daily' : 'weekly'
-      const pointsField = `${categoryLower}_${typeKey}_points`
 
-      const newCategoryPoints = (progress[pointsField] || 0) + quest.points
+      // Handle Bonus category specially (no bonus_*_points columns in DB)
+      const isBonus = quest.category === 'Bonus'
+      const pointsField = isBonus ? null : `${categoryLower}_${typeKey}_points`
+
+      const newCategoryPoints = isBonus ? 0 : (progress[pointsField] || 0) + quest.points
       const newTotalPoints = (progress.total_points || 0) + quest.points
 
-      // Check artifact unlock conditions
+      // Check artifact unlock conditions (not applicable for Bonus)
       const artifacts = challengeData?.artifacts || []
       const categoryArtifact = artifacts.find(a => a.category === quest.category)
       const artifactUnlocked = categoryArtifact ? checkArtifactUnlock(quest.category, newCategoryPoints, typeKey) : false
 
       // Update progress
       const updateData = {
-        [pointsField]: newCategoryPoints,
         total_points: newTotalPoints,
         last_active_date: new Date().toISOString()
+      }
+
+      // Only add category points field if not Bonus
+      if (!isBonus && pointsField) {
+        updateData[pointsField] = newCategoryPoints
       }
 
       if (artifactUnlocked && categoryArtifact) {
@@ -486,6 +493,8 @@ function Challenge() {
         .from('challenge_progress')
         .update(updateData)
         .eq('user_id', user.id)
+        .eq('challenge_instance_id', progress.challenge_instance_id)
+        .eq('status', 'active')
         .select()
         .single()
 
