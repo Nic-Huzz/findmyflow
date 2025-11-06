@@ -1,5 +1,6 @@
 import { renderEssenceReveal } from "./templates/essenceRevealTemplate";
 import { renderProtectiveMirror } from "./templates/protectiveMirrorTemplate";
+import { generateBeliefTests, mirrorPattern } from "./templates/nervousSystemTemplates";
 
 /**
  * Replace {{var}} placeholders with values from answers.
@@ -35,6 +36,16 @@ function resolveMacros(str, answers = {}) {
     const keyName = protectiveMatch[1].trim();
     const archetypeKey = answers[keyName] || "";
     return renderProtectiveMirror(archetypeKey);
+  }
+
+  // Generate Belief Tests: {{GENERATE_BELIEF_TESTS}}
+  if (str.includes('{{GENERATE_BELIEF_TESTS}}')) {
+    return generateBeliefTests(answers);
+  }
+
+  // Mirror Pattern: {{MIRROR_PATTERN}}
+  if (str.includes('{{MIRROR_PATTERN}}')) {
+    return mirrorPattern(answers);
   }
 
   return str;
