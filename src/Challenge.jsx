@@ -321,6 +321,7 @@ function Challenge() {
       let challengeQuery = supabase
         .from('challenge_progress')
         .select('*')
+        .eq('status', 'active')  // Only show active challenges
         .order('total_points', { ascending: false })
 
       // If user has a group, filter by group members
