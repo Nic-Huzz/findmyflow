@@ -4,6 +4,9 @@ import App from './App'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
 import Challenge from './Challenge'
+import ArchetypeSelection from './ArchetypeSelection'
+import EssenceProfile from './EssenceProfile'
+import ProtectiveProfile from './ProtectiveProfile'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import './App.css'
@@ -31,6 +34,21 @@ function AppRouter() {
           <Route path="/7-day-challenge" element={
             <AuthGate>
               <Challenge />
+            </AuthGate>
+          } />
+          <Route path="/archetypes" element={
+            <AuthGate>
+              <ArchetypeSelection />
+            </AuthGate>
+          } />
+          <Route path="/archetypes/essence" element={
+            <AuthGate>
+              <EssenceProfile />
+            </AuthGate>
+          } />
+          <Route path="/archetypes/protective" element={
+            <AuthGate>
+              <ProtectiveProfile />
             </AuthGate>
           } />
         </Routes>

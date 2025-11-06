@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/AuthProvider'
 import { supabase } from './lib/supabaseClient'
 import './Challenge.css'
 
 function Challenge() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('Recognise')
   const [challengeData, setData] = useState(null)
@@ -21,6 +22,7 @@ function Challenge() {
   const [leaderboard, setLeaderboard] = useState([])
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
+  const [userData, setUserData] = useState(null)
 
   const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
@@ -32,8 +34,28 @@ function Challenge() {
     if (user) {
       loadUserProgress()
       loadLeaderboard()
+      loadUserData()
     }
   }, [user])
+
+  const loadUserData = async () => {
+    if (!user?.email) return
+
+    try {
+      const { data, error } = await supabase
+        .from('lead_flow_profiles')
+        .select('*')
+        .eq('email', user.email)
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      if (!error && data && data.length > 0) {
+        setUserData(data[0])
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error)
+    }
+  }
 
   useEffect(() => {
     if (user && progress) {
@@ -740,6 +762,16 @@ function Challenge() {
             {groupCode && (
               <div className="challenge-day group-code-badge" title="Share this code with friends!">
                 👥 {groupCode}
+              </div>
+            )}
+            {userData?.essence_archetype && (
+              <div
+                className="challenge-day archetype-badge"
+                title="View your archetypes"
+                onClick={() => navigate('/archetypes')}
+                style={{ cursor: 'pointer' }}
+              >
+                ✨ Archetypes
               </div>
             )}
           </div>
