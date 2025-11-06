@@ -1,0 +1,391 @@
+{
+  "quests": [
+    {
+      "id": "recognise_essence_observe",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Essence Archetype",
+      "description": "Where did your essence archetype naturally emerge today?",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What was the situation? What were you doing? Who were you with?"
+    },
+    {
+      "id": "recognise_protective_observe",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Protective Archetype",
+      "description": "Where did your protective archetype emerge today?",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What was the situation? What caused it to arise?"
+    },
+    {
+      "id": "recognise_positive_frequency",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Positive Frequency",
+      "description": "What moment/s did you find yourself reacting from a place of Love today?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the situation?"
+    },
+    {
+      "id": "recognise_negative_frequency",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Negative Frequency",
+      "description": "What moment/s did you find yourself reacting from Fear today?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the situation? What caused you to be triggered?"
+    },
+    {
+      "id": "recognise_archetype_quiz",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Identify Your Archetypes",
+      "description": "Which essence and protective archetypes did you most identify with?",
+      "points": 7,
+      "inputType": "text",
+      "placeholder": "Share what essence and protective archetype you identified"
+    },
+    {
+      "id": "recognise_healing_compass",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Healing Compass",
+      "description": "Identify the wound/s causing your Protective Archetype to protect you",
+      "points": 20,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "recognise_ikigai",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Nikigai",
+      "description": "The Ikigai process modernised to identify business opportunities",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "Share your Nikigai insights"
+    },
+    {
+      "id": "recognise_consciousness_quiz",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Spiral Dynamics Quiz",
+      "description": "Discover where you operate on the consciousness spectrum. Understand your current state and opportunities for growth.",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "Share your Spiral Dynamics stage and insights"
+    },
+    {
+      "id": "recognise_nervous_system",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Map The Boundaries Of Your Nervous System",
+      "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "Share what you discovered about your nervous system"
+    },
+    {
+      "id": "recognise_define_success",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Define Success",
+      "description": "What does success mean to you? What's your North Star? How will you know you're 'successful'?",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What does success mean to you?"
+    },
+    {
+      "id": "recognise_nonfiction_content",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Identify Your Curiosities",
+      "description": "What was the topic of a podcast, book, or learning that you absolutely loved this week?",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "The more specific the topic the better"
+    },
+    {
+      "id": "release_daily_challenge",
+      "category": "Release",
+      "type": "daily",
+      "name": "Daily Release Challenge",
+      "description": "Check the group chat to see the daily release challenge for the day.",
+      "points": 7,
+      "inputType": "text",
+      "placeholder": "What came up for you in this process today?"
+    },
+    {
+      "id": "release_negative_charge",
+      "category": "Release",
+      "type": "daily",
+      "name": "Processing Our Emotions",
+      "description": "When you find yourself feeling negatively charged today, rather than bottle it up, release it",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What emotion were you feeling and how did you release it?"
+    },
+    {
+      "id": "release_weekly_big",
+      "category": "Release",
+      "type": "weekly",
+      "name": "Big Release",
+      "description": "Complete an extended release whether it be breathwork or another release practise of your choosing",
+      "points": 30,
+      "inputType": "text",
+      "placeholder": "What came up in the session? What did you process and release?"
+    },
+    {
+      "id": "rewire_behavior_change",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Embody Your Essence",
+      "description": "What's a moment where you were on auto-pilot and consciously chose to show-up as your essence archetype instead?",
+      "points": 5,
+      "inputType": "text",
+      "maxPerDay": 3,
+      "placeholder": "What did you do?"
+    },
+    {
+      "id": "rewire_dopamine_diet",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Dopamine Diet Change",
+      "description": "What's a moment where instead of default to 'fast-food' joy, you pursued 'nutritious' joy instead?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the 'fast-food' joy you usually default to in this moment and what was the 'nutritious' joy you chose instead?"
+    },
+    {
+      "id": "rewire_customer_acquisition",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Customer Acquisition Task",
+      "description": "Take one action toward attracting your ideal audience or customers. Post, reach out, create, or connect.",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What action did you take?"
+    },
+    {
+      "id": "rewire_protective_to_essence",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Protective to Essence Shift",
+      "description": "What's a moment where you were showing up as your protective archetype but shifted and showed up in your essence?",
+      "points": 7,
+      "inputType": "text",
+      "placeholder": "How did you shift from protective to essence?"
+    },
+    {
+      "id": "rewire_groan_skills",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Groan Challenge: Skills",
+      "description": "Do something outside your comfort zone but develops a key skill.",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "What skill-building groan task did you complete?"
+    },
+    {
+      "id": "rewire_groan_serve",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Groan Challenge: Persona",
+      "description": "Do something outside your comfort zone to serve and support your ideal audience",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "How did you serve your persona this week?"
+    },
+    {
+      "id": "rewire_groan_solve",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Groan Challenge: Problem",
+      "description": "Solve a problem your passionate about for someone in a way that is outside your comfort zone",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "What problem did you solve?"
+    },
+    {
+      "id": "rewire_3_percent_better",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "3% Better",
+      "description": "In your business what can you make 3% better this week?",
+      "points": 20,
+      "inputType": "text",
+      "placeholder": "What did you improve by 3%?"
+    },
+    {
+      "id": "reconnect_morning_meditation",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Meditation",
+      "description": "Establish connection with your essence archetype and drop into a meditation",
+      "points": 5,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "reconnect_morning_dance",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Rise & Vibe Dance",
+      "description": "Play one of your favourite bangers and get your dance on",
+      "points": 3,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "reconnect_morning_breathwork",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Breathwork",
+      "description": "Complete breathwork and breath life into your essence archetype",
+      "points": 5,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "reconnect_self_identified",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Self-Identified Activity",
+      "description": "Do something that reconnects you to YOU. Your choice, your ritual, your essence.",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What did you do to reconnect today?"
+    },
+    {
+      "id": "reconnect_weekly_task",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Weekly Self-Identified Task",
+      "description": "Choose a weekly reconnection practice that deeply resonates with you. Make it meaningful.",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What was your reconnection practice this week?"
+    },
+    {
+      "id": "reconnect_clothing_ritual",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Clothing Item Ritual",
+      "description": "Choose a clothing item your essence archetype would love to wear but sparks your fear of judgement",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What item did you choose and why?"
+    },
+    {
+      "id": "reconnect_groan_wheel",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Essence Archetype Groan",
+      "description": "Do something your Essence Archetype would love to do but sparks a fear of judgement, failure or not being good enough",
+      "points": 20,
+      "inputType": "text",
+      "placeholder": "What did you do and how did it go?"
+    },
+    {
+      "id": "reconnect_remove_negative",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Environment Hygiene",
+      "description": "Identify and remove yourself from an environment, relationship, or situation that drains your essence.",
+      "points": 25,
+      "inputType": "text",
+      "placeholder": "What negative environment did you address?"
+    },
+    {
+      "id": "bonus_feedback",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Feedback Form",
+      "description": "Share your experience with the challenge. Your feedback helps us improve the journey for everyone.",
+      "points": 10,
+      "inputType": "text",
+      "placeholder": "What feedback do you have about the challenge?"
+    },
+    {
+      "id": "bonus_ig_groan",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Post Your Groan/s on Instagram",
+      "description": "Share one of your 'groan' tasks as a story or post on Instagram. Vulnerability is magnetic. Tag @_Huzz so I can reshare it 🫶🏻",
+      "points": 10,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "bonus_tell_friend",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Tell a Friend",
+      "description": "Share this 7-day challenge with someone who you think would love to join.",
+      "points": 5,
+      "inputType": "checkbox",
+      "maxCompletions": 3
+    },
+    {
+      "id": "bonus_essence_ring",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Buy Essence Ring",
+      "description": "Invest in a physical reminder of your essence archetype. Wear your truth. If you can't find one, send Huzz a message.",
+      "points": 10,
+      "inputType": "checkbox"
+    },
+    {
+      "id": "bonus_elephant_report",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Weekly Reflection",
+      "description": "Submit your weekly reflection. Track your transformation over the 7 days.",
+      "points": 10,
+      "inputType": "text",
+      "placeholder": "Share your weekly reflection"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "essence_boat",
+      "name": "Treasure Map",
+      "category": "Recognise",
+      "description": "Identify where to find your flow.",
+      "weeklyPointsRequired": 50,
+      "dailyPointsRequired": 40,
+      "totalRequired": 90,
+      "image": "/images/artifacts/essence-boat.png"
+    },
+    {
+      "id": "captains_hat",
+      "name": "Cutting The Anchor",
+      "category": "Release",
+      "description": "Letting go of what's stopping your flow.",
+      "weeklyPointsRequired": 30,
+      "dailyPointsRequired": 30,
+      "totalRequired": 60,
+      "image": "/images/artifacts/captains-hat.png"
+    },
+    {
+      "id": "treasure_map",
+      "name": "Captain's Hat",
+      "category": "Rewire",
+      "description": "Taking action to be who you were born to be.",
+      "weeklyPointsRequired": 60,
+      "dailyPointsRequired": 50,
+      "totalRequired": 110,
+      "image": "/images/artifacts/treasure-map.png"
+    },
+    {
+      "id": "sailing_sails",
+      "name": "Essence Boat",
+      "category": "Reconnect",
+      "description": "Your Vessel for living your flow.",
+      "weeklyPointsRequired": 40,
+      "dailyPointsRequired": 50,
+      "totalRequired": 90,
+      "image": "/images/artifacts/sailing-sails.png"
+    }
+  ]
+}

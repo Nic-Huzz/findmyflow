@@ -16,6 +16,7 @@ function App() {
   const [error, setError] = useState(null)
   const [showHybridFlow, setShowHybridFlow] = useState(false)
   const [hybridFlowType, setHybridFlowType] = useState(null) // 'protective' or 'essence'
+  const [isResending, setIsResending] = useState(false)
   const messagesEndRef = useRef(null)
 
   // Load flow JSON
@@ -230,7 +231,7 @@ function App() {
             {
               id: `ai-${Date.now()}`,
               isAI: true,
-              text: `I\'ve sent a magic link to ${trimmedInput}. Please check your inbox (and spam folder).`,
+              text: `I've sent a magic link to ${trimmedInput}. Please check your inbox (and spam folder).`,
               timestamp: new Date().toLocaleTimeString()
             }
           ])
@@ -241,7 +242,7 @@ function App() {
             {
               id: `ai-${Date.now()}`,
               isAI: true,
-              text: `Hmm, I couldn\'t send the magic link: ${magicLinkResult.message}. Please double-check your email or try again in a moment.`,
+              text: `Hmm, I couldn't send the magic link: ${magicLinkResult.message}. Please double-check your email or try again in a moment.`,
               timestamp: new Date().toLocaleTimeString()
             }
           ])
@@ -262,12 +263,12 @@ function App() {
     if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
-      
+
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
         kind: 'completion',
-        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or click below to view your profile:",
+        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or if you can't see it, click below to resend.",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -366,12 +367,12 @@ function App() {
     if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
-      
+
       const completionMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
         kind: 'completion',
-        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or click below to view your profile:",
+        text: "🎉 Congratulations! You've completed the flow. Check your email for a magic link to access your profile, or if you can't see it, click below to resend.",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -384,6 +385,47 @@ function App() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSubmit()
+    }
+  }
+
+  const handleResendEmail = async () => {
+    const email = context.user_email || context.email
+    if (!email) {
+      console.error('No email found in context')
+      return
+    }
+
+    setIsResending(true)
+    try {
+      console.log('📧 Resending magic link to:', email)
+      const magicLinkResult = await signInWithMagicLink(email)
+      if (magicLinkResult.success) {
+        console.log('✅ Magic link resent successfully')
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: `I've resent the magic link to ${email}. Please check your inbox (and spam folder).`,
+            timestamp: new Date().toLocaleTimeString()
+          }
+        ])
+      } else {
+        console.error('❌ Magic link failed:', magicLinkResult.message)
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: `Hmm, I couldn't resend the magic link: ${magicLinkResult.message}. Please try again in a moment.`,
+            timestamp: new Date().toLocaleTimeString()
+          }
+        ])
+      }
+    } catch (err) {
+      console.error('❌ Failed to resend magic link:', err)
+    } finally {
+      setIsResending(false)
     }
   }
 
@@ -444,9 +486,22 @@ function App() {
                   <div className="text">
                     {message.text}
                     <div style={{ marginTop: 8 }}>
-                      <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
-                        View your profile
-                      </Link>
+                      <button
+                        onClick={handleResendEmail}
+                        disabled={isResending}
+                        style={{
+                          color: '#5e17eb',
+                          textDecoration: 'underline',
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          fontSize: 'inherit',
+                          padding: 0,
+                          fontFamily: 'inherit'
+                        }}
+                      >
+                        {isResending ? 'Sending...' : 'Resend Email'}
+                      </button>
                     </div>
                   </div>
                 ) : (

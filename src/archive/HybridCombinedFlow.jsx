@@ -461,7 +461,7 @@ const HybridCombinedFlow = () => {
           
           <div className="message ai">
             <div className="bubble">
-              <div className="text">Now let's discover your Essence Archetype - who you are at your core. I'll show you 8 different essence patterns. Swipe right on the ones that sound like you, left on the ones that don't.\n\nReady to discover your essence? Let's go! ✨</div>
+              <div className="text">Now let&apos;s discover your Essence Archetype - who you are at your core. I&apos;ll show you 8 different essence patterns. Swipe right on the ones that sound like you, left on the ones that don&apos;t.\n\nReady to discover your essence? Let&apos;s go! ✨</div>
               <div className="timestamp">{new Date().toLocaleTimeString()}</div>
             </div>
           </div>
@@ -508,7 +508,7 @@ const HybridCombinedFlow = () => {
           
           <div className="message ai">
             <div className="bubble">
-              <div className="text">Now let's narrow it down! Which {archetypeType} pattern resonates more with you?</div>
+              <div className="text">Now let&apos;s narrow it down! Which {archetypeType} pattern resonates more with you?</div>
               <div className="timestamp">{new Date().toLocaleTimeString()}</div>
             </div>
           </div>
@@ -592,7 +592,7 @@ const HybridCombinedFlow = () => {
           
           <div className="message ai">
             <div className="bubble">
-              <div className="text">Swipe right if this {archetypeType} pattern sounds like you, left if it doesn't:</div>
+              <div className="text">Swipe right if this {archetypeType} pattern sounds like you, left if it doesn&apos;t:</div>
               <div className="timestamp">{new Date().toLocaleTimeString()}</div>
             </div>
           </div>

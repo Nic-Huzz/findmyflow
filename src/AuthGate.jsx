@@ -78,7 +78,7 @@ const AuthGate = ({ children }) => {
         </form>
 
         <div className="auth-footer">
-          <p>We'll send you a secure link to sign in - no password required!</p>
+          <p>We&apos;ll send you a secure link to sign in - no password required!</p>
         </div>
       </div>
     </div>
