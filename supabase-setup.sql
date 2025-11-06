@@ -6,11 +6,13 @@ CREATE TABLE IF NOT EXISTS healing_compass_responses (
   stuck_reason TEXT,
   stuck_emotional_response TEXT,
   past_parallel_story TEXT,
+  past_event_details TEXT,
   past_event_emotions TEXT,
   splinter_interpretation TEXT,
   connect_dots_consent TEXT,
   connect_dots_acknowledged TEXT,
   splinter_removal_consent TEXT,
+  challenge_enrollment_consent TEXT,
   context JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
