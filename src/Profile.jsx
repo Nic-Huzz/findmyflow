@@ -149,8 +149,8 @@ const Profile = () => {
         <div className="logo">FindMyFlow</div>
 
         <div className="user-profile">
-          <div className="user-avatar">{getUserInitials(user?.email)}</div>
-          <div className="user-name">{user?.email?.split('@')[0] || 'User'}</div>
+          <div className="user-avatar">{userData?.user_name?.substring(0, 2).toUpperCase() || getUserInitials(user?.email)}</div>
+          <div className="user-name">{userData?.user_name || user?.email?.split('@')[0] || 'User'}</div>
           <div className="user-email">{user?.email}</div>
         </div>
 
@@ -177,7 +177,7 @@ const Profile = () => {
       {/* Main Content */}
       <div className="main-content">
         <div className="page-header">
-          <h1 className="page-title">Welcome Back, {user?.email?.split('@')[0] || 'User'}</h1>
+          <h1 className="page-title">Welcome Back, {userData?.user_name || user?.email?.split('@')[0] || 'User'}</h1>
           <p className="page-subtitle">Here's your transformation journey at a glance</p>
         </div>
 
