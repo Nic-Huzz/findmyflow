@@ -53,11 +53,13 @@
           "target": "skills",
           "source_tags": ["skill_verb", "domain_topic", "value"],
           "target_clusters_min": 3,
-          "target_clusters_max": 6
+          "target_clusters_max": 6,
+          "candidate_items_min": 5,
+          "candidate_items_max": 15
         },
         "store_as": "skills.preview.from_hobbies"
       },
-      "assistant_prompt": "✨ Beautiful — I can already see some puzzle pieces forming.\n\nBased on what you love doing, here are early **Skill clusters** emerging:\n\n{skills.preview.from_hobbies}\n\nKeep/edit these now or skip and refine later?",
+      "assistant_prompt": "✨ Beautiful — those early joys often hold the purest clues.\n\nBased on what you love doing, here are early **Skill clusters** emerging:\n\n{skills.preview.from_hobbies}\n\nI can already see some patterns forming. Do any of these feel like your natural way of showing up?\n\nKeep/edit these now or skip and refine later?",
       "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
       "store_as": "skills.preview_choice.hobbies",
       "next_step_rules": [
@@ -122,7 +124,7 @@
         },
         "store_as": "skills.preview.with_proud_moments"
       },
-      "assistant_prompt": "✨ More puzzle pieces connecting!\n\nYour proud/alive moments added depth to the **Skill clusters**:\n\n{skills.preview.with_proud_moments}\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ More puzzle pieces connecting!\n\nYour proud/alive moments added depth to the **Skill clusters**:\n\n{skills.preview.with_proud_moments}\n\nFrom your answers, I sense these are the ways you naturally contribute when you feel most alive. Which clusters feel most energizing to you?\n\nKeep/edit/skip?",
       "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
       "store_as": "skills.preview_choice.proud_moments",
       "next_step_rules": [
@@ -147,7 +149,7 @@
     {
       "id": "4.0",
       "step_order_index": 12,
-      "assistant_prompt": "If you saw your life as a story, what are the chapters?\n\nThink of major life phases or turning points — like 'The Explorer Years', 'The Rebuild', 'The Awakening', etc.\n\nList 3–5 chapter titles (the more the better!).",
+      "assistant_prompt": "Beautiful work so far — you're revealing powerful threads.\n\nNow let's look at what *shaped* you.\n\nIf you saw your life as a story, what are the chapters?\n\nThink of major life phases or turning points — like 'The Explorer Years', 'The Rebuild', 'The Awakening', etc.\n\nList 3–5 chapter titles (the more the better!).",
       "expected_inputs": ["text_list"],
       "store_as": "life_map.life_chapters.titles",
       "next_step_rules": [{ "on_success": "4.1" }]
@@ -179,7 +181,7 @@
         },
         "store_as": "problems.preview.from_chapters"
       },
-      "assistant_prompt": "✨ Your story reveals deeper threads.\n\nHere are **Problem/Change themes** emerging from your life chapters:\n\n{problems.preview.from_chapters}\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ Your story reveals deeper threads.\n\nHere are **Problem/Change themes** emerging from your life chapters:\n\n{problems.preview.from_chapters}\n\nThese themes show what you've learned to care about through lived experience. Which feel most meaningful to you?\n\nKeep/edit/skip?",
       "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
       "store_as": "problems.preview_choice.chapters",
       "next_step_rules": [
@@ -232,7 +234,7 @@
         },
         "store_as": "problems.preview.with_role_models"
       },
-      "assistant_prompt": "✨ The impact your role models have made reveals problems you care about.\n\nUpdated **Problem/Change themes** with insights from your role models:\n\n{problems.preview.with_role_models}\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ The impact your role models have made reveals problems you care about.\n\nUpdated **Problem/Change themes** with insights from your role models:\n\n{problems.preview.with_role_models}\n\nI notice the changes you admire in others often reflect the changes you want to create yourself. Does that resonate?\n\nKeep/edit/skip?",
       "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
       "store_as": "problems.preview_choice.role_models",
       "next_step_rules": [
@@ -276,7 +278,7 @@
         },
         "store_as": "skills.preview.with_learning"
       },
-      "assistant_prompt": "✨ Your learning adds more color to your skill picture.\n\nUpdated **Skill clusters** with your learning interests:\n\n{skills.preview.with_learning}\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ Your learning adds more color to your skill picture.\n\nUpdated **Skill clusters** with your learning interests:\n\n{skills.preview.with_learning}\n\nThe topics you're naturally drawn to often reveal the domains where your skills want to express themselves. Notice any connections?\n\nKeep/edit/skip?",
       "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
       "store_as": "skills.preview_choice.learning",
       "next_step_rules": [
@@ -348,7 +350,7 @@
         ],
         "store_as": "skills.preview.with_work;problems.preview.with_work"
       },
-      "assistant_prompt": "✨ Your work experience reveals how you show up in the world.\n\nRefined **Skills** and **Problem/Change** themes:\n\n**Skills:**\n{skills.preview.with_work}\n\n**Problems/Change:**\n{problems.preview.with_work}\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ Your work experience reveals how you show up in the world.\n\nRefined **Skills** and **Problem/Change** themes:\n\n**Skills:**\n{skills.preview.with_work}\n\n**Problems/Change:**\n{problems.preview.with_work}\n\nI can see how your natural abilities and the impact you create are two sides of the same coin. These patterns feel significant — do they ring true for you?\n\nKeep/edit/skip?",
       "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
       "store_as": "experience.preview_choice",
       "next_step_rules": [
@@ -432,7 +434,7 @@
         },
         "store_as": "skills.final;problems.final;market.seeds"
       },
-      "assistant_prompt": "✨ All your puzzle pieces are now laid out on the table!\n\nHere's your complete picture ready for the Nikigai lenses:\n\n**Skills:**\n{skills.final}\n\n**Problem/Change Themes:**\n{problems.final}\n\n**Market Seeds:**\n{market.seeds}\n\nContinue or review any section?",
+      "assistant_prompt": "✨ All your puzzle pieces are now laid out on the table!\n\nHere's your complete picture ready for the Nikigai lenses:\n\n**Skills:**\n{skills.final}\n\n**Problem/Change Themes:**\n{problems.final}\n\n**Market Seeds:**\n{market.seeds}\n\nYour patterns are becoming clear. From everything you've shared, I can see the unique shape of your gifts and the change you're meant to create.\n\nContinue or review any section?",
       "expected_inputs": [
         { "type": "single_select", "options": ["Continue", "Review Skills", "Review Problems", "Review Market Seeds"] }
       ],
