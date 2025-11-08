@@ -365,6 +365,63 @@
   font-size: 0.9375rem;
 }
 
+/* Learn More Section */
+.learn-more-section {
+  margin: 0.25rem 0 1.5rem 0;
+}
+
+.learn-more-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.learn-more-toggle:hover {
+  color: #7c3aed;
+  gap: 0.625rem;
+}
+
+.learn-more-arrow {
+  transition: transform 0.3s ease;
+  color: #5e17eb;
+}
+
+.learn-more-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.learn-more-content {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-left: 3px solid #5e17eb;
+  border-radius: 0 8px 8px 0;
+  color: #495057;
+  line-height: 1.6;
+  font-size: 0.875rem;
+  animation: slideDown 0.3s ease;
+  white-space: pre-line; /* Preserve line breaks from \n */
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Daily Streak Bubbles */
 .daily-streak {
   display: flex;

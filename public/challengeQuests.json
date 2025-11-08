@@ -8,7 +8,8 @@
       "description": "Where did your essence archetype naturally emerge today?",
       "points": 5,
       "inputType": "text",
-      "placeholder": "What was the situation? What were you doing? Who were you with?"
+      "placeholder": "What was the situation? What were you doing? Who were you with?",
+      "learnMore": "Tracking when your essence shows up helps you identify how often throughout the day you're showing up from this place.\n\nYou're training your awareness so you can show-up from this place more often."
     },
     {
       "id": "recognise_protective_observe",
@@ -18,29 +19,32 @@
       "description": "Where did your protective archetype emerge today?",
       "points": 5,
       "inputType": "text",
-      "placeholder": "What was the situation? What caused it to arise?"
+      "placeholder": "What was the situation? What caused it to arise?",
+      "learnMore": "Your protective archetype is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future."
     },
     {
       "id": "recognise_positive_frequency",
       "category": "Recognise",
       "type": "daily",
       "name": "Positive Frequency",
-      "description": "What moment/s did you find yourself reacting from a place of Love today?",
+      "description": "What's a moment where you were challenged today but reacted from a place of love?",
       "points": 3,
       "inputType": "text",
-      "placeholder": "What was the situation?"
+      "placeholder": "What was the situation?",
+      "learnMore": "A love response is anything above 'courage' on the emotional frequency scale.\n\nIt includes:\nWillingness: 'Expressesing feelings without blame'.\nAcceptance: 'Making decisions from clarity, not emotion'.\nPeace: 'Seeing innocence in others, even in conflict'.\n\nThis is important because we attract what we are. If we find ourselves responding from anger throughout the day we will attract more anger. If we show up from these higher states we will attract more of them.\n\nTracking these moments builds awareness and accountability."
     },
     {
       "id": "recognise_negative_frequency",
       "category": "Recognise",
       "type": "daily",
       "name": "Negative Frequency",
-      "description": "What moment/s did you find yourself reacting from Fear today?",
+      "description": "What's a moment you were challenged today and reacted from a place of fear?",
       "points": 3,
       "inputType": "text",
-      "placeholder": "What was the situation? What caused you to be triggered?"
+      "placeholder": "What was the situation? What caused you to be triggered?",
+      "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future."
     },
-    {
+      {
       "id": "recognise_archetype_quiz",
       "category": "Recognise",
       "type": "weekly",
@@ -59,7 +63,8 @@
       "points": 20,
       "inputType": "flow",
       "flow_id": "healing_compass",
-      "flow_route": "/healing-compass"
+      "flow_route": "/healing-compass",
+      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective archetype developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
     },
     {
       "id": "recognise_ikigai",
@@ -70,7 +75,8 @@
       "points": 25,
       "inputType": "flow",
       "flow_id": "nikigai",
-      "flow_route": "/nikigai"
+      "flow_route": "/nikigai",
+      "learnMore": "Ikigai is a Japanese concept meaning 'reason for being.' It sits at the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.\n\nThis modernised version helps you identify tangible business opportunities aligned with your passions, experiences and skills.\n\nTakes 15-20 minutes."
     },
     {
       "id": "recognise_consciousness_quiz",
@@ -81,7 +87,8 @@
       "points": 15,
       "inputType": "flow",
       "flow_id": "spiral_dynamics",
-      "flow_route": "/spiral-dynamics"
+      "flow_route": "/spiral-dynamics",
+      "learnMore": "Spiral Dynamics maps stages of human values and beliefs—from survival-based thinking to purpose-driven living.\n\nUnderstanding where you currently operate helps you see your blind spots and growth edges.\n\nThis isn't about being 'better than' others—it's about recognising your worldview and where you're ready to expand.\n\nTakes 5-10 minutes."
     },
     {
       "id": "recognise_nervous_system",
@@ -92,7 +99,8 @@
       "points": 15,
       "inputType": "flow",
       "flow_id": "nervous_system",
-      "flow_route": "/nervous-system"
+      "flow_route": "/nervous-system",
+      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a somatic practice) to identify exactly where those boundaries are—so you can consciously expand them.\n\nTakes about 10 minutes."
     },
     {
       "id": "recognise_define_success",
@@ -102,7 +110,8 @@
       "description": "What does success mean to you? What's your North Star? How will you know you're 'successful'?",
       "points": 15,
       "inputType": "text",
-      "placeholder": "What does success mean to you?"
+      "placeholder": "What does success mean to you?",
+      "learnMore": "Most people chase inherited definitions of success—money, status, titles—only to feel empty when they achieve them.\n\nDefining success on your own terms is essential for building a life you actually want.\n\nGet specific: what does success feel like, look like, and allow you to do? This becomes your compass for decision-making."
     },
     {
       "id": "recognise_nonfiction_content",
@@ -112,7 +121,8 @@
       "description": "What was the topic of a podcast, book, or learning that you absolutely loved this week?",
       "points": 15,
       "inputType": "text",
-      "placeholder": "The more specific the topic the better"
+      "placeholder": "The more specific the topic the better",
+        "learnMore": "Your curiosities are breadcrumbs leading to what your essence is passionate about and the impact it wants to make in the world.\n\nThe topics you're excited to learn about reveal what you're meant to share with the world.\n\nMost people dismiss their interests as 'just hobbies,' but tracking them over time reveals patterns that point to your unique genius and potential business opportunities."
     },
     {
       "id": "release_daily_challenge",
@@ -128,11 +138,12 @@
       "id": "release_negative_charge",
       "category": "Release",
       "type": "daily",
-      "name": "Processing Our Emotions",
-      "description": "When you find yourself feeling negatively charged today, rather than bottle it up, release it",
+      "name": "Processing Your Emotions",
+      "description": "When you found yourself feeling negatively charged (anger, fear, guilt, shame) today, rather than bottle it up (a recipe for trauma to develop and future resentment + fear blocks), how did you release it healthily?",
       "points": 5,
       "inputType": "text",
-      "placeholder": "What emotion were you feeling and how did you release it?"
+      "placeholder": "What emotion were you feeling and how did you release it?",
+      "learnMore": "Emotions are energy in motion— see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'."
     },
     {
       "id": "release_weekly_big",
@@ -142,7 +153,8 @@
       "description": "Complete an extended release whether it be breathwork or another release practise of your choosing",
       "points": 30,
       "inputType": "text",
-      "placeholder": "What came up in the session? What did you process and release?"
+      "placeholder": "What came up in the session? What did you process and release?",
+      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions—trust the process and let your body lead."
     },
     {
       "id": "rewire_behavior_change",
@@ -160,10 +172,11 @@
       "category": "Rewire",
       "type": "daily",
       "name": "Dopamine Diet Change",
-      "description": "What's a moment where instead of default to 'fast-food' joy, you pursued 'nutritious' joy instead?",
+      "description": "What's a moment where instead of defaulting to 'fast-food' joy, you pursued 'nutritious' joy instead?",
       "points": 3,
       "inputType": "text",
-      "placeholder": "What was the 'fast-food' joy you usually default to in this moment and what was the 'nutritious' joy you chose instead?"
+      "placeholder": "What 'fast-food' joy do you usually default to and what was the 'nutritious' joy you chose instead?",
+      "learnMore": "Fast-food joy is anything where you feel good in the moment, but leaves you feeling lower after. Think: drinking alcohol, eating high-sugar foods, scrolling social media, watching netflix.\n\nNutritious joy is anything where you suffer but it leaves you feeling better after. Think: purposeful work, going to the gym, vulnerable conversations with friends/family, learning something new.\n\nThe more you choose nutritious joy, the less you'll crave the fast-food hits. You're literally rewiring your brain's reward system."
     },
     {
       "id": "rewire_customer_acquisition",
@@ -193,7 +206,8 @@
       "description": "Do something outside your comfort zone but develops a key skill.",
       "points": 25,
       "inputType": "text",
-      "placeholder": "What skill-building groan task did you complete?"
+      "placeholder": "What skill-building groan task did you complete?",
+      "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Skill-building groans might include: recording a video, asking for feedback, learning a new tool, or practicing a skill publicly before you feel 'ready.'"
     },
     {
       "id": "rewire_groan_serve",
@@ -203,7 +217,8 @@
       "description": "Do something outside your comfort zone to serve and support your ideal audience",
       "points": 25,
       "inputType": "text",
-      "placeholder": "How did you serve your persona this week?"
+      "placeholder": "How did you serve your persona this week?",
+      "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Persona-building groans might include: hosting a free workshop for a dream client, reaching out to someone you admire to offer value, creating content about something vulnerable, or asking your audience what they need and delivering it."
     },
     {
       "id": "rewire_groan_solve",
@@ -213,7 +228,8 @@
       "description": "Solve a problem your passionate about for someone in a way that is outside your comfort zone",
       "points": 25,
       "inputType": "text",
-      "placeholder": "What problem did you solve?"
+      "placeholder": "What problem did you solve?",
+      "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Problem-solving groans might include: offering a paid service before you feel qualified, solving a problem publicly (video/article), or approaching someone directly to help them with something they're struggling with."
     },
     {
       "id": "rewire_3_percent_better",
@@ -223,7 +239,8 @@
       "description": "In your business what can you make 3% better this week?",
       "points": 20,
       "inputType": "text",
-      "placeholder": "What did you improve by 3%?"
+      "placeholder": "What did you improve by 3%?",
+      "learnMore": "The 3% rule focuses on marginal gains as a recipe for success instead of massive transformation.These small consistent improvements compound exponentially.\n\nInstead of 'I need to completely overhaul my website,' you ask 'What's 3% better?' Maybe it's improving one headline, simplifying your offer, or speeding up your response time. Tiny improvements sustained over time create massive growth."
     },
     {
       "id": "reconnect_morning_meditation",
@@ -280,7 +297,8 @@
       "description": "Choose a clothing item your essence archetype would love to wear but sparks your fear of judgement",
       "points": 15,
       "inputType": "text",
-      "placeholder": "What item did you choose and why?"
+      "placeholder": "What item did you choose and why?",
+      "learnMore": "Your protective archetype keeps you small by controlling how you present yourself to the world. Wearing something that feels 'too much' or 'not professional' or 'too bold' is a somatic way to practice being yourself despite fear of judgment. When you dress like your essence, you literally embody it. This is identity work disguised as fashion."
     },
     {
       "id": "reconnect_groan_wheel",
@@ -290,7 +308,8 @@
       "description": "Do something your Essence Archetype would love to do but sparks a fear of judgement, failure or not being good enough",
       "points": 20,
       "inputType": "text",
-      "placeholder": "What did you do and how did it go?"
+      "placeholder": "What did you do and how did it go?",
+      "learnMore": "Your essence wants to express itself fully, but your protective archetype has been blocking it to keep you safe. This quest is about giving your essence permission to play—even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway."
     },
     {
       "id": "reconnect_remove_negative",
@@ -300,7 +319,8 @@
       "description": "Identify and remove yourself from an environment, relationship, or situation that drains your essence.",
       "points": 25,
       "inputType": "text",
-      "placeholder": "What negative environment did you address?"
+      "placeholder": "What negative environment did you address?",
+      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish—it's essential."
     },
     {
       "id": "bonus_feedback",
