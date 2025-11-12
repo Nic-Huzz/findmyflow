@@ -1,17 +1,17 @@
 /**
  * AI Helper for Pattern Recognition
- * Uses OpenAI API for deep personalization
+ * Uses Anthropic Claude Haiku API for deep personalization
  */
 
 /**
  * Mirror user's pattern using AI
- * Requires VITE_OPENAI_API_KEY environment variable
+ * Requires VITE_ANTHROPIC_API_KEY environment variable
  */
 export async function generateAIPatternMirror(context) {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
 
   if (!apiKey) {
-    console.warn('VITE_OPENAI_API_KEY not configured. Using fallback logic.');
+    console.warn('VITE_ANTHROPIC_API_KEY not configured. Using fallback logic.');
     return null; // Will trigger fallback
   }
 
@@ -62,29 +62,31 @@ ${belief_test_results ? formatContractResults(belief_test_results) : 'Not yet co
 Provide a deeply personalized reflection in the format described. Start with "Here's what I'm noticing, ${user_name}:"`;
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'claude-3-5-haiku-20241022',
+        max_tokens: 1024,
+        system: systemPrompt,
         messages: [
-          { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
         ],
-        temperature: 0.7,
-        max_tokens: 1000
+        temperature: 0.7
       })
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`Anthropic API error: ${response.statusText} - ${errorText}`);
     }
 
     const data = await response.json();
-    return data.choices[0].message.content;
+    return data.content[0].text;
 
   } catch (error) {
     console.error('AI pattern mirror failed:', error);

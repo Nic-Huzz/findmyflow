@@ -44,10 +44,11 @@ I've created a complete **Nervous System Safety Boundaries** chat flow using the
 ### 4. **AI Helper** ⭐ NEW
 - **File:** `/src/lib/aiHelper.js`
 - **Contains:**
-  - `generateAIPatternMirror()` - OpenAI API integration for pattern recognition
+  - `generateAIPatternMirror()` - Anthropic Claude API integration for pattern recognition
+  - Uses Claude 3.5 Haiku - fast, affordable, excellent for empathetic/somatic work
   - Deeply personalized, accurate reflections based on all user data
   - Fallback to conditional logic if API key not configured
-  - Uses GPT-4o for best results
+  - **Cost:** ~$0.0014 per user (10x cheaper than GPT-4o!)
 
 ### 5. **Updated PromptResolver**
 - **File:** `/src/lib/promptResolver.js` (updated)
@@ -57,7 +58,8 @@ I've created a complete **Nervous System Safety Boundaries** chat flow using the
 
 ### 6. **Environment Configuration** ⭐ NEW
 - **File:** `.env.example` (updated)
-- **Added:** `VITE_OPENAI_API_KEY` configuration
+- **Added:** `VITE_ANTHROPIC_API_KEY` configuration
+- Uses Claude 3.5 Haiku for best cost/quality ratio
 - Optional - flow works without it using fallback logic
 
 ---
@@ -96,7 +98,7 @@ Five statements to sway test:
 - **Why contracts work better:** Direct fear testing produces more accurate sway results
 
 ### **Stage 6: Mirror Back Pattern (Steps 15-17)** ⭐ AI-POWERED
-- **Uses OpenAI API** to generate deeply personalized reflection
+- **Uses Claude 3.5 Haiku** to generate deeply personalized reflection
 - Reflects safety zones vs. contraction zones
 - Names the protective pattern
 - Identifies underlying fear
@@ -104,6 +106,7 @@ Five statements to sway test:
 - Explains what needs to be rewired
 - Asks for consent to shift
 - **Falls back to conditional logic** if API key not configured
+- **Cost:** ~$0.0014 per user (incredibly affordable!)
 
 ---
 
@@ -176,24 +179,25 @@ If no specific archetype matches, the mirror reflects the general protective pat
 
 The flow works without AI using conditional logic fallback, but AI provides significantly more accurate pattern reflections.
 
-### Setup OpenAI API:
+### Setup Anthropic Claude API:
 
 1. **Get API Key:**
-   - Go to https://platform.openai.com/api-keys
+   - Go to https://console.anthropic.com/settings/keys
    - Create a new API key
    - Copy it
 
 2. **Add to `.env.local`:**
    ```bash
-   VITE_OPENAI_API_KEY=sk-proj-...your-key-here
+   VITE_ANTHROPIC_API_KEY=sk-ant-...your-key-here
    ```
 
 3. **Test it:**
    - Run the flow
-   - If API key is valid, you'll get AI-powered reflections
+   - If API key is valid, you'll get AI-powered reflections from Claude Haiku
    - If not configured, fallback logic activates automatically
 
-**Cost:** ~$0.01-0.02 per user (GPT-4o pricing)
+**Model:** Claude 3.5 Haiku (fast, affordable, excellent for somatic work)
+**Cost:** ~$0.0014 per user (10x cheaper than GPT-4o!)
 
 ---
 
