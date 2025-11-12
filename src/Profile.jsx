@@ -5,6 +5,7 @@ import { useAuth } from './auth/AuthProvider'
 import { essenceProfiles } from './data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles } from './data/personaProfiles'
+import { hasActiveChallenge } from './lib/questCompletion'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -14,11 +15,13 @@ const Profile = () => {
   const [error, setError] = useState(null)
   const [expandedCard, setExpandedCard] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [hasChallenge, setHasChallenge] = useState(false)
 
   useEffect(() => {
     // Only load profile when user is available
     if (user?.email) {
       loadUserProfile()
+      checkChallengeStatus()
     } else if (user === null) {
       // User is not authenticated
       setLoading(false)
@@ -26,6 +29,13 @@ const Profile = () => {
     }
     // If user is still loading (undefined), keep loading state
   }, [user])
+
+  const checkChallengeStatus = async () => {
+    if (user?.id) {
+      const active = await hasActiveChallenge(user.id)
+      setHasChallenge(active)
+    }
+  }
 
   const loadUserProfile = async () => {
     if (!user?.email) {
@@ -289,7 +299,7 @@ const Profile = () => {
                 className="btn-white"
                 onClick={() => navigate('/7-day-challenge')}
               >
-                Join 7-Day Challenge 🔥
+                {hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥'}
               </button>
               <button className="btn-outline">Share Your Profile</button>
             </div>

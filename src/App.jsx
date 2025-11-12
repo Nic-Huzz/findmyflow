@@ -33,7 +33,7 @@ function App() {
         
         // Start with first message
         const firstStep = sortedSteps[0]
-        const firstPrompt = resolvePrompt(firstStep, {})
+        const firstPrompt = await resolvePrompt(firstStep, {})
         setMessages([{
           id: 'ai-0',
           isAI: true,
@@ -56,7 +56,7 @@ function App() {
   const currentStep = flow?.steps?.[currentIndex]
 
   // Handle hybrid flow completion
-  const handleHybridFlowComplete = (result) => {
+  const handleHybridFlowComplete = async (result) => {
     console.log('✅ Hybrid flow completed:', result)
     setShowHybridFlow(false)
     
@@ -77,7 +77,7 @@ function App() {
     
     if (nextStep) {
       // Add AI response with resolved prompt
-      const responseText = resolvePrompt(nextStep, newContext)
+      const responseText = await resolvePrompt(nextStep, newContext)
       const aiMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
@@ -90,7 +90,7 @@ function App() {
   }
 
   // Move to next step - checks for hybrid_swipe type
-  const moveToNextStep = (updatedContext, skipHybridCheck = false) => {
+  const moveToNextStep = async (updatedContext, skipHybridCheck = false) => {
     const contextToUse = updatedContext || context
     const nextIndex = currentIndex + 1
     const nextStep = flow?.steps?.[nextIndex]
@@ -104,7 +104,7 @@ function App() {
         setShowHybridFlow(true)
       } else {
         // Regular step - add AI message with resolved prompt
-        const responseText = resolvePrompt(nextStep, contextToUse)
+        const responseText = await resolvePrompt(nextStep, contextToUse)
         const aiMessage = {
           id: `ai-${Date.now()}`,
           isAI: true,
@@ -258,8 +258,8 @@ function App() {
     }
 
     // Move to next step (check for hybrid flow)
-    const flowCompleted = moveToNextStep(newContext)
-    
+    const flowCompleted = await moveToNextStep(newContext)
+
     if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
@@ -272,6 +272,9 @@ function App() {
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
+
+      // Move currentIndex beyond last step to hide options/inputs
+      setCurrentIndex(flow.steps.length)
     }
 
     setIsLoading(false)
@@ -287,7 +290,7 @@ function App() {
     if (optionValue === 'change' || optionValue === 'no') {
       // Get the required input (which is the store_as from the previous swipe step)
       const requiredStoreAs = currentStep?.required_inputs?.[0]
-      
+
       if (!requiredStoreAs) {
         console.warn('⚠️ No required_inputs found for current step')
         setIsLoading(false)
@@ -296,33 +299,33 @@ function App() {
 
       // Find the swipe step that has this as its store_as
       const swipeStep = flow?.steps.find(step => step.store_as === requiredStoreAs)
-      
+
       // Validate: ensure we found a hybrid_swipe step
       if (swipeStep && swipeStep.step_type === 'hybrid_swipe') {
         // Find the step index
         const targetStepIndex = flow?.steps.findIndex(step => step.step === swipeStep.step)
-        
+
         if (targetStepIndex !== -1) {
           // Clear the previous selection and related context
           const newContext = { ...context }
-          
+
           // Clear the archetype selection (tag_as from swipe step)
           if (swipeStep.tag_as) {
             delete newContext[swipeStep.tag_as]
           }
-          
+
           // Clear the swipe step completion flag (store_as from swipe step)
           if (swipeStep.store_as) {
             delete newContext[swipeStep.store_as]
           }
-          
+
           // Clear the reflection step completion flag (store_as from current step)
           if (currentStep.store_as) {
             delete newContext[currentStep.store_as]
           }
-          
+
           setContext(newContext)
-          
+
           // Go back to swipe flow using the step's archetype_type
           setCurrentIndex(targetStepIndex)
           setShowHybridFlow(true)
@@ -362,8 +365,8 @@ function App() {
     setMessages(prev => [...prev, userMessage])
 
     // Move to next step (check for hybrid flow)
-    const flowCompleted = moveToNextStep(newContext)
-    
+    const flowCompleted = await moveToNextStep(newContext)
+
     if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
@@ -376,6 +379,9 @@ function App() {
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
+
+      // Move currentIndex beyond last step to hide options
+      setCurrentIndex(flow.steps.length)
     }
 
     setIsLoading(false)

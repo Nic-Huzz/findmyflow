@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design 3 Revised: Beautiful Cards - Archetype Profile</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #fafbfc;
+      min-height: 100vh;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    /* Compact Header - matches /me page mobile topbar */
+    .header {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(90deg, #5e17eb 0%, #3d0f99 100%);
+      color: white;
+      padding: 15px 20px;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .archetype-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .tab.active {
+      background: white;
+      color: #5e17eb;
+    }
+
+    /* Content - matches /me page style */
+    .content {
+      padding: 20px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Hero Image Card - matches archetype cards on /me */
+    .hero-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #e8ecef;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .hero-image {
+      height: 300px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f0e7ff, #fff9e6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .archetype-tag {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255,255,255,0.95);
+      color: #d4a000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-body {
+      padding: 30px;
+    }
+
+    .essence-text {
+      font-size: 1.125rem;
+      font-style: italic;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* Quote Card */
+    .quote-card {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #e8ecef;
+      margin-bottom: 20px;
+      border-left: 4px solid #ffdd27;
+      background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .quote-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .quote-text {
+      font-size: 1.125rem;
+      font-style: italic;
+      color: #1a1a1a;
+      line-height: 1.7;
+    }
+
+    /* Info Cards - matches stat cards on /me */
+    .info-card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #e8ecef;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .info-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 15px;
+      background: #f0e7ff;
+    }
+
+    .info-card.yellow .info-icon {
+      background: #fff9e6;
+    }
+
+    .info-card.gradient .info-icon {
+      background: linear-gradient(135deg, #f0e7ff, #fff9e6);
+    }
+
+    .info-label {
+      font-size: 0.85rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .info-title {
+      font-size: 1.25rem;
+      color: #1a1a1a;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .info-text {
+      color: #666;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* Wound Card - special styling */
+    .wound-card {
+      background: white;
+      border-left: 4px solid #f39c12;
+      background: linear-gradient(135deg, #fef5e7 0%, #ffffff 100%);
+    }
+
+    .wound-card .info-icon {
+      background: #fdebd0;
+    }
+
+    .wound-card .info-label {
+      color: #e67e22;
+    }
+
+    .wound-card .info-title {
+      color: #e67e22;
+    }
+
+    .wound-card .info-text {
+      color: #795548;
+    }
+
+    /* Characters Grid */
+    .characters-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .character-item {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border: 1px solid #e8ecef;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .character-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .character-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #f0e7ff, #fff9e6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .character-name {
+      font-weight: 700;
+      color: #1a1a1a;
+      font-size: 1rem;
+    }
+
+    /* CTA Button */
+    .cta-button {
+      width: 100%;
+      background: #5e17eb;
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+      margin-top: 20px;
+    }
+
+    .cta-button:hover {
+      background: #4912c4;
+      transform: scale(1.02);
+    }
+  </style>
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</head>
+<body>
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn">←</button>
+      <h1 class="archetype-name">Radiant Rebel</h1>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('overview')">Overview</button>
+      <button class="tab" onclick="switchTab('powers')">Powers</button>
+      <button class="tab" onclick="switchTab('patterns')">Patterns</button>
+      <button class="tab" onclick="switchTab('characters')">Characters</button>
+      <button class="tab" onclick="switchTab('vision')">Vision</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Overview Tab -->
+    <div id="overview" class="tab-content active">
+      <div class="hero-card">
+        <div class="hero-image">
+          <div class="archetype-tag">Activator</div>
+          <img src="../public/images/archetypes/lead-magnet-essence/radiant-rebel.PNG" alt="Radiant Rebel" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="hero-body">
+          <p class="essence-text">Disruptive truth-teller with heart.</p>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        <div class="quote-text">
+          "You are fire with a heartbeat — designed to disrupt what's false and awaken what's real."
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">✨</div>
+        <div class="info-label">Your Superpower</div>
+        <div class="info-title">Igniting Courage</div>
+        <div class="info-text">
+          You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck.
+        </div>
+      </div>
+
+      <div class="info-card yellow">
+        <div class="info-icon">🌟</div>
+        <div class="info-label">Your North Star</div>
+        <div class="info-title">Rebellion with Purpose</div>
+        <div class="info-text">
+          Use rebellion to liberate, not just provoke. Let your why guide your wow.
+        </div>
+      </div>
+
+      <div class="info-card wound-card">
+        <div class="info-icon">🩹</div>
+        <div class="info-label">The Wound</div>
+        <div class="info-title">"You're too intense. Calm down."</div>
+        <div class="info-text">
+          Your passion made you dangerous — so you learned to dim.
+        </div>
+      </div>
+    </div>
+
+    <!-- Powers Tab -->
+    <div id="powers" class="tab-content">
+      <div class="info-card gradient">
+        <div class="info-icon">⚡</div>
+        <div class="info-label">Energetic Transmission</div>
+        <div class="info-title">Activating Boldness</div>
+        <div class="info-text">
+          You electrify the space. Your energy activates boldness — like truth wants to break free through your presence.
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">🚀</div>
+        <div class="info-label">Vision in Action</div>
+        <div class="info-title">Sparking Revolutions</div>
+        <div class="info-text">
+          Turning chaos into clarity, they spark revolutions with nothing but their voice.
+        </div>
+      </div>
+    </div>
+
+    <!-- Patterns Tab -->
+    <div id="patterns" class="tab-content">
+      <div class="info-card">
+        <div class="info-icon">🎯</div>
+        <div class="info-label">Recognition Pattern</div>
+        <div class="info-title">Breaking Free Moment</div>
+        <div class="info-text">
+          People seek you when they're ready to break rules, burn masks, and step into unapologetic self-expression.
+        </div>
+      </div>
+
+      <div class="info-card yellow">
+        <div class="info-icon">🧸</div>
+        <div class="info-label">Inner Child Desire</div>
+        <div class="info-title">The Revolutionary</div>
+        <div class="info-text">
+          I wanted to lead the make-believe revolution, rally your crew, and challenge the rules just because you could.
+        </div>
+      </div>
+    </div>
+
+    <!-- Characters Tab -->
+    <div id="characters" class="tab-content">
+      <div class="characters-grid">
+        <div class="character-item">
+          <div class="character-icon">🎭</div>
+          <div class="character-name">Deadpool</div>
+        </div>
+        <div class="character-item">
+          <div class="character-icon">🎤</div>
+          <div class="character-name">Billie Eilish</div>
+        </div>
+        <div class="character-item">
+          <div class="character-icon">🏹</div>
+          <div class="character-name">Katniss Everdeen</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vision Tab -->
+    <div id="vision" class="tab-content">
+      <div class="info-card gradient">
+        <div class="info-icon">🔮</div>
+        <div class="info-label">Poetic Vision</div>
+        <div class="info-title">Your Revolutionary Future</div>
+        <div class="info-text">
+          What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary. The world isn't waiting for your perfection. It's starving for your fire.
+        </div>
+        <button class="cta-button">Explore Your Journey</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -23,6 +23,7 @@ function Challenge() {
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
   const [userData, setUserData] = useState(null)
+  const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
 
   const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
@@ -466,6 +467,13 @@ function Challenge() {
 
       return questCompletions.length > 0
     }
+  }
+
+  const toggleLearnMore = (questId) => {
+    setExpandedLearnMore(prev => ({
+      ...prev,
+      [questId]: !prev[questId]
+    }))
   }
 
   const handleQuestComplete = async (quest) => {
@@ -977,6 +985,37 @@ function Challenge() {
 
                     <p className="quest-description">{quest.description}</p>
 
+                    {quest.learnMore && !completed && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Learn More</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {quest.learnMore}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {!completed && (
                       <div className="quest-input-area">
                         {quest.inputType === 'flow' ? (
@@ -1044,6 +1083,37 @@ function Challenge() {
                     </div>
                     <p className="quest-description">{quest.description}</p>
 
+                    {quest.learnMore && !completed && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Learn More</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {quest.learnMore}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {!completed && (
                       <div className="quest-input-area">
                         {quest.inputType === 'flow' ? (
@@ -1110,6 +1180,37 @@ function Challenge() {
                       <span className="quest-points">+{quest.points} pts</span>
                     </div>
                     <p className="quest-description">{quest.description}</p>
+
+                    {quest.learnMore && !completed && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Learn More</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {quest.learnMore}
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     {!completed && (
                       <div className="quest-input-area">

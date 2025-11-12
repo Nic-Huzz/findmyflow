@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
-import { completeFlowQuest, hasActiveChallenge } from './lib/questCompletion'
+import { completeFlowQuest } from './lib/questCompletion'
 
-function HealingCompass() {
+function NervousSystemFlow() {
   const { user } = useAuth()
-  const navigate = useNavigate()
   const [flow, setFlow] = useState(null)
   const [messages, setMessages] = useState([])
   const [context, setContext] = useState({})
@@ -16,7 +15,6 @@ function HealingCompass() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [leadMagnetData, setLeadMagnetData] = useState(null)
-  const [hasChallenge, setHasChallenge] = useState(false)
   const messagesEndRef = useRef(null)
 
   // Fetch lead magnet data from Supabase
@@ -31,12 +29,11 @@ function HealingCompass() {
 
     try {
       console.log('🔍 Fetching lead magnet data from Supabase...')
-      
-      // Get the most recent profile for this authenticated user
+
       const { data, error } = await supabase
         .from('lead_flow_profiles')
         .select('user_name, protective_archetype, essence_archetype, persona')
-        .eq('email', user?.email) // Filter by authenticated user's email
+        .eq('email', user?.email)
         .order('created_at', { ascending: false })
         .limit(1)
 
@@ -67,7 +64,7 @@ function HealingCompass() {
     }
   }
 
-  // Load healing compass flow JSON and lead magnet data
+  // Load nervous system flow JSON and lead magnet data
   useEffect(() => {
     const loadFlow = async () => {
       try {
@@ -75,27 +72,19 @@ function HealingCompass() {
         const leadData = await fetchLeadMagnetData()
         setLeadMagnetData(leadData)
 
-        // Check if user has active challenge
-        if (user?.id) {
-          const active = await hasActiveChallenge(user.id)
-          setHasChallenge(active)
-        }
-
-        // Update context with lead magnet data and challenge status
+        // Update context with lead magnet data
         const updatedContext = {
           user_name: leadData.user_name,
-          protective_archetype: leadData.protective_archetype,
-          CHALLENGE_ACTION: hasChallenge ? 'continue' : 'start',
-          CHALLENGE_ACTION_LOWER: hasChallenge ? 'continue' : 'start'
+          protective_archetype: leadData.protective_archetype
         }
         setContext(updatedContext)
 
-        // Load healing compass flow
-        const response = await fetch('/Healing_compass_flow.json')
-        if (!response.ok) throw new Error('Failed to load healing compass flow')
+        // Load nervous system safety flow
+        const response = await fetch('/nervous-system-safety-flow.json')
+        if (!response.ok) throw new Error('Failed to load nervous system flow')
         const flowData = await response.json()
         setFlow(flowData)
-        
+
         // Start with the first step using the updated context
         if (flowData.steps && flowData.steps.length > 0) {
           const firstStep = flowData.steps[0]
@@ -109,8 +98,8 @@ function HealingCompass() {
           setMessages([aiMessage])
         }
       } catch (err) {
-        console.error('Error loading healing compass flow:', err)
-        setError('Failed to load healing compass flow')
+        console.error('Error loading nervous system flow:', err)
+        setError('Failed to load nervous system flow')
       }
     }
 
@@ -125,10 +114,10 @@ function HealingCompass() {
   const currentStep = flow?.steps?.[currentIndex]
 
   const handleSubmit = async () => {
-    console.log('🚀 Healing Compass handleSubmit called')
+    console.log('🚀 Nervous System Flow handleSubmit called')
     console.log('Current step:', currentStep?.step)
     console.log('Input text:', inputText)
-    
+
     if (!currentStep || isLoading || !inputText.trim()) {
       return
     }
@@ -177,22 +166,20 @@ function HealingCompass() {
       // Flow completed - save to Supabase
       if (supabase) {
         try {
-          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
+          console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
 
           const { data, error } = await supabase
-            .from('healing_compass_responses')
+            .from('nervous_system_responses')
             .insert([{
+              user_email: user?.email,
               user_name: newContext.user_name || 'Anonymous',
-              stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
-              stuck_emotional_response: newContext.stuck_emotional_response,
-              past_parallel_story: newContext.past_parallel_story,
-              past_event_emotions: newContext.past_event_emotions,
-              splinter_interpretation: newContext.splinter_interpretation,
-              connect_dots_consent: newContext.connect_dots_consent,
-              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
-              splinter_removal_consent: newContext.splinter_removal_consent,
+              impact_goal: newContext.impact_goal,
+              income_goal: newContext.income_goal,
+              positive_change: newContext.positive_change,
+              current_struggle: newContext.current_struggle,
+              belief_test_results: newContext.belief_test_results,
+              reflection_text: newContext.reflection_text,
               context: newContext
             }])
 
@@ -200,15 +187,15 @@ function HealingCompass() {
             console.error('❌ Supabase error:', error)
             throw error
           }
-          console.log('✅ Healing compass data saved successfully:', data)
+          console.log('✅ Nervous system data saved successfully:', data)
 
           // Auto-complete challenge quest if user has active challenge
           if (user?.id) {
-            console.log('🎯 Attempting to complete flow quest for healing_compass')
+            console.log('🎯 Attempting to complete flow quest for nervous_system')
             const questResult = await completeFlowQuest({
               userId: user.id,
-              flowId: 'healing_compass',
-              pointsEarned: 20
+              flowId: 'nervous_system',
+              pointsEarned: 25
             })
 
             if (questResult.success) {
@@ -218,34 +205,20 @@ function HealingCompass() {
             }
           }
         } catch (err) {
-          console.error('❌ Failed to save healing compass data:', err)
+          console.error('❌ Failed to save nervous system data:', err)
           // Continue with flow even if save fails
         }
       }
 
-      // Flow completed - check if there's a navigation step
-      const lastStep = flow?.steps?.[flow.steps.length - 1]
-      if (lastStep?.navigate_to) {
-        const finalMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'navigation',
-          text: await resolvePrompt(lastStep, newContext),
-          navigateTo: lastStep.navigate_to,
-          buttonText: hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge',
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, finalMessage])
-      } else {
-        const completionMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'completion',
-          text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, completionMessage])
+      // Flow completed
+      const completionMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow. Return to your profile to continue your journey:",
+        timestamp: new Date().toLocaleTimeString()
       }
+      setMessages(prev => [...prev, completionMessage])
     }
 
     setIsLoading(false)
@@ -297,22 +270,20 @@ function HealingCompass() {
       // Flow completed - save to Supabase
       if (supabase) {
         try {
-          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
+          console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
 
           const { data, error } = await supabase
-            .from('healing_compass_responses')
+            .from('nervous_system_responses')
             .insert([{
+              user_email: user?.email,
               user_name: newContext.user_name || 'Anonymous',
-              stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
-              stuck_emotional_response: newContext.stuck_emotional_response,
-              past_parallel_story: newContext.past_parallel_story,
-              past_event_emotions: newContext.past_event_emotions,
-              splinter_interpretation: newContext.splinter_interpretation,
-              connect_dots_consent: newContext.connect_dots_consent,
-              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
-              splinter_removal_consent: newContext.splinter_removal_consent,
+              impact_goal: newContext.impact_goal,
+              income_goal: newContext.income_goal,
+              positive_change: newContext.positive_change,
+              current_struggle: newContext.current_struggle,
+              belief_test_results: newContext.belief_test_results,
+              reflection_text: newContext.reflection_text,
               context: newContext
             }])
 
@@ -320,15 +291,15 @@ function HealingCompass() {
             console.error('❌ Supabase error:', error)
             throw error
           }
-          console.log('✅ Healing compass data saved successfully:', data)
+          console.log('✅ Nervous system data saved successfully:', data)
 
           // Auto-complete challenge quest if user has active challenge
           if (user?.id) {
-            console.log('🎯 Attempting to complete flow quest for healing_compass')
+            console.log('🎯 Attempting to complete flow quest for nervous_system')
             const questResult = await completeFlowQuest({
               userId: user.id,
-              flowId: 'healing_compass',
-              pointsEarned: 20
+              flowId: 'nervous_system',
+              pointsEarned: 25
             })
 
             if (questResult.success) {
@@ -338,34 +309,20 @@ function HealingCompass() {
             }
           }
         } catch (err) {
-          console.error('❌ Failed to save healing compass data:', err)
+          console.error('❌ Failed to save nervous system data:', err)
           // Continue with flow even if save fails
         }
       }
 
-      // Flow completed - check if there's a navigation step
-      const lastStep = flow?.steps?.[flow.steps.length - 1]
-      if (lastStep?.navigate_to) {
-        const finalMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'navigation',
-          text: await resolvePrompt(lastStep, newContext),
-          navigateTo: lastStep.navigate_to,
-          buttonText: hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge',
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, finalMessage])
-      } else {
-        const completionMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'completion',
-          text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, completionMessage])
+      // Flow completed
+      const completionMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow. Return to your profile to continue your journey:",
+        timestamp: new Date().toLocaleTimeString()
       }
+      setMessages(prev => [...prev, completionMessage])
     }
 
     setIsLoading(false)
@@ -403,8 +360,8 @@ function HealingCompass() {
   return (
     <div className="app">
       <header className="header">
-        <h1>Healing Compass</h1>
-        <p>Identify your emotional splinters and unlock your potential</p>
+        <h1>Nervous System Safety Boundaries</h1>
+        <p>Use sway testing to identify subconscious safety edges</p>
       </header>
 
       <main className="chat-container">
@@ -421,19 +378,6 @@ function HealingCompass() {
                       </Link>
                     </div>
                   </div>
-                ) : message.kind === 'navigation' ? (
-                  <div className="text">
-                    {message.text}
-                    <div style={{ marginTop: 16 }}>
-                      <button
-                        className="option-button"
-                        onClick={() => navigate(message.navigateTo)}
-                        style={{ width: '100%' }}
-                      >
-                        {message.buttonText}
-                      </button>
-                    </div>
-                  </div>
                 ) : (
                   <div className="text">{message.text}</div>
                 )}
@@ -441,7 +385,7 @@ function HealingCompass() {
               </div>
             </div>
           ))}
-          
+
           {isLoading && (
             <div className="message ai">
               <div className="bubble">
@@ -451,7 +395,7 @@ function HealingCompass() {
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
       </main>
@@ -495,4 +439,4 @@ function HealingCompass() {
   )
 }
 
-export default HealingCompass
+export default NervousSystemFlow

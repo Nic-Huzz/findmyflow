@@ -114,9 +114,15 @@
         "step_7_meaning_complete"
       ],
       "prompt": "Ready to connect the dots?",
+      "options": [
+        {
+          "label": "Yep!",
+          "value": "yes"
+        }
+      ],
       "tag_as": "connect_dots_consent",
       "store_as": "step_8_connect_dots_complete",
-      "instructions_to_gpt": "Expect a simple yes/no. If hesitant, reassure them that you'll take it slowly."
+      "instructions_to_gpt": "Wait for user to select the option before proceeding."
     },
     {
       "step": "q9_connect_dots_explainer",
@@ -149,10 +155,11 @@
       "required_inputs": [
         "step_10_splinter_opt_in_complete"
       ],
-      "prompt": "Amazing! The next step is to join the 7-day challenge where we'll work together to remove this emotional splinter and help you take action towards your ambition.\n\nReady to begin your transformation?",
+      "prompt": "Amazing! The next step is to {{CHALLENGE_ACTION}} the 7-day challenge where we'll work together to remove this emotional splinter and help you take action towards your ambition.\n\nClick the button below to {{CHALLENGE_ACTION_LOWER}} your transformation journey.",
       "tag_as": "challenge_enrollment_consent",
       "store_as": "step_11_challenge_complete",
-      "instructions_to_gpt": "Celebrate their commitment and guide them to the 7-day challenge enrollment."
+      "navigate_to": "/7-day-challenge",
+      "instructions_to_gpt": "Show a navigation button that directs users to the 7-day challenge. Use CHALLENGE_ACTION template variable to show 'start' or 'continue' based on whether they have an active challenge."
     }
   ]
 }

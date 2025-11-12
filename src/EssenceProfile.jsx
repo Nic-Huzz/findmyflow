@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { essenceProfiles } from './data/essenceProfiles'
+import { hasActiveChallenge } from './lib/questCompletion'
 import './EssenceProfile.css'
 
 const EssenceProfile = () => {
@@ -11,12 +12,21 @@ const EssenceProfile = () => {
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('overview')
+  const [hasChallenge, setHasChallenge] = useState(false)
 
   useEffect(() => {
     if (user?.email) {
       loadUserProfile()
+      checkChallengeStatus()
     }
   }, [user])
+
+  const checkChallengeStatus = async () => {
+    if (user?.id) {
+      const active = await hasActiveChallenge(user.id)
+      setHasChallenge(active)
+    }
+  }
 
   const loadUserProfile = async () => {
     try {
@@ -238,9 +248,9 @@ const EssenceProfile = () => {
             <p className="section-text">{archetypeData.poetic_vision}</p>
             <button
               className="cta-button"
-              onClick={() => navigate('/challenge')}
+              onClick={() => navigate('/7-day-challenge')}
             >
-              Start Your 7-Day Challenge
+              {hasChallenge ? 'Continue Your 7-Day Challenge' : 'Start Your 7-Day Challenge'}
             </button>
           </section>
         </div>

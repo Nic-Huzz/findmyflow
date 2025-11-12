@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Archetypes - Selection Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #fafbfc;
+      min-height: 100vh;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    /* Content */
+    .content {
+      padding: 30px 20px;
+    }
+
+    .intro-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .intro-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 15px;
+    }
+
+    .intro-text {
+      font-size: 1rem;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* Archetype Cards */
+    .archetype-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .archetype-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .archetype-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .archetype-card.essence {
+      border-color: #ffdd27;
+    }
+
+    .archetype-card.essence:hover {
+      border-color: #d4a000;
+    }
+
+    .archetype-card.protective {
+      border-color: #f39c12;
+    }
+
+    .archetype-card.protective:hover {
+      border-color: #e67e22;
+    }
+
+    .card-header {
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f0e7ff, #fff9e6);
+    }
+
+    .card-header img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-tag {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(10px);
+    }
+
+    .essence .card-tag {
+      background: rgba(255, 221, 39, 0.95);
+      color: #1a1a1a;
+    }
+
+    .protective .card-tag {
+      background: rgba(243, 156, 18, 0.95);
+      color: white;
+    }
+
+    .card-body {
+      padding: 25px;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .card-subtitle {
+      font-size: 1rem;
+      font-style: italic;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .card-description {
+      font-size: 0.9375rem;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .card-cta {
+      width: 100%;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .essence .card-cta {
+      background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+      color: #1a1a1a;
+    }
+
+    .essence .card-cta:hover {
+      background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    }
+
+    .protective .card-cta {
+      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+      color: white;
+    }
+
+    .protective .card-cta:hover {
+      background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn">←</button>
+      <h1 class="page-title">Your Archetypes</h1>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Intro -->
+    <div class="intro-section">
+      <h2 class="intro-title">Explore Your Archetypes</h2>
+      <p class="intro-text">
+        Choose which archetype you'd like to explore in depth. Learn about your patterns, powers, and path forward.
+      </p>
+    </div>
+
+    <!-- Archetype Selection Cards -->
+    <div class="archetype-cards">
+      <!-- Essence Archetype -->
+      <div class="archetype-card essence" onclick="window.location.href='essence-archetype-profile.html'">
+        <div class="card-header">
+          <div class="card-tag">Essence</div>
+          <img src="../public/images/archetypes/lead-magnet-essence/radiant-rebel.PNG" alt="Radiant Rebel">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Radiant Rebel</h3>
+          <p class="card-subtitle">Your Essence Archetype</p>
+          <p class="card-description">
+            Discover your true nature, superpowers, and the energy you bring when you're fully aligned. This is who you are at your core.
+          </p>
+          <button class="card-cta">Explore Your Essence →</button>
+        </div>
+      </div>
+
+      <!-- Protective Archetype -->
+      <div class="archetype-card protective" onclick="window.location.href='protective-archetype-profile.html'">
+        <div class="card-header">
+          <div class="card-tag">Protective</div>
+          <img src="../public/images/archetypes/lead-magnet-protective/perfectionist.png" alt="Perfectionist">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Perfectionist</h3>
+          <p class="card-subtitle">Your Protective Archetype</p>
+          <p class="card-description">
+            Understand the patterns that developed to keep you safe, and learn how to move beyond them into your essence.
+          </p>
+          <button class="card-cta">Understand Your Pattern →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
