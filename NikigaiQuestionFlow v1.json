@@ -1,0 +1,1449 @@
+{
+  "flow_name": "Nikigai_LifeMap_Part1",
+  "version": "1.0",
+  "description": "Guided Life Map stage of the Nikigai process — helping users identify life experiences, hobbies, proud moments, and flow activities across life stages.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "We’re going to explore your life so far — not to analyse it, but to find the golden threads that run through it. Think of this as laying out the pieces of your life puzzle on the table. Each piece is a memory, hobby, or win that shaped you.\n\nWe’ll move through four chapters of your life: childhood, high school, early adulthood, and today.\n\nFor each, I’ll ask a few simple questions — you can answer in short bullet points, like sticky notes.\n\nSound good?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map_consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Let’s start with **Pre-School + Primary School**.\n\nWhat did you love doing in your free time? What were your hobbies or favorite ways to play?\n\nPlease share 1–3 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.preschool",
+      "next_step_rules": [{ "on_success": "2.1" }]
+    },
+    {
+      "id": "2.1",
+      "step_order_index": 3,
+      "assistant_prompt": "Beautiful — those early joys often hold the purest clues.\n\nNow, during **High School**, what did you enjoy doing for fun or relaxation?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.highschool",
+      "next_step_rules": [{ "on_success": "2.2" }]
+    },
+    {
+      "id": "2.2",
+      "step_order_index": 4,
+      "assistant_prompt": "Great — let’s move into **Age 18–25**.\n\nWhat did you find yourself drawn to doing in your free time during this stage of life?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.age18_25",
+      "next_step_rules": [{ "on_success": "2.3" }]
+    },
+    {
+      "id": "2.3",
+      "step_order_index": 5,
+      "assistant_prompt": "And finally, **25 to now** — what hobbies, side interests, or creative outlets bring you joy these days?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.current",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    {
+      "id": "3.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Now let’s look at your proud moments.\n\nWhat achievements, things you’ve done, or successes you’ve experienced that you’re proud of — starting with **Pre-School + Primary School**?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.achievements.preschool",
+      "next_step_rules": [{ "on_success": "3.1" }]
+    },
+    {
+      "id": "3.1",
+      "step_order_index": 7,
+      "assistant_prompt": "Next, what achievements or moments of pride stand out from **High School**?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.achievements.highschool",
+      "next_step_rules": [{ "on_success": "3.2" }]
+    },
+    {
+      "id": "3.2",
+      "step_order_index": 8,
+      "assistant_prompt": "Now think of **Age 18–25** — what successes or milestones from this chapter make you feel proud?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.achievements.age18_25",
+      "next_step_rules": [{ "on_success": "3.3" }]
+    },
+    {
+      "id": "3.3",
+      "step_order_index": 9,
+      "assistant_prompt": "And finally, from **25 to now**, what have you achieved or created that you feel proud of?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.achievements.current",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    {
+      "id": "4.0",
+      "step_order_index": 10,
+      "assistant_prompt": "Next, let’s talk about moments you’ve felt *absolutely high on life.*\n\nStarting with **Pre-School + Primary School** — what moments made you feel buzzing with excitement, joy, or aliveness?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.high_moments.preschool",
+      "next_step_rules": [{ "on_success": "4.1" }]
+    },
+    {
+      "id": "4.1",
+      "step_order_index": 11,
+      "assistant_prompt": "Now think about **High School** — when did you feel completely alive, free, or unstoppable?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.high_moments.highschool",
+      "next_step_rules": [{ "on_success": "4.2" }]
+    },
+    {
+      "id": "4.2",
+      "step_order_index": 12,
+      "assistant_prompt": "How about **Age 18–25** — what experiences or moments made you feel high on life?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.high_moments.age18_25",
+      "next_step_rules": [{ "on_success": "4.3" }]
+    },
+    {
+      "id": "4.3",
+      "step_order_index": 13,
+      "assistant_prompt": "And from **25 to now**, what moments made you feel most alive or lit up?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.high_moments.current",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    {
+      "id": "5.0",
+      "step_order_index": 14,
+      "assistant_prompt": "Finally, let’s explore your *flow moments* — those activities where time disappears and you feel totally immersed.\n\nStarting with **Pre-School + Primary School**, what activities made you lose track of time?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.flow_activities.preschool",
+      "next_step_rules": [{ "on_success": "5.1" }]
+    },
+    {
+      "id": "5.1",
+      "step_order_index": 15,
+      "assistant_prompt": "And during **High School**, what activities brought you that same in-flow feeling?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.flow_activities.highschool",
+      "next_step_rules": [{ "on_success": "5.2" }]
+    },
+    {
+      "id": "5.2",
+      "step_order_index": 16,
+      "assistant_prompt": "What about **Age 18–25** — when did you experience that flow-state immersion?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.flow_activities.age18_25",
+      "next_step_rules": [{ "on_success": "5.3" }]
+    },
+    {
+      "id": "5.3",
+      "step_order_index": 17,
+      "assistant_prompt": "And from **25 to now**, what activities consistently put you in that effortless flow?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.flow_activities.current",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    {
+      "id": "6.0",
+      "step_order_index": 18,
+      "assistant_prompt": "Beautiful work — your life map is full of clues.\n\nIf you zoom out, do you notice any patterns or recurring themes — like creativity, freedom, helping others, or adventure?\n\nPlease list 2–3 themes that feel true.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.reflection_summary",
+      "next_step_rules": [{ "on_success": "6.1" }]
+    },
+
+    {
+      "id": "6.1",
+      "step_order_index": 19,
+      "assistant_prompt": "Thank you for sharing so openly. From your puzzle pieces, I can already see threads forming that we’ll build on next.\n\nReady to start clustering these pieces into meaningful categories?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.complete",
+      "next_step_rules": [{ "on_success": "next_module_life_map_part2" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_LifeMap_Part2",
+  "version": "1.0",
+  "description": "Life Map — Part 2 (Hidden Threads). Deep-dive reflections on uniqueness, resilience, growth, and inspirations across life stages. Coach-style, short bullet inputs.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Beautiful work on Part 1. You turned a lot of puzzle pieces upright.\n\nNow let’s look for the *hidden threads* — the moments that made you different, what you overcame, how you grew, and who inspired you. Same vibe as before: short bullet points, 1–3 per question, chapter by chapter.\n\nReady?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part2_consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ------------------------- UNIQUE / UNUSUAL ------------------------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "First, your unique moments.\n\n**Pre-School + Primary School** — What experiences were *outside the ordinary* for those around you? Or what made you feel a bit different from your friends?\n\nShare 1–3 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.unique_experiences.preschool",
+      "next_step_rules": [{ "on_success": "2.1" }]
+    },
+    {
+      "id": "2.1",
+      "step_order_index": 3,
+      "assistant_prompt": "**High School** — what made you feel unusual, different, or ‘not like everyone else’?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.unique_experiences.highschool",
+      "next_step_rules": [{ "on_success": "2.2" }]
+    },
+    {
+      "id": "2.2",
+      "step_order_index": 4,
+      "assistant_prompt": "**Age 18–25** — what experiences or traits set you apart?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.unique_experiences.age18_25",
+      "next_step_rules": [{ "on_success": "2.3" }]
+    },
+    {
+      "id": "2.3",
+      "step_order_index": 5,
+      "assistant_prompt": "**25 to now** — what about you feels different from the norm?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.unique_experiences.current",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ------------------------- CHALLENGES OVERCOME ------------------------- */
+    {
+      "id": "3.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Now, resilience.\n\n**Pre-School + Primary School** — what were the biggest challenges you faced *and overcame*?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.challenges_overcome.preschool",
+      "next_step_rules": [{ "on_success": "3.1" }]
+    },
+    {
+      "id": "3.1",
+      "step_order_index": 7,
+      "assistant_prompt": "**High School** — challenges you overcame?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.challenges_overcome.highschool",
+      "next_step_rules": [{ "on_success": "3.2" }]
+    },
+    {
+      "id": "3.2",
+      "step_order_index": 8,
+      "assistant_prompt": "**Age 18–25** — what did you overcome in this period?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.challenges_overcome.age18_25",
+      "next_step_rules": [{ "on_success": "3.3" }]
+    },
+    {
+      "id": "3.3",
+      "step_order_index": 9,
+      "assistant_prompt": "**25 to now** — what challenges have you worked through recently?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.challenges_overcome.current",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ------------------------- AREAS OF GROWTH ------------------------- */
+    {
+      "id": "4.0",
+      "step_order_index": 10,
+      "assistant_prompt": "Next, growth you’re proud of.\n\n**Pre-School + Primary School** — what areas of growth or change are you most proud of from this time?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.growth_areas.preschool",
+      "next_step_rules": [{ "on_success": "4.1" }]
+    },
+    {
+      "id": "4.1",
+      "step_order_index": 11,
+      "assistant_prompt": "**High School** — growth you’re proud of?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.growth_areas.highschool",
+      "next_step_rules": [{ "on_success": "4.2" }]
+    },
+    {
+      "id": "4.2",
+      "step_order_index": 12,
+      "assistant_prompt": "**Age 18–25** — what growth stands out?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.growth_areas.age18_25",
+      "next_step_rules": [{ "on_success": "4.3" }]
+    },
+    {
+      "id": "4.3",
+      "step_order_index": 13,
+      "assistant_prompt": "**25 to now** — where have you grown most?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.growth_areas.current",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ------------------------- FICTIONAL ROLE MODELS ------------------------- */
+    {
+      "id": "5.0",
+      "step_order_index": 14,
+      "assistant_prompt": "Inspiration from stories.\n\n**Pre-School + Primary School** — who were your favourite characters (movies, TV, books)? Share 1–3 names.\n\nThen add 1–3 bullets on *what qualities or values* they embodied that you resonated with.",
+      "expected_inputs": [
+        { "type": "text_list", "key": "characters" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.fictional_role_models.preschool",
+      "next_step_rules": [{ "on_success": "5.1" }]
+    },
+    {
+      "id": "5.1",
+      "step_order_index": 15,
+      "assistant_prompt": "**High School** — favourite characters (1–3) and the qualities you loved (1–3 bullets).",
+      "expected_inputs": [
+        { "type": "text_list", "key": "characters" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.fictional_role_models.highschool",
+      "next_step_rules": [{ "on_success": "5.2" }]
+    },
+    {
+      "id": "5.2",
+      "step_order_index": 16,
+      "assistant_prompt": "**Age 18–25** — favourite characters (1–3) and what about them inspired you (1–3 bullets).",
+      "expected_inputs": [
+        { "type": "text_list", "key": "characters" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.fictional_role_models.age18_25",
+      "next_step_rules": [{ "on_success": "5.3" }]
+    },
+    {
+      "id": "5.3",
+      "step_order_index": 17,
+      "assistant_prompt": "**25 to now** — favourite characters (1–3) and the qualities you resonate with (1–3 bullets).",
+      "expected_inputs": [
+        { "type": "text_list", "key": "characters" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.fictional_role_models.current",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ------------------------- REAL ROLE MODELS ------------------------- */
+    {
+      "id": "6.0",
+      "step_order_index": 18,
+      "assistant_prompt": "Real people who shaped you.\n\n**Pre-School + Primary School** — who were your role models (family, teachers, public figures)? Share 1–3 names.\n\nThen add 1–3 bullets on *what they did or embodied* that made them role models.",
+      "expected_inputs": [
+        { "type": "text_list", "key": "people" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.real_role_models.preschool",
+      "next_step_rules": [{ "on_success": "6.1" }]
+    },
+    {
+      "id": "6.1",
+      "step_order_index": 19,
+      "assistant_prompt": "**High School** — role models (1–3) and what made them role models (1–3 bullets).",
+      "expected_inputs": [
+        { "type": "text_list", "key": "people" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.real_role_models.highschool",
+      "next_step_rules": [{ "on_success": "6.2" }]
+    },
+    {
+      "id": "6.2",
+      "step_order_index": 20,
+      "assistant_prompt": "**Age 18–25** — role models (1–3) and why (1–3 bullets).",
+      "expected_inputs": [
+        { "type": "text_list", "key": "people" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.real_role_models.age18_25",
+      "next_step_rules": [{ "on_success": "6.3" }]
+    },
+    {
+      "id": "6.3",
+      "step_order_index": 21,
+      "assistant_prompt": "**25 to now** — role models (1–3) and what they modelled for you (1–3 bullets).",
+      "expected_inputs": [
+        { "type": "text_list", "key": "people" },
+        { "type": "text_list", "key": "qualities" }
+      ],
+      "store_as": "life_map.real_role_models.current",
+      "next_step_rules": [{ "on_success": "7.0" }]
+    },
+
+    /* ------------------------- THEMES REFLECTION ------------------------- */
+    {
+      "id": "7.0",
+      "step_order_index": 22,
+      "assistant_prompt": "Zooming out on everything you just shared — uniqueness, challenges, growth, and inspirations — what *themes or values* repeat across your story?\n\nList 2–4 short themes (e.g., courage, freedom, compassion, creativity, leadership, adventure).",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.part2_reflection_summary",
+      "next_step_rules": [{ "on_success": "7.1" }]
+    },
+    {
+      "id": "7.1",
+      "step_order_index": 23,
+      "assistant_prompt": "Beautiful. Those threads will guide our next step where we start *grouping* your pieces to reveal patterns.\n\nReady to move into clustering?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part2_complete",
+      "next_step_rules": [{ "on_success": "next_module_clustering" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_LifeMap_Part3",
+  "version": "1.0",
+  "description": "Life Map — Part 3 (Intellectual Curiosities). Explores university subjects, trainings, and content themes that capture attention and motivation.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Amazing work so far — you’ve explored your experiences, growth, and inspirations.\n\nNow we’ll zoom in on the *mind side* of your puzzle — what you’ve learned, studied, and loved geeking out on.\n\nThis helps reveal the skills and topics that naturally light up your curiosity.\n\nReady?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part3_consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ------------------------- UNIVERSITY SUBJECTS ------------------------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Let’s start with **university or school subjects** (if you studied formally).\n\nWhat subjects did you genuinely *enjoy* — the ones you looked forward to or found fascinating?\n\nList 3–5 short bullets (e.g., 'Psychology — understanding behaviour', 'Design Thinking — creativity meets problem-solving').",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.education.university_subjects",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ------------------------- COURSES / TRAININGS ------------------------- */
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Next, think about **courses, programs, or trainings** you’ve taken — inside or outside formal education.\n\nWhich ones have you *enjoyed the most*?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.education.courses_enjoyed",
+      "next_step_rules": [{ "on_success": "3.1" }]
+    },
+    {
+      "id": "3.1",
+      "step_order_index": 4,
+      "assistant_prompt": "For each course or training, what specifically *motivated* you to do it or what did you *love learning*?\n\nExample: 'NLP Certification — understanding how the brain processes language.'\n\nList 1–3 short bullets per item if you can.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.education.courses_motivation",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ------------------------- CONTENT CONSUMPTION ------------------------- */
+    {
+      "id": "4.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Now, let’s explore the *content* you naturally gravitate toward.\n\nIf you listen to podcasts, read non-fiction, or watch YouTube videos — what are your favourite topics to consume?\n\nIf you can, peek at your recent history or reading list for accuracy. Be specific — instead of 'psychology,' you might say 'the science of gratitude' or 'how habits shape identity.'",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.education.content_topics",
+      "next_step_rules": [{ "on_success": "4.1" }]
+    },
+    {
+      "id": "4.1",
+      "step_order_index": 6,
+      "assistant_prompt": "If any specific **episodes, books, or videos** stand out that felt especially inspiring, jot them here (optional).",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.education.content_examples",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ------------------------- REFLECTION ------------------------- */
+    {
+      "id": "5.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Beautiful — your learning map tells me a lot about your natural curiosities.\n\nWhen you look across these subjects, trainings, and topics — what *themes or patterns* do you notice?\n\nFor example: communication, human potential, creativity, leadership, or systems thinking.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.part3_reflection_summary",
+      "next_step_rules": [{ "on_success": "5.1" }]
+    },
+    {
+      "id": "5.1",
+      "step_order_index": 8,
+      "assistant_prompt": "Nice work — you’ve now mapped out the intellectual side of your puzzle.\n\nNext, we’ll start connecting all your pieces to uncover the skills and passions that point toward your purpose.\n\nReady to move into clustering?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part3_complete",
+      "next_step_rules": [{ "on_success": "next_module_clustering" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_LifeMap_Part4",
+  "version": "1.0",
+  "description": "Life Map — Part 4 (Experience). Guides user to reflect on jobs, creative pursuits, entrepreneurial projects, and passion projects to identify skills, problems solved, and themes.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "You’ve explored your personal story, your learning, and what lights up your mind.\n\nNow let’s explore how those patterns showed up through your **work and creative experiences**.\n\nThink of this as looking at how your puzzle pieces expressed themselves in the world — through jobs, projects, and pursuits.\n\nReady?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part4_consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ------------------------- JOB EXPERIENCE ------------------------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Let’s start with your **jobs**.\n\nOver your life, what jobs have you had that you *genuinely enjoyed*? These could be part-time, full-time, or short gigs — anything that gave you energy.\n\nList 3–5 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.jobs_enjoyed",
+      "next_step_rules": [{ "on_success": "2.1" }]
+    },
+    {
+      "id": "2.1",
+      "step_order_index": 3,
+      "assistant_prompt": "In those jobs, what **skills or tasks** did you most enjoy using? The things that felt natural, satisfying, or fun.\n\nExample: 'Brainstorming new ideas', 'Solving tricky problems', 'Designing experiences', 'Helping people grow'.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.job_skills_enjoyed",
+      "next_step_rules": [{ "on_success": "2.2" }]
+    },
+    {
+      "id": "2.2",
+      "step_order_index": 4,
+      "assistant_prompt": "And what **problems did you solve** or what kind of **change** did you help create in those jobs?\n\nFor example: 'Made a messy system easier', 'Helped clients feel confident', 'Increased community engagement'.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.job_problems_solved",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ------------------------- CREATIVE PURSUITS ------------------------- */
+    {
+      "id": "3.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Now let’s look at your **creative pursuits**.\n\nWhat creative outlets or projects have you enjoyed pursuing — whether for work or fun?\n\nExamples: 'Photography', 'Music production', 'Writing poetry', 'Event design'.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.creative_pursuits",
+      "next_step_rules": [{ "on_success": "3.1" }]
+    },
+    {
+      "id": "3.1",
+      "step_order_index": 6,
+      "assistant_prompt": "Beautiful. Within those creative pursuits, what **themes or topics** did you find yourself exploring or expressing?\n\nExample: 'Freedom', 'Self-expression', 'Connection', 'Transformation'.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.creative_themes",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ------------------------- ENTREPRENEURIAL ENDEAVOURS ------------------------- */
+    {
+      "id": "4.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Next, let’s look at your **entrepreneurial side**.\n\nWhat entrepreneurial or self-started endeavours have you pursued — even small ones?\n\nExample: 'Started a small online shop', 'Hosted wellness workshops', 'Built a side hustle'.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.entrepreneurial_projects",
+      "next_step_rules": [{ "on_success": "4.1" }]
+    },
+    {
+      "id": "4.1",
+      "step_order_index": 8,
+      "assistant_prompt": "And in those ventures — what **problems did you solve**, or what **impact or change** did they create for others?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.entrepreneurial_impact",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ------------------------- PASSION PROJECTS ------------------------- */
+    {
+      "id": "5.0",
+      "step_order_index": 9,
+      "assistant_prompt": "Now think about **passion projects** — things you’ve done purely out of love or curiosity, regardless of money or recognition.\n\nWhat passion projects have you created or contributed to?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.passion_projects",
+      "next_step_rules": [{ "on_success": "5.1" }]
+    },
+    {
+      "id": "5.1",
+      "step_order_index": 10,
+      "assistant_prompt": "And what **problem did those projects solve**, or what did they *bring into the world*?\n\nExample: 'Gave people a sense of belonging', 'Brought joy through creativity', 'Helped others heal'.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.passion_project_impact",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ------------------------- REFLECTION ------------------------- */
+    {
+      "id": "6.0",
+      "step_order_index": 11,
+      "assistant_prompt": "Looking back across all your experiences — jobs, creative outlets, ventures, and projects — what *skills, qualities, or values* keep showing up?\n\nList 3–5 short themes that feel true (e.g., leadership, creativity, empathy, innovation, communication).",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.part4_reflection_summary",
+      "next_step_rules": [{ "on_success": "6.1" }]
+    },
+    {
+      "id": "6.1",
+      "step_order_index": 12,
+      "assistant_prompt": "Beautiful work — you’ve mapped the expression of your essence through experience.\n\nNext, we’ll start clustering your pieces together to uncover your *signature patterns*.\n\nReady to move into clustering?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part4_complete",
+      "next_step_rules": [{ "on_success": "next_module_clustering" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_LifeMap_Part5",
+  "version": "1.0",
+  "description": "Life Map — Part 5 (Future). Surfaces future desires, lifelong aspirations, and change you want to see in the world. Finalizes Life Map before clustering.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "You’ve mapped your story and experience beautifully. Now let’s turn the lens forward.\n\nWe’ll capture what’s calling you next — simple bullet notes, 1–5 per question. Ready?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part5_consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ------------------------- FUTURE DESIRES ------------------------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "What are some things you’d **love to do but haven’t (yet)**?\n\nThink bold or simple — trips, creations, skills, experiences, contributions. Share 3–6 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.future.desires",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ------------------------- LIFELONG ASPIRATIONS ------------------------- */
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Across your life, what **aspirations or dreams** have kept showing up?\n\nAchievements you strove toward, identities you wanted to grow into, things you wished to do. 3–6 bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.future.lifelong_aspirations",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ------------------------- CHANGE YOU WANT TO SEE ------------------------- */
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "What **changes would you love to see in the world**?\n\nName the shifts, problems solved, or futures you want to help create. 3–6 bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.future.world_changes",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ------------------------- PRIORITY FOCUS (OPTIONAL BUT USEFUL) ------------------------- */
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "From everything you just shared, what are your **top 3 future pulls** that feel most alive *right now*?\n\nList 3 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.future.top3_now",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ------------------------- REFLECTION + TRANSITION ------------------------- */
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Beautiful. Your Life Map is complete — past to future.\n\nIf you zoom out, what **themes** link your future pulls to your story so far (e.g., creativity, service, freedom, leadership)? Share 2–4 quick themes.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.part5_reflection_summary",
+      "next_step_rules": [{ "on_success": "6.1" }]
+    },
+    {
+      "id": "6.1",
+      "step_order_index": 7,
+      "assistant_prompt": "Amazing work. We’ll now **cluster your stickies** to reveal 3–6 core patterns that define your signature path.\n\nReady to start clustering?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map.part5_complete",
+      "next_step_rules": [{ "on_success": "next_module_clustering" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_Transition_to_Framework",
+  "version": "1.0",
+  "description": "Transition from Life Map completion into the Nikigai Framework. Helps users connect their past experiences into actionable career or business clarity.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "You’ve now completed your Life Map — incredible work.\n\nYou’ve gathered hundreds of dots: memories, lessons, skills, dreams. Now we’re going to connect them to reveal the picture of who you are becoming.\n\nBefore we begin, let’s pause on this quote from Steve Jobs:",
+      "display_media": {
+        "type": "quote",
+        "content": "\"You can’t connect the dots looking forward; you can only connect them looking backwards. So you have to trust that the dots will somehow connect in your future. You have to trust in something — your gut, destiny, life, karma, whatever.\" — Steve Jobs"
+      },
+      "expected_inputs": ["confirmation"],
+      "store_as": "nikigai_transition_quote_ack",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Just like Jobs said — you’ve collected your dots. Now it’s time to **connect them.**\n\nEach sticky you’ve shared — from your childhood joys to your future dreams — is a dot. Together, they reveal the path of your unique design.\n\nWe’ll use my signature process for this: the **Nikigai Framework**.",
+      "expected_inputs": ["confirmation"],
+      "store_as": "nikigai_framework_intro",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "The **Nikigai Framework** helps you see the threads between:\n\n・A problem you’re passionate about solving\n・People you’re passionate about helping\n・Skills you’re passionate about using\n・Your mission — the deeper reason driving it all\n\nWhen you identify these, your story becomes a compass for your next step.",
+      "expected_inputs": ["confirmation"],
+      "store_as": "nikigai_framework_components_intro",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "Why these four areas?\n\nBecause every meaningful business — and every fulfilling career — does the same thing:\nThey **solve a problem, for a person, using specific skills.**\n\nThat’s what we’re about to uncover for *you.*",
+      "expected_inputs": ["confirmation"],
+      "store_as": "nikigai_framework_why",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Here’s what this means in practice:\n\n1️⃣ For someone looking for a job:\n・The **skills** you identify connect to job titles you’d love.\n・The **problems** you identify show you industries you care about.\n・The **people** you identify define the audience or community you want to serve.\n・Your **mission** points to companies or causes that feel aligned.\n\n2️⃣ For someone starting their own thing:\n・Your answers form the foundation of a purpose-driven business opportunity.\n\nWhich path feels more relevant to you right now?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Career / Job Clarity", "Entrepreneurial / Business Opportunity"]
+        }
+      ],
+      "store_as": "nikigai_path_type",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Perfect. You’re ready for the next step — **connecting your dots**.\n\nWe’ll now move through the Nikigai lenses to reveal your:\n1. Skills you love using\n2. Problems you love solving\n3. People you love serving\n4. Mission that ties it all together\n\nLet’s begin with the first lens: **Skills.**",
+      "expected_inputs": ["confirmation"],
+      "store_as": "nikigai_framework_ready",
+      "next_step_rules": [{ "on_success": "next_module_skills_lens" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_Skills_Lens",
+  "version": "1.0",
+  "description": "Part 2 — What You're Good At. Uses the Life Map to surface skills you love using, cluster them into 3–6 themes, name role archetypes, and suggest example job titles.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Let’s connect your dots into **what you’re great at and love using**. I’ll draft skill ideas from your Life Map (flow activities, job tasks you enjoyed, creative pursuits, courses, content topics) and you’ll refine. Ready?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "skills.consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ---------- AUTOGEN SKILL CANDIDATES FROM LIFE MAP ---------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Based on your Life Map, here are **10–15 candidate skills/activities** you seem to enjoy using. Edit freely: add, remove, or rewrite to make them feel true.\n\n(Behind the scenes I considered: life_map.flow_activities.*, life_map.experience.job_skills_enjoyed, life_map.experience.creative_pursuits, life_map.education.university_subjects, life_map.education.courses_motivation, life_map.education.content_topics.)\n\nPlease return a clean bullet list (aim for 5–12).",
+      "assistant_generate_from_memory": [
+        "life_map.flow_activities.*",
+        "life_map.experience.job_skills_enjoyed",
+        "life_map.experience.creative_pursuits",
+        "life_map.education.university_subjects",
+        "life_map.education.courses_motivation",
+        "life_map.education.content_topics"
+      ],
+      "expected_inputs": ["text_list"],
+      "validations": { "min_items": 5, "max_items": 12, "dedupe": true },
+      "store_as": "skills.candidates",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ---------- CLUSTERING INTO THEMES ---------- */
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Great. I’ll **cluster** these into 3–6 themes (each with a short label + 3–5 example skills). Review the clusters and tweak labels or membership so they feel right.",
+      "assistant_cluster_from": "skills.candidates",
+      "assistant_cluster_params": { "target_clusters_min": 3, "target_clusters_max": 6, "examples_per_cluster": 5 },
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "label": "string",
+            "skills": "text_list"
+          }
+        }
+      ],
+      "store_as": "skills.clusters",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ---------- NAME ROLE ARCHETYPES PER CLUSTER ---------- */
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "Let’s give each cluster a **role archetype** name (1–3 words) that captures the vibe (e.g., Creator, Facilitator, System Builder, Community Catalyst). I’ll suggest names — you confirm or rename.",
+      "assistant_propose_roles_from": "skills.clusters",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "cluster_label": "string",
+            "role_title": "string"
+          }
+        }
+      ],
+      "store_as": "skills.roles",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ---------- SUGGEST EXAMPLE JOB TITLES PER ROLE ---------- */
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "For each role, here are **3–6 example job titles** that match your skill pattern. Keep what resonates, remove what doesn’t, and add any that fit you better.",
+      "assistant_generate_job_titles_from": {
+        "roles_key": "skills.roles",
+        "clusters_key": "skills.clusters"
+      },
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "role_title": "string",
+            "job_titles": "text_list"
+          }
+        }
+      ],
+      "validations": { "min_items": 3 },
+      "store_as": "skills.job_title_suggestions",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ---------- RESONANCE RATING ---------- */
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Quick gut check: rate how much each **role** feels like you (1–10).",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "role_title": "string",
+            "resonance_1_to_10": "number"
+          }
+        }
+      ],
+      "store_as": "skills.role_ratings",
+      "next_step_rules": [{ "on_success": "7.0" }]
+    },
+
+    /* ---------- TOP ROLES + WHY ---------- */
+    {
+      "id": "7.0",
+      "step_order_index": 7,
+      "assistant_prompt": "From your ratings, which **top 2–3 roles** feel most alive right now — and *why*? (1–2 bullets each.)",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "role_title": "string",
+            "why_this_fits": "text_list"
+          }
+        }
+      ],
+      "validations": { "min_items": 2, "max_items": 3 },
+      "store_as": "skills.top_roles",
+      "next_step_rules": [{ "on_success": "8.0" }]
+    },
+
+    /* ---------- SUMMARY MIRROR ---------- */
+    {
+      "id": "8.0",
+      "step_order_index": 8,
+      "assistant_prompt": "Summary so far:\n• Skill clusters: {skills.clusters}\n• Role archetypes: {skills.roles}\n• Example job titles you like: {skills.job_title_suggestions}\n• Your top roles now: {skills.top_roles}\n\nAnything you want to tweak before we continue?",
+      "expected_inputs": ["free_text_optional"],
+      "store_as": "skills.summary_notes",
+      "next_step_rules": [{ "on_success": "9.0" }]
+    },
+
+    /* ---------- TRANSITION TO PROBLEMS LENS ---------- */
+    {
+      "id": "9.0",
+      "step_order_index": 9,
+      "assistant_prompt": "Beautiful. You’ve clarified the **ways you love to contribute**. Next we’ll map the **problems and changes** that matter most to you — so we can connect your roles to meaningful impact.\n\nReady for the **Problems Lens**?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "skills.complete",
+      "next_step_rules": [{ "on_success": "next_module_problems_lens" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_Problems_Lens",
+  "version": "1.0",
+  "description": "Part 3 — What the World Needs / Problems You’re Passionate About Solving. Automatically gathers insights from the Life Map, clusters repeating themes of challenge or growth, and helps users articulate the real-world change they care about creating.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Next, let’s uncover the **problems and changes** you care most about solving.\n\nWe’ll look across your Life Map to spot the themes that made you want to help others, fix something, or make life better.\n\nReady?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "problems.consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ---------- AUTO-GENERATE PROBLEM CANDIDATES ---------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Based on your Life Map, here are **potential problems or change themes** you’ve lived through, cared about, or expressed.\n\nI’ve pulled patterns from your Life Map reflections on challenges, growth, unique experiences, aspirations, and world-change desires.\n\nReview the list, refine wording, and add or remove items until it feels like an authentic snapshot of what matters most to you.",
+      "assistant_generate_from_memory": [
+        "life_map.experience.job_problems_solved",
+        "life_map.future.world_changes",
+        "life_map.future.lifelong_aspirations",
+        "life_map.growth_areas.*",
+        "life_map.challenges_overcome.*",
+        "life_map.unique_experiences.*"
+      ],
+      "expected_inputs": ["text_list"],
+      "validations": { "min_items": 5, "max_items": 15, "dedupe": true },
+      "store_as": "problems.candidates",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ---------- CLUSTER INTO CHANGE THEMES ---------- */
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Great. I’ll now **cluster these challenges or themes** into 3–6 broader areas of change — each representing a type of transformation you care about.\n\nEach cluster will have a title (e.g., 'Emotional Healing', 'Redefining Education', 'Human Connection') and 3–5 supporting items. Edit freely.",
+      "assistant_cluster_from": "problems.candidates",
+      "assistant_cluster_params": { "target_clusters_min": 3, "target_clusters_max": 6, "examples_per_cluster": 5 },
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "label": "string",
+            "examples": "text_list"
+          }
+        }
+      ],
+      "store_as": "problems.clusters",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ---------- DEFINE THE CHANGE STATEMENT ---------- */
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "Let’s turn each cluster into a **Change Statement** — a single sentence that describes the positive shift you want to create in that area.\n\nExample:\n• Cluster: Emotional Healing → Change Statement: “Helping people feel safe being fully themselves.”\n• Cluster: Education Reinvention → Change Statement: “Making learning joyful, embodied, and human again.”",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "cluster_label": "string",
+            "change_statement": "string"
+          }
+        }
+      ],
+      "store_as": "problems.change_statements",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ---------- RANK PERSONAL RELEVANCE ---------- */
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Beautifully said. Now, rate how much **each Change Statement** personally resonates with your mission or purpose (1 = mild curiosity, 10 = deep life calling).",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "change_statement": "string",
+            "resonance_1_to_10": "number"
+          }
+        }
+      ],
+      "store_as": "problems.change_ratings",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ---------- REFLECTION: WHY IT MATTERS ---------- */
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Looking at your highest-rated themes, what connects them? Why do these specific problems feel important for you to help solve?\n\nAnswer in 3–5 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "problems.reflection_why",
+      "next_step_rules": [{ "on_success": "7.0" }]
+    },
+
+    /* ---------- SUMMARY REVIEW ---------- */
+    {
+      "id": "7.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Here’s your **Problem Map summary**:\n\n• Change Themes: {problems.clusters}\n• Change Statements: {problems.change_statements}\n• Top Resonance Areas: {problems.change_ratings}\n• Why They Matter: {problems.reflection_why}\n\nWould you like to edit anything before continuing?",
+      "expected_inputs": ["free_text_optional"],
+      "store_as": "problems.summary_notes",
+      "next_step_rules": [{ "on_success": "8.0" }]
+    },
+
+    /* ---------- TRANSITION TO PEOPLE LENS ---------- */
+    {
+      "id": "8.0",
+      "step_order_index": 8,
+      "assistant_prompt": "Excellent work. You’ve clarified the **kinds of problems and change** that truly matter to you.\n\nNext, we’ll explore **who** you feel called to help — the people behind these problems.\n\nReady for the **People Lens**?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "problems.complete",
+      "next_step_rules": [{ "on_success": "next_module_people_lens" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_People_Lens",
+  "version": "1.0",
+  "description": "Part 4 — Who You Love Helping. Uses problem clusters to identify the audiences or personas users feel called to serve, builds empathy maps, and surfaces resonance-based archetypes of service.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Now that you’ve identified the **problems and changes** you care most about, let’s discover **who** you feel called to help.\n\nBehind every problem is a person — and understanding *who they are* is key to aligning purpose and impact.\n\nReady to meet your people?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "people.consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ---------- AUTO-GENERATE INITIAL PERSONAS ---------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "I’ll start by generating potential **personas or audience types** connected to your Change Statements.\n\nThese will be drawn from your top problems, values, and experiences — as well as characters and role models you’ve resonated with.\n\nEdit or rewrite freely to make these feel like *real humans* you’d love to help.",
+      "assistant_generate_from_memory": [
+        "problems.change_statements",
+        "problems.reflection_why",
+        "life_map.fictional_role_models",
+        "life_map.real_role_models",
+        "life_map.experience.passion_project_impact"
+      ],
+      "expected_inputs": ["text_list"],
+      "validations": { "min_items": 3, "max_items": 8 },
+      "store_as": "people.candidate_personas",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ---------- CLUSTER INTO PERSONA GROUPS ---------- */
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Beautiful. Let’s group these people into **2–4 audience clusters** — each representing a type of person you feel deeply connected to.\n\nFor example:\n• 'The Seekers' — people awakening to their purpose\n• 'The Creators' — people driven to express themselves\n• 'The Leaders' — people guiding others through growth\n\nCluster them by shared desires, struggles, or personality traits.",
+      "assistant_cluster_from": "people.candidate_personas",
+      "assistant_cluster_params": { "target_clusters_min": 2, "target_clusters_max": 4 },
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "label": "string",
+            "persona_examples": "text_list"
+          }
+        }
+      ],
+      "store_as": "people.persona_clusters",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ---------- CREATE EMPATHY SNAPSHOTS ---------- */
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "Now, for each persona cluster, let’s create a short **Empathy Snapshot** so we can feel into who they are.\n\nUse this structure:\n• Who they are (age, stage, vibe)\n• What they struggle with\n• What they crave or dream of\n• How you personally relate to them",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "persona_label": "string",
+            "who_they_are": "string",
+            "their_struggles": "string",
+            "their_dreams": "string",
+            "your_connection": "string"
+          }
+        }
+      ],
+      "store_as": "people.empathy_snapshots",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ---------- IDENTIFY PRIMARY PERSONA ---------- */
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Of all the personas you just described, which **1–2** do you feel most lit up to help *right now*?\n\nList their labels and tell me why they feel like your people.",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "persona_label": "string",
+            "why_this_persona": "text_list"
+          }
+        }
+      ],
+      "validations": { "min_items": 1, "max_items": 2 },
+      "store_as": "people.primary_personas",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ---------- SUMMARIZE RELATIONSHIP DYNAMICS ---------- */
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Let’s zoom out — how would you describe the **dynamic** between you and the people you love helping?\n\nExample: “I guide them through transitions I once faced,” or “I spark clarity and courage in those who doubt themselves.”\n\nWrite 2–3 short lines.",
+      "expected_inputs": ["text_list"],
+      "store_as": "people.relationship_dynamic",
+      "next_step_rules": [{ "on_success": "7.0" }]
+    },
+
+    /* ---------- PERSONA ARCHETYPE NAMING ---------- */
+    {
+      "id": "7.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Finally, let’s give each of your key personas a **memorable archetype name** — something you could easily remember and reference (e.g., 'The Awakener', 'The Builder', 'The Healer', 'The Visionary').\n\nI’ll suggest names — feel free to rename them in your own voice.",
+      "assistant_propose_archetype_names_from": "people.primary_personas",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "persona_label": "string",
+            "archetype_name": "string"
+          }
+        }
+      ],
+      "store_as": "people.archetype_names",
+      "next_step_rules": [{ "on_success": "8.0" }]
+    },
+
+    /* ---------- REVIEW SUMMARY ---------- */
+    {
+      "id": "8.0",
+      "step_order_index": 8,
+      "assistant_prompt": "Here’s your **People Map summary**:\n\n• Persona Clusters: {people.persona_clusters}\n• Empathy Snapshots: {people.empathy_snapshots}\n• Primary Personas: {people.primary_personas}\n• Relationship Dynamic: {people.relationship_dynamic}\n• Archetype Names: {people.archetype_names}\n\nWould you like to adjust anything before we continue?",
+      "expected_inputs": ["free_text_optional"],
+      "store_as": "people.summary_notes",
+      "next_step_rules": [{ "on_success": "9.0" }]
+    },
+
+    /* ---------- TRANSITION TO MARKET LENS ---------- */
+    {
+      "id": "9.0",
+      "step_order_index": 9,
+      "assistant_prompt": "Incredible work — you’ve now met the people your purpose is designed to serve.\n\nNext, we’ll explore **the landscape**: who’s already creating similar change, and how your path can find its niche.\n\nReady for the **Market Lens**?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "people.complete",
+      "next_step_rules": [{ "on_success": "next_module_market_lens" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_Market_Lens",
+  "version": "1.0",
+  "description": "Part 5 — What People Pay For / The Market Lens. Identifies existing people, brands, and organizations already solving the problems the user cares about, helping reveal viable industries, niches, and positioning opportunities.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "You’ve discovered the **skills you love using**, the **problems you care about**, and the **people you’re called to help.**\n\nNow it’s time to explore the **landscape** — who’s already doing similar work, what exists in that space, and where you could naturally fit or innovate.\n\nReady to map the market?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "market.consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ---------- AUTO-GENERATE INITIAL SOLUTIONS / ROLE MODELS ---------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "I’ll start by listing a few **people, companies, or movements** that might already be creating the kind of change you care about.\n\nThese are drawn from your previous reflections — especially your Change Statements and Personas.\n\nReview the list, refine names, and add any others you admire or know are in this space.",
+      "assistant_generate_from_memory": [
+        "problems.change_statements",
+        "people.archetype_names",
+        "people.empathy_snapshots",
+        "skills.top_roles"
+      ],
+      "expected_inputs": ["text_list"],
+      "validations": { "min_items": 3, "max_items": 12 },
+      "store_as": "market.existing_solutions",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ---------- GROUP EXISTING SOLUTIONS INTO THEMES ---------- */
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Let’s group these examples into **solution categories** or niches — areas of focus where people are already solving similar problems.\n\nExamples:\n• Mindset & Coaching\n• Community & Connection\n• Conscious Business\n• Creative Education\n\nGroup them into 3–6 clusters and give each a simple label.",
+      "assistant_cluster_from": "market.existing_solutions",
+      "assistant_cluster_params": { "target_clusters_min": 3, "target_clusters_max": 6 },
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "label": "string",
+            "examples": "text_list"
+          }
+        }
+      ],
+      "store_as": "market.solution_clusters",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ---------- IDENTIFY GAPS OR DIFFERENTIATORS ---------- */
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "Looking at these solution clusters, what do you notice?\n\nWhere do you see **gaps, unmet needs, or missing perspectives**?\n\nYou can also reflect on:\n• What do you admire about these existing players?\n• What would you do differently?\n• What’s missing that you could uniquely bring?",
+      "expected_inputs": ["text_list"],
+      "store_as": "market.gaps_or_differences",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ---------- MATCH SKILLS + PROBLEMS TO MARKET THEMES ---------- */
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Now let’s **connect your unique mix** to the market.\n\nFor each Change Statement (from the Problems Lens), choose the **solution category** or niche where it fits best.\n\nExample:\n• Change Statement: 'Helping people reconnect with play and joy' → Category: 'Mindfulness / Creative Expression'\n• Change Statement: 'Healing workplace burnout' → Category: 'Corporate Wellbeing'",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "change_statement": "string",
+            "aligned_category": "string"
+          }
+        }
+      ],
+      "store_as": "market.change_to_category_map",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ---------- IDENTIFY IDEAL ENVIRONMENTS OR PARTNERS ---------- */
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Based on where your work seems to fit, what **environments, platforms, or collaborations** could amplify your impact?\n\nExamples:\n• Retreat centers, wellness platforms, or education hubs\n• Online communities, creative agencies, or coaching networks\n• Conscious brands or social enterprises\n\nList any that come to mind — real or hypothetical.",
+      "expected_inputs": ["text_list"],
+      "store_as": "market.ideal_environments",
+      "next_step_rules": [{ "on_success": "7.0" }]
+    },
+
+    /* ---------- REFLECT ON POSITIONING / UNIQUENESS ---------- */
+    {
+      "id": "7.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Every great mission has its **unique edge** — the way it feels or expresses differently from others.\n\nWhen you look at your mix of skills, problems, and people, what do you think makes *your approach* different, fresh, or uniquely you?\n\nExample: 'I bring play to healing.' or 'I merge creativity with strategy.'",
+      "expected_inputs": ["text_list"],
+      "store_as": "market.unique_edge",
+      "next_step_rules": [{ "on_success": "8.0" }]
+    },
+
+    /* ---------- SUMMARIZE MARKET MAP ---------- */
+    {
+      "id": "8.0",
+      "step_order_index": 8,
+      "assistant_prompt": "Here’s your **Market Map summary**:\n\n• Existing Solutions: {market.existing_solutions}\n• Solution Clusters: {market.solution_clusters}\n• Gaps / Differentiators: {market.gaps_or_differences}\n• Change ↔ Category Map: {market.change_to_category_map}\n• Ideal Environments: {market.ideal_environments}\n• Unique Edge: {market.unique_edge}\n\nWould you like to edit or refine anything before we continue?",
+      "expected_inputs": ["free_text_optional"],
+      "store_as": "market.summary_notes",
+      "next_step_rules": [{ "on_success": "9.0" }]
+    },
+
+    /* ---------- TRANSITION TO FINAL INTEGRATION LENS ---------- */
+    {
+      "id": "9.0",
+      "step_order_index": 9,
+      "assistant_prompt": "Brilliant — you now understand **where your calling meets the world’s needs.**\n\nNext, we’ll connect all four lenses — Skills, Problems, People, and Market — to reveal your unique **Nikigai blueprint**.\n\nReady for the final integration?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "market.complete",
+      "next_step_rules": [{ "on_success": "next_module_integration_lens" }]
+    }
+  ]
+}
+{
+  "flow_name": "Nikigai_Integration_Lens",
+  "version": "1.0",
+  "description": "Part 6 — Integration Lens / Your Nikigai Blueprint. Combines Skills, Problems, People, and Market insights to generate 3–5 purpose-aligned opportunity statements, helps user refine them, rank resonance, and craft a final mission summary.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "This is where everything connects.\n\nYou’ve mapped your **skills**, **problems**, **people**, and **market** — now we’ll bring them together to reveal your **Nikigai Blueprint**: the intersection of what you love, what you’re good at, what the world needs, and what people pay for.\n\nReady to integrate?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "integration.consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ---------- AUTO-GENERATE OPPORTUNITY STATEMENTS ---------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Based on everything you’ve shared, here are **3–5 opportunity statements** that combine your skills, the problems you care about, the people you serve, and the market you fit into.\n\nEach statement follows this structure:\n> “Helping [persona] overcome [problem] using [skill/theme], through [solution category or offering].”\n\nEdit freely or add your own versions.",
+      "assistant_generate_from_memory": [
+        "skills.top_roles",
+        "problems.change_statements",
+        "people.primary_personas",
+        "market.solution_clusters",
+        "market.unique_edge"
+      ],
+      "expected_inputs": ["text_list"],
+      "validations": { "min_items": 3, "max_items": 6 },
+      "store_as": "integration.opportunity_statements",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ---------- RESONANCE SCORING ---------- */
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Take a moment to feel into each statement. Rate how much each one **lights you up** on a scale from 1–10 (not how realistic it feels, but how *alive* it feels).",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "opportunity_statement": "string",
+            "resonance_1_to_10": "number"
+          }
+        }
+      ],
+      "store_as": "integration.opportunity_ratings",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ---------- REFLECTION: WHY THESE RESONATE ---------- */
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "Beautiful. Which **2–3 statements** scored the highest — and *why* do they feel most aligned with who you are now?\n\nShare 1–2 short reasons for each.",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "opportunity_statement": "string",
+            "why_this_resonates": "text_list"
+          }
+        }
+      ],
+      "store_as": "integration.top_opportunities",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ---------- SYNTHESIZE MISSION STATEMENT ---------- */
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Let’s turn your top opportunities into a **mission statement** — something you could proudly say out loud.\n\nExample formats:\n• “My mission is to help [people] overcome [problem] by [how you help], so they can [desired outcome].”\n• “I exist to [verb] [who] through [method or magic].”\n\nWrite 1–2 options that feel authentic and inspiring.",
+      "expected_inputs": ["text_list"],
+      "validations": { "min_items": 1, "max_items": 2 },
+      "store_as": "integration.mission_statements",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ---------- ALIGNMENT CHECK ---------- */
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "When you read your mission statement(s), check how it feels in your body.\n\nDoes it feel:\n• Aligned — calm, clear, grounded?\n• Exciting — expansive, alive?\n• True — simple, natural, not forced?\n\nRate your alignment on each dimension (1–10).",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "mission_statement": "string",
+            "alignment_score": "number",
+            "excitement_score": "number",
+            "truth_score": "number"
+          }
+        }
+      ],
+      "store_as": "integration.alignment_scores",
+      "next_step_rules": [{ "on_success": "7.0" }]
+    },
+
+    /* ---------- VISION IN ACTION ---------- */
+    {
+      "id": "7.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Now imagine living this mission. Describe what your life looks like when you’re embodying it fully — day to day.\n\nWhat are you doing, who are you with, and how do you feel?\n\nWrite a few short lines that capture your **Vision in Action.**",
+      "expected_inputs": ["text_block"],
+      "store_as": "integration.vision_in_action",
+      "next_step_rules": [{ "on_success": "8.0" }]
+    },
+
+    /* ---------- IDENTIFY FIRST STEP ---------- */
+    {
+      "id": "8.0",
+      "step_order_index": 8,
+      "assistant_prompt": "Every big vision starts with one brave step.\n\nWhat’s one small, real-world action you could take this week to express this mission — even in the tiniest way?",
+      "expected_inputs": ["text_block"],
+      "store_as": "integration.first_step",
+      "next_step_rules": [{ "on_success": "9.0" }]
+    },
+
+    /* ---------- FINAL SUMMARY ---------- */
+    {
+      "id": "9.0",
+      "step_order_index": 9,
+      "assistant_prompt": "✨ Here’s your **Nikigai Blueprint Summary:**\n\n**Top Roles:** {skills.top_roles}\n**Change Themes:** {problems.change_statements}\n**Personas:** {people.primary_personas}\n**Solution Niches:** {market.solution_clusters}\n**Unique Edge:** {market.unique_edge}\n**Top Opportunities:** {integration.top_opportunities}\n**Mission Statement(s):** {integration.mission_statements}\n**Vision in Action:** {integration.vision_in_action}\n\nWould you like to adjust anything before we wrap up?",
+      "expected_inputs": ["free_text_optional"],
+      "store_as": "integration.summary_review",
+      "next_step_rules": [{ "on_success": "10.0" }]
+    },
+
+    /* ---------- CELEBRATION + CLOSING ---------- */
+    {
+      "id": "10.0",
+      "step_order_index": 10,
+      "assistant_prompt": "Congratulations — you’ve completed your Nikigai journey.\n\nYou’ve connected the dots between your story, your gifts, your people, and your purpose.\n\nWould you like me to generate a **personal summary document** (PDF / Markdown) with your full Nikigai Blueprint?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yes, create a summary", "No, I’m complete for now"]
+        }
+      ],
+      "store_as": "integration.export_consent",
+      "next_step_rules": [
+        { "on_selection": "Yes, create a summary", "go_to": "11.0" },
+        { "on_selection": "No, I’m complete for now", "go_to": "12.0" }
+      ]
+    },
+
+    /* ---------- EXPORT SUMMARY ARTIFACT ---------- */
+    {
+      "id": "11.0",
+      "step_order_index": 11,
+      "assistant_prompt": "Generating your summary document...",
+      "tool_call": "tools.pdf_export",
+      "tool_call_payload": {
+        "source_keys": [
+          "skills.top_roles",
+          "problems.change_statements",
+          "people.primary_personas",
+          "market.solution_clusters",
+          "integration.mission_statements",
+          "integration.vision_in_action",
+          "integration.first_step"
+        ],
+        "title": "Nikigai Blueprint Summary"
+      },
+      "store_as": "integration.export_link",
+      "next_step_rules": [{ "on_success": "12.0" }]
+    },
+
+    /* ---------- CLOSING MESSAGE ---------- */
+    {
+      "id": "12.0",
+      "step_order_index": 12,
+      "assistant_prompt": "Your Nikigai journey is complete.\n\nYou’ve uncovered the essence of your purpose — a map you can revisit anytime to guide your next chapter.\n\nThank you for sharing your story so openly.\n\nWould you like to continue with a **7-Day Action Integration Plan** to bring this mission to life?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yes, guide me into the 7-Day Plan", "No, end here"]
+        }
+      ],
+      "store_as": "integration.complete",
+      "next_step_rules": [
+        { "on_selection": "Yes, guide me into the 7-Day Plan", "go_to": "next_module_action_plan" },
+        { "on_selection": "No, end here", "go_to": "end" }
+      ]
+    }
+  ]
+}
