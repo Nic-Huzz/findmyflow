@@ -1,8 +1,10 @@
 # Nervous System Safety Boundaries Flow - Implementation Guide
 
-## 🎉 What Was Built
+## 🎉 What Was Built (UPDATED: Safety Contract Approach + AI)
 
-I've created a complete **Nervous System Safety Boundaries** chat flow following the exact structure we designed. This flow helps users identify subconscious safety edges around their ambitions using sway testing.
+I've created a complete **Nervous System Safety Boundaries** chat flow using the **safety contract approach** - testing fears directly instead of empowering beliefs, which produces more accurate sway test results.
+
+**NEW: AI-powered pattern mirroring** for deeply personalized reflections (with fallback to conditional logic).
 
 ---
 
@@ -13,36 +15,50 @@ I've created a complete **Nervous System Safety Boundaries** chat flow following
 - **Contains:** 17-step flow covering all 6 stages
 - **Structure:** Follows the same JSON format as healing compass and lead magnet flows
 
-### 2. **Belief Library**
+### 2. **Safety Contract Library** ⭐ NEW APPROACH
 - **File:** `/src/data/nervousSystemBeliefs.js`
 - **Contains:**
-  - 72 belief statements organized by 10 themes
-  - Conditional logic system (`selectBeliefs()` function)
+  - 80 safety contract statements (fear tests) organized by 8 wound types
+  - Conditional logic system (`selectSafetyContracts()` function)
   - Smart selection based on user context
-- **Themes:**
-  - Visibility & Being Seen (8 beliefs)
-  - Money & Abundance (8 beliefs)
-  - Worthiness & Enough-ness (8 beliefs)
-  - Pressure & Performance (8 beliefs)
-  - Safety in Success (8 beliefs)
-  - Belonging & Connection (8 beliefs)
-  - Impact & Scale (8 beliefs)
-  - Trust & Self-Belief (8 beliefs)
-  - Safety in Action (8 beliefs)
-  - Leadership & Authority (8 beliefs)
+- **Wound Types:**
+  - Visibility Wound (10 contracts) - "If I'm visible, I'll be judged"
+  - Belonging Wound (10 contracts) - "If I succeed, I'll lose connection"
+  - Stability/Control Wound (10 contracts) - "If I expand, I'll lose control"
+  - Worthiness Wound (10 contracts) - "If I receive abundance, I'll owe something"
+  - Safety Wound (10 contracts) - "If I step into power, I'll be unsafe"
+  - Impact/Responsibility Wound (10 contracts) - "If I impact many, I'll let them down"
+  - Abundance/Money Wound (10 contracts) - "If I have money, I'll lose who I am"
+  - Perfection/Failure Wound (10 contracts) - "If I'm not perfect, I'm worthless"
 
-### 3. **Template Functions**
+**Why this works better:** Testing the actual fear produces more accurate sway results than testing positive beliefs. The subconscious responds more honestly to "If I'm visible, I'll be judged" than "It's safe to be visible."
+
+### 3. **Template Functions** ⭐ UPDATED
 - **File:** `/src/lib/templates/nervousSystemTemplates.js`
 - **Contains:**
-  - `generateBeliefTests()` - Dynamically selects 5-7 personalized beliefs
-  - `mirrorPattern()` - Creates personalized reflection based on all responses
+  - `generateBeliefTests()` - Dynamically selects 5-7 personalized safety contracts
+  - `mirrorPattern()` - **AI-powered** personalized reflection (with fallback)
+  - `generateFallbackMirror()` - Conditional logic backup if AI unavailable
   - Helper functions for pattern/fear/archetype identification
 
-### 4. **Updated PromptResolver**
+### 4. **AI Helper** ⭐ NEW
+- **File:** `/src/lib/aiHelper.js`
+- **Contains:**
+  - `generateAIPatternMirror()` - OpenAI API integration for pattern recognition
+  - Deeply personalized, accurate reflections based on all user data
+  - Fallback to conditional logic if API key not configured
+  - Uses GPT-4o for best results
+
+### 5. **Updated PromptResolver**
 - **File:** `/src/lib/promptResolver.js` (updated)
 - **Added support for new macros:**
-  - `{{GENERATE_BELIEF_TESTS}}` - Triggers belief selection
-  - `{{MIRROR_PATTERN}}` - Triggers pattern reflection
+  - `{{GENERATE_BELIEF_TESTS}}` - Triggers safety contract selection
+  - `{{MIRROR_PATTERN}}` - Triggers AI-powered pattern reflection
+
+### 6. **Environment Configuration** ⭐ NEW
+- **File:** `.env.example` (updated)
+- **Added:** `VITE_OPENAI_API_KEY` configuration
+- Optional - flow works without it using fallback logic
 
 ---
 
@@ -72,63 +88,71 @@ Five statements to sway test:
 4. "What I'm struggling with, I am also subconsciously self-sabotaging"
 5. "Part of me feels unsafe with the vision of my ambitions"
 
-### **Stage 5: Root-Cause Belief Testing (Steps 13-14)**
-- Dynamically generates 5-7 personalized belief statements
+### **Stage 5: Safety Contract Testing (Steps 13-14)** ⭐ UPDATED
+- Dynamically generates 5-7 personalized **fear contracts** (not empowering beliefs)
+- Examples: "If I'm visible, I'll be judged", "If I succeed, I'll lose connection"
 - Based on conditional logic from triage results
 - User tests each and shares reflections
+- **Why contracts work better:** Direct fear testing produces more accurate sway results
 
-### **Stage 6: Mirror Back Pattern (Steps 15-17)**
+### **Stage 6: Mirror Back Pattern (Steps 15-17)** ⭐ AI-POWERED
+- **Uses OpenAI API** to generate deeply personalized reflection
 - Reflects safety zones vs. contraction zones
 - Names the protective pattern
 - Identifies underlying fear
-- Suggests belief archetype (e.g., "The Good Soldier")
+- Suggests belief archetype (e.g., "The Invisible Achiever", "The Selfless Healer")
 - Explains what needs to be rewired
 - Asks for consent to shift
+- **Falls back to conditional logic** if API key not configured
 
 ---
 
-## 🧠 Conditional Logic - How Belief Selection Works
+## 🧠 Conditional Logic - How Safety Contract Selection Works
 
-The `selectBeliefs()` function uses **7 rules** to choose the most relevant beliefs:
+The `selectSafetyContracts()` function uses **8 rules** to choose the most relevant fear contracts:
 
-### Rule 1: Visibility Struggles
+### Rule 1: Visibility Contraction
 If user tested NO to "safe being seen":
-- Add 2 visibility beliefs
-- Add 1 impact belief
+- "If I'm fully visible, I'll be judged"
+- "If I show up authentically, I'll be rejected"
 
-### Rule 2: Money Blocks
+### Rule 2: Money/Abundance Contraction
 If user tested NO to "safe earning":
-- Add 2 abundance beliefs
-- If high income goal ($1M+, $500k+), add worthiness belief
+- "If I have money, I'll lose who I am"
+- If high income goal ($1M+, $500k+): "If I receive abundance, I'll owe something I can't repay"
 
-### Rule 3: Self-Sabotage Pattern
-If user tested YES to "self-sabotaging":
-- Add action belief
-- Add trust belief
-
-### Rule 4: General Safety
+### Rule 3: General Safety Contraction
 If user tested NO to "safe pursuing" OR YES to "feels unsafe":
-- Add 2 safety in success beliefs
+- "If I pursue this ambition, I'll sacrifice my peace"
 
-### Rule 5: Struggle Area Keywords (NLP)
-Scans the user's struggle text for keywords:
-- **"visible", "seen", "show up", "market"** → Visibility beliefs
-- **"money", "pricing", "charge", "income"** → Abundance beliefs
-- **"pressure", "burnout", "exhaust", "overwhelm"** → Pressure beliefs
-- **"belong", "relation", "connection", "isolat"** → Belonging beliefs
-- **"lead", "authority", "power", "voice"** → Leadership beliefs
-- **"trust", "decision", "doubt", "uncertain"** → Trust beliefs
+### Rule 4: Self-Sabotage Pattern (Stability Wound)
+If user tested YES to "self-sabotaging":
+- "If I expand, I'll lose control"
 
-### Rule 6: Fill to Minimum 5
-If fewer than 5 beliefs selected, add universal beliefs:
-- Worthiness
-- Trust
-- Action
-- Safety in success
-- Pressure
+### Rule 5: High Impact = Responsibility Wound
+If impact goal is 100k+ people:
+- "If I impact many people, I'll be responsible for their outcomes"
 
-### Rule 7: Cap at 7 Maximum
-Never show more than 7 beliefs to avoid overwhelm.
+### Rule 6: Struggle Area Keywords (NLP)
+Scans user's struggle text for keywords:
+- **"visible", "seen", "show up", "market", "post", "social media"** → Visibility wound contracts
+- **"money", "pricing", "charge", "income", "earn"** → Abundance wound contracts
+- **"pressure", "burnout", "exhaust", "overwhelm", "stress"** → Stability wound contracts
+- **"belong", "relation", "connection", "isolat", "alone", "people"** → Belonging wound contracts
+- **"control", "trust", "uncertain", "chaos"** → Stability wound contracts
+- **"perfect", "fail", "mistake", "good enough", "inadequate"** → Perfection wound contracts
+- **"lead", "responsib", "depend", "let people down"** → Impact wound contracts
+
+### Rule 7: Fill to Minimum 5 Contracts
+If fewer than 5 contracts selected, add universal contracts:
+- "If I succeed, I'll be exposed as a fraud"
+- "If I outgrow my current life, I'll be alone"
+- "If I step into my power, I'll be unsafe"
+- "If I grow too fast, I'll lose myself"
+- "If I fail, I'll prove I was never good enough"
+
+### Rule 8: Cap at 7 Maximum
+Never show more than 7 contracts to avoid overwhelm.
 
 ---
 
@@ -145,6 +169,31 @@ Based on responses, the flow can identify these archetypes:
 | **The Strategic Controller** | Trust/control keywords in struggle |
 
 If no specific archetype matches, the mirror reflects the general protective pattern without naming an archetype.
+
+---
+
+## 🤖 AI Setup (Optional but Recommended)
+
+The flow works without AI using conditional logic fallback, but AI provides significantly more accurate pattern reflections.
+
+### Setup OpenAI API:
+
+1. **Get API Key:**
+   - Go to https://platform.openai.com/api-keys
+   - Create a new API key
+   - Copy it
+
+2. **Add to `.env.local`:**
+   ```bash
+   VITE_OPENAI_API_KEY=sk-proj-...your-key-here
+   ```
+
+3. **Test it:**
+   - Run the flow
+   - If API key is valid, you'll get AI-powered reflections
+   - If not configured, fallback logic activates automatically
+
+**Cost:** ~$0.01-0.02 per user (GPT-4o pricing)
 
 ---
 

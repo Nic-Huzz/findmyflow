@@ -152,30 +152,30 @@
       "instructions_to_gpt": "Record the response and prepare to transition to personalized belief testing."
     },
     {
-      "step": "stage5_beliefs_intro",
+      "step": "stage5_contracts_intro",
       "step_order_index": 13.0,
       "required_inputs": ["stage4_triage_5_complete"],
-      "prompt": "Now let's go deeper.\n\nI'm going to give you 5-7 belief statements to test. These are designed based on your ambition and where your system showed resistance.\n\nTest each one using the sway test and let me know what comes up.",
+      "prompt": "Now let's go deeper.\n\nI'm going to give you 5-7 **safety contracts** to test — these are fears your nervous system may be holding to keep you safe.\n\nThese are more accurate than testing empowering beliefs, because we're going straight to the source: what your system is protecting you from.\n\nTest each one using the sway test and notice if your body says YES (this fear is active) or NO (this isn't a concern).",
       "options": [
         { "label": "Let's do it", "value": "ready" }
       ],
-      "tag_as": "stage5_beliefs_intro_acknowledged",
-      "store_as": "stage5_beliefs_intro_complete",
-      "instructions_to_gpt": "Prepare to deliver personalized belief statements based on selectBeliefs() logic from nervousSystemBeliefs.js"
+      "tag_as": "stage5_contracts_intro_acknowledged",
+      "store_as": "stage5_contracts_intro_complete",
+      "instructions_to_gpt": "Prepare to deliver personalized safety contract tests based on selectSafetyContracts() logic from nervousSystemBeliefs.js"
     },
     {
-      "step": "stage5_belief_test_dynamic",
+      "step": "stage5_contract_test_dynamic",
       "step_order_index": 14.0,
-      "required_inputs": ["stage5_beliefs_intro_complete"],
+      "required_inputs": ["stage5_contracts_intro_complete"],
       "prompt": "{{GENERATE_BELIEF_TESTS}}",
-      "tag_as": "belief_test_results",
-      "store_as": "stage5_belief_tests_complete",
-      "instructions_to_gpt": "Use the selectBeliefs() function from nervousSystemBeliefs.js to generate 5-7 personalized belief statements. Present them one at a time or as a batch. Collect YES/NO responses and any reflections the user shares. Store all results in belief_test_results as an object/array."
+      "tag_as": "contract_test_results",
+      "store_as": "stage5_contract_tests_complete",
+      "instructions_to_gpt": "Use the selectSafetyContracts() function from nervousSystemBeliefs.js to generate 5-7 personalized safety contract statements. Present them sequentially. Collect YES/NO responses and any reflections the user shares. Store all results in contract_test_results as an object/array."
     },
     {
       "step": "stage6_mirror_intro",
       "step_order_index": 15.0,
-      "required_inputs": ["stage5_belief_tests_complete"],
+      "required_inputs": ["stage5_contract_tests_complete"],
       "prompt": "Let me mirror back what I'm noticing...",
       "options": [
         { "label": "I'm ready", "value": "ready" }
@@ -197,12 +197,12 @@
         "{{triage_safe_pursuing}}",
         "{{triage_self_sabotage}}",
         "{{triage_feels_unsafe}}",
-        "{{belief_test_results}}"
+        "{{contract_test_results}}"
       ],
       "prompt": "{{MIRROR_PATTERN}}",
       "tag_as": "pattern_mirrored",
       "store_as": "stage6_mirror_complete",
-      "instructions_to_gpt": "Generate a personalized reflection based on all collected data:\n\n1. Name where their system feels safe vs. where it contracts (use triage results)\n2. Identify the most limiting belief that showed up (from belief tests)\n3. Suggest what deeper fear may be protecting them from expansion\n4. Name the pattern/archetype if applicable (e.g., 'The Good Soldier', 'The Hustling Healer')\n5. Explain what needs to be rewired\n\nUse compassionate, insightful language. Make it feel personalized and deeply seen."
+      "instructions_to_gpt": "The MIRROR_PATTERN macro will use AI to generate a deeply personalized reflection based on all collected data:\n\n1. Name where their system feels safe vs. where it contracts (use triage results)\n2. Identify the most active safety contracts (from fear tests)\n3. Suggest what deeper fear may be protecting them from expansion\n4. Name the pattern/archetype if applicable (e.g., 'The Invisible Achiever', 'The Selfless Healer')\n5. Explain what needs to be rewired\n\nUses OpenAI API for accuracy. Falls back to conditional logic if API key not configured. Tone: Compassionate, insightful, deeply seeing."
     },
     {
       "step": "stage6_close",

@@ -3,13 +3,14 @@
  * Used by promptResolver to generate dynamic content
  */
 
-import { selectBeliefs } from '../../data/nervousSystemBeliefs.js';
+import { selectSafetyContracts } from '../../data/nervousSystemBeliefs.js';
+import { generateAIPatternMirror } from '../aiHelper.js';
 
 /**
  * GENERATE_BELIEF_TESTS Macro
  *
- * Generates 5-7 personalized belief statements based on user context
- * To be presented sequentially for sway testing
+ * Generates 5-7 personalized safety contract tests based on user context
+ * These are fear statements that test the actual subconscious protective beliefs
  */
 export function generateBeliefTests(context) {
   const userContext = {
@@ -23,17 +24,20 @@ export function generateBeliefTests(context) {
     yesToFeelsUnsafe: context.triage_feels_unsafe === 'yes'
   };
 
-  const beliefs = selectBeliefs(userContext);
+  const contracts = selectSafetyContracts(userContext);
 
   // Format as a sequential prompt
-  let output = "Here are your personalized belief statements to test:\n\n";
+  let output = "Here are your personalized safety contracts to test.\n\n";
+  output += "These are fears your nervous system may be holding to keep you safe.\n\n";
+  output += "Test each one and notice if your body says YES (this fear is active) or NO (this isn't a concern):\n\n";
+  output += "---\n\n";
 
-  beliefs.forEach((belief, index) => {
-    output += `**Statement ${index + 1} of ${beliefs.length}:**\n\n`;
-    output += `"${belief}"\n\n`;
-    output += `Test this and let me know: YES or NO?\n\n`;
-    output += `(Feel free to share any reflections that come up.)\n\n`;
-    if (index < beliefs.length - 1) {
+  contracts.forEach((contract, index) => {
+    output += `**Contract ${index + 1} of ${contracts.length}:**\n\n`;
+    output += `"${contract}"\n\n`;
+    output += `Did you sway YES or NO?\n\n`;
+    output += `(Feel free to share what comes up as you test this.)\n\n`;
+    if (index < contracts.length - 1) {
       output += "---\n\n";
     }
   });
@@ -44,9 +48,27 @@ export function generateBeliefTests(context) {
 /**
  * MIRROR_PATTERN Macro
  *
- * Creates a personalized reflection based on all triage and belief test results
+ * Creates a personalized reflection based on all triage and safety contract results
+ * Uses AI to provide deeply personalized, accurate pattern recognition
+ * Falls back to conditional logic if AI is unavailable
  */
-export function mirrorPattern(context) {
+export async function mirrorPattern(context) {
+  // Try AI-powered reflection first
+  const aiReflection = await generateAIPatternMirror(context);
+
+  if (aiReflection) {
+    return aiReflection;
+  }
+
+  // Fallback: Use conditional logic
+  return generateFallbackMirror(context);
+}
+
+/**
+ * Fallback pattern mirror using conditional logic
+ * Used when AI is not configured or fails
+ */
+function generateFallbackMirror(context) {
   const {
     user_name,
     impact_goal,
@@ -56,8 +78,7 @@ export function mirrorPattern(context) {
     triage_safe_earning,
     triage_safe_pursuing,
     triage_self_sabotage,
-    triage_feels_unsafe,
-    belief_test_results
+    triage_feels_unsafe
   } = context;
 
   let reflection = `Here's what I'm noticing, ${user_name}:\n\n`;

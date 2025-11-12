@@ -1,161 +1,166 @@
 /**
- * Nervous System Safety Beliefs Library
+ * Safety Contract Library - Nervous System Fear Tests
  *
- * Organized by themes for conditional selection based on:
+ * These are "safety contracts" - subconscious beliefs the nervous system
+ * is holding to keep you safe. Testing these directly reveals the actual
+ * protective mechanism more accurately than testing empowering beliefs.
+ *
+ * Organized by wound types for conditional selection based on:
  * - User's vision (impact/income levels)
  * - Struggle area
  * - Triage test results
+ *
+ * All statements are NLP-aligned (positive framing that subconscious can process)
  */
 
-export const beliefLibrary = {
+export const safetyContracts = {
 
   // ==========================================
-  // VISIBILITY & BEING SEEN
+  // VISIBILITY WOUND
+  // Core fear: Being seen = danger
   // ==========================================
   visibility: [
-    "It's safe for me to be seen in my full power.",
-    "Being visible doesn't mean I'll be rejected.",
-    "I can be seen and still belong.",
-    "The right people will find me when I'm visible.",
-    "Being visible attracts the support I need.",
-    "I'm safe to shine without dimming others.",
-    "Visibility is a gift I give to those who need me.",
-    "I can be visible and still be authentic."
+    "If I'm fully visible, I'll be judged.",
+    "If I show up authentically, I'll be rejected.",
+    "If I share my truth, I'll be criticized.",
+    "If people really see me, they'll find me inadequate.",
+    "If I'm visible at scale, I'll be attacked.",
+    "If I put myself out there, I'll be humiliated.",
+    "If I shine brightly, others will resent me.",
+    "If I'm seen in my power, I'll be misunderstood.",
+    "If I become visible, I'll lose my privacy forever.",
+    "If I show my real self, people will leave."
   ],
 
   // ==========================================
-  // MONEY & ABUNDANCE
-  // ==========================================
-  abundance: [
-    "Having money makes me more of who I am, not less.",
-    "I can be wealthy and still be deeply connected.",
-    "Abundance flows naturally when I'm aligned.",
-    "Money amplifies my ability to create positive change.",
-    "I'm safe to receive abundance for my gifts.",
-    "Earning more doesn't change who I am at my core.",
-    "Wealth supports my mission, not diminishes it.",
-    "I can hold money and maintain my values."
-  ],
-
-  // ==========================================
-  // WORTHINESS & ENOUGH-NESS
-  // ==========================================
-  worthiness: [
-    "What I bring is already enough.",
-    "I don't need to prove my worth to deserve success.",
-    "My value isn't measured by my productivity.",
-    "I am worthy of success simply by being me.",
-    "I'm enough exactly as I am right now.",
-    "My worth isn't conditional on achievement.",
-    "I deserve to receive for who I am, not just what I do.",
-    "Being myself is my greatest contribution."
-  ],
-
-  // ==========================================
-  // PRESSURE & PERFORMANCE
-  // ==========================================
-  pressure: [
-    "Pressure doesn't define my worth.",
-    "I can succeed without constant pressure.",
-    "Rest supports my ambition.",
-    "Ease and success can coexist.",
-    "I'm safe to move at my own pace.",
-    "Success doesn't require suffering.",
-    "I can achieve without burning out.",
-    "My best work comes from flow, not force."
-  ],
-
-  // ==========================================
-  // SAFETY IN SUCCESS
-  // ==========================================
-  safetyInSuccess: [
-    "It's safe to move forward without resistance.",
-    "I trust myself to handle success.",
-    "Expansion doesn't require sacrifice.",
-    "Success doesn't mean losing what matters.",
-    "I can grow and still stay grounded.",
-    "It's safe to have what I want.",
-    "I can succeed and maintain my relationships.",
-    "Success enhances my life, not complicates it."
-  ],
-
-  // ==========================================
-  // BELONGING & CONNECTION
+  // BELONGING WOUND
+  // Core fear: Success = losing connection
   // ==========================================
   belonging: [
-    "I can succeed and still belong.",
-    "My success doesn't threaten my relationships.",
-    "I'm safe to outgrow old versions of myself.",
-    "The people who matter will celebrate my growth.",
-    "I can change and still be loved.",
-    "My evolution doesn't mean abandoning others.",
-    "I belong even as I grow beyond old limits.",
-    "True connection deepens as I expand."
+    "If I succeed, I'll lose connection with people I love.",
+    "If I outgrow my current life, I'll be alone.",
+    "If I evolve, I'll abandon the people who need me.",
+    "If I become successful, my relationships will suffer.",
+    "If I change, the people I love will reject me.",
+    "If I rise, I'll leave important people behind.",
+    "If I prioritize my ambition, I'll damage my relationships.",
+    "If I'm different, I'll stop belonging.",
+    "If I grow beyond my community, I'll be isolated.",
+    "If I follow my path, I'll hurt the people I care about."
   ],
 
   // ==========================================
-  // IMPACT & SCALE
+  // STABILITY/CONTROL WOUND
+  // Core fear: Expansion = chaos/loss of control
+  // ==========================================
+  stability: [
+    "If I expand, I'll lose control.",
+    "If I scale, things will fall apart.",
+    "If I grow too fast, I'll lose myself.",
+    "If I succeed at this level, I'll be overwhelmed.",
+    "If I take this leap, everything will become chaotic.",
+    "If I let go of control, things will collapse.",
+    "If I trust the process, I'll end up in a worse situation.",
+    "If things get too big, I'll be unable to manage them.",
+    "If I step into uncertainty, I'll spiral.",
+    "If I expand beyond what I know, I'll fail spectacularly."
+  ],
+
+  // ==========================================
+  // WORTHINESS WOUND
+  // Core fear: Receiving = owing/being exposed as undeserving
+  // ==========================================
+  worthiness: [
+    "If I receive abundance, I'll owe something I can't repay.",
+    "If I charge what I'm worth, people will reject me.",
+    "If I succeed, I'll be exposed as a fraud.",
+    "If I receive recognition, people will realize I'm not that special.",
+    "If I'm paid well, I'll prove I'm greedy.",
+    "If I have more, I'll become someone I don't respect.",
+    "If I accept abundance, I'll feel guilty.",
+    "If I'm celebrated, I'll disappoint people eventually.",
+    "If I claim my worth, I'll be seen as arrogant.",
+    "If I receive freely, I'll be taking from others."
+  ],
+
+  // ==========================================
+  // SAFETY WOUND
+  // Core fear: Power/success = vulnerability/danger
+  // ==========================================
+  safety: [
+    "If I pursue this ambition, I'll sacrifice my peace.",
+    "If I'm successful, I'll become a target.",
+    "If I step into my power, I'll be unsafe.",
+    "If I have abundance, I'll attract danger.",
+    "If I'm visible and successful, bad things will happen.",
+    "If I fully commit, I'll be trapped.",
+    "If I achieve this level, I'll lose my freedom.",
+    "If I rise to this occasion, I'll be responsible for too much.",
+    "If I claim my power, I'll attract envy and harm.",
+    "If I follow my ambition, I'll betray my values."
+  ],
+
+  // ==========================================
+  // IMPACT/RESPONSIBILITY WOUND
+  // Core fear: Scale = burden I can't carry
   // ==========================================
   impact: [
-    "I'm safe to impact many people.",
-    "My influence creates positive ripples.",
-    "I can lead without losing myself.",
-    "Scaling my impact feels natural and safe.",
-    "I'm capable of holding the visibility my mission requires.",
-    "More people seeing my work is a gift, not a burden.",
-    "My impact grows as I stay aligned.",
-    "I trust myself to serve at scale."
+    "If I impact many people, I'll be responsible for their outcomes.",
+    "If I lead at scale, I'll let people down.",
+    "If my work reaches more people, I'll cause harm.",
+    "If I grow my influence, the pressure will crush me.",
+    "If I serve at this level, I'll burn out.",
+    "If people depend on me, I'll fail them.",
+    "If my message spreads widely, I'll be held to impossible standards.",
+    "If I scale my impact, I'll lose the quality that made it special.",
+    "If I become influential, I'll misuse my power.",
+    "If I lead others, I'll lead them in the wrong direction."
   ],
 
   // ==========================================
-  // TRUST & SELF-BELIEF
+  // ABUNDANCE/MONEY WOUND
+  // Core fear: Money = corruption/loss of self
   // ==========================================
-  trust: [
-    "I trust my body's wisdom.",
-    "I trust myself to make aligned decisions.",
-    "My intuition guides me toward what's right.",
-    "I'm safe to trust my inner knowing.",
-    "I believe in my ability to navigate uncertainty.",
-    "I trust that I'm on the right path.",
-    "My system knows what it needs.",
-    "I trust the timing of my expansion."
+  abundance: [
+    "If I have money, I'll lose who I am.",
+    "If I'm wealthy, I'll become disconnected from what matters.",
+    "If I earn at this level, I'll be corrupted by money.",
+    "If I prioritize income, I'll compromise my values.",
+    "If I receive financial abundance, I'll change for the worse.",
+    "If I have wealth, people will only see me as money.",
+    "If I'm financially successful, I'll become shallow.",
+    "If I focus on earning, I'll lose my purpose.",
+    "If I have more money, I'll be surrounded by the wrong people.",
+    "If I'm abundant, I'll forget where I came from."
   ],
 
   // ==========================================
-  // SAFETY IN ACTION
+  // PERFECTION/FAILURE WOUND
+  // Core fear: Being less than perfect = being nothing
   // ==========================================
-  action: [
-    "It's safe to take action toward my vision.",
-    "I can move forward even when I feel uncertain.",
-    "Action creates clarity and safety.",
-    "Each step I take builds my confidence.",
-    "I'm safe to try and learn as I go.",
-    "Imperfect action is better than perfect planning.",
-    "I trust myself to course-correct as needed.",
-    "Taking action feels good in my body."
-  ],
-
-  // ==========================================
-  // LEADERSHIP & AUTHORITY
-  // ==========================================
-  leadership: [
-    "I can lead in a way that feels good.",
-    "It's okay to lead differently than I was taught.",
-    "My leadership style is valid and valuable.",
-    "I don't need to be like other leaders to be effective.",
-    "I can be powerful and still be kind.",
-    "Leadership doesn't require me to be someone I'm not.",
-    "I'm safe to lead from my authentic essence.",
-    "My unique approach to leadership is needed."
+  perfection: [
+    "If I'm not perfect, I'll be exposed as inadequate.",
+    "If I make a mistake, I'll lose everything.",
+    "If I fail, I'll prove I was never good enough.",
+    "If I try and fail, I'll never recover.",
+    "If people see my flaws, they'll reject me completely.",
+    "If I'm anything less than excellent, I'm worthless.",
+    "If I show weakness, people will lose respect for me.",
+    "If I make the wrong move, I'll ruin everything.",
+    "If I'm not at the top, I'm at the bottom.",
+    "If I can't do it perfectly, I shouldn't do it at all."
   ]
 };
 
 /**
- * Belief Selection Logic
- * Returns 5-7 most relevant beliefs based on user context
+ * Safety Contract Selection Logic
+ * Returns 5-7 most relevant fear contracts based on user context
+ *
+ * These test the actual subconscious fears, which produces more accurate
+ * sway test results than testing empowering beliefs.
  */
-export function selectBeliefs(userContext) {
-  const selectedBeliefs = [];
+export function selectSafetyContracts(userContext) {
+  const selectedContracts = [];
 
   const {
     impactGoal,           // "100000+", "10000+", "1000+"
@@ -169,112 +174,143 @@ export function selectBeliefs(userContext) {
   } = userContext;
 
   // ==========================================
-  // RULE 1: Visibility struggles
+  // RULE 1: Visibility contraction
   // ==========================================
   if (noToSafeBeingSeen) {
-    selectedBeliefs.push(...beliefLibrary.visibility.slice(0, 2));
-    selectedBeliefs.push(beliefLibrary.impact[0]); // "I'm safe to impact many people"
+    selectedContracts.push(safetyContracts.visibility[0]); // "If I'm fully visible, I'll be judged"
+    selectedContracts.push(safetyContracts.visibility[1]); // "If I show up authentically, I'll be rejected"
   }
 
   // ==========================================
-  // RULE 2: Money blocks
+  // RULE 2: Money/abundance contraction
   // ==========================================
   if (noToSafeEarning) {
-    selectedBeliefs.push(...beliefLibrary.abundance.slice(0, 2));
+    selectedContracts.push(safetyContracts.abundance[0]); // "If I have money, I'll lose who I am"
 
-    // Add worthiness if high income goal
+    // Add worthiness wound if high income goal
     if (incomeGoal === "1000000+" || incomeGoal === "500000+") {
-      selectedBeliefs.push(beliefLibrary.worthiness[0]); // "What I bring is already enough"
+      selectedContracts.push(safetyContracts.worthiness[0]); // "If I receive abundance, I'll owe something I can't repay"
+    } else {
+      selectedContracts.push(safetyContracts.abundance[1]); // "If I'm wealthy, I'll become disconnected"
     }
   }
 
   // ==========================================
-  // RULE 3: Self-sabotage pattern
-  // ==========================================
-  if (yesToSelfSabotage) {
-    selectedBeliefs.push(beliefLibrary.action[0]); // "It's safe to take action toward my vision"
-    selectedBeliefs.push(beliefLibrary.trust[1]); // "I trust myself to make aligned decisions"
-  }
-
-  // ==========================================
-  // RULE 4: General safety around ambition
+  // RULE 3: General safety around pursuing ambition
   // ==========================================
   if (noToSafePursuing || yesToFeelsUnsafe) {
-    selectedBeliefs.push(beliefLibrary.safetyInSuccess[0]); // "It's safe to move forward without resistance"
-    selectedBeliefs.push(beliefLibrary.safetyInSuccess[2]); // "Expansion doesn't require sacrifice"
+    selectedContracts.push(safetyContracts.safety[0]); // "If I pursue this ambition, I'll sacrifice my peace"
   }
 
   // ==========================================
-  // RULE 5: Struggle area keywords (NLP)
+  // RULE 4: Self-sabotage pattern (stability wound)
+  // ==========================================
+  if (yesToSelfSabotage) {
+    selectedContracts.push(safetyContracts.stability[0]); // "If I expand, I'll lose control"
+  }
+
+  // ==========================================
+  // RULE 5: High impact = responsibility wound
+  // ==========================================
+  if (impactGoal === "100000+") {
+    selectedContracts.push(safetyContracts.impact[0]); // "If I impact many people, I'll be responsible for their outcomes"
+  }
+
+  // ==========================================
+  // RULE 6: Struggle area keywords (NLP)
   // ==========================================
   const struggleLower = (struggleArea || "").toLowerCase();
 
+  // Visibility keywords
   if (struggleLower.includes("visible") || struggleLower.includes("seen") ||
-      struggleLower.includes("show up") || struggleLower.includes("market")) {
-    selectedBeliefs.push(beliefLibrary.visibility[2]); // "I can be seen and still belong"
+      struggleLower.includes("show up") || struggleLower.includes("market") ||
+      struggleLower.includes("post") || struggleLower.includes("social media")) {
+    if (!selectedContracts.some(c => c.includes("visible"))) {
+      selectedContracts.push(safetyContracts.visibility[3]); // "If people really see me, they'll find me inadequate"
+    }
   }
 
+  // Money keywords
   if (struggleLower.includes("money") || struggleLower.includes("pricing") ||
-      struggleLower.includes("charge") || struggleLower.includes("income")) {
-    selectedBeliefs.push(beliefLibrary.abundance[3]); // "Money amplifies my ability to create positive change"
+      struggleLower.includes("charge") || struggleLower.includes("income") ||
+      struggleLower.includes("earn")) {
+    if (!selectedContracts.some(c => c.includes("money") || c.includes("wealth") || c.includes("abundant"))) {
+      selectedContracts.push(safetyContracts.abundance[4]); // "If I receive financial abundance, I'll change for the worse"
+    }
   }
 
+  // Pressure/burnout keywords
   if (struggleLower.includes("pressure") || struggleLower.includes("burnout") ||
-      struggleLower.includes("exhaust") || struggleLower.includes("overwhelm")) {
-    selectedBeliefs.push(beliefLibrary.pressure[2]); // "Rest supports my ambition"
-    selectedBeliefs.push(beliefLibrary.pressure[3]); // "Ease and success can coexist"
+      struggleLower.includes("exhaust") || struggleLower.includes("overwhelm") ||
+      struggleLower.includes("stress")) {
+    selectedContracts.push(safetyContracts.stability[3]); // "If I succeed at this level, I'll be overwhelmed"
   }
 
+  // Belonging/relationship keywords
   if (struggleLower.includes("belong") || struggleLower.includes("relation") ||
-      struggleLower.includes("connection") || struggleLower.includes("isolat")) {
-    selectedBeliefs.push(beliefLibrary.belonging[0]); // "I can succeed and still belong"
+      struggleLower.includes("connection") || struggleLower.includes("isolat") ||
+      struggleLower.includes("alone") || struggleLower.includes("people")) {
+    selectedContracts.push(safetyContracts.belonging[0]); // "If I succeed, I'll lose connection with people I love"
   }
 
-  if (struggleLower.includes("lead") || struggleLower.includes("authority") ||
-      struggleLower.includes("power") || struggleLower.includes("voice")) {
-    selectedBeliefs.push(beliefLibrary.leadership[0]); // "I can lead in a way that feels good"
+  // Control/trust keywords
+  if (struggleLower.includes("control") || struggleLower.includes("trust") ||
+      struggleLower.includes("uncertain") || struggleLower.includes("chaos")) {
+    if (!selectedContracts.some(c => c.includes("control"))) {
+      selectedContracts.push(safetyContracts.stability[1]); // "If I scale, things will fall apart"
+    }
   }
 
-  if (struggleLower.includes("trust") || struggleLower.includes("decision") ||
-      struggleLower.includes("doubt") || struggleLower.includes("uncertain")) {
-    selectedBeliefs.push(beliefLibrary.trust[0]); // "I trust my body's wisdom"
+  // Perfection/failure keywords
+  if (struggleLower.includes("perfect") || struggleLower.includes("fail") ||
+      struggleLower.includes("mistake") || struggleLower.includes("good enough") ||
+      struggleLower.includes("inadequate")) {
+    selectedContracts.push(safetyContracts.perfection[0]); // "If I'm not perfect, I'll be exposed as inadequate"
   }
 
-  // ==========================================
-  // RULE 6: Fill to minimum 5 beliefs
-  // ==========================================
-  // Add universal beliefs if we don't have enough yet
-  const universalBeliefs = [
-    beliefLibrary.worthiness[1], // "I don't need to prove my worth to deserve success"
-    beliefLibrary.trust[2],      // "My intuition guides me toward what's right"
-    beliefLibrary.action[1],     // "I can move forward even when I feel uncertain"
-    beliefLibrary.safetyInSuccess[1], // "I trust myself to handle success"
-    beliefLibrary.pressure[0]    // "Pressure doesn't define my worth"
-  ];
-
-  for (const belief of universalBeliefs) {
-    if (selectedBeliefs.length >= 7) break;
-    if (!selectedBeliefs.includes(belief)) {
-      selectedBeliefs.push(belief);
+  // Responsibility/leading keywords
+  if (struggleLower.includes("lead") || struggleLower.includes("responsib") ||
+      struggleLower.includes("depend") || struggleLower.includes("let people down")) {
+    if (!selectedContracts.some(c => c.includes("responsible") || c.includes("lead"))) {
+      selectedContracts.push(safetyContracts.impact[1]); // "If I lead at scale, I'll let people down"
     }
   }
 
   // ==========================================
-  // RULE 7: Cap at 7 beliefs max
+  // RULE 7: Fill to minimum 5 contracts
   // ==========================================
-  return [...new Set(selectedBeliefs)].slice(0, 7);
+  // Add universal contracts if we don't have enough yet
+  const universalContracts = [
+    safetyContracts.worthiness[2],  // "If I succeed, I'll be exposed as a fraud"
+    safetyContracts.belonging[1],   // "If I outgrow my current life, I'll be alone"
+    safetyContracts.safety[2],      // "If I step into my power, I'll be unsafe"
+    safetyContracts.stability[2],   // "If I grow too fast, I'll lose myself"
+    safetyContracts.perfection[2]   // "If I fail, I'll prove I was never good enough"
+  ];
+
+  for (const contract of universalContracts) {
+    if (selectedContracts.length >= 7) break;
+    if (!selectedContracts.includes(contract)) {
+      selectedContracts.push(contract);
+    }
+  }
+
+  // ==========================================
+  // RULE 8: Cap at 7 contracts max
+  // ==========================================
+  return [...new Set(selectedContracts)].slice(0, 7);
 }
 
 /**
- * Get beliefs organized by category for testing/reference
+ * Get contracts organized by wound type for testing/reference
  */
-export function getAllBeliefsByCategory() {
-  return beliefLibrary;
+export function getAllContractsByWound() {
+  return safetyContracts;
 }
 
 /**
- * Get total count of beliefs
+ * Get total count of safety contracts
  */
-export function getTotalBeliefCount() {
-  return Object.values(beliefLibrary).reduce((sum, arr) => sum + arr.length, 0);
+export function getTotalContractCount() {
+  return Object.values(safetyContracts).reduce((sum, arr) => sum + arr.length, 0);
 }
