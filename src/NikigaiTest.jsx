@@ -8,44 +8,41 @@ import { useAuth } from './auth/AuthProvider'
 
 /**
  * Nikigai Flow - Conversational Chat Interface
- * Discover your unique combination of skills, passions, and purpose
+ * Full implementation using v2.2 JSON flow (39 steps)
  */
 export default function NikigaiTest() {
   const { user } = useAuth()
   const [sessionId, setSessionId] = useState(null)
-  const [currentStep, setCurrentStep] = useState('2.0')
+  const [currentStep, setCurrentStep] = useState('1.0')
   const [messages, setMessages] = useState([])
   const [inputText, setInputText] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [allResponses, setAllResponses] = useState([])
   const [error, setError] = useState(null)
+  const [flowData, setFlowData] = useState(null)
+  const [clusterData, setClusterData] = useState({}) // Store generated clusters
   const messagesEndRef = useRef(null)
 
-  // Sample questions (from v2.2 flow)
-  const questions = {
-    '2.0': {
-      prompt: "Let's start with Childhood (Pre-school + Primary).\n\nWhat did you *love doing most*? These can be games, hobbies, or activities that made you lose track of time.\n\nPlease share 3–5 short bullets (the more the better!).",
-      store_as: 'life_map.hobbies.childhood',
-      shouldCluster: false
-    },
-    '2.1': {
-      prompt: "Now think of High School.\n\nWhat did you enjoy doing most for fun or self-expression?\n\nShare 3–5 bullets.",
-      store_as: 'life_map.hobbies.highschool',
-      shouldCluster: false
-    },
-    '2.2': {
-      prompt: "Finally, from 18 to Now — what activities, hobbies, or creative outlets light you up today?\n\n3–5 bullets please.",
-      store_as: 'life_map.hobbies.current',
-      shouldCluster: true, // First clustering checkpoint
-      clusterType: 'skills',
-      clusterStage: 'preview'
-    }
-  }
-
-  // Initialize session
+  // Load JSON flow
   useEffect(() => {
-    initSession()
+    fetch('/nikigai-flow-v2.2.json')
+      .then(res => res.json())
+      .then(data => {
+        console.log('✅ Flow loaded:', data.steps.length, 'steps')
+        setFlowData(data)
+      })
+      .catch(err => {
+        console.error('❌ Failed to load flow:', err)
+        setError('Failed to load question flow')
+      })
   }, [])
+
+  // Initialize session when flow is loaded
+  useEffect(() => {
+    if (flowData) {
+      initSession()
+    }
+  }, [flowData])
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -67,7 +64,7 @@ export default function NikigaiTest() {
           user_id: user.id,
           flow_version: 'v2.2',
           status: 'in_progress',
-          last_step_id: '2.0'
+          last_step_id: '1.0'
         })
         .select()
         .single()
@@ -77,13 +74,14 @@ export default function NikigaiTest() {
       setSessionId(data.id)
       console.log('✅ Session created:', data.id)
 
-      // Add initial AI message
-      const firstQuestion = questions['2.0']
+      // Add initial AI message (step 1.0)
+      const firstStep = flowData.steps.find(s => s.id === '1.0')
       const aiMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
-        text: firstQuestion.prompt,
-        timestamp: new Date().toLocaleTimeString()
+        text: firstStep.assistant_prompt,
+        timestamp: new Date().toLocaleTimeString(),
+        stepId: '1.0'
       }
       setMessages([aiMessage])
 
@@ -113,14 +111,18 @@ export default function NikigaiTest() {
 
     try {
       const { data: { user } } = await supabase.auth.getUser()
+      const currentStepData = flowData.steps.find(s => s.id === currentStep)
 
-      // Step 1: Extract tags
-      console.log('🔍 Extracting tags...')
-      const tags = await extractTags(trimmedInput, {
-        step_id: currentStep,
-        store_as: questions[currentStep].store_as
-      })
-      console.log('✅ Tags extracted:', tags)
+      // Step 1: Extract tags (if needed)
+      let tags = {}
+      if (currentStepData.store_as) {
+        console.log('🔍 Extracting tags...')
+        tags = await extractTags(trimmedInput, {
+          step_id: currentStep,
+          store_as: currentStepData.store_as
+        })
+        console.log('✅ Tags extracted:', tags)
+      }
 
       // Step 2: Count bullets
       const bullets = extractBulletPoints(trimmedInput)
@@ -133,8 +135,8 @@ export default function NikigaiTest() {
           session_id: sessionId,
           user_id: user.id,
           step_id: currentStep,
-          step_order_index: parseInt(currentStep.replace('.', '')),
-          question_text: questions[currentStep].prompt,
+          step_order_index: currentStepData.step_order_index,
+          question_text: currentStepData.assistant_prompt,
           response_raw: trimmedInput,
           bullet_count: bullets.length,
           tags_extracted: tags
@@ -149,75 +151,8 @@ export default function NikigaiTest() {
       const newResponses = [...allResponses, savedResponse]
       setAllResponses(newResponses)
 
-      // Step 5: If this is a clustering checkpoint, generate clusters
-      if (questions[currentStep].shouldCluster) {
-        console.log('🎯 Generating clusters...')
-
-        // Prepare items for clustering
-        const items = newResponses.flatMap(resp =>
-          extractBulletPoints(resp.response_raw).map(bullet => ({
-            text: bullet,
-            tags: resp.tags_extracted,
-            source_step: resp.step_id,
-            bullet_score: 0 // Will be calculated
-          }))
-        )
-
-        // Generate clusters
-        const generatedClusters = generateClusters(items, {
-          target_clusters_min: 3,
-          target_clusters_max: 6,
-          source_tags: ['skill_verb', 'domain_topic', 'value']
-        })
-
-        // Add labels
-        const labeledClusters = generatedClusters.map(cluster => ({
-          ...cluster,
-          label: generateClusterLabel(cluster)
-        }))
-
-        // Calculate quality metrics
-        const qualityMetrics = calculateClusterQualityMetrics(labeledClusters)
-        console.log('📊 Quality metrics:', qualityMetrics)
-
-        // Add clusters as AI message
-        const clusterMessage = formatClustersMessage(labeledClusters, qualityMetrics)
-        const aiMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          text: clusterMessage,
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, aiMessage])
-
-        console.log('✅ Clusters generated:', labeledClusters.length)
-      }
-
-      // Step 6: Move to next step
-      const nextStep = getNextStep(currentStep)
-      if (nextStep) {
-        setCurrentStep(nextStep)
-
-        // Add next question as AI message
-        const nextQuestion = questions[nextStep]
-        const aiMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          text: nextQuestion.prompt,
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, aiMessage])
-      } else {
-        // Flow complete
-        const completionMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'completion',
-          text: "🎉 Congratulations! You've completed the Nikigai discovery flow. Your unique skill clusters have been identified and saved.",
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, completionMessage])
-      }
+      // Step 5: Move to next step and check for postprocessing
+      await processNextStep(currentStepData, newResponses)
 
     } catch (err) {
       console.error('Error:', err)
@@ -233,10 +168,126 @@ export default function NikigaiTest() {
     }
   }
 
-  function formatClustersMessage(clusters, quality) {
-    let message = "✨ **Your Skill Clusters Are Emerging:**\n\n"
-    message += `**Quality Score:** ${quality.grade} (${Math.round(quality.overall_score * 100)}%)\n`
-    message += `Coherence: ${Math.round(quality.coherence * 100)}% | Distinctness: ${Math.round(quality.distinctness * 100)}% | Balance: ${Math.round(quality.balance * 100)}%\n\n`
+  async function processNextStep(currentStepData, responses) {
+    // Get next step ID
+    const nextStepId = getNextStepId(currentStepData)
+
+    if (!nextStepId) {
+      // Flow complete
+      const completionMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the Nikigai discovery flow. Your unique skill clusters have been identified and saved.",
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages(prev => [...prev, completionMessage])
+      return
+    }
+
+    const nextStepData = flowData.steps.find(s => s.id === nextStepId)
+    setCurrentStep(nextStepId)
+
+    // Check if next step has postprocessing (clustering)
+    if (nextStepData.assistant_postprocess) {
+      console.log('🎯 Processing clusters for step:', nextStepId)
+      await handlePostprocessing(nextStepData, responses)
+    } else {
+      // Just show the next question
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: nextStepData.assistant_prompt,
+        timestamp: new Date().toLocaleTimeString(),
+        stepId: nextStepId
+      }
+      setMessages(prev => [...prev, aiMessage])
+    }
+  }
+
+  async function handlePostprocessing(stepData, responses) {
+    const postprocess = stepData.assistant_postprocess
+
+    try {
+      // Get responses to cluster from
+      const sourceFields = postprocess.tag_from
+      const relevantResponses = responses.filter(r =>
+        sourceFields.some(field => r.store_as === field || field.includes('*'))
+      )
+
+      console.log('📦 Clustering from', relevantResponses.length, 'responses')
+
+      // Extract items for clustering
+      const items = relevantResponses.flatMap(resp =>
+        extractBulletPoints(resp.response_raw).map(bullet => ({
+          text: bullet,
+          tags: resp.tags_extracted,
+          source_step: resp.step_id,
+          bullet_score: 0
+        }))
+      )
+
+      // Generate clusters
+      const clusterConfig = postprocess.cluster
+      const generatedClusters = generateClusters(items, {
+        target_clusters_min: clusterConfig.target_clusters_min,
+        target_clusters_max: clusterConfig.target_clusters_max,
+        source_tags: clusterConfig.source_tags
+      })
+
+      // Add labels
+      const labeledClusters = generatedClusters.map(cluster => ({
+        ...cluster,
+        label: generateClusterLabel(cluster)
+      }))
+
+      // Calculate quality metrics
+      const qualityMetrics = calculateClusterQualityMetrics(labeledClusters)
+      console.log('📊 Quality metrics:', qualityMetrics)
+
+      // Store clusters
+      setClusterData(prev => ({
+        ...prev,
+        [postprocess.store_as]: labeledClusters
+      }))
+
+      // Format the assistant_prompt with cluster data
+      let promptText = stepData.assistant_prompt
+      const clusterPlaceholder = `{${postprocess.store_as}}`
+      if (promptText.includes(clusterPlaceholder)) {
+        const clusterMessage = formatClustersForDisplay(labeledClusters, qualityMetrics)
+        promptText = promptText.replace(clusterPlaceholder, clusterMessage)
+      }
+
+      // Add clusters + options as AI message
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: promptText,
+        timestamp: new Date().toLocaleTimeString(),
+        stepId: stepData.id,
+        hasOptions: stepData.expected_inputs?.[0]?.type === 'single_select',
+        options: stepData.expected_inputs?.[0]?.options || []
+      }
+      setMessages(prev => [...prev, aiMessage])
+
+    } catch (err) {
+      console.error('❌ Clustering failed:', err)
+      // Show question anyway
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: stepData.assistant_prompt,
+        timestamp: new Date().toLocaleTimeString(),
+        stepId: stepData.id
+      }
+      setMessages(prev => [...prev, aiMessage])
+    }
+  }
+
+  function formatClustersForDisplay(clusters, quality) {
+    let message = "**Your Skill Clusters:**\n\n"
+    message += `Quality: ${quality.grade} (${Math.round(quality.overall_score * 100)}%)\n\n`
 
     clusters.forEach((cluster, index) => {
       message += `**📦 ${cluster.label}** (${cluster.items.length} items)\n`
@@ -252,10 +303,48 @@ export default function NikigaiTest() {
     return message
   }
 
-  function getNextStep(current) {
-    const steps = Object.keys(questions)
-    const currentIndex = steps.indexOf(current)
-    return steps[currentIndex + 1] || null
+  function getNextStepId(currentStepData) {
+    // Check next_step_rules
+    if (currentStepData.next_step_rules && currentStepData.next_step_rules.length > 0) {
+      const rule = currentStepData.next_step_rules[0]
+      return rule.on_success || rule.goto || rule.go_to || null
+    }
+    return null
+  }
+
+  function handleOptionSelect(option) {
+    // Find current step
+    const currentStepData = flowData.steps.find(s => s.id === currentStep)
+
+    // Add user selection as message
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      isAI: false,
+      text: option,
+      timestamp: new Date().toLocaleTimeString()
+    }
+    setMessages(prev => [...prev, userMessage])
+
+    // Find next step based on selection
+    const nextStepRule = currentStepData.next_step_rules.find(
+      rule => rule.on_selection === option
+    )
+
+    if (nextStepRule) {
+      const nextStepId = nextStepRule.go_to || nextStepRule.goto
+      const nextStepData = flowData.steps.find(s => s.id === nextStepId)
+
+      setCurrentStep(nextStepId)
+
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: nextStepData.assistant_prompt,
+        timestamp: new Date().toLocaleTimeString(),
+        stepId: nextStepId
+      }
+      setMessages(prev => [...prev, aiMessage])
+    }
   }
 
   const handleKeyPress = (e) => {
@@ -275,7 +364,7 @@ export default function NikigaiTest() {
     )
   }
 
-  if (!sessionId) {
+  if (!sessionId || !flowData) {
     return (
       <div className="app">
         <div className="loading">
@@ -286,6 +375,11 @@ export default function NikigaiTest() {
       </div>
     )
   }
+
+  // Check if current step exists and needs options
+  const currentStepData = flowData.steps.find(s => s.id === currentStep)
+  const lastMessage = messages[messages.length - 1]
+  const showOptions = lastMessage?.hasOptions && lastMessage?.stepId === currentStep
 
   return (
     <div className="app">
@@ -330,7 +424,24 @@ export default function NikigaiTest() {
         </div>
       </main>
 
-      {questions[currentStep] && (
+      {/* Options (if step requires selection) */}
+      {showOptions && lastMessage.options && (
+        <div className="options-container">
+          {lastMessage.options.map((option, index) => (
+            <button
+              key={index}
+              className="option-button"
+              onClick={() => handleOptionSelect(option)}
+              disabled={isLoading}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Text input (if step needs text response) */}
+      {currentStepData && !showOptions && (
         <div className="input-bar">
           <textarea
             className="message-input"
