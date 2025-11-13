@@ -198,3 +198,28 @@ export async function isFlowCompleted(userId, flowId) {
     return false
   }
 }
+
+/**
+ * Check if a user has an active challenge
+ *
+ * @param {string} userId - Authenticated user ID
+ * @returns {Promise<boolean>} True if user has an active challenge
+ */
+export async function hasActiveChallenge(userId) {
+  try {
+    if (!userId) return false
+
+    const { data: activeChallenge } = await supabase
+      .from('challenge_progress')
+      .select('challenge_instance_id, status')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .limit(1)
+      .maybeSingle()
+
+    return !!activeChallenge
+  } catch (error) {
+    console.error('Error checking active challenge:', error)
+    return false
+  }
+}

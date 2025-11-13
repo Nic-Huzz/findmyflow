@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design 2 Revised: Tabbed + Swipe Magazine - Archetype Profile</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: white;
+      overflow-x: hidden;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    /* Header - sticky at top */
+    .header {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(90deg, #5e17eb 0%, #3d0f99 100%);
+      color: white;
+      padding: 15px 20px;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .archetype-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .tab.active {
+      background: white;
+      color: #5e17eb;
+    }
+
+    /* Swipe Container */
+    .swipe-container {
+      height: calc(100vh - 110px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      display: none;
+    }
+
+    .swipe-container.active {
+      display: flex;
+    }
+
+    .swipe-wrapper {
+      display: flex;
+      height: 100%;
+    }
+
+    /* Magazine Sections */
+    .magazine-section {
+      min-width: 100vw;
+      max-width: 430px;
+      height: 100%;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2rem;
+      position: relative;
+    }
+
+    /* Background variants */
+    .bg-purple {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    }
+
+    .bg-dark {
+      background: #1a1a1a;
+    }
+
+    .bg-light {
+      background: #f8f9fa;
+      color: #212529;
+    }
+
+    .bg-yellow {
+      background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+      color: #212529;
+    }
+
+    .bg-wound {
+      background: linear-gradient(135deg, #1a0a0a 0%, #3d1f1f 100%);
+    }
+
+    .bg-deep-purple {
+      background: linear-gradient(135deg, #2d0a5e 0%, #4a1589 100%);
+    }
+
+    /* Content styling */
+    .section-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .section-text {
+      font-size: 1.25rem;
+      line-height: 1.8;
+      opacity: 0.95;
+    }
+
+    .quote {
+      font-size: 1.75rem;
+      font-style: italic;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .quote-mark {
+      font-size: 5rem;
+      opacity: 0.2;
+      line-height: 0;
+      margin-bottom: 1rem;
+    }
+
+    /* Character cards in swipe */
+    .character-card-swipe {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .bg-light .character-card-swipe {
+      background: white;
+      border: 1px solid #e9ecef;
+    }
+
+    .character-icon-swipe {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+
+    .character-name-swipe {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* Image section */
+    .image-section {
+      padding: 0;
+      justify-content: flex-start;
+    }
+
+    .archetype-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .image-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 3rem 2rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    }
+
+    .archetype-tag-swipe {
+      background: rgba(255,255,255,0.95);
+      color: #d4a000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Swipe indicator */
+    .swipe-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .swipe-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .swipe-dot.active {
+      background: white;
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    .cta-button {
+      background: white;
+      color: #5e17eb;
+      border: none;
+      padding: 1.25rem 2rem;
+      border-radius: 16px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .bg-light .cta-button {
+      background: #5e17eb;
+      color: white;
+    }
+  </style>
+  <script>
+    function switchTab(tabName) {
+      // Hide all swipe containers
+      document.querySelectorAll('.swipe-container').forEach(container => {
+        container.classList.remove('active');
+      });
+
+      // Remove active class from all tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Show selected swipe container
+      document.getElementById(tabName).classList.add('active');
+
+      // Add active class to clicked tab
+      event.target.classList.add('active');
+
+      // Reset scroll to first section
+      document.getElementById(tabName).scrollLeft = 0;
+    }
+
+    // Update swipe dots on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+      const containers = document.querySelectorAll('.swipe-container');
+      containers.forEach(container => {
+        container.addEventListener('scroll', function() {
+          const sections = this.querySelectorAll('.magazine-section');
+          const scrollPosition = this.scrollLeft;
+          const sectionWidth = sections[0].offsetWidth;
+          const activeIndex = Math.round(scrollPosition / sectionWidth);
+
+          const dots = this.querySelectorAll('.swipe-dot');
+          dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeIndex);
+          });
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn">←</button>
+      <h1 class="archetype-name">Radiant Rebel</h1>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('overview-swipe')">Overview</button>
+      <button class="tab" onclick="switchTab('powers-swipe')">Powers</button>
+      <button class="tab" onclick="switchTab('patterns-swipe')">Patterns</button>
+      <button class="tab" onclick="switchTab('characters-swipe')">Characters</button>
+      <button class="tab" onclick="switchTab('vision-swipe')">Vision</button>
+    </div>
+  </div>
+
+  <!-- Overview Tab Swipe -->
+  <div id="overview-swipe" class="swipe-container active">
+    <div class="swipe-wrapper">
+      <!-- Image Section -->
+      <section class="magazine-section image-section">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #f0e7ff, #fff9e6); display: flex; align-items: center; justify-content: center; font-size: 6rem;">
+          🔥
+        </div>
+        <div class="image-overlay">
+          <span class="archetype-tag-swipe">Activator</span>
+          <h2 class="section-title">Radiant Rebel</h2>
+          <p style="font-size: 1.25rem; font-style: italic; opacity: 0.95;">Disruptive truth-teller with heart.</p>
+        </div>
+      </section>
+
+      <!-- Poetic Line -->
+      <section class="magazine-section bg-purple">
+        <div class="quote">
+          <div class="quote-mark">"</div>
+          You are fire with a heartbeat — designed to disrupt what's false and awaken what's real.
+        </div>
+      </section>
+
+      <!-- Superpower -->
+      <section class="magazine-section bg-deep-purple">
+        <div class="section-icon">✨</div>
+        <div class="section-label">Your Superpower</div>
+        <h2 class="section-title">Igniting Courage</h2>
+        <p class="section-text">
+          You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck.
+        </p>
+      </section>
+
+      <!-- North Star -->
+      <section class="magazine-section bg-light">
+        <div class="section-icon">🌟</div>
+        <div class="section-label">Your North Star</div>
+        <h2 class="section-title">Rebellion with Purpose</h2>
+        <p class="section-text">
+          Use rebellion to liberate, not just provoke. Let your why guide your wow.
+        </p>
+      </section>
+
+      <!-- The Wound -->
+      <section class="magazine-section bg-wound">
+        <div class="section-icon">🩹</div>
+        <div class="section-label">The Wound</div>
+        <h2 class="section-title">"You're too intense. Calm down."</h2>
+        <p class="section-text">
+          Your passion made you dangerous — so you learned to dim.
+        </p>
+      </section>
+    </div>
+    <div class="swipe-indicator">
+      <div class="swipe-dot active"></div>
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
+      <div class="swipe-dot"></div>
+    </div>
+  </div>
+
+  <!-- Powers Tab Swipe -->
+  <div id="powers-swipe" class="swipe-container">
+    <div class="swipe-wrapper">
+      <section class="magazine-section bg-purple">
+        <div class="section-icon">⚡</div>
+        <div class="section-label">Energetic Transmission</div>
+        <h2 class="section-title">Activating Boldness</h2>
+        <p class="section-text">
+          You electrify the space. Your energy activates boldness — like truth wants to break free through your presence.
+        </p>
+      </section>
+
+      <section class="magazine-section bg-light">
+        <div class="section-icon">🚀</div>
+        <div class="section-label">Vision in Action</div>
+        <h2 class="section-title">Sparking Revolutions</h2>
+        <p class="section-text">
+          Turning chaos into clarity, they spark revolutions with nothing but their voice.
+        </p>
+      </section>
+    </div>
+    <div class="swipe-indicator">
+      <div class="swipe-dot active"></div>
+      <div class="swipe-dot"></div>
+    </div>
+  </div>
+
+  <!-- Patterns Tab Swipe -->
+  <div id="patterns-swipe" class="swipe-container">
+    <div class="swipe-wrapper">
+      <section class="magazine-section bg-dark">
+        <div class="section-icon">🎯</div>
+        <div class="section-label">Recognition Pattern</div>
+        <h2 class="section-title">Breaking Free Moment</h2>
+        <p class="section-text">
+          People seek you when they're ready to break rules, burn masks, and step into unapologetic self-expression.
+        </p>
+      </section>
+
+      <section class="magazine-section bg-yellow">
+        <div class="section-icon">🧸</div>
+        <div class="section-label">Inner Child Desire</div>
+        <h2 class="section-title">The Revolutionary</h2>
+        <p class="section-text">
+          I wanted to lead the make-believe revolution, rally your crew, and challenge the rules just because you could.
+        </p>
+      </section>
+    </div>
+    <div class="swipe-indicator">
+      <div class="swipe-dot active"></div>
+      <div class="swipe-dot"></div>
+    </div>
+  </div>
+
+  <!-- Characters Tab Swipe -->
+  <div id="characters-swipe" class="swipe-container">
+    <div class="swipe-wrapper">
+      <section class="magazine-section bg-light">
+        <div class="section-label">Characters Like You</div>
+        <h2 class="section-title">Your Essence in Action</h2>
+        <div>
+          <div class="character-card-swipe">
+            <div class="character-icon-swipe">🎭</div>
+            <div class="character-name-swipe">Deadpool</div>
+          </div>
+          <div class="character-card-swipe">
+            <div class="character-icon-swipe">🎤</div>
+            <div class="character-name-swipe">Billie Eilish</div>
+          </div>
+          <div class="character-card-swipe">
+            <div class="character-icon-swipe">🏹</div>
+            <div class="character-name-swipe">Katniss Everdeen</div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="swipe-indicator">
+      <div class="swipe-dot active"></div>
+    </div>
+  </div>
+
+  <!-- Vision Tab Swipe -->
+  <div id="vision-swipe" class="swipe-container">
+    <div class="swipe-wrapper">
+      <section class="magazine-section bg-purple">
+        <div class="section-icon">🔮</div>
+        <div class="section-label">Poetic Vision</div>
+        <h2 class="section-title">Your Revolutionary Future</h2>
+        <p class="section-text">
+          What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary. The world isn't waiting for your perfection. It's starving for your fire.
+        </p>
+        <button class="cta-button">Explore Your Journey</button>
+      </section>
+    </div>
+    <div class="swipe-indicator">
+      <div class="swipe-dot active"></div>
+    </div>
+  </div>
+</body>
+</html>

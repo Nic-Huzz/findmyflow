@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design 2: Immersive Story - Archetype Profile</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: white;
+      min-height: 100vh;
+      max-width: 430px;
+      margin: 0 auto;
+      overflow-x: hidden;
+    }
+
+    /* Hero section with gradient */
+    .hero {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-content {
+      text-align: center;
+    }
+
+    .group-badge {
+      background: rgba(255, 255, 255, 0.25);
+      padding: 0.5rem 1.25rem;
+      border-radius: 30px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .hero .essence {
+      font-size: 1.25rem;
+      opacity: 0.95;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+
+    .scroll-indicator {
+      text-align: center;
+      margin-top: 2rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+
+    /* Section styling */
+    .section {
+      min-height: 100vh;
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .section.dark {
+      background: #1a1a1a;
+    }
+
+    .section.light {
+      background: #f8f9fa;
+      color: #212529;
+    }
+
+    .section.purple {
+      background: linear-gradient(135deg, #2d0a5e 0%, #4a1589 100%);
+    }
+
+    .section.yellow {
+      background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+      color: #212529;
+    }
+
+    .section.wound {
+      background: linear-gradient(135deg, #1a0a0a 0%, #3d1f1f 100%);
+    }
+
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .section-text {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      opacity: 0.95;
+    }
+
+    .quote {
+      font-size: 1.5rem;
+      font-style: italic;
+      line-height: 1.6;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .quote-mark {
+      font-size: 4rem;
+      opacity: 0.3;
+      line-height: 0;
+    }
+
+    .characters {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .character-card {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.25rem;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .light .character-card {
+      background: white;
+      border: 1px solid #e9ecef;
+    }
+
+    .icon-large {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta-button {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+      color: white;
+      border: none;
+      padding: 1.25rem 2rem;
+      border-radius: 16px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(94, 23, 235, 0.4);
+    }
+
+    .light .cta-button {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <section class="hero">
+    <button class="back-btn">←</button>
+    <div class="hero-content">
+      <div class="group-badge">Activator</div>
+      <h1>Radiant<br>Rebel</h1>
+      <p class="essence">Disruptive truth-teller with heart.</p>
+      <div class="scroll-indicator">↓</div>
+    </div>
+  </section>
+
+  <!-- Poetic Line -->
+  <section class="section dark">
+    <div class="quote">
+      <div class="quote-mark">"</div>
+      You are fire with a heartbeat — designed to disrupt what's false and awaken what's real.
+    </div>
+  </section>
+
+  <!-- Superpower -->
+  <section class="section purple">
+    <div class="icon-large">✨</div>
+    <div class="section-label">Your Superpower</div>
+    <div class="section-title">Igniting Courage</div>
+    <div class="section-text">
+      You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck.
+    </div>
+  </section>
+
+  <!-- North Star -->
+  <section class="section light">
+    <div class="icon-large">🌟</div>
+    <div class="section-label">Your North Star</div>
+    <div class="section-title">Rebellion with Purpose</div>
+    <div class="section-text">
+      Use rebellion to liberate, not just provoke. Let your why guide your wow.
+    </div>
+  </section>
+
+  <!-- Recognition Pattern -->
+  <section class="section dark">
+    <div class="icon-large">🎯</div>
+    <div class="section-label">When People Seek You</div>
+    <div class="section-title">Breaking Free Moment</div>
+    <div class="section-text">
+      People seek you when they're ready to break rules, burn masks, and step into unapologetic self-expression.
+    </div>
+  </section>
+
+  <!-- The Wound -->
+  <section class="section wound">
+    <div class="icon-large">🩹</div>
+    <div class="section-label">The Wound</div>
+    <div class="section-title">"You're too intense. Calm down."</div>
+    <div class="section-text">
+      Your passion made you dangerous — so you learned to dim.
+    </div>
+  </section>
+
+  <!-- Inner Child -->
+  <section class="section yellow">
+    <div class="icon-large">🧸</div>
+    <div class="section-label">Your Inner Child</div>
+    <div class="section-title">The Revolutionary</div>
+    <div class="section-text">
+      I wanted to lead the make-believe revolution, rally your crew, and challenge the rules just because you could.
+    </div>
+  </section>
+
+  <!-- Characters -->
+  <section class="section light">
+    <div class="section-label">Characters Like You</div>
+    <div class="section-title">Your Essence in Action</div>
+    <div class="characters">
+      <div class="character-card">🎭 Deadpool</div>
+      <div class="character-card">🎤 Billie Eilish</div>
+      <div class="character-card">🏹 Katniss Everdeen</div>
+    </div>
+  </section>
+
+  <!-- Vision -->
+  <section class="section purple">
+    <div class="icon-large">🔮</div>
+    <div class="section-label">Poetic Vision</div>
+    <div class="section-text">
+      What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary. The world isn't waiting for your perfection. It's starving for your fire.
+    </div>
+    <button class="cta-button">Start Your Journey</button>
+  </section>
+</body>
+</html>

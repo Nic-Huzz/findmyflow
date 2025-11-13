@@ -1,0 +1,223 @@
+{
+  "flow_name": "Nervous System Safety Boundaries",
+  "version": "1.0.0",
+  "mode": "SCRIPT_MODE",
+  "metadata": {
+    "name": "Nervous System Safety Boundaries Mapper",
+    "description": "Uses sway testing to identify subconscious safety edges around ambition, impact, and income."
+  },
+  "steps": [
+    {
+      "step": "stage1_intro",
+      "step_order_index": 1.0,
+      "required_inputs": ["{{user_name}}"],
+      "prompt": "Let's use your body to access your subconscious, {{user_name}}.\n\nThis is called the Sway Test — a way to ask your body yes/no questions using subconscious processes.\n\n🧠 Why do we want to ask our subconscious?\n\nThe conscious mind processes ~50 bits of information every second.\nThe subconscious processes ~11 million bits of information every second.\n\nAs a result our subconscious is 220,000 times more knowledgeable than our conscious mind.\n\nSway testing is a technique to bypass the mind's stories and ask what's really true.",
+      "options": [
+        { "label": "Tell me how it works", "value": "continue" }
+      ],
+      "tag_as": "stage1_intro_acknowledged",
+      "store_as": "stage1_intro_complete",
+      "instructions_to_gpt": "Wait for acknowledgment before proceeding."
+    },
+    {
+      "step": "stage2_calibration",
+      "step_order_index": 2.0,
+      "required_inputs": ["stage1_intro_complete"],
+      "prompt": "Instructions:\n\n• Stand up straight with your feet hip-width apart\n• Say: \"Show me a YES\" — observe which way you sway (could be forward or back)\n• Say: \"Show me a NO\" — notice the contrast\n\n🛑 Important: There's no right direction. Your body will show you a unique signal. Let it calibrate naturally.\n\n📹 Watch this video for a demonstration: https://youtu.be/UXO1mM26Ui0\n\nLet me know which way you swayed for 'Yes' and which way for 'No'.",
+      "tag_as": "calibration_complete_response",
+      "store_as": "stage2_calibration_complete",
+      "instructions_to_gpt": "Wait for user confirmation that they've completed the calibration. Accept responses like 'done', 'ready', 'calibrated', or similar."
+    },
+    {
+      "step": "stage3_vision_q1",
+      "step_order_index": 3.0,
+      "required_inputs": ["stage2_calibration_complete"],
+      "prompt": "Perfect! Now let's get clear on what you're building toward.\n\nQuestion 1 of 4:\n\nIn your most audacious ambitions, how many people do you hope to impact with your work?",
+      "options": [
+        { "label": "100,000+", "value": "100000+" },
+        { "label": "10,000+", "value": "10000+" },
+        { "label": "1,000+", "value": "1000+" },
+        { "label": "100+", "value": "100+" }
+      ],
+      "tag_as": "impact_goal",
+      "store_as": "stage3_q1_complete",
+      "instructions_to_gpt": "Store the selected impact level."
+    },
+    {
+      "step": "stage3_vision_q2",
+      "step_order_index": 4.0,
+      "required_inputs": ["stage3_q1_complete"],
+      "prompt": "Question 2 of 4:\n\nIn your most audacious ambitions, how much would you be earning per year?",
+      "options": [
+        { "label": "$1,000,000+", "value": "1000000+" },
+        { "label": "$500,000+", "value": "500000+" },
+        { "label": "$100,000+", "value": "100000+" }
+      ],
+      "tag_as": "income_goal",
+      "store_as": "stage3_q2_complete",
+      "instructions_to_gpt": "Store the selected income level."
+    },
+    {
+      "step": "stage3_vision_q3",
+      "step_order_index": 5.0,
+      "required_inputs": ["stage3_q2_complete"],
+      "prompt": "Question 3 of 4:\n\nWhat positive change does your ambition create for others?",
+      "tag_as": "positive_change",
+      "store_as": "stage3_q3_complete",
+      "instructions_to_gpt": "Wait for open-ended response. Briefly acknowledge their mission before continuing."
+    },
+    {
+      "step": "stage3_vision_q4",
+      "step_order_index": 6.0,
+      "required_inputs": ["stage3_q3_complete"],
+      "prompt": "Question 4 of 4:\n\nWhere are you struggling most with your ambition at the moment?",
+      "tag_as": "struggle_area",
+      "store_as": "stage3_q4_complete",
+      "instructions_to_gpt": "Wait for open-ended response. Validate their honesty and transition to the triage phase."
+    },
+    {
+      "step": "stage4_triage_intro",
+      "step_order_index": 7.0,
+      "required_inputs": ["stage3_q4_complete"],
+      "prompt": "Now let's see where your system feels safe — and where it contracts.\n\nI'm going to give you 5 statements to test using the sway test.\n\nSay each one out loud, notice your body's response, and let me know: YES or NO?",
+      "options": [
+        { "label": "Ready", "value": "ready" }
+      ],
+      "tag_as": "stage4_triage_intro_acknowledged",
+      "store_as": "stage4_triage_intro_complete",
+      "instructions_to_gpt": "Wait for readiness confirmation."
+    },
+    {
+      "step": "stage4_triage_1",
+      "step_order_index": 8.0,
+      "required_inputs": ["stage4_triage_intro_complete", "{{impact_goal}}"],
+      "prompt": "Statement 1 of 5:\n\n\"I feel safe being seen by {{impact_goal}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen",
+      "store_as": "stage4_triage_1_complete",
+      "instructions_to_gpt": "Record the response. No judgment or analysis yet."
+    },
+    {
+      "step": "stage4_triage_2",
+      "step_order_index": 9.0,
+      "required_inputs": ["stage4_triage_1_complete", "{{income_goal}}"],
+      "prompt": "Statement 2 of 5:\n\n\"I feel safe earning over ${{income_goal}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning",
+      "store_as": "stage4_triage_2_complete",
+      "instructions_to_gpt": "Record the response."
+    },
+    {
+      "step": "stage4_triage_3",
+      "step_order_index": 10.0,
+      "required_inputs": ["stage4_triage_2_complete"],
+      "prompt": "Statement 3 of 5:\n\n\"I believe I am safe to pursue my identified ambition.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_pursuing",
+      "store_as": "stage4_triage_3_complete",
+      "instructions_to_gpt": "Record the response."
+    },
+    {
+      "step": "stage4_triage_4",
+      "step_order_index": 11.0,
+      "required_inputs": ["stage4_triage_3_complete"],
+      "prompt": "Statement 4 of 5:\n\n\"What I'm struggling with, I am also subconsciously self-sabotaging.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_self_sabotage",
+      "store_as": "stage4_triage_4_complete",
+      "instructions_to_gpt": "Record the response."
+    },
+    {
+      "step": "stage4_triage_5",
+      "step_order_index": 12.0,
+      "required_inputs": ["stage4_triage_4_complete"],
+      "prompt": "Statement 5 of 5:\n\n\"Part of me feels unsafe with the vision of my ambitions.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_feels_unsafe",
+      "store_as": "stage4_triage_5_complete",
+      "instructions_to_gpt": "Record the response and prepare to transition to personalized belief testing."
+    },
+    {
+      "step": "stage5_contracts_intro",
+      "step_order_index": 13.0,
+      "required_inputs": ["stage4_triage_5_complete"],
+      "prompt": "Now let's go deeper.\n\nI'm going to give you 5-7 **safety contracts** to test — these are fears your nervous system may be holding to keep you safe.\n\nThese are more accurate than testing empowering beliefs, because we're going straight to the source: what your system is protecting you from.\n\nEach contract follows an \"If X, then Y\" format. Test each one and notice if your body says YES (this fear is active) or NO (this isn't a concern).",
+      "options": [
+        { "label": "Ready", "value": "ready" }
+      ],
+      "tag_as": "stage5_contracts_intro_acknowledged",
+      "store_as": "stage5_contracts_intro_complete",
+      "instructions_to_gpt": "Prepare to deliver personalized safety contracts (fear tests) based on selectSafetyContracts() logic from nervousSystemBeliefs.js"
+    },
+    {
+      "step": "stage5_contract_test_dynamic",
+      "step_order_index": 14.0,
+      "required_inputs": ["stage5_contracts_intro_complete"],
+      "prompt": "{{GENERATE_BELIEF_TESTS}}",
+      "tag_as": "belief_test_results",
+      "store_as": "stage5_contract_tests_complete",
+      "instructions_to_gpt": "Use the selectSafetyContracts() function from nervousSystemBeliefs.js to generate 5-7 personalized safety contracts (fear tests). Present them one at a time or as a batch. Collect YES/NO responses and any reflections the user shares. Store all results in belief_test_results as an object/array."
+    },
+    {
+      "step": "stage6_mirror_intro",
+      "step_order_index": 15.0,
+      "required_inputs": ["stage5_contract_tests_complete"],
+      "prompt": "Let me mirror back what I'm noticing about your nervous system's protective patterns...",
+      "options": [
+        { "label": "I'm ready", "value": "ready" }
+      ],
+      "tag_as": "stage6_mirror_intro_acknowledged",
+      "store_as": "stage6_mirror_intro_complete",
+      "instructions_to_gpt": "Acknowledge readiness to receive AI-powered personalized reflection."
+    },
+    {
+      "step": "stage6_mirror_reflection",
+      "step_order_index": 16.0,
+      "required_inputs": [
+        "stage6_mirror_intro_complete",
+        "{{impact_goal}}",
+        "{{income_goal}}",
+        "{{struggle_area}}",
+        "{{triage_safe_being_seen}}",
+        "{{triage_safe_earning}}",
+        "{{triage_safe_pursuing}}",
+        "{{triage_self_sabotage}}",
+        "{{triage_feels_unsafe}}",
+        "{{belief_test_results}}"
+      ],
+      "prompt": "{{MIRROR_PATTERN}}",
+      "tag_as": "pattern_mirrored",
+      "store_as": "stage6_mirror_complete",
+      "instructions_to_gpt": "Generate a personalized reflection based on all collected data:\n\n1. Name where their system feels safe vs. where it contracts (use triage results)\n2. Identify the most limiting belief that showed up (from belief tests)\n3. Suggest what deeper fear may be protecting them from expansion\n4. Name the pattern/archetype if applicable (e.g., 'The Good Soldier', 'The Hustling Healer')\n5. Explain what needs to be rewired\n\nUse compassionate, insightful language. Make it feel personalized and deeply seen."
+    },
+    {
+      "step": "stage6_close",
+      "step_order_index": 17.0,
+      "required_inputs": ["stage6_mirror_complete"],
+      "prompt": "The truth is: change doesn't have to be hard.\n\nIt's just that most people were never taught the right processes.\n\nYou're learning how to shift at the root — gently and powerfully.\n\nWould you like to shift this?",
+      "options": [
+        { "label": "Yes, I'm ready", "value": "yes" },
+        { "label": "Not yet", "value": "no" }
+      ],
+      "tag_as": "shift_consent",
+      "store_as": "stage6_close_complete",
+      "save_to_db": true,
+      "instructions_to_gpt": "If yes, celebrate their readiness and provide next steps (e.g., link to program, booking, resources). If no, honor their timing and offer reassurance that the awareness alone is powerful."
+    }
+  ]
+}

@@ -328,6 +328,11 @@
   transform: scale(1.05);
 }
 
+/* Override .bg-purple * rule for button text */
+.bg-purple .cta-button {
+  color: #5e17eb !important;
+}
+
 .bg-light .cta-button {
   background: #5e17eb;
   color: white;

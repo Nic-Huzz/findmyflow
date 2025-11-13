@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protective Archetype Profile - Perfectionist</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #000;
+      color: white;
+      overflow-x: hidden;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    /* Header - sticky at top */
+    .header {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 0 0 24px 24px;
+      box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+      z-index: 100;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .archetype-name {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .tab.active {
+      background: white;
+      color: #5e17eb;
+    }
+
+    /* Tab Content Container */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Magazine Sections - Full Screen */
+    .magazine-section {
+      min-height: calc(100vh - 110px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2rem;
+      position: relative;
+    }
+
+    /* Background variants */
+    .bg-purple {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    }
+
+    .bg-dark {
+      background: #1a1a1a;
+    }
+
+    .bg-light {
+      background: #f8f9fa;
+      color: #212529;
+    }
+
+    .bg-orange {
+      background: linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%);
+      color: #212529;
+    }
+
+    .bg-wound {
+      background: linear-gradient(135deg, #1a0a0a 0%, #3d1f1f 100%);
+    }
+
+    .bg-deep-purple {
+      background: linear-gradient(135deg, #2d0a5e 0%, #4a1589 100%);
+    }
+
+    /* Content styling */
+    .section-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label {
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .section-text {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      opacity: 0.95;
+    }
+
+    .quote {
+      font-size: 1.5rem;
+      font-style: italic;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .quote-mark {
+      font-size: 4rem;
+      opacity: 0.3;
+      line-height: 0;
+      margin-bottom: 1rem;
+    }
+
+    /* Image section */
+    .image-section {
+      padding: 0;
+      justify-content: flex-start;
+    }
+
+    .archetype-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .image-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 3rem 2rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    }
+
+    .archetype-tag-mag {
+      background: rgba(255,255,255,0.95);
+      color: #e67e22;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: inline-block;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(10px);
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      text-align: center;
+      margin-top: 2rem;
+      animation: bounce 2s infinite;
+      font-size: 1.5rem;
+      opacity: 0.6;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+
+    .cta-button {
+      background: white;
+      color: #5e17eb;
+      border: none;
+      padding: 1.25rem 2rem;
+      border-radius: 16px;
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+    }
+
+    .bg-light .cta-button,
+    .bg-orange .cta-button {
+      background: #5e17eb;
+      color: white;
+    }
+  </style>
+  <script>
+    function switchTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      // Remove active class from all tabs
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Show selected tab content
+      document.getElementById(tabName).classList.add('active');
+
+      // Add active class to clicked tab
+      event.target.classList.add('active');
+
+      // Scroll to top when switching tabs
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</head>
+<body>
+  <div class="header">
+    <div class="header-top">
+      <button class="back-btn">←</button>
+      <h1 class="archetype-name">Perfectionist</h1>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('overview')">Overview</button>
+      <button class="tab" onclick="switchTab('pattern')">The Pattern</button>
+      <button class="tab" onclick="switchTab('freedom')">Breaking Free</button>
+    </div>
+  </div>
+
+  <!-- Overview Tab -->
+  <div id="overview" class="tab-content active">
+    <!-- Image Section -->
+    <section class="magazine-section image-section">
+      <img src="../public/images/archetypes/lead-magnet-protective/perfectionist.png" alt="Perfectionist" class="archetype-image">
+      <div class="image-overlay">
+        <span class="archetype-tag-mag">Protective</span>
+        <h2 class="section-title">Perfectionist</h2>
+        <p style="font-size: 1.25rem; font-style: italic; opacity: 0.95;">This archetype developed to protect you from criticism and failure.</p>
+        <div class="scroll-indicator">↓</div>
+      </div>
+    </section>
+
+    <!-- Summary Quote -->
+    <section class="magazine-section bg-dark">
+      <div class="quote">
+        <div class="quote-mark">"</div>
+        This archetype developed to protect you from criticism and failure.
+      </div>
+      <div class="scroll-indicator">↓</div>
+    </section>
+
+    <!-- Purpose -->
+    <section class="magazine-section bg-deep-purple">
+      <div class="section-icon">🛡️</div>
+      <div class="section-label">Your Protection Pattern</div>
+      <h2 class="section-title">The Shield You Built</h2>
+      <p class="section-text">
+        This protective archetype emerged when you needed safety. It kept you safe from criticism, judgment, and failure. It served you once — but it may no longer serve who you're becoming.
+      </p>
+    </section>
+  </div>
+
+  <!-- Pattern Tab -->
+  <div id="pattern" class="tab-content">
+    <section class="magazine-section bg-wound">
+      <div class="section-icon">🔍</div>
+      <div class="section-label">How It Shows Up</div>
+      <h2 class="section-title">The Whisper Inside</h2>
+      <p class="section-text">
+        It whispers: "If I can just get it perfect, then I'll be safe from judgment." But perfectionism often becomes procrastination in disguise — keeping you stuck in endless prep mode. Exhausting, isn't it?
+      </p>
+      <div class="scroll-indicator">↓</div>
+    </section>
+
+    <section class="magazine-section bg-orange">
+      <div class="section-icon">💭</div>
+      <div class="section-label">The Hidden Cost</div>
+      <h2 class="section-title">What It Really Does</h2>
+      <p class="section-text">
+        While perfectionism promises safety from criticism, it often delivers something else: paralysis, procrastination, and the constant fear that you're not ready yet. It keeps you preparing instead of living.
+      </p>
+    </section>
+  </div>
+
+  <!-- Freedom Tab -->
+  <div id="freedom" class="tab-content">
+    <section class="magazine-section bg-light">
+      <div class="section-icon">🦋</div>
+      <div class="section-label">Breaking Free</div>
+      <h2 class="section-title">Your Path Forward</h2>
+      <p class="section-text">
+        Remember: done is better than perfect. Progress over perfection. Your essence is waiting to emerge.
+      </p>
+      <div class="scroll-indicator" style="color: #5e17eb;">↓</div>
+    </section>
+
+    <section class="magazine-section bg-purple">
+      <div class="section-icon">✨</div>
+      <div class="section-label">Your Invitation</div>
+      <h2 class="section-title">Step Into Your Essence</h2>
+      <p class="section-text">
+        What if "good enough" was actually perfect? What if your imperfect action mattered more than your perfect plan? Your essence doesn't need perfection to shine — it just needs permission.
+      </p>
+      <button class="cta-button">Explore Your Essence Archetype</button>
+    </section>
+  </div>
+</body>
+</html>
