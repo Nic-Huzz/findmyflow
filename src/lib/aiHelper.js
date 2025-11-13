@@ -76,7 +76,7 @@ Make it personal, warm, and deeply insightful. Start with "Here's what I'm notic
     ];
 
     const response = await sendMessage(messages, {
-      model: 'claude-3-5-sonnet-20241022',
+      model: 'claude-3-haiku-20240307',
       max_tokens: 2048,
       system: systemPrompt
     });
@@ -164,7 +164,7 @@ export async function testAIConnection() {
     ];
 
     const response = await sendMessage(messages, {
-      model: 'claude-3-5-sonnet-20241022',
+      model: 'claude-3-haiku-20240307',
       max_tokens: 50
     });
 

@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { messages, model = 'claude-3-5-sonnet-20241022', max_tokens = 1024, system } = req.body
+    const { messages, model = 'claude-3-haiku-20240307', max_tokens = 1024, system } = req.body
 
     // Validate required fields
     if (!messages || !Array.isArray(messages)) {
