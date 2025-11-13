@@ -4,6 +4,7 @@ import App from './App'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
 import Challenge from './Challenge'
+import NikigaiTest from './NikigaiTest'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import './App.css'
@@ -31,6 +32,11 @@ function AppRouter() {
           <Route path="/7-day-challenge" element={
             <AuthGate>
               <Challenge />
+            </AuthGate>
+          } />
+          <Route path="/nikigai-test" element={
+            <AuthGate>
+              <NikigaiTest />
             </AuthGate>
           } />
         </Routes>

@@ -1,21 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient.js'
 import { extractTags } from './lib/tagExtraction.js'
 import { generateClusters, generateClusterLabel, calculateClusterQualityMetrics } from './lib/clustering.js'
 import { processTagWeights, extractBulletPoints } from './lib/weighting.js'
+import { useAuth } from './auth/AuthProvider'
 
 /**
- * Nikigai Test Page
- * Simple interface to test the complete Nikigai flow
+ * Nikigai Flow - Conversational Chat Interface
+ * Discover your unique combination of skills, passions, and purpose
  */
 export default function NikigaiTest() {
+  const { user } = useAuth()
   const [sessionId, setSessionId] = useState(null)
   const [currentStep, setCurrentStep] = useState('2.0')
-  const [response, setResponse] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [clusters, setClusters] = useState(null)
+  const [messages, setMessages] = useState([])
+  const [inputText, setInputText] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [allResponses, setAllResponses] = useState([])
   const [error, setError] = useState(null)
+  const messagesEndRef = useRef(null)
 
   // Sample questions (from v2.2 flow)
   const questions = {
@@ -43,6 +47,11 @@ export default function NikigaiTest() {
     initSession()
   }, [])
 
+  // Auto-scroll to bottom
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
+
   async function initSession() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -67,6 +76,17 @@ export default function NikigaiTest() {
 
       setSessionId(data.id)
       console.log('✅ Session created:', data.id)
+
+      // Add initial AI message
+      const firstQuestion = questions['2.0']
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: firstQuestion.prompt,
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages([aiMessage])
+
     } catch (err) {
       console.error('Error creating session:', err)
       setError(err.message)
@@ -74,32 +94,36 @@ export default function NikigaiTest() {
   }
 
   async function handleSubmit() {
-    if (!response.trim()) {
-      alert('Please enter a response')
+    if (!inputText.trim() || !sessionId || isLoading) {
       return
     }
 
-    if (!sessionId) {
-      alert('Session not initialized. Please refresh.')
-      return
-    }
+    const trimmedInput = inputText.trim()
+    setIsLoading(true)
 
-    setLoading(true)
-    setError(null)
+    // Add user message
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      isAI: false,
+      text: trimmedInput,
+      timestamp: new Date().toLocaleTimeString()
+    }
+    setMessages(prev => [...prev, userMessage])
+    setInputText('')
 
     try {
       const { data: { user } } = await supabase.auth.getUser()
 
       // Step 1: Extract tags
       console.log('🔍 Extracting tags...')
-      const tags = await extractTags(response, {
+      const tags = await extractTags(trimmedInput, {
         step_id: currentStep,
         store_as: questions[currentStep].store_as
       })
       console.log('✅ Tags extracted:', tags)
 
       // Step 2: Count bullets
-      const bullets = extractBulletPoints(response)
+      const bullets = extractBulletPoints(trimmedInput)
       console.log('📝 Bullets found:', bullets.length)
 
       // Step 3: Save response to Supabase
@@ -111,7 +135,7 @@ export default function NikigaiTest() {
           step_id: currentStep,
           step_order_index: parseInt(currentStep.replace('.', '')),
           question_text: questions[currentStep].prompt,
-          response_raw: response,
+          response_raw: trimmedInput,
           bullet_count: bullets.length,
           tags_extracted: tags
         })
@@ -156,29 +180,76 @@ export default function NikigaiTest() {
         const qualityMetrics = calculateClusterQualityMetrics(labeledClusters)
         console.log('📊 Quality metrics:', qualityMetrics)
 
-        setClusters({
-          clusters: labeledClusters,
-          quality: qualityMetrics
-        })
+        // Add clusters as AI message
+        const clusterMessage = formatClustersMessage(labeledClusters, qualityMetrics)
+        const aiMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          text: clusterMessage,
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, aiMessage])
 
         console.log('✅ Clusters generated:', labeledClusters.length)
       }
 
-      // Step 6: Clear response and move to next step
-      setResponse('')
+      // Step 6: Move to next step
       const nextStep = getNextStep(currentStep)
       if (nextStep) {
         setCurrentStep(nextStep)
+
+        // Add next question as AI message
+        const nextQuestion = questions[nextStep]
+        const aiMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          text: nextQuestion.prompt,
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, aiMessage])
       } else {
-        alert('Flow complete! 🎉')
+        // Flow complete
+        const completionMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          kind: 'completion',
+          text: "🎉 Congratulations! You've completed the Nikigai discovery flow. Your unique skill clusters have been identified and saved.",
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, completionMessage])
       }
 
     } catch (err) {
       console.error('Error:', err)
-      setError(err.message)
+      const errorMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: `❌ Sorry, there was an error: ${err.message}. Please try again.`,
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages(prev => [...prev, errorMessage])
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
+  }
+
+  function formatClustersMessage(clusters, quality) {
+    let message = "✨ **Your Skill Clusters Are Emerging:**\n\n"
+    message += `**Quality Score:** ${quality.grade} (${Math.round(quality.overall_score * 100)}%)\n`
+    message += `Coherence: ${Math.round(quality.coherence * 100)}% | Distinctness: ${Math.round(quality.distinctness * 100)}% | Balance: ${Math.round(quality.balance * 100)}%\n\n`
+
+    clusters.forEach((cluster, index) => {
+      message += `**📦 ${cluster.label}** (${cluster.items.length} items)\n`
+      cluster.items.slice(0, 3).forEach(item => {
+        message += `• ${item.text}\n`
+      })
+      if (cluster.items.length > 3) {
+        message += `  _...and ${cluster.items.length - 3} more_\n`
+      }
+      message += '\n'
+    })
+
+    return message
   }
 
   function getNextStep(current) {
@@ -187,113 +258,98 @@ export default function NikigaiTest() {
     return steps[currentIndex + 1] || null
   }
 
-  if (!sessionId && !error) {
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSubmit()
+    }
+  }
+
+  if (error) {
     return (
-      <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
-        <h2>Initializing Nikigai Test...</h2>
-        <p>Creating session...</p>
+      <div className="app">
+        <div className="error">
+          {error}
+        </div>
+      </div>
+    )
+  }
+
+  if (!sessionId) {
+    return (
+      <div className="app">
+        <div className="loading">
+          <div className="typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div style={{ padding: '40px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1>Nikigai AI Test</h1>
-      <p style={{ color: '#666', marginBottom: '30px' }}>
-        Session ID: {sessionId}
-      </p>
+    <div className="app">
+      <header className="header">
+        <h1>Nikigai Discovery</h1>
+        <p>Uncover your unique combination of skills, passions, and purpose</p>
+      </header>
 
-      {error && (
-        <div style={{ background: '#fee', padding: '15px', marginBottom: '20px', borderRadius: '8px' }}>
-          <strong>Error:</strong> {error}
-        </div>
-      )}
-
-      {/* Question */}
-      <div style={{ marginBottom: '30px' }}>
-        <h2 style={{ fontSize: '20px', marginBottom: '15px' }}>
-          Step {currentStep}
-        </h2>
-        <div style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6', marginBottom: '20px' }}>
-          {questions[currentStep]?.prompt || 'No more questions'}
-        </div>
-      </div>
-
-      {/* Response Input */}
-      {questions[currentStep] && (
-        <>
-          <textarea
-            value={response}
-            onChange={(e) => setResponse(e.target.value)}
-            placeholder="Enter your response here (use bullet points with • or - or numbers)"
-            rows={8}
-            style={{
-              width: '100%',
-              padding: '12px',
-              fontSize: '16px',
-              borderRadius: '8px',
-              border: '1px solid #ddd',
-              marginBottom: '15px',
-              fontFamily: 'inherit'
-            }}
-          />
-
-          <button
-            onClick={handleSubmit}
-            disabled={loading || !response.trim()}
-            style={{
-              padding: '12px 24px',
-              fontSize: '16px',
-              background: loading ? '#ccc' : '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: loading ? 'not-allowed' : 'pointer'
-            }}
-          >
-            {loading ? 'Processing...' : 'Submit'}
-          </button>
-        </>
-      )}
-
-      {/* Clusters Display */}
-      {clusters && (
-        <div style={{ marginTop: '40px', padding: '20px', background: '#f9f9f9', borderRadius: '8px' }}>
-          <h3>✨ Skill Clusters Emerging:</h3>
-
-          <div style={{ marginBottom: '15px', fontSize: '14px', color: '#666' }}>
-            Quality: {clusters.quality.grade} ({Math.round(clusters.quality.overall_score * 100)}%)
-            <br />
-            Coherence: {Math.round(clusters.quality.coherence * 100)}%
-            | Distinctness: {Math.round(clusters.quality.distinctness * 100)}%
-            | Balance: {Math.round(clusters.quality.balance * 100)}%
-          </div>
-
-          {clusters.clusters.map((cluster, index) => (
-            <div key={index} style={{ marginBottom: '20px', padding: '15px', background: 'white', borderRadius: '8px' }}>
-              <h4 style={{ margin: '0 0 10px 0' }}>
-                📦 {cluster.label} ({cluster.items.length} items)
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: '20px' }}>
-                {cluster.items.slice(0, 5).map((item, i) => (
-                  <li key={i} style={{ marginBottom: '5px' }}>{item.text}</li>
-                ))}
-                {cluster.items.length > 5 && (
-                  <li style={{ color: '#999' }}>+ {cluster.items.length - 5} more...</li>
+      <main className="chat-container">
+        <div className="messages">
+          {messages.map(message => (
+            <div key={message.id} className={`message ${message.isAI ? 'ai' : 'user'}`}>
+              <div className="bubble">
+                {message.kind === 'completion' ? (
+                  <div className="text">
+                    {message.text}
+                    <div style={{ marginTop: 8 }}>
+                      <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
+                        Return to your profile
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text">{message.text}</div>
                 )}
-              </ul>
+                <div className="timestamp">{message.timestamp}</div>
+              </div>
             </div>
           ))}
+
+          {isLoading && (
+            <div className="message ai">
+              <div className="bubble">
+                <div className="typing-indicator">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
+        </div>
+      </main>
+
+      {questions[currentStep] && (
+        <div className="input-bar">
+          <textarea
+            className="message-input"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Share your thoughts..."
+            disabled={isLoading}
+            rows={1}
+          />
+          <button
+            className="send-button"
+            onClick={handleSubmit}
+            disabled={isLoading || !inputText.trim()}
+          >
+            Send
+          </button>
         </div>
       )}
-
-      {/* Progress */}
-      <div style={{ marginTop: '40px', padding: '15px', background: '#f0f0f0', borderRadius: '8px' }}>
-        <h4 style={{ margin: '0 0 10px 0' }}>Progress:</h4>
-        <div>Responses: {allResponses.length}</div>
-        <div>Current Step: {currentStep}</div>
-        <div>Steps Remaining: {Object.keys(questions).length - Object.keys(questions).indexOf(currentStep) - 1}</div>
-      </div>
     </div>
   )
 }

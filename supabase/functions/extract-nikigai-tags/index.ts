@@ -94,7 +94,7 @@ serve(async (req) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-haiku-20240307',
         max_tokens: 1024,
         messages: [{
           role: 'user',
@@ -105,8 +105,11 @@ serve(async (req) => {
 
     if (!claudeResponse.ok) {
       const errorText = await claudeResponse.text()
-      console.error('Claude API error:', errorText)
-      throw new Error(`Claude API error: ${claudeResponse.status}`)
+      console.error('Claude API error status:', claudeResponse.status)
+      console.error('Claude API error body:', errorText)
+      console.error('API key present:', !!ANTHROPIC_API_KEY)
+      console.error('API key length:', ANTHROPIC_API_KEY?.length)
+      throw new Error(`Claude API error ${claudeResponse.status}: ${errorText}`)
     }
 
     const claudeData = await claudeResponse.json()
@@ -143,7 +146,7 @@ serve(async (req) => {
       JSON.stringify({
         tags: completeTags,
         raw_response: extractedText,
-        model: 'claude-sonnet-4-20250514'
+        model: 'claude-3-haiku-20240307'
       }),
       {
         headers: {
