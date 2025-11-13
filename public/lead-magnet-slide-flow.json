@@ -9,7 +9,10 @@
     {
       "step": "lead_q1_intro_name",
       "step_order_index": 1.0,
-      "prompt": "Hey I'm Alfred, an AI designed to help you find your flow.\n\nIf you're someone who:\n- Believes you're here to make a positive impact\n- You're keen to scale your impact\n- And you believe in the universe\n\nThen you'll love what we're about to do.\n\nTo start, what do I call you?",
+      "prompt": "Welcome!🌞 I’m Zarlo 👋🏼\n\nHave you ever felt like you were made for more?\n\nI believe you were.\n\nI believe you were made to flow like a river—to move with purpose, to nourish the world, to make a positive impact.\n\nI believe when you live from this place, the universe creates a current to support you.\n\nI call this your flow.\n\nIf you’re feeling stuck - like your flow is hitting a river bank, this site is design to help so you can amplify your impact.\n\nIf you believe you’re here to make a difference and trust the universe—let’s begin.\n\nWhat do I call you?",
+      "options": [
+        { "label": "Yes, let's go!", "value": "yes" }
+      ],
       "tag_as": "user_name",
       "store_as": "lead_q1_name_complete",
       "instructions_to_gpt": "Wait for short name. Store exactly as provided. Do not proceed until captured."
@@ -18,7 +21,7 @@
       "step": "lead_q2_essence_intro",
       "step_order_index": 2.0,
       "required_inputs": ["lead_q1_name_complete"],
-      "prompt": "We'll start by discovering your Essence Archetype — who you naturally are when fear isn't driving.\n\nYour essence is the real you, the version of yourself that feels most alive and authentic.\n\nWhich of these feels most like the real you?",
+      "prompt": "Perfect, {{user_name}}.\n\nHere's what I've learned: every river has a natural current.\n\nA direction it flows most powerfully. A way it serves the world most naturally.\n\nThis is your essence—the unique way your energy moves when nothing blocks it.\n\nThere are 8 Essence Archetypes. Each one flows in a unique way to create its impact.\n\nOne will resonate as the version of you that's most alive and authentic.\n\nWhen you serve from this place, you're at your most impactful and magnetic.\n\nSwipe right on the ones that resonate. Left on the ones that don't.",
       "options": [
         { "label": "Yes, let's go!", "value": "yes" }
       ],
@@ -51,7 +54,7 @@
       "step": "lead_q5_protective_intro",
       "step_order_index": 5.0,
       "required_inputs": ["lead_q4_essence_reflection_complete"],
-      "prompt": "Now let's identify what's been blocking you from living as your essence.\n\nWhen it comes to your ambitions, you likely have protective patterns — brilliant but outdated behaviours that keep you safe from failure, rejection, or judgment.\n\nWhich protective patterns sound familiar?",
+      "prompt": "Now {{user_name}}, let's explore what's been blocking your flow.\n\nThese are protective patterns you developed when you were younger to keep yourself safe from failure, rejection, or judgement.\n\nThe Perfectionist. The People Pleaser. The Controller. The Performer. The Ghost.\n\nThey were so effective they've now become the thing blocking you from sharing your {{essence_archetype}} gifts with the world.\n\nLet's identify which one is showing up most in the pursuit of your ambitions.\n\nSwipe right on the ones that sound most familiar. Left on the ones that don't.",
       "options": [
         { "label": "Yes, let's go!", "value": "yes" }
       ],
