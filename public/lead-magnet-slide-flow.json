@@ -9,10 +9,7 @@
     {
       "step": "lead_q1_intro_name",
       "step_order_index": 1.0,
-      "prompt": "Welcome!🌞 I’m Zarlo 👋🏼\n\nHave you ever felt like you were made for more?\n\nI believe you were.\n\nI believe you were made to flow like a river—to move with purpose, to nourish the world, to make a positive impact.\n\nI believe when you live from this place, the universe creates a current to support you.\n\nI call this your flow.\n\nIf you’re feeling stuck - like your flow is hitting a river bank, this site is design to help so you can amplify your impact.\n\nIf you believe you’re here to make a difference and trust the universe—let’s begin.\n\nWhat do I call you?",
-      "options": [
-        { "label": "Yes, let's go!", "value": "yes" }
-      ],
+      "prompt": "Welcome!🌞 I'm Zarlo 👋🏼\n\nHave you ever felt like you were made for more?\n\nI believe you were.\n\nI believe you were made to flow like a river—to move with purpose, to nourish the world, to make a positive impact.\n\nI believe when you live from this place, the universe creates a current to support you.\n\nI call this your flow.\n\nIf you're feeling stuck - like your flow is hitting a river bank, this site is designed to help you re-find your flow so you can amplify your impact.\n\nIf you believe you're here to make a difference and trust the universe—let's begin.\n\nWhat do I call you?",
       "tag_as": "user_name",
       "store_as": "lead_q1_name_complete",
       "instructions_to_gpt": "Wait for short name. Store exactly as provided. Do not proceed until captured."
