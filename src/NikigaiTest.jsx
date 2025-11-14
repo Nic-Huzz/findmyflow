@@ -139,7 +139,8 @@ export default function NikigaiTest() {
           question_text: currentStepData.assistant_prompt,
           response_raw: trimmedInput,
           bullet_count: bullets.length,
-          tags_extracted: tags
+          tags_extracted: tags,
+          store_as: currentStepData.store_as // Add store_as for clustering
         })
         .select()
         .single()
@@ -211,11 +212,19 @@ export default function NikigaiTest() {
     try {
       // Get responses to cluster from
       const sourceFields = postprocess.tag_from
+      console.log('🔍 Looking for responses with store_as in:', sourceFields)
+      console.log('🔍 All responses store_as values:', responses.map(r => r.store_as))
+
       const relevantResponses = responses.filter(r =>
         sourceFields.some(field => r.store_as === field || field.includes('*'))
       )
 
       console.log('📦 Clustering from', relevantResponses.length, 'responses')
+
+      if (relevantResponses.length === 0) {
+        console.warn('⚠️ No relevant responses found for clustering!')
+        throw new Error('No responses found for clustering')
+      }
 
       // Extract items for clustering
       const items = relevantResponses.flatMap(resp =>
@@ -226,6 +235,14 @@ export default function NikigaiTest() {
           bullet_score: 0
         }))
       )
+
+      console.log('🔧 Extracted items for clustering:', items.length)
+      console.log('🏷️ Sample item tags:', items[0]?.tags)
+
+      if (items.length === 0) {
+        console.warn('⚠️ No items extracted from responses!')
+        throw new Error('No items to cluster')
+      }
 
       // Generate clusters
       const clusterConfig = postprocess.cluster
