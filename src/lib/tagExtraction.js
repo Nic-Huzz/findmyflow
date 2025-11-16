@@ -11,19 +11,12 @@ import { supabase } from './supabaseClient.js'
 
 /**
  * Extract tags from a user response
+ * Returns per-bullet tag extraction
  * Calls Supabase Edge Function which proxies to Claude API
  */
 export async function extractTags(userResponse, context = {}) {
   if (!userResponse || userResponse.trim().length === 0) {
-    return {
-      skill_verb: [],
-      domain_topic: [],
-      value: [],
-      emotion: [],
-      context: [],
-      problem_theme: [],
-      persona_hint: []
-    }
+    return { bullets: [] }
   }
 
   try {
@@ -40,35 +33,42 @@ export async function extractTags(userResponse, context = {}) {
       throw error
     }
 
-    return data.tags
+    return data // Returns { bullets: [{text, tags}] }
   } catch (error) {
     console.error('Tag extraction failed:', error)
 
-    // Fallback to rule-based extraction
+    // Fallback to rule-based extraction per bullet
     console.warn('Falling back to rule-based tag extraction')
-    return ruleBasedTagExtraction(userResponse)
+    return ruleBasedPerBulletExtraction(userResponse)
   }
 }
 
 /**
- * Fallback: Simple rule-based tag extraction
+ * Fallback: Simple rule-based tag extraction per bullet
  * Used when AI extraction fails
  */
-function ruleBasedTagExtraction(text) {
-  const lowerText = text.toLowerCase()
+function ruleBasedPerBulletExtraction(text) {
+  // Split into bullet points
+  const bulletPoints = text
+    .split(/\n/)
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .map(line => line.replace(/^[•\-\*]\s*/, ''))
 
   // Common skill verbs
   const skillVerbs = [
     'designing', 'building', 'creating', 'teaching', 'writing',
     'analyzing', 'managing', 'leading', 'coaching', 'facilitating',
-    'organizing', 'planning', 'developing', 'researching', 'presenting'
+    'organizing', 'planning', 'developing', 'researching', 'presenting',
+    'running', 'dancing', 'playing', 'gaming'
   ]
 
   // Common domains
   const domains = [
     'tech', 'technology', 'education', 'health', 'healthcare',
     'art', 'design', 'business', 'marketing', 'finance',
-    'music', 'writing', 'psychology', 'coaching', 'consulting'
+    'music', 'writing', 'psychology', 'coaching', 'consulting',
+    'sports', 'fitness', 'gaming'
   ]
 
   // Common values
@@ -77,17 +77,24 @@ function ruleBasedTagExtraction(text) {
     'purpose', 'learning', 'community', 'innovation', 'service'
   ]
 
-  const extracted = {
-    skill_verb: skillVerbs.filter(v => lowerText.includes(v)),
-    domain_topic: domains.filter(d => lowerText.includes(d)),
-    value: values.filter(v => lowerText.includes(v)),
-    emotion: [],
-    context: [],
-    problem_theme: [],
-    persona_hint: []
-  }
+  return {
+    bullets: bulletPoints.map(bullet => {
+      const lowerText = bullet.toLowerCase()
 
-  return extracted
+      return {
+        text: bullet,
+        tags: {
+          skill_verb: skillVerbs.filter(v => lowerText.includes(v)),
+          domain_topic: domains.filter(d => lowerText.includes(d)),
+          value: values.filter(v => lowerText.includes(v)),
+          emotion: [],
+          context: [],
+          problem_theme: [],
+          persona_hint: []
+        }
+      }
+    })
+  }
 }
 
 /**

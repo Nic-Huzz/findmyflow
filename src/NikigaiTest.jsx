@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient.js'
 import { extractTags } from './lib/tagExtraction.js'
-import { generateClusters, generateClusterLabel, calculateClusterQualityMetrics } from './lib/clustering.js'
+import { generateClusters, generateClusterLabel, generateSemanticClusterLabel, calculateClusterQualityMetrics, calculateItemSimilarity, generateMetaSkills } from './lib/clustering.js'
 import { processTagWeights, extractBulletPoints } from './lib/weighting.js'
 import { useAuth } from './auth/AuthProvider'
 
@@ -81,7 +81,9 @@ export default function NikigaiTest() {
         isAI: true,
         text: firstStep.assistant_prompt,
         timestamp: new Date().toLocaleTimeString(),
-        stepId: '1.0'
+        stepId: '1.0',
+        hasOptions: firstStep.expected_inputs?.[0]?.type === 'single_select',
+        options: firstStep.expected_inputs?.[0]?.options || []
       }
       setMessages([aiMessage])
 
@@ -113,22 +115,22 @@ export default function NikigaiTest() {
       const { data: { user } } = await supabase.auth.getUser()
       const currentStepData = flowData.steps.find(s => s.id === currentStep)
 
-      // Step 1: Extract tags (if needed)
-      let tags = {}
+      // Step 1: Extract tags per bullet (if needed)
+      let taggedBullets = { bullets: [] }
       if (currentStepData.store_as) {
-        console.log('🔍 Extracting tags...')
-        tags = await extractTags(trimmedInput, {
+        console.log('🔍 Extracting tags per bullet...')
+        taggedBullets = await extractTags(trimmedInput, {
           step_id: currentStep,
           store_as: currentStepData.store_as
         })
-        console.log('✅ Tags extracted:', tags)
+        console.log('✅ Tags extracted per bullet:', taggedBullets)
       }
 
-      // Step 2: Count bullets
-      const bullets = extractBulletPoints(trimmedInput)
-      console.log('📝 Bullets found:', bullets.length)
+      // Step 2: Count bullets (fallback if AI didn't parse them)
+      const bulletCount = taggedBullets.bullets.length || extractBulletPoints(trimmedInput).length
+      console.log('📝 Bullets found:', bulletCount)
 
-      // Step 3: Save response to Supabase
+      // Step 3: Save response to Supabase (with per-bullet tags)
       const { data: savedResponse, error: saveError } = await supabase
         .from('nikigai_responses')
         .insert({
@@ -138,9 +140,9 @@ export default function NikigaiTest() {
           step_order_index: currentStepData.step_order_index,
           question_text: currentStepData.assistant_prompt,
           response_raw: trimmedInput,
-          bullet_count: bullets.length,
-          tags_extracted: tags,
-          store_as: currentStepData.store_as // Add store_as for clustering
+          bullet_count: bulletCount,
+          tags_extracted: taggedBullets, // Store per-bullet tags: {bullets: [{text, tags}]}
+          store_as: currentStepData.store_as
         })
         .select()
         .single()
@@ -226,53 +228,170 @@ export default function NikigaiTest() {
         throw new Error('No responses found for clustering')
       }
 
-      // Extract items for clustering
-      const items = relevantResponses.flatMap(resp =>
-        extractBulletPoints(resp.response_raw).map(bullet => ({
-          text: bullet,
-          tags: resp.tags_extracted,
+      // Extract items for clustering (using per-bullet tags)
+      const items = relevantResponses.flatMap(resp => {
+        // tags_extracted now contains {bullets: [{text, tags}]}
+        const bulletsData = resp.tags_extracted?.bullets || []
+
+        // If no bullets from AI, fall back to manual extraction
+        if (bulletsData.length === 0) {
+          return extractBulletPoints(resp.response_raw).map(bullet => ({
+            text: bullet,
+            tags: {
+              skill_verb: [],
+              domain_topic: [],
+              value: [],
+              emotion: [],
+              context: [],
+              problem_theme: [],
+              persona_hint: []
+            },
+            source_step: resp.step_id,
+            bullet_score: 0
+          }))
+        }
+
+        // Use AI-extracted per-bullet tags
+        return bulletsData.map(bullet => ({
+          text: bullet.text,
+          tags: bullet.tags,
           source_step: resp.step_id,
           bullet_score: 0
         }))
-      )
+      })
 
       console.log('🔧 Extracted items for clustering:', items.length)
-      console.log('🏷️ Sample item tags:', items[0]?.tags)
+      console.log('🏷️ Items with tags:')
+      items.forEach((item, i) => {
+        const tagSummary = Object.entries(item.tags || {})
+          .filter(([_, vals]) => vals.length > 0)
+          .map(([type, vals]) => `${type}: ${vals.join(', ')}`)
+          .join(' | ')
+        console.log(`  ${i + 1}. "${item.text}" → ${tagSummary || 'no tags'}`)
+      })
 
       if (items.length === 0) {
         console.warn('⚠️ No items extracted from responses!')
         throw new Error('No items to cluster')
       }
 
-      // Generate clusters
-      const clusterConfig = postprocess.cluster
-      const generatedClusters = generateClusters(items, {
-        target_clusters_min: clusterConfig.target_clusters_min,
-        target_clusters_max: clusterConfig.target_clusters_max,
-        source_tags: clusterConfig.source_tags
+      let generatedClusters
+
+      // Check if this is cluster enrichment or new clustering
+      if (postprocess.cluster_enrich) {
+        // Cluster enrichment: add new items to existing clusters
+        const enrichConfig = postprocess.cluster_enrich
+        console.log('🔄 Enriching existing clusters from:', enrichConfig.merge_into)
+
+        // Load existing clusters from session data
+        const existingClusters = sessionData[enrichConfig.merge_into] || []
+        console.log('📦 Loaded', existingClusters.length, 'existing clusters')
+
+        if (existingClusters.length === 0) {
+          console.warn('⚠️ No existing clusters found to enrich!')
+          // Fall back to creating new clusters
+          generatedClusters = generateClusters(items, {
+            similarity_threshold: 0.25,
+            min_merge_similarity: 0.1,
+            min_items_per_cluster: 3,
+            source_tags: enrichConfig.source_tags
+          })
+        } else {
+          // Enrich existing clusters with new items
+          generatedClusters = existingClusters.map(cluster => ({
+            ...cluster,
+            items: cluster.items || []
+          }))
+
+          // Add each new item to the most similar existing cluster
+          items.forEach(newItem => {
+            let bestClusterIndex = 0
+            let bestSimilarity = 0
+
+            generatedClusters.forEach((cluster, idx) => {
+              // Calculate average similarity to items in this cluster
+              let totalSim = 0
+              cluster.items.forEach(existingItem => {
+                totalSim += calculateItemSimilarity(newItem, existingItem, enrichConfig.source_tags)
+              })
+              const avgSim = cluster.items.length > 0 ? totalSim / cluster.items.length : 0
+
+              if (avgSim > bestSimilarity) {
+                bestSimilarity = avgSim
+                bestClusterIndex = idx
+              }
+            })
+
+            // Add to best matching cluster
+            generatedClusters[bestClusterIndex].items.push(newItem)
+            console.log(`  ➕ Added "${newItem.text}" to cluster ${bestClusterIndex + 1} (similarity: ${bestSimilarity.toFixed(2)})`)
+          })
+
+          // Update item counts
+          generatedClusters = generatedClusters.map(cluster => ({
+            ...cluster,
+            item_count: cluster.items.length
+          }))
+        }
+      } else {
+        // Standard clustering: create new clusters from scratch
+        const clusterConfig = postprocess.cluster
+        const clusterParams = {
+          similarity_threshold: clusterConfig.similarity_threshold || 0.25,
+          min_merge_similarity: clusterConfig.min_merge_similarity || 0.1,
+          min_items_per_cluster: clusterConfig.min_items_per_cluster || 3,
+          source_tags: clusterConfig.source_tags
+        }
+
+        console.log('🎯 Clustering with params:', clusterParams)
+
+        generatedClusters = generateClusters(items, clusterParams)
+      }
+
+      console.log('🎯 Generated', generatedClusters.length, 'clusters')
+      generatedClusters.forEach((cluster, i) => {
+        console.log(`  Cluster ${i + 1}: ${cluster.items.length} items -`, cluster.items.map(item => item.text).join(', '))
       })
 
-      // Add labels
-      const labeledClusters = generatedClusters.map(cluster => ({
-        ...cluster,
-        label: generateClusterLabel(cluster)
-      }))
+      // Generate semantic labels using AI
+      console.log('🏷️ Generating semantic labels...')
+      const labeledClusters = await Promise.all(
+        generatedClusters.map(async (cluster) => {
+          const labelData = await generateSemanticClusterLabel(cluster, supabase)
+          return {
+            ...cluster,
+            label: labelData.displayLabel,  // User sees this
+            displayLabel: labelData.displayLabel,
+            archetypes: labelData.archetypes,  // For job matching
+            rationale: labelData.rationale
+          }
+        })
+      )
+      console.log('✅ Labels generated:', labeledClusters.map(c => ({
+        display: c.displayLabel,
+        archetypes: c.archetypes?.map(a => `${a.name} (${Math.round(a.confidence * 100)}%)`)
+      })))
 
       // Calculate quality metrics
       const qualityMetrics = calculateClusterQualityMetrics(labeledClusters)
       console.log('📊 Quality metrics:', qualityMetrics)
 
-      // Store clusters
+      // Generate meta-skills (higher-order patterns across clusters)
+      const metaSkills = await generateMetaSkills(labeledClusters, supabase)
+      console.log('✨ Meta-skills:', metaSkills)
+
+      // Store clusters with meta-skills
       setClusterData(prev => ({
         ...prev,
-        [postprocess.store_as]: labeledClusters
+        [postprocess.store_as]: labeledClusters,
+        [`${postprocess.store_as}_meta_skills`]: metaSkills
       }))
 
       // Format the assistant_prompt with cluster data
       let promptText = stepData.assistant_prompt
       const clusterPlaceholder = `{${postprocess.store_as}}`
       if (promptText.includes(clusterPlaceholder)) {
-        const clusterMessage = formatClustersForDisplay(labeledClusters, qualityMetrics)
+        const clusterMessage = formatClustersForDisplay(labeledClusters, qualityMetrics, metaSkills)
         promptText = promptText.replace(clusterPlaceholder, clusterMessage)
       }
 
@@ -302,20 +421,29 @@ export default function NikigaiTest() {
     }
   }
 
-  function formatClustersForDisplay(clusters, quality) {
+  function formatClustersForDisplay(clusters, quality, metaSkills = []) {
     let message = "**Your Skill Clusters:**\n\n"
     message += `Quality: ${quality.grade} (${Math.round(quality.overall_score * 100)}%)\n\n`
 
     clusters.forEach((cluster, index) => {
       message += `**📦 ${cluster.label}** (${cluster.items.length} items)\n`
-      cluster.items.slice(0, 3).forEach(item => {
+      // Show ALL items, not just first 3
+      cluster.items.forEach(item => {
         message += `• ${item.text}\n`
       })
-      if (cluster.items.length > 3) {
-        message += `  _...and ${cluster.items.length - 3} more_\n`
-      }
       message += '\n'
     })
+
+    // Add meta-skills if present
+    if (metaSkills && metaSkills.length > 0) {
+      message += "\n**✨ Your Meta-Skills:**\n\n"
+      message += "_Higher-order patterns that appear across your clusters:_\n\n"
+
+      metaSkills.forEach((metaSkill, index) => {
+        message += `**${index + 1}. ${metaSkill.name}**\n`
+        message += `${metaSkill.description}\n\n`
+      })
+    }
 
     return message
   }

@@ -6,21 +6,26 @@
     {
       "id": "1.0",
       "step_order_index": 1,
-      "assistant_prompt": "We're going to explore your life so far \u2014 not to analyse it, but to find the golden threads that run through it. Think of this as laying out the pieces of your life puzzle on the table. Each piece is a memory, hobby, or win that shaped you.\n\nWe'll move through three chapters of your life: **Childhood**, **High School**, and **18 to Now.**\n\nFor each, I'll ask a few simple questions \u2014 you can answer in short bullet points, like sticky notes. Aim for 3\u20135 bullets, and remember: the more detail you share, the richer the picture becomes.\n\nSound good?",
+      "assistant_prompt": "We're going to explore your life so far — not to analyse it, but to find the golden threads that run through it. Think of this as laying out the pieces of your life puzzle on the table. Each piece is a memory, hobby, or win that shaped you.\n\nWe'll move through three chapters of your life: **Childhood**, **High School**, and **18 to Now.**\n\nFor each, I'll ask a few simple questions — you can answer in short bullet points, like sticky notes. Aim for 3–5 bullets, and remember: the more detail you share, the richer the picture becomes.\n\nSound good?",
       "expected_inputs": [
-        "confirmation"
+        {
+          "type": "single_select",
+          "options": [
+            "Yep!"
+          ]
+        }
       ],
-      "store_as": "life_map_v2.consent",
       "next_step_rules": [
         {
-          "on_success": "2.0"
+          "on_selection": "Yep!",
+          "go_to": "2.0"
         }
       ]
     },
     {
       "id": "2.0",
       "step_order_index": 2,
-      "assistant_prompt": "Let's start with **Childhood (Pre-school + Primary).**\n\nWhat did you *love doing most*? These can be games, hobbies, or activities that made you lose track of time.\n\nPlease share 3\u20135 short bullets (the more the better!).",
+      "assistant_prompt": "Let's start with **Childhood (Pre-school + Primary).**\n\nWhat did you *love doing most*? These can be games, hobbies, or activities that made you lose track of time.\n\nPlease share 3–5 short bullets (the more the better!).",
       "expected_inputs": [
         "text_list"
       ],
@@ -34,7 +39,7 @@
     {
       "id": "2.1",
       "step_order_index": 3,
-      "assistant_prompt": "Now think of **High School.**\n\nWhat did you enjoy doing most for fun or self-expression?\n\nShare 3\u20135 bullets.",
+      "assistant_prompt": "Now think of **High School.**\n\nWhat did you enjoy doing most for fun or self-expression?\n\nShare 3–5 bullets.",
       "expected_inputs": [
         "text_list"
       ],
@@ -48,7 +53,7 @@
     {
       "id": "2.2",
       "step_order_index": 4,
-      "assistant_prompt": "Finally, from **18 to Now** \u2014 what activities, hobbies, or creative outlets light you up today?\n\n3\u20135 bullets please.",
+      "assistant_prompt": "Finally, from **18 to Now** — what activities, hobbies, or creative outlets light you up today?\n\n3–5 bullets please.",
       "expected_inputs": [
         "text_list"
       ],
@@ -80,14 +85,17 @@
             "domain_topic",
             "value"
           ],
-          "target_clusters_min": 3,
-          "target_clusters_max": 6,
+          "target_clusters_min": 2,
+          "target_clusters_max": 5,
+          "similarity_threshold": 0.25,
+          "min_merge_similarity": 0.1,
+          "min_items_per_cluster": 3,
           "candidate_items_min": 5,
           "candidate_items_max": 15
         },
         "store_as": "skills.preview.from_hobbies"
       },
-      "assistant_prompt": "\u2728 Beautiful \u2014 those early joys often hold the purest clues.\n\nBased on what you love doing, here are early **Skill clusters** emerging:\n\n{skills.preview.from_hobbies}\n\nI can already see some patterns forming. Do any of these feel like your natural way of showing up?\n\nKeep/edit these now or skip and refine later?",
+      "assistant_prompt": "✨ Beautiful — those early joys often hold the purest clues.\n\nBased on what you love doing, here are early **Skill clusters** emerging:\n\n{skills.preview.from_hobbies}\n\nI can already see some patterns forming. Do any of these feel like your natural way of showing up?\n\nKeep/edit these now or skip and refine later?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -117,7 +125,7 @@
     {
       "id": "2.3.edit",
       "step_order_index": 6,
-      "assistant_prompt": "Edit the **Skill clusters**: provide a list of clusters with label + 3\u20135 example skills each.",
+      "assistant_prompt": "Edit the **Skill clusters**: provide a list of clusters with label + 3–5 example skills each.",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -137,7 +145,7 @@
     {
       "id": "3.0",
       "step_order_index": 7,
-      "assistant_prompt": "Now, let's recall moments that made you feel *alive* or *proud.*\n\nStarting with **Childhood**, what experiences or small wins made you feel happy, confident, or seen?\n\n3\u20135 bullets (more is better!).",
+      "assistant_prompt": "Now, let's recall moments that made you feel *alive* or *proud.*\n\nStarting with **Childhood**, what experiences or small wins made you feel happy, confident, or seen?\n\n3–5 bullets (more is better!).",
       "expected_inputs": [
         "text_list"
       ],
@@ -151,7 +159,7 @@
     {
       "id": "3.1",
       "step_order_index": 8,
-      "assistant_prompt": "During **High School**, what moments made you feel most alive or proud of yourself?\n\n3\u20135 bullets.",
+      "assistant_prompt": "During **High School**, what moments made you feel most alive or proud of yourself?\n\n3–5 bullets.",
       "expected_inputs": [
         "text_list"
       ],
@@ -165,7 +173,7 @@
     {
       "id": "3.2",
       "step_order_index": 9,
-      "assistant_prompt": "From **18 to Now**, what experiences gave you that same sense of pride, fulfillment, or aliveness?\n\n3\u20135 bullets.",
+      "assistant_prompt": "From **18 to Now**, what experiences gave you that same sense of pride, fulfillment, or aliveness?\n\n3–5 bullets.",
       "expected_inputs": [
         "text_list"
       ],
@@ -200,7 +208,7 @@
         },
         "store_as": "skills.preview.with_proud_moments"
       },
-      "assistant_prompt": "\u2728 More puzzle pieces connecting!\n\nYour proud/alive moments added depth to the **Skill clusters**:\n\n{skills.preview.with_proud_moments}\n\nFrom your answers, I sense these are the ways you naturally contribute when you feel most alive. Which clusters feel most energizing to you?\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ More puzzle pieces connecting!\n\nYour proud/alive moments added depth to the **Skill clusters**:\n\n{skills.preview.with_proud_moments}\n\nFrom your answers, I sense these are the ways you naturally contribute when you feel most alive. Which clusters feel most energizing to you?\n\nKeep/edit/skip?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -230,7 +238,7 @@
     {
       "id": "3.3.edit",
       "step_order_index": 11,
-      "assistant_prompt": "Edit the updated **Skill clusters** (label + 3\u20135 example skills).",
+      "assistant_prompt": "Edit the updated **Skill clusters** (label + 3–5 example skills).",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -250,7 +258,7 @@
     {
       "id": "4.0",
       "step_order_index": 12,
-      "assistant_prompt": "Beautiful work so far \u2014 you're revealing powerful threads.\n\nNow let's look at what *shaped* you.\n\nIf you saw your life as a story, what are the chapters?\n\nThink of major life phases or turning points \u2014 like 'The Explorer Years', 'The Rebuild', 'The Awakening', etc.\n\nList 3\u20135 chapter titles (the more the better!).",
+      "assistant_prompt": "Beautiful work so far — you're revealing powerful threads.\n\nNow let's look at what *shaped* you.\n\nIf you saw your life as a story, what are the chapters?\n\nThink of major life phases or turning points — like 'The Explorer Years', 'The Rebuild', 'The Awakening', etc.\n\nList 3–5 chapter titles (the more the better!).",
       "expected_inputs": [
         "text_list"
       ],
@@ -264,7 +272,7 @@
     {
       "id": "4.1",
       "step_order_index": 13,
-      "assistant_prompt": "Beautiful chapters. Now, for each chapter you named, briefly share:\n\nWhat growth or struggle did you face in that chapter?\n\nExample format:\n\u2022 *Chapter: The Explorer Years* \u2014 Growth: learned to trust myself; Struggle: dealing with uncertainty\n\nShare 3\u20135 bullets covering your chapters.",
+      "assistant_prompt": "Beautiful chapters. Now, for each chapter you named, briefly share:\n\nWhat growth or struggle did you face in that chapter?\n\nExample format:\n• *Chapter: The Explorer Years* — Growth: learned to trust myself; Struggle: dealing with uncertainty\n\nShare 3–5 bullets covering your chapters.",
       "expected_inputs": [
         "text_list"
       ],
@@ -299,7 +307,7 @@
         },
         "store_as": "problems.preview.from_chapters"
       },
-      "assistant_prompt": "\u2728 Your story reveals deeper threads.\n\nHere are **Problem/Change themes** emerging from your life chapters:\n\n{problems.preview.from_chapters}\n\nThese themes show what you've learned to care about through lived experience. Which feel most meaningful to you?\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ Your story reveals deeper threads.\n\nHere are **Problem/Change themes** emerging from your life chapters:\n\n{problems.preview.from_chapters}\n\nThese themes show what you've learned to care about through lived experience. Which feel most meaningful to you?\n\nKeep/edit/skip?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -329,7 +337,7 @@
     {
       "id": "4.2.edit",
       "step_order_index": 15,
-      "assistant_prompt": "Edit the **Problem/Change themes**: provide clusters with label + 3\u20135 supporting examples.",
+      "assistant_prompt": "Edit the **Problem/Change themes**: provide clusters with label + 3–5 supporting examples.",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -349,7 +357,7 @@
     {
       "id": "5.0",
       "step_order_index": 16,
-      "assistant_prompt": "Who has inspired you the most \u2014 real or fictional?\n\nFor each person or character, share:\n\u2022 **Who they are**\n\u2022 **What impact they've had** that makes them a role model for you\n\nList 3\u20135 role models.\n\nExample: *Bren\u00e9 Brown \u2014 Her work on vulnerability helped me accept imperfection and show up authentically.*",
+      "assistant_prompt": "Who has inspired you the most — real or fictional?\n\nFor each person or character, share:\n• **Who they are**\n• **What impact they've had** that makes them a role model for you\n\nList 3–5 role models.\n\nExample: *Brené Brown — Her work on vulnerability helped me accept imperfection and show up authentically.*",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -389,7 +397,7 @@
         },
         "store_as": "problems.preview.with_role_models"
       },
-      "assistant_prompt": "\u2728 The impact your role models have made reveals problems you care about.\n\nUpdated **Problem/Change themes** with insights from your role models:\n\n{problems.preview.with_role_models}\n\nI notice the changes you admire in others often reflect the changes you want to create yourself. Does that resonate?\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ The impact your role models have made reveals problems you care about.\n\nUpdated **Problem/Change themes** with insights from your role models:\n\n{problems.preview.with_role_models}\n\nI notice the changes you admire in others often reflect the changes you want to create yourself. Does that resonate?\n\nKeep/edit/skip?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -419,7 +427,7 @@
     {
       "id": "5.1.edit",
       "step_order_index": 18,
-      "assistant_prompt": "Edit the **Problem/Change themes** (label + 3\u20135 example problems).",
+      "assistant_prompt": "Edit the **Problem/Change themes** (label + 3–5 example problems).",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -439,7 +447,7 @@
     {
       "id": "6.0",
       "step_order_index": 19,
-      "assistant_prompt": "What **topics or skills** have you loved learning about \u2014 through school, courses, or personal curiosity?\n\nList 3\u20135 bullets (the more the better!).\n\nExample: *psychology \u2014 how the mind works*, *music \u2014 creative flow*, *business \u2014 how ideas grow*",
+      "assistant_prompt": "What **topics or skills** have you loved learning about — through school, courses, or personal curiosity?\n\nList 3–5 bullets (the more the better!).\n\nExample: *psychology — how the mind works*, *music — creative flow*, *business — how ideas grow*",
       "expected_inputs": [
         "text_list"
       ],
@@ -467,7 +475,7 @@
         },
         "store_as": "skills.preview.with_learning"
       },
-      "assistant_prompt": "\u2728 Your learning adds more color to your skill picture.\n\nUpdated **Skill clusters** with your learning interests:\n\n{skills.preview.with_learning}\n\nThe topics you're naturally drawn to often reveal the domains where your skills want to express themselves. Notice any connections?\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ Your learning adds more color to your skill picture.\n\nUpdated **Skill clusters** with your learning interests:\n\n{skills.preview.with_learning}\n\nThe topics you're naturally drawn to often reveal the domains where your skills want to express themselves. Notice any connections?\n\nKeep/edit/skip?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -497,7 +505,7 @@
     {
       "id": "6.1.edit",
       "step_order_index": 21,
-      "assistant_prompt": "Edit the updated **Skill clusters** (label + 3\u20135 example skills).",
+      "assistant_prompt": "Edit the updated **Skill clusters** (label + 3–5 example skills).",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -517,7 +525,7 @@
     {
       "id": "7.0",
       "step_order_index": 22,
-      "assistant_prompt": "Let's explore your work and projects.\n\nAcross your jobs, projects, or creative pursuits, what have you **enjoyed doing most**?\n\nThink of times you felt in flow or energized by what you were doing.\n\n3\u20135 bullets (more is better!).",
+      "assistant_prompt": "Let's explore your work and projects.\n\nAcross your jobs, projects, or creative pursuits, what have you **enjoyed doing most**?\n\nThink of times you felt in flow or energized by what you were doing.\n\n3–5 bullets (more is better!).",
       "expected_inputs": [
         "text_list"
       ],
@@ -531,7 +539,7 @@
     {
       "id": "7.1",
       "step_order_index": 23,
-      "assistant_prompt": "And what **impact** did your work create for others?\n\nThink about the difference you made \u2014 big or small, tangible or emotional.\n\n3\u20135 bullets.",
+      "assistant_prompt": "And what **impact** did your work create for others?\n\nThink about the difference you made — big or small, tangible or emotional.\n\n3–5 bullets.",
       "expected_inputs": [
         "text_list"
       ],
@@ -545,7 +553,7 @@
     {
       "id": "7.2",
       "step_order_index": 24,
-      "assistant_prompt": "When you look at those experiences, what *skills or patterns* do you notice repeating?\n\nExample: leadership, communication, creativity, empathy.\n\n3\u20135 bullets.",
+      "assistant_prompt": "When you look at those experiences, what *skills or patterns* do you notice repeating?\n\nExample: leadership, communication, creativity, empathy.\n\n3–5 bullets.",
       "expected_inputs": [
         "text_list"
       ],
@@ -591,7 +599,7 @@
         ],
         "store_as": "skills.preview.with_work;problems.preview.with_work"
       },
-      "assistant_prompt": "\u2728 Your work experience reveals how you show up in the world.\n\nRefined **Skills** and **Problem/Change** themes:\n\n**Skills:**\n{skills.preview.with_work}\n\n**Problems/Change:**\n{problems.preview.with_work}\n\nI can see how your natural abilities and the impact you create are two sides of the same coin. These patterns feel significant \u2014 do they ring true for you?\n\nKeep/edit/skip?",
+      "assistant_prompt": "✨ Your work experience reveals how you show up in the world.\n\nRefined **Skills** and **Problem/Change** themes:\n\n**Skills:**\n{skills.preview.with_work}\n\n**Problems/Change:**\n{problems.preview.with_work}\n\nI can see how your natural abilities and the impact you create are two sides of the same coin. These patterns feel significant — do they ring true for you?\n\nKeep/edit/skip?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -642,7 +650,7 @@
     {
       "id": "8.0",
       "step_order_index": 27,
-      "assistant_prompt": "Now let's look forward.\n\nWhen you imagine the future, what do you feel called to create, experience, or change in the world?\n\n3\u20135 bullets (the more the better!).",
+      "assistant_prompt": "Now let's look forward.\n\nWhen you imagine the future, what do you feel called to create, experience, or change in the world?\n\n3–5 bullets (the more the better!).",
       "expected_inputs": [
         "text_list"
       ],
@@ -656,7 +664,7 @@
     {
       "id": "8.1",
       "step_order_index": 28,
-      "assistant_prompt": "From everything you just shared, what are your **top 3 future pulls** \u2014 the ideas or dreams that feel most alive *right now*?",
+      "assistant_prompt": "From everything you just shared, what are your **top 3 future pulls** — the ideas or dreams that feel most alive *right now*?",
       "expected_inputs": [
         "text_list"
       ],
@@ -719,7 +727,7 @@
         },
         "store_as": "skills.final;problems.final;market.seeds"
       },
-      "assistant_prompt": "\u2728 All your puzzle pieces are now laid out on the table!\n\nHere's your complete picture ready for the Nikigai lenses:\n\n**Skills:**\n{skills.final}\n\n**Problem/Change Themes:**\n{problems.final}\n\n**Market Seeds:**\n{market.seeds}\n\nYour patterns are becoming clear. From everything you've shared, I can see the unique shape of your gifts and the change you're meant to create.\n\nContinue or review any section?",
+      "assistant_prompt": "✨ All your puzzle pieces are now laid out on the table!\n\nHere's your complete picture ready for the Nikigai lenses:\n\n**Skills:**\n{skills.final}\n\n**Problem/Change Themes:**\n{problems.final}\n\n**Market Seeds:**\n{market.seeds}\n\nYour patterns are becoming clear. From everything you've shared, I can see the unique shape of your gifts and the change you're meant to create.\n\nContinue or review any section?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -754,7 +762,7 @@
     {
       "id": "8.2.review_skills",
       "step_order_index": 30,
-      "assistant_prompt": "Review **Skills**. Edit clusters (label + 3\u20135 example skills) or type 'ok' to accept.",
+      "assistant_prompt": "Review **Skills**. Edit clusters (label + 3–5 example skills) or type 'ok' to accept.",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -775,7 +783,7 @@
     {
       "id": "8.2.review_problems",
       "step_order_index": 31,
-      "assistant_prompt": "Review **Problem/Change Themes**. Edit clusters (label + 3\u20135 examples) or type 'ok' to accept.",
+      "assistant_prompt": "Review **Problem/Change Themes**. Edit clusters (label + 3–5 examples) or type 'ok' to accept.",
       "expected_inputs": [
         {
           "type": "object_list",
@@ -825,7 +833,7 @@
     {
       "id": "10.0",
       "step_order_index": 34,
-      "assistant_prompt": "Beautiful work \u2014 your Life Map is complete.\n\nYou've gathered all the puzzle pieces of your story, and the picture is becoming clear.\n\nWould you like a short reflection summary before we continue?",
+      "assistant_prompt": "Beautiful work — your Life Map is complete.\n\nYou've gathered all the puzzle pieces of your story, and the picture is becoming clear.\n\nWould you like a short reflection summary before we continue?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -850,7 +858,7 @@
     {
       "id": "11.0",
       "step_order_index": 35,
-      "assistant_prompt": "Here's what stands out from your Life Map:\n\n\u2022 **Things you've always loved:** {life_map.hobbies.*}\n\u2022 **Life chapters:** {life_map.life_chapters.titles}\n\u2022 **Growth & struggles:** {life_map.life_chapters.growth_and_struggle}\n\u2022 **Role model qualities:** {life_map.role_models}\n\u2022 **Skills that repeat:** {life_map.experience.repeating_skills}\n\u2022 **Impact you've created:** {life_map.experience.impact_created}\n\u2022 **Future pulls:** {life_map.future.top3_now}\n\u2022 **Your story in one sentence:** {life_map.reflection.summary_sentence}\n\nDoes that feel accurate before we move on?",
+      "assistant_prompt": "Here's what stands out from your Life Map:\n\n• **Things you've always loved:** {life_map.hobbies.*}\n• **Life chapters:** {life_map.life_chapters.titles}\n• **Growth & struggles:** {life_map.life_chapters.growth_and_struggle}\n• **Role model qualities:** {life_map.role_models}\n• **Skills that repeat:** {life_map.experience.repeating_skills}\n• **Impact you've created:** {life_map.experience.impact_created}\n• **Future pulls:** {life_map.future.top3_now}\n• **Your story in one sentence:** {life_map.reflection.summary_sentence}\n\nDoes that feel accurate before we move on?",
       "expected_inputs": [
         "confirmation"
       ],
@@ -864,7 +872,7 @@
     {
       "id": "12.0",
       "step_order_index": 36,
-      "assistant_prompt": "Amazing \u2014 we've laid out all your puzzle pieces.\n\nNow we're going to organize them using the **Nikigai Framework.**\n\nThe Nikigai Framework organises your stickies so that you identify:\n\u2022 A problem you're passionate about solving\n\u2022 People you're passionate about helping\n\u2022 Skills you're passionate about using\n\nWhy identify these things?",
+      "assistant_prompt": "Amazing — we've laid out all your puzzle pieces.\n\nNow we're going to organize them using the **Nikigai Framework.**\n\nThe Nikigai Framework organises your stickies so that you identify:\n• A problem you're passionate about solving\n• People you're passionate about helping\n• Skills you're passionate about using\n\nWhy identify these things?",
       "expected_inputs": [
         "confirmation"
       ],
@@ -878,7 +886,7 @@
     {
       "id": "12.1",
       "step_order_index": 37,
-      "assistant_prompt": "Because what does a business do?\n\nThey **solve a problem, for a person, using specific skills.**\n\nThis empowers us to identify your mission and map your answers to fulfilling and meaningful career paths \u2014 whether you're looking for your dream job OR building your own entrepreneurial venture.\n\nReady to see how?",
+      "assistant_prompt": "Because what does a business do?\n\nThey **solve a problem, for a person, using specific skills.**\n\nThis empowers us to identify your mission and map your answers to fulfilling and meaningful career paths — whether you're looking for your dream job OR building your own entrepreneurial venture.\n\nReady to see how?",
       "expected_inputs": [
         "confirmation"
       ],
@@ -892,7 +900,7 @@
     {
       "id": "12.2",
       "step_order_index": 38,
-      "assistant_prompt": "Here's how the Nikigai lenses work:\n\n**For people looking for a job:**\n\u2022 The **skills** you identify connect to job titles you're passionate about.\n\u2022 The **problems** you identify show you the industries you're passionate about.\n\u2022 The **person** you identify becomes the industry sector you're passionate about.\n\u2022 Your **mission** identifies specific companies you'd love to work for.\n\n**For entrepreneurs building something:**\n\u2022 The **skills** you identify become your core offerings.\n\u2022 The **problems** you identify reveal the transformation you create.\n\u2022 The **person** you identify defines your ideal customer or community.\n\u2022 Your **mission** becomes the foundation of your business purpose.\n\nWhich path feels more relevant to you right now?",
+      "assistant_prompt": "Here's how the Nikigai lenses work:\n\n**For people looking for a job:**\n• The **skills** you identify connect to job titles you're passionate about.\n• The **problems** you identify show you the industries you're passionate about.\n• The **person** you identify becomes the industry sector you're passionate about.\n• Your **mission** identifies specific companies you'd love to work for.\n\n**For entrepreneurs building something:**\n• The **skills** you identify become your core offerings.\n• The **problems** you identify reveal the transformation you create.\n• The **person** you identify defines your ideal customer or community.\n• Your **mission** becomes the foundation of your business purpose.\n\nWhich path feels more relevant to you right now?",
       "expected_inputs": [
         {
           "type": "single_select",

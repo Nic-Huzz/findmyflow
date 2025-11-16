@@ -9,43 +9,59 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
 
 const DECISION_TREE_PROMPT = `
-Extract tags from this user response.
+Extract MULTIPLE RELATED TAGS from EACH bullet point to enable semantic clustering.
 
 Use these tag types:
-1. skill_verb — actions (use -ing form: designing, teaching)
-2. domain_topic — fields/subjects (UX, education, psychology)
+1. skill_verb — ALL related actions (use -ing form: designing, creating, building)
+2. domain_topic — ALL related fields/subjects (UX, design, digital media)
 3. value — principles (integrity, growth, connection)
 4. emotion — feelings (joy, fear, excitement)
 5. context — situations (remote work, team settings)
 6. problem_theme — challenges (burnout, disconnection)
 7. persona_hint — specific groups (parents, creatives, professionals)
 
-DECISION RULES:
-- Action words → skill_verb (use verb form)
-- Fields/subjects → domain_topic
-- Principles/beliefs → value
-- Temporary feelings → emotion
-- Recurring challenges → problem_theme
-- Working conditions → context
-- Specific groups of people → persona_hint
+CRITICAL: Extract MULTIPLE verbs and topics to capture semantic meaning!
 
 EXAMPLES:
-- "I love creating digital art" → skill_verb: [creating], domain_topic: [digital art]
-- "Helping burned-out teachers" → persona_hint: [burned-out teachers], problem_theme: [teacher burnout]
-- "Purpose drives me" → value: [purpose]
+- "Creating digital art"
+  → skill_verb: [creating, making, designing, producing]
+  → domain_topic: [digital art, art, design, visual media, creativity]
+
+- "Playing in the playground"
+  → skill_verb: [playing, running, moving, exercising]
+  → domain_topic: [recreation, physical activity, sports, outdoor activities, play]
+
+- "Writing"
+  → skill_verb: [writing, creating, producing, crafting]
+  → domain_topic: [writing, content creation, literature, communication]
+
+- "Building businesses"
+  → skill_verb: [building, creating, developing, founding]
+  → domain_topic: [entrepreneurship, business, startups, business development]
+
+- "Running around"
+  → skill_verb: [running, moving, exercising]
+  → domain_topic: [physical activity, sports, fitness, exercise]
 
 Return ONLY valid JSON (no markdown, no explanation):
 {
-  "skill_verb": ["verb1", "verb2"],
-  "domain_topic": ["topic1"],
-  "value": ["value1"],
-  "emotion": [],
-  "context": [],
-  "problem_theme": [],
-  "persona_hint": []
+  "bullets": [
+    {
+      "text": "bullet text here",
+      "tags": {
+        "skill_verb": ["verb1", "verb2", "verb3"],
+        "domain_topic": ["topic1", "topic2", "topic3"],
+        "value": [],
+        "emotion": [],
+        "context": [],
+        "problem_theme": [],
+        "persona_hint": []
+      }
+    }
+  ]
 }
 
-Only include tags that clearly appear in the response. Empty arrays are fine.
+Each bullet gets its own tags. Include 3-5 related verbs and 3-5 related topics per item to enable good clustering.
 `
 
 serve(async (req) => {
@@ -66,15 +82,7 @@ serve(async (req) => {
     if (!response || response.trim().length === 0) {
       return new Response(
         JSON.stringify({
-          tags: {
-            skill_verb: [],
-            domain_topic: [],
-            value: [],
-            emotion: [],
-            context: [],
-            problem_theme: [],
-            persona_hint: []
-          }
+          bullets: []
         }),
         {
           headers: {
@@ -116,35 +124,38 @@ serve(async (req) => {
     const extractedText = claudeData.content[0].text
 
     // Parse JSON from Claude's response
-    let tags
+    let result
     try {
       // Try to extract JSON from response (in case Claude adds markdown formatting)
       const jsonMatch = extractedText.match(/\{[\s\S]*\}/)
       if (jsonMatch) {
-        tags = JSON.parse(jsonMatch[0])
+        result = JSON.parse(jsonMatch[0])
       } else {
-        tags = JSON.parse(extractedText)
+        result = JSON.parse(extractedText)
       }
     } catch (parseError) {
       console.error('Failed to parse Claude response:', extractedText)
       throw new Error('Invalid JSON response from Claude')
     }
 
-    // Ensure all expected keys exist
-    const completeTags = {
-      skill_verb: tags.skill_verb || [],
-      domain_topic: tags.domain_topic || [],
-      value: tags.value || [],
-      emotion: tags.emotion || [],
-      context: tags.context || [],
-      problem_theme: tags.problem_theme || [],
-      persona_hint: tags.persona_hint || []
-    }
+    // Ensure all bullets have complete tag structure
+    const bullets = (result.bullets || []).map((bullet: any) => ({
+      text: bullet.text,
+      tags: {
+        skill_verb: bullet.tags?.skill_verb || [],
+        domain_topic: bullet.tags?.domain_topic || [],
+        value: bullet.tags?.value || [],
+        emotion: bullet.tags?.emotion || [],
+        context: bullet.tags?.context || [],
+        problem_theme: bullet.tags?.problem_theme || [],
+        persona_hint: bullet.tags?.persona_hint || []
+      }
+    }))
 
-    // Return extracted tags
+    // Return extracted tags per bullet
     return new Response(
       JSON.stringify({
-        tags: completeTags,
+        bullets: bullets,
         raw_response: extractedText,
         model: 'claude-3-haiku-20240307'
       }),
@@ -162,15 +173,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         error: error.message || 'Internal server error',
-        tags: {
-          skill_verb: [],
-          domain_topic: [],
-          value: [],
-          emotion: [],
-          context: [],
-          problem_theme: [],
-          persona_hint: []
-        }
+        bullets: []
       }),
       {
         status: 500,
