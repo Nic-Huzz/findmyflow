@@ -5,18 +5,18 @@
       "category": "Recognise",
       "type": "daily",
       "name": "Essence Archetype",
-      "description": "Where did your essence archetype naturally emerge today?",
+      "description": "Where did you show up as your essence archetype in your work today",
       "points": 5,
       "inputType": "text",
-      "placeholder": "What was the situation? What were you doing? Who were you with?",
-      "learnMore": "Tracking when your essence shows up helps you identify how often throughout the day you're showing up from this place.\n\nYou're training your awareness so you can show-up from this place more often."
+      "placeholder": "What was the situation? What were you doing?",
+      "learnMore": "Tracking when your essence shows up helps you identify how aligned your work is with your essence.\n\nYou're training your awareness so you can show-up from this place more often."
     },
     {
       "id": "recognise_protective_observe",
       "category": "Recognise",
       "type": "daily",
       "name": "Protective Archetype",
-      "description": "Where did your protective archetype emerge today?",
+      "description": "Where did your protective archetype emerge in your work today?",
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What caused it to arise?",
@@ -27,7 +27,7 @@
       "category": "Recognise",
       "type": "daily",
       "name": "Positive Frequency",
-      "description": "What's a moment where you were challenged today but reacted from a place of love?",
+      "description": "What's a moment where you were challenged in your work today but reacted from a place of love?",
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation?",
@@ -38,7 +38,7 @@
       "category": "Recognise",
       "type": "daily",
       "name": "Negative Frequency",
-      "description": "What's a moment you were challenged today and reacted from a place of fear?",
+      "description": "What's a moment you were challenged in your work today and reacted from a place of fear?",
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation? What caused you to be triggered?",
@@ -81,25 +81,14 @@
       "id": "recognise_ikigai",
       "category": "Recognise",
       "type": "weekly",
-      "name": "Nikigai",
+      "name": "Nikigai - Flow Formula",
       "description": "The Ikigai process modernised to identify business opportunities",
       "points": 25,
       "inputType": "flow",
       "flow_id": "nikigai",
       "flow_route": "/nikigai",
-      "learnMore": "Ikigai is a Japanese concept meaning 'reason for being.' It sits at the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.\n\nThis modernised version helps you identify tangible business opportunities aligned with your passions, experiences and skills.\n\nTakes 15-20 minutes."
-    },
-    {
-      "id": "recognise_consciousness_quiz",
-      "category": "Recognise",
-      "type": "weekly",
-      "name": "Spiral Dynamics Quiz",
-      "description": "Discover where you operate on the consciousness spectrum. Understand your current state and opportunities for growth.",
-      "points": 15,
-      "inputType": "flow",
-      "flow_id": "spiral_dynamics",
-      "flow_route": "/spiral-dynamics",
-      "learnMore": "Spiral Dynamics maps stages of human values and beliefs—from survival-based thinking to purpose-driven living.\n\nUnderstanding where you currently operate helps you see your blind spots and growth edges.\n\nThis isn't about being 'better than' others—it's about recognising your worldview and where you're ready to expand.\n\nTakes 5-10 minutes."
+      "status": "coming_soon",
+      "learnMore": "Ikigai is a Japanese concept meaning 'reason for being.' It sits at the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.\n\nThis modernised version helps you identify tangible business opportunities aligned with your passions, experiences and skills. See it as your Flow Formula.\n\nTakes 15-20 minutes."
     },
     {
       "id": "recognise_nervous_system",
@@ -111,6 +100,7 @@
       "inputType": "flow",
       "flow_id": "nervous_system",
       "flow_route": "/nervous-system",
+      "status": "coming_soon",
       "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a somatic practice) to identify exactly where those boundaries are—so you can consciously expand them.\n\nTakes about 10 minutes."
     },
     {
@@ -439,44 +429,44 @@
   ],
   "artifacts": [
     {
-      "id": "essence_boat",
+      "id": "treasure_map",
       "name": "Treasure Map",
       "category": "Recognise",
       "description": "Identify where to find your flow.",
       "weeklyPointsRequired": 50,
       "dailyPointsRequired": 40,
       "totalRequired": 90,
-      "image": "/images/artifacts/essence-boat.png"
+      "image": "/images/artifacts/treasure-map.png"
     },
     {
-      "id": "captains_hat",
+      "id": "cutting_anchor",
       "name": "Cutting The Anchor",
       "category": "Release",
       "description": "Letting go of what's stopping your flow.",
       "weeklyPointsRequired": 30,
       "dailyPointsRequired": 30,
       "totalRequired": 60,
-      "image": "/images/artifacts/captains-hat.png"
+      "image": "/images/artifacts/cutting-anchor.png"
     },
     {
-      "id": "treasure_map",
+      "id": "captains_hat",
       "name": "Captain's Hat",
       "category": "Rewire",
       "description": "Taking action to be who you were born to be.",
       "weeklyPointsRequired": 60,
       "dailyPointsRequired": 50,
       "totalRequired": 110,
-      "image": "/images/artifacts/treasure-map.png"
+      "image": "/images/artifacts/captains-hat.png"
     },
     {
-      "id": "sailing_sails",
+      "id": "essence_boat",
       "name": "Essence Boat",
       "category": "Reconnect",
       "description": "Your Vessel for living your flow.",
       "weeklyPointsRequired": 40,
       "dailyPointsRequired": 50,
       "totalRequired": 90,
-      "image": "/images/artifacts/sailing-sails.png"
+      "image": "/images/artifacts/essence-boat.png"
     }
   ]
 }

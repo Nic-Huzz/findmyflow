@@ -200,10 +200,12 @@
   z-index: 1;
   pointer-events: none;
   filter: blur(2px); /* Add blur to distinguish from current card */
+  transition: none !important; /* Prevent sliding animation when becoming current card */
 }
 
 .swipe-card-current {
   z-index: 2;
+  transition: none !important; /* Prevent animation when card becomes current */
 }
 
 .swipe-card:active {

@@ -188,7 +188,7 @@ const Profile = () => {
       <div className="main-content">
         <div className="page-header">
           <h1 className="page-title">Welcome Back, {userData?.user_name || user?.email?.split('@')[0] || 'User'}</h1>
-          <p className="page-subtitle">Here's your transformation journey at a glance</p>
+          <p className="page-subtitle">Here's Your Profile:</p>
         </div>
 
         {/* Stats Grid */}
@@ -286,15 +286,9 @@ const Profile = () => {
         {/* CTA Banner */}
         <div className="cta-banner">
           <div className="cta-content">
-            <h3>Ready to Dive Deeper?</h3>
-            <p>Continue your transformation journey with the Healing Compass</p>
+            <h3>Ready to Find Your Flow?</h3>
+            <p>Fulfil Your Ambitions Quicker</p>
             <div className="cta-buttons">
-              <button
-                className="btn-white"
-                onClick={() => navigate('/healing-compass')}
-              >
-                Start Healing Compass →
-              </button>
               <button
                 className="btn-white"
                 onClick={() => navigate('/7-day-challenge')}

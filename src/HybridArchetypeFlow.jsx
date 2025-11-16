@@ -109,6 +109,7 @@ const HybridArchetypeFlow = ({
 
     setIsAnimating(true)
     setSwipeDirection('right')
+    setDragDelta(0) // Reset immediately to prevent overlay flash
 
     if (cardRef.current) {
       const flyDistance = window.innerWidth * 1.5
@@ -134,6 +135,7 @@ const HybridArchetypeFlow = ({
 
     setIsAnimating(true)
     setSwipeDirection('left')
+    setDragDelta(0) // Reset immediately to prevent overlay flash
 
     if (cardRef.current) {
       const flyDistance = window.innerWidth * 1.5
@@ -217,6 +219,7 @@ const HybridArchetypeFlow = ({
       setIsAnimating(true)
       const direction = deltaX > 0 ? 'right' : 'left'
       setSwipeDirection(direction)
+      setDragDelta(0) // Reset immediately to prevent overlay flash on next card
 
       if (cardRef.current) {
         // Animate card flying off screen (hardware accelerated)
@@ -531,13 +534,13 @@ const HybridArchetypeFlow = ({
             >
               {/* YES/NO Overlays */}
               <div className="swipe-overlay swipe-overlay-yes" style={{
-                opacity: dragDelta > 50 ? 1 : 0,
+                opacity: (isDragging.current && !isAnimating && dragDelta > 50) ? 1 : 0,
                 transition: 'opacity 0.2s ease'
               }}>
                 <span className="overlay-text">✅ YES</span>
               </div>
               <div className="swipe-overlay swipe-overlay-no" style={{
-                opacity: dragDelta < -50 ? 1 : 0,
+                opacity: (isDragging.current && !isAnimating && dragDelta < -50) ? 1 : 0,
                 transition: 'opacity 0.2s ease'
               }}>
                 <span className="overlay-text">❌ NO</span>

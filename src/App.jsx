@@ -480,7 +480,7 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>Find My Flow</h1>
-        <p>Discover your archetypes and unlock your potential</p>
+        <p>Fulfil Your Ambitions Faster</p>
       </header>
 
       <main className="chat-container">

@@ -141,30 +141,28 @@ function Challenge() {
 
       setProgress(progressData)
 
-      // Calculate current day based on Thailand timezone (UTC+7)
-      // Reset happens at midnight Thailand time (17:00 UTC previous day)
-      // This ensures consistent day progression regardless of user's location
-      // Example: If challenge starts on Monday in Thailand, Day 2 begins at Tuesday 00:00 ICT
-      const challengeStart = new Date(progressData.challenge_start_date)
+      // Check if we need to advance the day
+      // Use calendar days instead of 24-hour periods
+      const lastActive = new Date(progressData.last_active_date)
       const now = new Date()
 
-      // Convert to Thailand time by adding 7 hours (in milliseconds)
-      const thailandOffset = 7 * 60 * 60 * 1000
-      const startThailand = new Date(challengeStart.getTime() + thailandOffset)
-      const nowThailand = new Date(now.getTime() + thailandOffset)
+      // Reset time to midnight for proper day comparison
+      const lastActiveDay = new Date(lastActive.getFullYear(), lastActive.getMonth(), lastActive.getDate())
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
-      // Get midnight of the start date in Thailand
-      const startMidnight = new Date(startThailand.getFullYear(), startThailand.getMonth(), startThailand.getDate())
-      // Get midnight of current date in Thailand
-      const currentMidnight = new Date(nowThailand.getFullYear(), nowThailand.getMonth(), nowThailand.getDate())
+      const daysSinceLastActive = Math.floor((today - lastActiveDay) / (1000 * 60 * 60 * 24))
 
-      // Calculate how many Thailand calendar days have passed
-      const daysSinceStart = Math.floor((currentMidnight - startMidnight) / (1000 * 60 * 60 * 24))
-      const calculatedDay = Math.min(daysSinceStart + 1, 7)
+      console.log('Day counter check:', {
+        lastActiveDate: progressData.last_active_date,
+        lastActiveDay: lastActiveDay.toISOString(),
+        today: today.toISOString(),
+        daysSinceLastActive,
+        currentDay: progressData.current_day
+      })
 
-      // Update if the calculated day is different from stored day
-      if (calculatedDay !== progressData.current_day && calculatedDay <= 7) {
-        await updateDay(progressData, calculatedDay)
+      if (daysSinceLastActive >= 1 && progressData.current_day < 7) {
+        console.log('Advancing day from', progressData.current_day, 'to', Math.min(progressData.current_day + daysSinceLastActive, 7))
+        await advanceDay(progressData, daysSinceLastActive)
       }
 
       // Load quest completions for this challenge instance
@@ -187,21 +185,27 @@ function Challenge() {
     }
   }
 
-  const updateDay = async (currentProgress, calculatedDay) => {
+  const advanceDay = async (currentProgress, daysToAdvance = 1) => {
+    const newDay = Math.min(currentProgress.current_day + daysToAdvance, 7)
+
+    console.log('Advancing from day', currentProgress.current_day, 'to day', newDay)
+
     const { data, error} = await supabase
       .from('challenge_progress')
       .update({
-        current_day: calculatedDay,
+        current_day: newDay,
         last_active_date: new Date().toISOString()
       })
       .eq('user_id', user.id)
+      .eq('challenge_instance_id', currentProgress.challenge_instance_id)
       .select()
       .single()
 
-    if (!error) {
-      setProgress(data)
+    if (error) {
+      console.error('Error advancing day:', error)
     } else {
-      console.error('Error updating day:', error)
+      console.log('Day advanced successfully:', data)
+      setProgress(data)
     }
   }
 
@@ -298,6 +302,34 @@ function Challenge() {
     } catch (error) {
       console.error('Error joining group:', error)
       alert('Error joining group. Please try again.')
+    }
+  }
+
+  const handleRestartChallenge = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to start a new 7-day challenge? Your current progress will be archived and you\'ll start fresh on Day 1.'
+    )
+
+    if (!confirmed) return
+
+    try {
+      // Archive current challenge by setting status to 'completed'
+      await supabase
+        .from('challenge_progress')
+        .update({ status: 'completed' })
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+
+      // Start new challenge (reuse same group if user was in one)
+      await startChallenge(progress.group_id || null)
+
+      // Reload user progress
+      await loadUserProgress()
+
+      alert('🎉 New challenge started! Welcome to Day 1.')
+    } catch (error) {
+      console.error('Error restarting challenge:', error)
+      alert('Error starting new challenge. Please try again.')
     }
   }
 
@@ -634,6 +666,16 @@ function Challenge() {
     }
   }
 
+  const getArtifactEmoji = (category) => {
+    const emojiMap = {
+      'Recognise': '🗺️',
+      'Release': '⚓',
+      'Rewire': '🧢',
+      'Reconnect': '⛵'
+    }
+    return emojiMap[category] || '✨'
+  }
+
   const getDailyStreak = (questId) => {
     if (!progress) return [false, false, false, false, false, false, false]
 
@@ -783,7 +825,12 @@ function Challenge() {
         <div className="challenge-header-top">
           <h1>Gamify Your Ambitions</h1>
           <div className="challenge-header-badges">
-            <div className="challenge-day">Day {progress.current_day}/7</div>
+            <div className="challenge-day">
+              Day {progress.current_day}/7
+              {progress.current_day === 7 && (
+                <span className="challenge-complete-badge">Complete! 🎉</span>
+              )}
+            </div>
             {groupCode && (
               <div className="challenge-day group-code-badge" title="Share this code with friends!">
                 👥 {groupCode}
@@ -815,6 +862,11 @@ function Challenge() {
             )}
           </div>
         </div>
+        {progress.current_day === 7 && (
+          <button className="restart-challenge-btn" onClick={handleRestartChallenge}>
+            Start New 7-Day Challenge
+          </button>
+        )}
       </header>
 
       <div className="challenge-tabs">
@@ -892,7 +944,7 @@ function Challenge() {
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
-              <h3>{artifactProgress.unlocked ? '✨' : '🔒'} {artifactProgress.name}</h3>
+              <h3>{artifactProgress.unlocked ? getArtifactEmoji(activeCategory) : '🔒'} {artifactProgress.name}</h3>
               <p className="artifact-description">{artifactProgress.description}</p>
             </div>
 
