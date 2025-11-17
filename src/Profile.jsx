@@ -171,9 +171,6 @@ const Profile = () => {
           <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
             ✨ Archetypes
           </li>
-          <li className="nav-item" onClick={() => { navigate('/healing-compass'); setSidebarOpen(false); }}>
-            🧭 Healing Compass
-          </li>
           <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
             📈 7-Day Challenge
           </li>

@@ -5,7 +5,7 @@ const essenceProfiles = {
     "group": "Activator",
       "essence": "Disruptive truth-teller with heart.",
       "poetic_line": "You are fire with a heartbeat, designed to disrupt what's false and awaken what's real.",
-      "poetic_vision": "What if your truth became a movement? What if your unapologetic expression wasn't risky but revolutionary. The world isn't waiting for your perfection. It's starving for your fire.",
+      "poetic_vision": "What if your truth became a movement? What if your unapologetic expression wasn't risky but revolutionary?\n\nThe world isn't waiting for your perfection. It's starving for your fire.",
       "superpower": "You ignite courage in the quiet. You say what others won’t and move like fire through what feels stuck.",
       "north_star": "Use rebellion to liberate, not just provoke. Let your why guide your wow.",
  "energetic_transmission": "You electrify the space. Your energy activates boldness — like truth wants to break free through your presence.",
@@ -17,14 +17,14 @@ const essenceProfiles = {
         "Billie Eilish",
         "Katniss Everdeen (Hunger Games)"
       ],
-      "vision_in_action": "Turning chaos into clarity, they spark revolutions with nothing but their voice."
+      "vision_in_action": "You turn chaos into clarity, sparing revolutions with nothing but your voice."
     },
     {
       "name": "Compassionate Leader",
     "group": "Bridger",
       "essence": "Grounded authority, trust-building, embodied leadership.",
       "poetic_line": "You are a walking hearth, steady, warm, and fiercely kind. When you speak, people remember who they are.",
-      "poetic_vision": "What if your presence alone created breakthroughs? What if your calm leadership became a lighthouse for those lost in the noise? Your warmth doesn't make you soft it makes you safe.",
+      "poetic_vision": "What if your presence alone created breakthroughs? What if your calm leadership became a lighthouse for those lost in the noise?\n\nYour warmth doesn't make you soft it makes you safe.",
       "superpower": "You hold the center when things shake. You make people feel seen, safe, and ready to rise.",
       "north_star": "Lead from wholeness, not over-responsibility. Trust others can rise too.",
     "energetic_transmission": "People rise around you — they feel seen, supported, and called into their power. You don’t shout to lead. You hold firm, and others remember their strength.",
@@ -36,14 +36,14 @@ const essenceProfiles = {
         "Captain America",
         "Bren\u00e9 Brown"
       ],
-      "vision_in_action": "Their grounded presence becomes a gravitational field where others remember their power."
+      "vision_in_action": "Your grounded presence becomes a gravitational field where others remember their power."
     },
     {
       "name": "Playful Creator",
     "group": "Activator",
       "essence": "Joy, innovation, curiosity-led action.",
       "poetic_line": "You are joy in motion, color that moves, laughter that builds, a spark dressed in creativity.",
-      "poetic_vision": "What if your joy was the funnel? What if your weirdness was the strategy? You weren't born to fit into boxes you were born to make confetti out of them.",
+      "poetic_vision": "What if your joy was the funnel? What if your weirdness was the strategy?\n\nYou weren't born to fit into boxes you were born to make confetti out of them.",
       "superpower": "You alchemize boredom into magic. You make joy contagious, creativity safe, and weirdness welcome.",
       "north_star": "Channel your joy into containers that scale. Play can be the portal to mastery.",
  "energetic_transmission": "When you’re free, joy crackles through the air. You awaken play, laughter, and lightness just by being.",
@@ -55,14 +55,14 @@ const essenceProfiles = {
         "Robin Williams",
         "Willy Wonka"
       ],
-      "vision_in_action": "They turn pressure into play and make innovation feel like recess for the soul."
+      "vision_in_action": "You turn pressure into play and make innovation feel like recess for the soul."
     },
     {
       "name": "Mystic Messenger",
     "group": "Transmmuter",
       "essence": "Inner knowing, intuitive depth, unseen truth.",
       "poetic_line": "You are the still point in the storm, the one who hears what others can't name and makes it make sense.",
-      "poetic_vision": "What if your content felt like transmission, not explanation? What if your words whispered straight into the soul of your people? You don't need to convince you just need to channel.",
+      "poetic_vision": "What if your content felt like transmission, not explanation? What if your words whispered straight into the soul of your people?\n\nYou don't need to convince you just need to channel.",
       "superpower": "You hear what isn’t said. You decode the invisible and deliver soul signals people didn’t know they were waiting for.",
       "north_star": "Your wisdom doesn't need to be understood by all only felt by the right ones.",
 "energetic_transmission": "Your energy quiets the noise. Stillness spreads. You turn rooms into sanctuaries — even in silence.",
@@ -74,14 +74,14 @@ const essenceProfiles = {
         "Lorde (Singer)",
         "Neo (Matrix)"
       ],
-      "vision_in_action": "Without saying much, their work echoes in the bones of those ready to awaken."
+      "vision_in_action": "Without saying much, your work echoes in the bones of those ready to awaken."
     },
     {
       "name": "Grounded Guardian",
     "group": "Stabiliser",
       "essence": "Devotion, protection, and integrity in motion.",
       "poetic_line": "You are the roots beneath the rise, grounding the sacred into systems that last.",
-      "poetic_vision": "What if your operations were the offering? What if your back-end held just as much frequency as your front-facing voice? You don't need to be loud to be legendary. You need to be anchored.",
+      "poetic_vision": "What if your operations were the offering? What if your back-end held just as much frequency as your front-facing voice?\n\nYou don't need to be loud to be legendary. You need to be anchored.",
       "superpower": "You stabilize wild energy. You build safe havens, hold clear standards, and love through quiet presence.",
       "north_star": "Ground your legacy in integrity. Slow can be sacred.",
  "energetic_transmission": "With you, people exhale. You’re a safe harbor. Your presence says: “You don’t have to hold it all.”",
@@ -93,14 +93,14 @@ const essenceProfiles = {
         "Michelle Obama",
         "Hagrid (Harry Potter)"
       ],
-      "vision_in_action": "They build invisible structures that hold sacred work for generations to come."
+      "vision_in_action": "You build invisible structures that hold sacred work for generations to come."
     },
     {
       "name": "Wild Alchemist",
     "group": "Transmuter",
       "essence": "Liberation, emotion, transformation through truth.",
       "poetic_line": "You are permission, uncaged, untamed, undeniable. Your truth liberates others from their own.",
-      "poetic_vision": "What if your edges were the medicine? What if your rawness was the portal? You're not here to play it safe. You're here to break the rules that never made sense in the first place.",
+      "poetic_vision": "What if your edges were the medicine? What if your rawness was the portal?\n\nYou're not here to play it safe. You're here to break the rules that never made sense in the first place.",
       "superpower": "You transmute chaos into meaning. You give pain purpose and help people rebirth themselves.",
       "north_star": "Let your full expression lead. Alchemy needs fire.",
  "energetic_transmission": "You pulse with emotional depth. Chaos feels sacred around you — like it’s allowed to become something beautiful.",
@@ -112,14 +112,14 @@ const essenceProfiles = {
         "David Bowie",
         "Elizabeth Gilbert"
       ],
-      "vision_in_action": "Where others flinch from fire, they dance in it turning pain into art and rupture into truth."
+      "vision_in_action": "Where others flinch from fire, you dance in it turning pain into art and rupture into truth."
     },
     {
       "name": "Sacred Jester",
     "group": "Activator",
       "essence": "Disruption through play, heart-led absurdity, subversive joy.",
       "poetic_line": "You are the joke that reveals the truth. The giggle that breaks the pattern. The dance that interrupts the shame.",
-      "poetic_vision": "What if irreverence was the revolution? What if your joy flipped the power dynamic? You're not here to follow the rules. You're here to remind people they're free.",
+      "poetic_vision": "What if irreverence was the revolution? What if your joy flipped the power dynamic?\n\nYou're not here to follow the rules. You're here to remind people they're free.",
       "superpower": "You disarm defenses with humor. You reveal truth in the ridiculous and help others feel safe being real.",
       "north_star": "Play with power, don't perform it. Let irreverence be reverent.",
  "energetic_transmission": "Around you, people exhale. Pretenses drop. They remember it's safe to be weird and real.",
@@ -131,14 +131,14 @@ const essenceProfiles = {
         "Star-Lord (Gaurdians of the Galaxy)",
         "Jack Sparrow"
       ],
-      "vision_in_action": "They drop unexpected one-liners that dismantle shame and unzip joy."
+      "vision_in_action": "You drop unexpected one-liners that dismantle shame and unzip joy."
     },
     {
       "name": "Cosmic Connector",
     "group": "Bridger",
       "essence": "Multidimensional vision, integration, cross-world translation.",
       "poetic_line": "You are the thread between worlds' weaving the mystical into the practical, the unseen into form.",
-      "poetic_vision": "What if your weirdness was the map? What if your role wasn't to choose a lane but to bridge them? You're not too much you're multidimensional.",
+      "poetic_vision": "What if your weirdness was the map? What if your role wasn't to choose a lane but to bridge them?\n\nYou're not too much you're multidimensional.",
       "superpower": "You weave worlds. You connect the mystical and the practical, helping others make sense of the big and strange.",
       "north_star": "Don't dilute your range to fit in. Your synthesis is the spell.",
     "energetic_transmission": "You align chaos into coherence. Ideas land. Emotions make sense. The unseen becomes useful.",
@@ -150,7 +150,7 @@ const essenceProfiles = {
         "Rick Rubin",
         "Gandalf"
       ],
-      "vision_in_action": "They take quantum truths and translate them into tools, blueprints, and rituals that land."
+      "vision_in_action": "You take quantum truths and translate them into tools, blueprints, and rituals that land."
     },
 
   {
@@ -158,7 +158,7 @@ const essenceProfiles = {
     "group": "Stabiliser",
     "essence": "Steady presence that calms bodies and keeps the field intact.",
     "poetic_line": "You are the quiet gravity — the heartbeat that steadies the storm.",
-    "poetic_vision": "What if safety wasn't a pause but a power? What if your calm made courage possible — not by smothering the fire, but by giving it a hearth? You don't fix people. You help their nervous systems remember how to trust.",
+    "poetic_vision": "What if safety wasn't a pause but a power? What if your calm made courage possible — not by smothering the fire, but by giving it a hearth?\n\nYou don't fix people. You help their nervous systems remember how to trust.",
     "superpower": "You co-regulate rooms. With you, breath slows, shoulders drop, and real work can land.",
     "north_star": "Hold with warmth and boundaries. Care that preserves dignity, not dependency.",
     "energetic_transmission": "A settling wave. Voices soften, hearts unclench, belonging rises — people can be real again.",
@@ -177,7 +177,7 @@ const essenceProfiles = {
     "group": "Stabiliser",
     "essence": "Architect of reliability — turning chaos into simple, repeatable rhythm.",
     "poetic_line": "You are the cadence-maker — the click where mess becomes momentum.",
-    "poetic_vision": "What if excellence felt effortless? What if your love of clean lines and clear steps set people free to do their best work? Order isn't control — it's care made visible.",
+    "poetic_vision": "What if excellence felt effortless? What if your love of clean lines and clear steps set people free to do their best work?\n\nOrder isn't control — it's care made visible.",
     "superpower": "You build the rails: standards, checklists, handoffs. Error drops. Throughput climbs.",
     "north_star": "Make it visible. Make it repeatable. Make it safe.",
     "energetic_transmission": "The room ‘clicks.’ Paths clarify, stress falls, execution hums without heroics.",
@@ -196,7 +196,7 @@ const essenceProfiles = {
     "group": "Bridger",
     "essence": "Translator of complexity — turning many inputs into one shared map.",
     "poetic_line": "You are the constellation-bringer — the pattern that lets us walk together.",
-    "poetic_vision": "What if confusion was an invitation? What if your gift is showing people the same picture so collaboration feels obvious? Coherence isn't dumbing down — it's tuning the signal so everyone can hear it.",
+    "poetic_vision": "What if confusion was an invitation? What if your gift is showing people the same picture so collaboration feels obvious?\n\nCoherence isn't dumbing down — it's tuning the signal so everyone can hear it.",
     "superpower": "You connect the dots and name the frame; questions drop, alignment clicks.",
     "north_star": "Make meaning mutual. One clear model before big motion.",
     "energetic_transmission": "Fog lifts. A single ‘aha’ spreads. People point to the same map and move.",
@@ -215,7 +215,7 @@ const essenceProfiles = {
     "group": "Transmuter",
       "essence": "Clarity, boldness, and no-BS simplicity.",
       "poetic_line": "You are the sentence that slices through the noise. The call-out and the call-home. Clarity made human.",
-      "poetic_vision": "What if simplicity was the spell? What if calling it like it is was your sacred gift? You're not here to sugarcoat. You're here to wake people up.",
+      "poetic_vision": "What if simplicity was the spell? What if calling it like it is was your sacred gift?\n\nYou're not here to sugarcoat. You're here to wake people up.",
       "superpower": "You crack illusions with precision. You speak the sharp truth wrapped in unexpected tenderness.",
       "north_star": "Say the thing others won't. Truth is love wearing its boldest clothes.",
  "energetic_transmission": "Around you, everything sharpens. Emotional fog lifts. Your presence calls forth honesty even the kind that trembles.",
@@ -227,7 +227,7 @@ const essenceProfiles = {
     "Ricky Gervais",
     "Lady Gaga"
       ],
-      "vision_in_action": "They speak what no one else will and somehow it lands like liberation, not attack."
+      "vision_in_action": "You speak what no one else will and somehow it lands like liberation, not attack."
     }
   ]
 };

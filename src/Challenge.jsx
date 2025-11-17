@@ -258,6 +258,12 @@ function Challenge() {
         }])
 
       setShowGroupSelection(false)
+
+      // Show success message with group code
+      alert(`🎉 Group created successfully!\n\nYour group code is: ${newCode}\n\nShare this code with friends to invite them to your challenge group. You can also find this code on the Leaderboard page.`)
+
+      // TODO: Send email with group code (requires email service setup)
+      // For now, the code is displayed in the alert and on the leaderboard
     } catch (error) {
       console.error('Error creating group:', error)
       alert('Error creating group. Please try again.')
@@ -713,34 +719,49 @@ function Challenge() {
       <div className="challenge-container">
         <div className="challenge-onboarding">
           <div className="onboarding-content">
-            <h1>🚀 Welcome to Gamify Your Ambitions</h1>
+            <h1>🚀 Ready to Find Your Flow?</h1>
             <p className="onboarding-intro">
-              Embark on a transformational journey to embody your essence archetype.
-              Over the next 7 days, you'll complete quests across four categories:
+            You got the job. Made some money. Experienced the ladder.
+            </p>
+            <p className="onboarding-intro">
+            But somewhere along the way, you realised: This isn't it.
+            </p>
+            <p className="onboarding-intro">
+            You had your awakening...Now what?
+            </p>
+            <p className="onboarding-intro">
+              You know there's something more— you've felt it.
+            </p>
+            <p className="onboarding-intro">
+              Moments of aliveness. Impact. Flow.
+            </p>
+            <p className="onboarding-intro">
+              But you don't know how to get from where you are to where you sense you could be.
+            </p>
+            <p className="onboarding-intro">
+              That's what Find My Flow is for.
+            </p>
+            <p className="onboarding-intro">
+              Over the next 7 days you'll complete quests across four categories to help you re-find your flow and amplify your impact:
             </p>
 
             <div className="onboarding-categories">
               <div className="onboarding-category">
                 <h3>🔍 Recognise</h3>
-                <p>Build awareness of your protective and essence patterns</p>
+                <p>Build awareness of what's blocking your flow and what your flow is</p>
               </div>
               <div className="onboarding-category">
                 <h3>🕊️ Release</h3>
-                <p>Let go of what no longer serves you</p>
+                <p>Let go of traumas blocking your flow</p>
               </div>
               <div className="onboarding-category">
                 <h3>⚡ Rewire</h3>
-                <p>Create new behaviors aligned with your essence</p>
+                <p>Act in alignment with your flow</p>
               </div>
               <div className="onboarding-category">
                 <h3>🌊 Reconnect</h3>
-                <p>Live from your essence through daily practices</p>
+                <p>Live from your essence and find your flow</p>
               </div>
-            </div>
-
-            <div className="onboarding-artifacts">
-              <h3>🏆 Unlock 4 Sacred Artifacts</h3>
-              <p>Complete quests to unlock the Essence Boat, Captain's Hat, Treasure Map, and Sailing Sails.</p>
             </div>
 
             <button className="start-challenge-btn" onClick={showGroupSelectionModal}>
@@ -831,11 +852,6 @@ function Challenge() {
                 <span className="challenge-complete-badge">Complete! 🎉</span>
               )}
             </div>
-            {groupCode && (
-              <div className="challenge-day group-code-badge" title="Share this code with friends!">
-                👥 {groupCode}
-              </div>
-            )}
             {userData?.essence_archetype && (
               <div
                 className="challenge-day archetype-badge"
@@ -902,6 +918,12 @@ function Challenge() {
                 </button>
               </div>
             </div>
+
+            {groupCode && (
+              <div className="group-code-display">
+                Group Code: <strong>{groupCode}</strong>
+              </div>
+            )}
 
             <div className="leaderboard-list">
               {leaderboard.length === 0 && (
@@ -1071,9 +1093,15 @@ function Challenge() {
                     {!completed && (
                       <div className="quest-input-area">
                         {quest.inputType === 'flow' ? (
-                          <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
-                          </Link>
+                          quest.status === 'coming_soon' ? (
+                            <button className="quest-flow-btn coming-soon" disabled>
+                              Coming Soon
+                            </button>
+                          ) : (
+                            <Link to={quest.flow_route} className="quest-flow-btn">
+                              Start {quest.name} →
+                            </Link>
+                          )
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea
@@ -1169,9 +1197,15 @@ function Challenge() {
                     {!completed && (
                       <div className="quest-input-area">
                         {quest.inputType === 'flow' ? (
-                          <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
-                          </Link>
+                          quest.status === 'coming_soon' ? (
+                            <button className="quest-flow-btn coming-soon" disabled>
+                              Coming Soon
+                            </button>
+                          ) : (
+                            <Link to={quest.flow_route} className="quest-flow-btn">
+                              Start {quest.name} →
+                            </Link>
+                          )
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea
@@ -1267,9 +1301,15 @@ function Challenge() {
                     {!completed && (
                       <div className="quest-input-area">
                         {quest.inputType === 'flow' ? (
-                          <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
-                          </Link>
+                          quest.status === 'coming_soon' ? (
+                            <button className="quest-flow-btn coming-soon" disabled>
+                              Coming Soon
+                            </button>
+                          ) : (
+                            <Link to={quest.flow_route} className="quest-flow-btn">
+                              Start {quest.name} →
+                            </Link>
+                          )
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea

@@ -156,7 +156,7 @@
       "step": "stage5_contracts_intro",
       "step_order_index": 13.0,
       "required_inputs": ["stage4_triage_5_complete"],
-      "prompt": "Now let's go deeper.\n\nI'm going to give you 5-7 **safety contracts** to test — these are fears your nervous system may be holding to keep you safe.\n\nThese are more accurate than testing empowering beliefs, because we're going straight to the source: what your system is protecting you from.\n\nEach contract follows an \"If X, then Y\" format. Test each one and notice if your body says YES (this fear is active) or NO (this isn't a concern).",
+      "prompt": "Now let's go deeper.\n\nI'm going to give you 5-7 safety contracts to test — these are fears your nervous system may be holding to keep you safe.\n\nThese are more accurate than testing empowering beliefs, because we're going straight to the source: what your system is protecting you from.\n\nEach contract follows an \"If X, then Y\" format. Test each one and notice if your body says YES (this fear is active) or NO (this isn't a concern).",
       "options": [
         { "label": "Ready", "value": "ready" }
       ],
@@ -201,7 +201,10 @@
         "{{belief_test_results}}"
       ],
       "prompt": "{{MIRROR_PATTERN}}",
-      "tag_as": "pattern_mirrored",
+      "options": [
+        { "label": "Interesting!", "value": "continue" }
+      ],
+      "tag_as": "reflection_acknowledged",
       "store_as": "stage6_mirror_complete",
       "instructions_to_gpt": "Generate a personalized reflection based on all collected data:\n\n1. Name where their system feels safe vs. where it contracts (use triage results)\n2. Identify the most limiting belief that showed up (from belief tests)\n3. Suggest what deeper fear may be protecting them from expansion\n4. Name the pattern/archetype if applicable (e.g., 'The Good Soldier', 'The Hustling Healer')\n5. Explain what needs to be rewired\n\nUse compassionate, insightful language. Make it feel personalized and deeply seen."
     },

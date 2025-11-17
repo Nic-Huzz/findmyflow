@@ -5,6 +5,21 @@ import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
 
+// Helper function to convert markdown to HTML for basic formatting
+function formatMarkdown(text) {
+  if (!text) return ''
+
+  return text
+    // Bold: **text** or __text__
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.+?)__/g, '<strong>$1</strong>')
+    // Italic: *text* or _text_
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n/g, '<br />')
+}
+
 function NervousSystemFlow() {
   const { user } = useAuth()
   const [flow, setFlow] = useState(null)
@@ -177,9 +192,9 @@ function NervousSystemFlow() {
               impact_goal: newContext.impact_goal,
               income_goal: newContext.income_goal,
               positive_change: newContext.positive_change,
-              current_struggle: newContext.current_struggle,
+              current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,
-              reflection_text: newContext.reflection_text,
+              reflection_text: newContext.pattern_mirrored,
               context: newContext
             }])
 
@@ -219,6 +234,9 @@ function NervousSystemFlow() {
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
+
+      // Move currentIndex beyond last step to hide options
+      setCurrentIndex(flow.steps.length)
     }
 
     setIsLoading(false)
@@ -257,6 +275,13 @@ function NervousSystemFlow() {
     if (nextStep) {
       // Add AI response
       const responseText = await resolvePrompt(nextStep, newContext)
+
+      // If this is the mirror reflection step, store the generated text
+      if (nextStep.step === 'stage6_mirror_reflection') {
+        newContext.pattern_mirrored = responseText
+        setContext(newContext)
+      }
+
       const aiMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
@@ -281,9 +306,9 @@ function NervousSystemFlow() {
               impact_goal: newContext.impact_goal,
               income_goal: newContext.income_goal,
               positive_change: newContext.positive_change,
-              current_struggle: newContext.current_struggle,
+              current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,
-              reflection_text: newContext.reflection_text,
+              reflection_text: newContext.pattern_mirrored,
               context: newContext
             }])
 
@@ -323,6 +348,9 @@ function NervousSystemFlow() {
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
+
+      // Move currentIndex beyond last step to hide options
+      setCurrentIndex(flow.steps.length)
     }
 
     setIsLoading(false)
@@ -371,7 +399,7 @@ function NervousSystemFlow() {
               <div className="bubble">
                 {message.kind === 'completion' ? (
                   <div className="text">
-                    {message.text}
+                    <div dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                     <div style={{ marginTop: 8 }}>
                       <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
                         Return to your profile
@@ -379,7 +407,7 @@ function NervousSystemFlow() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text">{message.text}</div>
+                  <div className="text" dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                 )}
                 <div className="timestamp">{message.timestamp}</div>
               </div>

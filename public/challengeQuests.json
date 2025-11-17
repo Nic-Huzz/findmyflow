@@ -433,9 +433,9 @@
       "name": "Treasure Map",
       "category": "Recognise",
       "description": "Identify where to find your flow.",
-      "weeklyPointsRequired": 50,
-      "dailyPointsRequired": 40,
-      "totalRequired": 90,
+      "weeklyPointsRequired": 70,
+      "dailyPointsRequired": 90,
+      "totalRequired": 160,
       "image": "/images/artifacts/treasure-map.png"
     },
     {
@@ -444,8 +444,8 @@
       "category": "Release",
       "description": "Letting go of what's stopping your flow.",
       "weeklyPointsRequired": 30,
-      "dailyPointsRequired": 30,
-      "totalRequired": 60,
+      "dailyPointsRequired": 54,
+      "totalRequired": 84,
       "image": "/images/artifacts/cutting-anchor.png"
     },
     {
@@ -453,9 +453,9 @@
       "name": "Captain's Hat",
       "category": "Rewire",
       "description": "Taking action to be who you were born to be.",
-      "weeklyPointsRequired": 60,
-      "dailyPointsRequired": 50,
-      "totalRequired": 110,
+      "weeklyPointsRequired": 100,
+      "dailyPointsRequired": 113,
+      "totalRequired": 213,
       "image": "/images/artifacts/captains-hat.png"
     },
     {
@@ -463,9 +463,9 @@
       "name": "Essence Boat",
       "category": "Reconnect",
       "description": "Your Vessel for living your flow.",
-      "weeklyPointsRequired": 40,
-      "dailyPointsRequired": 50,
-      "totalRequired": 90,
+      "weeklyPointsRequired": 70,
+      "dailyPointsRequired": 90,
+      "totalRequired": 160,
       "image": "/images/artifacts/essence-boat.png"
     }
   ]

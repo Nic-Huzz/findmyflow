@@ -5,6 +5,21 @@ import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import HybridArchetypeFlow from './HybridArchetypeFlow'
 
+// Helper function to convert markdown to HTML for basic formatting
+function formatMarkdown(text) {
+  if (!text) return ''
+
+  return text
+    // Bold: **text** or __text__
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__(.+?)__/g, '<strong>$1</strong>')
+    // Italic: *text* or _text_
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n/g, '<br />')
+}
+
 function App() {
   const { signInWithMagicLink } = useAuth()
   const [flow, setFlow] = useState(null)
@@ -490,7 +505,7 @@ function App() {
               <div className="bubble">
                 {message.kind === 'completion' ? (
                   <div className="text">
-                    {message.text}
+                    <div dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                     <div style={{ marginTop: 8 }}>
                       <button
                         onClick={handleResendEmail}
@@ -511,7 +526,7 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text">{message.text}</div>
+                  <div className="text" dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                 )}
                 <div className="timestamp">{message.timestamp}</div>
               </div>

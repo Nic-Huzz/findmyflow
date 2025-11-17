@@ -9,7 +9,7 @@
     {
       "step": "lead_q1_intro_name",
       "step_order_index": 1.0,
-      "prompt": "Welcome!🌞 I'm Zarlo 👋🏼\n\nHave you ever felt like you were made for more?\n\nI believe you were.\n\nI believe you were made to flow like a river—to move with purpose, to nourish the world, to make a positive impact.\n\nI believe when you live from this place, the universe creates a current to support you.\n\nI call this your flow.\n\nIf you're feeling stuck - like your flow is hitting a river bank, through gamifying your ambitions this site will help you re-find your flow.\n\nIf you believe you're here to make a difference, trust the universe and keen to amplify your impact—let's begin.\n\nWhat do I call you?",
+      "prompt": "Welcome!🌞 I'm Zarlo 👋🏼\n\n**Have you ever felt like you were made for more?**\n\nI believe you were.\n\nI believe you were made to flow like a river—to move with purpose, to nourish the world, to make a positive impact.\n\nI believe when you live from this place, the universe creates a current to support you.\n\n**I call this your flow.**\n\nIf you're keen to find you flow but feeling stuck - like your flow is hitting a river bank, I'm here to support.\n\nIf you believe you're here to make a difference, trust the universe and keen to amplify your impact—let's begin.\n\nWhat do I call you?",
       "tag_as": "user_name",
       "store_as": "lead_q1_name_complete",
       "instructions_to_gpt": "Wait for short name. Store exactly as provided. Do not proceed until captured."
@@ -18,7 +18,7 @@
       "step": "lead_q2_essence_intro",
       "step_order_index": 2.0,
       "required_inputs": ["lead_q1_name_complete"],
-      "prompt": "Perfect, {{user_name}}.\n\nHere's what I've learned: every river has a natural current.\n\nA direction it flows most powerfully. A way it serves the world most naturally.\n\nThis is your essence—the unique way your energy moves when nothing blocks it.\n\nThere are 8 Essence Archetypes. Each one flows in a unique way to create its impact.\n\nOne will resonate as the version of you that's most alive and authentic.\n\nWhen you serve from this place, you're at your most impactful and magnetic.\n\nSwipe right on the ones that resonate. Left on the ones that don't.",
+      "prompt": "Perfect, {{user_name}}.\n\nHere's what I've learned: every river has a natural current.\n\nA direction it flows most powerfully. A way it serves the world most naturally.\n\nThis is your essence—the unique way your energy moves when nothing blocks it.\n\n**There are 8 Essence Archetypes. Each one flows in a unique way to create its impact.**\n\nOne will resonate as the version of you that's most alive and authentic.\n\nWhen you serve from this place, you're at your most impactful and magnetic.\n\nSwipe right on the ones that resonate. Left on the ones that don't.",
       "options": [
         { "label": "Yes, let's go!", "value": "yes" }
       ],
@@ -42,7 +42,7 @@
       "prompt": "{{ESSENCE_REVEAL(essence_archetype_selection)}}\n\nDoes this feel like you?",
       "options": [
         { "label": "Yes, that feels true", "value": "yes" },
-        { "label": "Not sure yet", "value": "no" }
+        { "label": "Hmm, show me the list again", "value": "no" }
       ],
       "tag_as": "essence_archetype_reflect",
       "store_as": "lead_q4_essence_reflection_complete"
@@ -51,7 +51,7 @@
       "step": "lead_q5_protective_intro",
       "step_order_index": 5.0,
       "required_inputs": ["lead_q4_essence_reflection_complete"],
-      "prompt": "Now {{user_name}}, let's explore what's been blocking your flow.\n\nThese are protective patterns you developed when you were younger to keep yourself safe from failure, rejection, or judgement.\n\nThe Perfectionist. The People Pleaser. The Controller. The Performer. The Ghost.\n\nThey were so effective they've now become the thing blocking you from sharing your {{essence_archetype}} gifts with the world.\n\nLet's identify which one is showing up most in the pursuit of your ambitions.\n\nSwipe right on the ones that sound most familiar. Left on the ones that don't.",
+      "prompt": "Now {{user_name}}, let's explore what's been blocking your flow.\n\nThese are protective patterns you developed when you were younger to keep yourself safe from failure, rejection, or judgement.\n\n*The Perfectionist. The People Pleaser. The Controller. The Performer. The Ghost.*\n\nThey were so effective they've now become the thing blocking you from sharing your {{essence_archetype}} gifts with the world.\n\nLet's identify which one is showing up most in the pursuit of your ambitions.\n\nSwipe right on the ones that sound most familiar. Left on the ones that don't.",
       "options": [
         { "label": "Yes, let's go!", "value": "yes" }
       ],
@@ -85,7 +85,7 @@
       "step": "lead_q8_email_capture",
       "step_order_index": 8.0,
       "required_inputs": ["lead_q7_protective_reflection_complete"],
-      "prompt": "Keen to learn more about your Essence Archetype and Protective Archetype?\n\nAnd ways to overcome the Protective Archetype that's blocking your ambitions so you can live from your Essence Archetype?\n\nEnter your email below. You'll receive a link to your profile.",
+      "prompt": "Perfect, {{user_name}}.\n\nYou've now identified your {{essence_archetype}} current and the {{protective_archetype}} pattern that's slowing it down.\n\nNow here's what happens next:\n\nI've created a personalised profile that shows you how to navigate from protection back to flow.\n\nEnter your email below and I'll send you a link to your full profile.",
       "tag_as": "user_email",
       "store_as": "lead_q8_email_capture_complete",
       "instructions_to_gpt": "Capture valid email address and store. Trigger Supabase profile creation.",

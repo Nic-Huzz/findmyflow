@@ -58,6 +58,7 @@
   border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 600;
+  margin-left: 0.5rem;
 }
 
 .restart-challenge-btn {
@@ -569,6 +570,17 @@
   transform: translateY(0);
 }
 
+.quest-flow-btn.coming-soon {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.quest-flow-btn.coming-soon:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .quest-completed-badge {
   background: #d4edda;
   color: #155724;
@@ -765,6 +777,12 @@
   .total-points {
     width: 100%;
   }
+
+  .restart-challenge-btn {
+    width: 100%;
+    margin-top: 1rem;
+    text-align: center;
+  }
 }
 
 /* Leaderboard Styles */
@@ -777,9 +795,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.group-code-display {
+  background: rgba(94, 23, 235, 0.1);
+  border: 2px dashed rgba(94, 23, 235, 0.3);
+  padding: 0.25rem 1rem;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.group-code-display strong {
+  color: #5e17eb;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  font-family: 'Monaco', 'Courier New', monospace;
 }
 
 .leaderboard-toggle {
