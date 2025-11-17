@@ -4,6 +4,7 @@ import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import HybridArchetypeFlow from './HybridArchetypeFlow'
+import { sanitizeText } from './lib/sanitize'
 
 // Helper function to convert markdown to HTML for basic formatting
 function formatMarkdown(text) {
@@ -168,20 +169,21 @@ function App() {
     }
 
     const trimmedInput = inputText.trim()
+    const sanitizedInput = sanitizeText(trimmedInput) // ✅ Sanitize user input
     setIsLoading(true)
 
     // Add user message
     const userMessage = {
       id: `user-${Date.now()}`,
       isAI: false,
-      text: trimmedInput,
+      text: sanitizedInput,
       timestamp: new Date().toLocaleTimeString()
     }
 
     // Update context
     const newContext = { ...context }
     if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = trimmedInput
+      newContext[currentStep.tag_as] = sanitizedInput
       console.log('📝 Stored in context:', currentStep.tag_as, '=', trimmedInput)
       // If persona was just selected, update Supabase immediately
       if (currentStep.tag_as === 'persona_selection') {
@@ -207,7 +209,7 @@ function App() {
       console.log('💾 SAVING TO SUPABASE - Email step detected!')
       try {
         // Generate session ID for anonymous users
-        const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        const sessionId = crypto.randomUUID()
         
         // Store session_id in context for later use
         newContext.session_id = sessionId

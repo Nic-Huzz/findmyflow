@@ -6,12 +6,12 @@ export function getOrCreateSessionId() {
   try {
     const existing = localStorage.getItem(SESSION_STORAGE_KEY)
     if (existing) return existing
-    const newId = `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
+    const newId = crypto.randomUUID()
     localStorage.setItem(SESSION_STORAGE_KEY, newId)
     return newId
   } catch {
     // Fallback when storage unavailable
-    return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
+    return crypto.randomUUID()
   }
 }
 

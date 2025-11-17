@@ -4,6 +4,7 @@ import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest, hasActiveChallenge } from './lib/questCompletion'
+import { sanitizeText } from './lib/sanitize'
 
 function HealingCompass() {
   const { user } = useAuth()
@@ -134,20 +135,21 @@ function HealingCompass() {
     }
 
     const trimmedInput = inputText.trim()
+    const sanitizedInput = sanitizeText(trimmedInput) // ✅ Sanitize user input
     setIsLoading(true)
 
     // Add user message
     const userMessage = {
       id: `user-${Date.now()}`,
       isAI: false,
-      text: trimmedInput,
+      text: sanitizedInput,
       timestamp: new Date().toLocaleTimeString()
     }
 
     // Update context
     const newContext = { ...context }
     if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = trimmedInput
+      newContext[currentStep.tag_as] = sanitizedInput
     }
     if (currentStep.store_as) {
       newContext[currentStep.store_as] = true
@@ -176,6 +178,20 @@ function HealingCompass() {
     } else {
       // Flow completed - save to Supabase
       if (supabase) {
+        // Validate user is authenticated before saving
+        if (!user?.id) {
+          console.error('❌ User not authenticated - cannot save healing compass data')
+          const errorMessage = {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: "⚠️ Please sign in to save your healing compass responses.",
+            timestamp: new Date().toLocaleTimeString()
+          }
+          setMessages(prev => [...prev, errorMessage])
+          setIsLoading(false)
+          return
+        }
+
         try {
           console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
@@ -183,16 +199,19 @@ function HealingCompass() {
           const { data, error } = await supabase
             .from('healing_compass_responses')
             .insert([{
+              user_id: user.id, // ✅ ADDED - Link to authenticated user
               user_name: newContext.user_name || 'Anonymous',
               stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
+              stuck_reason: newContext.stuck_reason_list,
               stuck_emotional_response: newContext.stuck_emotional_response,
               past_parallel_story: newContext.past_parallel_story,
               past_event_emotions: newContext.past_event_emotions,
+              past_event_details: newContext.past_event_details, // Added field from schema
               splinter_interpretation: newContext.splinter_interpretation,
               connect_dots_consent: newContext.connect_dots_consent,
               connect_dots_acknowledged: newContext.connect_dots_acknowledged,
               splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent, // Added field from schema
               context: newContext
             }])
 
@@ -296,6 +315,20 @@ function HealingCompass() {
     } else {
       // Flow completed - save to Supabase
       if (supabase) {
+        // Validate user is authenticated before saving
+        if (!user?.id) {
+          console.error('❌ User not authenticated - cannot save healing compass data')
+          const errorMessage = {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: "⚠️ Please sign in to save your healing compass responses.",
+            timestamp: new Date().toLocaleTimeString()
+          }
+          setMessages(prev => [...prev, errorMessage])
+          setIsLoading(false)
+          return
+        }
+
         try {
           console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
@@ -303,16 +336,19 @@ function HealingCompass() {
           const { data, error } = await supabase
             .from('healing_compass_responses')
             .insert([{
+              user_id: user.id, // ✅ ADDED - Link to authenticated user
               user_name: newContext.user_name || 'Anonymous',
               stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
+              stuck_reason: newContext.stuck_reason_list,
               stuck_emotional_response: newContext.stuck_emotional_response,
               past_parallel_story: newContext.past_parallel_story,
               past_event_emotions: newContext.past_event_emotions,
+              past_event_details: newContext.past_event_details, // Added field from schema
               splinter_interpretation: newContext.splinter_interpretation,
               connect_dots_consent: newContext.connect_dots_consent,
               connect_dots_acknowledged: newContext.connect_dots_acknowledged,
               splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent, // Added field from schema
               context: newContext
             }])
 
