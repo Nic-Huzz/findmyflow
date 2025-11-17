@@ -284,7 +284,7 @@ const Profile = () => {
         <div className="cta-banner">
           <div className="cta-content">
             <h3>Ready to Find Your Flow?</h3>
-            <p>Fulfil Your Ambitions Quicker</p>
+            <p>Live Your Ambitions Quicker</p>
             <div className="cta-buttons">
               <button
                 className="btn-white"

@@ -10,12 +10,12 @@ function formatMarkdown(text) {
   if (!text) return ''
 
   return text
-    // Bold: **text** or __text__
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/__(.+?)__/g, '<strong>$1</strong>')
-    // Italic: *text* or _text_
-    .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/_(.+?)_/g, '<em>$1</em>')
+    // Bold: **text** or __text__ (including multiline)
+    .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>')
+    // Italic: *text* or _text_ (including multiline)
+    .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
+    .replace(/_([\s\S]+?)_/g, '<em>$1</em>')
     // Line breaks
     .replace(/\n/g, '<br />')
 }
@@ -495,7 +495,7 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>Find My Flow</h1>
-        <p>Fulfil Your Ambitions Faster</p>
+        <p>Live Your Ambitions Quicker</p>
       </header>
 
       <main className="chat-container">

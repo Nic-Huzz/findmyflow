@@ -362,7 +362,7 @@ function Challenge() {
         user_id: user.id,
         session_id: sessionId,
         challenge_instance_id: challengeInstanceId,
-        current_day: 1,
+        current_day: 0,
         status: 'active',
         challenge_start_date: new Date().toISOString(),
         last_active_date: new Date().toISOString()
