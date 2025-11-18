@@ -145,6 +145,12 @@
         "step_9_connect_dots_ack_complete"
       ],
       "prompt": "So why do you feel stuck?\n\nBecause you believe you're good enough to do whatever this ambition is. But you've had an emotional splinter that's made it feel terrifying to take action.\n\nKeen to remove the emotional splinter and take action towards your ambition?",
+      "options": [
+        {
+          "label": "Yep!",
+          "value": "yes"
+        }
+      ],
       "tag_as": "splinter_removal_consent",
       "store_as": "step_10_splinter_opt_in_complete",
       "instructions_to_gpt": "Accept a yes/no style response. If yes, celebrate their readiness and prepare to transition to the 7-day challenge."
@@ -155,7 +161,13 @@
       "required_inputs": [
         "step_10_splinter_opt_in_complete"
       ],
-      "prompt": "Amazing! The next step is to {{CHALLENGE_ACTION}} the 7-day challenge where we'll work together to remove this emotional splinter and help you take action towards your ambition.\n\nClick the button below to {{CHALLENGE_ACTION_LOWER}} your transformation journey.",
+      "prompt": "Amazing! The next step is to continue the 7-day challenge where we'll work together to remove this emotional splinter and help you take action towards your ambition.",
+      "options": [
+        {
+          "label": "Continue 7-Day Challenge",
+          "value": "navigate"
+        }
+      ],
       "tag_as": "challenge_enrollment_consent",
       "store_as": "step_11_challenge_complete",
       "navigate_to": "/7-day-challenge",
