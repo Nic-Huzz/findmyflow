@@ -1096,16 +1096,14 @@ function Challenge() {
 
                     {!completed && (
                       <div className="quest-input-area">
-                        {quest.inputType === 'flow' ? (
-                          quest.status === 'coming_soon' ? (
-                            <button className="quest-flow-btn coming-soon" disabled>
-                              Coming Soon
-                            </button>
-                          ) : (
-                            <Link to={quest.flow_route} className="quest-flow-btn">
-                              Start {quest.name} →
-                            </Link>
-                          )
+                        {quest.status === 'coming_soon' ? (
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        ) : quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea
@@ -1200,16 +1198,14 @@ function Challenge() {
 
                     {!completed && (
                       <div className="quest-input-area">
-                        {quest.inputType === 'flow' ? (
-                          quest.status === 'coming_soon' ? (
-                            <button className="quest-flow-btn coming-soon" disabled>
-                              Coming Soon
-                            </button>
-                          ) : (
-                            <Link to={quest.flow_route} className="quest-flow-btn">
-                              Start {quest.name} →
-                            </Link>
-                          )
+                        {quest.status === 'coming_soon' ? (
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        ) : quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea
@@ -1304,16 +1300,14 @@ function Challenge() {
 
                     {!completed && (
                       <div className="quest-input-area">
-                        {quest.inputType === 'flow' ? (
-                          quest.status === 'coming_soon' ? (
-                            <button className="quest-flow-btn coming-soon" disabled>
-                              Coming Soon
-                            </button>
-                          ) : (
-                            <Link to={quest.flow_route} className="quest-flow-btn">
-                              Start {quest.name} →
-                            </Link>
-                          )
+                        {quest.status === 'coming_soon' ? (
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        ) : quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea

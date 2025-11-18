@@ -75,6 +75,7 @@
       "inputType": "flow",
       "flow_id": "healing_compass",
       "flow_route": "/healing-compass",
+      "status": "coming_soon",
       "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective archetype developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
     },
     {
@@ -214,33 +215,36 @@
       "id": "rewire_groan_skills",
       "category": "Rewire",
       "type": "weekly",
-      "name": "Groan Challenge: Skills",
+      "name": "Flow Finder: Skills Challenge",
       "description": "Do something outside your comfort zone but develops a key skill.",
       "points": 25,
       "inputType": "text",
       "placeholder": "What skill-building groan task did you complete?",
+      "status": "coming_soon",
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Skill-building groans might include: recording a video, asking for feedback, learning a new tool, or practicing a skill publicly before you feel 'ready.'"
     },
     {
       "id": "rewire_groan_serve",
       "category": "Rewire",
       "type": "weekly",
-      "name": "Groan Challenge: Persona",
+      "name": "Flow Finder: Persona Challenge",
       "description": "Do something outside your comfort zone to serve and support your ideal audience",
       "points": 25,
       "inputType": "text",
       "placeholder": "How did you serve your persona this week?",
+      "status": "coming_soon",
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Persona-building groans might include: hosting a free workshop for a dream client, reaching out to someone you admire to offer value, creating content about something vulnerable, or asking your audience what they need and delivering it."
     },
     {
       "id": "rewire_groan_solve",
       "category": "Rewire",
       "type": "weekly",
-      "name": "Groan Challenge: Problem",
+      "name": "Flow Finder: Problem Challenge",
       "description": "Solve a problem your passionate about for someone in a way that is outside your comfort zone",
       "points": 25,
       "inputType": "text",
       "placeholder": "What problem did you solve?",
+      "status": "coming_soon",
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Problem-solving groans might include: offering a paid service before you feel qualified, solving a problem publicly (video/article), or approaching someone directly to help them with something they're struggling with."
     },
     {
@@ -385,8 +389,9 @@
       "name": "Feedback Form",
       "description": "Share your experience with the challenge. Your feedback helps us improve the journey for everyone.",
       "points": 10,
-      "inputType": "text",
-      "placeholder": "What feedback do you have about the challenge?"
+      "inputType": "flow",
+      "flow_id": "feedback",
+      "flow_route": "/feedback"
     },
     {
       "id": "bonus_ig_groan",
@@ -417,14 +422,24 @@
       "inputType": "checkbox"
     },
     {
+      "id": "bonus_challenge_recommendation",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Challenge Recommendation",
+      "description": "What challenges would you recommend we add to the 7-day challenge? Please let us know are they a weekly or daily challenge and which R (recognise, release, rewire, reconnect) they best support.",
+      "points": 10,
+      "inputType": "text",
+      "placeholder": "Share your challenge recommendations"
+    },
+    {
       "id": "bonus_elephant_report",
       "category": "Bonus",
       "type": "anytime",
       "name": "Weekly Reflection",
-      "description": "Submit your weekly reflection. Track your transformation over the 7 days.",
+      "description": "Out of 10 how would you rate the 7-day challenge? You're not allowed to give it a 7. Also include what made you give it that score.",
       "points": 10,
       "inputType": "text",
-      "placeholder": "Share your weekly reflection"
+      "placeholder": "Your rating (0-10, not 7) and what made you give it that score"
     }
   ],
   "artifacts": [

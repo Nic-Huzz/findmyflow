@@ -174,6 +174,9 @@ const Profile = () => {
           <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
             📈 7-Day Challenge
           </li>
+          <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
+            💬 Give Feedback
+          </li>
         </ul>
 
         <div className="signout-link" onClick={signOut}>
@@ -292,7 +295,9 @@ const Profile = () => {
               >
                 {hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥'}
               </button>
-              <button className="btn-outline">Share Your Profile</button>
+              <button className="btn-outline" onClick={() => navigate('/feedback')}>
+                Give Feedback 💬
+              </button>
             </div>
           </div>
         </div>

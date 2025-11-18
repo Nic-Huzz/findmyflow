@@ -8,6 +8,7 @@ import Challenge from './Challenge'
 import ArchetypeSelection from './ArchetypeSelection'
 import EssenceProfile from './EssenceProfile'
 import ProtectiveProfile from './ProtectiveProfile'
+import Feedback from './Feedback'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -16,6 +17,7 @@ import './Profile.css'
 import './Auth.css'
 import './HybridEssenceFlow.css'
 import './Challenge.css'
+import './Feedback.css'
 
 function AppRouter() {
   return (
@@ -57,6 +59,11 @@ function AppRouter() {
             <Route path="/archetypes/protective" element={
               <AuthGate>
                 <ProtectiveProfile />
+              </AuthGate>
+            } />
+            <Route path="/feedback" element={
+              <AuthGate>
+                <Feedback />
               </AuthGate>
             } />
           </Routes>
