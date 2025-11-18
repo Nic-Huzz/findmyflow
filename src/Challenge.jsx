@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/AuthProvider'
 import { supabase } from './lib/supabaseClient'
+import { sanitizeText } from './lib/sanitize'
 import './Challenge.css'
 
 function Challenge() {
@@ -523,6 +524,9 @@ function Challenge() {
       return
     }
 
+    // Sanitize reflection text
+    const sanitizedReflection = inputValue ? sanitizeText(inputValue) : null
+
     try {
       // Create quest completion
       const { error: completionError } = await supabase
@@ -534,7 +538,7 @@ function Challenge() {
           quest_category: quest.category,
           quest_type: quest.type,
           points_earned: quest.points,
-          reflection_text: inputValue || null,
+          reflection_text: sanitizedReflection,
           challenge_day: progress.current_day
         }])
 
