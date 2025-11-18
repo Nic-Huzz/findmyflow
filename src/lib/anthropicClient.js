@@ -5,6 +5,22 @@
  * This keeps your API key safe on the server.
  */
 
+import { supabase } from './supabaseClient'
+
+/**
+ * Get the current user's auth token
+ * @returns {Promise<string|null>} - Auth token or null if not authenticated
+ */
+async function getAuthToken() {
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    return session?.access_token || null
+  } catch (error) {
+    console.error('Error getting auth token:', error)
+    return null
+  }
+}
+
 /**
  * Send a message to Claude via the serverless function
  *
@@ -20,6 +36,12 @@ export async function sendMessage(messages, options = {}) {
   } = options
 
   try {
+    // Get auth token
+    const token = await getAuthToken()
+    if (!token) {
+      throw new Error('Authentication required. Please sign in to use this feature.')
+    }
+
     const requestBody = {
       messages,
       model,
@@ -35,12 +57,24 @@ export async function sendMessage(messages, options = {}) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify(requestBody),
     })
 
     if (!response.ok) {
       const error = await response.json()
+
+      // Handle rate limiting
+      if (response.status === 429) {
+        throw new Error('Too many requests. Please wait a moment and try again.')
+      }
+
+      // Handle authentication errors
+      if (response.status === 401) {
+        throw new Error('Session expired. Please sign in again.')
+      }
+
       throw new Error(error.error || 'Failed to get response from Claude')
     }
 
