@@ -1,14 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient.js'
-import { extractTags } from './lib/tagExtraction.js'
-import { generateClusters, generateClusterLabel, generateSemanticClusterLabel, calculateClusterQualityMetrics, calculateItemSimilarity, generateMetaSkills } from './lib/clustering.js'
-import { processTagWeights, extractBulletPoints } from './lib/weighting.js'
 import { useAuth } from './auth/AuthProvider'
 
 /**
- * Nikigai Flow - Conversational Chat Interface
- * Full implementation using v2.2 JSON flow (39 steps)
+ * Nikigai Flow - Claude-Powered Conversational Interface
+ * Uses Claude AI for natural conversation and semantic clustering
  */
 export default function NikigaiTest() {
   const { user } = useAuth()
@@ -62,7 +59,7 @@ export default function NikigaiTest() {
         .from('nikigai_sessions')
         .insert({
           user_id: user.id,
-          flow_version: 'v2.2',
+          flow_version: 'v2.2-claude',
           status: 'in_progress',
           last_step_id: '1.0'
         })
@@ -115,22 +112,12 @@ export default function NikigaiTest() {
       const { data: { user } } = await supabase.auth.getUser()
       const currentStepData = flowData.steps.find(s => s.id === currentStep)
 
-      // Step 1: Extract tags per bullet (if needed)
-      let taggedBullets = { bullets: [] }
-      if (currentStepData.store_as) {
-        console.log('🔍 Extracting tags per bullet...')
-        taggedBullets = await extractTags(trimmedInput, {
-          step_id: currentStep,
-          store_as: currentStepData.store_as
-        })
-        console.log('✅ Tags extracted per bullet:', taggedBullets)
-      }
+      // Count bullets for storage
+      const bulletCount = trimmedInput.split(/[\n•\-\*]/)
+        .map(b => b.trim())
+        .filter(b => b.length > 0).length
 
-      // Step 2: Count bullets (fallback if AI didn't parse them)
-      const bulletCount = taggedBullets.bullets.length || extractBulletPoints(trimmedInput).length
-      console.log('📝 Bullets found:', bulletCount)
-
-      // Step 3: Save response to Supabase (with per-bullet tags)
+      // Save response to Supabase
       const { data: savedResponse, error: saveError } = await supabase
         .from('nikigai_responses')
         .insert({
@@ -141,7 +128,6 @@ export default function NikigaiTest() {
           question_text: currentStepData.assistant_prompt,
           response_raw: trimmedInput,
           bullet_count: bulletCount,
-          tags_extracted: taggedBullets, // Store per-bullet tags: {bullets: [{text, tags}]}
           store_as: currentStepData.store_as
         })
         .select()
@@ -150,12 +136,86 @@ export default function NikigaiTest() {
       if (saveError) throw saveError
       console.log('✅ Response saved:', savedResponse.id)
 
-      // Step 4: Add to responses array
+      // Add to responses array
       const newResponses = [...allResponses, savedResponse]
       setAllResponses(newResponses)
 
-      // Step 5: Move to next step and check for postprocessing
-      await processNextStep(currentStepData, newResponses)
+      // Get next step
+      const nextStepId = getNextStepId(currentStepData)
+      const nextStepData = nextStepId ? flowData.steps.find(s => s.id === nextStepId) : null
+
+      // Check if next step requires clustering
+      const shouldCluster = nextStepData?.assistant_postprocess !== undefined
+      let clusterSources = []
+      let clusterType = 'skills'
+
+      if (shouldCluster) {
+        const postprocess = nextStepData.assistant_postprocess
+        clusterSources = postprocess.tag_from || []
+
+        // Determine cluster type
+        if (postprocess.cluster?.target === 'problems' || postprocess.cluster_enrich?.target === 'problems') {
+          clusterType = 'problems'
+        }
+      }
+
+      // Call Claude for conversational response
+      const claudeResponse = await supabase.functions.invoke('nikigai-conversation', {
+        body: {
+          currentStep: {
+            ...currentStepData,
+            nextStep: nextStepData
+          },
+          userResponse: trimmedInput,
+          conversationHistory: messages.slice(-6),
+          allResponses: newResponses,
+          shouldCluster,
+          clusterSources,
+          clusterType
+        }
+      })
+
+      if (claudeResponse.error) {
+        throw new Error(claudeResponse.error.message || 'Failed to get AI response')
+      }
+
+      const aiResponse = claudeResponse.data
+
+      // Store clusters if generated
+      if (aiResponse.clusters && nextStepData?.assistant_postprocess?.store_as) {
+        setClusterData(prev => ({
+          ...prev,
+          [nextStepData.assistant_postprocess.store_as]: aiResponse.clusters
+        }))
+      }
+
+      // Create AI message
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: aiResponse.message,
+        timestamp: new Date().toLocaleTimeString(),
+        stepId: nextStepId || currentStep,
+        hasOptions: nextStepData?.expected_inputs?.[0]?.type === 'single_select',
+        options: nextStepData?.expected_inputs?.[0]?.options || [],
+        clusters: aiResponse.clusters
+      }
+      setMessages(prev => [...prev, aiMessage])
+
+      // Update current step
+      if (nextStepId) {
+        setCurrentStep(nextStepId)
+      } else {
+        // Flow complete
+        const completionMessage = {
+          id: `ai-completion-${Date.now()}`,
+          isAI: true,
+          kind: 'completion',
+          text: "🎉 Congratulations! You've completed the Nikigai discovery flow. Your unique skill clusters have been identified and saved.",
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, completionMessage])
+      }
 
     } catch (err) {
       console.error('Error:', err)
@@ -171,283 +231,6 @@ export default function NikigaiTest() {
     }
   }
 
-  async function processNextStep(currentStepData, responses) {
-    // Get next step ID
-    const nextStepId = getNextStepId(currentStepData)
-
-    if (!nextStepId) {
-      // Flow complete
-      const completionMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Nikigai discovery flow. Your unique skill clusters have been identified and saved.",
-        timestamp: new Date().toLocaleTimeString()
-      }
-      setMessages(prev => [...prev, completionMessage])
-      return
-    }
-
-    const nextStepData = flowData.steps.find(s => s.id === nextStepId)
-    setCurrentStep(nextStepId)
-
-    // Check if next step has postprocessing (clustering)
-    if (nextStepData.assistant_postprocess) {
-      console.log('🎯 Processing clusters for step:', nextStepId)
-      await handlePostprocessing(nextStepData, responses)
-    } else {
-      // Just show the next question
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: nextStepData.assistant_prompt,
-        timestamp: new Date().toLocaleTimeString(),
-        stepId: nextStepId
-      }
-      setMessages(prev => [...prev, aiMessage])
-    }
-  }
-
-  async function handlePostprocessing(stepData, responses) {
-    const postprocess = stepData.assistant_postprocess
-
-    try {
-      // Get responses to cluster from
-      const sourceFields = postprocess.tag_from
-      console.log('🔍 Looking for responses with store_as in:', sourceFields)
-      console.log('🔍 All responses store_as values:', responses.map(r => r.store_as))
-
-      const relevantResponses = responses.filter(r =>
-        sourceFields.some(field => r.store_as === field || field.includes('*'))
-      )
-
-      console.log('📦 Clustering from', relevantResponses.length, 'responses')
-
-      if (relevantResponses.length === 0) {
-        console.warn('⚠️ No relevant responses found for clustering!')
-        throw new Error('No responses found for clustering')
-      }
-
-      // Extract items for clustering (using per-bullet tags)
-      const items = relevantResponses.flatMap(resp => {
-        // tags_extracted now contains {bullets: [{text, tags}]}
-        const bulletsData = resp.tags_extracted?.bullets || []
-
-        // If no bullets from AI, fall back to manual extraction
-        if (bulletsData.length === 0) {
-          return extractBulletPoints(resp.response_raw).map(bullet => ({
-            text: bullet,
-            tags: {
-              skill_verb: [],
-              domain_topic: [],
-              value: [],
-              emotion: [],
-              context: [],
-              problem_theme: [],
-              persona_hint: []
-            },
-            source_step: resp.step_id,
-            bullet_score: 0
-          }))
-        }
-
-        // Use AI-extracted per-bullet tags
-        return bulletsData.map(bullet => ({
-          text: bullet.text,
-          tags: bullet.tags,
-          source_step: resp.step_id,
-          bullet_score: 0
-        }))
-      })
-
-      console.log('🔧 Extracted items for clustering:', items.length)
-      console.log('🏷️ Items with tags:')
-      items.forEach((item, i) => {
-        const tagSummary = Object.entries(item.tags || {})
-          .filter(([_, vals]) => vals.length > 0)
-          .map(([type, vals]) => `${type}: ${vals.join(', ')}`)
-          .join(' | ')
-        console.log(`  ${i + 1}. "${item.text}" → ${tagSummary || 'no tags'}`)
-      })
-
-      if (items.length === 0) {
-        console.warn('⚠️ No items extracted from responses!')
-        throw new Error('No items to cluster')
-      }
-
-      let generatedClusters
-
-      // Check if this is cluster enrichment or new clustering
-      if (postprocess.cluster_enrich) {
-        // Cluster enrichment: add new items to existing clusters
-        const enrichConfig = postprocess.cluster_enrich
-        console.log('🔄 Enriching existing clusters from:', enrichConfig.merge_into)
-
-        // Load existing clusters from session data
-        const existingClusters = sessionData[enrichConfig.merge_into] || []
-        console.log('📦 Loaded', existingClusters.length, 'existing clusters')
-
-        if (existingClusters.length === 0) {
-          console.warn('⚠️ No existing clusters found to enrich!')
-          // Fall back to creating new clusters
-          generatedClusters = generateClusters(items, {
-            similarity_threshold: 0.25,
-            min_merge_similarity: 0.1,
-            min_items_per_cluster: 3,
-            source_tags: enrichConfig.source_tags
-          })
-        } else {
-          // Enrich existing clusters with new items
-          generatedClusters = existingClusters.map(cluster => ({
-            ...cluster,
-            items: cluster.items || []
-          }))
-
-          // Add each new item to the most similar existing cluster
-          items.forEach(newItem => {
-            let bestClusterIndex = 0
-            let bestSimilarity = 0
-
-            generatedClusters.forEach((cluster, idx) => {
-              // Calculate average similarity to items in this cluster
-              let totalSim = 0
-              cluster.items.forEach(existingItem => {
-                totalSim += calculateItemSimilarity(newItem, existingItem, enrichConfig.source_tags)
-              })
-              const avgSim = cluster.items.length > 0 ? totalSim / cluster.items.length : 0
-
-              if (avgSim > bestSimilarity) {
-                bestSimilarity = avgSim
-                bestClusterIndex = idx
-              }
-            })
-
-            // Add to best matching cluster
-            generatedClusters[bestClusterIndex].items.push(newItem)
-            console.log(`  ➕ Added "${newItem.text}" to cluster ${bestClusterIndex + 1} (similarity: ${bestSimilarity.toFixed(2)})`)
-          })
-
-          // Update item counts
-          generatedClusters = generatedClusters.map(cluster => ({
-            ...cluster,
-            item_count: cluster.items.length
-          }))
-        }
-      } else {
-        // Standard clustering: create new clusters from scratch
-        const clusterConfig = postprocess.cluster
-        const clusterParams = {
-          similarity_threshold: clusterConfig.similarity_threshold || 0.25,
-          min_merge_similarity: clusterConfig.min_merge_similarity || 0.1,
-          min_items_per_cluster: clusterConfig.min_items_per_cluster || 3,
-          source_tags: clusterConfig.source_tags
-        }
-
-        console.log('🎯 Clustering with params:', clusterParams)
-
-        generatedClusters = generateClusters(items, clusterParams)
-      }
-
-      console.log('🎯 Generated', generatedClusters.length, 'clusters')
-      generatedClusters.forEach((cluster, i) => {
-        console.log(`  Cluster ${i + 1}: ${cluster.items.length} items -`, cluster.items.map(item => item.text).join(', '))
-      })
-
-      // Generate semantic labels using AI
-      console.log('🏷️ Generating semantic labels...')
-      const labeledClusters = await Promise.all(
-        generatedClusters.map(async (cluster) => {
-          const labelData = await generateSemanticClusterLabel(cluster, supabase)
-          return {
-            ...cluster,
-            label: labelData.displayLabel,  // User sees this
-            displayLabel: labelData.displayLabel,
-            archetypes: labelData.archetypes,  // For job matching
-            rationale: labelData.rationale
-          }
-        })
-      )
-      console.log('✅ Labels generated:', labeledClusters.map(c => ({
-        display: c.displayLabel,
-        archetypes: c.archetypes?.map(a => `${a.name} (${Math.round(a.confidence * 100)}%)`)
-      })))
-
-      // Calculate quality metrics
-      const qualityMetrics = calculateClusterQualityMetrics(labeledClusters)
-      console.log('📊 Quality metrics:', qualityMetrics)
-
-      // Generate meta-skills (higher-order patterns across clusters)
-      const metaSkills = await generateMetaSkills(labeledClusters, supabase)
-      console.log('✨ Meta-skills:', metaSkills)
-
-      // Store clusters with meta-skills
-      setClusterData(prev => ({
-        ...prev,
-        [postprocess.store_as]: labeledClusters,
-        [`${postprocess.store_as}_meta_skills`]: metaSkills
-      }))
-
-      // Format the assistant_prompt with cluster data
-      let promptText = stepData.assistant_prompt
-      const clusterPlaceholder = `{${postprocess.store_as}}`
-      if (promptText.includes(clusterPlaceholder)) {
-        const clusterMessage = formatClustersForDisplay(labeledClusters, qualityMetrics, metaSkills)
-        promptText = promptText.replace(clusterPlaceholder, clusterMessage)
-      }
-
-      // Add clusters + options as AI message
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: promptText,
-        timestamp: new Date().toLocaleTimeString(),
-        stepId: stepData.id,
-        hasOptions: stepData.expected_inputs?.[0]?.type === 'single_select',
-        options: stepData.expected_inputs?.[0]?.options || []
-      }
-      setMessages(prev => [...prev, aiMessage])
-
-    } catch (err) {
-      console.error('❌ Clustering failed:', err)
-      // Show question anyway
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: stepData.assistant_prompt,
-        timestamp: new Date().toLocaleTimeString(),
-        stepId: stepData.id
-      }
-      setMessages(prev => [...prev, aiMessage])
-    }
-  }
-
-  function formatClustersForDisplay(clusters, quality, metaSkills = []) {
-    let message = "**Your Skill Clusters:**\n\n"
-    message += `Quality: ${quality.grade} (${Math.round(quality.overall_score * 100)}%)\n\n`
-
-    clusters.forEach((cluster, index) => {
-      message += `**📦 ${cluster.label}** (${cluster.items.length} items)\n`
-      // Show ALL items, not just first 3
-      cluster.items.forEach(item => {
-        message += `• ${item.text}\n`
-      })
-      message += '\n'
-    })
-
-    // Add meta-skills if present
-    if (metaSkills && metaSkills.length > 0) {
-      message += "\n**✨ Your Meta-Skills:**\n\n"
-      message += "_Higher-order patterns that appear across your clusters:_\n\n"
-
-      metaSkills.forEach((metaSkill, index) => {
-        message += `**${index + 1}. ${metaSkill.name}**\n`
-        message += `${metaSkill.description}\n\n`
-      })
-    }
-
-    return message
-  }
-
   function getNextStepId(currentStepData) {
     // Check next_step_rules
     if (currentStepData.next_step_rules && currentStepData.next_step_rules.length > 0) {
@@ -457,7 +240,7 @@ export default function NikigaiTest() {
     return null
   }
 
-  function handleOptionSelect(option) {
+  async function handleOptionSelect(option) {
     // Find current step
     const currentStepData = flowData.steps.find(s => s.id === currentStep)
 
@@ -470,25 +253,37 @@ export default function NikigaiTest() {
     }
     setMessages(prev => [...prev, userMessage])
 
-    // Find next step based on selection
-    const nextStepRule = currentStepData.next_step_rules.find(
-      rule => rule.on_selection === option
-    )
+    setIsLoading(true)
 
-    if (nextStepRule) {
-      const nextStepId = nextStepRule.go_to || nextStepRule.goto
-      const nextStepData = flowData.steps.find(s => s.id === nextStepId)
+    try {
+      // Find next step based on selection
+      const nextStepRule = currentStepData.next_step_rules.find(
+        rule => rule.on_selection === option
+      )
 
-      setCurrentStep(nextStepId)
+      if (nextStepRule) {
+        const nextStepId = nextStepRule.go_to || nextStepRule.goto
+        const nextStepData = flowData.steps.find(s => s.id === nextStepId)
 
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: nextStepData.assistant_prompt,
-        timestamp: new Date().toLocaleTimeString(),
-        stepId: nextStepId
+        setCurrentStep(nextStepId)
+
+        // For option selections, we can use a simpler response
+        // or call Claude for more natural transitions
+        const aiMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          text: nextStepData.assistant_prompt,
+          timestamp: new Date().toLocaleTimeString(),
+          stepId: nextStepId,
+          hasOptions: nextStepData?.expected_inputs?.[0]?.type === 'single_select',
+          options: nextStepData?.expected_inputs?.[0]?.options || []
+        }
+        setMessages(prev => [...prev, aiMessage])
       }
-      setMessages(prev => [...prev, aiMessage])
+    } catch (err) {
+      console.error('Error handling option:', err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
