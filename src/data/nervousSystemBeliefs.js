@@ -21,15 +21,15 @@ export const safetyContracts = {
   // ==========================================
   visibility: [
     "If I'm fully visible, I'll be judged.",
-    "If I show up authentically, I'll be rejected.",
+    "If I show up authentically, I'll be pushed away.",
     "If I share my truth, I'll be criticized.",
-    "If people really see me, they'll find me inadequate.",
+    "If people really see me, they'll question my abilities.",
     "If I'm visible at scale, I'll be attacked.",
-    "If I put myself out there, I'll be humiliated.",
+    "If I put myself out there, I'll be embarrassed.",
     "If I show up consistently, people will see my flaws.",
     "If I'm seen in my full power, I'll be too much.",
     "If I become known, I'll lose my privacy and peace.",
-    "If I'm publicly visible, I'll attract negativity."
+    "If I'm publicly visible, I'll attract criticism."
   ],
 
   // ==========================================
@@ -41,12 +41,12 @@ export const safetyContracts = {
     "If I outgrow my current life, I'll be alone.",
     "If I evolve, I'll abandon the people who need me.",
     "If I become successful, my relationships will suffer.",
-    "If I change, the people I love will reject me.",
+    "If I change, the people I love will distance themselves.",
     "If I rise above my current circumstances, I'll lose my community.",
     "If I pursue my ambitions, I'll become isolated.",
     "If I grow beyond where I am, I'll leave people behind.",
-    "If I'm different from my family, I'll be outcasted.",
-    "If I succeed where others failed, I'll be resented."
+    "If I'm different from my family, I'll be cast out.",
+    "If I succeed where others struggled, I'll be resented."
   ],
 
   // ==========================================
@@ -72,15 +72,15 @@ export const safetyContracts = {
   // ==========================================
   worthiness: [
     "If I receive abundance, I'll owe something I can't repay.",
-    "If I charge what I'm worth, people will reject me.",
+    "If I charge what I'm worth, people will turn away.",
     "If I succeed, I'll be exposed as a fraud.",
-    "If I receive recognition, people will realize I'm not that special.",
+    "If I receive recognition, people will question if I earned it.",
     "If I'm paid well, I'll prove I'm greedy.",
     "If I accept praise, I'll be revealed as undeserving.",
     "If I receive easily, people will think I'm lucky, not skilled.",
     "If I'm compensated abundantly, I'll feel guilty.",
     "If I allow myself to have what I want, I'll be taking from others.",
-    "If I claim my value, I'll be arrogant."
+    "If I claim my value, I'll be seen as arrogant."
   ],
 
   // ==========================================
@@ -139,13 +139,13 @@ export const safetyContracts = {
   // Core fear: Being less than perfect = being nothing
   // ==========================================
   perfection: [
-    "If I'm not perfect, I'll be exposed as inadequate.",
+    "If I'm less than perfect, I'll be exposed as a fraud.",
     "If I make a mistake, I'll lose everything.",
-    "If I fail, I'll prove I was never good enough.",
+    "If I fail, I'll prove I was never capable.",
     "If I try and fail, I'll never recover.",
-    "If people see my flaws, they'll reject me completely.",
-    "If I'm less than perfect, I'm worthless.",
-    "If I launch before it's perfect, I'll be humiliated.",
+    "If people see my flaws, they'll walk away completely.",
+    "If I'm less than perfect, I'm unworthy.",
+    "If I launch before it's perfect, I'll be embarrassed.",
     "If I show my imperfect work, people will see I'm a fraud.",
     "If I fail publicly, I'll never be taken seriously again.",
     "If I make the wrong choice, I'll ruin everything."

@@ -11,9 +11,9 @@
       "step": "stage1_intro",
       "step_order_index": 1.0,
       "required_inputs": ["{{user_name}}"],
-      "prompt": "Let's use your body to access your subconscious, {{user_name}}.\n\nThis is called the Sway Test — a way to ask your body yes/no questions using subconscious processes.\n\n🧠 Why do we want to ask our subconscious?\n\nThe conscious mind processes ~50 bits of information every second.\nThe subconscious processes ~11 million bits of information every second.\n\nAs a result our subconscious is 220,000 times more knowledgeable than our conscious mind.\n\nSway testing is a technique to bypass the mind's stories and ask what's really true.",
+      "prompt": "Welcome to the Nervous System Map, {{user_name}}.\n\nRemember how we talked about your flow hitting a river bank?\n\nWhat if the bank isn't external—what if it's inside you?\n\nYour nervous system has a boundary around what feels 'safe'. Safe to earn. Safe to be seen. Safe to succeed.\n\nAnything beyond that boundary? It pulls you back. Not because you lack capability—but because expansion feels dangerous to your system.\n\nThis is why ambitious people self-sabotage. Not because they're broken. Because their nervous system is protecting them from something.\n\nLet's discover where your boundaries are—so you can expand them.\n\nWe'll use something called the Sway Test to identify these subconscious limits.",
       "options": [
-        { "label": "Tell me how it works", "value": "continue" }
+        { "label": "Sounds good!", "value": "continue" }
       ],
       "tag_as": "stage1_intro_acknowledged",
       "store_as": "stage1_intro_complete",
@@ -23,7 +23,7 @@
       "step": "stage2_calibration",
       "step_order_index": 2.0,
       "required_inputs": ["stage1_intro_complete"],
-      "prompt": "Instructions:\n\n• Stand up straight with your feet hip-width apart\n• Say: \"Show me a YES\" — observe which way you sway (could be forward or back)\n• Say: \"Show me a NO\" — notice the contrast\n\n🛑 Important: There's no right direction. Your body will show you a unique signal. Let it calibrate naturally.\n\n📹 Watch this video for a demonstration: https://youtu.be/UXO1mM26Ui0\n\nLet me know which way you swayed for 'Yes' and which way for 'No'.",
+      "prompt": "The Sway Test is simple but powerful.\n\nStand up straight with your feet hip-width apart. Close your eyes if it helps you tune in.\n\nSay out loud: \"Show me a YES.\" Notice which way your body sways—forward, back, left, or right.\n\nSay out loud: \"Show me a NO.\" Notice the contrast.\n\nThere's no right direction. Your body has its own language. Let it show you.\n\nIf you're skeptical, that's okay. Just try it with curiosity.\n\n📹 Video demonstration: https://youtu.be/UXO1mM26Ui0\n\nOnce you've calibrated, let me know which way you swayed for YES and which way for NO.",
       "tag_as": "calibration_complete_response",
       "store_as": "stage2_calibration_complete",
       "instructions_to_gpt": "Wait for user confirmation that they've completed the calibration. Accept responses like 'done', 'ready', 'calibrated', or similar."
@@ -156,26 +156,17 @@
       "step": "stage5_contracts_intro",
       "step_order_index": 13.0,
       "required_inputs": ["stage4_triage_5_complete"],
-      "prompt": "Now let's go deeper.\n\nI'm going to give you 5-7 safety contracts to test — these are fears your nervous system may be holding to keep you safe.\n\nThese are more accurate than testing empowering beliefs, because we're going straight to the source: what your system is protecting you from.\n\nEach contract follows an \"If X, then Y\" format. Test each one and notice if your body says YES (this fear is active) or NO (this isn't a concern).",
+      "prompt": "Now we're going to the source.\n\nYour nervous system doesn't just have limits—it has reasons for those limits. Fears it's protecting you from.\n\nI call these safety contracts: unconscious agreements like \"If I become visible, I'll be judged\" or \"If I succeed, I'll lose connection.\"\n\nThese aren't weaknesses. They're protective patterns built to keep you safe — but are now outdated and keeping your flow stuck.\n\nI'm going to give you a series of these to test. For each one, notice if your body says YES (this fear is active) or NO (it's not running).",
       "options": [
         { "label": "Ready", "value": "ready" }
       ],
       "tag_as": "stage5_contracts_intro_acknowledged",
       "store_as": "stage5_contracts_intro_complete",
-      "instructions_to_gpt": "Prepare to deliver personalized safety contracts (fear tests) based on selectSafetyContracts() logic from nervousSystemBeliefs.js"
-    },
-    {
-      "step": "stage5_contract_test_dynamic",
-      "step_order_index": 14.0,
-      "required_inputs": ["stage5_contracts_intro_complete"],
-      "prompt": "{{GENERATE_BELIEF_TESTS}}",
-      "tag_as": "belief_test_results",
-      "store_as": "stage5_contract_tests_complete",
-      "instructions_to_gpt": "Use the selectSafetyContracts() function from nervousSystemBeliefs.js to generate 5-7 personalized safety contracts (fear tests). Present them one at a time or as a batch. Collect YES/NO responses and any reflections the user shares. Store all results in belief_test_results as an object/array."
+      "instructions_to_gpt": "Dynamic contract testing is handled in NervousSystemFlow.jsx - generates 5-7 personalized safety contracts with YES/NO buttons for each"
     },
     {
       "step": "stage6_mirror_intro",
-      "step_order_index": 15.0,
+      "step_order_index": 14.0,
       "required_inputs": ["stage5_contract_tests_complete"],
       "prompt": "Let me mirror back what I'm noticing about your nervous system's protective patterns...",
       "options": [
@@ -187,7 +178,7 @@
     },
     {
       "step": "stage6_mirror_reflection",
-      "step_order_index": 16.0,
+      "step_order_index": 15.0,
       "required_inputs": [
         "stage6_mirror_intro_complete",
         "{{impact_goal}}",
@@ -210,17 +201,17 @@
     },
     {
       "step": "stage6_close",
-      "step_order_index": 17.0,
+      "step_order_index": 16.0,
       "required_inputs": ["stage6_mirror_complete"],
-      "prompt": "The truth is: change doesn't have to be hard.\n\nIt's just that most people were never taught the right processes.\n\nYou're learning how to shift at the root — gently and powerfully.\n\nWould you like to shift this?",
+      "prompt": "The truth is: change doesn't have to be hard.\n\nIt's just that most people were never taught the right processes.\n\nYou're learning how to shift at the root — gently and powerfully.\n\nNow you know where your nervous system's boundaries are. The next step is to expand them through the 7-day challenge.",
       "options": [
-        { "label": "Yes, I'm ready", "value": "yes" },
-        { "label": "Not yet", "value": "no" }
+        { "label": "Continue 7-Day Challenge", "value": "navigate" }
       ],
       "tag_as": "shift_consent",
       "store_as": "stage6_close_complete",
       "save_to_db": true,
-      "instructions_to_gpt": "If yes, celebrate their readiness and provide next steps (e.g., link to program, booking, resources). If no, honor their timing and offer reassurance that the awareness alone is powerful."
+      "navigate_to": "/7-day-challenge",
+      "instructions_to_gpt": "Show navigation button to return to 7-day challenge"
     }
   ]
 }

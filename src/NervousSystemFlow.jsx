@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
+import { selectSafetyContracts } from './data/nervousSystemBeliefs'
 
 // Helper function to convert markdown to HTML for basic formatting
 function formatMarkdown(text) {
@@ -22,6 +23,7 @@ function formatMarkdown(text) {
 
 function NervousSystemFlow() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [flow, setFlow] = useState(null)
   const [messages, setMessages] = useState([])
   const [context, setContext] = useState({})
@@ -31,6 +33,12 @@ function NervousSystemFlow() {
   const [error, setError] = useState(null)
   const [leadMagnetData, setLeadMagnetData] = useState(null)
   const messagesEndRef = useRef(null)
+
+  // Dynamic contract testing state
+  const [contracts, setContracts] = useState([]) // Array of contract strings
+  const [contractResults, setContractResults] = useState({}) // { contract: 'yes'/'no' }
+  const [currentContractIndex, setCurrentContractIndex] = useState(0)
+  const [isInContractMode, setIsInContractMode] = useState(false)
 
   // Fetch lead magnet data from Supabase
   const fetchLeadMagnetData = async () => {
@@ -128,6 +136,101 @@ function NervousSystemFlow() {
 
   const currentStep = flow?.steps?.[currentIndex]
 
+  // Generate contracts based on user context and start contract testing mode
+  const startContractTesting = (newContext) => {
+    const userContext = {
+      impactGoal: newContext.impact_goal,
+      incomeGoal: newContext.income_goal,
+      struggleArea: newContext.struggle_area,
+      noToSafeBeingSeen: newContext.triage_safe_being_seen === 'no',
+      noToSafeEarning: newContext.triage_safe_earning === 'no',
+      noToSafePursuing: newContext.triage_safe_pursuing === 'no',
+      yesToSelfSabotage: newContext.triage_self_sabotage === 'yes',
+      yesToFeelsUnsafe: newContext.triage_feels_unsafe === 'yes'
+    }
+
+    const selectedContracts = selectSafetyContracts(userContext)
+    console.log('📋 Generated contracts:', selectedContracts)
+
+    setContracts(selectedContracts)
+    setContractResults({})
+    setCurrentContractIndex(0)
+    setIsInContractMode(true)
+
+    // Show first contract
+    showContractQuestion(selectedContracts, 0)
+  }
+
+  // Show a contract question
+  const showContractQuestion = (contractList, index) => {
+    const contract = contractList[index]
+    const questionNumber = index + 1
+    const totalContracts = contractList.length
+
+    const aiMessage = {
+      id: `ai-${Date.now()}`,
+      isAI: true,
+      text: `**Safety Contract ${questionNumber} of ${totalContracts}:**\n\n"${contract}"\n\nDid you sway YES or NO?`,
+      timestamp: new Date().toLocaleTimeString()
+    }
+
+    setMessages(prev => [...prev, aiMessage])
+  }
+
+  // Handle contract YES/NO response
+  const handleContractResponse = async (response) => {
+    const contract = contracts[currentContractIndex]
+
+    // Store the result
+    const newResults = { ...contractResults, [contract]: response }
+    setContractResults(newResults)
+
+    // Add user message
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      isAI: false,
+      text: response.toUpperCase(),
+      timestamp: new Date().toLocaleTimeString()
+    }
+    setMessages(prev => [...prev, userMessage])
+
+    // Check if there are more contracts
+    const nextContractIndex = currentContractIndex + 1
+
+    if (nextContractIndex < contracts.length) {
+      // Show next contract
+      setCurrentContractIndex(nextContractIndex)
+      setTimeout(() => showContractQuestion(contracts, nextContractIndex), 500)
+    } else {
+      // All contracts done - exit contract mode and continue flow
+      setIsInContractMode(false)
+
+      // Store all results in context
+      const newContext = {
+        ...context,
+        belief_test_results: newResults,
+        stage5_contract_tests_complete: true
+      }
+      setContext(newContext)
+
+      // Move to next step in flow (mirror intro)
+      const nextIndex = currentIndex + 1
+      const nextStep = flow?.steps?.[nextIndex]
+
+      if (nextStep) {
+        const responseText = await resolvePrompt(nextStep, newContext)
+        const aiMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          text: responseText,
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, aiMessage])
+        setCurrentIndex(nextIndex)
+      }
+    }
+  }
+
   const handleSubmit = async () => {
     console.log('🚀 Nervous System Flow handleSubmit called')
     console.log('Current step:', currentStep?.step)
@@ -187,6 +290,7 @@ function NervousSystemFlow() {
           const { data, error } = await supabase
             .from('nervous_system_responses')
             .insert([{
+              user_id: user?.id,
               user_email: user?.email,
               user_name: newContext.user_name || 'Anonymous',
               impact_goal: newContext.impact_goal,
@@ -268,6 +372,69 @@ function NervousSystemFlow() {
     setContext(newContext)
     setMessages(prev => [...prev, userMessage])
 
+    // Check if this is the contracts intro step - if so, start contract testing mode
+    if (currentStep.step === 'stage5_contracts_intro') {
+      setIsLoading(false)
+      // Small delay before showing first contract
+      setTimeout(() => startContractTesting(newContext), 500)
+      return
+    }
+
+    // Check if current step has navigate_to - if so, save data and navigate
+    if (currentStep.navigate_to) {
+      console.log('🧭 Step has navigate_to, saving data and navigating to:', currentStep.navigate_to)
+
+      // Save to Supabase before navigating
+      if (supabase && user?.id) {
+        try {
+          console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
+          console.log('📤 Sending to Supabase:', newContext)
+
+          const { data, error } = await supabase
+            .from('nervous_system_responses')
+            .insert([{
+              user_id: user.id,
+              user_id: user?.id,
+              user_email: user?.email,
+              user_name: newContext.user_name || 'Anonymous',
+              impact_goal: newContext.impact_goal,
+              income_goal: newContext.income_goal,
+              positive_change: newContext.positive_change,
+              current_struggle: newContext.struggle_area,
+              belief_test_results: newContext.belief_test_results,
+              reflection_text: newContext.pattern_mirrored,
+              context: newContext
+            }])
+
+          if (error) {
+            console.error('❌ Supabase error:', error)
+          } else {
+            console.log('✅ Nervous system data saved successfully:', data)
+          }
+
+          // Auto-complete challenge quest
+          console.log('🎯 Attempting to complete flow quest for nervous_system')
+          const questResult = await completeFlowQuest({
+            userId: user.id,
+            flowId: 'nervous_system',
+            pointsEarned: 25
+          })
+
+          if (questResult.success) {
+            console.log('✅ Quest completed!', questResult.message)
+          } else {
+            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+          }
+        } catch (err) {
+          console.error('❌ Failed to save nervous system data:', err)
+        }
+      }
+
+      setIsLoading(false)
+      navigate(currentStep.navigate_to)
+      return
+    }
+
     // Move to next step
     const nextIndex = currentIndex + 1
     const nextStep = flow?.steps?.[nextIndex]
@@ -301,6 +468,7 @@ function NervousSystemFlow() {
           const { data, error } = await supabase
             .from('nervous_system_responses')
             .insert([{
+              user_id: user?.id,
               user_email: user?.email,
               user_name: newContext.user_name || 'Anonymous',
               impact_goal: newContext.impact_goal,
@@ -388,8 +556,8 @@ function NervousSystemFlow() {
   return (
     <div className="app">
       <header className="header">
-        <h1>Nervous System Safety Boundaries</h1>
-        <p>Use sway testing to identify subconscious safety edges</p>
+        <h1>Nervous System Map</h1>
+        <p>Identify your subconscious limits</p>
       </header>
 
       <main className="chat-container">
@@ -428,7 +596,28 @@ function NervousSystemFlow() {
         </div>
       </main>
 
-      {currentStep?.options && currentStep.options.length > 0 && (
+      {/* Show YES/NO buttons when in contract testing mode */}
+      {isInContractMode && (
+        <div className="options-container">
+          <button
+            className="option-button"
+            onClick={() => handleContractResponse('yes')}
+            disabled={isLoading}
+          >
+            YES
+          </button>
+          <button
+            className="option-button"
+            onClick={() => handleContractResponse('no')}
+            disabled={isLoading}
+          >
+            NO
+          </button>
+        </div>
+      )}
+
+      {/* Show regular options when not in contract mode */}
+      {!isInContractMode && currentStep?.options && currentStep.options.length > 0 && (
         <div className="options-container">
           {currentStep.options.map((option, index) => (
             <button
@@ -443,7 +632,7 @@ function NervousSystemFlow() {
         </div>
       )}
 
-      {currentStep && !currentStep.options && (
+      {!isInContractMode && currentStep && !currentStep.options && (
         <div className="input-bar">
           <textarea
             className="message-input"
