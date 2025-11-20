@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './App'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
+import NervousSystemFlow from './NervousSystemFlow'
 import Challenge from './Challenge'
 import NikigaiTest from './NikigaiTest'
 import AuthGate from './AuthGate'
@@ -27,6 +28,11 @@ function AppRouter() {
           <Route path="/healing-compass" element={
             <AuthGate>
               <HealingCompass />
+            </AuthGate>
+          } />
+          <Route path="/nervous-system" element={
+            <AuthGate>
+              <NervousSystemFlow />
             </AuthGate>
           } />
           <Route path="/7-day-challenge" element={
