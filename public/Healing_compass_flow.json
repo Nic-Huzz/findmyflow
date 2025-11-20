@@ -1,167 +1,105 @@
 {
   "flow_name": "Healing Compass - Emotional Splinter Identifier",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "mode": "SCRIPT_MODE",
+  "requires_nervous_system": true,
   "steps": [
     {
-      "step": "q1_stuck_gap",
+      "step": "q1_intro_safety_contract",
       "step_order_index": 1.0,
       "required_inputs": [
-        "{{user_name}}"
+        "{{user_name}}",
+        "{{safety_contracts}}"
       ],
-      "prompt": "Give yourself permission to think big {{user_name}}.\n\nIn your career or business, where do you feel \"stuck\", stagnant, not making progress as quick as you like right now?",
-      "tag_as": "stuck_gap_description",
-      "store_as": "step_1_stuck_gap_complete",
-      "instructions_to_gpt": "Wait for an open response describing where they feel stuck. Reflect their answer briefly before moving on."
+      "prompt": "Hey {{user_name}}, I'm excited to dive deeper with you.\n\nOur mission here is to find the source of what's blocking your flow—so we can heal it.\n\nIn the nervous system flow, you identified these safety contracts that have been protecting you:\n\n{{safety_contracts_list}}\n\nWhich safety contract would you like to focus on healing?",
+      "options_from": "safety_contracts",
+      "tag_as": "selected_safety_contract",
+      "store_as": "step_1_intro_complete",
+      "instructions_to_gpt": "Display the safety contracts as selectable options. Wait for user to select one to focus on."
     },
     {
-      "step": "q2_stuck_reason",
+      "step": "q2_how_limiting",
       "step_order_index": 2.0,
       "required_inputs": [
-        "step_1_stuck_gap_complete"
+        "step_1_intro_complete",
+        "{{selected_safety_contract}}"
       ],
-      "prompt": "And why do you believe you're stuck?\n\nWhat are the reasons your mind provides?",
-      "tag_as": "stuck_reason_list",
-      "store_as": "step_2_stuck_reason_complete",
-      "instructions_to_gpt": "Wait for them to share the reasons they believe they are stuck. Validate their insight and continue."
+      "prompt": "How is this safety contract currently slowing down the pursuit of your vision?",
+      "tag_as": "limiting_impact",
+      "store_as": "step_2_limiting_complete",
+      "instructions_to_gpt": "Wait for an open response describing how this safety contract is limiting them. Acknowledge their insight before moving on."
     },
     {
-      "step": "q3_emotional_response",
+      "step": "q3_past_parallel",
       "step_order_index": 3.0,
       "required_inputs": [
-        "step_2_stuck_reason_complete"
+        "step_2_limiting_complete"
       ],
-      "prompt": "Which emotional response feels most familiar to being stuck?",
-      "options": [
-        {
-          "label": "SHAME: I should be further ahead by now.",
-          "value": "Shame"
-        },
-        {
-          "label": "GUILT: I should be more grateful - why do I want more?",
-          "value": "Guilt"
-        },
-        {
-          "label": "APATHY: I feel stuck in a loop I can't break.",
-          "value": "Apathy"
-        },
-        {
-          "label": "GRIEF: I miss the version of me who used to believe this was possible.",
-          "value": "Grief"
-        },
-        {
-          "label": "FEAR: If I take the leap, I might end up in a worse situation.",
-          "value": "Fear"
-        },
-        {
-          "label": "ANGER: I'm doing everything right - why isn't it working?",
-          "value": "Anger"
-        }
-      ],
-      "tag_as": "stuck_emotional_response",
-      "store_as": "step_3_stuck_emotion_complete",
-      "instructions_to_gpt": "Accept one selection. Acknowledge the emotion before proceeding."
-    },
-    {
-      "step": "q4_past_parallel",
-      "step_order_index": 4.0,
-      "required_inputs": [
-        "step_3_stuck_emotion_complete",
-        "{{protective_archetype}}"
-      ],
-      "prompt": "You previously identified {{protective_archetype}} as a pattern that has blocked your ambitions... I'm assuming you didn't wake up today and decide to be this protective archetype...\n\nSo there's something from the time you were a kid to today, that has caused it to show-up.\n\nThis is the emotional splinter we're looking to pull out.\n\nCan you think of another time in your life where you struggled or failed to make your ambitions become your reality?",
+      "prompt": "Here's what I've learned: you didn't wake up today and decide to create this pattern.\n\nSomething happened—between childhood and now—that made this feel necessary.\n\nThis is the emotional splinter we're looking to remove.\n\nCan you think of another time in your life where you struggled or failed to make your ambitions become reality?",
       "tag_as": "past_parallel_story",
-      "store_as": "step_4_past_parallel_complete",
+      "store_as": "step_3_past_parallel_complete",
       "instructions_to_gpt": "Invite a reflective story. Allow pauses. Validate whatever they share and keep the tone gentle."
     },
     {
-      "step": "q5_what_happened",
-      "step_order_index": 5.0,
+      "step": "q4_what_happened",
+      "step_order_index": 4.0,
       "required_inputs": [
-        "step_4_past_parallel_complete"
+        "step_3_past_parallel_complete"
       ],
-      "prompt": "What happened back then?\n\nIs there a particular moment or series of events that you didn't like? Caused pain? Made it feel bad?",
+      "prompt": "What happened back then?\n\nIs there a particular moment or series of events that felt painful or uncomfortable?",
       "tag_as": "past_event_details",
-      "store_as": "step_5_what_happened_complete",
+      "store_as": "step_4_what_happened_complete",
       "instructions_to_gpt": "Allow them to describe the specific details. Hold space for their narrative without rushing."
     },
     {
-      "step": "q6_post_event_emotions",
-      "step_order_index": 6.0,
+      "step": "q5_post_event_emotions",
+      "step_order_index": 5.0,
       "required_inputs": [
-        "step_5_what_happened_complete"
+        "step_4_what_happened_complete"
       ],
-      "prompt": "If you're okay to revisit this experience again… when it happened, how did you feel afterwards?\n\nWhat emotions arose? Shame, embarrassment, fear?",
+      "prompt": "If you're okay revisiting this experience… when it happened, how did you feel afterwards?\n\nWhat emotions came up? Shame, embarrassment, fear?",
       "tag_as": "past_event_emotions",
-      "store_as": "step_6_emotions_complete",
+      "store_as": "step_5_emotions_complete",
       "instructions_to_gpt": "Hold space for their answer. Mirror the emotion back with empathy before moving forward."
     },
     {
-      "step": "q7_splinter_meaning",
-      "step_order_index": 7.0,
+      "step": "q6_connect_dots",
+      "step_order_index": 6.0,
       "required_inputs": [
-        "step_6_emotions_complete"
-      ],
-      "prompt": "Thinking back to what you felt back then — what made you feel that...\n\nWhat did you believe about yourself or the world before this happened? And what did this incident make you believe otherwise?",
-      "tag_as": "splinter_interpretation",
-      "store_as": "step_7_meaning_complete",
-      "instructions_to_gpt": "Invite them to explore the belief underneath the feeling. Reflect their self-awareness gently."
-    },
-    {
-      "step": "q8_connect_dots_ready",
-      "step_order_index": 8.0,
-      "required_inputs": [
-        "step_7_meaning_complete"
-      ],
-      "prompt": "Ready to connect the dots?",
-      "options": [
-        {
-          "label": "Yep!",
-          "value": "yes"
-        }
-      ],
-      "tag_as": "connect_dots_consent",
-      "store_as": "step_8_connect_dots_complete",
-      "instructions_to_gpt": "Wait for user to select the option before proceeding."
-    },
-    {
-      "step": "q9_connect_dots_explainer",
-      "step_order_index": 9.0,
-      "required_inputs": [
-        "step_8_connect_dots_complete",
+        "step_5_emotions_complete",
         "{{past_parallel_story}}",
         "{{past_event_emotions}}",
-        "{{splinter_interpretation}}"
+        "{{selected_safety_contract}}"
       ],
-      "prompt": "So this experience you identified growing up - {{past_parallel_story}} - was so impactful to your system, and you hated feeling {{past_event_emotions}} so much.\n\nIt now doesn't feel safe doing anything that might cause {{splinter_interpretation}} again.\n\nMake sense?",
+      "prompt": "So this experience—{{past_parallel_story}}—was so impactful that your system decided to protect you from ever feeling {{past_event_emotions}} again.\n\nThat's why \"{{selected_safety_contract}}\" exists.\n\nIt doesn't feel safe doing anything that might trigger that feeling.\n\nMake sense?",
       "tag_as": "connect_dots_acknowledged",
-      "store_as": "step_9_connect_dots_ack_complete",
+      "store_as": "step_6_connect_dots_complete",
       "instructions_to_gpt": "Wait for confirmation or questions. If they seem unsure, clarify the link with warmth."
     },
     {
-      "step": "q10_splinter_summary",
-      "step_order_index": 10.0,
+      "step": "q7_splinter_summary",
+      "step_order_index": 7.0,
       "required_inputs": [
-        "step_9_connect_dots_ack_complete"
+        "step_6_connect_dots_complete"
       ],
-      "prompt": "So why do you feel stuck?\n\nBecause you believe you're good enough to do whatever this ambition is. But you've had an emotional splinter that's made it feel terrifying to take action.\n\nKeen to remove the emotional splinter and take action towards your ambition?",
+      "prompt": "So why do you feel stuck?\n\nBecause you're capable of achieving your ambition—but this emotional splinter has made it feel terrifying to take action.\n\nKeen to remove it and start moving towards your vision?",
       "options": [
         {
-          "label": "Yep!",
+          "label": "Yes, let's do it!",
           "value": "yes"
         }
       ],
       "tag_as": "splinter_removal_consent",
-      "store_as": "step_10_splinter_opt_in_complete",
-      "instructions_to_gpt": "Accept a yes/no style response. If yes, celebrate their readiness and prepare to transition to the 7-day challenge."
+      "store_as": "step_7_splinter_opt_in_complete",
+      "instructions_to_gpt": "Accept their consent to move forward. Celebrate their readiness and prepare to transition to the 7-day challenge."
     },
     {
-      "step": "q11_seven_day_challenge",
-      "step_order_index": 11.0,
+      "step": "q8_seven_day_challenge",
+      "step_order_index": 8.0,
       "required_inputs": [
-        "step_10_splinter_opt_in_complete"
+        "step_7_splinter_opt_in_complete"
       ],
-      "prompt": "Amazing! The next step is to continue the 7-day challenge where we'll work together to remove this emotional splinter and help you take action towards your ambition.",
+      "prompt": "Amazing! The next step is the 7-day challenge where we'll work together to remove this emotional splinter and help you take action towards your ambition.",
       "options": [
         {
           "label": "Continue 7-Day Challenge",
@@ -169,9 +107,9 @@
         }
       ],
       "tag_as": "challenge_enrollment_consent",
-      "store_as": "step_11_challenge_complete",
+      "store_as": "step_8_challenge_complete",
       "navigate_to": "/7-day-challenge",
-      "instructions_to_gpt": "Show a navigation button that directs users to the 7-day challenge. Use CHALLENGE_ACTION template variable to show 'start' or 'continue' based on whether they have an active challenge."
+      "instructions_to_gpt": "Show a navigation button that directs users to the 7-day challenge."
     }
   ]
 }

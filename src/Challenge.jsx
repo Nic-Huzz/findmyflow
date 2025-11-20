@@ -25,6 +25,8 @@ function Challenge() {
   const [userRank, setUserRank] = useState(null)
   const [userData, setUserData] = useState(null)
   const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
+  const [nervousSystemComplete, setNervousSystemComplete] = useState(false) // Track if nervous system flow is complete
+  const [showLockedTooltip, setShowLockedTooltip] = useState(null) // Track which quest's locked tooltip is showing
 
   const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
@@ -37,8 +39,30 @@ function Challenge() {
       loadUserProgress()
       loadLeaderboard()
       loadUserData()
+      checkNervousSystemComplete()
     }
   }, [user])
+
+  const checkNervousSystemComplete = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data, error } = await supabase
+        .from('nervous_system_responses')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      if (!error && data && data.length > 0) {
+        setNervousSystemComplete(true)
+      } else {
+        setNervousSystemComplete(false)
+      }
+    } catch (error) {
+      console.error('Error checking nervous system completion:', error)
+      setNervousSystemComplete(false)
+    }
+  }
 
   const loadUserData = async () => {
     if (!user?.email) return
@@ -1202,6 +1226,30 @@ function Challenge() {
                           <button className="quest-flow-btn coming-soon" disabled>
                             Coming Soon
                           </button>
+                        ) : quest.id === 'recognise_healing_compass' && !nervousSystemComplete ? (
+                          <div className="quest-locked-container">
+                            <button
+                              className="quest-flow-btn locked"
+                              disabled
+                              onClick={() => setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)}
+                            >
+                              Locked
+                              <span
+                                className="locked-info-icon"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
+                                }}
+                              >
+                                ⓘ
+                              </span>
+                            </button>
+                            {showLockedTooltip === quest.id && (
+                              <div className="locked-tooltip">
+                                Complete the "Map the Boundaries of Your Nervous System" challenge above to unlock
+                              </div>
+                            )}
+                          </div>
                         ) : quest.inputType === 'flow' ? (
                           <Link to={quest.flow_route} className="quest-flow-btn">
                             Start {quest.name} →
