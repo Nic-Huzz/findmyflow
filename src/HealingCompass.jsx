@@ -337,6 +337,128 @@ function HealingCompass() {
     setContext(newContext)
     setMessages(prev => [...prev, userMessage])
 
+    // Check if option has an external link - if so, open in new tab and complete flow
+    if (option.external_link && option.url) {
+      console.log('🔗 Opening external link in new tab:', option.url)
+
+      // Save to Supabase before opening external link
+      if (supabase && user?.id) {
+        try {
+          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
+          console.log('📤 Sending to Supabase:', newContext)
+
+          const { data, error } = await supabase
+            .from('healing_compass_responses')
+            .insert([{
+              user_id: user.id,
+              user_name: newContext.user_name || 'Anonymous',
+              selected_safety_contract: newContext.selected_safety_contract,
+              limiting_impact: newContext.limiting_impact,
+              past_parallel_story: newContext.past_parallel_story,
+              past_event_details: newContext.past_event_details,
+              past_event_emotions: newContext.past_event_emotions,
+              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
+              splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
+              context: newContext
+            }])
+
+          if (error) {
+            console.error('❌ Supabase error:', error)
+          } else {
+            console.log('✅ Healing compass data saved successfully:', data)
+          }
+
+          // Auto-complete challenge quest
+          console.log('🎯 Attempting to complete flow quest for healing_compass')
+          const questResult = await completeFlowQuest({
+            userId: user.id,
+            flowId: 'healing_compass',
+            pointsEarned: 20
+          })
+
+          if (questResult.success) {
+            console.log('✅ Quest completed!', questResult.message)
+          } else {
+            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+          }
+        } catch (err) {
+          console.error('❌ Failed to save healing compass data:', err)
+        }
+      }
+
+      // Open external link in new tab
+      window.open(option.url, '_blank', 'noopener,noreferrer')
+
+      // Show completion message
+      const completionMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        kind: 'completion',
+        text: "🎉 Congratulations! You've completed the Healing Compass flow. Your session booking will open in a new tab.",
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages(prev => [...prev, completionMessage])
+      setIsLoading(false)
+      return
+    }
+
+    // Check if option has navigate_to - if so, save data and navigate
+    if (option.navigate_to) {
+      console.log('🧭 Option has navigate_to, saving data and navigating to:', option.navigate_to)
+
+      // Save to Supabase before navigating
+      if (supabase && user?.id) {
+        try {
+          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
+          console.log('📤 Sending to Supabase:', newContext)
+
+          const { data, error } = await supabase
+            .from('healing_compass_responses')
+            .insert([{
+              user_id: user.id,
+              user_name: newContext.user_name || 'Anonymous',
+              selected_safety_contract: newContext.selected_safety_contract,
+              limiting_impact: newContext.limiting_impact,
+              past_parallel_story: newContext.past_parallel_story,
+              past_event_details: newContext.past_event_details,
+              past_event_emotions: newContext.past_event_emotions,
+              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
+              splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
+              context: newContext
+            }])
+
+          if (error) {
+            console.error('❌ Supabase error:', error)
+          } else {
+            console.log('✅ Healing compass data saved successfully:', data)
+          }
+
+          // Auto-complete challenge quest
+          console.log('🎯 Attempting to complete flow quest for healing_compass')
+          const questResult = await completeFlowQuest({
+            userId: user.id,
+            flowId: 'healing_compass',
+            pointsEarned: 20
+          })
+
+          if (questResult.success) {
+            console.log('✅ Quest completed!', questResult.message)
+          } else {
+            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+          }
+        } catch (err) {
+          console.error('❌ Failed to save healing compass data:', err)
+          // Continue with navigation even if save fails
+        }
+      }
+
+      setIsLoading(false)
+      navigate(option.navigate_to)
+      return
+    }
+
     // Check if current step has navigate_to - if so, save data and navigate
     if (currentStep.navigate_to) {
       console.log('🧭 Step has navigate_to, saving data and navigating to:', currentStep.navigate_to)
