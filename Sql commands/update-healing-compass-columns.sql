@@ -1,6 +1,7 @@
 -- Migration: Update healing_compass_responses table for new flow structure
--- Purpose: Repurpose existing columns for new safety contract flow
+-- Purpose: Clean up schema and align with new safety contract flow
 -- Date: 2025-11-20
+-- Note: Table is currently empty, safe to drop unused columns
 
 -- Rename stuck_gap_description to limiting_impact (repurpose for new flow)
 ALTER TABLE healing_compass_responses
@@ -17,17 +18,16 @@ COMMENT ON COLUMN healing_compass_responses.selected_safety_contract IS
 COMMENT ON COLUMN healing_compass_responses.limiting_impact IS
 'User description of how the selected safety contract is limiting their pursuit of their vision';
 
--- Add comments to historical columns that are no longer populated in new flow
-COMMENT ON COLUMN healing_compass_responses.stuck_emotional_response IS
-'[DEPRECATED - Old Flow Only] Emotional response selected (Shame/Guilt/Apathy/Grief/Fear/Anger) - kept for historical data';
+-- Drop columns that are no longer used in new flow (table is empty, no data loss)
+ALTER TABLE healing_compass_responses
+DROP COLUMN IF EXISTS stuck_emotional_response,
+DROP COLUMN IF EXISTS splinter_interpretation,
+DROP COLUMN IF EXISTS connect_dots_consent;
 
-COMMENT ON COLUMN healing_compass_responses.splinter_interpretation IS
-'[DEPRECATED - Old Flow Only] User belief about what the incident made them believe - kept for historical data';
-
-COMMENT ON COLUMN healing_compass_responses.connect_dots_consent IS
-'[DEPRECATED - Old Flow Only] Ready to connect the dots consent (merged into connect_dots_acknowledged in new flow) - kept for historical data';
-
--- Summary of new flow columns:
+-- Final schema columns for new flow:
+-- ✅ id (primary key)
+-- ✅ user_id
+-- ✅ user_name
 -- ✅ selected_safety_contract - Selected from nervous system flow
 -- ✅ limiting_impact - How safety contract limits their vision
 -- ✅ past_parallel_story - Another time they struggled
@@ -36,6 +36,9 @@ COMMENT ON COLUMN healing_compass_responses.connect_dots_consent IS
 -- ✅ connect_dots_acknowledged - Understanding the connection
 -- ✅ splinter_removal_consent - Consent to remove splinter
 -- ✅ challenge_enrollment_consent - Continue challenge or book session
+-- ✅ context (JSONB - full conversation context)
+-- ✅ created_at
+-- ✅ updated_at
 
 -- Verify the migration
 SELECT column_name, data_type, is_nullable
