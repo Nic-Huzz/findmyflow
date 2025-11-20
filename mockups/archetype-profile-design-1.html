@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design 1: Card Scroll - Archetype Profile</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      min-height: 100vh;
+      padding: 0;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    /* Header with gradient */
+    .header {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+      color: white;
+      padding: 1.5rem 1.5rem 3rem;
+      border-radius: 0 0 32px 32px;
+      box-shadow: 0 4px 20px rgba(94, 23, 235, 0.2);
+      position: relative;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+
+    .archetype-name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .archetype-group {
+      background: rgba(255, 255, 255, 0.25);
+      padding: 0.375rem 1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 0.75rem;
+    }
+
+    .essence {
+      font-size: 1.125rem;
+      opacity: 0.95;
+      font-style: italic;
+    }
+
+    /* Content area */
+    .content {
+      padding: 1.5rem;
+      margin-top: -2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #5e17eb;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+    }
+
+    .card-text {
+      color: #495057;
+      line-height: 1.7;
+      font-size: 0.9375rem;
+    }
+
+    .poetic-quote {
+      background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+      border-left: 4px solid #ffdd27;
+      padding: 1.5rem;
+      border-radius: 12px;
+      font-style: italic;
+      color: #212529;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .characters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .character-item {
+      background: #f8f9fa;
+      padding: 0.75rem;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #495057;
+      font-weight: 500;
+    }
+
+    .highlight-box {
+      background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+    }
+
+    .highlight-box .card-title {
+      color: white;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 0.75rem;
+    }
+
+    .highlight-box .card-text {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .wound-box {
+      background: #fef5e7;
+      border: 2px solid #f39c12;
+      padding: 1.5rem;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+    }
+
+    .wound-box .card-title {
+      color: #e67e22;
+    }
+
+    .wound-box .card-text {
+      color: #795548;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="back-btn">←</button>
+    <h1 class="archetype-name">Radiant Rebel</h1>
+    <span class="archetype-group">Activator</span>
+    <p class="essence">Disruptive truth-teller with heart.</p>
+  </div>
+
+  <div class="content">
+    <div class="poetic-quote">
+      "You are fire with a heartbeat — designed to disrupt what's false and awaken what's real."
+    </div>
+
+    <div class="highlight-box">
+      <div class="card-title">
+        <span class="card-icon">✨</span>
+        Your Superpower
+      </div>
+      <div class="card-text">
+        You ignite courage in the quiet. You say what others won't and move like fire through what feels stuck.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">🌟</span>
+        Your North Star
+      </div>
+      <div class="card-text">
+        Use rebellion to liberate, not just provoke. Let your why guide your wow.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">⚡</span>
+        Energetic Transmission
+      </div>
+      <div class="card-text">
+        You electrify the space. Your energy activates boldness — like truth wants to break free through your presence.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">🎯</span>
+        Recognition Pattern
+      </div>
+      <div class="card-text">
+        People seek you when they're ready to break rules, burn masks, and step into unapologetic self-expression.
+      </div>
+    </div>
+
+    <div class="wound-box">
+      <div class="card-title">
+        <span class="card-icon">🩹</span>
+        The Wound
+      </div>
+      <div class="card-text">
+        'You're too intense. Calm down.' Your passion made you dangerous — so you learned to dim.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">🧸</span>
+        Inner Child Desire
+      </div>
+      <div class="card-text">
+        I wanted to lead the make-believe revolution, rally your crew, and challenge the rules just because you could.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">🎬</span>
+        Characters Like You
+      </div>
+      <div class="characters-grid">
+        <div class="character-item">Deadpool</div>
+        <div class="character-item">Billie Eilish</div>
+        <div class="character-item">Katniss Everdeen</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">🚀</span>
+        Vision in Action
+      </div>
+      <div class="card-text">
+        Turning chaos into clarity, they spark revolutions with nothing but their voice.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">🔮</span>
+        Poetic Vision
+      </div>
+      <div class="card-text">
+        What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary. The world isn't waiting for your perfection. It's starving for your fire.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

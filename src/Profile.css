@@ -197,6 +197,14 @@
   justify-content: center;
   font-size: 24px;
   margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.stat-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
 }
 
 .stat-card.purple .stat-icon {

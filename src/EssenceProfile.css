@@ -1,0 +1,376 @@
+/* Essence Profile - Magazine Style */
+
+.essence-profile-container {
+  background: #000;
+  color: white;
+  overflow-x: hidden;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Header - sticky at top */
+.essence-profile-header {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 0 0 24px 24px;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+  z-index: 100;
+}
+
+.essence-profile-header .header-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  color: white;
+}
+
+.essence-profile-header .back-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  backdrop-filter: blur(10px);
+}
+
+.essence-profile-header .archetype-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.tab.active {
+  background: white;
+  color: #5e17eb;
+}
+
+/* Magazine Sections - Full Screen */
+.magazine-section {
+  min-height: calc(100vh - 110px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem 2rem;
+  position: relative;
+}
+
+/* Background variants */
+.bg-purple {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white !important;
+}
+
+.bg-purple * {
+  color: white !important;
+}
+
+.bg-purple .section-label,
+.bg-purple .section-title,
+.bg-purple .section-text,
+.bg-purple p,
+.bg-purple h2,
+.bg-purple h3,
+.bg-purple h4 {
+  color: white !important;
+}
+
+.bg-dark {
+  background: #1a1a1a;
+  color: white !important;
+}
+
+.bg-dark * {
+  color: white !important;
+}
+
+.bg-dark .section-label,
+.bg-dark .section-title,
+.bg-dark .section-text,
+.bg-dark p,
+.bg-dark h2,
+.bg-dark h3,
+.bg-dark h4 {
+  color: white !important;
+}
+
+.bg-light {
+  background: #f8f9fa;
+  color: #212529;
+}
+
+.bg-yellow {
+  background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+  color: #212529;
+}
+
+.bg-wound {
+  background: linear-gradient(135deg, #1a0a0a 0%, #3d1f1f 100%);
+  color: white !important;
+}
+
+.bg-wound * {
+  color: white !important;
+}
+
+.bg-wound .section-label,
+.bg-wound .section-title,
+.bg-wound .section-text,
+.bg-wound p,
+.bg-wound h2,
+.bg-wound h3,
+.bg-wound h4 {
+  color: white !important;
+}
+
+.bg-deep-purple {
+  background: linear-gradient(135deg, #2d0a5e 0%, #4a1589 100%);
+  color: white !important;
+}
+
+.bg-deep-purple * {
+  color: white !important;
+}
+
+.bg-deep-purple .section-label,
+.bg-deep-purple .section-title,
+.bg-deep-purple .section-text,
+.bg-deep-purple p,
+.bg-deep-purple h2,
+.bg-deep-purple h3,
+.bg-deep-purple h4 {
+  color: white !important;
+}
+
+/* Content styling */
+.section-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.7;
+  margin-bottom: 1rem;
+  color: inherit;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  color: inherit;
+}
+
+.section-text {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  opacity: 0.95;
+  color: inherit;
+}
+
+.quote {
+  font-size: 1.5rem;
+  font-style: italic;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.quote-mark {
+  font-size: 4rem;
+  opacity: 0.3;
+  line-height: 0;
+  margin-bottom: 1rem;
+}
+
+/* Image section */
+.image-section {
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.archetype-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3rem 2rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+  color: white;
+}
+
+.image-overlay .section-title {
+  color: white;
+}
+
+.archetype-tag-mag {
+  background: rgba(255,255,255,0.95);
+  color: #d4a000;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+/* Scroll indicator */
+.scroll-indicator {
+  text-align: center;
+  margin-top: 2rem;
+  animation: bounce 2s infinite;
+  font-size: 1.5rem;
+  opacity: 0.6;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* Character cards */
+.character-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.25rem;
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bg-light .character-card {
+  background: white;
+  border: 1px solid #e9ecef;
+}
+
+.character-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.character-name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* CTA Button */
+.cta-button {
+  background: white;
+  color: #5e17eb;
+  border: none;
+  padding: 1.25rem 2rem;
+  border-radius: 16px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: scale(1.05);
+}
+
+/* Override .bg-purple * rule for button text */
+.bg-purple .cta-button {
+  color: #5e17eb !important;
+}
+
+.bg-light .cta-button {
+  background: #5e17eb;
+  color: white;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.25rem;
+  color: #666;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .essence-profile-header {
+    padding: 1.5rem;
+  }
+
+  .essence-profile-header .archetype-name {
+    font-size: 1.5rem;
+  }
+
+  .magazine-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .section-text {
+    font-size: 1rem;
+  }
+
+  .quote {
+    font-size: 1.25rem;
+  }
+}

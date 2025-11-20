@@ -11,9 +11,9 @@ export const essenceProfiles = {
     north_star:
       "Use rebellion to liberate, not just provoke. Let your why guide your wow.",
     poetic_vision:
-      "What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary. The world isn't waiting for your perfection. It's starving for your fire.",
+      "What if your truth became a movement? What if your unapologetic expression wasn't risky — but revolutionary?\n\nThe world isn't waiting for your perfection. It's starving for your fire.",
     vision_in_action:
-      "Turning chaos into clarity, they spark revolutions with nothing but their voice.",
+      "You turn chaos into clarity, sparing revolutions with nothing but your voice.",
   },
   "Playful Creator": {
     poetic_line:
@@ -26,9 +26,9 @@ export const essenceProfiles = {
     north_star:
       "Channel your joy into containers that scale. Play can be the portal to mastery.",
     poetic_vision:
-      "What if your joy was the funnel? What if your weirdness was the strategy? You weren't born to fit into boxes — you were born to make confetti out of them.",
+      "What if your joy was the funnel? What if your weirdness was the strategy?\n\nYou weren't born to fit into boxes — you were born to make confetti out of them.",
     vision_in_action:
-      "They turn pressure into play and make innovation feel like recess for the soul.",
+      "You turn pressure into play and make innovation feel like recess for the soul.",
   },
   "Sacred Jester": {
     poetic_line:
@@ -41,9 +41,9 @@ export const essenceProfiles = {
     north_star:
       "Play with power, don't perform it. Let irreverence be reverent.",
     poetic_vision:
-      "What if irreverence was the revolution? What if your joy flipped the power dynamic? You're not here to follow the rules. You're here to remind people they're free.",
+      "What if irreverence was the revolution? What if your joy flipped the power dynamic?\n\nYou're not here to follow the rules. You're here to remind people they're free.",
     vision_in_action:
-      "They drop unexpected one-liners that dismantle shame and unzip joy.",
+      "You drop unexpected one-liners that dismantle shame and unzip joy.",
   },
   "Wild Alchemist": {
     poetic_line:
@@ -55,9 +55,9 @@ export const essenceProfiles = {
       "You transmute chaos into meaning. You give pain purpose and help people rebirth themselves.",
     north_star: "Let your full expression lead. Alchemy needs fire.",
     poetic_vision:
-      "What if your edges were the medicine? What if your rawness was the portal? You're not here to play it safe. You're here to break the rules that never made sense in the first place.",
+      "What if your edges were the medicine? What if your rawness was the portal?\n\nYou're not here to play it safe. You're here to break the rules that never made sense in the first place.",
     vision_in_action:
-      "Where others flinch from fire, they dance in it — turning pain into art and rupture into truth.",
+        "Where others flinch from fire, you dance in it — turning pain into art and rupture into truth.",
   },
   "Heart Holder": {
     poetic_line:
@@ -70,7 +70,7 @@ export const essenceProfiles = {
     north_star:
       "Hold with warmth and boundaries. Care that preserves dignity, not dependency.",
     poetic_vision:
-      "What if safety wasn't a pause but a power? What if your calm made courage possible — not by smothering the fire, but by giving it a hearth? You don't fix people. You help their nervous systems remember how to trust.",
+      "What if safety wasn't a pause but a power? What if your calm made courage possible — not by smothering the fire, but by giving it a hearth?\n\nYou don't fix people. You help their nervous systems remember how to trust.",
     vision_in_action:
       "In tense moments you become the calm center; the room syncs, hard conversations land, and people leave more regulated than they arrived.",
   },
@@ -85,9 +85,9 @@ export const essenceProfiles = {
     north_star:
       "Don't dilute your range to fit in. Your synthesis is the spell.",
     poetic_vision:
-      "What if your weirdness was the map? What if your role wasn't to choose a lane — but to *bridge* them? You're not too much — you're multidimensional.",
+      "What if your weirdness was the map? What if your role wasn't to choose a lane — but to *bridge* them?\n\nYou're not too much — you're multidimensional.",
     vision_in_action:
-      "They take quantum truths and translate them into tools, blueprints, and rituals that land.",
+      "You take quantum truths and translate them into tools, blueprints, and rituals that land.",
   },
   "Compassionate Leader": {
     poetic_line:
@@ -100,9 +100,9 @@ export const essenceProfiles = {
     north_star:
       "Lead from wholeness, not over-responsibility. Trust others can rise too.",
     poetic_vision:
-      "What if your presence alone created breakthroughs? What if your calm leadership became a lighthouse for those lost in the noise? Your warmth doesn't make you soft — it makes you safe.",
+      "What if your presence alone created breakthroughs? What if your calm leadership became a lighthouse for those lost in the noise?\n\nYour warmth doesn't make you soft — it makes you safe.",
     vision_in_action:
-      "Their grounded presence becomes a gravitational field where others remember their power.",
+      "Your grounded presence becomes a gravitational field where others remember their power.",
   },
   "Truth-Teller": {
     poetic_line:
@@ -115,9 +115,9 @@ export const essenceProfiles = {
     north_star:
       "Say the thing others won't. Truth is love wearing its boldest clothes.",
     poetic_vision:
-      "What if simplicity was the spell? What if calling it like it is *was* your sacred gift? You're not here to sugarcoat. You're here to wake people up.",
+        "What if simplicity was the spell? What if calling it like it is *was* your sacred gift?\n\nYou're not here to sugarcoat. You're here to wake people up.",
     vision_in_action:
-      "They speak what no one else will — and somehow, it lands like liberation, not attack.",
+        "You speak what no one else will — and somehow it lands like liberation, not attack.",
   },
 }
 

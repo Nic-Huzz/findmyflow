@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import { completeFlowQuest, hasActiveChallenge } from './lib/questCompletion'
+import { sanitizeText } from './lib/sanitize'
 
 function HealingCompass() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [flow, setFlow] = useState(null)
   const [messages, setMessages] = useState([])
   const [context, setContext] = useState({})
@@ -14,6 +17,7 @@ function HealingCompass() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [leadMagnetData, setLeadMagnetData] = useState(null)
+  const [hasChallenge, setHasChallenge] = useState(false)
   const messagesEndRef = useRef(null)
 
   // Fetch lead magnet data from Supabase
@@ -71,11 +75,19 @@ function HealingCompass() {
         // Fetch lead magnet data first
         const leadData = await fetchLeadMagnetData()
         setLeadMagnetData(leadData)
-        
-        // Update context with lead magnet data
+
+        // Check if user has active challenge
+        if (user?.id) {
+          const active = await hasActiveChallenge(user.id)
+          setHasChallenge(active)
+        }
+
+        // Update context with lead magnet data and challenge status
         const updatedContext = {
           user_name: leadData.user_name,
-          protective_archetype: leadData.protective_archetype
+          protective_archetype: leadData.protective_archetype,
+          CHALLENGE_ACTION: hasChallenge ? 'continue' : 'start',
+          CHALLENGE_ACTION_LOWER: hasChallenge ? 'continue' : 'start'
         }
         setContext(updatedContext)
 
@@ -88,7 +100,7 @@ function HealingCompass() {
         // Start with the first step using the updated context
         if (flowData.steps && flowData.steps.length > 0) {
           const firstStep = flowData.steps[0]
-          const responseText = resolvePrompt(firstStep, updatedContext)
+          const responseText = await resolvePrompt(firstStep, updatedContext)
           const aiMessage = {
             id: `ai-${Date.now()}`,
             isAI: true,
@@ -123,20 +135,21 @@ function HealingCompass() {
     }
 
     const trimmedInput = inputText.trim()
+    const sanitizedInput = sanitizeText(trimmedInput) // ✅ Sanitize user input
     setIsLoading(true)
 
     // Add user message
     const userMessage = {
       id: `user-${Date.now()}`,
       isAI: false,
-      text: trimmedInput,
+      text: sanitizedInput,
       timestamp: new Date().toLocaleTimeString()
     }
 
     // Update context
     const newContext = { ...context }
     if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = trimmedInput
+      newContext[currentStep.tag_as] = sanitizedInput
     }
     if (currentStep.store_as) {
       newContext[currentStep.store_as] = true
@@ -152,7 +165,7 @@ function HealingCompass() {
 
     if (nextStep) {
       // Add AI response
-      const responseText = resolvePrompt(nextStep, newContext)
+      const responseText = await resolvePrompt(nextStep, newContext)
       const aiMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
@@ -165,6 +178,20 @@ function HealingCompass() {
     } else {
       // Flow completed - save to Supabase
       if (supabase) {
+        // Validate user is authenticated before saving
+        if (!user?.id) {
+          console.error('❌ User not authenticated - cannot save healing compass data')
+          const errorMessage = {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: "⚠️ Please sign in to save your healing compass responses.",
+            timestamp: new Date().toLocaleTimeString()
+          }
+          setMessages(prev => [...prev, errorMessage])
+          setIsLoading(false)
+          return
+        }
+
         try {
           console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
@@ -172,16 +199,19 @@ function HealingCompass() {
           const { data, error } = await supabase
             .from('healing_compass_responses')
             .insert([{
+              user_id: user.id, // ✅ ADDED - Link to authenticated user
               user_name: newContext.user_name || 'Anonymous',
               stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
+              stuck_reason: newContext.stuck_reason_list,
               stuck_emotional_response: newContext.stuck_emotional_response,
               past_parallel_story: newContext.past_parallel_story,
               past_event_emotions: newContext.past_event_emotions,
+              past_event_details: newContext.past_event_details, // Added field from schema
               splinter_interpretation: newContext.splinter_interpretation,
               connect_dots_consent: newContext.connect_dots_consent,
               connect_dots_acknowledged: newContext.connect_dots_acknowledged,
               splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent, // Added field from schema
               context: newContext
             }])
 
@@ -190,21 +220,51 @@ function HealingCompass() {
             throw error
           }
           console.log('✅ Healing compass data saved successfully:', data)
+
+          // Auto-complete challenge quest if user has active challenge
+          if (user?.id) {
+            console.log('🎯 Attempting to complete flow quest for healing_compass')
+            const questResult = await completeFlowQuest({
+              userId: user.id,
+              flowId: 'healing_compass',
+              pointsEarned: 20
+            })
+
+            if (questResult.success) {
+              console.log('✅ Quest completed!', questResult.message)
+            } else {
+              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+            }
+          }
         } catch (err) {
           console.error('❌ Failed to save healing compass data:', err)
           // Continue with flow even if save fails
         }
       }
 
-      // Flow completed
-      const completionMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
-        timestamp: new Date().toLocaleTimeString()
+      // Flow completed - check if there's a navigation step
+      const lastStep = flow?.steps?.[flow.steps.length - 1]
+      if (lastStep?.navigate_to) {
+        const finalMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          kind: 'navigation',
+          text: await resolvePrompt(lastStep, newContext),
+          navigateTo: lastStep.navigate_to,
+          buttonText: hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge',
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, finalMessage])
+      } else {
+        const completionMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          kind: 'completion',
+          text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, completionMessage])
       }
-      setMessages(prev => [...prev, completionMessage])
     }
 
     setIsLoading(false)
@@ -236,13 +296,72 @@ function HealingCompass() {
     setContext(newContext)
     setMessages(prev => [...prev, userMessage])
 
+    // Check if current step has navigate_to - if so, save data and navigate
+    if (currentStep.navigate_to) {
+      console.log('🧭 Step has navigate_to, saving data and navigating to:', currentStep.navigate_to)
+
+      // Save to Supabase before navigating
+      if (supabase && user?.id) {
+        try {
+          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
+          console.log('📤 Sending to Supabase:', newContext)
+
+          const { data, error } = await supabase
+            .from('healing_compass_responses')
+            .insert([{
+              user_id: user.id,
+              user_name: newContext.user_name || 'Anonymous',
+              stuck_gap_description: newContext.stuck_gap_description,
+              stuck_reason: newContext.stuck_reason_list,
+              stuck_emotional_response: newContext.stuck_emotional_response,
+              past_parallel_story: newContext.past_parallel_story,
+              past_event_emotions: newContext.past_event_emotions,
+              past_event_details: newContext.past_event_details,
+              splinter_interpretation: newContext.splinter_interpretation,
+              connect_dots_consent: newContext.connect_dots_consent,
+              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
+              splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
+              context: newContext
+            }])
+
+          if (error) {
+            console.error('❌ Supabase error:', error)
+          } else {
+            console.log('✅ Healing compass data saved successfully:', data)
+          }
+
+          // Auto-complete challenge quest if user has active challenge
+          console.log('🎯 Attempting to complete flow quest for healing_compass')
+          const questResult = await completeFlowQuest({
+            userId: user.id,
+            flowId: 'healing_compass',
+            pointsEarned: 20
+          })
+
+          if (questResult.success) {
+            console.log('✅ Quest completed!', questResult.message)
+          } else {
+            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+          }
+        } catch (err) {
+          console.error('❌ Failed to save healing compass data:', err)
+          // Continue with navigation even if save fails
+        }
+      }
+
+      setIsLoading(false)
+      navigate(currentStep.navigate_to)
+      return
+    }
+
     // Move to next step
     const nextIndex = currentIndex + 1
     const nextStep = flow?.steps?.[nextIndex]
 
     if (nextStep) {
       // Add AI response
-      const responseText = resolvePrompt(nextStep, newContext)
+      const responseText = await resolvePrompt(nextStep, newContext)
       const aiMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
@@ -255,6 +374,20 @@ function HealingCompass() {
     } else {
       // Flow completed - save to Supabase
       if (supabase) {
+        // Validate user is authenticated before saving
+        if (!user?.id) {
+          console.error('❌ User not authenticated - cannot save healing compass data')
+          const errorMessage = {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: "⚠️ Please sign in to save your healing compass responses.",
+            timestamp: new Date().toLocaleTimeString()
+          }
+          setMessages(prev => [...prev, errorMessage])
+          setIsLoading(false)
+          return
+        }
+
         try {
           console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
@@ -262,16 +395,19 @@ function HealingCompass() {
           const { data, error } = await supabase
             .from('healing_compass_responses')
             .insert([{
+              user_id: user.id, // ✅ ADDED - Link to authenticated user
               user_name: newContext.user_name || 'Anonymous',
               stuck_gap_description: newContext.stuck_gap_description,
-              stuck_reason: newContext.stuck_reason_list, // Fixed field name
+              stuck_reason: newContext.stuck_reason_list,
               stuck_emotional_response: newContext.stuck_emotional_response,
               past_parallel_story: newContext.past_parallel_story,
               past_event_emotions: newContext.past_event_emotions,
+              past_event_details: newContext.past_event_details, // Added field from schema
               splinter_interpretation: newContext.splinter_interpretation,
               connect_dots_consent: newContext.connect_dots_consent,
               connect_dots_acknowledged: newContext.connect_dots_acknowledged,
               splinter_removal_consent: newContext.splinter_removal_consent,
+              challenge_enrollment_consent: newContext.challenge_enrollment_consent, // Added field from schema
               context: newContext
             }])
 
@@ -280,21 +416,51 @@ function HealingCompass() {
             throw error
           }
           console.log('✅ Healing compass data saved successfully:', data)
+
+          // Auto-complete challenge quest if user has active challenge
+          if (user?.id) {
+            console.log('🎯 Attempting to complete flow quest for healing_compass')
+            const questResult = await completeFlowQuest({
+              userId: user.id,
+              flowId: 'healing_compass',
+              pointsEarned: 20
+            })
+
+            if (questResult.success) {
+              console.log('✅ Quest completed!', questResult.message)
+            } else {
+              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
+            }
+          }
         } catch (err) {
           console.error('❌ Failed to save healing compass data:', err)
           // Continue with flow even if save fails
         }
       }
 
-      // Flow completed
-      const completionMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
-        timestamp: new Date().toLocaleTimeString()
+      // Flow completed - check if there's a navigation step
+      const lastStep = flow?.steps?.[flow.steps.length - 1]
+      if (lastStep?.navigate_to) {
+        const finalMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          kind: 'navigation',
+          text: await resolvePrompt(lastStep, newContext),
+          navigateTo: lastStep.navigate_to,
+          buttonText: hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge',
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, finalMessage])
+      } else {
+        const completionMessage = {
+          id: `ai-${Date.now()}`,
+          isAI: true,
+          kind: 'completion',
+          text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
+          timestamp: new Date().toLocaleTimeString()
+        }
+        setMessages(prev => [...prev, completionMessage])
       }
-      setMessages(prev => [...prev, completionMessage])
     }
 
     setIsLoading(false)
@@ -305,6 +471,19 @@ function HealingCompass() {
       e.preventDefault()
       handleSubmit()
     }
+  }
+
+  // Helper function to resolve template variables in text
+  const resolveText = (text) => {
+    if (!text) return text
+    let resolved = text
+    Object.keys(context).forEach(key => {
+      const placeholder = `{{${key}}}`
+      if (resolved.includes(placeholder)) {
+        resolved = resolved.replace(new RegExp(placeholder, 'g'), context[key])
+      }
+    })
+    return resolved
   }
 
   if (error) {
@@ -350,6 +529,19 @@ function HealingCompass() {
                       </Link>
                     </div>
                   </div>
+                ) : message.kind === 'navigation' ? (
+                  <div className="text">
+                    {message.text}
+                    <div style={{ marginTop: 16 }}>
+                      <button
+                        className="option-button"
+                        onClick={() => navigate(message.navigateTo)}
+                        style={{ width: '100%' }}
+                      >
+                        {message.buttonText}
+                      </button>
+                    </div>
+                  </div>
                 ) : (
                   <div className="text">{message.text}</div>
                 )}
@@ -370,43 +562,43 @@ function HealingCompass() {
           
           <div ref={messagesEndRef} />
         </div>
-
-        {currentStep?.options && currentStep.options.length > 0 && (
-          <div className="options-container">
-            {currentStep.options.map((option, index) => (
-              <button
-                key={index}
-                className="option-button"
-                onClick={() => handleOptionClick(option)}
-                disabled={isLoading}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {currentStep && !currentStep.options && (
-          <div className="input-bar">
-            <textarea
-              className="message-input"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Share your thoughts..."
-              disabled={isLoading}
-              rows={1}
-            />
-            <button
-              className="send-button"
-              onClick={handleSubmit}
-              disabled={isLoading || !inputText.trim()}
-            >
-              Send
-            </button>
-          </div>
-        )}
       </main>
+
+      {currentStep?.options && currentStep.options.length > 0 && (
+        <div className="options-container">
+          {currentStep.options.map((option, index) => (
+            <button
+              key={index}
+              className="option-button"
+              onClick={() => handleOptionClick(option)}
+              disabled={isLoading}
+            >
+              {resolveText(option.label)}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {currentStep && !currentStep.options && (
+        <div className="input-bar">
+          <textarea
+            className="message-input"
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Share your thoughts..."
+            disabled={isLoading}
+            rows={1}
+          />
+          <button
+            className="send-button"
+            onClick={handleSubmit}
+            disabled={isLoading || !inputText.trim()}
+          >
+            Send
+          </button>
+        </div>
+      )}
     </div>
   )
 }

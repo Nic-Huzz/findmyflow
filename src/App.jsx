@@ -4,6 +4,22 @@ import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import HybridArchetypeFlow from './HybridArchetypeFlow'
+import { sanitizeText } from './lib/sanitize'
+
+// Helper function to convert markdown to HTML for basic formatting
+function formatMarkdown(text) {
+  if (!text) return ''
+
+  return text
+    // Bold: **text** or __text__ (including multiline)
+    .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>')
+    // Italic: *text* or _text_ (including multiline)
+    .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
+    .replace(/_([\s\S]+?)_/g, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n/g, '<br />')
+}
 
 function App() {
   const { signInWithMagicLink } = useAuth()
@@ -33,7 +49,7 @@ function App() {
         
         // Start with first message
         const firstStep = sortedSteps[0]
-        const firstPrompt = resolvePrompt(firstStep, {})
+        const firstPrompt = await resolvePrompt(firstStep, {})
         setMessages([{
           id: 'ai-0',
           isAI: true,
@@ -56,7 +72,7 @@ function App() {
   const currentStep = flow?.steps?.[currentIndex]
 
   // Handle hybrid flow completion
-  const handleHybridFlowComplete = (result) => {
+  const handleHybridFlowComplete = async (result) => {
     console.log('✅ Hybrid flow completed:', result)
     setShowHybridFlow(false)
     
@@ -77,7 +93,7 @@ function App() {
     
     if (nextStep) {
       // Add AI response with resolved prompt
-      const responseText = resolvePrompt(nextStep, newContext)
+      const responseText = await resolvePrompt(nextStep, newContext)
       const aiMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
@@ -90,7 +106,7 @@ function App() {
   }
 
   // Move to next step - checks for hybrid_swipe type
-  const moveToNextStep = (updatedContext, skipHybridCheck = false) => {
+  const moveToNextStep = async (updatedContext, skipHybridCheck = false) => {
     const contextToUse = updatedContext || context
     const nextIndex = currentIndex + 1
     const nextStep = flow?.steps?.[nextIndex]
@@ -104,7 +120,7 @@ function App() {
         setShowHybridFlow(true)
       } else {
         // Regular step - add AI message with resolved prompt
-        const responseText = resolvePrompt(nextStep, contextToUse)
+        const responseText = await resolvePrompt(nextStep, contextToUse)
         const aiMessage = {
           id: `ai-${Date.now()}`,
           isAI: true,
@@ -153,20 +169,21 @@ function App() {
     }
 
     const trimmedInput = inputText.trim()
+    const sanitizedInput = sanitizeText(trimmedInput) // ✅ Sanitize user input
     setIsLoading(true)
 
     // Add user message
     const userMessage = {
       id: `user-${Date.now()}`,
       isAI: false,
-      text: trimmedInput,
+      text: sanitizedInput,
       timestamp: new Date().toLocaleTimeString()
     }
 
     // Update context
     const newContext = { ...context }
     if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = trimmedInput
+      newContext[currentStep.tag_as] = sanitizedInput
       console.log('📝 Stored in context:', currentStep.tag_as, '=', trimmedInput)
       // If persona was just selected, update Supabase immediately
       if (currentStep.tag_as === 'persona_selection') {
@@ -192,7 +209,7 @@ function App() {
       console.log('💾 SAVING TO SUPABASE - Email step detected!')
       try {
         // Generate session ID for anonymous users
-        const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+        const sessionId = crypto.randomUUID()
         
         // Store session_id in context for later use
         newContext.session_id = sessionId
@@ -205,7 +222,7 @@ function App() {
           essence_archetype: newContext.essence_archetype_selection,
           essence_confirm: newContext.essence_archetype_reflect,
           persona: newContext.persona_selection || null, // Will be null since persona comes after email
-          email: trimmedInput,
+          email: trimmedInput.toLowerCase(), // Normalize to lowercase to match Supabase Auth
           context: newContext
         }
         
@@ -222,8 +239,8 @@ function App() {
         console.log('✅ Profile saved successfully:', data)
         
         // Send magic link after saving profile
-        console.log('📧 Sending magic link to:', trimmedInput)
-        const magicLinkResult = await signInWithMagicLink(trimmedInput)
+        console.log('📧 Sending magic link to:', trimmedInput.toLowerCase())
+        const magicLinkResult = await signInWithMagicLink(trimmedInput.toLowerCase())
         if (magicLinkResult.success) {
           console.log('✅ Magic link sent successfully')
           setMessages(prev => [
@@ -258,8 +275,8 @@ function App() {
     }
 
     // Move to next step (check for hybrid flow)
-    const flowCompleted = moveToNextStep(newContext)
-    
+    const flowCompleted = await moveToNextStep(newContext)
+
     if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
@@ -272,6 +289,9 @@ function App() {
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
+
+      // Move currentIndex beyond last step to hide options/inputs
+      setCurrentIndex(flow.steps.length)
     }
 
     setIsLoading(false)
@@ -287,7 +307,7 @@ function App() {
     if (optionValue === 'change' || optionValue === 'no') {
       // Get the required input (which is the store_as from the previous swipe step)
       const requiredStoreAs = currentStep?.required_inputs?.[0]
-      
+
       if (!requiredStoreAs) {
         console.warn('⚠️ No required_inputs found for current step')
         setIsLoading(false)
@@ -296,33 +316,33 @@ function App() {
 
       // Find the swipe step that has this as its store_as
       const swipeStep = flow?.steps.find(step => step.store_as === requiredStoreAs)
-      
+
       // Validate: ensure we found a hybrid_swipe step
       if (swipeStep && swipeStep.step_type === 'hybrid_swipe') {
         // Find the step index
         const targetStepIndex = flow?.steps.findIndex(step => step.step === swipeStep.step)
-        
+
         if (targetStepIndex !== -1) {
           // Clear the previous selection and related context
           const newContext = { ...context }
-          
+
           // Clear the archetype selection (tag_as from swipe step)
           if (swipeStep.tag_as) {
             delete newContext[swipeStep.tag_as]
           }
-          
+
           // Clear the swipe step completion flag (store_as from swipe step)
           if (swipeStep.store_as) {
             delete newContext[swipeStep.store_as]
           }
-          
+
           // Clear the reflection step completion flag (store_as from current step)
           if (currentStep.store_as) {
             delete newContext[currentStep.store_as]
           }
-          
+
           setContext(newContext)
-          
+
           // Go back to swipe flow using the step's archetype_type
           setCurrentIndex(targetStepIndex)
           setShowHybridFlow(true)
@@ -362,8 +382,8 @@ function App() {
     setMessages(prev => [...prev, userMessage])
 
     // Move to next step (check for hybrid flow)
-    const flowCompleted = moveToNextStep(newContext)
-    
+    const flowCompleted = await moveToNextStep(newContext)
+
     if (flowCompleted) {
       // Flow completed - update persona if this is the final step
       await updatePersonaInSupabase(newContext)
@@ -376,6 +396,9 @@ function App() {
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
+
+      // Move currentIndex beyond last step to hide options
+      setCurrentIndex(flow.steps.length)
     }
 
     setIsLoading(false)
@@ -389,7 +412,7 @@ function App() {
   }
 
   const handleResendEmail = async () => {
-    const email = context.user_email || context.email
+    const email = (context.user_email || context.email)?.toLowerCase()
     if (!email) {
       console.error('No email found in context')
       return
@@ -474,7 +497,7 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>Find My Flow</h1>
-        <p>Discover your archetypes and unlock your potential</p>
+        <p>Live Your Ambitions Quicker</p>
       </header>
 
       <main className="chat-container">
@@ -484,7 +507,7 @@ function App() {
               <div className="bubble">
                 {message.kind === 'completion' ? (
                   <div className="text">
-                    {message.text}
+                    <div dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                     <div style={{ marginTop: 8 }}>
                       <button
                         onClick={handleResendEmail}
@@ -505,7 +528,7 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text">{message.text}</div>
+                  <div className="text" dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                 )}
                 <div className="timestamp">{message.timestamp}</div>
               </div>

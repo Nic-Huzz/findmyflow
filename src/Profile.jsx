@@ -5,6 +5,7 @@ import { useAuth } from './auth/AuthProvider'
 import { essenceProfiles } from './data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles } from './data/personaProfiles'
+import { hasActiveChallenge } from './lib/questCompletion'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -14,11 +15,13 @@ const Profile = () => {
   const [error, setError] = useState(null)
   const [expandedCard, setExpandedCard] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [hasChallenge, setHasChallenge] = useState(false)
 
   useEffect(() => {
     // Only load profile when user is available
     if (user?.email) {
       loadUserProfile()
+      checkChallengeStatus()
     } else if (user === null) {
       // User is not authenticated
       setLoading(false)
@@ -26,6 +29,13 @@ const Profile = () => {
     }
     // If user is still loading (undefined), keep loading state
   }, [user])
+
+  const checkChallengeStatus = async () => {
+    if (user?.id) {
+      const active = await hasActiveChallenge(user.id)
+      setHasChallenge(active)
+    }
+  }
 
   const loadUserProfile = async () => {
     if (!user?.email) {
@@ -149,8 +159,8 @@ const Profile = () => {
         <div className="logo">FindMyFlow</div>
 
         <div className="user-profile">
-          <div className="user-avatar">{getUserInitials(user?.email)}</div>
-          <div className="user-name">{user?.email?.split('@')[0] || 'User'}</div>
+          <div className="user-avatar">{userData?.user_name?.substring(0, 2).toUpperCase() || getUserInitials(user?.email)}</div>
+          <div className="user-name">{userData?.user_name || user?.email?.split('@')[0] || 'User'}</div>
           <div className="user-email">{user?.email}</div>
         </div>
 
@@ -158,11 +168,14 @@ const Profile = () => {
           <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
             📊 Dashboard
           </li>
-          <li className="nav-item" onClick={() => { navigate('/healing-compass'); setSidebarOpen(false); }}>
-            🧭 Healing Compass
+          <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
+            ✨ Archetypes
           </li>
           <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
             📈 7-Day Challenge
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
+            💬 Give Feedback
           </li>
         </ul>
 
@@ -174,19 +187,37 @@ const Profile = () => {
       {/* Main Content */}
       <div className="main-content">
         <div className="page-header">
-          <h1 className="page-title">Welcome Back, {user?.email?.split('@')[0] || 'User'}</h1>
-          <p className="page-subtitle">Here's your transformation journey at a glance</p>
+          <h1 className="page-title">Welcome Back, {userData?.user_name || user?.email?.split('@')[0] || 'User'}</h1>
+          <p className="page-subtitle">Here's Your Profile:</p>
         </div>
 
         {/* Stats Grid */}
         <div className="stats-grid">
           <div className="stat-card purple">
-            <div className="stat-icon">✨</div>
+            <div className="stat-icon">
+              <img
+                src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
+                alt={userData.essence_archetype}
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                  e.target.parentElement.innerHTML = '✨'
+                }}
+              />
+            </div>
             <div className="stat-label">Essence</div>
             <div className="stat-value">{userData.essence_archetype}</div>
           </div>
           <div className="stat-card yellow">
-            <div className="stat-icon">🛡️</div>
+            <div className="stat-icon">
+              <img
+                src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
+                alt={userData.protective_archetype}
+                onError={(e) => {
+                  e.target.style.display = 'none'
+                  e.target.parentElement.innerHTML = '🛡️'
+                }}
+              />
+            </div>
             <div className="stat-label">Protective</div>
             <div className="stat-value">{userData.protective_archetype}</div>
           </div>
@@ -220,20 +251,10 @@ const Profile = () => {
                 </p>
                 <button
                   className="explore-button"
-                  onClick={() => toggleExpand('essence')}
+                  onClick={() => navigate('/archetypes/essence')}
                 >
-                  {expandedCard === 'essence' ? 'Show Less ↑' : 'Explore Deeper ↓'}
+                  Explore Deeper →
                 </button>
-                {expandedCard === 'essence' && essenceData && (
-                  <div className="expand-content show">
-                    <h4>Your Superpower</h4>
-                    <p>{essenceData.superpower}</p>
-                    <h4>Your North Star</h4>
-                    <p>{essenceData.north_star}</p>
-                    <h4>Your Vision</h4>
-                    <p>{essenceData.poetic_vision}</p>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -253,18 +274,10 @@ const Profile = () => {
                 </p>
                 <button
                   className="explore-button"
-                  onClick={() => toggleExpand('protective')}
+                  onClick={() => navigate('/archetypes/protective')}
                 >
-                  {expandedCard === 'protective' ? 'Show Less ↑' : 'Learn More ↓'}
+                  Learn More →
                 </button>
-                {expandedCard === 'protective' && protectiveData && (
-                  <div className="expand-content show">
-                    <h4>How It Shows Up</h4>
-                    <p>{protectiveData.detailed?.howItShowsUp}</p>
-                    <h4>Breaking Free</h4>
-                    <p>{protectiveData.detailed?.breakingFree}</p>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -273,22 +286,18 @@ const Profile = () => {
         {/* CTA Banner */}
         <div className="cta-banner">
           <div className="cta-content">
-            <h3>Ready to Dive Deeper?</h3>
-            <p>Continue your transformation journey with the Healing Compass</p>
+            <h3>Ready to Find Your Flow?</h3>
+            <p>Live Your Ambitions Quicker</p>
             <div className="cta-buttons">
-              <button
-                className="btn-white"
-                onClick={() => navigate('/healing-compass')}
-              >
-                Start Healing Compass →
-              </button>
               <button
                 className="btn-white"
                 onClick={() => navigate('/7-day-challenge')}
               >
-                Join 7-Day Challenge 🔥
+                {hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥'}
               </button>
-              <button className="btn-outline">Share Your Profile</button>
+              <button className="btn-outline" onClick={() => navigate('/feedback')}>
+                Give Feedback 💬
+              </button>
             </div>
           </div>
         </div>

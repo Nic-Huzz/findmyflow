@@ -3,89 +3,89 @@
   "version": "1.0.0",
   "metadata": {
     "name": "Lead Magnet Flow - Test Version",
-    "description": "A short introduction flow to help users identify their Protective and Essence Archetypes and unlock their profile."
+    "description": "A short introduction flow to help users identify their Essence and Protective Archetypes and unlock their profile."
   },
   "steps": [
     {
       "step": "lead_q1_intro_name",
       "step_order_index": 1.0,
-      "prompt": "Hey I'm Alfred, an AI designed to help you find your flow.\n\nIf you're someone who:\n- Believes you're here to make a positive impact\n- You're keen to scale your impact\n- And you believe in the universe\n\nThen you'll love what we're about to do.\n\nTo start, what do I call you?",
+      "prompt": "Welcome!🌞 I'm Zarlo 👋🏼\n\n**Have you ever felt like you were made for more?**\n\nI believe you were.\n\nI believe you were made to flow like a river—to move with purpose, to nourish the world, to make a positive impact.\n\nI believe when you live from this place, the universe creates a current to support you.\n\n**I call this your flow.**\n\nIf you're keen to find you flow but feeling stuck - like your flow is hitting a river bank, I'm here to support.\n\nIf you believe you're here to make a difference, trust the universe and keen to amplify your impact—let's begin.\n\nWhat do I call you?",
       "tag_as": "user_name",
       "store_as": "lead_q1_name_complete",
       "instructions_to_gpt": "Wait for short name. Store exactly as provided. Do not proceed until captured."
     },
     {
-      "step": "lead_q2_protective_intro",
+      "step": "lead_q2_essence_intro",
       "step_order_index": 2.0,
       "required_inputs": ["lead_q1_name_complete"],
-      "prompt": "We'll start with identifying what's blocking your flow.\n\nThe gap between aligning your internal flow and the external is action. And the thing that stops us taking action is our protective patterns — brilliant but outdated protective behaviours.\n\nWhen it comes to your ambitions, which protective patterns sound familiar? Swipe right on the ones that resonate, left on the ones that don't.",
+      "prompt": "Perfect, {{user_name}}.\n\nHere's what I've learned: every river has a natural current.\n\nA direction it flows most powerfully. A way it serves the world most naturally.\n\nThis is your essence—the unique way your energy moves when nothing blocks it.\n\n**There are 8 Essence Archetypes. Each one flows in a unique way to create its impact.**\n\nOne will resonate as the version of you that's most alive and authentic.\n\nWhen you serve from this place, you're at your most impactful and magnetic.\n\nSwipe right on the ones that resonate. Left on the ones that don't.",
       "options": [
         { "label": "Yes, let's go!", "value": "yes" }
       ],
-      "tag_as": "lead_q2_protective_intro",
-      "store_as": "lead_q2_protective_intro_complete"
+      "tag_as": "lead_q2_essence_intro",
+      "store_as": "lead_q2_essence_intro_complete"
     },
     {
-      "step": "lead_q3_protective_swipe",
+      "step": "lead_q3_essence_swipe",
       "step_order_index": 3.0,
-      "required_inputs": ["lead_q2_protective_intro_complete"],
-      "step_type": "hybrid_swipe",
-      "archetype_type": "protective",
-      "prompt": "We'll start with identifying what's blocking your flow.\n\nThe gap between aligning your internal flow and the external is action. And the thing that stops us taking action is our protective patterns — brilliant but outdated protective behaviours.\n\nWhen it comes to your ambitions, which protective patterns sound familiar? Swipe right on the ones that resonate, left on the ones that don't.",
-      "tag_as": "protective_archetype_selection",
-      "store_as": "lead_q3_protective_archetype_complete"
-    },
-{
-  "step": "lead_q4_protective_reflection",
-  "step_order_index": 4.0,
-  "required_inputs": ["lead_q3_protective_archetype_complete"],
-  "prompt": "{{PROTECTIVE_MIRROR(protective_archetype_selection)}}\n\nDoes this sound like you?",
-  "options": [
-    { "label": "Yes, that’s me", "value": "confirm" },
-    { "label": "Hmm, show me the list again", "value": "change" }
-  ],
-  "tag_as": "protective_archetype_reflect",
-  "store_as": "lead_q4_protective_reflection_complete",
-  "instructions_to_gpt": "If value is 'confirm', acknowledge briefly and continue. If value is 'change', return the user to lead_q3_protective_intro to choose again."
-},
-{
-  "step": "lead_q5_essence_intro",
-  "step_order_index": 5.0,
-  "required_inputs": ["lead_q4_protective_reflection_complete"],
-  "prompt": "Now we’re looking to reconnect to the essence that sits underneath this protective pattern. I call this your Essence Archetype.\n\nWhich of these feels most like the real you?",
-  "options": [
-    { "label": "Yes, let's go!", "value": "yes" }
-  ],
-  "tag_as": "lead_q5_essence_intro",
-  "store_as": "lead_q5_essence_intro_complete"
-},
-   {
-      "step": "lead_q6_essence_swipe",
-      "step_order_index": 6.0,
-      "required_inputs": ["lead_q5_essence_intro_complete"],
+      "required_inputs": ["lead_q2_essence_intro_complete"],
       "step_type": "hybrid_swipe",
       "archetype_type": "essence",
-      "prompt": "Now we're looking to reconnect to the essence that sits underneath this protective pattern. I call this your Essence Archetype.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
+      "prompt": "We'll start by discovering your Essence Archetype — who you naturally are when fear isn't driving.\n\nYour essence is the real you, the version of yourself that feels most alive and authentic.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
       "tag_as": "essence_archetype_selection",
-      "store_as": "lead_q6_essence_archetype_complete"
+      "store_as": "lead_q3_essence_archetype_complete"
     },
-{
-  "step": "lead_q7_essence_reflection",
-  "step_order_index": 7.0,
-  "required_inputs": ["lead_q6_essence_archetype_complete"],
-  "prompt": "{{ESSENCE_REVEAL(essence_archetype_selection)}}\n\nDoes this feel like you?",
-  "options": [
-    { "label": "Yes, that feels true", "value": "yes" },
-    { "label": "Not sure yet", "value": "no" }
-  ],
-  "tag_as": "essence_archetype_reflect",
-  "store_as": "lead_q7_essence_reflection_complete"
-},
+    {
+      "step": "lead_q4_essence_reflection",
+      "step_order_index": 4.0,
+      "required_inputs": ["lead_q3_essence_archetype_complete"],
+      "prompt": "{{ESSENCE_REVEAL(essence_archetype_selection)}}\n\nDoes this feel like you?",
+      "options": [
+        { "label": "Yes, that feels true", "value": "yes" },
+        { "label": "Hmm, show me the list again", "value": "no" }
+      ],
+      "tag_as": "essence_archetype_reflect",
+      "store_as": "lead_q4_essence_reflection_complete"
+    },
+    {
+      "step": "lead_q5_protective_intro",
+      "step_order_index": 5.0,
+      "required_inputs": ["lead_q4_essence_reflection_complete"],
+      "prompt": "Now {{user_name}}, let's explore what's been blocking your flow.\n\nThese are protective patterns you developed when you were younger to keep yourself safe from failure, rejection, or judgement.\n\n*The Perfectionist. The People Pleaser. The Controller. The Performer. The Ghost.*\n\nThey were so effective they've now become the thing blocking you from sharing your {{essence_archetype}} gifts with the world.\n\nLet's identify which one is showing up most in the pursuit of your ambitions.\n\nSwipe right on the ones that sound most familiar. Left on the ones that don't.",
+      "options": [
+        { "label": "Yes, let's go!", "value": "yes" }
+      ],
+      "tag_as": "lead_q5_protective_intro",
+      "store_as": "lead_q5_protective_intro_complete"
+    },
+    {
+      "step": "lead_q6_protective_swipe",
+      "step_order_index": 6.0,
+      "required_inputs": ["lead_q5_protective_intro_complete"],
+      "step_type": "hybrid_swipe",
+      "archetype_type": "protective",
+      "prompt": "Now let's identify what's been blocking you from living as your essence.\n\nWhen it comes to your ambitions, you likely have protective patterns — brilliant but outdated behaviours that keep you safe from failure, rejection, or judgment.\n\nWhich protective patterns sound familiar? Swipe right on the ones that resonate, left on the ones that don't.",
+      "tag_as": "protective_archetype_selection",
+      "store_as": "lead_q6_protective_archetype_complete"
+    },
+    {
+      "step": "lead_q7_protective_reflection",
+      "step_order_index": 7.0,
+      "required_inputs": ["lead_q6_protective_archetype_complete"],
+      "prompt": "{{PROTECTIVE_MIRROR(protective_archetype_selection)}}\n\nDoes this sound like you?",
+      "options": [
+        { "label": "Yes, that's me", "value": "confirm" },
+        { "label": "Hmm, show me the list again", "value": "change" }
+      ],
+      "tag_as": "protective_archetype_reflect",
+      "store_as": "lead_q7_protective_reflection_complete",
+      "instructions_to_gpt": "If value is 'confirm', acknowledge briefly and continue. If value is 'change', return the user to lead_q6_protective_swipe to choose again."
+    },
     {
       "step": "lead_q8_email_capture",
       "step_order_index": 8.0,
-      "required_inputs": ["lead_q7_essence_reflection_complete"],
-      "prompt": "Keen to learn more about your Protective Archetype and your Essence Archetype?\n\nAnd ways to overcome the Protective Archetype that's blocking your ambitions so you can live from your Essence Archetype?\n\nEnter your email below. You'll receive a link to your profile.",
+      "required_inputs": ["lead_q7_protective_reflection_complete"],
+      "prompt": "Perfect, {{user_name}}.\n\nYou've now identified your {{essence_archetype}} current and the {{protective_archetype}} pattern that's slowing it down.\n\nNow here's what happens next:\n\nI've created a personalised profile that shows you how to navigate from protection back to flow.\n\nEnter your email below and I'll send you a link to your full profile.",
       "tag_as": "user_email",
       "store_as": "lead_q8_email_capture_complete",
       "instructions_to_gpt": "Capture valid email address and store. Trigger Supabase profile creation.",

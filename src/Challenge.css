@@ -52,6 +52,35 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+.challenge-complete-badge {
+  background: rgba(255, 221, 39, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.restart-challenge-btn {
+  background: rgba(255, 255, 255, 0.95);
+  color: #5e17eb;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  padding: 0.75rem 1.5rem;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.restart-challenge-btn:hover {
+  background: white;
+  border-color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
 .challenge-points {
   display: flex;
   gap: 2rem;
@@ -365,6 +394,63 @@
   font-size: 0.9375rem;
 }
 
+/* Learn More Section */
+.learn-more-section {
+  margin: 0.25rem 0 1.5rem 0;
+}
+
+.learn-more-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.learn-more-toggle:hover {
+  color: #7c3aed;
+  gap: 0.625rem;
+}
+
+.learn-more-arrow {
+  transition: transform 0.3s ease;
+  color: #5e17eb;
+}
+
+.learn-more-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.learn-more-content {
+  margin-top: 0.75rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-left: 3px solid #5e17eb;
+  border-radius: 0 8px 8px 0;
+  color: #495057;
+  line-height: 1.6;
+  font-size: 0.875rem;
+  animation: slideDown 0.3s ease;
+  white-space: pre-line; /* Preserve line breaks from \n */
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Daily Streak Bubbles */
 .daily-streak {
   display: flex;
@@ -458,6 +544,41 @@
 
 .quest-complete-btn:active {
   transform: translateY(0);
+}
+
+.quest-flow-btn {
+  display: block;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  text-align: center;
+}
+
+.quest-flow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.quest-flow-btn:active {
+  transform: translateY(0);
+}
+
+.quest-flow-btn.coming-soon {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.quest-flow-btn.coming-soon:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .quest-completed-badge {
@@ -656,6 +777,12 @@
   .total-points {
     width: 100%;
   }
+
+  .restart-challenge-btn {
+    width: 100%;
+    margin-top: 1rem;
+    text-align: center;
+  }
 }
 
 /* Leaderboard Styles */
@@ -668,9 +795,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.group-code-display {
+  background: rgba(94, 23, 235, 0.1);
+  border: 2px dashed rgba(94, 23, 235, 0.3);
+  padding: 0.25rem 1rem;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.group-code-display strong {
+  color: #5e17eb;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  font-family: 'Monaco', 'Courier New', monospace;
 }
 
 .leaderboard-toggle {

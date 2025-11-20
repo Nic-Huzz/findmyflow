@@ -5,7 +5,7 @@
       "category": "Recognise",
       "type": "daily",
       "name": "Essence Archetype",
-      "description": "Where did you show up as your essence archetype in your work today?",
+      "description": "Where did you show up as your essence archetype in your work today",
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What were you doing?",
@@ -16,7 +16,7 @@
       "category": "Recognise",
       "type": "daily",
       "name": "Protective Archetype",
-      "description": "Where did your protective archetype emerge in your worktoday?",
+      "description": "Where did your protective archetype emerge in your work today?",
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What caused it to arise?",
@@ -26,8 +26,8 @@
       "id": "recognise_positive_frequency",
       "category": "Recognise",
       "type": "daily",
-      "name": "Reacted From Love",
-      "description": "What's a moment where you were challenged regarding your ambitions today but reacted from a place of love?",
+      "name": "Positive Frequency",
+      "description": "What's a moment where you were challenged in your work today but reacted from a place of love?",
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation?",
@@ -37,12 +37,23 @@
       "id": "recognise_negative_frequency",
       "category": "Recognise",
       "type": "daily",
-      "name": "Reacted From Fear",
-      "description": "What's a moment you were challenged regarding your ambitions today and reacted from a place of fear?",
+      "name": "Negative Frequency",
+      "description": "What's a moment you were challenged in your work today and reacted from a place of fear?",
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation? What caused you to be triggered?",
       "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future."
+    },
+    {
+      "id": "recognise_flow_update",
+      "category": "Recognise",
+      "type": "daily",
+      "name": "Daily Flow Update",
+      "description": "How did things flow internally and externally for you today, what direction did you flow?",
+      "points": 4,
+      "inputType": "text",
+      "placeholder": "What happened? What direction did you flow?",
+      "learnMore": "Internal flow = excitement or tired.\n\nDoes the thought of the action excite you or tire you?\n\nExternal flow = Ease or resistance.\n\nWhen you took action did your intentions came to life as expected and did serendipity's occur? This is Ease.\n\nOr did it not go as expected and did you face unexpected challenges? This is resistance.\n\nNorth = Action excited you and it flowed with ease. This is a signal for continuing.\n\nEast = Action excited you but you faced resistance. This is a signal that a pivot is required.\n\nSouth = Action felt tiring and you faced resistance. This is a signal that you need to rest and / or stop.\n\nWest = Action felt tiring but it led to a new opportunity dropping in. This is a single to potentially explore a new opportunity."
     },
       {
       "id": "recognise_archetype_quiz",
@@ -70,25 +81,14 @@
       "id": "recognise_ikigai",
       "category": "Recognise",
       "type": "weekly",
-      "name": "Nikigai",
+      "name": "Nikigai - Flow Formula",
       "description": "The Ikigai process modernised to identify business opportunities",
       "points": 25,
       "inputType": "flow",
       "flow_id": "nikigai",
       "flow_route": "/nikigai",
-      "learnMore": "Ikigai is a Japanese concept meaning 'reason for being.' It sits at the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.\n\nThis modernised version helps you identify tangible business opportunities aligned with your passions, experiences and skills.\n\nTakes 15-20 minutes."
-    },
-    {
-      "id": "recognise_consciousness_quiz",
-      "category": "Recognise",
-      "type": "weekly",
-      "name": "Spiral Dynamics Quiz",
-      "description": "Discover where you operate on the consciousness spectrum. Understand your current state and opportunities for growth.",
-      "points": 15,
-      "inputType": "flow",
-      "flow_id": "spiral_dynamics",
-      "flow_route": "/spiral-dynamics",
-      "learnMore": "Spiral Dynamics maps stages of human values and beliefs—from survival-based thinking to purpose-driven living.\n\nUnderstanding where you currently operate helps you see your blind spots and growth edges.\n\nThis isn't about being 'better than' others—it's about recognising your worldview and where you're ready to expand.\n\nTakes 5-10 minutes."
+      "status": "coming_soon",
+      "learnMore": "Ikigai is a Japanese concept meaning 'reason for being.' It sits at the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.\n\nThis modernised version helps you identify tangible business opportunities aligned with your passions, experiences and skills. See it as your Flow Formula.\n\nTakes 15-20 minutes."
     },
     {
       "id": "recognise_nervous_system",
@@ -96,7 +96,7 @@
       "type": "weekly",
       "name": "Map The Boundaries Of Your Nervous System",
       "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
-      "points": 15,
+      "points": 25,
       "inputType": "flow",
       "flow_id": "nervous_system",
       "flow_route": "/nervous-system",
@@ -199,36 +199,50 @@
       "placeholder": "How did you shift from protective to essence?"
     },
     {
+      "id": "rewire_hell_yea",
+      "category": "Rewire",
+      "type": "daily",
+      "name": "Make It A Hell Yea",
+      "description": "What event this week flowed into your life that was an immediate \"hell yea\" or what event wasn't a hell yea but you turned into one by changing something about it?",
+      "points": 5,
+      "inputType": "text",
+      "placeholder": "What event this week was a Hell Yea for you?",
+      "learnMore": "What's the difference between an A-grade actor and a C-grade actor who started with the same talent? One said yes to any opportunity and found themselves too busy to say yes to the \"hell yea\" ones when they did come and one said yes to only \"Hell Yea\" opportunities which led to more hell yeas.\n\nBy bringing awareness to what a \"hell yea\" is for you also shows what you're interested in and what you want to be doing."
+    },
+    {
       "id": "rewire_groan_skills",
       "category": "Rewire",
       "type": "weekly",
-      "name": "Groan Challenge: Skills",
+      "name": "Flow Finder: Skills Challenge",
       "description": "Do something outside your comfort zone but develops a key skill.",
       "points": 25,
       "inputType": "text",
       "placeholder": "What skill-building groan task did you complete?",
+      "status": "coming_soon",
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Skill-building groans might include: recording a video, asking for feedback, learning a new tool, or practicing a skill publicly before you feel 'ready.'"
     },
     {
       "id": "rewire_groan_serve",
       "category": "Rewire",
       "type": "weekly",
-      "name": "Groan Challenge: Persona",
+      "name": "Flow Finder: Persona Challenge",
       "description": "Do something outside your comfort zone to serve and support your ideal audience",
       "points": 25,
       "inputType": "text",
       "placeholder": "How did you serve your persona this week?",
+      "status": "coming_soon",
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Persona-building groans might include: hosting a free workshop for a dream client, reaching out to someone you admire to offer value, creating content about something vulnerable, or asking your audience what they need and delivering it."
     },
     {
       "id": "rewire_groan_solve",
       "category": "Rewire",
       "type": "weekly",
-      "name": "Groan Challenge: Problem",
+      "name": "Flow Finder: Problem Challenge",
       "description": "Solve a problem your passionate about for someone in a way that is outside your comfort zone",
       "points": 25,
       "inputType": "text",
       "placeholder": "What problem did you solve?",
+      "status": "coming_soon",
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Problem-solving groans might include: offering a paid service before you feel qualified, solving a problem publicly (video/article), or approaching someone directly to help them with something they're struggling with."
     },
     {
@@ -241,6 +255,28 @@
       "inputType": "text",
       "placeholder": "What did you improve by 3%?",
       "learnMore": "The 3% rule focuses on marginal gains as a recipe for success instead of massive transformation.These small consistent improvements compound exponentially.\n\nInstead of 'I need to completely overhaul my website,' you ask 'What's 3% better?' Maybe it's improving one headline, simplifying your offer, or speeding up your response time. Tiny improvements sustained over time create massive growth."
+    },
+    {
+      "id": "rewire_fear_judgement",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Overcoming Fear of Judgement",
+      "description": "Rather than expect critical judgement from your actions, expect people will love whatever it is you're doing.",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What did you brain default to expecting? What did you change it to?",
+      "learnMore": "Anxiety, excitement and nervousness are all the same emotional sensation. What determines what we feel is our expectation of the end result.\n\nIf we expect something bad we feel anxiety. If we expect something good we feel excitement. Nervousness is when we're flip flopping between both.\n\nThe quickest way to overcome fear of judgement anxiety than is to simply change our expectation to be that people will love whatever we're about to do."
+    },
+    {
+      "id": "rewire_fear_not_enough",
+      "category": "Rewire",
+      "type": "weekly",
+      "name": "Overcoming Fear of Not Being Good Enough",
+      "description": "What's something this week where the fear of not being good enough crept in and what courage mantra did you tell yourself to overcome that fear?",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What was the moment and what was the courage mantra you told yourself?",
+      "learnMore": "The quickest way to overcome our fear of not being good enough? Change the story we're telling ourselves. Creating a courage mantra you repeat to yourself is a great way to do this.\n\nCheck out the Healing Compass flow to create this mantra."
     },
     {
       "id": "reconnect_morning_meditation",
@@ -278,6 +314,17 @@
       "points": 3,
       "inputType": "text",
       "placeholder": "What did you do to reconnect today?"
+    },
+    {
+      "id": "reconnect_daily_prayer",
+      "category": "Reconnect",
+      "type": "daily",
+      "name": "Daily Prayer",
+      "description": "Pray, share gratitude, set intentions, make asks of whatever greater being you believe is present",
+      "points": 4,
+      "inputType": "text",
+      "placeholder": "What did you pray for or express gratitude about today?",
+      "learnMore": "Whether you believe in prayer or not, what I've found is when you do pray and ask for things, every opportunity or serendipity that follows has a sense of magic.\n\nIt leads you to ask \"Is this an answer to my prayer?\". I've found it leads me to remain open to any or all experiences and ensures I don't simply dismiss something prematurely."
     },
     {
       "id": "reconnect_weekly_task",
@@ -323,14 +370,26 @@
       "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish—it's essential."
     },
     {
+      "id": "reconnect_write_obituary",
+      "category": "Reconnect",
+      "type": "weekly",
+      "name": "Write Your Obituary",
+      "description": "Pretend it was your funeral tomorrow, what do you wish your best friend / family said about you in your obituary?",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "Insert your obituary here",
+      "learnMore": "This is a powerful exercise to identify what's really important to you in your life.\n\nI recommend setting a timer for 8 minutes and writing stream of consciousness to start to see what comes up."
+    },
+    {
       "id": "bonus_feedback",
       "category": "Bonus",
       "type": "anytime",
       "name": "Feedback Form",
       "description": "Share your experience with the challenge. Your feedback helps us improve the journey for everyone.",
       "points": 10,
-      "inputType": "text",
-      "placeholder": "What feedback do you have about the challenge?"
+      "inputType": "flow",
+      "flow_id": "feedback",
+      "flow_route": "/feedback"
     },
     {
       "id": "bonus_ig_groan",
@@ -361,56 +420,66 @@
       "inputType": "checkbox"
     },
     {
+      "id": "bonus_challenge_recommendation",
+      "category": "Bonus",
+      "type": "anytime",
+      "name": "Challenge Recommendation",
+      "description": "What challenges would you recommend we add to the 7-day challenge? Please let us know are they a weekly or daily challenge and which R (recognise, release, rewire, reconnect) they best support.",
+      "points": 10,
+      "inputType": "text",
+      "placeholder": "Share your challenge recommendations"
+    },
+    {
       "id": "bonus_elephant_report",
       "category": "Bonus",
       "type": "anytime",
       "name": "Weekly Reflection",
-      "description": "Submit your weekly reflection. Track your transformation over the 7 days.",
+      "description": "Out of 10 how would you rate the 7-day challenge? You're not allowed to give it a 7. Also include what made you give it that score.",
       "points": 10,
       "inputType": "text",
-      "placeholder": "Share your weekly reflection"
+      "placeholder": "Your rating (0-10, not 7) and what made you give it that score"
     }
   ],
   "artifacts": [
     {
-      "id": "essence_boat",
+      "id": "treasure_map",
       "name": "Treasure Map",
       "category": "Recognise",
       "description": "Identify where to find your flow.",
-      "weeklyPointsRequired": 50,
-      "dailyPointsRequired": 40,
-      "totalRequired": 90,
-      "image": "/images/artifacts/essence-boat.png"
+      "weeklyPointsRequired": 70,
+      "dailyPointsRequired": 90,
+      "totalRequired": 160,
+      "image": "/images/artifacts/treasure-map.png"
     },
     {
-      "id": "captains_hat",
+      "id": "cutting_anchor",
       "name": "Cutting The Anchor",
       "category": "Release",
       "description": "Letting go of what's stopping your flow.",
       "weeklyPointsRequired": 30,
-      "dailyPointsRequired": 30,
-      "totalRequired": 60,
-      "image": "/images/artifacts/captains-hat.png"
+      "dailyPointsRequired": 54,
+      "totalRequired": 84,
+      "image": "/images/artifacts/cutting-anchor.png"
     },
     {
-      "id": "treasure_map",
+      "id": "captains_hat",
       "name": "Captain's Hat",
       "category": "Rewire",
       "description": "Taking action to be who you were born to be.",
-      "weeklyPointsRequired": 60,
-      "dailyPointsRequired": 50,
-      "totalRequired": 110,
-      "image": "/images/artifacts/treasure-map.png"
+      "weeklyPointsRequired": 100,
+      "dailyPointsRequired": 113,
+      "totalRequired": 213,
+      "image": "/images/artifacts/captains-hat.png"
     },
     {
-      "id": "sailing_sails",
+      "id": "essence_boat",
       "name": "Essence Boat",
       "category": "Reconnect",
       "description": "Your Vessel for living your flow.",
-      "weeklyPointsRequired": 40,
-      "dailyPointsRequired": 50,
-      "totalRequired": 90,
-      "image": "/images/artifacts/sailing-sails.png"
+      "weeklyPointsRequired": 70,
+      "dailyPointsRequired": 90,
+      "totalRequired": 160,
+      "image": "/images/artifacts/essence-boat.png"
     }
   ]
 }

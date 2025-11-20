@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/AuthProvider'
 import { supabase } from './lib/supabaseClient'
+import { sanitizeText } from './lib/sanitize'
 import './Challenge.css'
 
 function Challenge() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('Recognise')
   const [challengeData, setData] = useState(null)
@@ -20,6 +23,8 @@ function Challenge() {
   const [leaderboard, setLeaderboard] = useState([])
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
+  const [userData, setUserData] = useState(null)
+  const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
 
   const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
@@ -31,8 +36,28 @@ function Challenge() {
     if (user) {
       loadUserProgress()
       loadLeaderboard()
+      loadUserData()
     }
   }, [user])
+
+  const loadUserData = async () => {
+    if (!user?.email) return
+
+    try {
+      const { data, error } = await supabase
+        .from('lead_flow_profiles')
+        .select('*')
+        .eq('email', user.email)
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      if (!error && data && data.length > 0) {
+        setUserData(data[0])
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error)
+    }
+  }
 
   useEffect(() => {
     if (user && progress) {
@@ -118,12 +143,27 @@ function Challenge() {
       setProgress(progressData)
 
       // Check if we need to advance the day
+      // Use calendar days instead of 24-hour periods
       const lastActive = new Date(progressData.last_active_date)
       const now = new Date()
-      const daysSinceLastActive = Math.floor((now - lastActive) / (1000 * 60 * 60 * 24))
+
+      // Reset time to midnight for proper day comparison
+      const lastActiveDay = new Date(lastActive.getFullYear(), lastActive.getMonth(), lastActive.getDate())
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
+      const daysSinceLastActive = Math.floor((today - lastActiveDay) / (1000 * 60 * 60 * 24))
+
+      console.log('Day counter check:', {
+        lastActiveDate: progressData.last_active_date,
+        lastActiveDay: lastActiveDay.toISOString(),
+        today: today.toISOString(),
+        daysSinceLastActive,
+        currentDay: progressData.current_day
+      })
 
       if (daysSinceLastActive >= 1 && progressData.current_day < 7) {
-        await advanceDay(progressData)
+        console.log('Advancing day from', progressData.current_day, 'to', Math.min(progressData.current_day + daysSinceLastActive, 7))
+        await advanceDay(progressData, daysSinceLastActive)
       }
 
       // Load quest completions for this challenge instance
@@ -146,8 +186,10 @@ function Challenge() {
     }
   }
 
-  const advanceDay = async (currentProgress) => {
-    const newDay = Math.min(currentProgress.current_day + 1, 7)
+  const advanceDay = async (currentProgress, daysToAdvance = 1) => {
+    const newDay = Math.min(currentProgress.current_day + daysToAdvance, 7)
+
+    console.log('Advancing from day', currentProgress.current_day, 'to day', newDay)
 
     const { data, error} = await supabase
       .from('challenge_progress')
@@ -156,10 +198,14 @@ function Challenge() {
         last_active_date: new Date().toISOString()
       })
       .eq('user_id', user.id)
+      .eq('challenge_instance_id', currentProgress.challenge_instance_id)
       .select()
       .single()
 
-    if (!error) {
+    if (error) {
+      console.error('Error advancing day:', error)
+    } else {
+      console.log('Day advanced successfully:', data)
       setProgress(data)
     }
   }
@@ -213,6 +259,12 @@ function Challenge() {
         }])
 
       setShowGroupSelection(false)
+
+      // Show success message with group code
+      alert(`🎉 Group created successfully!\n\nYour group code is: ${newCode}\n\nShare this code with friends to invite them to your challenge group. You can also find this code on the Leaderboard page.`)
+
+      // TODO: Send email with group code (requires email service setup)
+      // For now, the code is displayed in the alert and on the leaderboard
     } catch (error) {
       console.error('Error creating group:', error)
       alert('Error creating group. Please try again.')
@@ -260,6 +312,34 @@ function Challenge() {
     }
   }
 
+  const handleRestartChallenge = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to start a new 7-day challenge? Your current progress will be archived and you\'ll start fresh on Day 1.'
+    )
+
+    if (!confirmed) return
+
+    try {
+      // Archive current challenge by setting status to 'completed'
+      await supabase
+        .from('challenge_progress')
+        .update({ status: 'completed' })
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+
+      // Start new challenge (reuse same group if user was in one)
+      await startChallenge(progress.group_id || null)
+
+      // Reload user progress
+      await loadUserProgress()
+
+      alert('🎉 New challenge started! Welcome to Day 1.')
+    } catch (error) {
+      console.error('Error restarting challenge:', error)
+      alert('Error starting new challenge. Please try again.')
+    }
+  }
+
   const startChallenge = async (groupId = null) => {
     try {
       // First, abandon any active challenges for this user
@@ -283,7 +363,7 @@ function Challenge() {
         user_id: user.id,
         session_id: sessionId,
         challenge_instance_id: challengeInstanceId,
-        current_day: 1,
+        current_day: 0,
         status: 'active',
         challenge_start_date: new Date().toISOString(),
         last_active_date: new Date().toISOString()
@@ -321,6 +401,7 @@ function Challenge() {
       let challengeQuery = supabase
         .from('challenge_progress')
         .select('*')
+        .eq('status', 'active')  // Only show active challenges
         .order('total_points', { ascending: false })
 
       // If user has a group, filter by group members
@@ -427,6 +508,13 @@ function Challenge() {
     }
   }
 
+  const toggleLearnMore = (questId) => {
+    setExpandedLearnMore(prev => ({
+      ...prev,
+      [questId]: !prev[questId]
+    }))
+  }
+
   const handleQuestComplete = async (quest) => {
     const inputValue = questInputs[quest.id]
 
@@ -435,6 +523,9 @@ function Challenge() {
       alert('Please enter your reflection before completing this quest.')
       return
     }
+
+    // Sanitize reflection text
+    const sanitizedReflection = inputValue ? sanitizeText(inputValue) : null
 
     try {
       // Create quest completion
@@ -447,7 +538,7 @@ function Challenge() {
           quest_category: quest.category,
           quest_type: quest.type,
           points_earned: quest.points,
-          reflection_text: inputValue || null,
+          reflection_text: sanitizedReflection,
           challenge_day: progress.current_day
         }])
 
@@ -460,21 +551,28 @@ function Challenge() {
       // Calculate new points
       const categoryLower = quest.category.toLowerCase()
       const typeKey = quest.type === 'daily' ? 'daily' : 'weekly'
-      const pointsField = `${categoryLower}_${typeKey}_points`
 
-      const newCategoryPoints = (progress[pointsField] || 0) + quest.points
+      // Handle Bonus category specially (no bonus_*_points columns in DB)
+      const isBonus = quest.category === 'Bonus'
+      const pointsField = isBonus ? null : `${categoryLower}_${typeKey}_points`
+
+      const newCategoryPoints = isBonus ? 0 : (progress[pointsField] || 0) + quest.points
       const newTotalPoints = (progress.total_points || 0) + quest.points
 
-      // Check artifact unlock conditions
+      // Check artifact unlock conditions (not applicable for Bonus)
       const artifacts = challengeData?.artifacts || []
       const categoryArtifact = artifacts.find(a => a.category === quest.category)
       const artifactUnlocked = categoryArtifact ? checkArtifactUnlock(quest.category, newCategoryPoints, typeKey) : false
 
       // Update progress
       const updateData = {
-        [pointsField]: newCategoryPoints,
         total_points: newTotalPoints,
         last_active_date: new Date().toISOString()
+      }
+
+      // Only add category points field if not Bonus
+      if (!isBonus && pointsField) {
+        updateData[pointsField] = newCategoryPoints
       }
 
       if (artifactUnlocked && categoryArtifact) {
@@ -486,6 +584,8 @@ function Challenge() {
         .from('challenge_progress')
         .update(updateData)
         .eq('user_id', user.id)
+        .eq('challenge_instance_id', progress.challenge_instance_id)
+        .eq('status', 'active')
         .select()
         .single()
 
@@ -576,6 +676,16 @@ function Challenge() {
     }
   }
 
+  const getArtifactEmoji = (category) => {
+    const emojiMap = {
+      'Recognise': '🗺️',
+      'Release': '⚓',
+      'Rewire': '🧢',
+      'Reconnect': '⛵'
+    }
+    return emojiMap[category] || '✨'
+  }
+
   const getDailyStreak = (questId) => {
     if (!progress) return [false, false, false, false, false, false, false]
 
@@ -613,34 +723,49 @@ function Challenge() {
       <div className="challenge-container">
         <div className="challenge-onboarding">
           <div className="onboarding-content">
-            <h1>🚀 Welcome to Gamify Your Ambitions</h1>
+            <h1>🚀 Ready to Find Your Flow?</h1>
             <p className="onboarding-intro">
-              Embark on a transformational journey to embody your essence archetype.
-              Over the next 7 days, you'll complete quests across four categories:
+            You got the job. Made some money. Experienced the ladder.
+            </p>
+            <p className="onboarding-intro">
+            But somewhere along the way, you realised: This isn't it.
+            </p>
+            <p className="onboarding-intro">
+            You had your awakening...Now what?
+            </p>
+            <p className="onboarding-intro">
+              You know there's something more— you've felt it.
+            </p>
+            <p className="onboarding-intro">
+              Moments of aliveness. Impact. Flow.
+            </p>
+            <p className="onboarding-intro">
+              But you don't know how to get from where you are to where you sense you could be.
+            </p>
+            <p className="onboarding-intro">
+              That's what Find My Flow is for.
+            </p>
+            <p className="onboarding-intro">
+              Over the next 7 days you'll complete quests across four categories to help you re-find your flow and amplify your impact:
             </p>
 
             <div className="onboarding-categories">
               <div className="onboarding-category">
                 <h3>🔍 Recognise</h3>
-                <p>Build awareness of your protective and essence patterns</p>
+                <p>Build awareness of what's blocking your flow and what your flow is</p>
               </div>
               <div className="onboarding-category">
                 <h3>🕊️ Release</h3>
-                <p>Let go of what no longer serves you</p>
+                <p>Let go of traumas blocking your flow</p>
               </div>
               <div className="onboarding-category">
                 <h3>⚡ Rewire</h3>
-                <p>Create new behaviors aligned with your essence</p>
+                <p>Act in alignment with your flow</p>
               </div>
               <div className="onboarding-category">
                 <h3>🌊 Reconnect</h3>
-                <p>Live from your essence through daily practices</p>
+                <p>Live from your essence and find your flow</p>
               </div>
-            </div>
-
-            <div className="onboarding-artifacts">
-              <h3>🏆 Unlock 4 Sacred Artifacts</h3>
-              <p>Complete quests to unlock the Essence Boat, Captain's Hat, Treasure Map, and Sailing Sails.</p>
             </div>
 
             <button className="start-challenge-btn" onClick={showGroupSelectionModal}>
@@ -725,10 +850,20 @@ function Challenge() {
         <div className="challenge-header-top">
           <h1>Gamify Your Ambitions</h1>
           <div className="challenge-header-badges">
-            <div className="challenge-day">Day {progress.current_day}/7</div>
-            {groupCode && (
-              <div className="challenge-day group-code-badge" title="Share this code with friends!">
-                👥 {groupCode}
+            <div className="challenge-day">
+              Day {progress.current_day}/7
+              {progress.current_day === 7 && (
+                <span className="challenge-complete-badge">Complete! 🎉</span>
+              )}
+            </div>
+            {userData?.essence_archetype && (
+              <div
+                className="challenge-day archetype-badge"
+                title="View your archetypes"
+                onClick={() => navigate('/archetypes')}
+                style={{ cursor: 'pointer' }}
+              >
+                ✨ Archetypes
               </div>
             )}
           </div>
@@ -747,6 +882,11 @@ function Challenge() {
             )}
           </div>
         </div>
+        {progress.current_day === 7 && (
+          <button className="restart-challenge-btn" onClick={handleRestartChallenge}>
+            Start New 7-Day Challenge
+          </button>
+        )}
       </header>
 
       <div className="challenge-tabs">
@@ -782,6 +922,12 @@ function Challenge() {
                 </button>
               </div>
             </div>
+
+            {groupCode && (
+              <div className="group-code-display">
+                Group Code: <strong>{groupCode}</strong>
+              </div>
+            )}
 
             <div className="leaderboard-list">
               {leaderboard.length === 0 && (
@@ -824,7 +970,7 @@ function Challenge() {
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
-              <h3>{artifactProgress.unlocked ? '✨' : '🔒'} {artifactProgress.name}</h3>
+              <h3>{artifactProgress.unlocked ? getArtifactEmoji(activeCategory) : '🔒'} {artifactProgress.name}</h3>
               <p className="artifact-description">{artifactProgress.description}</p>
             </div>
 
@@ -917,29 +1063,78 @@ function Challenge() {
 
                     <p className="quest-description">{quest.description}</p>
 
-                    {!completed && (
-                      <div className="quest-input-area">
-                        {quest.inputType === 'text' ? (
-                          <textarea
-                            className="quest-textarea"
-                            placeholder={quest.placeholder}
-                            value={questInputs[quest.id] || ''}
-                            onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            rows={3}
-                          />
-                        ) : (
-                          <div className="quest-checkbox-area">
-                            <label className="quest-checkbox-label">
-                              Mark as complete
-                            </label>
+                    {quest.learnMore && !completed && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Learn More</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {quest.learnMore}
                           </div>
                         )}
-                        <button
-                          className="quest-complete-btn"
-                          onClick={() => handleQuestComplete(quest)}
-                        >
-                          Complete Quest
-                        </button>
+                      </div>
+                    )}
+
+                    {!completed && (
+                      <div className="quest-input-area">
+                        {quest.status === 'coming_soon' ? (
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        ) : quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
+                        ) : quest.inputType === 'text' ? (
+                          <>
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                            />
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="quest-checkbox-area">
+                              <label className="quest-checkbox-label">
+                                Mark as complete
+                              </label>
+                            </div>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
 
@@ -970,29 +1165,78 @@ function Challenge() {
                     </div>
                     <p className="quest-description">{quest.description}</p>
 
-                    {!completed && (
-                      <div className="quest-input-area">
-                        {quest.inputType === 'text' ? (
-                          <textarea
-                            className="quest-textarea"
-                            placeholder={quest.placeholder}
-                            value={questInputs[quest.id] || ''}
-                            onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            rows={3}
-                          />
-                        ) : (
-                          <div className="quest-checkbox-area">
-                            <label className="quest-checkbox-label">
-                              Mark as complete
-                            </label>
+                    {quest.learnMore && !completed && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Learn More</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {quest.learnMore}
                           </div>
                         )}
-                        <button
-                          className="quest-complete-btn"
-                          onClick={() => handleQuestComplete(quest)}
-                        >
-                          Complete Quest
-                        </button>
+                      </div>
+                    )}
+
+                    {!completed && (
+                      <div className="quest-input-area">
+                        {quest.status === 'coming_soon' ? (
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        ) : quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
+                        ) : quest.inputType === 'text' ? (
+                          <>
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                            />
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="quest-checkbox-area">
+                              <label className="quest-checkbox-label">
+                                Mark as complete
+                              </label>
+                            </div>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
 
@@ -1023,29 +1267,78 @@ function Challenge() {
                     </div>
                     <p className="quest-description">{quest.description}</p>
 
-                    {!completed && (
-                      <div className="quest-input-area">
-                        {quest.inputType === 'text' ? (
-                          <textarea
-                            className="quest-textarea"
-                            placeholder={quest.placeholder}
-                            value={questInputs[quest.id] || ''}
-                            onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            rows={3}
-                          />
-                        ) : (
-                          <div className="quest-checkbox-area">
-                            <label className="quest-checkbox-label">
-                              Mark as complete
-                            </label>
+                    {quest.learnMore && !completed && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Learn More</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {quest.learnMore}
                           </div>
                         )}
-                        <button
-                          className="quest-complete-btn"
-                          onClick={() => handleQuestComplete(quest)}
-                        >
-                          Complete Quest
-                        </button>
+                      </div>
+                    )}
+
+                    {!completed && (
+                      <div className="quest-input-area">
+                        {quest.status === 'coming_soon' ? (
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        ) : quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
+                        ) : quest.inputType === 'text' ? (
+                          <>
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                            />
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <div className="quest-checkbox-area">
+                              <label className="quest-checkbox-label">
+                                Mark as complete
+                              </label>
+                            </div>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        )}
                       </div>
                     )}
 
