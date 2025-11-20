@@ -73,11 +73,6 @@
           "life_map.hobbies.highschool",
           "life_map.hobbies.current"
         ],
-        "weighting": {
-          "joy_from": [
-            "life_map.hobbies.*"
-          ]
-        },
         "cluster": {
           "target": "skills",
           "source_tags": [
@@ -86,56 +81,10 @@
             "value"
           ],
           "target_clusters_min": 2,
-          "target_clusters_max": 5,
-          "similarity_threshold": 0.25,
-          "min_merge_similarity": 0.1,
-          "min_items_per_cluster": 3,
-          "candidate_items_min": 5,
-          "candidate_items_max": 15
+          "target_clusters_max": 5
         },
         "store_as": "skills.preview.from_hobbies"
       },
-      "assistant_prompt": "✨ Beautiful — those early joys often hold the purest clues.\n\nBased on what you love doing, here are early **Skill clusters** emerging:\n\n{skills.preview.from_hobbies}\n\nI can already see some patterns forming. Do any of these feel like your natural way of showing up?\n\nKeep/edit these now or skip and refine later?",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": [
-            "Keep",
-            "Edit",
-            "Skip"
-          ]
-        }
-      ],
-      "store_as": "skills.preview_choice.hobbies",
-      "next_step_rules": [
-        {
-          "on_selection": "Keep",
-          "go_to": "3.0"
-        },
-        {
-          "on_selection": "Edit",
-          "go_to": "2.3.edit"
-        },
-        {
-          "on_selection": "Skip",
-          "go_to": "3.0"
-        }
-      ]
-    },
-    {
-      "id": "2.3.edit",
-      "step_order_index": 6,
-      "assistant_prompt": "Edit the **Skill clusters**: provide a list of clusters with label + 3–5 example skills each.",
-      "expected_inputs": [
-        {
-          "type": "object_list",
-          "schema": {
-            "label": "string",
-            "skills": "text_list"
-          }
-        }
-      ],
-      "store_as": "skills.preview.from_hobbies",
       "next_step_rules": [
         {
           "on_success": "3.0"
@@ -189,24 +138,30 @@
       "step_order_index": 10,
       "assistant_postprocess": {
         "tag_from": [
+          "life_map.hobbies.childhood",
+          "life_map.hobbies.highschool",
+          "life_map.hobbies.current",
           "life_map.high_moments.childhood",
           "life_map.high_moments.highschool",
           "life_map.high_moments.current"
         ],
         "weighting": {
           "joy_from": [
+            "life_map.hobbies.*",
             "life_map.high_moments.*"
           ]
         },
-        "cluster_enrich": {
+        "cluster": {
           "target": "skills",
-          "merge_into": "skills.preview.from_hobbies",
           "source_tags": [
             "skill_verb",
+            "domain_topic",
             "value"
-          ]
+          ],
+          "target_clusters_min": 2,
+          "target_clusters_max": 5
         },
-        "store_as": "skills.preview.with_proud_moments"
+        "store_as": "skills.preview.from_hobbies_and_moments"
       },
       "assistant_prompt": "✨ More puzzle pieces connecting!\n\nYour proud/alive moments added depth to the **Skill clusters**:\n\n{skills.preview.with_proud_moments}\n\nFrom your answers, I sense these are the ways you naturally contribute when you feel most alive. Which clusters feel most energizing to you?\n\nKeep/edit/skip?",
       "expected_inputs": [

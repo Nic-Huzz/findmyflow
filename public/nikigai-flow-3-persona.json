@@ -1,0 +1,77 @@
+{
+  "flow_name": "Nikigai Flow 3: Persona Discovery",
+  "version": "1.0",
+  "description": "Discover who you're most qualified to serve - former versions of yourself at different life stages and struggles.",
+  "pillar": "persona",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Now let's discover who you're most qualified to serve.\n\nHere's the insight: **You're most qualified to help former versions of yourself.**\n\nThe struggles you've overcome, the growth you've experienced — that's your superpower. You understand those people because you *were* those people.\n\nI'm going to analyze everything you've shared so far — your hobbies, proud moments, life chapters, and struggles — to identify the personas you're uniquely positioned to serve.\n\nReady to meet your people?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yes, show me!"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Yes, show me!",
+          "go_to": "2.0"
+        }
+      ]
+    },
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.hobbies.childhood",
+          "life_map.hobbies.highschool",
+          "life_map.hobbies.current",
+          "life_map.high_moments.childhood",
+          "life_map.high_moments.highschool",
+          "life_map.high_moments.current",
+          "life_map.life_chapters.titles",
+          "life_map.life_chapters.growth_and_struggle"
+        ],
+        "cluster": {
+          "target": "persona",
+          "target_clusters_min": 3,
+          "target_clusters_max": 5,
+          "special_instructions": "Create personas representing former versions of this person. Each persona should be a specific life stage or struggle they went through. Name them descriptively (e.g., 'The Overwhelmed New Entrepreneur', 'The Creative Kid Who Felt Unseen', 'The Perfectionist Burning Out'). Include: who they are, what they're struggling with, and what they need."
+        },
+        "store_as": "persona.final"
+      },
+      "next_step_rules": [
+        {
+          "on_success": "3.0"
+        }
+      ]
+    },
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Looking at these personas — which one resonates most strongly with you right now?\n\nWhich former version of yourself do you feel most called to help?",
+      "expected_inputs": ["text_block"],
+      "store_as": "persona.primary_choice",
+      "next_step_rules": [
+        {
+          "on_success": "3.1"
+        }
+      ]
+    },
+    {
+      "id": "3.1",
+      "step_order_index": 4,
+      "assistant_prompt": "Why does this persona resonate? What is it about their struggle that you understand deeply?",
+      "expected_inputs": ["text_block"],
+      "store_as": "persona.resonance_reason",
+      "next_step_rules": [
+        {
+          "on_success": "complete"
+        }
+      ]
+    }
+  ]
+}

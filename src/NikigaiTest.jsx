@@ -3,6 +3,16 @@ import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient.js'
 import { useAuth } from './auth/AuthProvider'
 
+// Simple markdown parser for bold, italic text, bullets, and line breaks
+function formatMessage(text) {
+  if (!text) return ''
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // **bold**
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')  // *italic*
+    .replace(/^• /gm, '&bull; ')  // bullet points
+    .replace(/\n/g, '<br />')  // line breaks
+}
+
 /**
  * Nikigai Flow - Claude-Powered Conversational Interface
  * Uses Claude AI for natural conversation and semantic clustering
@@ -179,7 +189,18 @@ export default function NikigaiTest() {
         throw new Error(claudeResponse.error.message || 'Failed to get AI response')
       }
 
-      const aiResponse = claudeResponse.data
+      // Parse response if it's a string
+      let aiResponse = claudeResponse.data
+      if (typeof aiResponse === 'string') {
+        try {
+          aiResponse = JSON.parse(aiResponse)
+        } catch (e) {
+          console.error('Failed to parse AI response:', e)
+          aiResponse = { message: aiResponse, clusters: null }
+        }
+      }
+
+      console.log('✅ AI Response:', aiResponse)
 
       // Store clusters if generated
       if (aiResponse.clusters && nextStepData?.assistant_postprocess?.store_as) {
@@ -190,15 +211,20 @@ export default function NikigaiTest() {
       }
 
       // Create AI message
+      // For clustering steps, show cluster confirmation options instead of Keep/Edit/Skip
+      const isClusterStep = nextStepData?.assistant_postprocess !== undefined
       const aiMessage = {
         id: `ai-${Date.now()}`,
         isAI: true,
         text: aiResponse.message,
         timestamp: new Date().toLocaleTimeString(),
         stepId: nextStepId || currentStep,
-        hasOptions: nextStepData?.expected_inputs?.[0]?.type === 'single_select',
-        options: nextStepData?.expected_inputs?.[0]?.options || [],
-        clusters: aiResponse.clusters
+        hasOptions: isClusterStep || nextStepData?.expected_inputs?.[0]?.type === 'single_select',
+        options: isClusterStep
+          ? ['Clusters look good!', 'Re-cluster please!']
+          : (nextStepData?.expected_inputs?.[0]?.options || []),
+        clusters: aiResponse.clusters,
+        isClusterConfirmation: isClusterStep
       }
       setMessages(prev => [...prev, aiMessage])
 
@@ -243,6 +269,7 @@ export default function NikigaiTest() {
   async function handleOptionSelect(option) {
     // Find current step
     const currentStepData = flowData.steps.find(s => s.id === currentStep)
+    const lastMessage = messages[messages.length - 1]
 
     // Add user selection as message
     const userMessage = {
@@ -256,8 +283,89 @@ export default function NikigaiTest() {
     setIsLoading(true)
 
     try {
+      // Handle cluster confirmation
+      if (lastMessage?.isClusterConfirmation) {
+        if (option === 'Re-cluster please!') {
+          // Re-cluster: call Claude again with same data
+          const postprocess = currentStepData.assistant_postprocess
+          const clusterSources = postprocess?.tag_from || []
+          let clusterType = 'skills'
+          if (postprocess?.cluster?.target === 'problems' || postprocess?.cluster_enrich?.target === 'problems') {
+            clusterType = 'problems'
+          }
+
+          const claudeResponse = await supabase.functions.invoke('nikigai-conversation', {
+            body: {
+              currentStep: {
+                ...currentStepData,
+                nextStep: currentStepData // Same step for re-clustering
+              },
+              userResponse: 'Please re-cluster my responses with different groupings',
+              conversationHistory: messages.slice(-6),
+              allResponses,
+              shouldCluster: true,
+              clusterSources,
+              clusterType
+            }
+          })
+
+          if (claudeResponse.error) {
+            throw new Error(claudeResponse.error.message || 'Failed to get AI response')
+          }
+
+          let aiResponse = claudeResponse.data
+          if (typeof aiResponse === 'string') {
+            try {
+              aiResponse = JSON.parse(aiResponse)
+            } catch (e) {
+              aiResponse = { message: aiResponse, clusters: null }
+            }
+          }
+
+          // Store new clusters
+          if (aiResponse.clusters && currentStepData.assistant_postprocess?.store_as) {
+            setClusterData(prev => ({
+              ...prev,
+              [currentStepData.assistant_postprocess.store_as]: aiResponse.clusters
+            }))
+          }
+
+          const aiMessage = {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: aiResponse.message,
+            timestamp: new Date().toLocaleTimeString(),
+            stepId: currentStep,
+            hasOptions: true,
+            options: ['Clusters look good!', 'Re-cluster please!'],
+            clusters: aiResponse.clusters,
+            isClusterConfirmation: true
+          }
+          setMessages(prev => [...prev, aiMessage])
+        } else {
+          // Clusters approved - move to next step
+          const nextStepId = getNextStepId(currentStepData)
+          if (nextStepId) {
+            const nextStepData = flowData.steps.find(s => s.id === nextStepId)
+            setCurrentStep(nextStepId)
+
+            const aiMessage = {
+              id: `ai-${Date.now()}`,
+              isAI: true,
+              text: nextStepData.assistant_prompt,
+              timestamp: new Date().toLocaleTimeString(),
+              stepId: nextStepId,
+              hasOptions: nextStepData?.expected_inputs?.[0]?.type === 'single_select',
+              options: nextStepData?.expected_inputs?.[0]?.options || []
+            }
+            setMessages(prev => [...prev, aiMessage])
+          }
+        }
+        return
+      }
+
       // Find next step based on selection
-      const nextStepRule = currentStepData.next_step_rules.find(
+      const nextStepRule = currentStepData.next_step_rules?.find(
         rule => rule.on_selection === option
       )
 
@@ -335,7 +443,7 @@ export default function NikigaiTest() {
               <div className="bubble">
                 {message.kind === 'completion' ? (
                   <div className="text">
-                    {message.text}
+                    <span dangerouslySetInnerHTML={{ __html: formatMessage(message.text) }} />
                     <div style={{ marginTop: 8 }}>
                       <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
                         Return to your profile
@@ -343,7 +451,7 @@ export default function NikigaiTest() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text">{message.text}</div>
+                  <div className="text" dangerouslySetInnerHTML={{ __html: formatMessage(message.text) }} />
                 )}
                 <div className="timestamp">{message.timestamp}</div>
               </div>

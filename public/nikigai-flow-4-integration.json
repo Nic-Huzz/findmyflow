@@ -1,0 +1,128 @@
+{
+  "flow_name": "Nikigai Flow 4: Integration & Mission",
+  "version": "1.0",
+  "description": "Bring together skills, problems, and persona to create your mission and opportunity map.",
+  "pillar": "integration",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "You've done incredible work discovering your:\n\n• **Skills** — what you're naturally good at\n• **Problems** — the change you want to create\n• **Persona** — who you're most qualified to serve\n\nNow let's bring it all together into your unique Nikigai — the intersection where your gifts meet the world's needs.\n\nReady to see the full picture?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Show me!"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Show me!",
+          "go_to": "2.0"
+        }
+      ]
+    },
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_postprocess": {
+        "tag_from": [
+          "skills.final",
+          "problems.final",
+          "persona.final",
+          "persona.primary_choice"
+        ],
+        "generate": {
+          "type": "integration_summary",
+          "output": "Show final Skills clusters, Problems clusters, and Persona clusters in a clear format. Then generate 3-5 market opportunity seeds - specific ways this person could combine their skills + problems + persona into offerings (e.g., coaching, courses, consulting, products, content)."
+        },
+        "store_as": "nikigai.integration_summary"
+      },
+      "next_step_rules": [
+        {
+          "on_success": "3.0"
+        }
+      ]
+    },
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Looking at these opportunities, which 1-2 feel most exciting to you right now?",
+      "expected_inputs": ["text_block"],
+      "store_as": "nikigai.opportunity_choice",
+      "next_step_rules": [
+        {
+          "on_success": "4.0"
+        }
+      ]
+    },
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_postprocess": {
+        "tag_from": [
+          "skills.final",
+          "problems.final",
+          "persona.final",
+          "persona.primary_choice",
+          "nikigai.opportunity_choice"
+        ],
+        "generate": {
+          "type": "mission_statement",
+          "output": "Generate a personal mission statement that combines: the person's primary skills, the problem they want to solve, and the persona they want to serve. Format: 'I help [persona] [solve problem] using [skills].' Make it personal and powerful."
+        },
+        "store_as": "nikigai.mission_statement"
+      },
+      "next_step_rules": [
+        {
+          "on_success": "5.0"
+        }
+      ]
+    },
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Does this mission statement feel true to you? Would you like to refine it?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["It's perfect!", "Let me refine it"]
+        }
+      ],
+      "store_as": "nikigai.mission_choice",
+      "next_step_rules": [
+        {
+          "on_selection": "It's perfect!",
+          "go_to": "6.0"
+        },
+        {
+          "on_selection": "Let me refine it",
+          "go_to": "5.1"
+        }
+      ]
+    },
+    {
+      "id": "5.1",
+      "step_order_index": 6,
+      "assistant_prompt": "Write your refined mission statement below:",
+      "expected_inputs": ["text_block"],
+      "store_as": "nikigai.mission_statement_refined",
+      "next_step_rules": [
+        {
+          "on_success": "6.0"
+        }
+      ]
+    },
+    {
+      "id": "6.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Congratulations! You've completed your Nikigai discovery.\n\nYou now have:\n• Your unique skill clusters\n• The problems you're meant to solve\n• The people you're qualified to serve\n• Your personal mission statement\n• Market opportunity seeds to explore\n\nThis is the foundation for meaningful, fulfilling work that only *you* can do.\n\nWhat's one small step you can take this week to move toward your Nikigai?",
+      "expected_inputs": ["text_block"],
+      "store_as": "nikigai.next_step",
+      "next_step_rules": [
+        {
+          "on_success": "complete"
+        }
+      ]
+    }
+  ]
+}

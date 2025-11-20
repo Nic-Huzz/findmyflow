@@ -20,15 +20,17 @@ TONE & STYLE:
 - Concise - keep responses to 2-3 short paragraphs max
 - Use "you" language, make it personal
 - Natural conversational transitions, not robotic
+- IMPORTANT: Always separate your acknowledgment/reflection from the next question with a blank line (double newline). First paragraph acknowledges what they shared, second paragraph asks the next question.
+- When asking for lists/bullets, gently encourage "3-5 items" or "around 5 bullet points" but vary your phrasing naturally (don't repeat the exact same words each time)
 
 RESPONSE FORMAT:
-Return JSON with this structure:
-{
-  "message": "Your conversational response here",
-  "clusters": null | [{ "label": "Cluster Name", "items": ["item1", "item2"], "insight": "Brief insight" }]
-}
+Return ONLY valid JSON with this exact structure (no extra text before or after):
+{"message": "Your conversational response here", "clusters": null}
 
-Only include "clusters" when specifically asked to generate clusters. The clusters should be semantically meaningful groupings that reveal patterns in the user's responses.
+When asked to generate clusters, use:
+{"message": "Your response", "clusters": [{"label": "Cluster Name", "items": ["item1", "item2"], "insight": "Brief insight"}]}
+
+IMPORTANT: Return ONLY the JSON object, nothing else. No markdown code blocks, no explanation.
 
 CLUSTERING GUIDELINES (when asked to cluster):
 - Create 2-5 clusters based on semantic meaning
@@ -36,7 +38,29 @@ CLUSTERING GUIDELINES (when asked to cluster):
 - Group items by underlying theme/pattern, not surface similarity
 - Include ALL provided items in clusters
 - Add brief insight about what each cluster reveals
-- Look for deeper patterns: values, motivations, ways of being`
+- Look for deeper patterns: values, motivations, ways of being
+- IMPORTANT: Format clusters NICELY in your message text using markdown, like this:
+
+**Cluster Name**
+• item 1
+• item 2
+*Brief insight about this cluster*
+
+Do NOT include raw JSON in your message. The clusters field in the JSON response is for data storage only - the user sees the message field.
+
+- After showing clusters, ALWAYS end with: "Do these clusters look good, or would you like me to re-create them?"
+
+PERSONA CLUSTERING (when target is "persona"):
+- Create personas representing FORMER VERSIONS of this person
+- Each persona should be a specific life stage or struggle they went through
+- Name them descriptively (e.g., "The Overwhelmed New Entrepreneur", "The Creative Kid Who Felt Unseen")
+- For each persona include: who they are, what they're struggling with, and what they need
+- These are the people this user is most qualified to help
+
+INTEGRATION/MISSION (when generating integration or mission):
+- Combine skills, problems, and persona into a cohesive picture
+- Generate market opportunity seeds (coaching, courses, content, products)
+- Create mission statement format: "I help [persona] [solve problem] using [skills]"`
 
 serve(async (req) => {
   // Handle CORS
@@ -50,6 +74,9 @@ serve(async (req) => {
   }
 
   try {
+    const body = await req.json()
+    console.log('📥 Received request:', JSON.stringify(body, null, 2).substring(0, 500))
+
     const {
       currentStep,
       userResponse,
@@ -58,7 +85,11 @@ serve(async (req) => {
       shouldCluster,
       clusterSources,
       clusterType
-    } = await req.json()
+    } = body
+
+    if (!currentStep || !userResponse) {
+      throw new Error('Missing required fields: currentStep or userResponse')
+    }
 
     // Build the conversation context
     let userPrompt = ''
@@ -97,12 +128,17 @@ serve(async (req) => {
       userPrompt += `Create semantic clusters and acknowledge the user's latest response. Show them the clusters in your message.\n`
     } else {
       // Normal conversation - get next step
-      userPrompt += `\nNEXT STEP: ${currentStep.nextStep?.id || 'continue'}\n`
-      userPrompt += `NEXT QUESTION: ${currentStep.nextStep?.assistant_prompt || 'End of flow'}\n\n`
-      userPrompt += `Generate a conversational response that:\n`
-      userPrompt += `1. Acknowledges what the user shared (briefly)\n`
-      userPrompt += `2. Notes any interesting patterns or connections\n`
-      userPrompt += `3. Transitions naturally to the next question\n`
+      const nextStep = currentStep.nextStep
+      if (nextStep) {
+        userPrompt += `\nNEXT STEP: ${nextStep.id}\n`
+        userPrompt += `NEXT QUESTION: ${nextStep.assistant_prompt}\n\n`
+        userPrompt += `Generate a conversational response that:\n`
+        userPrompt += `1. Acknowledges what the user shared (briefly)\n`
+        userPrompt += `2. Notes any interesting patterns or connections\n`
+        userPrompt += `3. Transitions naturally to the next question\n`
+      } else {
+        userPrompt += `\nThis is the final step. Generate a brief acknowledgment of what they shared.\n`
+      }
     }
 
     console.log('📝 Sending to Claude:', userPrompt.substring(0, 500) + '...')
@@ -116,7 +152,7 @@ serve(async (req) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-3-haiku-20240307',
         max_tokens: 1024,
         system: SYSTEM_PROMPT,
         messages: [{
@@ -138,26 +174,58 @@ serve(async (req) => {
     // Parse JSON response
     let result
     try {
+      // Try to find a valid JSON object in the response
       const jsonMatch = extractedText.match(/\{[\s\S]*\}/)
       if (jsonMatch) {
         result = JSON.parse(jsonMatch[0])
       } else {
         result = JSON.parse(extractedText)
       }
+
+      // Ensure message exists
+      if (!result.message) {
+        result.message = extractedText
+      }
+
+      // Clean up message - remove any trailing JSON that Claude might have included
+      if (result.message) {
+        // Remove any JSON-like content at the end of the message
+        result.message = result.message
+          .replace(/",?\s*"clusters"\s*:\s*\[[\s\S]*\]\s*\}?\s*$/g, '')
+          .replace(/\s*,?\s*"clusters"\s*:\s*\[[\s\S]*$/g, '')
+          .trim()
+      }
     } catch (parseError) {
       console.error('Failed to parse Claude response:', extractedText)
-      // Fall back to treating the whole thing as a message
+      // Fall back to cleaning up the raw text
       result = {
         message: extractedText,
         clusters: null
       }
     }
 
+    // Always clean up the message to remove any JSON artifacts
+    if (result.message) {
+      result.message = result.message
+        // Remove opening JSON wrapper
+        .replace(/^\s*\{\s*"message"\s*:\s*"/i, '')
+        // Remove closing JSON wrapper
+        .replace(/"\s*\}\s*$/g, '')
+        // Remove clusters JSON at end
+        .replace(/",?\s*"clusters"\s*:\s*\[[\s\S]*\]\s*\}?\s*$/g, '')
+        .replace(/",?\s*"clusters"\s*:\s*null\s*\}?\s*$/g, '')
+        // Clean up escaped quotes
+        .replace(/\\"/g, '"')
+        // Clean up escaped newlines
+        .replace(/\\n/g, '\n')
+        .trim()
+    }
+
     return new Response(
       JSON.stringify({
         message: result.message,
         clusters: result.clusters || null,
-        model: 'claude-3-5-sonnet-20241022'
+        model: 'claude-3-haiku-20240307'
       }),
       {
         headers: {
