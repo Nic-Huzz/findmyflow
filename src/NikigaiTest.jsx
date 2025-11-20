@@ -17,7 +17,7 @@ function formatMessage(text) {
  * Nikigai Flow - Claude-Powered Conversational Interface
  * Uses Claude AI for natural conversation and semantic clustering
  */
-export default function NikigaiTest() {
+export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowName = 'Nikigai Discovery' }) {
   const { user } = useAuth()
   const [sessionId, setSessionId] = useState(null)
   const [currentStep, setCurrentStep] = useState('1.0')
@@ -32,7 +32,7 @@ export default function NikigaiTest() {
 
   // Load JSON flow
   useEffect(() => {
-    fetch('/nikigai-flow-v2.2.json')
+    fetch(`/${flowFile}`)
       .then(res => res.json())
       .then(data => {
         console.log('✅ Flow loaded:', data.steps.length, 'steps')
@@ -42,7 +42,7 @@ export default function NikigaiTest() {
         console.error('❌ Failed to load flow:', err)
         setError('Failed to load question flow')
       })
-  }, [])
+  }, [flowFile])
 
   // Initialize session when flow is loaded
   useEffect(() => {
@@ -64,12 +64,26 @@ export default function NikigaiTest() {
         return
       }
 
-      // Create new session
+      // For Flows 3 & 4, load previous responses from this user
+      if (flowData.pillar === 'persona' || flowData.pillar === 'integration') {
+        const { data: previousResponses, error: fetchError } = await supabase
+          .from('nikigai_responses')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: true })
+
+        if (!fetchError && previousResponses) {
+          setAllResponses(previousResponses)
+          console.log('✅ Loaded', previousResponses.length, 'previous responses')
+        }
+      }
+
+      // Create new session for this flow
       const { data, error } = await supabase
         .from('nikigai_sessions')
         .insert({
           user_id: user.id,
-          flow_version: 'v2.2-claude',
+          flow_version: `${flowData.pillar || 'v2.2'}-claude`,
           status: 'in_progress',
           last_step_id: '1.0'
         })
@@ -432,7 +446,7 @@ export default function NikigaiTest() {
   return (
     <div className="app">
       <header className="header">
-        <h1>Nikigai Discovery</h1>
+        <h1>{flowName}</h1>
         <p>Uncover your unique combination of skills, passions, and purpose</p>
       </header>
 

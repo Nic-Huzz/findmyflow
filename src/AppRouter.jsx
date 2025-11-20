@@ -39,6 +39,26 @@ function AppRouter() {
               <NikigaiTest />
             </AuthGate>
           } />
+          <Route path="/nikigai/skills" element={
+            <AuthGate>
+              <NikigaiTest flowFile="nikigai-flow-1-skills.json" flowName="Skills Discovery" />
+            </AuthGate>
+          } />
+          <Route path="/nikigai/problems" element={
+            <AuthGate>
+              <NikigaiTest flowFile="nikigai-flow-2-problems.json" flowName="Problems Discovery" />
+            </AuthGate>
+          } />
+          <Route path="/nikigai/persona" element={
+            <AuthGate>
+              <NikigaiTest flowFile="nikigai-flow-3-persona.json" flowName="Persona Discovery" />
+            </AuthGate>
+          } />
+          <Route path="/nikigai/integration" element={
+            <AuthGate>
+              <NikigaiTest flowFile="nikigai-flow-4-integration.json" flowName="Integration & Mission" />
+            </AuthGate>
+          } />
         </Routes>
       </Router>
     </AuthProvider>
