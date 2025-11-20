@@ -26,7 +26,7 @@ function Challenge() {
   const [userData, setUserData] = useState(null)
   const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
 
-  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
+  const categories = ['Flow Finder', 'Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
   useEffect(() => {
     loadChallengeData()
