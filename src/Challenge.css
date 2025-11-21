@@ -584,6 +584,7 @@
 /* Locked quest button */
 .quest-locked-container {
   position: relative;
+  width: 100%;
 }
 
 .quest-flow-btn.locked {
@@ -594,6 +595,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  width: 100%;
 }
 
 .quest-flow-btn.locked:hover {
