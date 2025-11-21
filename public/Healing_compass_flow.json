@@ -10,8 +10,8 @@
       "required_inputs": [
         "{{user_name}}",
         "{{safety_contracts}}"
-      ],
-      "prompt": "Hey {{user_name}}, I'm excited to dive deeper with you.\n\nOur mission here is to find the source of what's blocking your flow—so we can heal it.\n\nIn the nervous system flow, you identified these safety contracts that have been protecting you:\n\n{{safety_contracts_list}}\n\nWhich safety contract would you like to focus on healing?",
+      ],    
+      "prompt": "Hey {{user_name}}, I'm excited to dive deeper with you.\n\nOur mission here is to find the source of what's blocking your flow so we can heal it.\n\nIn the nervous system flow, you identified these safety contracts that have been protecting you:\n\n{{safety_contracts_list}}\n\nWhich safety contract would you like to focus on healing?",
       "options_from": "safety_contracts",
       "tag_as": "selected_safety_contract",
       "store_as": "step_1_intro_complete",
@@ -24,7 +24,7 @@
         "step_1_intro_complete",
         "{{selected_safety_contract}}"
       ],
-      "prompt": "How is this safety contract currently slowing down the pursuit of your vision?",
+      "prompt": "How is this safety contract currently slowing down your flow and limiting the pursuit of your ambitions?",
       "tag_as": "limiting_impact",
       "store_as": "step_2_limiting_complete",
       "instructions_to_gpt": "Wait for an open response describing how this safety contract is limiting them. Acknowledge their insight before moving on."
@@ -35,7 +35,7 @@
       "required_inputs": [
         "step_2_limiting_complete"
       ],
-      "prompt": "Here's what I've learned: you didn't wake up today and decide to create this pattern.\n\nSomething happened—between childhood and now—that made this feel necessary.\n\nThis is the emotional splinter we're looking to remove.\n\nCan you think of another time in your life where you struggled or failed to make your ambitions become reality?",
+      "prompt": "Here's what I've learned: you didn't wake up today and decide to create this pattern.\n\nSomething happened—between childhood and now—that made this feel necessary.\n\nThis is the emotional splinter we're looking to remove.\n\nCan you think of a time in your life where you may have learnt to believe {{selected_safety_contract}}?",
       "tag_as": "past_parallel_story",
       "store_as": "step_3_past_parallel_complete",
       "instructions_to_gpt": "Invite a reflective story. Allow pauses. Validate whatever they share and keep the tone gentle."
@@ -71,7 +71,7 @@
         "{{past_event_emotions}}",
         "{{selected_safety_contract}}"
       ],
-      "prompt": "So this experience—{{past_parallel_story}}—was so impactful that your system decided to protect you from ever feeling {{past_event_emotions}} again.\n\nThat's why \"{{selected_safety_contract}}\" exists.\n\nIt doesn't feel safe doing anything that might trigger that feeling.\n\nMake sense?",
+      "prompt": "So this experience—{{past_parallel_story}}—was so impactful that your system decided to protect you from ever feeling {{past_event_emotions}} again.\n\nThat's why \"{{selected_safety_contract}}\" exists.\n\nIt doesn't feel safe doing anything that might trigger that feeling again.\n\nMake sense?",
       "tag_as": "connect_dots_acknowledged",
       "store_as": "step_6_connect_dots_complete",
       "instructions_to_gpt": "Wait for confirmation or questions. If they seem unsure, clarify the link with warmth."
@@ -82,7 +82,7 @@
       "required_inputs": [
         "step_6_connect_dots_complete"
       ],
-      "prompt": "So why do you feel stuck?\n\nBecause you're capable of achieving your ambition—but this emotional splinter has made it feel terrifying to take action.\n\nKeen to remove it and start moving towards your vision?",
+      "prompt": "So even though your essence has been pulling you forward in the pursuit of your ambitions.\n\nYour subconscious has been pulling you back in its attempt to protect you.\n\nKeen to finally remove this emotional splinter?",
       "options": [
         {
           "label": "Yes, let's do it!",
@@ -99,7 +99,7 @@
       "required_inputs": [
         "step_7_splinter_opt_in_complete"
       ],
-      "prompt": "Amazing! You have two options to remove this emotional splinter:\n\n1. Continue the 7-day self-guided challenge\n2. Book a 1-on-1 Emotional Splinter Release Session\n\nWhich would you prefer?",
+      "prompt": "Amazing! You have two options to remove this emotional splinter:\n\n1. Continue the 'Release' quests inside the 7-day challenge\n2. To accelerate their removal book a 1-on-1 Emotional Splinter Release Session with Huzz\n\nWhich would you prefer?",
       "options": [
         {
           "label": "Continue 7-Day Challenge",
