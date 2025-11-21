@@ -1231,13 +1231,18 @@ function Challenge() {
                             <button
                               className="quest-flow-btn locked"
                               disabled
-                              onClick={() => setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)}
                             >
                               Locked
                               <span
                                 className="locked-info-icon"
                                 onClick={(e) => {
                                   e.stopPropagation()
+                                  e.preventDefault()
+                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
+                                }}
+                                onTouchEnd={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
                                   setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
                                 }}
                               >

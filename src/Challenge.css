@@ -594,6 +594,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  width: 100%;
+  text-align: center;
 }
 
 .quest-flow-btn.locked:hover {
@@ -605,6 +607,9 @@
   cursor: pointer;
   font-size: 0.875rem;
   opacity: 0.8;
+  padding: 0.25rem;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .locked-tooltip {
