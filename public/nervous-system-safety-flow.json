@@ -203,15 +203,11 @@
       "step": "stage6_close",
       "step_order_index": 16.0,
       "required_inputs": ["stage6_mirror_complete"],
-      "prompt": "The truth is: change doesn't have to be hard.\n\nIt's just that most people were never taught the right processes.\n\nYou're learning how to shift at the root — gently and powerfully.\n\nNow you know where your nervous system's boundaries are. The next step is to expand them through the 7-day challenge.",
-      "options": [
-        { "label": "Continue 7-Day Challenge", "value": "navigate" }
-      ],
-      "tag_as": "shift_consent",
+      "prompt": "The truth is: change doesn't have to be hard.\n\nIt's just that most people were never taught the right processes.\n\nYou're learning how to shift at the root — gently and powerfully.\n\nNow you know where your nervous system's boundaries are.",
+      "tag_as": "shift_acknowledged",
       "store_as": "stage6_close_complete",
       "save_to_db": true,
-      "navigate_to": "/7-day-challenge",
-      "instructions_to_gpt": "Show navigation button to return to 7-day challenge"
+      "instructions_to_gpt": "Wait for user acknowledgment before showing completion message with CTA buttons"
     }
   ]
 }
