@@ -9,6 +9,7 @@ import ArchetypeSelection from './ArchetypeSelection'
 import EssenceProfile from './EssenceProfile'
 import ProtectiveProfile from './ProtectiveProfile'
 import Feedback from './Feedback'
+import NotificationSettings from './components/NotificationSettings'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -64,6 +65,11 @@ function AppRouter() {
             <Route path="/feedback" element={
               <AuthGate>
                 <Feedback />
+              </AuthGate>
+            } />
+            <Route path="/settings/notifications" element={
+              <AuthGate>
+                <NotificationSettings />
               </AuthGate>
             } />
           </Routes>

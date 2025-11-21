@@ -1,0 +1,255 @@
+.notification-settings {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.settings-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 0.5rem 0;
+}
+
+.settings-description {
+  color: #6c757d;
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+.notification-status-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e9ecef;
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.status-label {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.status-badge.granted {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.denied {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-badge.default {
+  background: #e9ecef;
+  color: #6c757d;
+}
+
+.enable-notifications-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.enable-notifications-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.enable-notifications-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.test-notification-btn {
+  flex: 1;
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.test-notification-btn:hover {
+  background: #218838;
+  transform: translateY(-2px);
+}
+
+.disable-notifications-btn {
+  flex: 1;
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.disable-notifications-btn:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+.disable-notifications-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.notification-preferences {
+  border-top: 2px solid #e9ecef;
+  padding-top: 1.5rem;
+}
+
+.notification-preferences h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 0.5rem 0;
+}
+
+.preferences-description {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.preference-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preference-item:hover {
+  background: #e9ecef;
+}
+
+.preference-item input[type="checkbox"] {
+  margin-top: 0.25rem;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.preference-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.preference-name {
+  font-weight: 600;
+  color: #212529;
+  font-size: 0.9375rem;
+}
+
+.preference-description {
+  color: #6c757d;
+  font-size: 0.8125rem;
+}
+
+.notification-blocked,
+.notification-unsupported {
+  text-align: center;
+  padding: 2rem;
+}
+
+.notification-blocked p:first-child,
+.notification-unsupported p:first-child {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+.notification-hint {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.notification-blocked ol {
+  text-align: left;
+  max-width: 400px;
+  margin: 1rem auto;
+  color: #495057;
+  line-height: 1.8;
+}
+
+.setup-warning {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 2rem;
+  color: #856404;
+  font-size: 0.875rem;
+}
+
+.setup-warning strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notification-settings {
+    padding: 1rem;
+  }
+
+  .notification-status-card {
+    padding: 1.5rem;
+  }
+
+  .notification-actions {
+    flex-direction: column;
+  }
+
+  .status-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
