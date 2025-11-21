@@ -1126,7 +1126,9 @@ function Challenge() {
                           </button>
                         ) : quest.inputType === 'flow' ? (
                           <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
+                            {quest.id === 'recognise_nervous_system'
+                              ? 'Start Mapping My Nervous System →'
+                              : `Start ${quest.name} →`}
                           </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
@@ -1257,7 +1259,9 @@ function Challenge() {
                           </div>
                         ) : quest.inputType === 'flow' ? (
                           <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
+                            {quest.id === 'recognise_nervous_system'
+                              ? 'Start Mapping My Nervous System →'
+                              : `Start ${quest.name} →`}
                           </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
@@ -1359,7 +1363,9 @@ function Challenge() {
                           </button>
                         ) : quest.inputType === 'flow' ? (
                           <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
+                            {quest.id === 'recognise_nervous_system'
+                              ? 'Start Mapping My Nervous System →'
+                              : `Start ${quest.name} →`}
                           </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
