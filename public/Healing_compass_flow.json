@@ -35,7 +35,7 @@
       "required_inputs": [
         "step_2_limiting_complete"
       ],
-      "prompt": "Here's what I've learned: you didn't wake up today and decide to create this pattern.\n\nSomething happened—between childhood and now—that made this feel necessary.\n\nThis is the emotional splinter we're looking to remove.\n\nCan you think of a time in your life where you may have learnt to believe {{selected_safety_contract}}?",
+      "prompt": "So you didn't wake up today and decide to to start believing '{{selected_safety_contract}}'.\n\nSomething happened between childhood and now that created this belief.\n\nThis is the emotional splinter we're looking to remove.\n\nCan you think of a time in your life where you may have learnt to believe '{{selected_safety_contract}}'?",
       "tag_as": "past_parallel_story",
       "store_as": "step_3_past_parallel_complete",
       "instructions_to_gpt": "Invite a reflective story. Allow pauses. Validate whatever they share and keep the tone gentle."
@@ -67,11 +67,11 @@
       "step_order_index": 6.0,
       "required_inputs": [
         "step_5_emotions_complete",
-        "{{past_parallel_story}}",
+        "{{past_event_details}}",
         "{{past_event_emotions}}",
         "{{selected_safety_contract}}"
       ],
-      "prompt": "So this experience—{{past_parallel_story}}—was so impactful that your system decided to protect you from ever feeling {{past_event_emotions}} again.\n\nThat's why \"{{selected_safety_contract}}\" exists.\n\nIt doesn't feel safe doing anything that might trigger that feeling again.\n\nMake sense?",
+      "prompt": "So this experience '{{past_event_details}}' and feeling '{{past_event_emotions}}' was so impactful that your system decided to protect you from ever having the same experience again.\n\nThat's why it created this belief '{{selected_safety_contract}}'.\n\nTo protect you it now doesn't feel safe doing anything that might create the experience again.\n\nMake sense?",
       "tag_as": "connect_dots_acknowledged",
       "store_as": "step_6_connect_dots_complete",
       "instructions_to_gpt": "Wait for confirmation or questions. If they seem unsure, clarify the link with warmth."
