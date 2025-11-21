@@ -66,6 +66,18 @@
       "placeholder": "Share what essence and protective archetype you identified"
     },
     {
+      "id": "recognise_nervous_system",
+      "category": "Recognise",
+      "type": "weekly",
+      "name": "Map The Boundaries Of Your Nervous System",
+      "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
+      "points": 25,
+      "inputType": "flow",
+      "flow_id": "nervous_system",
+      "flow_route": "/nervous-system",
+      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a somatic practice) to identify exactly where those boundaries are—so you can consciously expand them.\n\nTakes about 10 minutes."
+    },
+    {
       "id": "recognise_healing_compass",
       "category": "Recognise",
       "type": "weekly",
@@ -89,18 +101,6 @@
       "flow_route": "/nikigai",
       "status": "coming_soon",
       "learnMore": "Ikigai is a Japanese concept meaning 'reason for being.' It sits at the intersection of what you love, what you're good at, what the world needs, and what you can be paid for.\n\nThis modernised version helps you identify tangible business opportunities aligned with your passions, experiences and skills. See it as your Flow Formula.\n\nTakes 15-20 minutes."
-    },
-    {
-      "id": "recognise_nervous_system",
-      "category": "Recognise",
-      "type": "weekly",
-      "name": "Map The Boundaries Of Your Nervous System",
-      "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
-      "points": 25,
-      "inputType": "flow",
-      "flow_id": "nervous_system",
-      "flow_route": "/nervous-system",
-      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a somatic practice) to identify exactly where those boundaries are—so you can consciously expand them.\n\nTakes about 10 minutes."
     },
     {
       "id": "recognise_define_success",
