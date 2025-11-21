@@ -136,7 +136,8 @@ function HealingCompass() {
         setContext(updatedContext)
 
         // Load healing compass flow
-        const response = await fetch('/Healing_compass_flow.json')
+        // Add cache-busting timestamp in development to always get latest version
+        const response = await fetch(`/Healing_compass_flow.json?t=${Date.now()}`)
         if (!response.ok) throw new Error('Failed to load healing compass flow')
         const flowData = await response.json()
         setFlow(flowData)
