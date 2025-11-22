@@ -182,3 +182,30 @@ export const initializeNotifications = async (userId, vapidPublicKey) => {
     return { supported: true, permission: 'default', subscribed: false, error }
   }
 }
+
+// Send notification via Supabase Edge Function
+export const sendNotification = async (userId, { title, body, url, tag }) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-push-notification`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({ userId, title, body, url, tag })
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error('Failed to send notification')
+    }
+
+    return await response.json()
+  } catch (error) {
+    console.error('Error sending notification:', error)
+    // Don't throw - notifications are non-critical
+    return { success: false, error: error.message }
+  }
+}

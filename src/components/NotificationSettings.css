@@ -148,6 +148,43 @@
   margin: 0 0 1.5rem 0;
 }
 
+/* Timezone Selector */
+.timezone-selector {
+  background: #f0f7ff;
+  border: 2px solid #5e17eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.timezone-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.timezone-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.timezone-select:hover {
+  border-color: #5e17eb;
+}
+
+.timezone-select:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+}
+
 .preference-item {
   display: flex;
   align-items: flex-start;

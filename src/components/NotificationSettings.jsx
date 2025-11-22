@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../auth/AuthProvider'
+import { supabase } from '../lib/supabaseClient'
 import {
   isNotificationSupported,
   getNotificationPermission,
@@ -10,9 +11,8 @@ import {
 } from '../lib/notifications'
 import './NotificationSettings.css'
 
-// VAPID Public Key - You'll need to generate this
-// For now, using a placeholder - see setup instructions below
-const VAPID_PUBLIC_KEY = 'YOUR_VAPID_PUBLIC_KEY_HERE'
+// VAPID Public Key from environment variables
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
 function NotificationSettings() {
   const { user } = useAuth()
@@ -26,12 +26,38 @@ function NotificationSettings() {
     dailyQuests: true,
     leaderboardUpdates: true,
     groupActivity: true,
-    artifactUnlocks: true
+    artifactUnlocks: true,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // Auto-detect timezone
   })
 
   useEffect(() => {
     checkNotificationStatus()
-  }, [])
+    loadPreferences()
+  }, [user])
+
+  const loadPreferences = async () => {
+    if (!user) return
+
+    try {
+      const { data, error } = await supabase
+        .from('notification_preferences')
+        .select('*')
+        .eq('user_id', user.id)
+        .single()
+
+      if (!error && data) {
+        setPreferences({
+          dailyQuests: data.daily_quests ?? true,
+          leaderboardUpdates: data.leaderboard_updates ?? true,
+          groupActivity: data.group_activity ?? true,
+          artifactUnlocks: data.artifact_unlocks ?? true,
+          timezone: data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone
+        })
+      }
+    } catch (error) {
+      console.error('Error loading preferences:', error)
+    }
+  }
 
   const checkNotificationStatus = async () => {
     const supported = isNotificationSupported()
@@ -52,7 +78,7 @@ function NotificationSettings() {
 
       if (permission === 'granted') {
         // Subscribe to push notifications
-        if (VAPID_PUBLIC_KEY !== 'YOUR_VAPID_PUBLIC_KEY_HERE') {
+        if (VAPID_PUBLIC_KEY) {
           await subscribeToPushNotifications(user.id, VAPID_PUBLIC_KEY)
         }
 
@@ -114,12 +140,37 @@ function NotificationSettings() {
     }
   }
 
-  const handlePreferenceChange = (key) => {
-    setPreferences(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }))
-    // TODO: Save preferences to database
+  const handlePreferenceChange = async (key, value) => {
+    const newPreferences = {
+      ...preferences,
+      [key]: value !== undefined ? value : !preferences[key]
+    }
+
+    setPreferences(newPreferences)
+
+    // Save to database
+    if (!user) return
+
+    try {
+      const { error } = await supabase
+        .from('notification_preferences')
+        .upsert({
+          user_id: user.id,
+          daily_quests: newPreferences.dailyQuests,
+          leaderboard_updates: newPreferences.leaderboardUpdates,
+          group_activity: newPreferences.groupActivity,
+          artifact_unlocks: newPreferences.artifactUnlocks,
+          timezone: newPreferences.timezone
+        }, {
+          onConflict: 'user_id'
+        })
+
+      if (error) {
+        console.error('Error saving preferences:', error)
+      }
+    } catch (error) {
+      console.error('Error saving preferences:', error)
+    }
   }
 
   if (!notificationStatus.supported) {
@@ -183,6 +234,55 @@ function NotificationSettings() {
             <div className="notification-preferences">
               <h3>Notification Preferences</h3>
               <p className="preferences-description">Choose what you want to be notified about</p>
+
+              <div className="timezone-selector">
+                <label className="timezone-label">
+                  <span className="preference-name">🌍 Your Timezone</span>
+                  <span className="preference-description">
+                    Notifications will be sent based on your local time (7am, 9am, 12pm, 5pm, 8pm)
+                  </span>
+                </label>
+                <select
+                  className="timezone-select"
+                  value={preferences.timezone}
+                  onChange={(e) => handlePreferenceChange('timezone', e.target.value)}
+                >
+                  <optgroup label="Common Timezones">
+                    <option value="America/New_York">Eastern Time (New York)</option>
+                    <option value="America/Chicago">Central Time (Chicago)</option>
+                    <option value="America/Denver">Mountain Time (Denver)</option>
+                    <option value="America/Los_Angeles">Pacific Time (Los Angeles)</option>
+                    <option value="America/Anchorage">Alaska Time</option>
+                    <option value="Pacific/Honolulu">Hawaii Time</option>
+                  </optgroup>
+                  <optgroup label="Europe">
+                    <option value="Europe/London">London (GMT/BST)</option>
+                    <option value="Europe/Paris">Paris (CET)</option>
+                    <option value="Europe/Berlin">Berlin (CET)</option>
+                    <option value="Europe/Rome">Rome (CET)</option>
+                    <option value="Europe/Madrid">Madrid (CET)</option>
+                    <option value="Europe/Athens">Athens (EET)</option>
+                  </optgroup>
+                  <optgroup label="Asia">
+                    <option value="Asia/Tokyo">Tokyo (JST)</option>
+                    <option value="Asia/Shanghai">Shanghai (CST)</option>
+                    <option value="Asia/Hong_Kong">Hong Kong (HKT)</option>
+                    <option value="Asia/Singapore">Singapore (SGT)</option>
+                    <option value="Asia/Dubai">Dubai (GST)</option>
+                    <option value="Asia/Kolkata">India (IST)</option>
+                  </optgroup>
+                  <optgroup label="Australia & Pacific">
+                    <option value="Australia/Sydney">Sydney (AEDT/AEST)</option>
+                    <option value="Australia/Melbourne">Melbourne (AEDT/AEST)</option>
+                    <option value="Australia/Brisbane">Brisbane (AEST)</option>
+                    <option value="Australia/Perth">Perth (AWST)</option>
+                    <option value="Pacific/Auckland">Auckland (NZDT/NZST)</option>
+                  </optgroup>
+                  <optgroup label="Other">
+                    <option value="UTC">UTC (Coordinated Universal Time)</option>
+                  </optgroup>
+                </select>
+              </div>
 
               <label className="preference-item">
                 <input
@@ -259,10 +359,10 @@ function NotificationSettings() {
         )}
       </div>
 
-      {VAPID_PUBLIC_KEY === 'YOUR_VAPID_PUBLIC_KEY_HERE' && (
+      {!VAPID_PUBLIC_KEY && (
         <div className="setup-warning">
           <strong>⚠️ Setup Required:</strong> VAPID keys need to be configured.
-          See the setup instructions in the code.
+          See md files/PUSH_NOTIFICATIONS_SETUP.md for instructions.
         </div>
       )}
     </div>

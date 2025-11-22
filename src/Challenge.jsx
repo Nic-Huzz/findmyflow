@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/AuthProvider'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
+import { sendNotification } from './lib/notifications'
+import NotificationPrompt from './components/NotificationPrompt'
 import './Challenge.css'
 
 function Challenge() {
@@ -27,6 +29,8 @@ function Challenge() {
   const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
   const [nervousSystemComplete, setNervousSystemComplete] = useState(false) // Track if nervous system flow is complete
   const [showLockedTooltip, setShowLockedTooltip] = useState(null) // Track which quest's locked tooltip is showing
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false) // Track settings dropdown menu visibility
+  const settingsMenuRef = useRef(null) // Ref for clicking outside to close menu
 
   const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
@@ -89,6 +93,23 @@ function Challenge() {
       loadGroupInfo()
     }
   }, [leaderboardView, progress])
+
+  // Close settings menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target)) {
+        setShowSettingsMenu(false)
+      }
+    }
+
+    if (showSettingsMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showSettingsMenu])
 
   const loadGroupInfo = async () => {
     if (!progress || !progress.group_id) return
@@ -231,6 +252,16 @@ function Challenge() {
     } else {
       console.log('Day advanced successfully:', data)
       setProgress(data)
+
+      // Send notification about new day
+      if (newDay > currentProgress.current_day && newDay <= 7) {
+        await sendNotification(user.id, {
+          title: `Day ${newDay} Unlocked! 🎉`,
+          body: 'Your new daily quests are ready to complete',
+          url: '/7-day-challenge',
+          tag: `day-${newDay}`
+        })
+      }
     }
   }
 
@@ -886,6 +917,7 @@ function Challenge() {
 
   return (
     <div className="challenge-container">
+      <NotificationPrompt />
       <header className="challenge-header">
         <div className="challenge-header-top">
           <h1>Gamify Your Ambitions</h1>
@@ -906,6 +938,37 @@ function Challenge() {
                 ✨ Archetypes
               </div>
             )}
+            <div className="settings-menu-container" ref={settingsMenuRef}>
+              <button
+                className="challenge-day settings-badge"
+                title="Settings"
+                onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+              >
+                ⚙️
+              </button>
+              {showSettingsMenu && (
+                <div className="settings-dropdown">
+                  <button
+                    className="settings-menu-item"
+                    onClick={() => {
+                      navigate('/me')
+                      setShowSettingsMenu(false)
+                    }}
+                  >
+                    🏠 Home
+                  </button>
+                  <button
+                    className="settings-menu-item"
+                    onClick={() => {
+                      navigate('/settings/notifications')
+                      setShowSettingsMenu(false)
+                    }}
+                  >
+                    🔔 Notifications
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -963,7 +1026,7 @@ function Challenge() {
               </div>
             </div>
 
-            {groupCode && progress.current_day >= 1 && (
+            {groupCode && progress.current_day === 0 && (
               <div className="group-code-display">
                 <div className="group-code-info">
                   Group Code: <strong>{groupCode}</strong>
