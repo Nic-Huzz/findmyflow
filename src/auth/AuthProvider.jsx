@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { initializeNotifications } from '../lib/notifications'
 
 const AuthContext = createContext({})
 
@@ -36,6 +37,21 @@ export const AuthProvider = ({ children }) => {
 
     return () => subscription.unsubscribe()
   }, [])
+
+  // Initialize notifications when user is authenticated
+  useEffect(() => {
+    const setupNotifications = async () => {
+      if (user) {
+        const vapidPublicKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
+        if (vapidPublicKey) {
+          await initializeNotifications(user.id, vapidPublicKey)
+          console.log('🔔 Notifications initialized')
+        }
+      }
+    }
+
+    setupNotifications()
+  }, [user])
 
   // Sign in with magic link
   const signInWithMagicLink = async (email) => {
