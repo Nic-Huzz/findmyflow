@@ -19,14 +19,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing required Supabase environment variables. Check console for details.')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: window.localStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true
-  }
-})
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Debug Supabase connection (only in development)
 if (import.meta.env.DEV) {

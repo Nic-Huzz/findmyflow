@@ -291,6 +291,44 @@
   line-height: 1.5;
 }
 
+/* Verification Code Specific Styles */
+.code-input-helper {
+  margin-bottom: 0.75rem;
+}
+
+.email-display {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.email-display strong {
+  color: #212529;
+  font-weight: 600;
+}
+
+.auth-back-button {
+  background: transparent;
+  color: #6c757d;
+  border: none;
+  padding: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.auth-back-button:hover:not(:disabled) {
+  color: #5e17eb;
+  transform: translateX(-2px);
+}
+
+.auth-back-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Loading state */
 .auth-loading {
   display: flex;
