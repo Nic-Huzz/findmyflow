@@ -26,8 +26,9 @@ function ManifestUpdater() {
   const location = useLocation()
 
   useEffect(() => {
+    // Update manifest on initial mount and whenever route changes
     updateManifestForCurrentPage()
-  }, [location.pathname])
+  }, [location.pathname, location.search])
 
   return null
 }
