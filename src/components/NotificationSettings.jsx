@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import {
@@ -16,6 +17,7 @@ import './NotificationSettings.css'
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY
 
 function NotificationSettings() {
+  const navigate = useNavigate()
   const { user } = useAuth()
   const [notificationStatus, setNotificationStatus] = useState({
     supported: false,
@@ -253,6 +255,13 @@ function NotificationSettings() {
 
   return (
     <div className="notification-settings">
+      <button
+        className="back-to-challenge-btn"
+        onClick={() => navigate('/7-day-challenge')}
+      >
+        ← Back to Challenge
+      </button>
+
       <h2 className="settings-title">🔔 Notification Settings</h2>
       <p className="settings-description">
         Get timely reminders and updates about your 7-Day Challenge

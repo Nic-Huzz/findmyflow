@@ -4,6 +4,25 @@
   padding: 2rem;
 }
 
+.back-to-challenge-btn {
+  background: transparent;
+  border: none;
+  color: #6366f1;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.back-to-challenge-btn:hover {
+  color: #5e17eb;
+  transform: translateX(-4px);
+}
+
 .settings-title {
   font-size: 1.75rem;
   font-weight: 700;
