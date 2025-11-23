@@ -74,7 +74,7 @@ serve(async (req) => {
     const payload = JSON.stringify({
       title,
       body: body || '',
-      icon: '/icon-192x192.png',
+      icon: '/icon-192.png',
       badge: '/badge-72x72.png',
       tag: tag || 'default',
       url: url || '/',

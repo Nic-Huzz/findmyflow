@@ -163,7 +163,7 @@ serve(async (req) => {
           const payload = JSON.stringify({
             title: notification.title,
             body: notification.body,
-            icon: '/icon-192x192.png',
+            icon: '/icon-192.png',
             badge: '/badge-72x72.png',
             tag: notification.tag,
             url: notification.url,

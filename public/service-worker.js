@@ -31,7 +31,7 @@ self.addEventListener('push', (event) => {
   const title = data.title || 'Find My Flow'
   const options = {
     body: data.body || 'You have a new notification',
-    icon: data.icon || '/icon-192x192.png',
+    icon: data.icon || '/icon-192.png',
     badge: data.badge || '/badge-72x72.png',
     image: data.image,
     data: data.url || '/',

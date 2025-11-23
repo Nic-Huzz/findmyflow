@@ -147,7 +147,7 @@ export const showLocalNotification = async (title, options = {}) => {
 
   await registration.showNotification(title, {
     body: options.body || '',
-    icon: options.icon || '/icon-192x192.png',
+    icon: options.icon || '/icon-192.png',
     badge: options.badge || '/badge-72x72.png',
     tag: options.tag || 'default',
     data: options.url || '/',
