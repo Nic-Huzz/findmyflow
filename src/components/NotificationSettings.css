@@ -267,21 +267,37 @@
   font-size: 1.125rem;
   font-weight: 600;
   color: #212529;
+  margin: 0 0 1.5rem 0;
+  text-align: center;
+}
+
+.device-instructions {
+  background: white;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 2px solid #e9ecef;
+}
+
+.device-instructions h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6366f1;
   margin: 0 0 1rem 0;
 }
 
-.install-steps ol {
-  margin: 0 0 1rem 0;
+.device-instructions ol {
+  margin: 0;
   padding-left: 1.5rem;
   color: #495057;
   line-height: 1.8;
 }
 
-.install-steps li {
+.device-instructions li {
   margin-bottom: 1rem;
 }
 
-.install-steps li:last-child {
+.device-instructions li:last-child {
   margin-bottom: 0;
 }
 

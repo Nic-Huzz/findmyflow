@@ -179,6 +179,8 @@ function NotificationSettings() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
                         window.navigator.standalone === true
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+    const isAndroid = /Android/i.test(navigator.userAgent)
 
     return (
       <div className="notification-settings">
@@ -193,22 +195,46 @@ function NotificationSettings() {
             <InstallPWA />
 
             <div className="install-steps">
-              <h3>How to Install:</h3>
-              <ol>
-                <li>
-                  <strong>Chrome (Android):</strong> Tap the install button above,
-                  or tap the menu (⋮) and select "Add to Home screen"
-                </li>
-                <li>
-                  <strong>Safari (iOS):</strong> Tap the share button (
-                  <svg width="14" height="14" viewBox="0 0 14 14" style={{display: 'inline', verticalAlign: 'middle'}}>
-                    <path d="M7 0L7 9M7 0L4 3M7 0L10 3M2 5L2 14L12 14L12 5" stroke="currentColor" fill="none"/>
-                  </svg>
-                  ) and select "Add to Home Screen"
-                </li>
-              </ol>
+              <h3>How to Install on Your Device:</h3>
+
+              {isIOS && (
+                <div className="device-instructions">
+                  <h4>📱 iPhone/iPad Instructions:</h4>
+                  <ol>
+                    <li>
+                      <strong>Safari:</strong> Tap the share button (
+                      <svg width="14" height="14" viewBox="0 0 14 14" style={{display: 'inline', verticalAlign: 'middle'}}>
+                        <path d="M7 0L7 9M7 0L4 3M7 0L10 3M2 5L2 14L12 14L12 5" stroke="currentColor" fill="none"/>
+                      </svg>
+                      ) at the bottom, then scroll down and tap "Add to Home Screen"
+                    </li>
+                    <li>
+                      <strong>Chrome:</strong> Tap the share button (
+                      <svg width="14" height="14" viewBox="0 0 14 14" style={{display: 'inline', verticalAlign: 'middle'}}>
+                        <path d="M7 0L7 9M7 0L4 3M7 0L10 3M2 5L2 14L12 14L12 5" stroke="currentColor" fill="none"/>
+                      </svg>
+                      ), then tap "Add to Home Screen"
+                    </li>
+                  </ol>
+                </div>
+              )}
+
+              {isAndroid && (
+                <div className="device-instructions">
+                  <h4>🤖 Android Instructions:</h4>
+                  <ol>
+                    <li>
+                      <strong>Chrome:</strong> Tap the install button above, or tap the menu (⋮) in the top right and select "Add to Home screen"
+                    </li>
+                    <li>
+                      <strong>Firefox:</strong> Tap the menu (⋮) and select "Install"
+                    </li>
+                  </ol>
+                </div>
+              )}
+
               <p className="install-note">
-                After installing, open the app from your home screen and return
+                💡 After installing, open the app from your home screen and return
                 to this page to enable notifications!
               </p>
             </div>
