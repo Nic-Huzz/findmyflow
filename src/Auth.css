@@ -245,15 +245,15 @@
 }
 
 .auth-message.success {
-  background: linear-gradient(135deg, #fff3cd 0%, #fff0b3 100%);
-  color: #856404;
-  border: 1px solid #ffeaa7;
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.15) 0%, rgba(255, 193, 7, 0.15) 100%);
+  color: #333;
+  border: 2px solid #ffdd27;
 }
 
 .auth-message.error {
-  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-  color: #721c24;
-  border: 1px solid #f1b0b7;
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.15) 0%, rgba(255, 193, 7, 0.15) 100%);
+  color: #333;
+  border: 2px solid #ffdd27;
 }
 
 .auth-footer {
