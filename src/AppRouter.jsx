@@ -10,6 +10,7 @@ import ArchetypeSelection from './ArchetypeSelection'
 import EssenceProfile from './EssenceProfile'
 import ProtectiveProfile from './ProtectiveProfile'
 import Feedback from './Feedback'
+import NotificationSettings from './components/NotificationSettings'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -90,6 +91,11 @@ function AppRouter() {
             <Route path="/nikigai/integration" element={
               <AuthGate>
                 <NikigaiTest flowFile="nikigai-flow-4-integration.json" flowName="Integration & Mission" />
+              </AuthGate>
+            } />
+            <Route path="/settings/notifications" element={
+              <AuthGate>
+                <NotificationSettings />
               </AuthGate>
             } />
           </Routes>

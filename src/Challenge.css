@@ -52,6 +52,67 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* Settings Menu */
+.settings-menu-container {
+  position: relative;
+}
+
+.challenge-day.settings-badge {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1rem;
+  min-width: 45px;
+  line-height: 1;
+}
+
+.challenge-day.settings-badge:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.settings-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+  min-width: 180px;
+}
+
+.settings-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  background: white;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.settings-menu-item:hover {
+  background: #f8f9fa;
+}
+
+.settings-menu-item:not(:last-child) {
+  border-bottom: 1px solid #e9ecef;
+}
+
 .challenge-complete-badge {
   background: rgba(255, 221, 39, 0.3);
   padding: 0.25rem 0.75rem;
@@ -356,6 +417,28 @@
   background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
 }
 
+.quest-card.locked {
+  opacity: 0.6;
+  background: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.quest-card.locked:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: #dee2e6;
+}
+
+.quest-locked-message {
+  background: #e9ecef;
+  color: #6c757d;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  border: 2px solid #dee2e6;
+}
+
 .quest-header {
   display: flex;
   justify-content: space-between;
@@ -581,6 +664,77 @@
   box-shadow: none;
 }
 
+/* Locked quest button */
+.quest-locked-container {
+  position: relative;
+  width: 100%;
+}
+
+.quest-flow-btn.locked {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.quest-flow-btn.locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.locked-info-icon {
+  cursor: pointer;
+  font-size: 0.875rem;
+  opacity: 0.8;
+  padding: 0.25rem;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.locked-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #212529;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  width: max-content;
+  max-width: 280px;
+  text-align: center;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: tooltipFadeIn 0.2s ease;
+}
+
+.locked-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #212529;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 .quest-completed-badge {
   background: #d4edda;
   color: #155724;
@@ -803,12 +957,19 @@
 .group-code-display {
   background: rgba(94, 23, 235, 0.1);
   border: 2px dashed rgba(94, 23, 235, 0.3);
-  padding: 0.25rem 1rem;
+  padding: 1rem;
   border-radius: 12px;
   text-align: center;
   font-size: 0.875rem;
   color: #333;
   margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.group-code-info {
+  text-align: center;
 }
 
 .group-code-display strong {
@@ -816,6 +977,38 @@
   font-size: 1rem;
   letter-spacing: 0.1em;
   font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.whatsapp-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.whatsapp-share-btn:hover {
+  background: #20BA5A;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-share-btn:active {
+  transform: translateY(0);
+}
+
+.whatsapp-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .leaderboard-toggle {
@@ -1238,4 +1431,88 @@
   .mode-icon {
     font-size: 2.5rem;
   }
+}
+
+/* Daily Release Challenge Styles */
+.daily-release-challenge {
+  margin-top: 1rem;
+}
+
+.daily-release-challenge h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.daily-release-challenge .challenge-description {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.daily-release-challenge .challenge-video {
+  margin: 1rem 0;
+}
+
+.daily-release-challenge .video-link {
+  display: inline-block;
+  background: #5e17eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.daily-release-challenge .video-link:hover {
+  background: #4a12bc;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.daily-release-challenge .challenge-instructions {
+  background: #f8f9fa;
+  border-left: 4px solid #5e17eb;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.daily-release-challenge .challenge-instructions p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.daily-release-challenge .challenge-instructions p:last-child {
+  margin-bottom: 0;
+}
+
+.daily-release-challenge .challenge-instructions strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Locked quest button styles */
+.quest-complete-btn.locked {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+  position: relative;
+  padding-right: 3rem;
+}
+
+.quest-complete-btn.locked:hover {
+  background: #ccc;
+  transform: none;
+}
+
+.quest-textarea:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
 }

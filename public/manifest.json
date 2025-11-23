@@ -1,0 +1,27 @@
+{
+  "name": "Find My Flow",
+  "short_name": "FindMyFlow",
+  "description": "Complete your 7-Day Challenge and unlock your flow state",
+  "start_url": "/7-day-challenge",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "productivity"],
+  "prefer_related_applications": false
+}

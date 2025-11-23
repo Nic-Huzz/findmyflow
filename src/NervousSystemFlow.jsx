@@ -21,6 +21,17 @@ function formatMarkdown(text) {
     .replace(/\n/g, '<br />')
 }
 
+// Helper function to extract YES safety contracts from belief test results
+function extractYesContracts(beliefTestResults) {
+  if (!beliefTestResults || typeof beliefTestResults !== 'object') {
+    return []
+  }
+
+  return Object.entries(beliefTestResults)
+    .filter(([contract, response]) => response === 'yes')
+    .map(([contract]) => contract)
+}
+
 function NervousSystemFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -287,6 +298,9 @@ function NervousSystemFlow() {
           console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
 
+          // Extract YES contracts for Healing Compass
+          const safetyContracts = extractYesContracts(newContext.belief_test_results)
+
           const { data, error } = await supabase
             .from('nervous_system_responses')
             .insert([{
@@ -298,6 +312,7 @@ function NervousSystemFlow() {
               positive_change: newContext.positive_change,
               current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,
+              safety_contracts: safetyContracts,
               reflection_text: newContext.pattern_mirrored,
               context: newContext
             }])
@@ -334,7 +349,7 @@ function NervousSystemFlow() {
         id: `ai-${Date.now()}`,
         isAI: true,
         kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow. Return to your profile to continue your journey:",
+        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow.\n\nYou've identified safety contracts that may be limiting your flow. The next step is to heal the root cause through the Healing Compass.",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -390,11 +405,13 @@ function NervousSystemFlow() {
           console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
 
+          // Extract YES contracts for Healing Compass
+          const safetyContracts = extractYesContracts(newContext.belief_test_results)
+
           const { data, error } = await supabase
             .from('nervous_system_responses')
             .insert([{
               user_id: user.id,
-              user_id: user?.id,
               user_email: user?.email,
               user_name: newContext.user_name || 'Anonymous',
               impact_goal: newContext.impact_goal,
@@ -402,6 +419,7 @@ function NervousSystemFlow() {
               positive_change: newContext.positive_change,
               current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,
+              safety_contracts: safetyContracts,
               reflection_text: newContext.pattern_mirrored,
               context: newContext
             }])
@@ -465,6 +483,9 @@ function NervousSystemFlow() {
           console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
           console.log('📤 Sending to Supabase:', newContext)
 
+          // Extract YES contracts for Healing Compass
+          const safetyContracts = extractYesContracts(newContext.belief_test_results)
+
           const { data, error } = await supabase
             .from('nervous_system_responses')
             .insert([{
@@ -476,6 +497,7 @@ function NervousSystemFlow() {
               positive_change: newContext.positive_change,
               current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,
+              safety_contracts: safetyContracts,
               reflection_text: newContext.pattern_mirrored,
               context: newContext
             }])
@@ -512,7 +534,7 @@ function NervousSystemFlow() {
         id: `ai-${Date.now()}`,
         isAI: true,
         kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow. Return to your profile to continue your journey:",
+        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow.\n\nYou've identified safety contracts that may be limiting your flow. The next step is to heal the root cause through the Healing Compass.",
         timestamp: new Date().toLocaleTimeString()
       }
       setMessages(prev => [...prev, completionMessage])
@@ -568,9 +590,37 @@ function NervousSystemFlow() {
                 {message.kind === 'completion' ? (
                   <div className="text">
                     <div dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
-                    <div style={{ marginTop: 8 }}>
-                      <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
-                        Return to your profile
+                    <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <Link
+                        to="/healing-compass"
+                        style={{
+                          display: 'inline-block',
+                          padding: '12px 24px',
+                          backgroundColor: '#5e17eb',
+                          color: 'white',
+                          textDecoration: 'none',
+                          borderRadius: '8px',
+                          textAlign: 'center',
+                          fontWeight: 500
+                        }}
+                      >
+                        Proceed to Healing Compass
+                      </Link>
+                      <Link
+                        to="/7-day-challenge"
+                        style={{
+                          display: 'inline-block',
+                          padding: '12px 24px',
+                          backgroundColor: 'transparent',
+                          color: '#5e17eb',
+                          textDecoration: 'none',
+                          borderRadius: '8px',
+                          textAlign: 'center',
+                          fontWeight: 500,
+                          border: '1px solid #5e17eb'
+                        }}
+                      >
+                        Return to 7-Day Challenge
                       </Link>
                     </div>
                   </div>

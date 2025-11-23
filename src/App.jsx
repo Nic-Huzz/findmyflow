@@ -33,6 +33,8 @@ function App() {
   const [showHybridFlow, setShowHybridFlow] = useState(false)
   const [hybridFlowType, setHybridFlowType] = useState(null) // 'protective' or 'essence'
   const [isResending, setIsResending] = useState(false)
+  const [pendingEmail, setPendingEmail] = useState(null) // Store email for confirmation
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false) // Show confirmation UI
   const messagesEndRef = useRef(null)
 
   // Load flow JSON
@@ -70,6 +72,12 @@ function App() {
   }, [messages])
 
   const currentStep = flow?.steps?.[currentIndex]
+
+  // Email validation helper
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
 
   // Handle hybrid flow completion
   const handleHybridFlowComplete = async (result) => {
@@ -162,7 +170,7 @@ function App() {
     console.log('🚀 handleSubmit called')
     console.log('Current step:', currentStep?.step)
     console.log('Input text:', inputText)
-    
+
     if (!currentStep || isLoading || !inputText.trim()) {
       console.log('❌ Early return - no currentStep, isLoading, or no input')
       return
@@ -170,6 +178,40 @@ function App() {
 
     const trimmedInput = inputText.trim()
     const sanitizedInput = sanitizeText(trimmedInput) // ✅ Sanitize user input
+
+    // Check if this is the email capture step
+    if (currentStep.step === 'lead_q8_email_capture') {
+      // Validate email format
+      if (!validateEmail(trimmedInput)) {
+        alert('Please enter a valid email address (e.g., name@example.com)')
+        return
+      }
+
+      // Store email and show confirmation
+      setPendingEmail(trimmedInput)
+      setShowEmailConfirmation(true)
+
+      // Add user message showing the email they entered
+      const userMessage = {
+        id: `user-${Date.now()}`,
+        isAI: false,
+        text: sanitizedInput,
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages(prev => [...prev, userMessage])
+
+      // Add AI confirmation message
+      const confirmMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: `Great! Just to confirm, is **${trimmedInput}** the correct email address?\n\nI'll send your magic link to this email.`,
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages(prev => [...prev, confirmMessage])
+      setInputText('')
+      return
+    }
+
     setIsLoading(true)
 
     // Add user message
@@ -404,6 +446,113 @@ function App() {
     setIsLoading(false)
   }
 
+  const handleEmailConfirm = async () => {
+    if (!pendingEmail) return
+
+    setIsLoading(true)
+    setShowEmailConfirmation(false)
+
+    // Update context with confirmed email
+    const newContext = {
+      ...context,
+      user_email: pendingEmail,
+      lead_q8_email_capture_complete: true
+    }
+    setContext(newContext)
+
+    // Save to Supabase and send magic link
+    if (supabase) {
+      console.log('💾 SAVING TO SUPABASE - Email confirmed!')
+      try {
+        const sessionId = crypto.randomUUID()
+        newContext.session_id = sessionId
+
+        const profileData = {
+          session_id: sessionId,
+          user_name: newContext.user_name,
+          protective_archetype: newContext.protective_archetype_selection,
+          protective_confirm: newContext.protective_archetype_reflect,
+          essence_archetype: newContext.essence_archetype_selection,
+          essence_confirm: newContext.essence_archetype_reflect,
+          persona: newContext.persona_selection || null,
+          email: pendingEmail.toLowerCase(),
+          context: newContext
+        }
+
+        console.log('📤 Sending to Supabase:', profileData)
+
+        const { data, error } = await supabase
+          .from('lead_flow_profiles')
+          .insert([profileData])
+
+        if (error) {
+          console.error('❌ Supabase error:', error)
+          throw error
+        }
+        console.log('✅ Profile saved successfully:', data)
+
+        // Send magic link
+        console.log('📧 Sending magic link to:', pendingEmail.toLowerCase())
+        const magicLinkResult = await signInWithMagicLink(pendingEmail.toLowerCase())
+        if (magicLinkResult.success) {
+          console.log('✅ Magic link sent successfully')
+          setMessages(prev => [
+            ...prev,
+            {
+              id: `ai-${Date.now()}`,
+              isAI: true,
+              text: `I've sent a magic link to ${pendingEmail}. Please check your inbox (and spam folder).`,
+              timestamp: new Date().toLocaleTimeString()
+            }
+          ])
+        } else {
+          console.error('❌ Magic link failed:', magicLinkResult.message)
+          setMessages(prev => [
+            ...prev,
+            {
+              id: `ai-${Date.now()}`,
+              isAI: true,
+              text: `Hmm, I couldn't send the magic link: ${magicLinkResult.message}. Please double-check your email or try again in a moment.`,
+              timestamp: new Date().toLocaleTimeString()
+            }
+          ])
+        }
+      } catch (err) {
+        console.error('❌ Failed to save profile:', err)
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `ai-${Date.now()}`,
+            isAI: true,
+            text: `There was an error saving your profile. Please try again.`,
+            timestamp: new Date().toLocaleTimeString()
+          }
+        ])
+      }
+    }
+
+    // Move to next step
+    await moveToNextStep(newContext)
+    setIsLoading(false)
+  }
+
+  const handleEmailChange = () => {
+    // Reset email confirmation state
+    setShowEmailConfirmation(false)
+    setPendingEmail(null)
+
+    // Add AI message prompting for re-entry
+    setMessages(prev => [
+      ...prev,
+      {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: `No problem! Please enter your correct email address below.`,
+        timestamp: new Date().toLocaleTimeString()
+      }
+    ])
+  }
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -564,14 +713,34 @@ function App() {
         </div>
       )}
 
-      {currentStep && !currentStep.options && (
+      {/* Email confirmation buttons */}
+      {showEmailConfirmation && (
+        <div className="options-container">
+          <button
+            className="option-button"
+            onClick={handleEmailConfirm}
+            disabled={isLoading}
+          >
+            ✓ Yes, that's correct
+          </button>
+          <button
+            className="option-button"
+            onClick={handleEmailChange}
+            disabled={isLoading}
+          >
+            ✏️ Change email
+          </button>
+        </div>
+      )}
+
+      {currentStep && !currentStep.options && !showEmailConfirmation && (
         <div className="input-bar">
           <textarea
             className="message-input"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder={currentStep.tag_as === 'user_name' ? 'Type your name...' : 'Share your thoughts...'}
+            placeholder={currentStep.tag_as === 'user_name' ? 'Type your name...' : currentStep.tag_as === 'user_email' ? 'Enter your email address...' : 'Share your thoughts...'}
             disabled={isLoading}
             rows={1}
           />

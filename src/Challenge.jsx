@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from './auth/AuthProvider'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
+import { sendNotification } from './lib/notifications'
+import NotificationPrompt from './components/NotificationPrompt'
+import PortalExplainer from './components/PortalExplainer'
 import './Challenge.css'
 
 function Challenge() {
@@ -11,6 +14,7 @@ function Challenge() {
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('Recognise')
   const [challengeData, setData] = useState(null)
+  const [dailyReleaseChallenges, setDailyReleaseChallenges] = useState(null)
   const [progress, setProgress] = useState(null)
   const [completions, setCompletions] = useState([])
   const [questInputs, setQuestInputs] = useState({})
@@ -25,6 +29,13 @@ function Challenge() {
   const [userRank, setUserRank] = useState(null)
   const [userData, setUserData] = useState(null)
   const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
+  const [nervousSystemComplete, setNervousSystemComplete] = useState(false) // Track if nervous system flow is complete
+  const [healingCompassComplete, setHealingCompassComplete] = useState(false) // Track if healing compass flow is complete
+  const [pastParallelStory, setPastParallelStory] = useState(null) // Store past_parallel_story from healing compass
+  const [showLockedTooltip, setShowLockedTooltip] = useState(null) // Track which quest's locked tooltip is showing
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false) // Track settings dropdown menu visibility
+  const [showExplainer, setShowExplainer] = useState(false) // Track portal explainer visibility
+  const settingsMenuRef = useRef(null) // Ref for clicking outside to close menu
 
   const categories = ['Flow Finder', 'Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
 
@@ -32,13 +43,71 @@ function Challenge() {
     loadChallengeData()
   }, [])
 
+  // Check if user has seen explainer and show on first visit
+  useEffect(() => {
+    if (progress && !showOnboarding) {
+      const hasSeenExplainer = localStorage.getItem('hasSeenPortalExplainer')
+      if (!hasSeenExplainer) {
+        setShowExplainer(true)
+      }
+    }
+  }, [progress, showOnboarding])
+
   useEffect(() => {
     if (user) {
       loadUserProgress()
       loadLeaderboard()
       loadUserData()
+      checkNervousSystemComplete()
+      checkHealingCompassComplete()
     }
   }, [user])
+
+  const checkNervousSystemComplete = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data, error } = await supabase
+        .from('nervous_system_responses')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1)
+
+      if (!error && data && data.length > 0) {
+        setNervousSystemComplete(true)
+      } else {
+        setNervousSystemComplete(false)
+      }
+    } catch (error) {
+      console.error('Error checking nervous system completion:', error)
+      setNervousSystemComplete(false)
+    }
+  }
+
+  const checkHealingCompassComplete = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data, error } = await supabase
+        .from('healing_compass_responses')
+        .select('past_parallel_story')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      if (!error && data && data.length > 0) {
+        setHealingCompassComplete(true)
+        setPastParallelStory(data[0].past_parallel_story)
+      } else {
+        setHealingCompassComplete(false)
+        setPastParallelStory(null)
+      }
+    } catch (error) {
+      console.error('Error checking healing compass completion:', error)
+      setHealingCompassComplete(false)
+      setPastParallelStory(null)
+    }
+  }
 
   const loadUserData = async () => {
     if (!user?.email) return
@@ -65,6 +134,23 @@ function Challenge() {
       loadGroupInfo()
     }
   }, [leaderboardView, progress])
+
+  // Close settings menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target)) {
+        setShowSettingsMenu(false)
+      }
+    }
+
+    if (showSettingsMenu) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [showSettingsMenu])
 
   const loadGroupInfo = async () => {
     if (!progress || !progress.group_id) return
@@ -110,6 +196,11 @@ function Challenge() {
       const response = await fetch('/challengeQuests.json')
       const data = await response.json()
       setData(data)
+
+      // Load daily release challenges
+      const releaseChallengesResponse = await fetch('/dailyReleaseChallenges.json')
+      const releaseChallengesData = await releaseChallengesResponse.json()
+      setDailyReleaseChallenges(releaseChallengesData)
     } catch (error) {
       console.error('Error loading challenge data:', error)
     }
@@ -207,6 +298,16 @@ function Challenge() {
     } else {
       console.log('Day advanced successfully:', data)
       setProgress(data)
+
+      // Send notification about new day
+      if (newDay > currentProgress.current_day && newDay <= 7) {
+        await sendNotification(user.id, {
+          title: `Day ${newDay} Unlocked! 🎉`,
+          body: 'Your new daily quests are ready to complete',
+          url: '/7-day-challenge',
+          tag: `day-${newDay}`
+        })
+      }
     }
   }
 
@@ -310,6 +411,15 @@ function Challenge() {
       console.error('Error joining group:', error)
       alert('Error joining group. Please try again.')
     }
+  }
+
+  const handleCloseExplainer = () => {
+    setShowExplainer(false)
+    localStorage.setItem('hasSeenPortalExplainer', 'true')
+  }
+
+  const handleOpenExplainer = () => {
+    setShowExplainer(true)
   }
 
   const handleRestartChallenge = async () => {
@@ -686,6 +796,50 @@ function Challenge() {
     return emojiMap[category] || '✨'
   }
 
+  // Get the daily release challenge for the current day
+  const getDailyReleaseChallenge = () => {
+    if (!dailyReleaseChallenges || !progress) return null
+
+    const currentDay = progress.current_day
+    if (currentDay === 0 || currentDay > 7) return null
+
+    return dailyReleaseChallenges[currentDay.toString()]
+  }
+
+  // Render the daily release challenge content
+  const renderDailyReleaseChallenge = () => {
+    const challenge = getDailyReleaseChallenge()
+    if (!challenge) return null
+
+    // Replace {{past_event_details}} with actual data from healing compass
+    const replacePlaceholder = (text) => {
+      if (!text) return text
+      const storyText = pastParallelStory || 'the past event from your Healing Compass'
+      return text.replace(/\{\{past_event_details\}\}/g, storyText)
+    }
+
+    return (
+      <div className="daily-release-challenge">
+        <h4>{challenge.title}</h4>
+        <p className="challenge-description">{challenge.description}</p>
+
+        {challenge.videoUrl && (
+          <div className="challenge-video">
+            <a href={challenge.videoUrl} target="_blank" rel="noopener noreferrer" className="video-link">
+              📺 Watch Guided Meditation
+            </a>
+          </div>
+        )}
+
+        <div className="challenge-instructions">
+          {challenge.instructions.map((instruction, index) => (
+            <p key={index} dangerouslySetInnerHTML={{ __html: replacePlaceholder(instruction) }} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   const getDailyStreak = (questId) => {
     if (!progress) return [false, false, false, false, false, false, false]
 
@@ -711,6 +865,22 @@ function Challenge() {
     })
 
     return streak
+  }
+
+  const getDayLabels = () => {
+    if (!progress) return ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+
+    const challengeStart = new Date(progress.challenge_start_date)
+    const dayOfWeek = challengeStart.getDay() // 0 = Sunday, 1 = Monday, etc.
+    const allDayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] // Sunday to Saturday
+
+    // Create array starting from the challenge start day
+    const labels = []
+    for (let i = 0; i < 7; i++) {
+      labels.push(allDayLabels[(dayOfWeek + i) % 7])
+    }
+
+    return labels
   }
 
   const filteredQuests = challengeData?.quests.filter(q => q.category === activeCategory) || []
@@ -846,6 +1016,8 @@ function Challenge() {
 
   return (
     <div className="challenge-container">
+      {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
+      <NotificationPrompt />
       <header className="challenge-header">
         <div className="challenge-header-top">
           <h1>Gamify Your Ambitions</h1>
@@ -866,6 +1038,46 @@ function Challenge() {
                 ✨ Archetypes
               </div>
             )}
+            <div className="settings-menu-container" ref={settingsMenuRef}>
+              <button
+                className="challenge-day settings-badge"
+                title="Settings"
+                onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+              >
+                ⚙️
+              </button>
+              {showSettingsMenu && (
+                <div className="settings-dropdown">
+                  <button
+                    className="settings-menu-item"
+                    onClick={() => {
+                      navigate('/me')
+                      setShowSettingsMenu(false)
+                    }}
+                  >
+                    🏠 Home
+                  </button>
+                  <button
+                    className="settings-menu-item"
+                    onClick={() => {
+                      handleOpenExplainer()
+                      setShowSettingsMenu(false)
+                    }}
+                  >
+                    ❓ Help
+                  </button>
+                  <button
+                    className="settings-menu-item"
+                    onClick={() => {
+                      navigate('/settings/notifications')
+                      setShowSettingsMenu(false)
+                    }}
+                  >
+                    🔔 Notifications
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -923,9 +1135,24 @@ function Challenge() {
               </div>
             </div>
 
-            {groupCode && (
+            {groupCode && progress.current_day === 0 && (
               <div className="group-code-display">
-                Group Code: <strong>{groupCode}</strong>
+                <div className="group-code-info">
+                  Group Code: <strong>{groupCode}</strong>
+                </div>
+                <button
+                  className="whatsapp-share-btn"
+                  onClick={() => {
+                    const message = `Join my 7-Day Find My Flow Challenge! Use code: ${groupCode}`
+                    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
+                    window.open(whatsappUrl, '_blank')
+                  }}
+                >
+                  <svg className="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                  </svg>
+                  Share group code via WhatsApp
+                </button>
               </div>
             )}
 
@@ -1039,10 +1266,11 @@ function Challenge() {
               {dailyQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
                 const streak = getDailyStreak(quest.id)
-                const dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+                const dayLabels = getDayLabels()
+                const isDailyQuestLocked = progress.current_day === 0
 
                 return (
-                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
+                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''} ${isDailyQuestLocked ? 'locked' : ''}`}>
                     <div className="quest-header">
                       <h3 className="quest-name">{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
@@ -1063,7 +1291,40 @@ function Challenge() {
 
                     <p className="quest-description">{quest.description}</p>
 
-                    {quest.learnMore && !completed && (
+                    {/* Special handling for daily release challenge */}
+                    {quest.id === 'release_daily_challenge' && !completed && !isDailyQuestLocked && getDailyReleaseChallenge() && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Today's Challenge</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {renderDailyReleaseChallenge()}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Regular learn more for other quests */}
+                    {quest.id !== 'release_daily_challenge' && quest.learnMore && !completed && !isDailyQuestLocked && (
                       <div className="learn-more-section">
                         <button
                           className="learn-more-toggle"
@@ -1094,15 +1355,60 @@ function Challenge() {
                       </div>
                     )}
 
-                    {!completed && (
+                    {isDailyQuestLocked && (
+                      <div className="quest-locked-message">
+                        🔒 Unlocked on Day 1 (Tomorrow)
+                      </div>
+                    )}
+
+                    {!completed && !isDailyQuestLocked && (
                       <div className="quest-input-area">
                         {quest.status === 'coming_soon' ? (
                           <button className="quest-flow-btn coming-soon" disabled>
                             Coming Soon
                           </button>
+                        ) : quest.id === 'release_daily_challenge' && !healingCompassComplete ? (
+                          <div className="quest-locked-container">
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                              disabled
+                            />
+                            <button
+                              className="quest-complete-btn locked"
+                              disabled
+                            >
+                              Complete Healing Compass to Unlock
+                              <span
+                                className="locked-info-icon"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
+                                }}
+                                onTouchEnd={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
+                                }}
+                              >
+                                ⓘ
+                              </span>
+                            </button>
+                            {showLockedTooltip === quest.id && (
+                              <div className="locked-tooltip">
+                                Complete the "Healing Compass" weekly quest to unlock daily release challenges
+                              </div>
+                            )}
+                          </div>
                         ) : quest.inputType === 'flow' ? (
                           <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
+                            {quest.id === 'recognise_nervous_system'
+                              ? 'Start Mapping My Nervous System →'
+                              : `Start ${quest.name} →`}
                           </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
@@ -1202,9 +1508,40 @@ function Challenge() {
                           <button className="quest-flow-btn coming-soon" disabled>
                             Coming Soon
                           </button>
+                        ) : quest.id === 'recognise_healing_compass' && !nervousSystemComplete ? (
+                          <div className="quest-locked-container">
+                            <button
+                              className="quest-flow-btn locked"
+                              disabled
+                            >
+                              Locked
+                              <span
+                                className="locked-info-icon"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
+                                }}
+                                onTouchEnd={(e) => {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
+                                }}
+                              >
+                                ⓘ
+                              </span>
+                            </button>
+                            {showLockedTooltip === quest.id && (
+                              <div className="locked-tooltip">
+                                Complete the "Map the Boundaries of Your Nervous System" challenge above to unlock
+                              </div>
+                            )}
+                          </div>
                         ) : quest.inputType === 'flow' ? (
                           <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
+                            {quest.id === 'recognise_nervous_system'
+                              ? 'Start Mapping My Nervous System →'
+                              : `Start ${quest.name} →`}
                           </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
@@ -1306,7 +1643,9 @@ function Challenge() {
                           </button>
                         ) : quest.inputType === 'flow' ? (
                           <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
+                            {quest.id === 'recognise_nervous_system'
+                              ? 'Start Mapping My Nervous System →'
+                              : `Start ${quest.name} →`}
                           </Link>
                         ) : quest.inputType === 'text' ? (
                           <>
