@@ -2,7 +2,7 @@
   "name": "Find My Flow",
   "short_name": "FindMyFlow",
   "description": "Complete your 7-Day Challenge and unlock your flow state",
-  "start_url": "/",
+  "start_url": "/7-day-challenge",
   "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
