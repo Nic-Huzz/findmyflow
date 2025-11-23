@@ -9,6 +9,7 @@ import {
   unsubscribeFromPushNotifications,
   showLocalNotification
 } from '../lib/notifications'
+import InstallPWA from './InstallPWA'
 import './NotificationSettings.css'
 
 // VAPID Public Key from environment variables
@@ -174,14 +175,52 @@ function NotificationSettings() {
   }
 
   if (!notificationStatus.supported) {
+    // Check if user is on mobile Chrome/iOS Safari browser (not PWA)
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                        window.navigator.standalone === true
+
     return (
       <div className="notification-settings">
-        <div className="notification-unsupported">
-          <p>⚠️ Push notifications are not supported in your browser.</p>
-          <p className="notification-hint">
-            Try using Chrome, Firefox, or Safari on a supported device.
-          </p>
-        </div>
+        {isMobile && !isStandalone ? (
+          <div className="notification-install-required">
+            <h2 className="settings-title">📱 Install Required</h2>
+            <p className="install-explanation">
+              Push notifications are only available when Find My Flow is installed
+              as an app on your home screen.
+            </p>
+
+            <InstallPWA />
+
+            <div className="install-steps">
+              <h3>How to Install:</h3>
+              <ol>
+                <li>
+                  <strong>Chrome (Android):</strong> Tap the install button above,
+                  or tap the menu (⋮) and select "Add to Home screen"
+                </li>
+                <li>
+                  <strong>Safari (iOS):</strong> Tap the share button (
+                  <svg width="14" height="14" viewBox="0 0 14 14" style={{display: 'inline', verticalAlign: 'middle'}}>
+                    <path d="M7 0L7 9M7 0L4 3M7 0L10 3M2 5L2 14L12 14L12 5" stroke="currentColor" fill="none"/>
+                  </svg>
+                  ) and select "Add to Home Screen"
+                </li>
+              </ol>
+              <p className="install-note">
+                After installing, open the app from your home screen and return
+                to this page to enable notifications!
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="notification-unsupported">
+            <p>⚠️ Push notifications are not supported in your browser.</p>
+            <p className="notification-hint">
+              Try using Chrome, Firefox, or Safari on a supported device.
+            </p>
+          </div>
+        )}
       </div>
     )
   }

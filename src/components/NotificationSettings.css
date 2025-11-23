@@ -227,7 +227,8 @@
 }
 
 .notification-blocked,
-.notification-unsupported {
+.notification-unsupported,
+.notification-install-required {
   text-align: center;
   padding: 2rem;
 }
@@ -238,6 +239,60 @@
   font-weight: 600;
   color: #dc3545;
   margin-bottom: 1rem;
+}
+
+.notification-install-required {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e9ecef;
+}
+
+.install-explanation {
+  color: #495057;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.install-steps {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: left;
+  margin-top: 2rem;
+}
+
+.install-steps h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 1rem 0;
+}
+
+.install-steps ol {
+  margin: 0 0 1rem 0;
+  padding-left: 1.5rem;
+  color: #495057;
+  line-height: 1.8;
+}
+
+.install-steps li {
+  margin-bottom: 1rem;
+}
+
+.install-steps li:last-child {
+  margin-bottom: 0;
+}
+
+.install-note {
+  background: #e7f3ff;
+  border-left: 4px solid #6366f1;
+  padding: 1rem;
+  margin: 1rem 0 0 0;
+  font-size: 0.875rem;
+  color: #495057;
+  border-radius: 4px;
 }
 
 .notification-hint {
