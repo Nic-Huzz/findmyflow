@@ -5,6 +5,7 @@ import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
 import { sendNotification } from './lib/notifications'
 import NotificationPrompt from './components/NotificationPrompt'
+import PortalExplainer from './components/PortalExplainer'
 import './Challenge.css'
 
 function Challenge() {
@@ -30,6 +31,7 @@ function Challenge() {
   const [nervousSystemComplete, setNervousSystemComplete] = useState(false) // Track if nervous system flow is complete
   const [showLockedTooltip, setShowLockedTooltip] = useState(null) // Track which quest's locked tooltip is showing
   const [showSettingsMenu, setShowSettingsMenu] = useState(false) // Track settings dropdown menu visibility
+  const [showExplainer, setShowExplainer] = useState(false) // Track portal explainer visibility
   const settingsMenuRef = useRef(null) // Ref for clicking outside to close menu
 
   const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
@@ -37,6 +39,16 @@ function Challenge() {
   useEffect(() => {
     loadChallengeData()
   }, [])
+
+  // Check if user has seen explainer and show on first visit
+  useEffect(() => {
+    if (progress && !showOnboarding) {
+      const hasSeenExplainer = localStorage.getItem('hasSeenPortalExplainer')
+      if (!hasSeenExplainer) {
+        setShowExplainer(true)
+      }
+    }
+  }, [progress, showOnboarding])
 
   useEffect(() => {
     if (user) {
@@ -365,6 +377,15 @@ function Challenge() {
       console.error('Error joining group:', error)
       alert('Error joining group. Please try again.')
     }
+  }
+
+  const handleCloseExplainer = () => {
+    setShowExplainer(false)
+    localStorage.setItem('hasSeenPortalExplainer', 'true')
+  }
+
+  const handleOpenExplainer = () => {
+    setShowExplainer(true)
   }
 
   const handleRestartChallenge = async () => {
@@ -917,6 +938,7 @@ function Challenge() {
 
   return (
     <div className="challenge-container">
+      {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
       <NotificationPrompt />
       <header className="challenge-header">
         <div className="challenge-header-top">
@@ -956,6 +978,15 @@ function Challenge() {
                     }}
                   >
                     🏠 Home
+                  </button>
+                  <button
+                    className="settings-menu-item"
+                    onClick={() => {
+                      handleOpenExplainer()
+                      setShowSettingsMenu(false)
+                    }}
+                  >
+                    ❓ Help
                   </button>
                   <button
                     className="settings-menu-item"
