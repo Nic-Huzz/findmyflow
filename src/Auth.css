@@ -245,9 +245,9 @@
 }
 
 .auth-message.success {
-  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-  color: #155724;
-  border: 1px solid #b1dfbb;
+  background: linear-gradient(135deg, #fff3cd 0%, #fff0b3 100%);
+  color: #856404;
+  border: 1px solid #ffeaa7;
 }
 
 .auth-message.error {
@@ -299,12 +299,19 @@
 .email-display {
   color: #6c757d;
   font-size: 0.875rem;
-  margin: 0;
+  margin: 0 0 0.25rem 0;
 }
 
 .email-display strong {
   color: #212529;
   font-weight: 600;
+}
+
+.code-help-text {
+  color: #8b5cf6;
+  font-size: 0.8125rem;
+  margin: 0;
+  font-style: italic;
 }
 
 .auth-back-button {
