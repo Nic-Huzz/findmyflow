@@ -1,0 +1,79 @@
+{
+  "1": {
+    "title": "Day 1: Mindful Movement",
+    "description": "A somatic practice to release stored emotions through mindful body movement.",
+    "instructions": [
+      "1. Stand-up in a space you feel safe and able to move around in",
+      "2. Shut your eyes and begin to watch '{{past_event_details}}' as if it was on a movie screen",
+      "3. Observe the emotion that comes up as you watch",
+      "4. As you feel it begin to move your body however it feels called to move",
+      "5. Continue moving and expressing this emotion for at least 90 seconds"
+    ]
+  },
+  "2": {
+    "title": "Day 2: Guided Meditation",
+    "description": "Complete this guided meditation that will help you process and release unprocessed emotions.",
+    "videoUrl": "https://youtu.be/LAj6VbtGpfA?si=3dEQXOlxAc_ZPfgA",
+    "instructions": [
+      "1. Watch and follow along with the guided meditation",
+      "The video also explains why and how this works"
+    ]
+  },
+  "3": {
+    "title": "Day 3: Mindful Drawing",
+    "description": "Express unprocessed emotions through non-dominant hand drawing.",
+    "instructions": [
+      "1. Place your pen in your non-dominant hand, in the middle of your page",
+      "2. Shut your eyes and begin to watch '{{past_event_details}}' as if it was on a movie screen",
+      "3. Observe the emotion that comes up as you watch",
+      "4. As you feel it begin to move your hand however it feels called to move",
+      "5. Continue moving and expressing this emotion for at least 90 seconds"
+    ]
+  },
+  "4": {
+    "title": "Day 4: Gestalt 3-Chair Technique",
+    "description": "A fun role playing technique to dialogue with different parts of yourself.",
+    "instructions": [
+      "1. Setup: Get three cushions and place them in a triangle, grab a journal & pen",
+      "2. Sit on one of the cushions  . This is the cushion for you of today. The cushion to your right is for the you who was hurt and developed the emotional splinter. The cushion to your left is for your protective archetype - the you, created to protect you from being hurt again",
+      "3. Go sit on the cushion and become the you from '{{past_event_details}}'. Take a moment to embody the you of that time. Allow your posture/body to change to reflect how that 'you' is feeling. Once you're sitting in the energy give yourself permission to express however this former you feels called to express. Do this for as long as you feel the emotional charge still alive",
+      "4. Once done, stand-up and return to the first cushion, as the meditator (you of today) and thank this past version of you",
+      "5. Go sit on the cushion for 'Protective Archetype You' and repeat the process. Take a moment to embody the energy of the protective archetype and give yourself permission to express whatever comes up",
+      "6. Once done, return to the mediator cushion and thank 'Protective Archetype You'",
+      "7. Journal about what came up"
+    ]
+  },
+  "5": {
+    "title": "Day 5: Release Ceremony",
+    "description": "Honor and release the wounded version of you and the protective archetype through a ceremonial practice.",
+    "instructions": [
+      "Create a ceremony for the wounded version of you from '{{past_event_details}}' & the protective archetype who developed to protect you. This ceremony is designed to honour them, thank them for protecting you and allowing the hurt version of you the space to express what they previously didn't feel safe to 🙌",
+      "How to do this: Create an 'altar' of some type and choose at least one item that symbolically represents this wounded version of you. The items can be something related to the period of life that it developed or a metaphorical attachment",
+      "For the ceremony say a few words or do whatever you're called to do to let this wounded version of you know they are safe and to honour the protective archetype. The key is ensuring wounded version of you is able to express whatever comes up and for the protective archetype to know you appreciate them for doing its best but they are no longer needed anymore",
+      "Throughout this process whatever emotions come up allow them to be expressed and released 🫶"
+    ]
+  },
+  "6": {
+    "title": "Day 6: Meditative Emotion Processing Visualisation",
+    "description": "A visualisation practice to observe and process unprocessed emotions",
+    "instructions": [
+      "1. Set a timer for 7 minutes",
+      "2. Shut your eyes and tune into the emotion from '{{past_event_details}}'",
+      "3. Locate where you feel this emotion in your body",
+      "4. Once located begin to observe its features: what shape is it? what colour is it? how big is it? what texture is it? how is it moving?",
+      "5. Observe how it changes as you notice its features",
+      "6. Continue observing and asking yourself about its features until the timer goes off",
+      "This is a super cool experience to watch how emotions change as you process them 🙌"
+    ]
+  },
+  "7": {
+    "title": "Day 7: Conscious Connected Breathing",
+    "description": "Use breathwork to process and release unprocessed emotions from the body.",
+    "instructions": [
+      "1. Set an alarm for 7 minutes",
+      "2. Tune into the emotion from '{{past_event_details}}'",
+      "3. Begin conscious connected breathing (in and out of your mouth like going on a run) with your focus and presence focused on the emotion",
+      "4. Continue giving yourself permission to express and move your body however you feel called to until the timer goes off 🫶🏼"
+    ]
+  }
+}

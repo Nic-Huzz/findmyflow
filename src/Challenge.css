@@ -1432,3 +1432,87 @@
     font-size: 2.5rem;
   }
 }
+
+/* Daily Release Challenge Styles */
+.daily-release-challenge {
+  margin-top: 1rem;
+}
+
+.daily-release-challenge h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.daily-release-challenge .challenge-description {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.daily-release-challenge .challenge-video {
+  margin: 1rem 0;
+}
+
+.daily-release-challenge .video-link {
+  display: inline-block;
+  background: #5e17eb;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.daily-release-challenge .video-link:hover {
+  background: #4a12bc;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.daily-release-challenge .challenge-instructions {
+  background: #f8f9fa;
+  border-left: 4px solid #5e17eb;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.daily-release-challenge .challenge-instructions p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.daily-release-challenge .challenge-instructions p:last-child {
+  margin-bottom: 0;
+}
+
+.daily-release-challenge .challenge-instructions strong {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Locked quest button styles */
+.quest-complete-btn.locked {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+  position: relative;
+  padding-right: 3rem;
+}
+
+.quest-complete-btn.locked:hover {
+  background: #ccc;
+  transform: none;
+}
+
+.quest-textarea:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

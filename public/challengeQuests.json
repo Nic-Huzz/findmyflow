@@ -292,7 +292,7 @@
       "category": "Reconnect",
       "type": "daily",
       "name": "Rise & Vibe Dance",
-      "description": "Play one of your favourite bangers and get your dance on",
+      "description": "Play one of your favourite bangers and get your dance on. Rate how you feel out of 10 before and after.",
       "points": 3,
       "inputType": "checkbox"
     },
