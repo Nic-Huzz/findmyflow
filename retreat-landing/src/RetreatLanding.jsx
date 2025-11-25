@@ -307,6 +307,51 @@ function RetreatLanding() {
         </div>
       </section>
 
+      {/* How Else Can I Help Section */}
+      <section className="retreat-help-section">
+        <div className="retreat-container">
+          <h2 className="retreat-section-title">How Else Can I Help?</h2>
+
+          <div className="retreat-help-grid">
+            {/* Silent Disco Rental */}
+            <div className="retreat-help-card">
+              <div className="retreat-help-icon">🎧</div>
+              <h3 className="retreat-help-title">Need Silent Disco Headsets?</h3>
+              <p className="retreat-help-description">
+                Don't need a facilitator but keen to rent headsets? We've got you sorted. I'm also the owner of Bali's largest silent disco rental company.
+              </p>
+              <button className="retreat-help-button" onClick={handleWhatsAppClick}>
+                Click here to learn more
+              </button>
+            </div>
+
+            {/* Network Connections */}
+            <div className="retreat-help-card">
+              <div className="retreat-help-icon">🌟</div>
+              <h3 className="retreat-help-title">Other Epic Experiences</h3>
+              <p className="retreat-help-description">
+                Keen for other epic experiences? I'm fortunate to have an amazing network of epic humans guiding awesome experiences. If you're keen for a Meditation Adventure, a Bounce Shoes experience or Sound Healing, I'm more than happy to make a connection.
+              </p>
+              <button className="retreat-help-button" onClick={handleWhatsAppClick}>
+                Click here to be connected
+              </button>
+            </div>
+
+            {/* Find My Flow App */}
+            <div className="retreat-help-card">
+              <div className="retreat-help-icon">🚀</div>
+              <h3 className="retreat-help-title">Scale Your Retreat Business</h3>
+              <p className="retreat-help-description">
+                Keen to scale your retreats business? I've created an AI coach that gamifies your ambitions. Using the knowledge of the best business people in the world, be guided and held accountable via the Find My Flow app so you can Live Your Ambitions Faster.
+              </p>
+              <button className="retreat-help-button" onClick={() => window.open('https://findmyflow.nichuzz.com', '_blank')}>
+                Click here to learn more
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="retreat-footer">
         <div className="retreat-container">
