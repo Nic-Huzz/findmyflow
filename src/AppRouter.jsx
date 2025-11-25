@@ -5,11 +5,14 @@ import Profile from './Profile'
 import HealingCompass from './HealingCompass'
 import NervousSystemFlow from './NervousSystemFlow'
 import Challenge from './Challenge'
+import NikigaiTest from './NikigaiTest'
 import ArchetypeSelection from './ArchetypeSelection'
 import EssenceProfile from './EssenceProfile'
 import ProtectiveProfile from './ProtectiveProfile'
 import Feedback from './Feedback'
 import NotificationSettings from './components/NotificationSettings'
+import RetreatLanding from './RetreatLanding'
+import FlowLibrary from './FlowLibrary'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -19,6 +22,7 @@ import './Auth.css'
 import './HybridEssenceFlow.css'
 import './Challenge.css'
 import './Feedback.css'
+import './RetreatLanding.css'
 
 function AppRouter() {
   return (
@@ -27,6 +31,7 @@ function AppRouter() {
         <Router>
           <Routes>
             <Route path="/" element={<App />} />
+            <Route path="/retreats" element={<RetreatLanding />} />
             <Route path="/me" element={
               <AuthGate>
                 <Profile />
@@ -67,9 +72,39 @@ function AppRouter() {
                 <Feedback />
               </AuthGate>
             } />
+            <Route path="/nikigai-test" element={
+              <AuthGate>
+                <NikigaiTest />
+              </AuthGate>
+            } />
+            <Route path="/nikigai/skills" element={
+              <AuthGate>
+                <NikigaiTest flowFile="nikigai-flow-1-skills.json" flowName="Skills Discovery" />
+              </AuthGate>
+            } />
+            <Route path="/nikigai/problems" element={
+              <AuthGate>
+                <NikigaiTest flowFile="nikigai-flow-2-problems.json" flowName="Problems Discovery" />
+              </AuthGate>
+            } />
+            <Route path="/nikigai/persona" element={
+              <AuthGate>
+                <NikigaiTest flowFile="nikigai-flow-3-persona.json" flowName="Persona Discovery" />
+              </AuthGate>
+            } />
+            <Route path="/nikigai/integration" element={
+              <AuthGate>
+                <NikigaiTest flowFile="nikigai-flow-4-integration.json" flowName="Integration & Mission" />
+              </AuthGate>
+            } />
             <Route path="/settings/notifications" element={
               <AuthGate>
                 <NotificationSettings />
+              </AuthGate>
+            } />
+            <Route path="/library" element={
+              <AuthGate>
+                <FlowLibrary />
               </AuthGate>
             } />
           </Routes>

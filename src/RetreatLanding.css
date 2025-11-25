@@ -1,0 +1,945 @@
+/* Retreat Landing Page Styles */
+/* Using FindMyFlow Design System */
+
+.retreat-landing {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Container */
+.retreat-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Hero Section */
+.retreat-hero {
+  position: relative;
+  height: 90vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  background-image:
+    linear-gradient(135deg, rgba(94, 23, 235, 0.9) 0%, rgba(139, 92, 246, 0.85) 100%),
+    url('/images/retreats/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+}
+
+.retreat-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 221, 39, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.retreat-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 2rem;
+  animation: fadeInUp 0.8s ease;
+}
+
+.retreat-hero-tag {
+  display: inline-block;
+  background: rgba(255, 221, 39, 0.2);
+  color: #ffdd27;
+  padding: 0.5rem 1.5rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 221, 39, 0.4);
+}
+
+.retreat-hero-title {
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.retreat-hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 400;
+  opacity: 0.95;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.retreat-cta-primary {
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  color: #212529;
+  padding: 1.25rem 3rem;
+  border-radius: 16px;
+  border: none;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(255, 221, 39, 0.4);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.retreat-cta-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(255, 221, 39, 0.5);
+}
+
+.retreat-cta-primary svg {
+  width: 24px;
+  height: 24px;
+}
+
+.retreat-cta-secondary {
+  background: white;
+  color: #5e17eb;
+  padding: 1.25rem 3rem;
+  border-radius: 16px;
+  border: 2px solid #e9ecef;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.retreat-cta-secondary:hover {
+  background: #f8f9fa;
+  border-color: #5e17eb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(94, 23, 235, 0.15);
+}
+
+.retreat-cta-secondary svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Philosophy Section */
+.retreat-philosophy {
+  padding: 6rem 0;
+  background: #f8f9fa;
+}
+
+.retreat-section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #212529;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.retreat-philosophy-intro {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #495057;
+  margin-bottom: 3rem;
+  font-weight: 500;
+}
+
+.retreat-rs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.retreat-r-card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.retreat-r-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(94, 23, 235, 0.15);
+  border-color: #5e17eb;
+}
+
+.retreat-r-number {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.retreat-r-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+  margin-bottom: 0.75rem;
+}
+
+.retreat-r-description {
+  font-size: 1rem;
+  color: #495057;
+  line-height: 1.6;
+}
+
+.retreat-philosophy-tagline {
+  text-align: center;
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-top: 2rem;
+}
+
+/* Offerings Section */
+.retreat-offerings {
+  padding: 6rem 0;
+  background: white;
+}
+
+.retreat-offerings-grid {
+  display: grid;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.retreat-offering-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.retreat-offering-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
+
+.retreat-offering-media {
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+}
+
+.retreat-offering-image {
+  position: relative;
+  height: 100%;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  padding: 2rem;
+}
+
+.retreat-offering-video-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.retreat-offering-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.retreat-video-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.retreat-offering-video-container:hover .retreat-video-play-overlay {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.retreat-video-play-button {
+  width: 80px;
+  height: 80px;
+  background: rgba(94, 23, 235, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.retreat-offering-video-container:hover .retreat-video-play-button {
+  transform: scale(1.1);
+  background: rgba(94, 23, 235, 1);
+  box-shadow: 0 12px 32px rgba(94, 23, 235, 0.5);
+}
+
+.retreat-video-play-button svg {
+  margin-left: 4px;
+}
+
+.retreat-offering-r-badge {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  background: rgba(255, 221, 39, 0.95);
+  color: #212529;
+  padding: 0.5rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+.retreat-offering-content {
+  padding: 2.5rem;
+}
+
+.retreat-offering-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #212529;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.retreat-offering-subtitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-bottom: 1rem;
+}
+
+.retreat-offering-description {
+  font-size: 1.125rem;
+  color: #212529;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+
+.retreat-offering-full {
+  font-size: 1rem;
+  color: #495057;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  white-space: pre-line; /* This makes \n work as line breaks */
+}
+
+.retreat-video-btn {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  padding: 0.875rem 1.75rem;
+  border-radius: 12px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  transition: all 0.3s ease;
+}
+
+.retreat-video-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.retreat-pricing-note {
+  text-align: center;
+  font-size: 1.125rem;
+  color: #495057;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 16px;
+  font-weight: 500;
+}
+
+/* About Section */
+.retreat-about {
+  padding: 6rem 0;
+  background: #f8f9fa;
+}
+
+.retreat-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  margin-top: 3rem;
+  align-items: start;
+}
+
+.retreat-about-image {
+  position: sticky;
+  top: 2rem;
+}
+
+.retreat-about-image img {
+  width: 100%;
+  border-radius: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  min-height: 400px;
+  object-fit: cover;
+}
+
+.retreat-about-content {
+  background: white;
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.retreat-story p {
+  font-size: 1.0625rem;
+  color: #495057;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.retreat-story-highlight {
+  font-size: 1.1875rem;
+  font-weight: 600;
+  color: #212529;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border-left: 4px solid #5e17eb;
+  border-radius: 8px;
+  margin: 2rem 0;
+  white-space: pre-line; /* Enables \n\n paragraph spacing */
+}
+
+.retreat-credentials-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 2.5rem 0 1.5rem;
+}
+
+.retreat-differentiators {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.retreat-differentiator {
+  display: flex;
+  gap: 1rem;
+  align-items: start;
+  padding: 1.25rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.retreat-differentiator:hover {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  transform: translateX(4px);
+}
+
+.retreat-differentiator-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.retreat-differentiator p {
+  font-size: 1rem;
+  color: #495057;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.retreat-credentials-list {
+  list-style: none;
+  padding: 0;
+}
+
+.retreat-credentials-list li {
+  font-size: 1rem;
+  color: #495057;
+  padding: 0.875rem 0;
+  padding-left: 2rem;
+  position: relative;
+  line-height: 1.6;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.retreat-credentials-list li:last-child {
+  border-bottom: none;
+}
+
+.retreat-credentials-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #5e17eb;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Testimonials Section */
+.retreat-testimonials {
+  padding: 6rem 0;
+  background: white;
+}
+
+.retreat-testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.retreat-testimonial-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.retreat-testimonial-card.placeholder {
+  opacity: 0.6;
+  border-style: dashed;
+}
+
+.retreat-testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(94, 23, 235, 0.12);
+  border-color: #5e17eb;
+}
+
+.retreat-testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.retreat-testimonial-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
+}
+
+.retreat-testimonial-info {
+  flex: 1;
+}
+
+.retreat-testimonial-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 0.25rem;
+}
+
+.retreat-testimonial-handle {
+  font-size: 0.875rem;
+  color: #5e17eb;
+  margin: 0;
+  font-weight: 500;
+}
+
+.retreat-testimonial-text {
+  font-size: 0.9375rem;
+  color: #495057;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line; /* Enables \n\n paragraph spacing */
+}
+
+/* CTA Section */
+.retreat-cta-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.retreat-cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 50%, rgba(255, 221, 39, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.retreat-cta-box {
+  position: relative;
+  text-align: center;
+  color: white;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.retreat-cta-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.retreat-cta-description {
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+.retreat-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Footer */
+.retreat-footer {
+  background: #212529;
+  color: white;
+  padding: 3rem 0 1.5rem;
+}
+
+.retreat-footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.retreat-footer-brand h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.retreat-footer-brand p {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.9375rem;
+}
+
+.retreat-footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.retreat-footer-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.retreat-footer-links a:hover {
+  opacity: 1;
+  color: #ffdd27;
+  transform: translateY(-2px);
+}
+
+.retreat-footer-bottom {
+  text-align: center;
+}
+
+.retreat-footer-bottom p {
+  margin: 0;
+  opacity: 0.6;
+  font-size: 0.875rem;
+}
+
+/* Video Modal */
+.retreat-video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.retreat-video-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+.retreat-video-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.retreat-video-close:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: rotate(90deg);
+}
+
+.retreat-video-placeholder {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+}
+
+.retreat-video-placeholder p {
+  margin: 0.5rem 0;
+  font-size: 1.125rem;
+}
+
+.retreat-video-note {
+  opacity: 0.8;
+  font-size: 0.9375rem !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .retreat-container {
+    padding: 0 1.5rem;
+  }
+
+  .retreat-about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .retreat-about-image {
+    position: relative;
+    top: 0;
+  }
+
+  .retreat-rs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .retreat-hero {
+    height: 80vh;
+    min-height: 500px;
+  }
+
+  .retreat-hero-title {
+    font-size: 2.5rem;
+  }
+
+  .retreat-hero-subtitle {
+    font-size: 1.125rem;
+  }
+
+  .retreat-section-title {
+    font-size: 2rem;
+  }
+
+  .retreat-philosophy,
+  .retreat-offerings,
+  .retreat-about,
+  .retreat-testimonials,
+  .retreat-cta-section {
+    padding: 4rem 0;
+  }
+
+  .retreat-rs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .retreat-about-content {
+    padding: 2rem;
+  }
+
+  .retreat-cta-title {
+    font-size: 1.875rem;
+  }
+
+  .retreat-cta-buttons {
+    flex-direction: column;
+  }
+
+  .retreat-cta-primary,
+  .retreat-cta-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .retreat-footer-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .retreat-testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .retreat-offering-media {
+    height: 250px;
+  }
+
+  .retreat-offering-content {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .retreat-container {
+    padding: 0 1rem;
+  }
+
+  .retreat-hero {
+    height: 70vh;
+    min-height: 450px;
+  }
+
+  .retreat-hero-title {
+    font-size: 2rem;
+  }
+
+  .retreat-hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .retreat-cta-primary,
+  .retreat-cta-secondary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  .retreat-section-title {
+    font-size: 1.75rem;
+  }
+
+  .retreat-philosophy,
+  .retreat-offerings,
+  .retreat-about,
+  .retreat-testimonials,
+  .retreat-cta-section {
+    padding: 3rem 0;
+  }
+
+  .retreat-r-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .retreat-offering-title {
+    font-size: 1.5rem;
+  }
+
+  .retreat-about-content {
+    padding: 1.5rem;
+  }
+
+  .retreat-testimonial-card {
+    padding: 1.5rem;
+  }
+
+  .retreat-cta-title {
+    font-size: 1.5rem;
+  }
+
+  .retreat-cta-description {
+    font-size: 1rem;
+  }
+}
