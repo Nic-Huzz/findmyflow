@@ -115,13 +115,13 @@
           "life_map.learning.skills_developed"
         ],
         "cluster": {
-          "target": "skills",
+          "target": "roles",
           "target_clusters_min": 3,
           "target_clusters_max": 6
         },
-        "store_as": "skills.final"
+        "store_as": "roles.final"
       },
-      "assistant_prompt": "These are the skill themes I see emerging from your experiences. These point toward potential dream roles that combine what you love doing with what you're naturally good at.\n\nWhat would you like to do next?",
+      "assistant_prompt": "Based on your skills, here are the roles where you'd naturally thrive — combining what you love doing with what you're good at.\n\nWhat would you like to do next?",
       "expected_inputs": [
         {
           "type": "single_select",

@@ -53,6 +53,13 @@ CRITICAL: In the clusters JSON array, each cluster object MUST include:
 - "insight": the insight/summary paragraph you wrote (e.g., "This cluster highlights your courage to shed the old, explore the unknown...")
 The insight field should contain ONLY the summary paragraph, NOT the bullet points.
 
+ROLE CLUSTERING (when target is "roles"):
+- Create role recommendations based on the person's skills and experiences
+- Each cluster is a JOB ROLE or CAREER PATH they would thrive in
+- Name them as actual job titles or role archetypes (e.g., "Creative Director", "Product Strategist", "Community Builder")
+- For each role include: what the role does, why they'd excel at it based on their skills
+- Focus on roles that combine their natural talents with things they love doing
+
 PERSONA CLUSTERING (when target is "persona"):
 - Create personas representing FORMER VERSIONS of this person
 - Each persona should be a specific life stage or struggle they went through

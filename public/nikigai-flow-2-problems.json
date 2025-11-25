@@ -1,13 +1,13 @@
 {
   "flow_name": "Nikigai Flow 2: Problems Discovery",
   "version": "1.0",
-  "description": "Discover the problems and changes you care about through life chapters, role models, learning topics, work impact, and future desires.",
+  "description": "Discover the problems and changes you care about through learning topics, impact created, life chapters, role models, and future desires.",
   "pillar": "problems",
   "steps": [
     {
       "id": "1.0",
       "step_order_index": 1,
-      "assistant_prompt": "Now let's discover the problems and changes you care about — the things that matter to you and the impact you want to create.\n\nWe'll explore your life chapters, role models, learning interests, work impact, and future desires.\n\nFor each question, share 3-5 bullet points.\n\nReady?",
+      "assistant_prompt": "Now let's discover the problems and changes you care about — the things that matter to you and the impact you want to create.\n\nWe'll explore your learning interests, impact you've made, life chapters, role models, and future vision.\n\nFor each question, aim for 5+ bullet points.\n\nReady?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -24,9 +24,9 @@
     {
       "id": "2.0",
       "step_order_index": 2,
-      "assistant_prompt": "If you saw your life as a story, what are the chapters?\n\nThink of major life phases or turning points — like 'The Explorer Years', 'The Rebuild', 'The Awakening', etc.\n\nShare 3-5 chapter titles.",
+      "assistant_prompt": "What **topics** have you loved learning about — through school, courses, or personal curiosity?\n\nShare 5 bullets.\n\nExample: *psychology — how the mind works*, *business — how ideas grow*, *health — how the body heals*",
       "expected_inputs": ["text_list"],
-      "store_as": "life_map.life_chapters.titles",
+      "store_as": "life_map.learning.topics",
       "next_step_rules": [
         {
           "on_success": "2.1"
@@ -36,9 +36,9 @@
     {
       "id": "2.1",
       "step_order_index": 3,
-      "assistant_prompt": "For each chapter you named, briefly share:\n\nWhat struggle did you face in that chapter?\n\nExample format:\n• *Chapter: The Explorer Years* - Struggle: finding a place I felt safe to be myself\n\nAim for 3 struggles per chapter but share at least 1.",
+      "assistant_prompt": "Across your work and projects, what **impact** did you create for others?\n\nThink about the difference you made — big or small, tangible or emotional.\n\nShare 3-5 bullets.",
       "expected_inputs": ["text_list"],
-      "store_as": "life_map.life_chapters.growth_and_struggle",
+      "store_as": "life_map.experience.impact_created",
       "next_step_rules": [
         {
           "on_success": "2.2"
@@ -50,15 +50,15 @@
       "step_order_index": 4,
       "assistant_postprocess": {
         "tag_from": [
-          "life_map.life_chapters.titles",
-          "life_map.life_chapters.growth_and_struggle"
+          "life_map.learning.topics",
+          "life_map.experience.impact_created"
         ],
         "cluster": {
           "target": "problems",
           "target_clusters_min": 2,
           "target_clusters_max": 5
         },
-        "store_as": "problems.preview.from_chapters"
+        "store_as": "problems.preview.from_learning_impact"
       },
       "next_step_rules": [
         {
@@ -69,9 +69,9 @@
     {
       "id": "3.0",
       "step_order_index": 5,
-      "assistant_prompt": "Who has inspired you the most — real or fictional?\n\nFor each person or character, share:\n• **Who they are**\n• **What impact they've had** that makes them a role model for you\n\nShare 3-5 role models.\n\nExample: *Brené Brown — Her work on vulnerability helped me accept imperfection and show up authentically.*",
+      "assistant_prompt": "If you saw your life as a story, what are the chapters?\n\nThink of major life phases or turning points — like 'The Explorer Years', 'The Rebuild', 'The Awakening', etc.\n\nShare 3-5 chapter titles",
       "expected_inputs": ["text_list"],
-      "store_as": "life_map.role_models",
+      "store_as": "life_map.life_chapters.titles",
       "next_step_rules": [
         {
           "on_success": "3.1"
@@ -81,6 +81,30 @@
     {
       "id": "3.1",
       "step_order_index": 6,
+      "assistant_prompt": "For each chapter you named, briefly share:\n\nWhat struggle did you face in that chapter?\n\nExample format:\n• *Chapter: The Explorer Years* - Struggle: finding a place I felt safe to be myself\n\nAim for 3 struggles per chapter but share at least 1.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.life_chapters.growth_and_struggle",
+      "next_step_rules": [
+        {
+          "on_success": "3.2"
+        }
+      ]
+    },
+    {
+      "id": "3.2",
+      "step_order_index": 7,
+      "assistant_prompt": "Who has inspired you the most — real or fictional?\n\nFor each person or character, share:\n• **Who they are**\n• **What impact they've had** that makes them a role model for you\n\nShare 3-5 role models.\n\nExample: *Brené Brown — Her work on vulnerability helped me accept imperfection and show up authentically.*",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.role_models",
+      "next_step_rules": [
+        {
+          "on_success": "3.3"
+        }
+      ]
+    },
+    {
+      "id": "3.3",
+      "step_order_index": 8,
       "assistant_postprocess": {
         "tag_from": [
           "life_map.life_chapters.titles",
@@ -92,7 +116,7 @@
           "target_clusters_min": 2,
           "target_clusters_max": 5
         },
-        "store_as": "problems.preview.with_role_models"
+        "store_as": "problems.preview.with_chapters_and_role_models"
       },
       "next_step_rules": [
         {
@@ -102,62 +126,38 @@
     },
     {
       "id": "4.0",
-      "step_order_index": 7,
-      "assistant_prompt": "What **topics** have you loved learning about — through school, courses, or personal curiosity?\n\nShare 5 bullets.\n\nExample: *psychology — how the mind works*, *business — how ideas grow*, *health — how the body heals*",
-      "expected_inputs": ["text_list"],
-      "store_as": "life_map.learning.topics",
-      "next_step_rules": [
-        {
-          "on_success": "5.0"
-        }
-      ]
-    },
-    {
-      "id": "5.0",
-      "step_order_index": 8,
-      "assistant_prompt": "Across your work and projects, what **impact** did you create for others?\n\nThink about the difference you made — big or small, tangible or emotional.\n\nShare 3-5 bullets.",
-      "expected_inputs": ["text_list"],
-      "store_as": "life_map.experience.impact_created",
-      "next_step_rules": [
-        {
-          "on_success": "6.0"
-        }
-      ]
-    },
-    {
-      "id": "6.0",
       "step_order_index": 9,
       "assistant_prompt": "When you imagine the future, what do you feel called to create, experience, or change in the world?\n\nShare 3-5 bullets.",
       "expected_inputs": ["text_list"],
       "store_as": "life_map.future.desires",
       "next_step_rules": [
         {
-          "on_success": "6.1"
+          "on_success": "4.1"
         }
       ]
     },
     {
-      "id": "6.1",
+      "id": "4.1",
       "step_order_index": 10,
       "assistant_prompt": "From everything you just shared, what are your **top 3 future pulls** — the ideas or dreams that feel most alive *right now*?",
       "expected_inputs": ["text_list"],
       "store_as": "life_map.future.top3_now",
       "next_step_rules": [
         {
-          "on_success": "6.2"
+          "on_success": "4.2"
         }
       ]
     },
     {
-      "id": "6.2",
+      "id": "4.2",
       "step_order_index": 11,
       "assistant_postprocess": {
         "tag_from": [
+          "life_map.learning.topics",
+          "life_map.experience.impact_created",
           "life_map.life_chapters.titles",
           "life_map.life_chapters.growth_and_struggle",
           "life_map.role_models",
-          "life_map.learning.topics",
-          "life_map.experience.impact_created",
           "life_map.future.desires",
           "life_map.future.top3_now"
         ],
