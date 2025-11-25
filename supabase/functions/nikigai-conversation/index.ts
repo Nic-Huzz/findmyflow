@@ -53,12 +53,16 @@ CRITICAL: In the clusters JSON array, each cluster object MUST include:
 - "insight": the insight/summary paragraph you wrote (e.g., "This cluster highlights your courage to shed the old, explore the unknown...")
 The insight field should contain ONLY the summary paragraph, NOT the bullet points.
 
-ROLE CLUSTERING (when target is "roles"):
-- Create role recommendations based on the person's skills and experiences
-- Each cluster is a JOB ROLE or CAREER PATH they would thrive in
+ROLE CLUSTERING (when CLUSTER TYPE is "roles"):
+- You are creating ROLE RECOMMENDATIONS, not skill clusters
+- Each cluster represents a JOB ROLE or CAREER PATH they would thrive in
 - Name them as actual job titles or role archetypes (e.g., "Creative Director", "Product Strategist", "Community Builder")
-- For each role include: what the role does, why they'd excel at it based on their skills
+- For each role cluster:
+  * Group skills that naturally fit that role
+  * Explain what the role does
+  * Explain why they'd excel at it based on their skills
 - Focus on roles that combine their natural talents with things they love doing
+- The items to cluster are SKILLS, but you're grouping them into ROLE clusters
 
 PERSONA CLUSTERING (when target is "persona"):
 - Create personas representing FORMER VERSIONS of this person
@@ -123,7 +127,8 @@ serve(async (req) => {
     // If we need to cluster
     if (shouldCluster && allResponses) {
       userPrompt += `\n---\nCLUSTERING TASK:\n`
-      userPrompt += `Create ${clusterType || 'skill'} clusters from these user responses:\n\n`
+      userPrompt += `CLUSTER TYPE: "${clusterType || 'skill'}"\n`
+      userPrompt += `Follow the ${clusterType?.toUpperCase() || 'SKILL'} CLUSTERING guidelines from your system prompt.\n\n`
 
       // Get items from specified sources
       const items: string[] = []
