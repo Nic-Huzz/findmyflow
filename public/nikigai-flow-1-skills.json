@@ -1,0 +1,148 @@
+{
+  "flow_name": "Nikigai Flow 1: Skills Discovery",
+  "version": "1.0",
+  "description": "Flow Finder: A modern day Ikigai process",
+  "pillar": "skills",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Hey {{user_name}}!\n\nWhat does a business do? It solves a problem, for a person, using a set of skills.\n\nBy identifying skills we're passionate about using, people we're passionate about serving and problems we're passionate about solving - I believe we can identify our dream business opportunities and jobs.\n\nThe whole process is inspired by a Steve Job's quote 'you can't connect the dots looking forward, you can only connect them looking back'.\n\nThis question flow will focus on identifying skills you're passionate about by reviewing different periods of your life.\n\nFor each question, aim for 5+ bullet points. See each bullet point you answer with as a dot and the more dots we have the better.\n\nReady to start?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yep!"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Yep!",
+          "go_to": "2.0"
+        }
+      ]
+    },
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Let's start with Childhood...Thinking back to Pre-school & Primary.\n\nWhat did you love doing most? What activities did you gravitate towards during free-time? The weekend? Holidays?\n\nAim for 5+ bullet points.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.childhood",
+      "next_step_rules": [
+        {
+          "on_success": "2.1"
+        }
+      ]
+    },
+    {
+      "id": "2.1",
+      "step_order_index": 3,
+      "assistant_prompt": "Now think of your teenage years throughout High School.\n\nWhat did you enjoy doing most? What extra-curricular activities did you do? Any subjects or assignments that you loved? What did you do on weekends and after school for fun?\n\nAim for 5+, the more the better.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.highschool",
+      "next_step_rules": [
+        {
+          "on_success": "2.2"
+        }
+      ]
+    },
+    {
+      "id": "2.2",
+      "step_order_index": 4,
+      "assistant_prompt": "After school and before full-time worklife - what activities, projects or creative outlets do you enjoy the most?\n\nAim for 5+, the more the better.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.current",
+      "next_step_rules": [
+        {
+          "on_success": "2.3"
+        }
+      ]
+    },
+    {
+      "id": "2.3",
+      "step_order_index": 5,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.hobbies.childhood",
+          "life_map.hobbies.highschool",
+          "life_map.hobbies.current"
+        ],
+        "cluster": {
+          "target": "skills",
+          "target_clusters_min": 2,
+          "target_clusters_max": 5
+        },
+        "store_as": "skills.preview.from_hobbies"
+      },
+      "next_step_rules": [
+        {
+          "on_success": "4.0"
+        }
+      ]
+    },
+    {
+      "id": "4.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Let's explore your work and projects.\n\nAcross your jobs, projects, or creative pursuits, what have you **enjoyed doing most**?\n\nThink of times you felt in flow or energized by what you were doing.\n\nAim for 5+ bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.enjoyed_most",
+      "next_step_rules": [
+        {
+          "on_success": "5.0"
+        }
+      ]
+    },
+    {
+      "id": "5.0",
+      "step_order_index": 7,
+      "assistant_prompt": "What **skills have you loved to develop**?\n\nThink about skills you've intentionally worked on — through courses, practice, or personal curiosity.\n\nAim for 5+ bullet points.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.learning.skills_developed",
+      "next_step_rules": [
+        {
+          "on_success": "2.4"
+        }
+      ]
+    },
+    {
+      "id": "2.4",
+      "step_order_index": 8,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.hobbies.childhood",
+          "life_map.hobbies.highschool",
+          "life_map.hobbies.current",
+          "life_map.experience.enjoyed_most",
+          "life_map.learning.skills_developed"
+        ],
+        "cluster": {
+          "target": "skills",
+          "target_clusters_min": 3,
+          "target_clusters_max": 6
+        },
+        "store_as": "skills.final"
+      },
+      "assistant_prompt": "These are the skill themes I see emerging from your experiences. These point toward potential dream roles that combine what you love doing with what you're naturally good at.\n\nWhat would you like to do next?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Continue to Problems Discovery",
+            "Return to 7-Day Challenge"
+          ]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Continue to Problems Discovery",
+          "go_to": "complete",
+          "redirect": "/nikigai/problems"
+        },
+        {
+          "on_selection": "Return to 7-Day Challenge",
+          "go_to": "complete",
+          "redirect": "/7-day-challenge"
+        }
+      ]
+    }
+  ]
+}

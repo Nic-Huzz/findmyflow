@@ -1,0 +1,477 @@
+{
+  "flow_name": "Nikigai_LifeMap_v2_with_Progressive_Clustering",
+  "version": "2.1",
+  "description": "Merged Life Map (Parts 1–5) with auto-tagging and progressive background clustering. Three life stages (Childhood, High School, 18 to Now). Produces prefilled clusters for Nikigai lenses.",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Welcome back! Together we’re about to map the story of your life — the experiences, joys, and challenges that shaped who you are.\n\nWe’ll explore three chapters: **Childhood**, **High School**, and **18 to Now.** For each, you’ll answer a few short questions in bullet form.\n\nReady to begin?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map_v2.consent",
+      "next_step_rules": [{ "on_success": "2.0" }]
+    },
+
+    /* ----------------------- LOVE DOING (HOBBIES + FLOW) ----------------------- */
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Let’s start with **Childhood (Pre-school + Primary).**\n\nWhat did you *love doing most*? These can be games, hobbies, or activities that made you lose track of time.\n\nPlease share 1–3 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.preschool",
+      "next_step_rules": [{ "on_success": "2.1" }]
+    },
+    {
+      "id": "2.1",
+      "step_order_index": 3,
+      "assistant_prompt": "Now think of **High School.**\n\nWhat did you enjoy doing most for fun or self-expression?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.highschool",
+      "next_step_rules": [{ "on_success": "2.2" }]
+    },
+    {
+      "id": "2.2",
+      "step_order_index": 4,
+      "assistant_prompt": "Finally, from **18 to Now** — what activities, hobbies, or creative outlets light you up today?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.hobbies.current",
+      "next_step_rules": [{ "on_success": "2.3" }]
+    },
+
+    /* ---------- POSTPROCESS #1: Tag + Draft SKILLS Preview (from hobbies/flow & high moments later) ---------- */
+    {
+      "id": "2.3",
+      "step_order_index": 5,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.hobbies.preschool",
+          "life_map.hobbies.highschool",
+          "life_map.hobbies.current"
+        ],
+        "weighting": { "joy_from": ["life_map.hobbies.*"] },
+        "cluster": {
+          "target": "skills",
+          "source_tags": ["skill_verb", "domain_topic", "value"],
+          "target_clusters_min": 3,
+          "target_clusters_max": 6
+        },
+        "store_as": "skills.preview.LM1"
+      },
+      "assistant_prompt": "✨ First look: based on your ‘things you love doing’, here are early **Skill clusters**. Want to keep/edit these now or skip and refine later?",
+      "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
+      "store_as": "skills.preview_choice.LM1",
+      "next_step_rules": [
+        { "on_selection": "Keep", "go_to": "3.0" },
+        { "on_selection": "Edit", "go_to": "2.3.edit" },
+        { "on_selection": "Skip", "go_to": "3.0" }
+      ]
+    },
+    {
+      "id": "2.3.edit",
+      "step_order_index": 6,
+      "assistant_prompt": "Edit the **Skill clusters**: provide a list of clusters with label + 3–5 example skills each.",
+      "expected_inputs": [
+        { "type": "object_list",
+          "schema": { "label": "string", "skills": "text_list" } }
+      ],
+      "store_as": "skills.preview.LM1",
+      "next_step_rules": [{ "on_success": "3.0" }]
+    },
+
+    /* ----------------------- PROUD + ALIVE MOMENTS ----------------------- */
+    {
+      "id": "3.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Beautiful. Now, let’s recall moments that made you feel *alive* or *proud.*\n\nStarting with **Childhood**, what experiences or small wins made you feel happy, confident, or seen?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.high_moments.preschool",
+      "next_step_rules": [{ "on_success": "3.1" }]
+    },
+    {
+      "id": "3.1",
+      "step_order_index": 8,
+      "assistant_prompt": "During **High School**, what moments made you feel most alive or proud of yourself?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.high_moments.highschool",
+      "next_step_rules": [{ "on_success": "3.2" }]
+    },
+    {
+      "id": "3.2",
+      "step_order_index": 9,
+      "assistant_prompt": "From **18 to Now**, what experiences gave you that same sense of pride, fulfillment, or aliveness?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.high_moments.current",
+      "next_step_rules": [{ "on_success": "3.3" }]
+    },
+
+    /* ---------- POSTPROCESS #2: Tag + Enrich SKILLS Preview with high moments ---------- */
+    {
+      "id": "3.3",
+      "step_order_index": 10,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.high_moments.preschool",
+          "life_map.high_moments.highschool",
+          "life_map.high_moments.current"
+        ],
+        "weighting": { "joy_from": ["life_map.high_moments.*"] },
+        "cluster_enrich": {
+          "target": "skills",
+          "merge_into": "skills.preview.LM1",
+          "source_tags": ["skill_verb", "value"]
+        },
+        "store_as": "skills.preview.LM1_plus_highs"
+      },
+      "assistant_prompt": "Updated **Skill clusters** with your proud/alive moments. Keep/edit/skip?",
+      "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
+      "store_as": "skills.preview_choice.LM1b",
+      "next_step_rules": [
+        { "on_selection": "Keep", "go_to": "4.0" },
+        { "on_selection": "Edit", "go_to": "3.3.edit" },
+        { "on_selection": "Skip", "go_to": "4.0" }
+      ]
+    },
+    {
+      "id": "3.3.edit",
+      "step_order_index": 11,
+      "assistant_prompt": "Edit the updated **Skill clusters** (label + 3–5 example skills).",
+      "expected_inputs": [
+        { "type": "object_list",
+          "schema": { "label": "string", "skills": "text_list" } }
+      ],
+      "store_as": "skills.preview.LM1_plus_highs",
+      "next_step_rules": [{ "on_success": "4.0" }]
+    },
+
+    /* ----------------------- TURNING POINTS / GROWTH ----------------------- */
+    {
+      "id": "4.0",
+      "step_order_index": 12,
+      "assistant_prompt": "Let’s look at what *shaped* you.\n\nAcross your life, what experiences, challenges, or turning points helped you grow or made you see the world differently?\n\nList 3–6 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.turning_points",
+      "next_step_rules": [{ "on_success": "4.1" }]
+    },
+
+    /* ---------- POSTPROCESS #3: Tag + Draft PROBLEMS Preview from turning points ---------- */
+    {
+      "id": "4.1",
+      "step_order_index": 13,
+      "assistant_postprocess": {
+        "tag_from": ["life_map.turning_points"],
+        "weighting": { "meaning_from": ["life_map.turning_points"] },
+        "cluster": {
+          "target": "problems",
+          "source_tags": ["problem_theme", "value"],
+          "target_clusters_min": 3,
+          "target_clusters_max": 6
+        },
+        "store_as": "problems.preview.LM2"
+      },
+      "assistant_prompt": "Here are **Problem/Change themes** I’m seeing from your turning points. Keep/edit/skip?",
+      "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
+      "store_as": "problems.preview_choice.LM2",
+      "next_step_rules": [
+        { "on_selection": "Keep", "go_to": "5.0" },
+        { "on_selection": "Edit", "go_to": "4.1.edit" },
+        { "on_selection": "Skip", "go_to": "5.0" }
+      ]
+    },
+    {
+      "id": "4.1.edit",
+      "step_order_index": 14,
+      "assistant_prompt": "Edit the **Problem/Change themes**: provide clusters with label + 3–5 supporting examples.",
+      "expected_inputs": [
+        { "type": "object_list",
+          "schema": { "label": "string", "examples": "text_list" } }
+      ],
+      "store_as": "problems.preview.LM2",
+      "next_step_rules": [{ "on_success": "5.0" }]
+    },
+
+    /* ----------------------- ROLE MODELS (REAL + FICTIONAL) ----------------------- */
+    {
+      "id": "5.0",
+      "step_order_index": 15,
+      "assistant_prompt": "Who has inspired you the most — real or fictional?\n\nList a few names or characters, and add a note on the qualities or values you admire in them.\n\nExample: *Tony Stark — creativity + confidence* or *my grandmother — kindness + resilience.*",
+      "expected_inputs": [
+        {
+          "type": "object_list",
+          "schema": {
+            "name_or_character": "string",
+            "qualities_admired": "text_list"
+          }
+        }
+      ],
+      "store_as": "life_map.role_models",
+      "next_step_rules": [{ "on_success": "6.0" }]
+    },
+
+    /* ----------------------- LEARNING / EDUCATION ----------------------- */
+    {
+      "id": "6.0",
+      "step_order_index": 16,
+      "assistant_prompt": "What **topics or skills** have you loved learning about — through school, courses, or personal curiosity?\n\nList 3–6 short bullets (e.g. *psychology — how the mind works*, *music — creative flow*, *business — how ideas grow*).",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.learning_topics",
+      "next_step_rules": [{ "on_success": "6.1" }]
+    },
+
+    /* ---------- POSTPROCESS #4: Tag + Enrich SKILLS with learning ---------- */
+    {
+      "id": "6.1",
+      "step_order_index": 17,
+      "assistant_postprocess": {
+        "tag_from": ["life_map.learning_topics"],
+        "cluster_enrich": {
+          "target": "skills",
+          "merge_into": "skills.preview.LM1_plus_highs",
+          "source_tags": ["skill_verb", "domain_topic"]
+        },
+        "store_as": "skills.preview.LM1_highs_learning"
+      },
+      "assistant_prompt": "Added your learning interests into the **Skill clusters**. Keep/edit/skip?",
+      "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
+      "store_as": "skills.preview_choice.LM3",
+      "next_step_rules": [
+        { "on_selection": "Keep", "go_to": "7.0" },
+        { "on_selection": "Edit", "go_to": "6.1.edit" },
+        { "on_selection": "Skip", "go_to": "7.0" }
+      ]
+    },
+    {
+      "id": "6.1.edit",
+      "step_order_index": 18,
+      "assistant_prompt": "Edit the updated **Skill clusters** (label + 3–5 example skills).",
+      "expected_inputs": [
+        { "type": "object_list",
+          "schema": { "label": "string", "skills": "text_list" } }
+      ],
+      "store_as": "skills.preview.LM1_highs_learning",
+      "next_step_rules": [{ "on_success": "7.0" }]
+    },
+
+    /* ----------------------- WORK / PROJECTS / IMPACT ----------------------- */
+    {
+      "id": "7.0",
+      "step_order_index": 19,
+      "assistant_prompt": "Across your jobs, projects, and creative pursuits — what have you *enjoyed doing most* and *what impact* did it create for others?\n\nThink of times you felt in flow or proud of your contribution.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.enjoyed_and_impact",
+      "next_step_rules": [{ "on_success": "8.0" }]
+    },
+    {
+      "id": "8.0",
+      "step_order_index": 20,
+      "assistant_prompt": "When you look at those experiences, what *skills or patterns* do you notice repeating?\n\nExample: leadership, communication, creativity, empathy.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.experience.repeating_skills",
+      "next_step_rules": [{ "on_success": "8.1" }]
+    },
+
+    /* ---------- POSTPROCESS #5: Tag + Enrich SKILLS and PROBLEMS from experience ---------- */
+    {
+      "id": "8.1",
+      "step_order_index": 21,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.experience.enjoyed_and_impact",
+          "life_map.experience.repeating_skills"
+        ],
+        "weighting": { "meaning_from": ["life_map.experience.enjoyed_and_impact"] },
+        "cluster_enrich": [
+          {
+            "target": "skills",
+            "merge_into": "skills.preview.LM1_highs_learning",
+            "source_tags": ["skill_verb", "domain_topic", "value"]
+          },
+          {
+            "target": "problems",
+            "merge_into": "problems.preview.LM2",
+            "source_tags": ["problem_theme", "value"]
+          }
+        ],
+        "store_as": "skills.preview.enriched;problems.preview.enriched"
+      },
+      "assistant_prompt": "Refined **Skills** and **Problem/Change** themes from your work and projects. Keep/edit/skip?",
+      "expected_inputs": [{ "type": "single_select", "options": ["Keep", "Edit", "Skip"] }],
+      "store_as": "experience.preview_choice",
+      "next_step_rules": [
+        { "on_selection": "Keep", "go_to": "9.0" },
+        { "on_selection": "Edit", "go_to": "8.1.edit" },
+        { "on_selection": "Skip", "go_to": "9.0" }
+      ]
+    },
+    {
+      "id": "8.1.edit",
+      "step_order_index": 22,
+      "assistant_prompt": "Edit the refined **Skills** and/or **Problem** clusters. Provide items as a list of objects with `label` and `examples/skills`.",
+      "expected_inputs": [
+        { "type": "object_list",
+          "schema": { "label": "string", "examples": "text_list", "skills": "text_list" } }
+      ],
+      "store_as": "skills_or_problems.preview.edited",
+      "next_step_rules": [{ "on_success": "9.0" }]
+    },
+
+    /* ----------------------- FUTURE VISION ----------------------- */
+    {
+      "id": "9.0",
+      "step_order_index": 23,
+      "assistant_prompt": "Now let’s look forward.\n\nWhen you imagine the future, what do you feel called to create, experience, or change in the world?\n\nList 3–6 short bullets.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.future.desires",
+      "next_step_rules": [{ "on_success": "10.0" }]
+    },
+    {
+      "id": "10.0",
+      "step_order_index": 24,
+      "assistant_prompt": "From everything you just shared, what are your **top 3 future pulls** — the ideas or dreams that feel most alive *right now*?",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.future.top3_now",
+      "next_step_rules": [{ "on_success": "10.1" }]
+    },
+
+    /* ---------- POSTPROCESS #6: Reconcile SKILLS + PROBLEMS and Draft MARKET seeds ---------- */
+    {
+      "id": "10.1",
+      "step_order_index": 25,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.future.desires",
+          "life_map.future.top3_now"
+        ],
+        "weighting": { "direction_from": ["life_map.future.*"] },
+        "reconcile": [
+          {
+            "target": "skills",
+            "sources": [
+              "skills.preview.enriched",
+              "skills.preview.LM1_highs_learning"
+            ],
+            "dedupe": true,
+            "sort_by": "weight"
+          },
+          {
+            "target": "problems",
+            "sources": [
+              "problems.preview.enriched",
+              "problems.preview.LM2"
+            ],
+            "dedupe": true,
+            "sort_by": "weight"
+          }
+        ],
+        "draft_market": {
+          "from_tags": ["problem_theme", "domain_topic", "value"],
+          "map_to_categories": [
+            "coaching",
+            "education",
+            "retreats",
+            "community",
+            "digital-products",
+            "apps/tools",
+            "consulting",
+            "corporate-wellbeing"
+          ]
+        },
+        "store_as": "skills.prefill;problems.prefill;market.prefill"
+      },
+      "assistant_prompt": "Quick recap cards ready: **Skills**, **Problem/Change themes**, and **Market seeds** are prefilled for the Nikigai lenses. Continue or review now?",
+      "expected_inputs": [
+        { "type": "single_select", "options": ["Continue", "Review Skills", "Review Problems", "Review Market Seeds"] }
+      ],
+      "store_as": "prefill.review_choice",
+      "next_step_rules": [
+        { "on_selection": "Continue", "go_to": "11.0" },
+        { "on_selection": "Review Skills", "go_to": "10.1.review_skills" },
+        { "on_selection": "Review Problems", "go_to": "10.1.review_problems" },
+        { "on_selection": "Review Market Seeds", "go_to": "10.1.review_market" }
+      ]
+    },
+    {
+      "id": "10.1.review_skills",
+      "step_order_index": 26,
+      "assistant_prompt": "Review **Skills Prefill**. Edit clusters (label + 3–5 example skills) or type ‘ok’ to accept.",
+      "expected_inputs": [
+        { "type": "object_list",
+          "schema": { "label": "string", "skills": "text_list" } },
+        "confirmation"
+      ],
+      "store_as": "skills.prefill",
+      "next_step_rules": [{ "on_success": "11.0" }]
+    },
+    {
+      "id": "10.1.review_problems",
+      "step_order_index": 27,
+      "assistant_prompt": "Review **Problem/Change Prefill**. Edit clusters (label + 3–5 examples) or type ‘ok’ to accept.",
+      "expected_inputs": [
+        { "type": "object_list",
+          "schema": { "label": "string", "examples": "text_list" } },
+        "confirmation"
+      ],
+      "store_as": "problems.prefill",
+      "next_step_rules": [{ "on_success": "11.0" }]
+    },
+    {
+      "id": "10.1.review_market",
+      "step_order_index": 28,
+      "assistant_prompt": "Review **Market Seeds** (solution categories that match your change themes). Edit as needed or type ‘ok’ to accept.",
+      "expected_inputs": ["text_list", "confirmation"],
+      "store_as": "market.prefill",
+      "next_step_rules": [{ "on_success": "11.0" }]
+    },
+
+    /* ----------------------- REFLECTION / THEMES ----------------------- */
+    {
+      "id": "11.0",
+      "step_order_index": 29,
+      "assistant_prompt": "Looking back across your answers — the things you loved, overcame, learned, and dream of — what **themes or values** repeat?\n\nExamples: creativity, connection, freedom, growth, service.",
+      "expected_inputs": ["text_list"],
+      "store_as": "life_map.reflection.themes",
+      "next_step_rules": [{ "on_success": "12.0" }]
+    },
+    {
+      "id": "12.0",
+      "step_order_index": 30,
+      "assistant_prompt": "If you had to summarise your **life story in one sentence**, what would it be?\n\n(e.g. *I’ve always been driven to bring people together through creativity and play.*)",
+      "expected_inputs": ["text_block"],
+      "store_as": "life_map.reflection.summary_sentence",
+      "next_step_rules": [{ "on_success": "13.0" }]
+    },
+
+    /* ----------------------- WRAP-UP + NEXT TRANSITION ----------------------- */
+    {
+      "id": "13.0",
+      "step_order_index": 31,
+      "assistant_prompt": "Beautiful work — your Life Map is complete.\n\nYou’ve now gathered rich clues about your skills, passions, challenges, and values.\n\nWould you like a short reflection summary before we continue?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yes, show reflection summary", "No, continue to next phase"]
+        }
+      ],
+      "store_as": "life_map_v2.complete",
+      "next_step_rules": [
+        { "on_selection": "Yes, show reflection summary", "go_to": "14.0" },
+        { "on_selection": "No, continue to next phase", "go_to": "15.0" }
+      ]
+    },
+    {
+      "id": "14.0",
+      "step_order_index": 32,
+      "assistant_prompt": "Here’s what stands out from your Life Map:\n\n• Things you’ve always loved → {life_map.hobbies.*}\n• Growth moments → {life_map.turning_points}\n• Role model qualities → {life_map.role_models}\n• Skills that repeat → {life_map.experience.repeating_skills}\n• Future pulls → {life_map.future.top3_now}\n• Core themes → {life_map.reflection.themes}\n\nDoes that feel accurate before we move on?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map_v2.reflection_review",
+      "next_step_rules": [{ "on_success": "15.0" }]
+    },
+    {
+      "id": "15.0",
+      "step_order_index": 33,
+      "assistant_prompt": "Amazing — we’ve laid the foundation for your Nikigai process. Next, we’ll begin connecting these dots into the four lenses: **Skills**, **Problems**, **People**, and **Market.**\n\nReady to continue?",
+      "expected_inputs": ["confirmation"],
+      "store_as": "life_map_v2.ready_for_nikigai",
+      "next_step_rules": [{ "on_success": "next_module_transition_to_framework" }]
+    }
+  ]
+}

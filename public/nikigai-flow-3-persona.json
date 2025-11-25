@@ -1,0 +1,89 @@
+{
+  "flow_name": "Nikigai Flow 3: Persona Discovery",
+  "version": "1.0",
+  "description": "Discover who you're most qualified to serve - former versions of yourself at different life stages and struggles.",
+  "pillar": "persona",
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Now let's discover who you're most qualified to serve.\n\nHere's the insight: **You're most qualified to help former versions of yourself.**\n\nThe struggles you've overcome, the growth you've experienced — that's your superpower. You understand those people because you *were* those people.\n\nReady to meet your people?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yes, show me!"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Yes, show me!",
+          "go_to": "2.0"
+        }
+      ]
+    },
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "Perfect! Let me analyze your journey across the skills and problems flows to identify the personas you're uniquely qualified to serve.",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Generate personas"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Generate personas",
+          "go_to": "2.1"
+        }
+      ]
+    },
+    {
+      "id": "2.1",
+      "step_order_index": 3,
+      "assistant_postprocess": {
+        "tag_from": [
+          "life_map.life_chapters.titles",
+          "life_map.life_chapters.growth_and_struggle",
+          "life_map.role_models",
+          "life_map.learning.topics",
+          "life_map.experience.impact_created",
+          "life_map.future.desires",
+          "life_map.future.top3_now"
+        ],
+        "cluster": {
+          "target": "persona",
+          "target_clusters_min": 3,
+          "target_clusters_max": 5
+        },
+        "store_as": "persona.final"
+      },
+      "next_step_rules": [
+        {
+          "on_success": "3.0"
+        }
+      ]
+    },
+    {
+      "id": "3.0",
+      "step_order_index": 4,
+      "assistant_prompt": "Stoked that these personas resonate with you!\n\nNow, would you like to continue connecting the dots? Let's see how your skills, problems, and personas create a career or business opportunity.\n\nWhat would you like to do next?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Continue to Integration Flow", "Return to 7-Day Challenge"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Continue to Integration Flow",
+          "go_to": "complete"
+        },
+        {
+          "on_selection": "Return to 7-Day Challenge",
+          "go_to": "complete"
+        }
+      ]
+    }
+  ]
+}
