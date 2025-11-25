@@ -320,7 +320,7 @@ function RetreatLanding() {
               <p className="retreat-help-description">
                 Don't need a facilitator but keen to rent headsets? We've got you sorted. I'm also the owner of Bali's largest silent disco rental company.
               </p>
-              <button className="retreat-help-button" onClick={handleWhatsAppClick}>
+              <button className="retreat-help-button" onClick={() => window.open('https://wa.me/6282266355322', '_blank')}>
                 Click here to learn more
               </button>
             </div>
