@@ -4,6 +4,19 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/retreats",
+      "has": [
+        {
+          "type": "host",
+          "value": "retreats.nichuzz.com"
+        }
+      ],
+      "permanent": false
+    }
   ]
 }
 
