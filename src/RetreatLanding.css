@@ -444,7 +444,14 @@
   border-left: 4px solid #5e17eb;
   border-radius: 8px;
   margin: 2rem 0;
-  white-space: pre-line; /* Enables \n\n paragraph spacing */
+}
+
+.retreat-story-highlight p {
+  margin-bottom: 1rem;
+}
+
+.retreat-story-highlight p:last-child {
+  margin-bottom: 0;
 }
 
 .retreat-credentials-title {

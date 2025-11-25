@@ -229,7 +229,13 @@ function RetreatLanding() {
 
                 <p>My passion for healing stems from my own journey where I'd never felt more vulnerable, isolated and confused.</p>
 
-                <p className="retreat-story-highlight">I believe healing is the most beautiful thing, but it's sold as this heavy burden. As if the more pain you experience, the more healing you're doing. But I'm here to say that's bullsh*t. I believe we can not only enjoy the process, I believe by merging these ancient modalities with modern technology, we can make it fun.</p>
+                <div className="retreat-story-highlight">
+                  <p>I believe healing is the most beautiful thing.</p>
+
+                  <p>But it can seen as a heavy burden due to a stigma that the more pain you experience, the more healing you're doing. But I'm here to say that's bullsh*t.</p>
+
+                  <p>I believe we can not only enjoy the process, I believe by merging these ancient modalities with modern technology, we can make it fun.</p>
+                </div>
               </div>
 
               <h3 className="retreat-credentials-title">What Differentiates Me</h3>
@@ -318,7 +324,11 @@ function RetreatLanding() {
               <div className="retreat-help-icon">🎧</div>
               <h3 className="retreat-help-title">Need Silent Disco Headsets?</h3>
               <p className="retreat-help-description">
-                Don't need a facilitator but keen to rent headsets? We've got you sorted. I'm also the owner of Bali's largest silent disco rental company.
+                Don't need a facilitator but keen to rent headsets?
+
+We've got you sorted.
+
+I'm also the owner of Bali's largest silent disco rental company with over 300 Noise-Cancelling, Hi-Fi Sound Quality Headsets.
               </p>
               <button className="retreat-help-button" onClick={() => window.open('https://wa.me/6282266355322', '_blank')}>
                 Click here to learn more
@@ -330,7 +340,11 @@ function RetreatLanding() {
               <div className="retreat-help-icon">🌟</div>
               <h3 className="retreat-help-title">Other Epic Experiences</h3>
               <p className="retreat-help-description">
-                Keen for other epic experiences? I'm fortunate to have an amazing network of epic humans guiding awesome experiences. If you're keen for a Meditation Adventure, a Bounce Shoes experience or Sound Healing, I'm more than happy to make a connection.
+                Keen for other epic experiences?
+
+After 3 years in Bali I'm fortunate to have amazing network of awesome humans guiding epic experiences.
+
+If you're keen for a Guided Meditation Adventure, a Bounce Shoes experience or Sound Healing, I'm more than happy to make a connection.
               </p>
               <button className="retreat-help-button" onClick={handleWhatsAppClick}>
                 Click here to be connected
@@ -342,7 +356,11 @@ function RetreatLanding() {
               <div className="retreat-help-icon">🚀</div>
               <h3 className="retreat-help-title">Scale Your Retreat Business</h3>
               <p className="retreat-help-description">
-                Keen to scale your retreats business? I've created an AI coach that gamifies your ambitions. Using the knowledge of the best business people in the world, be guided and held accountable via the Find My Flow app so you can Live Your Ambitions Faster.
+                Keen to scale your retreats business?
+
+I've created an AI coach that gamifies your ambitions.
+
+Using the knowledge of the best business people in the world, be guided and held accountable via the Find My Flow app so you can Live Your Ambitions Faster.
               </p>
               <button className="retreat-help-button" onClick={() => window.open('https://findmyflow.nichuzz.com', '_blank')}>
                 Click here to learn more
