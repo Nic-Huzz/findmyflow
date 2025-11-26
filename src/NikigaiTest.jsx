@@ -138,6 +138,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
   const [isLoading, setIsLoading] = useState(false)
   const [allResponses, setAllResponses] = useState([])
   const [error, setError] = useState(null)
+  const [lockedInfo, setLockedInfo] = useState(null) // { requiredFlow: 'skills', requiredFlowName: 'Skills Discovery' }
   const [flowData, setFlowData] = useState(null)
   const [clusterData, setClusterData] = useState({}) // Store generated clusters
   const [finalChoice, setFinalChoice] = useState(null) // Track user's final choice
@@ -147,6 +148,23 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
     persona: 0
   })
   const messagesEndRef = useRef(null)
+
+  // Reset all state when flowFile changes (navigating between flows)
+  useEffect(() => {
+    console.log('🔄 Flow file changed, resetting state...')
+    setSessionId(null)
+    setCurrentStep('1.0')
+    setMessages([])
+    setInputText('')
+    setIsLoading(false)
+    setAllResponses([])
+    setError(null)
+    setLockedInfo(null)
+    setFlowData(null)
+    setClusterData({})
+    setFinalChoice(null)
+    setSliderSelections({ skills: 0, problems: 0, persona: 0 })
+  }, [flowFile])
 
   // Load JSON flow
   useEffect(() => {
@@ -182,6 +200,48 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
         return
       }
 
+      // Check prerequisites
+      const prerequisites = {
+        'problems': 'skills',
+        'persona': 'problems',
+        'integration': 'persona'
+      }
+
+      const requiredPillar = prerequisites[flowData.pillar]
+      if (requiredPillar) {
+        const { data: completedSessions, error: checkError } = await supabase
+          .from('nikigai_sessions')
+          .select('id, status, completed_at')
+          .eq('user_id', user.id)
+          .eq('flow_version', `${requiredPillar}-claude`)
+          .eq('status', 'completed')
+          .order('completed_at', { ascending: false })
+          .limit(1)
+
+        if (checkError) {
+          console.error('Error checking prerequisites:', checkError)
+        }
+
+        if (!completedSessions || completedSessions.length === 0) {
+          const flowNames = {
+            'skills': 'Skills Discovery',
+            'problems': 'Problems Discovery',
+            'persona': 'Persona Discovery'
+          }
+          const flowPaths = {
+            'skills': '/nikigai/skills',
+            'problems': '/nikigai/problems',
+            'persona': '/nikigai/persona'
+          }
+          setLockedInfo({
+            requiredFlow: requiredPillar,
+            requiredFlowName: flowNames[requiredPillar],
+            requiredFlowPath: flowPaths[requiredPillar]
+          })
+          return
+        }
+      }
+
       // For Flows 3 & 4, load previous responses from this user
       if (flowData.pillar === 'persona' || flowData.pillar === 'integration') {
         const { data: previousResponses, error: fetchError } = await supabase
@@ -197,18 +257,34 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
 
         // For integration flow, also load saved clusters
         if (flowData.pillar === 'integration') {
+          // First, let's see ALL clusters for this user (no filters)
+          const { data: allUserClusters, error: debugError } = await supabase
+            .from('nikigai_clusters')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+
+          console.log('🔍 ALL clusters for this user:', allUserClusters?.map(c => ({
+            label: c.cluster_label,
+            type: c.cluster_type,
+            stage: c.cluster_stage,
+            archived: c.archived,
+            store_as: c.source_responses
+          })))
+
+          // Now filter for final, non-archived clusters
           const { data: savedClusters, error: clustersError } = await supabase
             .from('nikigai_clusters')
             .select('*')
             .eq('user_id', user.id)
             .eq('cluster_stage', 'final')
-            .eq('archived', false)
             .order('created_at', { ascending: false })
 
           if (!clustersError && savedClusters) {
             // Group clusters by type
+            // Note: Skills flow saves as 'roles' (new) or 'skills' (old), support both
             const grouped = {
-              skills: savedClusters.filter(c => c.cluster_type === 'skills'),
+              skills: savedClusters.filter(c => c.cluster_type === 'roles' || c.cluster_type === 'skills'),
               problems: savedClusters.filter(c => c.cluster_type === 'problems'),
               persona: savedClusters.filter(c => c.cluster_type === 'persona')
             }
@@ -218,6 +294,17 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
               problems: grouped.problems.length,
               persona: grouped.persona.length
             })
+            console.log('📊 Cluster details:', {
+              skills: grouped.skills.map(c => ({ label: c.cluster_label, type: c.cluster_type, stage: c.cluster_stage })),
+              problems: grouped.problems.map(c => ({ label: c.cluster_label, type: c.cluster_type, stage: c.cluster_stage })),
+              persona: grouped.persona.map(c => ({ label: c.cluster_label, type: c.cluster_type, stage: c.cluster_stage }))
+            })
+            console.log('🗄️ All clusters from DB:', savedClusters.map(c => ({
+              label: c.cluster_label,
+              type: c.cluster_type,
+              stage: c.cluster_stage,
+              archived: c.archived
+            })))
           }
         }
       }
@@ -391,6 +478,14 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
                               storeAs.includes('final') ? 'final' : 'intermediate'
 
           // Save each cluster to the database
+          console.log('💾 Saving clusters:', {
+            clusterType,
+            clusterStage,
+            storeAs,
+            count: aiResponse.clusters.length,
+            labels: aiResponse.clusters.map(c => c.label)
+          })
+
           for (const cluster of aiResponse.clusters) {
             await supabase.from('nikigai_clusters').insert({
               session_id: sessionId,
@@ -400,10 +495,11 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
               cluster_label: cluster.label,
               items: cluster.items || [],
               insight: cluster.insight || cluster.summary || null,
-              source_responses: clusterSources
+              source_responses: clusterSources,
+              archived: false
             })
           }
-          console.log('✅ Clusters saved to database:', aiResponse.clusters.length)
+          console.log('✅ Clusters saved to database:', aiResponse.clusters.length, 'as cluster_stage:', clusterStage)
         } catch (dbError) {
           console.error('⚠️ Failed to save clusters to database:', dbError)
           // Don't throw - continue even if DB save fails
@@ -590,22 +686,37 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
           }
           setMessages(prev => [...prev, aiMessage])
         } else {
-          // Clusters approved - move to next step
-          const nextStepId = getNextStepId(currentStepData)
-          if (nextStepId) {
-            const nextStepData = flowData.steps.find(s => s.id === nextStepId)
-            setCurrentStep(nextStepId)
-
+          // Clusters approved
+          // Check if current step has its own prompt to show (for steps that both cluster AND ask a question)
+          if (currentStepData.assistant_prompt && currentStepData.expected_inputs) {
             const aiMessage = {
               id: `ai-${Date.now()}`,
               isAI: true,
-              text: nextStepData.assistant_prompt,
+              text: currentStepData.assistant_prompt,
               timestamp: new Date().toLocaleTimeString(),
-              stepId: nextStepId,
-              hasOptions: nextStepData?.expected_inputs?.[0]?.type === 'single_select',
-              options: nextStepData?.expected_inputs?.[0]?.options || []
+              stepId: currentStep,
+              hasOptions: currentStepData.expected_inputs?.[0]?.type === 'single_select',
+              options: currentStepData.expected_inputs?.[0]?.options || []
             }
             setMessages(prev => [...prev, aiMessage])
+          } else {
+            // No prompt on current step, move to next step
+            const nextStepId = getNextStepId(currentStepData)
+            if (nextStepId) {
+              const nextStepData = flowData.steps.find(s => s.id === nextStepId)
+              setCurrentStep(nextStepId)
+
+              const aiMessage = {
+                id: `ai-${Date.now()}`,
+                isAI: true,
+                text: nextStepData.assistant_prompt,
+                timestamp: new Date().toLocaleTimeString(),
+                stepId: nextStepId,
+                hasOptions: nextStepData?.expected_inputs?.[0]?.type === 'single_select',
+                options: nextStepData?.expected_inputs?.[0]?.options || []
+              }
+              setMessages(prev => [...prev, aiMessage])
+            }
           }
         }
         return
@@ -629,27 +740,34 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
 
         // Handle completion
         if (nextStepId === 'complete') {
-          let completionText = "🎉 Congratulations! You've completed the Nikigai discovery flow."
-          let completionLink = '/me'
-          let completionLinkText = 'Return to your profile'
+          // Mark session as completed in database
+          try {
+            const { data: { user } } = await supabase.auth.getUser()
+            await supabase
+              .from('nikigai_sessions')
+              .update({
+                status: 'completed',
+                completed_at: new Date().toISOString()
+              })
+              .eq('id', sessionId)
 
-          if (option === 'Continue to Integration Flow') {
-            completionText = "🎉 Amazing! Your personas are saved. Ready to connect the dots?\n\nLet's see how your skills, problems, and personas create real opportunities."
-            completionLink = '/connecting-the-dots'
-            completionLinkText = 'Start Connecting the Dots'
-          } else if (option === 'Return to 7-Day Challenge') {
-            completionText = "🎉 Awesome! Your personas are locked in.\n\nTime to get back to your 7-Day Challenge and put these insights into action."
-            completionLink = '/challenge'
-            completionLinkText = 'Return to 7-Day Challenge'
+            console.log('✅ Session marked as completed:', sessionId)
+          } catch (err) {
+            console.error('⚠️ Failed to mark session as completed:', err)
           }
+
+          // Determine redirect based on next_step_rule
+          const redirectPath = nextStepRule?.redirect || '/me'
+
+          let completionText = `🎉 Congratulations! You've completed the ${flowData.flow_name}!`
 
           const completionMessage = {
             id: `ai-completion-${Date.now()}`,
             isAI: true,
             kind: 'completion',
             text: completionText,
-            link: completionLink,
-            linkText: completionLinkText,
+            link: redirectPath,
+            linkText: option,
             timestamp: new Date().toLocaleTimeString()
           }
           setMessages(prev => [...prev, completionMessage])
@@ -741,7 +859,9 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
                 userId: user.id,
                 clusterType,
                 clusterStage,
-                clusterCount: aiResponse.clusters.length
+                storeAs,
+                clusterCount: aiResponse.clusters.length,
+                labels: aiResponse.clusters.map(c => c.label)
               })
 
               // Save each cluster to the database
@@ -754,16 +874,17 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
                   cluster_label: cluster.label,
                   items: cluster.items || [],
                   insight: cluster.insight || cluster.summary || null,
-                  source_responses: clusterSources
+                  source_responses: clusterSources,
+                  archived: false
                 })
 
                 if (insertResult.error) {
                   console.error('❌ Error inserting cluster:', cluster.label, insertResult.error)
                 } else {
-                  console.log('✅ Saved cluster:', cluster.label)
+                  console.log('✅ Saved cluster:', cluster.label, 'as', clusterStage)
                 }
               }
-              console.log('✅ All clusters saved to database:', aiResponse.clusters.length)
+              console.log('✅ All clusters saved to database:', aiResponse.clusters.length, 'as cluster_stage:', clusterStage)
             } catch (dbError) {
               console.error('⚠️ Failed to save clusters to database:', dbError)
             }
@@ -880,7 +1001,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
       })
 
       // Also save to key_outcomes for easy Library of Answers access
-      await supabase.from('nikigai_key_outcomes').upsert({
+      const { data: outcomeData, error: outcomeError } = await supabase.from('nikigai_key_outcomes').upsert({
         session_id: sessionId,
         user_id: user.id,
         selected_opportunity: {
@@ -891,6 +1012,19 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
       }, {
         onConflict: 'session_id'
       })
+
+      if (outcomeError) {
+        console.error('❌ Error saving to key_outcomes:', outcomeError)
+        console.log('📊 Attempted to save:', {
+          session_id: sessionId,
+          user_id: user.id,
+          selectedSkill,
+          selectedProblem,
+          selectedPersona
+        })
+      } else {
+        console.log('✅ Saved to key_outcomes:', outcomeData)
+      }
 
       // Get next step
       const nextStepId = getNextStepId(currentStepData)
@@ -923,6 +1057,54 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
         <div className="error">
           {error}
         </div>
+      </div>
+    )
+  }
+
+  if (lockedInfo) {
+    return (
+      <div className="app">
+        <header className="header">
+          <h1>🔒 Flow Locked</h1>
+        </header>
+        <main className="chat-container" style={{ padding: '40px 20px', textAlign: 'center' }}>
+          <div style={{
+            maxWidth: '500px',
+            margin: '0 auto',
+            background: '#f8f9fa',
+            padding: '30px',
+            borderRadius: '12px'
+          }}>
+            <p style={{ fontSize: '18px', marginBottom: '20px', lineHeight: '1.6' }}>
+              This flow is locked. Please complete <strong>{lockedInfo.requiredFlowName}</strong> first.
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link to={lockedInfo.requiredFlowPath} style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                background: '#5e17eb',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '8px',
+                fontWeight: '500'
+              }}>
+                Start {lockedInfo.requiredFlowName}
+              </Link>
+              <Link to="/me" style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                background: 'white',
+                color: '#5e17eb',
+                textDecoration: 'none',
+                borderRadius: '8px',
+                fontWeight: '500',
+                border: '2px solid #5e17eb'
+              }}>
+                Return to Profile
+              </Link>
+            </div>
+          </div>
+        </main>
       </div>
     )
   }

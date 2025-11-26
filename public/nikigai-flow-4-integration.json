@@ -54,7 +54,7 @@
       "store_as": "nikigai.opportunity_choice",
       "next_step_rules": [
         {
-          "on_success": "4.0"
+          "on_success": "6.0"
         }
       ]
     },
@@ -118,12 +118,21 @@
     {
       "id": "6.0",
       "step_order_index": 7,
-      "assistant_prompt": "Congratulations! You've completed your Nikigai discovery.\n\nYou now have:\n• Your unique skill clusters\n• The problems you're meant to solve\n• The people you're qualified to serve\n• Your personal mission statement\n• Market opportunity seeds to explore\n\nThis is the foundation for meaningful, fulfilling work that only *you* can do.\n\nWhat's one small step you can take this week to move toward your Nikigai?",
-      "expected_inputs": ["text_block"],
-      "store_as": "nikigai.next_step",
+      "assistant_prompt": "Congratulations! You've completed your Nikigai discovery.\n\nYou now have:\n• Your unique skill clusters\n• The problems you're meant to solve\n• The people you're qualified to serve\n• Your personal mission statement\n\nThis is the foundation for meaningful, fulfilling work that only *you* can do.\n\nWhat would you like to do next?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Return to /me page"
+          ]
+        }
+      ],
+      "store_as": "nikigai.completion",
       "next_step_rules": [
         {
-          "on_success": "complete"
+          "on_selection": "Return to /me page",
+          "go_to": "complete",
+          "redirect": "/me"
         }
       ]
     }

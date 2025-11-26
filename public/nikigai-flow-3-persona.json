@@ -58,30 +58,26 @@
         },
         "store_as": "persona.final"
       },
-      "next_step_rules": [
-        {
-          "on_success": "3.0"
-        }
-      ]
-    },
-    {
-      "id": "3.0",
-      "step_order_index": 4,
-      "assistant_prompt": "Stoked that these personas resonate with you!\n\nNow, would you like to continue connecting the dots? Let's see how your skills, problems, and personas create a career or business opportunity.\n\nWhat would you like to do next?",
+      "assistant_prompt": "These are the personas you're most qualified to serve — former versions of yourself who need what you've learned.\n\nWhat would you like to do next?",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["Continue to Integration Flow", "Return to 7-Day Challenge"]
+          "options": [
+            "Continue to Connecting the Dots",
+            "Return to /me page"
+          ]
         }
       ],
       "next_step_rules": [
         {
-          "on_selection": "Continue to Integration Flow",
-          "go_to": "complete"
+          "on_selection": "Continue to Connecting the Dots",
+          "go_to": "complete",
+          "redirect": "/nikigai/integration"
         },
         {
-          "on_selection": "Return to 7-Day Challenge",
-          "go_to": "complete"
+          "on_selection": "Return to /me page",
+          "go_to": "complete",
+          "redirect": "/me"
         }
       ]
     }

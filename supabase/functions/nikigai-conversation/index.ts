@@ -27,7 +27,10 @@ RESPONSE FORMAT:
 You will respond using the 'nikigai_response' function/tool.
 - Always use the tool to structure your response
 - Include a conversational message
-- Include clusters array when clustering is requested, otherwise set to null or empty array
+- CRITICAL: When clustering is requested (you'll see "CLUSTERING TASK:" in the prompt), you MUST include the clusters in BOTH:
+  1. The message field (formatted nicely with markdown)
+  2. The clusters array field (structured JSON with label, items, insight for each cluster)
+- If no clustering is requested, set clusters to null or empty array
 
 CLUSTERING GUIDELINES (when asked to cluster):
 - Create 2-5 clusters based on semantic meaning
@@ -143,7 +146,11 @@ serve(async (req) => {
       })
 
       userPrompt += `Items to cluster:\n${items.map((item, i) => `${i+1}. ${item}`).join('\n')}\n\n`
-      userPrompt += `Create semantic clusters and acknowledge the user's latest response. Show them the clusters in your message.\n`
+      userPrompt += `IMPORTANT: Create semantic clusters and:\n`
+      userPrompt += `1. Show them beautifully formatted in your MESSAGE field using markdown\n`
+      userPrompt += `2. ALSO include them in the CLUSTERS array field as structured JSON\n`
+      userPrompt += `3. Each cluster needs: label, items array, and insight\n`
+      userPrompt += `4. End your message with: "Do these clusters look good, or would you like me to re-create them?"\n`
     } else if (shouldGenerate && generateType === 'integration_summary') {
       // Integration summary - fetch and display saved clusters from database
       userPrompt += `\n---\nINTEGRATION SUMMARY TASK:\n`
@@ -156,37 +163,45 @@ serve(async (req) => {
         userPrompt += `Here are the user's finalized clusters from the database:\n\n`
 
         // Add saved clusters to prompt
-        if (clusterData.skills) {
-          userPrompt += `**SKILLS CLUSTERS:**\n`
+        // Note: clusterData.skills actually contains role clusters from Skills flow
+        if (clusterData.skills && clusterData.skills.length > 0) {
+          userPrompt += `**ROLE CLUSTERS (from Skills flow):**\n`
           clusterData.skills.forEach((cluster: any) => {
             userPrompt += `- **${cluster.cluster_label}**: ${JSON.stringify(cluster.items || [])}\n`
           })
           userPrompt += '\n'
+        } else {
+          userPrompt += `**ROLE CLUSTERS:** None found (user may need to complete Skills Discovery first)\n\n`
         }
 
-        if (clusterData.problems) {
+        if (clusterData.problems && clusterData.problems.length > 0) {
           userPrompt += `**PROBLEMS CLUSTERS:**\n`
           clusterData.problems.forEach((cluster: any) => {
             userPrompt += `- **${cluster.cluster_label}**: ${JSON.stringify(cluster.items || [])}\n`
           })
           userPrompt += '\n'
+        } else {
+          userPrompt += `**PROBLEMS CLUSTERS:** None found (user may need to complete Problems Discovery first)\n\n`
         }
 
-        if (clusterData.persona) {
+        if (clusterData.persona && clusterData.persona.length > 0) {
           userPrompt += `**PERSONA CLUSTERS:**\n`
           clusterData.persona.forEach((cluster: any) => {
             userPrompt += `- **${cluster.cluster_label}**: ${JSON.stringify(cluster.items || [])}\n`
           })
           userPrompt += '\n'
+        } else {
+          userPrompt += `**PERSONA CLUSTERS:** None found (user may need to complete Persona Discovery first)\n\n`
         }
 
         userPrompt += `Your task:\n`
-        userPrompt += `Display these clusters in a clear, organized format.\n`
-        userPrompt += `For each cluster type (Skills, Problems, Personas):\n`
-        userPrompt += `- Show the cluster label in bold\n`
-        userPrompt += `- List 2-3 key items from each cluster\n`
-        userPrompt += `- Use clean markdown formatting\n`
-        userPrompt += `- Keep it concise and scannable\n`
+        userPrompt += `Display ALL of these clusters exactly as provided.\n`
+        userPrompt += `CRITICAL: Show EVERY SINGLE cluster that was provided above.\n`
+        userPrompt += `For each cluster type (Roles, Problems, Personas):\n`
+        userPrompt += `- Show ALL cluster labels in bold\n`
+        userPrompt += `- List ALL items from each cluster (or at minimum the first 3-5 items if there are many)\n`
+        userPrompt += `- Use clean markdown formatting with headers for each type\n`
+        userPrompt += `- Keep it organized and scannable\n`
         userPrompt += `- End with a brief, warm transition to the next step\n`
       } else {
         userPrompt += `NOTE: No saved clusters found. Let the user know there was an issue loading their clusters.\n`

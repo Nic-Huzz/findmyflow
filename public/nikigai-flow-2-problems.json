@@ -107,6 +107,8 @@
       "step_order_index": 8,
       "assistant_postprocess": {
         "tag_from": [
+          "life_map.learning.topics",
+          "life_map.experience.impact_created",
           "life_map.life_chapters.titles",
           "life_map.life_chapters.growth_and_struggle",
           "life_map.role_models"
@@ -168,9 +170,26 @@
         },
         "store_as": "problems.final"
       },
+      "assistant_prompt": "These are the problems and changes you care about most — the impact you want to create in the world.\n\nWhat would you like to do next?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Continue to Persona Discovery",
+            "Return to /me page"
+          ]
+        }
+      ],
       "next_step_rules": [
         {
-          "on_success": "complete"
+          "on_selection": "Continue to Persona Discovery",
+          "go_to": "complete",
+          "redirect": "/nikigai/persona"
+        },
+        {
+          "on_selection": "Return to /me page",
+          "go_to": "complete",
+          "redirect": "/me"
         }
       ]
     }

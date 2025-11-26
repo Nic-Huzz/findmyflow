@@ -127,7 +127,7 @@
           "type": "single_select",
           "options": [
             "Continue to Problems Discovery",
-            "Return to 7-Day Challenge"
+            "Return to /me page"
           ]
         }
       ],
@@ -138,9 +138,9 @@
           "redirect": "/nikigai/problems"
         },
         {
-          "on_selection": "Return to 7-Day Challenge",
+          "on_selection": "Return to /me page",
           "go_to": "complete",
-          "redirect": "/7-day-challenge"
+          "redirect": "/me"
         }
       ]
     }
