@@ -491,6 +491,21 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
 
       console.log('✅ AI Response:', aiResponse)
 
+      // Debug clustering response
+      if (shouldCluster || shouldGenerate) {
+        console.log('🔍 Clustering/Generation Debug:', {
+          shouldCluster,
+          shouldGenerate,
+          clusterType,
+          generateType,
+          hasClusters: !!aiResponse.clusters,
+          clustersCount: aiResponse.clusters?.length,
+          storeAs: nextStepData?.assistant_postprocess?.store_as,
+          aiResponseKeys: Object.keys(aiResponse),
+          fullAiResponse: aiResponse
+        })
+      }
+
       // Store clusters if generated
       if (aiResponse.clusters && nextStepData?.assistant_postprocess?.store_as) {
         setClusterData(prev => ({

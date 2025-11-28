@@ -1,2 +1,0 @@
-jobid,jobname,schedule,active
-11,timezone-based-notifications-hourly,0 * * * *,true
