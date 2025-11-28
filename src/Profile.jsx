@@ -97,16 +97,16 @@ const Profile = () => {
         .from('user_stage_progress')
         .select('*')
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
-      if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-        console.error('Error loading stage progress:', error)
+      if (error) {
+        console.warn('Error loading stage progress (this is OK if flows not set up yet):', error)
         return
       }
 
       setStageProgress(data)
     } catch (err) {
-      console.error('Error loading stage progress:', err)
+      console.warn('Error loading stage progress:', err)
     }
   }
 

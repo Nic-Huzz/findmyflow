@@ -8,14 +8,25 @@ import { PERSONA_STAGES, getNextStage, getStageCelebration } from './personaStag
 const checkFlowsCompleted = async (userId, flowsRequired = []) => {
   if (!flowsRequired || flowsRequired.length === 0) return true;
 
-  const { data: completedFlows } = await supabase
-    .from('nikigai_responses')
-    .select('flow_type')
-    .eq('user_id', userId)
-    .in('flow_type', flowsRequired);
+  try {
+    const { data: completedFlows, error } = await supabase
+      .from('nikigai_responses')
+      .select('flow_type')
+      .eq('user_id', userId)
+      .in('flow_type', flowsRequired);
 
-  const completedFlowTypes = new Set(completedFlows?.map(f => f.flow_type) || []);
-  return flowsRequired.every(flow => completedFlowTypes.has(flow));
+    // If error (like 400 Bad Request for non-existent flow types), return false gracefully
+    if (error) {
+      console.warn('Flow check error (flows may not exist yet):', error.message);
+      return false;
+    }
+
+    const completedFlowTypes = new Set(completedFlows?.map(f => f.flow_type) || []);
+    return flowsRequired.every(flow => completedFlowTypes.has(flow));
+  } catch (error) {
+    console.warn('Error checking flows:', error);
+    return false; // Gracefully fail - flows don't exist yet
+  }
 };
 
 // Check if user has completed required milestones

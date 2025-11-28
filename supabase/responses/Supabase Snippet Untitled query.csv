@@ -1,0 +1,13 @@
+schemaname,tablename,policyname,cmd,qual
+public,conversation_logs,Users can delete own conversation logs,DELETE,(auth.uid() = user_id)
+public,conversation_logs,Users can insert own conversation logs,INSERT,null
+public,conversation_logs,Users can update own conversation logs,UPDATE,(auth.uid() = user_id)
+public,conversation_logs,Users can view own conversation logs,SELECT,(auth.uid() = user_id)
+public,milestone_completions,Users can delete own milestones,DELETE,(auth.uid() = user_id)
+public,milestone_completions,Users can insert own milestones,INSERT,null
+public,milestone_completions,Users can update own milestones,UPDATE,(auth.uid() = user_id)
+public,milestone_completions,Users can view own milestones,SELECT,(auth.uid() = user_id)
+public,user_stage_progress,Users can delete own stage progress,DELETE,(auth.uid() = user_id)
+public,user_stage_progress,Users can insert own stage progress,INSERT,null
+public,user_stage_progress,Users can update own stage progress,UPDATE,(auth.uid() = user_id)
+public,user_stage_progress,Users can view own stage progress,SELECT,(auth.uid() = user_id)
