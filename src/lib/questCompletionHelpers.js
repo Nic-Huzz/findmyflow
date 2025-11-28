@@ -144,9 +144,9 @@ export const getUserStageProgress = async (userId) => {
       .from('user_stage_progress')
       .select('*')
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
-    if (error && error.code !== 'PGRST116') {
+    if (error) {
       console.error('Error fetching stage progress:', error);
       return null;
     }

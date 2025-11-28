@@ -59,11 +59,16 @@ export const updateStreak = async (userId, challengeInstanceId) => {
         .from('challenge_progress')
         .select('streak_days, longest_streak')
         .eq('id', challengeInstanceId)
-        .single();
+        .maybeSingle();
 
       if (progressError) {
         console.error('Error fetching challenge progress:', progressError);
         return { success: false, error: progressError.message };
+      }
+
+      if (!currentProgress) {
+        console.warn('No challenge progress found for id:', challengeInstanceId);
+        return { success: false, error: 'Challenge progress not found' };
       }
 
       const newStreak = (currentProgress.streak_days || 0) + 1;
@@ -123,9 +128,13 @@ export const checkStreakBreak = async (userId, challengeInstanceId) => {
       .from('challenge_progress')
       .select('last_active_date, streak_days')
       .eq('id', challengeInstanceId)
-      .single();
+      .maybeSingle();
 
-    if (progressError || !progress) {
+    if (progressError) {
+      return { success: false, error: progressError.message };
+    }
+
+    if (!progress) {
       return { success: false, error: 'Challenge progress not found' };
     }
 
@@ -169,13 +178,23 @@ export const getCurrentStreak = async (userId) => {
       .from('challenge_progress')
       .select('streak_days, longest_streak, last_active_date')
       .eq('user_id', userId)
+      .eq('status', 'active')
       .order('created_at', { ascending: false })
       .limit(1)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error('Error getting current streak:', error);
       return { success: false, error: error.message };
+    }
+
+    if (!data) {
+      return {
+        success: true,
+        streak_days: 0,
+        longest_streak: 0,
+        last_active_date: null
+      };
     }
 
     return {

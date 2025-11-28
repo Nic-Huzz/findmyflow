@@ -159,14 +159,32 @@ export const graduateUser = async (userId, fromStage, toStage, persona, reason) 
   }
 };
 
+// Helper to normalize persona names
+const normalizePersona = (persona) => {
+  if (!persona) return null;
+  const mapping = {
+    'Vibe Seeker': 'vibe_seeker',
+    'Vibe Riser': 'vibe_riser',
+    'Movement Maker': 'movement_maker'
+  };
+  return mapping[persona] || persona.toLowerCase().replace(/\s+/g, '_');
+};
+
 // Initialize user stage progress (call when user selects persona)
 export const initializeUserStageProgress = async (userId, persona) => {
   try {
+    // Normalize persona to match database constraint
+    const normalizedPersona = normalizePersona(persona);
+
+    if (!normalizedPersona || !['vibe_seeker', 'vibe_riser', 'movement_maker'].includes(normalizedPersona)) {
+      throw new Error(`Invalid persona: ${persona}. Must be one of: Vibe Seeker, Vibe Riser, Movement Maker`);
+    }
+
     const { data, error } = await supabase
       .from('user_stage_progress')
       .upsert({
         user_id: userId,
-        persona,
+        persona: normalizedPersona,
         current_stage: 'validation',
         conversations_logged: 0
       }, {
