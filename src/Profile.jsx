@@ -4,8 +4,12 @@ import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { essenceProfiles } from './data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
-import { personaProfiles } from './data/personaProfiles'
+import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/personaProfiles'
 import { hasActiveChallenge } from './lib/questCompletion'
+import { graduateUser } from './lib/graduationChecker'
+import { getCurrentStreak } from './lib/streakTracking'
+import StageProgressCard from './components/StageProgressCard'
+import GraduationModal from './components/GraduationModal'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -16,12 +20,17 @@ const Profile = () => {
   const [expandedCard, setExpandedCard] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [hasChallenge, setHasChallenge] = useState(false)
+  const [stageProgress, setStageProgress] = useState(null)
+  const [streakData, setStreakData] = useState(null)
+  const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
 
   useEffect(() => {
     // Only load profile when user is available
     if (user?.email) {
       loadUserProfile()
       checkChallengeStatus()
+      loadStageProgress()
+      loadStreakData()
     } else if (user === null) {
       // User is not authenticated
       setLoading(false)
@@ -46,7 +55,7 @@ const Profile = () => {
 
     try {
       console.log('🔍 Loading user profile for:', user.email)
-      
+
       // Get the most recent profile for this authenticated user
       const { data, error } = await supabase
         .from('lead_flow_profiles')
@@ -78,6 +87,71 @@ const Profile = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const loadStageProgress = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data, error } = await supabase
+        .from('user_stage_progress')
+        .select('*')
+        .eq('user_id', user.id)
+        .single()
+
+      if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+        console.error('Error loading stage progress:', error)
+        return
+      }
+
+      setStageProgress(data)
+    } catch (err) {
+      console.error('Error loading stage progress:', err)
+    }
+  }
+
+  const loadStreakData = async () => {
+    if (!user?.id) return
+
+    try {
+      const result = await getCurrentStreak(user.id)
+      if (result.success) {
+        setStreakData(result)
+      }
+    } catch (err) {
+      console.error('Error loading streak data:', err)
+    }
+  }
+
+  const handleGraduation = async (fromStage, toStage) => {
+    if (!user?.id || !stageProgress?.persona) return
+
+    try {
+      const result = await graduateUser(
+        user.id,
+        fromStage,
+        toStage,
+        stageProgress.persona,
+        { timestamp: new Date().toISOString() }
+      )
+
+      if (result.graduated) {
+        // Show celebration modal
+        setGraduationModal({
+          isOpen: true,
+          celebration: result.celebration_message
+        })
+
+        // Reload stage progress
+        await loadStageProgress()
+      }
+    } catch (err) {
+      console.error('Error graduating user:', err)
+    }
+  }
+
+  const closeGraduationModal = () => {
+    setGraduationModal({ isOpen: false, celebration: null })
   }
 
   const toggleExpand = (cardId) => {
@@ -136,6 +210,7 @@ const Profile = () => {
   
   const protectiveData = protectiveProfiles[userData.protective_archetype]
   const personaData = personaProfiles[userData.persona]
+  const personaFlowData = getPersonaWithFlow(userData.persona)
 
   return (
     <div className="dashboard-container">
@@ -226,7 +301,39 @@ const Profile = () => {
             <div className="stat-label">Journey Stage</div>
             <div className="stat-value">{userData.persona}</div>
           </div>
+          {streakData && streakData.streak_days > 0 && (
+            <div className="stat-card orange">
+              <div className="stat-icon">🔥</div>
+              <div className="stat-label">Current Streak</div>
+              <div className="stat-value">{streakData.streak_days} days</div>
+            </div>
+          )}
+          {stageProgress && stageProgress.conversations_logged > 0 && (
+            <div className="stat-card blue">
+              <div className="stat-icon">💬</div>
+              <div className="stat-label">Conversations</div>
+              <div className="stat-value">{stageProgress.conversations_logged} logged</div>
+            </div>
+          )}
         </div>
+
+        {/* Stage Progress Section */}
+        {stageProgress && (
+          <div className="stage-progress-section">
+            <StageProgressCard
+              persona={stageProgress.persona}
+              currentStage={stageProgress.current_stage}
+              onGraduate={handleGraduation}
+            />
+          </div>
+        )}
+
+        {/* Graduation Modal */}
+        <GraduationModal
+          isOpen={graduationModal.isOpen}
+          celebration={graduationModal.celebration}
+          onClose={closeGraduationModal}
+        />
 
         {/* Archetypes Section */}
         <div className="archetypes-section">
@@ -282,6 +389,38 @@ const Profile = () => {
             </div>
           </div>
         </div>
+
+        {/* Persona Flow CTA */}
+        {personaFlowData?.flow && (
+          <div className="persona-flow-section">
+            <div className="section-header">
+              <h2 className="section-title">Your Next Step</h2>
+            </div>
+            <div
+              className="persona-flow-card"
+              style={{ borderColor: personaFlowData.color }}
+            >
+              <div className="persona-flow-header">
+                <span
+                  className="persona-badge-small"
+                  style={{ backgroundColor: personaFlowData.color }}
+                >
+                  {personaFlowData.name}
+                </span>
+                <span className="persona-tagline">{personaFlowData.tagline}</span>
+              </div>
+              <h3 className="persona-flow-name">{personaFlowData.flow.name}</h3>
+              <p className="persona-flow-description">{personaFlowData.flow.description}</p>
+              <button
+                className="persona-flow-button"
+                style={{ backgroundColor: personaFlowData.color }}
+                onClick={() => navigate(personaFlowData.flow.path)}
+              >
+                Start {personaFlowData.flow.name}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* CTA Banner */}
         <div className="cta-banner">

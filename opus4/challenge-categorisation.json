@@ -1,0 +1,58 @@
+{
+  "recognise": {
+    "daily": [
+      "Essence Archetype",
+      "Protective Archetype",
+      "Positive Frequency",
+      "Negative Frequency",
+      "Flow Tracker"
+    ],
+    "weekly": [
+      "Nervous-System-Mapping",
+      "Healing Compass"
+    ]
+  },
+  "release": {
+    "daily": [
+      "Daily Release",
+      "Processing Emotions"
+    ],
+    "weekly": [
+      "Big Weekly Release"
+    ]
+  },
+  "rewire": {
+    "daily": [
+      "Auto-Pilot to Essence",
+      "Dopamine Diet Change",
+      "Protective-to-Essence Shift",
+      "Make It a Hell Yea"
+    ],
+    "weekly": [
+      "Persona Phase Challenge",
+      "3% Better",
+      "Groan Challenge",
+      "Learning Challenge"
+    ]
+  },
+  "reconnect": {
+    "daily": [
+      "Meditation",
+      "Rise & Vibe Dance",
+      "Breathwork",
+      "Self-Identified Activity",
+      "Prayer"
+    ],
+    "weekly": [
+      "Environment Hygiene",
+      "Self-Identified Activity"
+    ]
+  },
+  "bonus": [
+    "AI Analyse Trends Identified",
+    "Feedback Form",
+    "Post on IG",
+    "Tell a Friend",
+    "Weekly Reflection"
+  ]
+}

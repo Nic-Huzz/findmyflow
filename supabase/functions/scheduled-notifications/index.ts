@@ -101,12 +101,31 @@ serve(async (req) => {
       notification: any
     }> = []
 
-    subscriptions.forEach(sub => {
+    // Process subscriptions sequentially to handle async checks
+    for (const sub of subscriptions) {
       const prefs = sub.notification_preferences
 
       // Skip if user doesn't have any notifications enabled
       if (!prefs || !(prefs.daily_quests || prefs.leaderboard_updates || prefs.group_activity || prefs.artifact_unlocks)) {
-        return
+        continue
+      }
+
+      // Check if user's 7-day challenge is still active
+      const { data: challenge } = await supabaseClient
+        .from('challenge_instances')
+        .select('start_date')
+        .eq('user_id', sub.user_id)
+        .order('start_date', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (challenge && challenge.start_date) {
+        const daysSinceStart = Math.floor((Date.now() - new Date(challenge.start_date).getTime()) / (1000 * 60 * 60 * 24))
+        // Skip if challenge is complete (7+ days old)
+        if (daysSinceStart >= 7) {
+          console.log(`Skipping user ${sub.user_id}: Challenge completed ${daysSinceStart} days ago`)
+          continue
+        }
       }
 
       // Get user's timezone (default to UTC if not set)
@@ -117,7 +136,7 @@ serve(async (req) => {
 
       if (userLocalHour === -1) {
         console.error(`Invalid timezone for user ${sub.user_id}: ${timezone}`)
-        return
+        continue
       }
 
       // Check if there's a notification for this hour
@@ -126,7 +145,7 @@ serve(async (req) => {
       if (notification) {
         notificationsToSend.push({ subscription: sub, notification })
       }
-    })
+    }
 
     console.log(`Found ${notificationsToSend.length} notifications to send`)
 

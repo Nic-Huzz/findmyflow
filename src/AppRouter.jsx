@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './App'
+import PersonaAssessment from './PersonaAssessment'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
 import NervousSystemFlow from './NervousSystemFlow'
@@ -17,6 +18,7 @@ import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
 import './App.css'
+import './PersonaAssessment.css'
 import './Profile.css'
 import './Auth.css'
 import './HybridEssenceFlow.css'
@@ -30,7 +32,12 @@ function AppRouter() {
       <AuthProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<App />} />
+            {/* Homepage - Persona Assessment */}
+            <Route path="/" element={<PersonaAssessment />} />
+
+            {/* Legacy lead magnet flow */}
+            <Route path="/lead-magnet" element={<App />} />
+
             <Route path="/retreats" element={<RetreatLanding />} />
             <Route path="/me" element={
               <AuthGate>
@@ -107,6 +114,18 @@ function AppRouter() {
                 <FlowLibrary />
               </AuthGate>
             } />
+
+            {/* Persona-specific flows (Phase 2) */}
+            {/* <Route path="/offer-creation" element={
+              <AuthGate>
+                <OfferCreation />
+              </AuthGate>
+            } /> */}
+            {/* <Route path="/money-model" element={
+              <AuthGate>
+                <MoneyModel />
+              </AuthGate>
+            } /> */}
           </Routes>
         </Router>
       </AuthProvider>

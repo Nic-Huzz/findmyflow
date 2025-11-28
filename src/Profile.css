@@ -366,6 +366,72 @@
   margin-bottom: 15px;
 }
 
+/* Persona Flow Section */
+.persona-flow-section {
+  margin-bottom: 30px;
+}
+
+.persona-flow-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  border-left: 4px solid;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.persona-flow-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.persona-badge-small {
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.persona-tagline {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+.persona-flow-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 8px;
+}
+
+.persona-flow-description {
+  font-size: 16px;
+  color: #666;
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+.persona-flow-button {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.persona-flow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
 /* CTA Banner */
 .cta-banner {
   background: linear-gradient(135deg, #5e17eb, #764ba2);

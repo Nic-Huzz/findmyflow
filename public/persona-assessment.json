@@ -1,0 +1,125 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "name": "Persona Assessment",
+    "description": "3-question assessment to identify user persona (Vibe Seeker, Vibe Riser, Movement Maker)"
+  },
+  "questions": [
+    {
+      "id": "q1_journey",
+      "question": "Where are you in your journey?",
+      "subtext": "Be honest - there's no wrong answer",
+      "options": [
+        {
+          "label": "Searching for my direction",
+          "value": "seeker",
+          "description": "I'm exploring what I want to do",
+          "persona": "vibe_seeker"
+        },
+        {
+          "label": "I know what I want to build",
+          "value": "riser",
+          "description": "I have clarity, now I need to execute",
+          "persona": "vibe_riser"
+        },
+        {
+          "label": "Already making money, ready to scale",
+          "value": "maker",
+          "description": "I'm generating revenue and want to grow",
+          "persona": "movement_maker"
+        }
+      ]
+    },
+    {
+      "id": "q2_output",
+      "question": "What have you created so far?",
+      "subtext": "Think about your business or side project",
+      "options": [
+        {
+          "label": "Nothing concrete yet",
+          "value": "seeker",
+          "description": "Still in the idea phase",
+          "persona": "vibe_seeker"
+        },
+        {
+          "label": "An offer or service",
+          "value": "riser",
+          "description": "But income is inconsistent",
+          "persona": "vibe_riser"
+        },
+        {
+          "label": "A business with consistent revenue",
+          "value": "maker",
+          "description": "Ready to expand and scale",
+          "persona": "movement_maker"
+        }
+      ]
+    },
+    {
+      "id": "q3_goal",
+      "question": "What would make this month a win?",
+      "subtext": "Your biggest priority right now",
+      "options": [
+        {
+          "label": "Finally knowing my path",
+          "value": "seeker",
+          "description": "Clarity on what to pursue",
+          "persona": "vibe_seeker"
+        },
+        {
+          "label": "Landing paying clients",
+          "value": "riser",
+          "description": "Monetizing my skills",
+          "persona": "vibe_riser"
+        },
+        {
+          "label": "Scaling my impact and income",
+          "value": "maker",
+          "description": "Growing what's already working",
+          "persona": "movement_maker"
+        }
+      ]
+    }
+  ],
+  "personas": {
+    "vibe_seeker": {
+      "name": "Vibe Seeker",
+      "tagline": "Finding Your Direction",
+      "description": "You're at the beginning of your journey, sensing there's more to life. Your next step is discovering your unique gifts and how to share them with the world.",
+      "color": "#9333EA",
+      "flow": "nikigai",
+      "flowPath": "/nikigai/skills",
+      "flowName": "Nikigai Discovery",
+      "icon": "compass"
+    },
+    "vibe_riser": {
+      "name": "Vibe Riser",
+      "tagline": "Bringing It To Life",
+      "description": "You know your direction but need help monetizing it. Your next step is creating an irresistible offer that people can't say no to.",
+      "color": "#F59E0B",
+      "flow": "offer",
+      "flowPath": "/offer-creation",
+      "flowName": "$100M Offer Creation",
+      "icon": "rocket"
+    },
+    "movement_maker": {
+      "name": "Movement Maker",
+      "tagline": "Scaling Your Impact",
+      "description": "You're already making money and ready to scale. Your next step is building a money model that maximizes cashflow and growth.",
+      "color": "#10B981",
+      "flow": "money-model",
+      "flowPath": "/money-model",
+      "flowName": "$100M Money Model",
+      "icon": "chart"
+    }
+  },
+  "scoring": {
+    "method": "majority",
+    "tiebreaker": "vibe_seeker",
+    "confidence_thresholds": {
+      "high": 3,
+      "medium": 2,
+      "low": 1
+    }
+  }
+}

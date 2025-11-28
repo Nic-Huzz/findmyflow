@@ -1,0 +1,312 @@
+{
+  "flow_name": "$100M Money Model: Design Your Revenue Architecture",
+  "version": "1.0",
+  "description": "A tactical business model design process to maximize cashflow, profit, and scale",
+  "pillar": "money_model",
+  "steps": [
+    {
+      "id": "0.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Hey there — I'm your Money Model Architect.\n\nMy job is to help you design a business model that maximizes cashflow, profit, and scale.\n\nLet's start with the basics.",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Let's go"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Let's go",
+          "go_to": "1.0"
+        }
+      ]
+    },
+    {
+      "id": "1.0",
+      "step_order_index": 2,
+      "assistant_prompt": "What type of business are you running?\n\nExamples: coaching, SaaS, ecommerce, supplements, events, consulting, agency, etc.",
+      "expected_inputs": ["text"],
+      "store_as": "business_type",
+      "next_step_rules": [
+        {
+          "on_success": "2.0"
+        }
+      ]
+    },
+    {
+      "id": "2.0",
+      "step_order_index": 3,
+      "assistant_prompt": "Great. To design the right money model, I need a couple of numbers.\n\n**1. What's your average gross profit margin (%)?**\n\nThis is (Revenue - Cost of Goods Sold) / Revenue × 100.\n\nIf you're not sure, give your best estimate:",
+      "expected_inputs": ["text"],
+      "store_as": "gross_margin",
+      "next_step_rules": [
+        {
+          "on_success": "2.1"
+        }
+      ]
+    },
+    {
+      "id": "2.1",
+      "step_order_index": 4,
+      "assistant_prompt": "**2. On average, how many days does it take to recover your customer acquisition cost (CAC)?**\n\nIn other words: if you spend $100 to acquire a customer, how many days until you've made that $100 back from their purchases?\n\nIf you're not sure, give your best estimate:",
+      "expected_inputs": ["text"],
+      "store_as": "cac_payback_days",
+      "next_step_rules": [
+        {
+          "on_success": "3.0"
+        }
+      ]
+    },
+    {
+      "id": "3.0",
+      "step_order_index": 5,
+      "assistant_prompt": "Perfect. Now let's look at your current offer structure.\n\nWhich of these offers do you currently have in your business?\n\n**Select all that apply:**\n\n• **Attraction Offer** – Low-barrier entry that gets people in (free trial, challenge, low-ticket product)\n• **Upsell Offer** – Premium upgrade or add-on after the initial purchase\n• **Downsell Offer** – Alternative option for people who say no to your main offer (payment plan, lite version)\n• **Continuity Offer** – Recurring revenue product (membership, subscription, retainer)",
+      "expected_inputs": [
+        {
+          "type": "multi_select",
+          "options": [
+            "Attraction Offer",
+            "Upsell Offer",
+            "Downsell Offer",
+            "Continuity Offer",
+            "None of these"
+          ]
+        }
+      ],
+      "store_as": "current_offers",
+      "next_step_rules": [
+        {
+          "on_success": "4.0"
+        }
+      ]
+    },
+    {
+      "id": "4.0",
+      "step_order_index": 6,
+      "assistant_prompt": "Every offer should match your audience psychology.\n\nWhich best describes your customers?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Fitness/transformational (want clear results + transformation)",
+            "Retail/ecom (value-driven buyers, want deals)",
+            "Service/cashflow constrained (trust + affordability focus)",
+            "Status/exclusivity-driven (prestige, belonging, identity)"
+          ]
+        }
+      ],
+      "store_as": "audience_psychology",
+      "next_step_rules": [
+        {
+          "on_success": "5.0"
+        }
+      ]
+    },
+    {
+      "id": "5.0",
+      "step_order_index": 7,
+      "assistant_postprocess": {
+        "analyze": {
+          "inputs": [
+            "business_type",
+            "gross_margin",
+            "cac_payback_days",
+            "current_offers",
+            "audience_psychology"
+          ],
+          "apply_rules": {
+            "scaling": [
+              "If gross_margin < 80 → warning: 'Scaling risk: service businesses must maintain ≥80% margin.'",
+              "If cac_payback_days > 30 → recommend Client-Financed Acquisition (front-loaded cash collection)."
+            ],
+            "offer_ladder": [
+              "If continuity offer missing → recommend adding continuity to stabilize cashflow.",
+              "If only attraction exists → recommend upsell next.",
+              "If high drop-offs → recommend downsell.",
+              "Always output full ladder: Attraction → Upsell → Downsell → Continuity."
+            ],
+            "audience_mapping": [
+              "If fitness/transformational → recommend Win Your Money Back or Free with Consumption.",
+              "If retail/ecom → recommend Buy X Get Y Free or Decoy.",
+              "If cashflow constrained service → recommend Pay Less Now/Pay More Later.",
+              "If status/exclusivity-driven → recommend Scholarship/Free Giveaway."
+            ]
+          },
+          "store_as": "money_model_recommendations"
+        }
+      },
+      "assistant_prompt": "Based on your inputs, here's your recommended Money Model:\n\n**⚠️ Warnings:**\n{Display warnings based on margin and CAC analysis}\n\n**📊 Your Offer Ladder:**\n\n**Attraction Offer:** {recommended attraction strategy}\n• Strategy: {specific tactic}\n• Why it fits: {reasoning based on audience psychology}\n\n**Upsell Offer:** {recommended upsell strategy}\n• Strategy: {specific tactic}\n• Timing: {when to present}\n\n**Downsell Offer:** {recommended downsell strategy}\n• Strategy: {specific tactic}\n• Purpose: {capture lost revenue}\n\n**Continuity Offer:** {recommended continuity strategy}\n• Strategy: {specific tactic}\n• Structure: {pricing model}\n\n**🎯 Next Action Steps:**\n{Display 3-5 specific tactical steps}\n\n**🌀 Meta-Principles:**\n• Always test monthly\n• Prioritize front-loading cash if CAC payback > 30 days\n• Hybridize strategies when one category is underperforming\n\nWhat do you want me to help you design first?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Design the Attraction Offer",
+            "Design the Upsell",
+            "Design the Downsell",
+            "Design the Continuity Offer",
+            "See detailed strategies for my audience type"
+          ]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Design the Attraction Offer",
+          "go_to": "6.0"
+        },
+        {
+          "on_selection": "Design the Upsell",
+          "go_to": "7.0"
+        },
+        {
+          "on_selection": "Design the Downsell",
+          "go_to": "8.0"
+        },
+        {
+          "on_selection": "Design the Continuity Offer",
+          "go_to": "9.0"
+        },
+        {
+          "on_selection": "See detailed strategies for my audience type",
+          "go_to": "10.0"
+        }
+      ]
+    },
+    {
+      "id": "6.0",
+      "step_order_index": 8,
+      "assistant_prompt": "Let's design your **Attraction Offer** — the entry point that gets people into your ecosystem.\n\nBased on your audience psychology, here are the recommended strategies:\n\n**Win Your Money Back Challenge**\n• Tie refund to actions: advertise, comply, attend upsells\n• Challenge must be small achievable change tied to bigger transformation\n• Benchmark: ≥70% upsell conversion if upsell moments embedded\n\n**Free Giveaways/Contest**\n• Main prize = Grand Prize\n• Follow-up losers with consolation/partial scholarship\n• Use progressive reveal of prize\n• Balance friction vs prize compulsion\n\n**Decoy Offers**\n• Low-barrier decoy must highlight premium necessity\n• Benchmark: 70–80% premium uptake if contrast right\n• Always anchor premium price first\n\n**Buy X Get Y Free**\n• Frame as value education not discount\n• Use when stacking consumables/ecom for fast adoption\n\n**Pay Less Now or Pay More Later**\n• Immediate upsell must liquidate CAC\n• Backend high-ticket = margin\n• Discount must equal CAC coverage\n\n**Free with Consumption** (Webinar/Challenge)\n• Challenge/webinar must follow belief-breaking sequence\n• Webinar structure: 15m story → 15m obstacle → 45m value → 30m pitch\n• Always reinforce decision and frame next step\n\nWhich strategy resonates most with your business model?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Win Your Money Back Challenge",
+            "Free Giveaways/Contest",
+            "Decoy Offers",
+            "Buy X Get Y Free",
+            "Pay Less Now or Pay More Later",
+            "Free with Consumption (Webinar/Challenge)",
+            "Back to recommendations"
+          ]
+        }
+      ],
+      "store_as": "chosen_attraction_strategy",
+      "next_step_rules": [
+        {
+          "on_selection": "Back to recommendations",
+          "go_to": "5.0"
+        },
+        {
+          "on_success": "11.0"
+        }
+      ]
+    },
+    {
+      "id": "7.0",
+      "step_order_index": 9,
+      "assistant_prompt": "Let's design your **Upsell Offer** — the premium upgrade that maximizes customer value.\n\nHere are the recommended upsell strategies:\n\n**Classic Upsell**\n• Use natural complements (X without Y logic)\n• Use 'else' framing to soften rejection\n• Always have alternate format to salvage nos\n• Include magic pill option for quick fixes\n\n**Menu Upsell**\n• Offer structured A/B menu\n• Start by telling them what they don't need to build trust\n\n**Anchor Upsell**\n• Show expensive option first\n• Keep differences small so cheap feels like a steal\n• Avoid large differences that force reconsideration\n\n**Rollover Upsell**\n• Credit leftover/spent money toward bigger offer\n• Redo > refund (shift value instead of losing cash)\n• Always roll into something ~5x more valuable\n• Can also credit competitor spend to win customers\n\n**Upsell Timing Guidelines:**\n• Immediate upsell only if adjacent need is created (bike → helmet)\n• 24–72 hr upsell if awareness shift required\n• Milestone-based upsell after big win\n• Halfway upsell works for continuity programs\n• Never upsell at satisfaction moment (e.g., after meal, post-purchase high)\n\nWhich upsell strategy fits your business best?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Classic Upsell",
+            "Menu Upsell",
+            "Anchor Upsell",
+            "Rollover Upsell",
+            "Back to recommendations"
+          ]
+        }
+      ],
+      "store_as": "chosen_upsell_strategy",
+      "next_step_rules": [
+        {
+          "on_selection": "Back to recommendations",
+          "go_to": "5.0"
+        },
+        {
+          "on_success": "11.0"
+        }
+      ]
+    },
+    {
+      "id": "8.0",
+      "step_order_index": 10,
+      "assistant_prompt": "Let's design your **Downsell Offer** — the safety net that captures customers who would otherwise walk away.\n\nHere are the recommended downsell strategies:\n\n**Payment Plan**\n• Offer step-down payment plan if no to full price\n• Structure 7-step downsell sequence\n• Pay sales comp only on cash collected today\n\n**Free Trial**\n• Offer risk-free trial if all else fails\n• Always capture card upfront (use ID → card swap hack)\n• Answer objections with: 'That's just how we've always done it.'\n\n**Feature Downsell**\n• Reduce features/scope at lower price\n• Proactively suggest cheaper option to build loyalty\n• Feature downsell customers often become high LTV group\n\n**Key Principle:**\nDownsells are not about discounting — they're about removing barriers while maintaining value perception.\n\nWhich downsell strategy would work for your business?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Payment Plan",
+            "Free Trial",
+            "Feature Downsell",
+            "Back to recommendations"
+          ]
+        }
+      ],
+      "store_as": "chosen_downsell_strategy",
+      "next_step_rules": [
+        {
+          "on_selection": "Back to recommendations",
+          "go_to": "5.0"
+        },
+        {
+          "on_success": "11.0"
+        }
+      ]
+    },
+    {
+      "id": "9.0",
+      "step_order_index": 11,
+      "assistant_prompt": "Let's design your **Continuity Offer** — the recurring revenue engine that stabilizes cashflow.\n\n**Continuity Pricing Principles:**\n• Never bundle one-off education with continuity\n• Price high upfront + low recurring\n• Continuity must deliver ongoing value, not one-off\n\n**Continuity Bonus Strategies:**\n\n**Large Value Bonus**\n• Get huge bonus for signing up now\n• Creates urgency and perceived value\n\n**Continuity Discount**\n• Add second payment method, give up ~3% margin to reduce churn\n• Makes cancellation more friction-heavy\n\n**Waived Fee (Retention)**\n• When cancelling, validate emotionally then roll into new offer\n• Or waive fee for review/testimonial\n• Keep the relationship alive\n\n**Key Principle:**\nContinuity is about delivering ongoing, evolving value — not just stretching out a one-time product.\n\nWhat type of continuity makes sense for your business?",
+      "expected_inputs": ["text"],
+      "store_as": "continuity_design",
+      "next_step_rules": [
+        {
+          "on_success": "11.0"
+        }
+      ]
+    },
+    {
+      "id": "10.0",
+      "step_order_index": 12,
+      "assistant_prompt": "Based on your audience psychology: **{audience_psychology}**\n\nHere are detailed strategy recommendations:\n\n{Display audience-specific strategies based on the rules in Money-Model-Rules.json}\n\n**For Fitness/Transformational audiences:**\n• Win Your Money Back Challenge — ties results to refund\n• Free with Consumption (Challenge/Webinar) — builds belief before sale\n\n**For Retail/Ecom audiences:**\n• Buy X Get Y Free — creates perceived value without margin hit\n• Decoy Offers — makes premium feel like a steal\n\n**For Service/Cashflow Constrained audiences:**\n• Pay Less Now or Pay More Later — reduces barrier while protecting margin\n• Payment Plan downsells — removes affordability objection\n\n**For Status/Exclusivity-Driven audiences:**\n• Scholarship/Free Giveaway — creates prestige and FOMO\n• Anchor Upsell — positions premium as the only real option\n\nWhich strategy do you want to implement first?",
+      "expected_inputs": ["text"],
+      "store_as": "first_strategy_to_implement",
+      "next_step_rules": [
+        {
+          "on_success": "11.0"
+        }
+      ]
+    },
+    {
+      "id": "11.0",
+      "step_order_index": 13,
+      "assistant_prompt": "Excellent! You've now designed your Money Model.\n\n**Your Complete Offer Ladder:**\n• Attraction: {chosen_attraction_strategy}\n• Upsell: {chosen_upsell_strategy}\n• Downsell: {chosen_downsell_strategy}\n• Continuity: {continuity_design}\n\n**Next Steps:**\n1. Build your attraction offer first — this is your entry point\n2. Test it with 10-20 customers\n3. Iterate based on conversion data\n4. Layer in upsell after attraction is converting\n5. Add downsell to capture lost revenue\n6. Implement continuity for stable cashflow\n\n**Remember:**\n• Test monthly\n• Prioritize front-loading cash if CAC payback > 30 days\n• Hybridize strategies when one category underperforms\n\nWhat would you like to do next?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Return to /me page",
+            "Review recommendations again",
+            "Continue to $100M Offer flow"
+          ]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Return to /me page",
+          "go_to": "complete",
+          "redirect": "/me"
+        },
+        {
+          "on_selection": "Review recommendations again",
+          "go_to": "5.0"
+        },
+        {
+          "on_selection": "Continue to $100M Offer flow",
+          "go_to": "complete",
+          "redirect": "/100m-offer"
+        }
+      ]
+    }
+  ]
+}

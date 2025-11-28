@@ -1,0 +1,174 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Money Model GPT Full Ruleset",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/": {
+      "post": {
+        "operationId": "moneyModelRecommendation",
+        "summary": "Inputs → Rules → Recommendations for building a Money Model",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "business_type": { "type": "string" },
+                  "gross_margin": { "type": "number" },
+                  "cac_payback_days": { "type": "number" },
+                  "current_offers": { "type": "array", "items": { "type": "string" } },
+                  "cashflow_status": { "type": "string" },
+                  "audience_psychology": { "type": "string" }
+                },
+                "required": ["business_type", "gross_margin", "cac_payback_days"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recommended Money Model design",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "warnings": { "type": "array", "items": { "type": "string" } },
+                    "missing_offers": { "type": "array", "items": { "type": "string" } },
+                    "recommended_strategy": { "type": "string" },
+                    "rules_triggered": { "type": "array", "items": { "type": "string" } },
+                    "offer_ladder": { "type": "array", "items": { "type": "string" } },
+                    "action_steps": { "type": "array", "items": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-rules": {
+    "scaling": [
+      "If gross_margin < 80 → warning: 'Scaling risk: service businesses must maintain ≥80% margin.'",
+      "If cac_payback_days > 30 → recommend Client-Financed Acquisition (front-loaded cash collection)."
+    ],
+    "offer_ladder": [
+      "If continuity offer missing → recommend adding continuity to stabilize cashflow.",
+      "If only attraction exists → recommend upsell next.",
+      "If high drop-offs → recommend downsell.",
+      "Always output full ladder: Attraction → Upsell → Downsell → Continuity."
+    ],
+    "upsell_timing": [
+      "Immediate upsell only if adjacent need is created (bike → helmet).",
+      "Recommend 24–72 hr upsell if awareness shift required.",
+      "Recommend milestone-based upsell after big win.",
+      "Halfway upsell works for continuity programs.",
+      "Never upsell at satisfaction moment (e.g., after meal, post-purchase high)."
+    ],
+    "attraction_offers": {
+      "Win Your Money Back": [
+        "Tie refund to actions: advertise, comply, attend upsells.",
+        "Challenge must be small achievable change tied to bigger transformation.",
+        "Benchmark: ≥70% upsell conversion if upsell moments embedded."
+      ],
+      "Free Giveaways": [
+        "Main prize = Grand Prize.",
+        "Follow-up losers with consolation/partial scholarship.",
+        "Use progressive reveal of prize.",
+        "Balance friction vs prize compulsion.",
+        "Guardrail: avoid lottery risk."
+      ],
+      "Decoy Offers": [
+        "Low-barrier decoy must highlight premium necessity.",
+        "Benchmark: 70–80% premium uptake if contrast right.",
+        "Always anchor premium price first.",
+        "If too many choose decoy, adjust contrast."
+      ],
+      "Buy X Get Y Free": [
+        "Frame as value education not discount.",
+        "Use when stacking consumables/ecom for fast adoption."
+      ],
+      "Pay Less Now or Pay More Later": [
+        "Immediate upsell must liquidate CAC.",
+        "Backend high-ticket = margin.",
+        "Discount must equal CAC coverage.",
+        "Guardrail: avoid margin collapse from too many low-tier buyers."
+      ],
+      "Free with Consumption": [
+        "Challenge/webinar must follow belief-breaking sequence (old belief → why wrong → new belief → proof).",
+        "Webinar structure: 15m story → 15m obstacle → 45m value → 30m pitch.",
+        "Always reinforce decision and frame next step."
+      ]
+    },
+    "upsell_offers": {
+      "Classic Upsell": [
+        "Use natural complements (X without Y logic).",
+        "Use 'else' framing to soften rejection.",
+        "Always have alternate format to salvage nos.",
+        "Include magic pill option for quick fixes."
+      ],
+      "Menu Upsell": [
+        "Offer structured A/B menu.",
+        "Start by telling them what they don’t need to build trust."
+      ],
+      "Anchor Upsell": [
+        "Show expensive option first.",
+        "Keep differences small so cheap feels like a steal.",
+        "Avoid large differences that force reconsideration."
+      ],
+      "Rollover Upsell": [
+        "Credit leftover/spent money toward bigger offer.",
+        "Redo > refund (shift value instead of losing cash).",
+        "Always roll into something ~5x more valuable.",
+        "Can also credit competitor spend to win customers."
+      ]
+    },
+    "downsell_offers": {
+      "Payment Plan": [
+        "Offer step-down payment plan if no to full price.",
+        "Structure 7-step downsell sequence.",
+        "Pay sales comp only on cash collected today."
+      ],
+      "Free Trial": [
+        "Offer risk-free trial if all else fails.",
+        "Always capture card upfront (use ID → card swap hack).",
+        "Answer objections with: 'That’s just how we’ve always done it.'"
+      ],
+      "Feature Downsell": [
+        "Reduce features/scope at lower price.",
+        "Proactively suggest cheaper option to build loyalty.",
+        "Feature downsell customers often become high LTV group."
+      ]
+    },
+    "continuity_offers": {
+      "Pricing": [
+        "Never bundle one-off education with continuity.",
+        "Price high upfront + low recurring.",
+        "Continuity must deliver ongoing value, not one-off."
+      ],
+      "Bonus Offers": [
+        "Large Value Bonus → get huge bonus for signing up now.",
+        "Continuity Discount → add second payment method, give up ~3% margin to reduce churn.",
+        "Waived Fee → when cancelling, validate emotionally then roll into new offer or waive fee for review."
+      ]
+    },
+    "meta_principles": [
+      "Always build layered model: Attraction → Upsell → Downsell → Continuity.",
+      "Always check metrics first (margin, CAC, conversions).",
+      "Prioritize front-loading CAC if payback > 30 days.",
+      "Hybridize strategies (cross-pollination between categories).",
+      "Always recommend testing & iterating flows monthly.",
+      "Close every recommendation with ladder visualization + missing rung + next step."
+    ],
+    "audience_mapping": [
+      "If fitness/transformational → recommend Win Your Money Back or Free with Consumption.",
+      "If retail/ecom → recommend Buy X Get Y Free or Decoy.",
+      "If cashflow constrained service → recommend Pay Less Now/Pay More Later.",
+      "If status/exclusivity-driven → recommend Scholarship/Free Giveaway."
+    ]
+  }
+}

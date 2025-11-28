@@ -6,6 +6,15 @@ import { sanitizeText } from './lib/sanitize'
 import { sendNotification } from './lib/notifications'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
+import ConversationLogInput from './components/ConversationLogInput'
+import MilestoneInput from './components/MilestoneInput'
+import {
+  handleConversationLogCompletion,
+  handleMilestoneCompletion,
+  handleStreakUpdate,
+  getUserStageProgress
+} from './lib/questCompletionHelpers'
+import { initializeUserStageProgress } from './lib/graduationChecker'
 import './Challenge.css'
 
 function Challenge() {
@@ -28,6 +37,7 @@ function Challenge() {
   const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
   const [userRank, setUserRank] = useState(null)
   const [userData, setUserData] = useState(null)
+  const [stageProgress, setStageProgress] = useState(null) // Track user's stage progress for graduation
   const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
   const [nervousSystemComplete, setNervousSystemComplete] = useState(false) // Track if nervous system flow is complete
   const [healingCompassComplete, setHealingCompassComplete] = useState(false) // Track if healing compass flow is complete
@@ -60,6 +70,7 @@ function Challenge() {
       loadUserData()
       checkNervousSystemComplete()
       checkHealingCompassComplete()
+      loadStageProgress()
     }
   }, [user])
 
@@ -125,6 +136,25 @@ function Challenge() {
       }
     } catch (error) {
       console.error('Error loading user data:', error)
+    }
+  }
+
+  const loadStageProgress = async () => {
+    if (!user?.id) return
+
+    try {
+      const progress = await getUserStageProgress(user.id)
+      setStageProgress(progress)
+
+      // If no stage progress exists and user has a persona, initialize it
+      if (!progress && userData?.persona) {
+        const result = await initializeUserStageProgress(user.id, userData.persona)
+        if (result.success) {
+          setStageProgress(result.data)
+        }
+      }
+    } catch (error) {
+      console.error('Error loading stage progress:', error)
     }
   }
 
@@ -625,38 +655,100 @@ function Challenge() {
     }))
   }
 
-  const handleQuestComplete = async (quest) => {
-    const inputValue = questInputs[quest.id]
+  const handleQuestComplete = async (quest, specialData = null) => {
+    const inputValue = specialData || questInputs[quest.id]
 
-    // Validate input
+    // Validate input based on type
     if (quest.inputType === 'text' && (!inputValue || inputValue.trim() === '')) {
       alert('Please enter your reflection before completing this quest.')
       return
     }
 
-    // Sanitize reflection text
-    const sanitizedReflection = inputValue ? sanitizeText(inputValue) : null
+    if (quest.inputType === 'conversation_log' && !specialData) {
+      alert('Please fill out the conversation details.')
+      return
+    }
+
+    if (quest.inputType === 'milestone' && !specialData) {
+      alert('Please describe what you accomplished.')
+      return
+    }
+
+    // Sanitize reflection text for text inputs
+    const sanitizedReflection = (quest.inputType === 'text' && inputValue)
+      ? sanitizeText(inputValue)
+      : null
 
     try {
-      // Create quest completion
+      // Handle special quest types BEFORE creating quest completion
+      if (quest.inputType === 'conversation_log') {
+        const result = await handleConversationLogCompletion(
+          user.id,
+          progress.challenge_instance_id,
+          specialData,
+          stageProgress
+        )
+
+        if (!result.success) {
+          alert(`Error logging conversation: ${result.error}`)
+          return
+        }
+
+        // Reload stage progress to update conversation count
+        await loadStageProgress()
+      }
+
+      if (quest.inputType === 'milestone') {
+        const result = await handleMilestoneCompletion(
+          user.id,
+          specialData,
+          stageProgress,
+          userData?.persona
+        )
+
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed this milestone!')
+          } else {
+            alert(`Error saving milestone: ${result.error}`)
+          }
+          return
+        }
+
+        // Reload stage progress
+        await loadStageProgress()
+      }
+
+      // Create quest completion record
+      const completionData = {
+        user_id: user.id,
+        challenge_instance_id: progress.challenge_instance_id,
+        quest_id: quest.id,
+        quest_category: quest.category,
+        quest_type: quest.type,
+        points_earned: quest.points,
+        challenge_day: progress.current_day
+      }
+
+      // Add reflection_text for text inputs, or structured data for special types
+      if (quest.inputType === 'text') {
+        completionData.reflection_text = sanitizedReflection
+      } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone') {
+        completionData.reflection_text = JSON.stringify(specialData)
+      }
+
       const { error: completionError } = await supabase
         .from('quest_completions')
-        .insert([{
-          user_id: user.id,
-          challenge_instance_id: progress.challenge_instance_id,
-          quest_id: quest.id,
-          quest_category: quest.category,
-          quest_type: quest.type,
-          points_earned: quest.points,
-          reflection_text: sanitizedReflection,
-          challenge_day: progress.current_day
-        }])
+        .insert([completionData])
 
       if (completionError) {
         console.error('Error completing quest:', completionError)
         alert('Error completing quest. Please try again.')
         return
       }
+
+      // Update streak
+      await handleStreakUpdate(user.id, progress.challenge_instance_id)
 
       // Calculate new points
       const categoryLower = quest.category.toLowerCase()
@@ -720,11 +812,17 @@ function Challenge() {
       setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
 
       // Show success message
-      if (artifactUnlocked) {
-        alert(`🎉 Quest complete! +${quest.points} points\n\n✨ You unlocked the ${categoryArtifact.name}!`)
-      } else {
-        alert(`✅ Quest complete! +${quest.points} points`)
+      let successMessage = `✅ Quest complete! +${quest.points} points`
+
+      if (quest.counts_toward_graduation) {
+        successMessage += '\n✨ Progress toward graduation!'
       }
+
+      if (artifactUnlocked) {
+        successMessage = `🎉 Quest complete! +${quest.points} points\n\n✨ You unlocked the ${categoryArtifact.name}!`
+      }
+
+      alert(successMessage)
     } catch (error) {
       console.error('Error in handleQuestComplete:', error)
       alert('Error completing quest. Please try again.')
@@ -1426,6 +1524,16 @@ function Challenge() {
                               Complete Quest
                             </button>
                           </>
+                        ) : quest.inputType === 'conversation_log' ? (
+                          <ConversationLogInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
+                        ) : quest.inputType === 'milestone' ? (
+                          <MilestoneInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
@@ -1559,6 +1667,16 @@ function Challenge() {
                               Complete Quest
                             </button>
                           </>
+                        ) : quest.inputType === 'conversation_log' ? (
+                          <ConversationLogInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
+                        ) : quest.inputType === 'milestone' ? (
+                          <MilestoneInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
@@ -1663,6 +1781,16 @@ function Challenge() {
                               Complete Quest
                             </button>
                           </>
+                        ) : quest.inputType === 'conversation_log' ? (
+                          <ConversationLogInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
+                        ) : quest.inputType === 'milestone' ? (
+                          <MilestoneInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
