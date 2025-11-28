@@ -192,6 +192,18 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  // Map flowFile to flow_type for graduation tracking
+  function getFlowType(fileName) {
+    if (fileName.includes('nikigai-flow')) {
+      return 'nikigai'
+    } else if (fileName.includes('100m-offer')) {
+      return '100m_offer'
+    } else if (fileName.includes('money-model')) {
+      return '100m_money_model'
+    }
+    return 'nikigai' // default
+  }
+
   async function initSession() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -315,6 +327,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
         .insert({
           user_id: user.id,
           flow_version: `${flowData.pillar || 'v2.2'}-claude`,
+          flow_type: getFlowType(flowFile),
           status: 'in_progress',
           last_step_id: '1.0'
         })

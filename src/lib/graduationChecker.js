@@ -9,20 +9,33 @@ const checkFlowsCompleted = async (userId, flowsRequired = []) => {
   if (!flowsRequired || flowsRequired.length === 0) return true;
 
   try {
-    const { data: completedFlows, error } = await supabase
-      .from('nikigai_responses')
-      .select('flow_type')
+    // Query nikigai_sessions to check for completed flows
+    const { data: completedSessions, error } = await supabase
+      .from('nikigai_sessions')
+      .select('flow_type, status')
       .eq('user_id', userId)
+      .eq('status', 'completed')
       .in('flow_type', flowsRequired);
 
-    // If error (like 400 Bad Request for non-existent flow types), return false gracefully
+    // If error, return false gracefully
     if (error) {
       console.warn('Flow check error (flows may not exist yet):', error.message);
       return false;
     }
 
-    const completedFlowTypes = new Set(completedFlows?.map(f => f.flow_type) || []);
-    return flowsRequired.every(flow => completedFlowTypes.has(flow));
+    // Get unique flow types that have been completed
+    const completedFlowTypes = new Set(completedSessions?.map(s => s.flow_type) || []);
+
+    // Check if all required flows have been completed
+    const allCompleted = flowsRequired.every(flow => completedFlowTypes.has(flow));
+
+    console.log('✅ Flow completion check:', {
+      required: flowsRequired,
+      completed: Array.from(completedFlowTypes),
+      allCompleted
+    });
+
+    return allCompleted;
   } catch (error) {
     console.warn('Error checking flows:', error);
     return false; // Gracefully fail - flows don't exist yet

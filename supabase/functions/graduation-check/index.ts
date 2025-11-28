@@ -78,13 +78,14 @@ const PERSONA_STAGES = {
 async function checkFlowsCompleted(supabase: any, userId: string, flowsRequired: string[] = []) {
   if (!flowsRequired || flowsRequired.length === 0) return true
 
-  const { data: completedFlows } = await supabase
-    .from('nikigai_responses')
-    .select('flow_type')
+  const { data: completedSessions } = await supabase
+    .from('nikigai_sessions')
+    .select('flow_type, status')
     .eq('user_id', userId)
+    .eq('status', 'completed')
     .in('flow_type', flowsRequired)
 
-  const completedFlowTypes = new Set(completedFlows?.map((f: any) => f.flow_type) || [])
+  const completedFlowTypes = new Set(completedSessions?.map((s: any) => s.flow_type) || [])
   return flowsRequired.every(flow => completedFlowTypes.has(flow))
 }
 

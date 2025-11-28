@@ -116,16 +116,16 @@ function AppRouter() {
             } />
 
             {/* Persona-specific flows (Phase 2) */}
-            {/* <Route path="/offer-creation" element={
+            <Route path="/100m-offer" element={
               <AuthGate>
-                <OfferCreation />
+                <NikigaiTest flowFile="100m-offer-flow.json" flowName="$100M Offer Builder" />
               </AuthGate>
-            } /> */}
-            {/* <Route path="/money-model" element={
+            } />
+            <Route path="/money-model" element={
               <AuthGate>
-                <MoneyModel />
+                <NikigaiTest flowFile="money-model-flow.json" flowName="Money Model Designer" />
               </AuthGate>
-            } /> */}
+            } />
           </Routes>
         </Router>
       </AuthProvider>
