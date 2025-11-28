@@ -224,6 +224,9 @@ serve(async (req) => {
     console.log('📝 Sending to Claude:', userPrompt.substring(0, 500) + '...')
 
     // Define the response tool/function
+    // Make clusters required when clustering is requested
+    const requiredFields = shouldCluster || shouldGenerate ? ["message", "clusters"] : ["message"]
+
     const tools = [{
       name: "nikigai_response",
       description: "Respond to the user with a conversational message and optional clusters",
@@ -236,7 +239,9 @@ serve(async (req) => {
           },
           clusters: {
             type: "array",
-            description: "Array of clusters (only include when clustering is requested)",
+            description: shouldCluster
+              ? "REQUIRED: Array of semantic clusters. Each cluster MUST have label, items array, and insight."
+              : "Array of clusters (only include when clustering is requested)",
             items: {
               type: "object",
               properties: {
@@ -258,7 +263,7 @@ serve(async (req) => {
             }
           }
         },
-        required: ["message"]
+        required: requiredFields
       }
     }]
 
@@ -272,7 +277,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'claude-3-haiku-20240307',
-        max_tokens: 1024,
+        max_tokens: shouldCluster || shouldGenerate ? 2048 : 1024, // Increased for clustering
         system: SYSTEM_PROMPT,
         tools: tools,
         tool_choice: { type: "tool", name: "nikigai_response" },
