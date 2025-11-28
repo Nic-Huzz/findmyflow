@@ -74,6 +74,20 @@ PERSONA CLUSTERING (when target is "persona"):
 - For each persona include: who they are, what they're struggling with, and what they need
 - These are the people this user is most qualified to help
 
+PROBLEMS CLUSTERING (when target is "problems"):
+- Identify the underlying CHANGE or IMPACT the user wants to create in the world
+- Each cluster represents a PROBLEM SPACE or CHANGE AREA they deeply care about
+- Name clusters as the transformation/change (e.g., "Mental Health Access", "Creative Expression", "Personal Development")
+- Look for patterns in:
+  * What struggles or gaps do they see in the world?
+  * What changes do they want to create?
+  * What impact have they already made that they want to scale?
+  * What topics fascinate them and why?
+- Group by the TYPE of change or impact, not the specific tactics or methods
+- Focus on the emotional core: what deeply matters to them based on their experiences?
+- Each insight should connect the problem space to their personal journey and why they care
+- Avoid generic labels - make clusters specific to their unique perspective and experiences
+
 INTEGRATION/MISSION (when generating integration or mission):
 - Combine skills, problems, and persona into a cohesive picture
 - Generate market opportunity seeds (coaching, courses, content, products)
