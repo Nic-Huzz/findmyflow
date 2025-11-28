@@ -290,9 +290,14 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
             .select('*')
             .eq('user_id', user.id)
             .eq('cluster_stage', 'final')
+            .eq('archived', false)
             .order('created_at', { ascending: false })
 
           if (!clustersError && savedClusters) {
+            // Debug: Show what cluster_types we actually have
+            const clusterTypes = new Set(savedClusters.map(c => c.cluster_type))
+            console.log('🔍 Unique cluster_types found:', Array.from(clusterTypes))
+
             // Group clusters by type
             // Note: Skills flow saves as 'roles' (new) or 'skills' (old), support both
             const grouped = {
@@ -300,6 +305,16 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
               problems: savedClusters.filter(c => c.cluster_type === 'problems'),
               persona: savedClusters.filter(c => c.cluster_type === 'persona')
             }
+
+            // Debug: Check if any problem clusters exist at all
+            const problemClustersInAll = allUserClusters?.filter(c => c.cluster_type === 'problems') || []
+            console.log('🔍 Problem clusters analysis:', {
+              total_in_db: problemClustersInAll.length,
+              final_stage: problemClustersInAll.filter(c => c.cluster_stage === 'final').length,
+              not_archived: problemClustersInAll.filter(c => !c.archived).length,
+              final_and_not_archived: problemClustersInAll.filter(c => c.cluster_stage === 'final' && !c.archived).length
+            })
+
             setClusterData(grouped)
             console.log('✅ Loaded saved clusters:', {
               skills: grouped.skills.length,
@@ -736,9 +751,17 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
       }
 
       // Find next step based on selection
-      const nextStepRule = currentStepData.next_step_rules?.find(
+      // Support both on_selection (specific option) and on_success (any valid selection)
+      let nextStepRule = currentStepData.next_step_rules?.find(
         rule => rule.on_selection === option
       )
+
+      // If no specific match, check for on_success rule (fallback for single-select)
+      if (!nextStepRule) {
+        nextStepRule = currentStepData.next_step_rules?.find(
+          rule => rule.on_success
+        )
+      }
 
       if (nextStepRule) {
         const nextStepId = nextStepRule.go_to || nextStepRule.goto
