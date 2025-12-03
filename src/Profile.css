@@ -3,6 +3,7 @@
 .dashboard-container {
   min-height: 100vh;
   background: #fafbfc;
+  position: relative;
 }
 
 /* Mobile Top Bar */
@@ -172,6 +173,11 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
   margin-bottom: 40px;
+  align-items: start;
+}
+
+.stat-card-wrapper {
+  position: relative;
 }
 
 .stat-card {
@@ -186,6 +192,118 @@
 .stat-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.stat-card.expanded {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.stat-card-expanded {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin-top: -1px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+    transform: translateY(0);
+  }
+}
+
+.archetype-expanded-card {
+  background: white;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  border: 1px solid #e8ecef;
+  border-top: none;
+  overflow: hidden;
+}
+
+.archetype-expanded-card .archetype-header {
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+  background: #f5f7fa;
+}
+
+.archetype-expanded-card .archetype-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.archetype-expanded-card .archetype-tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.95);
+  color: #5e17eb;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.archetype-expanded-card.essence .archetype-tag,
+.archetype-expanded-card .archetype-tag {
+  color: #5e17eb;
+}
+
+.archetype-expanded-card.essence .archetype-tag {
+  color: #d4a000;
+}
+
+.archetype-expanded-card .archetype-body {
+  padding: 30px;
+}
+
+.archetype-expanded-card .archetype-name {
+  font-size: 1.8rem;
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  font-weight: 800;
+}
+
+.archetype-expanded-card .archetype-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.archetype-expanded-card .explore-button {
+  width: 100%;
+  background: #5e17eb;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 1rem;
+}
+
+.archetype-expanded-card .explore-button:hover {
+  background: #4912c4;
+  transform: scale(1.02);
 }
 
 .stat-icon {
@@ -270,6 +388,10 @@
 .archetype-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.archetype-card.expanded {
+  overflow: visible;
 }
 
 .archetype-header {
@@ -364,6 +486,77 @@
   color: #666;
   line-height: 1.6;
   margin-bottom: 15px;
+}
+
+/* Archetype Expanded Content */
+.archetype-expanded-content {
+  padding: 24px;
+  background: #fafafa;
+  border-top: 1px solid #e8ecef;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+  }
+}
+
+.expanded-section {
+  margin-bottom: 24px;
+}
+
+.expanded-section:last-child {
+  margin-bottom: 0;
+}
+
+.expanded-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e17eb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.expanded-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.expanded-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #666;
+}
+
+.expanded-text.italic {
+  font-style: italic;
+  margin-top: 12px;
+}
+
+.characters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.character-item {
+  font-size: 15px;
+  color: #666;
+  padding: 8px 0;
+}
+
+.archetype-card.expanded {
+  overflow: visible;
 }
 
 /* Persona Flow Section */
@@ -542,6 +735,12 @@
 
 /* Responsive - Mobile */
 @media (max-width: 768px) {
+  /* Fix for mobile scrolling - remove height constraint */
+  .dashboard-container {
+    min-height: 100vh;
+    height: auto;
+  }
+
   /* Show mobile topbar */
   .mobile-topbar {
     display: block;
@@ -560,11 +759,15 @@
     padding: 30px 20px;
   }
 
+  .sidebar.mobile-hidden {
+    pointer-events: none; /* Prevent touch events when hidden */
+  }
+
   .sidebar .logo {
     display: none; /* Hide logo on mobile since it's in topbar */
   }
 
-  /* Main content takes full width */
+  /* Main content takes full width and scrolls naturally */
   .main-content {
     margin-left: 0;
     padding: 80px 20px 25px 20px; /* Top padding for fixed topbar */

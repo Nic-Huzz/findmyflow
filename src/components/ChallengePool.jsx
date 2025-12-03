@@ -40,9 +40,10 @@ function ChallengePool({ onChallengeSelect }) {
 
     try {
       const { data, error } = await supabase
-        .from('nikigai_responses')
+        .from('nikigai_sessions')
         .select('flow_type')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('status', 'completed');
 
       if (error) {
         console.error('Error loading completed flows:', error);

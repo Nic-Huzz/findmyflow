@@ -4,6 +4,7 @@ import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import HybridArchetypeFlow from './HybridArchetypeFlow'
 import { essenceProfiles } from './data/essenceProfiles'
+import { essenceProfiles as essenceProfilesFlat } from './lib/data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
 import './PersonaAssessment.css'
 
@@ -235,7 +236,30 @@ function PersonaAssessment() {
   // Get essence archetype display data
   const getEssenceDisplay = () => {
     if (!essenceArchetype) return null
-    return essenceProfiles.essence_archetypes?.find(a => a.name === essenceArchetype.name) || essenceArchetype
+    
+    const archetypeName = essenceArchetype.name?.trim()
+    if (!archetypeName) return essenceArchetype
+    
+    // First try: array structure (essenceProfiles.essence_archetypes)
+    const foundInArray = essenceProfiles.essence_archetypes?.find(a => 
+      a.name?.trim().toLowerCase() === archetypeName.toLowerCase()
+    )
+    if (foundInArray) {
+      console.log('✅ Found essence profile in array:', foundInArray.name, 'with poetic_line:', foundInArray.poetic_line)
+      return foundInArray
+    }
+    
+    // Second try: flat object structure (essenceProfilesFlat[key])
+    const foundInFlat = essenceProfilesFlat[archetypeName]
+    if (foundInFlat && foundInFlat.poetic_line) {
+      console.log('✅ Found essence profile in flat structure:', archetypeName, 'with poetic_line:', foundInFlat.poetic_line)
+      return { ...essenceArchetype, ...foundInFlat, name: archetypeName }
+    }
+    
+    console.warn('⚠️ Could not find essence profile for:', archetypeName, 
+      'Array names:', essenceProfiles.essence_archetypes?.map(a => a.name),
+      'Flat keys:', Object.keys(essenceProfilesFlat))
+    return essenceArchetype
   }
 
   // Get protective archetype display data
@@ -290,10 +314,10 @@ function PersonaAssessment() {
         {renderProgress()}
         <div className="welcome-container">
           <div className="welcome-content">
-            <h1 className="welcome-greeting">Welcome. I'm Zarlo.</h1>
+            <h1 className="welcome-greeting">Welcome. I'm Zarlo 🌞 </h1>
             <div className="welcome-message">
               <p><strong>Have you ever felt like you were made for more?</strong></p>
-              <p>I believe you're an instrument of life —</p>
+              <p>I believe you're an instrument of life...</p>
               <p>When you were a kid, you embodied this effortlessly: Playful, curious, zero shame.</p>
               <p>Then life taught you to turn it down: "Be good. Don't be weird. Fit in."</p>
               <p>But that original frequency? It's still inside you. It has a name, a shape, a purpose.</p>
@@ -372,13 +396,19 @@ function PersonaAssessment() {
         <div className="intro-container">
           <h2 className="intro-title">Discover Your Essence</h2>
           <p className="intro-text">
-            Every river has a natural current — a direction it flows most powerfully.
+            That original song you were born to share? It has a name.
           </p>
           <p className="intro-text">
-            This is your <strong>essence</strong> — the unique way your energy moves when nothing blocks it.
+            I call it your <strong>Essence Voice</strong>.
           </p>
           <p className="intro-text">
-            There are 8 Essence Archetypes. One will resonate as the version of you that's most alive and authentic.
+            It's the version of you that feels most alive. Most authentic. Most magnetic.
+          </p>
+          <p className="intro-text">
+            When you show up from this place, your impact doesn't feel like work — it feels like flow.
+          </p>
+          <p className="intro-text">
+            There are 8 Essence Voices. One will feel like coming home.
           </p>
           <p className="intro-instruction">
             Swipe right on the ones that resonate. Left on the ones that don't.
@@ -441,7 +471,7 @@ function PersonaAssessment() {
         <div className="intro-container">
           <h2 className="intro-title">Identify What's Blocking You</h2>
           <p className="intro-text">
-            Now let's explore what's been slowing your flow.
+            Now let's explore what's been muting your song.
           </p>
           <p className="intro-text">
             These are <strong>protective patterns</strong> you developed when you were younger to keep yourself safe from failure, rejection, or judgement.

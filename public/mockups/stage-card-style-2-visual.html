@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage Card - Style 2: Visual Accordion</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .stage-progress-card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .card-header {
+      padding: 28px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 28px;
+      right: 28px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      transition: opacity 0.3s ease;
+    }
+
+    .card-header:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .stage-progress-card.expanded .card-header::after {
+      opacity: 0;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .persona-badge {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .expand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .expand-icon.expanded {
+      transform: rotate(180deg);
+      background: rgba(255, 255, 255, 0.95);
+      color: #667eea;
+    }
+
+    .stage-summary {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .current-stage-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stage-emoji {
+      font-size: 48px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    }
+
+    .stage-text {
+      flex: 1;
+    }
+
+    .current-stage-label {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .current-stage-name {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .next-stage-preview {
+      text-align: right;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .card-header:hover .next-stage-preview {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .next-stage-label {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .next-stage-name {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .next-stage-arrow {
+      margin-top: 4px;
+      opacity: 0.6;
+      font-size: 20px;
+    }
+
+    /* Dropdown Content */
+    .dropdown-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dropdown-content.expanded {
+      max-height: 1000px;
+    }
+
+    .journey-visualization {
+      padding: 40px 28px;
+      background: white;
+      color: #333;
+    }
+
+    /* Journey Path */
+    .path-container {
+      position: relative;
+      margin-bottom: 32px;
+    }
+
+    .path-line {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      right: 30px;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+    }
+
+    .path-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #fbbf24);
+      border-radius: 2px;
+      width: 33%;
+      transition: width 0.5s ease;
+    }
+
+    .milestones {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .milestone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 25%;
+      animation: fadeInUp 0.4s ease;
+      animation-fill-mode: backwards;
+    }
+
+    .milestone:nth-child(1) { animation-delay: 0.1s; }
+    .milestone:nth-child(2) { animation-delay: 0.2s; }
+    .milestone:nth-child(3) { animation-delay: 0.3s; }
+    .milestone:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .milestone-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      border: 4px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .milestone.completed .milestone-icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: #667eea;
+      color: white;
+      transform: scale(1.1);
+    }
+
+    .milestone.current .milestone-icon {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-color: #fbbf24;
+      border-width: 5px;
+      animation: bounce 2s infinite;
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0) scale(1.1);
+      }
+      50% {
+        transform: translateY(-10px) scale(1.15);
+      }
+    }
+
+    .milestone-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .milestone.completed .milestone-name {
+      color: #667eea;
+    }
+
+    .milestone.current .milestone-name {
+      color: #f59e0b;
+    }
+
+    .milestone-status {
+      font-size: 11px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .requirements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .requirement-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #fafafa;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.2s ease;
+    }
+
+    .requirement-card.completed {
+      background: linear-gradient(135deg, #d4f4dd, #c6f6d5);
+      border-color: #48bb78;
+    }
+
+    .requirement-checkbox {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .requirement-card.completed .requirement-checkbox {
+      background: #48bb78;
+      border-color: #48bb78;
+      color: white;
+    }
+
+    .requirement-text {
+      font-size: 13px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .stage-summary {
+        grid-template-columns: 1fr;
+      }
+      .next-stage-preview {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="stage-progress-card" id="stageCard">
+      <div class="card-header" onclick="toggleDropdown()">
+        <div class="header-top">
+          <div class="persona-badge">Vibe Seeker</div>
+          <div class="expand-icon" id="expandIcon">↓</div>
+        </div>
+        <div class="stage-summary">
+          <div class="current-stage-section">
+            <div class="stage-emoji">🔍</div>
+            <div class="stage-text">
+              <div class="current-stage-label">Current Stage</div>
+              <div class="current-stage-name">Explore</div>
+            </div>
+          </div>
+          <div class="next-stage-preview">
+            <div class="next-stage-label">Up Next</div>
+            <div class="next-stage-name">Commit</div>
+            <div class="next-stage-arrow">→</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dropdown-content" id="dropdownContent">
+        <div class="journey-visualization">
+          <div class="path-container">
+            <div class="path-line">
+              <div class="path-fill"></div>
+            </div>
+            <div class="milestones">
+              <div class="milestone completed">
+                <div class="milestone-icon">✓</div>
+                <div class="milestone-name">Discover</div>
+                <div class="milestone-status">Complete</div>
+              </div>
+              <div class="milestone current">
+                <div class="milestone-icon">🔍</div>
+                <div class="milestone-name">Explore</div>
+                <div class="milestone-status">In Progress</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-icon">🎯</div>
+                <div class="milestone-name">Commit</div>
+                <div class="milestone-status">Locked</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-icon">🚀</div>
+                <div class="milestone-name">Scale</div>
+                <div class="milestone-status">Locked</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="requirements-grid">
+            <div class="requirement-card completed">
+              <div class="requirement-checkbox">✓</div>
+              <div class="requirement-text">Complete Skills flow</div>
+            </div>
+            <div class="requirement-card">
+              <div class="requirement-checkbox">○</div>
+              <div class="requirement-text">Log 3 conversations</div>
+            </div>
+            <div class="requirement-card">
+              <div class="requirement-checkbox">○</div>
+              <div class="requirement-text">One milestone</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const content = document.getElementById('dropdownContent');
+      const icon = document.getElementById('expandIcon');
+      const card = document.getElementById('stageCard');
+      content.classList.toggle('expanded');
+      icon.classList.toggle('expanded');
+      card.classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Tracker - Style 1: Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(94, 23, 235, 0.3);
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    /* Stats Overview */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #5e17eb;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-icon {
+      font-size: 28px;
+    }
+
+    /* Projects Section */
+    .section {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .add-project-btn {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .add-project-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* Project Cards */
+    .projects-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .project-card {
+      border: 2px solid #f0f0f0;
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      border-color: #5e17eb;
+      box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+    }
+
+    .project-description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .project-status {
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #e0e7ff;
+      color: #5e17eb;
+    }
+
+    /* Direction Timeline */
+    .direction-timeline {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .direction-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .direction-dot:hover {
+      transform: scale(1.5);
+    }
+
+    .direction-north { background: #10b981; }
+    .direction-east { background: #f59e0b; }
+    .direction-south { background: #ef4444; }
+    .direction-west { background: #5e17eb; }
+
+    .timeline-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #999;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Quick Log Input */
+    .quick-log {
+      background: linear-gradient(135deg, #fafafa, #f5f5f5);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .quick-log-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+
+    .direction-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .direction-btn {
+      padding: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .direction-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .direction-btn.north { border-color: #10b981; }
+    .direction-btn.north:hover { background: #d1fae5; }
+
+    .direction-btn.east { border-color: #f59e0b; }
+    .direction-btn.east:hover { background: #fef3c7; }
+
+    .direction-btn.south { border-color: #ef4444; }
+    .direction-btn.south:hover { background: #fee2e2; }
+
+    .direction-btn.west { border-color: #5e17eb; }
+    .direction-btn.west:hover { background: #e0e7ff; }
+
+    .btn-icon {
+      font-size: 24px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .btn-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .demo-label {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="demo-label">Style 1: Dashboard View</div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="page-title">Flow Tracker</h1>
+      <p class="page-subtitle">Track your daily flow state and project momentum</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Active Projects</div>
+        <div class="stat-value">
+          <span class="stat-icon">📊</span>
+          <span>3</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">This Week</div>
+        <div class="stat-value">
+          <span class="stat-icon">✓</span>
+          <span>12 logs</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Current Streak</div>
+        <div class="stat-value">
+          <span class="stat-icon">🔥</span>
+          <span>7 days</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Dominant Direction</div>
+        <div class="stat-value">
+          <span class="stat-icon">↑</span>
+          <span>North</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Log -->
+    <div class="quick-log">
+      <div class="quick-log-title">Quick Log - How are you flowing today?</div>
+      <div class="direction-buttons">
+        <button class="direction-btn north">
+          <span class="btn-icon">↑</span>
+          <span class="btn-label">North</span>
+        </button>
+        <button class="direction-btn east">
+          <span class="btn-icon">→</span>
+          <span class="btn-label">East</span>
+        </button>
+        <button class="direction-btn south">
+          <span class="btn-icon">↓</span>
+          <span class="btn-label">South</span>
+        </button>
+        <button class="direction-btn west">
+          <span class="btn-icon">←</span>
+          <span class="btn-label">West</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Projects Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">Your Projects</h2>
+        <button class="add-project-btn">+ New Project</button>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">Mental Health Marketplace</h3>
+              <p class="project-description">Connecting therapists with clients through AI-powered matching</p>
+            </div>
+            <span class="project-status">Active</span>
+          </div>
+
+          <div class="direction-timeline">
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-east" title="East - Exploration"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-west" title="West - Reflection"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-east" title="East - Exploration"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-south" title="South - Rest"></div>
+          </div>
+          <div class="timeline-legend">
+            <div class="legend-item">
+              <div class="direction-dot direction-north"></div>
+              <span>Growth</span>
+            </div>
+            <div class="legend-item">
+              <div class="direction-dot direction-east"></div>
+              <span>Explore</span>
+            </div>
+            <div class="legend-item">
+              <div class="direction-dot direction-south"></div>
+              <span>Rest</span>
+            </div>
+            <div class="legend-item">
+              <div class="direction-dot direction-west"></div>
+              <span>Reflect</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">Creator Wellness App</h3>
+              <p class="project-description">Helping content creators manage burnout and maintain sustainable growth</p>
+            </div>
+            <span class="project-status">Active</span>
+          </div>
+
+          <div class="direction-timeline">
+            <div class="direction-dot direction-east" title="East - Exploration"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-east" title="East - Exploration"></div>
+            <div class="direction-dot direction-south" title="South - Rest"></div>
+            <div class="direction-dot direction-west" title="West - Reflection"></div>
+            <div class="direction-dot direction-east" title="East - Exploration"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card">
+          <div class="project-header">
+            <div>
+              <h3 class="project-title">Solopreneur Community Platform</h3>
+              <p class="project-description">Building a support network for solo founders and side hustlers</p>
+            </div>
+            <span class="project-status">Active</span>
+          </div>
+
+          <div class="direction-timeline">
+            <div class="direction-dot direction-west" title="West - Reflection"></div>
+            <div class="direction-dot direction-west" title="West - Reflection"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+            <div class="direction-dot direction-east" title="East - Exploration"></div>
+            <div class="direction-dot direction-north" title="North - Growth"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

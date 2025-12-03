@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient.js'
 import { useAuth } from './auth/AuthProvider'
+import { createProjectFromSession } from './lib/projectCreation'
 import './ClusterSlider.css'
 
 // Enhanced markdown parser for bold, italic text, bullets, headers, and line breaks
@@ -148,6 +149,15 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
     persona: 0
   })
   const messagesEndRef = useRef(null)
+
+  const taglineByFlowName = {
+    'Skills Discovery': "Identify your unique skill combinations to uncover roles you're passionate about",
+    'Problems Discovery': "Identify your life experiences and curiosities to uncover problems you're passionate about",
+    'Persona Discovery': "Identify people you're passionate about supporting",
+    'Integration & Mission': "Connect your skills, problems, and personas into a clear mission and opportunity map."
+  }
+
+  const headerTagline = taglineByFlowName[flowName] || "Flow Finder: A modern day Ikigai process"
 
   // Reset all state when flowFile changes (navigating between flows)
   useEffect(() => {
@@ -803,6 +813,27 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
               .eq('id', sessionId)
 
             console.log('✅ Session marked as completed:', sessionId)
+
+            // Auto-create project from completed session (Phase 4A: Project Auto-Creation)
+            const currentFlowType = getFlowType(flowFile)
+            const projectResult = await createProjectFromSession(user.id, sessionId, currentFlowType)
+
+            if (projectResult.success) {
+              console.log('🎯 Project auto-created:', projectResult.projectId, projectResult.projectName)
+
+              // Show success message if new project created
+              if (!projectResult.alreadyExists) {
+                const projectCreatedMsg = {
+                  id: `ai-project-created-${Date.now()}`,
+                  isAI: true,
+                  text: `🎯 Great news! I've created your project "${projectResult.projectName}". Visit /flow-tracker to start tracking your daily progress!`,
+                  timestamp: new Date().toLocaleTimeString()
+                }
+                setMessages(prev => [...prev, projectCreatedMsg])
+              }
+            } else {
+              console.warn('⚠️ Could not auto-create project:', projectResult.error)
+            }
           } catch (err) {
             console.error('⚠️ Failed to mark session as completed:', err)
           }
@@ -1182,7 +1213,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
     <div className="app">
       <header className="header">
         <h1>{flowName}</h1>
-        <p>Uncover your unique combination of skills, passions, and purpose</p>
+        <p>{headerTagline}</p>
       </header>
 
       <main className="chat-container">

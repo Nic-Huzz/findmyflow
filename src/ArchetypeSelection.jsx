@@ -108,7 +108,7 @@ const ArchetypeSelection = () => {
             </div>
             <div className="card-body">
               <h3 className="card-title">{essenceArchetype}</h3>
-              <p className="card-subtitle">Your Essence Archetype</p>
+              <p className="card-subtitle">Your Essence Voice</p>
               <p className="card-description">
                 Discover your true nature, superpowers, and the energy you bring when you're fully aligned. This is who you are at your core.
               </p>
@@ -134,7 +134,7 @@ const ArchetypeSelection = () => {
             </div>
             <div className="card-body">
               <h3 className="card-title">{protectiveArchetype}</h3>
-              <p className="card-subtitle">Your Protective Archetype</p>
+              <p className="card-subtitle">Your Protective Voice</p>
               <p className="card-description">
                 Understand the patterns that developed to keep you safe, and learn how to move beyond them into your essence.
               </p>

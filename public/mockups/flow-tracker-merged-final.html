@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Tracker - Merged Final Design</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(94, 23, 235, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .add-project-btn {
+      background: white;
+      color: #5e17eb;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .add-project-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .demo-label {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Quick Log Section - Updated Design */
+    .quick-log {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .quick-log-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .project-select-group {
+      margin-bottom: 24px;
+    }
+
+    .project-select-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .project-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      background: white;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .project-select:hover {
+      border-color: #5e17eb;
+    }
+
+    .project-select:focus {
+      outline: none;
+      border-color: #5e17eb;
+    }
+
+    .question-group {
+      margin-bottom: 24px;
+    }
+
+    .question-heading {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .energy-btn, .flow-btn {
+      padding: 14px 20px;
+      border: 2px solid;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .energy-btn:hover, .flow-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .energy-btn.selected, .flow-btn.selected {
+      color: white;
+    }
+
+    /* Energy buttons */
+    .energy-excited {
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .energy-excited.selected {
+      background: #10b981;
+    }
+
+    .energy-tired {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .energy-tired.selected {
+      background: #ef4444;
+    }
+
+    /* Flow buttons */
+    .flow-great {
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .flow-great.selected {
+      background: #10b981;
+    }
+
+    .flow-resistance {
+      border-color: #f59e0b;
+      color: #f59e0b;
+    }
+
+    .flow-resistance.selected {
+      background: #f59e0b;
+    }
+
+    .flow-opportunity {
+      border-color: #5e17eb;
+      color: #5e17eb;
+    }
+
+    .flow-opportunity.selected {
+      background: #5e17eb;
+    }
+
+    .arrow-icon {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .submit-log-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      margin-top: 8px;
+    }
+
+    .submit-log-btn:hover {
+      transform: scale(1.02);
+    }
+
+    .submit-log-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+    }
+
+    .filter-chip {
+      padding: 8px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-chip:hover {
+      border-color: #5e17eb;
+      transform: translateY(-2px);
+    }
+
+    .filter-chip.active {
+      border-color: #5e17eb;
+      background: #5e17eb;
+      color: white;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+    }
+
+    /* Project Card */
+    .project-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .project-card-header {
+      padding: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .project-card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .project-card-description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .project-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .project-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #e0e7ff;
+      color: #5e17eb;
+    }
+
+    .project-count {
+      font-size: 13px;
+      color: #999;
+      font-weight: 500;
+    }
+
+    /* Health Indicator */
+    .health-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .health-great { background: #10b981; }
+    .health-good { background: #f59e0b; }
+    .health-low { background: #ef4444; }
+
+    /* Momentum Bar */
+    .momentum-section {
+      padding: 16px 20px;
+      background: #fafafa;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .momentum-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .momentum-bar {
+      display: flex;
+      height: 8px;
+      border-radius: 100px;
+      overflow: hidden;
+      background: #e0e0e0;
+    }
+
+    .momentum-segment {
+      transition: width 0.3s;
+    }
+
+    .momentum-north { background: #10b981; }
+    .momentum-east { background: #f59e0b; }
+    .momentum-south { background: #ef4444; }
+    .momentum-west { background: #5e17eb; }
+
+    .momentum-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Recent Entries */
+    .recent-entries {
+      padding: 16px 20px;
+    }
+
+    .recent-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .entry-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .entry-mini:last-child {
+      border-bottom: none;
+    }
+
+    .entry-mini-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .entry-mini-info {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .entry-mini-direction {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .entry-mini-time {
+      color: #999;
+      font-size: 11px;
+    }
+
+    /* Card Actions */
+    .card-actions {
+      padding: 16px 20px;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quick-add-mini-btn {
+      width: 100%;
+      padding: 10px;
+      background: white;
+      border: 2px dashed #e0e0e0;
+      border-radius: 8px;
+      color: #666;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-add-mini-btn:hover {
+      border-color: #5e17eb;
+      color: #5e17eb;
+      background: #f9f9ff;
+    }
+
+    .view-timeline-btn {
+      width: 100%;
+      padding: 10px;
+      background: #5e17eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-timeline-btn:hover {
+      background: #4912c4;
+      transform: translateY(-1px);
+    }
+
+    /* Timeline Modal */
+    .timeline-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .timeline-modal.active {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .timeline-modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 800px;
+      width: 100%;
+      margin: 40px auto;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .timeline-modal-header {
+      padding: 24px;
+      border-bottom: 2px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .timeline-modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .close-modal-btn {
+      background: #f0f0f0;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .close-modal-btn:hover {
+      background: #e0e0e0;
+      transform: scale(1.1);
+    }
+
+    .timeline-modal-body {
+      padding: 24px;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    /* Timeline Container */
+    .timeline-container {
+      position: relative;
+    }
+
+    /* Date Group */
+    .date-group {
+      margin-bottom: 32px;
+    }
+
+    .date-header {
+      font-size: 14px;
+      font-weight: 700;
+      color: #5e17eb;
+      margin-bottom: 16px;
+      padding-left: 40px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Timeline Entry */
+    .timeline-entry {
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: 20px;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid white;
+      box-shadow: 0 0 0 2px currentColor;
+      z-index: 2;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 7px;
+      top: 24px;
+      bottom: -20px;
+      width: 2px;
+      background: #e0e0e0;
+      z-index: 1;
+    }
+
+    .date-group:last-child .timeline-entry:last-child .timeline-line {
+      display: none;
+    }
+
+    .timeline-dot.north { color: #10b981; }
+    .timeline-dot.east { color: #f59e0b; }
+    .timeline-dot.south { color: #ef4444; }
+    .timeline-dot.west { color: #5e17eb; }
+
+    /* Entry Card in Timeline */
+    .entry-card {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.3s;
+    }
+
+    .entry-card:hover {
+      background: #f5f5f5;
+      transform: translateX(4px);
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .entry-direction {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .direction-arrow {
+      font-size: 20px;
+    }
+
+    .entry-time {
+      font-size: 12px;
+      color: #999;
+      font-weight: 500;
+    }
+
+    .entry-states {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .state-box {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      border-left: 3px solid #5e17eb;
+    }
+
+    .state-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .state-value {
+      font-size: 13px;
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    /* Empty State Card */
+    .empty-card {
+      background: white;
+      border: 2px dashed #e0e0e0;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .empty-card:hover {
+      border-color: #5e17eb;
+      background: #f9f9ff;
+      transform: translateY(-4px);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .momentum-legend {
+        gap: 12px;
+      }
+
+      .entry-states {
+        grid-template-columns: 1fr;
+      }
+
+      .button-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="demo-label">✨ Merged Final Design</div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Flow Tracker</h1>
+        <p class="page-subtitle">Track your project momentum and flow states</p>
+      </div>
+      <button class="add-project-btn">+ New Project</button>
+    </div>
+
+    <!-- Quick Log Section - NEW DESIGN -->
+    <div class="quick-log">
+      <h2 class="quick-log-title">Quick Log</h2>
+
+      <!-- Project Selection -->
+      <div class="project-select-group">
+        <label class="project-select-label">Select Project</label>
+        <select class="project-select" id="project-select">
+          <option value="">Choose a project...</option>
+          <option value="1">Mental Health Marketplace</option>
+          <option value="2">Creator Wellness App</option>
+          <option value="3">Solopreneur Community</option>
+        </select>
+      </div>
+
+      <!-- Energy Question -->
+      <div class="question-group">
+        <h3 class="question-heading">Are you feeling excited or tired?</h3>
+        <div class="button-row">
+          <button class="energy-btn energy-excited" onclick="toggleButton(this, 'energy')">
+            Excited
+          </button>
+          <button class="energy-btn energy-tired" onclick="toggleButton(this, 'energy')">
+            Tired
+          </button>
+        </div>
+      </div>
+
+      <!-- Flow Question -->
+      <div class="question-group">
+        <h3 class="question-heading">How is the project flowing?</h3>
+        <div class="button-row">
+          <button class="flow-btn flow-great" onclick="toggleButton(this, 'flow')">
+            <span class="arrow-icon">↑</span>
+            <span>Great</span>
+          </button>
+          <button class="flow-btn flow-resistance" onclick="toggleButton(this, 'flow')">
+            <span class="arrow-icon">→</span>
+            <span>Facing Resistance</span>
+          </button>
+          <button class="flow-btn flow-opportunity" onclick="toggleButton(this, 'flow')">
+            <span class="arrow-icon">←</span>
+            <span>New Opportunity</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button class="submit-log-btn" onclick="submitLog()">Log Entry</button>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-chip active">All Projects</button>
+      <button class="filter-chip">Active</button>
+      <button class="filter-chip">Paused</button>
+      <button class="filter-chip">High Momentum</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="projects-grid">
+      <!-- Project Card 1 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <h3 class="project-card-title">Mental Health Marketplace</h3>
+          <p class="project-card-description">Connecting therapists with clients through AI-powered matching</p>
+          <div class="project-status-row">
+            <span class="project-status-badge">
+              <span class="health-indicator health-great"></span>
+              <span>Active</span>
+            </span>
+            <span class="project-count">18 entries this month</span>
+          </div>
+        </div>
+
+        <div class="momentum-section">
+          <div class="momentum-label">Flow Momentum</div>
+          <div class="momentum-bar">
+            <div class="momentum-segment momentum-north" style="width: 45%;"></div>
+            <div class="momentum-segment momentum-east" style="width: 25%;"></div>
+            <div class="momentum-segment momentum-south" style="width: 10%;"></div>
+            <div class="momentum-segment momentum-west" style="width: 20%;"></div>
+          </div>
+          <div class="momentum-legend">
+            <div class="legend-item">
+              <div class="legend-dot momentum-north"></div>
+              <span>45% Growth</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-east"></div>
+              <span>25% Explore</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-south"></div>
+              <span>10% Rest</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-west"></div>
+              <span>20% Reflect</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-entries">
+          <div class="recent-title">Recent Activity</div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Building MVP</span>
+              <span class="entry-mini-time">2h ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Testing features</span>
+              <span class="entry-mini-time">5h ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-east"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">East - User research</span>
+              <span class="entry-mini-time">Yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="quick-add-mini-btn">+ Add Entry</button>
+          <button class="view-timeline-btn" onclick="openTimeline('Mental Health Marketplace')">View Timeline</button>
+        </div>
+      </div>
+
+      <!-- Project Card 2 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <h3 class="project-card-title">Creator Wellness App</h3>
+          <p class="project-card-description">Helping content creators manage burnout and maintain sustainable growth</p>
+          <div class="project-status-row">
+            <span class="project-status-badge">
+              <span class="health-indicator health-good"></span>
+              <span>Active</span>
+            </span>
+            <span class="project-count">12 entries this month</span>
+          </div>
+        </div>
+
+        <div class="momentum-section">
+          <div class="momentum-label">Flow Momentum</div>
+          <div class="momentum-bar">
+            <div class="momentum-segment momentum-north" style="width: 30%;"></div>
+            <div class="momentum-segment momentum-east" style="width: 40%;"></div>
+            <div class="momentum-segment momentum-south" style="width: 15%;"></div>
+            <div class="momentum-segment momentum-west" style="width: 15%;"></div>
+          </div>
+          <div class="momentum-legend">
+            <div class="legend-item">
+              <div class="legend-dot momentum-north"></div>
+              <span>30% Growth</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-east"></div>
+              <span>40% Explore</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-south"></div>
+              <span>15% Rest</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-west"></div>
+              <span>15% Reflect</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-entries">
+          <div class="recent-title">Recent Activity</div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-east"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">East - Competitor research</span>
+              <span class="entry-mini-time">1d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Wireframing</span>
+              <span class="entry-mini-time">2d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-east"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">East - Brainstorming</span>
+              <span class="entry-mini-time">3d ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="quick-add-mini-btn">+ Add Entry</button>
+          <button class="view-timeline-btn" onclick="openTimeline('Creator Wellness App')">View Timeline</button>
+        </div>
+      </div>
+
+      <!-- Project Card 3 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <h3 class="project-card-title">Solopreneur Community</h3>
+          <p class="project-card-description">Building a support network for solo founders and side hustlers</p>
+          <div class="project-status-row">
+            <span class="project-status-badge">
+              <span class="health-indicator health-low"></span>
+              <span>Active</span>
+            </span>
+            <span class="project-count">5 entries this month</span>
+          </div>
+        </div>
+
+        <div class="momentum-section">
+          <div class="momentum-label">Flow Momentum</div>
+          <div class="momentum-bar">
+            <div class="momentum-segment momentum-north" style="width: 25%;"></div>
+            <div class="momentum-segment momentum-east" style="width: 20%;"></div>
+            <div class="momentum-segment momentum-south" style="width: 20%;"></div>
+            <div class="momentum-segment momentum-west" style="width: 35%;"></div>
+          </div>
+          <div class="momentum-legend">
+            <div class="legend-item">
+              <div class="legend-dot momentum-north"></div>
+              <span>25% Growth</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-east"></div>
+              <span>20% Explore</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-south"></div>
+              <span>20% Rest</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-west"></div>
+              <span>35% Reflect</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-entries">
+          <div class="recent-title">Recent Activity</div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-west"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">West - Reviewing goals</span>
+              <span class="entry-mini-time">3d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-west"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">West - Strategic planning</span>
+              <span class="entry-mini-time">5d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Outreach</span>
+              <span class="entry-mini-time">1w ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="quick-add-mini-btn">+ Add Entry</button>
+          <button class="view-timeline-btn" onclick="openTimeline('Solopreneur Community')">View Timeline</button>
+        </div>
+      </div>
+
+      <!-- Empty State Card -->
+      <div class="empty-card">
+        <div class="empty-icon">➕</div>
+        <div class="empty-title">Start a New Project</div>
+        <div class="empty-text">Track your flow journey on something new</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeline Modal -->
+  <div class="timeline-modal" id="timeline-modal">
+    <div class="timeline-modal-content">
+      <div class="timeline-modal-header">
+        <h2 class="timeline-modal-title" id="modal-project-title">Mental Health Marketplace Timeline</h2>
+        <button class="close-modal-btn" onclick="closeTimeline()">×</button>
+      </div>
+      <div class="timeline-modal-body">
+        <div class="timeline-container">
+          <!-- Today -->
+          <div class="date-group">
+            <div class="date-header">Today</div>
+
+            <div class="timeline-entry">
+              <div class="timeline-dot north"></div>
+              <div class="timeline-line"></div>
+              <div class="entry-card">
+                <div class="entry-header">
+                  <div class="entry-direction" style="color: #10b981;">
+                    <span class="direction-arrow">↑</span>
+                    <span>North - Growth</span>
+                  </div>
+                  <div class="entry-time">2:45 PM</div>
+                </div>
+                <div class="entry-states">
+                  <div class="state-box">
+                    <div class="state-label">Internal</div>
+                    <div class="state-value">Energized, Focused</div>
+                  </div>
+                  <div class="state-box">
+                    <div class="state-label">External</div>
+                    <div class="state-value">Building MVP features</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-entry">
+              <div class="timeline-dot north"></div>
+              <div class="timeline-line"></div>
+              <div class="entry-card">
+                <div class="entry-header">
+                  <div class="entry-direction" style="color: #10b981;">
+                    <span class="direction-arrow">↑</span>
+                    <span>North - Growth</span>
+                  </div>
+                  <div class="entry-time">10:15 AM</div>
+                </div>
+                <div class="entry-states">
+                  <div class="state-box">
+                    <div class="state-label">Internal</div>
+                    <div class="state-value">Confident, Motivated</div>
+                  </div>
+                  <div class="state-box">
+                    <div class="state-label">External</div>
+                    <div class="state-value">Testing user flows</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Yesterday -->
+          <div class="date-group">
+            <div class="date-header">Yesterday</div>
+
+            <div class="timeline-entry">
+              <div class="timeline-dot east"></div>
+              <div class="timeline-line"></div>
+              <div class="entry-card">
+                <div class="entry-header">
+                  <div class="entry-direction" style="color: #f59e0b;">
+                    <span class="direction-arrow">→</span>
+                    <span>East - Exploration</span>
+                  </div>
+                  <div class="entry-time">4:30 PM</div>
+                </div>
+                <div class="entry-states">
+                  <div class="state-box">
+                    <div class="state-label">Internal</div>
+                    <div class="state-value">Curious, Open</div>
+                  </div>
+                  <div class="state-box">
+                    <div class="state-label">External</div>
+                    <div class="state-value">User research interviews</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-entry">
+              <div class="timeline-dot west"></div>
+              <div class="timeline-line"></div>
+              <div class="entry-card">
+                <div class="entry-header">
+                  <div class="entry-direction" style="color: #5e17eb;">
+                    <span class="direction-arrow">←</span>
+                    <span>West - Reflection</span>
+                  </div>
+                  <div class="entry-time">11:00 AM</div>
+                </div>
+                <div class="entry-states">
+                  <div class="state-box">
+                    <div class="state-label">Internal</div>
+                    <div class="state-value">Thoughtful, Calm</div>
+                  </div>
+                  <div class="state-box">
+                    <div class="state-label">External</div>
+                    <div class="state-value">Reviewing roadmap</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-entry">
+              <div class="timeline-dot south"></div>
+              <div class="timeline-line"></div>
+              <div class="entry-card">
+                <div class="entry-header">
+                  <div class="entry-direction" style="color: #ef4444;">
+                    <span class="direction-arrow">↓</span>
+                    <span>South - Rest</span>
+                  </div>
+                  <div class="entry-time">8:30 AM</div>
+                </div>
+                <div class="entry-states">
+                  <div class="state-box">
+                    <div class="state-label">Internal</div>
+                    <div class="state-value">Tired, Need break</div>
+                  </div>
+                  <div class="state-box">
+                    <div class="state-label">External</div>
+                    <div class="state-value">Taking morning off</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- This Week -->
+          <div class="date-group">
+            <div class="date-header">This Week</div>
+
+            <div class="timeline-entry">
+              <div class="timeline-dot north"></div>
+              <div class="timeline-line"></div>
+              <div class="entry-card">
+                <div class="entry-header">
+                  <div class="entry-direction" style="color: #10b981;">
+                    <span class="direction-arrow">↑</span>
+                    <span>North - Growth</span>
+                  </div>
+                  <div class="entry-time">Mon, 3:20 PM</div>
+                </div>
+                <div class="entry-states">
+                  <div class="state-box">
+                    <div class="state-label">Internal</div>
+                    <div class="state-value">Clear, Determined</div>
+                  </div>
+                  <div class="state-box">
+                    <div class="state-label">External</div>
+                    <div class="state-value">Coding new features</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="timeline-entry">
+              <div class="timeline-dot east"></div>
+              <div class="entry-card">
+                <div class="entry-header">
+                  <div class="entry-direction" style="color: #f59e0b;">
+                    <span class="direction-arrow">→</span>
+                    <span>East - Exploration</span>
+                  </div>
+                  <div class="entry-time">Mon, 9:45 AM</div>
+                </div>
+                <div class="entry-states">
+                  <div class="state-box">
+                    <div class="state-label">Internal</div>
+                    <div class="state-value">Playful, Experimental</div>
+                  </div>
+                  <div class="state-box">
+                    <div class="state-label">External</div>
+                    <div class="state-value">Testing new concepts</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle button selection
+    function toggleButton(btn, group) {
+      const buttons = btn.parentElement.querySelectorAll('button');
+      buttons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    }
+
+    // Submit log (placeholder)
+    function submitLog() {
+      const project = document.getElementById('project-select').value;
+      const energy = document.querySelector('.energy-btn.selected');
+      const flow = document.querySelector('.flow-btn.selected');
+
+      if (!project || !energy || !flow) {
+        alert('Please complete all fields before logging.');
+        return;
+      }
+
+      alert('Entry logged! (This is a demo - in the real app, this would save to the database)');
+
+      // Reset form
+      document.getElementById('project-select').value = '';
+      document.querySelectorAll('.energy-btn, .flow-btn').forEach(btn => {
+        btn.classList.remove('selected');
+      });
+    }
+
+    // Open timeline modal
+    function openTimeline(projectName) {
+      const modal = document.getElementById('timeline-modal');
+      const title = document.getElementById('modal-project-title');
+      title.textContent = projectName + ' Timeline';
+      modal.classList.add('active');
+    }
+
+    // Close timeline modal
+    function closeTimeline() {
+      const modal = document.getElementById('timeline-modal');
+      modal.classList.remove('active');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('timeline-modal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeTimeline();
+      }
+    });
+  </script>
+</body>
+</html>

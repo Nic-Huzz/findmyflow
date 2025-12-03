@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "metadata": {
     "name": "Lead Magnet Flow - Test Version",
-    "description": "A short introduction flow to help users identify their Essence and Protective Archetypes and unlock their profile."
+    "description": "A short introduction flow to help users identify their Essence and Protective Voices and unlock their profile."
   },
   "steps": [
     {
@@ -18,7 +18,7 @@
       "step": "lead_q2_essence_intro",
       "step_order_index": 2.0,
       "required_inputs": ["lead_q1_name_complete"],
-      "prompt": "Perfect, {{user_name}}.\n\nHere's what I've learned: every river has a natural current.\n\nA direction it flows most powerfully. A way it serves the world most naturally.\n\nThis is your essence—the unique way your energy moves when nothing blocks it.\n\n**There are 8 Essence Archetypes. Each one flows in a unique way to create its impact.**\n\nOne will resonate as the version of you that's most alive and authentic.\n\nWhen you serve from this place, you're at your most impactful and magnetic.\n\nSwipe right on the ones that resonate. Left on the ones that don't.",
+      "prompt": "Perfect, {{user_name}}.\n\nHere's what I've learned: every river has a natural current.\n\nA direction it flows most powerfully. A way it serves the world most naturally.\n\nThis is your essence—the unique way your energy moves when nothing blocks it.\n\n**There are 8 Essence Voices. Each one flows in a unique way to create its impact.**\n\nOne will resonate as the version of you that's most alive and authentic.\n\nWhen you serve from this place, you're at your most impactful and magnetic.\n\nSwipe right on the ones that resonate. Left on the ones that don't.",
       "options": [
         { "label": "Yes, let's go!", "value": "yes" }
       ],
@@ -31,7 +31,7 @@
       "required_inputs": ["lead_q2_essence_intro_complete"],
       "step_type": "hybrid_swipe",
       "archetype_type": "essence",
-      "prompt": "We'll start by discovering your Essence Archetype — who you naturally are when fear isn't driving.\n\nYour essence is the real you, the version of yourself that feels most alive and authentic.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
+      "prompt": "We'll start by discovering your Essence Voice — who you naturally are when fear isn't driving.\n\nYour essence is the real you, the version of yourself that feels most alive and authentic.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
       "tag_as": "essence_archetype_selection",
       "store_as": "lead_q3_essence_archetype_complete"
     },

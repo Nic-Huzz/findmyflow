@@ -1,7 +1,0 @@
-flow_version,flow_type,session_count
-integration-claude,nikigai,57
-monetization-claude,100m_offer,5
-money_model-claude,100m_money_model,1
-persona-claude,nikigai,1
-problems-claude,nikigai,19
-skills-claude,nikigai,4

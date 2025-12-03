@@ -220,12 +220,12 @@ const Feedback = () => {
           </div>
         </div>
 
-        {/* Section 2: Essence Archetype */}
+        {/* Section 2: Essence Voice */}
         <div className="feedback-section">
-          <h2>2. Essence Archetype Feedback</h2>
+          <h2>2. Essence Voice Feedback</h2>
 
           <div className="question">
-            <label>When you were given your essence archetype, how did you feel?</label>
+            <label>When you were given your essence voice, how did you feel?</label>
             <div className="radio-group">
               {['Excited', 'Curious', 'Bored'].map(option => (
                 <label key={option} className="radio-option">
@@ -243,7 +243,7 @@ const Feedback = () => {
           </div>
 
           <div className="question">
-            <label>When you went through your essence archetype profile, did you feel:</label>
+            <label>When you went through your essence voice profile, did you feel:</label>
             <div className="radio-group">
               {['Seen', 'Like it was half right', 'Not really right'].map(option => (
                 <label key={option} className="radio-option">
@@ -261,12 +261,12 @@ const Feedback = () => {
           </div>
         </div>
 
-        {/* Section 3: Protective Archetype */}
+        {/* Section 3: Protective Voice */}
         <div className="feedback-section">
-          <h2>3. Protective Archetype Feedback</h2>
+          <h2>3. Protective Voice Feedback</h2>
 
           <div className="question">
-            <label>How much do you feel the identified protective archetype is negatively impacting your ambitions?</label>
+            <label>How much do you feel the identified protective voice is negatively impacting your ambitions?</label>
             <div className="radio-group">
               {['Struggling with it lots', 'Occasionally', 'Not at all'].map(option => (
                 <label key={option} className="radio-option">

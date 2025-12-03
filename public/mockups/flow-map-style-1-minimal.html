@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Map - Style 1: Minimal</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Flow Map Container */
+    .flow-map {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Flow Section - Minimal Clean Style */
+    .flow-section {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .section-header {
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .section-header:hover {
+      background: #fafafa;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .section-icon {
+      font-size: 24px;
+    }
+
+    .expand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+
+    .section-header.expanded .expand-icon {
+      transform: rotate(180deg);
+      background: #667eea;
+      color: white;
+    }
+
+    /* Section Content - Clean Layout */
+    .section-content {
+      padding: 24px;
+      background: #fafafa;
+    }
+
+    /* Flow Finder Minimal Style */
+    .finder-category {
+      margin-bottom: 20px;
+    }
+
+    .finder-category:last-child {
+      margin-bottom: 0;
+    }
+
+    .category-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cluster-list {
+      background: white;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .cluster-item {
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .cluster-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .cluster-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+
+    .cluster-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .item-tag {
+      background: #667eea;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Nervous System Minimal Style */
+    .limitation-item {
+      background: white;
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid #667eea;
+    }
+
+    .limitation-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .limitation-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .limitation-value {
+      font-size: 15px;
+      color: #1a1a1a;
+      font-weight: 500;
+    }
+
+    .safety-contracts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .contract-item {
+      background: #fef3c7;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: #92400e;
+      font-weight: 500;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .limitation-item.core-wound {
+      border-left-color: #ef4444;
+    }
+
+    .core-wound .limitation-label {
+      color: #dc2626;
+    }
+
+    .core-wound .limitation-value {
+      color: #991b1b;
+    }
+
+    /* Flow Tracker Minimal Style */
+    .project-item {
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .project-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-header {
+      padding: 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+
+    .project-header:hover {
+      background: #fafafa;
+    }
+
+    .project-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .latest-direction {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: #f0f0f0;
+    }
+
+    .direction-indicator {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .direction-north { color: #10b981; }
+    .direction-east { color: #f59e0b; }
+    .direction-south { color: #ef4444; }
+    .direction-west { color: #667eea; }
+
+    .project-expand-icon {
+      font-size: 18px;
+      color: #999;
+      transition: transform 0.3s ease;
+    }
+
+    .project-header.expanded .project-expand-icon {
+      transform: rotate(90deg);
+    }
+
+    .project-history {
+      padding: 14px;
+      background: #fafafa;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .history-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .history-entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: white;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .entry-direction {
+      font-weight: 600;
+      min-width: 70px;
+    }
+
+    .entry-date {
+      color: #999;
+      font-size: 11px;
+      min-width: 80px;
+    }
+
+    .entry-states {
+      color: #666;
+      font-size: 11px;
+      font-style: italic;
+    }
+
+    .demo-label {
+      background: #667eea;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="demo-label">Style 1: Minimal & Clean</div>
+
+    <div class="flow-map">
+      <!-- Section 1: Flow Finder -->
+      <div class="flow-section">
+        <div class="section-header expanded">
+          <div class="section-title">
+            <span class="section-icon">🧭</span>
+            Flow Finder
+          </div>
+          <div class="expand-icon">↓</div>
+        </div>
+
+        <div class="section-content">
+          <!-- Problems -->
+          <div class="finder-category">
+            <div class="category-title">Problems You're Passionate About</div>
+            <div class="cluster-list">
+              <div class="cluster-item">
+                <div class="cluster-label">Mental Health Access</div>
+                <div class="cluster-items">
+                  <span class="item-tag">Therapy Waitlists</span>
+                  <span class="item-tag">Cost Barriers</span>
+                  <span class="item-tag">Stigma</span>
+                </div>
+              </div>
+              <div class="cluster-item">
+                <div class="cluster-label">Creator Burnout</div>
+                <div class="cluster-items">
+                  <span class="item-tag">Unsustainable Income</span>
+                  <span class="item-tag">Algorithm Stress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- People -->
+          <div class="finder-category">
+            <div class="category-title">People You're Passionate About</div>
+            <div class="cluster-list">
+              <div class="cluster-item">
+                <div class="cluster-label">Overwhelmed Entrepreneurs</div>
+                <div class="cluster-items">
+                  <span class="item-tag">Solo Founders</span>
+                  <span class="item-tag">Side Hustlers</span>
+                  <span class="item-tag">First-Time Builders</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="finder-category">
+            <div class="category-title">Skills You're Passionate About</div>
+            <div class="cluster-list">
+              <div class="cluster-item">
+                <div class="cluster-label">Facilitation & Coaching</div>
+                <div class="cluster-items">
+                  <span class="item-tag">Active Listening</span>
+                  <span class="item-tag">Asking Questions</span>
+                  <span class="item-tag">Holding Space</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Nervous System Limitations -->
+      <div class="flow-section">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-icon">⚡</span>
+            Nervous System Limitations
+          </div>
+          <div class="expand-icon">↓</div>
+        </div>
+
+        <div class="section-content" style="display: none;">
+          <div class="limitation-item">
+            <div class="limitation-label">Current Money Limit</div>
+            <div class="limitation-value">$50,000/year</div>
+          </div>
+
+          <div class="limitation-item">
+            <div class="limitation-label">Current Visibility Limit</div>
+            <div class="limitation-value">1,000 people reached</div>
+          </div>
+
+          <div class="limitation-item">
+            <div class="limitation-label">Current Safety Contracts</div>
+            <div class="safety-contracts-list">
+              <div class="contract-item">If I'm successful, people will judge me</div>
+              <div class="contract-item">Making money means I'm greedy</div>
+            </div>
+          </div>
+
+          <div class="limitation-item core-wound">
+            <div class="limitation-label">Core Wound</div>
+            <div class="limitation-value">Fear of being seen as an imposter</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Flow Tracker -->
+      <div class="flow-section">
+        <div class="section-header">
+          <div class="section-title">
+            <span class="section-icon">📊</span>
+            Flow Tracker
+          </div>
+          <div class="expand-icon">↓</div>
+        </div>
+
+        <div class="section-content" style="display: none;">
+          <div class="project-item">
+            <div class="project-header">
+              <div class="project-info">
+                <div class="project-name">Mental Health Marketplace</div>
+                <div class="latest-direction">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span>North</span>
+                </div>
+              </div>
+              <div class="project-expand-icon">→</div>
+            </div>
+          </div>
+
+          <div class="project-item">
+            <div class="project-header expanded">
+              <div class="project-info">
+                <div class="project-name">Creator Wellness App</div>
+                <div class="latest-direction">
+                  <span class="direction-indicator direction-east">→</span>
+                  <span>East</span>
+                </div>
+              </div>
+              <div class="project-expand-icon">→</div>
+            </div>
+
+            <div class="project-history">
+              <div class="history-title">Last 5 Directional Inputs</div>
+              <div class="history-list">
+                <div class="history-entry">
+                  <span class="direction-indicator direction-east">→</span>
+                  <span class="entry-direction">East</span>
+                  <span class="entry-date">Dec 2, 2025</span>
+                  <span class="entry-states">excited • ease</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span class="entry-direction">North</span>
+                  <span class="entry-date">Dec 1, 2025</span>
+                  <span class="entry-states">focused • resistance</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-south">↓</span>
+                  <span class="entry-direction">South</span>
+                  <span class="entry-date">Nov 30, 2025</span>
+                  <span class="entry-states">tired • ease</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-west">←</span>
+                  <span class="entry-direction">West</span>
+                  <span class="entry-date">Nov 29, 2025</span>
+                  <span class="entry-states">reflective • ease</span>
+                </div>
+                <div class="history-entry">
+                  <span class="direction-indicator direction-north">↑</span>
+                  <span class="entry-direction">North</span>
+                  <span class="entry-date">Nov 28, 2025</span>
+                  <span class="entry-states">energized • ease</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "metadata": {
     "name": "Lead Magnet Flow - Test Version",
-    "description": "A short introduction flow to help users identify their Protective and Essence Archetypes and unlock their profile."
+    "description": "A short introduction flow to help users identify their Protective and Essence Voices and unlock their profile."
   },
   "steps": [
     {
@@ -40,7 +40,7 @@
       "required_inputs": ["lead_q3_protective_archetype_complete"],
       "step_type": "hybrid_swipe",
       "archetype_type": "essence",
-      "prompt": "Now we're looking to reconnect to the essence that sits underneath this protective pattern. I call this your Essence Archetype.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
+      "prompt": "Now we're looking to reconnect to the essence that sits underneath this protective pattern. I call this your Essence Voice.\n\nWhich of these feels most like the real you? Swipe right on the ones that resonate, left on the ones that don't.",
       "tag_as": "essence_archetype_selection",
       "store_as": "lead_q4_essence_archetype_complete"
     },
@@ -48,7 +48,7 @@
       "step": "lead_q5_email_capture",
       "step_order_index": 5.0,
       "required_inputs": ["lead_q4_essence_archetype_complete"],
-      "prompt": "Keen to learn more about your Protective Archetype and your Essence Archetype?\n\nAnd ways to overcome the Protective Archetype that's blocking your ambitions so you can live from your Essence Archetype?\n\nEnter your email below. You'll receive a link to your profile.",
+      "prompt": "Keen to learn more about your Protective Voice and your Essence Voice?\n\nAnd ways to overcome the Protective Voice that's blocking your ambitions so you can live from your Essence Voice?\n\nEnter your email below. You'll receive a link to your profile.",
       "tag_as": "user_email",
       "store_as": "lead_q5_email_capture_complete",
       "instructions_to_gpt": "Capture valid email address and store. Trigger Supabase profile creation.",

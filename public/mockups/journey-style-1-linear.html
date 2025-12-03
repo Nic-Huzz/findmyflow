@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journey Visualization - Style 1: Linear Progress</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .journey-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      color: #1a202c;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #718096;
+      font-size: 16px;
+    }
+
+    .persona-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Linear Progress Bar */
+    .progress-track {
+      position: relative;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 100px;
+      margin: 40px 0;
+      overflow: visible;
+    }
+
+    .progress-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 100px;
+      transition: width 0.5s ease;
+    }
+
+    .stages {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      margin-top: -28px;
+    }
+
+    .stage {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .stage-dot {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+
+    .stage.completed .stage-dot {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: #667eea;
+      color: white;
+    }
+
+    .stage.current .stage-dot {
+      background: white;
+      border-color: #667eea;
+      border-width: 4px;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+      animation: pulse 2s infinite;
+    }
+
+    .stage.current .stage-dot::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.1);
+      }
+    }
+
+    .stage-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 4px;
+    }
+
+    .stage.completed .stage-name {
+      color: #667eea;
+    }
+
+    .stage.current .stage-name {
+      color: #667eea;
+      font-weight: 700;
+    }
+
+    .stage-status {
+      font-size: 11px;
+      color: #a0aec0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stage.completed .stage-status {
+      color: #48bb78;
+    }
+
+    .stage.current .stage-status {
+      color: #667eea;
+    }
+
+    .info-box {
+      background: #f7fafc;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 32px;
+    }
+
+    .info-box h3 {
+      font-size: 16px;
+      color: #2d3748;
+      margin-bottom: 8px;
+    }
+
+    .info-box p {
+      color: #718096;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .stage-name {
+        font-size: 11px;
+      }
+      .stage-status {
+        font-size: 9px;
+      }
+      .stage-dot {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="journey-card">
+      <div class="header">
+        <div class="persona-badge">Vibe Seeker</div>
+        <h1>Your Journey Progress</h1>
+        <p>Track your path to finding your flow</p>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" style="width: 40%;"></div>
+      </div>
+
+      <div class="stages">
+        <div class="stage completed">
+          <div class="stage-dot">✓</div>
+          <div class="stage-name">Discover</div>
+          <div class="stage-status">Complete</div>
+        </div>
+        <div class="stage current">
+          <div class="stage-dot"></div>
+          <div class="stage-name">Explore</div>
+          <div class="stage-status">Current</div>
+        </div>
+        <div class="stage">
+          <div class="stage-dot">3</div>
+          <div class="stage-name">Commit</div>
+          <div class="stage-status">Locked</div>
+        </div>
+        <div class="stage">
+          <div class="stage-dot">4</div>
+          <div class="stage-name">Scale</div>
+          <div class="stage-status">Locked</div>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h3>Explore Stage</h3>
+        <p>You're experimenting with different approaches to find what works. Complete the Skills flow and log 3 customer conversations to graduate to the Commit stage.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

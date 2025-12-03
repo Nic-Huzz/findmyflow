@@ -272,7 +272,7 @@ const ProtectiveProfile = () => {
               className="cta-button"
               onClick={() => navigate('/archetypes/essence')}
             >
-              Explore Your Essence Archetype
+              Explore Your Essence Voice
             </button>
           </section>
         </div>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage Card - Style 3: Compact Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .stage-progress-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      border: 2px solid #f0f0f0;
+      transition: all 0.3s ease;
+    }
+
+    .stage-progress-card.expanded {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      border-color: #667eea;
+    }
+
+    .card-header {
+      padding: 20px 24px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #fafafa, #ffffff);
+      transition: all 0.2s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    .stage-progress-card.expanded .card-header {
+      border-bottom-color: #e0e0e0;
+    }
+
+    .card-header:hover {
+      background: linear-gradient(135deg, #f5f5f5, #fafafa);
+    }
+
+    .compact-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .persona-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stage-quick-view {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stage-icon {
+      font-size: 20px;
+    }
+
+    .stage-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stage-label {
+      font-size: 10px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .stage-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .stage-divider {
+      color: #ccc;
+      font-size: 20px;
+      margin: 0 4px;
+    }
+
+    .next-stage-name {
+      color: #667eea;
+    }
+
+    .progress-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mini-progress {
+      display: flex;
+      gap: 4px;
+    }
+
+    .mini-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      transition: all 0.3s ease;
+    }
+
+    .mini-dot.filled {
+      background: #48bb78;
+    }
+
+    .progress-text {
+      font-size: 13px;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .expand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      color: #666;
+    }
+
+    .expand-icon.expanded {
+      transform: rotate(180deg);
+      background: #667eea;
+      color: white;
+    }
+
+    /* Dropdown Content */
+    .dropdown-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dropdown-content.expanded {
+      max-height: 900px;
+    }
+
+    .journey-visualization {
+      padding: 32px 24px;
+      background: linear-gradient(180deg, #fafafa, #ffffff);
+    }
+
+    /* Two Column Layout */
+    .journey-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 32px;
+    }
+
+    /* Journey Path */
+    .path-section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .milestones {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .milestone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .milestone-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: #f5f5f5;
+      border: 2px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .milestone.completed .milestone-icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: #667eea;
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .milestone.current .milestone-icon {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-color: #fbbf24;
+      border-width: 3px;
+      animation: glow 2s infinite;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+      }
+      50% {
+        box-shadow: 0 4px 20px rgba(251, 191, 36, 0.6);
+      }
+    }
+
+    .milestone-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .milestone.completed .milestone-name {
+      color: #667eea;
+    }
+
+    .milestone.current .milestone-name {
+      color: #f59e0b;
+    }
+
+    .milestone-status {
+      font-size: 10px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Requirements Section */
+    .requirements-section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .requirement-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .requirement-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      background: #fafafa;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .requirement-item.completed {
+      background: linear-gradient(135deg, #d4f4dd, #c6f6d5);
+    }
+
+    .requirement-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .requirement-item.completed .requirement-checkbox {
+      background: #48bb78;
+      border-color: #48bb78;
+      color: white;
+    }
+
+    .requirement-text {
+      font-size: 13px;
+      color: #555;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      .journey-grid {
+        grid-template-columns: 1fr;
+      }
+      .compact-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .progress-preview {
+        justify-content: space-between;
+      }
+      .milestones {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="stage-progress-card" id="stageCard">
+      <div class="card-header" onclick="toggleDropdown()">
+        <div class="compact-header">
+          <div class="persona-badge">Vibe Seeker</div>
+
+          <div class="stage-quick-view">
+            <div class="stage-item">
+              <div class="stage-icon">🔍</div>
+              <div class="stage-details">
+                <div class="stage-label">Current</div>
+                <div class="stage-name">Explore</div>
+              </div>
+            </div>
+            <div class="stage-divider">→</div>
+            <div class="stage-item">
+              <div class="stage-details">
+                <div class="stage-label">Next</div>
+                <div class="stage-name next-stage-name">Commit</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-preview">
+            <div class="mini-progress">
+              <div class="mini-dot filled"></div>
+              <div class="mini-dot"></div>
+              <div class="mini-dot"></div>
+            </div>
+            <div class="progress-text">1/3</div>
+            <div class="expand-icon" id="expandIcon">↓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dropdown-content" id="dropdownContent">
+        <div class="journey-visualization">
+          <div class="journey-grid">
+            <div class="path-section">
+              <div class="section-title">Journey Path</div>
+              <div class="milestones">
+                <div class="milestone completed">
+                  <div class="milestone-icon">✓</div>
+                  <div class="milestone-name">Discover</div>
+                  <div class="milestone-status">Done</div>
+                </div>
+                <div class="milestone current">
+                  <div class="milestone-icon">🔍</div>
+                  <div class="milestone-name">Explore</div>
+                  <div class="milestone-status">Now</div>
+                </div>
+                <div class="milestone">
+                  <div class="milestone-icon">🎯</div>
+                  <div class="milestone-name">Commit</div>
+                  <div class="milestone-status">Locked</div>
+                </div>
+                <div class="milestone">
+                  <div class="milestone-icon">🚀</div>
+                  <div class="milestone-name">Scale</div>
+                  <div class="milestone-status">Locked</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="requirements-section">
+              <div class="section-title">Requirements</div>
+              <div class="requirement-list">
+                <div class="requirement-item completed">
+                  <div class="requirement-checkbox">✓</div>
+                  <div class="requirement-text">Skills flow</div>
+                </div>
+                <div class="requirement-item">
+                  <div class="requirement-checkbox">○</div>
+                  <div class="requirement-text">3 conversations</div>
+                </div>
+                <div class="requirement-item">
+                  <div class="requirement-checkbox">○</div>
+                  <div class="requirement-text">1 milestone</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const content = document.getElementById('dropdownContent');
+      const icon = document.getElementById('expandIcon');
+      const card = document.getElementById('stageCard');
+      content.classList.toggle('expanded');
+      icon.classList.toggle('expanded');
+      card.classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>

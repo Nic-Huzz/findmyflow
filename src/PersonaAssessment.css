@@ -7,7 +7,7 @@
   align-items: center;
   padding: 20px;
   padding-top: 80px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   position: relative;
 }
@@ -20,8 +20,7 @@
   left: 0;
   right: 0;
   padding: 16px 20px;
-  background: rgba(26, 26, 46, 0.95);
-  backdrop-filter: blur(10px);
+  background: transparent;
   z-index: 100;
 }
 
@@ -41,12 +40,12 @@
 }
 
 .progress-dot.completed {
-  background: #9333EA;
+  background: #ffdd27;
 }
 
 .progress-dot.active {
-  background: #9333EA;
-  box-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
+  background: #ffdd27;
+  box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
   transform: scale(1.2);
 }
 
@@ -62,7 +61,7 @@
 
 .section-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #9333EA, #F59E0B);
+  background: linear-gradient(90deg, #ffdd27, #f59e0b);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -88,14 +87,14 @@
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 32px;
-  background: linear-gradient(135deg, #9333EA, #F59E0B);
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .welcome-message {
-  text-align: left;
+  text-align: center;
 }
 
 .welcome-message p {
@@ -199,7 +198,7 @@
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 24px;
-  background: linear-gradient(135deg, #9333EA, #F59E0B);
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -208,12 +207,12 @@
 .intro-text {
   font-size: 16px;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.8);
+  color: white !important;
   margin: 0 0 16px;
 }
 
 .intro-text strong {
-  color: white;
+  color: white !important;
 }
 
 .intro-text em {
@@ -222,7 +221,7 @@
 
 .intro-instruction {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: white !important;
   margin: 24px 0 32px;
   padding: 16px;
   background: rgba(255, 255, 255, 0.05);

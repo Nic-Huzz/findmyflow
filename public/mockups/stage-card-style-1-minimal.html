@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage Card - Style 1: Minimal Dropdown</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .stage-progress-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .card-header {
+      padding: 24px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .card-header:hover {
+      background: #fafafa;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .persona-badge {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .expand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .expand-icon.expanded {
+      transform: rotate(180deg);
+      background: #667eea;
+      color: white;
+    }
+
+    .stage-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .current-stage-label {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .current-stage-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .next-stage {
+      text-align: right;
+    }
+
+    .next-stage-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
+    .next-stage-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    /* Dropdown Content */
+    .dropdown-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .dropdown-content.expanded {
+      max-height: 800px;
+    }
+
+    .journey-visualization {
+      padding: 32px 24px;
+      background: linear-gradient(135deg, #fafafa, #f5f5f5);
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Journey Path from Style 2 */
+    .journey-path {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .milestones {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Connecting line between milestones */
+    .milestones::before {
+      content: '';
+      position: absolute;
+      top: 30px;
+      left: 12.5%;
+      right: 12.5%;
+      height: 3px;
+      background: linear-gradient(to right,
+        #667eea 0%,
+        #667eea 33%,
+        #e2e8f0 33%,
+        #e2e8f0 100%);
+      z-index: -1;
+    }
+
+    .milestone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 25%;
+    }
+
+    .milestone-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .milestone.completed .milestone-icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: #667eea;
+      color: white;
+    }
+
+    .milestone.current .milestone-icon {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-color: #fbbf24;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(251, 191, 36, 0);
+      }
+    }
+
+    .milestone-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .milestone.completed .milestone-name {
+      color: #667eea;
+    }
+
+    .milestone.current .milestone-name {
+      color: #f59e0b;
+      font-weight: 700;
+    }
+
+    .milestone-status {
+      font-size: 10px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .requirements-section {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .requirements-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .requirement-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .requirement-item.completed .checkbox {
+      background: #48bb78;
+      border-color: #48bb78;
+      color: white;
+    }
+
+    .next-level-section {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .next-level-title {
+      font-size: 16px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .next-level-description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .unlock-requirement {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #fff5f7, #fff);
+      border-radius: 8px;
+      border: 1px solid #f093fb30;
+    }
+
+    .lock-icon {
+      font-size: 18px;
+      opacity: 0.7;
+    }
+
+    .unlock-text {
+      font-size: 13px;
+      color: #888;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .milestone {
+        width: 25%;
+      }
+      .milestone-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+      .milestone-name {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="stage-progress-card">
+      <div class="card-header" onclick="toggleDropdown()">
+        <div class="header-top">
+          <div class="persona-badge">Vibe Seeker</div>
+          <div class="expand-icon" id="expandIcon">↓</div>
+        </div>
+        <div class="stage-info">
+          <div>
+            <div class="current-stage-label">Current Stage</div>
+            <div class="current-stage-name">Explore</div>
+          </div>
+          <div class="next-stage">
+            <div class="next-stage-label">Next Stage</div>
+            <div class="next-stage-name">Commit</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dropdown-content" id="dropdownContent">
+        <div class="journey-visualization">
+          <div class="journey-path">
+            <div class="milestones">
+              <div class="milestone completed">
+                <div class="milestone-icon">✓</div>
+                <div class="milestone-name">Discover</div>
+                <div class="milestone-status">Complete</div>
+              </div>
+              <div class="milestone current">
+                <div class="milestone-icon">🔍</div>
+                <div class="milestone-name">Explore</div>
+                <div class="milestone-status">Current</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-icon">🎯</div>
+                <div class="milestone-name">Commit</div>
+                <div class="milestone-status">Locked</div>
+              </div>
+              <div class="milestone">
+                <div class="milestone-icon">🚀</div>
+                <div class="milestone-name">Scale</div>
+                <div class="milestone-status">Locked</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="requirements-section">
+            <div class="requirements-title">Graduation Requirements</div>
+            <div class="requirement-item completed">
+              <div class="checkbox">✓</div>
+              <div>Complete Skills flow</div>
+            </div>
+            <div class="requirement-item">
+              <div class="checkbox">○</div>
+              <div>Log 3 customer conversations</div>
+            </div>
+            <div class="requirement-item">
+              <div class="checkbox">○</div>
+              <div>Complete one milestone</div>
+            </div>
+          </div>
+
+          <div class="next-level-section">
+            <div class="next-level-title">Next Level: Vibe Riser</div>
+            <div class="next-level-description">
+              Scale your validated idea into a sustainable offer. Focus on refining your positioning,
+              testing with real customers, and building repeatable systems.
+            </div>
+            <div class="unlock-requirement">
+              <div class="lock-icon">🔒</div>
+              <div class="unlock-text">Complete all 4 stages of Vibe Seeker to unlock</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const content = document.getElementById('dropdownContent');
+      const icon = document.getElementById('expandIcon');
+      content.classList.toggle('expanded');
+      icon.classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>

@@ -157,3 +157,60 @@ export const getUserStageProgress = async (userId) => {
     return null;
   }
 };
+
+/**
+ * Handle flow_compass quest completion
+ * - Saves flow entry to flow_entries table
+ * - Links to challenge_instance_id
+ * - Optionally extracts tags using AI
+ */
+export const handleFlowCompassCompletion = async (userId, challengeInstanceId, flowData, projectId = null) => {
+  try {
+    const { direction, internal_state, external_state, activity_description, reasoning } = flowData;
+
+    // Insert flow entry
+    const { data: newEntry, error: entryError } = await supabase
+      .from('flow_entries')
+      .insert({
+        user_id: userId,
+        project_id: projectId,
+        direction,
+        internal_state,
+        external_state,
+        activity_description: activity_description || null,
+        reasoning,
+        challenge_instance_id: challengeInstanceId,
+        logged_at: new Date().toISOString(),
+        activity_date: new Date().toISOString().split('T')[0]
+      })
+      .select()
+      .single();
+
+    if (entryError) {
+      console.error('Error saving flow entry:', entryError);
+      throw entryError;
+    }
+
+    console.log('✅ Flow entry saved:', newEntry.id);
+
+    // Optionally extract tags using AI (non-blocking)
+    try {
+      await supabase.functions.invoke('flow-extract-tags', {
+        body: {
+          entryId: newEntry.id,
+          reasoning,
+          activityDescription: activity_description
+        }
+      });
+      console.log('✅ Tag extraction triggered');
+    } catch (tagError) {
+      // Don't fail the whole operation if tag extraction fails
+      console.warn('Tag extraction failed (non-critical):', tagError);
+    }
+
+    return { success: true, entryId: newEntry.id };
+  } catch (error) {
+    console.error('Error in handleFlowCompassCompletion:', error);
+    return { success: false, error: error.message };
+  }
+};

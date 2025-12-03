@@ -1,0 +1,485 @@
+/* Flow Map Container */
+.flow-map {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.flow-map-heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.flow-map.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #5e17eb;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Flow Section - Minimal Clean Style with Brand Colors */
+.flow-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  scroll-margin-top: 20px;
+}
+
+.section-header {
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  -webkit-user-select: none;
+  background: white;
+  border: none;
+  margin: 0;
+}
+
+.section-header:hover {
+  background: #fafafa;
+}
+
+.section-header.expanded {
+  background: white;
+  border-bottom: none;
+}
+
+.flow-section .section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px !important;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.flow-section .section-icon {
+  font-size: 24px !important;
+  line-height: 24px !important;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  vertical-align: baseline;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.expand-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.section-header.expanded .expand-icon {
+  transform: rotate(180deg);
+  background: #5e17eb;
+  color: white;
+}
+
+/* Section Content - Clean Layout */
+.section-content {
+  padding: 24px;
+  background: #fafafa;
+  border-top: none;
+  margin-top: 0;
+}
+
+/* Flow Finder with Slider Style */
+.finder-category {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.finder-category:last-child {
+  margin-bottom: 0;
+}
+
+.category-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* Slider Container */
+.slider-container {
+  width: 100%;
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.slider-content {
+  width: 100%;
+  cursor: grab;
+}
+
+.slider-content:active {
+  cursor: grabbing;
+}
+
+.cluster-card {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 24px;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: transform 0.3s ease;
+}
+
+.cluster-label {
+  font-size: 22px;
+  font-weight: 700;
+  color: #5e17eb;
+  text-align: center;
+}
+
+.cluster-label.empty-state {
+  font-size: 14px;
+  font-weight: 500;
+  background: none;
+  -webkit-text-fill-color: #999;
+  color: #999;
+  font-style: italic;
+}
+
+/* Slider Controls */
+.slider-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.slider-arrow {
+  background: #5e17eb;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.slider-arrow:hover {
+  transform: scale(1.1);
+  background: #4912c4;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.slider-arrow:active {
+  transform: scale(0.9);
+}
+
+.slider-indicator {
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+  font-weight: 500;
+}
+
+/* Nervous System with Gold Highlights */
+.limitation-item {
+  background: white;
+  padding: 14px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  border-left: 3px solid #5e17eb;
+}
+
+.limitation-item:last-child {
+  margin-bottom: 0;
+}
+
+.limitation-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.limitation-value {
+  font-size: 15px;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.safety-contracts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contract-item {
+  background: rgba(94, 23, 235, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #5e17eb;
+  font-weight: 500;
+  border-left: 3px solid #5e17eb;
+}
+
+.limitation-item.core-wound {
+  border-left-color: #ffdd27;
+}
+
+.core-wound .limitation-label {
+  background: linear-gradient(135deg, #ffdd27 0%, #d4a000 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.core-wound .limitation-value {
+  color: #92400e;
+}
+
+.core-wound-empty {
+  color: #1a1a1a !important;
+}
+
+/* Flow Tracker Minimal Style */
+.project-item {
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.project-item:last-child {
+  margin-bottom: 0;
+}
+
+.project-header {
+  padding: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.project-header:hover {
+  background: #fafafa;
+}
+
+.project-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.project-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.latest-direction {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  background: #f0f0f0;
+}
+
+.direction-indicator {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.direction-north { color: #10b981; }
+.direction-east { color: #f59e0b; }
+.direction-south { color: #ef4444; }
+.direction-west { color: #5e17eb; }
+
+.project-expand-icon {
+  font-size: 18px;
+  color: #999;
+  transition: transform 0.3s ease;
+}
+
+.project-header.expanded .project-expand-icon {
+  transform: rotate(90deg);
+}
+
+.project-history {
+  padding: 14px;
+  background: #fafafa;
+  border-top: 1px solid #e0e0e0;
+}
+
+.history-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.history-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: white;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.entry-direction {
+  font-weight: 600;
+  min-width: 70px;
+}
+
+.entry-date {
+  color: #999;
+  font-size: 11px;
+  min-width: 80px;
+}
+
+.entry-states {
+  color: #666;
+  font-size: 11px;
+  font-style: italic;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-size: 14px;
+  font-style: italic;
+}
+
+.start-flow-button {
+  background: #5e17eb;
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+}
+
+.start-flow-button:hover {
+  background: #4912c4;
+  transform: scale(1.02);
+}
+
+.empty-nervous-system {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .flow-section .section-title {
+    font-size: 20px !important;
+  }
+  
+  .flow-section .section-icon {
+    font-size: 20px !important;
+    width: 20px;
+    height: 20px;
+    line-height: 20px !important;
+  }
+
+  .section-content {
+    padding: 16px;
+  }
+
+  .finder-category,
+  .limitation-item,
+  .project-header {
+    padding: 12px;
+  }
+
+  .cluster-label {
+    font-size: 18px;
+  }
+
+  .history-entry {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .entry-direction,
+  .entry-date {
+    min-width: auto;
+  }
+}

@@ -1,0 +1,400 @@
+/* ============================================================================
+   Flow Insights Component Styles
+   ============================================================================ */
+
+.flow-insights {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f3f4f6;
+}
+
+/* Header
+   ========================================================================== */
+.insights-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.insights-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.refresh-btn {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Summary
+   ========================================================================== */
+.insight-summary {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.insight-summary p {
+  margin: 0;
+}
+
+/* Sections
+   ========================================================================== */
+.insight-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.insight-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.insight-section h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  color: #1a1a1a;
+}
+
+/* Direction Distribution Chart
+   ========================================================================== */
+.direction-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.direction-bar {
+  display: grid;
+  grid-template-columns: 150px 1fr 60px;
+  gap: 1rem;
+  align-items: center;
+}
+
+.bar-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.bar-emoji {
+  font-size: 1.25rem;
+}
+
+.bar-name {
+  flex: 1;
+}
+
+.bar-count {
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.bar-track {
+  background: #f3f4f6;
+  height: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 12px;
+}
+
+.bar-percentage {
+  text-align: right;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Dominant Badge
+   ========================================================================== */
+.dominant-badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.dominant-label {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.consistency-score {
+  margin-left: auto;
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #5e17eb;
+}
+
+/* Clusters List
+   ========================================================================== */
+.clusters-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.cluster-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.cluster-card h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: #1a1a1a;
+}
+
+.cluster-insight {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.5;
+}
+
+.cluster-items {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cluster-count {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* Patterns List
+   ========================================================================== */
+.patterns-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.pattern-card {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.pattern-card h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  color: #92400e;
+}
+
+.pattern-evidence,
+.pattern-impact {
+  font-size: 0.875rem;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.pattern-evidence {
+  color: #78350f;
+}
+
+.pattern-impact {
+  color: #92400e;
+  font-weight: 500;
+}
+
+/* Recommendations List
+   ========================================================================== */
+.recommendations-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.recommendation-card {
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid;
+}
+
+.recommendation-card.priority-high {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.recommendation-card.priority-medium {
+  background: #fef3c7;
+  border-color: #fde68a;
+}
+
+.recommendation-card.priority-low {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.rec-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.rec-icon {
+  font-size: 1.25rem;
+}
+
+.rec-header h5 {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.priority-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.priority-badge.priority-high {
+  background: #dc2626;
+  color: white;
+}
+
+.priority-badge.priority-medium {
+  background: #f59e0b;
+  color: white;
+}
+
+.priority-badge.priority-low {
+  background: #3b82f6;
+  color: white;
+}
+
+.rec-reason {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* No Insights State
+   ========================================================================== */
+.no-insights {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.no-insights-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.no-insights-text {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.no-insights-hint {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin: 0 0 1.5rem 0;
+}
+
+.analyze-btn {
+  margin: 0 auto;
+  display: block;
+}
+
+/* Loading State
+   ========================================================================== */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+/* Error Message
+   ========================================================================== */
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+/* Responsive Design
+   ========================================================================== */
+
+/* Mobile */
+@media (max-width: 768px) {
+  .flow-insights {
+    padding: 1.5rem;
+  }
+
+  .insights-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .direction-bar {
+    grid-template-columns: 120px 1fr 50px;
+    gap: 0.75rem;
+  }
+
+  .bar-label {
+    font-size: 0.75rem;
+  }
+
+  .dominant-badge {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .consistency-score {
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+}

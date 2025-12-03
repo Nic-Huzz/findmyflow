@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journey Visualization Mockups</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 60px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 48px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .section-title {
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 48px 0 24px 0;
+      text-align: center;
+      opacity: 0.95;
+    }
+
+    .mockups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .mockup-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .mockup-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .mockup-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .mockup-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 12px;
+    }
+
+    .mockup-description {
+      font-size: 14px;
+      color: #718096;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .view-button {
+      display: inline-block;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .mockup-card:hover .view-button {
+      transform: scale(1.05);
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #4a5568;
+    }
+
+    .feature-icon {
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .mockups-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Journey Visualization Mockups</h1>
+      <p>Choose your preferred style for displaying user journey progress</p>
+    </div>
+
+    <div class="mockups-grid">
+      <a href="journey-style-1-linear.html" class="mockup-card">
+        <div class="mockup-icon">📊</div>
+        <div class="mockup-title">Style 1: Linear Progress</div>
+        <div class="mockup-description">
+          Clean and minimal horizontal progress bar with stage indicators
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Traditional progress visualization</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Clear stage completion status</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Minimal and professional</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+
+      <a href="journey-style-2-path.html" class="mockup-card">
+        <div class="mockup-icon">🗺️</div>
+        <div class="mockup-title">Style 2: Journey Path</div>
+        <div class="mockup-description">
+          Visual journey with curved path and milestone markers
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Engaging visual metaphor</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Large interactive icons</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Storytelling approach</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+
+      <a href="journey-style-3-cards.html" class="mockup-card">
+        <div class="mockup-icon">🎮</div>
+        <div class="mockup-title">Style 3: Level Cards</div>
+        <div class="mockup-description">
+          Gamified level system with unlock progression and task tracking
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Gamification elements</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Detailed task breakdown</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Clear locked/unlocked states</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+    </div>
+
+    <div class="section-title">Stage Card Dropdown Styles</div>
+
+    <div class="mockups-grid">
+      <a href="stage-card-style-1-minimal.html" class="mockup-card">
+        <div class="mockup-icon">📋</div>
+        <div class="mockup-title">Minimal Dropdown</div>
+        <div class="mockup-description">
+          Clean collapsible card with stage progress and journey visualization
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Collapsible design</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Connected milestone path</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Minimal and elegant</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+
+      <a href="stage-card-style-2-visual.html" class="mockup-card">
+        <div class="mockup-icon">🎨</div>
+        <div class="mockup-title">Visual Card</div>
+        <div class="mockup-description">
+          Rich visual experience with expanded milestone information
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Bold visual design</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Prominent milestones</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Detailed information</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+
+      <a href="stage-card-style-3-compact.html" class="mockup-card">
+        <div class="mockup-icon">📱</div>
+        <div class="mockup-title">Compact Card</div>
+        <div class="mockup-description">
+          Space-efficient design optimized for mobile and desktop
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Mobile-optimized</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Efficient use of space</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Quick overview</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+    </div>
+
+    <div class="section-title">Persona & Stage Card Styles</div>
+
+    <div class="mockups-grid">
+      <a href="stage-card-persona-style-1.html" class="mockup-card">
+        <div class="mockup-icon">🎯</div>
+        <div class="mockup-title">Dual Badge</div>
+        <div class="mockup-description">
+          Stacked persona badges showing current and next journey
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Clear persona hierarchy</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Gradient badge design</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Compact layout</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+
+      <a href="stage-card-persona-style-2.html" class="mockup-card">
+        <div class="mockup-icon">⚡</div>
+        <div class="mockup-title">Split Card</div>
+        <div class="mockup-description">
+          Side-by-side comparison of current and next journey
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Balanced visual weight</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Clear progression view</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Modern grid layout</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+
+      <a href="stage-card-persona-style-3.html" class="mockup-card">
+        <div class="mockup-icon">➡️</div>
+        <div class="mockup-title">Inline Flow</div>
+        <div class="mockup-description">
+          Horizontal flow showing stage and persona progression together
+        </div>
+        <div class="features">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Natural reading flow</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Integrated information</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Smooth transitions</span>
+          </div>
+        </div>
+        <div class="view-button">View Mockup →</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

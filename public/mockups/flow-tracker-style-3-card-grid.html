@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Tracker - Style 3: Card Grid</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(94, 23, 235, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .add-project-btn {
+      background: white;
+      color: #5e17eb;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .add-project-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .demo-label {
+      background: linear-gradient(135deg, #5e17eb 0%, #ffdd27 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+    }
+
+    .filter-chip {
+      padding: 8px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-chip:hover {
+      border-color: #5e17eb;
+      transform: translateY(-2px);
+    }
+
+    .filter-chip.active {
+      border-color: #5e17eb;
+      background: #5e17eb;
+      color: white;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 24px;
+    }
+
+    /* Project Card */
+    .project-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .project-card-header {
+      padding: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .project-card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .project-card-description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .project-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .project-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #e0e7ff;
+      color: #5e17eb;
+    }
+
+    .project-count {
+      font-size: 13px;
+      color: #999;
+      font-weight: 500;
+    }
+
+    /* Momentum Bar */
+    .momentum-section {
+      padding: 16px 20px;
+      background: #fafafa;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .momentum-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .momentum-bar {
+      display: flex;
+      height: 8px;
+      border-radius: 100px;
+      overflow: hidden;
+      background: #e0e0e0;
+    }
+
+    .momentum-segment {
+      transition: width 0.3s;
+    }
+
+    .momentum-north { background: #10b981; }
+    .momentum-east { background: #f59e0b; }
+    .momentum-south { background: #ef4444; }
+    .momentum-west { background: #5e17eb; }
+
+    .momentum-legend {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Recent Entries */
+    .recent-entries {
+      padding: 16px 20px;
+    }
+
+    .recent-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .entry-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .entry-mini:last-child {
+      border-bottom: none;
+    }
+
+    .entry-mini-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .entry-mini-info {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .entry-mini-direction {
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .entry-mini-time {
+      color: #999;
+      font-size: 11px;
+    }
+
+    /* Quick Add */
+    .quick-add-section {
+      padding: 16px 20px;
+      background: #fafafa;
+    }
+
+    .quick-add-mini-btn {
+      width: 100%;
+      padding: 10px;
+      background: white;
+      border: 2px dashed #e0e0e0;
+      border-radius: 8px;
+      color: #666;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-add-mini-btn:hover {
+      border-color: #5e17eb;
+      color: #5e17eb;
+      background: #f9f9ff;
+    }
+
+    /* Empty State Card */
+    .empty-card {
+      background: white;
+      border: 2px dashed #e0e0e0;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .empty-card:hover {
+      border-color: #5e17eb;
+      background: #f9f9ff;
+      transform: translateY(-4px);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Health Indicator */
+    .health-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .health-great { background: #10b981; }
+    .health-good { background: #f59e0b; }
+    .health-low { background: #ef4444; }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .momentum-legend {
+        gap: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="demo-label">Style 3: Card Grid View</div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Flow Tracker</h1>
+        <p class="page-subtitle">Manage your projects and flow momentum</p>
+      </div>
+      <button class="add-project-btn">+ New Project</button>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-chip active">All Projects</button>
+      <button class="filter-chip">Active</button>
+      <button class="filter-chip">Paused</button>
+      <button class="filter-chip">High Momentum</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="projects-grid">
+      <!-- Project Card 1 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <h3 class="project-card-title">Mental Health Marketplace</h3>
+          <p class="project-card-description">Connecting therapists with clients through AI-powered matching</p>
+          <div class="project-status-row">
+            <span class="project-status-badge">
+              <span class="health-indicator health-great"></span>
+              <span>Active</span>
+            </span>
+            <span class="project-count">18 entries this month</span>
+          </div>
+        </div>
+
+        <div class="momentum-section">
+          <div class="momentum-label">Flow Momentum</div>
+          <div class="momentum-bar">
+            <div class="momentum-segment momentum-north" style="width: 45%;"></div>
+            <div class="momentum-segment momentum-east" style="width: 25%;"></div>
+            <div class="momentum-segment momentum-south" style="width: 10%;"></div>
+            <div class="momentum-segment momentum-west" style="width: 20%;"></div>
+          </div>
+          <div class="momentum-legend">
+            <div class="legend-item">
+              <div class="legend-dot momentum-north"></div>
+              <span>45% Growth</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-east"></div>
+              <span>25% Explore</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-south"></div>
+              <span>10% Rest</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-west"></div>
+              <span>20% Reflect</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-entries">
+          <div class="recent-title">Recent Activity</div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Building MVP</span>
+              <span class="entry-mini-time">2h ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Testing features</span>
+              <span class="entry-mini-time">5h ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-east"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">East - User research</span>
+              <span class="entry-mini-time">Yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-add-section">
+          <button class="quick-add-mini-btn">+ Add Entry</button>
+        </div>
+      </div>
+
+      <!-- Project Card 2 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <h3 class="project-card-title">Creator Wellness App</h3>
+          <p class="project-card-description">Helping content creators manage burnout and maintain sustainable growth</p>
+          <div class="project-status-row">
+            <span class="project-status-badge">
+              <span class="health-indicator health-good"></span>
+              <span>Active</span>
+            </span>
+            <span class="project-count">12 entries this month</span>
+          </div>
+        </div>
+
+        <div class="momentum-section">
+          <div class="momentum-label">Flow Momentum</div>
+          <div class="momentum-bar">
+            <div class="momentum-segment momentum-north" style="width: 30%;"></div>
+            <div class="momentum-segment momentum-east" style="width: 40%;"></div>
+            <div class="momentum-segment momentum-south" style="width: 15%;"></div>
+            <div class="momentum-segment momentum-west" style="width: 15%;"></div>
+          </div>
+          <div class="momentum-legend">
+            <div class="legend-item">
+              <div class="legend-dot momentum-north"></div>
+              <span>30% Growth</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-east"></div>
+              <span>40% Explore</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-south"></div>
+              <span>15% Rest</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-west"></div>
+              <span>15% Reflect</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-entries">
+          <div class="recent-title">Recent Activity</div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-east"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">East - Competitor research</span>
+              <span class="entry-mini-time">1d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Wireframing</span>
+              <span class="entry-mini-time">2d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-east"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">East - Brainstorming features</span>
+              <span class="entry-mini-time">3d ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-add-section">
+          <button class="quick-add-mini-btn">+ Add Entry</button>
+        </div>
+      </div>
+
+      <!-- Project Card 3 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <h3 class="project-card-title">Solopreneur Community</h3>
+          <p class="project-card-description">Building a support network for solo founders and side hustlers</p>
+          <div class="project-status-row">
+            <span class="project-status-badge">
+              <span class="health-indicator health-low"></span>
+              <span>Active</span>
+            </span>
+            <span class="project-count">5 entries this month</span>
+          </div>
+        </div>
+
+        <div class="momentum-section">
+          <div class="momentum-label">Flow Momentum</div>
+          <div class="momentum-bar">
+            <div class="momentum-segment momentum-north" style="width: 25%;"></div>
+            <div class="momentum-segment momentum-east" style="width: 20%;"></div>
+            <div class="momentum-segment momentum-south" style="width: 20%;"></div>
+            <div class="momentum-segment momentum-west" style="width: 35%;"></div>
+          </div>
+          <div class="momentum-legend">
+            <div class="legend-item">
+              <div class="legend-dot momentum-north"></div>
+              <span>25% Growth</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-east"></div>
+              <span>20% Explore</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-south"></div>
+              <span>20% Rest</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot momentum-west"></div>
+              <span>35% Reflect</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="recent-entries">
+          <div class="recent-title">Recent Activity</div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-west"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">West - Reviewing goals</span>
+              <span class="entry-mini-time">3d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-west"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">West - Strategic planning</span>
+              <span class="entry-mini-time">5d ago</span>
+            </div>
+          </div>
+          <div class="entry-mini">
+            <div class="entry-mini-dot momentum-north"></div>
+            <div class="entry-mini-info">
+              <span class="entry-mini-direction">North - Community outreach</span>
+              <span class="entry-mini-time">1w ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-add-section">
+          <button class="quick-add-mini-btn">+ Add Entry</button>
+        </div>
+      </div>
+
+      <!-- Empty State Card -->
+      <div class="empty-card">
+        <div class="empty-icon">➕</div>
+        <div class="empty-title">Start a New Project</div>
+        <div class="empty-text">Track your flow journey on something new</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

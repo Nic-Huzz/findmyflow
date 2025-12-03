@@ -1,0 +1,145 @@
+/* Flow Compass Input Component Styles */
+
+.flow-compass-input {
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+/* Compass Step */
+.compass-step {
+  text-align: center;
+}
+
+.step-instruction {
+  font-size: 1rem;
+  color: #374151;
+  margin: 0 0 1.5rem 0;
+  font-weight: 500;
+}
+
+.compass-legend-small {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.compass-legend-small p {
+  margin: 0.5rem 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.compass-legend-small strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* Context Step */
+.context-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.back-btn {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.activity-input,
+.reasoning-textarea {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.activity-input:focus,
+.reasoning-textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+}
+
+.char-count {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  align-self: flex-end;
+}
+
+.complete-button {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.complete-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(94, 23, 235, 0.3);
+}
+
+.complete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.graduation-note {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #5e17eb;
+  font-weight: 500;
+  margin: 0.5rem 0 0 0;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .flow-compass-input {
+    padding: 1rem;
+  }
+
+  .compass-legend-small {
+    padding: 0.75rem;
+  }
+
+  .compass-legend-small p {
+    font-size: 0.8125rem;
+  }
+}

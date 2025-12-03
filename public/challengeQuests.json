@@ -4,8 +4,8 @@
       "id": "recognise_essence_observe",
       "category": "Recognise",
       "type": "daily",
-      "name": "Essence Archetype",
-      "description": "Where did you show up as your essence archetype in your work today",
+      "name": "Essence Voice",
+      "description": "Where did you show up as your essence voice in your work today",
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What were you doing?",
@@ -15,12 +15,12 @@
       "id": "recognise_protective_observe",
       "category": "Recognise",
       "type": "daily",
-      "name": "Protective Archetype",
-      "description": "Where did your protective archetype emerge in your work today?",
+      "name": "Protective Voice",
+      "description": "Where did your protective voice emerge in your work today?",
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What caused it to arise?",
-      "learnMore": "Your protective archetype is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future."
+      "learnMore": "Your protective voice is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future."
     },
     {
       "id": "recognise_positive_frequency",
@@ -60,10 +60,10 @@
       "category": "Recognise",
       "type": "weekly",
       "name": "Identify Your Archetypes",
-      "description": "Which essence and protective archetypes did you most identify with?",
+      "description": "Which essence and protective voices did you most identify with?",
       "points": 7,
       "inputType": "text",
-      "placeholder": "Share what essence and protective archetype you identified"
+      "placeholder": "Share what essence and protective voice you identified"
     },
     {
       "id": "recognise_nervous_system",
@@ -82,12 +82,12 @@
       "category": "Recognise",
       "type": "weekly",
       "name": "Healing Compass",
-      "description": "Identify the wound/s causing your Protective Archetype to protect you",
+      "description": "Identify the wound/s causing your Protective Voice to protect you",
       "points": 20,
       "inputType": "flow",
       "flow_id": "healing_compass",
       "flow_route": "/healing-compass",
-      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective archetype developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
+      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
     },
     {
       "id": "recognise_ikigai",
@@ -161,7 +161,7 @@
       "category": "Rewire",
       "type": "daily",
       "name": "Embody Your Essence",
-      "description": "What's a moment where you were on auto-pilot and consciously chose to show-up as your essence archetype instead?",
+      "description": "What's a moment where you were on auto-pilot and consciously chose to show-up as your essence voice instead?",
       "points": 5,
       "inputType": "text",
       "maxPerDay": 3,
@@ -205,7 +205,7 @@
       "category": "Rewire",
       "type": "daily",
       "name": "Protective to Essence Shift",
-      "description": "What's a moment where you were showing up as your protective archetype but shifted and showed up in your essence?",
+      "description": "What's a moment where you were showing up as your protective voice but shifted and showed up in your essence?",
       "points": 7,
       "inputType": "text",
       "placeholder": "How did you shift from protective to essence?"
@@ -386,7 +386,7 @@
       "category": "Reconnect",
       "type": "daily",
       "name": "Meditation",
-      "description": "Establish connection with your essence archetype and drop into a meditation",
+      "description": "Establish connection with your essence voice and drop into a meditation",
       "points": 5,
       "inputType": "checkbox"
     },
@@ -404,7 +404,7 @@
       "category": "Reconnect",
       "type": "daily",
       "name": "Breathwork",
-      "description": "Complete breathwork and breath life into your essence archetype",
+      "description": "Complete breathwork and breath life into your essence voice",
       "points": 5,
       "inputType": "checkbox"
     },
@@ -444,22 +444,22 @@
       "category": "Reconnect",
       "type": "weekly",
       "name": "Clothing Item Ritual",
-      "description": "Choose a clothing item your essence archetype would love to wear but sparks your fear of judgement",
+      "description": "Choose a clothing item your essence voice would love to wear but sparks your fear of judgement",
       "points": 15,
       "inputType": "text",
       "placeholder": "What item did you choose and why?",
-      "learnMore": "Your protective archetype keeps you small by controlling how you present yourself to the world. Wearing something that feels 'too much' or 'not professional' or 'too bold' is a somatic way to practice being yourself despite fear of judgment. When you dress like your essence, you literally embody it. This is identity work disguised as fashion."
+      "learnMore": "Your protective voice keeps you small by controlling how you present yourself to the world. Wearing something that feels 'too much' or 'not professional' or 'too bold' is a somatic way to practice being yourself despite fear of judgment. When you dress like your essence, you literally embody it. This is identity work disguised as fashion."
     },
     {
       "id": "reconnect_groan_wheel",
       "category": "Reconnect",
       "type": "weekly",
-      "name": "Essence Archetype Groan",
-      "description": "Do something your Essence Archetype would love to do but sparks a fear of judgement, failure or not being good enough",
+      "name": "Essence Voice Groan",
+      "description": "Do something your Essence Voice would love to do but sparks a fear of judgement, failure or not being good enough",
       "points": 20,
       "inputType": "text",
       "placeholder": "What did you do and how did it go?",
-      "learnMore": "Your essence wants to express itself fully, but your protective archetype has been blocking it to keep you safe. This quest is about giving your essence permission to play—even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway."
+      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play—even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway."
     },
     {
       "id": "reconnect_remove_negative",
@@ -518,7 +518,7 @@
       "category": "Bonus",
       "type": "anytime",
       "name": "Buy Essence Ring",
-      "description": "Invest in a physical reminder of your essence archetype. Wear your truth. If you can't find one, send Huzz a message.",
+      "description": "Invest in a physical reminder of your essence voice. Wear your truth. If you can't find one, send Huzz a message.",
       "points": 10,
       "inputType": "checkbox"
     },

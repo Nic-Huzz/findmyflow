@@ -14,6 +14,7 @@ import Feedback from './Feedback'
 import NotificationSettings from './components/NotificationSettings'
 import RetreatLanding from './RetreatLanding'
 import FlowLibrary from './FlowLibrary'
+import FlowTracker from './pages/FlowTracker'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -112,6 +113,13 @@ function AppRouter() {
             <Route path="/library" element={
               <AuthGate>
                 <FlowLibrary />
+              </AuthGate>
+            } />
+
+            {/* Phase 4: Flow Tracker */}
+            <Route path="/flow-tracker" element={
+              <AuthGate>
+                <FlowTracker />
               </AuthGate>
             } />
 

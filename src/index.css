@@ -17,15 +17,28 @@
   padding: 0;
 }
 
-html, body, #root { 
-  height: 100%; 
+html, body, #root {
+  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-body { 
+body {
   background: linear-gradient(135deg, var(--warm-gray) 0%, #f1f3f4 100%);
   color: var(--text-gray);
   line-height: 1.6;
+}
+
+/* Fix mobile scrolling for dashboard pages */
+@media (max-width: 768px) {
+  html, body {
+    height: auto;
+    min-height: 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+    height: auto;
+  }
 }
 
 /* App layout */

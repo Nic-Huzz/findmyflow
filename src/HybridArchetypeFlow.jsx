@@ -13,7 +13,6 @@ const HybridArchetypeFlow = ({
   const [originalArchetypeCount, setOriginalArchetypeCount] = useState(0)
   const [totalBattlesCompleted, setTotalBattlesCompleted] = useState(0)
   const [battleHistory, setBattleHistory] = useState([])
-  const [finalResult, setFinalResult] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -272,9 +271,10 @@ const HybridArchetypeFlow = ({
         setCurrentIndex(0)
         setSwipedRight([])
       } else if (swipedRight.length === 1) {
-        // Single selection - show result
-        setFinalResult(swipedRight[0])
-        setPhase('result')
+        // Single selection - call onComplete immediately
+        if (onComplete) {
+          onComplete(swipedRight[0])
+        }
       } else {
         // Multiple selections - start battle phase
         setOriginalArchetypeCount(swipedRight.length)
@@ -282,7 +282,7 @@ const HybridArchetypeFlow = ({
         setPhase('battle')
       }
     }
-  }, [currentIndex, archetypes.length, swipedRight.length, phase])
+  }, [currentIndex, archetypes.length, swipedRight.length, phase, onComplete])
 
   // Get next battle pair for sequential elimination
   const getNextBattlePair = () => {
@@ -323,10 +323,11 @@ const HybridArchetypeFlow = ({
     })
     
     if (updatedSwipedRight.length === 1) {
-      // Battle complete - show result
-      console.log('Battle phase complete, showing result')
-      setFinalResult(updatedSwipedRight[0])
-      setPhase('result')
+      // Battle complete - call onComplete immediately
+      console.log('Battle phase complete, calling onComplete')
+      if (onComplete) {
+        onComplete(updatedSwipedRight[0])
+      }
     }
   }
 
@@ -354,13 +355,6 @@ const HybridArchetypeFlow = ({
     setBattleHistory(prev => prev.slice(0, -1)) // Remove the last state from history
   }
 
-  // Handle completion
-  const handleComplete = () => {
-    if (finalResult && onComplete) {
-      onComplete(finalResult)
-    }
-  }
-
   if (loading) {
     return (
       <div className="hybrid-flow">
@@ -369,33 +363,6 @@ const HybridArchetypeFlow = ({
             <span></span><span></span><span></span>
           </div>
           <p>Loading {archetypeType} archetypes...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Result phase
-  if (phase === 'result' && finalResult) {
-    const imagePath = archetypeType === 'protective' ? 'lead-magnet-protective' : 'lead-magnet-essence'
-    
-    return (
-      <div className="hybrid-flow">
-        <div className="result-container">
-          <div className="result-card">
-            <img 
-              src={`/images/archetypes/${imagePath}/${finalResult.image}`} 
-              alt={finalResult.name}
-              className="result-image"
-            />
-            <h2>{finalResult.name}</h2>
-            <p className="result-description">{finalResult.description}</p>
-          </div>
-          
-          <div className="result-actions">
-            <button onClick={handleComplete} className="continue-button">
-              {archetypeType === 'protective' ? 'Learn More' : 'Continue'}
-            </button>
-          </div>
         </div>
       </div>
     )

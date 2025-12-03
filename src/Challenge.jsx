@@ -8,9 +8,11 @@ import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
 import ConversationLogInput from './components/ConversationLogInput'
 import MilestoneInput from './components/MilestoneInput'
+import FlowCompassInput from './components/FlowCompassInput'
 import {
   handleConversationLogCompletion,
   handleMilestoneCompletion,
+  handleFlowCompassCompletion,
   handleStreakUpdate,
   getUserStageProgress
 } from './lib/questCompletionHelpers'
@@ -21,7 +23,7 @@ function Challenge() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('Recognise')
+  const [activeCategory, setActiveCategory] = useState('Flow Finder')
   const [challengeData, setData] = useState(null)
   const [dailyReleaseChallenges, setDailyReleaseChallenges] = useState(null)
   const [progress, setProgress] = useState(null)
@@ -47,7 +49,7 @@ function Challenge() {
   const [showExplainer, setShowExplainer] = useState(false) // Track portal explainer visibility
   const settingsMenuRef = useRef(null) // Ref for clicking outside to close menu
 
-  const categories = ['Recognise', 'Release', 'Rewire', 'Reconnect', 'Bonus']
+  const categories = ['Flow Finder', 'Daily', 'Weekly', 'Bonus', 'Tracker']
 
   useEffect(() => {
     loadChallengeData()
@@ -223,7 +225,7 @@ function Challenge() {
 
   const loadChallengeData = async () => {
     try {
-      const response = await fetch('/challengeQuests.json')
+      const response = await fetch('/challengeQuestsUpdate.json')
       const data = await response.json()
       setData(data)
 
@@ -674,6 +676,11 @@ function Challenge() {
       return
     }
 
+    if (quest.inputType === 'flow_compass' && !specialData) {
+      alert('Please select your flow direction and describe what happened.')
+      return
+    }
+
     // Sanitize reflection text for text inputs
     const sanitizedReflection = (quest.inputType === 'text' && inputValue)
       ? sanitizeText(inputValue)
@@ -719,6 +726,22 @@ function Challenge() {
         await loadStageProgress()
       }
 
+      if (quest.inputType === 'flow_compass') {
+        const result = await handleFlowCompassCompletion(
+          user.id,
+          progress.challenge_instance_id,
+          specialData,
+          stageProgress?.default_project_id
+        )
+
+        if (!result.success) {
+          alert(`Error logging flow: ${result.error}`)
+          return
+        }
+
+        console.log('✅ Flow entry logged from quest:', result.entryId)
+      }
+
       // Create quest completion record
       const completionData = {
         user_id: user.id,
@@ -733,7 +756,7 @@ function Challenge() {
       // Add reflection_text for text inputs, or structured data for special types
       if (quest.inputType === 'text') {
         completionData.reflection_text = sanitizedReflection
-      } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone') {
+      } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone' || quest.inputType === 'flow_compass') {
         completionData.reflection_text = JSON.stringify(specialData)
       }
 
@@ -873,13 +896,40 @@ function Challenge() {
     const artifact = challengeData.artifacts.find(a => a.category === category)
     if (!artifact) return null
 
-    const points = getCategoryPoints(category)
     const unlocked = progress?.[`${artifact.id}_unlocked`] || false
+
+    // For Daily and Weekly artifacts with R categories
+    if ((category === 'Daily' || category === 'Weekly') && artifact.rCategories) {
+      const rCategoriesWithProgress = {}
+
+      // Calculate points for each R category
+      Object.entries(artifact.rCategories).forEach(([rType, rData]) => {
+        // Get completions for this category and R type
+        const rCompletions = completions.filter(c =>
+          c.quest_category === category && c.quest_type === rType
+        )
+        const currentPoints = rCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
+
+        rCategoriesWithProgress[rType] = {
+          ...rData,
+          currentPoints
+        }
+      })
+
+      return {
+        ...artifact,
+        rCategories: rCategoriesWithProgress,
+        unlocked
+      }
+    }
+
+    // For Flow Finder and Tracker artifacts (simple point tracking)
+    const categoryCompletions = completions.filter(c => c.quest_category === category)
+    const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
     return {
       ...artifact,
-      currentDaily: points.daily,
-      currentWeekly: points.weekly,
+      currentPoints,
       unlocked
     }
   }
@@ -981,10 +1031,30 @@ function Challenge() {
     return labels
   }
 
+  // Filter quests by the active category tab
   const filteredQuests = challengeData?.quests.filter(q => q.category === activeCategory) || []
-  const dailyQuests = filteredQuests.filter(q => q.type === 'daily')
-  const weeklyQuests = filteredQuests.filter(q => q.type === 'weekly')
-  const bonusQuests = challengeData?.quests.filter(q => q.category === 'Bonus') || []
+
+  // For Daily and Weekly tabs, group quests by type (the 4 R's)
+  // For Flow Finder, quests are already in the right category
+  // For Bonus and Tracker, show all quests in that category
+  const questsByType = {}
+  if (activeCategory === 'Daily' || activeCategory === 'Weekly') {
+    // Group by the 4 R's framework
+    const rTypes = ['Recognise', 'Release', 'Rewire', 'Reconnect']
+    rTypes.forEach(type => {
+      questsByType[type] = filteredQuests.filter(q => q.type === type)
+    })
+  } else if (activeCategory === 'Flow Finder') {
+    // Group by persona or show all
+    questsByType['all'] = filteredQuests
+  } else if (activeCategory === 'Bonus' || activeCategory === 'Tracker') {
+    questsByType['all'] = filteredQuests
+  }
+
+  // For backward compatibility with existing code structure
+  const dailyQuests = activeCategory === 'Daily' ? filteredQuests : []
+  const weeklyQuests = activeCategory === 'Weekly' ? filteredQuests : []
+  const bonusQuests = activeCategory === 'Bonus' ? filteredQuests : []
 
   if (showOnboarding) {
     return (
@@ -1295,37 +1365,45 @@ function Challenge() {
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
-              <h3>{artifactProgress.unlocked ? getArtifactEmoji(activeCategory) : '🔒'} {artifactProgress.name}</h3>
+              <h3>{artifactProgress.unlocked ? '✅' : '🔒'} {artifactProgress.name}</h3>
               <p className="artifact-description">{artifactProgress.description}</p>
             </div>
 
             {!artifactProgress.unlocked && (
               <div className="artifact-bars">
-                <div className="progress-bar-container">
-                  <div className="progress-bar-label">
-                    <span>Daily Points</span>
-                    <span>{artifactProgress.currentDaily}/{artifactProgress.dailyPointsRequired}</span>
+                {/* For Daily and Weekly: Show 4 R's sliders */}
+                {(activeCategory === 'Daily' || activeCategory === 'Weekly') && artifactProgress.rCategories ? (
+                  <>
+                    {Object.entries(artifactProgress.rCategories).map(([rType, rData]) => (
+                      <div key={rType} className="progress-bar-container">
+                        <div className="progress-bar-label">
+                          <span>{rType}</span>
+                          <span>{rData.currentPoints}/{rData.pointsRequired}</span>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className="progress-bar-fill"
+                            style={{ width: `${Math.min((rData.currentPoints / rData.pointsRequired) * 100, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  /* For Flow Finder and Tracker: Show simple progress */
+                  <div className="progress-bar-container">
+                    <div className="progress-bar-label">
+                      <span>Progress</span>
+                      <span>{artifactProgress.currentPoints || 0}/{artifactProgress.pointsRequired}</span>
+                    </div>
+                    <div className="progress-bar">
+                      <div
+                        className="progress-bar-fill"
+                        style={{ width: `${Math.min(((artifactProgress.currentPoints || 0) / artifactProgress.pointsRequired) * 100, 100)}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-bar-fill daily"
-                      style={{ width: `${Math.min((artifactProgress.currentDaily / artifactProgress.dailyPointsRequired) * 100, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                <div className="progress-bar-container">
-                  <div className="progress-bar-label">
-                    <span>Weekly Points</span>
-                    <span>{artifactProgress.currentWeekly}/{artifactProgress.weeklyPointsRequired}</span>
-                  </div>
-                  <div className="progress-bar">
-                    <div
-                      className="progress-bar-fill weekly"
-                      style={{ width: `${Math.min((artifactProgress.currentWeekly / artifactProgress.weeklyPointsRequired) * 100, 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
+                )}
               </div>
             )}
 
@@ -1356,19 +1434,26 @@ function Challenge() {
           </button>
         </div>
 
-        {/* Daily Quests */}
-        {dailyQuests.length > 0 && (
+        {/* Quests for current category */}
+        {activeCategory === 'Daily' && filteredQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Daily Quests</h2>
-            <div className="quest-grid">
-              {dailyQuests.map(quest => {
-                const completed = isQuestCompletedToday(quest.id, quest)
-                const streak = getDailyStreak(quest.id)
-                const dayLabels = getDayLabels()
-                const isDailyQuestLocked = progress.current_day === 0
+            {['Recognise', 'Release', 'Rewire', 'Reconnect'].map(rType => {
+              const rTypeQuests = filteredQuests.filter(q => q.type === rType)
+              if (rTypeQuests.length === 0) return null
 
-                return (
-                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''} ${isDailyQuestLocked ? 'locked' : ''}`}>
+              return (
+                <div key={rType} className="quest-subsection">
+                  <h3 className="subsection-title">{rType}</h3>
+                  <div className="quest-grid">
+                    {rTypeQuests.map(quest => {
+                      const completed = isQuestCompletedToday(quest.id, quest)
+                      const streak = getDailyStreak(quest.id)
+                      const dayLabels = getDayLabels()
+                      const isDailyQuestLocked = progress.current_day === 0
+
+                      return (
+                        <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''} ${isDailyQuestLocked ? 'locked' : ''}`}>
                     <div className="quest-header">
                       <h3 className="quest-name">{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
@@ -1534,6 +1619,11 @@ function Challenge() {
                             quest={quest}
                             onComplete={(quest, data) => handleQuestComplete(quest, data)}
                           />
+                        ) : quest.inputType === 'flow_compass' ? (
+                          <FlowCompassInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
@@ -1562,17 +1652,27 @@ function Challenge() {
               })}
             </div>
           </div>
-        )}
+        )
+      })}
+    </div>
+  )}
 
         {/* Weekly Quests */}
-        {weeklyQuests.length > 0 && (
+        {activeCategory === 'Weekly' && filteredQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Weekly Quests</h2>
-            <div className="quest-grid">
-              {weeklyQuests.map(quest => {
-                const completed = isQuestCompletedToday(quest.id, quest)
-                return (
-                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
+            {['Recognise', 'Release', 'Rewire', 'Reconnect'].map(rType => {
+              const rTypeQuests = filteredQuests.filter(q => q.type === rType)
+              if (rTypeQuests.length === 0) return null
+
+              return (
+                <div key={rType} className="quest-subsection">
+                  <h3 className="subsection-title">{rType}</h3>
+                  <div className="quest-grid">
+                    {rTypeQuests.map(quest => {
+                      const completed = isQuestCompletedToday(quest.id, quest)
+                      return (
+                        <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
                     <div className="quest-header">
                       <h3 className="quest-name">{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
@@ -1677,6 +1777,131 @@ function Challenge() {
                             quest={quest}
                             onComplete={(quest, data) => handleQuestComplete(quest, data)}
                           />
+                        ) : quest.inputType === 'flow_compass' ? (
+                          <FlowCompassInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
+                        ) : (
+                          <>
+                            <div className="quest-checkbox-area">
+                              <label className="quest-checkbox-label">
+                                Mark as complete
+                              </label>
+                            </div>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {completed && (
+                      <div className="quest-completed-badge">
+                        ✅ Completed
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )}
+
+        {/* Flow Finder Quests */}
+        {activeCategory === 'Flow Finder' && filteredQuests.length > 0 && (
+          <div className="quest-section">
+            <h2 className="section-title">Flow Finder Quests</h2>
+            <div className="quest-grid">
+              {filteredQuests.map(quest => {
+                const completed = isQuestCompletedToday(quest.id, quest)
+                return (
+                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
+                    <div className="quest-header">
+                      <h3 className="quest-name">{quest.name}</h3>
+                      <span className="quest-points">+{quest.points} pts</span>
+                    </div>
+                    <p className="quest-description">{quest.description}</p>
+
+                    {quest.learnMore && !completed && (
+                      <div className="learn-more-section">
+                        <button
+                          className="learn-more-toggle"
+                          onClick={() => toggleLearnMore(quest.id)}
+                        >
+                          <span>Learn More</span>
+                          <svg
+                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                          >
+                            <path
+                              d="M4 6L8 10L12 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
+                        {expandedLearnMore[quest.id] && (
+                          <div className="learn-more-content">
+                            {quest.learnMore}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {!completed && (
+                      <div className="quest-input-area">
+                        {quest.status === 'coming_soon' ? (
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        ) : quest.inputType === 'flow' ? (
+                          <Link to={quest.flow_route} className="quest-flow-btn">
+                            Start {quest.name} →
+                          </Link>
+                        ) : quest.inputType === 'text' ? (
+                          <>
+                            <textarea
+                              className="quest-textarea"
+                              placeholder={quest.placeholder}
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              rows={3}
+                            />
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
+                        ) : quest.inputType === 'conversation_log' ? (
+                          <ConversationLogInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
+                        ) : quest.inputType === 'milestone' ? (
+                          <MilestoneInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
+                        ) : quest.inputType === 'flow_compass' ? (
+                          <FlowCompassInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
@@ -1708,11 +1933,11 @@ function Challenge() {
         )}
 
         {/* Bonus Quests - only show if we're on the Bonus tab */}
-        {activeCategory === 'Bonus' && bonusQuests.length > 0 && (
+        {activeCategory === 'Bonus' && filteredQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Bonus Quests</h2>
             <div className="quest-grid">
-              {bonusQuests.map(quest => {
+              {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
                 return (
                   <div key={quest.id} className={`quest-card bonus ${completed ? 'completed' : ''}`}>
@@ -1791,6 +2016,11 @@ function Challenge() {
                             quest={quest}
                             onComplete={(quest, data) => handleQuestComplete(quest, data)}
                           />
+                        ) : quest.inputType === 'flow_compass' ? (
+                          <FlowCompassInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                          />
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
@@ -1820,8 +2050,49 @@ function Challenge() {
             </div>
           </div>
         )}
-        </>
+
+        {/* Tracker Quests */}
+        {activeCategory === 'Tracker' && (
+          <div className="quest-section">
+            <h2 className="section-title">Flow Tracker</h2>
+            {filteredQuests.length === 0 ? (
+              <div className="empty-category">
+                <p>Track your flow activities here. Coming soon!</p>
+              </div>
+            ) : (
+              <div className="quest-grid">
+                {filteredQuests.map(quest => {
+                  const completed = isQuestCompletedToday(quest.id, quest)
+                  return (
+                    <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
+                      <div className="quest-header">
+                        <h3 className="quest-name">{quest.name}</h3>
+                        <span className="quest-points">+{quest.points} pts</span>
+                      </div>
+                      <p className="quest-description">{quest.description}</p>
+
+                      {!completed && (
+                        <div className="quest-input-area">
+                          <button className="quest-flow-btn coming-soon" disabled>
+                            Coming Soon
+                          </button>
+                        </div>
+                      )}
+
+                      {completed && (
+                        <div className="quest-completed-badge">
+                          ✅ Completed
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
         )}
+      </>
+      )}
       </div>
     </div>
   )

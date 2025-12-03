@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journey Visualization - Style 2: Journey Path</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .journey-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      color: #1a202c;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: #718096;
+      font-size: 16px;
+    }
+
+    .persona-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Journey Path */
+    .journey-path {
+      position: relative;
+      padding: 20px 0;
+    }
+
+    .path-line {
+      position: absolute;
+      top: 50%;
+      left: 60px;
+      right: 60px;
+      height: 4px;
+      transform: translateY(-50%);
+    }
+
+    .path-line svg {
+      width: 100%;
+      height: 200px;
+      position: absolute;
+      top: -100px;
+    }
+
+    .milestones {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .milestone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 140px;
+      position: relative;
+    }
+
+    .milestone-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: white;
+      border: 4px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .milestone.completed .milestone-icon {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-color: #667eea;
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .milestone.current .milestone-icon {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-color: #fbbf24;
+      border-width: 5px;
+      animation: bounce 2s infinite;
+      box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4);
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0) scale(1.05);
+      }
+      50% {
+        transform: translateY(-8px) scale(1.08);
+      }
+    }
+
+    .milestone.current .milestone-icon::before {
+      content: '🎯';
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      font-size: 24px;
+    }
+
+    .milestone-content {
+      text-align: center;
+    }
+
+    .milestone-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 6px;
+    }
+
+    .milestone.completed .milestone-name {
+      color: #667eea;
+    }
+
+    .milestone.current .milestone-name {
+      color: #f59e0b;
+    }
+
+    .milestone-status {
+      font-size: 12px;
+      color: #a0aec0;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: #f7fafc;
+      display: inline-block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .milestone.completed .milestone-status {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .milestone.current .milestone-status {
+      background: #fef3c7;
+      color: #78350f;
+    }
+
+    .milestone-description {
+      font-size: 12px;
+      color: #718096;
+      line-height: 1.4;
+    }
+
+    .current-stage-info {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 48px;
+      border: 2px solid #fbbf24;
+    }
+
+    .current-stage-info h3 {
+      font-size: 18px;
+      color: #78350f;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .current-stage-info p {
+      color: #92400e;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .milestones {
+        flex-direction: column;
+        gap: 40px;
+      }
+      .milestone {
+        width: 100%;
+        flex-direction: row;
+        text-align: left;
+        gap: 20px;
+      }
+      .milestone-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      .milestone-content {
+        text-align: left;
+        flex: 1;
+      }
+      .path-line {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="journey-card">
+      <div class="header">
+        <div class="persona-badge">Vibe Seeker</div>
+        <h1>Your Journey Path</h1>
+        <p>Follow the path to finding your flow</p>
+      </div>
+
+      <div class="journey-path">
+        <div class="path-line">
+          <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 0 100 Q 200 20, 270 100 T 540 100 T 800 100"
+                  stroke="#e2e8f0"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linecap="round"/>
+            <path d="M 0 100 Q 200 20, 270 100"
+                  stroke="url(#gradient)"
+                  stroke-width="6"
+                  fill="none"
+                  stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#fbbf24;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="milestones">
+          <div class="milestone completed">
+            <div class="milestone-icon">✓</div>
+            <div class="milestone-content">
+              <div class="milestone-status">Complete</div>
+              <div class="milestone-name">Discover</div>
+              <div class="milestone-description">Found your archetypes</div>
+            </div>
+          </div>
+
+          <div class="milestone current">
+            <div class="milestone-icon">🔍</div>
+            <div class="milestone-content">
+              <div class="milestone-status">Current</div>
+              <div class="milestone-name">Explore</div>
+              <div class="milestone-description">Testing approaches</div>
+            </div>
+          </div>
+
+          <div class="milestone">
+            <div class="milestone-icon">🎯</div>
+            <div class="milestone-content">
+              <div class="milestone-status">Locked</div>
+              <div class="milestone-name">Commit</div>
+              <div class="milestone-description">Focus on one path</div>
+            </div>
+          </div>
+
+          <div class="milestone">
+            <div class="milestone-icon">🚀</div>
+            <div class="milestone-content">
+              <div class="milestone-status">Locked</div>
+              <div class="milestone-name">Scale</div>
+              <div class="milestone-description">Grow your impact</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="current-stage-info">
+        <h3>🔍 Explore Stage</h3>
+        <p>You're experimenting with different approaches to find what works. Complete the Skills flow and log 3 customer conversations to unlock the Commit stage and move forward on your journey.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

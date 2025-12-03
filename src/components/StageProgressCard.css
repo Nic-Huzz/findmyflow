@@ -1,8 +1,9 @@
 .stage-progress-card {
   background: white;
   border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
   margin-bottom: 24px;
 }
 
@@ -15,7 +16,7 @@
 
 .loading-spinner {
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #6366f1;
+  border-top: 3px solid #667eea;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -27,100 +28,245 @@
   100% { transform: rotate(360deg); }
 }
 
-.stage-header {
+/* Header - Collapsible */
+.card-header {
+  padding: 24px;
+  cursor: pointer;
+  transition: background 0.2s ease;
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 20px;
+  flex-direction: column;
+}
+
+.card-header:hover {
+  background: #fafafa;
+}
+
+.header-top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 16px !important;
+  flex-direction: row !important;
+  width: 100% !important;
 }
 
 .persona-badge {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 13px;
   font-weight: 600;
-  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.expand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+  background: #667eea;
+  color: white;
 }
 
 .stage-info {
-  flex: 1;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  width: 100% !important;
 }
 
-.current-stage {
+.current-stage-label {
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.current-stage-name {
   font-size: 24px;
   font-weight: 700;
-  color: #1f2937;
-  margin: 0 0 4px 0;
+  color: #1a1a1a;
 }
 
 .next-stage {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0;
+  text-align: right;
 }
 
-.graduation-requirements {
-  margin-top: 16px;
+.next-stage-label {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 4px;
 }
 
-.graduation-requirements h4 {
+.next-stage-name {
   font-size: 16px;
   font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 8px 0;
+  color: #667eea;
 }
 
-.requirements-description {
+/* Dropdown Content */
+.dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.dropdown-content.expanded {
+  max-height: 1000px;
+}
+
+.journey-visualization {
+  padding: 32px 24px;
+  background: linear-gradient(135deg, #fafafa, #f5f5f5);
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Journey Path */
+.journey-path {
+  position: relative;
+  padding: 20px 0;
+}
+
+.milestones {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+/* Connecting line between milestones - now dynamic via inline style */
+.milestone-progress-line {
+  position: absolute;
+  top: 30px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 3px;
+  z-index: -1;
+}
+
+.milestone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* width set dynamically via inline style based on number of stages */
+}
+
+.milestone-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.milestone.completed .milestone-icon {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-color: #667eea;
+  color: white;
+}
+
+.milestone.current .milestone-icon {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-color: #fbbf24;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(251, 191, 36, 0);
+  }
+}
+
+.milestone-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.milestone.completed .milestone-name {
+  color: #667eea;
+}
+
+.milestone.current .milestone-name {
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.milestone-status {
+  font-size: 10px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Requirements Section */
+.requirements-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.requirements-title {
   font-size: 14px;
-  color: #6b7280;
-  margin: 0 0 16px 0;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 12px;
 }
 
 .requirements-checklist {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
 .requirement-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
-  background: #f9fafb;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #555;
 }
 
-.requirement-item.completed {
-  background: #ecfdf5;
-  border-left: 3px solid #10b981;
-}
-
-.requirement-item .checkbox {
-  font-size: 20px;
-  width: 24px;
-  height: 24px;
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 12px;
   flex-shrink: 0;
 }
 
 .requirement-item.completed .checkbox {
-  color: #10b981;
-}
-
-.requirement-item .requirement-text {
-  font-size: 14px;
-  color: #374151;
-}
-
-.requirement-item.completed .requirement-text {
-  color: #065f46;
+  background: #48bb78;
+  border-color: #48bb78;
+  color: white;
 }
 
 .graduate-button {
@@ -135,6 +281,7 @@
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  margin-top: 16px;
 }
 
 .graduate-button:hover {
@@ -146,19 +293,49 @@
   transform: translateY(0);
 }
 
-.completion-message {
-  text-align: center;
-  padding: 20px;
-  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-  border-radius: 8px;
-  margin-top: 16px;
+/* Next Level Section */
+.next-level-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
 }
 
-.completion-message p {
-  margin: 0;
+.next-level-title {
   font-size: 16px;
-  font-weight: 600;
-  color: #92400e;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+
+.next-level-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.unlock-requirement {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fff5f7, #fff);
+  border-radius: 8px;
+  border: 1px solid rgba(240, 147, 251, 0.2);
+}
+
+.lock-icon {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.unlock-text {
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
 }
 
 .stage-progress-card.eligible {
@@ -166,17 +343,27 @@
   box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
 }
 
-@media (max-width: 640px) {
-  .stage-progress-card {
-    padding: 16px;
-  }
-
-  .current-stage {
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .milestone-icon {
+    width: 50px;
+    height: 50px;
     font-size: 20px;
   }
 
-  .persona-badge {
-    font-size: 12px;
-    padding: 6px 12px;
+  .milestone-name {
+    font-size: 11px;
+  }
+
+  .card-header {
+    padding: 20px;
+  }
+
+  .current-stage-name {
+    font-size: 20px;
+  }
+
+  .journey-visualization {
+    padding: 24px 16px;
   }
 }
