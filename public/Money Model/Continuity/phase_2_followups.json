@@ -1,0 +1,118 @@
+{
+  "phase_2_followup_logic": {
+    "description": "After scoring phase-1 questions, ask follow-ups for top 2 offers to validate eligibility and readiness.",
+    "offers_to_followups": {
+
+      "signup_bonus_continuity": [
+        {
+          "id": "FC1_high_value_bonus",
+          "text": "Do you have a high-value product, service, or content bundle you could offer as a signup bonus?",
+          "type": "single_choice",
+          "options": ["yes_have_it", "yes_can_create", "maybe", "no"],
+          "store_as": "has_bonus_offer"
+        },
+        {
+          "id": "FC2_deliver_bonus",
+          "text": "Can you deliver the bonus immediately upon signup without major operational burden?",
+          "type": "single_choice",
+          "options": ["yes_easily", "yes_with_effort", "difficult", "no"],
+          "store_as": "can_deliver_bonus"
+        }
+      ],
+
+      "commitment_discount": [
+        {
+          "id": "FC3_commitment_length",
+          "text": "What minimum commitment length are you willing to offer discounts for?",
+          "type": "single_choice",
+          "options": ["3_months", "6_months", "12_months", "flexible", "not_sure"],
+          "store_as": "min_commitment_length"
+        },
+        {
+          "id": "FC4_cancellation_policy",
+          "text": "Are you comfortable enforcing a cancellation policy if customers break their commitment?",
+          "type": "single_choice",
+          "options": ["yes_comfortable", "yes_with_terms", "hesitant", "no_prefer_flexible"],
+          "store_as": "cancellation_enforcement"
+        }
+      ],
+
+      "waived_fee_continuity": [
+        {
+          "id": "FC5_setup_fee_amount",
+          "text": "What would you charge as a setup/onboarding fee if offered standalone?",
+          "type": "single_choice",
+          "options": ["under_1000", "1000_to_3000", "3000_to_5000", "over_5000", "not_sure"],
+          "store_as": "potential_setup_fee"
+        },
+        {
+          "id": "FC6_minimum_commitment",
+          "text": "What minimum commitment would justify waiving your setup/onboarding costs?",
+          "type": "single_choice",
+          "options": ["6_months", "12_months", "18_months", "24_months", "depends"],
+          "store_as": "min_commitment_for_waiver"
+        }
+      ],
+
+      "downsell_to_continuity": [
+        {
+          "id": "FC7_upfront_pricing",
+          "text": "Are you willing to collect a substantial upfront payment (50-80% of typical sale)?",
+          "type": "single_choice",
+          "options": ["yes_prefer_it", "yes_open_to_it", "maybe", "no_prefer_monthly"],
+          "store_as": "upfront_payment_willingness"
+        },
+        {
+          "id": "FC8_monthly_value",
+          "text": "Can you add ongoing value/support AFTER the initial delivery to justify monthly payments?",
+          "type": "single_choice",
+          "options": ["yes_already_planned", "yes_can_create", "maybe_limited", "no_challenge"],
+          "store_as": "ongoing_value_for_downsell"
+        }
+      ],
+
+      "auto_replenishment": [
+        {
+          "id": "FC9_product_consumption",
+          "text": "How predictable is the consumption cycle of your physical product?",
+          "type": "single_choice",
+          "options": ["very_predictable", "somewhat_predictable", "varies_by_customer", "unpredictable"],
+          "store_as": "consumption_predictability"
+        },
+        {
+          "id": "FC10_shipping_capability",
+          "text": "Can you handle recurring shipping/fulfillment efficiently?",
+          "type": "single_choice",
+          "options": ["yes_in_place", "yes_can_setup", "need_help", "major_challenge"],
+          "store_as": "shipping_capability"
+        }
+      ],
+
+      "pure_subscription": [
+        {
+          "id": "FC11_monthly_value_delivery",
+          "text": "Can you deliver NEW value every month (not just access to static content)?",
+          "type": "single_choice",
+          "options": ["yes_new_content_monthly", "yes_ongoing_support", "yes_both", "limited_one_time"],
+          "store_as": "monthly_value_delivery"
+        },
+        {
+          "id": "FC12_cancellation_approach",
+          "text": "What's your preferred cancellation policy approach?",
+          "type": "single_choice",
+          "options": ["cancel_anytime", "30_day_notice", "contract_minimum", "prorated_fee", "not_sure"],
+          "store_as": "cancellation_policy_preference"
+        }
+      ]
+
+    },
+
+    "logic_rules": {
+      "ask_top_two_offers_only": true,
+      "max_followup_questions_per_offer": 2,
+      "skip_if_not_in_top_two": true,
+      "auto_rule_out_if_hard_no": true,
+      "if_both_offers_fail_followups": "fallback_to_next_best_offer"
+    }
+  }
+}

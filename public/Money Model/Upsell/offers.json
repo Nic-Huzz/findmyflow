@@ -1,0 +1,509 @@
+{
+  "offers": [
+    {
+      "id": "classic_upsell",
+      "name": "Classic Upsell",
+      "tagline": "\"You don't want anything else?\"",
+      "description": "The simplest and fastest upsell to implement. Offer something free or heavily discounted just for buying. Works on front-end and back-end with 80%+ take rates when executed seamlessly.",
+      "best_for": [
+        "Businesses wanting immediate profit boost",
+        "Any size customer base",
+        "Front-end or back-end sales",
+        "Quick implementation"
+      ],
+      "key_success_factors": [
+        "Make it seamless - customer barely notices they're buying more",
+        "Offer must feel like a no-brainer (free or heavy discount)",
+        "Can work with single product or multiple products",
+        "80%+ take rate is achievable when done right"
+      ],
+      "when_it_fails": [
+        "Upsell is clunky or requires too many steps",
+        "Offer isn't compelling enough",
+        "Wrong timing in customer journey"
+      ],
+      "metrics_to_track": [
+        "Upsell take rate (target: 80%+)",
+        "Average order value increase",
+        "Gross profit per sale"
+      ],
+      "max_possible_score": 40,
+      "scoring_weights": {
+        "Q1_customer_base_size": {
+          "new_business_few_customers": 2,
+          "growing_customer_base": 3,
+          "established_customer_base": 3,
+          "dormant_customers": 2
+        },
+        "Q2_product_portfolio": {
+          "single_product": 3,
+          "2_3_products": 4,
+          "4_10_products": 3,
+          "10_plus_products": 2
+        },
+        "Q3_average_order_value": {
+          "under_50": 3,
+          "50_200": 4,
+          "200_1000": 3,
+          "1000_5000": 2,
+          "5000_plus": 1
+        },
+        "Q4_upsell_infrastructure": {
+          "yes_card_on_file": 4,
+          "can_implement_easily": 3,
+          "would_need_to_build": 1,
+          "no_plans_to_implement": -2
+        },
+        "Q5_product_modularity": {
+          "already_have_premium": 3,
+          "can_create_easily": 4,
+          "would_be_challenging": 2,
+          "not_possible": 1
+        },
+        "Q6_customer_tracking": {
+          "full_tracking": 3,
+          "partial_tracking": 3,
+          "minimal_tracking": 2,
+          "no_tracking": 1
+        },
+        "Q7_primary_upsell_goal": {
+          "maximize_immediate_profit": 4,
+          "increase_customer_ltv": 2,
+          "reengage_past_customers": 1,
+          "steal_competitor_customers": 1
+        },
+        "Q8_customer_sophistication": {
+          "very_sophisticated": 3,
+          "moderately_sophisticated": 4,
+          "beginners": 3,
+          "price_shoppers": 2
+        },
+        "Q9_sales_channel": {
+          "automated_funnel": 4,
+          "sales_calls": 3,
+          "email_backend": 4,
+          "hybrid_approach": 4
+        },
+        "Q10_current_upsell_situation": {
+          "no_upsell_currently": 4,
+          "have_upsell_working_ok": 2,
+          "have_upsell_not_working": 3,
+          "upset_customers": 0
+        }
+      },
+      "hard_disqualifiers": [],
+      "funnel_template": {
+        "headlines": [
+          "Wait! Before you go...",
+          "You don't want [FREE BONUS] too?",
+          "Special one-time offer for new customers"
+        ],
+        "offer_structure": [
+          "Customer completes main purchase",
+          "Immediately present upsell (same page or thank you page)",
+          "Offer something free or heavily discounted just for buying",
+          "Make it one-click to accept (card on file ideal)",
+          "80%+ should say yes if offer is right"
+        ],
+        "implementation_tips": [
+          "Keep it simple - one click to add",
+          "Make offer irresistible (free or 80%+ discount)",
+          "Test on front-end AND back-end",
+          "Works in automated funnels and sales calls",
+          "Example: 'Get [bonus product] FREE just for buying today'"
+        ]
+      }
+    },
+    {
+      "id": "menu_upsell",
+      "name": "Menu Upsell",
+      "tagline": "Hormozi's Favorite - Prescribe, Don't Sell",
+      "description": "The most sophisticated upsell strategy using 4 tactics: Unselling (tell them what they DON'T need), Prescribing (tell them what they DO need), A/B Offer (ask preference), and Card on File (make it easy). Builds trust and LTV.",
+      "best_for": [
+        "Businesses with multiple products (4+ ideal)",
+        "Sophisticated customers who appreciate guidance",
+        "Sales calls or live interactions",
+        "Building long-term customer relationships"
+      ],
+      "key_success_factors": [
+        "UNSELLING: Tell customers what they DON'T need (builds massive trust)",
+        "PRESCRIBING: Act like a doctor - diagnose and prescribe the right solution",
+        "A/B OFFER: Give 2 options and ask which they prefer (not 'yes or no')",
+        "CARD ON FILE: Make purchase frictionless with stored payment",
+        "Requires product variety to prescribe from"
+      ],
+      "when_it_fails": [
+        "Not enough products to prescribe from",
+        "Selling instead of prescribing",
+        "Customers don't trust your expertise",
+        "No card on file makes friction too high"
+      ],
+      "metrics_to_track": [
+        "Prescription accuracy (right product for customer)",
+        "Customer lifetime value increase",
+        "Trust indicators (testimonials, repeat purchases)",
+        "Unselling impact on conversion"
+      ],
+      "max_possible_score": 40,
+      "scoring_weights": {
+        "Q1_customer_base_size": {
+          "new_business_few_customers": 2,
+          "growing_customer_base": 4,
+          "established_customer_base": 4,
+          "dormant_customers": 2
+        },
+        "Q2_product_portfolio": {
+          "single_product": -3,
+          "2_3_products": 1,
+          "4_10_products": 4,
+          "10_plus_products": 4
+        },
+        "Q3_average_order_value": {
+          "under_50": 2,
+          "50_200": 3,
+          "200_1000": 4,
+          "1000_5000": 4,
+          "5000_plus": 3
+        },
+        "Q4_upsell_infrastructure": {
+          "yes_card_on_file": 4,
+          "can_implement_easily": 3,
+          "would_need_to_build": 0,
+          "no_plans_to_implement": -3
+        },
+        "Q5_product_modularity": {
+          "already_have_premium": 4,
+          "can_create_easily": 3,
+          "would_be_challenging": 1,
+          "not_possible": 0
+        },
+        "Q6_customer_tracking": {
+          "full_tracking": 4,
+          "partial_tracking": 3,
+          "minimal_tracking": 1,
+          "no_tracking": 0
+        },
+        "Q7_primary_upsell_goal": {
+          "maximize_immediate_profit": 2,
+          "increase_customer_ltv": 4,
+          "reengage_past_customers": 2,
+          "steal_competitor_customers": 2
+        },
+        "Q8_customer_sophistication": {
+          "very_sophisticated": 4,
+          "moderately_sophisticated": 4,
+          "beginners": 2,
+          "price_shoppers": 0
+        },
+        "Q9_sales_channel": {
+          "automated_funnel": 1,
+          "sales_calls": 4,
+          "email_backend": 2,
+          "hybrid_approach": 3
+        },
+        "Q10_current_upsell_situation": {
+          "no_upsell_currently": 3,
+          "have_upsell_working_ok": 3,
+          "have_upsell_not_working": 4,
+          "upset_customers": 2
+        }
+      },
+      "hard_disqualifiers": [
+        {
+          "field": "product_portfolio",
+          "disallowed": ["single_product"],
+          "reason": "Menu Upsell requires multiple products to prescribe from. With only one product, you can't use this strategy effectively."
+        }
+      ],
+      "funnel_template": {
+        "headlines": [
+          "Let me prescribe the right solution for you",
+          "Here's what I recommend based on your situation",
+          "You DON'T need [product X], but you DO need [product Y]"
+        ],
+        "offer_structure": [
+          "STEP 1 - UNSELLING: 'You don't need our premium package because...'",
+          "STEP 2 - PRESCRIBING: 'Based on what you told me, you need [specific product]'",
+          "STEP 3 - A/B OFFER: 'Would you prefer [Option A] or [Option B]?'",
+          "STEP 4 - CARD ON FILE: 'I'll add that to your account now' (one click)"
+        ],
+        "implementation_tips": [
+          "Works best on sales calls or live chat",
+          "Requires training team to prescribe, not sell",
+          "Build product matrix (if X situation, prescribe Y product)",
+          "Track which prescriptions lead to best LTV",
+          "Example: 'Most people think they need X, but in your case, Y is better because...'"
+        ]
+      }
+    },
+    {
+      "id": "anchor_upsell",
+      "name": "Anchor Upsell",
+      "tagline": "Show Premium First, Rescue with Main Offer",
+      "description": "Present the premium version FIRST at 5-10x the price. Wait for the gasp. Then 'rescue' them with your main offer. Customers end up spending more than they planned because the premium anchored their expectations.",
+      "best_for": [
+        "Higher-ticket offers ($1,000+)",
+        "Businesses that can create legitimate premium tiers",
+        "Sales calls where you can gauge reaction",
+        "Sophisticated buyers who appreciate premium value"
+      ],
+      "key_success_factors": [
+        "Premium must be 5-10x more expensive than main offer",
+        "Premium must be LEGITIMATE value (not fake tier)",
+        "Present premium first with full enthusiasm",
+        "Wait for 'the gasp' reaction to high price",
+        "Come to rescue: 'I have something more affordable...'",
+        "Main offer now feels like a bargain"
+      ],
+      "when_it_fails": [
+        "Premium tier feels fake or inflated",
+        "Can't create 5-10x value legitimately",
+        "Customers feel manipulated",
+        "Price anchoring doesn't work in your market"
+      ],
+      "metrics_to_track": [
+        "Average order value vs. main offer alone",
+        "Premium tier take rate (should be low, 5-15%)",
+        "Main offer conversion after seeing premium",
+        "Customer perception of value"
+      ],
+      "max_possible_score": 40,
+      "scoring_weights": {
+        "Q1_customer_base_size": {
+          "new_business_few_customers": 1,
+          "growing_customer_base": 3,
+          "established_customer_base": 4,
+          "dormant_customers": 2
+        },
+        "Q2_product_portfolio": {
+          "single_product": 1,
+          "2_3_products": 3,
+          "4_10_products": 4,
+          "10_plus_products": 3
+        },
+        "Q3_average_order_value": {
+          "under_50": 0,
+          "50_200": 1,
+          "200_1000": 3,
+          "1000_5000": 4,
+          "5000_plus": 4
+        },
+        "Q4_upsell_infrastructure": {
+          "yes_card_on_file": 3,
+          "can_implement_easily": 3,
+          "would_need_to_build": 2,
+          "no_plans_to_implement": 1
+        },
+        "Q5_product_modularity": {
+          "already_have_premium": 4,
+          "can_create_easily": 4,
+          "would_be_challenging": 0,
+          "not_possible": -5
+        },
+        "Q6_customer_tracking": {
+          "full_tracking": 3,
+          "partial_tracking": 2,
+          "minimal_tracking": 2,
+          "no_tracking": 1
+        },
+        "Q7_primary_upsell_goal": {
+          "maximize_immediate_profit": 4,
+          "increase_customer_ltv": 3,
+          "reengage_past_customers": 1,
+          "steal_competitor_customers": 2
+        },
+        "Q8_customer_sophistication": {
+          "very_sophisticated": 4,
+          "moderately_sophisticated": 3,
+          "beginners": 1,
+          "price_shoppers": -2
+        },
+        "Q9_sales_channel": {
+          "automated_funnel": 2,
+          "sales_calls": 4,
+          "email_backend": 1,
+          "hybrid_approach": 3
+        },
+        "Q10_current_upsell_situation": {
+          "no_upsell_currently": 3,
+          "have_upsell_working_ok": 3,
+          "have_upsell_not_working": 4,
+          "upset_customers": 0
+        }
+      },
+      "hard_disqualifiers": [
+        {
+          "field": "product_modularity",
+          "disallowed": ["not_possible"],
+          "reason": "Anchor Upsell requires creating a premium tier at 5-10x price. If you can't create legitimate premium value, this strategy won't work."
+        },
+        {
+          "field": "average_order_value",
+          "disallowed": ["under_50"],
+          "reason": "Anchor Upsell works best at higher price points. With sub-$50 offers, creating a credible 5-10x premium is challenging."
+        }
+      ],
+      "funnel_template": {
+        "headlines": [
+          "Let me show you our premium solution",
+          "We have two ways we can help you...",
+          "Our VIP program includes everything you need"
+        ],
+        "offer_structure": [
+          "STEP 1: Present PREMIUM offer first (5-10x main offer price)",
+          "STEP 2: Explain full value of premium with enthusiasm",
+          "STEP 3: State premium price clearly and confidently",
+          "STEP 4: Wait for 'the gasp' reaction",
+          "STEP 5: 'I have something more affordable that might work better...'",
+          "STEP 6: Present main offer (now feels like bargain)"
+        ],
+        "implementation_tips": [
+          "Works best on sales calls (need to see reaction)",
+          "Premium MUST be legitimate 5-10x value",
+          "Don't apologize for premium price",
+          "Some will buy premium (5-15%) - bonus profit",
+          "Main offer conversion increases because of anchor",
+          "Example: Present $10k VIP first, then rescue with $2k program"
+        ]
+      }
+    },
+    {
+      "id": "rollover_upsell",
+      "name": "Rollover Upsell",
+      "tagline": "Credit Previous Purchases Toward Next Offer",
+      "description": "The most-used upsell by Hormozi. Credit what customers already paid toward a higher-priced next offer (at least 4x higher). Works in 4 situations: re-engaging old customers, rescuing upset customers, stealing competitors' upset customers, or upselling current customers.",
+      "best_for": [
+        "Established customer base with purchase history",
+        "Re-engaging dormant customers",
+        "Rescuing upset or churned customers",
+        "Businesses with full purchase tracking",
+        "Higher-tier products to roll into"
+      ],
+      "key_success_factors": [
+        "MUST track customer purchase history accurately",
+        "Next offer should be at least 4x higher than credit amount",
+        "Works in 4 scenarios: re-engage old, rescue upset, steal competitors', upsell current",
+        "Frame as 'we'll credit what you paid toward this bigger solution'",
+        "Turns sunk cost into investment toward next level"
+      ],
+      "when_it_fails": [
+        "No purchase history tracking",
+        "Next offer isn't valuable enough (needs to be 4x+ credit)",
+        "Customers don't see value in upgrading",
+        "Used too frequently (diminishes effectiveness)"
+      ],
+      "metrics_to_track": [
+        "Reactivation rate of dormant customers",
+        "Rescue rate of upset customers",
+        "Average credit amount vs. upsell value",
+        "Lifetime value of rolled-over customers"
+      ],
+      "max_possible_score": 40,
+      "scoring_weights": {
+        "Q1_customer_base_size": {
+          "new_business_few_customers": 0,
+          "growing_customer_base": 2,
+          "established_customer_base": 4,
+          "dormant_customers": 4
+        },
+        "Q2_product_portfolio": {
+          "single_product": 0,
+          "2_3_products": 2,
+          "4_10_products": 4,
+          "10_plus_products": 4
+        },
+        "Q3_average_order_value": {
+          "under_50": 1,
+          "50_200": 2,
+          "200_1000": 3,
+          "1000_5000": 4,
+          "5000_plus": 4
+        },
+        "Q4_upsell_infrastructure": {
+          "yes_card_on_file": 4,
+          "can_implement_easily": 3,
+          "would_need_to_build": 1,
+          "no_plans_to_implement": 0
+        },
+        "Q5_product_modularity": {
+          "already_have_premium": 4,
+          "can_create_easily": 3,
+          "would_be_challenging": 1,
+          "not_possible": 0
+        },
+        "Q6_customer_tracking": {
+          "full_tracking": 4,
+          "partial_tracking": 2,
+          "minimal_tracking": 0,
+          "no_tracking": -5
+        },
+        "Q7_primary_upsell_goal": {
+          "maximize_immediate_profit": 2,
+          "increase_customer_ltv": 3,
+          "reengage_past_customers": 4,
+          "steal_competitor_customers": 4
+        },
+        "Q8_customer_sophistication": {
+          "very_sophisticated": 4,
+          "moderately_sophisticated": 3,
+          "beginners": 2,
+          "price_shoppers": 1
+        },
+        "Q9_sales_channel": {
+          "automated_funnel": 3,
+          "sales_calls": 4,
+          "email_backend": 4,
+          "hybrid_approach": 4
+        },
+        "Q10_current_upsell_situation": {
+          "no_upsell_currently": 1,
+          "have_upsell_working_ok": 3,
+          "have_upsell_not_working": 2,
+          "upset_customers": 4
+        }
+      },
+      "hard_disqualifiers": [
+        {
+          "field": "customer_tracking",
+          "disallowed": ["no_tracking"],
+          "reason": "Rollover Upsell requires accurate purchase history tracking to credit previous purchases. Without tracking, you can't execute this strategy."
+        },
+        {
+          "field": "customer_base_size",
+          "disallowed": ["new_business_few_customers"],
+          "reason": "Rollover Upsell works with established customers who have purchase history. New businesses with few customers don't have the base to roll over."
+        }
+      ],
+      "funnel_template": {
+        "headlines": [
+          "We'll credit everything you paid toward [premium offer]",
+          "Don't let your investment go to waste",
+          "Upgrade and we'll roll over your previous purchase"
+        ],
+        "offer_structure": [
+          "SITUATION 1 - RE-ENGAGE OLD: 'You paid $X before. Roll that into $4X program'",
+          "SITUATION 2 - RESCUE UPSET: 'Not happy? Credit toward better solution'",
+          "SITUATION 3 - STEAL COMPETITORS': 'Paid competitor $X? We'll credit that'",
+          "SITUATION 4 - UPSELL CURRENT: 'You've invested $X, upgrade for just $3X more'"
+        ],
+        "implementation_tips": [
+          "Track every customer purchase meticulously",
+          "Next offer must be at least 4x credit amount",
+          "Frame as 'don't lose your investment'",
+          "Works in emails, calls, or automated sequences",
+          "Example: 'You paid $500 for course. Credit that toward $2,500 coaching program'",
+          "Most-used upsell by Hormozi for a reason"
+        ]
+      }
+    }
+  ],
+  "recommendation_logic": {
+    "confidence_thresholds": {
+      "primary": 0.55,
+      "secondary": 0.3,
+      "experimental": 0.2
+    },
+    "scoring_explanation": "Each offer is scored based on how well the user's answers align with that offer's ideal use case. Scores are normalized (total_score / max_possible_score) to produce a confidence rating between 0 and 1.",
+    "hard_disqualifier_explanation": "Some answers automatically disqualify certain offers (e.g., no purchase tracking disqualifies Rollover Upsell). These are marked as 'disqualified' in results."
+  }
+}

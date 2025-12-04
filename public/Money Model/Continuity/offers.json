@@ -1,0 +1,766 @@
+[
+  {
+    "id": "signup_bonus_continuity",
+    "name": "Continuity Bonus Offer",
+    "description": "Offer a high-value bonus (product, service, or content bundle) when customers sign up for continuity TODAY. The bonus typically has more value than the first continuity payment, incentivizing immediate action.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FC1_high_value_bonus",
+        "FC2_deliver_bonus"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "ongoing_value_capability",
+          "disallowed": ["no_one_time_value"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_business_model": {
+        "digital_products_content": 4,
+        "coaching_consulting": 3,
+        "service_based": 2,
+        "hybrid_product_service": 3,
+        "physical_consumables": 1,
+        "saas_software": 2
+      },
+      "Q2_current_revenue_model": {
+        "one_time_only": 4,
+        "mix_both": 3,
+        "payment_plans": 2,
+        "recurring_subscriptions": 1,
+        "retainer_contracts": 1
+      },
+      "Q3_gross_margins": {
+        "over_70_percent": 4,
+        "50_to_70_percent": 3,
+        "30_to_50_percent": 2,
+        "under_30_percent": 0,
+        "not_sure": 1
+      },
+      "Q4_repurchase_frequency": {
+        "monthly": 4,
+        "weekly_or_more": 3,
+        "quarterly": 2,
+        "annually": 1,
+        "one_time_only": -2,
+        "varies_widely": 2
+      },
+      "Q5_ongoing_value_capability": {
+        "yes_easily": 4,
+        "yes_with_effort": 3,
+        "need_to_bundle": 2,
+        "maybe_limited": 1,
+        "no_one_time_value": -5
+      },
+      "Q6_setup_onboarding_cost": {
+        "minimal_to_none": 3,
+        "under_500": 2,
+        "500_to_2000": 1,
+        "2000_to_5000": 0,
+        "over_5000": -1
+      },
+      "Q7_customer_retention": {
+        "high_retention_low_churn": 4,
+        "moderate_retention": 3,
+        "just_starting_no_data": 2,
+        "high_churn_problem": 0,
+        "no_repeat_customers": -2
+      },
+      "Q8_average_transaction_value": {
+        "500_to_2000": 4,
+        "100_to_500": 3,
+        "2000_to_10000": 2,
+        "under_100": 1,
+        "over_10000": 0
+      },
+      "Q9_primary_continuity_goal": {
+        "increase_customer_ltv": 4,
+        "predictable_stable_revenue": 3,
+        "improve_cash_flow": 3,
+        "reduce_customer_acquisition_cost": 2,
+        "create_passive_income": 2,
+        "increase_business_valuation": 1
+      },
+      "Q10_customer_commitment_readiness": {
+        "hesitant_need_incentive": 4,
+        "moderately_ready": 3,
+        "price_sensitive": 3,
+        "not_sure_yet": 2,
+        "very_ready_loyal": 1,
+        "prefer_flexibility": 2
+      }
+    },
+
+    "max_possible_score": 38,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Get [High-Value Bonus] FREE When You Join Today",
+        "Join Our [Membership] + Get [$X,XXX Value] As Our Gift",
+        "Sign Up Now & Get [All Past Content/Products] Included Free"
+      ],
+      "offer_structure": [
+        "Step 1: Present the continuity offer with clear monthly value",
+        "Step 2: Stack the bonus value (typically more than first payment)",
+        "Step 3: Create urgency - bonus only available if they join TODAY",
+        "Step 4: Explain how bonus complements ongoing subscription"
+      ],
+      "bonus_examples": [
+        "Physical Product: Get every [product] we've ever made for free ($800 value) when you sign up for monthly shipments at $59/mo",
+        "Digital Product: Get all 40 past newsletters ($15,880 value) when you become a member for $399/mo after 30-day trial",
+        "Service: Get Short-Term Accelerator ($1000 value) free when you join VIP membership at $100/mo"
+      ],
+      "metrics": [
+        "Bonus conversion lift: Target 20-40% increase in sign-up rate",
+        "LTV should exceed one-time sale by 3-4x over 12-20 months",
+        "Churn rate: Monitor if bonus hunters cancel after getting bonus",
+        "Make bonus related to core offer to attract right customers"
+      ]
+    }
+  },
+
+  {
+    "id": "commitment_discount",
+    "name": "Free Duration with Commitment",
+    "description": "Give customers X free months/services if they commit to Y months. Four main approaches: (1) Upfront free time, (2) Free time at the end, (3) Spread discount over term, (4) After first payments. People think more about price than term.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FC3_commitment_length",
+        "FC4_cancellation_policy"
+      ],
+      "hard_disqualifiers": []
+    },
+
+    "scoring_weights": {
+      "Q1_business_model": {
+        "service_based": 4,
+        "saas_software": 3,
+        "coaching_consulting": 3,
+        "physical_consumables": 2,
+        "hybrid_product_service": 3,
+        "digital_products_content": 1
+      },
+      "Q2_current_revenue_model": {
+        "recurring_subscriptions": 4,
+        "retainer_contracts": 3,
+        "mix_both": 2,
+        "payment_plans": 2,
+        "one_time_only": 1
+      },
+      "Q3_gross_margins": {
+        "over_70_percent": 4,
+        "50_to_70_percent": 3,
+        "30_to_50_percent": 1,
+        "under_30_percent": -2,
+        "not_sure": 0
+      },
+      "Q4_repurchase_frequency": {
+        "monthly": 4,
+        "quarterly": 3,
+        "weekly_or_more": 2,
+        "annually": 2,
+        "one_time_only": -3,
+        "varies_widely": 1
+      },
+      "Q5_ongoing_value_capability": {
+        "yes_easily": 4,
+        "yes_with_effort": 3,
+        "need_to_bundle": 1,
+        "maybe_limited": 0,
+        "no_one_time_value": -5
+      },
+      "Q6_setup_onboarding_cost": {
+        "minimal_to_none": 4,
+        "under_500": 3,
+        "500_to_2000": 2,
+        "2000_to_5000": 1,
+        "over_5000": 0
+      },
+      "Q7_customer_retention": {
+        "moderate_retention": 4,
+        "high_churn_problem": 3,
+        "just_starting_no_data": 2,
+        "high_retention_low_churn": 1,
+        "no_repeat_customers": -2
+      },
+      "Q8_average_transaction_value": {
+        "100_to_500": 4,
+        "500_to_2000": 3,
+        "under_100": 3,
+        "2000_to_10000": 1,
+        "over_10000": 0
+      },
+      "Q9_primary_continuity_goal": {
+        "reduce_customer_acquisition_cost": 4,
+        "predictable_stable_revenue": 3,
+        "increase_customer_ltv": 3,
+        "improve_cash_flow": 2,
+        "increase_business_valuation": 2,
+        "create_passive_income": 1
+      },
+      "Q10_customer_commitment_readiness": {
+        "price_sensitive": 4,
+        "hesitant_need_incentive": 4,
+        "prefer_flexibility": 2,
+        "moderately_ready": 3,
+        "not_sure_yet": 2,
+        "very_ready_loyal": 1
+      }
+    },
+
+    "max_possible_score": 38,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Get 3 Months FREE with Annual Commitment",
+        "$1000/mo with 3 Free Months - Or - Pay $199/mo",
+        "Sign Up for 12 Months, Pay for Only 9"
+      ],
+      "offer_structure": [
+        "Step 1: Present standalone price (make it 1.33x-2.66x higher)",
+        "Step 2: Present continuity price with free duration",
+        "Step 3: Show total savings and how it spreads over commitment",
+        "Step 4: Emphasize the price advantage, de-emphasize the term"
+      ],
+      "discount_application_methods": [
+        "(1) UPFRONT: Free trial period, then contract starts (good for enforcing contracts like cell phones)",
+        "(2) AT THE END: Pay for X months, get Y months free at end (earn the discount)",
+        "(3) SPREAD OVER TIME: Discount applied every month across full term (keeps them engaged)",
+        "(4) AFTER FIRST PAYMENTS: Pay normally for 1-2 months, then get discount (covers advertising costs first)"
+      ],
+      "pricing_conversion_data": [
+        "At 3x price: 90% choose continuity",
+        "At 2x price: 70% choose continuity",
+        "At 1.66x price: 60% choose continuity",
+        "At 1.33x price: 50% choose continuity"
+      ],
+      "metrics": [
+        "Measure: % choosing commitment vs month-to-month",
+        "Track: Lifetime value of committed vs non-committed customers",
+        "Monitor: Early cancellation rate and reasons",
+        "Benchmark: Aim for 60-90% choosing commitment option"
+      ]
+    }
+  },
+
+  {
+    "id": "waived_fee_continuity",
+    "name": "Waived Fee with Commitment",
+    "description": "Waive your setup/onboarding/activation fee (typically 3-5x monthly rate) if customers commit to 12+ months. If they cancel early, they pay the fee. People avoid the fee by sticking around. Best for high-setup-cost businesses.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FC5_setup_fee_amount",
+        "FC6_minimum_commitment"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "setup_onboarding_cost",
+          "disallowed": ["minimal_to_none"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_business_model": {
+        "saas_software": 4,
+        "coaching_consulting": 4,
+        "service_based": 3,
+        "hybrid_product_service": 2,
+        "digital_products_content": 1,
+        "physical_consumables": 0
+      },
+      "Q2_current_revenue_model": {
+        "retainer_contracts": 4,
+        "recurring_subscriptions": 3,
+        "mix_both": 2,
+        "payment_plans": 1,
+        "one_time_only": 0
+      },
+      "Q3_gross_margins": {
+        "over_70_percent": 4,
+        "50_to_70_percent": 3,
+        "30_to_50_percent": 2,
+        "under_30_percent": 0,
+        "not_sure": 1
+      },
+      "Q4_repurchase_frequency": {
+        "monthly": 4,
+        "quarterly": 3,
+        "weekly_or_more": 2,
+        "annually": 1,
+        "one_time_only": -3,
+        "varies_widely": 1
+      },
+      "Q5_ongoing_value_capability": {
+        "yes_easily": 4,
+        "yes_with_effort": 3,
+        "need_to_bundle": 2,
+        "maybe_limited": 1,
+        "no_one_time_value": -5
+      },
+      "Q6_setup_onboarding_cost": {
+        "over_5000": 4,
+        "2000_to_5000": 4,
+        "500_to_2000": 3,
+        "under_500": 1,
+        "minimal_to_none": -5
+      },
+      "Q7_customer_retention": {
+        "moderate_retention": 4,
+        "high_churn_problem": 3,
+        "high_retention_low_churn": 2,
+        "just_starting_no_data": 2,
+        "no_repeat_customers": -2
+      },
+      "Q8_average_transaction_value": {
+        "2000_to_10000": 4,
+        "over_10000": 4,
+        "500_to_2000": 2,
+        "100_to_500": 1,
+        "under_100": -1
+      },
+      "Q9_primary_continuity_goal": {
+        "increase_customer_ltv": 4,
+        "predictable_stable_revenue": 4,
+        "reduce_customer_acquisition_cost": 3,
+        "increase_business_valuation": 3,
+        "improve_cash_flow": 2,
+        "create_passive_income": 1
+      },
+      "Q10_customer_commitment_readiness": {
+        "very_ready_loyal": 4,
+        "moderately_ready": 3,
+        "hesitant_need_incentive": 2,
+        "not_sure_yet": 1,
+        "price_sensitive": 2,
+        "prefer_flexibility": 0
+      }
+    },
+
+    "max_possible_score": 39,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Zero Setup Fee with 12-Month Commitment",
+        "Choose: $5000 Setup + $1000/mo Month-to-Month OR $0 Setup + $1000/mo × 12 Months",
+        "We'll Waive the $5000 Onboarding Fee If You Commit Long-Term"
+      ],
+      "offer_structure": [
+        "Step 1: Explain onboarding costs and why fee exists (setting up systems, training, resources)",
+        "Step 2: Present Option A: Pay fee + go month-to-month",
+        "Step 3: Present Option B: Waive fee entirely with 12+ month commitment",
+        "Step 4: Explain cancellation policy: Break commitment early = pay the fee"
+      ],
+      "fee_sizing_guidelines": [
+        "Make fee 3-5x your monthly rate",
+        "At minimum, commitment should be 12 months (ideally 12+)",
+        "Larger fee = more people choose commitment; Smaller fee = more upfront cash",
+        "Calculate: Does fee cover your actual customer acquisition/setup costs?"
+      ],
+      "cancellation_policy": [
+        "Make cancellation fee equal to the discount they received",
+        "Example: $5000 fee waived with 12mo commitment. If they cancel month 6, they pay $5000",
+        "Alternative: Prorated - they pay difference between commitment rate and month-to-month for months used",
+        "Bottom line: Leaving must cost more than staying"
+      ],
+      "metrics": [
+        "Track: % choosing committed vs month-to-month",
+        "Monitor: Cancellation rate and when cancellations occur",
+        "Calculate: Customer lifetime value - does fee waiver pay off?",
+        "Benchmark: 70-90% should choose commitment option",
+        "Key metric: If cost to quit > cost to stay, retention improves dramatically"
+      ]
+    }
+  },
+
+  {
+    "id": "downsell_to_continuity",
+    "name": "Big Head, Long Tail (Downsell Upsell)",
+    "description": "Sell a high upfront payment PLUS a small monthly fee. Get more cash upfront by selling shorter duration with added value for less. Example: Instead of $1000 one-time, offer $500 down + $50/mo. People focus on monthly price over term, locking in long-term revenue.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FC7_upfront_pricing",
+        "FC8_monthly_value"
+      ],
+      "hard_disqualifiers": []
+    },
+
+    "scoring_weights": {
+      "Q1_business_model": {
+        "coaching_consulting": 4,
+        "service_based": 4,
+        "hybrid_product_service": 3,
+        "digital_products_content": 2,
+        "saas_software": 2,
+        "physical_consumables": 1
+      },
+      "Q2_current_revenue_model": {
+        "one_time_only": 4,
+        "payment_plans": 3,
+        "mix_both": 3,
+        "recurring_subscriptions": 1,
+        "retainer_contracts": 1
+      },
+      "Q3_gross_margins": {
+        "over_70_percent": 4,
+        "50_to_70_percent": 3,
+        "30_to_50_percent": 2,
+        "under_30_percent": 1,
+        "not_sure": 1
+      },
+      "Q4_repurchase_frequency": {
+        "monthly": 4,
+        "quarterly": 3,
+        "annually": 2,
+        "varies_widely": 2,
+        "weekly_or_more": 1,
+        "one_time_only": 0
+      },
+      "Q5_ongoing_value_capability": {
+        "yes_with_effort": 4,
+        "yes_easily": 3,
+        "need_to_bundle": 3,
+        "maybe_limited": 2,
+        "no_one_time_value": -3
+      },
+      "Q6_setup_onboarding_cost": {
+        "2000_to_5000": 4,
+        "500_to_2000": 3,
+        "over_5000": 2,
+        "under_500": 2,
+        "minimal_to_none": 1
+      },
+      "Q7_customer_retention": {
+        "moderate_retention": 4,
+        "high_retention_low_churn": 3,
+        "just_starting_no_data": 2,
+        "high_churn_problem": 1,
+        "no_repeat_customers": 0
+      },
+      "Q8_average_transaction_value": {
+        "2000_to_10000": 4,
+        "over_10000": 4,
+        "500_to_2000": 3,
+        "100_to_500": 2,
+        "under_100": 0
+      },
+      "Q9_primary_continuity_goal": {
+        "improve_cash_flow": 4,
+        "increase_customer_ltv": 4,
+        "predictable_stable_revenue": 3,
+        "reduce_customer_acquisition_cost": 2,
+        "increase_business_valuation": 2,
+        "create_passive_income": 1
+      },
+      "Q10_customer_commitment_readiness": {
+        "hesitant_need_incentive": 4,
+        "price_sensitive": 4,
+        "moderately_ready": 3,
+        "not_sure_yet": 2,
+        "prefer_flexibility": 2,
+        "very_ready_loyal": 1
+      }
+    },
+
+    "max_possible_score": 39,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Get More Value, Pay Less Per Month",
+        "$500 Today + Just $50/Month (vs $1000 One-Time)",
+        "Shorter Duration, Lower Monthly Price, More Value Added"
+      ],
+      "offer_structure": [
+        "Step 1: 'So you've enjoyed everything so far?' (acknowledge current satisfaction)",
+        "Step 2: 'Mind if I tell you about a way to save a little and get more?'",
+        "Step 3: 'Given you've enjoyed [current offer], we want you here long-term. Here's what we're gonna do...'",
+        "Step 4: 'If you're in this with us for the long term, we want to reward you with MORE stuff for LESS. Sound good?'"
+      ],
+      "pricing_psychology": [
+        "People think about MONTHLY CASH FLOW more than they think about DURATION",
+        "Power of commitments and contracts significantly increases LTV",
+        "Example: $100/10% churn = $1000 LTV. At $100/3% churn = $3000 LTV (3x improvement)",
+        "Downselling the upsell: Get cash upfront, sell shorter duration, add value, charge less monthly"
+      ],
+      "value_stacking": [
+        "Don't just lower price - ADD VALUE to justify continuity",
+        "Bundle one-time education/training upfront (big head)",
+        "Add ongoing implementation support/community (long tail)",
+        "Example: $5000 training program → $5000 down + $200/mo ongoing coaching"
+      ],
+      "metrics": [
+        "Track: Upfront revenue collected vs previous one-time model",
+        "Measure: Average customer stays X months (calculate total LTV)",
+        "Monitor: Churn rate - aim for <5% monthly",
+        "Benchmark: LTV should be 3-4x one-time sale over 12-20 months"
+      ]
+    }
+  },
+
+  {
+    "id": "auto_replenishment",
+    "name": "Auto-Replenishment Subscription",
+    "description": "Automatically ship consumable physical products on a recurring schedule. Customers never run out, you get predictable recurring revenue. Best for products with natural consumption cycles. Can offer discount vs one-time purchases.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FC9_product_consumption",
+        "FC10_shipping_capability"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "business_model",
+          "disallowed": ["digital_products_content", "saas_software", "coaching_consulting", "service_based"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_business_model": {
+        "physical_consumables": 5,
+        "hybrid_product_service": 2,
+        "service_based": 0,
+        "digital_products_content": -3,
+        "coaching_consulting": -3,
+        "saas_software": -3
+      },
+      "Q2_current_revenue_model": {
+        "one_time_only": 4,
+        "mix_both": 3,
+        "recurring_subscriptions": 2,
+        "payment_plans": 1,
+        "retainer_contracts": 0
+      },
+      "Q3_gross_margins": {
+        "over_70_percent": 4,
+        "50_to_70_percent": 3,
+        "30_to_50_percent": 2,
+        "under_30_percent": 0,
+        "not_sure": 1
+      },
+      "Q4_repurchase_frequency": {
+        "monthly": 5,
+        "weekly_or_more": 4,
+        "quarterly": 3,
+        "annually": 1,
+        "one_time_only": -5,
+        "varies_widely": 0
+      },
+      "Q5_ongoing_value_capability": {
+        "yes_easily": 5,
+        "yes_with_effort": 3,
+        "need_to_bundle": 1,
+        "maybe_limited": 0,
+        "no_one_time_value": -5
+      },
+      "Q6_setup_onboarding_cost": {
+        "minimal_to_none": 4,
+        "under_500": 3,
+        "500_to_2000": 1,
+        "2000_to_5000": 0,
+        "over_5000": -2
+      },
+      "Q7_customer_retention": {
+        "high_retention_low_churn": 4,
+        "moderate_retention": 3,
+        "just_starting_no_data": 2,
+        "high_churn_problem": 0,
+        "no_repeat_customers": -3
+      },
+      "Q8_average_transaction_value": {
+        "under_100": 4,
+        "100_to_500": 3,
+        "500_to_2000": 2,
+        "2000_to_10000": 1,
+        "over_10000": 0
+      },
+      "Q9_primary_continuity_goal": {
+        "predictable_stable_revenue": 4,
+        "increase_customer_ltv": 3,
+        "create_passive_income": 3,
+        "improve_cash_flow": 2,
+        "reduce_customer_acquisition_cost": 2,
+        "increase_business_valuation": 1
+      },
+      "Q10_customer_commitment_readiness": {
+        "very_ready_loyal": 4,
+        "moderately_ready": 3,
+        "hesitant_need_incentive": 2,
+        "not_sure_yet": 1,
+        "prefer_flexibility": 3,
+        "price_sensitive": 2
+      }
+    },
+
+    "max_possible_score": 42,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Never Run Out - Get [Product] Delivered Automatically",
+        "Subscribe & Save 15% on Every Delivery",
+        "Monthly [Product] Box - Skip, Pause, or Cancel Anytime"
+      ],
+      "offer_structure": [
+        "Step 1: Identify the consumption cycle (how often they use/need product)",
+        "Step 2: Offer convenience (never run out, auto-delivery)",
+        "Step 3: Add incentive (discount vs one-time purchase, free shipping)",
+        "Step 4: Make it flexible (skip, pause, adjust frequency)"
+      ],
+      "subscription_models": [
+        "Replenishment: Same product delivered on schedule (dog food, supplements, razors)",
+        "Curation: Different products each delivery (subscription boxes, curated collections)",
+        "Access: Ongoing access to products + new releases (coffee club, book club)",
+        "Hybrid: Core product + rotating add-ons"
+      ],
+      "value_propositions": [
+        "Convenience: Never run out, automatic delivery",
+        "Savings: 10-20% discount vs one-time purchases",
+        "Exclusivity: Subscriber-only products or early access",
+        "Flexibility: Skip, pause, or modify subscription anytime"
+      ],
+      "metrics": [
+        "Churn rate: Aim for <10% monthly (this varies by industry)",
+        "Customer LTV: Calculate months retained × monthly value",
+        "Reactivation rate: % of cancelled subscribers who return",
+        "Net Revenue Retention: Track if subscribers upgrade/downgrade over time"
+      ]
+    }
+  },
+
+  {
+    "id": "pure_subscription",
+    "name": "Pure Monthly Subscription/Membership",
+    "description": "Simple recurring monthly or annual subscription for access to content, software, community, or services. Clean, straightforward model. Best for SaaS, memberships, content libraries, and ongoing services with clear recurring value delivery.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FC11_monthly_value_delivery",
+        "FC12_cancellation_approach"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "ongoing_value_capability",
+          "disallowed": ["no_one_time_value"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_business_model": {
+        "saas_software": 5,
+        "digital_products_content": 4,
+        "coaching_consulting": 3,
+        "service_based": 3,
+        "hybrid_product_service": 2,
+        "physical_consumables": 1
+      },
+      "Q2_current_revenue_model": {
+        "recurring_subscriptions": 5,
+        "retainer_contracts": 4,
+        "mix_both": 3,
+        "payment_plans": 2,
+        "one_time_only": 1
+      },
+      "Q3_gross_margins": {
+        "over_70_percent": 5,
+        "50_to_70_percent": 4,
+        "30_to_50_percent": 2,
+        "under_30_percent": 0,
+        "not_sure": 1
+      },
+      "Q4_repurchase_frequency": {
+        "monthly": 5,
+        "weekly_or_more": 4,
+        "quarterly": 3,
+        "annually": 2,
+        "one_time_only": -3,
+        "varies_widely": 1
+      },
+      "Q5_ongoing_value_capability": {
+        "yes_easily": 5,
+        "yes_with_effort": 4,
+        "need_to_bundle": 2,
+        "maybe_limited": 1,
+        "no_one_time_value": -5
+      },
+      "Q6_setup_onboarding_cost": {
+        "minimal_to_none": 5,
+        "under_500": 4,
+        "500_to_2000": 2,
+        "2000_to_5000": 1,
+        "over_5000": 0
+      },
+      "Q7_customer_retention": {
+        "high_retention_low_churn": 5,
+        "moderate_retention": 4,
+        "just_starting_no_data": 2,
+        "high_churn_problem": 0,
+        "no_repeat_customers": -3
+      },
+      "Q8_average_transaction_value": {
+        "100_to_500": 4,
+        "under_100": 4,
+        "500_to_2000": 3,
+        "2000_to_10000": 2,
+        "over_10000": 1
+      },
+      "Q9_primary_continuity_goal": {
+        "predictable_stable_revenue": 5,
+        "increase_business_valuation": 4,
+        "create_passive_income": 4,
+        "increase_customer_ltv": 3,
+        "reduce_customer_acquisition_cost": 2,
+        "improve_cash_flow": 2
+      },
+      "Q10_customer_commitment_readiness": {
+        "very_ready_loyal": 5,
+        "moderately_ready": 4,
+        "prefer_flexibility": 3,
+        "not_sure_yet": 2,
+        "hesitant_need_incentive": 2,
+        "price_sensitive": 1
+      }
+    },
+
+    "max_possible_score": 47,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Join [Membership Name] - $X/Month",
+        "Unlimited Access to [Value] for Just $X/Month",
+        "Start Your Free Trial - Then $X/Month"
+      ],
+      "offer_structure": [
+        "Step 1: Clearly define what's included in membership",
+        "Step 2: Show ongoing value delivery (new content, features, support)",
+        "Step 3: Offer trial period or money-back guarantee",
+        "Step 4: Make sign-up easy with clear cancellation policy"
+      ],
+      "pricing_strategies": [
+        "Monthly vs Annual: Offer 15-20% discount for annual payment",
+        "Tiered Pricing: Basic/Pro/Premium levels with different feature sets",
+        "Billing Frequency: Bill every 4 weeks (not monthly) for 8.3% more annual revenue",
+        "Free Trial: 7-30 days to demonstrate value before charging"
+      ],
+      "churn_reduction_tactics": [
+        "Cancellation flow: Offer pause, downgrade, or discount before canceling",
+        "Exit interview: Understand why and offer to solve problem",
+        "Win-back campaigns: Re-engage cancelled members with special offers",
+        "Engagement monitoring: Reach out proactively when usage drops"
+      ],
+      "metrics": [
+        "Monthly Recurring Revenue (MRR): Total monthly subscription revenue",
+        "Churn Rate: Aim for <5% monthly for SaaS, <10% for content/coaching",
+        "LTGP (Lifetime Gross Profit) = Gross Margin × LTV",
+        "Net Revenue Retention: Are existing customers expanding or contracting?",
+        "Months to recover CAC: How long to break even on customer acquisition cost?"
+      ]
+    }
+  }
+]

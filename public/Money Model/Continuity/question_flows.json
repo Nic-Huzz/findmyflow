@@ -1,0 +1,148 @@
+{
+  "questions": [
+    {
+      "id": "Q1_business_model",
+      "text": "What type of business or product do you offer?",
+      "type": "single_choice",
+      "options": [
+        "physical_consumables",
+        "digital_products_content",
+        "saas_software",
+        "coaching_consulting",
+        "service_based",
+        "hybrid_product_service"
+      ],
+      "store_as": "business_model",
+      "tags": ["business_type", "product_fit"]
+    },
+    {
+      "id": "Q2_current_revenue_model",
+      "text": "How do you currently charge customers?",
+      "type": "single_choice",
+      "options": [
+        "one_time_only",
+        "recurring_subscriptions",
+        "mix_both",
+        "payment_plans",
+        "retainer_contracts"
+      ],
+      "store_as": "current_revenue_model",
+      "tags": ["revenue", "pricing"]
+    },
+    {
+      "id": "Q3_gross_margins",
+      "text": "What are your typical gross margins?",
+      "type": "single_choice",
+      "options": [
+        "under_30_percent",
+        "30_to_50_percent",
+        "50_to_70_percent",
+        "over_70_percent",
+        "not_sure"
+      ],
+      "store_as": "gross_margins",
+      "tags": ["profitability", "margins"]
+    },
+    {
+      "id": "Q4_repurchase_frequency",
+      "text": "How often do customers naturally need your product/service again?",
+      "type": "single_choice",
+      "options": [
+        "weekly_or_more",
+        "monthly",
+        "quarterly",
+        "annually",
+        "one_time_only",
+        "varies_widely"
+      ],
+      "store_as": "repurchase_frequency",
+      "tags": ["customer_behavior", "frequency"]
+    },
+    {
+      "id": "Q5_ongoing_value_capability",
+      "text": "Can you deliver NEW ongoing value each month (not just one-time education)?",
+      "type": "single_choice",
+      "options": [
+        "yes_easily",
+        "yes_with_effort",
+        "maybe_limited",
+        "no_one_time_value",
+        "need_to_bundle"
+      ],
+      "store_as": "ongoing_value_capability",
+      "tags": ["value_delivery", "sustainability"]
+    },
+    {
+      "id": "Q6_setup_onboarding_cost",
+      "text": "How much does it cost you to onboard a new customer?",
+      "type": "single_choice",
+      "options": [
+        "under_500",
+        "500_to_2000",
+        "2000_to_5000",
+        "over_5000",
+        "minimal_to_none"
+      ],
+      "store_as": "setup_onboarding_cost",
+      "tags": ["costs", "operations"]
+    },
+    {
+      "id": "Q7_customer_retention",
+      "text": "What's your current customer retention/churn situation?",
+      "type": "single_choice",
+      "options": [
+        "high_retention_low_churn",
+        "moderate_retention",
+        "high_churn_problem",
+        "no_repeat_customers",
+        "just_starting_no_data"
+      ],
+      "store_as": "customer_retention",
+      "tags": ["retention", "churn"]
+    },
+    {
+      "id": "Q8_average_transaction_value",
+      "text": "What's your average transaction or project value?",
+      "type": "single_choice",
+      "options": [
+        "under_100",
+        "100_to_500",
+        "500_to_2000",
+        "2000_to_10000",
+        "over_10000"
+      ],
+      "store_as": "average_transaction_value",
+      "tags": ["pricing", "ticket_size"]
+    },
+    {
+      "id": "Q9_primary_continuity_goal",
+      "text": "What's your PRIMARY goal with continuity/recurring revenue?",
+      "type": "single_choice",
+      "options": [
+        "predictable_stable_revenue",
+        "increase_customer_ltv",
+        "reduce_customer_acquisition_cost",
+        "create_passive_income",
+        "increase_business_valuation",
+        "improve_cash_flow"
+      ],
+      "store_as": "primary_continuity_goal",
+      "tags": ["goals", "strategy"]
+    },
+    {
+      "id": "Q10_customer_commitment_readiness",
+      "text": "How ready are your customers to commit long-term?",
+      "type": "single_choice",
+      "options": [
+        "very_ready_loyal",
+        "moderately_ready",
+        "hesitant_need_incentive",
+        "prefer_flexibility",
+        "price_sensitive",
+        "not_sure_yet"
+      ],
+      "store_as": "customer_commitment_readiness",
+      "tags": ["customer_psychology", "commitment"]
+    }
+  ]
+}

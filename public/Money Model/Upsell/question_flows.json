@@ -1,0 +1,374 @@
+{
+  "metadata": {
+    "flow_name": "Upsell Offer Selector",
+    "version": "1.0.0",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "last_updated": "2025-12-04",
+    "description": "Determines which of the 4 upsell strategies (Classic, Menu, Anchor, or Rollover) best fits your business model"
+  },
+  "questions": [
+    {
+      "id": "Q1_customer_base_size",
+      "question_number": 1,
+      "text": "How would you describe your current customer base?",
+      "help_text": "Select the option that best reflects your active customer situation",
+      "why_this_matters": "Different upsell strategies work better depending on whether you're building a new customer base or optimizing an existing one. Rollover upsells excel with established customers, while Classic and Menu upsells work great for growing businesses.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "new_business_few_customers",
+          "label": "New Business (Few Customers)",
+          "description": "Just starting out, building my first customer base",
+          "examples": ["Launched in last 6 months", "Under 50 customers"]
+        },
+        {
+          "value": "growing_customer_base",
+          "label": "Growing Customer Base",
+          "description": "Steady stream of new customers, some repeat buyers",
+          "examples": ["50-500 customers", "Mix of new and returning"]
+        },
+        {
+          "value": "established_customer_base",
+          "label": "Established Customer Base",
+          "description": "Large pool of existing customers with purchase history",
+          "examples": ["500+ customers", "Strong repeat business"]
+        },
+        {
+          "value": "dormant_customers",
+          "label": "Many Dormant/Past Customers",
+          "description": "Have customers who haven't purchased recently",
+          "examples": ["Need to re-engage", "Previous buyers went quiet"]
+        }
+      ]
+    },
+    {
+      "id": "Q2_product_portfolio",
+      "question_number": 2,
+      "text": "How many products or service tiers do you currently offer?",
+      "help_text": "Think about your complete product catalog",
+      "why_this_matters": "Menu Upsells require multiple products to prescribe from. Anchor Upsells need the ability to create premium tiers. Classic Upsells can work with any portfolio size.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "single_product",
+          "label": "Single Product/Service",
+          "description": "I sell one main thing",
+          "examples": ["One course", "One coaching package", "Single SaaS plan"]
+        },
+        {
+          "value": "2_3_products",
+          "label": "2-3 Products/Tiers",
+          "description": "Small curated selection",
+          "examples": ["Basic + Premium", "Core product + add-on"]
+        },
+        {
+          "value": "4_10_products",
+          "label": "4-10 Products/Tiers",
+          "description": "Moderate product range",
+          "examples": ["Multiple courses", "Service packages", "Product suite"]
+        },
+        {
+          "value": "10_plus_products",
+          "label": "10+ Products/Tiers",
+          "description": "Extensive catalog to choose from",
+          "examples": ["Full product ecosystem", "Comprehensive offerings"]
+        }
+      ]
+    },
+    {
+      "id": "Q3_average_order_value",
+      "question_number": 3,
+      "text": "What is your current average order value?",
+      "help_text": "Select the range closest to what customers typically pay",
+      "why_this_matters": "Anchor Upsells work best at higher price points (5-10x premium means you need room to scale). Rollover Upsells require significant previous purchase value to credit. Classic and Menu work at any price point.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "under_50",
+          "label": "Under $50",
+          "description": "Low-ticket offers",
+          "examples": ["$7-$47 products", "Small digital products"]
+        },
+        {
+          "value": "50_200",
+          "label": "$50 - $200",
+          "description": "Mid-ticket range",
+          "examples": ["Online courses", "Monthly services"]
+        },
+        {
+          "value": "200_1000",
+          "label": "$200 - $1,000",
+          "description": "Higher-ticket products",
+          "examples": ["Premium courses", "Coaching sessions"]
+        },
+        {
+          "value": "1000_5000",
+          "label": "$1,000 - $5,000",
+          "description": "High-ticket offers",
+          "examples": ["Group programs", "Done-for-you services"]
+        },
+        {
+          "value": "5000_plus",
+          "label": "$5,000+",
+          "description": "Premium high-ticket",
+          "examples": ["Mastermind", "Full service packages"]
+        }
+      ]
+    },
+    {
+      "id": "Q4_upsell_infrastructure",
+      "question_number": 4,
+      "text": "Do you have a 'card on file' system for easy upsell purchases?",
+      "help_text": "Can customers buy additional products without re-entering payment info?",
+      "why_this_matters": "Menu Upsells rely heavily on 'card on file' capability to maximize take rates. Having payment info stored makes upselling seamless and increases conversion dramatically.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "yes_card_on_file",
+          "label": "Yes - Card on File System",
+          "description": "Customers can buy more with one click",
+          "examples": ["Stripe subscriptions", "Stored payment methods", "Member area with saved cards"]
+        },
+        {
+          "value": "can_implement_easily",
+          "label": "No, But Can Implement Easily",
+          "description": "Have the tech stack, just need to turn it on",
+          "examples": ["Stripe/PayPal ready", "Platform supports it"]
+        },
+        {
+          "value": "would_need_to_build",
+          "label": "Would Need to Build This",
+          "description": "Don't currently have this capability",
+          "examples": ["Manual payments only", "No recurring billing"]
+        },
+        {
+          "value": "no_plans_to_implement",
+          "label": "No Plans to Implement",
+          "description": "Prefer manual payment collection",
+          "examples": ["Cash/check business", "Manual invoicing"]
+        }
+      ]
+    },
+    {
+      "id": "Q5_product_modularity",
+      "question_number": 5,
+      "text": "Can you easily create premium or deluxe versions of your current offers?",
+      "help_text": "Think about whether you could 5-10x your product's value",
+      "why_this_matters": "Anchor Upsells require a premium version at 5-10x the price of your main offer. If you can't create a legitimate premium tier, Anchor won't work well for you.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "already_have_premium",
+          "label": "Already Have Premium Versions",
+          "description": "I offer deluxe/VIP tiers at higher prices",
+          "examples": ["VIP coaching", "Done-for-you tier", "Premium package"]
+        },
+        {
+          "value": "can_create_easily",
+          "label": "Can Create Premium Easily",
+          "description": "I know exactly what premium would include",
+          "examples": ["Add 1-on-1 support", "Include implementation", "Add bonus modules"]
+        },
+        {
+          "value": "would_be_challenging",
+          "label": "Would Be Challenging",
+          "description": "Not sure how to make premium version worth 5-10x",
+          "examples": ["Limited scope to expand", "Hard to add value"]
+        },
+        {
+          "value": "not_possible",
+          "label": "Not Possible for My Business",
+          "description": "My product can't be tiered this way",
+          "examples": ["Fixed-price service", "Commodity product"]
+        }
+      ]
+    },
+    {
+      "id": "Q6_customer_tracking",
+      "question_number": 6,
+      "text": "Can you track each customer's complete purchase history?",
+      "help_text": "Do you know what every customer has bought from you and when?",
+      "why_this_matters": "Rollover Upsells require detailed tracking of previous purchases so you can credit them toward the next offer. Without this, you can't execute Rollover strategy effectively.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "full_tracking",
+          "label": "Full Purchase History Tracking",
+          "description": "I know exactly what each customer has purchased",
+          "examples": ["CRM with full history", "Stripe dashboard", "Member database"]
+        },
+        {
+          "value": "partial_tracking",
+          "label": "Partial Tracking",
+          "description": "I track some purchases but not all details",
+          "examples": ["Email receipts only", "Spreadsheet tracking"]
+        },
+        {
+          "value": "minimal_tracking",
+          "label": "Minimal Tracking",
+          "description": "Basic records only",
+          "examples": ["Know who bought, but not details", "No centralized system"]
+        },
+        {
+          "value": "no_tracking",
+          "label": "No Purchase History Tracking",
+          "description": "Don't currently track customer purchase history",
+          "examples": ["Cash business", "No customer database"]
+        }
+      ]
+    },
+    {
+      "id": "Q7_primary_upsell_goal",
+      "question_number": 7,
+      "text": "What is your PRIMARY goal for adding an upsell?",
+      "help_text": "Select the most important objective",
+      "why_this_matters": "Different upsell types excel at different goals. Classic maximizes immediate profit, Menu builds LTV through right-fit products, Anchor increases AOV, and Rollover re-engages past customers.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "maximize_immediate_profit",
+          "label": "Maximize Immediate Profit Per Sale",
+          "description": "Get the most money right now from each customer",
+          "examples": ["Boost front-end revenue", "Increase order value instantly"]
+        },
+        {
+          "value": "increase_customer_ltv",
+          "label": "Increase Customer Lifetime Value",
+          "description": "Build long-term customer relationships and revenue",
+          "examples": ["Prescribe right products", "Create ascension ladder"]
+        },
+        {
+          "value": "reengage_past_customers",
+          "label": "Re-engage Dormant/Past Customers",
+          "description": "Win back customers who haven't purchased recently",
+          "examples": ["Reactivate old list", "Bring back churned customers"]
+        },
+        {
+          "value": "steal_competitor_customers",
+          "label": "Attract Competitor's Upset Customers",
+          "description": "Win over people unhappy with competitors",
+          "examples": ["Offer credits for switching", "Rescue frustrated buyers"]
+        }
+      ]
+    },
+    {
+      "id": "Q8_customer_sophistication",
+      "question_number": 8,
+      "text": "How sophisticated are your customers about buying decisions?",
+      "help_text": "How much do they know about your industry and solutions?",
+      "why_this_matters": "Menu Upsells (especially the Unselling tactic) work best with sophisticated buyers who appreciate being told what they DON'T need. Anchor Upsells require customers who can appreciate premium value.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "very_sophisticated",
+          "label": "Very Sophisticated",
+          "description": "They know the space well, appreciate expert guidance",
+          "examples": ["Industry veterans", "Researched buyers", "Know what they need"]
+        },
+        {
+          "value": "moderately_sophisticated",
+          "label": "Moderately Sophisticated",
+          "description": "Have some knowledge, open to recommendations",
+          "examples": ["Done basic research", "Understand concepts"]
+        },
+        {
+          "value": "beginners",
+          "label": "Beginners/Novices",
+          "description": "New to the space, need guidance",
+          "examples": ["First-time buyers", "Learning the basics"]
+        },
+        {
+          "value": "price_shoppers",
+          "label": "Primarily Price Shoppers",
+          "description": "Main concern is getting the best deal",
+          "examples": ["Comparing prices", "Looking for discounts"]
+        }
+      ]
+    },
+    {
+      "id": "Q9_sales_channel",
+      "question_number": 9,
+      "text": "Where do most of your sales happen?",
+      "help_text": "Select your primary sales channel",
+      "why_this_matters": "Classic Upsells work on both front-end and back-end. Menu Upsells excel in live/call settings where you can prescribe. Anchor Upsells work well in sales calls. Rollover can work anywhere.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "automated_funnel",
+          "label": "Automated Online Funnel",
+          "description": "Self-serve checkout, minimal human interaction",
+          "examples": ["Clickfunnels", "Order forms", "E-commerce store"]
+        },
+        {
+          "value": "sales_calls",
+          "label": "Sales Calls/Appointments",
+          "description": "I talk to customers before they buy",
+          "examples": ["Discovery calls", "Strategy sessions", "Phone sales"]
+        },
+        {
+          "value": "email_backend",
+          "label": "Email/Backend Offers",
+          "description": "Upsell after initial purchase via email",
+          "examples": ["Email sequences", "Post-purchase campaigns"]
+        },
+        {
+          "value": "hybrid_approach",
+          "label": "Hybrid Approach",
+          "description": "Mix of automated and human touchpoints",
+          "examples": ["Funnel + call", "Self-serve + support"]
+        }
+      ]
+    },
+    {
+      "id": "Q10_current_upsell_situation",
+      "question_number": 10,
+      "text": "What is your current upsell situation?",
+      "help_text": "Be honest about where you are now",
+      "why_this_matters": "If you have no upsell, Classic is the fastest to implement. If upsells are failing, you might be offering the wrong thing, at the wrong time, or in the wrong way - Menu can fix this. If you need to rescue the situation, Rollover helps recover.",
+      "type": "single_choice",
+      "required": true,
+      "options": [
+        {
+          "value": "no_upsell_currently",
+          "label": "No Upsell Currently",
+          "description": "I only sell my main product, nothing more",
+          "examples": ["Just getting started", "Never tried upselling"]
+        },
+        {
+          "value": "have_upsell_working_ok",
+          "label": "Have Upsell - Working OK",
+          "description": "Have an upsell, decent results, want to optimize",
+          "examples": ["10-30% take rate", "Making some money"]
+        },
+        {
+          "value": "have_upsell_not_working",
+          "label": "Have Upsell - Not Working Well",
+          "description": "Tried upselling but poor conversion rates",
+          "examples": ["Low take rate", "Customers say no", "Feels pushy"]
+        },
+        {
+          "value": "upset_customers",
+          "label": "Have Upset/Churned Customers",
+          "description": "Need to rescue customer relationships",
+          "examples": ["Refund requests", "Complaints", "Lost customers"]
+        }
+      ]
+    }
+  ],
+  "scoring_notes": {
+    "classic_upsell": "Scores highest for businesses wanting immediate profit boost, have seamless infrastructure, work on front-end or back-end, and don't have upsells yet. 80%+ take rate when done right.",
+    "menu_upsell": "Scores highest for businesses with multiple products, sophisticated customers, card on file, sales calls, and want to build LTV. Hormozi's favorite - unselling builds trust.",
+    "anchor_upsell": "Scores highest for businesses that can create premium tiers at 5-10x price, higher AOV, sales calls, sophisticated buyers. Creates price anchoring effect.",
+    "rollover_upsell": "Scores highest for businesses with established customer base, full tracking, dormant customers to re-engage, or upset customers to rescue. Credits previous purchases toward next offer at 4x+ value."
+  }
+}

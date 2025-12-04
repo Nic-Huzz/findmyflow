@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { getDirectionColor, getDirectionLabel, getDirectionIcon, formatFlowDate } from '../lib/flowCompass'
 import './FlowTracker.css'
+import '../Profile.css'
 
 /**
  * FlowTracker - Redesigned with card grid and quick log
@@ -10,7 +12,8 @@ import './FlowTracker.css'
  */
 
 const FlowTracker = () => {
-  const { user } = useAuth()
+  const navigate = useNavigate()
+  const { user, signOut } = useAuth()
   const [projects, setProjects] = useState([])
   const [selectedProjectId, setSelectedProjectId] = useState('')
   const [selectedEnergy, setSelectedEnergy] = useState(null) // 'excited' or 'tired'
@@ -19,6 +22,7 @@ const FlowTracker = () => {
   const [submitting, setSubmitting] = useState(false)
   const [timelineModal, setTimelineModal] = useState({ isOpen: false, project: null, entries: [] })
   const [projectStats, setProjectStats] = useState({})
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (user?.id) {
@@ -219,9 +223,22 @@ const FlowTracker = () => {
     return groups
   }
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
+  const getUserInitials = (email) => {
+    if (!email) return '?'
+    const parts = email.split('@')[0].split(/[._-]/)
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase()
+    }
+    return email.substring(0, 2).toUpperCase()
+  }
+
   if (loading) {
     return (
-      <div className="flow-tracker-page">
+      <div className="dashboard-container">
         <div className="loading">
           <div className="typing-indicator">
             <span></span><span></span><span></span>
@@ -232,9 +249,59 @@ const FlowTracker = () => {
   }
 
   return (
-    <div className="flow-tracker-page">
-      {/* Page Header */}
-      <div className="page-header">
+    <div className="dashboard-container">
+      {/* Mobile Top Bar */}
+      <div className="mobile-topbar">
+        <div className="topbar-content">
+          <div className="topbar-logo">FindMyFlow</div>
+          <button className="hamburger-btn" onClick={toggleSidebar}>
+            ☰
+          </button>
+        </div>
+      </div>
+
+      {/* Sidebar Overlay for Mobile */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+      )}
+
+      {/* Sidebar */}
+      <div className={`sidebar ${sidebarOpen ? '' : 'mobile-hidden'}`}>
+        <div className="logo">FindMyFlow</div>
+
+        <div className="user-profile">
+          <div className="user-avatar">{getUserInitials(user?.email)}</div>
+          <div className="user-name">{user?.email?.split('@')[0] || 'User'}</div>
+          <div className="user-email">{user?.email}</div>
+        </div>
+
+        <ul className="nav-menu">
+          <li className="nav-item" onClick={() => { navigate('/me'); setSidebarOpen(false); }}>
+            📊 Dashboard
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
+            ✨ Archetypes
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
+            📈 7-Day Challenge
+          </li>
+          <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
+            🧭 Flow Tracker
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
+            💬 Give Feedback
+          </li>
+        </ul>
+
+        <div className="signout-link" onClick={signOut}>
+          Sign Out
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-content">
+        {/* Page Header */}
+        <div className="page-header">
         <div>
           <h1 className="page-title">Flow Tracker</h1>
           <p className="page-subtitle">Track your project momentum and flow states</p>
@@ -418,6 +485,7 @@ const FlowTracker = () => {
           <div className="empty-title">Start a New Project</div>
           <div className="empty-text">Track your flow journey on something new</div>
         </div>
+      </div>
       </div>
 
       {/* Timeline Modal */}

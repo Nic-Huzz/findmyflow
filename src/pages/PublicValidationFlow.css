@@ -1,0 +1,361 @@
+/* Public Validation Flow Page */
+.public-validation-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Progress Bar */
+.validation-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 100;
+}
+
+.validation-progress-fill {
+  height: 100%;
+  background: #10b981;
+  transition: width 0.3s ease;
+}
+
+/* Main Container */
+.validation-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 40px;
+}
+
+/* Header */
+.validation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.validation-logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}
+
+.validation-step-counter {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+/* Content */
+.validation-content {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.validation-prompt {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+
+.validation-prompt strong {
+  color: #5e17eb;
+}
+
+/* Input Section */
+.validation-input-section {
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+/* Single Select Options */
+.validation-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.validation-option-btn {
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.validation-option-btn:hover {
+  background: #e9ecef;
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.validation-option-btn.selected {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Text Input */
+.validation-textarea,
+.validation-input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+  resize: vertical;
+}
+
+.validation-textarea:focus,
+.validation-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.validation-textarea {
+  min-height: 120px;
+}
+
+/* Text List */
+.validation-text-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.text-list-input-group {
+  display: flex;
+  gap: 12px;
+}
+
+.text-list-input-group .validation-input {
+  flex: 1;
+}
+
+.add-list-item-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-list-item-btn:hover:not(:disabled) {
+  background: #5568d3;
+  transform: translateY(-2px);
+}
+
+.add-list-item-btn:disabled {
+  background: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.text-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.text-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #495057;
+}
+
+.remove-list-item-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-list-item-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.text-list-progress {
+  font-size: 14px;
+  color: #6c757d;
+  text-align: center;
+}
+
+/* Next Button */
+.validation-next-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: auto;
+}
+
+.validation-next-btn:hover:not(:disabled) {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.validation-next-btn:disabled {
+  background: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Footer */
+.validation-footer {
+  text-align: center;
+  padding: 24px 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+/* Loading State */
+.validation-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 8px;
+}
+
+.typing-indicator span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: white;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Error State */
+.validation-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.validation-error h2 {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.validation-error p {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .validation-container {
+    padding: 16px;
+    padding-top: 30px;
+  }
+
+  .validation-content {
+    padding: 24px;
+  }
+
+  .validation-prompt {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .validation-option-btn {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+
+  .validation-next-btn {
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+
+  .validation-logo {
+    font-size: 20px;
+  }
+
+  .validation-step-counter {
+    font-size: 12px;
+  }
+}

@@ -88,7 +88,7 @@
       "instructions_to_gpt": "Wait for readiness confirmation."
     },
     {
-      "step": "stage4_triage_1",
+      "step": "stage4_triage_1_initial",
       "step_order_index": 8.0,
       "required_inputs": ["stage4_triage_intro_complete", "{{impact_goal}}"],
       "prompt": "Statement 1 of 5:\n\n\"I feel safe being seen by {{impact_goal}} people.\"\n\nDid you sway YES or NO?",
@@ -96,22 +96,690 @@
         { "label": "YES", "value": "yes" },
         { "label": "NO", "value": "no" }
       ],
-      "tag_as": "triage_safe_being_seen",
-      "store_as": "stage4_triage_1_complete",
-      "instructions_to_gpt": "Record the response. No judgment or analysis yet."
+      "tag_as": "triage_safe_being_seen_initial",
+      "store_as": "stage4_triage_1_initial_complete",
+      "metadata": {
+        "binary_search": true,
+        "initial_test": true,
+        "test_amount": "{{impact_goal}}",
+        "min_floor": 10,
+        "max_iterations": 7,
+        "result_variable": "nervous_system_impact_limit"
+      },
+      "instructions_to_gpt": "Record the response. If YES, proceed to doubling path (8.1-double). If NO, proceed to halving path (8.1-half)."
     },
     {
-      "step": "stage4_triage_2",
-      "step_order_index": 9.0,
-      "required_inputs": ["stage4_triage_1_complete", "{{income_goal}}"],
-      "prompt": "Statement 2 of 5:\n\n\"I feel safe earning over ${{income_goal}}/year.\"\n\nDid you sway YES or NO?",
+      "step": "stage4_triage_1_double_1",
+      "step_order_index": 8.1,
+      "required_inputs": ["stage4_triage_1_initial_complete"],
+      "conditional": "triage_safe_being_seen_initial === 'yes'",
+      "prompt": "Let's test a larger audience.\n\n\"I feel safe being seen by {{doubled_impact_1}} people.\"\n\nDid you sway YES or NO?",
       "options": [
         { "label": "YES", "value": "yes" },
         { "label": "NO", "value": "no" }
       ],
-      "tag_as": "triage_safe_earning",
+      "tag_as": "triage_safe_being_seen_double_1",
+      "store_as": "stage4_triage_1_double_1_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 1,
+        "multiplier": 2,
+        "base_amount": "{{impact_goal}}",
+        "previous_yes_amount": "{{impact_goal}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_impact_1 as impact_goal * 2. If NO, set limit to previous_yes_amount and skip to stage4_triage_1_complete. If YES, continue to 8.2-double."
+    },
+    {
+      "step": "stage4_triage_1_double_2",
+      "step_order_index": 8.2,
+      "required_inputs": ["stage4_triage_1_double_1_complete"],
+      "conditional": "triage_safe_being_seen_double_1 === 'yes'",
+      "prompt": "Let's test an even larger audience.\n\n\"I feel safe being seen by {{doubled_impact_2}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_double_2",
+      "store_as": "stage4_triage_1_double_2_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 2,
+        "multiplier": 4,
+        "base_amount": "{{impact_goal}}",
+        "previous_yes_amount": "{{doubled_impact_1}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_impact_2 as impact_goal * 4. If NO, set limit to previous_yes_amount and skip to stage4_triage_1_complete. If YES, continue to 8.3-double."
+    },
+    {
+      "step": "stage4_triage_1_double_3",
+      "step_order_index": 8.3,
+      "required_inputs": ["stage4_triage_1_double_2_complete"],
+      "conditional": "triage_safe_being_seen_double_2 === 'yes'",
+      "prompt": "Your visibility is expanding! Let's test higher.\n\n\"I feel safe being seen by {{doubled_impact_3}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_double_3",
+      "store_as": "stage4_triage_1_double_3_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 3,
+        "multiplier": 8,
+        "base_amount": "{{impact_goal}}",
+        "previous_yes_amount": "{{doubled_impact_2}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_impact_3 as impact_goal * 8. If NO, set limit to previous_yes_amount and skip to stage4_triage_1_complete. If YES, continue to 8.4-double."
+    },
+    {
+      "step": "stage4_triage_1_double_4",
+      "step_order_index": 8.4,
+      "required_inputs": ["stage4_triage_1_double_3_complete"],
+      "conditional": "triage_safe_being_seen_double_3 === 'yes'",
+      "prompt": "You're really expanding! Let's test even higher.\n\n\"I feel safe being seen by {{doubled_impact_4}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_double_4",
+      "store_as": "stage4_triage_1_double_4_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 4,
+        "multiplier": 16,
+        "base_amount": "{{impact_goal}}",
+        "previous_yes_amount": "{{doubled_impact_3}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_impact_4 as impact_goal * 16. If NO, set limit to previous_yes_amount and skip to stage4_triage_1_complete. If YES, continue to 8.5-double."
+    },
+    {
+      "step": "stage4_triage_1_double_5",
+      "step_order_index": 8.5,
+      "required_inputs": ["stage4_triage_1_double_4_complete"],
+      "conditional": "triage_safe_being_seen_double_4 === 'yes'",
+      "prompt": "Your nervous system is incredibly expansive! Let's test higher.\n\n\"I feel safe being seen by {{doubled_impact_5}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_double_5",
+      "store_as": "stage4_triage_1_double_5_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 5,
+        "multiplier": 32,
+        "base_amount": "{{impact_goal}}",
+        "previous_yes_amount": "{{doubled_impact_4}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_impact_5 as impact_goal * 32. If NO, set limit to previous_yes_amount and skip to stage4_triage_1_complete. If YES, continue to 8.6-double."
+    },
+    {
+      "step": "stage4_triage_1_double_6",
+      "step_order_index": 8.6,
+      "required_inputs": ["stage4_triage_1_double_5_complete"],
+      "conditional": "triage_safe_being_seen_double_5 === 'yes'",
+      "prompt": "Remarkable expansion! One more level.\n\n\"I feel safe being seen by {{doubled_impact_6}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_double_6",
+      "store_as": "stage4_triage_1_double_6_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 6,
+        "multiplier": 64,
+        "base_amount": "{{impact_goal}}",
+        "previous_yes_amount": "{{doubled_impact_5}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_impact_6 as impact_goal * 64. If NO, set limit to previous_yes_amount and skip to stage4_triage_1_complete. If YES, continue to 8.7-double (final iteration)."
+    },
+    {
+      "step": "stage4_triage_1_double_7",
+      "step_order_index": 8.7,
+      "required_inputs": ["stage4_triage_1_double_6_complete"],
+      "conditional": "triage_safe_being_seen_double_6 === 'yes'",
+      "prompt": "Final test - let's see how visible you can be!\n\n\"I feel safe being seen by {{doubled_impact_7}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_double_7",
+      "store_as": "stage4_triage_1_double_7_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 7,
+        "multiplier": 128,
+        "base_amount": "{{impact_goal}}",
+        "previous_yes_amount": "{{doubled_impact_6}}",
+        "final_iteration": true
+      },
+      "instructions_to_gpt": "Calculate doubled_impact_7 as impact_goal * 128. If NO, set limit to previous_yes_amount. If YES, set limit to doubled_impact_7. Then proceed to stage4_triage_1_complete."
+    },
+    {
+      "step": "stage4_triage_1_half_1",
+      "step_order_index": 8.11,
+      "required_inputs": ["stage4_triage_1_initial_complete"],
+      "conditional": "triage_safe_being_seen_initial === 'no'",
+      "prompt": "Let's test a smaller audience.\n\n\"I feel safe being seen by {{halved_impact_1}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_half_1",
+      "store_as": "stage4_triage_1_half_1_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 1,
+        "divisor": 2,
+        "base_amount": "{{impact_goal}}",
+        "min_floor": 10
+      },
+      "instructions_to_gpt": "Calculate halved_impact_1 as impact_goal / 2 (minimum 10 people). If YES, set limit to halved_impact_1 and skip to stage4_triage_1_complete. If NO, continue to 8.12-half."
+    },
+    {
+      "step": "stage4_triage_1_half_2",
+      "step_order_index": 8.12,
+      "required_inputs": ["stage4_triage_1_half_1_complete"],
+      "conditional": "triage_safe_being_seen_half_1 === 'no'",
+      "prompt": "Let's test an even smaller audience.\n\n\"I feel safe being seen by {{halved_impact_2}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_half_2",
+      "store_as": "stage4_triage_1_half_2_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 2,
+        "divisor": 4,
+        "base_amount": "{{impact_goal}}",
+        "min_floor": 10
+      },
+      "instructions_to_gpt": "Calculate halved_impact_2 as impact_goal / 4 (minimum 10 people). If YES, set limit to halved_impact_2 and skip to stage4_triage_1_complete. If NO, continue to 8.13-half."
+    },
+    {
+      "step": "stage4_triage_1_half_3",
+      "step_order_index": 8.13,
+      "required_inputs": ["stage4_triage_1_half_2_complete"],
+      "conditional": "triage_safe_being_seen_half_2 === 'no'",
+      "prompt": "Let's keep testing smaller.\n\n\"I feel safe being seen by {{halved_impact_3}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_half_3",
+      "store_as": "stage4_triage_1_half_3_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 3,
+        "divisor": 8,
+        "base_amount": "{{impact_goal}}",
+        "min_floor": 10
+      },
+      "instructions_to_gpt": "Calculate halved_impact_3 as impact_goal / 8 (minimum 10 people). If YES, set limit to halved_impact_3 and skip to stage4_triage_1_complete. If NO, continue to 8.14-half."
+    },
+    {
+      "step": "stage4_triage_1_half_4",
+      "step_order_index": 8.14,
+      "required_inputs": ["stage4_triage_1_half_3_complete"],
+      "conditional": "triage_safe_being_seen_half_3 === 'no'",
+      "prompt": "Let's test smaller still.\n\n\"I feel safe being seen by {{halved_impact_4}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_half_4",
+      "store_as": "stage4_triage_1_half_4_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 4,
+        "divisor": 16,
+        "base_amount": "{{impact_goal}}",
+        "min_floor": 10
+      },
+      "instructions_to_gpt": "Calculate halved_impact_4 as impact_goal / 16 (minimum 10 people). If YES, set limit to halved_impact_4 and skip to stage4_triage_1_complete. If NO, continue to 8.15-half."
+    },
+    {
+      "step": "stage4_triage_1_half_5",
+      "step_order_index": 8.15,
+      "required_inputs": ["stage4_triage_1_half_4_complete"],
+      "conditional": "triage_safe_being_seen_half_4 === 'no'",
+      "prompt": "Getting closer to your visibility comfort zone.\n\n\"I feel safe being seen by {{halved_impact_5}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_half_5",
+      "store_as": "stage4_triage_1_half_5_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 5,
+        "divisor": 32,
+        "base_amount": "{{impact_goal}}",
+        "min_floor": 10
+      },
+      "instructions_to_gpt": "Calculate halved_impact_5 as impact_goal / 32 (minimum 10 people). If YES, set limit to halved_impact_5 and skip to stage4_triage_1_complete. If NO, continue to 8.16-half."
+    },
+    {
+      "step": "stage4_triage_1_half_6",
+      "step_order_index": 8.16,
+      "required_inputs": ["stage4_triage_1_half_5_complete"],
+      "conditional": "triage_safe_being_seen_half_5 === 'no'",
+      "prompt": "Almost there.\n\n\"I feel safe being seen by {{halved_impact_6}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_half_6",
+      "store_as": "stage4_triage_1_half_6_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 6,
+        "divisor": 64,
+        "base_amount": "{{impact_goal}}",
+        "min_floor": 10
+      },
+      "instructions_to_gpt": "Calculate halved_impact_6 as impact_goal / 64 (minimum 10 people). If YES, set limit to halved_impact_6 and skip to stage4_triage_1_complete. If NO, continue to 8.17-half (final iteration)."
+    },
+    {
+      "step": "stage4_triage_1_half_7",
+      "step_order_index": 8.17,
+      "required_inputs": ["stage4_triage_1_half_6_complete"],
+      "conditional": "triage_safe_being_seen_half_6 === 'no'",
+      "prompt": "Final test - finding your visibility baseline.\n\n\"I feel safe being seen by {{halved_impact_7}} people.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_being_seen_half_7",
+      "store_as": "stage4_triage_1_half_7_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 7,
+        "divisor": 128,
+        "base_amount": "{{impact_goal}}",
+        "min_floor": 10,
+        "final_iteration": true
+      },
+      "instructions_to_gpt": "Calculate halved_impact_7 as impact_goal / 128 (minimum 10 people). If YES, set limit to halved_impact_7. If NO, set limit to 10 (floor reached). Then proceed to stage4_triage_1_complete."
+    },
+    {
+      "step": "stage4_triage_1_complete",
+      "step_order_index": 8.99,
+      "required_inputs": ["stage4_triage_1_initial_complete"],
+      "prompt": "Perfect. Your nervous system's current visibility comfort limit is {{nervous_system_impact_limit}} people.\n\nThis is where your body currently feels safe being seen. Not your potential—just your current nervous system boundary.\n\nLet's continue.",
+      "options": [
+        { "label": "Continue", "value": "continue" }
+      ],
+      "tag_as": "impact_limit_acknowledged",
+      "store_as": "stage4_triage_1_complete",
+      "metadata": {
+        "binary_search_complete": true,
+        "stores_limit": "nervous_system_impact_limit"
+      },
+      "instructions_to_gpt": "Display the discovered nervous system impact limit. Store it as nervous_system_impact_limit for use in the final reflection."
+    },
+    {
+      "step": "stage4_triage_2_initial",
+      "step_order_index": 9.0,
+      "required_inputs": ["stage4_triage_1_complete", "{{income_goal}}"],
+      "prompt": "Statement 2 of 5:\n\n\"I feel safe earning over {{income_goal}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_initial",
+      "store_as": "stage4_triage_2_initial_complete",
+      "metadata": {
+        "binary_search": true,
+        "initial_test": true,
+        "test_amount": "{{income_goal}}",
+        "min_floor": 10000,
+        "max_iterations": 7,
+        "result_variable": "nervous_system_income_limit"
+      },
+      "instructions_to_gpt": "Record the response. If YES, proceed to doubling path (9.1-double). If NO, proceed to halving path (9.1-half)."
+    },
+    {
+      "step": "stage4_triage_2_double_1",
+      "step_order_index": 9.1,
+      "required_inputs": ["stage4_triage_2_initial_complete"],
+      "conditional": "triage_safe_earning_initial === 'yes'",
+      "prompt": "Let's test a higher amount.\n\n\"I feel safe earning over {{doubled_amount_1}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_double_1",
+      "store_as": "stage4_triage_2_double_1_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 1,
+        "multiplier": 2,
+        "base_amount": "{{income_goal}}",
+        "previous_yes_amount": "{{income_goal}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_amount_1 as income_goal * 2. If NO, set limit to previous_yes_amount and skip to stage4_triage_2_complete. If YES, continue to 9.2-double."
+    },
+    {
+      "step": "stage4_triage_2_double_2",
+      "step_order_index": 9.2,
+      "required_inputs": ["stage4_triage_2_double_1_complete"],
+      "conditional": "triage_safe_earning_double_1 === 'yes'",
+      "prompt": "Let's test an even higher amount.\n\n\"I feel safe earning over {{doubled_amount_2}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_double_2",
+      "store_as": "stage4_triage_2_double_2_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 2,
+        "multiplier": 4,
+        "base_amount": "{{income_goal}}",
+        "previous_yes_amount": "{{doubled_amount_1}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_amount_2 as income_goal * 4. If NO, set limit to previous_yes_amount and skip to stage4_triage_2_complete. If YES, continue to 9.3-double."
+    },
+    {
+      "step": "stage4_triage_2_double_3",
+      "step_order_index": 9.3,
+      "required_inputs": ["stage4_triage_2_double_2_complete"],
+      "conditional": "triage_safe_earning_double_2 === 'yes'",
+      "prompt": "Let's keep going higher.\n\n\"I feel safe earning over {{doubled_amount_3}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_double_3",
+      "store_as": "stage4_triage_2_double_3_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 3,
+        "multiplier": 8,
+        "base_amount": "{{income_goal}}",
+        "previous_yes_amount": "{{doubled_amount_2}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_amount_3 as income_goal * 8. If NO, set limit to previous_yes_amount and skip to stage4_triage_2_complete. If YES, continue to 9.4-double."
+    },
+    {
+      "step": "stage4_triage_2_double_4",
+      "step_order_index": 9.4,
+      "required_inputs": ["stage4_triage_2_double_3_complete"],
+      "conditional": "triage_safe_earning_double_3 === 'yes'",
+      "prompt": "You're expanding! Let's test higher.\n\n\"I feel safe earning over {{doubled_amount_4}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_double_4",
+      "store_as": "stage4_triage_2_double_4_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 4,
+        "multiplier": 16,
+        "base_amount": "{{income_goal}}",
+        "previous_yes_amount": "{{doubled_amount_3}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_amount_4 as income_goal * 16. If NO, set limit to previous_yes_amount and skip to stage4_triage_2_complete. If YES, continue to 9.5-double."
+    },
+    {
+      "step": "stage4_triage_2_double_5",
+      "step_order_index": 9.5,
+      "required_inputs": ["stage4_triage_2_double_4_complete"],
+      "conditional": "triage_safe_earning_double_4 === 'yes'",
+      "prompt": "Your nervous system is really expanding! Let's test higher.\n\n\"I feel safe earning over {{doubled_amount_5}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_double_5",
+      "store_as": "stage4_triage_2_double_5_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 5,
+        "multiplier": 32,
+        "base_amount": "{{income_goal}}",
+        "previous_yes_amount": "{{doubled_amount_4}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_amount_5 as income_goal * 32. If NO, set limit to previous_yes_amount and skip to stage4_triage_2_complete. If YES, continue to 9.6-double."
+    },
+    {
+      "step": "stage4_triage_2_double_6",
+      "step_order_index": 9.6,
+      "required_inputs": ["stage4_triage_2_double_5_complete"],
+      "conditional": "triage_safe_earning_double_5 === 'yes'",
+      "prompt": "Impressive expansion! Let's test one more level.\n\n\"I feel safe earning over {{doubled_amount_6}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_double_6",
+      "store_as": "stage4_triage_2_double_6_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 6,
+        "multiplier": 64,
+        "base_amount": "{{income_goal}}",
+        "previous_yes_amount": "{{doubled_amount_5}}"
+      },
+      "instructions_to_gpt": "Calculate doubled_amount_6 as income_goal * 64. If NO, set limit to previous_yes_amount and skip to stage4_triage_2_complete. If YES, continue to 9.7-double (final iteration)."
+    },
+    {
+      "step": "stage4_triage_2_double_7",
+      "step_order_index": 9.7,
+      "required_inputs": ["stage4_triage_2_double_6_complete"],
+      "conditional": "triage_safe_earning_double_6 === 'yes'",
+      "prompt": "Final test - let's see how high you can go!\n\n\"I feel safe earning over {{doubled_amount_7}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_double_7",
+      "store_as": "stage4_triage_2_double_7_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "doubling",
+        "iteration": 7,
+        "multiplier": 128,
+        "base_amount": "{{income_goal}}",
+        "previous_yes_amount": "{{doubled_amount_6}}",
+        "final_iteration": true
+      },
+      "instructions_to_gpt": "Calculate doubled_amount_7 as income_goal * 128. If NO, set limit to previous_yes_amount. If YES, set limit to doubled_amount_7. Then proceed to stage4_triage_2_complete."
+    },
+    {
+      "step": "stage4_triage_2_half_1",
+      "step_order_index": 9.11,
+      "required_inputs": ["stage4_triage_2_initial_complete"],
+      "conditional": "triage_safe_earning_initial === 'no'",
+      "prompt": "Let's test a lower amount.\n\n\"I feel safe earning over {{halved_amount_1}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_half_1",
+      "store_as": "stage4_triage_2_half_1_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 1,
+        "divisor": 2,
+        "base_amount": "{{income_goal}}",
+        "min_floor": 10000
+      },
+      "instructions_to_gpt": "Calculate halved_amount_1 as income_goal / 2 (minimum $10,000). If YES, set limit to halved_amount_1 and skip to stage4_triage_2_complete. If NO, continue to 9.12-half."
+    },
+    {
+      "step": "stage4_triage_2_half_2",
+      "step_order_index": 9.12,
+      "required_inputs": ["stage4_triage_2_half_1_complete"],
+      "conditional": "triage_safe_earning_half_1 === 'no'",
+      "prompt": "Let's test an even lower amount.\n\n\"I feel safe earning over {{halved_amount_2}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_half_2",
+      "store_as": "stage4_triage_2_half_2_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 2,
+        "divisor": 4,
+        "base_amount": "{{income_goal}}",
+        "min_floor": 10000
+      },
+      "instructions_to_gpt": "Calculate halved_amount_2 as income_goal / 4 (minimum $10,000). If YES, set limit to halved_amount_2 and skip to stage4_triage_2_complete. If NO, continue to 9.13-half."
+    },
+    {
+      "step": "stage4_triage_2_half_3",
+      "step_order_index": 9.13,
+      "required_inputs": ["stage4_triage_2_half_2_complete"],
+      "conditional": "triage_safe_earning_half_2 === 'no'",
+      "prompt": "Let's keep testing lower.\n\n\"I feel safe earning over {{halved_amount_3}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_half_3",
+      "store_as": "stage4_triage_2_half_3_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 3,
+        "divisor": 8,
+        "base_amount": "{{income_goal}}",
+        "min_floor": 10000
+      },
+      "instructions_to_gpt": "Calculate halved_amount_3 as income_goal / 8 (minimum $10,000). If YES, set limit to halved_amount_3 and skip to stage4_triage_2_complete. If NO, continue to 9.14-half."
+    },
+    {
+      "step": "stage4_triage_2_half_4",
+      "step_order_index": 9.14,
+      "required_inputs": ["stage4_triage_2_half_3_complete"],
+      "conditional": "triage_safe_earning_half_3 === 'no'",
+      "prompt": "Let's test lower still.\n\n\"I feel safe earning over {{halved_amount_4}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_half_4",
+      "store_as": "stage4_triage_2_half_4_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 4,
+        "divisor": 16,
+        "base_amount": "{{income_goal}}",
+        "min_floor": 10000
+      },
+      "instructions_to_gpt": "Calculate halved_amount_4 as income_goal / 16 (minimum $10,000). If YES, set limit to halved_amount_4 and skip to stage4_triage_2_complete. If NO, continue to 9.15-half."
+    },
+    {
+      "step": "stage4_triage_2_half_5",
+      "step_order_index": 9.15,
+      "required_inputs": ["stage4_triage_2_half_4_complete"],
+      "conditional": "triage_safe_earning_half_4 === 'no'",
+      "prompt": "Getting closer to your current safety edge.\n\n\"I feel safe earning over {{halved_amount_5}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_half_5",
+      "store_as": "stage4_triage_2_half_5_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 5,
+        "divisor": 32,
+        "base_amount": "{{income_goal}}",
+        "min_floor": 10000
+      },
+      "instructions_to_gpt": "Calculate halved_amount_5 as income_goal / 32 (minimum $10,000). If YES, set limit to halved_amount_5 and skip to stage4_triage_2_complete. If NO, continue to 9.16-half."
+    },
+    {
+      "step": "stage4_triage_2_half_6",
+      "step_order_index": 9.16,
+      "required_inputs": ["stage4_triage_2_half_5_complete"],
+      "conditional": "triage_safe_earning_half_5 === 'no'",
+      "prompt": "Almost there.\n\n\"I feel safe earning over {{halved_amount_6}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_half_6",
+      "store_as": "stage4_triage_2_half_6_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 6,
+        "divisor": 64,
+        "base_amount": "{{income_goal}}",
+        "min_floor": 10000
+      },
+      "instructions_to_gpt": "Calculate halved_amount_6 as income_goal / 64 (minimum $10,000). If YES, set limit to halved_amount_6 and skip to stage4_triage_2_complete. If NO, continue to 9.17-half (final iteration)."
+    },
+    {
+      "step": "stage4_triage_2_half_7",
+      "step_order_index": 9.17,
+      "required_inputs": ["stage4_triage_2_half_6_complete"],
+      "conditional": "triage_safe_earning_half_6 === 'no'",
+      "prompt": "Final test - finding your baseline.\n\n\"I feel safe earning over {{halved_amount_7}}/year.\"\n\nDid you sway YES or NO?",
+      "options": [
+        { "label": "YES", "value": "yes" },
+        { "label": "NO", "value": "no" }
+      ],
+      "tag_as": "triage_safe_earning_half_7",
+      "store_as": "stage4_triage_2_half_7_complete",
+      "metadata": {
+        "binary_search": true,
+        "direction": "halving",
+        "iteration": 7,
+        "divisor": 128,
+        "base_amount": "{{income_goal}}",
+        "min_floor": 10000,
+        "final_iteration": true
+      },
+      "instructions_to_gpt": "Calculate halved_amount_7 as income_goal / 128 (minimum $10,000). If YES, set limit to halved_amount_7. If NO, set limit to $10,000 (floor reached). Then proceed to stage4_triage_2_complete."
+    },
+    {
+      "step": "stage4_triage_2_complete",
+      "step_order_index": 9.99,
+      "required_inputs": ["stage4_triage_2_initial_complete"],
+      "prompt": "Perfect. Your nervous system's current income safety limit is {{nervous_system_income_limit}}.\n\nThis is where your body currently feels safe. Not your potential—just your current nervous system boundary.\n\nLet's continue.",
+      "options": [
+        { "label": "Continue", "value": "continue" }
+      ],
+      "tag_as": "income_limit_acknowledged",
       "store_as": "stage4_triage_2_complete",
-      "instructions_to_gpt": "Record the response."
+      "metadata": {
+        "binary_search_complete": true,
+        "stores_limit": "nervous_system_income_limit"
+      },
+      "instructions_to_gpt": "Display the discovered nervous system income limit. Store it as nervous_system_income_limit for use in the final reflection."
     },
     {
       "step": "stage4_triage_3",
@@ -182,7 +850,9 @@
       "required_inputs": [
         "stage6_mirror_intro_complete",
         "{{impact_goal}}",
+        "{{nervous_system_impact_limit}}",
         "{{income_goal}}",
+        "{{nervous_system_income_limit}}",
         "{{struggle_area}}",
         "{{triage_safe_being_seen}}",
         "{{triage_safe_earning}}",
@@ -197,7 +867,7 @@
       ],
       "tag_as": "reflection_acknowledged",
       "store_as": "stage6_mirror_complete",
-      "instructions_to_gpt": "Generate a personalized reflection based on all collected data:\n\n1. Name where their system feels safe vs. where it contracts (use triage results)\n2. Identify the most limiting belief that showed up (from belief tests)\n3. Suggest what deeper fear may be protecting them from expansion\n4. Name the pattern/archetype if applicable (e.g., 'The Good Soldier', 'The Hustling Healer')\n5. Explain what needs to be rewired\n\nUse compassionate, insightful language. Make it feel personalized and deeply seen."
+      "instructions_to_gpt": "Generate a personalized reflection based on all collected data:\n\n1. Name where their system feels safe vs. where it contracts (use triage results)\n2. **IMPORTANT**: Highlight TWO gaps:\n   - VISIBILITY GAP: Their aspirational impact goal ({{impact_goal}}) vs their discovered visibility limit ({{nervous_system_impact_limit}})\n   - INCOME GAP: Their aspirational income goal ({{income_goal}}) vs their discovered income limit ({{nervous_system_income_limit}})\n   Frame compassionately: 'You aspire to reach X people and earn Y, but your nervous system currently feels safe being seen by A people and earning B. These gaps show your precise expansion edges.'\n3. Identify the most limiting belief that showed up (from belief tests)\n4. Suggest what deeper fear may be protecting them from expansion\n5. Name the pattern/archetype if applicable (e.g., 'The Good Soldier', 'The Hustling Healer') - USE QUOTES around the archetype name\n6. Explain what needs to be rewired\n\nUse compassionate, insightful language. Make it feel personalized and deeply seen."
     },
     {
       "step": "stage6_close",

@@ -1,7 +1,7 @@
 {
   "flow_name": "$100M Offer: Build an Irresistible Offer",
-  "version": "1.0",
-  "description": "A tactical 6-stage offer design process inspired by Alex Hormozi's $100M Offers framework",
+  "version": "2.0",
+  "description": "A tactical persona-driven offer design process inspired by Alex Hormozi's $100M Offers framework",
   "pillar": "monetization",
   "steps": [
     {
@@ -24,93 +24,14 @@
     {
       "id": "1.0",
       "step_order_index": 2,
-      "assistant_prompt": "Let's begin by identifying three possible audiences you could help.\n\nFor **Persona #1**, answer the following questions:",
-      "expected_inputs": ["text"],
-      "next_step_rules": [
-        {
-          "on_success": "1.1"
-        }
-      ]
-    },
-    {
-      "id": "1.1",
-      "step_order_index": 3,
-      "assistant_prompt": "**1. What is their core problem?**\n\nChoose one:",
+      "assistant_prompt": "Who was the first persona to answer your feedback?\n\nUse the slider below to explore your persona options and select the one who gave you feedback first.",
       "expected_inputs": [
         {
-          "type": "single_select",
-          "options": ["Health", "Wealth", "Love"]
+          "type": "persona_slider",
+          "source": "persona.final"
         }
       ],
-      "store_as": "persona_1.problem_type",
-      "next_step_rules": [
-        {
-          "on_success": "1.2"
-        }
-      ]
-    },
-    {
-      "id": "1.2",
-      "step_order_index": 4,
-      "assistant_prompt": "**2. How painful is the problem?**\n\nRate out of 10 — don't choose 7:",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["1", "2", "3", "4", "5", "6", "8", "9", "10"]
-        }
-      ],
-      "store_as": "persona_1.pain_level",
-      "next_step_rules": [
-        {
-          "on_success": "1.3"
-        }
-      ]
-    },
-    {
-      "id": "1.3",
-      "step_order_index": 5,
-      "assistant_prompt": "**3. How much do they currently earn?**",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["$0–$25k", "$25k–$50k", "$50k–$100k", "$100k–$250k", "$250k+"]
-        }
-      ],
-      "store_as": "persona_1.income_level",
-      "next_step_rules": [
-        {
-          "on_success": "1.4"
-        }
-      ]
-    },
-    {
-      "id": "1.4",
-      "step_order_index": 6,
-      "assistant_prompt": "**4. How easy are they to reach?**",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["I have 20+ people in mind", "I know a few", "I don't know any"]
-        }
-      ],
-      "store_as": "persona_1.ease_of_reach",
-      "next_step_rules": [
-        {
-          "on_success": "1.5"
-        }
-      ]
-    },
-    {
-      "id": "1.5",
-      "step_order_index": 7,
-      "assistant_prompt": "**5. Is their market growing?**",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["Yes", "No", "Stable", "Don't know"]
-        }
-      ],
-      "store_as": "persona_1.market_growth",
+      "store_as": "offer.persona_1",
       "next_step_rules": [
         {
           "on_success": "2.0"
@@ -119,9 +40,15 @@
     },
     {
       "id": "2.0",
-      "step_order_index": 8,
-      "assistant_prompt": "Great! Now let's explore **Persona #2**.\n\nFor this second audience, answer the same questions:",
-      "expected_inputs": ["text"],
+      "step_order_index": 3,
+      "assistant_prompt": "Based on their feedback, let's understand this persona deeply.\n\n**How much pain are they experiencing?**\n\nRate out of 10 — don't choose 7:",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["1", "2", "3", "4", "5", "6", "8", "9", "10"]
+        }
+      ],
+      "store_as": "offer.persona_1.pain_level",
       "next_step_rules": [
         {
           "on_success": "2.1"
@@ -130,15 +57,15 @@
     },
     {
       "id": "2.1",
-      "step_order_index": 9,
-      "assistant_prompt": "**1. What is their core problem?**",
+      "step_order_index": 3,
+      "assistant_prompt": "**What's their problem area?**",
       "expected_inputs": [
         {
           "type": "single_select",
           "options": ["Health", "Wealth", "Love"]
         }
       ],
-      "store_as": "persona_2.problem_type",
+      "store_as": "offer.persona_1.problem_area",
       "next_step_rules": [
         {
           "on_success": "2.2"
@@ -147,15 +74,15 @@
     },
     {
       "id": "2.2",
-      "step_order_index": 10,
-      "assistant_prompt": "**2. How painful is the problem?**\n\nRate out of 10 — don't choose 7:",
+      "step_order_index": 3,
+      "assistant_prompt": "**How much money do they have to spend on a solution?**",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["1", "2", "3", "4", "5", "6", "8", "9", "10"]
+          "options": ["$0–$25k", "$25k–$50k", "$50k–$100k", "$100k–$250k", "$250k+"]
         }
       ],
-      "store_as": "persona_2.pain_level",
+      "store_as": "offer.persona_1.spending_capacity",
       "next_step_rules": [
         {
           "on_success": "2.3"
@@ -164,15 +91,15 @@
     },
     {
       "id": "2.3",
-      "step_order_index": 11,
-      "assistant_prompt": "**3. How much do they currently earn?**",
+      "step_order_index": 3,
+      "assistant_prompt": "**How large of a sunk cost do they have in their existing solution?**",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["$0–$25k", "$25k–$50k", "$50k–$100k", "$100k–$250k", "$250k+"]
+          "options": ["None - haven't tried anything", "Minimal ($0-$500)", "Moderate ($500-$5k)", "Significant ($5k-$50k)", "Substantial ($50k+)"]
         }
       ],
-      "store_as": "persona_2.income_level",
+      "store_as": "offer.persona_1.sunk_cost",
       "next_step_rules": [
         {
           "on_success": "2.4"
@@ -181,32 +108,15 @@
     },
     {
       "id": "2.4",
-      "step_order_index": 12,
-      "assistant_prompt": "**4. How easy are they to reach?**",
+      "step_order_index": 3,
+      "assistant_prompt": "**What emotion are they feeling?**",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["I have 20+ people in mind", "I know a few", "I don't know any"]
+          "options": ["Frustrated", "Desperate", "Hopeful", "Skeptical", "Overwhelmed", "Motivated", "Confused"]
         }
       ],
-      "store_as": "persona_2.ease_of_reach",
-      "next_step_rules": [
-        {
-          "on_success": "2.5"
-        }
-      ]
-    },
-    {
-      "id": "2.5",
-      "step_order_index": 13,
-      "assistant_prompt": "**5. Is their market growing?**",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["Yes", "No", "Stable", "Don't know"]
-        }
-      ],
-      "store_as": "persona_2.market_growth",
+      "store_as": "offer.persona_1.emotion",
       "next_step_rules": [
         {
           "on_success": "3.0"
@@ -215,26 +125,37 @@
     },
     {
       "id": "3.0",
-      "step_order_index": 14,
-      "assistant_prompt": "Almost there! Now for **Persona #3**.\n\nLet's capture the final audience option:",
-      "expected_inputs": ["text"],
+      "step_order_index": 4,
+      "assistant_prompt": "Great! Is there another persona who gave you feedback?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yes, there's another persona", "No, that's all"]
+        }
+      ],
+      "store_as": "offer.has_persona_2",
       "next_step_rules": [
         {
-          "on_success": "3.1"
+          "on_selection": "Yes, there's another persona",
+          "go_to": "3.1"
+        },
+        {
+          "on_selection": "No, that's all",
+          "go_to": "4.0"
         }
       ]
     },
     {
       "id": "3.1",
-      "step_order_index": 15,
-      "assistant_prompt": "**1. What is their core problem?**",
+      "step_order_index": 4,
+      "assistant_prompt": "Who was the second persona to answer your feedback?\n\nUse the slider below to select them.",
       "expected_inputs": [
         {
-          "type": "single_select",
-          "options": ["Health", "Wealth", "Love"]
+          "type": "persona_slider",
+          "source": "persona.final"
         }
       ],
-      "store_as": "persona_3.problem_type",
+      "store_as": "offer.persona_2",
       "next_step_rules": [
         {
           "on_success": "3.2"
@@ -243,15 +164,15 @@
     },
     {
       "id": "3.2",
-      "step_order_index": 16,
-      "assistant_prompt": "**2. How painful is the problem?**\n\nRate out of 10 — don't choose 7:",
+      "step_order_index": 4,
+      "assistant_prompt": "Based on their feedback:\n\n**How much pain are they experiencing?**\n\nRate out of 10 — don't choose 7:",
       "expected_inputs": [
         {
           "type": "single_select",
           "options": ["1", "2", "3", "4", "5", "6", "8", "9", "10"]
         }
       ],
-      "store_as": "persona_3.pain_level",
+      "store_as": "offer.persona_2.pain_level",
       "next_step_rules": [
         {
           "on_success": "3.3"
@@ -260,15 +181,15 @@
     },
     {
       "id": "3.3",
-      "step_order_index": 17,
-      "assistant_prompt": "**3. How much do they currently earn?**",
+      "step_order_index": 4,
+      "assistant_prompt": "**What's their problem area?**",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["$0–$25k", "$25k–$50k", "$50k–$100k", "$100k–$250k", "$250k+"]
+          "options": ["Health", "Wealth", "Love"]
         }
       ],
-      "store_as": "persona_3.income_level",
+      "store_as": "offer.persona_2.problem_area",
       "next_step_rules": [
         {
           "on_success": "3.4"
@@ -277,15 +198,15 @@
     },
     {
       "id": "3.4",
-      "step_order_index": 18,
-      "assistant_prompt": "**4. How easy are they to reach?**",
+      "step_order_index": 4,
+      "assistant_prompt": "**How much money do they have to spend on a solution?**",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["I have 20+ people in mind", "I know a few", "I don't know any"]
+          "options": ["$0–$25k", "$25k–$50k", "$50k–$100k", "$100k–$250k", "$250k+"]
         }
       ],
-      "store_as": "persona_3.ease_of_reach",
+      "store_as": "offer.persona_2.spending_capacity",
       "next_step_rules": [
         {
           "on_success": "3.5"
@@ -294,15 +215,156 @@
     },
     {
       "id": "3.5",
-      "step_order_index": 19,
-      "assistant_prompt": "**5. Is their market growing?**",
+      "step_order_index": 4,
+      "assistant_prompt": "**How large of a sunk cost do they have in their existing solution?**",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["Yes", "No", "Stable", "Don't know"]
+          "options": ["None - haven't tried anything", "Minimal ($0-$500)", "Moderate ($500-$5k)", "Significant ($5k-$50k)", "Substantial ($50k+)"]
         }
       ],
-      "store_as": "persona_3.market_growth",
+      "store_as": "offer.persona_2.sunk_cost",
+      "next_step_rules": [
+        {
+          "on_success": "3.6"
+        }
+      ]
+    },
+    {
+      "id": "3.6",
+      "step_order_index": 4,
+      "assistant_prompt": "**What emotion are they feeling?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Frustrated", "Desperate", "Hopeful", "Skeptical", "Overwhelmed", "Motivated", "Confused"]
+        }
+      ],
+      "store_as": "offer.persona_2.emotion",
+      "next_step_rules": [
+        {
+          "on_success": "3.7"
+        }
+      ]
+    },
+    {
+      "id": "3.7",
+      "step_order_index": 4,
+      "assistant_prompt": "Is there another persona who gave you feedback?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Yes, there's another persona", "No, that's all"]
+        }
+      ],
+      "store_as": "offer.has_persona_3",
+      "next_step_rules": [
+        {
+          "on_selection": "Yes, there's another persona",
+          "go_to": "3.8"
+        },
+        {
+          "on_selection": "No, that's all",
+          "go_to": "4.0"
+        }
+      ]
+    },
+    {
+      "id": "3.8",
+      "step_order_index": 4,
+      "assistant_prompt": "Who was the third persona to answer your feedback?\n\nUse the slider below to select them.",
+      "expected_inputs": [
+        {
+          "type": "persona_slider",
+          "source": "persona.final"
+        }
+      ],
+      "store_as": "offer.persona_3",
+      "next_step_rules": [
+        {
+          "on_success": "3.9"
+        }
+      ]
+    },
+    {
+      "id": "3.9",
+      "step_order_index": 4,
+      "assistant_prompt": "Based on their feedback:\n\n**How much pain are they experiencing?**\n\nRate out of 10 — don't choose 7:",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["1", "2", "3", "4", "5", "6", "8", "9", "10"]
+        }
+      ],
+      "store_as": "offer.persona_3.pain_level",
+      "next_step_rules": [
+        {
+          "on_success": "3.10"
+        }
+      ]
+    },
+    {
+      "id": "3.10",
+      "step_order_index": 4,
+      "assistant_prompt": "**What's their problem area?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Health", "Wealth", "Love"]
+        }
+      ],
+      "store_as": "offer.persona_3.problem_area",
+      "next_step_rules": [
+        {
+          "on_success": "3.11"
+        }
+      ]
+    },
+    {
+      "id": "3.11",
+      "step_order_index": 4,
+      "assistant_prompt": "**How much money do they have to spend on a solution?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["$0–$25k", "$25k–$50k", "$50k–$100k", "$100k–$250k", "$250k+"]
+        }
+      ],
+      "store_as": "offer.persona_3.spending_capacity",
+      "next_step_rules": [
+        {
+          "on_success": "3.12"
+        }
+      ]
+    },
+    {
+      "id": "3.12",
+      "step_order_index": 4,
+      "assistant_prompt": "**How large of a sunk cost do they have in their existing solution?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["None - haven't tried anything", "Minimal ($0-$500)", "Moderate ($500-$5k)", "Significant ($5k-$50k)", "Substantial ($50k+)"]
+        }
+      ],
+      "store_as": "offer.persona_3.sunk_cost",
+      "next_step_rules": [
+        {
+          "on_success": "3.13"
+        }
+      ]
+    },
+    {
+      "id": "3.13",
+      "step_order_index": 4,
+      "assistant_prompt": "**What emotion are they feeling?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Frustrated", "Desperate", "Hopeful", "Skeptical", "Overwhelmed", "Motivated", "Confused"]
+        }
+      ],
+      "store_as": "offer.persona_3.emotion",
       "next_step_rules": [
         {
           "on_success": "4.0"
@@ -311,15 +373,10 @@
     },
     {
       "id": "4.0",
-      "step_order_index": 20,
-      "assistant_prompt": "Great. Now — based on what you've shared, **choose one persona to move forward with**.\n\nIf you're unsure which audience to move forward with, here are a few principles to guide your decision:\n\n• Wealth-based problems are often the most straightforward to sell, because the return is measurable. If someone spends $X and can see how they might earn $Y in return, the value is clear.\n• Health-based problems come next, because the results are still quantifiable — losing x amount of kilos and adding x amount of muscle mass, the transformation can be clearly linked to the investment.\n• Love and emotional challenges are often the most meaningful but also the hardest to monetize, since the outcomes are less measurable and more subjective.\n• In general, the more painful the problem, the more motivated the person is to take action and pay for a solution.\n• The higher someone's income, the more they can afford — and that often means you can charge more for premium solutions.\n• If you already know people like your target audience, that's a great sign — the more people you know, the faster you can test and sell.\n• Finally, consider the trend: a growing market means new people are entering the space all the time, which increases your opportunity over the long term.\n\nWhich persona do you want to build your offer around?",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["Persona #1", "Persona #2", "Persona #3"]
-        }
-      ],
-      "store_as": "selected_persona",
+      "step_order_index": 5,
+      "assistant_prompt": "Perfect! Let's sharpen your niche by layering specificity.\n\nUse this structure:\n1. Problem you solve\n2. Problem + Who it's for\n3. Problem + Specific 'Who'\n4. Problem + Specific 'Who' + Domain area\n\n**Example:**\n1. Mental health\n2. Mental health for teenagers\n3. Mental health for anxious teenage girls\n4. Mental health for anxious teenage girls struggling with comparison\n\nShare your 4-layer niche for the audience you chose.\n\nAim for 4 bullet points following this structure.",
+      "expected_inputs": ["text_list"],
+      "store_as": "niche_layers",
       "next_step_rules": [
         {
           "on_success": "5.0"
@@ -328,10 +385,10 @@
     },
     {
       "id": "5.0",
-      "step_order_index": 21,
-      "assistant_prompt": "Perfect! Let's sharpen your niche by layering specificity.\n\nUse this structure:\n1. Problem you solve\n2. Problem + Who it's for\n3. Problem + Specific 'Who'\n4. Problem + Specific 'Who' + Domain area\n\n**Example:**\n1. Mental health\n2. Mental health for teenagers\n3. Mental health for anxious teenage girls\n4. Mental health for anxious teenage girls struggling with comparison\n\nShare your 4-layer niche for the audience you chose.\n\nAim for 4 bullet points following this structure.",
+      "step_order_index": 6,
+      "assistant_prompt": "Excellent. Now let's unpack why your audience hasn't solved their problem yet.\n\nList **at least 10 reasons** — internal, external, or motivational:\n• Internal belief (e.g., \"I'm not good enough\")\n• External blocker (e.g., \"I can't afford it\")\n• Motivation gap (e.g., \"I'll get to it eventually\")\n\nThese will become the raw ingredients of your offer.\n\nAim for 10+ bullet points.",
       "expected_inputs": ["text_list"],
-      "store_as": "niche_layers",
+      "store_as": "excuses_and_resistance",
       "next_step_rules": [
         {
           "on_success": "6.0"
@@ -340,10 +397,106 @@
     },
     {
       "id": "6.0",
-      "step_order_index": 22,
-      "assistant_prompt": "Excellent. Now let's unpack why your audience hasn't solved their problem yet.\n\nList **at least 10 reasons** — internal, external, or motivational:\n• Internal belief (e.g., \"I'm not good enough\")\n• External blocker (e.g., \"I can't afford it\")\n• Motivation gap (e.g., \"I'll get to it eventually\")\n\nThese will become the raw ingredients of your offer.\n\nAim for 10+ bullet points.",
-      "expected_inputs": ["text_list"],
-      "store_as": "excuses_and_resistance",
+      "step_order_index": 7,
+      "assistant_prompt": "Great list! Now for each reason, let's identify both **service** and **physical** solutions.\n\nI'll guide you through analyzing each excuse. For the first reason you listed, let's start with the **Service Solution**:\n\n**How do you make it better than existing solutions?**\n\nSelect all that apply and explain how:",
+      "expected_inputs": [
+        {
+          "type": "multi_select",
+          "options": ["Faster", "Easier", "Cheaper", "Better quality"]
+        },
+        {
+          "type": "free_text",
+          "label": "Explain how:"
+        }
+      ],
+      "store_as": "reason_1.service.advantages",
+      "next_step_rules": [
+        {
+          "on_success": "6.1"
+        }
+      ]
+    },
+    {
+      "id": "6.1",
+      "step_order_index": 7,
+      "assistant_prompt": "For this service solution:\n\n**Why would they trust you?**",
+      "expected_inputs": ["free_text"],
+      "store_as": "reason_1.service.trust_factor",
+      "next_step_rules": [
+        {
+          "on_success": "6.2"
+        }
+      ]
+    },
+    {
+      "id": "6.2",
+      "step_order_index": 7,
+      "assistant_prompt": "**How much does it solve their pain point?**\n\nRate out of 10:",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+        }
+      ],
+      "store_as": "reason_1.service.pain_solution_level",
+      "next_step_rules": [
+        {
+          "on_success": "6.3"
+        }
+      ]
+    },
+    {
+      "id": "6.3",
+      "step_order_index": 7,
+      "assistant_prompt": "Now let's explore the **Physical Solution** for this same reason.\n\n**How do you make it better than existing solutions?**\n\nSelect all that apply and explain how:",
+      "expected_inputs": [
+        {
+          "type": "multi_select",
+          "options": ["Faster", "Easier", "Cheaper", "Better quality"]
+        },
+        {
+          "type": "free_text",
+          "label": "Explain how:"
+        }
+      ],
+      "store_as": "reason_1.physical.advantages",
+      "next_step_rules": [
+        {
+          "on_success": "6.4"
+        }
+      ]
+    },
+    {
+      "id": "6.4",
+      "step_order_index": 7,
+      "assistant_prompt": "For this physical solution:\n\n**What investment is required?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Under $100", "$100-$500", "$500-$2,000", "$2,000-$10,000", "$10,000+"]
+        }
+      ],
+      "store_as": "reason_1.physical.investment",
+      "next_step_rules": [
+        {
+          "on_success": "6.5"
+        }
+      ]
+    },
+    {
+      "id": "6.5",
+      "step_order_index": 7,
+      "assistant_prompt": "**How much does it solve their pain point?**\n\nRate out of 10:",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+        }
+      ],
+      "store_as": "reason_1.physical.pain_solution_level",
+      "metadata": {
+        "note": "This step represents the analysis for the first reason. In production, this would loop through all reasons listed in step 5.0"
+      },
       "next_step_rules": [
         {
           "on_success": "7.0"
@@ -352,10 +505,10 @@
     },
     {
       "id": "7.0",
-      "step_order_index": 23,
-      "assistant_prompt": "Great list! Now let's create solutions for these excuses.\n\nFor each excuse you listed, answer these three questions:\n\n**1. What solution could help?**\n**2. If you could only charge 1/10th of the price, how would you deliver it?** (This forces simplicity and scalability.)\n**3. If you had to charge 1000x the price, how would you deliver it?** (This forces outrageous value and premium thinking.)\n\nWork through each excuse using this format. Take your time — this is where the magic happens.",
-      "expected_inputs": ["text_list"],
-      "store_as": "solutions_with_pricing",
+      "step_order_index": 8,
+      "assistant_prompt": "Excellent work analyzing your solutions!\n\nNow, **let's identify which solution you want to build.**\n\nBased on all the service and physical solutions you've explored, which one excites you most and has the strongest potential?",
+      "expected_inputs": ["free_text"],
+      "store_as": "chosen_solution",
       "next_step_rules": [
         {
           "on_success": "8.0"
@@ -364,61 +517,10 @@
     },
     {
       "id": "8.0",
-      "step_order_index": 24,
-      "assistant_prompt": "Brilliant work! Let's build your first lead magnet or offer.\n\n**1. Which solution do you want to turn into something real?**\n\nDescribe it briefly:",
-      "expected_inputs": ["text"],
-      "store_as": "lead_magnet.solution",
-      "next_step_rules": [
-        {
-          "on_success": "8.1"
-        }
-      ]
-    },
-    {
-      "id": "8.1",
-      "step_order_index": 25,
-      "assistant_prompt": "**2. What's the purpose of your lead magnet?**",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["Reveal the problem", "Give a free trial", "Provide step 1 of a bigger journey"]
-        }
-      ],
-      "store_as": "lead_magnet.purpose",
-      "next_step_rules": [
-        {
-          "on_success": "8.2"
-        }
-      ]
-    },
-    {
-      "id": "8.2",
-      "step_order_index": 26,
-      "assistant_prompt": "**3. What format will it take?**",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["Software", "Information product", "Service", "Physical product"]
-        }
-      ],
-      "store_as": "lead_magnet.format",
-      "next_step_rules": [
-        {
-          "on_success": "8.3"
-        }
-      ]
-    },
-    {
-      "id": "8.3",
-      "step_order_index": 27,
-      "assistant_prompt": "**4. Will you commit to building this this week?**",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": ["Yes, I'm committed", "I need more time to think", "I'll start next week"]
-        }
-      ],
-      "store_as": "lead_magnet.commitment",
+      "step_order_index": 9,
+      "assistant_prompt": "Perfect! Now let's make this real.\n\n**What does a minimum viable version of this look like?**\n\nDescribe the simplest version you could build that would still deliver value and solve the core problem. Think: What's the essential feature or component that makes this work?\n\nBe specific about:\n• What it includes\n• What it doesn't include (yet)\n• How someone would use it\n• What result they'd get",
+      "expected_inputs": ["text_block"],
+      "store_as": "mvp_description",
       "next_step_rules": [
         {
           "on_success": "9.0"
@@ -427,27 +529,15 @@
     },
     {
       "id": "9.0",
-      "step_order_index": 28,
-      "assistant_prompt": "Last step — let's sketch out your product ecosystem across 5 funnel stages:\n\n• **Awareness** – How do people first find you? (e.g., content, ads)\n• **Gifts** – What grabs their attention? (e.g., freebies, challenges)\n• **Product for Prospects** – What builds trust before the main offer? (e.g., low-ticket, mini-programs)\n• **Core Offering** – What delivers the big transformation?\n• **Product for Clients** – What helps them maintain success or go deeper long-term?\n\nFill out each one with your best draft — I'll help refine if needed.\n\nAim for 5 bullet points, one for each stage.",
-      "expected_inputs": ["text_list"],
-      "store_as": "funnel_stages",
-      "next_step_rules": [
-        {
-          "on_success": "10.0"
-        }
-      ]
-    },
-    {
-      "id": "10.0",
-      "step_order_index": 29,
-      "assistant_prompt": "Amazing work! You've just designed a complete $100M Offer framework.\n\nYou now have:\n• A clearly defined target audience\n• A specific niche\n• Deep understanding of their resistance\n• Solutions mapped to their excuses\n• A lead magnet ready to build\n• A complete product ecosystem\n\nWhat would you like to do next?",
+      "step_order_index": 10,
+      "assistant_prompt": "Amazing work! You've just designed a complete $100M Offer framework.\n\nYou now have:\n• Deep persona insights with pain levels and emotional states\n• A clearly defined niche\n• Understanding of their resistance\n• Both service and physical solutions mapped out\n• A chosen solution to build\n• An MVP plan ready to execute\n\nWhat would you like to do next?",
       "expected_inputs": [
         {
           "type": "single_select",
           "options": [
             "Continue to Money Model flow",
             "Return to /me page",
-            "Review my offer again"
+            "Start building my MVP"
           ]
         }
       ],
@@ -463,9 +553,9 @@
           "redirect": "/me"
         },
         {
-          "on_selection": "Review my offer again",
+          "on_selection": "Start building my MVP",
           "go_to": "complete",
-          "redirect": "/offers/review"
+          "redirect": "/flow-tracker"
         }
       ]
     }

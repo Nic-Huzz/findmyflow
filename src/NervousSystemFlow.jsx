@@ -32,6 +32,76 @@ function extractYesContracts(beliefTestResults) {
     .map(([contract]) => contract)
 }
 
+// Helper function to parse income goal string to number
+function parseIncomeGoal(incomeGoalString) {
+  if (!incomeGoalString) return 100000 // default
+
+  // Extract number from strings like "$1,000,000+" or "$500,000+"
+  const match = incomeGoalString.replace(/,/g, '').match(/\d+/)
+  return match ? parseInt(match[0], 10) : 100000
+}
+
+// Helper function to parse impact goal string to number
+function parseImpactGoal(impactGoalString) {
+  if (!impactGoalString) return 10000 // default
+
+  // Extract number from strings like "100,000+" or "10,000+"
+  const match = impactGoalString.replace(/,/g, '').match(/\d+/)
+  return match ? parseInt(match[0], 10) : 10000
+}
+
+// Helper function to format amount as currency
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount)
+}
+
+// Helper function to format impact as people count
+function formatPeople(amount) {
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount) + ' people'
+}
+
+// Helper function to evaluate conditional logic
+function evaluateConditional(conditional, context) {
+  if (!conditional) return true
+
+  // Handle simple equality checks like "triage_safe_earning_initial === 'yes'"
+  const match = conditional.match(/(\w+)\s*===\s*'(\w+)'/)
+  if (match) {
+    const [, varName, expectedValue] = match
+    return context[varName] === expectedValue
+  }
+
+  return true
+}
+
+// Helper function to extract archetype from AI reflection text
+function extractArchetype(reflectionText) {
+  if (!reflectionText) return null
+
+  // Look for patterns like "The Good Soldier", "The Hustling Healer", etc.
+  // Patterns: "The [Word]" or "The [Word] [Word]"
+  const match = reflectionText.match(/['"](The\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)['"]/i)
+  if (match) {
+    return match[1]
+  }
+
+  // Alternative pattern: mentions of archetype directly
+  const archetypeMatch = reflectionText.match(/archetype[:\s]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i)
+  if (archetypeMatch) {
+    return archetypeMatch[1]
+  }
+
+  return null
+}
+
 function NervousSystemFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -50,6 +120,13 @@ function NervousSystemFlow() {
   const [contractResults, setContractResults] = useState({}) // { contract: 'yes'/'no' }
   const [currentContractIndex, setCurrentContractIndex] = useState(0)
   const [isInContractMode, setIsInContractMode] = useState(false)
+
+  // Binary search state for income limit discovery
+  const [isInBinarySearchMode, setIsInBinarySearchMode] = useState(false)
+  const [binarySearchCurrentAmount, setBinarySearchCurrentAmount] = useState(null)
+  const [binarySearchPreviousYesAmount, setBinarySearchPreviousYesAmount] = useState(null)
+  const [binarySearchIteration, setBinarySearchIteration] = useState(0)
+  const [binarySearchDirection, setBinarySearchDirection] = useState(null) // 'doubling' or 'halving'
 
   // Fetch lead magnet data from Supabase
   const fetchLeadMagnetData = async () => {
@@ -146,6 +223,115 @@ function NervousSystemFlow() {
   }, [messages])
 
   const currentStep = flow?.steps?.[currentIndex]
+
+  // Calculate dynamic variables for a step based on metadata and context
+  const calculateDynamicVariables = (step, ctx) => {
+    const dynamicVars = {}
+
+    if (!step?.metadata?.binary_search) {
+      return dynamicVars
+    }
+
+    const metadata = step.metadata
+
+    // Determine if this is income or impact binary search
+    const isImpactSearch = metadata.base_amount === '{{impact_goal}}'
+    const isIncomeSearch = metadata.base_amount === '{{income_goal}}'
+
+    if (isImpactSearch) {
+      // Impact goal calculations (people)
+      const impactGoalNum = parseImpactGoal(ctx.impact_goal)
+
+      if (metadata.direction === 'doubling' && metadata.multiplier) {
+        const amount = impactGoalNum * metadata.multiplier
+        dynamicVars[`doubled_impact_${metadata.iteration}`] = formatPeople(amount)
+      } else if (metadata.direction === 'halving' && metadata.divisor) {
+        const amount = Math.max(
+          impactGoalNum / metadata.divisor,
+          metadata.min_floor || 10
+        )
+        dynamicVars[`halved_impact_${metadata.iteration}`] = formatPeople(amount)
+      }
+    } else if (isIncomeSearch) {
+      // Income goal calculations (currency)
+      const incomeGoalNum = parseIncomeGoal(ctx.income_goal)
+
+      if (metadata.direction === 'doubling' && metadata.multiplier) {
+        const amount = incomeGoalNum * metadata.multiplier
+        dynamicVars[`doubled_amount_${metadata.iteration}`] = formatCurrency(amount)
+      } else if (metadata.direction === 'halving' && metadata.divisor) {
+        const amount = Math.max(
+          incomeGoalNum / metadata.divisor,
+          metadata.min_floor || 10000
+        )
+        dynamicVars[`halved_amount_${metadata.iteration}`] = formatCurrency(amount)
+      }
+    }
+
+    return dynamicVars
+  }
+
+  // Find next valid step (skip steps that don't meet conditional)
+  const findNextStep = (startIndex, ctx) => {
+    let nextIndex = startIndex
+
+    while (nextIndex < flow?.steps?.length) {
+      const step = flow.steps[nextIndex]
+
+      // Check if step's conditional is met
+      if (evaluateConditional(step.conditional, ctx)) {
+        return { step, index: nextIndex }
+      }
+
+      nextIndex++
+    }
+
+    return { step: null, index: nextIndex }
+  }
+
+  // Complete binary search and store discovered limit
+  const completeBinarySearch = async (limitAmount, ctx, searchType = 'income') => {
+    console.log(`✅ Binary search complete! ${searchType} limit found:`, limitAmount)
+
+    const newContext = { ...ctx }
+    let completionStepName
+    let limitVarName
+
+    if (searchType === 'impact') {
+      newContext.nervous_system_impact_limit = formatPeople(limitAmount)
+      completionStepName = 'stage4_triage_1_complete'
+      limitVarName = 'nervous_system_impact_limit'
+    } else {
+      // income
+      newContext.nervous_system_income_limit = formatCurrency(limitAmount)
+      completionStepName = 'stage4_triage_2_complete'
+      limitVarName = 'nervous_system_income_limit'
+    }
+
+    setContext(newContext)
+
+    // Find the completion step
+    const completionStep = flow?.steps?.find(s => s.step === completionStepName)
+
+    if (completionStep) {
+      const completionIndex = flow.steps.indexOf(completionStep)
+      let responseText = await resolvePrompt(completionStep, newContext)
+
+      // Replace the limit variable in the response
+      responseText = responseText.replace(`{{${limitVarName}}}`, newContext[limitVarName])
+
+      const aiMessage = {
+        id: `ai-${Date.now()}`,
+        isAI: true,
+        text: responseText,
+        timestamp: new Date().toLocaleTimeString()
+      }
+
+      setMessages(prev => [...prev, aiMessage])
+      setCurrentIndex(completionIndex)
+      setIsInBinarySearchMode(false)
+    }
+  }
 
   // Generate contracts based on user context and start contract testing mode
   const startContractTesting = (newContext) => {
@@ -309,6 +495,9 @@ function NervousSystemFlow() {
               user_name: newContext.user_name || 'Anonymous',
               impact_goal: newContext.impact_goal,
               income_goal: newContext.income_goal,
+              nervous_system_impact_limit: newContext.nervous_system_impact_limit,
+              nervous_system_income_limit: newContext.nervous_system_income_limit,
+              archetype: newContext.archetype,
               positive_change: newContext.positive_change,
               current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,
@@ -416,6 +605,8 @@ function NervousSystemFlow() {
               user_name: newContext.user_name || 'Anonymous',
               impact_goal: newContext.impact_goal,
               income_goal: newContext.income_goal,
+              nervous_system_income_limit: newContext.nervous_system_income_limit,
+              archetype: newContext.archetype,
               positive_change: newContext.positive_change,
               current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,
@@ -453,17 +644,114 @@ function NervousSystemFlow() {
       return
     }
 
-    // Move to next step
-    const nextIndex = currentIndex + 1
-    const nextStep = flow?.steps?.[nextIndex]
+    // Check if this is a binary search step and handle accordingly
+    if (currentStep?.metadata?.binary_search) {
+      const metadata = currentStep.metadata
+      const response = optionValue.toLowerCase()
+
+      // Determine if this is impact or income search
+      const isImpactSearch = metadata.base_amount === '{{impact_goal}}'
+      const searchType = isImpactSearch ? 'impact' : 'income'
+
+      // Parse the appropriate goal value
+      const goalNum = isImpactSearch
+        ? parseImpactGoal(newContext.impact_goal)
+        : parseIncomeGoal(newContext.income_goal)
+
+      const minFloor = isImpactSearch ? 10 : 10000
+
+      // Initial test
+      if (metadata.initial_test) {
+        console.log(`🔍 Initial ${searchType} binary search test:`, response)
+
+        if (response === 'yes') {
+          // Start doubling path
+          setBinarySearchDirection('doubling')
+          setBinarySearchPreviousYesAmount(goalNum)
+        } else {
+          // Start halving path
+          setBinarySearchDirection('halving')
+        }
+
+        setIsInBinarySearchMode(true)
+        setBinarySearchIteration(0)
+      }
+      // Doubling path - testing higher amounts
+      else if (metadata.direction === 'doubling') {
+        const currentTestAmount = goalNum * metadata.multiplier
+
+        if (response === 'no') {
+          // Hit their limit! Previous YES is the limit
+          const limit = metadata.previous_yes_amount
+          const limitNum = typeof limit === 'string' && limit.startsWith('{{')
+            ? (isImpactSearch
+                ? parseImpactGoal(newContext[limit.slice(2, -2)])
+                : parseIncomeGoal(newContext[limit.slice(2, -2)]))
+            : (binarySearchPreviousYesAmount || goalNum)
+
+          await completeBinarySearch(limitNum, newContext, searchType)
+          setIsLoading(false)
+          return
+        } else {
+          // They can go higher
+          setBinarySearchPreviousYesAmount(currentTestAmount)
+
+          // Check if final iteration
+          if (metadata.final_iteration) {
+            // They said YES at max iteration - this is their limit
+            await completeBinarySearch(currentTestAmount, newContext, searchType)
+            setIsLoading(false)
+            return
+          }
+        }
+      }
+      // Halving path - testing lower amounts
+      else if (metadata.direction === 'halving') {
+        const currentTestAmount = Math.max(
+          goalNum / metadata.divisor,
+          metadata.min_floor || minFloor
+        )
+
+        if (response === 'yes') {
+          // Found their limit!
+          await completeBinarySearch(currentTestAmount, newContext, searchType)
+          setIsLoading(false)
+          return
+        } else {
+          // Need to go lower
+          if (metadata.final_iteration) {
+            // Hit floor at final iteration
+            await completeBinarySearch(metadata.min_floor || minFloor, newContext, searchType)
+            setIsLoading(false)
+            return
+          }
+        }
+      }
+    }
+
+    // Find next valid step (respecting conditionals)
+    const { step: nextStep, index: nextIndex } = findNextStep(currentIndex + 1, newContext)
 
     if (nextStep) {
-      // Add AI response
-      const responseText = await resolvePrompt(nextStep, newContext)
+      // Calculate dynamic variables for this step
+      const dynamicVars = calculateDynamicVariables(nextStep, newContext)
 
-      // If this is the mirror reflection step, store the generated text
+      // Add AI response with dynamic variable replacement
+      let responseText = await resolvePrompt(nextStep, { ...newContext, ...dynamicVars })
+
+      // Replace any remaining dynamic variables
+      Object.keys(dynamicVars).forEach(key => {
+        responseText = responseText.replace(`{{${key}}}`, dynamicVars[key])
+      })
+
+      // If this is the mirror reflection step, store the generated text and extract archetype
       if (nextStep.step === 'stage6_mirror_reflection') {
         newContext.pattern_mirrored = responseText
+        const archetype = extractArchetype(responseText)
+        if (archetype) {
+          newContext.archetype = archetype
+          console.log('🎭 Extracted archetype:', archetype)
+        }
         setContext(newContext)
       }
 
@@ -494,6 +782,9 @@ function NervousSystemFlow() {
               user_name: newContext.user_name || 'Anonymous',
               impact_goal: newContext.impact_goal,
               income_goal: newContext.income_goal,
+              nervous_system_impact_limit: newContext.nervous_system_impact_limit,
+              nervous_system_income_limit: newContext.nervous_system_income_limit,
+              archetype: newContext.archetype,
               positive_change: newContext.positive_change,
               current_struggle: newContext.struggle_area,
               belief_test_results: newContext.belief_test_results,

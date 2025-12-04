@@ -1,0 +1,393 @@
+[
+  {
+    "id": "payment_plan_downsell",
+    "name": "Payment Plan Downsells",
+    "description": "Offer the same product with flexible payment terms—spread cost over time, offer financing, or use the 7-step downsell framework. Customers pay full price (or more) but with less upfront cost.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FD1_payment_processing",
+        "FD2_completion_tracking"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "payment_flexibility",
+          "disallowed": ["no_must_pay_full"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_business_type": {
+        "high_ticket_service": 4,
+        "mid_ticket_service": 3,
+        "low_ticket_service": 1,
+        "physical_product": 2,
+        "digital_product": 2,
+        "saas_software": 3,
+        "membership_subscription": 2
+      },
+      "Q2_price_point": {
+        "under_100": -1,
+        "100_to_500": 1,
+        "500_to_2000": 3,
+        "2000_to_5000": 4,
+        "5000_to_10000": 4,
+        "over_10000": 3
+      },
+      "Q3_main_objection": {
+        "too_expensive_upfront": 5,
+        "not_sure_it_works": 2,
+        "timing_not_right": 3,
+        "prefer_cheaper_option": -2,
+        "want_to_try_first": 1,
+        "dont_need_all_features": -2,
+        "payment_terms_inflexible": 5
+      },
+      "Q4_payment_flexibility": {
+        "yes_already_do": 4,
+        "yes_could_implement": 3,
+        "maybe_need_setup": 1,
+        "no_must_pay_full": -5
+      },
+      "Q5_feature_modularity": {
+        "yes_easily_modular": 1,
+        "yes_have_lite_version": 0,
+        "maybe_could_create": 0,
+        "no_all_or_nothing": 2
+      },
+      "Q6_current_close_rate": {
+        "under_10_percent": 3,
+        "10_to_25_percent": 4,
+        "25_to_50_percent": 3,
+        "50_to_75_percent": 1,
+        "over_75_percent": 0
+      },
+      "Q7_cancellation_rate": {
+        "under_5_percent": 2,
+        "5_to_15_percent": 3,
+        "15_to_30_percent": 1,
+        "over_30_percent": -2,
+        "dont_track": 0
+      },
+      "Q8_trial_capability": {
+        "yes_can_track_completion": 1,
+        "yes_with_some_setup": 0,
+        "maybe_not_sure_how": 0,
+        "no_cant_enforce": 0
+      },
+      "Q9_sales_process": {
+        "live_sales_calls": 4,
+        "automated_checkout": 2,
+        "hybrid_both": 4,
+        "in_person": 4,
+        "email_follow_up": 2
+      },
+      "Q10_downsell_goal": {
+        "increase_conversions": 4,
+        "reduce_cart_abandonment": 3,
+        "retain_canceling_customers": 2,
+        "offer_budget_options": 2,
+        "maximize_revenue_per_lead": 4
+      }
+    },
+
+    "max_possible_score": 37,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Same [Product], Flexible Payments",
+        "Get Everything You Want—Pay Over Time",
+        "Full Price, Zero Upfront"
+      ],
+      "offer_structure": [
+        "Step 1: Present full price, offer discount if they pay in full (reward prepayment)",
+        "Step 2: If no, offer 3rd party financing, credit card, or layaway options",
+        "Step 3: If no, offer half now, half later (split on paycheck schedule)",
+        "Step 4: Check desire level (1-10 scale). If 8+, continue. If 7-, consider feature downsell",
+        "Step 5: Offer split into three payments (1/3 down, schedule on paychecks or monthly)",
+        "Step 6: Offer evenly spread payments over service duration (e.g., 16-week program = 16 weekly payments)",
+        "Step 7: As last resort, offer Free Trial with completion requirements"
+      ],
+      "upsell_sequence": [
+        "During payment plan: Offer original discount price if they pay balance in full today",
+        "Mid-plan: Offer periodic upsells for additional features at discount (only paid if they complete plan)"
+      ],
+      "followup_sequence": [
+        "Day 0: Welcome, explain payment schedule, align with paycheck dates",
+        "Day 3: Value reinforcement—remind them why they bought",
+        "Day 7: Quick win—help them see results to increase completion",
+        "Payment reminder: 2 days before each payment, remind and provide value",
+        "Completion: Celebrate when they finish paying, offer upsell to next tier"
+      ],
+      "metrics": [
+        "Close rate increase (should go up with payment plans)",
+        "Paid-in-full rate (should NOT decrease—if it does, you have a problem)",
+        "Payment plan completion rate (aim for 70%+ completion)",
+        "Total revenue per lead (should increase significantly)",
+        "30-day profit boost (more cash collected from 'no' customers)"
+      ]
+    }
+  },
+  {
+    "id": "trial_with_penalty",
+    "name": "Trial With Penalty",
+    "description": "Let customers try your product/service for free as long as they meet specific requirements (show up, do homework, complete actions). If they don't comply, they pay fees. Uses 'avoiding fees' as motivator rather than 'winning money back.'",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FD3_tracking_capability",
+        "FD4_enforcement_willingness"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "trial_capability",
+          "disallowed": ["no_cant_enforce"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_business_type": {
+        "high_ticket_service": 4,
+        "mid_ticket_service": 4,
+        "low_ticket_service": 3,
+        "physical_product": 1,
+        "digital_product": 2,
+        "saas_software": 3,
+        "membership_subscription": 4
+      },
+      "Q2_price_point": {
+        "under_100": 1,
+        "100_to_500": 2,
+        "500_to_2000": 4,
+        "2000_to_5000": 4,
+        "5000_to_10000": 3,
+        "over_10000": 2
+      },
+      "Q3_main_objection": {
+        "too_expensive_upfront": 3,
+        "not_sure_it_works": 5,
+        "timing_not_right": 2,
+        "prefer_cheaper_option": 1,
+        "want_to_try_first": 5,
+        "dont_need_all_features": 0,
+        "payment_terms_inflexible": 2
+      },
+      "Q4_payment_flexibility": {
+        "yes_already_do": 2,
+        "yes_could_implement": 2,
+        "maybe_need_setup": 1,
+        "no_must_pay_full": 0
+      },
+      "Q5_feature_modularity": {
+        "yes_easily_modular": 1,
+        "yes_have_lite_version": 1,
+        "maybe_could_create": 0,
+        "no_all_or_nothing": 1
+      },
+      "Q6_current_close_rate": {
+        "under_10_percent": 4,
+        "10_to_25_percent": 4,
+        "25_to_50_percent": 3,
+        "50_to_75_percent": 1,
+        "over_75_percent": -1
+      },
+      "Q7_cancellation_rate": {
+        "under_5_percent": 3,
+        "5_to_15_percent": 4,
+        "15_to_30_percent": 2,
+        "over_30_percent": 1,
+        "dont_track": 0
+      },
+      "Q8_trial_capability": {
+        "yes_can_track_completion": 5,
+        "yes_with_some_setup": 3,
+        "maybe_not_sure_how": 0,
+        "no_cant_enforce": -5
+      },
+      "Q9_sales_process": {
+        "live_sales_calls": 4,
+        "automated_checkout": 1,
+        "hybrid_both": 3,
+        "in_person": 4,
+        "email_follow_up": 1
+      },
+      "Q10_downsell_goal": {
+        "increase_conversions": 4,
+        "reduce_cart_abandonment": 2,
+        "retain_canceling_customers": 3,
+        "offer_budget_options": 2,
+        "maximize_revenue_per_lead": 4
+      }
+    },
+
+    "max_possible_score": 38,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Try It Free—Pay Only If You Don't Show Up",
+        "Free Trial With Accountability",
+        "Get Results Risk-Free (Or Get Charged)"
+      ],
+      "offer_structure": [
+        "Step 1: Get their credit card FIRST (to 'complete account profile'—'that's just how we've always done it')",
+        "Step 2: THEN explain the trial terms and what they must do to keep it free",
+        "Step 3: Sell 'staying and paying'—explain how long it takes to hit their goal (X months minimum)",
+        "Step 4: Sell consumption commitments—what they must do: show up, do homework, attend calls, post progress",
+        "Step 5: Explain fees—missed workout $XX, missed call $XX (associate fees with non-consumption, not with penalties)",
+        "Step 6: Require sales consultation attendance (3 check-ins = upsell opportunities)"
+      ],
+      "upsell_sequence": [
+        "Check-in 1 (Week 1-2): If they like it, upsell to paid (set up billing, offer upgrade)",
+        "Check-in 2 (Week 3-4): If they hate it, diagnose why and offer better fit (turn frown upside down)",
+        "Check-in 3 (End of trial): If they didn't use it, reach out multiple times, offer fee waiver if they return, or offer better product"
+      ],
+      "followup_sequence": [
+        "Day 0: Welcome, set expectations, explain how to avoid all fees and stay free forever",
+        "Day 1: First action reminder—get them to complete first requirement immediately",
+        "Day 3: Quick win—help them see value so they WANT to upgrade",
+        "Mid-trial check-ins: Make offers based on usage (like it = upsell, hate it = swap, not using = re-engage)",
+        "End of trial: Convert to paid if they love it, or charge accumulated fees if they didn't comply"
+      ],
+      "metrics": [
+        "Card capture rate (should be very high—card first, terms second)",
+        "Trial activation rate (did they actually start using it?)",
+        "Compliance rate (% completing requirements to avoid fees)",
+        "Trial-to-paid conversion (can double your conversions: close 3/10 on main, 4/10 on trial = 6 total)",
+        "Average fee collected (from non-compliant users)",
+        "Long-term customer value (trials who convert tend to stay longer)"
+      ]
+    }
+  },
+  {
+    "id": "feature_downsell",
+    "name": "Feature Downsells",
+    "description": "Remove features, quantity, quality, or optional components to lower price and find the best deal for the customer. Remove highest-value features first so customers 're-upsell' themselves when they see the value of what's missing.",
+
+    "eligibility_rules": {
+      "required_followups": [
+        "FD5_feature_tiers",
+        "FD6_value_positioning"
+      ],
+      "hard_disqualifiers": [
+        {
+          "field": "feature_modularity",
+          "disallowed": ["no_all_or_nothing"]
+        }
+      ]
+    },
+
+    "scoring_weights": {
+      "Q1_business_type": {
+        "high_ticket_service": 3,
+        "mid_ticket_service": 4,
+        "low_ticket_service": 4,
+        "physical_product": 4,
+        "digital_product": 4,
+        "saas_software": 5,
+        "membership_subscription": 3
+      },
+      "Q2_price_point": {
+        "under_100": 2,
+        "100_to_500": 3,
+        "500_to_2000": 3,
+        "2000_to_5000": 4,
+        "5000_to_10000": 3,
+        "over_10000": 2
+      },
+      "Q3_main_objection": {
+        "too_expensive_upfront": 3,
+        "not_sure_it_works": 1,
+        "timing_not_right": 0,
+        "prefer_cheaper_option": 5,
+        "want_to_try_first": 2,
+        "dont_need_all_features": 5,
+        "payment_terms_inflexible": 0
+      },
+      "Q4_payment_flexibility": {
+        "yes_already_do": 1,
+        "yes_could_implement": 1,
+        "maybe_need_setup": 0,
+        "no_must_pay_full": 0
+      },
+      "Q5_feature_modularity": {
+        "yes_easily_modular": 5,
+        "yes_have_lite_version": 4,
+        "maybe_could_create": 2,
+        "no_all_or_nothing": -5
+      },
+      "Q6_current_close_rate": {
+        "under_10_percent": 4,
+        "10_to_25_percent": 4,
+        "25_to_50_percent": 3,
+        "50_to_75_percent": 2,
+        "over_75_percent": 0
+      },
+      "Q7_cancellation_rate": {
+        "under_5_percent": 2,
+        "5_to_15_percent": 3,
+        "15_to_30_percent": 4,
+        "over_30_percent": 3,
+        "dont_track": 0
+      },
+      "Q8_trial_capability": {
+        "yes_can_track_completion": 2,
+        "yes_with_some_setup": 1,
+        "maybe_not_sure_how": 0,
+        "no_cant_enforce": 0
+      },
+      "Q9_sales_process": {
+        "live_sales_calls": 4,
+        "automated_checkout": 3,
+        "hybrid_both": 4,
+        "in_person": 4,
+        "email_follow_up": 2
+      },
+      "Q10_downsell_goal": {
+        "increase_conversions": 4,
+        "reduce_cart_abandonment": 3,
+        "retain_canceling_customers": 4,
+        "offer_budget_options": 5,
+        "maximize_revenue_per_lead": 3
+      }
+    },
+
+    "max_possible_score": 39,
+
+    "funnel_template": {
+      "headline_patterns": [
+        "Let's Find the Right Package for Your Budget",
+        "Same Solution, Smaller Investment",
+        "Pick What You Need, Pay for What You Use"
+      ],
+      "offer_structure": [
+        "Step 1: Remove features from HIGHEST to LOWEST value (so they see what they're losing)",
+        "Step 2: After removing each feature, show new lower price and ask 'How about now?'",
+        "Step 3: Temperature check after 2 downsells (1-10 scale). If 8+, keep going. If 7-, try payment plan.",
+        "Step 4: Position yourself as helpful guide finding the BEST DEAL for them (not just cheapest)",
+        "Step 5: People see the VALUE in removed features AFTER seeing price difference (they re-upsell themselves)",
+        "Step 6: If they like a combo but not the price, START PAYMENT PLAN downselling (very effective)"
+      ],
+      "upsell_sequence": [
+        "After downsell purchase: Mid-experience upsell to add back removed features when they see value",
+        "If they choose 'minimum': Later offer free orientation or training on removed features, then upsell",
+        "For current customers: Feature downsell BEFORE they cancel—becomes 2nd highest LTV group"
+      ],
+      "followup_sequence": [
+        "Day 0: Welcome, reinforce their choice was smart (best deal for them)",
+        "Week 1: Deliver massive value with what they bought",
+        "Week 2-3: Show examples of what premium features enable (plant seed)",
+        "Month 1: 'How's it going?' check-in—diagnose if they're hitting limits",
+        "Month 2: Offer upgrade to add back specific features they need now"
+      ],
+      "metrics": [
+        "Downsell conversion rate (should capture 20-40% of 'no' customers)",
+        "Re-upsell rate (% of downsell customers who upgrade later)",
+        "Revenue per lead (total, including downsells)",
+        "Customer satisfaction (feature downsell customers often have HIGHER satisfaction—you helped them)",
+        "Retention rate of downsell customers vs. cancellations prevented"
+      ]
+    }
+  }
+]

@@ -2,6 +2,11 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './App'
 import PersonaAssessment from './PersonaAssessment'
+import AttractionOfferFlow from './AttractionOfferFlow'
+import UpsellFlow from './UpsellFlow'
+import DownsellFlow from './DownsellFlow'
+import ContinuityFlow from './ContinuityFlow'
+import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
 import NervousSystemFlow from './NervousSystemFlow'
@@ -15,11 +20,18 @@ import NotificationSettings from './components/NotificationSettings'
 import RetreatLanding from './RetreatLanding'
 import FlowLibrary from './FlowLibrary'
 import FlowTracker from './pages/FlowTracker'
+import PublicValidationFlow from './pages/PublicValidationFlow'
+import ValidationFlowsManager from './pages/ValidationFlowsManager'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
 import './App.css'
 import './PersonaAssessment.css'
+import './AttractionOfferFlow.css'
+import './UpsellFlow.css'
+import './DownsellFlow.css'
+import './ContinuityFlow.css'
+import './MoneyModelGuide.css'
 import './Profile.css'
 import './Auth.css'
 import './HybridEssenceFlow.css'
@@ -36,10 +48,29 @@ function AppRouter() {
             {/* Homepage - Persona Assessment */}
             <Route path="/" element={<PersonaAssessment />} />
 
+            {/* Attraction Offer Assessment - Public Lead Magnet */}
+            <Route path="/attraction-offer" element={<AttractionOfferFlow />} />
+
+            {/* Upsell Offer Assessment - Public Lead Magnet */}
+            <Route path="/upsell-offer" element={<UpsellFlow />} />
+
+            {/* Downsell Offer Assessment - Public Lead Magnet */}
+            <Route path="/downsell-offer" element={<DownsellFlow />} />
+
+            {/* Continuity Offer Assessment - Public Lead Magnet */}
+            <Route path="/continuity-offer" element={<ContinuityFlow />} />
+
+            {/* Money Model Guide - Educational Overview */}
+            <Route path="/money-model-guide" element={<MoneyModelGuide />} />
+
             {/* Legacy lead magnet flow */}
             <Route path="/lead-magnet" element={<App />} />
 
             <Route path="/retreats" element={<RetreatLanding />} />
+
+            {/* Public Validation Flow - No Auth Required */}
+            <Route path="/v/:shareToken" element={<PublicValidationFlow />} />
+
             <Route path="/me" element={
               <AuthGate>
                 <Profile />
@@ -120,6 +151,13 @@ function AppRouter() {
             <Route path="/flow-tracker" element={
               <AuthGate>
                 <FlowTracker />
+              </AuthGate>
+            } />
+
+            {/* Validation Flows Manager */}
+            <Route path="/validation-flows" element={
+              <AuthGate>
+                <ValidationFlowsManager />
               </AuthGate>
             } />
 

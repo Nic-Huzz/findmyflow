@@ -1,0 +1,626 @@
+{
+  "version": "1.0.0",
+  "metadata": {
+    "last_updated": "2025-12-04",
+    "description": "Templates for formatting attraction offer recommendations based on confidence levels and user profile"
+  },
+
+  "recommendation_levels": {
+    "primary": {
+      "label": "Primary Recommendation",
+      "min_confidence": 0.55,
+      "description": "Best fit based on your business profile",
+      "color": "#10B981",
+      "icon": "trophy"
+    },
+    "secondary": {
+      "label": "Secondary Recommendation",
+      "min_confidence": 0.3,
+      "description": "Strong alternative worth considering",
+      "color": "#3B82F6",
+      "icon": "star"
+    },
+    "experimental": {
+      "label": "Experimental Option",
+      "min_confidence": 0.2,
+      "description": "Worth testing in specific scenarios",
+      "color": "#8B5CF6",
+      "icon": "beaker"
+    }
+  },
+
+  "primary_recommendation_template": {
+    "structure": [
+      "header",
+      "confidence_score",
+      "quick_summary",
+      "why_this_works",
+      "key_success_factors",
+      "implementation_checklist",
+      "funnel_structure",
+      "metrics_to_track",
+      "warnings_and_disclaimers",
+      "next_steps"
+    ],
+
+    "header": {
+      "format": "🏆 {offer_name}",
+      "subtitle": "Your Best-Fit Attraction Offer",
+      "show_confidence_badge": true
+    },
+
+    "confidence_score": {
+      "format": "Match Confidence: {confidence_percentage}%",
+      "show_visual_bar": true,
+      "interpretation": {
+        "0.80_to_1.00": "Excellent fit - This offer aligns perfectly with your business model",
+        "0.70_to_0.79": "Very strong fit - High confidence this will work for you",
+        "0.60_to_0.69": "Strong fit - Good alignment with your current setup",
+        "0.55_to_0.59": "Solid fit - Should work well with proper execution"
+      }
+    },
+
+    "quick_summary": {
+      "format": "## What This Is\n\n{offer_short_description}\n\n**Best For:** {ideal_business_types}\n\n**Key Benefit:** {primary_benefit}",
+      "use_offer_metadata": true
+    },
+
+    "why_this_works": {
+      "intro": "## Why This Works For Your Business",
+      "reasoning_points": [
+        {
+          "condition": "business_model",
+          "template": "✓ **{business_model_label}** businesses excel with this model because {business_model_reason}"
+        },
+        {
+          "condition": "gross_margin",
+          "template": "✓ Your **{gross_margin_label}** margins give you {margin_flexibility_description}"
+        },
+        {
+          "condition": "cashflow_tolerance",
+          "template": "✓ Your cashflow tolerance ({cashflow_label}) {cashflow_alignment_description}"
+        },
+        {
+          "condition": "capacity",
+          "template": "✓ Your capacity level ({capacity_label}) {capacity_match_description}"
+        },
+        {
+          "condition": "tracking_ability",
+          "template": "✓ Your tracking capability ({tracking_label}) {tracking_requirement_match}"
+        },
+        {
+          "condition": "backend_strength",
+          "template": "✓ **Critical:** Your {backend_label} {backend_monetization_fit}"
+        },
+        {
+          "condition": "primary_goal",
+          "template": "✓ This offer is specifically designed to {goal_alignment_description}"
+        }
+      ],
+      "format": "bullet_list",
+      "show_top_n_reasons": 5
+    },
+
+    "key_success_factors": {
+      "intro": "## Critical Success Factors",
+      "offer_specific_requirements": {
+        "win_your_money_back": [
+          "**Tracking System:** Must reliably track customer completion (70% hit their goal in successful programs)",
+          "**Strong Backend:** Main profit comes from upsells and repeat purchases, not front-end",
+          "**Clear Criteria:** Define exactly what actions qualify for refund (workouts logged, modules completed, etc.)",
+          "**Testimonial Strategy:** Majority who succeed become case studies and advocates",
+          "**Store Credit Preferred:** Offering store credit vs cash refund keeps money in ecosystem"
+        ],
+        "giveaway": [
+          "**Meaningful Prize:** Must be valuable enough to attract attention (scholarship, full program, etc.)",
+          "**Legal Compliance:** Publish clear terms & conditions, check local sweepstakes laws",
+          "**Non-Winner Offer:** 80-90% of entrants should get discounted offer (partial scholarship)",
+          "**Backend Upsells:** Make profit on what people buy after entering, not on entry",
+          "**Volume Capacity:** Must handle large influx of leads without breaking systems"
+        ],
+        "decoy_offer": [
+          "**Three-Tier Pricing:** Good, Better, Best structure required",
+          "**Premium Positioning:** 70-80% should choose premium when positioned correctly",
+          "**Immediate Profit:** This model profits on front-end, not just backend",
+          "**Clear Differentiation:** Each tier must have obvious value differences",
+          "**Anchor Pricing:** Most expensive option makes premium look reasonable"
+        ],
+        "buy_x_get_y_free": [
+          "**Repeat Purchase:** Only works if customers buy multiple times (supplements, meals, etc.)",
+          "**Margin Buffer:** Must afford to give away free units without losing money",
+          "**Volume Capacity:** Expect significant spike in orders",
+          "**Perceived Value:** 'Get 2 Free' feels better than 33% discount even if same math",
+          "**Clear Redemption:** Simple rules for claiming free units"
+        ],
+        "pay_less_now_or_pay_more_later": [
+          "**Strong Urgency:** Must have real deadline (price increases X date, spots fill, etc.)",
+          "**Backend Revenue:** Comfortable with delayed cashflow, profit comes later",
+          "**Satisfaction Guarantee:** If not satisfied, they pay nothing more",
+          "**Clear Price Increase:** Specific dollar amount increase if they wait",
+          "**Follow-Up Sequence:** Strong email sequence to convert 'wait and see' prospects"
+        ],
+        "free_with_consumption_to_upsell": [
+          "**Natural Upsell Path:** Trial must naturally lead to wanting more",
+          "**Low Delivery Cost:** Free trial can't hurt margins significantly",
+          "**Educational Approach:** Use free session to break false beliefs, not just pitch",
+          "**Strong Backend:** All profit comes from upsell, not free offer",
+          "**Qualification Filter:** Free trial should still attract right people, not tire-kickers"
+        ]
+      },
+      "format": "bulleted_list_with_icons"
+    },
+
+    "implementation_checklist": {
+      "intro": "## Implementation Checklist",
+      "use_funnel_template": true,
+      "sections": [
+        {
+          "title": "1. Offer Design",
+          "items_from": "funnel_template.offer_structure"
+        },
+        {
+          "title": "2. Landing Page & Headlines",
+          "items_from": "funnel_template.headlines"
+        },
+        {
+          "title": "3. Upsell Sequence",
+          "items_from": "funnel_template.upsell_sequence"
+        },
+        {
+          "title": "4. Follow-Up System",
+          "items_from": "funnel_template.follow_up_emails"
+        },
+        {
+          "title": "5. Tracking & Metrics",
+          "items_from": "metrics_to_track"
+        }
+      ],
+      "format": "expandable_sections"
+    },
+
+    "funnel_structure": {
+      "intro": "## Your Complete Funnel Template",
+      "sections": {
+        "headlines": {
+          "label": "Headline Examples",
+          "source": "funnel_template.headlines",
+          "format": "list",
+          "show_customization_tips": true
+        },
+        "offer_structure": {
+          "label": "Offer Structure",
+          "source": "funnel_template.offer_structure",
+          "format": "step_by_step",
+          "numbered": true
+        },
+        "upsell_sequence": {
+          "label": "Upsell Sequence",
+          "source": "funnel_template.upsell_sequence",
+          "format": "flow_diagram",
+          "show_order_of_operations": true
+        },
+        "follow_up_emails": {
+          "label": "Email Follow-Up Sequence",
+          "source": "funnel_template.follow_up_emails",
+          "format": "timeline",
+          "show_timing": true
+        }
+      },
+      "show_example_from_pdf": true
+    },
+
+    "metrics_to_track": {
+      "intro": "## Key Metrics to Track",
+      "primary_metrics": {
+        "source": "funnel_template.metrics",
+        "display": "card_grid",
+        "show_targets": true
+      },
+      "calculation_formulas": {
+        "ltv_to_cac": {
+          "label": "LTV:CAC Ratio",
+          "formula": "(Average Customer Lifetime Value) ÷ (Customer Acquisition Cost)",
+          "target": "≥ 3:1",
+          "why_it_matters": "Most attraction offers break even or lose on front-end, profit on backend"
+        },
+        "backend_conversion": {
+          "label": "Backend Conversion Rate",
+          "formula": "(Customers Who Buy Upsells) ÷ (Total Front-End Customers)",
+          "target": "Varies by offer",
+          "why_it_matters": "This is where you make your profit"
+        },
+        "effective_cpa": {
+          "label": "Effective CPA",
+          "formula": "(Total Ad Spend) ÷ (Total New Customers)",
+          "target": "< 1/3 of Average Order Value",
+          "why_it_matters": "Measures true cost to acquire customer through entire funnel"
+        }
+      },
+      "offer_specific_metrics": {
+        "win_your_money_back": [
+          "Completion rate (target: 70%)",
+          "Refund request rate (target: <30%)",
+          "Testimonial conversion rate",
+          "Backend upsell rate from completers"
+        ],
+        "giveaway": [
+          "Total entries",
+          "Non-winner discount redemption rate (target: 20-30%)",
+          "Email list growth",
+          "Cost per lead"
+        ],
+        "decoy_offer": [
+          "% choosing each tier (target: 70-80% premium)",
+          "Average order value",
+          "Immediate profit per customer"
+        ],
+        "buy_x_get_y_free": [
+          "Redemption rate on free units",
+          "Repeat purchase rate",
+          "Units per order increase"
+        ],
+        "pay_less_now_or_pay_more_later": [
+          "Immediate buy-in rate",
+          "Later conversion rate",
+          "Average time to decision"
+        ],
+        "free_with_consumption_to_upsell": [
+          "Free trial claim rate",
+          "Trial-to-paid conversion rate (target: 20-40%)",
+          "Cost to deliver free trial"
+        ]
+      }
+    },
+
+    "warnings_and_disclaimers": {
+      "offer_specific_warnings": {
+        "win_your_money_back": [
+          "⚠️ **Requires Reliable Tracking:** Cannot run this without systems to verify completion",
+          "⚠️ **Needs Strong Backend:** If you don't have upsells, you'll lose money",
+          "💡 **Tip:** Use store credit instead of cash refunds to keep revenue in ecosystem"
+        ],
+        "giveaway": [
+          "⚠️ **Legal Requirements:** Must publish terms & conditions, check local sweepstakes laws",
+          "⚠️ **Volume Warning:** Can generate massive lead volume - ensure systems can handle it",
+          "💡 **Tip:** Non-winners getting 'partial scholarship' discount converts 20-30%"
+        ],
+        "decoy_offer": [
+          "💡 **Psychology Matters:** Positioning is everything - 70-80% should choose premium tier",
+          "💡 **Tip:** Make premium tier the 'best deal' by showing value per unit"
+        ],
+        "buy_x_get_y_free": [
+          "⚠️ **Margin Check:** Ensure you can afford free units without losing profit",
+          "⚠️ **Only For Repeat Purchase:** Doesn't work for one-time purchase businesses"
+        ],
+        "pay_less_now_or_pay_more_later": [
+          "⚠️ **Delayed Cashflow:** Most revenue comes later, not immediately",
+          "💡 **Tip:** Follow-up sequence is critical for converting 'wait and see' prospects"
+        ],
+        "free_with_consumption_to_upsell": [
+          "⚠️ **Backend Critical:** All profit comes from upsell, not free trial",
+          "💡 **Tip:** Use free session to educate and break false beliefs, not just pitch"
+        ]
+      },
+      "global_warnings": {
+        "show_if_no_backend": {
+          "condition": "backend_strength == 'no_backend_offer_yet'",
+          "message": "🚨 **Critical:** Build your backend monetization FIRST before launching any attraction offer. Most offers lose money on the front-end and profit on upsells."
+        },
+        "show_if_low_margin": {
+          "condition": "gross_margin == 'under_40_percent'",
+          "message": "⚠️ **Margin Warning:** Your margins may be too low for generous attraction offers. Focus on volume-based offers or improve margins first."
+        },
+        "show_if_no_tracking": {
+          "condition": "tracking_ability == 'cannot_track_results_at_all'",
+          "message": "⚠️ **Tracking Limitation:** Without tracking capability, you're limited to simple offers like giveaways and basic discounts."
+        }
+      },
+      "legal_disclaimers": {
+        "giveaway": "**Legal Disclaimer:** Sweepstakes and giveaways may be subject to federal and state regulations. Consult with legal counsel and publish clear official rules including: no purchase necessary, eligibility requirements, prize details, odds of winning, and how winner is selected. Some states require registration for prizes over certain values."
+      }
+    },
+
+    "next_steps": {
+      "intro": "## Next Steps",
+      "standard_steps": [
+        {
+          "step": 1,
+          "action": "Review the complete funnel template above",
+          "details": "Customize headlines, offer structure, and email sequences for your specific business"
+        },
+        {
+          "step": 2,
+          "action": "Ensure prerequisites are in place",
+          "details": "Verify you have required tracking, backend offers, and operational capacity"
+        },
+        {
+          "step": 3,
+          "action": "Build your landing page",
+          "details": "Use headline examples and offer structure from template"
+        },
+        {
+          "step": 4,
+          "action": "Set up tracking and metrics",
+          "details": "Implement tracking for all key metrics listed above"
+        },
+        {
+          "step": 5,
+          "action": "Create upsell sequence",
+          "details": "Build backend monetization path following upsell template"
+        },
+        {
+          "step": 6,
+          "action": "Test with small budget first",
+          "details": "Validate conversion rates before scaling spend"
+        }
+      ],
+      "offer_specific_first_step": {
+        "win_your_money_back": "Set up tracking system to verify customer completion actions",
+        "giveaway": "Research legal requirements and draft terms & conditions",
+        "decoy_offer": "Create three-tier pricing structure (Good, Better, Best)",
+        "buy_x_get_y_free": "Calculate exact margin impact of giving away free units",
+        "pay_less_now_or_pay_more_later": "Define specific deadline and price increase amount",
+        "free_with_consumption_to_upsell": "Design free trial experience that naturally leads to upsell"
+      }
+    }
+  },
+
+  "secondary_recommendation_template": {
+    "structure": [
+      "header",
+      "confidence_score",
+      "quick_summary",
+      "why_this_is_viable",
+      "comparison_to_primary",
+      "when_to_choose_this",
+      "key_requirements",
+      "next_steps"
+    ],
+
+    "header": {
+      "format": "⭐ {offer_name}",
+      "subtitle": "Strong Alternative Worth Considering"
+    },
+
+    "why_this_is_viable": {
+      "intro": "## Why This Also Works",
+      "template": "While {primary_offer_name} is your top match, {this_offer_name} scored {confidence_percentage}% and could be equally effective because:",
+      "show_top_reasons": 3
+    },
+
+    "comparison_to_primary": {
+      "intro": "## How This Compares to {primary_offer_name}",
+      "format": "comparison_table",
+      "dimensions": [
+        "lead_volume_potential",
+        "lead_quality",
+        "front_end_profitability",
+        "backend_dependency",
+        "implementation_complexity",
+        "tracking_requirements",
+        "capacity_requirements"
+      ]
+    },
+
+    "when_to_choose_this": {
+      "intro": "## When to Choose This Instead",
+      "scenarios": "dynamic_based_on_offer_differences"
+    }
+  },
+
+  "experimental_recommendation_template": {
+    "structure": [
+      "header",
+      "confidence_score",
+      "quick_summary",
+      "why_lower_confidence",
+      "test_framework",
+      "risk_mitigation"
+    ],
+
+    "header": {
+      "format": "🧪 {offer_name}",
+      "subtitle": "Experimental Option - Test Carefully"
+    },
+
+    "why_lower_confidence": {
+      "intro": "## Why This Is Experimental For You",
+      "template": "This offer scored {confidence_percentage}%, which is below our primary recommendation threshold. Potential concerns:",
+      "show_gaps": true
+    },
+
+    "test_framework": {
+      "intro": "## How to Test This Safely",
+      "steps": [
+        "Start with minimal budget ($500-$1000)",
+        "Set clear success metrics before launching",
+        "Run for 2-4 weeks to gather data",
+        "Compare results to primary recommendation",
+        "Scale only if metrics exceed targets"
+      ]
+    },
+
+    "risk_mitigation": {
+      "intro": "## Risk Mitigation Strategies",
+      "use_offer_specific_warnings": true
+    }
+  },
+
+  "no_strong_match_template": {
+    "structure": [
+      "header",
+      "explanation",
+      "constraints_identified",
+      "recommendations",
+      "build_prerequisites_first"
+    ],
+
+    "header": {
+      "format": "⚠️ No Strong Match Found",
+      "subtitle": "Let's build your foundation first"
+    },
+
+    "explanation": {
+      "template": "Based on your answers, no attraction offer achieved our minimum confidence threshold of {min_confidence}%. This typically means some prerequisites need to be in place first."
+    },
+
+    "constraints_identified": {
+      "intro": "## Key Constraints Identified",
+      "common_blockers": {
+        "no_backend": {
+          "message": "🚨 **No Backend Monetization:** Most attraction offers require strong backend upsells to be profitable. This is your #1 priority.",
+          "action": "Build a backend offer that converts 30%+ of front-end customers before creating attraction offer"
+        },
+        "low_margin": {
+          "message": "⚠️ **Low Margins:** Margins under 40% limit your attraction offer options significantly.",
+          "action": "Focus on improving margins or choose volume-based models only"
+        },
+        "no_tracking": {
+          "message": "⚠️ **No Tracking Capability:** This eliminates result-based offers like Win Your Money Back.",
+          "action": "Implement basic tracking systems or stick to simple giveaway/discount models"
+        },
+        "no_capacity": {
+          "message": "⚠️ **No Capacity:** Can't run volume-driving offers if you can't serve customers.",
+          "action": "Focus on exclusive, controlled-volume offers like Decoy pricing"
+        }
+      }
+    },
+
+    "recommendations": {
+      "intro": "## Recommended Path Forward",
+      "priority_order": [
+        "Build backend monetization first",
+        "Improve gross margins if possible",
+        "Implement basic tracking systems",
+        "Increase operational capacity",
+        "Then return to choose attraction offer"
+      ]
+    },
+
+    "build_prerequisites_first": {
+      "safe_starting_point": {
+        "title": "Safe Starting Point While Building",
+        "suggestion": "Simple content lead magnet or small discount",
+        "description": "While you build prerequisites, use a basic free guide, checklist, or 10-15% discount to generate leads. Don't run aggressive attraction offers until backend is in place."
+      }
+    }
+  },
+
+  "output_formatting_rules": {
+    "general": {
+      "use_markdown": true,
+      "max_section_length_words": 200,
+      "show_confidence_visually": true,
+      "include_emoji_icons": true,
+      "expandable_sections": true,
+      "print_friendly_option": true
+    },
+
+    "funnel_template_presentation": {
+      "headlines": {
+        "show_as": "bullet_list",
+        "allow_customization_notes": true,
+        "show_examples_from_pdf": true
+      },
+      "offer_structure": {
+        "show_as": "numbered_steps",
+        "include_timing": true,
+        "show_dependencies": true
+      },
+      "upsell_sequence": {
+        "show_as": "flow_diagram",
+        "include_conversion_targets": true,
+        "show_order_of_operations": true
+      },
+      "follow_up_emails": {
+        "show_as": "timeline",
+        "include_days_since_purchase": true,
+        "show_email_purpose": true
+      }
+    },
+
+    "metrics_display": {
+      "format": "card_grid",
+      "show_targets": true,
+      "show_calculation_formulas": true,
+      "highlight_critical_metrics": true,
+      "offer_comparison_mode": "side_by_side_table"
+    },
+
+    "reasoning_display": {
+      "use_checkmarks_for_matches": true,
+      "use_warning_icons_for_gaps": true,
+      "max_reasons_to_show": 5,
+      "prioritize_by_weight": true
+    },
+
+    "mobile_responsive": {
+      "collapse_sections_by_default": true,
+      "stack_comparison_tables": true,
+      "show_summary_first": true
+    }
+  },
+
+  "reasoning_fragments": {
+    "business_model": {
+      "digital_product": "Digital products have excellent margins and easy delivery, making you flexible for most offers",
+      "coaching_consulting": "Coaching/consulting businesses excel with trust-building offers that demonstrate expertise",
+      "physical_product": "Physical products work great with Buy X Get Y Free due to repeat purchase nature",
+      "membership_subscription": "Subscription models benefit from free trials that convert to recurring revenue",
+      "saas_software": "SaaS excels with Free With Consumption due to low marginal cost of additional users",
+      "agency": "Agency work requires trust and proof, making Win Your Money Back and case studies powerful",
+      "hybrid": "Hybrid models give you flexibility to test multiple attraction offer types"
+    },
+
+    "gross_margin": {
+      "under_40_percent": "provides limited flexibility - focus on volume offers rather than generous giveaways",
+      "40_60_percent": "gives you decent flexibility for most offers if you have strong backend",
+      "60_85_percent": "gives you strong flexibility for bonuses, trials, and generous front-end offers",
+      "85_plus_percent": "allows maximum flexibility - you can afford generous free trials and guarantees"
+    },
+
+    "cashflow_tolerance": {
+      "must_profit_front_end": "means you need offers that profit immediately (Decoy Offer is best option)",
+      "break_even_is_okay": "opens up most attraction offer possibilities with backend monetization",
+      "can_afford_short_term_loss": "gives you maximum flexibility for aggressive customer acquisition",
+      "can_run_free_front_end": "unlocks all attraction strategies including pure giveaways"
+    },
+
+    "capacity": {
+      "high_capacity_can_handle_big_spike": "makes you perfect for volume offers like giveaways and Buy X Get Y",
+      "moderate_capacity_some_limitations": "works well with most balanced attraction offers",
+      "low_capacity_can_only_take_a_few": "requires quality-over-volume offers like Decoy pricing",
+      "no_capacity_need_to_control_volume": "limits you to exclusive, premium positioning only"
+    },
+
+    "tracking_ability": {
+      "can_track_everything": "unlocks result-based offers like Win Your Money Back",
+      "can_track_some_things": "works for most offers except strict completion-based models",
+      "tracking_is_difficult": "limits you to simpler offers without completion requirements",
+      "cannot_track_results_at_all": "restricts you to basic giveaways and discount offers"
+    },
+
+    "backend_strength": {
+      "multiple_strong_upsells_and_backend": "gives you the foundation to run generous front-end offers profitably",
+      "one_strong_backend_offer": "provides the upsell path needed for most attraction offers",
+      "weak_backend_working_on_it": "means you should strengthen backend before aggressive front-end offers",
+      "no_backend_offer_yet": "is a critical gap - build backend monetization FIRST"
+    },
+
+    "primary_goal": {
+      "get_more_leads_fast": "This offer excels at generating high lead volume quickly",
+      "build_trust_and_authority": "This offer builds credibility by letting prospects experience your value",
+      "generate_testimonials_and_case_studies": "This offer creates success stories and social proof",
+      "fill_a_program_or_cohort": "This offer creates urgency to fill limited spots by deadline",
+      "sell_high_ticket_offer": "This offer uses positioning to make premium pricing feel reasonable",
+      "grow_a_large_email_list": "This offer attracts large numbers of leads to nurture over time"
+    },
+
+    "lead_preference": {
+      "as_many_leads_as_possible": "This offer drives maximum volume of leads into your funnel",
+      "fewer_but_higher_quality_leads": "This offer attracts more qualified, serious prospects",
+      "only_people_likely_to_buy": "This offer pre-qualifies leads for high purchase intent",
+      "balanced_mix_of_volume_and_quality": "This offer provides good balance of volume and quality"
+    }
+  }
+}

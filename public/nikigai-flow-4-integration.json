@@ -54,83 +54,205 @@
       "store_as": "nikigai.opportunity_choice",
       "next_step_rules": [
         {
-          "on_success": "6.0"
+          "on_success": "4.0"
         }
       ]
     },
     {
       "id": "4.0",
       "step_order_index": 4,
-      "assistant_postprocess": {
-        "tag_from": [
-          "skills.final",
-          "problems.final",
-          "persona.final",
-          "persona.primary_choice",
-          "nikigai.opportunity_choice"
-        ],
-        "generate": {
-          "type": "mission_statement",
-          "output": "Generate a personal mission statement that combines: the person's primary skills, the problem they want to solve, and the persona they want to serve. Format: 'I help [persona] [solve problem] using [skills].' Make it personal and powerful."
-        },
-        "store_as": "nikigai.mission_statement"
-      },
-      "next_step_rules": [
-        {
-          "on_success": "5.0"
-        }
-      ]
-    },
-    {
-      "id": "5.0",
-      "step_order_index": 5,
-      "assistant_prompt": "Does this mission statement feel true to you? Would you like to refine it?",
+      "assistant_prompt": "Is this combination an opportunity you're already pursuing or a new opportunity?",
       "expected_inputs": [
         {
           "type": "single_select",
-          "options": ["It's perfect!", "Let me refine it"]
+          "options": ["Existing Opportunity", "New Opportunity"]
         }
       ],
-      "store_as": "nikigai.mission_choice",
+      "store_as": "nikigai.opportunity_type",
       "next_step_rules": [
         {
-          "on_selection": "It's perfect!",
-          "go_to": "6.0"
+          "on_selection": "Existing Opportunity",
+          "go_to": "4.1-existing"
         },
         {
-          "on_selection": "Let me refine it",
-          "go_to": "5.1"
+          "on_selection": "New Opportunity",
+          "go_to": "4.1-new"
         }
       ]
     },
     {
-      "id": "5.1",
-      "step_order_index": 6,
-      "assistant_prompt": "Write your refined mission statement below:",
-      "expected_inputs": ["text_block"],
-      "store_as": "nikigai.mission_statement_refined",
-      "next_step_rules": [
-        {
-          "on_success": "6.0"
-        }
-      ]
-    },
-    {
-      "id": "6.0",
-      "step_order_index": 7,
-      "assistant_prompt": "Congratulations! You've completed your Nikigai discovery.\n\nYou now have:\n• Your unique skill clusters\n• The problems you're meant to solve\n• The people you're qualified to serve\n• Your personal mission statement\n\nThis is the foundation for meaningful, fulfilling work that only *you* can do.\n\nWhat would you like to do next?",
+      "id": "4.1-existing",
+      "step_order_index": 5,
+      "assistant_prompt": "What stage of development is this current opportunity?",
       "expected_inputs": [
         {
           "type": "single_select",
           "options": [
-            "Return to /me page"
+            "Still creating",
+            "In process of launching",
+            "Launched and delivering consistently"
+          ]
+        }
+      ],
+      "store_as": "nikigai.opportunity_stage",
+      "metadata": {
+        "stage_mapping": {
+          "Still creating": "creation",
+          "In process of launching": "testing",
+          "Launched and delivering consistently": "launched"
+        },
+        "add_to_flow_tracker": true
+      },
+      "next_step_rules": [
+        {
+          "on_success": "4.2-complete"
+        }
+      ]
+    },
+    {
+      "id": "4.1-new",
+      "step_order_index": 5,
+      "assistant_prompt": "Would you like to start pursuing this opportunity and add it to your flow tracker?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Yes",
+            "No, I want to focus on a different opportunity"
+          ]
+        }
+      ],
+      "store_as": "nikigai.pursue_opportunity",
+      "metadata": {
+        "if_yes_add_to_flow_tracker": true,
+        "if_yes_stage": "validation"
+      },
+      "next_step_rules": [
+        {
+          "on_selection": "Yes",
+          "go_to": "4.2-complete"
+        },
+        {
+          "on_selection": "No, I want to focus on a different opportunity",
+          "go_to": "4.2-new-details"
+        }
+      ]
+    },
+    {
+      "id": "4.2-new-details",
+      "step_order_index": 6,
+      "assistant_prompt": "What do you call this opportunity?",
+      "expected_inputs": [
+        {
+          "type": "free_text"
+        }
+      ],
+      "store_as": "nikigai.opportunity_name",
+      "next_step_rules": [
+        {
+          "on_success": "4.3-new-details"
+        }
+      ]
+    },
+    {
+      "id": "4.3-new-details",
+      "step_order_index": 7,
+      "assistant_prompt": "What do you call your role in this opportunity?",
+      "expected_inputs": [
+        {
+          "type": "free_text"
+        }
+      ],
+      "store_as": "nikigai.opportunity_role",
+      "next_step_rules": [
+        {
+          "on_success": "4.4-new-details"
+        }
+      ]
+    },
+    {
+      "id": "4.4-new-details",
+      "step_order_index": 8,
+      "assistant_prompt": "Who is the target audience for this opportunity?",
+      "expected_inputs": [
+        {
+          "type": "free_text"
+        }
+      ],
+      "store_as": "nikigai.opportunity_audience",
+      "next_step_rules": [
+        {
+          "on_success": "4.5-new-details"
+        }
+      ]
+    },
+    {
+      "id": "4.5-new-details",
+      "step_order_index": 9,
+      "assistant_prompt": "What problem do you solve in this opportunity?",
+      "expected_inputs": [
+        {
+          "type": "free_text"
+        }
+      ],
+      "store_as": "nikigai.opportunity_problem",
+      "next_step_rules": [
+        {
+          "on_success": "4.6-new-stage"
+        }
+      ]
+    },
+    {
+      "id": "4.6-new-stage",
+      "step_order_index": 10,
+      "assistant_prompt": "What stage of development is this opportunity?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Still creating",
+            "In process of launching",
+            "Launched and delivering consistently"
+          ]
+        }
+      ],
+      "store_as": "nikigai.opportunity_stage",
+      "metadata": {
+        "stage_mapping": {
+          "Still creating": "creation",
+          "In process of launching": "testing",
+          "Launched and delivering consistently": "launched"
+        },
+        "add_to_flow_tracker": true
+      },
+      "next_step_rules": [
+        {
+          "on_success": "4.2-complete"
+        }
+      ]
+    },
+    {
+      "id": "4.2-complete",
+      "step_order_index": 11,
+      "assistant_prompt": "Congratulations! You've completed your Flow Finder discovery. This is the foundation for meaningful, fulfilling work that only *you* can do. Ready to take action?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Proceed to 7-day challenge",
+            "Return to home page"
           ]
         }
       ],
       "store_as": "nikigai.completion",
       "next_step_rules": [
         {
-          "on_selection": "Return to /me page",
+          "on_selection": "Proceed to 7-day challenge",
+          "go_to": "complete",
+          "redirect": "/7-day-challenge"
+        },
+        {
+          "on_selection": "Return to home page",
           "go_to": "complete",
           "redirect": "/me"
         }

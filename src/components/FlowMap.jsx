@@ -200,14 +200,20 @@ function FlowMap() {
       e.preventDefault();
       e.stopPropagation();
     }
-    // Prevent scroll jump by maintaining scroll position
-    const scrollY = window.scrollY;
-    const newSection = expandedSection === section ? null : section;
-    setExpandedSection(newSection);
-    // Restore scroll position after state update
-    requestAnimationFrame(() => {
-      window.scrollTo(0, scrollY);
-    });
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (!isMobile) {
+      // Prevent scroll jump by maintaining scroll position
+      const scrollY = window.scrollY;
+      setExpandedSection(expandedSection === section ? null : section);
+      // Restore scroll position after state update
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY);
+      });
+    } else {
+      setExpandedSection(expandedSection === section ? null : section);
+    }
   };
 
   const toggleProject = (projectId) => {

@@ -1,0 +1,209 @@
+{
+  "flow_name": "Vibe Riser Testing Feedback",
+  "version": "1.0",
+  "description": "Testing stage feedback questions for Vibe Riser persona - collect product feedback from beta testers",
+  "flow_type": "public_validation",
+  "persona": "vibe_riser",
+  "stage": "testing",
+  "metadata": {
+    "total_questions": 10,
+    "estimated_time_minutes": 4,
+    "public_shareable": true,
+    "requires_auth": false,
+    "collect_email": true
+  },
+  "steps": [
+    {
+      "id": "1.0",
+      "step_order_index": 1,
+      "assistant_prompt": "What did the product support you with the most?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "Share what worked best for you..."
+        }
+      ],
+      "store_as": "testing.product_support",
+      "next_step_rules": [
+        {
+          "on_success": "2.0"
+        }
+      ]
+    },
+    {
+      "id": "2.0",
+      "step_order_index": 2,
+      "assistant_prompt": "What's one thing you'd definitely change to improve the product?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "What needs improvement..."
+        }
+      ],
+      "store_as": "testing.improvement_needed",
+      "next_step_rules": [
+        {
+          "on_success": "3.0"
+        }
+      ]
+    },
+    {
+      "id": "3.0",
+      "step_order_index": 3,
+      "assistant_prompt": "What's one thing you love and wouldn't change about the product?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "What should we keep exactly as is..."
+        }
+      ],
+      "store_as": "testing.keep_unchanged",
+      "next_step_rules": [
+        {
+          "on_success": "4.0"
+        }
+      ]
+    },
+    {
+      "id": "4.0",
+      "step_order_index": 4,
+      "assistant_prompt": "If you were to recommend this to a friend, what would you say?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "Your recommendation message..."
+        }
+      ],
+      "store_as": "testing.recommendation",
+      "next_step_rules": [
+        {
+          "on_success": "5.0"
+        }
+      ]
+    },
+    {
+      "id": "5.0",
+      "step_order_index": 5,
+      "assistant_prompt": "If you had to make the product 5% better, what would you recommend?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "Small improvements that would make a difference..."
+        }
+      ],
+      "store_as": "testing.improve_5_percent",
+      "next_step_rules": [
+        {
+          "on_success": "6.0"
+        }
+      ]
+    },
+    {
+      "id": "6.0",
+      "step_order_index": 6,
+      "assistant_prompt": "If you had to make the product 50% better, what would you recommend?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "Big changes that would transform the product..."
+        }
+      ],
+      "store_as": "testing.improve_50_percent",
+      "next_step_rules": [
+        {
+          "on_success": "7.0"
+        }
+      ]
+    },
+    {
+      "id": "7.0",
+      "step_order_index": 7,
+      "assistant_prompt": "Is there anything else you wish the product could support you with?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "Any additional features or support you'd like..."
+        }
+      ],
+      "store_as": "testing.additional_support",
+      "next_step_rules": [
+        {
+          "on_success": "8.0"
+        }
+      ]
+    },
+    {
+      "id": "8.0",
+      "step_order_index": 8,
+      "assistant_prompt": "What amount seems fair for this product?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Free",
+            "$5 - $10",
+            "$10 - $25",
+            "$25 - $50",
+            "$50 - $100",
+            "$100 - $250",
+            "$250+"
+          ]
+        }
+      ],
+      "store_as": "testing.fair_price",
+      "next_step_rules": [
+        {
+          "on_success": "9.0"
+        }
+      ]
+    },
+    {
+      "id": "9.0",
+      "step_order_index": 9,
+      "assistant_prompt": "Do you have any friends that would be interested in the product?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Yes - I can introduce you",
+            "Yes - but I'd rather not share",
+            "Maybe - need to think about it",
+            "No - don't know anyone"
+          ]
+        }
+      ],
+      "store_as": "testing.referral_interest",
+      "next_step_rules": [
+        {
+          "on_success": "10.0"
+        }
+      ]
+    },
+    {
+      "id": "10.0",
+      "step_order_index": 10,
+      "assistant_prompt": "What's your email address?\n\n(So we can send you updates and thank you for your feedback)",
+      "expected_inputs": [
+        {
+          "type": "email",
+          "required": true,
+          "placeholder": "your.email@example.com"
+        }
+      ],
+      "store_as": "testing.email",
+      "next_step_rules": [
+        {
+          "on_success": "complete"
+        }
+      ]
+    },
+    {
+      "id": "complete",
+      "step_order_index": 11,
+      "assistant_prompt": "Thank you for your feedback!\n\nYour insights are invaluable in helping us improve the product. We'll review your feedback carefully and may reach out with follow-up questions.\n\nWe appreciate you being part of our testing journey! 🙏",
+      "expected_inputs": [],
+      "store_as": null,
+      "next_step_rules": []
+    }
+  ]
+}

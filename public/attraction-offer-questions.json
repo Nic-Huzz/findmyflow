@@ -1,0 +1,315 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "last_updated": "2025-12-04"
+  },
+  "questions": [
+    {
+      "id": "q1_business_model",
+      "question": "What type of business do you run?",
+      "subtext": "Select the option that best describes your primary revenue model",
+      "options": [
+        {
+          "label": "Digital Product",
+          "value": "digital_product",
+          "description": "Online courses, ebooks, templates, digital downloads"
+        },
+        {
+          "label": "Coaching / Consulting",
+          "value": "coaching_consulting",
+          "description": "1-on-1 or group coaching, consulting services"
+        },
+        {
+          "label": "Physical Product",
+          "value": "physical_product",
+          "description": "Tangible products that ship to customers"
+        },
+        {
+          "label": "Membership / Subscription",
+          "value": "membership_subscription",
+          "description": "Recurring access to content, community, or services"
+        },
+        {
+          "label": "SaaS / Software",
+          "value": "saas_software",
+          "description": "Software-as-a-service or web applications"
+        },
+        {
+          "label": "Agency / Done-For-You",
+          "value": "agency",
+          "description": "Services where you do the work for clients"
+        },
+        {
+          "label": "Hybrid / Multiple Models",
+          "value": "hybrid",
+          "description": "Combination of multiple business models"
+        }
+      ]
+    },
+    {
+      "id": "q2_gross_margin",
+      "question": "What best describes your average gross margin?",
+      "subtext": "Gross margin = (Revenue - Cost) / Revenue. If you sell for $100 and it costs $20 to deliver, that's 80% margin.",
+      "options": [
+        {
+          "label": "Under 40%",
+          "value": "under_40_percent",
+          "description": "Lower margin, higher cost to deliver"
+        },
+        {
+          "label": "40-60%",
+          "value": "40_60_percent",
+          "description": "Moderate margin"
+        },
+        {
+          "label": "60-85%",
+          "value": "60_85_percent",
+          "description": "Good margin"
+        },
+        {
+          "label": "85%+",
+          "value": "85_plus_percent",
+          "description": "Excellent margin"
+        }
+      ]
+    },
+    {
+      "id": "q3_cashflow_tolerance",
+      "question": "What best describes your cashflow tolerance for front-end offers?",
+      "subtext": "Can you afford to break even or lose money initially, making it up on the backend?",
+      "options": [
+        {
+          "label": "Must profit on front-end",
+          "value": "must_profit_front_end",
+          "description": "I need to make money immediately on each sale"
+        },
+        {
+          "label": "Break-even is okay",
+          "value": "break_even_is_okay",
+          "description": "I can break even upfront if there's backend potential"
+        },
+        {
+          "label": "Can afford short-term loss",
+          "value": "can_afford_short_term_loss",
+          "description": "I can invest in customer acquisition"
+        },
+        {
+          "label": "Can run free front-end",
+          "value": "can_run_free_front_end",
+          "description": "I can give away significant value for free"
+        }
+      ]
+    },
+    {
+      "id": "q4_capacity",
+      "question": "How much new customer volume can you handle right now?",
+      "subtext": "If your attraction offer works, how many new customers can you actually serve?",
+      "options": [
+        {
+          "label": "High capacity - can handle big spike",
+          "value": "high_capacity_can_handle_big_spike",
+          "description": "Automated delivery or scalable team"
+        },
+        {
+          "label": "Moderate capacity - some limitations",
+          "value": "moderate_capacity_some_limitations",
+          "description": "Can grow but need time to scale"
+        },
+        {
+          "label": "Low capacity - can only take a few",
+          "value": "low_capacity_can_only_take_a_few",
+          "description": "Limited spots or time-intensive delivery"
+        },
+        {
+          "label": "No capacity - need to control volume",
+          "value": "no_capacity_need_to_control_volume",
+          "description": "At or near max capacity now"
+        }
+      ]
+    },
+    {
+      "id": "q5_tracking",
+      "question": "How well can you track user outcomes or progress?",
+      "subtext": "Can you measure whether customers complete actions or achieve results? Critical for some offers.",
+      "options": [
+        {
+          "label": "Can track everything",
+          "value": "can_track_everything",
+          "description": "Automated systems, clear metrics, reliable data"
+        },
+        {
+          "label": "Can track some things",
+          "value": "can_track_some_things",
+          "description": "Manual tracking or partial automation"
+        },
+        {
+          "label": "Tracking is difficult",
+          "value": "tracking_is_difficult",
+          "description": "Hard to measure or verify outcomes"
+        },
+        {
+          "label": "Cannot track results at all",
+          "value": "cannot_track_results_at_all",
+          "description": "No tracking capability"
+        }
+      ]
+    },
+    {
+      "id": "q6_lead_challenge",
+      "question": "What is your biggest challenge with leads right now?",
+      "subtext": "What's the main obstacle preventing leads from becoming customers?",
+      "options": [
+        {
+          "label": "Not enough leads",
+          "value": "not_enough_leads",
+          "description": "Need more people to enter the funnel"
+        },
+        {
+          "label": "Leads don't trust me yet",
+          "value": "leads_dont_trust_me_yet",
+          "description": "People are skeptical or need proof"
+        },
+        {
+          "label": "Leads are price sensitive",
+          "value": "leads_are_price_sensitive",
+          "description": "People think it's too expensive"
+        },
+        {
+          "label": "Slow or unclear sales cycle",
+          "value": "slow_or_unclear_sales_cycle",
+          "description": "People take forever to decide"
+        },
+        {
+          "label": "Low quality leads",
+          "value": "low_quality_leads",
+          "description": "Wrong fit or tire-kickers"
+        },
+        {
+          "label": "None of the above",
+          "value": "none_of_the_above",
+          "description": "Different challenge or no major issue"
+        }
+      ]
+    },
+    {
+      "id": "q7_backend_strength",
+      "question": "How strong is your back-end monetization?",
+      "subtext": "After someone buys your front-end offer, what else can you sell them? This is CRITICAL.",
+      "options": [
+        {
+          "label": "Multiple strong upsells",
+          "value": "multiple_strong_upsells_and_backend",
+          "description": "Several proven offers that convert well"
+        },
+        {
+          "label": "One strong backend offer",
+          "value": "one_strong_backend_offer",
+          "description": "One main upsell that works"
+        },
+        {
+          "label": "Weak backend, working on it",
+          "value": "weak_backend_working_on_it",
+          "description": "Have something but needs improvement"
+        },
+        {
+          "label": "No backend offer yet",
+          "value": "no_backend_offer_yet",
+          "description": "Only have one product/service"
+        }
+      ]
+    },
+    {
+      "id": "q8_repeat_purchase",
+      "question": "How often do customers buy from you again or consume repeatedly?",
+      "subtext": "Is this a one-time purchase or do customers come back for more?",
+      "options": [
+        {
+          "label": "Frequent repurchase/consumption",
+          "value": "frequent_repurchase_or_consumption",
+          "description": "Weekly or monthly reorders/usage"
+        },
+        {
+          "label": "Occasional repeat purchase",
+          "value": "occasional_repeat_purchase",
+          "description": "Customers return periodically"
+        },
+        {
+          "label": "Rare repeat purchase",
+          "value": "rare_repeat_purchase",
+          "description": "Customers might buy again but infrequently"
+        },
+        {
+          "label": "One-time purchase only",
+          "value": "one_time_purchase_only",
+          "description": "Customers typically only buy once ever"
+        }
+      ]
+    },
+    {
+      "id": "q9_primary_goal",
+      "question": "What is your primary goal for the attraction offer?",
+      "subtext": "What's the #1 outcome you want from this front-end offer?",
+      "options": [
+        {
+          "label": "Get more leads fast",
+          "value": "get_more_leads_fast",
+          "description": "Volume is the priority"
+        },
+        {
+          "label": "Build trust and authority",
+          "value": "build_trust_and_authority",
+          "description": "Establish credibility and prove value"
+        },
+        {
+          "label": "Generate testimonials & case studies",
+          "value": "generate_testimonials_and_case_studies",
+          "description": "Get social proof and success stories"
+        },
+        {
+          "label": "Fill a program or cohort",
+          "value": "fill_a_program_or_cohort",
+          "description": "Fill limited spots by specific deadline"
+        },
+        {
+          "label": "Sell high-ticket offer",
+          "value": "sell_high_ticket_offer",
+          "description": "Convert to premium pricing"
+        },
+        {
+          "label": "Grow a large email list",
+          "value": "grow_a_large_email_list",
+          "description": "Build database for future marketing"
+        }
+      ]
+    },
+    {
+      "id": "q10_lead_preference",
+      "question": "What type of leads do you most want from this offer?",
+      "subtext": "Would you rather have 1,000 okay leads or 50 perfect leads?",
+      "options": [
+        {
+          "label": "As many leads as possible",
+          "value": "as_many_leads_as_possible",
+          "description": "Volume over quality - we'll nurture them"
+        },
+        {
+          "label": "Fewer but higher quality leads",
+          "value": "fewer_but_higher_quality_leads",
+          "description": "Quality over quantity - serious buyers only"
+        },
+        {
+          "label": "Only people likely to buy",
+          "value": "only_people_likely_to_buy",
+          "description": "Pre-qualified, ready to purchase"
+        },
+        {
+          "label": "Balanced mix of volume and quality",
+          "value": "balanced_mix_of_volume_and_quality",
+          "description": "Good middle ground"
+        }
+      ]
+    }
+  ]
+}

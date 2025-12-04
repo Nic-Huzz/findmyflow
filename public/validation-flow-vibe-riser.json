@@ -1,0 +1,295 @@
+{
+  "flow_name": "Vibe Riser Validation Questions",
+  "version": "1.0",
+  "description": "Validation stage questions for Vibe Riser persona - collect customer feedback anonymously",
+  "flow_type": "public_validation",
+  "persona": "vibe_riser",
+  "stage": "validation",
+  "steps": [
+    {
+      "id": "0.0",
+      "step_order_index": 1,
+      "assistant_prompt": "Thanks for taking the time to share your thoughts!\n\nYour feedback will help shape a solution that actually works. This should take about 5 minutes.\n\nReady?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Let's go!"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Let's go!",
+          "go_to": "1.0"
+        }
+      ]
+    },
+    {
+      "id": "1.0",
+      "step_order_index": 2,
+      "assistant_prompt": "**What's your dream outcome?**\n\nIf you could wave a magic wand and solve this problem completely, what would that look like?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "Describe your ideal outcome..."
+        }
+      ],
+      "store_as": "validation.dream_outcome",
+      "next_step_rules": [
+        {
+          "on_success": "2.0"
+        }
+      ]
+    },
+    {
+      "id": "2.0",
+      "step_order_index": 3,
+      "assistant_prompt": "**What's the story you tell yourself about why this hasn't been solved yet?**\n\nBe honest — what's the reason (or excuse) you give yourself for why this problem still exists?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "The story I tell myself is..."
+        }
+      ],
+      "store_as": "validation.mental_story",
+      "next_step_rules": [
+        {
+          "on_success": "3.0"
+        }
+      ]
+    },
+    {
+      "id": "3.0",
+      "step_order_index": 4,
+      "assistant_prompt": "**What are 5 additional reasons you haven't solved this yet?**\n\nList them out — internal beliefs, external blockers, or anything else holding you back:",
+      "expected_inputs": [
+        {
+          "type": "text_list",
+          "min_items": 5,
+          "max_items": 5,
+          "placeholder": "Enter reason..."
+        }
+      ],
+      "store_as": "validation.additional_reasons",
+      "next_step_rules": [
+        {
+          "on_success": "4.0"
+        }
+      ]
+    },
+    {
+      "id": "4.0",
+      "step_order_index": 5,
+      "assistant_prompt": "**How much time and money have you invested in your current solution?**\n\nFirst, how much time?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Less than 10 hours",
+            "10-50 hours",
+            "50-100 hours",
+            "100-500 hours",
+            "500+ hours"
+          ]
+        }
+      ],
+      "store_as": "validation.time_invested",
+      "next_step_rules": [
+        {
+          "on_success": "4.1"
+        }
+      ]
+    },
+    {
+      "id": "4.1",
+      "step_order_index": 5,
+      "assistant_prompt": "And how much money have you invested?",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "$0 (haven't tried anything yet)",
+            "$1-$100",
+            "$100-$500",
+            "$500-$2,000",
+            "$2,000-$10,000",
+            "$10,000+"
+          ]
+        }
+      ],
+      "store_as": "validation.money_invested",
+      "next_step_rules": [
+        {
+          "on_success": "5.0"
+        }
+      ]
+    },
+    {
+      "id": "5.0",
+      "step_order_index": 6,
+      "assistant_prompt": "**Do you think the solution you're looking for is better features on existing solutions or a new approach to solving the problem?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Better features on existing solutions",
+            "A completely new approach",
+            "Not sure - could be either"
+          ]
+        }
+      ],
+      "store_as": "validation.solution_type",
+      "next_step_rules": [
+        {
+          "on_success": "6.0"
+        }
+      ]
+    },
+    {
+      "id": "6.0",
+      "step_order_index": 7,
+      "assistant_prompt": "**What emotion are you feeling right now about this problem?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "Frustrated",
+            "Desperate",
+            "Hopeful",
+            "Skeptical",
+            "Overwhelmed",
+            "Motivated",
+            "Confused",
+            "Anxious",
+            "Resigned",
+            "Excited"
+          ]
+        }
+      ],
+      "store_as": "validation.current_emotion",
+      "next_step_rules": [
+        {
+          "on_success": "7.0"
+        }
+      ]
+    },
+    {
+      "id": "7.0",
+      "step_order_index": 8,
+      "assistant_prompt": "**What would make you say 'HELL YES' to a solution?**\n\nWhat specific features, outcomes, or guarantees would make you instantly commit?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "I'd say hell yes if..."
+        }
+      ],
+      "store_as": "validation.hell_yes_factors",
+      "next_step_rules": [
+        {
+          "on_success": "8.0"
+        }
+      ]
+    },
+    {
+      "id": "8.0",
+      "step_order_index": 9,
+      "assistant_prompt": "**What do your friends think about this problem and potential solutions?**\n\nHave you talked about it with them? What's their take?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "My friends think..."
+        }
+      ],
+      "store_as": "validation.social_feedback",
+      "next_step_rules": [
+        {
+          "on_success": "9.0"
+        }
+      ]
+    },
+    {
+      "id": "9.0",
+      "step_order_index": 10,
+      "assistant_prompt": "**What is your level of pain with this problem?**\n\nRate it from 1-10, where 10 is unbearable.\n\n(Please don't choose 7 — be more decisive!)",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["1", "2", "3", "4", "5", "6", "8", "9", "10"]
+        }
+      ],
+      "store_as": "validation.pain_level",
+      "next_step_rules": [
+        {
+          "on_success": "10.0"
+        }
+      ]
+    },
+    {
+      "id": "10.0",
+      "step_order_index": 11,
+      "assistant_prompt": "**How much budget do you have to spend on a solution?**",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": [
+            "$0 - can't afford to pay",
+            "$1-$50",
+            "$50-$200",
+            "$200-$500",
+            "$500-$2,000",
+            "$2,000-$10,000",
+            "$10,000+"
+          ]
+        }
+      ],
+      "store_as": "validation.budget",
+      "next_step_rules": [
+        {
+          "on_success": "11.0"
+        }
+      ]
+    },
+    {
+      "id": "11.0",
+      "step_order_index": 12,
+      "assistant_prompt": "Almost done!\n\n**What's your email address?**\n\nWe'll use this to:\n• Share the results with you\n• Keep you updated if we build this solution\n• Never spam you (promise!)",
+      "expected_inputs": [
+        {
+          "type": "email",
+          "placeholder": "your.email@example.com",
+          "required": true,
+          "validation": "email"
+        }
+      ],
+      "store_as": "validation.respondent_email",
+      "next_step_rules": [
+        {
+          "on_success": "12.0"
+        }
+      ]
+    },
+    {
+      "id": "12.0",
+      "step_order_index": 13,
+      "assistant_prompt": "🎉 **Thank you!**\n\nYour feedback is incredibly valuable. We'll analyze all responses and use them to build something that actually solves your problem.\n\nWant to stay in the loop? We'll email you when we have updates.\n\nThanks for your time! 🙏",
+      "expected_inputs": [
+        {
+          "type": "single_select",
+          "options": ["Close"]
+        }
+      ],
+      "next_step_rules": [
+        {
+          "on_selection": "Close",
+          "go_to": "complete"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "total_questions": 11,
+    "estimated_time_minutes": 5,
+    "public_shareable": true,
+    "requires_auth": false,
+    "collect_email": true
+  }
+}

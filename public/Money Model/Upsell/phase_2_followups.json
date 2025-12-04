@@ -1,0 +1,428 @@
+{
+  "metadata": {
+    "purpose": "Validate recommended upsell offer and gather implementation details",
+    "version": "1.0.0",
+    "last_updated": "2025-12-04"
+  },
+  "followup_questions": {
+    "classic_upsell": {
+      "offer_name": "Classic Upsell",
+      "validation_intro": "Classic Upsell is perfect for getting immediate profit boosts with 80%+ take rates. Let's nail down your implementation details.",
+      "questions": [
+        {
+          "id": "classic_q1_upsell_offer",
+          "text": "What will you offer as your Classic Upsell?",
+          "help_text": "This should be something free or heavily discounted that complements the main purchase",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "complementary_product",
+              "label": "Complementary Product",
+              "description": "Another product that pairs well with main purchase",
+              "examples": ["Bought course, upsell templates", "Bought supplement, upsell shaker bottle"]
+            },
+            {
+              "value": "upgraded_version",
+              "label": "Upgraded Version",
+              "description": "Better version of what they just bought",
+              "examples": ["Basic → Premium tier", "1 month → 3 months"]
+            },
+            {
+              "value": "additional_quantity",
+              "label": "Additional Quantity",
+              "description": "More of what they just bought at discount",
+              "examples": ["Buy 1, get 2 more at 50% off", "Stock up offer"]
+            },
+            {
+              "value": "bonus_bundle",
+              "label": "Bonus Bundle",
+              "description": "Free or discounted bundle add-on",
+              "examples": ["Free bonus modules", "Implementation toolkit"]
+            }
+          ]
+        },
+        {
+          "id": "classic_q2_placement",
+          "text": "Where will you present this Classic Upsell?",
+          "help_text": "Front-end = immediately after checkout. Back-end = days/weeks later via email/call",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "front_end_checkout",
+              "label": "Front-End (Checkout Page)",
+              "description": "Immediately after they buy, same session",
+              "examples": ["Thank you page", "Order confirmation"]
+            },
+            {
+              "value": "front_end_onboarding",
+              "label": "Front-End (Onboarding)",
+              "description": "During first login or welcome sequence",
+              "examples": ["First member area visit", "Welcome email"]
+            },
+            {
+              "value": "back_end_email",
+              "label": "Back-End (Email Campaign)",
+              "description": "Days or weeks after purchase via email",
+              "examples": ["Week 2 email", "Consumption-based trigger"]
+            },
+            {
+              "value": "back_end_sales_call",
+              "label": "Back-End (Sales Call)",
+              "description": "During scheduled follow-up call",
+              "examples": ["Check-in call", "Strategy session"]
+            },
+            {
+              "value": "test_both",
+              "label": "Test Both Front & Back",
+              "description": "Try front-end first, then back-end for non-buyers",
+              "examples": ["Maximize opportunities"]
+            }
+          ]
+        },
+        {
+          "id": "classic_q3_seamlessness",
+          "text": "How seamless can you make the upsell acceptance?",
+          "help_text": "The easier it is to say yes, the higher your take rate",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "one_click_card_on_file",
+              "label": "One-Click (Card on File)",
+              "description": "Single button click, card already stored",
+              "examples": ["Amazon-style", "Stripe saved payment"]
+            },
+            {
+              "value": "checkbox_same_page",
+              "label": "Checkbox on Same Page",
+              "description": "Add to order before completing checkout",
+              "examples": ["Order bump", "Add-on checkbox"]
+            },
+            {
+              "value": "separate_checkout",
+              "label": "Separate Checkout Required",
+              "description": "Need to enter payment info again",
+              "examples": ["New order form", "Manual payment"]
+            },
+            {
+              "value": "manual_sales_process",
+              "label": "Manual Sales Process",
+              "description": "Requires human interaction to complete",
+              "examples": ["Call to accept", "Email reply"]
+            }
+          ]
+        }
+      ]
+    },
+    "menu_upsell": {
+      "offer_name": "Menu Upsell",
+      "validation_intro": "Menu Upsell is Hormozi's favorite because it builds trust through unselling. Let's map out your prescription framework.",
+      "questions": [
+        {
+          "id": "menu_q1_product_menu",
+          "text": "How many products can you prescribe from your menu?",
+          "help_text": "Menu Upsell requires variety - ideally 4+ options to diagnose and prescribe",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "2_3_options",
+              "label": "2-3 Product Options",
+              "description": "Limited menu, can still prescribe",
+              "examples": ["Basic + Premium", "Service A or B"]
+            },
+            {
+              "value": "4_6_options",
+              "label": "4-6 Product Options",
+              "description": "Good variety for prescribing",
+              "examples": ["Course suite", "Service packages"]
+            },
+            {
+              "value": "7_10_options",
+              "label": "7-10 Product Options",
+              "description": "Excellent menu depth",
+              "examples": ["Full product ecosystem"]
+            },
+            {
+              "value": "10_plus_options",
+              "label": "10+ Product Options",
+              "description": "Extensive menu, need clear framework",
+              "examples": ["Comprehensive catalog"]
+            }
+          ]
+        },
+        {
+          "id": "menu_q2_unselling_comfort",
+          "text": "Are you comfortable UNSELLING (telling customers what they DON'T need)?",
+          "help_text": "This is the secret weapon of Menu Upsell - builds massive trust",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "very_comfortable",
+              "label": "Very Comfortable",
+              "description": "I already do this, builds trust",
+              "examples": ["Tell clients what won't work for them"]
+            },
+            {
+              "value": "willing_to_learn",
+              "label": "Willing to Learn",
+              "description": "New to me but I see the value",
+              "examples": ["Need framework and training"]
+            },
+            {
+              "value": "somewhat_uncomfortable",
+              "label": "Somewhat Uncomfortable",
+              "description": "Feels counterintuitive to turn down sales",
+              "examples": ["Worried about losing revenue"]
+            },
+            {
+              "value": "very_uncomfortable",
+              "label": "Very Uncomfortable",
+              "description": "Want to sell everything to everyone",
+              "examples": ["More is always better mindset"]
+            }
+          ]
+        },
+        {
+          "id": "menu_q3_prescription_framework",
+          "text": "Do you have a framework for diagnosing which product fits which customer?",
+          "help_text": "Like a doctor's diagnosis - if X symptoms, prescribe Y solution",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "documented_framework",
+              "label": "Documented Framework",
+              "description": "Clear if/then rules for prescribing",
+              "examples": ["Decision tree", "Product matrix"]
+            },
+            {
+              "value": "know_it_not_documented",
+              "label": "Know It, Not Documented",
+              "description": "I know which products fit which customers",
+              "examples": ["In my head", "Need to write down"]
+            },
+            {
+              "value": "need_to_create",
+              "label": "Need to Create Framework",
+              "description": "Don't have clear prescription rules yet",
+              "examples": ["Wing it currently"]
+            },
+            {
+              "value": "one_size_fits_all",
+              "label": "Currently One-Size-Fits-All",
+              "description": "Sell same thing to everyone",
+              "examples": ["No customization"]
+            }
+          ]
+        }
+      ]
+    },
+    "anchor_upsell": {
+      "offer_name": "Anchor Upsell",
+      "validation_intro": "Anchor Upsell uses premium pricing psychology to make your main offer feel like a bargain. Let's design your anchor strategy.",
+      "questions": [
+        {
+          "id": "anchor_q1_premium_offer",
+          "text": "What premium offer will you present FIRST at 5-10x your main price?",
+          "help_text": "This must be legitimate value, not a fake tier",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "vip_done_for_you",
+              "label": "VIP/Done-For-You Service",
+              "description": "We do everything for them",
+              "examples": ["Full implementation", "White glove service"]
+            },
+            {
+              "value": "one_on_one_intensive",
+              "label": "1-on-1 Intensive Program",
+              "description": "Personal coaching or consulting",
+              "examples": ["Private mentorship", "Personal trainer"]
+            },
+            {
+              "value": "premium_bundle",
+              "label": "Premium Everything Bundle",
+              "description": "All products + services + bonuses",
+              "examples": ["Complete package", "Everything included"]
+            },
+            {
+              "value": "mastermind_access",
+              "label": "Mastermind/Inner Circle Access",
+              "description": "Exclusive high-level group",
+              "examples": ["Peer group", "Network access"]
+            }
+          ]
+        },
+        {
+          "id": "anchor_q2_main_offer_rescue",
+          "text": "What is your 'rescue' offer after the premium gasp?",
+          "help_text": "This is your actual main offer - should be 1/5 to 1/10 the premium price",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "group_program",
+              "label": "Group Program/Coaching",
+              "description": "Group setting instead of 1-on-1",
+              "examples": ["Group coaching", "Cohort course"]
+            },
+            {
+              "value": "self_paced_course",
+              "label": "Self-Paced Course/Program",
+              "description": "DIY version with support",
+              "examples": ["Online course", "Video training"]
+            },
+            {
+              "value": "done_with_you",
+              "label": "Done-With-You Service",
+              "description": "We guide, they implement",
+              "examples": ["Coaching + templates", "Guided service"]
+            },
+            {
+              "value": "basic_package",
+              "label": "Basic Package",
+              "description": "Core solution without extras",
+              "examples": ["Essentials only", "Foundation tier"]
+            }
+          ]
+        },
+        {
+          "id": "anchor_q3_gasp_comfort",
+          "text": "How comfortable are you with 'the gasp' moment when customers see premium price?",
+          "help_text": "This is a critical moment - need confidence to hold the anchor",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "very_comfortable",
+              "label": "Very Comfortable",
+              "description": "I can confidently present premium pricing",
+              "examples": ["Used to high-ticket", "Price with confidence"]
+            },
+            {
+              "value": "somewhat_comfortable",
+              "label": "Somewhat Comfortable",
+              "description": "Can do it but need practice",
+              "examples": ["Have done it before", "Get nervous"]
+            },
+            {
+              "value": "need_training",
+              "label": "Need Training/Scripts",
+              "description": "Want to do it, need guidance",
+              "examples": ["Need exact words", "Role play practice"]
+            },
+            {
+              "value": "very_uncomfortable",
+              "label": "Very Uncomfortable",
+              "description": "Feel awkward with high pricing",
+              "examples": ["Apologize for prices", "Discount quickly"]
+            }
+          ]
+        }
+      ]
+    },
+    "rollover_upsell": {
+      "offer_name": "Rollover Upsell",
+      "validation_intro": "Rollover Upsell is Hormozi's most-used strategy. Let's identify which of the 4 rollover scenarios fits your business best.",
+      "questions": [
+        {
+          "id": "rollover_q1_target_segment",
+          "text": "Which customer segment will you target with Rollover Upsell?",
+          "help_text": "Rollover works in 4 scenarios - pick your primary target",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "dormant_old_customers",
+              "label": "Dormant/Old Customers (Re-engage)",
+              "description": "Customers who bought before but went quiet",
+              "examples": ["Bought 6+ months ago", "Haven't engaged recently"]
+            },
+            {
+              "value": "upset_your_customers",
+              "label": "Upset/Unhappy Customers (Rescue)",
+              "description": "Your own customers who are dissatisfied",
+              "examples": ["Refund requests", "Complaints", "Poor results"]
+            },
+            {
+              "value": "upset_competitor_customers",
+              "label": "Competitor's Upset Customers (Steal)",
+              "description": "People unhappy with competitors",
+              "examples": ["Switchers", "Frustrated with others"]
+            },
+            {
+              "value": "current_happy_customers",
+              "label": "Current Happy Customers (Upsell)",
+              "description": "Active customers ready for next level",
+              "examples": ["Got results", "Want more", "Ready to scale"]
+            }
+          ]
+        },
+        {
+          "id": "rollover_q2_credit_amount",
+          "text": "What will you credit from their previous purchase?",
+          "help_text": "You'll roll this amount toward the higher-tier offer",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "full_purchase_price",
+              "label": "Full Purchase Price",
+              "description": "Credit 100% of what they paid",
+              "examples": ["Paid $500, credit full $500"]
+            },
+            {
+              "value": "partial_purchase_price",
+              "label": "Partial Purchase Price",
+              "description": "Credit 50-75% of what they paid",
+              "examples": ["Paid $500, credit $300"]
+            },
+            {
+              "value": "refund_amount",
+              "label": "Refund Amount (If Upset)",
+              "description": "For upset customers, credit their refund",
+              "examples": ["Wanted $500 refund, credit toward better solution"]
+            },
+            {
+              "value": "competitor_purchase",
+              "label": "Competitor's Purchase Price",
+              "description": "Credit what they paid competitor",
+              "examples": ["Show receipt, match amount"]
+            }
+          ]
+        },
+        {
+          "id": "rollover_q3_next_tier_offer",
+          "text": "What higher-tier offer will they roll into (must be 4x+ higher)?",
+          "help_text": "This is the premium solution worth the upgrade",
+          "type": "single_choice",
+          "options": [
+            {
+              "value": "coaching_program",
+              "label": "Coaching/Mentorship Program",
+              "description": "Personalized guidance and support",
+              "examples": ["Group coaching", "1-on-1 mentorship"]
+            },
+            {
+              "value": "done_for_you_service",
+              "label": "Done-For-You Service",
+              "description": "We implement for them",
+              "examples": ["Full service", "Implementation team"]
+            },
+            {
+              "value": "annual_membership",
+              "label": "Annual Membership/Mastermind",
+              "description": "Ongoing access and community",
+              "examples": ["Year-long program", "Inner circle"]
+            },
+            {
+              "value": "premium_bundle",
+              "label": "Premium Product Bundle",
+              "description": "Complete solution package",
+              "examples": ["All products + support", "Everything included"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "usage_notes": {
+    "when_to_show": "After user completes initial 10 questions and receives their top 2 recommended offers",
+    "purpose": "Validate the recommendation and gather implementation details specific to each offer type",
+    "scoring_impact": "These answers don't change the recommendation, they help customize the implementation strategy"
+  }
+}

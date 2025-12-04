@@ -271,102 +271,120 @@ const Profile = () => {
           <p className="page-subtitle">Here's Your Profile:</p>
         </div>
 
+        {/* Your Voices Section */}
+        <h2 className="section-heading">Your Voices</h2>
+
         {/* Stats Grid */}
         <div className="stats-grid">
+          {/* Essence Archetype - Expandable */}
           <div className="stat-card-wrapper">
             <div
               className={`stat-card purple clickable ${expandedArchetypes.essence ? 'expanded' : ''}`}
-              onClick={() => {
-                setExpandedArchetypes(prev => ({ ...prev, essence: !prev.essence }))
-              }}
+              onClick={() => setExpandedArchetypes(prev => ({ ...prev, essence: !prev.essence }))}
               style={{ cursor: 'pointer' }}
             >
-              <div className="stat-icon">
-                <img
-                  src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
-                  alt={userData.essence_archetype}
-                  onError={(e) => {
-                    e.target.style.display = 'none'
-                    e.target.parentElement.innerHTML = '✨'
-                  }}
-                />
-              </div>
-              <div className="stat-label">Essence</div>
-              <div className="stat-value">{userData.essence_archetype}</div>
-            </div>
-            
-            {/* Expanded Dropdown Content */}
-            {expandedArchetypes.essence && (
-              <div className="stat-card-expanded">
-                <div className="archetype-expanded-card essence">
-                  <div className="archetype-header">
+              {!expandedArchetypes.essence && (
+                <>
+                  <div className="stat-icon">
                     <img
                       src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
                       alt={userData.essence_archetype}
+                      onError={(e) => {
+                        e.target.style.display = 'none'
+                        e.target.parentElement.innerHTML = '✨'
+                      }}
                     />
-                    <div className="archetype-tag">Your Essence</div>
                   </div>
-                  <div className="archetype-body">
-                    <h3 className="archetype-name">{userData.essence_archetype}</h3>
-                    <p className="archetype-description">
-                      {essenceData?.poetic_line || 'Your essence voice'}
-                    </p>
-                    <button
-                      className="explore-button"
-                      onClick={() => navigate('/archetypes/essence')}
-                    >
-                      Explore Deeper →
-                    </button>
-                  </div>
+                  <div className="stat-label">Essence</div>
+                  <div className="stat-value">{userData.essence_archetype}</div>
+                </>
+              )}
+              <div className={`expand-arrow ${expandedArchetypes.essence ? 'expanded' : ''}`}>
+                ↓
+              </div>
+            </div>
+
+            {/* Expanded Content */}
+            {expandedArchetypes.essence && (
+              <div className="archetype-expanded">
+                <div className="archetype-expanded-header">
+                  <img
+                    src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
+                    alt={userData.essence_archetype}
+                  />
+                  <div className="archetype-tag">Your Essence</div>
+                </div>
+                <div className="archetype-expanded-body">
+                  <h3 className="archetype-name">{userData.essence_archetype}</h3>
+                  <p className="archetype-description">
+                    {essenceData?.poetic_line || 'Your essence voice'}
+                  </p>
+                  <button
+                    className="explore-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/archetypes/essence');
+                    }}
+                  >
+                    Explore Deeper →
+                  </button>
                 </div>
               </div>
             )}
           </div>
+
+          {/* Protective Archetype - Expandable */}
           <div className="stat-card-wrapper">
             <div
               className={`stat-card yellow clickable ${expandedArchetypes.protective ? 'expanded' : ''}`}
-              onClick={() => {
-                setExpandedArchetypes(prev => ({ ...prev, protective: !prev.protective }))
-              }}
+              onClick={() => setExpandedArchetypes(prev => ({ ...prev, protective: !prev.protective }))}
               style={{ cursor: 'pointer' }}
             >
-              <div className="stat-icon">
-                <img
-                  src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
-                  alt={userData.protective_archetype}
-                  onError={(e) => {
-                    e.target.style.display = 'none'
-                    e.target.parentElement.innerHTML = '🛡️'
-                  }}
-                />
-              </div>
-              <div className="stat-label">Protective</div>
-              <div className="stat-value">{userData.protective_archetype}</div>
-            </div>
-            
-            {/* Expanded Dropdown Content */}
-            {expandedArchetypes.protective && (
-              <div className="stat-card-expanded">
-                <div className="archetype-expanded-card">
-                  <div className="archetype-header">
+              {!expandedArchetypes.protective && (
+                <>
+                  <div className="stat-icon">
                     <img
                       src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
                       alt={userData.protective_archetype}
+                      onError={(e) => {
+                        e.target.style.display = 'none'
+                        e.target.parentElement.innerHTML = '🛡️'
+                      }}
                     />
-                    <div className="archetype-tag">Protective</div>
                   </div>
-                  <div className="archetype-body">
-                    <h3 className="archetype-name">{userData.protective_archetype}</h3>
-                    <p className="archetype-description">
-                      {protectiveData?.summary || 'Your protective voice'}
-                    </p>
-                    <button
-                      className="explore-button"
-                      onClick={() => navigate('/archetypes/protective')}
-                    >
-                      Learn More →
-                    </button>
-                  </div>
+                  <div className="stat-label">Protective</div>
+                  <div className="stat-value">{userData.protective_archetype}</div>
+                </>
+              )}
+              <div className={`expand-arrow ${expandedArchetypes.protective ? 'expanded' : ''}`}>
+                ↓
+              </div>
+            </div>
+
+            {/* Expanded Content */}
+            {expandedArchetypes.protective && (
+              <div className="archetype-expanded">
+                <div className="archetype-expanded-header">
+                  <img
+                    src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
+                    alt={userData.protective_archetype}
+                  />
+                  <div className="archetype-tag">Protective</div>
+                </div>
+                <div className="archetype-expanded-body">
+                  <h3 className="archetype-name">{userData.protective_archetype}</h3>
+                  <p className="archetype-description">
+                    {protectiveData?.summary || 'Your protective voice'}
+                  </p>
+                  <button
+                    className="explore-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate('/archetypes/protective');
+                    }}
+                  >
+                    Learn More →
+                  </button>
                 </div>
               </div>
             )}
@@ -387,6 +405,9 @@ const Profile = () => {
           )}
         </div>
 
+        {/* Journey Guide Section */}
+        <h2 className="section-heading">Journey Guide</h2>
+
         {/* Stage Progress Section */}
         {stageProgress && (
           <div className="stage-progress-section">
@@ -395,11 +416,11 @@ const Profile = () => {
               currentStage={stageProgress.current_stage}
               onGraduate={handleGraduation}
             />
-
-            {/* Flow Map - Shows user's journey data */}
-            <FlowMap />
           </div>
         )}
+
+        {/* Flow Map - Shows user's journey data for all users */}
+        <FlowMap />
 
         {/* Graduation Modal */}
         <GraduationModal
@@ -459,60 +480,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Archetypes Section */}
-        <div className="archetypes-section" id="archetypes-section">
-          <div className="section-header">
-            <h2 className="section-title">Your Archetypes</h2>
-          </div>
-
-          <div className="archetype-cards-grid">
-            {/* Essence Card */}
-            <div className="archetype-card essence" id="essence-archetype-card">
-              <div className="archetype-header">
-                <img
-                  src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
-                  alt={userData.essence_archetype}
-                />
-                <div className="archetype-tag">Your Essence</div>
-              </div>
-              <div className="archetype-body">
-                <h3 className="archetype-name">{userData.essence_archetype}</h3>
-                <p className="archetype-description">
-                  {essenceData?.poetic_line || 'Your essence voice'}
-                </p>
-                <button
-                  className="explore-button"
-                  onClick={() => navigate('/archetypes/essence')}
-                >
-                  Explore Deeper →
-                </button>
-              </div>
-            </div>
-
-            {/* Protective Card */}
-            <div className="archetype-card" id="protective-archetype-card">
-              <div className="archetype-header">
-                <img
-                  src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
-                  alt={userData.protective_archetype}
-                />
-                <div className="archetype-tag">Protective</div>
-              </div>
-              <div className="archetype-body">
-                <h3 className="archetype-name">{userData.protective_archetype}</h3>
-                <p className="archetype-description">
-                  {protectiveData?.summary || 'Your protective voice'}
-                </p>
-                <button
-                  className="explore-button"
-                  onClick={() => navigate('/archetypes/protective')}
-                >
-                  Learn More →
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )

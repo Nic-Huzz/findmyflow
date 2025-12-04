@@ -167,6 +167,15 @@
   color: #666;
 }
 
+/* Section Headings */
+.section-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+  margin-top: 24px;
+}
+
 /* Stats Grid */
 .stats-grid {
   display: grid;
@@ -174,10 +183,6 @@
   gap: 25px;
   margin-bottom: 40px;
   align-items: start;
-}
-
-.stat-card-wrapper {
-  position: relative;
 }
 
 .stat-card {
@@ -194,116 +199,54 @@
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
-.stat-card.expanded {
+.stat-card-wrapper {
+  position: relative;
+}
+
+.stat-card.clickable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stat-card.clickable.expanded {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.stat-card-expanded {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  margin-top: -1px;
-  animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    max-height: 1000px;
-    transform: translateY(0);
-  }
-}
-
-.archetype-expanded-card {
-  background: white;
-  border-radius: 0 0 16px 16px;
+.stat-card.clickable:hover {
+  transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-  border: 1px solid #e8ecef;
-  border-top: none;
-  overflow: hidden;
 }
 
-.archetype-expanded-card .archetype-header {
-  height: 300px;
-  position: relative;
-  overflow: hidden;
-  background: #f5f7fa;
+.stat-card.clickable.expanded {
+  padding: 20px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.archetype-expanded-card .archetype-header img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.archetype-expanded-card .archetype-tag {
+.expand-arrow {
   position: absolute;
   top: 20px;
-  left: 20px;
-  background: rgba(255,255,255,0.95);
-  color: #5e17eb;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  z-index: 1;
-  backdrop-filter: blur(10px);
-}
-
-.archetype-expanded-card.essence .archetype-tag,
-.archetype-expanded-card .archetype-tag {
-  color: #5e17eb;
-}
-
-.archetype-expanded-card.essence .archetype-tag {
-  color: #d4a000;
-}
-
-.archetype-expanded-card .archetype-body {
-  padding: 30px;
-}
-
-.archetype-expanded-card .archetype-name {
-  font-size: 1.8rem;
-  color: #1a1a1a;
-  margin-bottom: 15px;
-  font-weight: 800;
-}
-
-.archetype-expanded-card .archetype-description {
-  font-size: 0.95rem;
-  line-height: 1.7;
+  right: 20px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
   color: #666;
-  margin-bottom: 25px;
+  transition: all 0.3s ease;
+  pointer-events: none;
 }
 
-.archetype-expanded-card .explore-button {
-  width: 100%;
+.expand-arrow.expanded {
+  transform: rotate(180deg);
   background: #5e17eb;
   color: white;
-  border: none;
-  padding: 14px;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-  font-size: 1rem;
-}
-
-.archetype-expanded-card .explore-button:hover {
-  background: #4912c4;
-  transform: scale(1.02);
 }
 
 .stat-icon {
@@ -352,6 +295,95 @@
   font-weight: 800;
 }
 
+/* Expanded Archetype Styles */
+.archetype-expanded {
+  background: white;
+  border: 1px solid #e8ecef;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 600px;
+    transform: translateY(0);
+  }
+}
+
+.archetype-expanded-header {
+  height: 250px;
+  position: relative;
+  overflow: hidden;
+  background: #f5f7fa;
+}
+
+.archetype-expanded-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.archetype-tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.95);
+  color: #5e17eb;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.archetype-expanded-body {
+  padding: 30px;
+}
+
+.archetype-name {
+  font-size: 1.8rem;
+  color: #1a1a1a;
+  margin-bottom: 15px;
+  font-weight: 800;
+}
+
+.archetype-description {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.explore-button {
+  width: 100%;
+  background: #5e17eb;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  font-size: 1rem;
+}
+
+.explore-button:hover {
+  background: #4912c4;
+  transform: scale(1.02);
+}
+
 /* Archetype Cards */
 .archetypes-section {
   margin-bottom: 40px;
@@ -362,6 +394,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
+  margin-top: 24px;
 }
 
 .section-title {

@@ -1,0 +1,67 @@
+{
+  "phase_2_followup_logic": {
+    "description": "After scoring phase-1 questions, ask follow-ups for top 2 offers to validate eligibility and readiness.",
+    "offers_to_followups": {
+
+      "payment_plan_downsell": [
+        {
+          "id": "FD1_payment_processing",
+          "text": "Can you process recurring payments or set up payment schedules?",
+          "type": "single_choice",
+          "options": ["yes_already_setup", "yes_can_implement", "no_not_yet"],
+          "store_as": "payment_processing_capability"
+        },
+        {
+          "id": "FD2_completion_tracking",
+          "text": "Are you comfortable with some customers canceling payment plans before completion?",
+          "type": "single_choice",
+          "options": ["yes_acceptable_risk", "maybe_depends", "no_need_full_payment"],
+          "store_as": "payment_plan_risk_tolerance"
+        }
+      ],
+
+      "trial_with_penalty": [
+        {
+          "id": "FD3_tracking_capability",
+          "text": "Can you track customer actions (attendance, homework completion, engagement)?",
+          "type": "single_choice",
+          "options": ["yes_have_system", "yes_can_setup", "no_cant_track"],
+          "store_as": "action_tracking_capability"
+        },
+        {
+          "id": "FD4_enforcement_willingness",
+          "text": "Are you willing to charge fees for non-compliance (missed sessions, incomplete work)?",
+          "type": "single_choice",
+          "options": ["yes_comfortable", "maybe_hesitant", "no_prefer_not"],
+          "store_as": "fee_enforcement_willingness"
+        }
+      ],
+
+      "feature_downsell": [
+        {
+          "id": "FD5_feature_tiers",
+          "text": "Can you clearly identify which features/components are most vs. least valuable?",
+          "type": "single_choice",
+          "options": ["yes_know_exactly", "mostly_yes", "need_to_figure_out"],
+          "store_as": "feature_value_clarity"
+        },
+        {
+          "id": "FD6_value_positioning",
+          "text": "Are you comfortable positioning yourself as a helpful guide (not just dropping price)?",
+          "type": "single_choice",
+          "options": ["yes_confident", "yes_with_training", "no_feels_pushy"],
+          "store_as": "downsell_positioning_comfort"
+        }
+      ]
+
+    },
+
+    "logic_rules": {
+      "ask_top_two_offers_only": true,
+      "max_followup_questions_per_offer": 2,
+      "skip_if_not_in_top_two": true,
+      "auto_rule_out_if_hard_no": true,
+      "if_both_offers_fail_followups": "fallback_to_next_best_offer"
+    }
+  }
+}
