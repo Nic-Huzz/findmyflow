@@ -46,17 +46,29 @@ export const handleConversationLogCompletion = async (userId, challengeInstanceI
     }
 
     // Increment conversations_logged counter
-    const { error: incrementError } = await supabase
+    // First fetch current value, then increment
+    const { data: currentProgress, error: fetchError } = await supabase
       .from('user_stage_progress')
-      .update({
-        conversations_logged: supabase.raw('conversations_logged + 1'),
-        updated_at: new Date().toISOString()
-      })
-      .eq('user_id', userId);
+      .select('conversations_logged')
+      .eq('user_id', userId)
+      .single();
 
-    if (incrementError) {
-      console.error('Error incrementing conversations:', incrementError);
-      // Don't throw - log was saved successfully
+    if (fetchError) {
+      console.error('Error fetching current progress:', fetchError);
+    } else {
+      const newCount = (currentProgress?.conversations_logged || 0) + 1;
+      const { error: incrementError } = await supabase
+        .from('user_stage_progress')
+        .update({
+          conversations_logged: newCount,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', userId);
+
+      if (incrementError) {
+        console.error('Error incrementing conversations:', incrementError);
+        // Don't throw - log was saved successfully
+      }
     }
 
     return { success: true };

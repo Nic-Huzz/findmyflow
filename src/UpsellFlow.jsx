@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import { completeFlowQuest } from './lib/questCompletion'
 import './UpsellFlow.css'
 
 // Flow stages
@@ -19,9 +20,6 @@ const STAGES = {
   Q10: 'q10',
   CALCULATING: 'calculating',
   REVEAL: 'reveal',
-  NAME_CAPTURE: 'name_capture',
-  EMAIL_CAPTURE: 'email_capture',
-  CODE_VERIFY: 'code_verify',
   SUCCESS: 'success'
 }
 
@@ -33,13 +31,12 @@ const STAGE_GROUPS = [
   { id: 'strategy', label: 'Strategy', stages: [STAGES.Q6, STAGES.Q7] },
   { id: 'execution', label: 'Execution', stages: [STAGES.Q8, STAGES.Q9, STAGES.Q10] },
   { id: 'results', label: 'Results', stages: [STAGES.CALCULATING, STAGES.REVEAL] },
-  { id: 'profile', label: 'Profile', stages: [STAGES.NAME_CAPTURE, STAGES.EMAIL_CAPTURE, STAGES.CODE_VERIFY] },
   { id: 'complete', label: 'Complete', stages: [STAGES.SUCCESS] }
 ]
 
 function UpsellFlow() {
   const navigate = useNavigate()
-  const { user, signInWithCode, verifyCode } = useAuth()
+  const { user } = useAuth()
 
   const [stage, setStage] = useState(STAGES.WELCOME)
   const [questionsData, setQuestionsData] = useState(null)
@@ -47,10 +44,7 @@ function UpsellFlow() {
   const [answers, setAnswers] = useState({})
   const [recommendedOffer, setRecommendedOffer] = useState(null)
   const [allOfferScores, setAllOfferScores] = useState([])
-  const [userName, setUserName] = useState('')
-  const [email, setEmail] = useState('')
-  const [verificationCode, setVerificationCode] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
   // Load questions and offers JSON
@@ -182,51 +176,21 @@ function UpsellFlow() {
     }
   }
 
-  // Handle name submission
-  const handleNameSubmit = (e) => {
-    e.preventDefault()
-    if (userName.trim()) {
-      setStage(STAGES.EMAIL_CAPTURE)
-    }
-  }
-
-  // Handle email submission (send code)
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault()
-    if (!email || isLoading) return
+  // Handle saving results (for authenticated users)
+  const handleSaveResults = async () => {
+    if (isLoading || !user) return
 
     setIsLoading(true)
     setError(null)
 
     try {
-      const result = await signInWithCode(email.toLowerCase())
-      if (result.success) {
-        setStage(STAGES.CODE_VERIFY)
-      } else {
-        setError(result.message || 'Failed to send verification code')
-      }
-    } catch (err) {
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Handle code verification
-  const handleCodeVerify = async (e) => {
-    e.preventDefault()
-    if (!verificationCode || isLoading) return
-
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      // Save profile data first
+      // Save assessment results
       const sessionId = crypto.randomUUID()
       await supabase.from('upsell_assessments').insert([{
         session_id: sessionId,
-        user_name: userName,
-        email: email.toLowerCase(),
+        user_id: user.id,
+        user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+        email: user.email,
         responses: answers,
         recommended_offer_id: recommendedOffer?.offer?.id,
         recommended_offer_name: recommendedOffer?.offer?.name,
@@ -241,23 +205,40 @@ function UpsellFlow() {
         }))
       }])
 
-      // Verify the code
-      const result = await verifyCode(email.toLowerCase(), verificationCode)
-      if (result.success) {
-        setStage(STAGES.SUCCESS)
-        setTimeout(() => navigate('/me'), 2000)
-      } else {
-        setError(result.message || 'Invalid verification code')
+      // Track flow completion for graduation requirements
+      try {
+        await supabase.from('flow_sessions').insert({
+          user_id: user.id,
+          flow_type: 'upsell_flow',
+          flow_version: 'upsell-offer-v1',
+          status: 'completed',
+          last_step_id: 'complete'
+        })
+      } catch (trackingError) {
+        console.warn('Flow tracking failed:', trackingError)
       }
+
+      // Complete challenge quest
+      try {
+        await completeFlowQuest({
+          userId: user.id,
+          flowId: 'flow_upsell_offer',
+          pointsEarned: 35
+        })
+      } catch (questError) {
+        console.warn('Quest completion failed:', questError)
+      }
+
+      setStage(STAGES.SUCCESS)
+      setTimeout(() => navigate('/me'), 2000)
     } catch (err) {
-      setError('Verification failed. Please try again.')
+      setError('Failed to save results. Please try again.')
+      console.error('Save error:', err)
     } finally {
       setIsLoading(false)
     }
   }
 
-  // Validate email format
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
   // Get question by stage
   const getQuestionByStage = () => {
@@ -456,7 +437,11 @@ function UpsellFlow() {
             Save your results to get your complete upsell funnel template, implementation tips, and success metrics.
           </p>
 
-          <button className="primary-button" onClick={() => setStage(STAGES.NAME_CAPTURE)}>
+          <button
+            className="primary-button"
+            onClick={handleSaveResults}
+            disabled={isLoading}
+          >
             Get My Complete Upsell Strategy
           </button>
         </div>
@@ -464,116 +449,15 @@ function UpsellFlow() {
     )
   }
 
-  // NAME CAPTURE
-  if (stage === STAGES.NAME_CAPTURE) {
-    return (
-      <div className="upsell-flow">
-        {renderProgress()}
-        <div className="capture-container">
-          <h2 className="capture-title">Almost there!</h2>
-          <p className="capture-subtitle">What should I call you?</p>
-          <form onSubmit={handleNameSubmit} className="capture-form">
-            <input
-              type="text"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              placeholder="Your name"
-              className="capture-input"
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="primary-button"
-              disabled={!userName.trim()}
-            >
-              Continue
-            </button>
-          </form>
-        </div>
-      </div>
-    )
-  }
 
-  // EMAIL CAPTURE
-  if (stage === STAGES.EMAIL_CAPTURE) {
-    return (
-      <div className="upsell-flow">
-        {renderProgress()}
-        <div className="capture-container">
-          <h2 className="capture-title">Perfect, {userName}!</h2>
-          <p className="capture-subtitle">
-            Enter your email to access your complete {recommendedOffer?.offer?.name} implementation guide and funnel template.
-          </p>
-          <form onSubmit={handleEmailSubmit} className="capture-form">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
-              className="capture-input"
-              disabled={isLoading}
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="primary-button"
-              disabled={isLoading || !validateEmail(email)}
-            >
-              {isLoading ? 'Sending...' : 'Send Verification Code'}
-            </button>
-          </form>
-          {error && <p className="error-message">{error}</p>}
-        </div>
-      </div>
-    )
-  }
 
-  // CODE VERIFICATION
-  if (stage === STAGES.CODE_VERIFY) {
-    return (
-      <div className="upsell-flow">
-        {renderProgress()}
-        <div className="capture-container">
-          <h2 className="capture-title">Check Your Email</h2>
-          <p className="capture-subtitle">
-            I've sent a verification code to <strong>{email}</strong>
-          </p>
-          <form onSubmit={handleCodeVerify} className="capture-form">
-            <input
-              type="text"
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              placeholder="Enter 6-digit code"
-              className="capture-input code-input"
-              maxLength={6}
-              disabled={isLoading}
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="primary-button"
-              disabled={isLoading || verificationCode.length < 6}
-            >
-              {isLoading ? 'Verifying...' : 'Verify Code'}
-            </button>
-          </form>
-          {error && <p className="error-message">{error}</p>}
-          <button
-            className="text-button"
-            onClick={() => {
-              setError(null)
-              setStage(STAGES.EMAIL_CAPTURE)
-            }}
-          >
-            Use a different email
-          </button>
-        </div>
-      </div>
-    )
-  }
+
+
+
 
   // SUCCESS
   if (stage === STAGES.SUCCESS) {
+    const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'there'
     return (
       <div className="upsell-flow">
         <div className="success-container">

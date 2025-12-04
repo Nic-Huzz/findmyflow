@@ -1,5 +1,5 @@
 // Flow Compass Helper Functions
-// Provides direction definitions, colors, and utilities for the Flow Tracker
+// Provides direction definitions, colors, and utilities for the Flow Compass
 
 /**
  * Flow Direction Definitions
@@ -47,16 +47,16 @@ export const FLOW_DIRECTIONS = {
   },
   west: {
     id: 'west',
-    label: 'Explore',
-    fullLabel: 'New Opportunity',
+    label: 'Enjoy',
+    fullLabel: 'Celebrate & Rest',
     internal: 'tired',
     external: 'ease',
-    color: '#8B5CF6', // Purple - Explore
+    color: '#8B5CF6', // Purple - Celebrate
     icon: '⬅️',
-    emoji: '✨',
-    signal: 'A new opportunity dropped in - explore it',
-    description: 'Tired energy + Easy results = Something interesting appeared',
-    action: 'Explore this new path'
+    emoji: '🎉',
+    signal: 'Time to honor yourself and your efforts',
+    description: 'Tired energy + Easy results = Take time to celebrate and rest',
+    action: 'Rest, reflect, and enjoy what you\'ve accomplished'
   }
 };
 

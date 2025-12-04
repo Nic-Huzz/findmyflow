@@ -452,7 +452,7 @@ function PersonaAssessment() {
           <div className="reveal-badge essence-badge">Your Essence</div>
           <h1 className="reveal-name">{essenceArchetype?.name}</h1>
           <p className="reveal-teaser">
-            {essenceDisplay?.poetic_line || essenceArchetype?.description}
+            {essenceDisplay?.superpower || essenceArchetype?.description}
           </p>
           <p className="reveal-hint">You'll discover more about your essence in your profile.</p>
           <button className="primary-button" onClick={() => setStage(STAGES.PROTECTIVE_INTRO)}>

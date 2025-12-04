@@ -2,16 +2,16 @@
 // Checks if user meets requirements to graduate to the next stage
 
 import { supabase } from './supabaseClient';
-import { PERSONA_STAGES, getNextStage, getStageCelebration } from './personaStages';
+import { PERSONA_STAGES, getNextStage, getStageCelebration, getInitialStage, getAllMilestones } from './personaStages';
 
 // Check if user has completed required flows
 const checkFlowsCompleted = async (userId, flowsRequired = []) => {
   if (!flowsRequired || flowsRequired.length === 0) return true;
 
   try {
-    // Query nikigai_sessions to check for completed flows
+    // Query flow_sessions to check for completed flows
     const { data: completedSessions, error } = await supabase
-      .from('nikigai_sessions')
+      .from('flow_sessions')
       .select('flow_type, status')
       .eq('user_id', userId)
       .eq('status', 'completed')
@@ -42,18 +42,21 @@ const checkFlowsCompleted = async (userId, flowsRequired = []) => {
   }
 };
 
-// Check if user has completed required milestones
-const checkMilestones = async (userId, milestonesRequired = []) => {
-  if (!milestonesRequired || milestonesRequired.length === 0) return true;
+// Check if user has completed required milestones (combines milestones and milestones_additional)
+// Now persona-aware to prevent cross-persona milestone contamination
+const checkMilestones = async (userId, persona, milestonesRequired = [], milestonesAdditional = []) => {
+  const allMilestones = [...milestonesRequired, ...milestonesAdditional];
+  if (!allMilestones || allMilestones.length === 0) return true;
 
   const { data: completedMilestones } = await supabase
     .from('milestone_completions')
     .select('milestone_id')
     .eq('user_id', userId)
-    .in('milestone_id', milestonesRequired);
+    .eq('persona', persona)  // Filter by current persona
+    .in('milestone_id', allMilestones);
 
   const completedMilestoneIds = new Set(completedMilestones?.map(m => m.milestone_id) || []);
-  return milestonesRequired.every(milestone => completedMilestoneIds.has(milestone));
+  return allMilestones.every(milestone => completedMilestoneIds.has(milestone));
 };
 
 // Check if user has met challenge streak requirement
@@ -108,7 +111,7 @@ export const checkGraduationEligibility = async (userId) => {
     const checks = {
       flows_completed: await checkFlowsCompleted(userId, requirements.flows_required),
       conversations_logged: conversations_logged >= (requirements.conversations_required || 0),
-      milestones_met: await checkMilestones(userId, requirements.milestones),
+      milestones_met: await checkMilestones(userId, persona, requirements.milestones, requirements.milestones_additional),
       streak_met: await checkStreak(userId, requirements.challenge_streak)
     };
 
@@ -137,6 +140,11 @@ export const checkGraduationEligibility = async (userId) => {
 // Graduate user to next stage
 export const graduateUser = async (userId, fromStage, toStage, persona, reason) => {
   try {
+    // Special case: Vibe Seeker graduating from Clarity becomes Vibe Riser
+    if (persona === 'vibe_seeker' && fromStage === 'clarity' && toStage === null) {
+      return await graduateVibeSeeker(userId, reason);
+    }
+
     // Record graduation in stage_graduations table
     const { error: graduationError } = await supabase
       .from('stage_graduations')
@@ -183,6 +191,63 @@ export const graduateUser = async (userId, fromStage, toStage, persona, reason) 
   }
 };
 
+// Special handler: Graduate Vibe Seeker to Vibe Riser
+const graduateVibeSeeker = async (userId, reason) => {
+  try {
+    // 1. Record graduation from Vibe Seeker
+    await supabase.from('stage_graduations').insert({
+      user_id: userId,
+      persona: 'vibe_seeker',
+      from_stage: 'clarity',
+      to_stage: null, // No next stage for Vibe Seeker
+      graduation_reason: reason
+    });
+
+    // 2. Update persona in profiles table
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .update({ persona: 'vibe_riser' })
+      .eq('id', userId);
+
+    if (profileError) {
+      throw new Error(`Failed to update persona: ${profileError.message}`);
+    }
+
+    // 3. Update user_stage_progress to Vibe Riser Validation stage
+    const { error: stageError } = await supabase
+      .from('user_stage_progress')
+      .update({
+        persona: 'vibe_riser',
+        current_stage: 'validation',
+        stage_started_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('user_id', userId);
+
+    if (stageError) {
+      throw new Error(`Failed to update stage progress: ${stageError.message}`);
+    }
+
+    return {
+      graduated: true,
+      persona_switched: true,
+      new_persona: 'vibe_riser',
+      new_stage: 'validation',
+      celebration_message: {
+        title: '🎉 Congratulations, Vibe Riser!',
+        message: "You've gained clarity on your unique value. Now it's time to validate your ideas and build something amazing!",
+        next_step: 'Welcome to the Validation stage. Let\'s validate your ideas with real people.'
+      }
+    };
+  } catch (error) {
+    console.error('Error graduating Vibe Seeker:', error);
+    return {
+      graduated: false,
+      error: error.message
+    };
+  }
+};
+
 // Helper to normalize persona names
 const normalizePersona = (persona) => {
   if (!persona) return null;
@@ -204,12 +269,15 @@ export const initializeUserStageProgress = async (userId, persona) => {
       throw new Error(`Invalid persona: ${persona}. Must be one of: Vibe Seeker, Vibe Riser, Movement Maker`);
     }
 
+    // Get the initial stage for this persona (different personas start at different stages)
+    const initialStage = getInitialStage(normalizedPersona);
+
     const { data, error } = await supabase
       .from('user_stage_progress')
       .upsert({
         user_id: userId,
         persona: normalizedPersona,
-        current_stage: 'validation',
+        current_stage: initialStage,
         conversations_logged: 0
       }, {
         onConflict: 'user_id',

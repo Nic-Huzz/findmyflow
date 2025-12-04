@@ -15,10 +15,13 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
   const allStages = PERSONA_STAGES[persona]?.stages || [];
 
   const stageIcons = {
+    clarity: '🔮',
     validation: '🔍',
     creation: '🗺️',
     testing: '🎯',
-    scale: '🚀'
+    ideation: '💡',
+    launch: '🚀',
+    scale: '🚀' // Legacy
   };
 
   useEffect(() => {
@@ -64,7 +67,9 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
     currentStage,
     currentStageIndex,
     stageFromDB: currentStage,
-    expectedStages: allStages
+    expectedStages: allStages,
+    requirements: requirements,
+    hasRequirements: !!requirements
   });
 
   // Safety check: if stage not found, default to first stage (discover)
@@ -137,14 +142,23 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
 
           {requirements && (
             <div className="requirements-section">
-              <div className="requirements-title">Graduation Requirements</div>
+              <div className="requirements-title">
+                {persona === 'vibe_seeker'
+                  ? 'Graduation Requirements'
+                  : 'Complete Graduation Requirements in 7-Day Challenge'}
+              </div>
+              {requirements.description && (
+                <div className="requirements-description" style={{ marginBottom: '16px', color: '#6b7280', fontSize: '0.95rem' }}>
+                  {requirements.description}
+                </div>
+              )}
               <div className="requirements-checklist">
                 {requirements.flows_required && requirements.flows_required.length > 0 && (
                   <div className={`requirement-item ${graduationStatus?.checks?.flows_completed ? 'completed' : ''}`}>
                     <div className="checkbox">
                       {graduationStatus?.checks?.flows_completed ? '✓' : '○'}
                     </div>
-                    <div>Complete {requirements.flows_required.join(', ')} flow</div>
+                    <div>Complete {requirements.flows_required.join(', ')} flows</div>
                   </div>
                 )}
 
@@ -191,12 +205,12 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
             <div className="next-level-section">
               <div className="next-level-title">Next Level: {getPersonaDisplayName(nextPersona)}</div>
               <div className="next-level-description">
-                {nextPersonaProfile.description}
+                {nextPersonaProfile.detailed?.description || nextPersonaProfile.description}
               </div>
               <div className="unlock-requirement">
                 <div className="lock-icon">🔒</div>
                 <div className="unlock-text">
-                  Complete all 4 stages of {getPersonaDisplayName(persona)} to unlock
+                  Complete all {allStages.length} stage{allStages.length !== 1 ? 's' : ''} of {getPersonaDisplayName(persona)} to unlock
                 </div>
               </div>
             </div>

@@ -1,0 +1,739 @@
+[
+{
+  "id": "win_your_money_back",
+  "name": "Win Your Money Back",
+  "description": "A results-driven offer where customers can earn back their investment by completing specific actions that generate results, testimonials, and upsell opportunities.",
+
+  "eligibility_rules": {
+    "required_followups": [
+      "FW1_tracking_requirement",
+      "FW2_refund_flexibility"
+    ],
+    "hard_disqualifiers": [
+      {
+        "field": "tracking_ability",
+        "disallowed": ["tracking_is_difficult", "cannot_track_results_at_all"]
+      },
+      {
+        "field": "cashflow_tolerance",
+        "disallowed": ["must_profit_front_end"]
+      }
+    ]
+  },
+
+  "scoring_weights": {
+    "Q1_business_model": {
+      "coaching_consulting": 3,
+      "agency": 3,
+      "digital_product": 2,
+      "membership_subscription": 1,
+      "saas_software": 1,
+      "physical_product": -1,
+      "hybrid": 2
+    },
+    "Q2_gross_margin": {
+      "under_40_percent": -3,
+      "40_60_percent": -1,
+      "60_85_percent": 2,
+      "85_plus_percent": 3
+    },
+    "Q3_cashflow_tolerance": {
+      "must_profit_front_end": -4,
+      "break_even_is_okay": 1,
+      "can_afford_short_term_loss": 3,
+      "can_run_free_front_end": 4
+    },
+    "Q4_capacity": {
+      "high_capacity_can_handle_big_spike": 2,
+      "moderate_capacity_some_limitations": 1,
+      "low_capacity_can_only_take_a_few": -2,
+      "no_capacity_need_to_control_volume": -3
+    },
+    "Q5_tracking": {
+      "can_track_everything": 4,
+      "can_track_some_things": 2,
+      "tracking_is_difficult": -3,
+      "cannot_track_results_at_all": -5
+    },
+    "Q6_lead_challenge": {
+      "leads_dont_trust_me_yet": 3,
+      "leads_are_price_sensitive": 3,
+      "slow_or_unclear_sales_cycle": 2,
+      "not_enough_leads": 1,
+      "low_quality_leads": 1,
+      "none_of_the_above": 0
+    },
+    "Q7_backend_strength": {
+      "multiple_strong_upsells_and_backend": 3,
+      "one_strong_backend_offer": 2,
+      "weak_backend_working_on_it": -1,
+      "no_backend_offer_yet": -4
+    },
+   "Q8_repeat_purchase": {
+  "frequent_repurchase_or_consumption": 0,
+  "occasional_repeat_purchase": 0,
+  "rare_repeat_purchase": 0,
+  "one_time_purchase_only": -1
+},
+    "Q9_primary_goal": {
+      "generate_testimonials_and_case_studies": 4,
+      "build_trust_and_authority": 2,
+      "fill_a_program_or_cohort": 2,
+      "sell_high_ticket_offer": 2,
+      "get_more_leads_fast": 1,
+      "grow_a_large_email_list": 1
+    },
+    "Q10_lead_preference": {
+      "fewer_but_higher_quality_leads": 3,
+      "only_people_likely_to_buy": 3,
+      "balanced_mix_of_volume_and_quality": 2,
+      "as_many_leads_as_possible": 1
+    }
+  },
+
+  "max_possible_score": 30,
+
+  "funnel_template": {
+    "headline_patterns": [
+      "Get results and earn your investment back.",
+      "Do the actions, get the wins, and win your money back."
+    ],
+    "offer_structure": [
+      "Front-end purchase to join challenge or program.",
+      "Clear completion checklist tied to results.",
+      "Reward: store credit or refund upon completion."
+    ],
+    "upsell_sequence": [
+      "Midpoint call or webinar to introduce premium offer.",
+      "Personal progress review before completion.",
+      "Premium upgrade invitation after documenting results."
+    ],
+    "followup_sequence": [
+      "Day 0: Welcome + steps to win your money back.",
+      "Day 3: Encouragement + first milestone reminder.",
+      "Day 7: Case study + subtle upsell.",
+      "Completion: Reward, testimonial request, final upsell."
+    ],
+    "metrics": [
+      "Completion rate",
+      "Refund/credit claim rate",
+      "Upsell conversion",
+      "CAC vs LTV"
+    ]
+  }
+},
+
+
+
+{
+  "id": "giveaway",
+  "name": "Flagship Giveaway",
+  "description": "A high-attraction offer that uses a compelling prize or scholarship to bring in large volumes of leads and convert non-winners through discounts or partial scholarships.",
+
+  "eligibility_rules": {
+    "required_followups": [
+      "FG1_prize_openness",
+      "FG2_legal_comfort"
+    ],
+    "hard_disqualifiers": [
+      {
+        "field": "capacity",
+        "disallowed": ["no_capacity_need_to_control_volume"]
+      },
+      {
+        "field": "backend_strength",
+        "disallowed": ["no_backend_offer_yet"]
+      }
+    ]
+  },
+
+  "scoring_weights": {
+    "Q1_business_model": {
+      "digital_product": 3,
+      "coaching_consulting": 3,
+      "membership_subscription": 3,
+      "hybrid": 3,
+      "agency": 2,
+      "saas_software": 2,
+      "physical_product": 1
+    },
+    "Q2_gross_margin": {
+      "under_40_percent": -3,
+      "40_60_percent": 0,
+      "60_85_percent": 3,
+      "85_plus_percent": 4
+    },
+    "Q3_cashflow_tolerance": {
+      "must_profit_front_end": -3,
+      "break_even_is_okay": 1,
+      "can_afford_short_term_loss": 3,
+      "can_run_free_front_end": 4
+    },
+   "Q4_capacity": {
+  "high_capacity_can_handle_big_spike": 4,
+  "moderate_capacity_some_limitations": 2,
+  "low_capacity_can_only_take_a_few": -2,
+  "no_capacity_need_to_control_volume": -5
+}
+   "Q5_tracking": {
+  "can_track_everything": 0,
+  "can_track_some_things": 0,
+  "tracking_is_difficult": 0,
+  "cannot_track_results_at_all": 0
+}
+    "Q6_lead_challenge": {
+      "not_enough_leads": 4,
+      "leads_dont_trust_me_yet": 3,
+      "slow_or_unclear_sales_cycle": 2,
+      "price_sensitive": 1,
+      "low_quality_leads": 1,
+      "none_of_the_above": 0
+    "Q7_backend_strength": {
+  "multiple_strong_upsells_and_backend": 4,
+  "one_strong_backend_offer": 3,
+  "weak_backend_working_on_it": -1,
+  "no_backend_offer_yet": -4
+}
+    "Q8_repeat_purchase": {
+      "frequent_repurchase_or_consumption": 1,
+      "occasional_repeat_purchase": 1,
+      "rare_repeat_purchase": 0,
+      "one_time_purchase_only": 0
+    },
+    "Q9_primary_goal": {
+      "get_more_leads_fast": 5,
+      "grow_a_large_email_list": 4,
+      "fill_a_program_or_cohort": 3,
+      "build_trust_and_authority": 2,
+      "sell_high_ticket_offer": 1,
+      "generate_testimonials_and_case_studies": 1
+    },
+    "Q10_lead_preference": {
+      "as_many_leads_as_possible": 4,
+      "balanced_mix_of_volume_and_quality": 2,
+      "fewer_but_higher_quality_leads": 1,
+      "only_people_likely_to_buy": 0
+    }
+  },
+
+  "max_possible_score": 34,
+
+  "funnel_template": {
+    "headline_patterns": [
+      "Enter to win the ultimate transformation experience.",
+      "Win our flagship program — no purchase required."
+    ],
+    "offer_structure": [
+      "Simple entry form.",
+      "Optional bonus entries for engagement.",
+      "Winner announcement followed by partial scholarships."
+    ],
+    "upsell_sequence": [
+      "Non-winner email offering discount or extended payment options.",
+      "Personal invite to join program.",
+      "Last-call message before deadline."
+    ],
+    "followup_sequence": [
+      "Day 0: Confirmation + explain the prize.",
+      "Day 2: Case study.",
+      "Day 4: Reminder.",
+      "Day 6: Winner announced + offer to non-winners."
+    ],
+    "metrics": [
+      "Entry count",
+      "Cost per lead",
+      "Upsell conversion from non-winners"
+    ]
+  }
+},
+
+
+
+
+{
+  "id": "decoy_offer",
+  "name": "Decoy Offer (Good/Better/Best)",
+  "description": "A tiered pricing structure where a weaker offer makes the premium offer look significantly more attractive.",
+
+  "eligibility_rules": {
+    "required_followups": [
+      "FD1_premium_vs_basic"
+    ],
+    "hard_disqualifiers": [
+      {
+        "field": "backend_strength",
+        "disallowed": ["no_backend_offer_yet"]
+      }
+    ]
+  },
+
+  "scoring_weights": {
+    "Q1_business_model": {
+      "coaching_consulting": 3,
+      "agency": 3,
+      "digital_product": 3,
+      "saas_software": 3,
+      "membership_subscription": 2,
+      "physical_product": 1,
+      "hybrid": 3
+    },
+    "Q2_gross_margin": {
+      "under_40_percent": -1,
+      "40_60_percent": 1,
+      "60_85_percent": 2,
+      "85_plus_percent": 3
+    },
+    "Q3_cashflow_tolerance": {
+      "must_profit_front_end": 0,
+      "break_even_is_okay": 2,
+      "can_afford_short_term_loss": 3,
+      "can_run_free_front_end": 1
+    },
+    "Q4_capacity": {
+      "high_capacity_can_handle_big_spike": 1,
+      "moderate_capacity_some_limitations": 1,
+      "low_capacity_can_only_take_a_few": 0,
+      "no_capacity_need_to_control_volume": -1
+    },
+    "Q5_tracking": {
+  "can_track_everything": 0,
+  "can_track_some_things": 0,
+  "tracking_is_difficult": 0,
+  "cannot_track_results_at_all": 0
+}
+    "Q6_lead_challenge": {
+      "leads_are_price_sensitive": 4,
+      "slow_or_unclear_sales_cycle": 3,
+      "low_quality_leads": 2,
+      "leads_dont_trust_me_yet": 1,
+      "not_enough_leads": 1,
+      "none_of_the_above": 0
+    },
+   "Q7_backend_strength": {
+  "multiple_strong_upsells_and_backend": 3,
+  "one_strong_backend_offer": 3,
+  "weak_backend_working_on_it": 0,
+  "no_backend_offer_yet": -3
+}
+    "Q8_repeat_purchase": {
+  "frequent_repurchase_or_consumption": 0,
+  "occasional_repeat_purchase": 0,
+  "rare_repeat_purchase": 0,
+  "one_time_purchase_only": 0
+}
+    "Q9_primary_goal": {
+      "fill_a_program_or_cohort": 4,
+      "sell_high_ticket_offer": 4,
+      "build_trust_and_authority": 2,
+      "get_more_leads_fast": 1,
+      "generate_testimonials_and_case_studies": 1,
+      "grow_a_large_email_list": 1
+    },
+    "Q10_lead_preference": {
+      "fewer_but_higher_quality_leads": 4,
+      "only_people_likely_to_buy": 3,
+      "balanced_mix_of_volume_and_quality": 2,
+      "as_many_leads_as_possible": 1
+    }
+  },
+
+  "max_possible_score": 34,
+
+  "funnel_template": {
+    "headline_patterns": [
+      "Choose the path that fits your goals.",
+      "Three levels, one transformation — choose your experience."
+    ],
+    "offer_structure": [
+      "Tier 1: stripped-down version.",
+      "Tier 2: mid-level value.",
+      "Tier 3: the premium experience."
+    ],
+    "upsell_sequence": [
+      "Show value difference via comparison chart.",
+      "Highlight transformation stories tied to premium.",
+      "Urgency: premium bonuses expiring soon."
+    ],
+    "followup_sequence": [
+      "Day 0: comparison chart.",
+      "Day 2: case study of premium success.",
+      "Day 4: FAQ email.",
+      "Day 6: last chance to choose premium."
+    ],
+    "metrics": [
+      "Tier distribution",
+      "Premium upgrade rate",
+      "Sales cycle length"
+    ]
+  }
+},
+
+
+
+
+{
+  "id": "buy_x_get_y_free",
+  "name": "Buy X Get Y Free",
+  "description": "A value-stacking front-end offer where buying a core product includes bonus units or additional products at no extra cost.",
+
+  "eligibility_rules": {
+    "required_followups": [
+      "FB1_repeat_purchase_confirm",
+      "FB2_unit_cost_feasibility"
+    ],
+    "hard_disqualifiers": [
+      {
+        "field": "gross_margin",
+        "disallowed": ["under_40_percent"]
+      }
+    ]
+  },
+
+  "scoring_weights": {
+    "Q1_business_model": {
+      "physical_product": 4,
+      "hybrid": 3,
+      "digital_product": 2,
+      "membership_subscription": 2,
+      "saas_software": 1,
+      "coaching_consulting": 1,
+      "agency": 1
+    },
+    "Q2_gross_margin": {
+      "under_40_percent": -5,
+      "40_60_percent": -1,
+      "60_85_percent": 2,
+      "85_plus_percent": 3
+    },
+    "Q3_cashflow_tolerance": {
+      "must_profit_front_end": -2,
+      "break_even_is_okay": 1,
+      "can_afford_short_term_loss": 3,
+      "can_run_free_front_end": 4
+    },
+   "Q4_capacity": {
+  "high_capacity_can_handle_big_spike": 3,
+  "moderate_capacity_some_limitations": 1,
+  "low_capacity_can_only_take_a_few": -3,
+  "no_capacity_need_to_control_volume": -4
+}
+    "Q5_tracking": {
+  "can_track_everything": 0,
+  "can_track_some_things": 0,
+  "tracking_is_difficult": 0,
+  "cannot_track_results_at_all": 0
+}
+    "Q6_lead_challenge": {
+      "not_enough_leads": 3,
+      "leads_are_price_sensitive": 3,
+      "slow_or_unclear_sales_cycle": 2,
+      "low_quality_leads": 1,
+      "leads_dont_trust_me_yet": 1,
+      "none_of_the_above": 0
+    },
+    "Q7_backend_strength": {
+  "multiple_strong_upsells_and_backend": 2,
+  "one_strong_backend_offer": 1,
+  "weak_backend_working_on_it": 0,
+  "no_backend_offer_yet": 0
+}
+    "Q8_repeat_purchase": {
+      "frequent_repurchase_or_consumption": 4,
+      "occasional_repeat_purchase": 2,
+      "rare_repeat_purchase": -2,
+      "one_time_purchase_only": -3
+    },
+    "Q9_primary_goal": {
+      "get_more_leads_fast": 3,
+      "grow_a_large_email_list": 2,
+      "build_trust_and_authority": 1,
+      "generate_testimonials_and_case_studies": 1,
+      "fill_a_program_or_cohort": 1,
+      "sell_high_ticket_offer": 1
+    },
+    "Q10_lead_preference": {
+      "as_many_leads_as_possible": 3,
+      "balanced_mix_of_volume_and_quality": 2,
+      "fewer_but_higher_quality_leads": 1,
+      "only_people_likely_to_buy": 0
+    }
+  },
+
+  "max_possible_score": 33,
+
+  "funnel_template": {
+    "headline_patterns": [
+      "Buy X, get Y free — unlock more value instantly.",
+      "Double your impact for the same price."
+    ],
+    "offer_structure": [
+      "Front-end offer includes bonus units.",
+      "Clear product value stack.",
+      "Limited-time, scarcity-based framing."
+    ],
+    "upsell_sequence": [
+      "Bundle upgrade options.",
+      "Subscription or refill upsell.",
+      "Volume-based deal for bulk buyers."
+    ],
+    "followup_sequence": [
+      "Day 0: value stack breakdown.",
+      "Day 2: reminder + scarcity.",
+      "Day 5: final chance.",
+      "Post-purchase: upsell refill/subscription."
+    ],
+    "metrics": [
+      "AOV",
+      "Bump/upsell take-rate",
+      "Repeat purchase rate"
+    ]
+  }
+},
+
+
+
+
+{
+  "id": "pay_less_now_or_pay_more_later",
+  "name": "Pay Less Now or Pay More Later",
+  "description": "A time-sensitive pricing structure where early buyers get a better deal, creating urgency and rapid sales.",
+
+  "eligibility_rules": {
+    "required_followups": [
+      "FP1_urgency_creation",
+      "FP2_delayed_cashflow_okay"
+    ],
+    "hard_disqualifiers": [
+      {
+        "field": "cashflow_tolerance",
+        "disallowed": ["must_profit_front_end"]
+      },
+      {
+        "field": "backend_strength",
+        "disallowed": ["no_backend_offer_yet"]
+      }
+    ]
+  },
+
+  "scoring_weights": {
+    "Q1_business_model": {
+      "coaching_consulting": 3,
+      "agency": 3,
+      "digital_product": 3,
+      "membership_subscription": 2,
+      "saas_software": 2,
+      "physical_product": 1,
+      "hybrid": 3
+    },
+    "Q2_gross_margin": {
+      "under_40_percent": -1,
+      "40_60_percent": 1,
+      "60_85_percent": 2,
+      "85_plus_percent": 3
+    },
+    "Q3_cashflow_tolerance": {
+      "must_profit_front_end": -4,
+      "break_even_is_okay": 1,
+      "can_afford_short_term_loss": 3,
+      "can_run_free_front_end": 3
+    },
+    "Q4_capacity": {
+      "high_capacity_can_handle_big_spike": 1,
+      "moderate_capacity_some_limitations": 1,
+      "low_capacity_can_only_take_a_few": 0,
+      "no_capacity_need_to_control_volume": -1
+    },
+    "Q5_tracking": {
+      "can_track_everything": 0,
+      "can_track_some_things": 0,
+      "tracking_is_difficult": 0,
+      "cannot_track_results_at_all": 0
+    },
+    "Q6_lead_challenge": {
+      "leads_are_price_sensitive": 3,
+      "slow_or_unclear_sales_cycle": 3,
+      "low_quality_leads": 1,
+      "leads_dont_trust_me_yet": 1,
+      "not_enough_leads": 1,
+      "none_of_the_above": 0
+    },
+    "Q7_backend_strength": {
+      "multiple_strong_upsells_and_backend": 4,
+      "one_strong_backend_offer": 3,
+      "weak_backend_working_on_it": -1,
+      "no_backend_offer_yet": -3
+    },
+    "Q8_repeat_purchase": {
+      "frequent_repurchase_or_consumption": 0,
+      "occasional_repeat_purchase": 0,
+      "rare_repeat_purchase": 0,
+      "one_time_purchase_only": 0
+    },
+    "Q9_primary_goal": {
+      "fill_a_program_or_cohort": 4,
+      "sell_high_ticket_offer": 4,
+      "build_trust_and_authority": 2,
+      "get_more_leads_fast": 2,
+      "generate_testimonials_and_case_studies": 1,
+      "grow_a_large_email_list": 1
+    },
+    "Q10_lead_preference": {
+      "fewer_but_higher_quality_leads": 3,
+      "only_people_likely_to_buy": 3,
+      "balanced_mix_of_volume_and_quality": 2,
+      "as_many_leads_as_possible": 1
+    }
+  },
+
+  "max_possible_score": 31,
+
+  "funnel_template": {
+    "headline_patterns": [
+      "Get the best price before it increases.",
+      "Early bird access — secure your spot before prices rise."
+    ],
+    "offer_structure": [
+      "Time-sensitive discount.",
+      "Clear deadline.",
+      "Contrast between early vs later pricing."
+    ],
+    "upsell_sequence": [
+      "Bonus for early purchasers.",
+      "Urgency reminder before price increase.",
+      "Final call with strong CTA."
+    ],
+    "followup_sequence": [
+      "Day 0: Welcome + urgency framing.",
+      "Day 1: Transformation story.",
+      "Day 3: FAQ email.",
+      "Day 5: Price increases tomorrow (last chance)."
+    ],
+    "metrics": [
+      "Sales velocity",
+      "Early purchase rate",
+      "Revenue per cohort"
+    ]
+  }
+},
+
+
+
+
+{
+  "id": "free_with_consumption_to_upsell",
+  "name": "Free With Consumption (Sample → Upsell)",
+  "description": "A model where the user receives the first session, module, or sample for free, and the experience naturally leads into a premium upsell.",
+
+  "eligibility_rules": {
+    "required_followups": [
+      "FC1_free_sample_feasibility",
+      "FC2_clear_upsell_path"
+    ],
+    "hard_disqualifiers": [
+      {
+        "field": "backend_strength",
+        "disallowed": ["no_backend_offer_yet"]
+      }
+    ]
+  },
+
+  "scoring_weights": {
+    "Q1_business_model": {
+      "digital_product": 3,
+      "membership_subscription": 3,
+      "saas_software": 4,
+      "physical_product": 3,
+      "coaching_consulting": 2,
+      "agency": 1,
+      "hybrid": 3
+    },
+    "Q2_gross_margin": {
+      "under_40_percent": -3,
+      "40_60_percent": -1,
+      "60_85_percent": 2,
+      "85_plus_percent": 3
+    },
+    "Q3_cashflow_tolerance": {
+      "must_profit_front_end": -3,
+      "break_even_is_okay": 1,
+      "can_afford_short_term_loss": 3,
+      "can_run_free_front_end": 4
+    },
+    "Q4_capacity": {
+      "high_capacity_can_handle_big_spike": 3,
+      "moderate_capacity_some_limitations": 1,
+      "low_capacity_can_only_take_a_few": -1,
+      "no_capacity_need_to_control_volume": -2
+    },
+    "Q5_tracking": {
+      "can_track_everything": 0,
+      "can_track_some_things": 0,
+      "tracking_is_difficult": 0,
+      "cannot_track_results_at_all": 0
+    },
+    "Q6_lead_challenge": {
+      "not_enough_leads": 3,
+      "leads_dont_trust_me_yet": 3,
+      "slow_or_unclear_sales_cycle": 2,
+      "low_quality_leads": 1,
+      "leads_are_price_sensitive": 1,
+      "none_of_the_above": 0
+    },
+    "Q7_backend_strength": {
+      "multiple_strong_upsells_and_backend": 4,
+      "one_strong_backend_offer": 2,
+      "weak_backend_working_on_it": -1,
+      "no_backend_offer_yet": -4
+    },
+    "Q8_repeat_purchase": {
+      "frequent_repurchase_or_consumption": 4,
+      "occasional_repeat_purchase": 2,
+      "rare_repeat_purchase": -2,
+      "one_time_purchase_only": -3
+    },
+    "Q9_primary_goal": {
+      "build_trust_and_authority": 4,
+      "get_more_leads_fast": 3,
+      "generate_testimonials_and_case_studies": 2,
+      "sell_high_ticket_offer": 2,
+      "grow_a_large_email_list": 2,
+      "fill_a_program_or_cohort": 1
+    },
+    "Q10_lead_preference": {
+      "balanced_mix_of_volume_and_quality": 3,
+      "as_many_leads_as_possible": 3,
+      "fewer_but_higher_quality_leads": 2,
+      "only_people_likely_to_buy": 1
+    }
+  },
+
+  "max_possible_score": 33,
+
+  "funnel_template": {
+    "headline_patterns": [
+      "Try the first session free — experience the transformation.",
+      "Start for free and see the power yourself."
+    ],
+    "offer_structure": [
+      "Free initial session/sample/module.",
+      "Clear pathway to premium upgrade.",
+      "Strong value demonstrated inside the free experience."
+    ],
+    "upsell_sequence": [
+      "Post-free-session email with upgrade link.",
+      "Limited-time bonuses if upgrading within 48–72 hours.",
+      "Case study follow-up email."
+    ],
+    "followup_sequence": [
+      "Day 0: Welcome + free experience.",
+      "Day 1: Value highlight + soft upsell.",
+      "Day 2: Bonus reminder.",
+      "Day 3: Last chance for upgrade incentive."
+    ],
+    "metrics": [
+      "Free-to-paid conversion rate",
+      "Activation rate of free sample",
+      "Upgrade rate within 72 hours"
+    ]
+  }
+}]

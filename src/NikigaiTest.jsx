@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient.js'
 import { useAuth } from './auth/AuthProvider'
 import { createProjectFromSession } from './lib/projectCreation'
+import { completeFlowQuest } from './lib/questCompletion'
 import './ClusterSlider.css'
 
 // Enhanced markdown parser for bold, italic text, bullets, headers, and line breaks
@@ -204,14 +205,33 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
 
   // Map flowFile to flow_type for graduation tracking
   function getFlowType(fileName) {
-    if (fileName.includes('nikigai-flow')) {
+    // Nikigai flows - each pillar tracked separately for Vibe Seeker graduation
+    if (fileName.includes('nikigai-flow-1-skills')) {
+      return 'nikigai_skills'
+    } else if (fileName.includes('nikigai-flow-2-problems')) {
+      return 'nikigai_problems'
+    } else if (fileName.includes('nikigai-flow-3-persona')) {
+      return 'nikigai_persona'
+    } else if (fileName.includes('nikigai-flow-4-integration')) {
+      return 'nikigai_integration'
+    } else if (fileName.includes('nikigai-flow')) {
+      // Legacy v2.2 flow (all-in-one)
       return 'nikigai'
-    } else if (fileName.includes('100m-offer')) {
-      return '100m_offer'
-    } else if (fileName.includes('money-model')) {
-      return '100m_money_model'
     }
-    return 'nikigai' // default
+
+    // Vibe Riser flows
+    if (fileName.includes('100m-offer')) {
+      return '100m_offer'
+    } else if (fileName.includes('lead-magnet')) {
+      return 'lead_magnet_offer'
+    }
+
+    // Movement Maker flows
+    if (fileName.includes('leads-strategy') || fileName.includes('100m-leads')) {
+      return '100m_leads'
+    }
+
+    return 'nikigai' // default fallback
   }
 
   async function initSession() {
@@ -232,7 +252,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
       const requiredPillar = prerequisites[flowData.pillar]
       if (requiredPillar) {
         const { data: completedSessions, error: checkError } = await supabase
-          .from('nikigai_sessions')
+          .from('flow_sessions')
           .select('id, status, completed_at')
           .eq('user_id', user.id)
           .eq('flow_version', `${requiredPillar}-claude`)
@@ -348,7 +368,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
 
       // Create new session for this flow
       const { data, error } = await supabase
-        .from('nikigai_sessions')
+        .from('flow_sessions')
         .insert({
           user_id: user.id,
           flow_version: `${flowData.pillar || 'v2.2'}-claude`,
@@ -611,6 +631,40 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
           timestamp: new Date().toLocaleTimeString()
         }
         setMessages(prev => [...prev, completionMessage])
+
+        // Complete challenge quest if this is the 100M Offer flow
+        if (flowFile === '100m-offer-flow.json' && user?.id) {
+          try {
+            await completeFlowQuest({
+              userId: user.id,
+              flowId: 'flow_100m_offer',
+              pointsEarned: 35
+            })
+          } catch (questError) {
+            console.warn('Quest completion failed:', questError)
+          }
+
+          // Auto-save milestone: product_created (Vibe Riser Creation stage requirement)
+          try {
+            const { data: stageProgress } = await supabase
+              .from('user_stage_progress')
+              .select('persona, current_stage')
+              .eq('user_id', user.id)
+              .single()
+
+            if (stageProgress?.persona === 'vibe_riser') {
+              await supabase.from('milestone_completions').insert({
+                user_id: user.id,
+                persona: stageProgress.persona,
+                stage: stageProgress.current_stage,
+                milestone_id: 'product_created',
+                completed_at: new Date().toISOString()
+              })
+            }
+          } catch (milestoneError) {
+            console.warn('Milestone auto-save failed:', milestoneError)
+          }
+        }
       }
 
     } catch (err) {
@@ -805,7 +859,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
           try {
             const { data: { user } } = await supabase.auth.getUser()
             await supabase
-              .from('nikigai_sessions')
+              .from('flow_sessions')
               .update({
                 status: 'completed',
                 completed_at: new Date().toISOString()
@@ -821,15 +875,17 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
             if (projectResult.success) {
               console.log('🎯 Project auto-created:', projectResult.projectId, projectResult.projectName)
 
-              // Show success message if new project created
-              if (!projectResult.alreadyExists) {
+              // Show success message if new project created (not skipped or already exists)
+              if (!projectResult.alreadyExists && !projectResult.skipped) {
                 const projectCreatedMsg = {
                   id: `ai-project-created-${Date.now()}`,
                   isAI: true,
-                  text: `🎯 Great news! I've created your project "${projectResult.projectName}". Visit /flow-tracker to start tracking your daily progress!`,
+                  text: `🎯 Great news! I've created your project "${projectResult.projectName}". Visit /flow-compass to start tracking your daily progress!`,
                   timestamp: new Date().toLocaleTimeString()
                 }
                 setMessages(prev => [...prev, projectCreatedMsg])
+              } else if (projectResult.skipped) {
+                console.log('✅ Skipped project creation - user already has an active project')
               }
             } else {
               console.warn('⚠️ Could not auto-create project:', projectResult.error)

@@ -14,9 +14,7 @@ const personaProfiles = {
       description: "Discover your unique gifts and calling"
     },
     stages: {
-      validation: "Complete Nikigai to discover your calling",
-      creation: "Build your first offer around your discovery",
-      testing: "Test your offer with real people"
+      clarity: "Complete all 4 Nikigai flows to gain clarity on your unique value"
     },
     detailed: {
       description:
@@ -36,13 +34,14 @@ const personaProfiles = {
       description: "Create an irresistible offer"
     },
     stages: {
-      validation: "Create your $100M Offer",
-      creation: "Build and launch your offer",
-      testing: "Get your first paying clients"
+      validation: "Send validation form and get 3 responses",
+      creation: "Complete offer flows, create product and lead magnet",
+      testing: "Complete testing, get feedback, identify improvements",
+      launch: "Define strategy, funnel stages, and begin implementation"
     },
     detailed: {
       description:
-        "You've started to recognize your patterns and are ready to make changes. You're committed to growth and transformation.",
+        "You've discovered your calling—now it's time to bring it to life. Validate your idea, create your offer, test it with real customers, and launch.",
       nextSteps: "Start your $100M Offer Creation flow to build an irresistible offer.",
       image: "/images/personas/vibe-riser.png"
     }
@@ -58,13 +57,13 @@ const personaProfiles = {
       description: "Build a scalable business model"
     },
     stages: {
-      validation: "Design your Money Model",
-      creation: "Implement your offer ladder",
-      testing: "Optimize for growth"
+      ideation: "Complete all money model flows and decide on each offer type",
+      creation: "Create all 4 offer types: Acquisition, Upsell, Downsell, Continuity",
+      launch: "Define strategy, funnel stages, and begin implementation"
     },
     detailed: {
       description:
-        "You've integrated your archetypes and are using your gifts to serve others. You're a catalyst for change.",
+        "You've proven your offer works—now it's time to multiply your impact. Design a full money model, create multiple offer types, and build a scalable system.",
       nextSteps: "Start your $100M Money Model flow to build a scalable business.",
       image: "/images/personas/movement-maker.png"
     }
@@ -84,7 +83,7 @@ const personaProfiles = {
     summary: "You're connected but wanting to live more in alignment with your essence.",
     detailed: {
       description:
-        "You've started to recognize your patterns and are ready to make changes. You're committed to growth and transformation.",
+        "You've discovered your calling—now it's time to bring it to life. Validate your idea, create your offer, test it with real customers, and launch.",
       nextSteps: "Dive deeper with the Healing Compass flow and begin your 7-day challenge.",
       image: "/images/personas/vibe-riser.png"
     }
@@ -93,7 +92,7 @@ const personaProfiles = {
     summary: "You're living in alignment and ready to create movement in the world.",
     detailed: {
       description:
-        "You've integrated your archetypes and are using your gifts to serve others. You're a catalyst for change.",
+        "You've proven your offer works—now it's time to multiply your impact. Design a full money model, create multiple offer types, and build a scalable system.",
       nextSteps: "Share your journey and help others discover their archetypes.",
       image: "/images/personas/movement-maker.png"
     }

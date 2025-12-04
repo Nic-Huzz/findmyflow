@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import {
   getUserValidationFlows,
@@ -9,13 +10,15 @@ import {
   getFlowAnalytics
 } from '../lib/validationFlows'
 import './ValidationFlowsManager.css'
+import '../Profile.css'
 
 /**
  * ValidationFlowsManager - Creator dashboard for managing validation flows
  */
 
 const ValidationFlowsManager = () => {
-  const { user } = useAuth()
+  const navigate = useNavigate()
+  const { user, signOut } = useAuth()
   const [flows, setFlows] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedFlow, setSelectedFlow] = useState(null)
@@ -24,6 +27,7 @@ const ValidationFlowsManager = () => {
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [selectedFlowType, setSelectedFlowType] = useState(null)
   const [copiedToken, setCopiedToken] = useState(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     if (user?.id) {
@@ -113,6 +117,19 @@ const ValidationFlowsManager = () => {
     setTimeout(() => setCopiedToken(null), 2000)
   }
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen)
+  }
+
+  const getUserInitials = (email) => {
+    if (!email) return '?'
+    const parts = email.split('@')[0].split(/[._-]/)
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase()
+    }
+    return email.substring(0, 2).toUpperCase()
+  }
+
   if (loading) {
     return (
       <div className="validation-manager-page">
@@ -122,16 +139,69 @@ const ValidationFlowsManager = () => {
   }
 
   return (
-    <div className="validation-manager-page">
-      <div className="manager-header">
-        <div>
-          <h1>Validation Flows</h1>
-          <p>Create shareable validation flows to gather customer feedback</p>
+    <div className="dashboard-container">
+      {/* Mobile Top Bar */}
+      <div className="mobile-topbar">
+        <div className="topbar-content">
+          <div className="topbar-logo">FindMyFlow</div>
+          <button className="hamburger-btn" onClick={toggleSidebar}>
+            ☰
+          </button>
         </div>
-        <button className="create-flow-btn" onClick={() => setShowCreateModal(true)}>
-          + Create New Flow
-        </button>
       </div>
+
+      {/* Sidebar Overlay for Mobile */}
+      {sidebarOpen && (
+        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
+      )}
+
+      {/* Sidebar */}
+      <div className={`sidebar ${sidebarOpen ? '' : 'mobile-hidden'}`}>
+        <div className="logo">FindMyFlow</div>
+
+        <div className="user-profile">
+          <div className="user-avatar">{getUserInitials(user?.email)}</div>
+          <div className="user-name">{user?.email?.split('@')[0] || 'User'}</div>
+          <div className="user-email">{user?.email}</div>
+        </div>
+
+        <ul className="nav-menu">
+          <li className="nav-item" onClick={() => { navigate('/me'); setSidebarOpen(false); }}>
+            📊 Dashboard
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
+            ✨ Archetypes
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
+            📈 7-Day Challenge
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
+            🧭 Flow Compass
+          </li>
+          <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
+            🔗 Validation Flows
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
+            💬 Give Feedback
+          </li>
+        </ul>
+
+        <div className="signout-link" onClick={signOut}>
+          Sign Out
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <div className="manager-header">
+          <div>
+            <h1>Validation Flows</h1>
+            <p>Create shareable validation flows to gather customer feedback</p>
+          </div>
+          <button className="create-flow-btn" onClick={() => setShowCreateModal(true)}>
+            + Create New Flow
+          </button>
+        </div>
 
       <div className="manager-content">
         {/* Flows List */}
@@ -252,8 +322,8 @@ const ValidationFlowsManager = () => {
         )}
       </div>
 
-      {/* Create Flow Modal */}
-      {showCreateModal && (
+        {/* Create Flow Modal */}
+        {showCreateModal && (
         <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Create Validation Flow</h2>
@@ -296,7 +366,8 @@ const ValidationFlowsManager = () => {
             </div>
           </div>
         </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

@@ -538,7 +538,7 @@
 .primary-button {
   width: 100%;
   padding: 16px 32px;
-  background: linear-gradient(135deg, #9333EA, #7C3AED);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
   border: none;
   border-radius: 12px;
   font-size: 16px;
@@ -546,12 +546,12 @@
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .primary-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
 }
 
 .primary-button:active {

@@ -25,6 +25,8 @@ const Profile = () => {
   const [stageProgress, setStageProgress] = useState(null)
   const [streakData, setStreakData] = useState(null)
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
+  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [currentSlide, setCurrentSlide] = useState(0)
 
   useEffect(() => {
     // Only load profile when user is available
@@ -33,6 +35,7 @@ const Profile = () => {
       checkChallengeStatus()
       loadStageProgress()
       loadStreakData()
+      checkFirstTimeUser()
     } else if (user === null) {
       // User is not authenticated
       setLoading(false)
@@ -40,6 +43,65 @@ const Profile = () => {
     }
     // If user is still loading (undefined), keep loading state
   }, [user])
+
+  const checkFirstTimeUser = () => {
+    // TEMPORARY: Always show onboarding for testing
+    // Delay slightly to ensure all components are rendered
+    setTimeout(() => {
+      setShowOnboarding(true)
+    }, 300)
+
+    // ORIGINAL CODE (commented out for testing):
+    // const hasSeenOnboarding = localStorage.getItem(`profile_onboarding_seen_${user?.id}`)
+    // if (!hasSeenOnboarding) {
+    //   setTimeout(() => {
+    //     setShowOnboarding(true)
+    //   }, 300)
+    // }
+  }
+
+  const handleCloseOnboarding = () => {
+    localStorage.setItem(`profile_onboarding_seen_${user?.id}`, 'true')
+    setShowOnboarding(false)
+    setCurrentSlide(0)
+  }
+
+  const handleNextSlide = () => {
+    setCurrentSlide(prev => prev + 1)
+  }
+
+  const handlePrevSlide = () => {
+    setCurrentSlide(prev => Math.max(0, prev - 1))
+  }
+
+  const captureComponentSnapshot = (selector) => {
+    // Add a small delay to ensure DOM is fully rendered
+    const element = document.querySelector(selector)
+    if (!element) {
+      // Retry once after a short delay if element not found
+      setTimeout(() => {
+        const retryElement = document.querySelector(selector)
+        if (retryElement) {
+          const clone = retryElement.cloneNode(true)
+          clone.style.maxWidth = '100%'
+          clone.style.transform = 'scale(0.95)'
+          clone.style.transformOrigin = 'center'
+          clone.style.pointerEvents = 'none'
+          return clone.outerHTML
+        }
+      }, 100)
+      return null
+    }
+
+    // Clone the element for snapshot
+    const clone = element.cloneNode(true)
+    clone.style.maxWidth = '100%'
+    clone.style.transform = 'scale(0.95)'
+    clone.style.transformOrigin = 'center'
+    clone.style.pointerEvents = 'none'
+
+    return clone.outerHTML
+  }
 
   const checkChallengeStatus = async () => {
     if (user?.id) {
@@ -214,8 +276,90 @@ const Profile = () => {
   const personaData = personaProfiles[userData.persona]
   const personaFlowData = getPersonaWithFlow(userData.persona)
 
+  // Onboarding slides with component snapshots
+  const onboardingSlides = [
+    {
+      title: "Welcome to Your Dashboard! 🎉",
+      content: "This is your command center for discovering and living your flow. Let's take a quick tour of what you can do here.",
+      componentSelector: null
+    },
+    {
+      title: "Your Voices 🎭",
+      content: "These are your Essence and Protective archetypes—the two voices inside you. Click to expand and explore deeper insights about each archetype.",
+      componentSelector: ".stats-grid"
+    },
+    {
+      title: "Journey Guide 🗺️",
+      content: "Track your progress through different stages. Each persona has specific stages to complete, with graduation requirements clearly shown.",
+      componentSelector: ".stage-progress-section"
+    },
+    {
+      title: "Flow Map 🧭",
+      content: "Your Flow Map shows three key sections: Flow Finder (your skills, problems, and people), Nervous System Limitations, and Flow Compass for logging your journey.",
+      componentSelector: ".flow-map"
+    },
+    {
+      title: "Ready to Explore! ✨",
+      content: "You're all set! Start by completing your Nikigai flows, explore your archetypes, or dive into the 7-Day Challenge. Your journey to flow begins now.",
+      componentSelector: ".cta-banner"
+    }
+  ]
+
+  const currentSlideData = onboardingSlides[currentSlide]
+  const isLastSlide = currentSlide === onboardingSlides.length - 1
+
   return (
     <div className="dashboard-container">
+      {/* Onboarding Modal Overlay */}
+      {showOnboarding && (
+        <div className="onboarding-overlay">
+          <div className="onboarding-modal">
+            <div className="onboarding-slide">
+              <h2 className="onboarding-title">{currentSlideData.title}</h2>
+              <p className="onboarding-content">{currentSlideData.content}</p>
+
+              {/* Component Preview */}
+              {currentSlideData.componentSelector && (
+                <div className="component-preview">
+                  <div
+                    className="component-snapshot"
+                    dangerouslySetInnerHTML={{
+                      __html: captureComponentSnapshot(currentSlideData.componentSelector) || '<div class="snapshot-placeholder">Component preview loading...</div>'
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="onboarding-dots">
+                {onboardingSlides.map((_, index) => (
+                  <div
+                    key={index}
+                    className={`onboarding-dot ${index === currentSlide ? 'active' : ''} ${index < currentSlide ? 'completed' : ''}`}
+                  />
+                ))}
+              </div>
+
+              <div className="onboarding-buttons">
+                {currentSlide > 0 && (
+                  <button className="onboarding-btn secondary" onClick={handlePrevSlide}>
+                    Previous
+                  </button>
+                )}
+                {!isLastSlide ? (
+                  <button className="onboarding-btn primary" onClick={handleNextSlide}>
+                    Next
+                  </button>
+                ) : (
+                  <button className="onboarding-btn primary" onClick={handleCloseOnboarding}>
+                    Get Started!
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Top Bar */}
       <div className="mobile-topbar">
         <div className="topbar-content">
@@ -248,11 +392,19 @@ const Profile = () => {
           <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
             ✨ Archetypes
           </li>
-          <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
-            📈 7-Day Challenge
+          <li
+            className={`nav-item ${userData?.persona === 'vibe_seeker' ? 'nav-item-locked' : ''}`}
+            onClick={() => {
+              if (userData?.persona === 'vibe_seeker') return
+              navigate('/7-day-challenge')
+              setSidebarOpen(false)
+            }}
+            title={userData?.persona === 'vibe_seeker' ? '🔒 Complete all 4 Nikigai flows to unlock' : ''}
+          >
+            {userData?.persona === 'vibe_seeker' ? '🔒 7-Day Challenge (Locked)' : '📈 7-Day Challenge'}
           </li>
-          <li className="nav-item" onClick={() => { navigate('/flow-tracker'); setSidebarOpen(false); }}>
-            🧭 Flow Tracker
+          <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
+            🧭 Flow Compass
           </li>
           <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
             💬 Give Feedback
@@ -408,7 +560,6 @@ const Profile = () => {
         {/* Journey Guide Section */}
         <h2 className="section-heading">Journey Guide</h2>
 
-        {/* Stage Progress Section */}
         {stageProgress && (
           <div className="stage-progress-section">
             <StageProgressCard
@@ -429,37 +580,8 @@ const Profile = () => {
           onClose={closeGraduationModal}
         />
 
-        {/* Persona Flow CTA */}
-        {personaFlowData?.flow && (
-          <div className="persona-flow-section">
-            <div className="section-header">
-              <h2 className="section-title">Your Next Step</h2>
-            </div>
-            <div
-              className="persona-flow-card"
-              style={{ borderColor: personaFlowData.color }}
-            >
-              <div className="persona-flow-header">
-                <span
-                  className="persona-badge-small"
-                  style={{ backgroundColor: personaFlowData.color }}
-                >
-                  {personaFlowData.name}
-                </span>
-                <span className="persona-tagline">{personaFlowData.tagline}</span>
-              </div>
-              <h3 className="persona-flow-name">{personaFlowData.flow.name}</h3>
-              <p className="persona-flow-description">{personaFlowData.flow.description}</p>
-              <button
-                className="persona-flow-button"
-                style={{ backgroundColor: personaFlowData.color }}
-                onClick={() => navigate(personaFlowData.flow.path)}
-              >
-                Start {personaFlowData.flow.name}
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Ready To Find Your Flow Section */}
+        <h2 className="section-heading">Ready To Find Your Flow?</h2>
 
         {/* CTA Banner */}
         <div className="cta-banner">
@@ -468,10 +590,18 @@ const Profile = () => {
             <p>Live Your Ambitions Quicker</p>
             <div className="cta-buttons">
               <button
-                className="btn-white"
-                onClick={() => navigate('/7-day-challenge')}
+                className={`btn-white ${userData?.persona === 'vibe_seeker' ? 'btn-locked' : ''}`}
+                onClick={() => {
+                  if (userData?.persona === 'vibe_seeker') return
+                  navigate('/7-day-challenge')
+                }}
+                disabled={userData?.persona === 'vibe_seeker'}
+                title={userData?.persona === 'vibe_seeker' ? 'Complete all 4 Nikigai flows to unlock' : ''}
               >
-                {hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥'}
+                {userData?.persona === 'vibe_seeker'
+                  ? '🔒 Complete Nikigai Flows to Unlock'
+                  : (hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥')
+                }
               </button>
               <button className="btn-outline" onClick={() => navigate('/feedback')}>
                 Give Feedback 💬

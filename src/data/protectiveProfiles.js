@@ -225,15 +225,15 @@ const protectiveProfiles = {
     },
     coreNarrative: {
       title: "Core Narrative",
-      belief: "Being close is dangerous. Numb is safer."
+      belief: "Being seen is dangerous. Being hidden is safer."
     },
     avoidancePattern: {
       title: "Avoidance Pattern",
-      description: "Avoid connection, avoid emotion, avoid vulnerability."
+      description: "Avoid connection, avoid emotion, avoid vulnerability, avoid standing-out."
     },
     splinterMomentType: {
       title: "Splinter Moment Type",
-      description: "Emotional overload, betrayal, intense conflict, abandonment terror."
+      description: "Emotional overload, betrayal, intense conflict, abandonment terror, intense judgement causing shame."
     },
     dischargePatternNeeded: {
       title: "Discharge Pattern Needed",

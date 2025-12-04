@@ -34,15 +34,22 @@ SELECT
 FROM push_subscriptions
 WHERE user_id = 'e1e50c38-94d4-4ce7-b763-b439e49f48f3';
 
--- 5. Verify challenge_instances table exists and check YOUR challenge
+-- 5. Verify challenge_progress table exists and check YOUR challenge
 SELECT
   user_id,
-  start_date,
+  challenge_start_date,
   created_at,
-  EXTRACT(DAY FROM (NOW() - start_date)) as days_since_start
-FROM challenge_instances
+  current_day,
+  EXTRACT(DAY FROM (NOW() - challenge_start_date)) as days_since_start,
+  persona,
+  current_stage,
+  streak_days,
+  longest_streak,
+  last_active_date,
+  total_points
+FROM challenge_progress
 WHERE user_id = 'e1e50c38-94d4-4ce7-b763-b439e49f48f3'
-ORDER BY start_date DESC
+ORDER BY challenge_start_date DESC
 LIMIT 1;
 
 -- 6. Check current cron job configuration

@@ -6,6 +6,8 @@ import AttractionOfferFlow from './AttractionOfferFlow'
 import UpsellFlow from './UpsellFlow'
 import DownsellFlow from './DownsellFlow'
 import ContinuityFlow from './ContinuityFlow'
+import LeadsStrategyFlow from './LeadsStrategyFlow'
+import LeadMagnetFlow from './LeadMagnetFlow'
 import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
@@ -19,7 +21,7 @@ import Feedback from './Feedback'
 import NotificationSettings from './components/NotificationSettings'
 import RetreatLanding from './RetreatLanding'
 import FlowLibrary from './FlowLibrary'
-import FlowTracker from './pages/FlowTracker'
+import FlowCompass from './pages/FlowCompass'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import ValidationFlowsManager from './pages/ValidationFlowsManager'
 import AuthGate from './AuthGate'
@@ -31,6 +33,8 @@ import './AttractionOfferFlow.css'
 import './UpsellFlow.css'
 import './DownsellFlow.css'
 import './ContinuityFlow.css'
+import './LeadsStrategyFlow.css'
+import './LeadMagnetFlow.css'
 import './MoneyModelGuide.css'
 import './Profile.css'
 import './Auth.css'
@@ -48,23 +52,50 @@ function AppRouter() {
             {/* Homepage - Persona Assessment */}
             <Route path="/" element={<PersonaAssessment />} />
 
-            {/* Attraction Offer Assessment - Public Lead Magnet */}
-            <Route path="/attraction-offer" element={<AttractionOfferFlow />} />
+            {/* Attraction Offer Assessment - In-App Challenge */}
+            <Route path="/attraction-offer" element={
+              <AuthGate>
+                <AttractionOfferFlow />
+              </AuthGate>
+            } />
 
-            {/* Upsell Offer Assessment - Public Lead Magnet */}
-            <Route path="/upsell-offer" element={<UpsellFlow />} />
+            {/* Upsell Offer Assessment - In-App Challenge */}
+            <Route path="/upsell-offer" element={
+              <AuthGate>
+                <UpsellFlow />
+              </AuthGate>
+            } />
 
-            {/* Downsell Offer Assessment - Public Lead Magnet */}
-            <Route path="/downsell-offer" element={<DownsellFlow />} />
+            {/* Downsell Offer Assessment - In-App Challenge */}
+            <Route path="/downsell-offer" element={
+              <AuthGate>
+                <DownsellFlow />
+              </AuthGate>
+            } />
 
-            {/* Continuity Offer Assessment - Public Lead Magnet */}
-            <Route path="/continuity-offer" element={<ContinuityFlow />} />
+            {/* Continuity Offer Assessment - In-App Challenge */}
+            <Route path="/continuity-offer" element={
+              <AuthGate>
+                <ContinuityFlow />
+              </AuthGate>
+            } />
+
+            {/* Leads Strategy Assessment - In-App Challenge */}
+            <Route path="/leads-strategy" element={
+              <AuthGate>
+                <LeadsStrategyFlow />
+              </AuthGate>
+            } />
+
+            {/* Lead Magnet Type Assessment - In-App Challenge */}
+            <Route path="/lead-magnet" element={
+              <AuthGate>
+                <LeadMagnetFlow />
+              </AuthGate>
+            } />
 
             {/* Money Model Guide - Educational Overview */}
             <Route path="/money-model-guide" element={<MoneyModelGuide />} />
-
-            {/* Legacy lead magnet flow */}
-            <Route path="/lead-magnet" element={<App />} />
 
             <Route path="/retreats" element={<RetreatLanding />} />
 
@@ -147,10 +178,10 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Phase 4: Flow Tracker */}
-            <Route path="/flow-tracker" element={
+            {/* Phase 4: Flow Compass */}
+            <Route path="/flow-compass" element={
               <AuthGate>
-                <FlowTracker />
+                <FlowCompass />
               </AuthGate>
             } />
 
@@ -165,11 +196,6 @@ function AppRouter() {
             <Route path="/100m-offer" element={
               <AuthGate>
                 <NikigaiTest flowFile="100m-offer-flow.json" flowName="$100M Offer Builder" />
-              </AuthGate>
-            } />
-            <Route path="/money-model" element={
-              <AuthGate>
-                <NikigaiTest flowFile="money-model-flow.json" flowName="Money Model Designer" />
               </AuthGate>
             } />
           </Routes>

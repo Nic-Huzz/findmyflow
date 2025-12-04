@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nikigai Sliders - Style 3: Visual Venn</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .nikigai-visual {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .circle-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    .circle-card:hover {
+      transform: scale(1.05);
+    }
+
+    .circle-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .circle-icon.skill {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .circle-icon.problem {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .circle-icon.persona {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .circle-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .circle-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1f2937;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .circle-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .center-badge {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .badge-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .badge-title {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #8b5cf6;
+      margin-bottom: 8px;
+    }
+
+    .badge-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      line-height: 1.3;
+    }
+
+    .connector-lines {
+      display: none; /* Could add SVG lines between circles */
+    }
+
+    @media (max-width: 768px) {
+      .nikigai-visual {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Your Unique Nikigai</h2>
+      <p class="section-subtitle">The intersection of your talents, purpose, and passion</p>
+    </div>
+
+    <div class="nikigai-visual">
+      <!-- Skill Circle -->
+      <div class="circle-card">
+        <div class="circle-icon skill">🎯</div>
+        <div class="circle-label">Your Skill</div>
+        <div class="circle-value">Content Creation & Storytelling</div>
+        <div class="circle-description">
+          Crafting compelling narratives across multiple formats
+        </div>
+      </div>
+
+      <!-- Problem Circle -->
+      <div class="circle-card">
+        <div class="circle-icon problem">💡</div>
+        <div class="circle-label">Problem You Solve</div>
+        <div class="circle-value">Marketing Challenges</div>
+        <div class="circle-description">
+          Helping businesses connect authentically with customers
+        </div>
+      </div>
+
+      <!-- Persona Circle -->
+      <div class="circle-card">
+        <div class="circle-icon persona">👥</div>
+        <div class="circle-label">People You Serve</div>
+        <div class="circle-value">Ambitious Entrepreneurs</div>
+        <div class="circle-description">
+          Driven founders ready to scale their impact
+        </div>
+      </div>
+    </div>
+
+    <div class="center-badge">
+      <div class="badge-icon">✨</div>
+      <div class="badge-title">Your Sweet Spot</div>
+      <div class="badge-value">
+        Using Content Creation & Storytelling to solve Marketing Challenges for Ambitious Entrepreneurs
+      </div>
+    </div>
+  </div>
+</body>
+</html>

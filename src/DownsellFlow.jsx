@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import { completeFlowQuest } from './lib/questCompletion'
 import './DownsellFlow.css'
 
 // Flow stages
@@ -19,9 +20,6 @@ const STAGES = {
   Q10: 'q10',
   CALCULATING: 'calculating',
   REVEAL: 'reveal',
-  NAME_CAPTURE: 'name_capture',
-  EMAIL_CAPTURE: 'email_capture',
-  CODE_VERIFY: 'code_verify',
   SUCCESS: 'success'
 }
 
@@ -33,13 +31,12 @@ const STAGE_GROUPS = [
   { id: 'market', label: 'Market', stages: [STAGES.Q6, STAGES.Q7] },
   { id: 'goals', label: 'Goals', stages: [STAGES.Q8, STAGES.Q9, STAGES.Q10] },
   { id: 'results', label: 'Results', stages: [STAGES.CALCULATING, STAGES.REVEAL] },
-  { id: 'profile', label: 'Profile', stages: [STAGES.NAME_CAPTURE, STAGES.EMAIL_CAPTURE, STAGES.CODE_VERIFY] },
   { id: 'complete', label: 'Complete', stages: [STAGES.SUCCESS] }
 ]
 
 function DownsellFlow() {
   const navigate = useNavigate()
-  const { user, signInWithCode, verifyCode } = useAuth()
+  const { user } = useAuth()
 
   const [stage, setStage] = useState(STAGES.WELCOME)
   const [questionsData, setQuestionsData] = useState(null)
@@ -47,10 +44,7 @@ function DownsellFlow() {
   const [answers, setAnswers] = useState({})
   const [recommendedOffer, setRecommendedOffer] = useState(null)
   const [allOfferScores, setAllOfferScores] = useState([])
-  const [userName, setUserName] = useState('')
-  const [email, setEmail] = useState('')
-  const [verificationCode, setVerificationCode] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
   // Load questions and offers JSON
@@ -178,51 +172,21 @@ function DownsellFlow() {
     }
   }
 
-  // Handle name submission
-  const handleNameSubmit = (e) => {
-    e.preventDefault()
-    if (userName.trim()) {
-      setStage(STAGES.EMAIL_CAPTURE)
-    }
-  }
-
-  // Handle email submission (send code)
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault()
-    if (!email || isLoading) return
+  // Handle saving results (for authenticated users)
+  const handleSaveResults = async () => {
+    if (isLoading || !user) return
 
     setIsLoading(true)
     setError(null)
 
     try {
-      const result = await signInWithCode(email.toLowerCase())
-      if (result.success) {
-        setStage(STAGES.CODE_VERIFY)
-      } else {
-        setError(result.message || 'Failed to send verification code')
-      }
-    } catch (err) {
-      setError('Something went wrong. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Handle code verification
-  const handleCodeVerify = async (e) => {
-    e.preventDefault()
-    if (!verificationCode || isLoading) return
-
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      // Save profile data first
+      // Save assessment results
       const sessionId = crypto.randomUUID()
       await supabase.from('downsell_assessments').insert([{
         session_id: sessionId,
-        user_name: userName,
-        email: email.toLowerCase(),
+        user_id: user.id,
+        user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+        email: user.email,
         responses: answers,
         recommended_offer_id: recommendedOffer?.offer?.id,
         recommended_offer_name: recommendedOffer?.offer?.name,
@@ -237,23 +201,40 @@ function DownsellFlow() {
         }))
       }])
 
-      // Verify the code
-      const result = await verifyCode(email.toLowerCase(), verificationCode)
-      if (result.success) {
-        setStage(STAGES.SUCCESS)
-        setTimeout(() => navigate('/me'), 2000)
-      } else {
-        setError(result.message || 'Invalid verification code')
+      // Track flow completion for graduation requirements
+      try {
+        await supabase.from('flow_sessions').insert({
+          user_id: user.id,
+          flow_type: 'downsell_flow',
+          flow_version: 'downsell-offer-v1',
+          status: 'completed',
+          last_step_id: 'complete'
+        })
+      } catch (trackingError) {
+        console.warn('Flow tracking failed:', trackingError)
       }
+
+      // Complete challenge quest
+      try {
+        await completeFlowQuest({
+          userId: user.id,
+          flowId: 'flow_downsell_offer',
+          pointsEarned: 35
+        })
+      } catch (questError) {
+        console.warn('Quest completion failed:', questError)
+      }
+
+      setStage(STAGES.SUCCESS)
+      setTimeout(() => navigate('/me'), 2000)
     } catch (err) {
-      setError('Verification failed. Please try again.')
+      setError('Failed to save results. Please try again.')
+      console.error('Save error:', err)
     } finally {
       setIsLoading(false)
     }
   }
 
-  // Validate email format
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
   // Get question by stage
   const getQuestionByStage = () => {
@@ -449,7 +430,11 @@ function DownsellFlow() {
             </div>
           )}
 
-          <button className="primary-button" onClick={() => setStage(STAGES.NAME_CAPTURE)}>
+          <button
+            className="primary-button"
+            onClick={handleSaveResults}
+            disabled={isLoading}
+          >
             Save My Results
           </button>
         </div>

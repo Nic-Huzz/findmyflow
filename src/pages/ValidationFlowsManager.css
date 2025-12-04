@@ -6,11 +6,12 @@
 }
 
 .manager-header {
-  max-width: 1200px;
-  margin: 0 auto 40px;
+  margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .manager-header h1 {
@@ -26,7 +27,7 @@
 }
 
 .create-flow-btn {
-  background: #667eea;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -35,18 +36,17 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 .create-flow-btn:hover {
-  background: #5568d3;
+  background: linear-gradient(135deg, #3d0b8a 0%, #4a12c7 50%, #6730d1 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 6px 16px rgba(94, 23, 235, 0.4);
 }
 
 /* Manager Content */
 .manager-content {
-  max-width: 1200px;
-  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;

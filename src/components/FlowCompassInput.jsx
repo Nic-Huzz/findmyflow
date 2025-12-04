@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../auth/AuthProvider'
+import { supabase } from '../lib/supabaseClient'
 import FlowCompass from './FlowCompass'
 import './FlowCompassInput.css'
 
@@ -11,12 +14,39 @@ import './FlowCompassInput.css'
  */
 
 function FlowCompassInput({ quest, onComplete }) {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [hasProject, setHasProject] = useState(null) // null = loading, true/false = result
   const [step, setStep] = useState(1) // 1: compass, 2: context
   const [direction, setDirection] = useState(null)
   const [internalState, setInternalState] = useState(null)
   const [externalState, setExternalState] = useState(null)
   const [activityDescription, setActivityDescription] = useState('')
   const [reasoning, setReasoning] = useState('')
+
+  // Check if user has a project on mount
+  useEffect(() => {
+    const checkProject = async () => {
+      if (!user?.id) return
+
+      try {
+        const { data, error } = await supabase
+          .from('user_projects')
+          .select('id')
+          .eq('user_id', user.id)
+          .limit(1)
+
+        if (error) throw error
+
+        setHasProject(data && data.length > 0)
+      } catch (error) {
+        console.error('Error checking project:', error)
+        setHasProject(false)
+      }
+    }
+
+    checkProject()
+  }, [user])
 
   const handleCompassSelect = (dir, internal, external) => {
     setDirection(dir)
@@ -42,6 +72,37 @@ function FlowCompassInput({ quest, onComplete }) {
 
     // Call completion callback
     onComplete(quest, flowData)
+  }
+
+  // Show loading state while checking project
+  if (hasProject === null) {
+    return (
+      <div className="flow-compass-input">
+        <div className="compass-step">
+          <p className="step-instruction">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show redirect if no project exists
+  if (hasProject === false) {
+    return (
+      <div className="flow-compass-input">
+        <div className="compass-step">
+          <p className="step-instruction" style={{ marginBottom: '16px' }}>
+            To track your flow, you need to set up your Flow Compass first.
+          </p>
+          <button
+            className="quest-flow-btn"
+            onClick={() => navigate('/flow-compass')}
+            style={{ width: '100%' }}
+          >
+            Start Your Flow Compass →
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (

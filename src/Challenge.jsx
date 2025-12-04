@@ -760,6 +760,23 @@ function Challenge() {
         completionData.reflection_text = JSON.stringify(specialData)
       }
 
+      // Check if quest already completed today (prevent duplicates)
+      const todayDate = new Date().toISOString().split('T')[0]
+      const { data: existingCompletion } = await supabase
+        .from('quest_completions')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('challenge_instance_id', progress.challenge_instance_id)
+        .eq('quest_id', quest.id)
+        .gte('completed_at', `${todayDate}T00:00:00.000Z`)
+        .lte('completed_at', `${todayDate}T23:59:59.999Z`)
+        .maybeSingle()
+
+      if (existingCompletion) {
+        alert('You have already completed this quest today!')
+        return
+      }
+
       const { error: completionError } = await supabase
         .from('quest_completions')
         .insert([completionData])
@@ -1032,7 +1049,28 @@ function Challenge() {
   }
 
   // Filter quests by the active category tab
-  const filteredQuests = challengeData?.quests.filter(q => q.category === activeCategory) || []
+  let filteredQuests = challengeData?.quests.filter(q => q.category === activeCategory) || []
+
+  // Filter by persona and stage for Flow Finder quests
+  if (activeCategory === 'Flow Finder') {
+    filteredQuests = filteredQuests.filter(quest => {
+      // Filter by persona
+      if (quest.persona_specific && userData?.persona) {
+        if (!quest.persona_specific.includes(userData.persona)) {
+          return false
+        }
+      }
+
+      // Filter by stage
+      if (quest.stage_required && stageProgress?.current_stage) {
+        if (quest.stage_required !== stageProgress.current_stage) {
+          return false
+        }
+      }
+
+      return true
+    })
+  }
 
   // For Daily and Weekly tabs, group quests by type (the 4 R's)
   // For Flow Finder, quests are already in the right category
@@ -1193,7 +1231,9 @@ function Challenge() {
             <div className="challenge-day">
               Day {progress.current_day}/7
               {progress.current_day === 7 && (
-                <span className="challenge-complete-badge">Complete! 🎉</span>
+                <span className="challenge-complete-badge">
+                  <span className="complete-text">Complete!</span> 🎉
+                </span>
               )}
             </div>
             {userData?.essence_archetype && (
@@ -1828,6 +1868,25 @@ function Challenge() {
                       <h3 className="quest-name">{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
                     </div>
+
+                    {/* Daily Streak Bubbles for quests with maxPerDay */}
+                    {quest.maxPerDay && (
+                      <div className="daily-streak">
+                        {getDayLabels().map((label, index) => {
+                          const streak = getDailyStreak(quest.id)
+                          return (
+                            <div
+                              key={index}
+                              className={`streak-bubble ${streak[index] ? 'completed' : ''}`}
+                              title={`Day ${index + 1}`}
+                            >
+                              {label}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+
                     <p className="quest-description">{quest.description}</p>
 
                     {quest.learnMore && !completed && (
@@ -2054,7 +2113,7 @@ function Challenge() {
         {/* Tracker Quests */}
         {activeCategory === 'Tracker' && (
           <div className="quest-section">
-            <h2 className="section-title">Flow Tracker</h2>
+            <h2 className="section-title">Flow Compass</h2>
             {filteredQuests.length === 0 ? (
               <div className="empty-category">
                 <p>Track your flow activities here. Coming soon!</p>

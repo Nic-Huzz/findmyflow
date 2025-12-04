@@ -58,7 +58,7 @@ export const updateStreak = async (userId, challengeInstanceId) => {
       const { data: currentProgress, error: progressError } = await supabase
         .from('challenge_progress')
         .select('streak_days, longest_streak')
-        .eq('id', challengeInstanceId)
+        .eq('challenge_instance_id', challengeInstanceId)
         .maybeSingle();
 
       if (progressError) {
@@ -82,7 +82,7 @@ export const updateStreak = async (userId, challengeInstanceId) => {
           longest_streak: newLongest,
           last_active_date: new Date().toISOString()
         })
-        .eq('id', challengeInstanceId);
+        .eq('challenge_instance_id', challengeInstanceId);
 
       if (updateError) {
         console.error('Error updating streak:', updateError);
@@ -103,7 +103,7 @@ export const updateStreak = async (userId, challengeInstanceId) => {
       .update({
         last_active_date: new Date().toISOString()
       })
-      .eq('id', challengeInstanceId);
+      .eq('challenge_instance_id', challengeInstanceId);
 
     if (updateError) {
       console.error('Error updating last active date:', updateError);
@@ -127,7 +127,7 @@ export const checkStreakBreak = async (userId, challengeInstanceId) => {
     const { data: progress, error: progressError } = await supabase
       .from('challenge_progress')
       .select('last_active_date, streak_days')
-      .eq('id', challengeInstanceId)
+      .eq('challenge_instance_id', challengeInstanceId)
       .maybeSingle();
 
     if (progressError) {
@@ -157,7 +157,7 @@ export const checkStreakBreak = async (userId, challengeInstanceId) => {
     const { error: updateError } = await supabase
       .from('challenge_progress')
       .update({ streak_days: 0 })
-      .eq('id', challengeInstanceId);
+      .eq('challenge_instance_id', challengeInstanceId);
 
     if (updateError) {
       console.error('Error resetting streak:', updateError);

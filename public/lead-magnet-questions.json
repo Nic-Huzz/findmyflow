@@ -1,0 +1,300 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 3,
+    "last_updated": "2025-12-04"
+  },
+  "questions": [
+    {
+      "id": "q1_core_offer_type",
+      "question": "What type of core offer do you have or plan to sell?",
+      "subtext": "Your lead magnet should connect directly to what you're selling",
+      "options": [
+        {
+          "label": "Software / SaaS",
+          "value": "software_saas",
+          "description": "Online tool, app, or software platform"
+        },
+        {
+          "label": "Coaching / Consulting",
+          "value": "coaching_consulting",
+          "description": "1-on-1 or group coaching services"
+        },
+        {
+          "label": "Course / Program",
+          "value": "course_program",
+          "description": "Educational content or training program"
+        },
+        {
+          "label": "Physical Product",
+          "value": "physical_product",
+          "description": "Tangible products that ship"
+        },
+        {
+          "label": "Service / Done-For-You",
+          "value": "service_done_for_you",
+          "description": "You do the work for clients"
+        },
+        {
+          "label": "Membership / Community",
+          "value": "membership_community",
+          "description": "Ongoing access to community or content"
+        },
+        {
+          "label": "Not Sure Yet",
+          "value": "not_sure_yet",
+          "description": "Still figuring out my core offer"
+        }
+      ]
+    },
+    {
+      "id": "q2_technical_ability",
+      "question": "How comfortable are you with technical tools and software?",
+      "subtext": "This affects what type of lead magnet you can realistically create",
+      "options": [
+        {
+          "label": "Very Technical - Can Build",
+          "value": "very_technical_can_build",
+          "description": "Can code or build software tools"
+        },
+        {
+          "label": "Comfortable - Can Use Tools",
+          "value": "comfortable_can_use_tools",
+          "description": "Can use no-code tools and platforms"
+        },
+        {
+          "label": "Basic - Prefer Simple",
+          "value": "basic_prefer_simple",
+          "description": "Stick to simple, proven tools"
+        },
+        {
+          "label": "Not Technical - Need Easy",
+          "value": "not_technical_need_easy",
+          "description": "Technology is challenging for me"
+        }
+      ]
+    },
+    {
+      "id": "q3_time_to_create",
+      "question": "How much time can you invest in creating your lead magnet?",
+      "subtext": "Some lead magnets take days, others take months to create",
+      "options": [
+        {
+          "label": "1 Week or Less",
+          "value": "1_week_or_less",
+          "description": "Need something quick and simple"
+        },
+        {
+          "label": "2-4 Weeks",
+          "value": "2_4_weeks",
+          "description": "Can invest moderate time"
+        },
+        {
+          "label": "1-3 Months",
+          "value": "1_3_months",
+          "description": "Willing to invest significant time"
+        },
+        {
+          "label": "3+ Months",
+          "value": "3_plus_months",
+          "description": "Can build something comprehensive"
+        }
+      ]
+    },
+    {
+      "id": "q4_budget",
+      "question": "What budget do you have for creating your lead magnet?",
+      "subtext": "Consider tools, design, development, and delivery costs",
+      "options": [
+        {
+          "label": "Under $100",
+          "value": "minimal_under_100",
+          "description": "Bootstrap mode, DIY approach"
+        },
+        {
+          "label": "$100-$500",
+          "value": "small_100_500",
+          "description": "Can invest in basic tools/design"
+        },
+        {
+          "label": "$500-$2,000",
+          "value": "moderate_500_2000",
+          "description": "Can hire help for specific parts"
+        },
+        {
+          "label": "$2,000+",
+          "value": "significant_2000_plus",
+          "description": "Can invest in professional creation"
+        }
+      ]
+    },
+    {
+      "id": "q5_content_comfort",
+      "question": "How comfortable are you creating educational content?",
+      "subtext": "Writing guides, recording videos, creating training materials",
+      "options": [
+        {
+          "label": "Very Comfortable - Do It Regularly",
+          "value": "very_comfortable_do_it_regularly",
+          "description": "Content creation is my strength"
+        },
+        {
+          "label": "Comfortable - Can Create",
+          "value": "comfortable_can_create",
+          "description": "Can create content with effort"
+        },
+        {
+          "label": "Somewhat Comfortable - Need Help",
+          "value": "somewhat_comfortable_need_help",
+          "description": "Struggle with content creation"
+        },
+        {
+          "label": "Not Comfortable - Prefer Other Methods",
+          "value": "not_comfortable_prefer_other_methods",
+          "description": "Would rather do something else"
+        }
+      ]
+    },
+    {
+      "id": "q6_service_capacity",
+      "question": "Can you deliver personalized services or consultations?",
+      "subtext": "Some lead magnets require your time for personalized delivery",
+      "options": [
+        {
+          "label": "Yes - Have Capacity Now",
+          "value": "yes_have_capacity_now",
+          "description": "Can dedicate time to personalized delivery"
+        },
+        {
+          "label": "Yes - But Limited Capacity",
+          "value": "yes_but_limited_capacity",
+          "description": "Can do some, but not unlimited"
+        },
+        {
+          "label": "No - Too Time Intensive",
+          "value": "no_too_time_intensive",
+          "description": "Don't have time for 1-on-1 work"
+        },
+        {
+          "label": "No - Prefer Scalable Solutions",
+          "value": "no_prefer_scalable_solutions",
+          "description": "Want automated, scalable delivery"
+        }
+      ]
+    },
+    {
+      "id": "q7_problem_clarity",
+      "question": "How well do your prospects understand their problem?",
+      "subtext": "This determines whether you need to reveal the problem or solve it",
+      "options": [
+        {
+          "label": "Don't Know They Have Problem",
+          "value": "dont_know_they_have_problem",
+          "description": "Need to make them aware first"
+        },
+        {
+          "label": "Know Problem, Not Severity",
+          "value": "know_problem_not_severity",
+          "description": "Aware but don't see urgency"
+        },
+        {
+          "label": "Know Problem, Not Solution",
+          "value": "know_problem_not_solution",
+          "description": "Searching for how to solve it"
+        },
+        {
+          "label": "Know Problem and Solution",
+          "value": "know_problem_and_solution",
+          "description": "Just need to experience it works"
+        }
+      ]
+    },
+    {
+      "id": "q8_conversion_goal",
+      "question": "What's your primary goal for the lead magnet?",
+      "subtext": "Different goals require different lead magnet types",
+      "options": [
+        {
+          "label": "Educate and Build Trust",
+          "value": "educate_and_build_trust",
+          "description": "Position as expert, build credibility"
+        },
+        {
+          "label": "Let Them Experience Value",
+          "value": "let_them_experience_value",
+          "description": "Try before they buy"
+        },
+        {
+          "label": "Diagnose Specific Problem",
+          "value": "diagnose_specific_problem",
+          "description": "Help them see what needs fixing"
+        },
+        {
+          "label": "Get Them a Quick Win",
+          "value": "get_them_quick_win",
+          "description": "Solve one specific problem fast"
+        }
+      ]
+    },
+    {
+      "id": "q9_scalability_priority",
+      "question": "How important is scalability (delivering to many people)?",
+      "subtext": "Scalable lead magnets deliver automatically, others require your time",
+      "options": [
+        {
+          "label": "Critical - Need to Scale",
+          "value": "critical_need_scale",
+          "description": "Must work for hundreds or thousands"
+        },
+        {
+          "label": "Important But Not Critical",
+          "value": "important_but_not_critical",
+          "description": "Want scale but can start manual"
+        },
+        {
+          "label": "Not Important - Prefer Personal",
+          "value": "not_important_prefer_personal",
+          "description": "Quality over quantity approach"
+        },
+        {
+          "label": "Doesn't Matter",
+          "value": "doesnt_matter",
+          "description": "Flexible on this aspect"
+        }
+      ]
+    },
+    {
+      "id": "q10_existing_assets",
+      "question": "What existing assets do you have that could become a lead magnet?",
+      "subtext": "The best lead magnets often repurpose what you already have",
+      "options": [
+        {
+          "label": "Have Software or Tool",
+          "value": "have_software_or_tool",
+          "description": "Built or can access a software tool"
+        },
+        {
+          "label": "Have Content (Guides/Videos)",
+          "value": "have_content_guides_videos",
+          "description": "Existing educational materials"
+        },
+        {
+          "label": "Can Offer Consulting Time",
+          "value": "can_offer_consulting_time",
+          "description": "Can give free consultations/audits"
+        },
+        {
+          "label": "Have Physical Samples",
+          "value": "have_physical_samples",
+          "description": "Can send product samples"
+        },
+        {
+          "label": "Nothing Yet - Starting Fresh",
+          "value": "nothing_yet_starting_fresh",
+          "description": "Building from scratch"
+        }
+      ]
+    }
+  ]
+}

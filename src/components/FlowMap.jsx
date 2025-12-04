@@ -25,9 +25,10 @@ function FlowMap() {
   const [moneyLimit, setMoneyLimit] = useState('');
   const [visibilityLimit, setVisibilityLimit] = useState('');
   const [safetyContracts, setSafetyContracts] = useState([]);
+  const [nervousSystemArchetype, setNervousSystemArchetype] = useState('');
   const [coreWound, setCoreWound] = useState('');
 
-  // Flow Tracker data
+  // Flow Compass data
   const [projects, setProjects] = useState([]);
   const [projectDirections, setProjectDirections] = useState({});
 
@@ -56,7 +57,7 @@ function FlowMap() {
       await Promise.all([
         fetchFlowFinderData(),
         fetchNervousSystemData(),
-        fetchFlowTrackerData(),
+        fetchFlowCompassData(),
         fetchNikigaiCompletionStatus()
       ]);
     } catch (error) {
@@ -71,7 +72,7 @@ function FlowMap() {
 
     try {
       const { data: sessions, error } = await supabase
-        .from('nikigai_sessions')
+        .from('flow_sessions')
         .select('flow_version, status')
         .eq('user_id', user.id)
         .eq('status', 'completed')
@@ -132,7 +133,7 @@ function FlowMap() {
   const fetchNervousSystemData = async () => {
     const { data: nsData, error: nsError } = await supabase
       .from('nervous_system_responses')
-      .select('income_goal, impact_goal, safety_contracts')
+      .select('income_goal, impact_goal, safety_contracts, archetype')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(1)
@@ -144,6 +145,7 @@ function FlowMap() {
       setMoneyLimit(nsData.income_goal || 'Not set');
       setVisibilityLimit(nsData.impact_goal || 'Not set');
       setSafetyContracts(nsData.safety_contracts || []);
+      setNervousSystemArchetype(nsData.archetype || 'Not set');
     }
 
     const { data: hcData, error: hcError } = await supabase
@@ -161,7 +163,7 @@ function FlowMap() {
     }
   };
 
-  const fetchFlowTrackerData = async () => {
+  const fetchFlowCompassData = async () => {
     const { data: projectsData, error: projectsError } = await supabase
       .from('user_projects')
       .select('id, name, description, status')
@@ -329,7 +331,7 @@ function FlowMap() {
 
   return (
     <div className="flow-map">
-      <h1 className="flow-map-heading">Flow Map</h1>
+      <h2 className="section-heading">Flow Map</h2>
       {/* Section 1: Flow Finder */}
       <div className="flow-section">
         <div
@@ -367,13 +369,14 @@ function FlowMap() {
 
         {expandedSection === 'nervous-system' && (
           <div className="section-content">
-            {(!moneyLimit || moneyLimit === 'Not set') && 
-             (!visibilityLimit || visibilityLimit === 'Not set') && 
-             safetyContracts.length === 0 && 
+            {(!moneyLimit || moneyLimit === 'Not set') &&
+             (!visibilityLimit || visibilityLimit === 'Not set') &&
+             safetyContracts.length === 0 &&
+             (!nervousSystemArchetype || nervousSystemArchetype === 'Not set') &&
              (!coreWound || coreWound === 'Not identified') ? (
               <>
                 <div className="empty-nervous-system">
-                  <button 
+                  <button
                     className="start-flow-button"
                     onClick={() => navigate('/nervous-system')}
                   >
@@ -390,6 +393,10 @@ function FlowMap() {
                 </div>
                 <div className="limitation-item">
                   <div className="limitation-label">Current Safety Contracts</div>
+                  <div className="limitation-value">Not Identified Yet</div>
+                </div>
+                <div className="limitation-item">
+                  <div className="limitation-label">Nervous System Archetype</div>
                   <div className="limitation-value">Not Identified Yet</div>
                 </div>
                 <div className="limitation-item core-wound">
@@ -422,6 +429,11 @@ function FlowMap() {
                   )}
                 </div>
 
+                <div className="limitation-item">
+                  <div className="limitation-label">Nervous System Archetype</div>
+                  <div className="limitation-value">{nervousSystemArchetype === 'Not set' ? 'Not Identified Yet' : nervousSystemArchetype}</div>
+                </div>
+
                 <div className="limitation-item core-wound">
                   <div className="limitation-label">Core Wound</div>
                   <div className={`limitation-value ${coreWound === 'Not identified' ? 'core-wound-empty' : ''}`}>
@@ -434,20 +446,20 @@ function FlowMap() {
         )}
       </div>
 
-      {/* Section 3: Flow Tracker */}
+      {/* Section 3: Flow Compass */}
       <div className="flow-section">
         <div
-          className={`section-header ${expandedSection === 'flow-tracker' ? 'expanded' : ''}`}
-          onClick={(e) => toggleSection('flow-tracker', e)}
+          className={`section-header ${expandedSection === 'flow-compass' ? 'expanded' : ''}`}
+          onClick={(e) => toggleSection('flow-compass', e)}
         >
           <div className="section-title">
             <span className="section-icon">📊</span>
-            Flow Tracker
+            Flow Compass
           </div>
           <div className="expand-icon">↓</div>
         </div>
 
-        {expandedSection === 'flow-tracker' && (
+        {expandedSection === 'flow-compass' && (
           <div className="section-content">
             {projects.length > 0 ? (
               <>
@@ -510,7 +522,7 @@ function FlowMap() {
               <div className="empty-nervous-system">
                 <button 
                   className="start-flow-button"
-                  onClick={() => navigate('/flow-tracker')}
+                  onClick={() => navigate('/flow-compass')}
                 >
                   Start Tracking Your Flow
                 </button>

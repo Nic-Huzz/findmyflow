@@ -101,7 +101,7 @@
           "In process of launching": "testing",
           "Launched and delivering consistently": "launched"
         },
-        "add_to_flow_tracker": true
+        "add_to_flow_compass": true
       },
       "next_step_rules": [
         {
@@ -112,7 +112,7 @@
     {
       "id": "4.1-new",
       "step_order_index": 5,
-      "assistant_prompt": "Would you like to start pursuing this opportunity and add it to your flow tracker?",
+      "assistant_prompt": "Would you like to start pursuing this opportunity and add it to your Flow Compass?",
       "expected_inputs": [
         {
           "type": "single_select",
@@ -124,7 +124,7 @@
       ],
       "store_as": "nikigai.pursue_opportunity",
       "metadata": {
-        "if_yes_add_to_flow_tracker": true,
+        "if_yes_add_to_flow_compass": true,
         "if_yes_stage": "validation"
       },
       "next_step_rules": [
@@ -223,7 +223,7 @@
           "In process of launching": "testing",
           "Launched and delivering consistently": "launched"
         },
-        "add_to_flow_tracker": true
+        "add_to_flow_compass": true
       },
       "next_step_rules": [
         {

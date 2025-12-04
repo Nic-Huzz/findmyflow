@@ -3,66 +3,63 @@
 
 export const PERSONA_STAGES = {
   vibe_seeker: {
-    stages: ['validation', 'creation', 'testing'],
+    stages: ['clarity'],
+    initial_stage: 'clarity',
     graduation_requirements: {
-      validation: {
-        flows_required: ['nikigai'],
-        conversations_required: 3,
-        description: 'Complete Nikigai + talk to 3 people about your idea'
-      },
-      creation: {
-        milestones: ['product_created'],
-        description: 'Create your first product/offering'
-      },
-      testing: {
-        milestones: ['tested_with_3'],
-        description: 'Test your product with 3 people'
+      clarity: {
+        flows_required: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
+        description: 'Complete all 4 Nikigai flows to gain clarity on your unique value'
       }
     }
   },
   vibe_riser: {
-    stages: ['validation', 'creation', 'testing', 'scale'],
+    stages: ['validation', 'creation', 'testing', 'launch'],
+    initial_stage: 'validation',
     graduation_requirements: {
       validation: {
-        flows_required: ['100m_offer'],
-        conversations_required: 3,
-        description: 'Complete $100M Offer flow + talk to 3 people'
+        milestones: ['validation_form_sent', 'validation_responses_3'],
+        challenge_streak: 7,
+        description: 'Send validation form, get 3 responses, and complete a 7-day challenge'
       },
       creation: {
-        milestones: ['offer_created'],
-        description: 'Create your offer'
+        flows_required: ['100m_offer', 'lead_magnet_offer'],
+        milestones: ['product_created', 'lead_magnet_created'],
+        challenge_streak: 7,
+        description: 'Complete offer flows, create product and lead magnet, complete a 7-day challenge'
       },
       testing: {
-        milestones: ['offer_tested_with_3'],
-        description: 'Test offer with 3 people'
-      },
-      scale: {
-        flows_required: ['100m_leads'],
+        milestones: ['testing_complete', 'feedback_responses_3', 'improvements_identified'],
         challenge_streak: 7,
-        description: 'Complete $100M Leads + 7-day challenge streak'
+        description: 'Complete testing, get 3 feedback responses, identify improvements, complete a 7-day challenge'
+      },
+      launch: {
+        flows_required: ['100m_leads'],
+        milestones: ['strategy_identified', 'funnel_stages_defined'],
+        challenge_streak: 7,
+        description: 'Complete leads flow, define strategy and funnel, complete a 7-day challenge'
       }
     }
   },
   movement_maker: {
-    stages: ['validation', 'creation', 'testing', 'scale'],
+    stages: ['ideation', 'creation', 'launch'],
+    initial_stage: 'ideation',
     graduation_requirements: {
-      validation: {
-        flows_required: ['100m_money_model'],
-        conversations_required: 3,
-        description: 'Complete $100M Money Model + talk to 3 people'
+      ideation: {
+        milestones: ['read_putting_it_together', 'decide_acquisition', 'decide_upsell', 'decide_downsell', 'decide_continuity'],
+        flows_required: ['attraction_offer', 'upsell_flow', 'downsell_flow', 'continuity_flow'],
+        challenge_streak: 7,
+        description: 'Read overview, complete all 4 money model flows, decide on each offer type, complete a 7-day challenge'
       },
       creation: {
-        milestones: ['model_built'],
-        description: 'Build your money model'
+        milestones: ['create_acquisition_offer', 'create_upsell_offer', 'create_downsell_offer', 'create_continuity_offer'],
+        challenge_streak: 7,
+        description: 'Create all 4 offer types and complete a 7-day challenge: Acquisition, Upsell, Downsell, Continuity'
       },
-      testing: {
-        milestones: ['model_tested_with_3'],
-        description: 'Test model with 3 people'
-      },
-      scale: {
+      launch: {
         flows_required: ['100m_leads'],
-        milestones: ['acquisition_offer_launched'],
-        description: 'Complete $100M Leads + launch acquisition offer'
+        milestones: ['strategy_identified', 'funnel_stages_defined'],
+        challenge_streak: 7,
+        description: 'Complete leads flow, define strategy and funnel, complete a 7-day challenge'
       }
     }
   }
@@ -84,10 +81,13 @@ export const getNextStage = (persona, currentStage) => {
 // Helper function to get stage display name
 export const getStageDisplayName = (stage) => {
   const displayNames = {
+    clarity: 'Clarity',
     validation: 'Validation',
     creation: 'Creation',
     testing: 'Testing',
-    scale: 'Scale'
+    launch: 'Launch',
+    ideation: 'Ideation',
+    scale: 'Scale' // Legacy, kept for backwards compatibility
   };
   return displayNames[stage] || stage;
 };
@@ -102,23 +102,55 @@ export const getPersonaDisplayName = (persona) => {
   return displayNames[persona] || persona;
 };
 
+// Helper function to get the initial stage for a persona
+export const getInitialStage = (persona) => {
+  const personaData = PERSONA_STAGES[persona];
+  if (!personaData) return 'validation'; // Fallback
+  return personaData.initial_stage || personaData.stages[0];
+};
+
+// Helper function to get all milestones for a stage (combines milestones and milestones_additional)
+export const getAllMilestones = (persona, stage) => {
+  const requirements = PERSONA_STAGES[persona]?.graduation_requirements?.[stage];
+  if (!requirements) return [];
+
+  const milestones = requirements.milestones || [];
+  const additionalMilestones = requirements.milestones_additional || [];
+  return [...milestones, ...additionalMilestones];
+};
+
 // Helper function to get celebration message for stage graduation
 export const getStageCelebration = (stage, persona) => {
   const celebrations = {
+    clarity: {
+      title: '🔮 Clarity Achieved!',
+      message: "You've gained clarity on your unique skills, problems you solve, and ideal persona!",
+      next_step: persona === 'vibe_seeker' ? 'You\'ve completed your Vibe Seeker journey!' : 'Time to take the next step!'
+    },
     validation: {
       title: '🎉 Validation Complete!',
-      message: "You've validated your idea with real conversations. Time to create!",
+      message: "You've validated your idea with real responses. Time to create!",
       next_step: 'Now let\'s build something amazing.'
     },
     creation: {
       title: '🚀 Creation Milestone Unlocked!',
-      message: "You've built your product/offer. Now it's time to test it!",
+      message: "You've built your offers and products. Now it's time to test!",
       next_step: 'Get feedback from real users.'
     },
     testing: {
       title: '✨ Testing Stage Complete!',
       message: "You've tested with real people and gathered insights!",
-      next_step: persona === 'vibe_seeker' ? 'Keep iterating!' : 'Time to scale up!'
+      next_step: 'Time to launch!'
+    },
+    ideation: {
+      title: '💡 Ideation Complete!',
+      message: "You've designed your complete money model with all offer types!",
+      next_step: 'Now let\'s bring these offers to life.'
+    },
+    launch: {
+      title: '🚀 Launch Stage Achieved!',
+      message: "You're ready to launch and reach your audience!",
+      next_step: 'Keep pushing boundaries!'
     },
     scale: {
       title: '🌟 Scale Stage Achieved!',

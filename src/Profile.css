@@ -13,7 +13,7 @@
   top: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(90deg, #5e17eb 0%, #3d0f99 100%);
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   padding: 15px 20px;
   z-index: 101;
@@ -107,7 +107,7 @@
   margin-bottom: 8px;
   border-radius: 10px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, opacity 0.3s ease;
   font-weight: 500;
 }
 
@@ -117,6 +117,15 @@
 
 .nav-item:hover {
   background: rgba(255,255,255,0.1);
+}
+
+.nav-item-locked {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.nav-item-locked:hover {
+  background: transparent !important;
 }
 
 .signout-link {
@@ -842,5 +851,205 @@
 
   .stat-card {
     padding: 20px;
+  }
+}
+
+/* ============ ONBOARDING MODAL ============ */
+
+.onboarding-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.onboarding-modal {
+  background: white;
+  border-radius: 20px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 48px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.onboarding-slide {
+  text-align: center;
+}
+
+.onboarding-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+.onboarding-content {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0 0 32px;
+}
+
+/* Component Preview */
+.component-preview {
+  margin: 0 0 32px;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 8px;
+  border: 2px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.component-snapshot {
+  pointer-events: none;
+  user-select: none;
+  max-width: 100%;
+  overflow: hidden;
+  transform: scale(0.9);
+  transform-origin: center;
+  display: inline-block;
+}
+
+.component-snapshot > * {
+  max-width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: block;
+}
+
+.snapshot-placeholder {
+  padding: 40px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.onboarding-dots {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.onboarding-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.onboarding-dot.active {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  transform: scale(1.3);
+  box-shadow: 0 0 10px rgba(94, 23, 235, 0.4);
+}
+
+.onboarding-dot.completed {
+  background: #d1d5db;
+}
+
+.onboarding-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.onboarding-btn {
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.onboarding-btn.primary {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: white;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.onboarding-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.onboarding-btn.secondary {
+  background: white;
+  color: #5e17eb;
+  border: 2px solid #5e17eb;
+}
+
+.onboarding-btn.secondary:hover {
+  background: #f9fafb;
+}
+
+@media (max-width: 640px) {
+  .onboarding-modal {
+    padding: 32px 24px;
+    max-height: 95vh;
+  }
+
+  .onboarding-title {
+    font-size: 24px;
+  }
+
+  .onboarding-content {
+    font-size: 15px;
+  }
+
+  .component-preview {
+    padding: 8px;
+  }
+
+  .component-snapshot {
+    transform: scale(0.8);
+  }
+
+  .onboarding-buttons {
+    flex-direction: column;
+  }
+
+  .onboarding-btn {
+    width: 100%;
   }
 }

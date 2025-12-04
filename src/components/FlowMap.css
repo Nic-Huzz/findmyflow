@@ -2,8 +2,6 @@
 .flow-map {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 24px;
 }
 
 .flow-map-heading {
@@ -43,6 +41,11 @@
   overflow: hidden;
   transition: all 0.3s ease;
   scroll-margin-top: 20px;
+  margin-bottom: 16px;
+}
+
+.flow-section:last-of-type {
+  margin-bottom: 0;
 }
 
 .section-header {
@@ -295,7 +298,7 @@
   color: #1a1a1a !important;
 }
 
-/* Flow Tracker Minimal Style */
+/* Flow Compass Minimal Style */
 .project-item {
   background: white;
   border-radius: 8px;

@@ -12,16 +12,37 @@ import { supabase } from './supabaseClient'
  *
  * @param {string} userId - User's ID
  * @param {string} sessionId - Nikigai session ID
- * @param {string} flowType - Flow type ('nikigai', '100m_offer', '100m_money_model')
+ * @param {string} flowType - Flow type ('nikigai', '100m_offer', 'acquisition_flow', etc.)
  * @returns {Promise<{success: boolean, projectId?: string, error?: string}>}
  */
 export const createProjectFromSession = async (userId, sessionId, flowType) => {
   try {
     console.log('🎯 Auto-creating project from session:', { userId, sessionId, flowType })
 
+    // Step 0: Check if user already has an active project (Single-Project MVP)
+    const { data: existingProjects, error: checkError } = await supabase
+      .from('user_projects')
+      .select('id, name')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+
+    if (checkError) {
+      console.error('❌ Error checking existing projects:', checkError)
+    }
+
+    if (existingProjects && existingProjects.length > 0) {
+      console.log('✅ User already has an active project, skipping auto-creation:', existingProjects[0].name)
+      return {
+        success: true,
+        projectId: existingProjects[0].id,
+        skipped: true,
+        reason: 'User already has an active project'
+      }
+    }
+
     // Step 1: Fetch the session data
     const { data: session, error: sessionError } = await supabase
-      .from('nikigai_sessions')
+      .from('flow_sessions')
       .select('*')
       .eq('id', sessionId)
       .eq('user_id', userId)
@@ -82,9 +103,6 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
     } else if (flowType === '100m_offer') {
       projectName = 'My $100M Offer'
       projectDescription = 'Building a grand slam offer that stands out in the market'
-    } else if (flowType === '100m_money_model') {
-      projectName = 'My Money Model'
-      projectDescription = 'Designing a sustainable revenue model for my business'
     }
 
     // Step 4: Create the project (unique constraint prevents duplicates)
@@ -174,7 +192,7 @@ export const getOrCreateActiveProject = async (userId) => {
 
     // No active project found, check if user has completed any flows
     const { data: completedSessions } = await supabase
-      .from('nikigai_sessions')
+      .from('flow_sessions')
       .select('id, flow_type')
       .eq('user_id', userId)
       .eq('status', 'completed')
