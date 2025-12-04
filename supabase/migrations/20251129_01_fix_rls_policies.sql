@@ -3,7 +3,9 @@
 
 -- Drop and recreate user_stage_progress policies with proper INSERT support
 DROP POLICY IF EXISTS "Users can view own stage progress" ON public.user_stage_progress;
+DROP POLICY IF EXISTS "Users can insert own stage progress" ON public.user_stage_progress;
 DROP POLICY IF EXISTS "Users can update own stage progress" ON public.user_stage_progress;
+DROP POLICY IF EXISTS "Users can delete own stage progress" ON public.user_stage_progress;
 
 CREATE POLICY "Users can view own stage progress" ON public.user_stage_progress
   FOR SELECT USING (auth.uid() = user_id);
@@ -19,6 +21,10 @@ CREATE POLICY "Users can delete own stage progress" ON public.user_stage_progres
 
 -- Ensure conversation_logs has proper policies
 DROP POLICY IF EXISTS "Users can manage own conversation logs" ON public.conversation_logs;
+DROP POLICY IF EXISTS "Users can view own conversation logs" ON public.conversation_logs;
+DROP POLICY IF EXISTS "Users can insert own conversation logs" ON public.conversation_logs;
+DROP POLICY IF EXISTS "Users can update own conversation logs" ON public.conversation_logs;
+DROP POLICY IF EXISTS "Users can delete own conversation logs" ON public.conversation_logs;
 
 CREATE POLICY "Users can view own conversation logs" ON public.conversation_logs
   FOR SELECT USING (auth.uid() = user_id);
@@ -34,6 +40,10 @@ CREATE POLICY "Users can delete own conversation logs" ON public.conversation_lo
 
 -- Ensure milestone_completions has proper policies
 DROP POLICY IF EXISTS "Users can manage own milestones" ON public.milestone_completions;
+DROP POLICY IF EXISTS "Users can view own milestones" ON public.milestone_completions;
+DROP POLICY IF EXISTS "Users can insert own milestones" ON public.milestone_completions;
+DROP POLICY IF EXISTS "Users can update own milestones" ON public.milestone_completions;
+DROP POLICY IF EXISTS "Users can delete own milestones" ON public.milestone_completions;
 
 CREATE POLICY "Users can view own milestones" ON public.milestone_completions
   FOR SELECT USING (auth.uid() = user_id);

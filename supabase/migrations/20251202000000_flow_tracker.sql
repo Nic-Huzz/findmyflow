@@ -138,6 +138,11 @@ ALTER TABLE public.flow_patterns ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.flow_entry_tags ENABLE ROW LEVEL SECURITY;
 
 -- user_projects policies
+DROP POLICY IF EXISTS "Users can view own projects" ON public.user_projects;
+DROP POLICY IF EXISTS "Users can insert own projects" ON public.user_projects;
+DROP POLICY IF EXISTS "Users can update own projects" ON public.user_projects;
+DROP POLICY IF EXISTS "Users can delete own projects" ON public.user_projects;
+
 CREATE POLICY "Users can view own projects" ON public.user_projects
   FOR SELECT USING (auth.uid() = user_id);
 
@@ -151,6 +156,11 @@ CREATE POLICY "Users can delete own projects" ON public.user_projects
   FOR DELETE USING (auth.uid() = user_id);
 
 -- flow_entries policies
+DROP POLICY IF EXISTS "Users can view own flow entries" ON public.flow_entries;
+DROP POLICY IF EXISTS "Users can insert own flow entries" ON public.flow_entries;
+DROP POLICY IF EXISTS "Users can update own flow entries" ON public.flow_entries;
+DROP POLICY IF EXISTS "Users can delete own flow entries" ON public.flow_entries;
+
 CREATE POLICY "Users can view own flow entries" ON public.flow_entries
   FOR SELECT USING (auth.uid() = user_id);
 
@@ -164,10 +174,14 @@ CREATE POLICY "Users can delete own flow entries" ON public.flow_entries
   FOR DELETE USING (auth.uid() = user_id);
 
 -- flow_patterns policies (read-only for users, written by Edge Function)
+DROP POLICY IF EXISTS "Users can view own patterns" ON public.flow_patterns;
+
 CREATE POLICY "Users can view own patterns" ON public.flow_patterns
   FOR SELECT USING (auth.uid() = user_id);
 
 -- flow_entry_tags policies (read-only for users, written by Edge Function)
+DROP POLICY IF EXISTS "Users can view own tags" ON public.flow_entry_tags;
+
 CREATE POLICY "Users can view own tags" ON public.flow_entry_tags
   FOR SELECT USING (
     flow_entry_id IN (SELECT id FROM public.flow_entries WHERE user_id = auth.uid())
