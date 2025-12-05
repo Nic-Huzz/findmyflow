@@ -519,12 +519,13 @@ function App() {
         }
       } catch (err) {
         console.error('❌ Failed to save profile:', err)
+        const errorMessage = err?.message || err?.error_description || 'Unknown error'
         setMessages(prev => [
           ...prev,
           {
             id: `ai-${Date.now()}`,
             isAI: true,
-            text: `There was an error saving your profile. Please try again.`,
+            text: `Something went wrong. Please try again.\n\nError: ${errorMessage}`,
             timestamp: new Date().toLocaleTimeString()
           }
         ])

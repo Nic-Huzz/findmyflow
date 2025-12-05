@@ -563,6 +563,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
             await supabase.from('nikigai_clusters').insert({
               session_id: sessionId,
               user_id: user.id,
+              step_id: nextStepData.id, // Track which step created these clusters
               cluster_type: clusterType,
               cluster_stage: clusterStage,
               cluster_label: cluster.label,
@@ -572,7 +573,7 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
               archived: false
             })
           }
-          console.log('✅ Clusters saved to database:', aiResponse.clusters.length, 'as cluster_stage:', clusterStage)
+          console.log('✅ Clusters saved to database:', aiResponse.clusters.length, 'at step:', nextStepData.id, 'as cluster_stage:', clusterStage)
         } catch (dbError) {
           console.error('⚠️ Failed to save clusters to database:', dbError)
           // Don't throw - continue even if DB save fails
@@ -868,27 +869,29 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
 
             console.log('✅ Session marked as completed:', sessionId)
 
-            // Auto-create project from completed session (Phase 4A: Project Auto-Creation)
+            // Auto-create project only for integration flow (Phase 4A: Project Auto-Creation)
             const currentFlowType = getFlowType(flowFile)
-            const projectResult = await createProjectFromSession(user.id, sessionId, currentFlowType)
+            if (currentFlowType === 'nikigai_integration') {
+              const projectResult = await createProjectFromSession(user.id, sessionId, currentFlowType)
 
-            if (projectResult.success) {
-              console.log('🎯 Project auto-created:', projectResult.projectId, projectResult.projectName)
+              if (projectResult.success) {
+                console.log('🎯 Project auto-created:', projectResult.projectId, projectResult.projectName)
 
-              // Show success message if new project created (not skipped or already exists)
-              if (!projectResult.alreadyExists && !projectResult.skipped) {
-                const projectCreatedMsg = {
-                  id: `ai-project-created-${Date.now()}`,
-                  isAI: true,
-                  text: `🎯 Great news! I've created your project "${projectResult.projectName}". Visit /flow-compass to start tracking your daily progress!`,
-                  timestamp: new Date().toLocaleTimeString()
+                // Show success message if new project created (not skipped or already exists)
+                if (!projectResult.alreadyExists && !projectResult.skipped) {
+                  const projectCreatedMsg = {
+                    id: `ai-project-created-${Date.now()}`,
+                    isAI: true,
+                    text: `🎯 Great news! I've created your project "${projectResult.projectName}". Visit /flow-compass to start tracking your daily progress!`,
+                    timestamp: new Date().toLocaleTimeString()
+                  }
+                  setMessages(prev => [...prev, projectCreatedMsg])
+                } else if (projectResult.skipped) {
+                  console.log('✅ Skipped project creation - user already has an active project')
                 }
-                setMessages(prev => [...prev, projectCreatedMsg])
-              } else if (projectResult.skipped) {
-                console.log('✅ Skipped project creation - user already has an active project')
+              } else {
+                console.warn('⚠️ Could not auto-create project:', projectResult.error)
               }
-            } else {
-              console.warn('⚠️ Could not auto-create project:', projectResult.error)
             }
           } catch (err) {
             console.error('⚠️ Failed to mark session as completed:', err)
@@ -1079,6 +1082,14 @@ export default function NikigaiTest({ flowFile = 'nikigai-flow-v2.2.json', flowN
       }
     } catch (err) {
       console.error('Error handling option:', err)
+      setError('Something went wrong. Please try again.')
+      const errorMsg = {
+        id: `error-${Date.now()}`,
+        isAI: true,
+        text: 'Sorry, something went wrong. Please try again or refresh the page.',
+        timestamp: new Date().toLocaleTimeString()
+      }
+      setMessages(prev => [...prev, errorMsg])
     } finally {
       setIsLoading(false)
     }

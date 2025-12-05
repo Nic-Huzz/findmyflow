@@ -15,9 +15,45 @@ function PortalExplainer({ onClose }) {
       )
     },
     {
-      title: "The Four Categories 🗺️",
+      title: "Quest Tabs 📑",
       content: (
         <>
+          <p>Your quests are organized into 5 tabs, each serving a different purpose:</p>
+          <div className="category-grid">
+            <div className="explainer-category">
+              <div className="category-icon">🎯</div>
+              <h3>Flow Finder</h3>
+              <p>Persona-specific quests to find your flow</p>
+            </div>
+            <div className="explainer-category">
+              <div className="category-icon">📆</div>
+              <h3>Daily</h3>
+              <p>Daily quests across the 4 R's framework</p>
+            </div>
+            <div className="explainer-category">
+              <div className="category-icon">📋</div>
+              <h3>Weekly</h3>
+              <p>Weekly quests across the 4 R's framework</p>
+            </div>
+            <div className="explainer-category">
+              <div className="category-icon">⭐</div>
+              <h3>Bonus</h3>
+              <p>Extra quests for bonus points</p>
+            </div>
+            <div className="explainer-category">
+              <div className="category-icon">🧭</div>
+              <h3>Tracker</h3>
+              <p>Track your flow with Flow Compass</p>
+            </div>
+          </div>
+        </>
+      )
+    },
+    {
+      title: "The 4 R's Framework 🗺️",
+      content: (
+        <>
+          <p>Daily and Weekly quests are organized using the 4 R's framework - four pillars to help you find your flow:</p>
           <div className="category-grid">
             <div className="explainer-category">
               <div className="category-icon">🔍</div>
@@ -40,34 +76,7 @@ function PortalExplainer({ onClose }) {
               <p>Live from your essence and find your flow</p>
             </div>
           </div>
-        </>
-      )
-    },
-    {
-      title: "Daily vs Weekly Quests 📅",
-      content: (
-        <>
-          <div className="quest-types">
-            <div className="quest-type-card">
-              <h3>📆 Daily Quests</h3>
-              <ul>
-                <li>Complete once per day</li>
-                <li>Build consistent habits</li>
-                <li>Track your 7-day streak</li>
-                <li>Quick reflection exercises</li>
-              </ul>
-            </div>
-            <div className="quest-type-card">
-              <h3>📋 Weekly Quests</h3>
-              <ul>
-                <li>Complete once during the 7 days</li>
-                <li>Deeper dive exercises</li>
-                <li>More points (15-30 pts)</li>
-                <li>Flows and reflective practices</li>
-              </ul>
-            </div>
-          </div>
-          <p className="quest-tip">💡 <strong>Tip:</strong> Mix daily and weekly quests to maximize your points and unlock artifacts!</p>
+          <p className="quest-tip">💡 <strong>Tip:</strong> Complete quests from all 4 R's each day to unlock artifacts!</p>
         </>
       )
     },
