@@ -756,6 +756,17 @@
   color: #5e17eb;
 }
 
+.btn-locked {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.btn-locked:hover {
+  background: white !important;
+  transform: none !important;
+}
+
 /* Responsive - Tablet */
 @media (max-width: 1024px) {
   .sidebar {
@@ -922,6 +933,7 @@
   color: #6b7280;
   line-height: 1.6;
   margin: 0 0 32px;
+  white-space: pre-line;
 }
 
 /* Component Preview */

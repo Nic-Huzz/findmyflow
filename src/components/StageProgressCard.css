@@ -30,7 +30,7 @@
 
 /* Header - Collapsible */
 .card-header {
-  padding: 24px;
+  padding: 20px 24px;
   cursor: pointer;
   transition: background 0.2s ease;
   display: flex;
@@ -61,6 +61,18 @@
   letter-spacing: 0.5px;
 }
 
+.persona-badge.persona-vibe_seeker {
+  background: linear-gradient(135deg, #D4A017, #B8860B);
+}
+
+.persona-badge.persona-vibe_riser {
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+}
+
+.persona-badge.persona-movement_maker {
+  background: linear-gradient(135deg, #D4A017, #B8860B);
+}
+
 .expand-icon {
   width: 32px;
   height: 32px;
@@ -75,7 +87,7 @@
 
 .expand-icon.expanded {
   transform: rotate(180deg);
-  background: #667eea;
+  background: #9333EA;
   color: white;
 }
 
@@ -263,15 +275,19 @@
   flex-shrink: 0;
 }
 
+.requirement-item.completed {
+  color: #D4A017;
+}
+
 .requirement-item.completed .checkbox {
-  background: #48bb78;
-  border-color: #48bb78;
+  background: #D4A017;
+  border-color: #D4A017;
   color: white;
 }
 
 .graduate-button {
   width: 100%;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #D4A017 0%, #B8860B 100%);
   color: white;
   border: none;
   padding: 14px 24px;
@@ -280,13 +296,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 8px rgba(212, 160, 23, 0.3);
   margin-top: 16px;
 }
 
 .graduate-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 12px rgba(212, 160, 23, 0.4);
 }
 
 .graduate-button:active {
@@ -339,8 +355,8 @@
 }
 
 .stage-progress-card.eligible {
-  border: 2px solid #10b981;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+  border: 2px solid #D4A017;
+  box-shadow: 0 4px 16px rgba(212, 160, 23, 0.2);
 }
 
 /* Mobile Responsive */

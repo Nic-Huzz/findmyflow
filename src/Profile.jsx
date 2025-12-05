@@ -45,19 +45,18 @@ const Profile = () => {
   }, [user])
 
   const checkFirstTimeUser = () => {
-    // TEMPORARY: Always show onboarding for testing
-    // Delay slightly to ensure all components are rendered
-    setTimeout(() => {
-      setShowOnboarding(true)
-    }, 300)
+    const hasSeenOnboarding = localStorage.getItem(`profile_onboarding_seen_${user?.id}`)
+    if (!hasSeenOnboarding) {
+      setTimeout(() => {
+        setShowOnboarding(true)
+      }, 300)
+    }
+  }
 
-    // ORIGINAL CODE (commented out for testing):
-    // const hasSeenOnboarding = localStorage.getItem(`profile_onboarding_seen_${user?.id}`)
-    // if (!hasSeenOnboarding) {
-    //   setTimeout(() => {
-    //     setShowOnboarding(true)
-    //   }, 300)
-    // }
+  const handleOpenOnboarding = () => {
+    setShowOnboarding(true)
+    setCurrentSlide(0)
+    setSidebarOpen(false)
   }
 
   const handleCloseOnboarding = () => {
@@ -208,6 +207,11 @@ const Profile = () => {
 
         // Reload stage progress
         await loadStageProgress()
+
+        // If persona switched (Vibe Seeker → Vibe Riser), reload user profile
+        if (result.persona_switched) {
+          await loadUserProfile()
+        }
       }
     } catch (err) {
       console.error('Error graduating user:', err)
@@ -280,27 +284,27 @@ const Profile = () => {
   const onboardingSlides = [
     {
       title: "Welcome to Your Dashboard! 🎉",
-      content: "This is your command center for discovering and living your flow. Let's take a quick tour of what you can do here.",
+      content: "This is your home for discovering and living your flow.\n\nHere's a quick tour:",
       componentSelector: null
     },
     {
       title: "Your Voices 🎭",
-      content: "These are your Essence and Protective archetypes—the two voices inside you. Click to expand and explore deeper insights about each archetype.",
+      content: "These are your Essence and Protective archetypes—the two voices inside you.\n\nClick to expand and explore deeper insights about each.",
       componentSelector: ".stats-grid"
     },
     {
       title: "Journey Guide 🗺️",
-      content: "Track your progress through different stages. Each persona has specific stages to complete, with graduation requirements clearly shown.",
+      content: "Track your progress through different stages.\n\nEach persona has specific stages to complete, with graduation requirements clearly shown.",
       componentSelector: ".stage-progress-section"
     },
     {
       title: "Flow Map 🧭",
-      content: "Your Flow Map shows three key sections: Flow Finder (your skills, problems, and people), Nervous System Limitations, and Flow Compass for logging your journey.",
+      content: "Your Flow Map shows three key sections:\n1. Flow Finder: Opportunities\n2. Nervous System Limitations: Your current limitations\n3. Flow Compass: Tracking your journey",
       componentSelector: ".flow-map"
     },
     {
       title: "Ready to Explore! ✨",
-      content: "You're all set! Start by completing your Nikigai flows, explore your archetypes, or dive into the 7-Day Challenge. Your journey to flow begins now.",
+      content: "Keen to take action and start advancing through stages?\n\nStart a 7-day challenge!\n\nWe're excited to support you on this journey.",
       componentSelector: ".cta-banner"
     }
   ]
@@ -405,6 +409,9 @@ const Profile = () => {
           </li>
           <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
             🧭 Flow Compass
+          </li>
+          <li className="nav-item" onClick={handleOpenOnboarding}>
+            📖 Explainer
           </li>
           <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
             💬 Give Feedback
@@ -586,8 +593,8 @@ const Profile = () => {
         {/* CTA Banner */}
         <div className="cta-banner">
           <div className="cta-content">
-            <h3>Ready to Find Your Flow?</h3>
-            <p>Live Your Ambitions Quicker</p>
+            <h3>Live Your Ambitions Faster</h3>
+            <p>Start a 7-day-challenge to take action and advance through your persona stages</p>
             <div className="cta-buttons">
               <button
                 className={`btn-white ${userData?.persona === 'vibe_seeker' ? 'btn-locked' : ''}`}
@@ -599,7 +606,7 @@ const Profile = () => {
                 title={userData?.persona === 'vibe_seeker' ? 'Complete all 4 Nikigai flows to unlock' : ''}
               >
                 {userData?.persona === 'vibe_seeker'
-                  ? '🔒 Complete Nikigai Flows to Unlock'
+                  ? '🔒 Complete Flow Finder Flows to Unlock'
                   : (hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥')
                 }
               </button>

@@ -72,40 +72,11 @@
       "next_step_rules": [
         {
           "on_selection": "Existing Opportunity",
-          "go_to": "4.1-existing"
+          "go_to": "4.2-complete"
         },
         {
           "on_selection": "New Opportunity",
           "go_to": "4.1-new"
-        }
-      ]
-    },
-    {
-      "id": "4.1-existing",
-      "step_order_index": 5,
-      "assistant_prompt": "What stage of development is this current opportunity?",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": [
-            "Still creating",
-            "In process of launching",
-            "Launched and delivering consistently"
-          ]
-        }
-      ],
-      "store_as": "nikigai.opportunity_stage",
-      "metadata": {
-        "stage_mapping": {
-          "Still creating": "creation",
-          "In process of launching": "testing",
-          "Launched and delivering consistently": "launched"
-        },
-        "add_to_flow_compass": true
-      },
-      "next_step_rules": [
-        {
-          "on_success": "4.2-complete"
         }
       ]
     },
@@ -198,35 +169,6 @@
       "store_as": "nikigai.opportunity_problem",
       "next_step_rules": [
         {
-          "on_success": "4.6-new-stage"
-        }
-      ]
-    },
-    {
-      "id": "4.6-new-stage",
-      "step_order_index": 10,
-      "assistant_prompt": "What stage of development is this opportunity?",
-      "expected_inputs": [
-        {
-          "type": "single_select",
-          "options": [
-            "Still creating",
-            "In process of launching",
-            "Launched and delivering consistently"
-          ]
-        }
-      ],
-      "store_as": "nikigai.opportunity_stage",
-      "metadata": {
-        "stage_mapping": {
-          "Still creating": "creation",
-          "In process of launching": "testing",
-          "Launched and delivering consistently": "launched"
-        },
-        "add_to_flow_compass": true
-      },
-      "next_step_rules": [
-        {
           "on_success": "4.2-complete"
         }
       ]
@@ -234,25 +176,19 @@
     {
       "id": "4.2-complete",
       "step_order_index": 11,
-      "assistant_prompt": "Congratulations! You've completed your Flow Finder discovery. This is the foundation for meaningful, fulfilling work that only *you* can do. Ready to take action?",
+      "assistant_prompt": "Congratulations! You've completed your Flow Finder discovery. This is the foundation for meaningful, fulfilling work that only *you* can do.",
       "expected_inputs": [
         {
           "type": "single_select",
           "options": [
-            "Proceed to 7-day challenge",
-            "Return to home page"
+            "Return to /me page"
           ]
         }
       ],
       "store_as": "nikigai.completion",
       "next_step_rules": [
         {
-          "on_selection": "Proceed to 7-day challenge",
-          "go_to": "complete",
-          "redirect": "/7-day-challenge"
-        },
-        {
-          "on_selection": "Return to home page",
+          "on_selection": "Return to /me page",
           "go_to": "complete",
           "redirect": "/me"
         }

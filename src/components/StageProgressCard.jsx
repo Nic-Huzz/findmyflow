@@ -85,7 +85,7 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
     <div className={`stage-progress-card ${isEligible ? 'eligible' : ''}`}>
       <div className="card-header" onClick={() => setIsExpanded(!isExpanded)}>
         <div className="header-top">
-          <div className="persona-badge">{getPersonaDisplayName(persona)}</div>
+          <div className={`persona-badge persona-${persona}`}>{getPersonaDisplayName(persona)}</div>
           <div className={`expand-icon ${isExpanded ? 'expanded' : ''}`}>↓</div>
         </div>
         <div className="stage-info">
@@ -153,7 +153,8 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
                 </div>
               )}
               <div className="requirements-checklist">
-                {requirements.flows_required && requirements.flows_required.length > 0 && (
+                {/* Only show flows_required if there's no milestones_display (for other personas) */}
+                {requirements.flows_required && requirements.flows_required.length > 0 && !requirements.milestones_display && (
                   <div className={`requirement-item ${graduationStatus?.checks?.flows_completed ? 'completed' : ''}`}>
                     <div className="checkbox">
                       {graduationStatus?.checks?.flows_completed ? '✓' : '○'}
@@ -171,14 +172,29 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
                   </div>
                 )}
 
-                {requirements.milestones && requirements.milestones.length > 0 && (
-                  <div className={`requirement-item ${graduationStatus?.checks?.milestones_met ? 'completed' : ''}`}>
+                {requirements.milestones_display && requirements.milestones_display.length > 0 && requirements.milestones_display.map((milestone, index) => {
+                  // Check if corresponding flow is completed
+                  const flowId = requirements.flows_required?.[index];
+                  const isCompleted = graduationStatus?.completed_flows?.includes(flowId);
+
+                  return (
+                    <div key={index} className={`requirement-item ${isCompleted ? 'completed' : ''}`}>
+                      <div className="checkbox">
+                        {isCompleted ? '✓' : '○'}
+                      </div>
+                      <div>{milestone}</div>
+                    </div>
+                  );
+                })}
+
+                {requirements.milestones && requirements.milestones.length > 0 && requirements.milestones.map((milestone, index) => (
+                  <div key={index} className={`requirement-item ${graduationStatus?.checks?.milestones_met ? 'completed' : ''}`}>
                     <div className="checkbox">
                       {graduationStatus?.checks?.milestones_met ? '✓' : '○'}
                     </div>
-                    <div>Complete milestone: {requirements.milestones.join(', ')}</div>
+                    <div>{milestone}</div>
                   </div>
-                )}
+                ))}
 
                 {requirements.challenge_streak && (
                   <div className={`requirement-item ${graduationStatus?.checks?.streak_met ? 'completed' : ''}`}>
@@ -195,7 +211,9 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
                   className="graduate-button"
                   onClick={() => onGraduate(currentStage, nextStage)}
                 >
-                  Graduate to {getStageDisplayName(nextStage)}
+                  {persona === 'vibe_seeker' && currentStage === 'clarity'
+                    ? 'Graduate to Vibe Riser'
+                    : `Graduate to ${getStageDisplayName(nextStage)}`}
                 </button>
               )}
             </div>

@@ -23,9 +23,11 @@
 .essence-profile-header .header-top {
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
   margin-bottom: 15px;
   color: white;
+  position: relative;
+  width: 100%;
 }
 
 .essence-profile-header .back-btn {
@@ -42,14 +44,20 @@
   cursor: pointer;
   flex-shrink: 0;
   backdrop-filter: blur(10px);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .essence-profile-header .archetype-name {
   font-size: 2rem;
   font-weight: 700;
+  text-align: center;
   color: white;
   margin: 0;
   line-height: 1;
+  width: 100%;
 }
 
 /* Tabs */

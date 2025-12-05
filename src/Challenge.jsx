@@ -1272,7 +1272,7 @@ function Challenge() {
                       setShowSettingsMenu(false)
                     }}
                   >
-                    ❓ Help
+                    📖 Explainer
                   </button>
                   <button
                     className="settings-menu-item"

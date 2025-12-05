@@ -52,12 +52,13 @@ function PersonaAssessment() {
   const [verificationCode, setVerificationCode] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [isSavingUserData, setIsSavingUserData] = useState(false)
 
   // Load assessment JSON
   useEffect(() => {
     const loadAssessment = async () => {
       try {
-        const response = await fetch('/persona-assessment.json')
+        const response = await fetch(`/persona-assessment.json?v=${Date.now()}`)
         if (!response.ok) throw new Error('Failed to load assessment')
         const data = await response.json()
         setAssessment(data)
@@ -69,11 +70,12 @@ function PersonaAssessment() {
   }, [])
 
   // If user is already authenticated, redirect to dashboard
+  // But skip this if we're in the middle of saving user data after verification
   useEffect(() => {
-    if (user) {
+    if (user && !isSavingUserData && stage === STAGES.WELCOME) {
       navigate('/me')
     }
-  }, [user, navigate])
+  }, [user, navigate, isSavingUserData, stage])
 
   // Calculate current stage group for progress
   const getCurrentGroupIndex = () => {
@@ -162,6 +164,34 @@ function PersonaAssessment() {
     setError(null)
 
     try {
+      // Save lead profile data first (before verification)
+      const sessionId = crypto.randomUUID()
+      const dbPersona = assignedPersona?.persona // Already in format like 'vibe_seeker'
+
+      await supabase.from('lead_flow_profiles').insert([{
+        session_id: sessionId,
+        user_name: userName,
+        email: email.toLowerCase(),
+        persona: assignedPersona?.persona === 'vibe_seeker' ? 'Vibe Seeker' :
+                 assignedPersona?.persona === 'vibe_riser' ? 'Vibe Riser' : 'Movement Maker',
+        essence_archetype: essenceArchetype?.name,
+        protective_archetype: protectiveArchetype?.name,
+        context: {
+          persona_answers: personaAnswers,
+          persona_confidence: assignedPersona?.confidence
+        }
+      }])
+
+      // Save to persona_assessments for new system
+      await supabase.from('persona_assessments').insert([{
+        email: email.toLowerCase(),
+        responses: personaAnswers,
+        assigned_persona: dbPersona,
+        confidence_score: assignedPersona?.confidence === 'high' ? 1.0 :
+                         assignedPersona?.confidence === 'medium' ? 0.67 : 0.33
+      }])
+
+      // Now send the verification code
       const result = await signInWithCode(email.toLowerCase())
       if (result.success) {
         setStage(STAGES.CODE_VERIFY)
@@ -182,36 +212,51 @@ function PersonaAssessment() {
 
     setIsLoading(true)
     setError(null)
+    setIsSavingUserData(true) // Prevent auto-redirect while saving
 
     try {
-      // Save profile data first
-      const sessionId = crypto.randomUUID()
-      await supabase.from('lead_flow_profiles').insert([{
-        session_id: sessionId,
-        user_name: userName,
-        email: email.toLowerCase(),
-        persona: assignedPersona?.persona === 'vibe_seeker' ? 'Vibe Seeker' :
-                 assignedPersona?.persona === 'vibe_riser' ? 'Vibe Riser' : 'Movement Maker',
-        essence_archetype: essenceArchetype?.name,
-        protective_archetype: protectiveArchetype?.name,
-        context: {
-          persona_answers: personaAnswers,
-          persona_confidence: assignedPersona?.confidence
-        }
-      }])
-
       // Verify the code
       const result = await verifyCode(email.toLowerCase(), verificationCode)
       if (result.success) {
-        // Also save to persona_assessments for new system
-        await supabase.from('persona_assessments').insert([{
-          email: email.toLowerCase(),
-          responses: personaAnswers,
-          assigned_persona: assignedPersona?.persona,
-          confidence_score: assignedPersona?.confidence === 'high' ? 1.0 :
-                           assignedPersona?.confidence === 'medium' ? 0.67 : 0.33
-        }])
+        const authUser = result.user
 
+        // Create initial user_stage_progress record for new users
+        if (authUser?.id) {
+          const dbPersona = assignedPersona?.persona // Already in format like 'vibe_seeker'
+
+          // Set initial stage based on persona
+          const initialStages = {
+            vibe_seeker: 'clarity',
+            vibe_riser: 'validation',
+            movement_maker: 'ideation'
+          }
+          const initialStage = initialStages[dbPersona] || 'clarity'
+
+          // Check if stage progress already exists
+          const { data: existingProgress } = await supabase
+            .from('user_stage_progress')
+            .select('id, current_stage')
+            .eq('user_id', authUser.id)
+            .maybeSingle()
+
+          if (!existingProgress) {
+            // Create new stage progress record
+            await supabase.from('user_stage_progress').insert([{
+              user_id: authUser.id,
+              persona: dbPersona,
+              current_stage: initialStage,
+              conversations_logged: 0
+            }])
+          } else if (existingProgress.current_stage === 'stage_1') {
+            // Fix legacy stage_1 format
+            await supabase
+              .from('user_stage_progress')
+              .update({ current_stage: initialStage, persona: dbPersona })
+              .eq('user_id', authUser.id)
+          }
+        }
+
+        // Show success and redirect
         setStage(STAGES.SUCCESS)
         setTimeout(() => navigate('/me'), 2000)
       } else {
@@ -273,9 +318,18 @@ function PersonaAssessment() {
     return (
       <div className="persona-assessment">
         <div className="loading-state">
-          <div className="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
+          {error ? (
+            <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
+              <p>{error}</p>
+              <button onClick={() => window.location.reload()} style={{ marginTop: '20px', padding: '10px 20px', cursor: 'pointer' }}>
+                Retry
+              </button>
+            </div>
+          ) : (
+            <div className="typing-indicator">
+              <span></span><span></span><span></span>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -371,7 +425,7 @@ function PersonaAssessment() {
       <div className="persona-assessment">
         {renderProgress()}
         <div className="reveal-container">
-          <div className="reveal-badge" style={{ backgroundColor: personaDisplay.color }}>
+          <div className="reveal-badge" style={{ background: personaDisplay.color }}>
             {personaDisplay.name}
           </div>
           <h1 className="reveal-tagline">{personaDisplay.tagline}</h1>
@@ -396,7 +450,7 @@ function PersonaAssessment() {
         <div className="intro-container">
           <h2 className="intro-title">Discover Your Essence</h2>
           <p className="intro-text">
-            That original song you were born to share? It has a name.
+            That original song you were born to share?<br />It has a name.
           </p>
           <p className="intro-text">
             I call it your <strong>Essence Voice</strong>.

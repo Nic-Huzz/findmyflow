@@ -8,7 +8,8 @@ export const PERSONA_STAGES = {
     graduation_requirements: {
       clarity: {
         flows_required: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
-        description: 'Complete all 4 Nikigai flows to gain clarity on your unique value'
+        description: 'Complete all 4 Flow Finder flows to gain clarity on your unique opportunities:',
+        milestones_display: ['Flow Finder: Skills', 'Flow Finder: Problems', 'Flow Finder: Personas', 'Putting It All Together']
       }
     }
   },

@@ -111,6 +111,8 @@ function FlowMap() {
   };
 
   const fetchFlowFinderData = async () => {
+    console.log('🔍 Fetching Flow Finder data for user:', user?.id);
+
     const { data: clusters, error } = await supabase
       .from('nikigai_clusters')
       .select('cluster_type, cluster_label, items')
@@ -119,14 +121,28 @@ function FlowMap() {
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching nikigai clusters:', error);
+      console.error('❌ Error fetching nikigai clusters:', error);
       return;
     }
 
-    if (clusters) {
-      setProblemsClusters(clusters.filter(c => c.cluster_type === 'problems'));
-      setPeopleClusters(clusters.filter(c => c.cluster_type === 'people'));
-      setSkillsClusters(clusters.filter(c => c.cluster_type === 'skills'));
+    console.log('📊 Fetched clusters:', clusters);
+
+    if (clusters && clusters.length > 0) {
+      // Check for both 'skills' and 'roles' cluster types (Skills flow might save as 'roles')
+      const skillsClusters = clusters.filter(c => c.cluster_type === 'skills' || c.cluster_type === 'roles');
+      const problemsClusters = clusters.filter(c => c.cluster_type === 'problems');
+      // Persona flow saves as 'persona', not 'people'
+      const peopleClusters = clusters.filter(c => c.cluster_type === 'people' || c.cluster_type === 'persona');
+
+      console.log('Skills clusters (skills/roles):', skillsClusters);
+      console.log('Problems clusters:', problemsClusters);
+      console.log('People clusters (people/persona):', peopleClusters);
+
+      setProblemsClusters(problemsClusters);
+      setPeopleClusters(peopleClusters);
+      setSkillsClusters(skillsClusters);
+    } else {
+      console.log('⚠️ No clusters found');
     }
   };
 
@@ -276,47 +292,43 @@ function FlowMap() {
     return icons[direction] || '•';
   };
 
-  const renderClusterSlider = (category, title, clusters) => {
+  const renderFlowFinderCard = (category, label, icon, gradientClass, description) => {
+    const clusters = category === 'problems' ? problemsClusters :
+                     category === 'people' ? peopleClusters : skillsClusters;
+
     if (clusters.length === 0) {
       return (
-        <div className="finder-category">
-          <div className="category-title">{title}</div>
-          <div className="cluster-card">
-            <button 
-              className="start-flow-button"
-              onClick={() => navigate(nextNikigaiFlow)}
-            >
-              Complete Nikigai Flow to Discover
-            </button>
-          </div>
+        <div className="nikigai-card empty">
+          <div className={`card-icon ${gradientClass}`}>{icon}</div>
+          <div className="card-label">{label}</div>
+          <button
+            className="start-flow-button"
+            onClick={() => navigate(nextNikigaiFlow)}
+          >
+            Complete Flow Finder to Discover
+          </button>
         </div>
       );
     }
 
     const currentCluster = clusters[currentIndices[category]];
+    const hasMultiple = clusters.length > 1;
 
     return (
-      <div className="finder-category">
-        <div className="category-title">{title}</div>
-        <div className="slider-container">
-          <div
-            className="slider-content"
-            onTouchStart={(e) => handleTouchStart(e, category)}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={() => handleTouchEnd(category)}
-          >
-            <div className="cluster-card">
-              <div className="cluster-label">{currentCluster.cluster_label}</div>
+      <div className="nikigai-card">
+        <div className={`card-icon ${gradientClass}`}>{icon}</div>
+        <div className="card-label">{label}</div>
+        <div className="card-value">{currentCluster.cluster_label}</div>
+        {description && <div className="card-description">{description}</div>}
+        {hasMultiple && (
+          <div className="card-nav">
+            <button className="nav-arrow" onClick={() => previousCluster(category)}>←</button>
+            <div className="nav-indicator">
+              {currentIndices[category] + 1} / {clusters.length}
             </div>
+            <button className="nav-arrow" onClick={() => nextCluster(category)}>→</button>
           </div>
-        </div>
-        <div className="slider-controls">
-          <button className="slider-arrow" onClick={() => previousCluster(category)}>‹</button>
-          <div className="slider-indicator">
-            {currentIndices[category] + 1} / {clusters.length}
-          </div>
-          <button className="slider-arrow" onClick={() => nextCluster(category)}>›</button>
-        </div>
+        )}
       </div>
     );
   };
@@ -347,9 +359,11 @@ function FlowMap() {
 
         {expandedSection === 'flow-finder' && (
           <div className="section-content">
-            {renderClusterSlider('problems', 'Problems You\'re Passionate About', problemsClusters)}
-            {renderClusterSlider('people', 'People You\'re Passionate About', peopleClusters)}
-            {renderClusterSlider('skills', 'Skills You\'re Passionate About', skillsClusters)}
+            <div className="nikigai-cards-grid">
+              {renderFlowFinderCard('skills', 'Your Skills', '🎯', 'icon-skill', null)}
+              {renderFlowFinderCard('problems', 'Problems You Solve', '💡', 'icon-problem', null)}
+              {renderFlowFinderCard('people', 'People You Serve', '👥', 'icon-persona', null)}
+            </div>
           </div>
         )}
       </div>

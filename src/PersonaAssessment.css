@@ -5,8 +5,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-  padding-top: 80px;
+  justify-content: flex-start;
+  padding: 80px 20px 20px 20px;
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   position: relative;
@@ -68,7 +68,7 @@
 
 /* ============ WELCOME SCREEN ============ */
 
-.welcome-container {
+.persona-assessment .welcome-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -116,7 +116,7 @@
 
 /* ============ QUESTION SCREENS ============ */
 
-.question-container {
+.persona-assessment .question-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -183,7 +183,7 @@
 
 /* ============ INTRO SCREENS ============ */
 
-.intro-container {
+.persona-assessment .intro-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -194,7 +194,7 @@
   animation: fadeIn 0.5s ease;
 }
 
-.intro-title {
+.persona-assessment .intro-title {
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 24px;
@@ -204,22 +204,22 @@
   background-clip: text;
 }
 
-.intro-text {
+.persona-assessment .intro-text {
   font-size: 16px;
   line-height: 1.7;
   color: white !important;
   margin: 0 0 16px;
 }
 
-.intro-text strong {
+.persona-assessment .intro-text strong {
   color: white !important;
 }
 
-.intro-text em {
+.persona-assessment .intro-text em {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.intro-instruction {
+.persona-assessment .intro-instruction {
   font-size: 14px;
   color: white !important;
   margin: 24px 0 32px;
@@ -230,7 +230,7 @@
 
 /* ============ REVEAL SCREENS ============ */
 
-.reveal-container {
+.persona-assessment .reveal-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -252,7 +252,7 @@
   }
 }
 
-.reveal-badge {
+.persona-assessment .reveal-badge {
   display: inline-block;
   padding: 8px 24px;
   border-radius: 100px;
@@ -261,13 +261,14 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 24px;
+  color: white;
 }
 
-.essence-badge {
+.persona-assessment .essence-badge {
   background: linear-gradient(135deg, #9333EA, #7C3AED);
 }
 
-.protective-badge {
+.persona-assessment .protective-badge {
   background: linear-gradient(135deg, #F59E0B, #D97706);
 }
 
@@ -350,7 +351,7 @@
 
 /* ============ CAPTURE SCREENS ============ */
 
-.capture-container {
+.persona-assessment .capture-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -451,7 +452,7 @@
 
 /* ============ SUCCESS SCREEN ============ */
 
-.success-container {
+.persona-assessment .success-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -558,8 +559,7 @@
 
 @media (max-width: 480px) {
   .persona-assessment {
-    padding: 16px;
-    padding-top: 70px;
+    padding: 70px 16px 16px 16px;
   }
 
   .progress-container {
@@ -622,6 +622,6 @@
   }
 
   .persona-assessment {
-    padding-top: calc(80px + env(safe-area-inset-top));
+    padding: calc(80px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom)) 20px;
   }
 }

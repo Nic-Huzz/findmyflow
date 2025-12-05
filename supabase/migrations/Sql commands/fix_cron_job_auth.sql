@@ -1,13 +1,17 @@
--- First, verify the service role key is in vault
-SELECT name, description FROM vault.decrypted_secrets WHERE name = 'SUPABASE_SERVICE_ROLE_KEY';
+-- ============================================
+-- FIX: Cron Job Authentication Issue
+-- ============================================
+-- Problem: The cron job is using the JWT token VALUE as the secret NAME
+-- Solution: Change it to look up 'SUPABASE_SERVICE_ROLE_KEY' from vault
+-- ============================================
 
--- Unschedule the existing job with wrong auth
+-- First, unschedule the broken cron job
 SELECT cron.unschedule('timezone-based-notifications-hourly');
 
--- Reschedule with the correct service role key from vault
+-- Now create it correctly with proper vault secret lookup
 SELECT cron.schedule(
   'timezone-based-notifications-hourly',
-  '0 * * * *',  -- Every hour at minute 0
+  '0 * * * *', -- Every hour at minute 0
   $$
   SELECT
     net.http_post(
@@ -21,5 +25,12 @@ SELECT cron.schedule(
   $$
 );
 
--- Verify the job was created correctly
-SELECT jobid, schedule, active, jobname FROM cron.job WHERE jobname = 'timezone-based-notifications-hourly';
+-- Verify the fix
+SELECT
+  jobid,
+  jobname,
+  schedule,
+  active,
+  command
+FROM cron.job
+WHERE jobname = 'timezone-based-notifications-hourly';

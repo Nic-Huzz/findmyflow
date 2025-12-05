@@ -6,7 +6,7 @@ import { PERSONA_STAGES, getNextStage, getStageCelebration, getInitialStage, get
 
 // Check if user has completed required flows
 const checkFlowsCompleted = async (userId, flowsRequired = []) => {
-  if (!flowsRequired || flowsRequired.length === 0) return true;
+  if (!flowsRequired || flowsRequired.length === 0) return { allCompleted: true, completedFlows: [] };
 
   try {
     // Query flow_sessions to check for completed flows
@@ -20,7 +20,7 @@ const checkFlowsCompleted = async (userId, flowsRequired = []) => {
     // If error, return false gracefully
     if (error) {
       console.warn('Flow check error (flows may not exist yet):', error.message);
-      return false;
+      return { allCompleted: false, completedFlows: [] };
     }
 
     // Get unique flow types that have been completed
@@ -35,10 +35,10 @@ const checkFlowsCompleted = async (userId, flowsRequired = []) => {
       allCompleted
     });
 
-    return allCompleted;
+    return { allCompleted, completedFlows: Array.from(completedFlowTypes) };
   } catch (error) {
     console.warn('Error checking flows:', error);
-    return false; // Gracefully fail - flows don't exist yet
+    return { allCompleted: false, completedFlows: [] }; // Gracefully fail - flows don't exist yet
   }
 };
 
@@ -108,8 +108,9 @@ export const checkGraduationEligibility = async (userId) => {
     }
 
     // Check all requirements
+    const flowsCheck = await checkFlowsCompleted(userId, requirements.flows_required);
     const checks = {
-      flows_completed: await checkFlowsCompleted(userId, requirements.flows_required),
+      flows_completed: flowsCheck.allCompleted,
       conversations_logged: conversations_logged >= (requirements.conversations_required || 0),
       milestones_met: await checkMilestones(userId, persona, requirements.milestones, requirements.milestones_additional),
       streak_met: await checkStreak(userId, requirements.challenge_streak)
@@ -121,6 +122,7 @@ export const checkGraduationEligibility = async (userId) => {
     return {
       eligible,
       checks,
+      completed_flows: flowsCheck.completedFlows,
       requirements,
       current_stage,
       next_stage: getNextStage(persona, current_stage),
@@ -213,7 +215,26 @@ const graduateVibeSeeker = async (userId, reason) => {
       throw new Error(`Failed to update persona: ${profileError.message}`);
     }
 
-    // 3. Update user_stage_progress to Vibe Riser Validation stage
+    // 3. Get user's email to update lead_flow_profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('id', userId)
+      .single();
+
+    // 4. Update lead_flow_profiles table
+    if (profile?.email) {
+      const { error: leadFlowError } = await supabase
+        .from('lead_flow_profiles')
+        .update({ persona: 'vibe_riser' })
+        .eq('email', profile.email);
+
+      if (leadFlowError) {
+        console.warn('Failed to update lead_flow_profiles:', leadFlowError.message);
+      }
+    }
+
+    // 5. Update user_stage_progress to Vibe Riser Validation stage
     const { error: stageError } = await supabase
       .from('user_stage_progress')
       .update({

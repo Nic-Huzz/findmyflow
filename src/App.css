@@ -346,47 +346,75 @@ body {
   font-weight: 500;
 }
 
+/* Prevent iOS zoom on input focus */
+@supports (-webkit-touch-callout: none) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .app {
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
     border-radius: 0;
     box-shadow: none;
+    max-width: 100%;
+    width: 100%;
   }
-  
+
   .header {
     border-radius: 0;
     padding: 20px 16px;
   }
-  
+
   .header h1 {
     font-size: 24px;
   }
-  
+
   .header h1::before {
     font-size: 28px;
   }
-  
+
   .chat-container {
     padding: 0 16px;
   }
-  
+
   .bubble {
     max-width: 90%;
     padding: 14px 18px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
-  
+
+  .text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
   .input-bar {
     padding: 16px;
   }
-  
+
+  .message-input {
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+
   .diagnostics-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .option-button {
     margin: 2px;
     padding: 14px 18px;
+    font-size: 16px; /* Prevent iOS zoom */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .options-container {
+    padding: 16px;
   }
 }
 
