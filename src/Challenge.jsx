@@ -1053,10 +1053,29 @@ function Challenge() {
 
   // Filter by persona and stage for Flow Finder quests
   if (activeCategory === 'Flow Finder') {
+    // Normalize persona to lowercase with underscores for comparison
+    const normalizePersona = (persona) => {
+      if (!persona) return null
+      return persona.toLowerCase().replace(/\s+/g, '_')
+    }
+
+    const userPersonaNormalized = normalizePersona(userData?.persona)
+
+    console.log('🔍 Flow Finder Filtering Debug:', {
+      totalQuests: filteredQuests.length,
+      userPersona: userData?.persona,
+      userPersonaNormalized,
+      userStage: stageProgress?.current_stage,
+      hasUserData: !!userData,
+      hasStageProgress: !!stageProgress
+    })
+
     filteredQuests = filteredQuests.filter(quest => {
       // Filter by persona
-      if (quest.persona_specific && userData?.persona) {
-        if (!quest.persona_specific.includes(userData.persona)) {
+      if (quest.persona_specific && userPersonaNormalized) {
+        const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+        if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
+          console.log(`❌ Filtered out: ${quest.name} (persona mismatch: ${quest.persona_specific} vs ${userData.persona})`)
           return false
         }
       }
@@ -1064,12 +1083,16 @@ function Challenge() {
       // Filter by stage
       if (quest.stage_required && stageProgress?.current_stage) {
         if (quest.stage_required !== stageProgress.current_stage) {
+          console.log(`❌ Filtered out: ${quest.name} (stage mismatch: ${quest.stage_required} vs ${stageProgress.current_stage})`)
           return false
         }
       }
 
+      console.log(`✅ Keeping: ${quest.name}`)
       return true
     })
+
+    console.log('✅ Final Flow Finder quests:', filteredQuests.length)
   }
 
   // For Daily and Weekly tabs, group quests by type (the 4 R's)
@@ -1225,8 +1248,23 @@ function Challenge() {
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
       <NotificationPrompt />
       <header className="challenge-header">
+        <h1>Gamify Your Ambitions</h1>
+
+        <div className="challenge-points">
+          <div className="total-points clickable" onClick={() => setActiveCategory('Leaderboard')}>
+            <span className="points-label">Total Points</span>
+            <span className="points-value">{progress.total_points || 0}</span>
+            {userRank && (
+              <>
+                <span className="points-separator">•</span>
+                <span className="points-label">Your Rank</span>
+                <span className="points-value">#{userRank}</span>
+              </>
+            )}
+          </div>
+        </div>
+
         <div className="challenge-header-top">
-          <h1>Gamify Your Ambitions</h1>
           <div className="challenge-header-badges">
             <div className="challenge-day">
               Day {progress.current_day}/7
@@ -1286,20 +1324,6 @@ function Challenge() {
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        <div className="challenge-points">
-          <div className="total-points clickable" onClick={() => setActiveCategory('Leaderboard')}>
-            <span className="points-label">Total Points</span>
-            <span className="points-value">{progress.total_points || 0}</span>
-            {userRank && (
-              <>
-                <span className="points-separator">•</span>
-                <span className="points-label">Your Rank</span>
-                <span className="points-value">#{userRank}</span>
-              </>
-            )}
           </div>
         </div>
         {progress.current_day === 7 && (

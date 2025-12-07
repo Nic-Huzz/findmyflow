@@ -44,7 +44,8 @@ function UpsellFlow() {
   const [answers, setAnswers] = useState({})
   const [recommendedOffer, setRecommendedOffer] = useState(null)
   const [allOfferScores, setAllOfferScores] = useState([])
-const [isLoading, setIsLoading] = useState(false)
+  const [showAllOptions, setShowAllOptions] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
   // Load questions and offers JSON
@@ -230,7 +231,7 @@ const [isLoading, setIsLoading] = useState(false)
       }
 
       setStage(STAGES.SUCCESS)
-      setTimeout(() => navigate('/me'), 2000)
+      setTimeout(() => navigate('/7-day-challenge'), 2000)
     } catch (err) {
       setError('Failed to save results. Please try again.')
       console.error('Save error:', err)
@@ -267,7 +268,6 @@ const [isLoading, setIsLoading] = useState(false)
   // Render progress indicators
   const renderProgress = () => {
     const currentGroupIndex = getCurrentGroupIndex()
-    const groupProgress = getGroupProgress()
 
     return (
       <div className="progress-container">
@@ -279,10 +279,6 @@ const [isLoading, setIsLoading] = useState(false)
               className={`progress-dot ${index < currentGroupIndex ? 'completed' : ''} ${index === currentGroupIndex ? 'active' : ''}`}
             />
           ))}
-        </div>
-        {/* Section progress bar */}
-        <div className="section-progress">
-          <div className="section-progress-fill" style={{ width: `${groupProgress}%` }} />
         </div>
       </div>
     )
@@ -297,23 +293,18 @@ const [isLoading, setIsLoading] = useState(false)
         {renderProgress()}
         <div className="welcome-container">
           <div className="welcome-content">
-            <h1 className="welcome-greeting">Discover Your Perfect Upsell Strategy</h1>
+            <h1 className="welcome-greeting">Discover Your Best Upsell Strategy</h1>
             <div className="welcome-message">
               <p><strong>Ready to multiply your revenue with the right upsell?</strong></p>
               <p>Every customer who buys from you is a potential upsell opportunity. But most businesses leave massive profit on the table by using the wrong upsell strategy.</p>
-              <p>There are 4 proven upsell models that work...</p>
-              <p><strong>Classic Upsell:</strong> Simple and seamless, 80%+ take rates when done right.</p>
-              <p><strong>Menu Upsell:</strong> Hormozi's favorite - builds trust by prescribing the right solution.</p>
-              <p><strong>Anchor Upsell:</strong> Show premium first, rescue with main offer - customers spend more than planned.</p>
-              <p><strong>Rollover Upsell:</strong> Credit previous purchases toward higher offers - the most-used strategy.</p>
-              <p>The wrong upsell? You'll annoy customers and kill conversion.</p>
+              <p>There are 4 proven upsell models that work... the following 10 questions will decide which is best for you.</p>
               <p>The right upsell? You'll boost profit per sale, increase LTV, and delight customers.</p>
-              <p className="welcome-cta-text">Answer 10 quick questions and I'll recommend the perfect upsell strategy for your business.</p>
             </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Find My Upsell Strategy
           </button>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )
@@ -421,28 +412,40 @@ const [isLoading, setIsLoading] = useState(false)
 
           {allOfferScores.length > 1 && (
             <div className="alternative-offers">
-              <h3 className="preview-heading">Other Strategies Scored:</h3>
+              <h3 className="preview-heading">Strategy Scores:</h3>
               <div className="offer-scores-list">
-                {allOfferScores.slice(0, 4).map((score, index) => (
+                {(showAllOptions ? allOfferScores : allOfferScores.slice(0, 3)).map((score, index) => (
                   <div key={index} className="score-item">
-                    <span className="score-name">{score.offer.name}</span>
-                    <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    <div className="score-item-content">
+                      <span className="score-name">{score.offer.name}</span>
+                      <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    </div>
+                    <button
+                      className="select-option-btn"
+                      onClick={() => setRecommendedOffer(score)}
+                    >
+                      Show This Option
+                    </button>
                   </div>
                 ))}
               </div>
+              {allOfferScores.length > 3 && (
+                <button
+                  className="see-all-options-btn"
+                  onClick={() => setShowAllOptions(!showAllOptions)}
+                >
+                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.length} Options`}
+                </button>
+              )}
             </div>
           )}
-
-          <p className="next-step-text">
-            Save your results to get your complete upsell funnel template, implementation tips, and success metrics.
-          </p>
 
           <button
             className="primary-button"
             onClick={handleSaveResults}
             disabled={isLoading}
           >
-            Get My Complete Upsell Strategy
+            {isLoading ? 'Saving...' : 'Save Results'}
           </button>
         </div>
       </div>

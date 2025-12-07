@@ -1,7 +1,7 @@
 /* PersonaAssessment.css - Full Homepage Flow */
 
 .persona-assessment {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,6 +10,7 @@
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   position: relative;
+  overflow: hidden;
 }
 
 /* ============ PROGRESS INDICATORS ============ */
@@ -207,7 +208,7 @@
 .persona-assessment .intro-text {
   font-size: 16px;
   line-height: 1.7;
-  color: white !important;
+  color: rgba(255, 255, 255, 0.85) !important;
   margin: 0 0 16px;
 }
 
@@ -408,7 +409,7 @@
   text-align: center;
   font-size: 24px;
   font-weight: 600;
-  letter-spacing: 8px;
+  letter-spacing: normal;
 }
 
 /* ============ BUTTONS ============ */

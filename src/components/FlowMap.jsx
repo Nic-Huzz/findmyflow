@@ -4,7 +4,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { supabase } from '../lib/supabaseClient';
 import './FlowMap.css';
 
-function FlowMap() {
+function FlowMap({ persona }) {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -344,7 +344,7 @@ function FlowMap() {
   return (
     <div className="flow-map">
       <h2 className="section-heading">Flow Map</h2>
-      {/* Section 1: Flow Finder */}
+      {/* Section 1: Flow Finder - Always show for all personas */}
       <div className="flow-section">
         <div
           className={`section-header ${expandedSection === 'flow-finder' ? 'expanded' : ''}`}

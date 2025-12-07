@@ -46,6 +46,7 @@ function AttractionOfferFlow() {
   const [allOfferScores, setAllOfferScores] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showAllOptions, setShowAllOptions] = useState(false)
 
   // Load questions and offers JSON
   useEffect(() => {
@@ -97,17 +98,37 @@ function AttractionOfferFlow() {
   const calculateOfferScores = (userAnswers) => {
     if (!offersData) return []
 
+    console.log('🔍 Calculating scores with answers:', userAnswers)
+    console.log('📊 Offers data:', offersData)
+
     const scores = offersData.map(offer => {
       let totalScore = 0
       const maxPossibleScore = offer.max_possible_score || 30
 
+      console.log(`\n📝 Scoring offer: ${offer.name}`)
+      console.log('Scoring weights:', offer.scoring_weights)
+      console.log('Scoring weights keys:', Object.keys(offer.scoring_weights || {}))
+
       // Calculate weighted score for each question
       Object.entries(userAnswers).forEach(([questionId, answer]) => {
-        const weights = offer.scoring_weights?.[questionId]
+        // Normalize questionId: q1_business_model -> Q1_business_model
+        const normalizedQuestionId = questionId.replace(/^q(\d+)/, 'Q$1')
+        const weights = offer.scoring_weights?.[normalizedQuestionId]
+        console.log(`  Question ${questionId} (normalized: ${normalizedQuestionId}):`, {
+          answer: answer.value,
+          weights,
+          foundWeight: weights?.[answer.value],
+          hasWeights: !!weights
+        })
         if (weights && weights[answer.value] !== undefined) {
           totalScore += weights[answer.value]
+          console.log(`    ✅ Added ${weights[answer.value]} points`)
+        } else {
+          console.log(`    ❌ No weight found`)
         }
       })
+
+      console.log(`  Final totalScore: ${totalScore}/${maxPossibleScore}`)
 
       // Check hard disqualifiers
       let isDisqualified = false
@@ -227,7 +248,7 @@ function AttractionOfferFlow() {
       }
 
       setStage(STAGES.SUCCESS)
-      setTimeout(() => navigate('/me'), 2000)
+      setTimeout(() => navigate('/7-day-challenge'), 2000)
     } catch (err) {
       setError('Failed to save results. Please try again.')
       console.error('Save error:', err)
@@ -270,7 +291,6 @@ function AttractionOfferFlow() {
   // Render progress indicators
   const renderProgress = () => {
     const currentGroupIndex = getCurrentGroupIndex()
-    const groupProgress = getGroupProgress()
 
     return (
       <div className="progress-container">
@@ -282,10 +302,6 @@ function AttractionOfferFlow() {
               className={`progress-dot ${index < currentGroupIndex ? 'completed' : ''} ${index === currentGroupIndex ? 'active' : ''}`}
             />
           ))}
-        </div>
-        {/* Section progress bar */}
-        <div className="section-progress">
-          <div className="section-progress-fill" style={{ width: `${groupProgress}%` }} />
         </div>
       </div>
     )
@@ -314,6 +330,7 @@ function AttractionOfferFlow() {
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Let's Find Your Offer
           </button>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )
@@ -420,28 +437,40 @@ function AttractionOfferFlow() {
 
           {allOfferScores.length > 1 && (
             <div className="alternative-offers">
-              <h3 className="preview-heading">Other Options Scored:</h3>
+              <h3 className="preview-heading">Strategy Scores:</h3>
               <div className="offer-scores-list">
-                {allOfferScores.slice(0, 3).map((score, index) => (
+                {(showAllOptions ? allOfferScores : allOfferScores.slice(0, 3)).map((score, index) => (
                   <div key={index} className="score-item">
-                    <span className="score-name">{score.offer.name}</span>
-                    <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    <div className="score-item-content">
+                      <span className="score-name">{score.offer.name}</span>
+                      <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    </div>
+                    <button
+                      className="select-option-btn"
+                      onClick={() => setRecommendedOffer(score)}
+                    >
+                      Show This Option
+                    </button>
                   </div>
                 ))}
               </div>
+              {allOfferScores.length > 3 && (
+                <button
+                  className="see-all-options-btn"
+                  onClick={() => setShowAllOptions(!showAllOptions)}
+                >
+                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.length} Options`}
+                </button>
+              )}
             </div>
           )}
-
-          <p className="next-step-text">
-            Save your results to get your complete funnel template, headline examples, and implementation guide.
-          </p>
 
           <button
             className="primary-button"
             onClick={handleSaveResults}
             disabled={isLoading}
           >
-            {isLoading ? 'Saving...' : 'Get My Complete Funnel'}
+            {isLoading ? 'Saving...' : 'Save Results'}
           </button>
         </div>
       </div>

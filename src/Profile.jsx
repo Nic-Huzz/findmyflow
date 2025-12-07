@@ -397,15 +397,13 @@ const Profile = () => {
             ✨ Archetypes
           </li>
           <li
-            className={`nav-item ${userData?.persona === 'vibe_seeker' ? 'nav-item-locked' : ''}`}
+            className="nav-item"
             onClick={() => {
-              if (userData?.persona === 'vibe_seeker') return
               navigate('/7-day-challenge')
               setSidebarOpen(false)
             }}
-            title={userData?.persona === 'vibe_seeker' ? '🔒 Complete all 4 Nikigai flows to unlock' : ''}
           >
-            {userData?.persona === 'vibe_seeker' ? '🔒 7-Day Challenge (Locked)' : '📈 7-Day Challenge'}
+            📈 7-Day Challenge
           </li>
           <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
             🧭 Flow Compass
@@ -578,7 +576,7 @@ const Profile = () => {
         )}
 
         {/* Flow Map - Shows user's journey data for all users */}
-        <FlowMap />
+        <FlowMap persona={stageProgress?.persona} />
 
         {/* Graduation Modal */}
         <GraduationModal
@@ -597,18 +595,10 @@ const Profile = () => {
             <p>Start a 7-day-challenge to take action and advance through your persona stages</p>
             <div className="cta-buttons">
               <button
-                className={`btn-white ${userData?.persona === 'vibe_seeker' ? 'btn-locked' : ''}`}
-                onClick={() => {
-                  if (userData?.persona === 'vibe_seeker') return
-                  navigate('/7-day-challenge')
-                }}
-                disabled={userData?.persona === 'vibe_seeker'}
-                title={userData?.persona === 'vibe_seeker' ? 'Complete all 4 Nikigai flows to unlock' : ''}
+                className="btn-white"
+                onClick={() => navigate('/7-day-challenge')}
               >
-                {userData?.persona === 'vibe_seeker'
-                  ? '🔒 Complete Flow Finder Flows to Unlock'
-                  : (hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥')
-                }
+                {hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥'}
               </button>
               <button className="btn-outline" onClick={() => navigate('/feedback')}>
                 Give Feedback 💬

@@ -44,7 +44,8 @@ function DownsellFlow() {
   const [answers, setAnswers] = useState({})
   const [recommendedOffer, setRecommendedOffer] = useState(null)
   const [allOfferScores, setAllOfferScores] = useState([])
-const [isLoading, setIsLoading] = useState(false)
+  const [showAllOptions, setShowAllOptions] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
   // Load questions and offers JSON
@@ -97,17 +98,33 @@ const [isLoading, setIsLoading] = useState(false)
   const calculateOfferScores = (userAnswers) => {
     if (!offersData) return []
 
+    console.log('🔍 Calculating downsell scores with answers:', userAnswers)
+
     const scores = offersData.map(offer => {
       let totalScore = 0
       const maxPossibleScore = offer.max_possible_score || 30
 
+      console.log(`\n📝 Scoring offer: ${offer.name}`)
+
       // Calculate weighted score for each question
       Object.entries(userAnswers).forEach(([questionId, answer]) => {
-        const weights = offer.scoring_weights?.[questionId]
+        // Normalize questionId: q1_business_type -> Q1_business_type
+        const normalizedQuestionId = questionId.replace(/^q(\d+)/, 'Q$1')
+        const weights = offer.scoring_weights?.[normalizedQuestionId]
+        console.log(`  Question ${questionId} (normalized: ${normalizedQuestionId}):`, {
+          answer: answer.value,
+          weights,
+          foundWeight: weights?.[answer.value]
+        })
         if (weights && weights[answer.value] !== undefined) {
           totalScore += weights[answer.value]
+          console.log(`    ✅ Added ${weights[answer.value]} points`)
+        } else {
+          console.log(`    ❌ No weight found`)
         }
       })
+
+      console.log(`  Final totalScore: ${totalScore}/${maxPossibleScore}`)
 
       // Check hard disqualifiers
       let isDisqualified = false
@@ -226,7 +243,7 @@ const [isLoading, setIsLoading] = useState(false)
       }
 
       setStage(STAGES.SUCCESS)
-      setTimeout(() => navigate('/me'), 2000)
+      setTimeout(() => navigate('/7-day-challenge'), 2000)
     } catch (err) {
       setError('Failed to save results. Please try again.')
       console.error('Save error:', err)
@@ -263,7 +280,6 @@ const [isLoading, setIsLoading] = useState(false)
   // Render progress indicators
   const renderProgress = () => {
     const currentGroupIndex = getCurrentGroupIndex()
-    const groupProgress = getGroupProgress()
 
     return (
       <div className="progress-container">
@@ -275,10 +291,6 @@ const [isLoading, setIsLoading] = useState(false)
               className={`progress-dot ${index < currentGroupIndex ? 'completed' : ''} ${index === currentGroupIndex ? 'active' : ''}`}
             />
           ))}
-        </div>
-        {/* Section progress bar */}
-        <div className="section-progress">
-          <div className="section-progress-fill" style={{ width: `${groupProgress}%` }} />
         </div>
       </div>
     )
@@ -298,20 +310,14 @@ const [isLoading, setIsLoading] = useState(false)
               <p><strong>Turn "no" into "yes" and rescue revenue from lost deals.</strong></p>
               <p>Downsells begin after a customer says no. They're not discounts—they're trades.</p>
               <p>You work with the customer to find combinations of giving and getting until you find a match.</p>
-              <p>There are three core downsell strategies:</p>
-              <ul>
-                <li><strong>Payment Plans</strong> - Same product, flexible payment terms</li>
-                <li><strong>Trial With Penalty</strong> - Free trial with accountability requirements</li>
-                <li><strong>Feature Downsells</strong> - Remove features to lower price and find best fit</li>
-              </ul>
-              <p>The wrong strategy? You'll leave money on the table or damage customer relationships.</p>
-              <p>The right strategy? You'll boost conversions by 20-40% and turn "no" customers into loyal advocates.</p>
-              <p className="welcome-cta-text">Answer 10 quick questions and I'll recommend the perfect downsell strategy for your business.</p>
+              <p>Through 10 questions we'll identify which of the three downsell strategies is best for you.</p>
+              <p>With the right strategy you'll boost conversions by 20-40% and turn "no" customers into loyal advocates.</p>
             </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Let's Find Your Downsell Strategy
           </button>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )
@@ -418,15 +424,31 @@ const [isLoading, setIsLoading] = useState(false)
 
           {allOfferScores.length > 1 && (
             <div className="alternative-offers">
-              <h3 className="preview-heading">Other Strategies Scored:</h3>
+              <h3 className="preview-heading">Strategy Scores:</h3>
               <div className="offer-scores-list">
-                {allOfferScores.slice(0, 3).map((score, index) => (
+                {(showAllOptions ? allOfferScores : allOfferScores.slice(0, 3)).map((score, index) => (
                   <div key={index} className="score-item">
-                    <span className="score-name">{score.offer.name}</span>
-                    <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    <div className="score-item-content">
+                      <span className="score-name">{score.offer.name}</span>
+                      <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    </div>
+                    <button
+                      className="select-option-btn"
+                      onClick={() => setRecommendedOffer(score)}
+                    >
+                      Show This Option
+                    </button>
                   </div>
                 ))}
               </div>
+              {allOfferScores.length > 3 && (
+                <button
+                  className="see-all-options-btn"
+                  onClick={() => setShowAllOptions(!showAllOptions)}
+                >
+                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.length} Options`}
+                </button>
+              )}
             </div>
           )}
 
@@ -435,7 +457,7 @@ const [isLoading, setIsLoading] = useState(false)
             onClick={handleSaveResults}
             disabled={isLoading}
           >
-            Save My Results
+            {isLoading ? 'Saving...' : 'Save Results'}
           </button>
         </div>
       </div>

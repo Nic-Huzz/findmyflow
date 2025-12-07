@@ -17,17 +17,18 @@
   overflow-x: hidden;
 }
 
-.challenge-header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
 .challenge-header h1 {
-  margin: 0;
+  margin: 0 0 1rem 0;
   font-size: 2rem;
   font-weight: 700;
+  text-align: center;
+}
+
+.challenge-header-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .challenge-header-badges {

@@ -599,7 +599,7 @@
 },
 {
 "id": "free_with_consumption_to_upsell",
-"name": "Free With Consumption (Sample → Upsell)",
+"name": "Free With Consumption",
 "description": "A model where the user receives the first session, module, or sample for free, and the experience naturally leads into a premium upsell.",
 "eligibility_rules": {
 "required_followups": [

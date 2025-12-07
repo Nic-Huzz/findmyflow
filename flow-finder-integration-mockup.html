@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Finder: Integration - Mockup</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: 80px;
+    }
+
+    /* Progress Indicators */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: transparent;
+      z-index: 100;
+    }
+
+    .progress-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .progress-dot.completed {
+      background: #fbbf24;
+    }
+
+    .progress-dot.active {
+      background: #fbbf24;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+      transform: scale(1.2);
+    }
+
+    /* Container */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Welcome Screen */
+    .welcome-container {
+      text-align: center;
+    }
+
+    .welcome-greeting {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-message p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0 0 16px;
+    }
+
+    .welcome-message strong {
+      color: white;
+    }
+
+    .pillars-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 32px 0;
+      text-align: left;
+    }
+
+    .pillar-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pillar-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .pillar-icon {
+      font-size: 20px;
+      margin-top: 2px;
+    }
+
+    .pillar-content h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pillar-content p {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Summary Screen */
+    .summary-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .summary-section h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .summary-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .summary-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .summary-item h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    .summary-item p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Question Screens */
+    .question-container {
+      text-align: center;
+    }
+
+    .question-number {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 16px;
+    }
+
+    .question-text {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+
+    .question-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      margin: 0 0 32px;
+      line-height: 1.6;
+    }
+
+    /* Cluster Sliders */
+    .slider-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .slider-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 12px;
+    }
+
+    .slider-content {
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(251, 191, 36, 0.3);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .slider-content h4 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 8px;
+    }
+
+    .slider-content p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .slider-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .slider-btn {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .slider-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .slider-indicator {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Option buttons */
+    .option-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .option-btn {
+      width: 100%;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .option-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(251, 191, 36, 0.5);
+    }
+
+    .option-btn.selected {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+      border-color: #fbbf24;
+    }
+
+    /* Text input */
+    .text-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      font-size: 15px;
+      color: white;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      margin-top: 32px;
+    }
+
+    .text-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: rgba(251, 191, 36, 0.8);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Processing/Loading Screen */
+    .processing-container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 32px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid #fbbf24;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .processing-text {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .processing-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+    }
+
+    /* Buttons */
+    .primary-button {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+      margin: 32px auto 0;
+      display: block;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .primary-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Screen management */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Demo controls */
+    .demo-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      gap: 8px;
+      z-index: 200;
+      flex-wrap: wrap;
+      max-width: 90%;
+    }
+
+    .demo-btn {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .demo-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-btn.active {
+      background: #fbbf24;
+      border-color: #fbbf24;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .question-text {
+        font-size: 24px;
+      }
+
+      .welcome-greeting {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Progress Dots -->
+  <div class="progress-container">
+    <div class="progress-dots">
+      <div class="progress-dot completed"></div>
+      <div class="progress-dot completed"></div>
+      <div class="progress-dot completed"></div>
+      <div class="progress-dot active"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: Welcome -->
+  <div class="screen active" id="screen-welcome">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">Flow Finder: Connecting the Dots</h1>
+      <div class="welcome-message">
+        <p><strong>Hey Sarah!</strong></p>
+        <p>You've done incredible work discovering your:</p>
+      </div>
+
+      <div class="pillars-box">
+        <div class="pillar-item">
+          <div class="pillar-icon">🎯</div>
+          <div class="pillar-content">
+            <h4>Skills</h4>
+            <p>What you're naturally good at</p>
+          </div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-icon">💡</div>
+          <div class="pillar-content">
+            <h4>Problems</h4>
+            <p>The change you want to create</p>
+          </div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-icon">👥</div>
+          <div class="pillar-content">
+            <h4>Persona</h4>
+            <p>Who you're most qualified to serve</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="welcome-message">
+        <p>Now let's bring it all together into your unique <strong>Nikigai</strong> — the intersection where your gifts meet the world's needs.</p>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-summary')">Show me!</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: Summary Processing -->
+  <div class="screen" id="screen-summary-processing">
+    <div class="container processing-container">
+      <div class="spinner"></div>
+      <div class="processing-text">Connecting the dots...</div>
+      <div class="processing-subtext">
+        Bringing together your skills, problems, and persona discoveries.
+      </div>
+      <button class="primary-button" onclick="showScreen('screen-summary')" style="margin-top: 48px;">Continue (Demo)</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Summary -->
+  <div class="screen" id="screen-summary">
+    <div class="container question-container">
+      <div class="question-number">Your Full Picture</div>
+      <h2 class="question-text">Here's what we've discovered</h2>
+      <p class="question-subtext">Review your unique combination</p>
+
+      <div class="summary-section">
+        <h3>🎯 Your Skills</h3>
+        <div class="summary-item">
+          <h4>Strategic Connector</h4>
+          <p>You excel at bringing people together, facilitating collaboration, and creating alignment around shared goals.</p>
+        </div>
+      </div>
+
+      <div class="summary-section">
+        <h3>💡 Your Problem</h3>
+        <div class="summary-item">
+          <h4>Creating Safe Spaces for Vulnerability</h4>
+          <p>You want to build environments where people feel safe to be themselves, show up authentically, and grow without fear.</p>
+        </div>
+      </div>
+
+      <div class="summary-section">
+        <h3>👥 Your Persona</h3>
+        <div class="summary-item">
+          <h4>The People Pleaser Breaking Free</h4>
+          <p>Someone who's spent years making themselves small, avoiding conflict, and seeking approval. They're ready to find their voice but terrified of what happens when they use it.</p>
+        </div>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-sliders')">Find My Perfect Combination</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: Cluster Sliders -->
+  <div class="screen" id="screen-sliders">
+    <div class="container question-container">
+      <div class="question-number">Find Your Combination</div>
+      <h2 class="question-text">Which combination excites you most?</h2>
+      <p class="question-subtext">Slide through each to explore different possibilities</p>
+
+      <div style="margin-top: 32px;">
+        <div class="slider-section">
+          <div class="slider-label">Your Skills</div>
+          <div class="slider-content">
+            <h4>Strategic Connector</h4>
+            <p>You excel at bringing people together, facilitating collaboration, and creating alignment around shared goals.</p>
+          </div>
+          <div class="slider-controls">
+            <button class="slider-btn">← Previous</button>
+            <div class="slider-indicator">1 of 4</div>
+            <button class="slider-btn">Next →</button>
+          </div>
+        </div>
+
+        <div class="slider-section">
+          <div class="slider-label">Your Problem</div>
+          <div class="slider-content">
+            <h4>Creating Safe Spaces for Vulnerability</h4>
+            <p>You want to build environments where people feel safe to be themselves, show up authentically, and grow without fear.</p>
+          </div>
+          <div class="slider-controls">
+            <button class="slider-btn">← Previous</button>
+            <div class="slider-indicator">2 of 4</div>
+            <button class="slider-btn">Next →</button>
+          </div>
+        </div>
+
+        <div class="slider-section">
+          <div class="slider-label">Your Persona</div>
+          <div class="slider-content">
+            <h4>The People Pleaser Breaking Free</h4>
+            <p>Someone who's spent years making themselves small, avoiding conflict, and seeking approval. They're ready to find their voice but terrified of what happens when they use it.</p>
+          </div>
+          <div class="slider-controls">
+            <button class="slider-btn">← Previous</button>
+            <div class="slider-indicator">2 of 5</div>
+            <button class="slider-btn">Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="welcome-message" style="margin-top: 24px;">
+        <p style="font-size: 14px; color: rgba(255, 255, 255, 0.6);">💡 Swipe through each slider to explore different combinations. When you find one that excites you, confirm below!</p>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-opportunity-type')">This Combination Excites Me!</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: Opportunity Type -->
+  <div class="screen" id="screen-opportunity-type">
+    <div class="container question-container">
+      <div class="question-number">Your Opportunity</div>
+      <h2 class="question-text">Is this an existing or new opportunity?</h2>
+      <p class="question-subtext">Help us understand where you are with this</p>
+
+      <div class="option-grid">
+        <button class="option-btn" onclick="selectOption(this); showScreen('screen-existing-success')">Existing Opportunity</button>
+        <button class="option-btn selected" onclick="selectOption(this); showScreen('screen-new-pursue')">New Opportunity</button>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-new-pursue')" style="margin-top: 48px;">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: New - Pursue? -->
+  <div class="screen" id="screen-new-pursue">
+    <div class="container question-container">
+      <div class="question-number">Pursuing This Opportunity</div>
+      <h2 class="question-text">Would you like to add this to your Flow Compass?</h2>
+      <p class="question-subtext">Start pursuing this opportunity and track your progress</p>
+
+      <div class="option-grid">
+        <button class="option-btn selected" onclick="selectOption(this)">Yes</button>
+        <button class="option-btn" onclick="selectOption(this); showScreen('screen-new-details-1')">No, I want to focus on a different opportunity</button>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-existing-success')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: New Details - Name -->
+  <div class="screen" id="screen-new-details-1">
+    <div class="container question-container">
+      <div class="question-number">Opportunity Details</div>
+      <h2 class="question-text">What do you call this opportunity?</h2>
+      <p class="question-subtext">Give it a name that resonates with you</p>
+
+      <input type="text" class="text-input" placeholder="e.g., Vulnerability Coaching Practice">
+
+      <button class="primary-button" onclick="showScreen('screen-new-details-2')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 8: New Details - Role -->
+  <div class="screen" id="screen-new-details-2">
+    <div class="container question-container">
+      <div class="question-number">Opportunity Details</div>
+      <h2 class="question-text">What do you call your role?</h2>
+      <p class="question-subtext">How would you describe what you do?</p>
+
+      <input type="text" class="text-input" placeholder="e.g., Vulnerability Coach">
+
+      <button class="primary-button" onclick="showScreen('screen-new-details-3')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 9: New Details - Audience -->
+  <div class="screen" id="screen-new-details-3">
+    <div class="container question-container">
+      <div class="question-number">Opportunity Details</div>
+      <h2 class="question-text">Who is your target audience?</h2>
+      <p class="question-subtext">Who are you serving?</p>
+
+      <input type="text" class="text-input" placeholder="e.g., High-achieving women breaking free from people pleasing">
+
+      <button class="primary-button" onclick="showScreen('screen-new-details-4')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 10: New Details - Problem -->
+  <div class="screen" id="screen-new-details-4">
+    <div class="container question-container">
+      <div class="question-number">Opportunity Details</div>
+      <h2 class="question-text">What problem do you solve?</h2>
+      <p class="question-subtext">What transformation do you create?</p>
+
+      <input type="text" class="text-input" placeholder="e.g., Help people find their voice and show up authentically">
+
+      <button class="primary-button" onclick="showScreen('screen-existing-success')">Complete Flow Finder</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 11: Success -->
+  <div class="screen" id="screen-existing-success">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">🎉 Congratulations!</h1>
+      <div class="welcome-message">
+        <p><strong>You've completed your Flow Finder discovery.</strong></p>
+        <p>This is the foundation for meaningful, fulfilling work that only <em>you</em> can do.</p>
+      </div>
+
+      <div class="pillars-box">
+        <div class="pillar-item">
+          <div class="pillar-icon">🎯</div>
+          <div class="pillar-content">
+            <h4>Your Skills</h4>
+            <p>Strategic Connector</p>
+          </div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-icon">💡</div>
+          <div class="pillar-content">
+            <h4>Your Problem</h4>
+            <p>Creating Safe Spaces for Vulnerability</p>
+          </div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-icon">👥</div>
+          <div class="pillar-content">
+            <h4>Your Persona</h4>
+            <p>The People Pleaser Breaking Free</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="welcome-message">
+        <p>Your unique combination has been saved to your profile. You can now use this to guide your opportunities, content, and impact.</p>
+      </div>
+
+      <button class="primary-button" onclick="alert('Return to Dashboard')">Return to /me page</button>
+    </div>
+  </div>
+
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <button class="demo-btn active" onclick="showScreen('screen-welcome')">Welcome</button>
+    <button class="demo-btn" onclick="showScreen('screen-summary-processing')">Processing</button>
+    <button class="demo-btn" onclick="showScreen('screen-summary')">Summary</button>
+    <button class="demo-btn" onclick="showScreen('screen-sliders')">Sliders</button>
+    <button class="demo-btn" onclick="showScreen('screen-opportunity-type')">OppType</button>
+    <button class="demo-btn" onclick="showScreen('screen-new-pursue')">Pursue?</button>
+    <button class="demo-btn" onclick="showScreen('screen-new-details-1')">Name</button>
+    <button class="demo-btn" onclick="showScreen('screen-new-details-2')">Role</button>
+    <button class="demo-btn" onclick="showScreen('screen-new-details-3')">Audience</button>
+    <button class="demo-btn" onclick="showScreen('screen-new-details-4')">Problem</button>
+    <button class="demo-btn" onclick="showScreen('screen-existing-success')">Success</button>
+  </div>
+
+  <script>
+    function showScreen(screenId) {
+      // Hide all screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      // Show selected screen
+      document.getElementById(screenId).classList.add('active');
+
+      // Update demo buttons
+      document.querySelectorAll('.demo-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    function selectOption(element) {
+      // Remove selected from siblings
+      const siblings = element.parentElement.querySelectorAll('.option-btn');
+      siblings.forEach(sibling => sibling.classList.remove('selected'));
+
+      // Add selected to clicked button
+      element.classList.add('selected');
+    }
+  </script>
+</body>
+</html>

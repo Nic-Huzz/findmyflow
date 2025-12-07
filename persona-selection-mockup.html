@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persona Selection Flow - Mockup</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: 80px;
+    }
+
+    /* Progress Indicators */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: transparent;
+      z-index: 100;
+    }
+
+    .progress-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .progress-dot.completed {
+      background: #fbbf24;
+    }
+
+    .progress-dot.active {
+      background: #fbbf24;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+      transform: scale(1.2);
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Welcome Screen */
+    .welcome-container {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .welcome-greeting {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-message p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0 0 16px;
+    }
+
+    .welcome-message strong {
+      color: white;
+    }
+
+    /* All Questions Screen */
+    .all-questions-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 12px;
+      text-align: center;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0 0 48px;
+      text-align: center;
+    }
+
+    /* Question Block */
+    .question-block {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+
+    .question-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 12px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 24px;
+      color: white;
+    }
+
+    .question-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      margin: -16px 0 24px;
+    }
+
+    /* Horizontal Options */
+    .horizontal-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .horizontal-option {
+      flex: 1;
+      min-width: 80px;
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .horizontal-option:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(251, 191, 36, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .horizontal-option.selected {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
+      border-color: #fbbf24;
+    }
+
+    /* Small horizontal options for numbers */
+    .horizontal-options.compact .horizontal-option {
+      min-width: 50px;
+      padding: 12px 16px;
+      font-size: 16px;
+    }
+
+    /* Buttons */
+    .primary-button {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+      margin: 48px auto 0;
+      display: block;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .primary-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Attribution */
+    .attribution-text {
+      margin-top: 24px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: white;
+      text-align: center;
+    }
+
+    /* Screen selector for demo */
+    .demo-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      gap: 8px;
+      z-index: 200;
+    }
+
+    .demo-btn {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .demo-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-btn.active {
+      background: #fbbf24;
+      border-color: #fbbf24;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .horizontal-options {
+        flex-direction: column;
+      }
+
+      .horizontal-option {
+        min-width: 100%;
+      }
+
+      .question-block {
+        padding: 24px;
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Progress Dots -->
+  <div class="progress-container">
+    <div class="progress-dots">
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: Welcome -->
+  <div class="screen active" id="screen-welcome">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">Define Your Ideal Customer</h1>
+      <div class="welcome-message">
+        <p><strong>Before you build your offer, you need to know exactly who it's for.</strong></p>
+        <p>The best offers aren't built for "everyone"—they're laser-focused on a specific person with a specific problem at a specific moment in time.</p>
+        <p>This quick persona selector will help you understand your ideal customer's pain level, problem area, income level, existing investments (financial and time), and current emotional state.</p>
+        <p>Answer 6 questions to build a crystal-clear picture of who you serve.</p>
+      </div>
+      <button class="primary-button" onclick="showScreen('screen-questions')">Start Persona Selection</button>
+      <p class="attribution-text">This framework is based on Alex Hormozi's $100M Offers book and methodology. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: All Questions -->
+  <div class="screen" id="screen-questions">
+    <div class="container all-questions-container">
+      <h1 class="page-title">Build Your Customer Persona</h1>
+      <p class="page-subtitle">Answer all 6 questions to complete your persona profile</p>
+
+      <!-- Question 1: Pain Level -->
+      <div class="question-block">
+        <div class="question-label">Question 1 of 6</div>
+        <h3 class="question-text">How much pain is your target customer experiencing?</h3>
+        <p class="question-subtext">Rate out of 10 — don't choose 7</p>
+        <div class="horizontal-options compact">
+          <button class="horizontal-option">1</button>
+          <button class="horizontal-option">2</button>
+          <button class="horizontal-option">3</button>
+          <button class="horizontal-option">4</button>
+          <button class="horizontal-option">5</button>
+          <button class="horizontal-option">6</button>
+          <button class="horizontal-option selected">8</button>
+          <button class="horizontal-option">9</button>
+          <button class="horizontal-option">10</button>
+        </div>
+      </div>
+
+      <!-- Question 2: Problem Area -->
+      <div class="question-block">
+        <div class="question-label">Question 2 of 6</div>
+        <h3 class="question-text">Does their problem relate to...</h3>
+        <div class="horizontal-options">
+          <button class="horizontal-option">Improving their health</button>
+          <button class="horizontal-option selected">Increasing their wealth</button>
+          <button class="horizontal-option">Loving their life more</button>
+        </div>
+      </div>
+
+      <!-- Question 3: Income Level -->
+      <div class="question-block">
+        <div class="question-label">Question 3 of 6</div>
+        <h3 class="question-text">How much do they earn?</h3>
+        <div class="horizontal-options">
+          <button class="horizontal-option">$0–$25k</button>
+          <button class="horizontal-option">$25k–$50k</button>
+          <button class="horizontal-option selected">$50k–$100k</button>
+          <button class="horizontal-option">$100k–$250k</button>
+          <button class="horizontal-option">$250k+</button>
+        </div>
+      </div>
+
+      <!-- Question 4A: Financial Sunk Cost -->
+      <div class="question-block">
+        <div class="question-label">Question 4A of 6</div>
+        <h3 class="question-text">How large of a financial sunk cost do they have in their existing solution?</h3>
+        <div class="horizontal-options">
+          <button class="horizontal-option">None - haven't tried anything</button>
+          <button class="horizontal-option">Minimal ($0-$500)</button>
+          <button class="horizontal-option selected">Moderate ($500-$5k)</button>
+          <button class="horizontal-option">Significant ($5k-$50k)</button>
+          <button class="horizontal-option">Substantial ($50k+)</button>
+        </div>
+      </div>
+
+      <!-- Question 4B: Time Sunk Cost -->
+      <div class="question-block">
+        <div class="question-label">Question 4B of 6</div>
+        <h3 class="question-text">How large of a time sunk cost do they have in their existing solution?</h3>
+        <div class="horizontal-options">
+          <button class="horizontal-option">None - haven't tried anything</button>
+          <button class="horizontal-option">Minimal (less than 1 month)</button>
+          <button class="horizontal-option selected">Moderate (1-6 months)</button>
+          <button class="horizontal-option">Significant (6 months-2 years)</button>
+          <button class="horizontal-option">Substantial (2+ years)</button>
+        </div>
+      </div>
+
+      <!-- Question 5: Emotion -->
+      <div class="question-block">
+        <div class="question-label">Question 5 of 6</div>
+        <h3 class="question-text">What emotion are they feeling?</h3>
+        <div class="horizontal-options">
+          <button class="horizontal-option">Shame</button>
+          <button class="horizontal-option">Embarrassment</button>
+          <button class="horizontal-option">Fear</button>
+          <button class="horizontal-option">Frustration</button>
+          <button class="horizontal-option selected">Overwhelm</button>
+          <button class="horizontal-option">Anxiety</button>
+          <button class="horizontal-option">Sadness</button>
+          <button class="horizontal-option">Anger</button>
+        </div>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-success')">Complete Persona Profile</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Success -->
+  <div class="screen" id="screen-success">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">✓ Persona Profile Complete!</h1>
+      <div class="welcome-message">
+        <p><strong>You've defined your ideal customer:</strong></p>
+        <p>• Pain Level: 8/10 (High urgency)</p>
+        <p>• Problem Relates To: Increasing their wealth</p>
+        <p>• Income Level: $50k–$100k annually</p>
+        <p>• Financial Sunk Cost: Moderate ($500-$5k invested already)</p>
+        <p>• Time Sunk Cost: Moderate (1-6 months invested)</p>
+        <p>• Current Emotion: Overwhelm</p>
+        <p style="margin-top: 24px;">This persona will guide your offer creation in the next flow.</p>
+      </div>
+      <button class="primary-button">Continue to Offer Creation</button>
+      <button class="primary-button" style="background: rgba(255, 255, 255, 0.1); box-shadow: none; margin-top: 12px;">Save & Return Later</button>
+    </div>
+  </div>
+
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <button class="demo-btn active" onclick="showScreen('screen-welcome')">Welcome</button>
+    <button class="demo-btn" onclick="showScreen('screen-questions')">Questions</button>
+    <button class="demo-btn" onclick="showScreen('screen-success')">Success</button>
+  </div>
+
+  <script>
+    function showScreen(screenId) {
+      // Hide all screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      // Show selected screen
+      document.getElementById(screenId).classList.add('active');
+
+      // Update demo buttons
+      document.querySelectorAll('.demo-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    // Add click handlers to options
+    document.querySelectorAll('.horizontal-option').forEach(option => {
+      option.addEventListener('click', function() {
+        // Remove selected from siblings
+        const siblings = this.parentElement.querySelectorAll('.horizontal-option');
+        siblings.forEach(sibling => sibling.classList.remove('selected'));
+
+        // Add selected to clicked option
+        this.classList.add('selected');
+      });
+    });
+  </script>
+</body>
+</html>

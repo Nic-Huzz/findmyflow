@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healing Compass - Mockup</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: 80px;
+    }
+
+    /* Progress Indicators */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: transparent;
+      z-index: 100;
+    }
+
+    .progress-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .progress-dot.completed {
+      background: #fbbf24;
+    }
+
+    .progress-dot.active {
+      background: #fbbf24;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+      transform: scale(1.2);
+    }
+
+    /* Container */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Welcome Screen */
+    .welcome-container {
+      text-align: center;
+    }
+
+    .welcome-greeting {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-message p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0 0 16px;
+    }
+
+    .welcome-message strong {
+      color: white;
+    }
+
+    /* Question Screens */
+    .question-container {
+      text-align: center;
+    }
+
+    .question-number {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 16px;
+    }
+
+    .question-text {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+
+    .question-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      margin: 0 0 32px;
+      line-height: 1.6;
+    }
+
+    /* Safety contracts display */
+    .safety-contracts-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 32px 0;
+      text-align: left;
+    }
+
+    .safety-contracts-box h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #fbbf24;
+    }
+
+    .safety-contract-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .safety-contract-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(251, 191, 36, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .safety-contract-item.selected {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
+      border-color: #fbbf24;
+    }
+
+    /* Text input */
+    .text-input-container {
+      margin-top: 32px;
+    }
+
+    .text-area {
+      width: 100%;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      font-size: 16px;
+      color: white;
+      font-family: inherit;
+      min-height: 150px;
+      resize: vertical;
+      transition: all 0.2s ease;
+    }
+
+    .text-area::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .text-area:focus {
+      outline: none;
+      border-color: rgba(251, 191, 36, 0.8);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Insight box */
+    .insight-box {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 32px 0;
+      text-align: left;
+    }
+
+    .insight-box p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0 0 12px;
+    }
+
+    .insight-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .insight-box strong {
+      color: #fbbf24;
+    }
+
+    /* Horizontal options */
+    .horizontal-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+      justify-content: center;
+    }
+
+    .horizontal-option {
+      flex: 1;
+      min-width: 120px;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .horizontal-option:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(251, 191, 36, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .horizontal-option.selected {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2));
+      border-color: #fbbf24;
+    }
+
+    /* Buttons */
+    .primary-button {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+      margin: 32px auto 0;
+      display: block;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    /* Screen management */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Demo controls */
+    .demo-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      gap: 8px;
+      z-index: 200;
+      flex-wrap: wrap;
+      max-width: 90%;
+    }
+
+    .demo-btn {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .demo-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-btn.active {
+      background: #fbbf24;
+      border-color: #fbbf24;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .question-text {
+        font-size: 24px;
+      }
+
+      .welcome-greeting {
+        font-size: 28px;
+      }
+
+      .horizontal-options {
+        flex-direction: column;
+      }
+
+      .horizontal-option {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Progress Dots -->
+  <div class="progress-container">
+    <div class="progress-dots">
+      <div class="progress-dot completed"></div>
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: Welcome -->
+  <div class="screen active" id="screen-welcome">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">Healing Compass</h1>
+      <div class="welcome-message">
+        <p><strong>Hey Sarah, I'm excited to dive deeper with you.</strong></p>
+        <p>Our mission here is to find the source of what's blocking your flow so we can heal it.</p>
+        <p>In the nervous system flow, you identified safety contracts that have been protecting you—beliefs your system created to keep you safe.</p>
+        <p>Now we're going to trace one of these beliefs back to its origin, understand why it formed, and heal the emotional wound that created it.</p>
+        <p style="margin-top: 24px;"><strong>This is deep work.</strong> We're looking for the emotional splinter that's been driving your patterns.</p>
+      </div>
+      <button class="primary-button" onclick="showScreen('screen-q1')">I'm Ready</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: Q1 - Select Safety Contract -->
+  <div class="screen" id="screen-q1">
+    <div class="container question-container">
+      <div class="question-number">Question 1 of 7</div>
+      <h2 class="question-text">Which safety contract would you like to focus on healing?</h2>
+      <p class="question-subtext">From your Nervous System Map</p>
+
+      <div class="safety-contracts-box">
+        <h3>Your Safety Contracts:</h3>
+        <div class="safety-contract-item selected">"I'm not safe earning more than $312,500"</div>
+        <div class="safety-contract-item">"I'm not safe being seen by more than 37,500 people"</div>
+        <div class="safety-contract-item">"Success means people will expect too much from me"</div>
+        <div class="safety-contract-item">"If I fully succeed, I'll lose my relationships"</div>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q2')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Q2 - How It's Limiting -->
+  <div class="screen" id="screen-q2">
+    <div class="container question-container">
+      <div class="question-number">Question 2 of 7</div>
+      <h2 class="question-text">How is this safety contract currently slowing down your flow?</h2>
+      <p class="question-subtext">Selected: "I'm not safe earning more than $312,500"</p>
+
+      <div class="text-input-container">
+        <textarea class="text-area" placeholder="Example: Every time I get close to this income level, I sabotage myself. I start second-guessing my pricing, I avoid sales conversations, or I suddenly feel like I need to take a break. It's like there's an invisible ceiling I keep hitting..."></textarea>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q3')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: Q3 - Past Parallel -->
+  <div class="screen" id="screen-q3">
+    <div class="container question-container">
+      <div class="question-number">Question 3 of 7</div>
+      <h2 class="question-text">Can you think of a time when you may have learned this belief?</h2>
+      <p class="question-subtext">This is the emotional splinter we're looking to remove</p>
+
+      <div class="welcome-message" style="text-align: left; margin-top: 32px; margin-bottom: 32px;">
+        <p>You didn't wake up today and decide to start believing <strong>"I'm not safe earning more than $312,500"</strong>.</p>
+        <p>Something happened between childhood and now that created this belief.</p>
+        <p>Take your time. Can you remember a moment or period in your life where you learned that money, success, or wealth wasn't safe?</p>
+      </div>
+
+      <div class="text-input-container">
+        <textarea class="text-area" placeholder="Example: I remember my dad getting a big promotion when I was 12. He started working all the time, and my parents fought constantly about money. He became someone I didn't recognize. Eventually they divorced. I think I connected his success with losing our family..."></textarea>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q4')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: Q4 - What Happened -->
+  <div class="screen" id="screen-q4">
+    <div class="container question-container">
+      <div class="question-number">Question 4 of 7</div>
+      <h2 class="question-text">What happened back then?</h2>
+      <p class="question-subtext">Describe the specific moment or series of events</p>
+
+      <div class="text-input-container">
+        <textarea class="text-area" placeholder="Example: After he got promoted, everything changed. He was never home. When he was home, he was stressed and angry. Mom kept saying 'money changed him.' I remember sitting on the stairs listening to them fight about his work schedule and how he cared more about his career than us. Within a year, he moved out..."></textarea>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q5')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: Q5 - Post-Event Emotions -->
+  <div class="screen" id="screen-q5">
+    <div class="container question-container">
+      <div class="question-number">Question 5 of 7</div>
+      <h2 class="question-text">How did you feel afterwards?</h2>
+      <p class="question-subtext">What emotions came up? Shame, embarrassment, fear, sadness?</p>
+
+      <div class="text-input-container">
+        <textarea class="text-area" placeholder="Example: I felt abandoned and confused. Like his success was more important than me. I was angry at him for choosing money over family. And I felt guilty—like maybe if I'd been a better kid, he would have stayed..."></textarea>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q6')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: Q6 - Connect the Dots -->
+  <div class="screen" id="screen-q6">
+    <div class="container question-container">
+      <div class="question-number">Question 6 of 7</div>
+      <h2 class="question-text">Now we can see how this belief formed</h2>
+
+      <div class="insight-box">
+        <p>So this experience—<strong>watching your dad's promotion destroy your family</strong>—and the feelings that came with it—<strong>abandonment, confusion, anger, guilt</strong>—were so impactful that your system decided to protect you from ever experiencing that again.</p>
+
+        <p style="margin-top: 16px;">That's why it created this belief: <strong>"I'm not safe earning more than $312,500"</strong></p>
+
+        <p style="margin-top: 16px;">To protect you, your nervous system now doesn't feel safe doing anything that might recreate that experience. It's trying to save you from becoming the person who chooses success over relationships.</p>
+
+        <p style="margin-top: 16px; color: #fbbf24;">Even though you're not your dad, and your success doesn't have to look like his—your system doesn't know that. It just knows: success = loss.</p>
+      </div>
+
+      <p class="question-subtext" style="margin-top: 32px;">Does this make sense?</p>
+
+      <div class="horizontal-options">
+        <button class="horizontal-option selected">Yes, I see it now</button>
+        <button class="horizontal-option">I need clarification</button>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q7')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 8: Q7 - Ready to Remove Splinter -->
+  <div class="screen" id="screen-q7">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">The Emotional Splinter</h1>
+      <div class="welcome-message">
+        <p><strong>So even though your essence has been pulling you forward in the pursuit of your ambitions...</strong></p>
+        <p>Your subconscious has been pulling you back in its attempt to protect you.</p>
+        <p>This is why you keep hitting that invisible ceiling. This is why you sabotage when you get close. This is why momentum feels dangerous.</p>
+        <p style="margin-top: 24px;">Your 12-year-old self created this protection mechanism to survive that painful experience.</p>
+        <p><strong>But you're not 12 anymore.</strong> And you're not your dad. You get to write a different story.</p>
+        <p style="margin-top: 24px;">Ready to finally remove this emotional splinter?</p>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q8')">Yes, Let's Do It</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 9: Q8 - 7-Day Challenge -->
+  <div class="screen" id="screen-q8">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">The Healing Process</h1>
+      <div class="welcome-message">
+        <p><strong>Here's how we remove the splinter:</strong></p>
+        <p>Awareness alone doesn't heal. You need to rewire the pattern through repeated exposure and new experiences.</p>
+        <p>That's what the 7-Day Challenge is designed to do—give you daily practices that gently expand your nervous system's safety zone.</p>
+        <p>Each day, you'll take a small action that contradicts the old belief and proves to your system that success doesn't equal loss.</p>
+        <p style="margin-top: 24px;"><strong>You've identified the wound. Now let's heal it.</strong></p>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-success')">Start 7-Day Challenge</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 10: Success -->
+  <div class="screen" id="screen-success">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">✓ Healing Compass Complete</h1>
+      <div class="welcome-message">
+        <p><strong>You've completed the Healing Compass process.</strong></p>
+        <p>Here's what you discovered:</p>
+      </div>
+
+      <div class="safety-contracts-box" style="text-align: left;">
+        <h3>🎯 Your Focus:</h3>
+        <p><strong>Safety Contract:</strong> "I'm not safe earning more than $312,500"</p>
+        <p><strong>Origin Event:</strong> Dad's promotion at age 12 → parents' divorce</p>
+        <p><strong>Core Emotions:</strong> Abandonment, confusion, anger, guilt</p>
+        <p><strong>Protection Mechanism:</strong> Sabotaging success to avoid becoming like dad</p>
+        <p style="margin-top: 16px; color: rgba(255, 255, 255, 0.7); font-style: italic;">The pattern makes perfect sense. Your system was trying to protect you. But now you can choose differently.</p>
+      </div>
+
+      <div class="welcome-message" style="margin-top: 32px;">
+        <p><strong>What's Next:</strong></p>
+        <p>Your 7-Day Challenge will include daily practices designed to safely expand your nervous system's boundaries around earning and success.</p>
+        <p>Each action will help you build new evidence that success doesn't have to look like your dad's story.</p>
+      </div>
+
+      <button class="primary-button">View My 7-Day Challenge</button>
+      <button class="primary-button" style="background: rgba(255, 255, 255, 0.1); box-shadow: none; margin-top: 12px;">Return to Dashboard</button>
+    </div>
+  </div>
+
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <button class="demo-btn active" onclick="showScreen('screen-welcome')">Welcome</button>
+    <button class="demo-btn" onclick="showScreen('screen-q1')">Q1-Contract</button>
+    <button class="demo-btn" onclick="showScreen('screen-q2')">Q2-Limiting</button>
+    <button class="demo-btn" onclick="showScreen('screen-q3')">Q3-Parallel</button>
+    <button class="demo-btn" onclick="showScreen('screen-q4')">Q4-Event</button>
+    <button class="demo-btn" onclick="showScreen('screen-q5')">Q5-Emotions</button>
+    <button class="demo-btn" onclick="showScreen('screen-q6')">Q6-Connect</button>
+    <button class="demo-btn" onclick="showScreen('screen-q7')">Q7-Splinter</button>
+    <button class="demo-btn" onclick="showScreen('screen-q8')">Q8-Healing</button>
+    <button class="demo-btn" onclick="showScreen('screen-success')">Success</button>
+  </div>
+
+  <script>
+    function showScreen(screenId) {
+      // Hide all screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      // Show selected screen
+      document.getElementById(screenId).classList.add('active');
+
+      // Update demo buttons
+      document.querySelectorAll('.demo-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    // Add click handlers to safety contract items
+    document.querySelectorAll('.safety-contract-item').forEach(item => {
+      item.addEventListener('click', function() {
+        // Remove selected from siblings
+        const siblings = this.parentElement.querySelectorAll('.safety-contract-item');
+        siblings.forEach(sibling => sibling.classList.remove('selected'));
+
+        // Add selected to clicked item
+        this.classList.add('selected');
+      });
+    });
+
+    // Add click handlers to horizontal options
+    document.querySelectorAll('.horizontal-option').forEach(option => {
+      option.addEventListener('click', function() {
+        // Remove selected from siblings in the same group
+        const siblings = this.parentElement.querySelectorAll('.horizontal-option');
+        siblings.forEach(sibling => sibling.classList.remove('selected'));
+
+        // Add selected to clicked option
+        this.classList.add('selected');
+      });
+    });
+  </script>
+</body>
+</html>

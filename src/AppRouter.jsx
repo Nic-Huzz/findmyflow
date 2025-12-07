@@ -8,6 +8,7 @@ import DownsellFlow from './DownsellFlow'
 import ContinuityFlow from './ContinuityFlow'
 import LeadsStrategyFlow from './LeadsStrategyFlow'
 import LeadMagnetFlow from './LeadMagnetFlow'
+import PersonaSelectionFlow from './PersonaSelectionFlow'
 import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
 import HealingCompass from './HealingCompass'
@@ -35,6 +36,7 @@ import './DownsellFlow.css'
 import './ContinuityFlow.css'
 import './LeadsStrategyFlow.css'
 import './LeadMagnetFlow.css'
+import './PersonaSelectionFlow.css'
 import './MoneyModelGuide.css'
 import './Profile.css'
 import './Auth.css'
@@ -91,6 +93,13 @@ function AppRouter() {
             <Route path="/lead-magnet" element={
               <AuthGate>
                 <LeadMagnetFlow />
+              </AuthGate>
+            } />
+
+            {/* Persona Selection Flow - In-App Challenge */}
+            <Route path="/persona-selection" element={
+              <AuthGate>
+                <PersonaSelectionFlow />
               </AuthGate>
             } />
 

@@ -44,6 +44,7 @@ function LeadMagnetFlow() {
   const [answers, setAnswers] = useState({})
   const [recommendedOffer, setRecommendedOffer] = useState(null)
   const [allOfferScores, setAllOfferScores] = useState([])
+  const [showAllOptions, setShowAllOptions] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -100,7 +101,9 @@ function LeadMagnetFlow() {
 
       // Calculate weighted score for each question
       Object.entries(userAnswers).forEach(([questionId, answer]) => {
-        const weights = offer.scoring_weights?.[questionId]
+        // Normalize question ID: q1_budget -> Q1_budget
+        const normalizedQuestionId = questionId.replace(/^q(\d+)/, 'Q$1')
+        const weights = offer.scoring_weights?.[normalizedQuestionId]
         if (weights && weights[answer.value] !== undefined) {
           totalScore += weights[answer.value]
         }
@@ -245,7 +248,7 @@ function LeadMagnetFlow() {
       }
 
       setStage(STAGES.SUCCESS)
-      setTimeout(() => navigate('/me'), 2000)
+      setTimeout(() => navigate('/7-day-challenge'), 2000)
     } catch (err) {
       setError('Failed to save results. Please try again.')
       console.error('Save error:', err)
@@ -288,7 +291,6 @@ function LeadMagnetFlow() {
   // Render progress indicators
   const renderProgress = () => {
     const currentGroupIndex = getCurrentGroupIndex()
-    const groupProgress = getGroupProgress()
 
     return (
       <div className="progress-container">
@@ -300,10 +302,6 @@ function LeadMagnetFlow() {
               className={`progress-dot ${index < currentGroupIndex ? 'completed' : ''} ${index === currentGroupIndex ? 'active' : ''}`}
             />
           ))}
-        </div>
-        {/* Section progress bar */}
-        <div className="section-progress">
-          <div className="section-progress-fill" style={{ width: `${groupProgress}%` }} />
         </div>
       </div>
     )
@@ -318,23 +316,23 @@ function LeadMagnetFlow() {
         {renderProgress()}
         <div className="welcome-container">
           <div className="welcome-content">
-            <h1 className="welcome-greeting">Discover Your Perfect Lead Generation Strategy</h1>
+            <h1 className="welcome-greeting">Discover Your Perfect Lead Magnet</h1>
             <div className="welcome-message">
-              <p><strong>The Core Four lead generation strategies:</strong></p>
-              <p>Every successful business uses one or more of these proven methods to attract customers...</p>
-              <p><strong>1. Warm Outreach</strong> - Tap into your existing network (1-on-1, Private, Warm)</p>
-              <p><strong>2. Cold Outreach</strong> - Reach strangers who match your ideal customer (1-on-1, Private, Cold)</p>
-              <p><strong>3. Post Free Content</strong> - Attract audiences through valuable content (1-to-many, Public, Warm)</p>
-              <p><strong>4. Run Paid Ads</strong> - Invest to reach cold audiences at scale (1-to-many, Public, Cold)</p>
-              <p>But which strategy is right for YOUR situation?</p>
-              <p>The wrong strategy? You'll waste time and money spinning your wheels.</p>
-              <p>The right strategy? You'll build a predictable pipeline of qualified leads.</p>
-              <p className="welcome-cta-text">Answer 10 quick questions and I'll recommend the perfect lead generation strategy for your resources, skills, and goals.</p>
+              <p><strong>A lead magnet's job is simple: build trust so potential customers believe your solution solves their problem.</strong></p>
+              <p>The right lead magnet proves your value and demonstrates expertise so you convert more leads into customers.</p>
+              <p>There are 3 proven lead magnet types that work best:</p>
+              <p><strong>1. Reveal Problem</strong> - Help prospects discover what's wrong</p>
+              <p><strong>2. Free Trial</strong> - Let them experience your solution</p>
+              <p><strong>3. Free Step 1</strong> - Give them a quick win upfront</p>
+              <p>But which type matches your offer, skills, and resources?</p>
+              <p>With the right lead magnet you will attract qualified prospects who are ready to buy.</p>
+              <p className="welcome-cta-text">Answer 10 quick questions and I'll recommend the perfect lead magnet type for your business.</p>
             </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
-            Find My Strategy
+            Find My Lead Magnet
           </button>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )
@@ -450,28 +448,40 @@ function LeadMagnetFlow() {
 
           {allOfferScores.length > 1 && (
             <div className="alternative-offers">
-              <h3 className="preview-heading">Other Strategies Scored:</h3>
+              <h3 className="preview-heading">Strategy Scores:</h3>
               <div className="offer-scores-list">
-                {allOfferScores.slice(0, 4).map((score, index) => (
+                {(showAllOptions ? allOfferScores : allOfferScores.slice(0, 3)).map((score, index) => (
                   <div key={index} className="score-item">
-                    <span className="score-name">{score.offer.name}</span>
-                    <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    <div className="score-item-content">
+                      <span className="score-name">{score.offer.name}</span>
+                      <span className="score-value">{Math.round(score.confidence * 100)}%</span>
+                    </div>
+                    <button
+                      className="select-option-btn"
+                      onClick={() => setRecommendedOffer(score)}
+                    >
+                      Show This Option
+                    </button>
                   </div>
                 ))}
               </div>
+              {allOfferScores.length > 3 && (
+                <button
+                  className="see-all-options-btn"
+                  onClick={() => setShowAllOptions(!showAllOptions)}
+                >
+                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.length} Options`}
+                </button>
+              )}
             </div>
           )}
-
-          <p className="next-step-text">
-            Save your results to get your complete implementation playbook with step-by-step tactics and tracking templates.
-          </p>
 
           <button
             className="primary-button"
             onClick={handleSaveResults}
             disabled={isLoading}
           >
-            Get My Complete Playbook
+            {isLoading ? 'Saving...' : 'Save Results'}
           </button>
         </div>
       </div>

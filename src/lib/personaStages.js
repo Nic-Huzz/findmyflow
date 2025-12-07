@@ -8,8 +8,10 @@ export const PERSONA_STAGES = {
     graduation_requirements: {
       clarity: {
         flows_required: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
-        description: 'Complete all 4 Flow Finder flows to gain clarity on your unique opportunities:',
-        milestones_display: ['Flow Finder: Skills', 'Flow Finder: Problems', 'Flow Finder: Personas', 'Putting It All Together']
+        milestones: ['groan_challenge_completed'],
+        challenge_streak: 7,
+        description: 'Complete all 4 Flow Finder flows, complete a groan challenge, and complete a 7-day challenge',
+        milestones_display: ['Flow Finder: Skills', 'Flow Finder: Problems', 'Flow Finder: Personas', 'Putting It All Together', 'Complete a Groan Challenge']
       }
     }
   },
@@ -18,26 +20,30 @@ export const PERSONA_STAGES = {
     initial_stage: 'validation',
     graduation_requirements: {
       validation: {
-        milestones: ['validation_form_sent', 'validation_responses_3'],
+        milestones: ['validation_form_sent', 'validation_responses_3', 'groan_challenge_completed'],
+        milestones_display: ['Send validation form', 'Get 3+ responses', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Send validation form, get 3 responses, and complete a 7-day challenge'
+        description: 'Send validation form, get 3 responses, complete a groan challenge, and complete a 7-day challenge'
       },
       creation: {
         flows_required: ['100m_offer', 'lead_magnet_offer'],
-        milestones: ['product_created', 'lead_magnet_created'],
+        milestones: ['product_created', 'lead_magnet_created', 'groan_challenge_completed'],
+        milestones_display: ['$100M Offer Flow', 'Lead Magnet Offer Flow', 'Create your product', 'Create your lead magnet', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Complete offer flows, create product and lead magnet, complete a 7-day challenge'
+        description: 'Complete offer flows, create product and lead magnet, complete a groan challenge, and complete a 7-day challenge'
       },
       testing: {
-        milestones: ['testing_complete', 'feedback_responses_3', 'improvements_identified'],
+        milestones: ['testing_complete', 'feedback_responses_3', 'improvements_identified', 'groan_challenge_completed'],
+        milestones_display: ['Complete testing', 'Get 3+ feedback responses', 'Identify improvements', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Complete testing, get 3 feedback responses, identify improvements, complete a 7-day challenge'
+        description: 'Complete testing, get 3 feedback responses, identify improvements, complete a groan challenge, and complete a 7-day challenge'
       },
       launch: {
         flows_required: ['100m_leads'],
-        milestones: ['strategy_identified', 'funnel_stages_defined'],
+        milestones: ['strategy_identified', 'funnel_stages_defined', 'groan_challenge_completed'],
+        milestones_display: ['$100M Leads Flow', 'Identify your strategy', 'Define funnel stages', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Complete leads flow, define strategy and funnel, complete a 7-day challenge'
+        description: 'Complete leads flow, define strategy and funnel, complete a groan challenge, and complete a 7-day challenge'
       }
     }
   },
@@ -46,21 +52,24 @@ export const PERSONA_STAGES = {
     initial_stage: 'ideation',
     graduation_requirements: {
       ideation: {
-        milestones: ['read_putting_it_together', 'decide_acquisition', 'decide_upsell', 'decide_downsell', 'decide_continuity'],
+        milestones: ['read_putting_it_together', 'decide_acquisition', 'decide_upsell', 'decide_downsell', 'decide_continuity', 'groan_challenge_completed'],
         flows_required: ['attraction_offer', 'upsell_flow', 'downsell_flow', 'continuity_flow'],
+        milestones_display: ['Read "Putting It All Together"', 'Attraction Offer Flow', 'Upsell Flow', 'Downsell Flow', 'Continuity Flow', 'Decide on Acquisition offer', 'Decide on Upsell offer', 'Decide on Downsell offer', 'Decide on Continuity offer', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Read overview, complete all 4 money model flows, decide on each offer type, complete a 7-day challenge'
+        description: 'Read overview, complete all 4 money model flows, decide on each offer type, complete a groan challenge, and complete a 7-day challenge'
       },
       creation: {
-        milestones: ['create_acquisition_offer', 'create_upsell_offer', 'create_downsell_offer', 'create_continuity_offer'],
+        milestones: ['create_acquisition_offer', 'create_upsell_offer', 'create_downsell_offer', 'create_continuity_offer', 'groan_challenge_completed'],
+        milestones_display: ['Create Acquisition offer', 'Create Upsell offer', 'Create Downsell offer', 'Create Continuity offer', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Create all 4 offer types and complete a 7-day challenge: Acquisition, Upsell, Downsell, Continuity'
+        description: 'Create all 4 offer types, complete a groan challenge, and complete a 7-day challenge: Acquisition, Upsell, Downsell, Continuity'
       },
       launch: {
         flows_required: ['100m_leads'],
-        milestones: ['strategy_identified', 'funnel_stages_defined'],
+        milestones: ['strategy_identified', 'funnel_stages_defined', 'groan_challenge_completed'],
+        milestones_display: ['$100M Leads Flow', 'Identify your strategy', 'Define funnel stages', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Complete leads flow, define strategy and funnel, complete a 7-day challenge'
+        description: 'Complete leads flow, define strategy and funnel, complete a groan challenge, and complete a 7-day challenge'
       }
     }
   }

@@ -246,25 +246,12 @@ const EssenceProfile = () => {
             <div className="section-label">Poetic Vision</div>
             <h2 className="section-title">Your Future Awaits</h2>
             <p className="section-text">{archetypeData.poetic_vision}</p>
-            {userData?.persona === 'Vibe Seeker' ? (
-              <div className="locked-challenge-message">
-                <p style={{ color: '#fbbf24', marginBottom: '12px', fontWeight: 600 }}>🔒 Complete Flow Finder to unlock</p>
-                <button
-                  className="cta-button"
-                  onClick={() => navigate('/nikigai/skills')}
-                  style={{ background: 'linear-gradient(135deg, #D4A017, #F59E0B)' }}
-                >
-                  Start Flow Finder
-                </button>
-              </div>
-            ) : (
-              <button
-                className="cta-button"
-                onClick={() => navigate('/7-day-challenge')}
-              >
-                {hasChallenge ? 'Continue Your 7-Day Challenge' : 'Start Your 7-Day Challenge'}
-              </button>
-            )}
+            <button
+              className="cta-button"
+              onClick={() => navigate('/7-day-challenge')}
+            >
+              {hasChallenge ? 'Continue Your 7-Day Challenge' : 'Start Your 7-Day Challenge'}
+            </button>
           </section>
         </div>
       )}
