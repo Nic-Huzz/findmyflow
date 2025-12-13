@@ -56,16 +56,38 @@ CRITICAL: In the clusters JSON array, each cluster object MUST include:
 - "insight": the insight/summary paragraph you wrote (e.g., "This cluster highlights your courage to shed the old, explore the unknown...")
 The insight field should contain ONLY the summary paragraph, NOT the bullet points.
 
+SKILL PATTERN CLUSTERING (when CLUSTER TYPE is "skills"):
+- You are identifying SKILL THEMES and natural patterns from their activities
+- This is preliminary data - focus on exploratory patterns, not job recommendations
+- Name clusters as skill themes or activity types (e.g., "Creative Expression", "Analytical Problem-Solving", "Building & Making Things", "Teaching & Guiding Others")
+- For each skill pattern cluster:
+  * Group activities/skills that share an underlying motivation or approach
+  * Explain what this pattern reveals about how they naturally work
+  * Keep it exploratory and validating - "you're naturally drawn to..."
+  * Don't make job recommendations - just identify the patterns
+- Look for recurring themes across different life stages (childhood → high school → post-school)
+- Focus on intrinsic interests, not career paths yet
+- Help them see patterns they might not have noticed themselves
+
 ROLE CLUSTERING (when CLUSTER TYPE is "roles"):
-- You are creating ROLE RECOMMENDATIONS, not skill clusters
-- Each cluster represents a JOB ROLE or CAREER PATH they would thrive in
-- Name them as actual job titles or role archetypes (e.g., "Creative Director", "Product Strategist", "Community Builder")
+- You are creating ASPIRATIONAL ROLE RECOMMENDATIONS that inspire and excite
+- Each cluster represents a unique career path that combines their talents in a meaningful way
+- CRITICAL: Name roles creatively and aspirationally - NOT generic corporate titles
+  * ✅ GOOD: "Learning Experience Architect", "Social Impact Entrepreneur", "Healing & Wellness Coach", "Creative Systems Designer", "Community Transformation Catalyst"
+  * ❌ AVOID: "Product Manager", "Marketing Manager", "Software Developer", "Consultant"
+- Create role names that:
+  * Sound inspiring and forward-thinking
+  * Combine multiple aspects of their unique skill set
+  * Feel like a calling or mission, not just a job
+  * Are specific to their particular combination of talents
 - For each role cluster:
-  * Group skills that naturally fit that role
-  * Explain what the role does
-  * Explain why they'd excel at it based on their skills
-- Focus on roles that combine their natural talents with things they love doing
-- The items to cluster are SKILLS, but you're grouping them into ROLE clusters
+  * Group skills that naturally fit that aspirational role
+  * Explain what this role does and the impact it creates
+  * Explain why they'd excel at it and feel fulfilled doing it
+  * Paint a vision of what their work would look like in this role
+- Focus on roles that combine their natural talents with things they love doing AND the impact they want to create
+- The items to cluster are SKILLS, but you're grouping them into ASPIRATIONAL ROLE clusters
+- Create 3-5 specific, inspiring role recommendations that feel personalized to them
 
 PERSONA CLUSTERING (when target is "persona"):
 - Create personas representing FORMER VERSIONS of this person
@@ -78,11 +100,18 @@ PROBLEMS CLUSTERING (when target is "problems"):
 - Identify the underlying CHANGE or IMPACT the user wants to create in the world
 - Each cluster represents a PROBLEM SPACE or CHANGE AREA they deeply care about
 - Name clusters as the transformation/change (e.g., "Mental Health Access", "Creative Expression", "Personal Development")
+- CRITICAL: When processing role model responses:
+  * Extract the IMPACT or LESSON the role model provided, NOT the person's name
+  * Example: "Tony Robbins - taught me about personal power" → extract "personal empowerment and self-belief"
+  * Example: "Brené Brown - vulnerability is strength" → extract "authentic vulnerability and connection"
+  * NEVER cluster role model names together (e.g., DON'T create a cluster called "Inspirational Leaders" with person names)
+  * ALWAYS extract what those role models represented or taught, then cluster those themes
 - Look for patterns in:
   * What struggles or gaps do they see in the world?
   * What changes do they want to create?
   * What impact have they already made that they want to scale?
   * What topics fascinate them and why?
+  * What values or lessons did their role models teach them? (extract the lesson, not the name)
 - Group by the TYPE of change or impact, not the specific tactics or methods
 - Focus on the emotional core: what deeply matters to them based on their experiences?
 - Each insight should connect the problem space to their personal journey and why they care
@@ -290,7 +319,7 @@ serve(async (req) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
+        model: 'claude-3-5-haiku-20241022',
         max_tokens: shouldCluster || shouldGenerate ? 2048 : 1024, // Increased for clustering
         system: SYSTEM_PROMPT,
         tools: tools,
