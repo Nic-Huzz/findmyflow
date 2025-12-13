@@ -147,6 +147,11 @@ export const graduateUser = async (userId, fromStage, toStage, persona, reason) 
       return await graduateVibeSeeker(userId, reason);
     }
 
+    // Special case: Vibe Riser graduating from Launch becomes Movement Maker
+    if (persona === 'vibe_riser' && fromStage === 'launch' && toStage === null) {
+      return await graduateVibeRiser(userId, reason);
+    }
+
     // Record graduation in stage_graduations table
     const { error: graduationError } = await supabase
       .from('stage_graduations')
@@ -262,6 +267,82 @@ const graduateVibeSeeker = async (userId, reason) => {
     };
   } catch (error) {
     console.error('Error graduating Vibe Seeker:', error);
+    return {
+      graduated: false,
+      error: error.message
+    };
+  }
+};
+
+// Special handler: Graduate Vibe Riser to Movement Maker
+const graduateVibeRiser = async (userId, reason) => {
+  try {
+    // 1. Record graduation from Vibe Riser
+    await supabase.from('stage_graduations').insert({
+      user_id: userId,
+      persona: 'vibe_riser',
+      from_stage: 'launch',
+      to_stage: null, // No next stage for Vibe Riser
+      graduation_reason: reason
+    });
+
+    // 2. Update persona in profiles table
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .update({ persona: 'movement_maker' })
+      .eq('id', userId);
+
+    if (profileError) {
+      throw new Error(`Failed to update persona: ${profileError.message}`);
+    }
+
+    // 3. Get user's email to update lead_flow_profiles
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('id', userId)
+      .single();
+
+    // 4. Update lead_flow_profiles table
+    if (profile?.email) {
+      const { error: leadFlowError } = await supabase
+        .from('lead_flow_profiles')
+        .update({ persona: 'movement_maker' })
+        .eq('email', profile.email);
+
+      if (leadFlowError) {
+        console.warn('Failed to update lead_flow_profiles:', leadFlowError.message);
+      }
+    }
+
+    // 5. Update user_stage_progress to Movement Maker Ideation stage
+    const { error: stageError } = await supabase
+      .from('user_stage_progress')
+      .update({
+        persona: 'movement_maker',
+        current_stage: 'ideation',
+        stage_started_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('user_id', userId);
+
+    if (stageError) {
+      throw new Error(`Failed to update stage progress: ${stageError.message}`);
+    }
+
+    return {
+      graduated: true,
+      persona_switched: true,
+      new_persona: 'movement_maker',
+      new_stage: 'ideation',
+      celebration_message: {
+        title: '🎉 Congratulations, Movement Maker!',
+        message: "You've successfully launched your offer and proven your ability to build and validate. Now it's time to scale your impact!",
+        next_step: 'Welcome to the Ideation stage. Let\'s design your complete money model.'
+      }
+    };
+  } catch (error) {
+    console.error('Error graduating Vibe Riser:', error);
     return {
       graduated: false,
       error: error.message

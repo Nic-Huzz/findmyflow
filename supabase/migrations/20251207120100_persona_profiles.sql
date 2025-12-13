@@ -42,18 +42,22 @@ CREATE INDEX IF NOT EXISTS idx_persona_profiles_created ON persona_profiles(crea
 ALTER TABLE persona_profiles ENABLE ROW LEVEL SECURITY;
 
 -- Users can view their own profiles
+DROP POLICY IF EXISTS "Users can view own persona profiles" ON persona_profiles;
 CREATE POLICY "Users can view own persona profiles" ON persona_profiles
   FOR SELECT USING (auth.uid() = user_id);
 
 -- Users can insert their own profiles
+DROP POLICY IF EXISTS "Users can insert own persona profiles" ON persona_profiles;
 CREATE POLICY "Users can insert own persona profiles" ON persona_profiles
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- Users can update their own profiles
+DROP POLICY IF EXISTS "Users can update own persona profiles" ON persona_profiles;
 CREATE POLICY "Users can update own persona profiles" ON persona_profiles
   FOR UPDATE USING (auth.uid() = user_id);
 
 -- Users can delete their own profiles
+DROP POLICY IF EXISTS "Users can delete own persona profiles" ON persona_profiles;
 CREATE POLICY "Users can delete own persona profiles" ON persona_profiles
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -62,6 +66,7 @@ CREATE POLICY "Users can delete own persona profiles" ON persona_profiles
 -- ============================================================================
 
 -- Auto-update updated_at timestamp
+DROP TRIGGER IF EXISTS update_persona_profiles_updated_at ON persona_profiles;
 CREATE TRIGGER update_persona_profiles_updated_at
   BEFORE UPDATE ON persona_profiles
   FOR EACH ROW

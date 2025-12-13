@@ -14,7 +14,6 @@ import Profile from './Profile'
 import HealingCompass from './HealingCompass'
 import NervousSystemFlow from './NervousSystemFlow'
 import Challenge from './Challenge'
-import NikigaiTest from './NikigaiTest'
 import FlowFinderSkills from './FlowFinderSkills'
 import FlowFinderProblems from './FlowFinderProblems'
 import FlowFinderPersona from './FlowFinderPersona'
@@ -156,11 +155,6 @@ function AppRouter() {
                 <Feedback />
               </AuthGate>
             } />
-            <Route path="/nikigai-test" element={
-              <AuthGate>
-                <NikigaiTest />
-              </AuthGate>
-            } />
             <Route path="/nikigai/skills" element={
               <AuthGate>
                 <FlowFinderSkills />
@@ -203,13 +197,6 @@ function AppRouter() {
             <Route path="/validation-flows" element={
               <AuthGate>
                 <ValidationFlowsManager />
-              </AuthGate>
-            } />
-
-            {/* Persona-specific flows (Phase 2) */}
-            <Route path="/100m-offer" element={
-              <AuthGate>
-                <NikigaiTest flowFile="100m-offer-flow.json" flowName="$100M Offer Builder" />
               </AuthGate>
             } />
           </Routes>

@@ -10,7 +10,7 @@ export const PERSONA_STAGES = {
         flows_required: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
         milestones: ['groan_challenge_completed'],
         challenge_streak: 7,
-        description: 'Complete all 4 Flow Finder flows, complete a groan challenge, and complete a 7-day challenge',
+        description: 'Complete all 4 Flow Finder flows, and inside a 7-day challenge complete a Groan Challenge and complete at least 1 challenge a day for 7 days',
         milestones_display: ['Flow Finder: Skills', 'Flow Finder: Problems', 'Flow Finder: Personas', 'Putting It All Together', 'Complete a Groan Challenge']
       }
     }

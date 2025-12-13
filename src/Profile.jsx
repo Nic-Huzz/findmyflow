@@ -592,7 +592,7 @@ const Profile = () => {
         <div className="cta-banner">
           <div className="cta-content">
             <h3>Live Your Ambitions Faster</h3>
-            <p>Start a 7-day-challenge to take action and advance through your persona stages</p>
+            <p>Start a 7-day-challenge to gamify your ambitions and advance through the persona stages</p>
             <div className="cta-buttons">
               <button
                 className="btn-white"
