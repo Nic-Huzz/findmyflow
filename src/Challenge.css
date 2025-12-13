@@ -14,7 +14,9 @@
   border-radius: 0 0 24px 24px;
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
   max-width: 100%;
-  overflow-x: hidden;
+  overflow: visible;
+  position: relative;
+  z-index: 10;
 }
 
 .challenge-header h1 {
@@ -493,8 +495,31 @@
 .quest-description {
   color: #6c757d;
   line-height: 1.6;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1rem 0;
   font-size: 0.9375rem;
+}
+
+.quest-action-link {
+  display: inline-block;
+  color: #5e17eb;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: color 0.2s ease;
+}
+
+.quest-action-link:hover {
+  color: #8b5cf6;
+  text-decoration: underline;
+}
+
+.graduation-note {
+  text-align: center;
+  color: #8b5cf6;
+  font-size: 0.8125rem;
+  margin-top: 0.75rem;
+  font-weight: 500;
 }
 
 /* Learn More Section */
@@ -755,6 +780,12 @@
   }
 }
 
+.quest-completed-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .quest-completed-badge {
   background: #d4edda;
   color: #155724;
@@ -763,6 +794,26 @@
   text-align: center;
   font-weight: 600;
   border: 2px solid #c3e6cb;
+}
+
+.view-results-btn {
+  background: transparent;
+  border: 2px solid #5e17eb;
+  color: #5e17eb;
+  padding: 0.625rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.view-results-btn:hover {
+  background: #5e17eb;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 /* Loading and Error States */

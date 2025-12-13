@@ -114,13 +114,19 @@ function UpsellFlow() {
 
       // Check hard disqualifiers
       let isDisqualified = false
-      if (offer.hard_disqualifiers && offer.hard_disqualifiers.length > 0) {
-        offer.hard_disqualifiers.forEach(rule => {
-          // Convert field name to match question ID format (q6_customer_tracking from Q6_customer_tracking)
-          const questionId = rule.field.toLowerCase()
-          const fieldAnswer = userAnswers[questionId]
+      let disqualificationReasons = []
+      const disqualifiers = offer.hard_disqualifiers || offer.eligibility_rules?.hard_disqualifiers || []
+      if (disqualifiers.length > 0) {
+        disqualifiers.forEach(rule => {
+          // Find the matching question key by field name suffix
+          const fieldName = rule.field.toLowerCase()
+          const matchingKey = Object.keys(userAnswers).find(key =>
+            key.endsWith('_' + fieldName)
+          )
+          const fieldAnswer = matchingKey ? userAnswers[matchingKey] : null
           if (fieldAnswer && rule.disallowed.includes(fieldAnswer.value)) {
             isDisqualified = true
+            disqualificationReasons.push(rule.reason || `Disqualified due to ${rule.field}`)
           }
         })
       }
@@ -132,7 +138,8 @@ function UpsellFlow() {
         totalScore,
         maxPossibleScore,
         confidence,
-        isDisqualified
+        isDisqualified,
+        disqualificationReasons
       }
     })
 
@@ -414,7 +421,7 @@ function UpsellFlow() {
             <div className="alternative-offers">
               <h3 className="preview-heading">Strategy Scores:</h3>
               <div className="offer-scores-list">
-                {(showAllOptions ? allOfferScores : allOfferScores.slice(0, 3)).map((score, index) => (
+                {(showAllOptions ? allOfferScores.filter(s => !s.isDisqualified) : allOfferScores.filter(s => !s.isDisqualified).slice(0, 3)).map((score, index) => (
                   <div key={index} className="score-item">
                     <div className="score-item-content">
                       <span className="score-name">{score.offer.name}</span>
@@ -429,14 +436,36 @@ function UpsellFlow() {
                   </div>
                 ))}
               </div>
-              {allOfferScores.length > 3 && (
+              {allOfferScores.filter(s => !s.isDisqualified).length > 3 && (
                 <button
                   className="see-all-options-btn"
                   onClick={() => setShowAllOptions(!showAllOptions)}
                 >
-                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.length} Options`}
+                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.filter(s => !s.isDisqualified).length} Options`}
                 </button>
               )}
+            </div>
+          )}
+
+          {/* Disqualified Offers Section */}
+          {allOfferScores.some(s => s.isDisqualified) && (
+            <div className="disqualified-offers">
+              <h3 className="preview-heading disqualified-heading">Disqualified Strategies:</h3>
+              <div className="disqualified-list">
+                {allOfferScores.filter(s => s.isDisqualified).map((score, index) => (
+                  <div key={index} className="disqualified-item">
+                    <div className="disqualified-header">
+                      <span className="disqualified-name">{score.offer.name}</span>
+                      <span className="disqualified-score">{Math.round(score.confidence * 100)}% match</span>
+                    </div>
+                    <div className="disqualified-reasons">
+                      {score.disqualificationReasons?.map((reason, rIndex) => (
+                        <p key={rIndex} className="disqualified-reason">⚠️ {reason}</p>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

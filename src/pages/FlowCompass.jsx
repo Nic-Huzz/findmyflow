@@ -51,7 +51,9 @@ const FlowCompass = () => {
         setSelectedProjectId(data[0].id)
         await loadProjectStats(data.map(p => p.id))
       } else {
-        // No projects exist - show create modal
+        // No projects exist - still load unassigned entries from challenge
+        await loadUnassignedEntries()
+        // Show create modal
         setShowCreateModal(true)
       }
     } catch (err) {
@@ -63,24 +65,61 @@ const FlowCompass = () => {
 
   const loadProjectStats = async (projectIds) => {
     try {
-      const { data, error } = await supabase
+      // Load entries for all projects
+      const { data: projectData, error: projectError } = await supabase
         .from('flow_entries')
         .select('project_id, direction, logged_at')
         .in('project_id', projectIds)
         .eq('user_id', user.id)
 
-      if (error) throw error
+      if (projectError) throw projectError
+
+      // Also load entries without a project_id (from challenge tracker quests)
+      const { data: unassignedData, error: unassignedError } = await supabase
+        .from('flow_entries')
+        .select('id, project_id, direction, logged_at, activity_description, reasoning')
+        .is('project_id', null)
+        .eq('user_id', user.id)
+
+      if (unassignedError) throw unassignedError
 
       // Calculate stats per project
       const stats = {}
       projectIds.forEach(projectId => {
-        const projectEntries = data.filter(e => e.project_id === projectId)
+        const projectEntries = projectData.filter(e => e.project_id === projectId)
         stats[projectId] = calculateProjectStats(projectEntries)
       })
+
+      // Add unassigned entries stats with special key
+      if (unassignedData && unassignedData.length > 0) {
+        stats['unassigned'] = calculateProjectStats(unassignedData)
+      }
 
       setProjectStats(stats)
     } catch (err) {
       console.error('Error loading project stats:', err)
+    }
+  }
+
+  // Load unassigned entries when there are no projects
+  const loadUnassignedEntries = async () => {
+    try {
+      const { data: unassignedData, error: unassignedError } = await supabase
+        .from('flow_entries')
+        .select('id, project_id, direction, logged_at, activity_description, reasoning')
+        .is('project_id', null)
+        .eq('user_id', user.id)
+
+      if (unassignedError) throw unassignedError
+
+      // Only set stats if there are unassigned entries
+      if (unassignedData && unassignedData.length > 0) {
+        setProjectStats({
+          'unassigned': calculateProjectStats(unassignedData)
+        })
+      }
+    } catch (err) {
+      console.error('Error loading unassigned entries:', err)
     }
   }
 
@@ -206,13 +245,21 @@ const FlowCompass = () => {
 
   const openTimeline = async (project) => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('flow_entries')
         .select('*')
         .eq('user_id', user.id)
-        .eq('project_id', project.id)
         .order('logged_at', { ascending: false })
         .limit(20)
+
+      // Handle unassigned entries (from challenge tracker quests)
+      if (project.id === null) {
+        query = query.is('project_id', null)
+      } else {
+        query = query.eq('project_id', project.id)
+      }
+
+      const { data, error } = await query
 
       if (error) throw error
 
@@ -499,6 +546,90 @@ const FlowCompass = () => {
             </div>
           )
         })}
+
+        {/* Challenge Entries Card - show entries from 7-day challenge tracker quests */}
+        {projectStats['unassigned'] && projectStats['unassigned'].total > 0 && (
+          <div className="project-card challenge-entries-card">
+            <div className="project-card-header">
+              <h3 className="project-card-title">Challenge Entries</h3>
+              <p className="project-card-description">Flow entries logged from the 7-Day Challenge</p>
+              <div className="project-status-row">
+                <span className="project-status-badge">
+                  <span className={`health-indicator ${getHealthIndicator(projectStats['unassigned'])}`}></span>
+                  <span>From Challenge</span>
+                </span>
+                <span className="project-count">{projectStats['unassigned'].total} entries total</span>
+              </div>
+            </div>
+
+            {/* Momentum Bar */}
+            {projectStats['unassigned'].total > 0 && (
+              <div className="momentum-section">
+                <div className="momentum-label">Flow Momentum</div>
+                <div className="momentum-bar">
+                  {projectStats['unassigned'].north > 0 && <div className="momentum-segment momentum-north" style={{ width: `${projectStats['unassigned'].north}%` }}></div>}
+                  {projectStats['unassigned'].east > 0 && <div className="momentum-segment momentum-east" style={{ width: `${projectStats['unassigned'].east}%` }}></div>}
+                  {projectStats['unassigned'].south > 0 && <div className="momentum-segment momentum-south" style={{ width: `${projectStats['unassigned'].south}%` }}></div>}
+                  {projectStats['unassigned'].west > 0 && <div className="momentum-segment momentum-west" style={{ width: `${projectStats['unassigned'].west}%` }}></div>}
+                </div>
+                <div className="momentum-legend">
+                  {projectStats['unassigned'].north > 0 && (
+                    <div className="legend-item">
+                      <div className="legend-dot momentum-north"></div>
+                      <span>{projectStats['unassigned'].north}% Flowing</span>
+                    </div>
+                  )}
+                  {projectStats['unassigned'].east > 0 && (
+                    <div className="legend-item">
+                      <div className="legend-dot momentum-east"></div>
+                      <span>{projectStats['unassigned'].east}% Pivoting</span>
+                    </div>
+                  )}
+                  {projectStats['unassigned'].south > 0 && (
+                    <div className="legend-item">
+                      <div className="legend-dot momentum-south"></div>
+                      <span>{projectStats['unassigned'].south}% Resting</span>
+                    </div>
+                  )}
+                  {projectStats['unassigned'].west > 0 && (
+                    <div className="legend-item">
+                      <div className="legend-dot momentum-west"></div>
+                      <span>{projectStats['unassigned'].west}% Honouring</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Recent Entries */}
+            {projectStats['unassigned'].recent && projectStats['unassigned'].recent.length > 0 && (
+              <div className="recent-entries">
+                <div className="recent-title">Recent Activity</div>
+                {projectStats['unassigned'].recent.map(entry => (
+                  <div key={entry.id} className="entry-mini">
+                    <div className={`entry-mini-dot momentum-${entry.direction}`}></div>
+                    <div className="entry-mini-info">
+                      <span className="entry-mini-direction">
+                        {getDirectionLabel(entry.direction)} - {entry.activity_description || 'Challenge Log'}
+                      </span>
+                      <span className="entry-mini-time">{formatFlowDate(entry.logged_at)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Card Actions */}
+            <div className="card-actions">
+              <button
+                className="view-timeline-btn"
+                onClick={() => openTimeline({ id: null, name: 'Challenge Entries' })}
+              >
+                View Timeline
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       </div>
 

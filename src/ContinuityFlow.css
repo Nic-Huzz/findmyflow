@@ -485,6 +485,69 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+/* Disqualified Offers Section */
+
+.disqualified-offers {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.disqualified-heading {
+  color: rgba(239, 68, 68, 0.9) !important;
+}
+
+.disqualified-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.disqualified-item {
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.disqualified-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.disqualified-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: line-through;
+  text-decoration-color: rgba(239, 68, 68, 0.5);
+}
+
+.disqualified-score {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.disqualified-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.disqualified-reason {
+  font-size: 13px;
+  color: rgba(239, 68, 68, 0.85);
+  margin: 0;
+  line-height: 1.5;
+}
+
 .next-step-text {
   font-size: 14px;
   color: white;

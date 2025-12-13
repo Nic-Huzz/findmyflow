@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
-import FlowCompass from './FlowCompass'
 import './FlowCompassInput.css'
 
 /**
  * FlowCompassInput - Quest input component for logging flow within challenges
+ * Updated to match /flow-compass Quick Log UX
  *
  * Props:
  * - quest: Quest object
@@ -17,10 +17,10 @@ function FlowCompassInput({ quest, onComplete }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [hasProject, setHasProject] = useState(null) // null = loading, true/false = result
-  const [step, setStep] = useState(1) // 1: compass, 2: context
-  const [direction, setDirection] = useState(null)
-  const [internalState, setInternalState] = useState(null)
-  const [externalState, setExternalState] = useState(null)
+  const [projectId, setProjectId] = useState(null) // Store the project ID for submission
+  const [step, setStep] = useState(1) // 1: quick log, 2: context
+  const [selectedEnergy, setSelectedEnergy] = useState(null) // 'excited' or 'tired'
+  const [selectedFlow, setSelectedFlow] = useState(null) // 'ease' or 'resistance'
   const [activityDescription, setActivityDescription] = useState('')
   const [reasoning, setReasoning] = useState('')
 
@@ -34,11 +34,17 @@ function FlowCompassInput({ quest, onComplete }) {
           .from('user_projects')
           .select('id')
           .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
           .limit(1)
 
         if (error) throw error
 
-        setHasProject(data && data.length > 0)
+        if (data && data.length > 0) {
+          setHasProject(true)
+          setProjectId(data[0].id) // Store the project ID
+        } else {
+          setHasProject(false)
+        }
       } catch (error) {
         console.error('Error checking project:', error)
         setHasProject(false)
@@ -48,10 +54,29 @@ function FlowCompassInput({ quest, onComplete }) {
     checkProject()
   }, [user])
 
-  const handleCompassSelect = (dir, internal, external) => {
-    setDirection(dir)
-    setInternalState(internal)
-    setExternalState(external)
+  // Calculate direction from energy + flow
+  const getDirection = () => {
+    if (selectedEnergy === 'excited' && selectedFlow === 'ease') return 'north'
+    if (selectedEnergy === 'excited' && selectedFlow === 'resistance') return 'east'
+    if (selectedEnergy === 'tired' && selectedFlow === 'resistance') return 'south'
+    if (selectedEnergy === 'tired' && selectedFlow === 'ease') return 'west'
+    return null
+  }
+
+  const getDirectionLabel = () => {
+    const dir = getDirection()
+    if (dir === 'north') return 'Flowing (North)'
+    if (dir === 'east') return 'Pivoting (East)'
+    if (dir === 'south') return 'Resting (South)'
+    if (dir === 'west') return 'Honouring (West)'
+    return ''
+  }
+
+  const handleContinue = () => {
+    if (!selectedEnergy || !selectedFlow) {
+      alert('Please answer both questions')
+      return
+    }
     setStep(2)
   }
 
@@ -61,13 +86,22 @@ function FlowCompassInput({ quest, onComplete }) {
       return
     }
 
+    if (!projectId) {
+      alert('Please set up your Flow Compass first')
+      navigate('/flow-compass')
+      return
+    }
+
+    const direction = getDirection()
+
     // Structure data for quest completion
     const flowData = {
       direction,
-      internal_state: internalState,
-      external_state: externalState,
+      internal_state: selectedEnergy,
+      external_state: selectedFlow,
       activity_description: activityDescription,
-      reasoning: reasoning.trim()
+      reasoning: reasoning.trim(),
+      project_id: projectId
     }
 
     // Call completion callback
@@ -78,8 +112,8 @@ function FlowCompassInput({ quest, onComplete }) {
   if (hasProject === null) {
     return (
       <div className="flow-compass-input">
-        <div className="compass-step">
-          <p className="step-instruction">Loading...</p>
+        <div className="compass-loading">
+          <p>Loading...</p>
         </div>
       </div>
     )
@@ -89,16 +123,15 @@ function FlowCompassInput({ quest, onComplete }) {
   if (hasProject === false) {
     return (
       <div className="flow-compass-input">
-        <div className="compass-step">
-          <p className="step-instruction" style={{ marginBottom: '16px' }}>
+        <div className="compass-no-project">
+          <p className="no-project-text">
             To track your flow, you need to set up your Flow Compass first.
           </p>
           <button
-            className="quest-flow-btn"
+            className="start-compass-btn"
             onClick={() => navigate('/flow-compass')}
-            style={{ width: '100%' }}
           >
-            Start Your Flow Compass →
+            Start Your Flow Compass
           </button>
         </div>
       </div>
@@ -108,24 +141,62 @@ function FlowCompassInput({ quest, onComplete }) {
   return (
     <div className="flow-compass-input">
       {step === 1 && (
-        <div className="compass-step">
-          <p className="step-instruction">
-            How did this quest go? Select the direction that matches your experience:
-          </p>
-
-          <FlowCompass
-            onSelect={handleCompassSelect}
-            selectedDirection={direction}
-            size="medium"
-            showLabels={true}
-          />
-
-          <div className="compass-legend-small">
-            <p><strong>😊 Excited</strong> → You felt energized and motivated</p>
-            <p><strong>😴 Tired</strong> → You felt drained or unmotivated</p>
-            <p><strong>✅ Ease</strong> → Things flowed naturally, made progress</p>
-            <p><strong>❌ Resistance</strong> → Hit blockers, struggled to progress</p>
+        <div className="quick-log-step">
+          {/* Energy Question */}
+          <div className="question-group">
+            <h4 className="question-heading">Are you feeling excited or tired?</h4>
+            <div className="button-row">
+              <button
+                className={`energy-btn energy-excited ${selectedEnergy === 'excited' ? 'selected' : ''}`}
+                onClick={() => setSelectedEnergy('excited')}
+              >
+                Excited
+              </button>
+              <button
+                className={`energy-btn energy-tired ${selectedEnergy === 'tired' ? 'selected' : ''}`}
+                onClick={() => setSelectedEnergy('tired')}
+              >
+                Tired
+              </button>
+            </div>
           </div>
+
+          {/* Flow Question */}
+          <div className="question-group">
+            <h4 className="question-heading">How is the project flowing?</h4>
+            <div className="button-row">
+              <button
+                className={`flow-btn flow-great ${selectedFlow === 'ease' ? 'selected' : ''}`}
+                onClick={() => setSelectedFlow('ease')}
+              >
+                <span className="arrow-icon">↑</span>
+                <span>Great</span>
+              </button>
+              <button
+                className={`flow-btn flow-resistance ${selectedFlow === 'resistance' ? 'selected' : ''}`}
+                onClick={() => setSelectedFlow('resistance')}
+              >
+                <span className="arrow-icon">→</span>
+                <span>Facing Resistance</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Direction Preview */}
+          {selectedEnergy && selectedFlow && (
+            <div className={`direction-preview direction-${getDirection()}`}>
+              <span className="direction-label">{getDirectionLabel()}</span>
+            </div>
+          )}
+
+          {/* Continue Button */}
+          <button
+            className="continue-btn"
+            onClick={handleContinue}
+            disabled={!selectedEnergy || !selectedFlow}
+          >
+            Continue
+          </button>
         </div>
       )}
 
@@ -135,8 +206,12 @@ function FlowCompassInput({ quest, onComplete }) {
             className="back-btn"
             onClick={() => setStep(1)}
           >
-            ← Change Direction
+            ← Change Selection
           </button>
+
+          <div className={`direction-badge direction-${getDirection()}`}>
+            {getDirectionLabel()}
+          </div>
 
           <div className="input-group">
             <label>What were you doing? (optional)</label>
@@ -144,7 +219,7 @@ function FlowCompassInput({ quest, onComplete }) {
               type="text"
               value={activityDescription}
               onChange={(e) => setActivityDescription(e.target.value)}
-              placeholder="e.g., Working on the quest, Talking to customers..."
+              placeholder="e.g., Working on my project, Talking to customers..."
               className="activity-input"
             />
           </div>
@@ -154,8 +229,8 @@ function FlowCompassInput({ quest, onComplete }) {
             <textarea
               value={reasoning}
               onChange={(e) => setReasoning(e.target.value)}
-              placeholder="Describe what you experienced while working on this quest..."
-              rows="4"
+              placeholder="Describe what you experienced..."
+              rows="3"
               className="reasoning-textarea"
             />
             <span className="char-count">
@@ -164,16 +239,12 @@ function FlowCompassInput({ quest, onComplete }) {
           </div>
 
           <button
-            className="complete-button"
+            className="complete-btn"
             onClick={handleSubmit}
             disabled={!reasoning || reasoning.trim().length < 10}
           >
             Complete Quest (+{quest.points} points)
           </button>
-
-          {quest.counts_toward_graduation && (
-            <p className="graduation-note">✨ Counts toward stage graduation</p>
-          )}
         </div>
       )}
     </div>

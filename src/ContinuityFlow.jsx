@@ -98,41 +98,35 @@ function ContinuityFlow() {
   const calculateOfferScores = (userAnswers) => {
     if (!offersData) return []
 
-    console.log('🔍 Calculating continuity scores with answers:', userAnswers)
-
     const scores = offersData.map(offer => {
       let totalScore = 0
       const maxPossibleScore = offer.max_possible_score || 30
-
-      console.log(`\n📝 Scoring offer: ${offer.name}`)
 
       // Calculate weighted score for each question
       Object.entries(userAnswers).forEach(([questionId, answer]) => {
         // Normalize questionId: q1_business_type -> Q1_business_type
         const normalizedQuestionId = questionId.replace(/^q(\d+)/, 'Q$1')
         const weights = offer.scoring_weights?.[normalizedQuestionId]
-        console.log(`  Question ${questionId} (normalized: ${normalizedQuestionId}):`, {
-          answer: answer.value,
-          weights,
-          foundWeight: weights?.[answer.value]
-        })
         if (weights && weights[answer.value] !== undefined) {
           totalScore += weights[answer.value]
-          console.log(`    ✅ Added ${weights[answer.value]} points`)
-        } else {
-          console.log(`    ❌ No weight found`)
         }
       })
 
-      console.log(`  Final totalScore: ${totalScore}/${maxPossibleScore}`)
-
       // Check hard disqualifiers
       let isDisqualified = false
-      if (offer.eligibility_rules?.hard_disqualifiers) {
-        offer.eligibility_rules.hard_disqualifiers.forEach(rule => {
-          const fieldAnswer = userAnswers[`q${rule.field.match(/\d+/)?.[0] || ''}_${rule.field}`]
+      let disqualificationReasons = []
+      const disqualifiers = offer.hard_disqualifiers || offer.eligibility_rules?.hard_disqualifiers || []
+      if (disqualifiers.length > 0) {
+        disqualifiers.forEach(rule => {
+          // Find the matching question key by field name suffix
+          const fieldName = rule.field.toLowerCase()
+          const matchingKey = Object.keys(userAnswers).find(key =>
+            key.endsWith('_' + fieldName)
+          )
+          const fieldAnswer = matchingKey ? userAnswers[matchingKey] : null
           if (fieldAnswer && rule.disallowed.includes(fieldAnswer.value)) {
             isDisqualified = true
+            disqualificationReasons.push(rule.reason || `Disqualified due to ${rule.field}`)
           }
         })
       }
@@ -144,7 +138,8 @@ function ContinuityFlow() {
         totalScore,
         maxPossibleScore,
         confidence,
-        isDisqualified
+        isDisqualified,
+        disqualificationReasons
       }
     })
 
@@ -428,7 +423,7 @@ function ContinuityFlow() {
             <div className="alternative-offers">
               <h3 className="preview-heading">Strategy Scores:</h3>
               <div className="offer-scores-list">
-                {(showAllOptions ? allOfferScores : allOfferScores.slice(0, 3)).map((score, index) => (
+                {(showAllOptions ? allOfferScores.filter(s => !s.isDisqualified) : allOfferScores.filter(s => !s.isDisqualified).slice(0, 3)).map((score, index) => (
                   <div key={index} className="score-item">
                     <div className="score-item-content">
                       <span className="score-name">{score.offer.name}</span>
@@ -443,14 +438,36 @@ function ContinuityFlow() {
                   </div>
                 ))}
               </div>
-              {allOfferScores.length > 3 && (
+              {allOfferScores.filter(s => !s.isDisqualified).length > 3 && (
                 <button
                   className="see-all-options-btn"
                   onClick={() => setShowAllOptions(!showAllOptions)}
                 >
-                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.length} Options`}
+                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.filter(s => !s.isDisqualified).length} Options`}
                 </button>
               )}
+            </div>
+          )}
+
+          {/* Disqualified Offers Section */}
+          {allOfferScores.some(s => s.isDisqualified) && (
+            <div className="disqualified-offers">
+              <h3 className="preview-heading disqualified-heading">Disqualified Strategies:</h3>
+              <div className="disqualified-list">
+                {allOfferScores.filter(s => s.isDisqualified).map((score, index) => (
+                  <div key={index} className="disqualified-item">
+                    <div className="disqualified-header">
+                      <span className="disqualified-name">{score.offer.name}</span>
+                      <span className="disqualified-score">{Math.round(score.confidence * 100)}% match</span>
+                    </div>
+                    <div className="disqualified-reasons">
+                      {score.disqualificationReasons?.map((reason, rIndex) => (
+                        <p key={rIndex} className="disqualified-reason">⚠️ {reason}</p>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 

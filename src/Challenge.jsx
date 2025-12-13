@@ -49,7 +49,7 @@ function Challenge() {
   const [showExplainer, setShowExplainer] = useState(false) // Track portal explainer visibility
   const settingsMenuRef = useRef(null) // Ref for clicking outside to close menu
 
-  const categories = ['Flow Finder', 'Daily', 'Weekly', 'Bonus', 'Tracker']
+  const categories = ['Flow Finder', 'Daily', 'Weekly', 'Tracker', 'Bonus']
 
   useEffect(() => {
     loadChallengeData()
@@ -648,6 +648,23 @@ function Challenge() {
 
       return questCompletions.length > 0
     }
+  }
+
+  // Check if a quest has ever been completed (used for sequential unlocking)
+  const isQuestEverCompleted = (questId) => {
+    return completions.some(c => c.quest_id === questId)
+  }
+
+  // Check if a quest is locked due to requires_quest not being completed
+  const isQuestLocked = (quest) => {
+    if (!quest.requires_quest) return false
+    return !isQuestEverCompleted(quest.requires_quest)
+  }
+
+  // Get the name of the required quest for display
+  const getRequiredQuestName = (questId) => {
+    const quest = challengeData?.quests?.find(q => q.id === questId)
+    return quest?.name || questId
   }
 
   const toggleLearnMore = (questId) => {
@@ -1707,8 +1724,18 @@ function Challenge() {
                     )}
 
                     {completed && (
-                      <div className="quest-completed-badge">
-                        ✅ Completed Today
+                      <div className="quest-completed-section">
+                        <div className="quest-completed-badge">
+                          ✅ Completed Today
+                        </div>
+                        {quest.flow_route && (
+                          <button
+                            className="view-results-btn"
+                            onClick={() => navigate(quest.flow_route)}
+                          >
+                            View Results
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1865,8 +1892,18 @@ function Challenge() {
                     )}
 
                     {completed && (
-                      <div className="quest-completed-badge">
-                        ✅ Completed
+                      <div className="quest-completed-section">
+                        <div className="quest-completed-badge">
+                          ✅ Completed
+                        </div>
+                        {quest.flow_route && (
+                          <button
+                            className="view-results-btn"
+                            onClick={() => navigate(quest.flow_route)}
+                          >
+                            View Results
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1886,10 +1923,11 @@ function Challenge() {
             <div className="quest-grid">
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
+                const locked = isQuestLocked(quest)
                 return (
-                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
+                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''} ${locked ? 'locked' : ''}`}>
                     <div className="quest-header">
-                      <h3 className="quest-name">{quest.name}</h3>
+                      <h3 className="quest-name">{locked ? '🔒 ' : ''}{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
                     </div>
 
@@ -1912,6 +1950,12 @@ function Challenge() {
                     )}
 
                     <p className="quest-description">{quest.description}</p>
+
+                    {quest.actionLink && !completed && (
+                      <Link to={quest.actionLink} className="quest-action-link">
+                        {quest.actionLinkText || 'Go →'}
+                      </Link>
+                    )}
 
                     {quest.learnMore && !completed && (
                       <div className="learn-more-section">
@@ -1944,7 +1988,7 @@ function Challenge() {
                       </div>
                     )}
 
-                    {!completed && (
+                    {!completed && !locked && (
                       <div className="quest-input-area">
                         {quest.status === 'coming_soon' ? (
                           <button className="quest-flow-btn coming-soon" disabled>
@@ -2003,9 +2047,29 @@ function Challenge() {
                       </div>
                     )}
 
+                    {!completed && locked && (
+                      <div className="quest-locked-message">
+                        🔒 Complete "{getRequiredQuestName(quest.requires_quest)}" first to unlock
+                      </div>
+                    )}
+
+                    {quest.counts_toward_graduation && !completed && quest.inputType !== 'conversation_log' && (
+                      <p className="graduation-note">✨ Counts toward stage graduation</p>
+                    )}
+
                     {completed && (
-                      <div className="quest-completed-badge">
-                        ✅ Completed
+                      <div className="quest-completed-section">
+                        <div className="quest-completed-badge">
+                          ✅ Completed
+                        </div>
+                        {quest.flow_route && (
+                          <button
+                            className="view-results-btn"
+                            onClick={() => navigate(quest.flow_route)}
+                          >
+                            View Results
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -2123,8 +2187,18 @@ function Challenge() {
                     )}
 
                     {completed && (
-                      <div className="quest-completed-badge">
-                        ✅ Completed
+                      <div className="quest-completed-section">
+                        <div className="quest-completed-badge">
+                          ✅ Completed
+                        </div>
+                        {quest.flow_route && (
+                          <button
+                            className="view-results-btn"
+                            onClick={() => navigate(quest.flow_route)}
+                          >
+                            View Results
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
@@ -2140,31 +2214,112 @@ function Challenge() {
             <h2 className="section-title">Flow Compass</h2>
             {filteredQuests.length === 0 ? (
               <div className="empty-category">
-                <p>Track your flow activities here. Coming soon!</p>
+                <p>Track your flow activities here.</p>
               </div>
             ) : (
               <div className="quest-grid">
                 {filteredQuests.map(quest => {
                   const completed = isQuestCompletedToday(quest.id, quest)
+                  const streak = getDailyStreak(quest.id)
+                  const dayLabels = getDayLabels()
+
                   return (
                     <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
                       <div className="quest-header">
                         <h3 className="quest-name">{quest.name}</h3>
                         <span className="quest-points">+{quest.points} pts</span>
                       </div>
+
+                      {/* Daily Streak Bubbles for daily tracker */}
+                      {quest.type === 'Daily' && (
+                        <div className="daily-streak">
+                          {dayLabels.map((label, index) => (
+                            <div
+                              key={index}
+                              className={`streak-bubble ${streak[index] ? 'completed' : ''}`}
+                              title={`Day ${index + 1}`}
+                            >
+                              {label}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
                       <p className="quest-description">{quest.description}</p>
+
+                      {quest.learnMore && !completed && (
+                        <div className="learn-more-section">
+                          <button
+                            className="learn-more-toggle"
+                            onClick={() => toggleLearnMore(quest.id)}
+                          >
+                            <span>Learn More</span>
+                            <svg
+                              className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
+                              width="16"
+                              height="16"
+                              viewBox="0 0 16 16"
+                              fill="none"
+                            >
+                              <path
+                                d="M4 6L8 10L12 6"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </button>
+                          {expandedLearnMore[quest.id] && (
+                            <div className="learn-more-content">
+                              {quest.learnMore}
+                            </div>
+                          )}
+                        </div>
+                      )}
 
                       {!completed && (
                         <div className="quest-input-area">
-                          <button className="quest-flow-btn coming-soon" disabled>
-                            Coming Soon
-                          </button>
+                          {quest.inputType === 'flow_compass' ? (
+                            <FlowCompassInput
+                              quest={quest}
+                              onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                            />
+                          ) : quest.status === 'coming_soon' ? (
+                            <button className="quest-flow-btn coming-soon" disabled>
+                              Coming Soon
+                            </button>
+                          ) : (
+                            <>
+                              <div className="quest-checkbox-area">
+                                <label className="quest-checkbox-label">
+                                  Mark as complete
+                                </label>
+                              </div>
+                              <button
+                                className="quest-complete-btn"
+                                onClick={() => handleQuestComplete(quest)}
+                              >
+                                Complete Quest
+                              </button>
+                            </>
+                          )}
                         </div>
                       )}
 
                       {completed && (
-                        <div className="quest-completed-badge">
-                          ✅ Completed
+                        <div className="quest-completed-section">
+                          <div className="quest-completed-badge">
+                            ✅ Completed {quest.type === 'Daily' ? 'Today' : ''}
+                          </div>
+                          {quest.flow_route && (
+                            <button
+                              className="view-results-btn"
+                              onClick={() => navigate(quest.flow_route)}
+                            >
+                              View Results
+                            </button>
+                          )}
                         </div>
                       )}
                     </div>

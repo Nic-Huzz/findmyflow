@@ -1,42 +1,203 @@
-/* Flow Compass Input Component Styles */
+/* Flow Compass Input Component Styles
+   Matches /flow-compass Quick Log UX */
 
 .flow-compass-input {
-  padding: 1.5rem;
-  background: #f9fafb;
-  border-radius: 12px;
-  margin-top: 1rem;
-}
-
-/* Compass Step */
-.compass-step {
-  text-align: center;
-}
-
-.step-instruction {
-  font-size: 1rem;
-  color: #374151;
-  margin: 0 0 1.5rem 0;
-  font-weight: 500;
-}
-
-.compass-legend-small {
-  margin-top: 1.5rem;
   padding: 1rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-top: 0.5rem;
+}
+
+/* Loading State */
+.compass-loading {
+  text-align: center;
+  padding: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* No Project State */
+.compass-no-project {
+  text-align: center;
+  padding: 1rem;
+}
+
+.no-project-text {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.start-compass-btn {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.5rem;
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  text-align: left;
-}
-
-.compass-legend-small p {
-  margin: 0.5rem 0;
-  font-size: 0.875rem;
-  color: #6b7280;
-}
-
-.compass-legend-small strong {
-  color: #1f2937;
+  font-size: 0.9375rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.start-compass-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(94, 23, 235, 0.3);
+}
+
+/* Quick Log Step */
+.quick-log-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.question-group {
+  margin-bottom: 0.5rem;
+}
+
+.question-heading {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 0.75rem;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Energy and Flow Buttons */
+.energy-btn,
+.flow-btn {
+  padding: 0.875rem 1rem;
+  border: 2px solid;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.energy-btn:hover,
+.flow-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.energy-btn.selected,
+.flow-btn.selected {
+  color: white;
+}
+
+/* Energy buttons */
+.energy-excited {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.energy-excited.selected {
+  background: #10b981;
+}
+
+.energy-tired {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.energy-tired.selected {
+  background: #ef4444;
+}
+
+/* Flow buttons */
+.flow-great {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.flow-great.selected {
+  background: #10b981;
+}
+
+.flow-resistance {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.flow-resistance.selected {
+  background: #f59e0b;
+}
+
+.arrow-icon {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Direction Preview */
+.direction-preview {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-top: 0.5rem;
+}
+
+.direction-preview.direction-north {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.direction-preview.direction-east {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.direction-preview.direction-south {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.direction-preview.direction-west {
+  background: rgba(94, 23, 235, 0.2);
+  color: #a78bfa;
+  border: 1px solid rgba(94, 23, 235, 0.3);
+}
+
+/* Continue Button */
+.continue-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.continue-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(94, 23, 235, 0.3);
+}
+
+.continue-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Context Step */
@@ -49,8 +210,8 @@
 .back-btn {
   align-self: flex-start;
   background: transparent;
-  border: 1px solid #d1d5db;
-  color: #6b7280;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.875rem;
@@ -59,10 +220,44 @@
 }
 
 .back-btn:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
+/* Direction Badge */
+.direction-badge {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.direction-badge.direction-north {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.direction-badge.direction-east {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.direction-badge.direction-south {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.direction-badge.direction-west {
+  background: rgba(94, 23, 235, 0.2);
+  color: #a78bfa;
+  border: 1px solid rgba(94, 23, 235, 0.3);
+}
+
+/* Input Group */
 .input-group {
   display: flex;
   flex-direction: column;
@@ -72,74 +267,75 @@
 .input-group label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #374151;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .activity-input,
 .reasoning-textarea {
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 0.875rem;
   font-family: inherit;
   transition: border-color 0.2s;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.activity-input::placeholder,
+.reasoning-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .activity-input:focus,
 .reasoning-textarea:focus {
   outline: none;
   border-color: #5e17eb;
-  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.2);
 }
 
 .char-count {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: rgba(255, 255, 255, 0.5);
   align-self: flex-end;
 }
 
-.complete-button {
+/* Complete Button */
+.complete-btn {
   background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
   color: white;
   border: none;
   padding: 0.875rem 1.5rem;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   margin-top: 0.5rem;
 }
 
-.complete-button:hover:not(:disabled) {
+.complete-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(94, 23, 235, 0.3);
 }
 
-.complete-button:disabled {
+.complete-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.graduation-note {
-  text-align: center;
-  font-size: 0.875rem;
-  color: #5e17eb;
-  font-weight: 500;
-  margin: 0.5rem 0 0 0;
-}
-
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 480px) {
   .flow-compass-input {
-    padding: 1rem;
-  }
-
-  .compass-legend-small {
     padding: 0.75rem;
   }
 
-  .compass-legend-small p {
-    font-size: 0.8125rem;
+  .button-row {
+    grid-template-columns: 1fr;
+  }
+
+  .energy-btn,
+  .flow-btn {
+    padding: 0.75rem;
   }
 }

@@ -171,21 +171,147 @@ export const getUserStageProgress = async (userId) => {
 };
 
 /**
+ * Sync Flow Finder completion with 7-day challenge
+ * - Checks if user has an active challenge
+ * - Creates quest completion if not already completed
+ * - Updates challenge progress points
+ * @param {string} userId - User ID
+ * @param {string} flowType - One of: 'skills', 'problems', 'persona', 'integration'
+ */
+export const syncFlowFinderWithChallenge = async (userId, flowType) => {
+  try {
+    // Map flow types to quest IDs
+    const flowToQuestMap = {
+      'skills': 'flow_finder_skills',
+      'problems': 'flow_finder_problems',
+      'persona': 'flow_finder_persona',
+      'integration': 'flow_finder_integration'
+    };
+
+    const questId = flowToQuestMap[flowType];
+    if (!questId) {
+      console.log(`⚠️ Unknown flow type: ${flowType}`);
+      return { success: false, error: 'Unknown flow type' };
+    }
+
+    // Check for active challenge
+    const { data: activeChallenge, error: challengeError } = await supabase
+      .from('challenge_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .order('challenge_start_date', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (challengeError) {
+      console.error('Error checking for active challenge:', challengeError);
+      return { success: false, error: challengeError.message };
+    }
+
+    if (!activeChallenge) {
+      console.log('ℹ️ No active challenge found - skipping sync');
+      return { success: true, skipped: true, reason: 'No active challenge' };
+    }
+
+    // Check if quest already completed in this challenge instance
+    const { data: existingCompletion, error: checkError } = await supabase
+      .from('quest_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('challenge_instance_id', activeChallenge.challenge_instance_id)
+      .eq('quest_id', questId)
+      .maybeSingle();
+
+    if (checkError) {
+      console.error('Error checking existing completion:', checkError);
+      return { success: false, error: checkError.message };
+    }
+
+    if (existingCompletion) {
+      console.log(`ℹ️ Quest ${questId} already completed in this challenge`);
+      return { success: true, skipped: true, reason: 'Already completed' };
+    }
+
+    // Get quest details from challengeQuestsUpdate.json (we need points)
+    // For now, use known point values
+    const questPoints = {
+      'flow_finder_skills': 40,
+      'flow_finder_problems': 40,
+      'flow_finder_persona': 30,
+      'flow_finder_integration': 30
+    };
+
+    const points = questPoints[questId] || 30;
+
+    // Create quest completion
+    const { error: completionError } = await supabase
+      .from('quest_completions')
+      .insert({
+        user_id: userId,
+        challenge_instance_id: activeChallenge.challenge_instance_id,
+        quest_id: questId,
+        quest_category: 'Flow Finder',
+        quest_type: 'flow',
+        points_earned: points,
+        challenge_day: activeChallenge.current_day,
+        reflection_text: `Completed ${flowType} flow from home page`
+      });
+
+    if (completionError) {
+      console.error('Error creating quest completion:', completionError);
+      return { success: false, error: completionError.message };
+    }
+
+    // Update challenge progress total points
+    const newTotalPoints = (activeChallenge.total_points || 0) + points;
+
+    const { error: updateError } = await supabase
+      .from('challenge_progress')
+      .update({
+        total_points: newTotalPoints,
+        last_active_date: new Date().toISOString()
+      })
+      .eq('user_id', userId)
+      .eq('challenge_instance_id', activeChallenge.challenge_instance_id);
+
+    if (updateError) {
+      console.error('Error updating challenge progress:', updateError);
+      return { success: false, error: updateError.message };
+    }
+
+    console.log(`✅ Flow Finder quest ${questId} synced with challenge (+${points} pts)`);
+    return { success: true, questId, points, newTotalPoints };
+  } catch (error) {
+    console.error('Error in syncFlowFinderWithChallenge:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
  * Handle flow_compass quest completion
  * - Saves flow entry to flow_entries table
  * - Links to challenge_instance_id
  * - Optionally extracts tags using AI
  */
-export const handleFlowCompassCompletion = async (userId, challengeInstanceId, flowData, projectId = null) => {
+export const handleFlowCompassCompletion = async (userId, challengeInstanceId, flowData, fallbackProjectId = null) => {
   try {
-    const { direction, internal_state, external_state, activity_description, reasoning } = flowData;
+    const { direction, internal_state, external_state, activity_description, reasoning, project_id } = flowData;
+
+    // Use project_id from flowData, fallback to parameter
+    const finalProjectId = project_id || fallbackProjectId;
+
+    if (!finalProjectId) {
+      console.error('No project_id provided for flow entry');
+      return { success: false, error: 'Please set up your Flow Compass first' };
+    }
 
     // Insert flow entry
     const { data: newEntry, error: entryError } = await supabase
       .from('flow_entries')
       .insert({
         user_id: userId,
-        project_id: projectId,
+        project_id: finalProjectId,
         direction,
         internal_state,
         external_state,
