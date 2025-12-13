@@ -1,9 +1,9 @@
 /**
  * AI Helper for Nervous System Safety Flow
- * Uses secure anthropicClient to generate personalized reflections
+ * Uses Supabase edge function to generate personalized reflections
  */
 
-import { sendMessage } from './anthropicClient';
+import { supabase } from './supabaseClient';
 
 /**
  * Generate personalized pattern reflection using AI
@@ -15,84 +15,83 @@ export async function generatePersonalizedReflection(context) {
   const {
     user_name,
     impact_goal,
+    nervous_system_impact_limit,
     income_goal,
+    nervous_system_income_limit,
     positive_change,
     struggle_area,
-    triage_safe_being_seen,
-    triage_safe_earning,
     triage_safe_pursuing,
     triage_self_sabotage,
     triage_feels_unsafe,
     belief_test_results
   } = context;
 
-  // Build the system prompt with instructions for Claude
-  const systemPrompt = `You are a compassionate nervous system coach and somatic therapist specializing in subconscious safety patterns and fear work.
-
-Your task is to create a personalized reflection based on their sway test results (safety contracts). These are FEAR TESTS - statements in "If X, then Y" format that reveal what their nervous system believes will happen if they pursue their ambitions.
-
-The reflection should:
-
-1. Map their safety zones vs contraction zones (be specific to their numbers/goals)
-2. Name the protective pattern underneath (what the nervous system learned)
-3. Identify the deeper fear protecting them (what they're really afraid of)
-4. Suggest what needs to be rewired (specific beliefs/associations)
-5. Optional: Name an archetype if relevant (e.g., "The Invisible Achiever", "The Selfless Healer")
-
-Use warm, insightful, deeply personalized language that makes them feel seen. Be specific to their data. Use "you/your" language.`;
-
-  // Build the user message with all their data
-  const userMessage = `Create a personalized nervous system reflection for ${user_name}.
-
-**Their Vision:**
-- Impact goal: ${impact_goal} people
-- Income goal: $${income_goal}/year
-- Positive change they create: ${positive_change}
-- Current struggle: ${struggle_area}
-
-**Sway Test Results (Triage):**
-- "I feel safe being seen by ${impact_goal} people" → ${triage_safe_being_seen?.toUpperCase() || 'N/A'}
-- "I feel safe earning over $${income_goal}/year" → ${triage_safe_earning?.toUpperCase() || 'N/A'}
-- "I believe I am safe to pursue my identified ambition" → ${triage_safe_pursuing?.toUpperCase() || 'N/A'}
-- "What I'm struggling with, I am also subconsciously self-sabotaging" → ${triage_self_sabotage?.toUpperCase() || 'N/A'}
-- "Part of me feels unsafe with the vision of my ambitions" → ${triage_feels_unsafe?.toUpperCase() || 'N/A'}
-
-**Safety Contract Test Results (Fear Tests):**
-${formatContractResults(belief_test_results)}
-
-Create a compassionate, insightful reflection that:
-1. Names where their system feels safe vs. where it contracts (reference their specific numbers)
-2. Identifies the protective pattern (what their nervous system learned)
-3. Reveals the deeper fear (what they're truly afraid of)
-4. Optional: Names an archetype if one emerges from the data
-5. Explains what needs to be rewired (specific beliefs/associations)
-
-Make it personal, warm, and deeply insightful. Start with "Here's what I'm noticing, ${user_name}:" and format with clear sections using markdown (**, ###, etc.).`;
-
   try {
-    // Call Anthropic API via secure serverless function
-    const messages = [
-      { role: 'user', content: userMessage }
-    ];
+    console.log('🤖 Calling nervous-system-mirror edge function...');
 
-    const response = await sendMessage(messages, {
-      model: 'claude-3-haiku-20240307',
-      max_tokens: 2048,
-      system: systemPrompt
+    // Call the edge function
+    const { data, error } = await supabase.functions.invoke('nervous-system-mirror', {
+      body: {
+        impact_goal,
+        nervous_system_impact_limit,
+        income_goal,
+        nervous_system_income_limit,
+        positive_change,
+        struggle_area,
+        triage_safe_pursuing,
+        triage_self_sabotage,
+        triage_feels_unsafe,
+        belief_test_results
+      }
     });
 
-    // Extract the text content
-    if (response?.content?.[0]?.text) {
-      return response.content[0].text;
-    } else {
-      console.error('❌ Unexpected AI response format:', response);
-      throw new Error('Invalid AI response format');
+    if (error) {
+      console.error('❌ Edge function error:', error);
+      throw error;
     }
+
+    if (!data?.success || !data?.reflection) {
+      console.error('❌ Invalid edge function response:', data);
+      throw new Error('Invalid edge function response');
+    }
+
+    console.log('✅ AI reflection generated successfully');
+
+    // Format the reflection nicely for display
+    const reflection = data.reflection;
+
+    // Use the full_reflection field which has everything formatted
+    return reflection.full_reflection || formatReflectionFromParts(reflection, user_name);
+
   } catch (error) {
     console.error('❌ Error generating AI reflection:', error);
     // Return fallback message instead of throwing
     return generateFallbackReflection(context);
   }
+}
+
+/**
+ * Format reflection from component parts if full_reflection isn't available
+ */
+function formatReflectionFromParts(reflection, user_name) {
+  const {
+    archetype_name,
+    archetype_description,
+    safety_edges_summary,
+    core_fear,
+    fear_interpretation,
+    rewiring_needed
+  } = reflection;
+
+  let formatted = `Here's what I'm noticing, ${user_name}:\n\n`;
+  formatted += `**Your Protective Pattern:**\n\n`;
+  formatted += `You're what I call ${archetype_name} — ${archetype_description}\n\n`;
+  formatted += `**Safety Edges:**\n\n${safety_edges_summary}\n\n`;
+  formatted += `**The Deeper Fear:**\n\n"${core_fear}"\n\n`;
+  formatted += `${fear_interpretation}\n\n`;
+  formatted += `**What Needs Rewiring:**\n\n${rewiring_needed}\n\n`;
+
+  return formatted;
 }
 
 /**

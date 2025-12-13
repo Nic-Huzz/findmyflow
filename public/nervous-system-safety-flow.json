@@ -13,26 +13,17 @@
       "required_inputs": ["{{user_name}}"],
       "prompt": "Welcome to the Nervous System Map, {{user_name}}.\n\nRemember how we talked about your flow hitting a river bank?\n\nWhat if the bank isn't external—what if it's inside you?\n\nYour nervous system has a boundary around what feels 'safe'. Safe to earn. Safe to be seen. Safe to succeed.\n\nAnything beyond that boundary? It pulls you back. Not because you lack capability—but because expansion feels dangerous to your system.\n\nThis is why ambitious people self-sabotage. Not because they're broken. Because their nervous system is protecting them from something.\n\nLet's discover where your boundaries are—so you can expand them.\n\nWe'll use something called the Sway Test to identify these subconscious limits.",
       "options": [
-        { "label": "Sounds good!", "value": "continue" }
+        { "label": "Let's Begin", "value": "continue" }
       ],
       "tag_as": "stage1_intro_acknowledged",
       "store_as": "stage1_intro_complete",
       "instructions_to_gpt": "Wait for acknowledgment before proceeding."
     },
     {
-      "step": "stage2_calibration",
+      "step": "stage3_vision_q1",
       "step_order_index": 2.0,
       "required_inputs": ["stage1_intro_complete"],
-      "prompt": "The Sway Test is simple but powerful.\n\nStand up straight with your feet hip-width apart. Close your eyes if it helps you tune in.\n\nSay out loud: \"Show me a YES.\" Notice which way your body sways—forward, back, left, or right.\n\nSay out loud: \"Show me a NO.\" Notice the contrast.\n\nThere's no right direction. Your body has its own language. Let it show you.\n\nIf you're skeptical, that's okay. Just try it with curiosity.\n\n📹 Video demonstration: https://youtu.be/UXO1mM26Ui0\n\nOnce you've calibrated, let me know which way you swayed for YES and which way for NO.",
-      "tag_as": "calibration_complete_response",
-      "store_as": "stage2_calibration_complete",
-      "instructions_to_gpt": "Wait for user confirmation that they've completed the calibration. Accept responses like 'done', 'ready', 'calibrated', or similar."
-    },
-    {
-      "step": "stage3_vision_q1",
-      "step_order_index": 3.0,
-      "required_inputs": ["stage2_calibration_complete"],
-      "prompt": "Perfect! Now let's get clear on what you're building toward.\n\nQuestion 1 of 4:\n\nIn your most audacious ambitions, how many people do you hope to impact with your work?",
+      "prompt": "Question 1 of 4:\n\nIn your most audacious ambitions, how many people do you hope to impact with your work?",
       "options": [
         { "label": "100,000+", "value": "100000+" },
         { "label": "10,000+", "value": "10000+" },
@@ -45,7 +36,7 @@
     },
     {
       "step": "stage3_vision_q2",
-      "step_order_index": 4.0,
+      "step_order_index": 3.0,
       "required_inputs": ["stage3_q1_complete"],
       "prompt": "Question 2 of 4:\n\nIn your most audacious ambitions, how much would you be earning per year?",
       "options": [
@@ -59,7 +50,7 @@
     },
     {
       "step": "stage3_vision_q3",
-      "step_order_index": 5.0,
+      "step_order_index": 4.0,
       "required_inputs": ["stage3_q2_complete"],
       "prompt": "Question 3 of 4:\n\nWhat positive change does your ambition create for others?",
       "tag_as": "positive_change",
@@ -68,17 +59,26 @@
     },
     {
       "step": "stage3_vision_q4",
-      "step_order_index": 6.0,
+      "step_order_index": 5.0,
       "required_inputs": ["stage3_q3_complete"],
       "prompt": "Question 4 of 4:\n\nWhere are you struggling most with your ambition at the moment?",
       "tag_as": "struggle_area",
       "store_as": "stage3_q4_complete",
-      "instructions_to_gpt": "Wait for open-ended response. Validate their honesty and transition to the triage phase."
+      "instructions_to_gpt": "Wait for open-ended response. Validate their honesty and transition to calibration."
+    },
+    {
+      "step": "stage2_calibration",
+      "step_order_index": 6.0,
+      "required_inputs": ["stage3_q4_complete"],
+      "prompt": "The Sway Test is simple but powerful.\n\nStand up straight with your feet hip-width apart. Close your eyes if it helps you tune in.\n\nSay out loud: \"Show me a YES.\" Notice which way your body sways—forward, back, left, or right.\n\nSay out loud: \"Show me a NO.\" Notice the contrast.\n\nThere's no right direction. Your body has its own language. Let it show you.\n\nIf you're skeptical, that's okay. Just try it with curiosity.\n\n📹 Video demonstration: https://youtu.be/UXO1mM26Ui0\n\nOnce you've calibrated, let me know which way you swayed for YES and which way for NO.",
+      "tag_as": "calibration_complete_response",
+      "store_as": "stage2_calibration_complete",
+      "instructions_to_gpt": "Wait for user confirmation that they've completed the calibration. Accept responses like 'done', 'ready', 'calibrated', or similar."
     },
     {
       "step": "stage4_triage_intro",
       "step_order_index": 7.0,
-      "required_inputs": ["stage3_q4_complete"],
+      "required_inputs": ["stage2_calibration_complete"],
       "prompt": "Now let's see where your system feels safe — and where it contracts.\n\nI'm going to give you 5 statements to test using the sway test.\n\nSay each one out loud, notice your body's response, and let me know: YES or NO?",
       "options": [
         { "label": "Ready", "value": "ready" }
@@ -784,28 +784,28 @@
     {
       "step": "stage4_triage_3",
       "step_order_index": 10.0,
-      "required_inputs": ["stage4_triage_2_complete"],
-      "prompt": "Statement 3 of 5:\n\n\"I believe I am safe to pursue my identified ambition.\"\n\nDid you sway YES or NO?",
+      "required_inputs": ["stage4_triage_2_complete", "{{positive_change}}"],
+      "prompt": "Statement 3 of 5:\n\n\"I feel safe to pursue my ambition to {{positive_change}}.\"\n\nDid you sway YES or NO?",
       "options": [
         { "label": "YES", "value": "yes" },
         { "label": "NO", "value": "no" }
       ],
       "tag_as": "triage_safe_pursuing",
       "store_as": "stage4_triage_3_complete",
-      "instructions_to_gpt": "Record the response."
+      "instructions_to_gpt": "Insert the user's answer to Q3 (positive_change) into the statement. Record the response."
     },
     {
       "step": "stage4_triage_4",
       "step_order_index": 11.0,
-      "required_inputs": ["stage4_triage_3_complete"],
-      "prompt": "Statement 4 of 5:\n\n\"What I'm struggling with, I am also subconsciously self-sabotaging.\"\n\nDid you sway YES or NO?",
+      "required_inputs": ["stage4_triage_3_complete", "{{struggle_area}}"],
+      "prompt": "Statement 4 of 5:\n\n\"My struggle with {{struggle_area}}, I'm also subconsciously self-sabotaging.\"\n\nDid you sway YES or NO?",
       "options": [
         { "label": "YES", "value": "yes" },
         { "label": "NO", "value": "no" }
       ],
       "tag_as": "triage_self_sabotage",
       "store_as": "stage4_triage_4_complete",
-      "instructions_to_gpt": "Record the response."
+      "instructions_to_gpt": "Insert the user's answer to Q4 (struggle_area) into the statement. Record the response."
     },
     {
       "step": "stage4_triage_5",

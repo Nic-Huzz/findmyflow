@@ -20,10 +20,11 @@ export const PERSONA_STAGES = {
     initial_stage: 'validation',
     graduation_requirements: {
       validation: {
+        flows_required: ['persona_selection'],
         milestones: ['validation_form_sent', 'validation_responses_3', 'groan_challenge_completed'],
-        milestones_display: ['Send validation form', 'Get 3+ responses', 'Complete a Groan Challenge'],
+        milestones_display: ['Persona Selection Flow', 'Send validation form', 'Get 3+ responses', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Send validation form, get 3 responses, complete a groan challenge, and complete a 7-day challenge'
+        description: 'Complete persona selection, send validation form, get 3 responses, complete a groan challenge, and complete a 7-day challenge'
       },
       creation: {
         flows_required: ['100m_offer', 'lead_magnet_offer'],

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
@@ -52,11 +52,11 @@ function PersonaSelectionFlow() {
 
       const personas = clusters
         .filter(c => c.cluster_type === 'persona')
-        .map(c => c.cluster_content || c.insight)
+        .map(c => c.cluster_label || c.cluster_name || c.cluster_content || c.insight)
 
       const problems = clusters
         .filter(c => c.cluster_type === 'problems')
-        .map(c => c.cluster_content || c.insight)
+        .map(c => c.cluster_label || c.cluster_name || c.cluster_content || c.insight)
 
       setNikigaiPersonas(personas)
       setNikigaiProblems(problems)
@@ -166,7 +166,7 @@ function PersonaSelectionFlow() {
     const currentAnswers = answers[comboKey] || {}
 
     // Validate all questions answered
-    const requiredQuestions = ['pain_level', 'problem_area', 'income_level', 'financial_sunk_cost', 'time_sunk_cost', 'emotion']
+    const requiredQuestions = ['pain_level', 'problem_area', 'income_level', 'financial_sunk_cost', 'time_sunk_cost', 'emotion', 'easy_to_target']
     const allAnswered = requiredQuestions.every(q => currentAnswers[q])
 
     if (!allAnswered) {
@@ -215,6 +215,7 @@ function PersonaSelectionFlow() {
         financial_sunk_cost: selectedProfile.answers.financial_sunk_cost,
         time_sunk_cost: selectedProfile.answers.time_sunk_cost,
         emotion: selectedProfile.answers.emotion,
+        easy_to_target: selectedProfile.answers.easy_to_target,
         all_profiles: allProfiles,
         selected_profile_id: selectedProfileId
       })
@@ -287,6 +288,12 @@ function PersonaSelectionFlow() {
         if (value === 'None of the above') return 'desirability-white'
         return 'desirability-orange'
 
+      case 'easy_to_target':
+        if (value === 'I\'m confident I could connect with 10+ people') return 'desirability-red'
+        if (value === 'Few people come to mind') return 'desirability-yellow'
+        if (value === 'Don\'t know anyone off the top of my head') return 'desirability-white'
+        return 'desirability-white'
+
       default:
         return ''
     }
@@ -316,18 +323,22 @@ function PersonaSelectionFlow() {
         </div>
 
         <div className="container welcome-container">
-          <h1 className="welcome-greeting">Define Your Ideal Customer</h1>
-          <div className="welcome-message">
-            <p><strong>Before you build your offer, you need to know exactly who it's for.</strong></p>
-            <p>The best offers aren't built for "everyone"—they're laser-focused on a specific person with a specific problem at a specific moment in time.</p>
-            <p>You'll select 1-3 persona + problem combinations from your Flow Finder clusters, then answer 6 questions for each to build a complete customer profile.</p>
+          <div className="welcome-content">
+            <h1 className="welcome-greeting">Define Your Ideal Customer</h1>
+            <div className="welcome-message">
+              <p><strong>Before you build your offer, you need to know exactly who it's for.</strong></p>
+              <p>The best offers aren't built for "everyone"—they're laser-focused on a specific person with a specific problem at a specific moment in time.</p>
+              <p>You'll select 1-3 persona + problem combinations from your Flow Finder clusters, then answer 7 questions for each to build a complete customer profile.</p>
+            </div>
           </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.SELECTOR)}>
-            Start Persona Selection
-          </button>
-          <p className="attribution-text">
-            This framework is based on Alex Hormozi's $100M Offers book and methodology. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com
-          </p>
+          <div className="welcome-bottom">
+            <button className="primary-button" onClick={() => setStage(STAGES.SELECTOR)}>
+              Start Persona Selection
+            </button>
+            <p className="attribution-text">
+              This framework is based on Alex Hormozi's $100M Offers book and methodology. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com
+            </p>
+          </div>
         </div>
       </div>
     )
@@ -467,69 +478,11 @@ function PersonaSelectionFlow() {
 
   // CUSTOM_INPUT Stage
   if (stage === STAGES.CUSTOM_INPUT) {
-    const [customPersona, setCustomPersona] = useState('')
-    const [customProblem, setCustomProblem] = useState('')
-
-    return (
-      <div className="persona-selection-flow">
-        <div className="progress-container">
-          <div className="progress-dots">
-            <div className="progress-dot completed"></div>
-            <div className="progress-dot active"></div>
-            <div className="progress-dot"></div>
-            <div className="progress-dot"></div>
-          </div>
-        </div>
-
-        <div className="container">
-          <h1 className="page-title">Add Custom Combination</h1>
-          <p className="page-subtitle">Define your own persona and problem combination</p>
-
-          <div className="custom-input-form">
-            <div className="form-group">
-              <label className="form-label">Who they are:</label>
-              <textarea
-                className="form-textarea"
-                placeholder="e.g., Ambitious entrepreneurs building their first online business"
-                value={customPersona}
-                onChange={(e) => setCustomPersona(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">What they're struggling with:</label>
-              <textarea
-                className="form-textarea"
-                placeholder="e.g., Struggling with imposter syndrome and self-doubt when putting themselves out there"
-                value={customProblem}
-                onChange={(e) => setCustomProblem(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            <div className="custom-input-actions">
-              <button
-                className="action-btn action-btn-secondary"
-                onClick={() => setStage(STAGES.SELECTOR)}
-              >
-                Cancel
-              </button>
-              <button
-                className="action-btn action-btn-primary"
-                onClick={() => {
-                  addCustomCombo(customPersona, customProblem)
-                  setCustomPersona('')
-                  setCustomProblem('')
-                }}
-              >
-                Add Combination
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    return <CustomInputStage
+      setStage={setStage}
+      addCustomCombo={addCustomCombo}
+      STAGES={STAGES}
+    />
   }
 
   // QUESTIONS Stage
@@ -552,7 +505,7 @@ function PersonaSelectionFlow() {
         <div className="container">
           <h1 className="page-title">Build Your Customer Persona</h1>
           <p className="page-subtitle">
-            Profile {currentComboIndex + 1} of {selectedCombinations.length}: Answer all 6 questions
+            Profile {currentComboIndex + 1} of {selectedCombinations.length}: Answer all 7 questions
           </p>
 
           {/* Current Combination Display */}
@@ -563,7 +516,7 @@ function PersonaSelectionFlow() {
 
           {/* Question 1: Pain Level */}
           <div className="question-block">
-            <div className="question-label">Question 1 of 6</div>
+            <div className="question-label">Question 1 of 7</div>
             <h3 className="question-text">How much pain is your target customer experiencing?</h3>
             <p className="question-subtext">Rate out of 10 — don't choose 7</p>
             <div className="horizontal-options compact">
@@ -581,7 +534,7 @@ function PersonaSelectionFlow() {
 
           {/* Question 2: Problem Area */}
           <div className="question-block">
-            <div className="question-label">Question 2 of 6</div>
+            <div className="question-label">Question 2 of 7</div>
             <h3 className="question-text">Does their problem relate to...</h3>
             <div className="horizontal-options">
               {[
@@ -602,7 +555,7 @@ function PersonaSelectionFlow() {
 
           {/* Question 3: Income Level */}
           <div className="question-block">
-            <div className="question-label">Question 3 of 6</div>
+            <div className="question-label">Question 3 of 7</div>
             <h3 className="question-text">How much do they earn?</h3>
             <div className="horizontal-options">
               {['$0–$25k', '$25k–$50k', '$50k–$100k', '$100k–$250k', '$250k+'].map(income => (
@@ -617,9 +570,9 @@ function PersonaSelectionFlow() {
             </div>
           </div>
 
-          {/* Question 4A: Financial Sunk Cost */}
+          {/* Question 4: Financial Sunk Cost */}
           <div className="question-block">
-            <div className="question-label">Question 4A of 6</div>
+            <div className="question-label">Question 4 of 7</div>
             <h3 className="question-text">How large of a financial sunk cost do they have in their existing solution?</h3>
             <div className="horizontal-options">
               {[
@@ -640,9 +593,9 @@ function PersonaSelectionFlow() {
             </div>
           </div>
 
-          {/* Question 4B: Time Sunk Cost */}
+          {/* Question 5: Time Sunk Cost */}
           <div className="question-block">
-            <div className="question-label">Question 4B of 6</div>
+            <div className="question-label">Question 5 of 7</div>
             <h3 className="question-text">How large of a time sunk cost do they have in their existing solution?</h3>
             <div className="horizontal-options">
               {[
@@ -663,9 +616,9 @@ function PersonaSelectionFlow() {
             </div>
           </div>
 
-          {/* Question 5: Emotion */}
+          {/* Question 6: Emotion */}
           <div className="question-block">
-            <div className="question-label">Question 5 of 6</div>
+            <div className="question-label">Question 6 of 7</div>
             <h3 className="question-text">What emotion are they feeling?</h3>
             <div className="horizontal-options">
               {[
@@ -685,6 +638,27 @@ function PersonaSelectionFlow() {
                   onClick={() => handleOptionSelect('emotion', emotion)}
                 >
                   {emotion}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Question 7: Easy to Target */}
+          <div className="question-block">
+            <div className="question-label">Question 7 of 7</div>
+            <h3 className="question-text">Are they easy to target?</h3>
+            <div className="horizontal-options">
+              {[
+                'Don\'t know anyone off the top of my head',
+                'Few people come to mind',
+                'I\'m confident I could connect with 10+ people'
+              ].map(option => (
+                <button
+                  key={option}
+                  className={`horizontal-option ${currentAnswers.easy_to_target === option ? 'selected' : ''}`}
+                  onClick={() => handleOptionSelect('easy_to_target', option)}
+                >
+                  {option}
                 </button>
               ))}
             </div>
@@ -770,6 +744,11 @@ function PersonaSelectionFlow() {
                     {profile.answers.emotion}
                   </span>
                 </p>
+                <p className="profile-detail">
+                  • Easy to Target: <span className={getDesirabilityClass('easy_to_target', profile.answers.easy_to_target)}>
+                    {profile.answers.easy_to_target}
+                  </span>
+                </p>
 
                 <div className="profile-actions">
                   <button
@@ -828,6 +807,7 @@ function PersonaSelectionFlow() {
                 <p><strong>Higher Income (Red = $250k+):</strong> Greater purchasing power and ability to invest in premium solutions.</p>
                 <p><strong>Low Sunk Costs (Red):</strong> Haven't invested heavily in failed solutions, so they're more open to new approaches and less skeptical.</p>
                 <p><strong>Strong Emotions (Orange):</strong> Awareness of emotional state indicates readiness for change. "None of the above" (white) suggests lack of urgency.</p>
+                <p><strong>Easy to Target (Red):</strong> Being able to connect with 10+ people means you have clear access to this market, making customer acquisition easier and cheaper.</p>
               </div>
 
               <div className="guide-section">
@@ -839,8 +819,9 @@ function PersonaSelectionFlow() {
                   <li>Higher income level</li>
                   <li>Minimal existing investment (financial and time)</li>
                   <li>Strong emotional awareness</li>
+                  <li>Easy to target (you can connect with 10+ people)</li>
                 </ul>
-                <p>This combination indicates a customer who is desperately seeking a solution, has the means to pay, and isn't jaded from previous failures.</p>
+                <p>This combination indicates a customer who is desperately seeking a solution, has the means to pay, isn't jaded from previous failures, and is accessible to you.</p>
               </div>
             </div>
           </div>
@@ -850,6 +831,73 @@ function PersonaSelectionFlow() {
   }
 
   return null
+}
+
+// Custom Input Stage Component
+function CustomInputStage({ setStage, addCustomCombo, STAGES }) {
+  const [customPersona, setCustomPersona] = useState('')
+  const [customProblem, setCustomProblem] = useState('')
+
+  return (
+    <div className="persona-selection-flow">
+      <div className="progress-container">
+        <div className="progress-dots">
+          <div className="progress-dot completed"></div>
+          <div className="progress-dot active"></div>
+          <div className="progress-dot"></div>
+          <div className="progress-dot"></div>
+        </div>
+      </div>
+
+      <div className="container">
+        <h1 className="page-title">Add Custom Combination</h1>
+        <p className="page-subtitle">Define your own persona and problem combination</p>
+
+        <div className="custom-input-form">
+          <div className="form-group">
+            <label className="form-label">Who they are:</label>
+            <textarea
+              className="form-textarea"
+              placeholder="e.g., Ambitious entrepreneurs building their first online business"
+              value={customPersona}
+              onChange={(e) => setCustomPersona(e.target.value)}
+              rows={3}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">What they're struggling with:</label>
+            <textarea
+              className="form-textarea"
+              placeholder="e.g., Struggling with imposter syndrome and self-doubt when putting themselves out there"
+              value={customProblem}
+              onChange={(e) => setCustomProblem(e.target.value)}
+              rows={3}
+            />
+          </div>
+
+          <div className="custom-input-actions">
+            <button
+              className="action-btn action-btn-secondary"
+              onClick={() => setStage(STAGES.SELECTOR)}
+            >
+              Cancel
+            </button>
+            <button
+              className="action-btn action-btn-primary"
+              onClick={() => {
+                addCustomCombo(customPersona, customProblem)
+                setCustomPersona('')
+                setCustomProblem('')
+              }}
+            >
+              Add Combination
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default PersonaSelectionFlow

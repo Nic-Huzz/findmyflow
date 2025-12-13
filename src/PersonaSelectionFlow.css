@@ -66,6 +66,22 @@
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: calc(100vh - 100px);
+}
+
+.welcome-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.welcome-bottom {
+  margin-top: auto;
+  padding-bottom: 20px;
 }
 
 .welcome-greeting {
@@ -83,6 +99,12 @@
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.85);
   margin: 0 0 16px;
+}
+
+@media (max-width: 768px) {
+  .welcome-message p {
+    font-size: 18px;
+  }
 }
 
 .welcome-message strong {
@@ -182,6 +204,7 @@
 .slider-content {
   flex: 1;
   min-width: 0;
+  text-align: center;
 }
 
 .slider-text {
@@ -786,6 +809,14 @@
   background: rgba(255, 255, 255, 0.1);
   font-weight: 600;
   margin-right: 8px;
+}
+
+.color-example.desirability-white {
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
 }
 
 /* Responsive */

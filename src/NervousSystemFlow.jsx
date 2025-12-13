@@ -1,1000 +1,1091 @@
-import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { resolvePrompt } from './lib/promptResolver'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
-import { selectSafetyContracts } from './data/nervousSystemBeliefs'
+import './NervousSystemHealingCompass.css'
 
-// Helper function to convert markdown to HTML for basic formatting
-function formatMarkdown(text) {
-  if (!text) return ''
-
-  return text
-    // Bold: **text** or __text__ (including multiline)
-    .replace(/\*\*([\s\S]+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/__([\s\S]+?)__/g, '<strong>$1</strong>')
-    // Italic: *text* or _text_ (including multiline)
-    .replace(/\*([\s\S]+?)\*/g, '<em>$1</em>')
-    .replace(/_([\s\S]+?)_/g, '<em>$1</em>')
-    // Line breaks
-    .replace(/\n/g, '<br />')
-}
-
-// Helper function to extract YES safety contracts from belief test results
-function extractYesContracts(beliefTestResults) {
-  if (!beliefTestResults || typeof beliefTestResults !== 'object') {
-    return []
-  }
-
-  return Object.entries(beliefTestResults)
-    .filter(([contract, response]) => response === 'yes')
-    .map(([contract]) => contract)
-}
-
-// Helper function to parse income goal string to number
-function parseIncomeGoal(incomeGoalString) {
-  if (!incomeGoalString) return 100000 // default
-
-  // Extract number from strings like "$1,000,000+" or "$500,000+"
-  const match = incomeGoalString.replace(/,/g, '').match(/\d+/)
-  return match ? parseInt(match[0], 10) : 100000
-}
-
-// Helper function to parse impact goal string to number
-function parseImpactGoal(impactGoalString) {
-  if (!impactGoalString) return 10000 // default
-
-  // Extract number from strings like "100,000+" or "10,000+"
-  const match = impactGoalString.replace(/,/g, '').match(/\d+/)
-  return match ? parseInt(match[0], 10) : 10000
-}
-
-// Helper function to format amount as currency
-function formatCurrency(amount) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(amount)
-}
-
-// Helper function to format impact as people count
-function formatPeople(amount) {
-  return new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(amount) + ' people'
-}
-
-// Helper function to evaluate conditional logic
-function evaluateConditional(conditional, context) {
-  if (!conditional) return true
-
-  // Handle simple equality checks like "triage_safe_earning_initial === 'yes'"
-  const match = conditional.match(/(\w+)\s*===\s*'(\w+)'/)
-  if (match) {
-    const [, varName, expectedValue] = match
-    return context[varName] === expectedValue
-  }
-
-  return true
-}
-
-// Helper function to extract archetype from AI reflection text
-function extractArchetype(reflectionText) {
-  if (!reflectionText) return null
-
-  // Look for patterns like "The Good Soldier", "The Hustling Healer", etc.
-  // Patterns: "The [Word]" or "The [Word] [Word]"
-  const match = reflectionText.match(/['"](The\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)['"]/i)
-  if (match) {
-    return match[1]
-  }
-
-  // Alternative pattern: mentions of archetype directly
-  const archetypeMatch = reflectionText.match(/archetype[:\s]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/i)
-  if (archetypeMatch) {
-    return archetypeMatch[1]
-  }
-
-  return null
-}
-
-function NervousSystemFlow() {
+export default function NervousSystemFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [flow, setFlow] = useState(null)
-  const [messages, setMessages] = useState([])
-  const [context, setContext] = useState({})
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [inputText, setInputText] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [leadMagnetData, setLeadMagnetData] = useState(null)
-  const messagesEndRef = useRef(null)
 
-  // Dynamic contract testing state
-  const [contracts, setContracts] = useState([]) // Array of contract strings
-  const [contractResults, setContractResults] = useState({}) // { contract: 'yes'/'no' }
+  const [currentScreen, setCurrentScreen] = useState('welcome')
+  const [responses, setResponses] = useState({
+    impact_goal: '',
+    income_goal: '',
+    positive_change: '',
+    struggle_area: '',
+    calibration_complete: false,
+    yes_direction: '',
+    no_direction: '',
+    // Triage test responses
+    test1_initial: null, // YES/NO for initial impact goal
+    test1_refinements: [], // Array of {amount, response} for binary search
+    test2_initial: null, // YES/NO for initial income goal
+    test2_refinements: [], // Array of {amount, response} for binary search
+    test3_safe_pursuing: null, // YES/NO
+    test4_self_sabotage: null, // YES/NO
+    test5_feels_unsafe: null, // YES/NO
+    // Contract testing
+    contracts_tested: {}, // { contract: 'yes'/'no' }
+    // Final calculated edges
+    being_seen_edge: null,
+    earning_edge: null
+  })
+  const [safetyContracts, setSafetyContracts] = useState([])
   const [currentContractIndex, setCurrentContractIndex] = useState(0)
-  const [isInContractMode, setIsInContractMode] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [reflection, setReflection] = useState(null)
+  const [showCalibrationVideo, setShowCalibrationVideo] = useState(false)
 
-  // Binary search state for income limit discovery
-  const [isInBinarySearchMode, setIsInBinarySearchMode] = useState(false)
-  const [binarySearchCurrentAmount, setBinarySearchCurrentAmount] = useState(null)
-  const [binarySearchPreviousYesAmount, setBinarySearchPreviousYesAmount] = useState(null)
-  const [binarySearchIteration, setBinarySearchIteration] = useState(0)
-  const [binarySearchDirection, setBinarySearchDirection] = useState(null) // 'doubling' or 'halving'
+  // Binary search state for Test 1 (impact)
+  const [test1CurrentAmount, setTest1CurrentAmount] = useState(null)
+  const [test1Iteration, setTest1Iteration] = useState(0)
+  const [test1LastYes, setTest1LastYes] = useState(0)
+  const [test1LastNo, setTest1LastNo] = useState(null)
 
-  // Fetch lead magnet data from Supabase
-  const fetchLeadMagnetData = async () => {
-    if (!supabase) {
-      console.warn('⚠️ Supabase not available - using fallback data')
-      return {
-        user_name: 'User',
-        protective_archetype: 'Unknown'
+  // Binary search state for Test 2 (income)
+  const [test2CurrentAmount, setTest2CurrentAmount] = useState(null)
+  const [test2Iteration, setTest2Iteration] = useState(0)
+  const [test2LastYes, setTest2LastYes] = useState(0)
+  const [test2LastNo, setTest2LastNo] = useState(null)
+
+  const totalScreens = 22 // Total number of progress dots (added subconscious + calibration-directions)
+  const currentScreenIndex = getScreenIndex(currentScreen)
+
+  function getScreenIndex(screen) {
+    const screenMap = {
+      'welcome': 0,
+      'q1': 1, 'q2': 2, 'q3': 3, 'q4': 4,
+      'subconscious-power': 5,
+      'calibration': 6,
+      'calibration-directions': 7,
+      'triage-intro': 8,
+      'test1-initial': 9,
+      'test1-refine': 10,
+      'test2-initial': 11,
+      'test2-refine': 12,
+      'test3': 13,
+      'test4': 14,
+      'test5': 15,
+      'contracts-intro': 16,
+      'contracts-test': 17,
+      'mirror-intro': 18,
+      'mirror-processing': 19,
+      'mirror-reflection': 20,
+      'success': 21
+    }
+    return screenMap[screen] || 0
+  }
+
+  // Generate safety contracts based on triage results
+  const generateSafetyContracts = () => {
+    const contracts = []
+
+    // Core contracts based on triage results
+    if (responses.test3_safe_pursuing === 'no') {
+      contracts.push("If I pursue my ambitions, I'll lose the people I care about")
+      contracts.push("If I'm too successful, I'll be rejected or abandoned")
+    }
+
+    if (responses.test4_self_sabotage === 'yes') {
+      contracts.push("If I succeed, I'll have to maintain it forever (and I can't)")
+      contracts.push("If I reach my goals, I'll discover I'm a fraud")
+    }
+
+    if (responses.test5_feels_unsafe === 'yes') {
+      contracts.push("If I'm visible, I'll be judged and criticized")
+      contracts.push("If I have money, it will corrupt me or change who I am")
+    }
+
+    // Always add common contracts to ensure we have 5-7
+    contracts.push("If I outgrow my current life, I'll lose my identity")
+    contracts.push("If I become too successful, I won't be relatable anymore")
+    contracts.push("If I charge what I'm worth, people will think I'm greedy")
+    contracts.push("If I shine too bright, I'll make others feel bad about themselves")
+    contracts.push("If I'm fully seen, people will discover I'm not enough")
+
+    // Return 5-7 contracts (remove duplicates and limit)
+    const uniqueContracts = [...new Set(contracts)]
+    return uniqueContracts.slice(0, 7)
+  }
+
+  // Binary search for Test 1 (visibility edge)
+  const handleTest1Response = (response) => {
+    const goalNumber = parseInt(responses.impact_goal.replace(/[^0-9]/g, ''))
+
+    if (currentScreen === 'test1-initial') {
+      if (response === 'no') {
+        // Start binary search downward
+        const halfAmount = Math.floor(goalNumber / 2)
+        setTest1CurrentAmount(halfAmount)
+        setTest1LastNo(goalNumber)
+        setTest1Iteration(1)
+        setResponses(prev => ({
+          ...prev,
+          test1_initial: 'no',
+          test1_refinements: [{ amount: halfAmount, response: null }]
+        }))
+        setCurrentScreen('test1-refine')
+      } else {
+        // They feel safe at their goal, double it to find the upper limit
+        const doubledAmount = goalNumber * 2
+        setTest1CurrentAmount(doubledAmount)
+        setTest1LastYes(goalNumber)
+        setTest1Iteration(1)
+        setResponses(prev => ({
+          ...prev,
+          test1_initial: 'yes',
+          test1_refinements: [{ amount: doubledAmount, response: null }]
+        }))
+        setCurrentScreen('test1-refine')
+      }
+    } else if (currentScreen === 'test1-refine') {
+      // Binary search logic
+      const newRefinements = [...responses.test1_refinements]
+      newRefinements[newRefinements.length - 1].response = response
+
+      if (response === 'yes') {
+        setTest1LastYes(test1CurrentAmount)
+      } else {
+        setTest1LastNo(test1CurrentAmount)
+      }
+
+      // Check if we should continue or stop
+      if (test1Iteration >= 3 || (test1LastNo && test1LastYes && test1LastNo - test1LastYes <= goalNumber * 0.1)) {
+        // Stop: we've found the edge
+        const edge = test1LastYes
+        setResponses(prev => ({
+          ...prev,
+          test1_refinements: newRefinements,
+          being_seen_edge: edge
+        }))
+        setCurrentScreen('test2-initial')
+      } else {
+        // Continue binary search
+        let nextAmount
+        if (response === 'yes' && test1LastNo) {
+          // Try midpoint between current YES and last NO
+          nextAmount = Math.floor((test1CurrentAmount + test1LastNo) / 2)
+        } else if (response === 'no') {
+          // Try midpoint between last YES and current NO
+          nextAmount = Math.floor((test1LastYes + test1CurrentAmount) / 2)
+        } else {
+          // First YES, try doubling
+          nextAmount = test1CurrentAmount * 2
+        }
+
+        setTest1CurrentAmount(nextAmount)
+        setTest1Iteration(test1Iteration + 1)
+        newRefinements.push({ amount: nextAmount, response: null })
+        setResponses(prev => ({
+          ...prev,
+          test1_refinements: newRefinements
+        }))
       }
     }
+  }
+
+  // Binary search for Test 2 (income edge)
+  const handleTest2Response = (response) => {
+    const goalNumber = parseInt(responses.income_goal.replace(/[^0-9]/g, ''))
+
+    if (currentScreen === 'test2-initial') {
+      if (response === 'no') {
+        // Start binary search downward
+        const halfAmount = Math.floor(goalNumber / 2)
+        setTest2CurrentAmount(halfAmount)
+        setTest2LastNo(goalNumber)
+        setTest2Iteration(1)
+        setResponses(prev => ({
+          ...prev,
+          test2_initial: 'no',
+          test2_refinements: [{ amount: halfAmount, response: null }]
+        }))
+        setCurrentScreen('test2-refine')
+      } else {
+        // They feel safe at their income goal, double it to find the upper limit
+        const doubledAmount = goalNumber * 2
+        setTest2CurrentAmount(doubledAmount)
+        setTest2LastYes(goalNumber)
+        setTest2Iteration(1)
+        setResponses(prev => ({
+          ...prev,
+          test2_initial: 'yes',
+          test2_refinements: [{ amount: doubledAmount, response: null }]
+        }))
+        setCurrentScreen('test2-refine')
+      }
+    } else if (currentScreen === 'test2-refine') {
+      const newRefinements = [...responses.test2_refinements]
+      newRefinements[newRefinements.length - 1].response = response
+
+      if (response === 'yes') {
+        setTest2LastYes(test2CurrentAmount)
+      } else {
+        setTest2LastNo(test2CurrentAmount)
+      }
+
+      if (test2Iteration >= 3 || (test2LastNo && test2LastYes && test2LastNo - test2LastYes <= goalNumber * 0.1)) {
+        const edge = test2LastYes
+        setResponses(prev => ({
+          ...prev,
+          test2_refinements: newRefinements,
+          earning_edge: edge
+        }))
+        setCurrentScreen('test3')
+      } else {
+        let nextAmount
+        if (response === 'yes' && test2LastNo) {
+          nextAmount = Math.floor((test2CurrentAmount + test2LastNo) / 2)
+        } else if (response === 'no') {
+          nextAmount = Math.floor((test2LastYes + test2CurrentAmount) / 2)
+        } else {
+          nextAmount = test2CurrentAmount * 2
+        }
+
+        setTest2CurrentAmount(nextAmount)
+        setTest2Iteration(test2Iteration + 1)
+        newRefinements.push({ amount: nextAmount, response: null })
+        setResponses(prev => ({
+          ...prev,
+          test2_refinements: newRefinements
+        }))
+      }
+    }
+  }
+
+  // Handle contract testing
+  const handleContractResponse = (response) => {
+    const currentContract = safetyContracts[currentContractIndex]
+    const newContractsTested = {
+      ...responses.contracts_tested,
+      [currentContract]: response
+    }
+
+    setResponses(prev => ({
+      ...prev,
+      contracts_tested: newContractsTested
+    }))
+
+    if (currentContractIndex < safetyContracts.length - 1) {
+      setCurrentContractIndex(currentContractIndex + 1)
+    } else {
+      // All contracts tested, move to mirror
+      setCurrentScreen('mirror-intro')
+    }
+  }
+
+  // Generate AI mirror reflection
+  const generateMirrorReflection = async () => {
+    setIsProcessing(true)
+    setCurrentScreen('mirror-processing')
 
     try {
-      console.log('🔍 Fetching lead magnet data from Supabase...')
-
-      const { data, error } = await supabase
-        .from('lead_flow_profiles')
-        .select('user_name, protective_archetype, essence_archetype, persona')
-        .eq('email', user?.email)
-        .order('created_at', { ascending: false })
-        .limit(1)
-
-      if (error) {
-        console.error('❌ Error fetching lead magnet data:', error)
-        return {
-          user_name: 'User',
-          protective_archetype: 'Unknown'
-        }
-      }
-
-      if (data && data.length > 0) {
-        console.log('✅ Lead magnet data fetched:', data[0])
-        return data[0]
-      } else {
-        console.warn('⚠️ No lead magnet data found')
-        return {
-          user_name: 'User',
-          protective_archetype: 'Unknown'
-        }
-      }
-    } catch (err) {
-      console.error('❌ Error fetching lead magnet data:', err)
-      return {
-        user_name: 'User',
-        protective_archetype: 'Unknown'
-      }
-    }
-  }
-
-  // Load nervous system flow JSON and lead magnet data
-  useEffect(() => {
-    const loadFlow = async () => {
-      try {
-        // Fetch lead magnet data first
-        const leadData = await fetchLeadMagnetData()
-        setLeadMagnetData(leadData)
-
-        // Update context with lead magnet data
-        const updatedContext = {
-          user_name: leadData.user_name,
-          protective_archetype: leadData.protective_archetype
-        }
-        setContext(updatedContext)
-
-        // Load nervous system safety flow
-        const response = await fetch('/nervous-system-safety-flow.json')
-        if (!response.ok) throw new Error('Failed to load nervous system flow')
-        const flowData = await response.json()
-        setFlow(flowData)
-
-        // Start with the first step using the updated context
-        if (flowData.steps && flowData.steps.length > 0) {
-          const firstStep = flowData.steps[0]
-          const responseText = await resolvePrompt(firstStep, updatedContext)
-          const aiMessage = {
-            id: `ai-${Date.now()}`,
-            isAI: true,
-            text: responseText,
-            timestamp: new Date().toLocaleTimeString()
-          }
-          setMessages([aiMessage])
-        }
-      } catch (err) {
-        console.error('Error loading nervous system flow:', err)
-        setError('Failed to load nervous system flow')
-      }
-    }
-
-    loadFlow()
-  }, [])
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  const currentStep = flow?.steps?.[currentIndex]
-
-  // Calculate dynamic variables for a step based on metadata and context
-  const calculateDynamicVariables = (step, ctx) => {
-    const dynamicVars = {}
-
-    if (!step?.metadata?.binary_search) {
-      return dynamicVars
-    }
-
-    const metadata = step.metadata
-
-    // Determine if this is income or impact binary search
-    const isImpactSearch = metadata.base_amount === '{{impact_goal}}'
-    const isIncomeSearch = metadata.base_amount === '{{income_goal}}'
-
-    if (isImpactSearch) {
-      // Impact goal calculations (people)
-      const impactGoalNum = parseImpactGoal(ctx.impact_goal)
-
-      if (metadata.direction === 'doubling' && metadata.multiplier) {
-        const amount = impactGoalNum * metadata.multiplier
-        dynamicVars[`doubled_impact_${metadata.iteration}`] = formatPeople(amount)
-      } else if (metadata.direction === 'halving' && metadata.divisor) {
-        const amount = Math.max(
-          impactGoalNum / metadata.divisor,
-          metadata.min_floor || 10
-        )
-        dynamicVars[`halved_impact_${metadata.iteration}`] = formatPeople(amount)
-      }
-    } else if (isIncomeSearch) {
-      // Income goal calculations (currency)
-      const incomeGoalNum = parseIncomeGoal(ctx.income_goal)
-
-      if (metadata.direction === 'doubling' && metadata.multiplier) {
-        const amount = incomeGoalNum * metadata.multiplier
-        dynamicVars[`doubled_amount_${metadata.iteration}`] = formatCurrency(amount)
-      } else if (metadata.direction === 'halving' && metadata.divisor) {
-        const amount = Math.max(
-          incomeGoalNum / metadata.divisor,
-          metadata.min_floor || 10000
-        )
-        dynamicVars[`halved_amount_${metadata.iteration}`] = formatCurrency(amount)
-      }
-    }
-
-    return dynamicVars
-  }
-
-  // Find next valid step (skip steps that don't meet conditional)
-  const findNextStep = (startIndex, ctx) => {
-    let nextIndex = startIndex
-
-    while (nextIndex < flow?.steps?.length) {
-      const step = flow.steps[nextIndex]
-
-      // Check if step's conditional is met
-      if (evaluateConditional(step.conditional, ctx)) {
-        return { step, index: nextIndex }
-      }
-
-      nextIndex++
-    }
-
-    return { step: null, index: nextIndex }
-  }
-
-  // Complete binary search and store discovered limit
-  const completeBinarySearch = async (limitAmount, ctx, searchType = 'income') => {
-    console.log(`✅ Binary search complete! ${searchType} limit found:`, limitAmount)
-
-    const newContext = { ...ctx }
-    let completionStepName
-    let limitVarName
-
-    if (searchType === 'impact') {
-      newContext.nervous_system_impact_limit = formatPeople(limitAmount)
-      completionStepName = 'stage4_triage_1_complete'
-      limitVarName = 'nervous_system_impact_limit'
-    } else {
-      // income
-      newContext.nervous_system_income_limit = formatCurrency(limitAmount)
-      completionStepName = 'stage4_triage_2_complete'
-      limitVarName = 'nervous_system_income_limit'
-    }
-
-    setContext(newContext)
-
-    // Find the completion step
-    const completionStep = flow?.steps?.find(s => s.step === completionStepName)
-
-    if (completionStep) {
-      const completionIndex = flow.steps.indexOf(completionStep)
-      let responseText = await resolvePrompt(completionStep, newContext)
-
-      // Replace the limit variable in the response
-      responseText = responseText.replace(`{{${limitVarName}}}`, newContext[limitVarName])
-
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString()
-      }
-
-      setMessages(prev => [...prev, aiMessage])
-      setCurrentIndex(completionIndex)
-      setIsInBinarySearchMode(false)
-    }
-  }
-
-  // Generate contracts based on user context and start contract testing mode
-  const startContractTesting = (newContext) => {
-    const userContext = {
-      impactGoal: newContext.impact_goal,
-      incomeGoal: newContext.income_goal,
-      struggleArea: newContext.struggle_area,
-      noToSafeBeingSeen: newContext.triage_safe_being_seen === 'no',
-      noToSafeEarning: newContext.triage_safe_earning === 'no',
-      noToSafePursuing: newContext.triage_safe_pursuing === 'no',
-      yesToSelfSabotage: newContext.triage_self_sabotage === 'yes',
-      yesToFeelsUnsafe: newContext.triage_feels_unsafe === 'yes'
-    }
-
-    const selectedContracts = selectSafetyContracts(userContext)
-    console.log('📋 Generated contracts:', selectedContracts)
-
-    setContracts(selectedContracts)
-    setContractResults({})
-    setCurrentContractIndex(0)
-    setIsInContractMode(true)
-
-    // Show first contract
-    showContractQuestion(selectedContracts, 0)
-  }
-
-  // Show a contract question
-  const showContractQuestion = (contractList, index) => {
-    const contract = contractList[index]
-    const questionNumber = index + 1
-    const totalContracts = contractList.length
-
-    const aiMessage = {
-      id: `ai-${Date.now()}`,
-      isAI: true,
-      text: `**Safety Contract ${questionNumber} of ${totalContracts}:**\n\n"${contract}"\n\nDid you sway YES or NO?`,
-      timestamp: new Date().toLocaleTimeString()
-    }
-
-    setMessages(prev => [...prev, aiMessage])
-  }
-
-  // Handle contract YES/NO response
-  const handleContractResponse = async (response) => {
-    const contract = contracts[currentContractIndex]
-
-    // Store the result
-    const newResults = { ...contractResults, [contract]: response }
-    setContractResults(newResults)
-
-    // Add user message
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      isAI: false,
-      text: response.toUpperCase(),
-      timestamp: new Date().toLocaleTimeString()
-    }
-    setMessages(prev => [...prev, userMessage])
-
-    // Check if there are more contracts
-    const nextContractIndex = currentContractIndex + 1
-
-    if (nextContractIndex < contracts.length) {
-      // Show next contract
-      setCurrentContractIndex(nextContractIndex)
-      setTimeout(() => showContractQuestion(contracts, nextContractIndex), 500)
-    } else {
-      // All contracts done - exit contract mode and continue flow
-      setIsInContractMode(false)
-
-      // Store all results in context
-      const newContext = {
-        ...context,
-        belief_test_results: newResults,
-        stage5_contract_tests_complete: true
-      }
-      setContext(newContext)
-
-      // Move to next step in flow (mirror intro)
-      const nextIndex = currentIndex + 1
-      const nextStep = flow?.steps?.[nextIndex]
-
-      if (nextStep) {
-        const responseText = await resolvePrompt(nextStep, newContext)
-        const aiMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          text: responseText,
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, aiMessage])
-        setCurrentIndex(nextIndex)
-      }
-    }
-  }
-
-  const handleSubmit = async () => {
-    console.log('🚀 Nervous System Flow handleSubmit called')
-    console.log('Current step:', currentStep?.step)
-    console.log('Input text:', inputText)
-
-    if (!currentStep || isLoading || !inputText.trim()) {
-      return
-    }
-
-    const trimmedInput = inputText.trim()
-    setIsLoading(true)
-
-    // Add user message
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      isAI: false,
-      text: trimmedInput,
-      timestamp: new Date().toLocaleTimeString()
-    }
-
-    // Update context
-    const newContext = { ...context }
-    if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = trimmedInput
-    }
-    if (currentStep.store_as) {
-      newContext[currentStep.store_as] = true
-    }
-
-    setContext(newContext)
-    setMessages(prev => [...prev, userMessage])
-    setInputText('')
-
-    // Move to next step
-    const nextIndex = currentIndex + 1
-    const nextStep = flow?.steps?.[nextIndex]
-
-    if (nextStep) {
-      // Add AI response
-      const responseText = await resolvePrompt(nextStep, newContext)
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString()
-      }
-
-      setMessages(prev => [...prev, aiMessage])
-      setCurrentIndex(nextIndex)
-    } else {
-      // Flow completed - save to Supabase
-      if (supabase) {
-        try {
-          console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
-
-          // Extract YES contracts for Healing Compass
-          const safetyContracts = extractYesContracts(newContext.belief_test_results)
-
-          const { data, error } = await supabase
-            .from('nervous_system_responses')
-            .insert([{
-              user_id: user?.id,
-              user_email: user?.email,
-              user_name: newContext.user_name || 'Anonymous',
-              impact_goal: newContext.impact_goal,
-              income_goal: newContext.income_goal,
-              nervous_system_impact_limit: newContext.nervous_system_impact_limit,
-              nervous_system_income_limit: newContext.nervous_system_income_limit,
-              archetype: newContext.archetype,
-              positive_change: newContext.positive_change,
-              current_struggle: newContext.struggle_area,
-              belief_test_results: newContext.belief_test_results,
-              safety_contracts: safetyContracts,
-              reflection_text: newContext.pattern_mirrored,
-              context: newContext
-            }])
-
-          if (error) {
-            console.error('❌ Supabase error:', error)
-            throw error
-          }
-          console.log('✅ Nervous system data saved successfully:', data)
-
-          // Auto-complete challenge quest if user has active challenge
-          if (user?.id) {
-            console.log('🎯 Attempting to complete flow quest for nervous_system')
-            const questResult = await completeFlowQuest({
-              userId: user.id,
-              flowId: 'nervous_system',
-              pointsEarned: 25
-            })
-
-            if (questResult.success) {
-              console.log('✅ Quest completed!', questResult.message)
-            } else {
-              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-            }
-          }
-        } catch (err) {
-          console.error('❌ Failed to save nervous system data:', err)
-          // Continue with flow even if save fails
-        }
-      }
-
-      // Flow completed
-      const completionMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow.\n\nYou've identified safety contracts that may be limiting your flow. The next step is to heal the root cause through the Healing Compass.",
-        timestamp: new Date().toLocaleTimeString()
-      }
-      setMessages(prev => [...prev, completionMessage])
-
-      // Move currentIndex beyond last step to hide options
-      setCurrentIndex(flow.steps.length)
-    }
-
-    setIsLoading(false)
-  }
-
-  const handleOptionClick = async (option) => {
-    if (!currentStep || isLoading) return
-
-    const optionValue = option.value || option.label
-    setIsLoading(true)
-
-    // Add user message
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      isAI: false,
-      text: option.label,
-      timestamp: new Date().toLocaleTimeString()
-    }
-
-    // Update context
-    const newContext = { ...context }
-    if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = optionValue
-    }
-    if (currentStep.store_as) {
-      newContext[currentStep.store_as] = true
-    }
-
-    setContext(newContext)
-    setMessages(prev => [...prev, userMessage])
-
-    // Check if this is the contracts intro step - if so, start contract testing mode
-    if (currentStep.step === 'stage5_contracts_intro') {
-      setIsLoading(false)
-      // Small delay before showing first contract
-      setTimeout(() => startContractTesting(newContext), 500)
-      return
-    }
-
-    // Check if current step has navigate_to - if so, save data and navigate
-    if (currentStep.navigate_to) {
-      console.log('🧭 Step has navigate_to, saving data and navigating to:', currentStep.navigate_to)
-
-      // Save to Supabase before navigating
-      if (supabase && user?.id) {
-        try {
-          console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
-
-          // Extract YES contracts for Healing Compass
-          const safetyContracts = extractYesContracts(newContext.belief_test_results)
-
-          const { data, error } = await supabase
-            .from('nervous_system_responses')
-            .insert([{
-              user_id: user.id,
-              user_email: user?.email,
-              user_name: newContext.user_name || 'Anonymous',
-              impact_goal: newContext.impact_goal,
-              income_goal: newContext.income_goal,
-              nervous_system_income_limit: newContext.nervous_system_income_limit,
-              archetype: newContext.archetype,
-              positive_change: newContext.positive_change,
-              current_struggle: newContext.struggle_area,
-              belief_test_results: newContext.belief_test_results,
-              safety_contracts: safetyContracts,
-              reflection_text: newContext.pattern_mirrored,
-              context: newContext
-            }])
-
-          if (error) {
-            console.error('❌ Supabase error:', error)
-          } else {
-            console.log('✅ Nervous system data saved successfully:', data)
-          }
-
-          // Auto-complete challenge quest
-          console.log('🎯 Attempting to complete flow quest for nervous_system')
-          const questResult = await completeFlowQuest({
-            userId: user.id,
-            flowId: 'nervous_system',
-            pointsEarned: 25
-          })
-
-          if (questResult.success) {
-            console.log('✅ Quest completed!', questResult.message)
-          } else {
-            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-          }
-        } catch (err) {
-          console.error('❌ Failed to save nervous system data:', err)
-        }
-      }
-
-      setIsLoading(false)
-      navigate(currentStep.navigate_to)
-      return
-    }
-
-    // Check if this is a binary search step and handle accordingly
-    if (currentStep?.metadata?.binary_search) {
-      const metadata = currentStep.metadata
-      const response = optionValue.toLowerCase()
-
-      // Determine if this is impact or income search
-      const isImpactSearch = metadata.base_amount === '{{impact_goal}}'
-      const searchType = isImpactSearch ? 'impact' : 'income'
-
-      // Parse the appropriate goal value
-      const goalNum = isImpactSearch
-        ? parseImpactGoal(newContext.impact_goal)
-        : parseIncomeGoal(newContext.income_goal)
-
-      const minFloor = isImpactSearch ? 10 : 10000
-
-      // Initial test
-      if (metadata.initial_test) {
-        console.log(`🔍 Initial ${searchType} binary search test:`, response)
-
-        if (response === 'yes') {
-          // Start doubling path
-          setBinarySearchDirection('doubling')
-          setBinarySearchPreviousYesAmount(goalNum)
-        } else {
-          // Start halving path
-          setBinarySearchDirection('halving')
-        }
-
-        setIsInBinarySearchMode(true)
-        setBinarySearchIteration(0)
-      }
-      // Doubling path - testing higher amounts
-      else if (metadata.direction === 'doubling') {
-        const currentTestAmount = goalNum * metadata.multiplier
-
-        if (response === 'no') {
-          // Hit their limit! Previous YES is the limit
-          const limit = metadata.previous_yes_amount
-          const limitNum = typeof limit === 'string' && limit.startsWith('{{')
-            ? (isImpactSearch
-                ? parseImpactGoal(newContext[limit.slice(2, -2)])
-                : parseIncomeGoal(newContext[limit.slice(2, -2)]))
-            : (binarySearchPreviousYesAmount || goalNum)
-
-          await completeBinarySearch(limitNum, newContext, searchType)
-          setIsLoading(false)
-          return
-        } else {
-          // They can go higher
-          setBinarySearchPreviousYesAmount(currentTestAmount)
-
-          // Check if final iteration
-          if (metadata.final_iteration) {
-            // They said YES at max iteration - this is their limit
-            await completeBinarySearch(currentTestAmount, newContext, searchType)
-            setIsLoading(false)
-            return
-          }
-        }
-      }
-      // Halving path - testing lower amounts
-      else if (metadata.direction === 'halving') {
-        const currentTestAmount = Math.max(
-          goalNum / metadata.divisor,
-          metadata.min_floor || minFloor
-        )
-
-        if (response === 'yes') {
-          // Found their limit!
-          await completeBinarySearch(currentTestAmount, newContext, searchType)
-          setIsLoading(false)
-          return
-        } else {
-          // Need to go lower
-          if (metadata.final_iteration) {
-            // Hit floor at final iteration
-            await completeBinarySearch(metadata.min_floor || minFloor, newContext, searchType)
-            setIsLoading(false)
-            return
-          }
-        }
-      }
-    }
-
-    // Find next valid step (respecting conditionals)
-    const { step: nextStep, index: nextIndex } = findNextStep(currentIndex + 1, newContext)
-
-    if (nextStep) {
-      // Calculate dynamic variables for this step
-      const dynamicVars = calculateDynamicVariables(nextStep, newContext)
-
-      // Add AI response with dynamic variable replacement
-      let responseText = await resolvePrompt(nextStep, { ...newContext, ...dynamicVars })
-
-      // Replace any remaining dynamic variables
-      Object.keys(dynamicVars).forEach(key => {
-        responseText = responseText.replace(`{{${key}}}`, dynamicVars[key])
+      // Validate required data
+      console.log('🔍 Checking edge data:', {
+        being_seen_edge: responses.being_seen_edge,
+        earning_edge: responses.earning_edge,
+        all_responses: responses
       })
 
-      // If this is the mirror reflection step, store the generated text and extract archetype
-      if (nextStep.step === 'stage6_mirror_reflection') {
-        newContext.pattern_mirrored = responseText
-        const archetype = extractArchetype(responseText)
-        if (archetype) {
-          newContext.archetype = archetype
-          console.log('🎭 Extracted archetype:', archetype)
-        }
-        setContext(newContext)
+      if (!responses.being_seen_edge || !responses.earning_edge) {
+        const errorMsg = `Missing nervous system edge data. being_seen_edge=${responses.being_seen_edge}, earning_edge=${responses.earning_edge}`
+        console.error('❌ Validation failed:', errorMsg)
+        throw new Error(errorMsg)
       }
 
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString()
+      const requestBody = {
+        impact_goal: responses.impact_goal,
+        nervous_system_impact_limit: `${responses.being_seen_edge} people`,
+        income_goal: responses.income_goal,
+        nervous_system_income_limit: `$${responses.earning_edge.toLocaleString()}`,
+        positive_change: responses.positive_change,
+        struggle_area: responses.struggle_area,
+        triage_safe_pursuing: responses.test3_safe_pursuing,
+        triage_self_sabotage: responses.test4_self_sabotage,
+        triage_feels_unsafe: responses.test5_feels_unsafe,
+        belief_test_results: responses.contracts_tested
       }
 
-      setMessages(prev => [...prev, aiMessage])
-      setCurrentIndex(nextIndex)
-    } else {
-      // Flow completed - save to Supabase
-      if (supabase) {
-        try {
-          console.log('💾 SAVING NERVOUS SYSTEM DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
+      console.log('🤖 Sending to nervous-system-mirror:', requestBody)
 
-          // Extract YES contracts for Healing Compass
-          const safetyContracts = extractYesContracts(newContext.belief_test_results)
+      const { data, error } = await supabase.functions.invoke('nervous-system-mirror', {
+        body: requestBody
+      })
 
-          const { data, error } = await supabase
-            .from('nervous_system_responses')
-            .insert([{
-              user_id: user?.id,
-              user_email: user?.email,
-              user_name: newContext.user_name || 'Anonymous',
-              impact_goal: newContext.impact_goal,
-              income_goal: newContext.income_goal,
-              nervous_system_impact_limit: newContext.nervous_system_impact_limit,
-              nervous_system_income_limit: newContext.nervous_system_income_limit,
-              archetype: newContext.archetype,
-              positive_change: newContext.positive_change,
-              current_struggle: newContext.struggle_area,
-              belief_test_results: newContext.belief_test_results,
-              safety_contracts: safetyContracts,
-              reflection_text: newContext.pattern_mirrored,
-              context: newContext
-            }])
+      console.log('📥 Edge function response:', { data, error })
 
-          if (error) {
-            console.error('❌ Supabase error:', error)
-            throw error
-          }
-          console.log('✅ Nervous system data saved successfully:', data)
-
-          // Auto-complete challenge quest if user has active challenge
-          if (user?.id) {
-            console.log('🎯 Attempting to complete flow quest for nervous_system')
-            const questResult = await completeFlowQuest({
-              userId: user.id,
-              flowId: 'nervous_system',
-              pointsEarned: 25
-            })
-
-            if (questResult.success) {
-              console.log('✅ Quest completed!', questResult.message)
-            } else {
-              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-            }
-          }
-        } catch (err) {
-          console.error('❌ Failed to save nervous system data:', err)
-          // Continue with flow even if save fails
-        }
+      if (error) {
+        console.error('Edge function error:', error)
+        // Try to get more details from the error
+        const errorDetails = data?.error || error.message || 'Unknown error'
+        const additionalDetails = data?.details ? `\n\nDetails: ${data.details}` : ''
+        throw new Error(`${errorDetails}${additionalDetails}`)
       }
 
-      // Flow completed
-      const completionMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Nervous System Safety Boundaries flow.\n\nYou've identified safety contracts that may be limiting your flow. The next step is to heal the root cause through the Healing Compass.",
-        timestamp: new Date().toLocaleTimeString()
+      if (!data) {
+        console.error('No data in response')
+        throw new Error('No data received from edge function')
       }
-      setMessages(prev => [...prev, completionMessage])
 
-      // Move currentIndex beyond last step to hide options
-      setCurrentIndex(flow.steps.length)
-    }
+      if (data.error) {
+        console.error('Error in response data:', data.error, data.details)
+        throw new Error(`${data.error}\n\nDetails: ${data.details || 'No additional details'}`)
+      }
 
-    setIsLoading(false)
-  }
+      if (!data.reflection) {
+        console.error('Invalid response data:', data)
+        throw new Error('No reflection data received')
+      }
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit()
+      setReflection(data.reflection)
+      setCurrentScreen('mirror-reflection')
+    } catch (err) {
+      console.error('Error generating reflection:', err)
+      alert(`Error generating reflection: ${err.message || 'Please try again.'}`)
+      setCurrentScreen('mirror-intro')
+    } finally {
+      setIsProcessing(false)
     }
   }
 
-  if (error) {
-    return (
-      <div className="app">
-        <div className="error">
-          {error}
-        </div>
-      </div>
-    )
+  // Save to database and complete flow
+  const completeFlow = async () => {
+    try {
+      // Validate required data
+      if (!responses.being_seen_edge || !responses.earning_edge) {
+        throw new Error('Missing nervous system edge data. Please complete the flow.')
+      }
+
+      // Extract YES contracts for Healing Compass
+      const yesContracts = Object.entries(responses.contracts_tested)
+        .filter(([_, response]) => response === 'yes')
+        .map(([contract]) => contract)
+
+      const { error } = await supabase
+        .from('nervous_system_responses')
+        .insert({
+          user_id: user.id,
+          user_email: user.email,
+          user_name: user.user_metadata?.name || 'Anonymous',
+          impact_goal: responses.impact_goal,
+          income_goal: responses.income_goal,
+          nervous_system_impact_limit: `${responses.being_seen_edge} people`,
+          nervous_system_income_limit: `$${responses.earning_edge.toLocaleString()}`,
+          positive_change: responses.positive_change,
+          current_struggle: responses.struggle_area,
+          belief_test_results: responses.contracts_tested,
+          safety_contracts: yesContracts,
+          reflection_text: reflection?.full_reflection,
+          archetype: reflection?.archetype_name,
+          being_seen_edge: responses.being_seen_edge,
+          earning_edge: responses.earning_edge
+        })
+
+      if (error) throw error
+
+      // Complete quest
+      await completeFlowQuest({
+        userId: user.id,
+        flowId: 'nervous_system',
+        pointsEarned: 25
+      })
+
+      setCurrentScreen('success')
+    } catch (err) {
+      console.error('Error saving data:', err)
+      alert('Error saving data. Please try again.')
+    }
   }
 
-  if (!flow) {
-    return (
-      <div className="app">
-        <div className="loading">
-          <div className="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
+  // Format numbers nicely
+  const formatPeople = (num) => num >= 1000 ? `${(num / 1000).toFixed(0)}K` : num
+  const formatMoney = (num) => num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`
+
+  // Render functions for each screen
+  const renderWelcome = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">Nervous System Map</h1>
+      <div className="ns-hc-welcome-message">
+        <p><strong>Welcome, {user?.user_metadata?.name || 'there'}!</strong></p>
+        <p>Remember how we talked about your flow hitting a river bank?</p>
+        <p>What if the bank isn't external — what if it's <strong>inside you</strong>?</p>
+        <p>Your nervous system has a boundary around what feels 'safe'. Safe to earn. Safe to be seen. Safe to succeed.</p>
+        <p>Anything beyond that boundary? It pulls you back. Not because you lack capability — but because expansion feels dangerous to your system.</p>
+        <p>This is why ambitious people self-sabotage. Not because they're broken. Because their nervous system is protecting them from something.</p>
+        <p>Let's discover where your boundaries are — so you can expand them.</p>
       </div>
-    )
-  }
 
-  return (
-    <div className="app">
-      <header className="header">
-        <h1>Nervous System Map</h1>
-        <p>Identify your subconscious limits</p>
-      </header>
+      <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('q1')}>
+        Let's Begin
+      </button>
+    </div>
+  )
 
-      <main className="chat-container">
-        <div className="messages">
-          {messages.map(message => (
-            <div key={message.id} className={`message ${message.isAI ? 'ai' : 'user'}`}>
-              <div className="bubble">
-                {message.kind === 'completion' ? (
-                  <div className="text">
-                    <div dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
-                    <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                      <Link
-                        to="/healing-compass"
-                        style={{
-                          display: 'inline-block',
-                          padding: '12px 24px',
-                          backgroundColor: '#5e17eb',
-                          color: 'white',
-                          textDecoration: 'none',
-                          borderRadius: '8px',
-                          textAlign: 'center',
-                          fontWeight: 500
-                        }}
-                      >
-                        Proceed to Healing Compass
-                      </Link>
-                      <Link
-                        to="/7-day-challenge"
-                        style={{
-                          display: 'inline-block',
-                          padding: '12px 24px',
-                          backgroundColor: 'transparent',
-                          color: '#5e17eb',
-                          textDecoration: 'none',
-                          borderRadius: '8px',
-                          textAlign: 'center',
-                          fontWeight: 500,
-                          border: '1px solid #5e17eb'
-                        }}
-                      >
-                        Return to 7-Day Challenge
-                      </Link>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text" dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
-                )}
-                <div className="timestamp">{message.timestamp}</div>
-              </div>
-            </div>
-          ))}
+  const renderQ1 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 1 of 4</div>
+      <h2 className="ns-hc-question-text">In your most audacious ambitions, how many people do you hope to impact?</h2>
 
-          {isLoading && (
-            <div className="message ai">
-              <div className="bubble">
-                <div className="typing-indicator">
-                  <span></span><span></span><span></span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-      </main>
-
-      {/* Show YES/NO buttons when in contract testing mode */}
-      {isInContractMode && (
-        <div className="options-container">
+      <div className="ns-hc-horizontal-options">
+        {['100+', '1,000+', '10,000+', '100,000+'].map(option => (
           <button
-            className="option-button"
-            onClick={() => handleContractResponse('yes')}
-            disabled={isLoading}
+            key={option}
+            className={`ns-hc-horizontal-option ${responses.impact_goal === option ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, impact_goal: option }))}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q2')}
+        disabled={!responses.impact_goal}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ2 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 2 of 4</div>
+      <h2 className="ns-hc-question-text">In your most audacious ambitions, how much would you be earning per year?</h2>
+
+      <div className="ns-hc-horizontal-options">
+        {['$100,000+', '$500,000+', '$1,000,000+'].map(option => (
+          <button
+            key={option}
+            className={`ns-hc-horizontal-option ${responses.income_goal === option ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, income_goal: option }))}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q3')}
+        disabled={!responses.income_goal}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ3 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 3 of 4</div>
+      <h2 className="ns-hc-question-text">What positive change does your ambition create for others?</h2>
+      <p className="ns-hc-question-subtext">Tell us about the impact you want to have</p>
+
+      <div className="ns-hc-text-input-container">
+        <textarea
+          className="ns-hc-text-area"
+          placeholder="Example: I help people break free from limiting beliefs and design lives they're genuinely excited about..."
+          value={responses.positive_change}
+          onChange={(e) => setResponses(prev => ({ ...prev, positive_change: e.target.value }))}
+        />
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q4')}
+        disabled={!responses.positive_change.trim()}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ4 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 4 of 4</div>
+      <h2 className="ns-hc-question-text">Where are you struggling most with your ambition at the moment?</h2>
+      <p className="ns-hc-question-subtext">Be honest — this helps us understand your current edge</p>
+
+      <div className="ns-hc-text-input-container">
+        <textarea
+          className="ns-hc-text-area"
+          placeholder="Example: I keep starting and stopping. I get excited, build momentum, then suddenly pull back when things start working..."
+          value={responses.struggle_area}
+          onChange={(e) => setResponses(prev => ({ ...prev, struggle_area: e.target.value }))}
+        />
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('subconscious-power')}
+        disabled={!responses.struggle_area.trim()}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderSubconsciousPower = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">The Power of Your Subconscious</h1>
+      <div className="ns-hc-welcome-message">
+        <p>Your <strong>conscious mind</strong> is what you're aware of right now — your thoughts, decisions, what you think you believe.</p>
+        <p>But your <strong>subconscious mind</strong> runs 95% of your life. It controls your automatic patterns, emotional reactions, and deeply-held beliefs.</p>
+        <p>This is why you can <em>want</em> something consciously (more clients, more visibility, more income) but still find yourself pulling back.</p>
+        <p><strong>Your subconscious has veto power.</strong></p>
+        <p>If it believes that success = danger, it will sabotage you every time.</p>
+        <p style={{ marginTop: 24 }}>Muscle testing (the Sway Test) bypasses your conscious mind and lets us ask your <strong>nervous system</strong> directly:</p>
+        <p><em>"What do you actually believe is safe?"</em></p>
+        <p>This is how we find your real edges — not what you think they are, but what your body knows them to be.</p>
+      </div>
+
+      <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('calibration')}>
+        Got it, let's test
+      </button>
+    </div>
+  )
+
+  const renderCalibration = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Calibration</div>
+      <h2 className="ns-hc-question-text">The Sway Test</h2>
+      <p className="ns-hc-question-subtext">Learn how your body communicates YES and NO</p>
+
+      <div className="ns-hc-welcome-message" style={{ marginTop: 32 }}>
+        <p>The Sway Test is simple but powerful.</p>
+        <p><strong>Stand up straight</strong> with your feet hip-width apart. Close your eyes if it helps you tune in.</p>
+        <p>Say out loud: <strong>"Show me a YES."</strong> Notice which way your body sways—forward, back, left, or right.</p>
+        <p>Say out loud: <strong>"Show me a NO."</strong> Notice the contrast.</p>
+        <p>There's no right direction. Your body has its own language. Let it show you.</p>
+        <p style={{ marginTop: 24 }}>If you're skeptical, that's okay. Just try it with curiosity.</p>
+      </div>
+
+      <div className="ns-hc-video-container">
+        <iframe
+          src="https://www.youtube.com/embed/UXO1mM26Ui0"
+          allowFullScreen
+          title="Sway Test Demo"
+        />
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => {
+          setResponses(prev => ({ ...prev, calibration_complete: true }))
+          setCurrentScreen('calibration-directions')
+        }}
+      >
+        I've Calibrated
+      </button>
+    </div>
+  )
+
+  const renderCalibrationDirections = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Calibration Complete</div>
+      <h2 className="ns-hc-question-text">Let's record your body's language</h2>
+      <p className="ns-hc-question-subtext">This helps you stay consistent during testing</p>
+
+      <div style={{ marginTop: 32, marginBottom: 24 }}>
+        <label style={{ display: 'block', marginBottom: 12, fontSize: 16, color: 'white', fontWeight: 600 }}>
+          What way was YES?
+        </label>
+        <div className="ns-hc-horizontal-options">
+          <button
+            className={`ns-hc-horizontal-option ${responses.yes_direction === 'Forward' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, yes_direction: 'Forward' }))}
+          >
+            Forward
+          </button>
+          <button
+            className={`ns-hc-horizontal-option ${responses.yes_direction === 'Back' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, yes_direction: 'Back' }))}
+          >
+            Back
+          </button>
+          <button
+            className={`ns-hc-horizontal-option ${responses.yes_direction === 'Left' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, yes_direction: 'Left' }))}
+          >
+            Left
+          </button>
+          <button
+            className={`ns-hc-horizontal-option ${responses.yes_direction === 'Right' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, yes_direction: 'Right' }))}
+          >
+            Right
+          </button>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 32, marginBottom: 24 }}>
+        <label style={{ display: 'block', marginBottom: 12, fontSize: 16, color: 'white', fontWeight: 600 }}>
+          What way was NO?
+        </label>
+        <div className="ns-hc-horizontal-options">
+          <button
+            className={`ns-hc-horizontal-option ${responses.no_direction === 'Forward' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, no_direction: 'Forward' }))}
+          >
+            Forward
+          </button>
+          <button
+            className={`ns-hc-horizontal-option ${responses.no_direction === 'Back' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, no_direction: 'Back' }))}
+          >
+            Back
+          </button>
+          <button
+            className={`ns-hc-horizontal-option ${responses.no_direction === 'Left' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, no_direction: 'Left' }))}
+          >
+            Left
+          </button>
+          <button
+            className={`ns-hc-horizontal-option ${responses.no_direction === 'Right' ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, no_direction: 'Right' }))}
+          >
+            Right
+          </button>
+        </div>
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('triage-intro')}
+        disabled={!responses.yes_direction || !responses.no_direction}
+      >
+        Continue
+      </button>
+
+      <button
+        className="ns-hc-secondary-button"
+        onClick={() => setCurrentScreen('calibration')}
+      >
+        Watch Calibration Video Again
+      </button>
+    </div>
+  )
+
+  const renderTriageIntro = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">Let's Find Your Edge</h1>
+      <div className="ns-hc-welcome-message">
+        <p>Now let's see where your system feels safe — and where it contracts.</p>
+        <p>I'm going to give you <strong>5 statements to test</strong> using the sway test.</p>
+        <p>Say each one out loud, notice your body's response, and let me know: <strong>YES or NO?</strong></p>
+      </div>
+
+      <button className="ns-hc-primary-button" onClick={() => {
+        setCurrentScreen('test1-initial')
+        // Initialize test 1 with the impact goal
+        const goalNumber = parseInt(responses.impact_goal.replace(/[^0-9]/g, ''))
+        setTest1CurrentAmount(goalNumber)
+      }}>
+        Ready
+      </button>
+    </div>
+  )
+
+  const renderTest1Initial = () => {
+    const goalNumber = parseInt(responses.impact_goal.replace(/[^0-9]/g, ''))
+    return (
+      <div className="ns-hc-container ns-hc-question-container">
+        <div className="ns-hc-question-number">Statement 1 of 5</div>
+        <h2 className="ns-hc-question-text">"I feel safe being seen by {formatPeople(goalNumber)} people"</h2>
+        <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
+
+        <div className="ns-hc-horizontal-options">
+          <button
+            className="ns-hc-horizontal-option"
+            onClick={() => handleTest1Response('yes')}
           >
             YES
           </button>
           <button
-            className="option-button"
-            onClick={() => handleContractResponse('no')}
-            disabled={isLoading}
+            className="ns-hc-horizontal-option"
+            onClick={() => handleTest1Response('no')}
           >
             NO
           </button>
         </div>
-      )}
+      </div>
+    )
+  }
 
-      {/* Show regular options when not in contract mode */}
-      {!isInContractMode && currentStep?.options && currentStep.options.length > 0 && (
-        <div className="options-container">
-          {currentStep.options.map((option, index) => (
-            <button
-              key={index}
-              className="option-button"
-              onClick={() => handleOptionClick(option)}
-              disabled={isLoading}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      )}
+  const renderTest1Refine = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Statement 1 of 5 - Refining (Step {test1Iteration + 1} of 4)</div>
+      <h2 className="ns-hc-question-text">"I feel safe being seen by {formatPeople(test1CurrentAmount)} people"</h2>
+      <p className="ns-hc-question-subtext">Testing to find your exact edge</p>
 
-      {!isInContractMode && currentStep && !currentStep.options && (
-        <div className="input-bar">
-          <textarea
-            className="message-input"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Share your thoughts..."
-            disabled={isLoading}
-            rows={1}
-          />
+      <div className="ns-hc-horizontal-options">
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => handleTest1Response('yes')}
+        >
+          YES
+        </button>
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => handleTest1Response('no')}
+        >
+          NO
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderTest2Initial = () => {
+    const goalNumber = parseInt(responses.income_goal.replace(/[^0-9]/g, ''))
+    return (
+      <div className="ns-hc-container ns-hc-question-container">
+        <div className="ns-hc-question-number">Statement 2 of 5</div>
+        <h2 className="ns-hc-question-text">"I feel safe earning over {formatMoney(goalNumber)}/year"</h2>
+        <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
+
+        <div className="ns-hc-horizontal-options">
           <button
-            className="send-button"
-            onClick={handleSubmit}
-            disabled={isLoading || !inputText.trim()}
+            className="ns-hc-horizontal-option"
+            onClick={() => {
+              setTest2CurrentAmount(goalNumber)
+              handleTest2Response('yes')
+            }}
           >
-            Send
+            YES
+          </button>
+          <button
+            className="ns-hc-horizontal-option"
+            onClick={() => {
+              setTest2CurrentAmount(goalNumber)
+              handleTest2Response('no')
+            }}
+          >
+            NO
           </button>
         </div>
-      )}
+      </div>
+    )
+  }
+
+  const renderTest2Refine = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Statement 2 of 5 - Refining (Step {test2Iteration + 1} of 4)</div>
+      <h2 className="ns-hc-question-text">"I feel safe earning over {formatMoney(test2CurrentAmount)}/year"</h2>
+      <p className="ns-hc-question-subtext">Testing to find your exact edge</p>
+
+      <div className="ns-hc-horizontal-options">
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => handleTest2Response('yes')}
+        >
+          YES
+        </button>
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => handleTest2Response('no')}
+        >
+          NO
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderTest3 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Statement 3 of 5</div>
+      <h2 className="ns-hc-question-text">
+        "I feel safe to pursue my ambition to <span className="ns-hc-highlight">{responses.positive_change}</span>"
+      </h2>
+      <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
+
+      <div className="ns-hc-horizontal-options">
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => {
+            setResponses(prev => ({ ...prev, test3_safe_pursuing: 'yes' }))
+            setCurrentScreen('test4')
+          }}
+        >
+          YES
+        </button>
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => {
+            setResponses(prev => ({ ...prev, test3_safe_pursuing: 'no' }))
+            setCurrentScreen('test4')
+          }}
+        >
+          NO
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderTest4 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Statement 4 of 5</div>
+      <h2 className="ns-hc-question-text">
+        "My struggle with <span className="ns-hc-highlight">{responses.struggle_area}</span>, I'm also subconsciously self-sabotaging"
+      </h2>
+      <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
+
+      <div className="ns-hc-horizontal-options">
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => {
+            setResponses(prev => ({ ...prev, test4_self_sabotage: 'yes' }))
+            setCurrentScreen('test5')
+          }}
+        >
+          YES
+        </button>
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => {
+            setResponses(prev => ({ ...prev, test4_self_sabotage: 'no' }))
+            setCurrentScreen('test5')
+          }}
+        >
+          NO
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderTest5 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Statement 5 of 5</div>
+      <h2 className="ns-hc-question-text">"Part of me feels unsafe with the vision of my ambitions"</h2>
+      <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
+
+      <div className="ns-hc-horizontal-options">
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => {
+            setResponses(prev => ({ ...prev, test5_feels_unsafe: 'yes' }))
+            const contracts = generateSafetyContracts()
+            setSafetyContracts(contracts)
+            setCurrentContractIndex(0)
+            setCurrentScreen('contracts-intro')
+          }}
+        >
+          YES
+        </button>
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => {
+            setResponses(prev => ({ ...prev, test5_feels_unsafe: 'no' }))
+            const contracts = generateSafetyContracts()
+            setSafetyContracts(contracts)
+            setCurrentContractIndex(0)
+            setCurrentScreen('contracts-intro')
+          }}
+        >
+          NO
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderContractsIntro = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">Safety Contracts</h1>
+      <div className="ns-hc-welcome-message">
+        <p>Your nervous system operates on <strong>safety contracts</strong> — subconscious beliefs designed to protect you.</p>
+        <p>These contracts feel true because they once <em>were</em> true. Something happened that taught your system to believe them.</p>
+        <p>Now we'll test <strong>{safetyContracts.length} contracts</strong> to see which ones are still active in your system.</p>
+        <p>For each one, use the sway test and notice: <strong>YES (this fear is active) or NO (not a concern)</strong>.</p>
+      </div>
+
+      <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('contracts-test')}>
+        Ready to Test
+      </button>
+    </div>
+  )
+
+  const renderContractsTest = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Contract {currentContractIndex + 1} of {safetyContracts.length}</div>
+      <h2 className="ns-hc-question-text">"{safetyContracts[currentContractIndex]}"</h2>
+      <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
+
+      <div className="ns-hc-horizontal-options">
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => handleContractResponse('yes')}
+        >
+          YES
+        </button>
+        <button
+          className="ns-hc-horizontal-option"
+          onClick={() => handleContractResponse('no')}
+        >
+          NO
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderMirrorIntro = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">The Mirror</h1>
+      <div className="ns-hc-welcome-message">
+        <p>Now let's reflect back what your nervous system just revealed.</p>
+        <p>This isn't judgment — it's <strong>pattern recognition</strong>.</p>
+        <p>Understanding your protective pattern is the first step to expanding beyond it.</p>
+      </div>
+
+      <button className="ns-hc-primary-button" onClick={generateMirrorReflection}>
+        Show Me
+      </button>
+    </div>
+  )
+
+  const renderMirrorProcessing = () => (
+    <div className="ns-hc-container ns-hc-processing-container">
+      <div className="ns-hc-spinner"></div>
+      <div className="ns-hc-processing-text">Analyzing your nervous system pattern...</div>
+      <p className="ns-hc-processing-subtext">Generating your personalized reflection</p>
+    </div>
+  )
+
+  const renderMirrorReflection = () => {
+    if (!reflection) return null
+
+    return (
+      <div className="ns-hc-container ns-hc-welcome-container">
+        <h1 className="ns-hc-welcome-greeting">Your Protective Pattern</h1>
+
+        {/* Pattern Archetype */}
+        <div className="ns-hc-result-box" style={{ background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05))', borderColor: 'rgba(251, 191, 36, 0.3)' }}>
+          <h3 style={{ fontSize: 22 }}>🌟 {reflection.archetype_name}</h3>
+          <p style={{ fontSize: 15, marginTop: 12 }}>{reflection.archetype_description}</p>
+        </div>
+
+        {/* Safety Zone */}
+        <div className="ns-hc-result-box">
+          <h3>✓ Where You Feel Safe:</h3>
+          <div style={{ marginTop: 12, paddingLeft: 8 }}>
+            <p>💰 Earning up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)}/year</strong></p>
+            <p>👥 Being visible to about <strong style={{ color: '#fbbf24' }}>{formatPeople(responses.being_seen_edge)} people</strong></p>
+          </div>
+        </div>
+
+        {/* Core Fear */}
+        <div className="ns-hc-result-box" style={{ background: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.3)' }}>
+          <h3 style={{ color: '#fca5a5' }}>🔍 Primary Limiting Belief:</h3>
+          <p style={{ marginTop: 12, fontStyle: 'italic' }}>"{reflection.core_fear}"</p>
+          <p style={{ marginTop: 12, fontSize: 14, opacity: 0.85 }}>{reflection.fear_interpretation}</p>
+        </div>
+
+        {/* All Active Safety Contracts */}
+        {(() => {
+          const activeContracts = Object.entries(responses.contracts_tested)
+            .filter(([_, response]) => response === 'yes')
+            .map(([contract]) => contract)
+
+          if (activeContracts.length > 1) {
+            return (
+              <div className="ns-hc-result-box">
+                <h3>⚠️ All Active Safety Contracts:</h3>
+                <p style={{ fontSize: 14, opacity: 0.7, marginTop: 8, marginBottom: 16 }}>
+                  These beliefs are currently active in your nervous system:
+                </p>
+                <ul style={{ paddingLeft: 20, margin: 0 }}>
+                  {activeContracts.map((contract, index) => (
+                    <li key={index} style={{
+                      marginBottom: 12,
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      color: contract === reflection.core_fear ? '#fbbf24' : 'rgba(255,255,255,0.85)'
+                    }}>
+                      {contract}
+                      {contract === reflection.core_fear && (
+                        <span style={{ marginLeft: 8, fontSize: 12, opacity: 0.7 }}>← Primary</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+          return null
+        })()}
+
+        {/* What Needs Rewiring */}
+        <div className="ns-hc-result-box" style={{ background: 'rgba(139, 92, 246, 0.05)', borderColor: 'rgba(139, 92, 246, 0.3)' }}>
+          <h3 style={{ color: '#c4b5fd' }}>✨ What Needs Rewiring:</h3>
+          <p style={{ marginTop: 12, whiteSpace: 'pre-line' }}>{reflection.rewiring_needed}</p>
+        </div>
+
+        <button className="ns-hc-primary-button" onClick={completeFlow}>
+          Continue to Results
+        </button>
+      </div>
+    )
+  }
+
+  const renderSuccess = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">✓ Nervous System Mapped!</h1>
+      <div className="ns-hc-welcome-message">
+        <p>You've identified the safety contracts limiting your flow.</p>
+        <p>The next step is to <strong>heal the root cause</strong> through the Healing Compass.</p>
+      </div>
+
+      <button className="ns-hc-primary-button" onClick={() => navigate('/healing-compass')}>
+        Proceed to Healing Compass
+      </button>
+      <button className="ns-hc-secondary-button" onClick={() => navigate('/7-day-challenge')}>
+        Return to 7-Day Challenge
+      </button>
+    </div>
+  )
+
+  // Main render
+  return (
+    <div className="ns-hc-app">
+      {/* Progress Dots */}
+      <div className="ns-hc-progress-container">
+        <div className="ns-hc-progress-dots">
+          {Array.from({ length: totalScreens }).map((_, index) => (
+            <div
+              key={index}
+              className={`ns-hc-progress-dot ${
+                index < currentScreenIndex ? 'completed' :
+                index === currentScreenIndex ? 'active' : ''
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Screen Content */}
+      {currentScreen === 'welcome' && renderWelcome()}
+      {currentScreen === 'q1' && renderQ1()}
+      {currentScreen === 'q2' && renderQ2()}
+      {currentScreen === 'q3' && renderQ3()}
+      {currentScreen === 'q4' && renderQ4()}
+      {currentScreen === 'subconscious-power' && renderSubconsciousPower()}
+      {currentScreen === 'calibration' && renderCalibration()}
+      {currentScreen === 'calibration-directions' && renderCalibrationDirections()}
+      {currentScreen === 'triage-intro' && renderTriageIntro()}
+      {currentScreen === 'test1-initial' && renderTest1Initial()}
+      {currentScreen === 'test1-refine' && renderTest1Refine()}
+      {currentScreen === 'test2-initial' && renderTest2Initial()}
+      {currentScreen === 'test2-refine' && renderTest2Refine()}
+      {currentScreen === 'test3' && renderTest3()}
+      {currentScreen === 'test4' && renderTest4()}
+      {currentScreen === 'test5' && renderTest5()}
+      {currentScreen === 'contracts-intro' && renderContractsIntro()}
+      {currentScreen === 'contracts-test' && renderContractsTest()}
+      {currentScreen === 'mirror-intro' && renderMirrorIntro()}
+      {currentScreen === 'mirror-processing' && renderMirrorProcessing()}
+      {currentScreen === 'mirror-reflection' && renderMirrorReflection()}
+      {currentScreen === 'success' && renderSuccess()}
     </div>
   )
 }
-
-export default NervousSystemFlow

@@ -1,33 +1,54 @@
-import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { resolvePrompt } from './lib/promptResolver'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
-import { completeFlowQuest, hasActiveChallenge } from './lib/questCompletion'
-import { sanitizeText } from './lib/sanitize'
+import { completeFlowQuest } from './lib/questCompletion'
+import './NervousSystemHealingCompass.css'
 
-function HealingCompass() {
+export default function HealingCompass() {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const [flow, setFlow] = useState(null)
-  const [messages, setMessages] = useState([])
-  const [context, setContext] = useState({})
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [inputText, setInputText] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [leadMagnetData, setLeadMagnetData] = useState(null)
-  const [hasChallenge, setHasChallenge] = useState(false)
-  const [safetyContracts, setSafetyContracts] = useState([]) // Safety contracts from nervous system flow
-  const messagesEndRef = useRef(null)
 
-  // Fetch safety contracts from nervous system responses
-  const fetchSafetyContracts = async () => {
-    if (!user?.id) return []
+  const [currentScreen, setCurrentScreen] = useState('loading')
+  const [safetyContracts, setSafetyContracts] = useState([])
+  const [responses, setResponses] = useState({
+    selected_safety_contract: '',
+    limiting_impact: '',
+    past_parallel_story: '',
+    past_event_details: '',
+    past_event_emotions: '',
+    connect_dots_acknowledged: false,
+    splinter_removal_consent: false
+  })
+
+  const totalScreens = 9
+  const currentScreenIndex = getScreenIndex(currentScreen)
+
+  function getScreenIndex(screen) {
+    const screenMap = {
+      'loading': 0,
+      'welcome': 0,
+      'q1': 1,
+      'q2': 2,
+      'q3': 3,
+      'q4': 4,
+      'q5': 5,
+      'q6': 6,
+      'q7': 7,
+      'q8': 8
+    }
+    return screenMap[screen] || 0
+  }
+
+  // Load safety contracts from Nervous System flow
+  useEffect(() => {
+    loadSafetyContracts()
+  }, [user])
+
+  const loadSafetyContracts = async () => {
+    if (!user?.id) return
 
     try {
-      console.log('🔍 Fetching safety contracts from nervous system responses...')
-
       const { data, error } = await supabase
         .from('nervous_system_responses')
         .select('safety_contracts')
@@ -35,748 +56,315 @@ function HealingCompass() {
         .order('created_at', { ascending: false })
         .limit(1)
 
-      if (error) {
-        console.error('❌ Error fetching safety contracts:', error)
-        return []
-      }
+      if (error) throw error
 
       if (data && data.length > 0 && data[0].safety_contracts) {
-        console.log('✅ Safety contracts fetched:', data[0].safety_contracts)
-        return data[0].safety_contracts
+        setSafetyContracts(data[0].safety_contracts)
+        setCurrentScreen('welcome')
       } else {
-        console.warn('⚠️ No safety contracts found')
-        return []
+        // No safety contracts found
+        alert('Please complete the Nervous System flow first to identify your safety contracts.')
+        navigate('/nervous-system')
       }
     } catch (err) {
-      console.error('❌ Error fetching safety contracts:', err)
-      return []
+      console.error('Error loading safety contracts:', err)
+      alert('Error loading safety contracts. Please try again.')
     }
   }
 
-  // Fetch lead magnet data from Supabase
-  const fetchLeadMagnetData = async () => {
-    if (!supabase) {
-      console.warn('⚠️ Supabase not available - using fallback data')
-      return {
-        user_name: 'User',
-        protective_archetype: 'Unknown'
-      }
-    }
-
+  const saveAndComplete = async (selectedOption) => {
     try {
-      console.log('🔍 Fetching lead magnet data from Supabase...')
-      
-      // Get the most recent profile for this authenticated user
-      const { data, error } = await supabase
-        .from('lead_flow_profiles')
-        .select('user_name, protective_archetype, essence_archetype, persona')
-        .eq('email', user?.email) // Filter by authenticated user's email
-        .order('created_at', { ascending: false })
-        .limit(1)
+      // Save to database
+      const { error } = await supabase
+        .from('healing_compass_responses')
+        .insert({
+          user_id: user.id,
+          user_name: user.user_metadata?.name || 'Anonymous',
+          selected_safety_contract: responses.selected_safety_contract,
+          limiting_impact: responses.limiting_impact,
+          past_parallel_story: responses.past_parallel_story,
+          past_event_details: responses.past_event_details,
+          past_event_emotions: responses.past_event_emotions,
+          connect_dots_acknowledged: responses.connect_dots_acknowledged,
+          splinter_removal_consent: responses.splinter_removal_consent,
+          challenge_enrollment_consent: selectedOption
+        })
 
-      if (error) {
-        console.error('❌ Error fetching lead magnet data:', error)
-        return {
-          user_name: 'User',
-          protective_archetype: 'Unknown'
-        }
-      }
+      if (error) throw error
 
-      if (data && data.length > 0) {
-        console.log('✅ Lead magnet data fetched:', data[0])
-        return data[0]
+      // Complete quest
+      await completeFlowQuest({
+        userId: user.id,
+        flowId: 'healing_compass',
+        pointsEarned: 20
+      })
+
+      // Navigate based on selection
+      if (selectedOption === 'continue_challenge') {
+        navigate('/7-day-challenge')
       } else {
-        console.warn('⚠️ No lead magnet data found')
-        return {
-          user_name: 'User',
-          protective_archetype: 'Unknown'
-        }
+        // Open Calendly in new tab
+        window.open('https://calendly.com/huzz-nichuzz/30min', '_blank', 'noopener,noreferrer')
+        navigate('/me')
       }
     } catch (err) {
-      console.error('❌ Error fetching lead magnet data:', err)
-      return {
-        user_name: 'User',
-        protective_archetype: 'Unknown'
-      }
+      console.error('Error saving data:', err)
+      alert('Error saving data. Please try again.')
     }
   }
 
-  // Load healing compass flow JSON and lead magnet data
-  useEffect(() => {
-    const loadFlow = async () => {
-      try {
-        // Fetch lead magnet data first
-        const leadData = await fetchLeadMagnetData()
-        setLeadMagnetData(leadData)
-
-        // Fetch safety contracts from nervous system flow
-        const contracts = await fetchSafetyContracts()
-        setSafetyContracts(contracts)
-
-        // Check if user has active challenge
-        if (user?.id) {
-          const active = await hasActiveChallenge(user.id)
-          setHasChallenge(active)
-        }
-
-        // Format safety contracts as a bullet list for display
-        const safetyContractsList = contracts.length > 0
-          ? contracts.map(c => `• "${c}"`).join('\n')
-          : '• No safety contracts found'
-
-        // Update context with lead magnet data, safety contracts, and challenge status
-        const updatedContext = {
-          user_name: leadData.user_name,
-          protective_archetype: leadData.protective_archetype,
-          safety_contracts: contracts,
-          safety_contracts_list: safetyContractsList,
-          CHALLENGE_ACTION: hasChallenge ? 'continue' : 'start',
-          CHALLENGE_ACTION_LOWER: hasChallenge ? 'continue' : 'start'
-        }
-        setContext(updatedContext)
-
-        // Load healing compass flow
-        // Add cache-busting timestamp in development to always get latest version
-        const response = await fetch(`/Healing_compass_flow.json?t=${Date.now()}`)
-        if (!response.ok) throw new Error('Failed to load healing compass flow')
-        const flowData = await response.json()
-        setFlow(flowData)
-        
-        // Start with the first step using the updated context
-        if (flowData.steps && flowData.steps.length > 0) {
-          const firstStep = flowData.steps[0]
-          const responseText = await resolvePrompt(firstStep, updatedContext)
-          const aiMessage = {
-            id: `ai-${Date.now()}`,
-            isAI: true,
-            text: responseText,
-            timestamp: new Date().toLocaleTimeString()
-          }
-          setMessages([aiMessage])
-        }
-      } catch (err) {
-        console.error('Error loading healing compass flow:', err)
-        setError('Failed to load healing compass flow')
-      }
-    }
-
-    loadFlow()
-  }, [])
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
-
-  const currentStep = flow?.steps?.[currentIndex]
-
-  const handleSubmit = async () => {
-    console.log('🚀 Healing Compass handleSubmit called')
-    console.log('Current step:', currentStep?.step)
-    console.log('Input text:', inputText)
-    
-    if (!currentStep || isLoading || !inputText.trim()) {
-      return
-    }
-
-    const trimmedInput = inputText.trim()
-    const sanitizedInput = sanitizeText(trimmedInput) // ✅ Sanitize user input
-    setIsLoading(true)
-
-    // Add user message
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      isAI: false,
-      text: sanitizedInput,
-      timestamp: new Date().toLocaleTimeString()
-    }
-
-    // Update context
-    const newContext = { ...context }
-    if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = sanitizedInput
-    }
-    if (currentStep.store_as) {
-      newContext[currentStep.store_as] = true
-    }
-
-    setContext(newContext)
-    setMessages(prev => [...prev, userMessage])
-    setInputText('')
-
-    // Move to next step
-    const nextIndex = currentIndex + 1
-    const nextStep = flow?.steps?.[nextIndex]
-
-    if (nextStep) {
-      // Add AI response
-      const responseText = await resolvePrompt(nextStep, newContext)
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString()
-      }
-
-      setMessages(prev => [...prev, aiMessage])
-      setCurrentIndex(nextIndex)
-    } else {
-      // Flow completed - save to Supabase
-      if (supabase) {
-        // Validate user is authenticated before saving
-        if (!user?.id) {
-          console.error('❌ User not authenticated - cannot save healing compass data')
-          const errorMessage = {
-            id: `ai-${Date.now()}`,
-            isAI: true,
-            text: "⚠️ Please sign in to save your healing compass responses.",
-            timestamp: new Date().toLocaleTimeString()
-          }
-          setMessages(prev => [...prev, errorMessage])
-          setIsLoading(false)
-          return
-        }
-
-        try {
-          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
-
-          const { data, error } = await supabase
-            .from('healing_compass_responses')
-            .insert([{
-              user_id: user.id,
-              user_name: newContext.user_name || 'Anonymous',
-              selected_safety_contract: newContext.selected_safety_contract,
-              limiting_impact: newContext.limiting_impact,
-              past_parallel_story: newContext.past_parallel_story,
-              past_event_details: newContext.past_event_details,
-              past_event_emotions: newContext.past_event_emotions,
-              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
-              splinter_removal_consent: newContext.splinter_removal_consent,
-              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
-              context: newContext
-            }])
-
-          if (error) {
-            console.error('❌ Supabase error:', error)
-            throw error
-          }
-          console.log('✅ Healing compass data saved successfully:', data)
-
-          // Auto-complete challenge quest if user has active challenge
-          if (user?.id) {
-            console.log('🎯 Attempting to complete flow quest for healing_compass')
-            const questResult = await completeFlowQuest({
-              userId: user.id,
-              flowId: 'healing_compass',
-              pointsEarned: 20
-            })
-
-            if (questResult.success) {
-              console.log('✅ Quest completed!', questResult.message)
-            } else {
-              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-            }
-          }
-        } catch (err) {
-          console.error('❌ Failed to save healing compass data:', err)
-          // Continue with flow even if save fails
-        }
-      }
-
-      // Flow completed - check if there's a navigation step
-      const lastStep = flow?.steps?.[flow.steps.length - 1]
-      if (lastStep?.navigate_to) {
-        const finalMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'navigation',
-          text: await resolvePrompt(lastStep, newContext),
-          navigateTo: lastStep.navigate_to,
-          buttonText: hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge',
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, finalMessage])
-      } else {
-        const completionMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'completion',
-          text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, completionMessage])
-      }
-    }
-
-    setIsLoading(false)
-  }
-
-  const handleOptionClick = async (option) => {
-    if (!currentStep || isLoading) return
-
-    const optionValue = option.value || option.label
-    setIsLoading(true)
-
-    // Add user message
-    const userMessage = {
-      id: `user-${Date.now()}`,
-      isAI: false,
-      text: option.label,
-      timestamp: new Date().toLocaleTimeString()
-    }
-
-    // Update context
-    const newContext = { ...context }
-    if (currentStep.tag_as) {
-      newContext[currentStep.tag_as] = optionValue
-    }
-    if (currentStep.store_as) {
-      newContext[currentStep.store_as] = true
-    }
-
-    setContext(newContext)
-    setMessages(prev => [...prev, userMessage])
-
-    // Check if option has an external link - if so, open in new tab and complete flow
-    if (option.external_link && option.url) {
-      console.log('🔗 Opening external link in new tab:', option.url)
-
-      // Save to Supabase before opening external link
-      if (supabase && user?.id) {
-        try {
-          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
-
-          const { data, error } = await supabase
-            .from('healing_compass_responses')
-            .insert([{
-              user_id: user.id,
-              user_name: newContext.user_name || 'Anonymous',
-              selected_safety_contract: newContext.selected_safety_contract,
-              limiting_impact: newContext.limiting_impact,
-              past_parallel_story: newContext.past_parallel_story,
-              past_event_details: newContext.past_event_details,
-              past_event_emotions: newContext.past_event_emotions,
-              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
-              splinter_removal_consent: newContext.splinter_removal_consent,
-              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
-              context: newContext
-            }])
-
-          if (error) {
-            console.error('❌ Supabase error:', error)
-          } else {
-            console.log('✅ Healing compass data saved successfully:', data)
-          }
-
-          // Auto-complete challenge quest
-          console.log('🎯 Attempting to complete flow quest for healing_compass')
-          const questResult = await completeFlowQuest({
-            userId: user.id,
-            flowId: 'healing_compass',
-            pointsEarned: 20
-          })
-
-          if (questResult.success) {
-            console.log('✅ Quest completed!', questResult.message)
-          } else {
-            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-          }
-        } catch (err) {
-          console.error('❌ Failed to save healing compass data:', err)
-        }
-      }
-
-      // Open external link in new tab
-      window.open(option.url, '_blank', 'noopener,noreferrer')
-
-      // Show completion message
-      const completionMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        kind: 'completion',
-        text: "🎉 Congratulations! You've completed the Healing Compass flow. Your session booking will open in a new tab.",
-        timestamp: new Date().toLocaleTimeString()
-      }
-      setMessages(prev => [...prev, completionMessage])
-      setIsLoading(false)
-      return
-    }
-
-    // Check if option has navigate_to - if so, save data and navigate
-    if (option.navigate_to) {
-      console.log('🧭 Option has navigate_to, saving data and navigating to:', option.navigate_to)
-
-      // Save to Supabase before navigating
-      if (supabase && user?.id) {
-        try {
-          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
-
-          const { data, error } = await supabase
-            .from('healing_compass_responses')
-            .insert([{
-              user_id: user.id,
-              user_name: newContext.user_name || 'Anonymous',
-              selected_safety_contract: newContext.selected_safety_contract,
-              limiting_impact: newContext.limiting_impact,
-              past_parallel_story: newContext.past_parallel_story,
-              past_event_details: newContext.past_event_details,
-              past_event_emotions: newContext.past_event_emotions,
-              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
-              splinter_removal_consent: newContext.splinter_removal_consent,
-              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
-              context: newContext
-            }])
-
-          if (error) {
-            console.error('❌ Supabase error:', error)
-          } else {
-            console.log('✅ Healing compass data saved successfully:', data)
-          }
-
-          // Auto-complete challenge quest
-          console.log('🎯 Attempting to complete flow quest for healing_compass')
-          const questResult = await completeFlowQuest({
-            userId: user.id,
-            flowId: 'healing_compass',
-            pointsEarned: 20
-          })
-
-          if (questResult.success) {
-            console.log('✅ Quest completed!', questResult.message)
-          } else {
-            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-          }
-        } catch (err) {
-          console.error('❌ Failed to save healing compass data:', err)
-          // Continue with navigation even if save fails
-        }
-      }
-
-      setIsLoading(false)
-      navigate(option.navigate_to)
-      return
-    }
-
-    // Check if current step has navigate_to - if so, save data and navigate
-    if (currentStep.navigate_to) {
-      console.log('🧭 Step has navigate_to, saving data and navigating to:', currentStep.navigate_to)
-
-      // Save to Supabase before navigating
-      if (supabase && user?.id) {
-        try {
-          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
-
-          const { data, error } = await supabase
-            .from('healing_compass_responses')
-            .insert([{
-              user_id: user.id,
-              user_name: newContext.user_name || 'Anonymous',
-              selected_safety_contract: newContext.selected_safety_contract,
-              limiting_impact: newContext.limiting_impact,
-              past_parallel_story: newContext.past_parallel_story,
-              past_event_details: newContext.past_event_details,
-              past_event_emotions: newContext.past_event_emotions,
-              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
-              splinter_removal_consent: newContext.splinter_removal_consent,
-              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
-              context: newContext
-            }])
-
-          if (error) {
-            console.error('❌ Supabase error:', error)
-          } else {
-            console.log('✅ Healing compass data saved successfully:', data)
-          }
-
-          // Auto-complete challenge quest if user has active challenge
-          console.log('🎯 Attempting to complete flow quest for healing_compass')
-          const questResult = await completeFlowQuest({
-            userId: user.id,
-            flowId: 'healing_compass',
-            pointsEarned: 20
-          })
-
-          if (questResult.success) {
-            console.log('✅ Quest completed!', questResult.message)
-          } else {
-            console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-          }
-        } catch (err) {
-          console.error('❌ Failed to save healing compass data:', err)
-          // Continue with navigation even if save fails
-        }
-      }
-
-      setIsLoading(false)
-      navigate(currentStep.navigate_to)
-      return
-    }
-
-    // Move to next step
-    const nextIndex = currentIndex + 1
-    const nextStep = flow?.steps?.[nextIndex]
-
-    if (nextStep) {
-      // Add AI response
-      const responseText = await resolvePrompt(nextStep, newContext)
-      const aiMessage = {
-        id: `ai-${Date.now()}`,
-        isAI: true,
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString()
-      }
-
-      setMessages(prev => [...prev, aiMessage])
-      setCurrentIndex(nextIndex)
-    } else {
-      // Flow completed - save to Supabase
-      if (supabase) {
-        // Validate user is authenticated before saving
-        if (!user?.id) {
-          console.error('❌ User not authenticated - cannot save healing compass data')
-          const errorMessage = {
-            id: `ai-${Date.now()}`,
-            isAI: true,
-            text: "⚠️ Please sign in to save your healing compass responses.",
-            timestamp: new Date().toLocaleTimeString()
-          }
-          setMessages(prev => [...prev, errorMessage])
-          setIsLoading(false)
-          return
-        }
-
-        try {
-          console.log('💾 SAVING HEALING COMPASS DATA TO SUPABASE')
-          console.log('📤 Sending to Supabase:', newContext)
-
-          const { data, error } = await supabase
-            .from('healing_compass_responses')
-            .insert([{
-              user_id: user.id,
-              user_name: newContext.user_name || 'Anonymous',
-              selected_safety_contract: newContext.selected_safety_contract,
-              limiting_impact: newContext.limiting_impact,
-              past_parallel_story: newContext.past_parallel_story,
-              past_event_details: newContext.past_event_details,
-              past_event_emotions: newContext.past_event_emotions,
-              connect_dots_acknowledged: newContext.connect_dots_acknowledged,
-              splinter_removal_consent: newContext.splinter_removal_consent,
-              challenge_enrollment_consent: newContext.challenge_enrollment_consent,
-              context: newContext
-            }])
-
-          if (error) {
-            console.error('❌ Supabase error:', error)
-            throw error
-          }
-          console.log('✅ Healing compass data saved successfully:', data)
-
-          // Auto-complete challenge quest if user has active challenge
-          if (user?.id) {
-            console.log('🎯 Attempting to complete flow quest for healing_compass')
-            const questResult = await completeFlowQuest({
-              userId: user.id,
-              flowId: 'healing_compass',
-              pointsEarned: 20
-            })
-
-            if (questResult.success) {
-              console.log('✅ Quest completed!', questResult.message)
-            } else {
-              console.log('ℹ️ Quest not completed:', questResult.reason || questResult.error)
-            }
-          }
-        } catch (err) {
-          console.error('❌ Failed to save healing compass data:', err)
-          // Continue with flow even if save fails
-        }
-      }
-
-      // Flow completed - check if there's a navigation step
-      const lastStep = flow?.steps?.[flow.steps.length - 1]
-      if (lastStep?.navigate_to) {
-        const finalMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'navigation',
-          text: await resolvePrompt(lastStep, newContext),
-          navigateTo: lastStep.navigate_to,
-          buttonText: hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge',
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, finalMessage])
-      } else {
-        const completionMessage = {
-          id: `ai-${Date.now()}`,
-          isAI: true,
-          kind: 'completion',
-          text: "🎉 Congratulations! You've completed the Healing Compass flow. Return to your profile to continue your journey:",
-          timestamp: new Date().toLocaleTimeString()
-        }
-        setMessages(prev => [...prev, completionMessage])
-      }
-    }
-
-    setIsLoading(false)
-  }
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit()
-    }
-  }
-
-  // Helper function to resolve template variables in text
-  const resolveText = (text) => {
-    if (!text) return text
-    let resolved = text
-    Object.keys(context).forEach(key => {
-      const placeholder = `{{${key}}}`
-      if (resolved.includes(placeholder)) {
-        resolved = resolved.replace(new RegExp(placeholder, 'g'), context[key])
-      }
-    })
-    return resolved
-  }
-
-  if (error) {
-    return (
-      <div className="app">
-        <div className="error">
-          {error}
-        </div>
+  const renderWelcome = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">Healing Compass</h1>
+      <div className="ns-hc-welcome-message">
+        <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong> I'm excited to dive deeper with you.</p>
+        <p>Our mission here is to find the <strong>source</strong> of what's blocking your flow so we can heal it.</p>
+        <p>In the Nervous System flow, you identified safety contracts that have been protecting you.</p>
+        <p>Now let's trace one back to its origin — and remove the emotional splinter driving it.</p>
       </div>
-    )
-  }
 
-  if (!flow) {
-    return (
-      <div className="app">
-        <div className="loading">
-          <div className="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
+      <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('q1')}>
+        Let's Begin
+      </button>
+    </div>
+  )
+
+  const renderQ1 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 1 of 7</div>
+      <h2 className="ns-hc-question-text">Which safety contract would you like to focus on healing?</h2>
+
+      <div className="ns-hc-contract-list">
+        {safetyContracts.map((contract, index) => (
+          <button
+            key={index}
+            className={`ns-hc-contract-option ${responses.selected_safety_contract === contract ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, selected_safety_contract: contract }))}
+          >
+            {contract}
+          </button>
+        ))}
       </div>
-    )
-  }
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q2')}
+        disabled={!responses.selected_safety_contract}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ2 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 2 of 7</div>
+      <h2 className="ns-hc-question-text">How is this safety contract currently slowing down your flow?</h2>
+      <p className="ns-hc-question-subtext">Tell us how it's limiting the pursuit of your ambitions</p>
+
+      <div className="ns-hc-text-input-container">
+        <textarea
+          className="ns-hc-text-area"
+          placeholder="Example: It stops me from posting content consistently because I'm afraid of judgment..."
+          value={responses.limiting_impact}
+          onChange={(e) => setResponses(prev => ({ ...prev, limiting_impact: e.target.value }))}
+        />
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q3')}
+        disabled={!responses.limiting_impact.trim()}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ3 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 3 of 7</div>
+      <h2 className="ns-hc-question-text">Can you think of a time when you may have learned this belief?</h2>
+      <p className="ns-hc-question-subtext">
+        You didn't wake up believing "<span className="ns-hc-highlight">{responses.selected_safety_contract}</span>".
+        Something happened that created it. This is the emotional splinter we're looking to remove.
+      </p>
+
+      <div className="ns-hc-text-input-container">
+        <textarea
+          className="ns-hc-text-area"
+          placeholder="Example: When I was 12, I shared a creative project I was proud of in class..."
+          value={responses.past_parallel_story}
+          onChange={(e) => setResponses(prev => ({ ...prev, past_parallel_story: e.target.value }))}
+        />
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q4')}
+        disabled={!responses.past_parallel_story.trim()}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ4 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 4 of 7</div>
+      <h2 className="ns-hc-question-text">What happened back then?</h2>
+      <p className="ns-hc-question-subtext">Is there a particular moment or series of events that felt painful or uncomfortable?</p>
+
+      <div className="ns-hc-text-input-container">
+        <textarea
+          className="ns-hc-text-area"
+          placeholder="Example: My classmates laughed at it. The teacher said nothing. I felt completely exposed and embarrassed..."
+          value={responses.past_event_details}
+          onChange={(e) => setResponses(prev => ({ ...prev, past_event_details: e.target.value }))}
+        />
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q5')}
+        disabled={!responses.past_event_details.trim()}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ5 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 5 of 7</div>
+      <h2 className="ns-hc-question-text">If you're okay revisiting this experience... when it happened, how did you feel afterwards?</h2>
+      <p className="ns-hc-question-subtext">What emotions came up? Shame, embarrassment, fear?</p>
+
+      <div className="ns-hc-text-input-container">
+        <textarea
+          className="ns-hc-text-area"
+          placeholder="Example: Deep shame. I felt like I could never share my creative work again. I decided it was safer to stay invisible..."
+          value={responses.past_event_emotions}
+          onChange={(e) => setResponses(prev => ({ ...prev, past_event_emotions: e.target.value }))}
+        />
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => setCurrentScreen('q6')}
+        disabled={!responses.past_event_emotions.trim()}
+      >
+        Continue
+      </button>
+    </div>
+  )
+
+  const renderQ6 = () => (
+    <div className="ns-hc-container ns-hc-question-container">
+      <div className="ns-hc-question-number">Question 6 of 7</div>
+      <h2 className="ns-hc-question-text">Now we can see how this belief formed</h2>
+
+      <div className="ns-hc-result-box" style={{ marginTop: 32 }}>
+        <p>This experience — <span className="ns-hc-highlight">{responses.past_event_details}</span> — and feeling <span className="ns-hc-highlight">{responses.past_event_emotions}</span> was so impactful that your system decided to protect you from ever having the same experience again.</p>
+        <p style={{ marginTop: 16 }}>That's why it created this belief: <span className="ns-hc-highlight">"{responses.selected_safety_contract}"</span></p>
+        <p style={{ marginTop: 16 }}>To protect you, it now doesn't feel safe doing anything that might create that experience again.</p>
+        <p style={{ marginTop: 16 }}>Make sense?</p>
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => {
+          setResponses(prev => ({ ...prev, connect_dots_acknowledged: true }))
+          setCurrentScreen('q7')
+        }}
+      >
+        Yes, I see it
+      </button>
+    </div>
+  )
+
+  const renderQ7 = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">The Emotional Splinter</h1>
+      <div className="ns-hc-welcome-message">
+        <p>So even though your essence has been pulling you <strong>forward</strong> in the pursuit of your ambitions...</p>
+        <p>Your subconscious has been pulling you <strong>back</strong> in its attempt to protect you.</p>
+        <p>This is the emotional splinter. A past hurt that never fully healed.</p>
+        <p>Keen to finally remove it?</p>
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => {
+          setResponses(prev => ({ ...prev, splinter_removal_consent: true }))
+          setCurrentScreen('q8')
+        }}
+      >
+        Yes, let's do it!
+      </button>
+    </div>
+  )
+
+  const renderQ8 = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">The Healing Process</h1>
+      <div className="ns-hc-welcome-message">
+        <p>Amazing! You have two options to remove this emotional splinter:</p>
+      </div>
+
+      <button
+        className="ns-hc-primary-button"
+        onClick={() => saveAndComplete('continue_challenge')}
+      >
+        Continue 7-Day Challenge
+      </button>
+
+      <button
+        className="ns-hc-secondary-button"
+        onClick={() => saveAndComplete('book_session')}
+      >
+        Book 1-on-1 Emotional Splinter Release Session
+      </button>
+    </div>
+  )
+
+  const renderLoading = () => (
+    <div className="ns-hc-container ns-hc-processing-container">
+      <div className="ns-hc-spinner"></div>
+      <div className="ns-hc-processing-text">Loading your safety contracts...</div>
+    </div>
+  )
 
   return (
-    <div className="app">
-      <header className="header">
-        <h1>Healing Compass</h1>
-        <p>Identify your emotional splinters and unlock your potential</p>
-      </header>
-
-      <main className="chat-container">
-        <div className="messages">
-          {messages.map(message => (
-            <div key={message.id} className={`message ${message.isAI ? 'ai' : 'user'}`}>
-              <div className="bubble">
-                {message.kind === 'completion' ? (
-                  <div className="text">
-                    {message.text}
-                    <div style={{ marginTop: 8 }}>
-                      <Link to="/me" style={{ color: '#5e17eb', textDecoration: 'underline' }}>
-                        Return to your profile
-                      </Link>
-                    </div>
-                  </div>
-                ) : message.kind === 'navigation' ? (
-                  <div className="text">
-                    {message.text}
-                    <div style={{ marginTop: 16 }}>
-                      <button
-                        className="option-button"
-                        onClick={() => navigate(message.navigateTo)}
-                        style={{ width: '100%' }}
-                      >
-                        {message.buttonText}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text">{message.text}</div>
-                )}
-                <div className="timestamp">{message.timestamp}</div>
-              </div>
-            </div>
-          ))}
-          
-          {isLoading && (
-            <div className="message ai">
-              <div className="bubble">
-                <div className="typing-indicator">
-                  <span></span><span></span><span></span>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <div ref={messagesEndRef} />
-        </div>
-      </main>
-
-      {/* Dynamic options from safety_contracts */}
-      {currentStep?.options_from === 'safety_contracts' && safetyContracts.length > 0 && (
-        <div className="options-container">
-          {safetyContracts.map((contract, index) => (
-            <button
-              key={index}
-              className="option-button"
-              onClick={() => handleOptionClick({ label: contract, value: contract })}
-              disabled={isLoading}
-              style={{ textAlign: 'left', whiteSpace: 'normal' }}
-            >
-              {contract}
-            </button>
-          ))}
+    <div className="ns-hc-app">
+      {/* Progress Dots */}
+      {currentScreen !== 'loading' && (
+        <div className="ns-hc-progress-container">
+          <div className="ns-hc-progress-dots">
+            {Array.from({ length: totalScreens }).map((_, index) => (
+              <div
+                key={index}
+                className={`ns-hc-progress-dot ${
+                  index < currentScreenIndex ? 'completed' :
+                  index === currentScreenIndex ? 'active' : ''
+                }`}
+              />
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Static options */}
-      {currentStep?.options && currentStep.options.length > 0 && !currentStep.options_from && (
-        <div className="options-container">
-          {currentStep.options.map((option, index) => (
-            <button
-              key={index}
-              className="option-button"
-              onClick={() => handleOptionClick(option)}
-              disabled={isLoading}
-            >
-              {resolveText(option.label)}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {currentStep && !currentStep.options && !currentStep.options_from && (
-        <div className="input-bar">
-          <textarea
-            className="message-input"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Share your thoughts..."
-            disabled={isLoading}
-            rows={1}
-          />
-          <button
-            className="send-button"
-            onClick={handleSubmit}
-            disabled={isLoading || !inputText.trim()}
-          >
-            Send
-          </button>
-        </div>
-      )}
+      {/* Screen Content */}
+      {currentScreen === 'loading' && renderLoading()}
+      {currentScreen === 'welcome' && renderWelcome()}
+      {currentScreen === 'q1' && renderQ1()}
+      {currentScreen === 'q2' && renderQ2()}
+      {currentScreen === 'q3' && renderQ3()}
+      {currentScreen === 'q4' && renderQ4()}
+      {currentScreen === 'q5' && renderQ5()}
+      {currentScreen === 'q6' && renderQ6()}
+      {currentScreen === 'q7' && renderQ7()}
+      {currentScreen === 'q8' && renderQ8()}
     </div>
   )
 }
-
-export default HealingCompass

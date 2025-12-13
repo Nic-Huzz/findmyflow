@@ -15,6 +15,10 @@ import HealingCompass from './HealingCompass'
 import NervousSystemFlow from './NervousSystemFlow'
 import Challenge from './Challenge'
 import NikigaiTest from './NikigaiTest'
+import FlowFinderSkills from './FlowFinderSkills'
+import FlowFinderProblems from './FlowFinderProblems'
+import FlowFinderPersona from './FlowFinderPersona'
+import FlowFinderIntegration from './FlowFinderIntegration'
 import ArchetypeSelection from './ArchetypeSelection'
 import EssenceProfile from './EssenceProfile'
 import ProtectiveProfile from './ProtectiveProfile'
@@ -44,6 +48,7 @@ import './HybridEssenceFlow.css'
 import './Challenge.css'
 import './Feedback.css'
 import './RetreatLanding.css'
+import './FlowFinder.css'
 
 function AppRouter() {
   return (
@@ -158,22 +163,22 @@ function AppRouter() {
             } />
             <Route path="/nikigai/skills" element={
               <AuthGate>
-                <NikigaiTest flowFile="nikigai-flow-1-skills.json" flowName="Skills Discovery" />
+                <FlowFinderSkills />
               </AuthGate>
             } />
             <Route path="/nikigai/problems" element={
               <AuthGate>
-                <NikigaiTest flowFile="nikigai-flow-2-problems.json" flowName="Problems Discovery" />
+                <FlowFinderProblems />
               </AuthGate>
             } />
             <Route path="/nikigai/persona" element={
               <AuthGate>
-                <NikigaiTest flowFile="nikigai-flow-3-persona.json" flowName="Persona Discovery" />
+                <FlowFinderPersona />
               </AuthGate>
             } />
             <Route path="/nikigai/integration" element={
               <AuthGate>
-                <NikigaiTest flowFile="nikigai-flow-4-integration.json" flowName="Integration & Mission" />
+                <FlowFinderIntegration />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={

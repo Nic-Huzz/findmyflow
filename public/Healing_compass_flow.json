@@ -99,24 +99,23 @@
       "required_inputs": [
         "step_7_splinter_opt_in_complete"
       ],
-      "prompt": "Amazing! You have two options to remove this emotional splinter:\n\n1. Continue the 'Release' quests inside the 7-day challenge\n2. To accelerate their removal book a 1-on-1 Emotional Splinter Release Session with Huzz\n\nWhich would you prefer?",
-      "options": [
+      "prompt": "Amazing! Here are your next steps to remove this emotional splinter:",
+      "tag_as": "challenge_enrollment_consent",
+      "store_as": "step_8_challenge_complete",
+      "instructions_to_gpt": "Show completion message and present both options as buttons.",
+      "completion_options": [
         {
           "label": "Continue 7-Day Challenge",
           "value": "continue_challenge",
           "navigate_to": "/7-day-challenge"
         },
         {
-          "label": "Book Emotional Splinter Release Session",
+          "label": "Book 1-on-1 Emotional Splinter Release Session",
           "value": "book_session",
           "external_link": true,
-          "url": "https://calendly.com/huzz-nichuzz/30min",
-          "open_in_new_tab": true
+          "url": "https://calendly.com/huzz-nichuzz/30min"
         }
-      ],
-      "tag_as": "challenge_enrollment_consent",
-      "store_as": "step_8_challenge_complete",
-      "instructions_to_gpt": "Present both options. If they select the challenge, navigate to /7-day-challenge. If they select the booking, open the Calendly link in a new tab."
+      ]
     }
   ]
 }
