@@ -1,0 +1,46 @@
+# Supabase Configuration for FindMyFlow
+# Docs: https://supabase.com/docs/guides/cli/config
+
+[project]
+id = "qlwfcfypnoptsocdpxuv"
+
+[api]
+# Enable pg_graphql extension
+enabled = true
+# Schemas to expose via API
+schemas = ["public", "graphql_public"]
+# Extra schemas to add to search path (for user functions)
+extra_search_path = ["public", "extensions"]
+# Max rows to return from a query
+max_rows = 1000
+
+[db]
+# Port for local development
+port = 54322
+# Max db connections for local dev
+shadow_port = 54320
+# Enable RLS by default for new tables
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
+# Site URL for auth redirects
+site_url = "https://findmyflow.nichuzz.com"
+# Additional redirect URLs (comma separated)
+additional_redirect_urls = ["http://localhost:5173", "https://findmyflow.nichuzz.com"]
+
+[auth.email]
+# Enable email confirmations
+enable_confirmations = true
+
+[functions]
+# Functions run on Deno
+verify_jwt = true
+
+# Edge function specific configs can be added per function:
+# [functions.graduation-check]
+# verify_jwt = true

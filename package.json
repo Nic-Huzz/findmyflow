@@ -7,7 +7,16 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:push": "supabase db push",
+    "db:pull": "supabase db pull",
+    "db:diff": "supabase db diff -f",
+    "db:reset": "supabase db reset",
+    "functions:deploy": "supabase functions deploy",
+    "functions:deploy:all": "supabase functions deploy --all",
+    "functions:serve": "supabase functions serve",
+    "supabase:status": "supabase status",
+    "db:connect": "./scripts/db-connect.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.81.1",
