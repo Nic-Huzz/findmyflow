@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../auth/AuthProvider';
 import { checkGraduationEligibility } from '../lib/graduationChecker';
 import { PERSONA_STAGES, getStageDisplayName, getPersonaDisplayName } from '../lib/personaStages';
@@ -177,15 +178,19 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
                   const flowId = requirements.flows_required?.[index];
                   const isCompleted = graduationStatus?.completed_flows?.includes(flowId);
 
-                  // Add "Inside 7-Day Challenge" heading before "Complete a Groan Challenge"
-                  const showChallengeHeading = milestone.toLowerCase().includes('groan challenge') &&
+                  // Add "Inside 7-Day Challenge" heading before "Complete a Groan Challenge" for Vibe Seeker only
+                  const showChallengeHeading = persona === 'vibe_seeker' &&
+                                               milestone.toLowerCase().includes('groan challenge') &&
                                                index > 0 &&
                                                !requirements.milestones_display[index - 1].toLowerCase().includes('groan challenge');
 
+                  // Check if this is the Money Model Guide milestone
+                  const isMoneyGuide = milestone.toLowerCase().includes('money') && milestone.toLowerCase().includes('guide');
+
                   return (
-                    <>
+                    <div key={index}>
                       {showChallengeHeading && (
-                        <div key={`heading-${index}`} style={{
+                        <div style={{
                           marginTop: '16px',
                           marginBottom: '8px',
                           fontSize: '0.85rem',
@@ -197,13 +202,13 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
                           Inside 7-Day Challenge
                         </div>
                       )}
-                      <div key={index} className={`requirement-item ${isCompleted ? 'completed' : ''}`}>
+                      <div className={`requirement-item ${isCompleted ? 'completed' : ''}`}>
                         <div className="checkbox">
                           {isCompleted ? '✓' : '○'}
                         </div>
                         <div>{milestone}</div>
                       </div>
-                    </>
+                    </div>
                   );
                 })}
 
@@ -241,7 +246,7 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
             </div>
           )}
 
-          {nextPersonaProfile && (
+          {nextPersonaProfile && persona !== 'movement_maker' && (
             <div className="next-level-section">
               <div className="next-level-title">Next Level: {getPersonaDisplayName(nextPersona)}</div>
               <div className="next-level-description">

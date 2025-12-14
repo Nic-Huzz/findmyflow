@@ -65,6 +65,38 @@ function Challenge() {
     }
   }, [progress, showOnboarding])
 
+  // Helper function to render quest descriptions with markdown links
+  const renderDescription = (description) => {
+    if (!description) return null
+
+    // Match markdown links: [text](url)
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const parts = []
+    let lastIndex = 0
+    let match
+
+    while ((match = linkRegex.exec(description)) !== null) {
+      // Add text before the link
+      if (match.index > lastIndex) {
+        parts.push(description.slice(lastIndex, match.index))
+      }
+      // Add the link
+      parts.push(
+        <Link key={match.index} to={match[2]} className="quest-inline-link">
+          {match[1]}
+        </Link>
+      )
+      lastIndex = match.index + match[0].length
+    }
+
+    // Add remaining text after the last link
+    if (lastIndex < description.length) {
+      parts.push(description.slice(lastIndex))
+    }
+
+    return parts.length > 0 ? parts : description
+  }
+
   useEffect(() => {
     if (user) {
       loadUserProgress()
@@ -880,6 +912,15 @@ function Challenge() {
       }
 
       alert(successMessage)
+
+      // Check for tab completion bonus (after showing quest complete message)
+      // We need to recalculate with the new completions
+      setTimeout(async () => {
+        const tabStatus = getTabCompletionStatus(quest.category)
+        if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
+          await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints)
+        }
+      }, 500)
     } catch (error) {
       console.error('Error in handleQuestComplete:', error)
       alert('Error completing quest. Please try again.')
@@ -924,6 +965,117 @@ function Challenge() {
     return todayCompletions.reduce((sum, completion) => sum + (completion.points_earned || 0), 0)
   }
 
+  // Tab Completion Bonus System
+  const BONUS_PERCENTAGE = 5 // 5% bonus for completing all quests in a tab
+
+  const getTabCompletionStatus = (category) => {
+    if (!challengeData || !completions) {
+      return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
+    }
+
+    // Get all quests for this category
+    let categoryQuests = challengeData.quests.filter(q => q.category === category)
+
+    // For Flow Finder, filter by persona and stage like the main filter does
+    if (category === 'Flow Finder' && userData?.persona) {
+      const normalizePersona = (persona) => {
+        if (!persona) return null
+        return persona.toLowerCase().replace(/\s+/g, '_')
+      }
+      const userPersonaNormalized = normalizePersona(userData.persona)
+
+      categoryQuests = categoryQuests.filter(quest => {
+        // Filter by persona
+        if (quest.persona_specific && userPersonaNormalized) {
+          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
+            return false
+          }
+        }
+        // Filter by stage
+        if (quest.stage_required && stageProgress?.current_stage) {
+          if (quest.stage_required !== stageProgress.current_stage) {
+            return false
+          }
+        }
+        return true
+      })
+    }
+
+    const totalQuests = categoryQuests.length
+    if (totalQuests === 0) {
+      return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
+    }
+
+    // Count completed quests (any completion, not just today)
+    const completedQuestIds = new Set(completions.map(c => c.quest_id))
+    const completedQuests = categoryQuests.filter(q => completedQuestIds.has(q.id)).length
+
+    // Calculate total possible points for this category
+    const totalPossiblePoints = categoryQuests.reduce((sum, q) => sum + (q.points || 0), 0)
+
+    // Calculate bonus points (15% of total category points)
+    const bonusPoints = Math.round(totalPossiblePoints * (BONUS_PERCENTAGE / 100))
+
+    const isComplete = completedQuests >= totalQuests
+    const percentage = Math.round((completedQuests / totalQuests) * 100)
+
+    // Check if bonus was already awarded (stored in progress)
+    const bonusKey = `${category.toLowerCase().replace(/\s+/g, '_')}_bonus_awarded`
+    const bonusAwarded = progress?.[bonusKey] || false
+
+    return {
+      totalQuests,
+      completedQuests,
+      isComplete,
+      bonusPoints,
+      bonusAwarded,
+      percentage,
+      bonusPercentage: BONUS_PERCENTAGE
+    }
+  }
+
+  // Award tab completion bonus
+  const awardTabCompletionBonus = async (category, bonusPoints) => {
+    if (!progress || !user) return
+
+    const bonusKey = `${category.toLowerCase().replace(/\s+/g, '_')}_bonus_awarded`
+
+    // Check if already awarded
+    if (progress[bonusKey]) return
+
+    try {
+      const newTotalPoints = (progress.total_points || 0) + bonusPoints
+
+      const updateData = {
+        total_points: newTotalPoints,
+        [bonusKey]: true,
+        last_active_date: new Date().toISOString()
+      }
+
+      const { data: updatedProgress, error } = await supabase
+        .from('challenge_progress')
+        .update(updateData)
+        .eq('user_id', user.id)
+        .eq('challenge_instance_id', progress.challenge_instance_id)
+        .eq('status', 'active')
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Error awarding tab bonus:', error)
+        return
+      }
+
+      setProgress(updatedProgress)
+
+      // Show celebration message
+      alert(`🎉 Tab Complete! +${bonusPoints} bonus points (${BONUS_PERCENTAGE}% boost)\n\nYou've completed all quests in ${category}!`)
+    } catch (error) {
+      console.error('Error in awardTabCompletionBonus:', error)
+    }
+  }
+
   const getArtifactProgress = (category) => {
     if (!challengeData) return null
 
@@ -957,7 +1109,51 @@ function Challenge() {
       }
     }
 
-    // For Flow Finder and Tracker artifacts (simple point tracking)
+    // For Flow Finder: Calculate pointsRequired dynamically based on filtered quests (100% completion)
+    if (category === 'Flow Finder') {
+      // Normalize persona to lowercase with underscores for comparison
+      const normalizePersona = (persona) => {
+        if (!persona) return null
+        return persona.toLowerCase().replace(/\s+/g, '_')
+      }
+
+      const userPersonaNormalized = normalizePersona(userData?.persona)
+
+      // Filter quests by persona and stage (same logic as main quest filter)
+      let flowFinderQuests = challengeData.quests.filter(q => q.category === 'Flow Finder')
+
+      flowFinderQuests = flowFinderQuests.filter(quest => {
+        // Filter by persona
+        if (quest.persona_specific && userPersonaNormalized) {
+          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
+            return false
+          }
+        }
+        // Filter by stage
+        if (quest.stage_required && stageProgress?.current_stage) {
+          if (quest.stage_required !== stageProgress.current_stage) {
+            return false
+          }
+        }
+        return true
+      })
+
+      // Calculate total possible points from filtered quests (100% completion)
+      const dynamicPointsRequired = flowFinderQuests.reduce((sum, q) => sum + (q.points || 0), 0)
+
+      const categoryCompletions = completions.filter(c => c.quest_category === category)
+      const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
+
+      return {
+        ...artifact,
+        currentPoints,
+        pointsRequired: dynamicPointsRequired || artifact.pointsRequired, // Use dynamic or fallback to JSON value
+        unlocked
+      }
+    }
+
+    // For Tracker artifacts (simple point tracking)
     const categoryCompletions = completions.filter(c => c.quest_category === category)
     const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
@@ -1485,6 +1681,15 @@ function Challenge() {
                     </div>
                   </div>
                 )}
+                {/* Tab Completion Bonus Text */}
+                {(() => {
+                  const tabStatus = getTabCompletionStatus(activeCategory)
+                  if (tabStatus.totalQuests === 0) return null
+                  if (tabStatus.bonusAwarded) {
+                    return <p className="tab-bonus-text earned">+{tabStatus.bonusPoints} pts bonus earned!</p>
+                  }
+                  return <p className="tab-bonus-text">Complete To Receive {BONUS_PERCENTAGE}% Point Boost</p>
+                })()}
               </div>
             )}
 
@@ -1553,7 +1758,7 @@ function Challenge() {
                       ))}
                     </div>
 
-                    <p className="quest-description">{quest.description}</p>
+                    <p className="quest-description">{renderDescription(quest.description)}</p>
 
                     {/* Special handling for daily release challenge */}
                     {quest.id === 'release_daily_challenge' && !completed && !isDailyQuestLocked && getDailyReleaseChallenge() && (
@@ -1709,7 +1914,13 @@ function Challenge() {
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                Mark as complete
+                                {quest.id === 'milestone_read_money_model' ? (
+                                  <Link to="/money-model-guide" className="quest-inline-link">
+                                    Read Guide Here
+                                  </Link>
+                                ) : (
+                                  'Mark as complete'
+                                )}
                               </label>
                             </div>
                             <button
@@ -1768,7 +1979,7 @@ function Challenge() {
                       <h3 className="quest-name">{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
                     </div>
-                    <p className="quest-description">{quest.description}</p>
+                    <p className="quest-description">{renderDescription(quest.description)}</p>
 
                     {quest.learnMore && !completed && (
                       <div className="learn-more-section">
@@ -1877,7 +2088,13 @@ function Challenge() {
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                Mark as complete
+                                {quest.id === 'milestone_read_money_model' ? (
+                                  <Link to="/money-model-guide" className="quest-inline-link">
+                                    Read Guide Here
+                                  </Link>
+                                ) : (
+                                  'Mark as complete'
+                                )}
                               </label>
                             </div>
                             <button
@@ -1949,7 +2166,7 @@ function Challenge() {
                       </div>
                     )}
 
-                    <p className="quest-description">{quest.description}</p>
+                    <p className="quest-description">{renderDescription(quest.description)}</p>
 
                     {quest.actionLink && !completed && (
                       <Link to={quest.actionLink} className="quest-action-link">
@@ -2033,7 +2250,13 @@ function Challenge() {
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                Mark as complete
+                                {quest.id === 'milestone_read_money_model' ? (
+                                  <Link to="/money-model-guide" className="quest-inline-link">
+                                    Read Guide Here
+                                  </Link>
+                                ) : (
+                                  'Mark as complete'
+                                )}
                               </label>
                             </div>
                             <button
@@ -2092,7 +2315,7 @@ function Challenge() {
                       <h3 className="quest-name">{quest.name}</h3>
                       <span className="quest-points">+{quest.points} pts</span>
                     </div>
-                    <p className="quest-description">{quest.description}</p>
+                    <p className="quest-description">{renderDescription(quest.description)}</p>
 
                     {quest.learnMore && !completed && (
                       <div className="learn-more-section">
@@ -2172,7 +2395,13 @@ function Challenge() {
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                Mark as complete
+                                {quest.id === 'milestone_read_money_model' ? (
+                                  <Link to="/money-model-guide" className="quest-inline-link">
+                                    Read Guide Here
+                                  </Link>
+                                ) : (
+                                  'Mark as complete'
+                                )}
                               </label>
                             </div>
                             <button
@@ -2245,7 +2474,7 @@ function Challenge() {
                         </div>
                       )}
 
-                      <p className="quest-description">{quest.description}</p>
+                      <p className="quest-description">{renderDescription(quest.description)}</p>
 
                       {quest.learnMore && !completed && (
                         <div className="learn-more-section">

@@ -230,7 +230,7 @@ function UpsellFlow() {
       try {
         await completeFlowQuest({
           userId: user.id,
-          flowId: 'flow_upsell_offer',
+          flowId: 'upsell_offer',
           pointsEarned: 35
         })
       } catch (questError) {
@@ -381,11 +381,21 @@ function UpsellFlow() {
     const confidenceLabel = confidencePercent >= 70 ? 'Excellent Fit' :
                            confidencePercent >= 55 ? 'Strong Fit' : 'Good Fit'
 
+    // Determine the rank of the current offer
+    const nonDisqualifiedOffers = allOfferScores.filter(s => !s.isDisqualified)
+    const currentRank = nonDisqualifiedOffers.findIndex(s => s.offer.name === recommendedOffer.offer.name)
+    const getBadgeText = (rank) => {
+      if (rank === 0) return 'Your Best Match'
+      if (rank === 1) return '2nd Weighted Option'
+      if (rank === 2) return '3rd Weighted Option'
+      return `${rank + 1}th Weighted Option`
+    }
+
     return (
       <div className="upsell-flow">
         {renderProgress()}
         <div className="reveal-container">
-          <div className="reveal-badge">Your Best Match</div>
+          <div className={`reveal-badge ${currentRank > 0 ? 'secondary' : ''}`}>{getBadgeText(currentRank)}</div>
           <h1 className="reveal-offer-name">{offer.name}</h1>
           {offer.tagline && <p className="reveal-tagline">{offer.tagline}</p>}
           <div className="confidence-display">

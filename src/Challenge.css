@@ -265,7 +265,7 @@
 .artifact-bars {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0;
 }
 
 .progress-bar-container {
@@ -499,6 +499,19 @@
   font-size: 0.9375rem;
 }
 
+.quest-inline-link {
+  color: #5e17eb;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid #5e17eb;
+  transition: all 0.2s ease;
+}
+
+.quest-inline-link:hover {
+  color: #4912c4;
+  border-bottom-color: #4912c4;
+}
+
 .quest-action-link {
   display: inline-block;
   color: #5e17eb;
@@ -524,7 +537,7 @@
 
 /* Learn More Section */
 .learn-more-section {
-  margin: 0.25rem 0 1.5rem 0;
+  margin: 0.25rem 0 0.75rem 0;
 }
 
 .learn-more-toggle {
@@ -1584,4 +1597,19 @@
   background: #f5f5f5;
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+/* Tab Completion Bonus Text */
+.tab-bonus-text {
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #5e17eb;
+  margin: -8px 0 0 0;
+  font-style: italic;
+}
+
+.tab-bonus-text.earned {
+  color: #d97706;
+  font-style: normal;
 }

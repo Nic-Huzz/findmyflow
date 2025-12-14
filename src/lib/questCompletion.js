@@ -49,7 +49,7 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
     console.log('Active challenge found:', activeChallenge.challenge_instance_id)
 
     // 2. Load quest configuration
-    const questsResponse = await fetch('/challengeQuests.json')
+    const questsResponse = await fetch('/challengeQuestsUpdate.json')
     const questsData = await questsResponse.json()
     const matchingQuest = questsData.quests.find(q => q.flow_id === flowId)
 

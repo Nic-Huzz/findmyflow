@@ -51,18 +51,38 @@ export default function HealingCompass() {
     try {
       const { data, error } = await supabase
         .from('nervous_system_responses')
-        .select('safety_contracts')
+        .select('safety_contracts, belief_test_results')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
 
       if (error) throw error
 
-      if (data && data.length > 0 && data[0].safety_contracts) {
-        setSafetyContracts(data[0].safety_contracts)
-        setCurrentScreen('welcome')
+      if (data && data.length > 0) {
+        // First try safety_contracts array
+        if (data[0].safety_contracts && data[0].safety_contracts.length > 0) {
+          setSafetyContracts(data[0].safety_contracts)
+          setCurrentScreen('welcome')
+        }
+        // Fallback: Extract YES contracts from belief_test_results
+        else if (data[0].belief_test_results) {
+          const yesContracts = Object.entries(data[0].belief_test_results)
+            .filter(([_, response]) => response === 'yes')
+            .map(([contract]) => contract)
+
+          if (yesContracts.length > 0) {
+            setSafetyContracts(yesContracts)
+            setCurrentScreen('welcome')
+          } else {
+            alert('Please complete the Nervous System flow first to identify your safety contracts.')
+            navigate('/nervous-system')
+          }
+        } else {
+          alert('Please complete the Nervous System flow first to identify your safety contracts.')
+          navigate('/nervous-system')
+        }
       } else {
-        // No safety contracts found
+        // No nervous system data found
         alert('Please complete the Nervous System flow first to identify your safety contracts.')
         navigate('/nervous-system')
       }

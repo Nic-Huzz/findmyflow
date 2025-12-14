@@ -6,7 +6,6 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  padding-top: 80px;
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   position: relative;
@@ -14,14 +13,13 @@
 
 /* ============ PROGRESS INDICATORS ============ */
 
-.progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+.attraction-offer-flow .progress-container {
+  position: relative;
+  width: 100%;
   padding: 16px 20px;
   background: transparent;
-  z-index: 100;
+  z-index: 10;
+  box-sizing: border-box;
 }
 
 .progress-dots {
@@ -279,6 +277,10 @@
   letter-spacing: 1px;
   margin-bottom: 16px;
   background: linear-gradient(135deg, #10B981, #059669);
+}
+
+.reveal-badge.secondary {
+  background: linear-gradient(135deg, #6B7280, #4B5563);
 }
 
 .reveal-offer-name {
@@ -760,7 +762,6 @@
 @media (max-width: 480px) {
   .attraction-offer-flow {
     padding: 16px;
-    padding-top: 70px;
   }
 
   .welcome-greeting {
@@ -801,10 +802,10 @@
 /* iOS Safe Area Support */
 @supports (padding-top: env(safe-area-inset-top)) {
   .attraction-offer-flow {
-    padding-top: calc(80px + env(safe-area-inset-top));
+    padding-top: calc(20px + env(safe-area-inset-top));
   }
 
-  .progress-container {
+  .attraction-offer-flow .progress-container {
     padding-top: calc(16px + env(safe-area-inset-top));
   }
 }

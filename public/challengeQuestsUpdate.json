@@ -187,6 +187,69 @@
       "learnMore": "What's the difference between an A-grade actor and a C-grade actor who started with the same talent? One said yes to any opportunity and found themselves too busy to say yes to the \"hell yea\" ones when they did come and one said yes to only \"Hell Yea\" opportunities which led to more hell yeas.\n\nBy bringing awareness to what a \"hell yea\" is for you also shows what you're interested in and what you want to be doing."
     },
     {
+      "id": "flow_finder_skills",
+      "category": "Flow Finder",
+      "type": "flow",
+      "name": "Flow Finder: Skills",
+      "description": "Discover your unique skills and what you're naturally great at",
+      "points": 40,
+      "inputType": "flow",
+      "flow_id": "nikigai_skills",
+      "flow_route": "/nikigai/skills",
+      "persona_specific": ["vibe_seeker"],
+      "stage_required": "clarity",
+      "counts_toward_graduation": true,
+      "learnMore": "This flow helps you identify your natural talents and acquired skills. These form one pillar of your unique opportunities."
+    },
+    {
+      "id": "flow_finder_problems",
+      "category": "Flow Finder",
+      "type": "flow",
+      "name": "Flow Finder: Problems",
+      "description": "Identify the problems you're passionate about solving",
+      "points": 40,
+      "inputType": "flow",
+      "flow_id": "nikigai_problems",
+      "flow_route": "/nikigai/problems",
+      "persona_specific": ["vibe_seeker"],
+      "stage_required": "clarity",
+      "requires_quest": "flow_finder_skills",
+      "counts_toward_graduation": true,
+      "learnMore": "Discover which problems energize you to solve. These become the foundation of your impact."
+    },
+    {
+      "id": "flow_finder_persona",
+      "category": "Flow Finder",
+      "type": "flow",
+      "name": "Flow Finder: Personas",
+      "description": "Discover who you're meant to serve and support",
+      "points": 30,
+      "inputType": "flow",
+      "flow_id": "nikigai_persona",
+      "flow_route": "/nikigai/persona",
+      "persona_specific": ["vibe_seeker"],
+      "stage_required": "clarity",
+      "requires_quest": "flow_finder_problems",
+      "counts_toward_graduation": true,
+      "learnMore": "Identify the people and communities you naturally connect with and want to serve."
+    },
+    {
+      "id": "flow_finder_integration",
+      "category": "Flow Finder",
+      "type": "flow",
+      "name": "Putting It All Together",
+      "description": "Integrate your skills, problems, and personas into unique opportunities",
+      "points": 30,
+      "inputType": "flow",
+      "flow_id": "nikigai_integration",
+      "flow_route": "/nikigai/integration",
+      "persona_specific": ["vibe_seeker"],
+      "stage_required": "clarity",
+      "requires_quest": "flow_finder_persona",
+      "counts_toward_graduation": true,
+      "learnMore": "Combine everything you've discovered to reveal concrete opportunities aligned with your flow."
+    },
+    {
       "id": "milestone_offer_created",
       "category": "Flow Finder",
       "type": "Vibe Riser",
@@ -307,6 +370,20 @@
       "learnMore": "Identify your optimal lead generation strategy and create your customer acquisition funnel."
     },
     {
+      "id": "milestone_read_money_model",
+      "category": "Flow Finder",
+      "type": "Movement Maker",
+      "stage_required": "ideation",
+      "name": "Read Money Model Guide",
+      "description": "📖 Read the [Money Model Guide](/money-model-guide) to understand how all your offers work together",
+      "points": 10,
+      "inputType": "checkbox",
+      "milestone_type": "read_putting_it_together",
+      "persona_specific": ["movement_maker"],
+      "counts_toward_graduation": true,
+      "learnMore": "Understanding your complete money model helps you see how each offer type works together to maximize revenue."
+    },
+    {
       "id": "flow_attraction_offer",
       "category": "Flow Finder",
       "type": "Movement Maker",
@@ -382,18 +459,34 @@
       "learnMore": "Identify your optimal lead generation strategy and create your customer acquisition funnel."
     },
     {
+      "id": "flow_persona_validation",
+      "category": "Flow Finder",
+      "type": "Vibe Riser",
+      "stage_required": "validation",
+      "name": "Persona Validation Assessment",
+      "description": "Validate which persona and problem combination resonates most with your target audience",
+      "points": 25,
+      "inputType": "flow",
+      "flow_id": "persona_selection",
+      "flow_route": "/persona-selection",
+      "persona_specific": ["vibe_riser"],
+      "counts_toward_graduation": true,
+      "learnMore": "This flow helps you validate your target persona by exploring different combinations of the personas and problems you've identified. Understanding who you truly serve is the foundation of a successful business."
+    },
+    {
       "id": "milestone_validation_form_sent",
       "category": "Flow Finder",
       "type": "Vibe Riser",
       "stage_required": "validation",
       "name": "Send Validation Form",
-      "description": "📝 Create and send your validation form to gather feedback on your idea. [View validation flows →](/validation-flows)",
+      "description": "📝 Create and send your validation form to gather feedback on your idea.",
       "points": 15,
       "inputType": "checkbox",
       "milestone_type": "validation_form_sent",
       "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
-      "learnMore": "Create a validation form to test your idea with potential customers before building. This ensures you're solving a real problem people will pay for."
+      "actionLink": "/validation-flows",
+      "actionLinkText": "Send validation form here →"
     },
     {
       "id": "milestone_validation_conversations",
@@ -401,10 +494,11 @@
       "type": "Vibe Riser",
       "stage_required": "validation",
       "name": "Validation Conversations",
-      "description": "Talk to potential customers about your IDEA before building. What problems do they face? Would they pay for a solution?",
+      "description": "Get three people to complete the validation form.",
       "points": 10,
       "inputType": "conversation_log",
-      "placeholder": "Who did you talk to? What did you learn about their problems?",
+      "placeholder": "What did you originally think and how was it different?",
+      "conversation_fields": ["What were the key insights?", "What surprised you?"],
       "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Validation conversations help you understand if your idea solves a real problem people will pay for. Aim for 3 conversations to complete this milestone."
@@ -481,20 +575,6 @@
       "persona_specific": ["vibe_riser", "movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "A clear strategy and funnel ensures you know exactly how to attract and convert customers."
-    },
-    {
-      "id": "milestone_read_money_model",
-      "category": "Flow Finder",
-      "type": "Movement Maker",
-      "stage_required": "ideation",
-      "name": "Read Money Model Guide",
-      "description": "📖 Read the [Money Model Guide](/money-model-guide) to understand how all your offers work together",
-      "points": 10,
-      "inputType": "checkbox",
-      "milestone_type": "read_putting_it_together",
-      "persona_specific": ["movement_maker"],
-      "counts_toward_graduation": true,
-      "learnMore": "Understanding your complete money model helps you see how each offer type works together to maximize revenue."
     },
     {
       "id": "milestone_decide_acquisition",
@@ -633,14 +713,14 @@
     },
     {
       "id": "groan_challenge",
-      "category": "Weekly",
-      "type": "Rewire",
-      "name": "Groan challenge",
+      "category": "Flow Finder",
+      "type": "challenge",
+      "name": "Groan Challenge",
       "description": "A groan is something your essence knows you're capable of but your body still resists. It's something that feels outside your comfort zone but you know that you can do.",
       "points": 25,
       "inputType": "text",
       "placeholder": "What groan task did you complete?",
-      "status": "coming_soon",
+      "counts_toward_graduation": true,
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Groan tasks might include: recording a video, asking for feedback, learning a new tool, or practicing a skill publicly before you feel 'ready.'"
     },
     {
@@ -799,18 +879,44 @@
       "id": "flow_finder_artifact",
       "name": "Flow Formula",
       "category": "Flow Finder",
-      "description": "Discover your unique path to flow and purpose.",
-      "pointsRequired": 50,
+      "description": "Tasks to bring your flow to life.",
+      "pointsRequired": 25,
       "image": "/images/artifacts/flow-formula.png"
     },
     {
       "id": "daily_mastery",
       "name": "Daily Mastery",
       "category": "Daily",
-      "description": "Master your daily practice across all four R's.",
+      "description": "Tasks to support your flow everyday.",
       "rCategories": {
         "Recognise": {
-          "pointsRequired": 20,
+          "pointsRequired": 56,
+          "currentPoints": 0
+        },
+        "Release": {
+          "pointsRequired": 42,
+          "currentPoints": 0
+        },
+        "Rewire": {
+          "pointsRequired": 88,
+          "currentPoints": 0
+        },
+        "Reconnect": {
+          "pointsRequired": 70,
+          "currentPoints": 0
+        }
+      },
+      "totalRequired": 256,
+      "image": "/images/artifacts/daily-mastery.png"
+    },
+    {
+      "id": "weekly_mastery",
+      "name": "Weekly Mastery",
+      "category": "Weekly",
+      "description": "Tasks that compound overtime.",
+      "rCategories": {
+        "Recognise": {
+          "pointsRequired": 30,
           "currentPoints": 0
         },
         "Release": {
@@ -818,41 +924,15 @@
           "currentPoints": 0
         },
         "Rewire": {
-          "pointsRequired": 18,
+          "pointsRequired": 20,
           "currentPoints": 0
         },
         "Reconnect": {
-          "pointsRequired": 17,
+          "pointsRequired": 20,
           "currentPoints": 0
         }
       },
-      "totalRequired": 70,
-      "image": "/images/artifacts/daily-mastery.png"
-    },
-    {
-      "id": "weekly_mastery",
-      "name": "Weekly Mastery",
-      "category": "Weekly",
-      "description": "Complete your weekly journey through all four R's.",
-      "rCategories": {
-        "Recognise": {
-          "pointsRequired": 50,
-          "currentPoints": 0
-        },
-        "Release": {
-          "pointsRequired": 40,
-          "currentPoints": 0
-        },
-        "Rewire": {
-          "pointsRequired": 45,
-          "currentPoints": 0
-        },
-        "Reconnect": {
-          "pointsRequired": 35,
-          "currentPoints": 0
-        }
-      },
-      "totalRequired": 170,
+      "totalRequired": 85,
       "image": "/images/artifacts/weekly-mastery.png"
     },
     {
@@ -860,7 +940,7 @@
       "name": "Flow Compass",
       "category": "Tracker",
       "description": "Track and analyze your flow patterns over time.",
-      "pointsRequired": 30,
+      "pointsRequired": 20,
       "image": "/images/artifacts/flow-compass.png"
     }
   ]
