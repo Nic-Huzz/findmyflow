@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import { syncFlowFinderWithChallenge } from './lib/questCompletionHelpers'
 import './FlowFinder.css'
 
 export default function FlowFinderSkills() {
@@ -75,6 +76,41 @@ export default function FlowFinderSkills() {
     const filledResponses = responses[questionKey].filter(r => r.trim().length > 0)
     return filledResponses.length >= minCount
   }
+
+  // Back button handler
+  const goBack = (fromScreen) => {
+    const screenOrder = ['welcome', 'q1', 'q2', 'q3', 'processing1', 'q4', 'q5']
+    const currentIndex = screenOrder.indexOf(fromScreen)
+    if (currentIndex > 0) {
+      // Skip processing screens when going back
+      let targetIndex = currentIndex - 1
+      if (screenOrder[targetIndex] === 'processing1') targetIndex = currentIndex - 2
+      setCurrentScreen(screenOrder[Math.max(0, targetIndex)])
+    }
+  }
+
+  // Back button component (positioned below Continue button)
+  const BackButton = ({ fromScreen }) => (
+    <button
+      className="back-button"
+      onClick={() => goBack(fromScreen)}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: 'rgba(255,255,255,0.6)',
+        cursor: 'pointer',
+        fontSize: '14px',
+        padding: '4px 0 2px 0',
+        marginTop: '16px',
+        marginBottom: '0',
+        display: 'block',
+        width: '100%',
+        textAlign: 'center'
+      }}
+    >
+      ← Go Back
+    </button>
+  )
 
   // Analyze Q1-3 responses for preliminary skill clusters
   const analyzePreliminary = async () => {
@@ -210,6 +246,9 @@ export default function FlowFinderSkills() {
         .update({ status: 'completed', completed_at: new Date().toISOString() })
         .eq('id', sessionId)
 
+      // Sync with 7-day challenge if active
+      await syncFlowFinderWithChallenge(user.id, 'skills')
+
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
@@ -244,6 +283,7 @@ export default function FlowFinderSkills() {
       <div className="question-number">Question 1 of 5</div>
       <h2 className="question-text">Let's start with Childhood</h2>
       <p className="question-subtext">Thinking back to Pre-school & Primary: What did you love doing most? What activities did you gravitate towards during free-time? The weekend? Holidays?</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q1_childhood.map((value, index) => (
@@ -267,9 +307,9 @@ export default function FlowFinderSkills() {
       <button className="add-more-btn" onClick={() => addInput('q1_childhood')}>
         + Add More
       </button>
-      <div className="input-hint">💡 Aim for 5+ bullet points</div>
+
       {!hasMinimumResponses('q1_childhood') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '16px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -278,9 +318,11 @@ export default function FlowFinderSkills() {
         className="primary-button"
         onClick={() => setCurrentScreen('q2')}
         disabled={!hasMinimumResponses('q1_childhood')}
+        style={{ opacity: hasMinimumResponses('q1_childhood') ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q1" />
     </div>
   )
 
@@ -289,6 +331,7 @@ export default function FlowFinderSkills() {
       <div className="question-number">Question 2 of 5</div>
       <h2 className="question-text">Now think of your teenage years throughout High School</h2>
       <p className="question-subtext">What did you enjoy doing most? What extra-curricular activities did you do? Any subjects or assignments that you loved? What did you do on weekends and after school for fun?</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q2_highschool.map((value, index) => (
@@ -312,9 +355,9 @@ export default function FlowFinderSkills() {
       <button className="add-more-btn" onClick={() => addInput('q2_highschool')}>
         + Add More
       </button>
-      <div className="input-hint">💡 Aim for 5+, the more the better</div>
+
       {!hasMinimumResponses('q2_highschool') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '16px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -323,9 +366,11 @@ export default function FlowFinderSkills() {
         className="primary-button"
         onClick={() => setCurrentScreen('q3')}
         disabled={!hasMinimumResponses('q2_highschool')}
+        style={{ opacity: hasMinimumResponses('q2_highschool') ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q2" />
     </div>
   )
 
@@ -334,6 +379,7 @@ export default function FlowFinderSkills() {
       <div className="question-number">Question 3 of 5</div>
       <h2 className="question-text">After school and before full-time work life</h2>
       <p className="question-subtext">What activities, projects or creative outlets do you enjoy the most?</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q3_postschool.map((value, index) => (
@@ -357,9 +403,9 @@ export default function FlowFinderSkills() {
       <button className="add-more-btn" onClick={() => addInput('q3_postschool')}>
         + Add More
       </button>
-      <div className="input-hint">💡 Aim for 5+, the more the better</div>
+
       {!hasMinimumResponses('q3_postschool') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '16px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -368,9 +414,11 @@ export default function FlowFinderSkills() {
         className="primary-button"
         onClick={() => setCurrentScreen('processing1')}
         disabled={!hasMinimumResponses('q3_postschool')}
+        style={{ opacity: hasMinimumResponses('q3_postschool') ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q3" />
     </div>
   )
 
@@ -425,6 +473,7 @@ export default function FlowFinderSkills() {
       <div className="question-number">Question 4 of 5</div>
       <h2 className="question-text">Let's explore your work and projects</h2>
       <p className="question-subtext">Across your jobs, projects, or creative pursuits, what have you enjoyed doing most? Think of times you felt in flow or energized by what you were doing.</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q4_work.map((value, index) => (
@@ -448,9 +497,9 @@ export default function FlowFinderSkills() {
       <button className="add-more-btn" onClick={() => addInput('q4_work')}>
         + Add More
       </button>
-      <div className="input-hint">💡 Aim for 5+ bullets</div>
+
       {!hasMinimumResponses('q4_work') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '16px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -459,9 +508,11 @@ export default function FlowFinderSkills() {
         className="primary-button"
         onClick={() => setCurrentScreen('q5')}
         disabled={!hasMinimumResponses('q4_work')}
+        style={{ opacity: hasMinimumResponses('q4_work') ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q4" />
     </div>
   )
 
@@ -470,6 +521,7 @@ export default function FlowFinderSkills() {
       <div className="question-number">Question 5 of 5</div>
       <h2 className="question-text">What skills have you loved to develop?</h2>
       <p className="question-subtext">Think about skills you've intentionally worked on — through courses, practice, or personal curiosity.</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q5_skills.map((value, index) => (
@@ -493,9 +545,9 @@ export default function FlowFinderSkills() {
       <button className="add-more-btn" onClick={() => addInput('q5_skills')}>
         + Add More
       </button>
-      <div className="input-hint">💡 Aim for 5+ bullet points</div>
+
       {!hasMinimumResponses('q5_skills') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '16px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -504,9 +556,11 @@ export default function FlowFinderSkills() {
         className="primary-button"
         onClick={analyzeResponses}
         disabled={!hasMinimumResponses('q5_skills')}
+        style={{ opacity: hasMinimumResponses('q5_skills') ? 1 : 0.5 }}
       >
         Analyze My Answers
       </button>
+      <BackButton fromScreen="q5" />
     </div>
   )
 

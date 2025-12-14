@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import { syncFlowFinderWithChallenge } from './lib/questCompletionHelpers'
 import './FlowFinder.css'
 
 export default function FlowFinderProblems() {
@@ -19,8 +20,11 @@ export default function FlowFinderProblems() {
     q7_pulls: ['', '', '']
   })
   const [clusters, setClusters] = useState([])
+  const [intermediateClusters1, setIntermediateClusters1] = useState([])
+  const [intermediateClusters2, setIntermediateClusters2] = useState([])
   const [sessionId, setSessionId] = useState(null)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [processingError, setProcessingError] = useState(null)
 
   // Create flow session on mount
   useEffect(() => {
@@ -64,8 +68,115 @@ export default function FlowFinderProblems() {
     })
   }
 
-  const analyzeResponses = async () => {
+  // Check if at least 3 non-empty answers exist for a question
+  const hasMinimumAnswers = (questionKey, minCount = 3) => {
+    const filledAnswers = responses[questionKey].filter(val => val.trim().length > 0)
+    return filledAnswers.length >= minCount
+  }
+
+  // Get count of filled answers for display
+  const getFilledCount = (questionKey) => {
+    return responses[questionKey].filter(val => val.trim().length > 0).length
+  }
+
+  // Intermediate clustering after Q2 (topics + impact)
+  const runIntermediateClustering1 = async () => {
     setIsProcessing(true)
+    setProcessingError(null)
+    setCurrentScreen('processing1')
+
+    try {
+      const items = [
+        ...responses.q1_topics.filter(v => v.trim()),
+        ...responses.q2_impact.filter(v => v.trim())
+      ]
+
+      const allResponses = [{
+        user_id: user.id,
+        response_raw: items.join('\n'),
+        store_as: 'problems_intermediate1'
+      }]
+
+      const { data, error } = await supabase.functions.invoke('nikigai-conversation', {
+        body: {
+          currentStep: { id: 'problems_preview1', assistant_prompt: 'Early problem theme preview from learning interests and impact' },
+          userResponse: 'Show me early patterns',
+          shouldCluster: true,
+          clusterType: 'problems',
+          clusterSources: ['problems_intermediate1'],
+          allResponses: allResponses,
+          conversationHistory: []
+        }
+      })
+
+      if (error) throw error
+
+      setIntermediateClusters1(data.clusters || [])
+      setIsProcessing(false)
+    } catch (err) {
+      console.error('Error in intermediate clustering 1:', err)
+      setProcessingError('Could not generate preview. You can continue or retry.')
+      setIsProcessing(false)
+    }
+  }
+
+  // Intermediate clustering after Q5 (chapters + struggles + rolemodels)
+  const runIntermediateClustering2 = async () => {
+    setIsProcessing(true)
+    setProcessingError(null)
+    setCurrentScreen('processing2')
+
+    try {
+      const items = [
+        ...responses.q1_topics.filter(v => v.trim()),
+        ...responses.q2_impact.filter(v => v.trim()),
+        ...responses.q3_chapters.filter(v => v.trim()),
+        ...responses.q4_struggles.filter(v => v.trim()),
+        ...responses.q5_rolemodels.filter(v => v.trim())
+      ]
+
+      const allResponses = [{
+        user_id: user.id,
+        response_raw: items.join('\n'),
+        store_as: 'problems_intermediate2'
+      }]
+
+      const { data, error } = await supabase.functions.invoke('nikigai-conversation', {
+        body: {
+          currentStep: { id: 'problems_preview2', assistant_prompt: 'Deeper problem theme preview including life story and inspirations' },
+          userResponse: 'Show me deeper patterns',
+          shouldCluster: true,
+          clusterType: 'problems',
+          clusterSources: ['problems_intermediate2'],
+          allResponses: allResponses,
+          conversationHistory: []
+        }
+      })
+
+      if (error) throw error
+
+      setIntermediateClusters2(data.clusters || [])
+      setIsProcessing(false)
+    } catch (err) {
+      console.error('Error in intermediate clustering 2:', err)
+      setProcessingError('Could not generate preview. You can continue or retry.')
+      setIsProcessing(false)
+    }
+  }
+
+  const analyzeResponses = async () => {
+    // Safety check for sessionId
+    if (!sessionId) {
+      console.error('No session ID - attempting to create one')
+      await createSession()
+      if (!sessionId) {
+        alert('Error starting flow. Please refresh and try again.')
+        return
+      }
+    }
+
+    setIsProcessing(true)
+    setProcessingError(null)
     setCurrentScreen('processing')
 
     try {
@@ -108,10 +219,10 @@ export default function FlowFinderProblems() {
         user_id: user.id,
         session_id: sessionId,
         cluster_type: 'problems',
-        cluster_stage: 'final',  // Required field: 'preview', 'intermediate', or 'final'
+        cluster_stage: 'final',
         cluster_label: cluster.label,
         insight: cluster.insight,
-        items: Array.isArray(cluster.items) ? cluster.items : []  // Changed from 'evidence' to 'items'
+        items: Array.isArray(cluster.items) ? cluster.items : []
       }))
 
       console.log('💾 Saving to database:', clustersToSave)
@@ -133,16 +244,66 @@ export default function FlowFinderProblems() {
         .update({ status: 'completed', completed_at: new Date().toISOString() })
         .eq('id', sessionId)
 
+      // Sync with 7-day challenge if active
+      await syncFlowFinderWithChallenge(user.id, 'problems')
+
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
       console.error('Error analyzing responses:', err)
-      alert('Error generating insights. Please try again.')
-      setCurrentScreen('q7')
+      setProcessingError('Error generating insights. Please try again.')
     } finally {
       setIsProcessing(false)
     }
   }
+
+  // Back button handler
+  const goBack = (fromScreen) => {
+    const screenOrder = ['welcome', 'q1', 'q2', 'processing1', 'q3', 'q4', 'q5', 'processing2', 'q6', 'q7']
+    const currentIndex = screenOrder.indexOf(fromScreen)
+    if (currentIndex > 0) {
+      // Skip processing screens when going back
+      let targetIndex = currentIndex - 1
+      if (screenOrder[targetIndex] === 'processing1') targetIndex = currentIndex - 2
+      if (screenOrder[targetIndex] === 'processing2') targetIndex = currentIndex - 2
+      setCurrentScreen(screenOrder[Math.max(0, targetIndex)])
+    }
+  }
+
+  // Validation message component
+  const ValidationMessage = ({ questionKey, minCount = 3 }) => {
+    const filled = getFilledCount(questionKey)
+    const needed = minCount - filled
+    if (filled >= minCount) return null
+    return (
+      <div className="validation-message" style={{ color: '#fbbf24', fontSize: '14px', marginTop: '8px', textAlign: 'center' }}>
+        Please add {needed} more {needed === 1 ? 'answer' : 'answers'} to continue ({filled}/{minCount})
+      </div>
+    )
+  }
+
+  // Back button component (positioned below Continue button)
+  const BackButton = ({ fromScreen }) => (
+    <button
+      className="back-button"
+      onClick={() => goBack(fromScreen)}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: 'rgba(255,255,255,0.6)',
+        cursor: 'pointer',
+        fontSize: '14px',
+        padding: '4px 0 2px 0',
+        marginTop: '16px',
+        marginBottom: '0',
+        display: 'block',
+        width: '100%',
+        textAlign: 'center'
+      }}
+    >
+      ← Go Back
+    </button>
+  )
 
   const renderWelcome = () => (
     <div className="container welcome-container">
@@ -151,7 +312,7 @@ export default function FlowFinderProblems() {
         <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong></p>
         <p>Now let's discover the <strong>problems and changes you care about</strong> — the things that matter to you and the impact you want to create.</p>
         <p>We'll explore your learning interests, impact you've made, life chapters, role models, and future vision.</p>
-        <p><strong>For each question, aim for 5+ bullet points.</strong></p>
+        <p><strong>For each question, aim for 3-5+ bullet points.</strong></p>
       </div>
 
       <button className="primary-button" onClick={() => setCurrentScreen('q1')}>
@@ -164,7 +325,8 @@ export default function FlowFinderProblems() {
     <div className="container question-container">
       <div className="question-number">Question 1 of 7</div>
       <h2 className="question-text">What topics have you loved learning about?</h2>
-      <p className="question-subtext">Through school, courses, or personal curiosity — aim for 5+ topics</p>
+      <p className="question-subtext">What are the topics of your favourite non-fiction books or podcasts? What feels like fun to learn about?</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q1_topics.map((value, index) => (
@@ -188,11 +350,22 @@ export default function FlowFinderProblems() {
       <button className="add-more-btn" onClick={() => addInput('q1_topics')}>
         + Add More
       </button>
-      <div className="input-hint">What subjects pull you in? What do you read about for fun?</div>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('q2')}>
+      {!hasMinimumAnswers('q1_topics') && (
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+          Please provide at least 3 answers to continue
+        </div>
+      )}
+
+      <button
+        className="primary-button"
+        onClick={() => setCurrentScreen('q2')}
+        disabled={!hasMinimumAnswers('q1_topics')}
+        style={{ opacity: hasMinimumAnswers('q1_topics') ? 1 : 0.5 }}
+      >
         Continue
       </button>
+      <BackButton fromScreen="q1" />
     </div>
   )
 
@@ -200,7 +373,8 @@ export default function FlowFinderProblems() {
     <div className="container question-container">
       <div className="question-number">Question 2 of 7</div>
       <h2 className="question-text">What impact have you created for others?</h2>
-      <p className="question-subtext">Across your work and projects — big or small, tangible or emotional</p>
+      <p className="question-subtext">What difference have you made? How have you helped others?</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q2_impact.map((value, index) => (
@@ -224,24 +398,72 @@ export default function FlowFinderProblems() {
       <button className="add-more-btn" onClick={() => addInput('q2_impact')}>
         + Add More
       </button>
-      <div className="input-hint">What difference have you made? How have you helped others?</div>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('processing1')}>
+      {!hasMinimumAnswers('q2_impact') && (
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+          Please provide at least 3 answers to continue
+        </div>
+      )}
+
+      <button
+        className="primary-button"
+        onClick={runIntermediateClustering1}
+        disabled={!hasMinimumAnswers('q2_impact')}
+        style={{ opacity: hasMinimumAnswers('q2_impact') ? 1 : 0.5 }}
+      >
         Continue
       </button>
+      <BackButton fromScreen="q2" />
     </div>
   )
 
   const renderProcessing1 = () => (
     <div className="container processing-container">
-      <div className="spinner"></div>
-      <div className="processing-text">Analyzing patterns...</div>
-      <div className="processing-subtext">
-        Looking for themes across your learning interests and impact created.
-      </div>
-      <button className="primary-button" onClick={() => setCurrentScreen('q3')} style={{ marginTop: '48px' }}>
-        Continue
-      </button>
+      {isProcessing ? (
+        <>
+          <div className="spinner"></div>
+          <div className="processing-text">Discovering early patterns...</div>
+          <div className="processing-subtext">
+            Looking for themes across your learning interests and impact created.
+          </div>
+        </>
+      ) : processingError ? (
+        <>
+          <div className="processing-text" style={{ color: '#fbbf24' }}>{processingError}</div>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '24px', justifyContent: 'center' }}>
+            <button className="primary-button" onClick={runIntermediateClustering1} style={{ background: 'rgba(255,255,255,0.1)' }}>
+              Retry
+            </button>
+            <button className="primary-button" onClick={() => setCurrentScreen('q3')}>
+              Continue Anyway
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="processing-text">Early Problem Themes</div>
+          <div className="processing-subtext" style={{ marginBottom: '24px' }}>
+            Based on your learning interests and impact, here's what we're seeing so far:
+          </div>
+
+          <div className="cluster-preview" style={{ textAlign: 'left', maxWidth: '500px', margin: '0 auto' }}>
+            {intermediateClusters1.map((cluster, index) => (
+              <div key={index} style={{ marginBottom: '16px', padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', borderLeft: '3px solid #fbbf24' }}>
+                <strong style={{ color: '#fbbf24' }}>{cluster.label}</strong>
+                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', marginTop: '8px' }}>{cluster.insight}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="processing-subtext" style={{ marginTop: '24px' }}>
+            Let's go deeper — your life story will reveal even more.
+          </div>
+
+          <button className="primary-button" onClick={() => setCurrentScreen('q3')} style={{ marginTop: '24px' }}>
+            Continue
+          </button>
+        </>
+      )}
     </div>
   )
 
@@ -249,7 +471,8 @@ export default function FlowFinderProblems() {
     <div className="container question-container">
       <div className="question-number">Question 3 of 7</div>
       <h2 className="question-text">If you saw your life as a story, what are the chapters?</h2>
-      <p className="question-subtext">Major life phases or turning points — aim for 3-5 chapter titles</p>
+      <p className="question-subtext">Think of major phases or turning points in your journey</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q3_chapters.map((value, index) => (
@@ -273,11 +496,22 @@ export default function FlowFinderProblems() {
       <button className="add-more-btn" onClick={() => addInput('q3_chapters')}>
         + Add More
       </button>
-      <div className="input-hint">Think of major phases or turning points in your journey</div>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('q4')}>
+      {!hasMinimumAnswers('q3_chapters') && (
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+          Please provide at least 3 answers to continue
+        </div>
+      )}
+
+      <button
+        className="primary-button"
+        onClick={() => setCurrentScreen('q4')}
+        disabled={!hasMinimumAnswers('q3_chapters')}
+        style={{ opacity: hasMinimumAnswers('q3_chapters') ? 1 : 0.5 }}
+      >
         Continue
       </button>
+      <BackButton fromScreen="q3" />
     </div>
   )
 
@@ -285,7 +519,8 @@ export default function FlowFinderProblems() {
     <div className="container question-container">
       <div className="question-number">Question 4 of 7</div>
       <h2 className="question-text">For each chapter, what struggle did you face?</h2>
-      <p className="question-subtext">Format: Chapter name — Struggle description</p>
+      <p className="question-subtext">Aim for at least 1 struggle per chapter, up to 3 per chapter</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q4_struggles.map((value, index) => (
@@ -309,11 +544,22 @@ export default function FlowFinderProblems() {
       <button className="add-more-btn" onClick={() => addInput('q4_struggles')}>
         + Add More
       </button>
-      <div className="input-hint">Aim for at least 1 struggle per chapter, up to 3 per chapter</div>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('q5')}>
+      {!hasMinimumAnswers('q4_struggles') && (
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+          Please provide at least 3 answers to continue
+        </div>
+      )}
+
+      <button
+        className="primary-button"
+        onClick={() => setCurrentScreen('q5')}
+        disabled={!hasMinimumAnswers('q4_struggles')}
+        style={{ opacity: hasMinimumAnswers('q4_struggles') ? 1 : 0.5 }}
+      >
         Continue
       </button>
+      <BackButton fromScreen="q4" />
     </div>
   )
 
@@ -321,7 +567,8 @@ export default function FlowFinderProblems() {
     <div className="container question-container">
       <div className="question-number">Question 5 of 7</div>
       <h2 className="question-text">Who has inspired you the most?</h2>
-      <p className="question-subtext">Real or fictional — share who they are and their impact on you</p>
+      <p className="question-subtext">Include both the person and why they're meaningful to you</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q5_rolemodels.map((value, index) => (
@@ -345,24 +592,72 @@ export default function FlowFinderProblems() {
       <button className="add-more-btn" onClick={() => addInput('q5_rolemodels')}>
         + Add More
       </button>
-      <div className="input-hint">Include both the person and why they're meaningful to you</div>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('processing2')}>
+      {!hasMinimumAnswers('q5_rolemodels') && (
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+          Please provide at least 3 answers to continue
+        </div>
+      )}
+
+      <button
+        className="primary-button"
+        onClick={runIntermediateClustering2}
+        disabled={!hasMinimumAnswers('q5_rolemodels')}
+        style={{ opacity: hasMinimumAnswers('q5_rolemodels') ? 1 : 0.5 }}
+      >
         Continue
       </button>
+      <BackButton fromScreen="q5" />
     </div>
   )
 
   const renderProcessing2 = () => (
     <div className="container processing-container">
-      <div className="spinner"></div>
-      <div className="processing-text">Deepening the analysis...</div>
-      <div className="processing-subtext">
-        Adding your life chapters and role models to understand the full picture.
-      </div>
-      <button className="primary-button" onClick={() => setCurrentScreen('q6')} style={{ marginTop: '48px' }}>
-        Continue
-      </button>
+      {isProcessing ? (
+        <>
+          <div className="spinner"></div>
+          <div className="processing-text">Deepening the analysis...</div>
+          <div className="processing-subtext">
+            Adding your life chapters, struggles, and role models to understand the full picture.
+          </div>
+        </>
+      ) : processingError ? (
+        <>
+          <div className="processing-text" style={{ color: '#fbbf24' }}>{processingError}</div>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '24px', justifyContent: 'center' }}>
+            <button className="primary-button" onClick={runIntermediateClustering2} style={{ background: 'rgba(255,255,255,0.1)' }}>
+              Retry
+            </button>
+            <button className="primary-button" onClick={() => setCurrentScreen('q6')}>
+              Continue Anyway
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="processing-text">Your Problem Themes Are Taking Shape</div>
+          <div className="processing-subtext" style={{ marginBottom: '24px' }}>
+            Your life story adds rich context to what you care about:
+          </div>
+
+          <div className="cluster-preview" style={{ textAlign: 'left', maxWidth: '500px', margin: '0 auto' }}>
+            {intermediateClusters2.map((cluster, index) => (
+              <div key={index} style={{ marginBottom: '16px', padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', borderLeft: '3px solid #fbbf24' }}>
+                <strong style={{ color: '#fbbf24' }}>{cluster.label}</strong>
+                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', marginTop: '8px' }}>{cluster.insight}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="processing-subtext" style={{ marginTop: '24px' }}>
+            Almost there! Let's capture your vision for the future.
+          </div>
+
+          <button className="primary-button" onClick={() => setCurrentScreen('q6')} style={{ marginTop: '24px' }}>
+            Continue
+          </button>
+        </>
+      )}
     </div>
   )
 
@@ -370,7 +665,8 @@ export default function FlowFinderProblems() {
     <div className="container question-container">
       <div className="question-number">Question 6 of 7</div>
       <h2 className="question-text">What do you feel called to create, experience, or change?</h2>
-      <p className="question-subtext">When you imagine the future — aim for 3-5 ideas</p>
+      <p className="question-subtext">What impact do you want to make? What do you want to exist?</p>
+      <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
         {responses.q6_future.map((value, index) => (
@@ -394,11 +690,22 @@ export default function FlowFinderProblems() {
       <button className="add-more-btn" onClick={() => addInput('q6_future')}>
         + Add More
       </button>
-      <div className="input-hint">What impact do you want to make? What do you want to exist?</div>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('q7')}>
+      {!hasMinimumAnswers('q6_future') && (
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+          Please provide at least 3 answers to continue
+        </div>
+      )}
+
+      <button
+        className="primary-button"
+        onClick={() => setCurrentScreen('q7')}
+        disabled={!hasMinimumAnswers('q6_future')}
+        style={{ opacity: hasMinimumAnswers('q6_future') ? 1 : 0.5 }}
+      >
         Continue
       </button>
+      <BackButton fromScreen="q6" />
     </div>
   )
 
@@ -406,7 +713,7 @@ export default function FlowFinderProblems() {
     <div className="container question-container">
       <div className="question-number">Question 7 of 7</div>
       <h2 className="question-text">What are your top 3 future pulls?</h2>
-      <p className="question-subtext">The ideas or dreams that feel most alive RIGHT NOW</p>
+      <p className="question-subtext">From everything you shared, what feels most energizing?</p>
 
       <div className="input-list">
         {responses.q7_pulls.slice(0, 3).map((value, index) => (
@@ -425,23 +732,47 @@ export default function FlowFinderProblems() {
         ))}
       </div>
 
-      <div className="input-hint" style={{ marginTop: '16px' }}>From everything you shared, what feels most energizing?</div>
-
-      <button className="primary-button" onClick={analyzeResponses}>
+      <button
+        className="primary-button"
+        onClick={analyzeResponses}
+        disabled={!hasMinimumAnswers('q7_pulls', 3)}
+        style={{ opacity: hasMinimumAnswers('q7_pulls', 3) ? 1 : 0.5 }}
+      >
         Analyze My Answers
       </button>
+      <BackButton fromScreen="q7" />
     </div>
   )
 
   const renderProcessing = () => (
     <div className="container processing-container">
-      <div className="spinner"></div>
-      <div className="processing-text">Identifying your problem themes...</div>
-      <div className="processing-subtext">
-        Bringing together all your responses to reveal the problems and changes you care about most.
-        <br /><br />
-        This usually takes 10-15 seconds.
-      </div>
+      {isProcessing ? (
+        <>
+          <div className="spinner"></div>
+          <div className="processing-text">Creating your final problem themes...</div>
+          <div className="processing-subtext">
+            Bringing together all your responses to reveal the problems and changes you care about most.
+            <br /><br />
+            This usually takes 10-15 seconds.
+          </div>
+        </>
+      ) : processingError ? (
+        <>
+          <div className="processing-text" style={{ color: '#ef4444' }}>{processingError}</div>
+          <div style={{ display: 'flex', gap: '12px', marginTop: '24px', justifyContent: 'center' }}>
+            <button className="primary-button" onClick={analyzeResponses}>
+              Retry
+            </button>
+            <button
+              className="primary-button"
+              onClick={() => setCurrentScreen('q7')}
+              style={{ background: 'rgba(255,255,255,0.1)' }}
+            >
+              Go Back
+            </button>
+          </div>
+        </>
+      ) : null}
     </div>
   )
 
@@ -449,7 +780,7 @@ export default function FlowFinderProblems() {
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Here's what we discovered about you</h1>
       <div className="welcome-message">
-        <p>Based on your responses, we've identified 4 problem themes that represent the impact you want to create in the world:</p>
+        <p>Based on your responses, we've identified {clusters.length} problem themes that represent the impact you want to create in the world:</p>
       </div>
 
       {/* All Clusters (Read-only, no selection) */}
@@ -493,6 +824,25 @@ export default function FlowFinderProblems() {
     </div>
   )
 
+  // Get current progress step for dots
+  const getCurrentStep = () => {
+    const screenToStep = {
+      'welcome': 0,
+      'q1': 1,
+      'q2': 1,
+      'processing1': 2,
+      'q3': 3,
+      'q4': 3,
+      'q5': 3,
+      'processing2': 4,
+      'q6': 5,
+      'q7': 5,
+      'processing': 6,
+      'success': 7
+    }
+    return screenToStep[currentScreen] || 0
+  }
+
   // Main render logic
   const screens = {
     welcome: renderWelcome,
@@ -514,20 +864,12 @@ export default function FlowFinderProblems() {
       {/* Progress Dots */}
       <div className="progress-container">
         <div className="progress-dots">
-          {[...Array(10)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <div
               key={i}
               className={`progress-dot ${
-                i === 0 && currentScreen === 'welcome' ? 'active' :
-                i === 1 && ['q1', 'q2'].includes(currentScreen) ? 'active' :
-                i === 2 && currentScreen === 'processing1' ? 'active' :
-                i === 3 && ['q3', 'q4', 'q5'].includes(currentScreen) ? 'active' :
-                i === 4 && currentScreen === 'processing2' ? 'active' :
-                i === 5 && ['q6', 'q7'].includes(currentScreen) ? 'active' :
-                i === 6 && currentScreen === 'processing' ? 'active' :
-                i === 7 && currentScreen === 'success' ? 'active' :
-                ''
-              } ${i < 7 && currentScreen === 'success' ? 'completed' : ''}`}
+                i === getCurrentStep() ? 'active' : ''
+              } ${i < getCurrentStep() ? 'completed' : ''}`}
             ></div>
           ))}
         </div>

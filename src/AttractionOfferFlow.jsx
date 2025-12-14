@@ -48,6 +48,43 @@ function AttractionOfferFlow() {
   const [error, setError] = useState(null)
   const [showAllOptions, setShowAllOptions] = useState(false)
 
+  // Go back handler
+  const goBack = (fromStage) => {
+    const questionStages = [
+      STAGES.Q1, STAGES.Q2, STAGES.Q3, STAGES.Q4, STAGES.Q5,
+      STAGES.Q6, STAGES.Q7, STAGES.Q8, STAGES.Q9, STAGES.Q10
+    ]
+    const currentIndex = questionStages.indexOf(fromStage)
+    if (currentIndex === 0) {
+      setStage(STAGES.WELCOME)
+    } else if (currentIndex > 0) {
+      setStage(questionStages[currentIndex - 1])
+    }
+  }
+
+  // Back button component (positioned below options)
+  const BackButton = ({ fromStage }) => (
+    <button
+      className="back-button"
+      onClick={() => goBack(fromStage)}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: 'rgba(255,255,255,0.6)',
+        cursor: 'pointer',
+        fontSize: '14px',
+        padding: '4px 0 2px 0',
+        marginTop: '16px',
+        marginBottom: '0',
+        display: 'block',
+        width: '100%',
+        textAlign: 'center'
+      }}
+    >
+      ← Go Back
+    </button>
+  )
+
   // Load questions and offers JSON
   useEffect(() => {
     const loadData = async () => {
@@ -358,6 +395,7 @@ function AttractionOfferFlow() {
               </button>
             ))}
           </div>
+          <BackButton fromStage={stage} />
         </div>
       </div>
     )

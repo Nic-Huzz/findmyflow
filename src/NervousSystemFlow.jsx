@@ -53,6 +53,40 @@ export default function NervousSystemFlow() {
   const totalScreens = 22 // Total number of progress dots (added subconscious + calibration-directions)
   const currentScreenIndex = getScreenIndex(currentScreen)
 
+  // Go back handler
+  const goBack = (fromScreen) => {
+    const screenOrder = [
+      'welcome', 'q1', 'q2', 'q3', 'q4', 'subconscious-power', 'calibration', 'calibration-directions'
+    ]
+    const currentIndex = screenOrder.indexOf(fromScreen)
+    if (currentIndex > 0) {
+      setCurrentScreen(screenOrder[currentIndex - 1])
+    }
+  }
+
+  // Back button component
+  const BackButton = ({ fromScreen }) => (
+    <button
+      className="ns-hc-back-button"
+      onClick={() => goBack(fromScreen)}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: 'rgba(255,255,255,0.6)',
+        cursor: 'pointer',
+        fontSize: '14px',
+        padding: '4px 0 2px 0',
+        marginTop: '16px',
+        marginBottom: '0',
+        display: 'block',
+        width: '100%',
+        textAlign: 'center'
+      }}
+    >
+      ← Go Back
+    </button>
+  )
+
   function getScreenIndex(screen) {
     const screenMap = {
       'welcome': 0,
@@ -444,9 +478,11 @@ export default function NervousSystemFlow() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q2')}
         disabled={!responses.impact_goal}
+        style={{ opacity: responses.impact_goal ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q1" />
     </div>
   )
 
@@ -471,9 +507,11 @@ export default function NervousSystemFlow() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q3')}
         disabled={!responses.income_goal}
+        style={{ opacity: responses.income_goal ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q2" />
     </div>
   )
 
@@ -496,9 +534,11 @@ export default function NervousSystemFlow() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q4')}
         disabled={!responses.positive_change.trim()}
+        style={{ opacity: responses.positive_change.trim() ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q3" />
     </div>
   )
 
@@ -521,9 +561,11 @@ export default function NervousSystemFlow() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('subconscious-power')}
         disabled={!responses.struggle_area.trim()}
+        style={{ opacity: responses.struggle_area.trim() ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q4" />
     </div>
   )
 
@@ -544,6 +586,7 @@ export default function NervousSystemFlow() {
       <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('calibration')}>
         Got it, let's test
       </button>
+      <BackButton fromScreen="subconscious-power" />
     </div>
   )
 
@@ -579,6 +622,7 @@ export default function NervousSystemFlow() {
       >
         I've Calibrated
       </button>
+      <BackButton fromScreen="calibration" />
     </div>
   )
 
@@ -656,13 +700,16 @@ export default function NervousSystemFlow() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('triage-intro')}
         disabled={!responses.yes_direction || !responses.no_direction}
+        style={{ opacity: (responses.yes_direction && responses.no_direction) ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="calibration-directions" />
 
       <button
         className="ns-hc-secondary-button"
         onClick={() => setCurrentScreen('calibration')}
+        style={{ marginTop: '8px' }}
       >
         Watch Calibration Video Again
       </button>
@@ -965,9 +1012,9 @@ export default function NervousSystemFlow() {
           <p style={{ fontSize: 15, marginTop: 12 }}>{reflection.archetype_description}</p>
         </div>
 
-        {/* Safety Zone */}
+        {/* Current Limits */}
         <div className="ns-hc-result-box">
-          <h3>✓ Where You Feel Safe:</h3>
+          <h3>📊 What Your Current Limit Is:</h3>
           <div style={{ marginTop: 12, paddingLeft: 8 }}>
             <p>💰 Earning up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)}/year</strong></p>
             <p>👥 Being visible to about <strong style={{ color: '#fbbf24' }}>{formatPeople(responses.being_seen_edge)} people</strong></p>

@@ -24,6 +24,38 @@ export default function HealingCompass() {
   const totalScreens = 9
   const currentScreenIndex = getScreenIndex(currentScreen)
 
+  // Go back handler
+  const goBack = (fromScreen) => {
+    const screenOrder = ['welcome', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8']
+    const currentIndex = screenOrder.indexOf(fromScreen)
+    if (currentIndex > 0) {
+      setCurrentScreen(screenOrder[currentIndex - 1])
+    }
+  }
+
+  // Back button component
+  const BackButton = ({ fromScreen }) => (
+    <button
+      className="ns-hc-back-button"
+      onClick={() => goBack(fromScreen)}
+      style={{
+        background: 'transparent',
+        border: 'none',
+        color: 'rgba(255,255,255,0.6)',
+        cursor: 'pointer',
+        fontSize: '14px',
+        padding: '4px 0 2px 0',
+        marginTop: '16px',
+        marginBottom: '0',
+        display: 'block',
+        width: '100%',
+        textAlign: 'center'
+      }}
+    >
+      ← Go Back
+    </button>
+  )
+
   function getScreenIndex(screen) {
     const screenMap = {
       'loading': 0,
@@ -170,9 +202,11 @@ export default function HealingCompass() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q2')}
         disabled={!responses.selected_safety_contract}
+        style={{ opacity: responses.selected_safety_contract ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q1" />
     </div>
   )
 
@@ -195,9 +229,11 @@ export default function HealingCompass() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q3')}
         disabled={!responses.limiting_impact.trim()}
+        style={{ opacity: responses.limiting_impact.trim() ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q2" />
     </div>
   )
 
@@ -223,9 +259,11 @@ export default function HealingCompass() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q4')}
         disabled={!responses.past_parallel_story.trim()}
+        style={{ opacity: responses.past_parallel_story.trim() ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q3" />
     </div>
   )
 
@@ -248,9 +286,11 @@ export default function HealingCompass() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q5')}
         disabled={!responses.past_event_details.trim()}
+        style={{ opacity: responses.past_event_details.trim() ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q4" />
     </div>
   )
 
@@ -273,9 +313,11 @@ export default function HealingCompass() {
         className="ns-hc-primary-button"
         onClick={() => setCurrentScreen('q6')}
         disabled={!responses.past_event_emotions.trim()}
+        style={{ opacity: responses.past_event_emotions.trim() ? 1 : 0.5 }}
       >
         Continue
       </button>
+      <BackButton fromScreen="q5" />
     </div>
   )
 
@@ -300,6 +342,7 @@ export default function HealingCompass() {
       >
         Yes, I see it
       </button>
+      <BackButton fromScreen="q6" />
     </div>
   )
 
@@ -322,6 +365,7 @@ export default function HealingCompass() {
       >
         Yes, let's do it!
       </button>
+      <BackButton fromScreen="q7" />
     </div>
   )
 
