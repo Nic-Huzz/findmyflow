@@ -1,28 +1,30 @@
 /* PersonaAssessment.css - Full Homepage Flow */
 
 .persona-assessment {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 80px 20px 20px 20px;
+  padding: 20px;
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* ============ PROGRESS INDICATORS ============ */
 
-.progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+.persona-assessment .progress-container {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  width: 100%;
   padding: 16px 20px;
   background: transparent;
-  z-index: 100;
+  z-index: 10;
+  box-sizing: border-box;
 }
 
 .progress-dots {
@@ -80,8 +82,12 @@
   animation: fadeIn 0.5s ease;
 }
 
-.welcome-content {
-  margin-bottom: 32px;
+.persona-assessment .welcome-content {
+  margin-bottom: 12px;
+}
+
+.persona-assessment .welcome-container > .primary-button {
+  margin-top: 12px;
 }
 
 .welcome-greeting {
@@ -560,10 +566,10 @@
 
 @media (max-width: 480px) {
   .persona-assessment {
-    padding: 70px 16px 16px 16px;
+    padding: 16px;
   }
 
-  .progress-container {
+  .persona-assessment .progress-container {
     padding: 12px 16px;
   }
 
@@ -618,11 +624,11 @@
 
 /* Handle notch/safe area on iOS */
 @supports (padding-top: env(safe-area-inset-top)) {
-  .progress-container {
+  .persona-assessment .progress-container {
     padding-top: calc(16px + env(safe-area-inset-top));
   }
 
   .persona-assessment {
-    padding: calc(80px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom)) 20px;
+    padding: calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom)) 20px;
   }
 }

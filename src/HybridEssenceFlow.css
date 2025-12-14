@@ -8,6 +8,8 @@
   background: transparent;
   box-shadow: none;
   overflow: hidden;
+  touch-action: pan-x; /* Allow horizontal swipe only */
+  overscroll-behavior: none; /* Prevent pull-to-refresh and scroll bounce */
 }
 
 /* Messages Container */
@@ -148,9 +150,14 @@
 .swipe-container {
   background: transparent;
   border-radius: 20px 20px 0 0;
-  padding: 20px;
-  margin-top: auto;
+  padding: 10px 20px;
+  margin-top: 0;
   box-shadow: none;
+  overflow: hidden;
+  touch-action: pan-x; /* Allow horizontal swipe only */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .progress-info {
@@ -173,10 +180,12 @@
 /* Card Stack */
 .card-stack {
   position: relative;
-  height: calc(100vh - 200px); /* Use most of viewport height, leaving space for header and buttons */
-  min-height: 500px; /* Ensure minimum height for good proportions */
-  max-height: 600px; /* Prevent cards from getting too tall */
-  margin-bottom: 30px;
+  flex: 1;
+  min-height: 350px; /* Ensure minimum height for good proportions */
+  max-height: 550px; /* Prevent cards from getting too tall */
+  margin-bottom: 10px;
+  overflow: hidden;
+  touch-action: pan-x; /* Allow horizontal swipe only */
 }
 
 .swipe-card {
@@ -193,6 +202,7 @@
   transition: transform 0.2s ease;
   border: 3px solid transparent;
   will-change: transform;
+  touch-action: pan-x; /* Allow horizontal swipe, block vertical scroll */
 }
 
 .swipe-card-next {
@@ -592,11 +602,13 @@
   .swipe-container,
   .battle-container,
   .result-container {
-    padding: 20px;
+    padding: 8px 16px;
   }
   
   .card-stack {
-    height: 350px;
+    flex: 1;
+    min-height: 300px;
+    max-height: 480px;
   }
   
   .swipe-actions {
