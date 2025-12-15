@@ -73,10 +73,10 @@ function FlowMap({ persona }) {
     try {
       const { data: sessions, error } = await supabase
         .from('flow_sessions')
-        .select('flow_version, status')
+        .select('flow_type, status')
         .eq('user_id', user.id)
         .eq('status', 'completed')
-        .in('flow_version', ['skills-claude', 'problems-claude', 'persona-claude', 'integration-claude']);
+        .in('flow_type', ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration']);
 
       if (error) {
         console.error('Error fetching nikigai completion status:', error);
@@ -84,10 +84,10 @@ function FlowMap({ persona }) {
       }
 
       const completed = {
-        skills: sessions?.some(s => s.flow_version === 'skills-claude') || false,
-        problems: sessions?.some(s => s.flow_version === 'problems-claude') || false,
-        persona: sessions?.some(s => s.flow_version === 'persona-claude') || false,
-        integration: sessions?.some(s => s.flow_version === 'integration-claude') || false
+        skills: sessions?.some(s => s.flow_type === 'nikigai_skills') || false,
+        problems: sessions?.some(s => s.flow_type === 'nikigai_problems') || false,
+        persona: sessions?.some(s => s.flow_type === 'nikigai_persona') || false,
+        integration: sessions?.some(s => s.flow_type === 'nikigai_integration') || false
       };
 
       setCompletedFlows(completed);
@@ -296,39 +296,75 @@ function FlowMap({ persona }) {
     const clusters = category === 'problems' ? problemsClusters :
                      category === 'people' ? peopleClusters : skillsClusters;
 
-    if (clusters.length === 0) {
+    // Map category to flow key and route
+    const flowMap = {
+      skills: { key: 'skills', route: '/nikigai/skills', prereq: null },
+      problems: { key: 'problems', route: '/nikigai/problems', prereq: 'skills' },
+      people: { key: 'persona', route: '/nikigai/persona', prereq: 'problems' }
+    };
+
+    const flowInfo = flowMap[category];
+    const isCompleted = completedFlows[flowInfo.key];
+    const isUnlocked = !flowInfo.prereq || completedFlows[flowInfo.prereq];
+
+    // If has cluster data, show it (flow is completed)
+    if (clusters.length > 0) {
+      const clusterIndex = currentIndices[category] ?? 0;
+      const currentCluster = clusters[clusterIndex];
+      const hasMultiple = clusters.length > 1;
+
+      // Safety check: if currentCluster is somehow undefined, fall back to first cluster
+      if (!currentCluster) {
+        console.warn(`FlowMap: Invalid cluster index ${clusterIndex} for ${category}`);
+        return null;
+      }
+
       return (
-        <div className="nikigai-card empty">
+        <div className="nikigai-card">
           <div className={`card-icon ${gradientClass}`}>{icon}</div>
           <div className="card-label">{label}</div>
-          <button
-            className="start-flow-button"
-            onClick={() => navigate(nextNikigaiFlow)}
-          >
-            Complete Flow Finder to Discover
-          </button>
+          <div className="card-value">{currentCluster.cluster_label}</div>
+          {description && <div className="card-description">{description}</div>}
+          {hasMultiple && (
+            <div className="card-nav">
+              <button className="nav-arrow" onClick={() => previousCluster(category)}>←</button>
+              <div className="nav-indicator">
+                {currentIndices[category] + 1} / {clusters.length}
+              </div>
+              <button className="nav-arrow" onClick={() => nextCluster(category)}>→</button>
+            </div>
+          )}
         </div>
       );
     }
 
-    const currentCluster = clusters[currentIndices[category]];
-    const hasMultiple = clusters.length > 1;
+    // Flow not completed - show locked or unlocked state
+    if (!isUnlocked) {
+      // Locked state
+      const prereqLabel = flowInfo.prereq === 'skills' ? 'Skills' :
+                          flowInfo.prereq === 'problems' ? 'Problems' : 'Persona';
+      return (
+        <div className="nikigai-card empty locked">
+          <div className={`card-icon ${gradientClass}`} style={{ opacity: 0.4 }}>🔒</div>
+          <div className="card-label" style={{ opacity: 0.6 }}>{label}</div>
+          <div className="locked-message">
+            Complete {prereqLabel} first
+          </div>
+        </div>
+      );
+    }
 
+    // Unlocked but not completed - show start button
     return (
-      <div className="nikigai-card">
+      <div className="nikigai-card empty">
         <div className={`card-icon ${gradientClass}`}>{icon}</div>
         <div className="card-label">{label}</div>
-        <div className="card-value">{currentCluster.cluster_label}</div>
-        {description && <div className="card-description">{description}</div>}
-        {hasMultiple && (
-          <div className="card-nav">
-            <button className="nav-arrow" onClick={() => previousCluster(category)}>←</button>
-            <div className="nav-indicator">
-              {currentIndices[category] + 1} / {clusters.length}
-            </div>
-            <button className="nav-arrow" onClick={() => nextCluster(category)}>→</button>
-          </div>
-        )}
+        <button
+          className="start-flow-button"
+          onClick={() => navigate(flowInfo.route)}
+        >
+          Start {label.replace('Your ', '').replace('Problems You Solve', 'Problems').replace('People You Serve', 'Persona')} Flow
+        </button>
       </div>
     );
   };
@@ -467,7 +503,7 @@ function FlowMap({ persona }) {
           onClick={(e) => toggleSection('flow-compass', e)}
         >
           <div className="section-title">
-            <span className="section-icon">📊</span>
+            <span className="section-icon">🌊</span>
             Flow Compass
           </div>
           <div className="expand-icon">↓</div>
@@ -531,6 +567,13 @@ function FlowMap({ persona }) {
                   </div>
                 );
               })}
+                <button
+                  className="start-flow-button"
+                  onClick={() => navigate('/flow-compass')}
+                  style={{ marginTop: '16px' }}
+                >
+                  Go to Flow Compass
+                </button>
               </>
             ) : (
               <div className="empty-nervous-system">

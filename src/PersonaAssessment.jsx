@@ -172,23 +172,13 @@ function PersonaAssessment() {
         session_id: sessionId,
         user_name: userName,
         email: email.toLowerCase(),
-        persona: assignedPersona?.persona === 'vibe_seeker' ? 'Vibe Seeker' :
-                 assignedPersona?.persona === 'vibe_riser' ? 'Vibe Riser' : 'Movement Maker',
+        persona: assignedPersona?.persona, // Use snake_case format for consistency with profiles table
         essence_archetype: essenceArchetype?.name,
         protective_archetype: protectiveArchetype?.name,
         context: {
           persona_answers: personaAnswers,
           persona_confidence: assignedPersona?.confidence
         }
-      }])
-
-      // Save to persona_assessments for new system
-      await supabase.from('persona_assessments').insert([{
-        email: email.toLowerCase(),
-        responses: personaAnswers,
-        assigned_persona: dbPersona,
-        confidence_score: assignedPersona?.confidence === 'high' ? 1.0 :
-                         assignedPersona?.confidence === 'medium' ? 0.67 : 0.33
       }])
 
       // Now send the verification code
@@ -231,6 +221,17 @@ function PersonaAssessment() {
             movement_maker: 'ideation'
           }
           const initialStage = initialStages[dbPersona] || 'clarity'
+
+          // Update profiles table with persona (for consistency with graduation flow)
+          try {
+            await supabase
+              .from('profiles')
+              .update({ persona: dbPersona })
+              .eq('id', authUser.id)
+          } catch (profileError) {
+            console.warn('Failed to update profile persona:', profileError)
+            // Don't fail the whole flow if this fails
+          }
 
           // Check if stage progress already exists
           const { data: existingProgress } = await supabase

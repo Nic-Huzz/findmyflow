@@ -1,6 +1,7 @@
 // Phase 3: Helper functions for special quest completion types
 import { supabase } from './supabaseClient';
 import { updateStreak } from './streakTracking';
+import { normalizePersona } from '../data/personaProfiles';
 
 /**
  * Handle conversation_log quest completion
@@ -212,6 +213,39 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     if (!activeChallenge) {
       console.log('ℹ️ No active challenge found - skipping sync');
       return { success: true, skipped: true, reason: 'No active challenge' };
+    }
+
+    // Get user's persona and stage to verify quest is valid for them
+    const { data: stageProgress } = await supabase
+      .from('user_stage_progress')
+      .select('persona, current_stage')
+      .eq('user_id', userId)
+      .maybeSingle();
+
+    // Quest requirements - Flow Finder quests are only for vibe_seeker in clarity stage
+    const questRequirements = {
+      'flow_finder_skills': { persona: 'vibe_seeker', stage: 'clarity' },
+      'flow_finder_problems': { persona: 'vibe_seeker', stage: 'clarity' },
+      'flow_finder_persona': { persona: 'vibe_seeker', stage: 'clarity' },
+      'flow_finder_integration': { persona: 'vibe_seeker', stage: 'clarity' }
+    };
+
+    const requirements = questRequirements[questId];
+    if (requirements && stageProgress) {
+      const userPersona = normalizePersona(stageProgress.persona);
+      const requiredPersona = normalizePersona(requirements.persona);
+
+      // Check if quest is valid for user's persona
+      if (requiredPersona && userPersona !== requiredPersona) {
+        console.log(`ℹ️ Quest ${questId} is for ${requiredPersona}, but user is ${userPersona} - skipping`);
+        return { success: true, skipped: true, reason: 'Quest not valid for user persona' };
+      }
+
+      // Check if quest is valid for user's stage
+      if (requirements.stage && stageProgress.current_stage !== requirements.stage) {
+        console.log(`ℹ️ Quest ${questId} is for ${requirements.stage} stage, but user is in ${stageProgress.current_stage} - skipping`);
+        return { success: true, skipped: true, reason: 'Quest not valid for user stage' };
+      }
     }
 
     // Check if quest already completed in this challenge instance

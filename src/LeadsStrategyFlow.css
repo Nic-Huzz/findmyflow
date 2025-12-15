@@ -274,11 +274,17 @@
   padding: 8px 24px;
   border-radius: 100px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #10B981, #059669);
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1a1a2e;
+}
+
+.reveal-badge.secondary {
+  background: linear-gradient(135deg, #fb923c, #ea580c);
+  color: white;
 }
 
 .reveal-offer-name {
@@ -304,7 +310,7 @@
 
 .confidence-fill {
   height: 100%;
-  background: linear-gradient(90deg, #10B981, #059669);
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
   border-radius: 100px;
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }

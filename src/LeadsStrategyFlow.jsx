@@ -329,7 +329,7 @@ function LeadsStrategyFlow() {
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Find My Strategy
           </button>
-          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m leads course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )

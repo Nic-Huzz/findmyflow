@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Finder: Problems Discovery - Mockup</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: 80px;
+    }
+
+    /* Progress Indicators */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 20px;
+      background: transparent;
+      z-index: 100;
+    }
+
+    .progress-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .progress-dot.completed {
+      background: #fbbf24;
+    }
+
+    .progress-dot.active {
+      background: #fbbf24;
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+      transform: scale(1.2);
+    }
+
+    /* Container */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Welcome Screen */
+    .welcome-container {
+      text-align: center;
+    }
+
+    .welcome-greeting {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-message p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0 0 16px;
+    }
+
+    .welcome-message strong {
+      color: white;
+    }
+
+    /* Question Screens */
+    .question-container {
+      text-align: center;
+    }
+
+    .question-number {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 16px;
+    }
+
+    .question-text {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      line-height: 1.3;
+    }
+
+    .question-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      margin: 0 0 32px;
+      line-height: 1.6;
+    }
+
+    /* Multiple inputs */
+    .input-list {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .input-number {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      min-width: 20px;
+    }
+
+    .text-input {
+      flex: 1;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      font-size: 15px;
+      color: white;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+
+    .text-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: rgba(251, 191, 36, 0.8);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .add-more-btn {
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin: 16px auto 0;
+      display: block;
+    }
+
+    .add-more-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .input-hint {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 8px;
+      text-align: left;
+    }
+
+    /* Processing/Loading Screen */
+    .processing-container {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 32px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid #fbbf24;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .processing-text {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .processing-subtext {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+    }
+
+    /* Cluster Selection */
+    .cluster-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .cluster-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .cluster-card:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(251, 191, 36, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .cluster-card.selected {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+      border-color: #fbbf24;
+    }
+
+    .cluster-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fbbf24;
+      margin-bottom: 12px;
+    }
+
+    .cluster-card p {
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.85);
+      margin: 0;
+    }
+
+    .cluster-evidence {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cluster-evidence-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+    }
+
+    .evidence-list {
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .evidence-list li {
+      margin-bottom: 4px;
+    }
+
+    /* Buttons */
+    .primary-button {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+      margin: 32px auto 0;
+      display: block;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+    }
+
+    .primary-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Screen management */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* Demo controls */
+    .demo-controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      gap: 8px;
+      z-index: 200;
+      flex-wrap: wrap;
+      max-width: 90%;
+    }
+
+    .demo-btn {
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .demo-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-btn.active {
+      background: #fbbf24;
+      border-color: #fbbf24;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .question-text {
+        font-size: 24px;
+      }
+
+      .welcome-greeting {
+        font-size: 28px;
+      }
+
+      .cluster-card h3 {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Progress Dots -->
+  <div class="progress-container">
+    <div class="progress-dots">
+      <div class="progress-dot completed"></div>
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: Welcome -->
+  <div class="screen active" id="screen-welcome">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">Flow Finder: Problems Discovery</h1>
+      <div class="welcome-message">
+        <p><strong>Hey Sarah!</strong></p>
+        <p>Now let's discover the <strong>problems and changes you care about</strong> — the things that matter to you and the impact you want to create.</p>
+        <p>We'll explore your learning interests, impact you've made, life chapters, role models, and future vision.</p>
+        <p><strong>For each question, aim for 5+ bullet points.</strong></p>
+      </div>
+
+      <button class="primary-button" onclick="showScreen('screen-q1')">Yep!</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: Q1 - Learning Topics -->
+  <div class="screen" id="screen-q1">
+    <div class="container question-container">
+      <div class="question-number">Question 1 of 7</div>
+      <h2 class="question-text">What topics have you loved learning about?</h2>
+      <p class="question-subtext">Through school, courses, or personal curiosity — aim for 5+ topics</p>
+
+      <div class="input-list" id="q1-inputs">
+        <div class="input-item">
+          <span class="input-number">1.</span>
+          <input type="text" class="text-input" placeholder="Psychology — how the mind works">
+        </div>
+        <div class="input-item">
+          <span class="input-number">2.</span>
+          <input type="text" class="text-input" placeholder="Business — how ideas grow">
+        </div>
+        <div class="input-item">
+          <span class="input-number">3.</span>
+          <input type="text" class="text-input" placeholder="Health — how the body heals">
+        </div>
+        <div class="input-item">
+          <span class="input-number">4.</span>
+          <input type="text" class="text-input" placeholder="Creativity — how innovation happens">
+        </div>
+        <div class="input-item">
+          <span class="input-number">5.</span>
+          <input type="text" class="text-input" placeholder="Philosophy — what makes life meaningful">
+        </div>
+      </div>
+
+      <button class="add-more-btn" onclick="addInput('q1-inputs')">+ Add More</button>
+      <div class="input-hint" style="margin-top: 16px;">💡 What subjects pull you in? What do you read about for fun?</div>
+
+      <button class="primary-button" onclick="showScreen('screen-q2')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Q2 - Impact Created -->
+  <div class="screen" id="screen-q2">
+    <div class="container question-container">
+      <div class="question-number">Question 2 of 7</div>
+      <h2 class="question-text">What impact have you created for others?</h2>
+      <p class="question-subtext">Across your work and projects — big or small, tangible or emotional</p>
+
+      <div class="input-list" id="q2-inputs">
+        <div class="input-item">
+          <span class="input-number">1.</span>
+          <input type="text" class="text-input" placeholder="Helped a friend rebuild their confidence after a setback">
+        </div>
+        <div class="input-item">
+          <span class="input-number">2.</span>
+          <input type="text" class="text-input" placeholder="Created a system that saved my team 10 hours per week">
+        </div>
+        <div class="input-item">
+          <span class="input-number">3.</span>
+          <input type="text" class="text-input" placeholder="Mentored junior colleagues through career transitions">
+        </div>
+        <div class="input-item">
+          <span class="input-number">4.</span>
+          <input type="text" class="text-input" placeholder="Designed a workshop that helped people find clarity">
+        </div>
+        <div class="input-item">
+          <span class="input-number">5.</span>
+          <input type="text" class="text-input" placeholder="Built a community where people felt safe to be themselves">
+        </div>
+      </div>
+
+      <button class="add-more-btn" onclick="addInput('q2-inputs')">+ Add More</button>
+      <div class="input-hint" style="margin-top: 16px;">💡 What difference have you made? How have you helped others?</div>
+
+      <button class="primary-button" onclick="showScreen('screen-processing-1')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: Processing 1 -->
+  <div class="screen" id="screen-processing-1">
+    <div class="container processing-container">
+      <div class="spinner"></div>
+      <div class="processing-text">Analyzing patterns...</div>
+      <div class="processing-subtext">
+        Looking for themes across your learning interests and impact created.
+      </div>
+      <button class="primary-button" onclick="showScreen('screen-q3')" style="margin-top: 48px;">Continue (Demo)</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: Q3 - Life Chapters -->
+  <div class="screen" id="screen-q3">
+    <div class="container question-container">
+      <div class="question-number">Question 3 of 7</div>
+      <h2 class="question-text">If you saw your life as a story, what are the chapters?</h2>
+      <p class="question-subtext">Major life phases or turning points — aim for 3-5 chapter titles</p>
+
+      <div class="input-list" id="q3-inputs">
+        <div class="input-item">
+          <span class="input-number">1.</span>
+          <input type="text" class="text-input" placeholder="The Explorer Years">
+        </div>
+        <div class="input-item">
+          <span class="input-number">2.</span>
+          <input type="text" class="text-input" placeholder="The Rebuild">
+        </div>
+        <div class="input-item">
+          <span class="input-number">3.</span>
+          <input type="text" class="text-input" placeholder="The Awakening">
+        </div>
+        <div class="input-item">
+          <span class="input-number">4.</span>
+          <input type="text" class="text-input" placeholder="Finding My Voice">
+        </div>
+        <div class="input-item">
+          <span class="input-number">5.</span>
+          <input type="text" class="text-input" placeholder="Building My Legacy">
+        </div>
+      </div>
+
+      <button class="add-more-btn" onclick="addInput('q3-inputs')">+ Add More</button>
+      <div class="input-hint" style="margin-top: 16px;">💡 Think of major phases or turning points in your journey</div>
+
+      <button class="primary-button" onclick="showScreen('screen-q4')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 6: Q4 - Chapter Struggles -->
+  <div class="screen" id="screen-q4">
+    <div class="container question-container">
+      <div class="question-number">Question 4 of 7</div>
+      <h2 class="question-text">For each chapter, what struggle did you face?</h2>
+      <p class="question-subtext">Format: Chapter name — Struggle description</p>
+
+      <div class="input-list" id="q4-inputs">
+        <div class="input-item">
+          <span class="input-number">1.</span>
+          <input type="text" class="text-input" placeholder="The Explorer Years — finding a place I felt safe to be myself">
+        </div>
+        <div class="input-item">
+          <span class="input-number">2.</span>
+          <input type="text" class="text-input" placeholder="The Rebuild — recovering from burnout and redefining success">
+        </div>
+        <div class="input-item">
+          <span class="input-number">3.</span>
+          <input type="text" class="text-input" placeholder="The Awakening — letting go of others' expectations">
+        </div>
+        <div class="input-item">
+          <span class="input-number">4.</span>
+          <input type="text" class="text-input" placeholder="Finding My Voice — overcoming fear of visibility">
+        </div>
+        <div class="input-item">
+          <span class="input-number">5.</span>
+          <input type="text" class="text-input" placeholder="Building My Legacy — balancing ambition with presence">
+        </div>
+      </div>
+
+      <button class="add-more-btn" onclick="addInput('q4-inputs')">+ Add More</button>
+      <div class="input-hint" style="margin-top: 16px;">💡 Aim for at least 1 struggle per chapter, up to 3 per chapter</div>
+
+      <button class="primary-button" onclick="showScreen('screen-q5')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 7: Q5 - Role Models -->
+  <div class="screen" id="screen-q5">
+    <div class="container question-container">
+      <div class="question-number">Question 5 of 7</div>
+      <h2 class="question-text">Who has inspired you the most?</h2>
+      <p class="question-subtext">Real or fictional — share who they are and their impact on you</p>
+
+      <div class="input-list" id="q5-inputs">
+        <div class="input-item">
+          <span class="input-number">1.</span>
+          <input type="text" class="text-input" placeholder="Brené Brown — Her work on vulnerability helped me accept imperfection">
+        </div>
+        <div class="input-item">
+          <span class="input-number">2.</span>
+          <input type="text" class="text-input" placeholder="My grandmother — Showed me the power of resilience and quiet strength">
+        </div>
+        <div class="input-item">
+          <span class="input-number">3.</span>
+          <input type="text" class="text-input" placeholder="Seth Godin — Taught me to see marketing as service, not manipulation">
+        </div>
+        <div class="input-item">
+          <span class="input-number">4.</span>
+          <input type="text" class="text-input" placeholder="Hermione Granger — Demonstrated that being smart is powerful">
+        </div>
+        <div class="input-item">
+          <span class="input-number">5.</span>
+          <input type="text" class="text-input" placeholder="My first manager — Believed in me before I believed in myself">
+        </div>
+      </div>
+
+      <button class="add-more-btn" onclick="addInput('q5-inputs')">+ Add More</button>
+      <div class="input-hint" style="margin-top: 16px;">💡 Include both the person and why they're meaningful to you</div>
+
+      <button class="primary-button" onclick="showScreen('screen-processing-2')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 8: Processing 2 -->
+  <div class="screen" id="screen-processing-2">
+    <div class="container processing-container">
+      <div class="spinner"></div>
+      <div class="processing-text">Deepening the analysis...</div>
+      <div class="processing-subtext">
+        Adding your life chapters and role models to understand the full picture.
+      </div>
+      <button class="primary-button" onclick="showScreen('screen-q6')" style="margin-top: 48px;">Continue (Demo)</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 9: Q6 - Future Desires -->
+  <div class="screen" id="screen-q6">
+    <div class="container question-container">
+      <div class="question-number">Question 6 of 7</div>
+      <h2 class="question-text">What do you feel called to create, experience, or change?</h2>
+      <p class="question-subtext">When you imagine the future — aim for 3-5 ideas</p>
+
+      <div class="input-list" id="q6-inputs">
+        <div class="input-item">
+          <span class="input-number">1.</span>
+          <input type="text" class="text-input" placeholder="Help people escape toxic work environments and build meaningful careers">
+        </div>
+        <div class="input-item">
+          <span class="input-number">2.</span>
+          <input type="text" class="text-input" placeholder="Create spaces where vulnerability is celebrated, not punished">
+        </div>
+        <div class="input-item">
+          <span class="input-number">3.</span>
+          <input type="text" class="text-input" placeholder="Build a community of people doing work that matters">
+        </div>
+        <div class="input-item">
+          <span class="input-number">4.</span>
+          <input type="text" class="text-input" placeholder="Write a book that helps people find their path">
+        </div>
+        <div class="input-item">
+          <span class="input-number">5.</span>
+          <input type="text" class="text-input" placeholder="Design systems that make growth feel playful instead of painful">
+        </div>
+      </div>
+
+      <button class="add-more-btn" onclick="addInput('q6-inputs')">+ Add More</button>
+      <div class="input-hint" style="margin-top: 16px;">💡 What impact do you want to make? What do you want to exist?</div>
+
+      <button class="primary-button" onclick="showScreen('screen-q7')">Continue</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 10: Q7 - Top 3 Future Pulls -->
+  <div class="screen" id="screen-q7">
+    <div class="container question-container">
+      <div class="question-number">Question 7 of 7</div>
+      <h2 class="question-text">What are your top 3 future pulls?</h2>
+      <p class="question-subtext">The ideas or dreams that feel most alive RIGHT NOW</p>
+
+      <div class="input-list" id="q7-inputs">
+        <div class="input-item">
+          <span class="input-number">1.</span>
+          <input type="text" class="text-input" placeholder="Building a coaching practice around career transformation">
+        </div>
+        <div class="input-item">
+          <span class="input-number">2.</span>
+          <input type="text" class="text-input" placeholder="Creating a course that helps people find their ikigai">
+        </div>
+        <div class="input-item">
+          <span class="input-number">3.</span>
+          <input type="text" class="text-input" placeholder="Starting a podcast interviewing people who've made bold pivots">
+        </div>
+      </div>
+
+      <button class="add-more-btn" onclick="addInput('q7-inputs')">+ Add More</button>
+      <div class="input-hint" style="margin-top: 16px;">💡 From everything you shared, what feels most energizing?</div>
+
+      <button class="primary-button" onclick="showScreen('screen-processing-3')">Analyze My Answers</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 11: Processing 3 -->
+  <div class="screen" id="screen-processing-3">
+    <div class="container processing-container">
+      <div class="spinner"></div>
+      <div class="processing-text">Identifying your problem themes...</div>
+      <div class="processing-subtext">
+        Bringing together all your responses to reveal the problems and changes you care about most.
+        <br><br>
+        This usually takes 10-15 seconds.
+      </div>
+      <button class="primary-button" onclick="showScreen('screen-success')" style="margin-top: 48px;">View Results (Demo)</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 12: Success with All Clusters -->
+  <div class="screen" id="screen-success">
+    <div class="container welcome-container">
+      <h1 class="welcome-greeting">Here's what we discovered about you</h1>
+      <div class="welcome-message">
+        <p>Based on your responses, we've identified 4 problem themes that represent the impact you want to create in the world:</p>
+      </div>
+
+      <!-- All Clusters (Read-only, no selection) -->
+      <div class="cluster-grid" style="margin: 32px 0;">
+        <div class="cluster-card" style="cursor: default; border-color: rgba(251, 191, 36, 0.3);">
+          <h3>Helping People Find Meaningful Work</h3>
+          <p>You're passionate about helping people escape soul-crushing jobs and discover work that actually matters to them.</p>
+          <div class="cluster-evidence">
+            <div class="cluster-evidence-label">Based on your responses:</div>
+            <ul class="evidence-list">
+              <li>"Help people escape toxic work environments and build meaningful careers"</li>
+              <li>"Building a coaching practice around career transformation"</li>
+              <li>"Finding My Voice — overcoming fear of visibility"</li>
+              <li>"Mentored junior colleagues through career transitions"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cluster-card" style="cursor: default; border-color: rgba(251, 191, 36, 0.3);">
+          <h3>Creating Safe Spaces for Vulnerability</h3>
+          <p>You want to build environments where people feel safe to be themselves, show up authentically, and grow without fear.</p>
+          <div class="cluster-evidence">
+            <div class="cluster-evidence-label">Based on your responses:</div>
+            <ul class="evidence-list">
+              <li>"Create spaces where vulnerability is celebrated, not punished"</li>
+              <li>"Built a community where people felt safe to be themselves"</li>
+              <li>"Brené Brown — Her work on vulnerability helped me accept imperfection"</li>
+              <li>"The Explorer Years — finding a place I felt safe to be myself"</li>
+              <li>"Psychology — how the mind works"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cluster-card" style="cursor: default; border-color: rgba(251, 191, 36, 0.3);">
+          <h3>Making Growth Feel Accessible</h3>
+          <p>You believe personal growth shouldn't be painful or complicated—you want to make transformation feel natural and even playful.</p>
+          <div class="cluster-evidence">
+            <div class="cluster-evidence-label">Based on your responses:</div>
+            <ul class="evidence-list">
+              <li>"Design systems that make growth feel playful instead of painful"</li>
+              <li>"Created a system that saved my team 10 hours per week"</li>
+              <li>"Designed a workshop that helped people find clarity"</li>
+              <li>"Creating a course that helps people find their ikigai"</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cluster-card" style="cursor: default; border-color: rgba(251, 191, 36, 0.3);">
+          <h3>Building Community & Connection</h3>
+          <p>You're driven to bring people together and create meaningful connections that support collective growth.</p>
+          <div class="cluster-evidence">
+            <div class="cluster-evidence-label">Based on your responses:</div>
+            <ul class="evidence-list">
+              <li>"Build a community of people doing work that matters"</li>
+              <li>"Starting a podcast interviewing people who've made bold pivots"</li>
+              <li>"Built a community where people felt safe to be themselves"</li>
+              <li>"Helped a friend rebuild their confidence after a setback"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="welcome-greeting" style="margin-top: 40px;">✓ Problems Discovery Complete!</h1>
+      <div class="welcome-message">
+        <p>These problem themes represent the impact you want to create in the world—the changes that matter to you.</p>
+        <p style="margin-top: 24px;"><strong>Next up:</strong> Let's discover who you're most qualified to serve.</p>
+      </div>
+
+      <button class="primary-button" onclick="alert('Navigate to Persona Discovery')">Continue to Persona Discovery</button>
+      <button class="primary-button" style="background: rgba(255, 255, 255, 0.1); box-shadow: none; margin-top: 12px;" onclick="alert('Return to Dashboard')">Save & Return to Dashboard</button>
+    </div>
+  </div>
+
+  <!-- Demo Controls -->
+  <div class="demo-controls">
+    <button class="demo-btn active" onclick="showScreen('screen-welcome')">Welcome</button>
+    <button class="demo-btn" onclick="showScreen('screen-q1')">Q1-Topics</button>
+    <button class="demo-btn" onclick="showScreen('screen-q2')">Q2-Impact</button>
+    <button class="demo-btn" onclick="showScreen('screen-processing-1')">Process1</button>
+    <button class="demo-btn" onclick="showScreen('screen-q3')">Q3-Chapters</button>
+    <button class="demo-btn" onclick="showScreen('screen-q4')">Q4-Struggles</button>
+    <button class="demo-btn" onclick="showScreen('screen-q5')">Q5-RoleModels</button>
+    <button class="demo-btn" onclick="showScreen('screen-processing-2')">Process2</button>
+    <button class="demo-btn" onclick="showScreen('screen-q6')">Q6-Future</button>
+    <button class="demo-btn" onclick="showScreen('screen-q7')">Q7-Top3</button>
+    <button class="demo-btn" onclick="showScreen('screen-processing-3')">Process3</button>
+    <button class="demo-btn" onclick="showScreen('screen-success')">Success</button>
+  </div>
+
+  <script>
+    function showScreen(screenId) {
+      // Hide all screens
+      document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+
+      // Show selected screen
+      document.getElementById(screenId).classList.add('active');
+
+      // Update demo buttons
+      document.querySelectorAll('.demo-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    // Add click handlers to cluster cards
+    document.querySelectorAll('.cluster-card').forEach(card => {
+      card.addEventListener('click', function() {
+        // Remove selected from siblings
+        const siblings = this.parentElement.querySelectorAll('.cluster-card');
+        siblings.forEach(sibling => sibling.classList.remove('selected'));
+
+        // Add selected to clicked card
+        this.classList.add('selected');
+      });
+    });
+
+    // Function to dynamically add more input fields
+    function addInput(containerId) {
+      const container = document.getElementById(containerId);
+      const currentInputs = container.querySelectorAll('.input-item');
+      const nextNumber = currentInputs.length + 1;
+
+      const newInputItem = document.createElement('div');
+      newInputItem.className = 'input-item';
+      newInputItem.innerHTML = `
+        <span class="input-number">${nextNumber}.</span>
+        <input type="text" class="text-input" placeholder="Enter another item...">
+      `;
+
+      container.appendChild(newInputItem);
+
+      // Focus the new input
+      const newInput = newInputItem.querySelector('.text-input');
+      newInput.focus();
+    }
+  </script>
+</body>
+</html>

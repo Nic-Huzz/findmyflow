@@ -3,6 +3,7 @@
 
 import { supabase } from './supabaseClient';
 import { PERSONA_STAGES, getNextStage, getStageCelebration, getInitialStage, getAllMilestones } from './personaStages';
+import { normalizePersona } from '../data/personaProfiles';
 
 // Check if user has completed required flows
 const checkFlowsCompleted = async (userId, flowsRequired = []) => {
@@ -44,34 +45,67 @@ const checkFlowsCompleted = async (userId, flowsRequired = []) => {
 
 // Check if user has completed required milestones (combines milestones and milestones_additional)
 // Now persona-aware to prevent cross-persona milestone contamination
+// Groan Challenge must be completed within the current 7-day challenge
 const checkMilestones = async (userId, persona, milestonesRequired = [], milestonesAdditional = []) => {
   const allMilestones = [...milestonesRequired, ...milestonesAdditional];
   if (!allMilestones || allMilestones.length === 0) return true;
 
+  // Get active challenge start date for groan_challenge check
+  const { data: activeChallenge } = await supabase
+    .from('challenge_progress')
+    .select('challenge_start_date')
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .order('challenge_start_date', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const challengeStartDate = activeChallenge?.challenge_start_date;
+
+  // Get all completed milestones for this persona
   const { data: completedMilestones } = await supabase
     .from('milestone_completions')
-    .select('milestone_id')
+    .select('milestone_id, created_at')
     .eq('user_id', userId)
-    .eq('persona', persona)  // Filter by current persona
+    .eq('persona', persona)
     .in('milestone_id', allMilestones);
 
-  const completedMilestoneIds = new Set(completedMilestones?.map(m => m.milestone_id) || []);
-  return allMilestones.every(milestone => completedMilestoneIds.has(milestone));
+  // Check each required milestone
+  return allMilestones.every(milestone => {
+    const completion = completedMilestones?.find(m => m.milestone_id === milestone);
+    if (!completion) return false;
+
+    // Groan Challenge must be completed within the current 7-day challenge
+    if (milestone === 'groan_challenge_completed' && challengeStartDate) {
+      const completedAt = new Date(completion.created_at);
+      const challengeStart = new Date(challengeStartDate);
+      if (completedAt < challengeStart) {
+        console.log('⚠️ Groan challenge was completed before current challenge started');
+        return false;
+      }
+    }
+
+    return true;
+  });
 };
 
 // Check if user has met challenge streak requirement
+// Uses longest_streak from the ACTIVE challenge (current persona/stage)
 const checkStreak = async (userId, streakRequired) => {
   if (!streakRequired) return true;
 
-  const { data: challengeProgress } = await supabase
+  // Get the active challenge for this user (corresponds to current persona/stage)
+  const { data: activeChallenge } = await supabase
     .from('challenge_progress')
-    .select('streak_days')
+    .select('longest_streak')
     .eq('user_id', userId)
-    .order('streak_days', { ascending: false })
+    .eq('status', 'active')
+    .order('challenge_start_date', { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
-  return challengeProgress?.streak_days >= streakRequired;
+  // Use longest_streak (max ever achieved in this challenge), not current streak_days
+  return (activeChallenge?.longest_streak || 0) >= streakRequired;
 };
 
 // Main function: Check if user is eligible to graduate
@@ -167,6 +201,21 @@ export const graduateUser = async (userId, fromStage, toStage, persona, reason) 
       throw new Error(`Failed to record graduation: ${graduationError.message}`);
     }
 
+    // Archive the current active challenge (challenge resets on graduation)
+    const { error: archiveError } = await supabase
+      .from('challenge_progress')
+      .update({
+        status: 'completed',
+        completed_at: new Date().toISOString()
+      })
+      .eq('user_id', userId)
+      .eq('status', 'active');
+
+    if (archiveError) {
+      console.warn('Failed to archive challenge:', archiveError.message);
+      // Don't throw - graduation should still proceed
+    }
+
     // Update current stage in user_stage_progress
     const { error: updateError } = await supabase
       .from('user_stage_progress')
@@ -210,6 +259,16 @@ const graduateVibeSeeker = async (userId, reason) => {
       graduation_reason: reason
     });
 
+    // 1b. Archive the current active challenge (challenge resets on graduation)
+    await supabase
+      .from('challenge_progress')
+      .update({
+        status: 'completed',
+        completed_at: new Date().toISOString()
+      })
+      .eq('user_id', userId)
+      .eq('status', 'active');
+
     // 2. Update persona in profiles table
     const { error: profileError } = await supabase
       .from('profiles')
@@ -221,18 +280,19 @@ const graduateVibeSeeker = async (userId, reason) => {
     }
 
     // 3. Get user's email to update lead_flow_profiles
+    // Use maybeSingle() to avoid throwing when no profile exists
     const { data: profile } = await supabase
       .from('profiles')
       .select('email')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
-    // 4. Update lead_flow_profiles table
+    // 4. Update lead_flow_profiles table (use ilike for case-insensitive email matching)
     if (profile?.email) {
       const { error: leadFlowError } = await supabase
         .from('lead_flow_profiles')
         .update({ persona: 'vibe_riser' })
-        .eq('email', profile.email);
+        .ilike('email', profile.email);
 
       if (leadFlowError) {
         console.warn('Failed to update lead_flow_profiles:', leadFlowError.message);
@@ -286,6 +346,16 @@ const graduateVibeRiser = async (userId, reason) => {
       graduation_reason: reason
     });
 
+    // 1b. Archive the current active challenge (challenge resets on graduation)
+    await supabase
+      .from('challenge_progress')
+      .update({
+        status: 'completed',
+        completed_at: new Date().toISOString()
+      })
+      .eq('user_id', userId)
+      .eq('status', 'active');
+
     // 2. Update persona in profiles table
     const { error: profileError } = await supabase
       .from('profiles')
@@ -297,18 +367,19 @@ const graduateVibeRiser = async (userId, reason) => {
     }
 
     // 3. Get user's email to update lead_flow_profiles
+    // Use maybeSingle() to avoid throwing when no profile exists
     const { data: profile } = await supabase
       .from('profiles')
       .select('email')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
-    // 4. Update lead_flow_profiles table
+    // 4. Update lead_flow_profiles table (use ilike for case-insensitive email matching)
     if (profile?.email) {
       const { error: leadFlowError } = await supabase
         .from('lead_flow_profiles')
         .update({ persona: 'movement_maker' })
-        .eq('email', profile.email);
+        .ilike('email', profile.email);
 
       if (leadFlowError) {
         console.warn('Failed to update lead_flow_profiles:', leadFlowError.message);
@@ -350,16 +421,7 @@ const graduateVibeRiser = async (userId, reason) => {
   }
 };
 
-// Helper to normalize persona names
-const normalizePersona = (persona) => {
-  if (!persona) return null;
-  const mapping = {
-    'Vibe Seeker': 'vibe_seeker',
-    'Vibe Riser': 'vibe_riser',
-    'Movement Maker': 'movement_maker'
-  };
-  return mapping[persona] || persona.toLowerCase().replace(/\s+/g, '_');
-};
+// normalizePersona is now imported from '../data/personaProfiles'
 
 // Initialize user stage progress (call when user selects persona)
 export const initializeUserStageProgress = async (userId, persona) => {

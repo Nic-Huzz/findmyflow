@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// Persona stages configuration
+// Persona stages configuration - MUST match src/lib/personaStages.js
 const PERSONA_STAGES = {
   vibe_seeker: {
     stages: ['clarity'],
@@ -14,7 +14,9 @@ const PERSONA_STAGES = {
     graduation_requirements: {
       clarity: {
         flows_required: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
-        description: 'Complete all 4 Nikigai flows to gain clarity on your unique value'
+        milestones: ['groan_challenge_completed'],
+        challenge_streak: 7,
+        description: 'Complete all 4 Flow Finder flows, and inside a 7-day challenge complete a Groan Challenge and complete at least 1 challenge a day for 7 days'
       }
     }
   },
@@ -23,26 +25,27 @@ const PERSONA_STAGES = {
     initial_stage: 'validation',
     graduation_requirements: {
       validation: {
-        milestones: ['validation_form_sent', 'validation_responses_3'],
+        flows_required: ['persona_selection'],
+        milestones: ['validation_form_sent', 'validation_responses_3', 'groan_challenge_completed'],
         challenge_streak: 7,
-        description: 'Send validation form, get 3 responses, and complete a 7-day challenge'
+        description: 'Complete persona selection, send validation form, get 3 responses, complete a groan challenge, and complete a 7-day challenge'
       },
       creation: {
         flows_required: ['100m_offer', 'lead_magnet_offer'],
-        milestones: ['product_created', 'lead_magnet_created'],
+        milestones: ['product_created', 'lead_magnet_created', 'groan_challenge_completed'],
         challenge_streak: 7,
-        description: 'Complete offer flows, create product and lead magnet, complete a 7-day challenge'
+        description: 'Complete offer flows, create product and lead magnet, complete a groan challenge, and complete a 7-day challenge'
       },
       testing: {
-        milestones: ['testing_complete', 'feedback_responses_3', 'improvements_identified'],
+        milestones: ['testing_complete', 'feedback_responses_3', 'improvements_identified', 'groan_challenge_completed'],
         challenge_streak: 7,
-        description: 'Complete testing, get 3 feedback responses, identify improvements, complete a 7-day challenge'
+        description: 'Complete testing, get 3 feedback responses, identify improvements, complete a groan challenge, and complete a 7-day challenge'
       },
       launch: {
         flows_required: ['100m_leads'],
-        milestones: ['strategy_identified', 'funnel_stages_defined'],
+        milestones: ['strategy_identified', 'funnel_stages_defined', 'groan_challenge_completed'],
         challenge_streak: 7,
-        description: 'Complete leads flow, define strategy and funnel, complete a 7-day challenge'
+        description: 'Complete leads flow, define strategy and funnel, complete a groan challenge, and complete a 7-day challenge'
       }
     }
   },
@@ -51,21 +54,21 @@ const PERSONA_STAGES = {
     initial_stage: 'ideation',
     graduation_requirements: {
       ideation: {
-        milestones: ['read_putting_it_together', 'decide_acquisition', 'decide_upsell', 'decide_downsell', 'decide_continuity'],
+        milestones: ['read_putting_it_together', 'decide_acquisition', 'decide_upsell', 'decide_downsell', 'decide_continuity', 'groan_challenge_completed'],
         flows_required: ['attraction_offer', 'upsell_flow', 'downsell_flow', 'continuity_flow'],
         challenge_streak: 7,
-        description: 'Read overview, complete all 4 money model flows, decide on each offer type, complete a 7-day challenge'
+        description: 'Read overview, complete all 4 money model flows, decide on each offer type, complete a groan challenge, and complete a 7-day challenge'
       },
       creation: {
-        milestones: ['create_acquisition_offer', 'create_upsell_offer', 'create_downsell_offer', 'create_continuity_offer'],
+        milestones: ['create_acquisition_offer', 'create_upsell_offer', 'create_downsell_offer', 'create_continuity_offer', 'groan_challenge_completed'],
         challenge_streak: 7,
-        description: 'Create all 4 offer types and complete a 7-day challenge: Acquisition, Upsell, Downsell, Continuity'
+        description: 'Create all 4 offer types, complete a groan challenge, and complete a 7-day challenge: Acquisition, Upsell, Downsell, Continuity'
       },
       launch: {
         flows_required: ['100m_leads'],
-        milestones: ['strategy_identified', 'funnel_stages_defined'],
+        milestones: ['strategy_identified', 'funnel_stages_defined', 'groan_challenge_completed'],
         challenge_streak: 7,
-        description: 'Complete leads flow, define strategy and funnel, complete a 7-day challenge'
+        description: 'Complete leads flow, define strategy and funnel, complete a groan challenge, and complete a 7-day challenge'
       }
     }
   }
@@ -88,34 +91,67 @@ async function checkFlowsCompleted(supabase: any, userId: string, flowsRequired:
 
 // Helper: Check if milestones are completed (combines milestones and milestones_additional)
 // Now persona-aware to prevent cross-persona milestone contamination
+// Groan Challenge must be completed within the current 7-day challenge
 async function checkMilestones(supabase: any, userId: string, persona: string, milestonesRequired: string[] = [], milestonesAdditional: string[] = []) {
   const allMilestones = [...milestonesRequired, ...milestonesAdditional]
   if (!allMilestones || allMilestones.length === 0) return true
 
+  // Get active challenge start date for groan_challenge check
+  const { data: activeChallenge } = await supabase
+    .from('challenge_progress')
+    .select('challenge_start_date')
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .order('challenge_start_date', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  const challengeStartDate = activeChallenge?.challenge_start_date
+
+  // Get all completed milestones for this persona
   const { data: completedMilestones } = await supabase
     .from('milestone_completions')
-    .select('milestone_id')
+    .select('milestone_id, created_at')
     .eq('user_id', userId)
-    .eq('persona', persona)  // Filter by current persona
+    .eq('persona', persona)
     .in('milestone_id', allMilestones)
 
-  const completedMilestoneIds = new Set(completedMilestones?.map((m: any) => m.milestone_id) || [])
-  return allMilestones.every(milestone => completedMilestoneIds.has(milestone))
+  // Check each required milestone
+  return allMilestones.every(milestone => {
+    const completion = completedMilestones?.find((m: any) => m.milestone_id === milestone)
+    if (!completion) return false
+
+    // Groan Challenge must be completed within the current 7-day challenge
+    if (milestone === 'groan_challenge_completed' && challengeStartDate) {
+      const completedAt = new Date(completion.created_at)
+      const challengeStart = new Date(challengeStartDate)
+      if (completedAt < challengeStart) {
+        console.log('⚠️ Groan challenge was completed before current challenge started')
+        return false
+      }
+    }
+
+    return true
+  })
 }
 
 // Helper: Check if streak requirement is met
+// Uses longest_streak from the ACTIVE challenge (matches client-side graduationChecker.js)
 async function checkStreak(supabase: any, userId: string, streakRequired: number | undefined) {
   if (!streakRequired) return true
 
-  const { data: challengeProgress } = await supabase
+  // Get the active challenge for this user (corresponds to current persona/stage)
+  const { data: activeChallenge } = await supabase
     .from('challenge_progress')
-    .select('streak_days')
+    .select('longest_streak')
     .eq('user_id', userId)
-    .order('streak_days', { ascending: false })
+    .eq('status', 'active')
+    .order('challenge_start_date', { ascending: false })
     .limit(1)
-    .single()
+    .maybeSingle()
 
-  return (challengeProgress?.streak_days || 0) >= streakRequired
+  // Use longest_streak (max ever achieved in this challenge), not current streak_days
+  return (activeChallenge?.longest_streak || 0) >= streakRequired
 }
 
 // Helper: Get next stage

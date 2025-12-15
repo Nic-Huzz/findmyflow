@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
@@ -36,6 +36,7 @@ const STAGE_GROUPS = [
 
 function DownsellFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
 
   const [stage, setStage] = useState(STAGES.WELCOME)
@@ -47,6 +48,7 @@ function DownsellFlow() {
   const [showAllOptions, setShowAllOptions] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [viewingResults, setViewingResults] = useState(false)
 
   // Go back handler
   const goBack = (fromStage) => {
@@ -110,8 +112,47 @@ function DownsellFlow() {
     loadData()
   }, [])
 
-  // Money-Model challenge - accessible to authenticated Movement Makers
-  // No redirect needed
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user || !offersData) return
+
+      try {
+        const { data: assessment, error } = await supabase
+          .from('downsell_assessments')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (error || !assessment) return
+
+        const savedScores = assessment.all_offer_scores || []
+        const reconstructedScores = savedScores.map(saved => {
+          const offer = offersData.find(o => o.id === saved.id || o.name === saved.name)
+          return {
+            offer: offer || { id: saved.id, name: saved.name },
+            totalScore: saved.score,
+            confidence: saved.confidence,
+            isDisqualified: saved.disqualified
+          }
+        })
+
+        if (reconstructedScores.length > 0) {
+          setAllOfferScores(reconstructedScores)
+          const topOffer = reconstructedScores.find(s => !s.isDisqualified) || reconstructedScores[0]
+          setRecommendedOffer(topOffer)
+          setViewingResults(true)
+          setStage(STAGES.REVEAL)
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+
+    loadSavedResults()
+  }, [searchParams, user, offersData])
 
   // Calculate current stage group for progress
   const getCurrentGroupIndex = () => {
@@ -349,7 +390,7 @@ function DownsellFlow() {
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Let's Find Your Downsell Strategy
           </button>
-          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m money model course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )
@@ -517,106 +558,22 @@ function DownsellFlow() {
             </div>
           )}
 
-          <button
-            className="primary-button"
-            onClick={handleSaveResults}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Saving...' : 'Save Results'}
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // NAME CAPTURE STAGE
-  if (stage === STAGES.NAME_CAPTURE) {
-    return (
-      <div className="downsell-flow">
-        {renderProgress()}
-        <div className="capture-container">
-          <h2 className="capture-title">Let's save your results</h2>
-          <p className="capture-subtitle">What should I call you?</p>
-          <form onSubmit={handleNameSubmit}>
-            <input
-              type="text"
-              className="capture-input"
-              placeholder="Your name"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              autoFocus
-            />
+          {viewingResults ? (
             <button
-              type="submit"
               className="primary-button"
-              disabled={!userName.trim()}
+              onClick={() => navigate('/7-day-challenge')}
             >
-              Continue
+              ← Back to 7-Day Challenge
             </button>
-          </form>
-        </div>
-      </div>
-    )
-  }
-
-  // EMAIL CAPTURE STAGE
-  if (stage === STAGES.EMAIL_CAPTURE) {
-    return (
-      <div className="downsell-flow">
-        {renderProgress()}
-        <div className="capture-container">
-          <h2 className="capture-title">Nice to meet you, {userName}</h2>
-          <p className="capture-subtitle">What's your email address?</p>
-          <form onSubmit={handleEmailSubmit}>
-            <input
-              type="email"
-              className="capture-input"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoFocus
-            />
-            {error && <div className="error-message">{error}</div>}
+          ) : (
             <button
-              type="submit"
               className="primary-button"
-              disabled={!validateEmail(email) || isLoading}
+              onClick={handleSaveResults}
+              disabled={isLoading}
             >
-              {isLoading ? 'Sending...' : 'Send Verification Code'}
+              {isLoading ? 'Saving...' : 'Save Results'}
             </button>
-          </form>
-        </div>
-      </div>
-    )
-  }
-
-  // CODE VERIFY STAGE
-  if (stage === STAGES.CODE_VERIFY) {
-    return (
-      <div className="downsell-flow">
-        {renderProgress()}
-        <div className="capture-container">
-          <h2 className="capture-title">Check your email</h2>
-          <p className="capture-subtitle">Enter the 6-digit code we sent to {email}</p>
-          <form onSubmit={handleCodeVerify}>
-            <input
-              type="text"
-              className="capture-input code-input"
-              placeholder="000000"
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              maxLength={6}
-              autoFocus
-            />
-            {error && <div className="error-message">{error}</div>}
-            <button
-              type="submit"
-              className="primary-button"
-              disabled={verificationCode.length !== 6 || isLoading}
-            >
-              {isLoading ? 'Verifying...' : 'Verify & Continue'}
-            </button>
-          </form>
+          )}
         </div>
       </div>
     )

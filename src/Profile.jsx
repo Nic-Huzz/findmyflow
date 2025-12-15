@@ -7,7 +7,6 @@ import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/personaProfiles'
 import { hasActiveChallenge } from './lib/questCompletion'
 import { graduateUser } from './lib/graduationChecker'
-import { getCurrentStreak } from './lib/streakTracking'
 import StageProgressCard from './components/StageProgressCard'
 import GraduationModal from './components/GraduationModal'
 import FlowMap from './components/FlowMap'
@@ -23,7 +22,6 @@ const Profile = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [hasChallenge, setHasChallenge] = useState(false)
   const [stageProgress, setStageProgress] = useState(null)
-  const [streakData, setStreakData] = useState(null)
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -34,7 +32,6 @@ const Profile = () => {
       loadUserProfile()
       checkChallengeStatus()
       loadStageProgress()
-      loadStreakData()
       checkFirstTimeUser()
     } else if (user === null) {
       // User is not authenticated
@@ -74,29 +71,14 @@ const Profile = () => {
   }
 
   const captureComponentSnapshot = (selector) => {
-    // Add a small delay to ensure DOM is fully rendered
     const element = document.querySelector(selector)
     if (!element) {
-      // Retry once after a short delay if element not found
-      setTimeout(() => {
-        const retryElement = document.querySelector(selector)
-        if (retryElement) {
-          const clone = retryElement.cloneNode(true)
-          clone.style.maxWidth = '100%'
-          clone.style.transform = 'scale(0.95)'
-          clone.style.transformOrigin = 'center'
-          clone.style.pointerEvents = 'none'
-          return clone.outerHTML
-        }
-      }, 100)
       return null
     }
 
-    // Clone the element for snapshot
+    // Clone the element for snapshot (CSS handles scaling)
     const clone = element.cloneNode(true)
     clone.style.maxWidth = '100%'
-    clone.style.transform = 'scale(0.95)'
-    clone.style.transformOrigin = 'center'
     clone.style.pointerEvents = 'none'
 
     return clone.outerHTML
@@ -120,10 +102,11 @@ const Profile = () => {
       console.log('🔍 Loading user profile for:', user.email)
 
       // Get the most recent profile for this authenticated user
+      // Use ilike for case-insensitive email matching (emails may be stored in mixed case)
       const { data, error } = await supabase
         .from('lead_flow_profiles')
         .select('*')
-        .eq('email', user.email) // Filter by authenticated user's email
+        .ilike('email', user.email)
         .order('created_at', { ascending: false })
         .limit(1)
 
@@ -170,19 +153,6 @@ const Profile = () => {
       setStageProgress(data)
     } catch (err) {
       console.warn('Error loading stage progress:', err)
-    }
-  }
-
-  const loadStreakData = async () => {
-    if (!user?.id) return
-
-    try {
-      const result = await getCurrentStreak(user.id)
-      if (result.success) {
-        setStreakData(result)
-      }
-    } catch (err) {
-      console.error('Error loading streak data:', err)
     }
   }
 
@@ -546,13 +516,6 @@ const Profile = () => {
               </div>
             )}
           </div>
-          {streakData && streakData.streak_days > 0 && (
-            <div className="stat-card orange">
-              <div className="stat-icon">🔥</div>
-              <div className="stat-label">Current Streak</div>
-              <div className="stat-value">{streakData.streak_days} days</div>
-            </div>
-          )}
           {stageProgress && stageProgress.conversations_logged > 0 && (
             <div className="stat-card blue">
               <div className="stat-icon">💬</div>

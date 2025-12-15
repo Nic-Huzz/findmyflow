@@ -45,8 +45,10 @@ export default function FlowFinderProblems() {
 
       if (error) throw error
       setSessionId(data.id)
+      return data.id  // Return the ID for immediate use
     } catch (err) {
       console.error('Error creating session:', err)
+      return null
     }
   }
 
@@ -165,11 +167,12 @@ export default function FlowFinderProblems() {
   }
 
   const analyzeResponses = async () => {
-    // Safety check for sessionId
-    if (!sessionId) {
+    // Safety check for sessionId - use returned value since setState is async
+    let currentSessionId = sessionId
+    if (!currentSessionId) {
       console.error('No session ID - attempting to create one')
-      await createSession()
-      if (!sessionId) {
+      currentSessionId = await createSession()
+      if (!currentSessionId) {
         alert('Error starting flow. Please refresh and try again.')
         return
       }
@@ -217,7 +220,7 @@ export default function FlowFinderProblems() {
       // Save clusters to database
       const clustersToSave = returnedClusters.map(cluster => ({
         user_id: user.id,
-        session_id: sessionId,
+        session_id: currentSessionId,
         cluster_type: 'problems',
         cluster_stage: 'final',
         cluster_label: cluster.label,
@@ -242,7 +245,7 @@ export default function FlowFinderProblems() {
       await supabase
         .from('flow_sessions')
         .update({ status: 'completed', completed_at: new Date().toISOString() })
-        .eq('id', sessionId)
+        .eq('id', currentSessionId)
 
       // Sync with 7-day challenge if active
       await syncFlowFinderWithChallenge(user.id, 'problems')
@@ -425,6 +428,8 @@ export default function FlowFinderProblems() {
           <div className="processing-text">Discovering early patterns...</div>
           <div className="processing-subtext">
             Looking for themes across your learning interests and impact created.
+            <br /><br />
+            This usually takes 10-15 seconds.
           </div>
         </>
       ) : processingError ? (
@@ -619,6 +624,8 @@ export default function FlowFinderProblems() {
           <div className="processing-text">Deepening the analysis...</div>
           <div className="processing-subtext">
             Adding your life chapters, struggles, and role models to understand the full picture.
+            <br /><br />
+            This usually takes 10-15 seconds.
           </div>
         </>
       ) : processingError ? (

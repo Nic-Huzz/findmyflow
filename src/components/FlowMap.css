@@ -85,16 +85,18 @@
 
 .flow-section .section-icon {
   font-size: 24px !important;
-  line-height: 24px !important;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
+  line-height: 1 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
   text-align: center;
-  vertical-align: baseline;
+  vertical-align: middle;
   flex-shrink: 0;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .expand-icon {
@@ -457,9 +459,9 @@
   
   .flow-section .section-icon {
     font-size: 20px !important;
-    width: 20px;
-    height: 20px;
-    line-height: 20px !important;
+    min-width: 24px;
+    min-height: 24px;
+    line-height: 1 !important;
   }
 
   .section-content {
@@ -516,6 +518,24 @@
   align-items: center;
   text-align: center;
   padding: 32px 24px;
+}
+
+.nikigai-card.empty.locked {
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  cursor: not-allowed;
+}
+
+.nikigai-card.empty.locked:hover {
+  transform: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.locked-message {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 500;
+  margin-top: 8px;
 }
 
 .card-icon {

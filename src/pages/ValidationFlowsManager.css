@@ -162,13 +162,13 @@
 }
 
 .copy-link-btn {
-  background: #667eea !important;
+  background: #5e17eb !important;
   color: white !important;
   border: none !important;
 }
 
 .copy-link-btn:hover {
-  background: #5568d3 !important;
+  background: #4a12c7 !important;
 }
 
 .delete-btn:hover {
@@ -230,7 +230,7 @@
   gap: 24px;
   margin-bottom: 24px;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   border-radius: 12px;
   color: white;
 }
@@ -363,14 +363,14 @@
 }
 
 .flow-type-card:hover {
-  border-color: #667eea;
-  background: #f0f2ff;
+  border-color: #5e17eb;
+  background: #f5f0ff;
 }
 
 .flow-type-card.selected {
-  border-color: #667eea;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  border-color: #5e17eb;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
 }
 
 .flow-type-card h3 {
@@ -390,7 +390,7 @@
 .flow-type-card .question-count {
   display: inline-block;
   padding: 4px 12px;
-  background: #667eea;
+  background: #5e17eb;
   color: white;
   border-radius: 20px;
   font-size: 12px;
@@ -423,13 +423,13 @@
 }
 
 .confirm-btn {
-  background: #667eea;
+  background: #5e17eb;
   border: none;
   color: white;
 }
 
 .confirm-btn:hover {
-  background: #5568d3;
+  background: #4a12c7;
 }
 
 .confirm-btn:disabled {

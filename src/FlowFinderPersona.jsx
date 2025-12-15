@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
+import { syncFlowFinderWithChallenge } from './lib/questCompletionHelpers'
 import './FlowFinder.css'
 
 export default function FlowFinderPersona() {
@@ -116,6 +117,9 @@ export default function FlowFinderPersona() {
         .update({ status: 'completed', completed_at: new Date().toISOString() })
         .eq('id', sessionId)
 
+      // Sync with 7-day challenge if active
+      await syncFlowFinderWithChallenge(user.id, 'persona')
+
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
@@ -143,9 +147,9 @@ export default function FlowFinderPersona() {
         margin: '32px 0',
         textAlign: 'left'
       }}>
-        <p style={{ marginBottom: '12px' }}><strong>Here's the key insight:</strong></p>
-        <p style={{ marginBottom: '12px' }}>You're most qualified to help <strong>former versions of yourself.</strong></p>
-        <p style={{ marginBottom: 0 }}>The struggles you've overcome, the growth you've experienced — that's your superpower. You understand those people because you <em>were</em> those people.</p>
+        <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}><strong>Here's the key insight:</strong></p>
+        <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}>You're most qualified to help <strong>former versions of yourself.</strong></p>
+        <p style={{ marginBottom: 0, fontSize: '16px', lineHeight: '1.8' }}>The struggles you've overcome, the growth you've experienced — that's your superpower. You understand those people because you <em>were</em> those people.</p>
       </div>
 
       <div className="welcome-message">
@@ -173,11 +177,11 @@ export default function FlowFinderPersona() {
         margin: '32px 0',
         textAlign: 'left'
       }}>
-        <p style={{ marginBottom: '12px' }}>✓ Your life chapters and struggles</p>
-        <p style={{ marginBottom: '12px' }}>✓ Your role models and their impact</p>
-        <p style={{ marginBottom: '12px' }}>✓ Your learning topics and interests</p>
-        <p style={{ marginBottom: '12px' }}>✓ The impact you've created</p>
-        <p style={{ marginBottom: 0 }}>✓ Your future vision and desires</p>
+        <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}>✓ Your life chapters and struggles</p>
+        <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}>✓ Your role models and their impact</p>
+        <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}>✓ Your learning topics and interests</p>
+        <p style={{ marginBottom: '12px', fontSize: '16px', lineHeight: '1.8' }}>✓ The impact you've created</p>
+        <p style={{ marginBottom: 0, fontSize: '16px', lineHeight: '1.8' }}>✓ Your future vision and desires</p>
       </div>
 
       <div className="welcome-message">

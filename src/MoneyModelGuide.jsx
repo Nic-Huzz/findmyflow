@@ -219,6 +219,23 @@ function MoneyModelGuide() {
           </Link>
         </div>
       </section>
+
+      <section className="return-section" style={{ marginTop: '40px', marginBottom: '40px', textAlign: 'center' }}>
+        <Link to="/7-day-challenge" className="return-button" style={{
+          display: 'inline-block',
+          padding: '16px 32px',
+          background: 'rgba(255, 255, 255, 0.1)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '12px',
+          color: 'white',
+          textDecoration: 'none',
+          fontSize: '16px',
+          fontWeight: '600',
+          transition: 'all 0.3s ease'
+        }}>
+          ← Return to 7-Day Challenge
+        </Link>
+      </section>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
@@ -36,6 +36,7 @@ const STAGE_GROUPS = [
 
 function AttractionOfferFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
 
   const [stage, setStage] = useState(STAGES.WELCOME)
@@ -47,6 +48,7 @@ function AttractionOfferFlow() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [showAllOptions, setShowAllOptions] = useState(false)
+  const [viewingResults, setViewingResults] = useState(false)
 
   // Go back handler
   const goBack = (fromStage) => {
@@ -109,6 +111,53 @@ function AttractionOfferFlow() {
     }
     loadData()
   }, [])
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user || !offersData) return
+
+      try {
+        // Load the most recent assessment for this user
+        const { data: assessment, error } = await supabase
+          .from('attraction_offer_assessments')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (error || !assessment) {
+          console.log('No saved results found')
+          return
+        }
+
+        // Reconstruct the scores from saved data
+        const savedScores = assessment.all_offer_scores || []
+        const reconstructedScores = savedScores.map(saved => {
+          const offer = offersData.find(o => o.id === saved.id || o.name === saved.name)
+          return {
+            offer: offer || { id: saved.id, name: saved.name },
+            totalScore: saved.score,
+            confidence: saved.confidence,
+            isDisqualified: saved.disqualified
+          }
+        })
+
+        if (reconstructedScores.length > 0) {
+          setAllOfferScores(reconstructedScores)
+          const topOffer = reconstructedScores.find(s => !s.isDisqualified) || reconstructedScores[0]
+          setRecommendedOffer(topOffer)
+          setViewingResults(true)
+          setStage(STAGES.REVEAL)
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+
+    loadSavedResults()
+  }, [searchParams, user, offersData])
 
   // Money-Model challenge - accessible to authenticated Movement Makers
   // No redirect needed
@@ -266,17 +315,17 @@ function AttractionOfferFlow() {
 
       // Complete challenge quest
       try {
-        await completeFlowQuest({
+        const questResult = await completeFlowQuest({
           userId: user.id,
           flowId: 'attraction_offer',
           pointsEarned: 35
         })
+        console.log('Quest completion result:', questResult)
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
       }
 
       setStage(STAGES.SUCCESS)
-      setTimeout(() => navigate('/7-day-challenge'), 2000)
     } catch (err) {
       setError('Failed to save results. Please try again.')
       console.error('Save error:', err)
@@ -358,7 +407,7 @@ function AttractionOfferFlow() {
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Let's Find Your Offer
           </button>
-          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m money model course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )
@@ -526,13 +575,29 @@ function AttractionOfferFlow() {
             </div>
           )}
 
-          <button
-            className="primary-button"
-            onClick={handleSaveResults}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Saving...' : 'Save Results'}
-          </button>
+          {viewingResults ? (
+            <button
+              className="primary-button"
+              onClick={() => navigate('/7-day-challenge')}
+              style={{ marginTop: '24px' }}
+            >
+              ← Back to 7-Day Challenge
+            </button>
+          ) : (
+            <>
+              <button
+                className="primary-button"
+                onClick={handleSaveResults}
+                disabled={isLoading}
+                style={{ marginTop: '24px' }}
+              >
+                {isLoading ? 'Saving...' : 'Save & Complete Quest (+35 pts)'}
+              </button>
+              <p style={{ marginTop: '12px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>
+                Saves your results and completes this challenge quest
+              </p>
+            </>
+          )}
         </div>
       </div>
     )
@@ -546,11 +611,16 @@ function AttractionOfferFlow() {
       <div className="attraction-offer-flow">
         <div className="success-container">
           <div className="success-icon">✓</div>
-          <h2>Success, {userName}!</h2>
-          <p>Your {recommendedOffer?.offer?.name} funnel is ready...</p>
-          <div className="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
+          <h2>Quest Complete, {userName}!</h2>
+          <p style={{ marginBottom: '8px' }}>Your <strong>{recommendedOffer?.offer?.name}</strong> strategy is ready.</p>
+          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+35 points earned!</p>
+          <button
+            className="primary-button"
+            onClick={() => navigate('/7-day-challenge')}
+            style={{ marginTop: '24px' }}
+          >
+            Return to 7-Day Challenge
+          </button>
         </div>
       </div>
     )

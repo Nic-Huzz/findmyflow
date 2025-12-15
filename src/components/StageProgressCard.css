@@ -70,7 +70,7 @@
 }
 
 .persona-badge.persona-movement_maker {
-  background: linear-gradient(135deg, #D4A017, #B8860B);
+  background: linear-gradient(135deg, #FFD700, #FDB931);
 }
 
 .expand-icon {
@@ -283,6 +283,35 @@
   background: #D4A017;
   border-color: #D4A017;
   color: white;
+}
+
+.requirement-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.milestone-link-button {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.milestone-link-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+}
+
+.milestone-link-button:active {
+  transform: translateY(0);
 }
 
 .graduate-button {

@@ -375,12 +375,14 @@
       "type": "Movement Maker",
       "stage_required": "ideation",
       "name": "Read Money Model Guide",
-      "description": "📖 Read the [Money Model Guide](/money-model-guide) to understand how all your offers work together",
+      "description": "📖 Read the Money Model Guide to understand how all your offers work together",
       "points": 10,
       "inputType": "checkbox",
       "milestone_type": "read_putting_it_together",
       "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
+      "actionLink": "/money-model-guide",
+      "actionLinkText": "Read Guide Here →",
       "learnMore": "Understanding your complete money model helps you see how each offer type works together to maximize revenue."
     },
     {
@@ -581,15 +583,22 @@
       "category": "Flow Finder",
       "type": "Movement Maker",
       "stage_required": "ideation",
-      "name": "Decide on Acquisition Offer",
-      "description": "Describe which acquisition offer you've decided to create",
+      "name": "Decide on Attraction Offer",
+      "description": "Select which attraction offer you've decided to create",
       "points": 15,
-      "inputType": "text",
+      "inputType": "dropdown",
       "milestone_type": "decide_acquisition",
-      "placeholder": "Describe your acquisition offer decision",
+      "options": [
+        { "value": "win_your_money_back", "label": "Win Your Money Back" },
+        { "value": "giveaway", "label": "Flagship Giveaway" },
+        { "value": "decoy_offer", "label": "Decoy Offer (Good/Better/Best)" },
+        { "value": "buy_x_get_y_free", "label": "Buy X Get Y Free" },
+        { "value": "pay_less_now_or_pay_more_later", "label": "Pay Less Now or Pay More Later" },
+        { "value": "free_with_consumption_to_upsell", "label": "Free With Consumption" }
+      ],
       "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
-      "learnMore": "Your acquisition offer is the foundation of your customer journey. Choose wisely based on your assessment."
+      "learnMore": "Your attraction offer is the foundation of your customer journey. Choose wisely based on your assessment."
     },
     {
       "id": "milestone_decide_upsell",
@@ -597,11 +606,16 @@
       "type": "Movement Maker",
       "stage_required": "ideation",
       "name": "Decide on Upsell Offer",
-      "description": "Describe which upsell offer you've decided to create",
+      "description": "Select which upsell offer you've decided to create",
       "points": 15,
-      "inputType": "text",
+      "inputType": "dropdown",
       "milestone_type": "decide_upsell",
-      "placeholder": "Describe your upsell offer decision",
+      "options": [
+        { "value": "classic_upsell", "label": "Classic Upsell" },
+        { "value": "menu_upsell", "label": "Menu Upsell" },
+        { "value": "anchor_upsell", "label": "Anchor Upsell" },
+        { "value": "rollover_upsell", "label": "Rollover Upsell" }
+      ],
       "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Your upsell maximizes value for customers who want more. Make it irresistible."
@@ -612,11 +626,15 @@
       "type": "Movement Maker",
       "stage_required": "ideation",
       "name": "Decide on Downsell Offer",
-      "description": "Describe which downsell offer you've decided to create",
+      "description": "Select which downsell offer you've decided to create",
       "points": 15,
-      "inputType": "text",
+      "inputType": "dropdown",
       "milestone_type": "decide_downsell",
-      "placeholder": "Describe your downsell offer decision",
+      "options": [
+        { "value": "payment_plan_downsell", "label": "Payment Plan Downsells" },
+        { "value": "trial_with_penalty", "label": "Trial With Penalty" },
+        { "value": "feature_downsell", "label": "Feature Downsells" }
+      ],
       "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Your downsell captures customers who aren't ready for your main offer yet. Don't leave money on the table."
@@ -627,11 +645,18 @@
       "type": "Movement Maker",
       "stage_required": "ideation",
       "name": "Decide on Continuity Offer",
-      "description": "Describe which continuity offer you've decided to create",
+      "description": "Select which continuity offer you've decided to create",
       "points": 15,
-      "inputType": "text",
+      "inputType": "dropdown",
       "milestone_type": "decide_continuity",
-      "placeholder": "Describe your continuity offer decision",
+      "options": [
+        { "value": "signup_bonus_continuity", "label": "Continuity Bonus Offer" },
+        { "value": "commitment_discount", "label": "Free Duration with Commitment" },
+        { "value": "waived_fee_continuity", "label": "Waived Fee with Commitment" },
+        { "value": "downsell_to_continuity", "label": "Big Head, Long Tail (Downsell Upsell)" },
+        { "value": "auto_replenishment", "label": "Auto-Replenishment Subscription" },
+        { "value": "pure_subscription", "label": "Pure Monthly Subscription/Membership" }
+      ],
       "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Your continuity offer creates recurring revenue. This is the foundation of sustainable business."

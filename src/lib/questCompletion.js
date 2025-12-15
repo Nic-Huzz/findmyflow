@@ -11,6 +11,17 @@ import { supabase } from './supabaseClient'
  */
 export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
   try {
+    // Input validation
+    if (!userId || typeof userId !== 'string') {
+      return { success: false, error: 'Invalid userId: must be a non-empty string' }
+    }
+    if (!flowId || typeof flowId !== 'string') {
+      return { success: false, error: 'Invalid flowId: must be a non-empty string' }
+    }
+    if (typeof pointsEarned !== 'number' || pointsEarned < 0) {
+      return { success: false, error: 'Invalid pointsEarned: must be a non-negative number' }
+    }
+
     console.log('🎯 completeFlowQuest called:', { userId, flowId, pointsEarned })
 
     // 1. Check if user has an active challenge
@@ -24,7 +35,7 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
 
     if (challengeError) {
       console.error('Error fetching active challenge:', challengeError)
-      return { success: false, error: challengeError }
+      return { success: false, error: challengeError.message }
     }
 
     if (!activeChallenge) {
@@ -50,7 +61,17 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
 
     // 2. Load quest configuration
     const questsResponse = await fetch('/challengeQuestsUpdate.json')
+    if (!questsResponse.ok) {
+      console.error('Failed to fetch quest configuration:', questsResponse.status)
+      return { success: false, error: 'Failed to load quest configuration' }
+    }
+
     const questsData = await questsResponse.json()
+    if (!questsData?.quests || !Array.isArray(questsData.quests)) {
+      console.error('Invalid quest configuration format')
+      return { success: false, error: 'Invalid quest configuration format' }
+    }
+
     const matchingQuest = questsData.quests.find(q => q.flow_id === flowId)
 
     if (!matchingQuest) {
@@ -92,12 +113,12 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
         quest_category: matchingQuest.category,
         quest_type: matchingQuest.type,
         points_earned: pointsEarned,
-        challenge_day: activeChallenge.current_day
+        challenge_day: activeChallenge.current_day || 0  // Fallback to 0 if undefined
       }])
 
     if (completionError) {
       console.error('Error creating quest completion:', completionError)
-      return { success: false, error: completionError }
+      return { success: false, error: completionError.message }
     }
 
     console.log('✅ Quest completion created')
@@ -105,15 +126,18 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
     // 5. Update challenge_progress points
     const categoryLower = matchingQuest.category.toLowerCase()
     const typeKey = matchingQuest.type === 'daily' ? 'daily' : 'weekly'
-    const isBonus = matchingQuest.category === 'Bonus'
+
+    // Only these categories have dedicated points columns in challenge_progress
+    const categoriesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
+    const hasPointsColumn = categoriesWithColumns.includes(categoryLower)
 
     const updateData = {
       total_points: (activeChallenge.total_points || 0) + pointsEarned,
       last_active_date: new Date().toISOString()
     }
 
-    // Only add category points field if not Bonus
-    if (!isBonus) {
+    // Add category-specific points for Recognise/Release/Rewire/Reconnect quests
+    if (hasPointsColumn) {
       const pointsField = `${categoryLower}_${typeKey}_points`
       updateData[pointsField] = (activeChallenge[pointsField] || 0) + pointsEarned
     }
@@ -127,7 +151,7 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
 
     if (updateError) {
       console.error('Error updating challenge progress:', updateError)
-      return { success: false, error: updateError }
+      return { success: false, error: updateError.message }
     }
 
     console.log('✅ Challenge progress updated')
@@ -157,7 +181,7 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
 
   } catch (error) {
     console.error('Error in completeFlowQuest:', error)
-    return { success: false, error }
+    return { success: false, error: error.message }
   }
 }
 

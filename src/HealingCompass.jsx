@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
@@ -8,8 +8,10 @@ import './NervousSystemHealingCompass.css'
 export default function HealingCompass() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [currentScreen, setCurrentScreen] = useState('loading')
+  const [viewingResults, setViewingResults] = useState(false)
   const [safetyContracts, setSafetyContracts] = useState([])
   const [responses, setResponses] = useState({
     selected_safety_contract: '',
@@ -59,6 +61,7 @@ export default function HealingCompass() {
   function getScreenIndex(screen) {
     const screenMap = {
       'loading': 0,
+      'no-results': 0,
       'welcome': 0,
       'q1': 1,
       'q2': 2,
@@ -72,10 +75,55 @@ export default function HealingCompass() {
     return screenMap[screen] || 0
   }
 
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      try {
+        const { data, error } = await supabase
+          .from('healing_compass_responses')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+
+        if (error) throw error
+
+        if (data && data.length > 0) {
+          const saved = data[0]
+
+          // Populate responses state
+          setResponses({
+            selected_safety_contract: saved.selected_safety_contract || '',
+            limiting_impact: saved.limiting_impact || '',
+            past_parallel_story: saved.past_parallel_story || '',
+            past_event_details: saved.past_event_details || '',
+            past_event_emotions: saved.past_event_emotions || '',
+            connect_dots_acknowledged: saved.connect_dots_acknowledged || false,
+            splinter_removal_consent: saved.splinter_removal_consent || false
+          })
+
+          setViewingResults(true)
+          setCurrentScreen('q6') // Show the insight/summary screen
+        } else {
+          // No saved results found - show navigation options
+          setCurrentScreen('no-results')
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+        setCurrentScreen('no-results')
+      }
+    }
+    loadSavedResults()
+  }, [searchParams, user])
+
   // Load safety contracts from Nervous System flow
   useEffect(() => {
+    // Skip loading safety contracts if we're viewing results (they're already populated)
+    if (searchParams.get('results') === 'true') return
     loadSafetyContracts()
-  }, [user])
+  }, [user, searchParams])
 
   const loadSafetyContracts = async () => {
     if (!user?.id) return
@@ -323,26 +371,34 @@ export default function HealingCompass() {
 
   const renderQ6 = () => (
     <div className="ns-hc-container ns-hc-question-container">
-      <div className="ns-hc-question-number">Question 6 of 7</div>
+      <div className="ns-hc-question-number">{viewingResults ? 'Your Results' : 'Question 6 of 7'}</div>
       <h2 className="ns-hc-question-text">Now we can see how this belief formed</h2>
 
       <div className="ns-hc-result-box" style={{ marginTop: 32 }}>
         <p>This experience — <span className="ns-hc-highlight">{responses.past_event_details}</span> — and feeling <span className="ns-hc-highlight">{responses.past_event_emotions}</span> was so impactful that your system decided to protect you from ever having the same experience again.</p>
         <p style={{ marginTop: 16 }}>That's why it created this belief: <span className="ns-hc-highlight">"{responses.selected_safety_contract}"</span></p>
         <p style={{ marginTop: 16 }}>To protect you, it now doesn't feel safe doing anything that might create that experience again.</p>
-        <p style={{ marginTop: 16 }}>Make sense?</p>
+        {!viewingResults && <p style={{ marginTop: 16 }}>Make sense?</p>}
       </div>
 
-      <button
-        className="ns-hc-primary-button"
-        onClick={() => {
-          setResponses(prev => ({ ...prev, connect_dots_acknowledged: true }))
-          setCurrentScreen('q7')
-        }}
-      >
-        Yes, I see it
-      </button>
-      <BackButton fromScreen="q6" />
+      {viewingResults ? (
+        <button className="ns-hc-primary-button" onClick={() => navigate('/7-day-challenge')}>
+          ← Back to 7-Day Challenge
+        </button>
+      ) : (
+        <>
+          <button
+            className="ns-hc-primary-button"
+            onClick={() => {
+              setResponses(prev => ({ ...prev, connect_dots_acknowledged: true }))
+              setCurrentScreen('q7')
+            }}
+          >
+            Yes, I see it
+          </button>
+          <BackButton fromScreen="q6" />
+        </>
+      )}
     </div>
   )
 
@@ -392,6 +448,23 @@ export default function HealingCompass() {
     </div>
   )
 
+  const renderNoResults = () => (
+    <div className="ns-hc-container ns-hc-welcome-container">
+      <h1 className="ns-hc-welcome-greeting">No Results Found</h1>
+      <div className="ns-hc-welcome-message">
+        <p>It looks like you haven't completed the Healing Compass yet.</p>
+        <p>To get started, you'll first need to complete the <strong>Nervous System Map</strong> to identify your safety contracts.</p>
+      </div>
+
+      <button className="ns-hc-primary-button" onClick={() => navigate('/nervous-system')}>
+        Go to Nervous System Map
+      </button>
+      <button className="ns-hc-secondary-button" onClick={() => navigate('/me')}>
+        Back to Home
+      </button>
+    </div>
+  )
+
   const renderLoading = () => (
     <div className="ns-hc-container ns-hc-processing-container">
       <div className="ns-hc-spinner"></div>
@@ -402,7 +475,7 @@ export default function HealingCompass() {
   return (
     <div className="ns-hc-app">
       {/* Progress Dots */}
-      {currentScreen !== 'loading' && (
+      {currentScreen !== 'loading' && currentScreen !== 'no-results' && (
         <div className="ns-hc-progress-container">
           <div className="ns-hc-progress-dots">
             {Array.from({ length: totalScreens }).map((_, index) => (
@@ -420,6 +493,7 @@ export default function HealingCompass() {
 
       {/* Screen Content */}
       {currentScreen === 'loading' && renderLoading()}
+      {currentScreen === 'no-results' && renderNoResults()}
       {currentScreen === 'welcome' && renderWelcome()}
       {currentScreen === 'q1' && renderQ1()}
       {currentScreen === 'q2' && renderQ2()}

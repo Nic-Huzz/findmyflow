@@ -100,6 +100,7 @@ const personaProfiles = {
 };
 
 // Helper to convert legacy persona names to snake_case
+// This is the CANONICAL version - import from here, don't duplicate
 const normalizePersona = (persona) => {
   if (!persona) return null;
   const mapping = {
@@ -107,7 +108,8 @@ const normalizePersona = (persona) => {
     'Vibe Riser': 'vibe_riser',
     'Movement Maker': 'movement_maker'
   };
-  return mapping[persona] || persona;
+  // Return mapped value, or normalize unknown formats to snake_case
+  return mapping[persona] || persona.toLowerCase().replace(/\s+/g, '_');
 };
 
 // Get persona profile with flow info

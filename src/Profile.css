@@ -932,31 +932,21 @@
   font-size: 16px;
   color: #6b7280;
   line-height: 1.6;
-  margin: 0 0 32px;
+  margin: 0 0 16px;
   white-space: pre-line;
 }
 
 /* Component Preview */
 .component-preview {
-  margin: 0 0 32px;
-  background: #f9fafb;
-  border-radius: 12px;
-  padding: 8px;
-  border: 2px solid #e5e7eb;
-  overflow: hidden;
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin: 8px 0 24px 0;
 }
 
 .component-snapshot {
   pointer-events: none;
   user-select: none;
-  max-width: 100%;
-  overflow: hidden;
-  transform: scale(0.9);
-  transform-origin: center;
-  display: inline-block;
+  zoom: 0.7;
 }
 
 .component-snapshot > * {
@@ -964,6 +954,13 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   display: block;
+}
+
+/* Scale down images inside snapshots */
+.component-snapshot img {
+  max-height: 120px;
+  width: auto;
+  object-fit: contain;
 }
 
 .snapshot-placeholder {
@@ -1050,11 +1047,15 @@
   }
 
   .component-preview {
-    padding: 8px;
+    margin: 0 0 16px 0;
   }
 
   .component-snapshot {
-    transform: scale(0.8);
+    zoom: 0.5;
+  }
+
+  .component-snapshot img {
+    max-height: 80px;
   }
 
   .onboarding-buttons {

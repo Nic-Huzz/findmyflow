@@ -199,7 +199,7 @@ const ValidationFlowsManager = () => {
             <p>Create shareable validation flows to gather customer feedback</p>
           </div>
           <button className="create-flow-btn" onClick={() => setShowCreateModal(true)}>
-            + Create New Flow
+            + Send Form
           </button>
         </div>
 

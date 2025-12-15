@@ -6,6 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true, // Allow access from network (for mobile testing)
+    allowedHosts: ['.ngrok-free.app', '.ngrok.io', '.ngrok-free.dev'],
   },
 })
 

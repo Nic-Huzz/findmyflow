@@ -1,6 +1,43 @@
 // Phase 3: Streak Tracking
 // Manages daily challenge streaks and longest streak tracking
 
+/**
+ * @fileoverview Streak tracking for 7-day challenges
+ *
+ * DATABASE SCHEMA REFERENCE (challenge_progress table):
+ * This is the authoritative reference for challenge_progress fields.
+ *
+ * @typedef {Object} ChallengeProgress
+ * @property {string} id - UUID primary key
+ * @property {string} user_id - FK to auth.users
+ * @property {string} challenge_instance_id - Unique ID for this challenge instance
+ * @property {string} session_id - Session identifier from lead_flow_profiles
+ * @property {string} status - 'active' or 'completed'
+ * @property {number} current_day - Current day (0-7), advances on new calendar day
+ * @property {string} challenge_start_date - When challenge started (timestamp)
+ * @property {string} last_active_date - Last activity timestamp (for day advancement)
+ * @property {number} total_points - Sum of all points earned
+ * @property {number} streak_days - Current consecutive day streak (resets if 2+ days missed)
+ * @property {number} longest_streak - Max streak achieved in this challenge (used for graduation)
+ * @property {string} persona - User's persona when challenge started (vibe_seeker, vibe_riser, movement_maker)
+ * @property {string} current_stage - User's stage when challenge started (clarity, validation, etc.)
+ * @property {string} group_id - Optional FK to challenge_groups
+ * @property {number} recognise_daily_points - Points from Recognise daily quests
+ * @property {number} release_daily_points - Points from Release daily quests
+ * @property {number} rewire_daily_points - Points from Rewire daily quests
+ * @property {number} reconnect_daily_points - Points from Reconnect daily quests
+ * @property {number} recognise_weekly_points - Points from Recognise weekly quests
+ * @property {number} release_weekly_points - Points from Release weekly quests
+ * @property {number} rewire_weekly_points - Points from Rewire weekly quests
+ * @property {number} reconnect_weekly_points - Points from Reconnect weekly quests
+ *
+ * IMPORTANT NOTES:
+ * - streak_days: Current streak, resets to 0 if user misses 2+ consecutive days
+ * - longest_streak: Maximum streak achieved in this challenge, never decreases
+ * - Graduation checks use longest_streak (not streak_days)
+ * - Each new challenge (after graduation) resets both streak values
+ */
+
 import { supabase } from './supabaseClient';
 
 // Helper function to get today's date in YYYY-MM-DD format

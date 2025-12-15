@@ -16,7 +16,9 @@ import {
   handleStreakUpdate,
   getUserStageProgress
 } from './lib/questCompletionHelpers'
+import { checkStreakBreak } from './lib/streakTracking'
 import { initializeUserStageProgress } from './lib/graduationChecker'
+import { normalizePersona } from './data/personaProfiles'
 import './Challenge.css'
 
 function Challenge() {
@@ -158,10 +160,11 @@ function Challenge() {
     if (!user?.email) return
 
     try {
+      // Use ilike for case-insensitive email matching
       const { data, error } = await supabase
         .from('lead_flow_profiles')
         .select('*')
-        .eq('email', user.email)
+        .ilike('email', user.email)
         .order('created_at', { ascending: false })
         .limit(1)
 
@@ -179,18 +182,30 @@ function Challenge() {
     try {
       const progress = await getUserStageProgress(user.id)
       setStageProgress(progress)
-
-      // If no stage progress exists and user has a persona, initialize it
-      if (!progress && userData?.persona) {
-        const result = await initializeUserStageProgress(user.id, userData.persona)
-        if (result.success) {
-          setStageProgress(result.data)
-        }
-      }
+      // Note: Initialization logic moved to separate useEffect to avoid race condition
     } catch (error) {
       console.error('Error loading stage progress:', error)
     }
   }
+
+  // Initialize user stage progress when userData is available but stageProgress is not
+  // This fixes the race condition where loadStageProgress ran before userData was loaded
+  useEffect(() => {
+    const initializeStageIfNeeded = async () => {
+      if (!user?.id || !userData?.persona || stageProgress) return
+
+      try {
+        const result = await initializeUserStageProgress(user.id, userData.persona)
+        if (result.success) {
+          setStageProgress(result.data)
+        }
+      } catch (error) {
+        console.error('Error initializing stage progress:', error)
+      }
+    }
+
+    initializeStageIfNeeded()
+  }, [user?.id, userData?.persona, stageProgress])
 
   useEffect(() => {
     if (user && progress) {
@@ -296,6 +311,21 @@ function Challenge() {
       }
 
       setProgress(progressData)
+
+      // Check if streak should be broken (user missed 2+ days)
+      const streakResult = await checkStreakBreak(user.id, progressData.challenge_instance_id)
+      if (streakResult.streak_broken) {
+        console.log('⚠️ Streak was broken - reset to 0')
+        // Reload progress to get updated streak_days
+        const { data: updatedProgress } = await supabase
+          .from('challenge_progress')
+          .select('*')
+          .eq('challenge_instance_id', progressData.challenge_instance_id)
+          .single()
+        if (updatedProgress) {
+          setProgress(updatedProgress)
+        }
+      }
 
       // Check if we need to advance the day
       // Use calendar days instead of 24-hour periods
@@ -519,16 +549,32 @@ function Challenge() {
       // First, abandon any active challenges for this user
       await supabase.rpc('abandon_active_challenges', { p_user_id: user.id })
 
-      // Get session_id from lead_flow_profiles
+      // Get session_id from lead_flow_profiles (use ilike for case-insensitive email matching)
       const { data: profileData } = await supabase
         .from('lead_flow_profiles')
         .select('session_id')
-        .eq('email', user.email)
+        .ilike('email', user.email)
         .order('created_at', { ascending: false })
         .limit(1)
         .single()
 
       const sessionId = profileData?.session_id || `session_${Date.now()}`
+
+      // Get user's current persona and stage
+      let userPersona = stageProgress?.persona
+      let userStage = stageProgress?.current_stage
+
+      // If not in state, fetch from database
+      if (!userPersona || !userStage) {
+        const { data: currentStageProgress } = await supabase
+          .from('user_stage_progress')
+          .select('persona, current_stage')
+          .eq('user_id', user.id)
+          .maybeSingle()
+
+        userPersona = currentStageProgress?.persona || 'vibe_seeker'
+        userStage = currentStageProgress?.current_stage || 'clarity'
+      }
 
       // Generate new challenge instance ID
       const challengeInstanceId = crypto.randomUUID()
@@ -540,7 +586,9 @@ function Challenge() {
         current_day: 0,
         status: 'active',
         challenge_start_date: new Date().toISOString(),
-        last_active_date: new Date().toISOString()
+        last_active_date: new Date().toISOString(),
+        persona: userPersona,
+        current_stage: userStage
       }
 
       if (groupId) {
@@ -730,8 +778,13 @@ function Challenge() {
       return
     }
 
-    // Sanitize reflection text for text inputs
-    const sanitizedReflection = (quest.inputType === 'text' && inputValue)
+    if (quest.inputType === 'dropdown' && (!inputValue || inputValue.trim() === '')) {
+      alert('Please select an option before completing this quest.')
+      return
+    }
+
+    // Sanitize reflection text for text and dropdown inputs
+    const sanitizedReflection = ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue)
       ? sanitizeText(inputValue)
       : null
 
@@ -791,6 +844,34 @@ function Challenge() {
         console.log('✅ Flow entry logged from quest:', result.entryId)
       }
 
+      // Handle checkbox quests that have a milestone_type (Bug Fix: save milestone for checkbox inputs)
+      if (quest.inputType === 'checkbox' && quest.milestone_type) {
+        const milestoneData = {
+          milestone_type: quest.milestone_type,
+          evidence_text: 'Completed via checkbox'
+        }
+
+        const result = await handleMilestoneCompletion(
+          user.id,
+          milestoneData,
+          stageProgress,
+          userData?.persona
+        )
+
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed this milestone!')
+            return
+          } else {
+            alert(`Error saving milestone: ${result.error}`)
+            return
+          }
+        }
+
+        // Reload stage progress
+        await loadStageProgress()
+      }
+
       // Create quest completion record
       const completionData = {
         user_id: user.id,
@@ -802,27 +883,38 @@ function Challenge() {
         challenge_day: progress.current_day
       }
 
-      // Add reflection_text for text inputs, or structured data for special types
-      if (quest.inputType === 'text') {
+      // Add reflection_text for text/dropdown inputs, or structured data for special types
+      if (quest.inputType === 'text' || quest.inputType === 'dropdown') {
         completionData.reflection_text = sanitizedReflection
       } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone' || quest.inputType === 'flow_compass') {
         completionData.reflection_text = JSON.stringify(specialData)
       }
 
-      // Check if quest already completed today (prevent duplicates)
+      // Check for duplicate completions
+      // For milestone quests, check if EVER completed (one-time only)
+      // For regular quests, check if completed TODAY (daily limit)
       const todayDate = new Date().toISOString().split('T')[0]
-      const { data: existingCompletion } = await supabase
+      let duplicateQuery = supabase
         .from('quest_completions')
         .select('id')
         .eq('user_id', user.id)
         .eq('challenge_instance_id', progress.challenge_instance_id)
         .eq('quest_id', quest.id)
-        .gte('completed_at', `${todayDate}T00:00:00.000Z`)
-        .lte('completed_at', `${todayDate}T23:59:59.999Z`)
-        .maybeSingle()
+
+      // Milestone quests can only be completed once ever
+      if (!quest.milestone_type) {
+        duplicateQuery = duplicateQuery
+          .gte('completed_at', `${todayDate}T00:00:00.000Z`)
+          .lte('completed_at', `${todayDate}T23:59:59.999Z`)
+      }
+
+      const { data: existingCompletion } = await duplicateQuery.maybeSingle()
 
       if (existingCompletion) {
-        alert('You have already completed this quest today!')
+        const message = quest.milestone_type
+          ? 'You have already completed this milestone!'
+          : 'You have already completed this quest today!'
+        alert(message)
         return
       }
 
@@ -843,17 +935,11 @@ function Challenge() {
       const categoryLower = quest.category.toLowerCase()
       const typeKey = quest.type === 'daily' ? 'daily' : 'weekly'
 
-      // Handle Bonus category specially (no bonus_*_points columns in DB)
-      const isBonus = quest.category === 'Bonus'
-      const pointsField = isBonus ? null : `${categoryLower}_${typeKey}_points`
+      // Only these categories have dedicated points columns in challenge_progress
+      const categoriesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
+      const hasPointsColumn = categoriesWithColumns.includes(categoryLower)
 
-      const newCategoryPoints = isBonus ? 0 : (progress[pointsField] || 0) + quest.points
       const newTotalPoints = (progress.total_points || 0) + quest.points
-
-      // Check artifact unlock conditions (not applicable for Bonus)
-      const artifacts = challengeData?.artifacts || []
-      const categoryArtifact = artifacts.find(a => a.category === quest.category)
-      const artifactUnlocked = categoryArtifact ? checkArtifactUnlock(quest.category, newCategoryPoints, typeKey) : false
 
       // Update progress
       const updateData = {
@@ -861,14 +947,10 @@ function Challenge() {
         last_active_date: new Date().toISOString()
       }
 
-      // Only add category points field if not Bonus
-      if (!isBonus && pointsField) {
-        updateData[pointsField] = newCategoryPoints
-      }
-
-      if (artifactUnlocked && categoryArtifact) {
-        const artifactKey = `${categoryArtifact.id}_unlocked`
-        updateData[artifactKey] = true
+      // Add category-specific points for Recognise/Release/Rewire/Reconnect quests
+      if (hasPointsColumn) {
+        const pointsField = `${categoryLower}_${typeKey}_points`
+        updateData[pointsField] = (progress[pointsField] || 0) + quest.points
       }
 
       const { data: updatedProgress, error: progressError } = await supabase
@@ -900,6 +982,10 @@ function Challenge() {
       // Clear input
       setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
 
+      // Check for artifact unlock (reusing categoryLower and typeKey from above)
+      const categoryArtifact = challengeData?.artifacts?.find(a => a.category === quest.category)
+      const artifactUnlocked = categoryArtifact && checkArtifactUnlock(quest.category, newTotalPoints, typeKey)
+
       // Show success message
       let successMessage = `✅ Quest complete! +${quest.points} points`
 
@@ -907,7 +993,7 @@ function Challenge() {
         successMessage += '\n✨ Progress toward graduation!'
       }
 
-      if (artifactUnlocked) {
+      if (artifactUnlocked && categoryArtifact) {
         successMessage = `🎉 Quest complete! +${quest.points} points\n\n✨ You unlocked the ${categoryArtifact.name}!`
       }
 
@@ -940,14 +1026,73 @@ function Challenge() {
     return dailyPoints >= artifact.dailyPointsRequired && weeklyPoints >= artifact.weeklyPointsRequired
   }
 
+  // Helper to get valid quest IDs for current persona/stage
+  const getValidQuestIds = (category) => {
+    if (!challengeData?.quests) return []
+
+    // normalizePersona imported from './data/personaProfiles'
+    const userPersonaNormalized = normalizePersona(userData?.persona)
+
+    return challengeData.quests
+      .filter(quest => {
+        // Must match category
+        if (quest.category !== category) return false
+
+        // Filter by persona
+        if (quest.persona_specific && userPersonaNormalized) {
+          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
+            return false
+          }
+        }
+
+        // Filter by stage
+        if (quest.stage_required && stageProgress?.current_stage) {
+          if (quest.stage_required !== stageProgress.current_stage) {
+            return false
+          }
+        }
+
+        return true
+      })
+      .map(q => q.id)
+  }
+
   const getCategoryPoints = (category) => {
     if (!progress) return { daily: 0, weekly: 0, total: 0 }
 
+    // Categories that have dedicated columns in challenge_progress table
+    const categoriesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
     const categoryLower = category.toLowerCase()
-    const daily = progress[`${categoryLower}_daily_points`] || 0
-    const weekly = progress[`${categoryLower}_weekly_points`] || 0
 
-    return { daily, weekly, total: daily + weekly }
+    if (categoriesWithColumns.includes(categoryLower)) {
+      // Use database columns for these categories
+      const daily = progress[`${categoryLower}_daily_points`] || 0
+      const weekly = progress[`${categoryLower}_weekly_points`] || 0
+      return { daily, weekly, total: daily + weekly }
+    }
+
+    // Get valid quest IDs for current persona/stage
+    const validQuestIds = getValidQuestIds(category)
+
+    // Filter completions to only include valid quests for current persona/stage
+    const categoryCompletions = completions.filter(c =>
+      c.quest_category === category && validQuestIds.includes(c.quest_id)
+    )
+    const total = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
+
+    // For Daily/Weekly categories, also break down by type
+    if (category === 'Daily' || category === 'Weekly') {
+      const dailyPoints = categoryCompletions
+        .filter(c => c.quest_type?.toLowerCase() === 'daily' || category === 'Daily')
+        .reduce((sum, c) => sum + (c.points_earned || 0), 0)
+      const weeklyPoints = categoryCompletions
+        .filter(c => c.quest_type?.toLowerCase() === 'weekly' || category === 'Weekly')
+        .reduce((sum, c) => sum + (c.points_earned || 0), 0)
+      return { daily: dailyPoints, weekly: weeklyPoints, total }
+    }
+
+    return { daily: 0, weekly: 0, total }
   }
 
   const getPointsToday = (category) => {
@@ -955,10 +1100,15 @@ function Challenge() {
 
     const today = new Date().setHours(0, 0, 0, 0)
 
-    // Filter completions for this category that were completed today
+    // Get valid quest IDs for current persona/stage
+    const validQuestIds = getValidQuestIds(category)
+
+    // Filter completions for this category that were completed today, only for valid quests
     const todayCompletions = completions.filter(c => {
       const completionDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
-      return c.quest_category === category && completionDate === today
+      return c.quest_category === category &&
+        completionDate === today &&
+        validQuestIds.includes(c.quest_id)
     })
 
     // Sum up the points
@@ -973,34 +1123,11 @@ function Challenge() {
       return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
     }
 
-    // Get all quests for this category
-    let categoryQuests = challengeData.quests.filter(q => q.category === category)
+    // Get valid quest IDs for current persona/stage (applies to all categories)
+    const validQuestIds = getValidQuestIds(category)
 
-    // For Flow Finder, filter by persona and stage like the main filter does
-    if (category === 'Flow Finder' && userData?.persona) {
-      const normalizePersona = (persona) => {
-        if (!persona) return null
-        return persona.toLowerCase().replace(/\s+/g, '_')
-      }
-      const userPersonaNormalized = normalizePersona(userData.persona)
-
-      categoryQuests = categoryQuests.filter(quest => {
-        // Filter by persona
-        if (quest.persona_specific && userPersonaNormalized) {
-          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-            return false
-          }
-        }
-        // Filter by stage
-        if (quest.stage_required && stageProgress?.current_stage) {
-          if (quest.stage_required !== stageProgress.current_stage) {
-            return false
-          }
-        }
-        return true
-      })
-    }
+    // Get quests that are valid for this persona/stage
+    const categoryQuests = challengeData.quests.filter(q => validQuestIds.includes(q.id))
 
     const totalQuests = categoryQuests.length
     if (totalQuests === 0) {
@@ -1084,15 +1211,20 @@ function Challenge() {
 
     const unlocked = progress?.[`${artifact.id}_unlocked`] || false
 
+    // Get valid quest IDs for current persona/stage
+    const validQuestIds = getValidQuestIds(category)
+
     // For Daily and Weekly artifacts with R categories
     if ((category === 'Daily' || category === 'Weekly') && artifact.rCategories) {
       const rCategoriesWithProgress = {}
 
-      // Calculate points for each R category
+      // Calculate points for each R category, filtered by persona/stage
       Object.entries(artifact.rCategories).forEach(([rType, rData]) => {
-        // Get completions for this category and R type
+        // Get completions for this category and R type, only for valid quests
         const rCompletions = completions.filter(c =>
-          c.quest_category === category && c.quest_type === rType
+          c.quest_category === category &&
+          c.quest_type === rType &&
+          validQuestIds.includes(c.quest_id)
         )
         const currentPoints = rCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
@@ -1111,38 +1243,16 @@ function Challenge() {
 
     // For Flow Finder: Calculate pointsRequired dynamically based on filtered quests (100% completion)
     if (category === 'Flow Finder') {
-      // Normalize persona to lowercase with underscores for comparison
-      const normalizePersona = (persona) => {
-        if (!persona) return null
-        return persona.toLowerCase().replace(/\s+/g, '_')
-      }
-
-      const userPersonaNormalized = normalizePersona(userData?.persona)
-
-      // Filter quests by persona and stage (same logic as main quest filter)
-      let flowFinderQuests = challengeData.quests.filter(q => q.category === 'Flow Finder')
-
-      flowFinderQuests = flowFinderQuests.filter(quest => {
-        // Filter by persona
-        if (quest.persona_specific && userPersonaNormalized) {
-          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-            return false
-          }
-        }
-        // Filter by stage
-        if (quest.stage_required && stageProgress?.current_stage) {
-          if (quest.stage_required !== stageProgress.current_stage) {
-            return false
-          }
-        }
-        return true
-      })
+      // Get filtered quests using validQuestIds
+      const flowFinderQuests = challengeData.quests.filter(q => validQuestIds.includes(q.id))
 
       // Calculate total possible points from filtered quests (100% completion)
       const dynamicPointsRequired = flowFinderQuests.reduce((sum, q) => sum + (q.points || 0), 0)
 
-      const categoryCompletions = completions.filter(c => c.quest_category === category)
+      // Filter completions to only include valid quests for current persona/stage
+      const categoryCompletions = completions.filter(c =>
+        c.quest_category === category && validQuestIds.includes(c.quest_id)
+      )
       const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
       return {
@@ -1153,8 +1263,10 @@ function Challenge() {
       }
     }
 
-    // For Tracker artifacts (simple point tracking)
-    const categoryCompletions = completions.filter(c => c.quest_category === category)
+    // For Tracker and Bonus artifacts - filter by valid quests
+    const categoryCompletions = completions.filter(c =>
+      c.quest_category === category && validQuestIds.includes(c.quest_id)
+    )
     const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
     return {
@@ -1266,12 +1378,7 @@ function Challenge() {
 
   // Filter by persona and stage for Flow Finder quests
   if (activeCategory === 'Flow Finder') {
-    // Normalize persona to lowercase with underscores for comparison
-    const normalizePersona = (persona) => {
-      if (!persona) return null
-      return persona.toLowerCase().replace(/\s+/g, '_')
-    }
-
+    // normalizePersona imported from './data/personaProfiles'
     const userPersonaNormalized = normalizePersona(userData?.persona)
 
     console.log('🔍 Flow Finder Filtering Debug:', {
@@ -1910,13 +2017,34 @@ function Challenge() {
                             quest={quest}
                             onComplete={(quest, data) => handleQuestComplete(quest, data)}
                           />
+                        ) : quest.inputType === 'dropdown' ? (
+                          <>
+                            <select
+                              className="quest-dropdown"
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                            >
+                              <option value="">Select an option...</option>
+                              {quest.options?.map(opt => (
+                                <option key={opt.value} value={opt.label}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                {quest.id === 'milestone_read_money_model' ? (
-                                  <Link to="/money-model-guide" className="quest-inline-link">
-                                    Read Guide Here
+                                {quest.actionLink ? (
+                                  <Link to={quest.actionLink} className="quest-inline-link">
+                                    {quest.actionLinkText || 'View'}
                                   </Link>
                                 ) : (
                                   'Mark as complete'
@@ -1942,7 +2070,7 @@ function Challenge() {
                         {quest.flow_route && (
                           <button
                             className="view-results-btn"
-                            onClick={() => navigate(quest.flow_route)}
+                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
                           >
                             View Results
                           </button>
@@ -2084,13 +2212,34 @@ function Challenge() {
                             quest={quest}
                             onComplete={(quest, data) => handleQuestComplete(quest, data)}
                           />
+                        ) : quest.inputType === 'dropdown' ? (
+                          <>
+                            <select
+                              className="quest-dropdown"
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                            >
+                              <option value="">Select an option...</option>
+                              {quest.options?.map(opt => (
+                                <option key={opt.value} value={opt.label}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                {quest.id === 'milestone_read_money_model' ? (
-                                  <Link to="/money-model-guide" className="quest-inline-link">
-                                    Read Guide Here
+                                {quest.actionLink ? (
+                                  <Link to={quest.actionLink} className="quest-inline-link">
+                                    {quest.actionLinkText || 'View'}
                                   </Link>
                                 ) : (
                                   'Mark as complete'
@@ -2116,7 +2265,7 @@ function Challenge() {
                         {quest.flow_route && (
                           <button
                             className="view-results-btn"
-                            onClick={() => navigate(quest.flow_route)}
+                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
                           >
                             View Results
                           </button>
@@ -2246,13 +2395,34 @@ function Challenge() {
                             quest={quest}
                             onComplete={(quest, data) => handleQuestComplete(quest, data)}
                           />
+                        ) : quest.inputType === 'dropdown' ? (
+                          <>
+                            <select
+                              className="quest-dropdown"
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                            >
+                              <option value="">Select an option...</option>
+                              {quest.options?.map(opt => (
+                                <option key={opt.value} value={opt.label}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                {quest.id === 'milestone_read_money_model' ? (
-                                  <Link to="/money-model-guide" className="quest-inline-link">
-                                    Read Guide Here
+                                {quest.actionLink ? (
+                                  <Link to={quest.actionLink} className="quest-inline-link">
+                                    {quest.actionLinkText || 'View'}
                                   </Link>
                                 ) : (
                                   'Mark as complete'
@@ -2288,7 +2458,7 @@ function Challenge() {
                         {quest.flow_route && (
                           <button
                             className="view-results-btn"
-                            onClick={() => navigate(quest.flow_route)}
+                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
                           >
                             View Results
                           </button>
@@ -2391,13 +2561,34 @@ function Challenge() {
                             quest={quest}
                             onComplete={(quest, data) => handleQuestComplete(quest, data)}
                           />
+                        ) : quest.inputType === 'dropdown' ? (
+                          <>
+                            <select
+                              className="quest-dropdown"
+                              value={questInputs[quest.id] || ''}
+                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                            >
+                              <option value="">Select an option...</option>
+                              {quest.options?.map(opt => (
+                                <option key={opt.value} value={opt.label}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                            <button
+                              className="quest-complete-btn"
+                              onClick={() => handleQuestComplete(quest)}
+                            >
+                              Complete Quest
+                            </button>
+                          </>
                         ) : (
                           <>
                             <div className="quest-checkbox-area">
                               <label className="quest-checkbox-label">
-                                {quest.id === 'milestone_read_money_model' ? (
-                                  <Link to="/money-model-guide" className="quest-inline-link">
-                                    Read Guide Here
+                                {quest.actionLink ? (
+                                  <Link to={quest.actionLink} className="quest-inline-link">
+                                    {quest.actionLinkText || 'View'}
                                   </Link>
                                 ) : (
                                   'Mark as complete'
@@ -2423,7 +2614,7 @@ function Challenge() {
                         {quest.flow_route && (
                           <button
                             className="view-results-btn"
-                            onClick={() => navigate(quest.flow_route)}
+                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
                           >
                             View Results
                           </button>
@@ -2514,6 +2705,27 @@ function Challenge() {
                               quest={quest}
                               onComplete={(quest, data) => handleQuestComplete(quest, data)}
                             />
+                          ) : quest.inputType === 'dropdown' ? (
+                            <>
+                              <select
+                                className="quest-dropdown"
+                                value={questInputs[quest.id] || ''}
+                                onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
+                              >
+                                <option value="">Select an option...</option>
+                                {quest.options?.map(opt => (
+                                  <option key={opt.value} value={opt.label}>
+                                    {opt.label}
+                                  </option>
+                                ))}
+                              </select>
+                              <button
+                                className="quest-complete-btn"
+                                onClick={() => handleQuestComplete(quest)}
+                              >
+                                Complete Quest
+                              </button>
+                            </>
                           ) : quest.status === 'coming_soon' ? (
                             <button className="quest-flow-btn coming-soon" disabled>
                               Coming Soon
@@ -2544,7 +2756,7 @@ function Challenge() {
                           {quest.flow_route && (
                             <button
                               className="view-results-btn"
-                              onClick={() => navigate(quest.flow_route)}
+                              onClick={() => navigate(`${quest.flow_route}?results=true`)}
                             >
                               View Results
                             </button>

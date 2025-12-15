@@ -19,10 +19,11 @@ const ArchetypeSelection = () => {
 
   const loadUserProfile = async () => {
     try {
+      // Use ilike for case-insensitive email matching
       const { data, error } = await supabase
         .from('lead_flow_profiles')
         .select('*')
-        .eq('email', user.email)
+        .ilike('email', user.email)
         .order('created_at', { ascending: false })
         .limit(1)
 

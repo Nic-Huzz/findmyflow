@@ -254,7 +254,7 @@ export default function FlowFinderSkills() {
     } catch (err) {
       console.error('Error analyzing responses:', err)
       alert('Error generating insights. Please try again.')
-      setCurrentScreen('q7')
+      setCurrentScreen('q5')
     } finally {
       setIsProcessing(false)
     }
@@ -431,6 +431,8 @@ export default function FlowFinderSkills() {
           <div className="processing-text">Analyzing patterns...</div>
           <div className="processing-subtext">
             Looking for skill themes across your childhood, high school, and recent activities.
+            <br /><br />
+            This usually takes 10-15 seconds.
           </div>
         </div>
       )

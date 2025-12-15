@@ -1,0 +1,366 @@
+/* Shared styles for Nervous System and Healing Compass flows */
+
+.ns-hc-app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  padding: 20px;
+}
+
+/* Progress Indicators */
+.ns-hc-app .ns-hc-progress-container {
+  position: relative;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.ns-hc-progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.ns-hc-progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.ns-hc-progress-dot.completed {
+  background: #fbbf24;
+}
+
+.ns-hc-progress-dot.active {
+  background: #fbbf24;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+  transform: scale(1.2);
+}
+
+/* Container */
+.ns-hc-container {
+  max-width: 700px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Welcome Screen */
+.ns-hc-welcome-container {
+  text-align: center;
+}
+
+.ns-hc-welcome-greeting {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ns-hc-welcome-message p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+  text-align: left;
+}
+
+.ns-hc-welcome-message strong {
+  color: white;
+}
+
+/* Question Screens */
+.ns-hc-question-container {
+  text-align: center;
+}
+
+.ns-hc-question-number {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 16px;
+}
+
+.ns-hc-question-text {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.ns-hc-question-subtext {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+/* Highlight dynamic insertions */
+.ns-hc-highlight {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+/* Horizontal Options (multiple choice) */
+.ns-hc-horizontal-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.ns-hc-horizontal-option {
+  padding: 14px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.ns-hc-horizontal-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.5);
+  transform: translateY(-2px);
+}
+
+.ns-hc-horizontal-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+}
+
+/* Text Input */
+.ns-hc-text-input-container {
+  margin: 32px 0;
+}
+
+.ns-hc-text-area {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 15px;
+  color: white;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.ns-hc-text-area::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ns-hc-text-area:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Video Container */
+.ns-hc-video-container {
+  margin: 32px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.ns-hc-video-container iframe {
+  width: 100%;
+  height: 400px;
+  display: block;
+  border: none;
+}
+
+/* Safety Contract Selection */
+.ns-hc-contract-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 32px 0;
+}
+
+.ns-hc-contract-option {
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.ns-hc-contract-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.5);
+  transform: translateY(-2px);
+}
+
+.ns-hc-contract-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+}
+
+/* Processing/Loading Screen */
+.ns-hc-processing-container {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.ns-hc-spinner {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 32px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #fbbf24;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ns-hc-processing-text {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.ns-hc-processing-subtext {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+
+/* Result Box (for reflection screens) */
+.ns-hc-result-box {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: left;
+  margin: 24px 0;
+}
+
+.ns-hc-result-box h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.ns-hc-result-box p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 8px 0;
+}
+
+/* Primary Button */
+.ns-hc-primary-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  margin: 32px auto 0;
+  display: block;
+}
+
+.ns-hc-primary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.ns-hc-primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary Button */
+.ns-hc-secondary-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 12px auto 0;
+  display: block;
+}
+
+.ns-hc-secondary-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.ns-hc-secondary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ns-hc-question-text {
+    font-size: 24px;
+  }
+
+  .ns-hc-welcome-greeting {
+    font-size: 28px;
+  }
+
+  .ns-hc-horizontal-options {
+    flex-direction: column;
+  }
+
+  .ns-hc-horizontal-option {
+    white-space: normal;
+  }
+
+  .ns-hc-video-container iframe {
+    height: 250px;
+  }
+}

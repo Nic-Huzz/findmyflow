@@ -382,13 +382,10 @@ const HybridArchetypeFlow = ({
     return (
       <div className="hybrid-flow">
         <div className="battle-container">
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${Math.min(100, progressPercentage)}%` }}></div>
-          </div>
           <div className="battle-instruction">
             Select which one sounds more like you
             {battleHistory.length > 0 && (
-              <button 
+              <button
                 onClick={handleUndo}
                 className="undo-button"
                 title="Undo last selection"
@@ -430,6 +427,11 @@ const HybridArchetypeFlow = ({
               <p><strong>{currentPair[1].description}</strong></p>
             </div>
           </div>
+
+          {/* Progress bar under battle cards */}
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${Math.min(100, progressPercentage)}%` }}></div>
+          </div>
         </div>
       </div>
     )
@@ -446,14 +448,6 @@ const HybridArchetypeFlow = ({
     return (
       <div className="hybrid-flow">
         <div className="swipe-container">
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${((currentIndex + 1) / archetypes.length) * 100}%` }}></div>
-          </div>
-          
-          <div className="swipe-progress-info">
-            <span>{swipedRight.length} selected</span>
-          </div>
-          
           <div className="swipe-instruction">
             {isMobile
               ? `Swipe right if this sounds like you, left if it doesn't`
@@ -470,7 +464,7 @@ const HybridArchetypeFlow = ({
               </button>
             )}
           </div>
-          
+
           <div className="card-stack">
             {/* Next card preview */}
             {archetypes[currentIndex + 1] && (
@@ -524,7 +518,15 @@ const HybridArchetypeFlow = ({
               </div>
             </div>
           </div>
-          
+
+          {/* Progress bar under cards */}
+          <div className="swipe-progress-info">
+            <span>{swipedRight.length} selected</span>
+          </div>
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${((currentIndex + 1) / archetypes.length) * 100}%` }}></div>
+          </div>
+
           {!isMobile && (
             <div className="swipe-actions">
               <button

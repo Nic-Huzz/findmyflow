@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
@@ -36,6 +36,7 @@ const STAGE_GROUPS = [
 
 function UpsellFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
 
   const [stage, setStage] = useState(STAGES.WELCOME)
@@ -47,6 +48,7 @@ function UpsellFlow() {
   const [showAllOptions, setShowAllOptions] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [viewingResults, setViewingResults] = useState(false)
 
   // Go back handler
   const goBack = (fromStage) => {
@@ -110,8 +112,47 @@ function UpsellFlow() {
     loadData()
   }, [])
 
-  // Money-Model challenge - accessible to authenticated Movement Makers
-  // No redirect needed
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user || !offersData) return
+
+      try {
+        const { data: assessment, error } = await supabase
+          .from('upsell_assessments')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (error || !assessment) return
+
+        const savedScores = assessment.all_offer_scores || []
+        const reconstructedScores = savedScores.map(saved => {
+          const offer = offersData.find(o => o.id === saved.id || o.name === saved.name)
+          return {
+            offer: offer || { id: saved.id, name: saved.name },
+            totalScore: saved.score,
+            confidence: saved.confidence,
+            isDisqualified: saved.disqualified
+          }
+        })
+
+        if (reconstructedScores.length > 0) {
+          setAllOfferScores(reconstructedScores)
+          const topOffer = reconstructedScores.find(s => !s.isDisqualified) || reconstructedScores[0]
+          setRecommendedOffer(topOffer)
+          setViewingResults(true)
+          setStage(STAGES.REVEAL)
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+
+    loadSavedResults()
+  }, [searchParams, user, offersData])
 
   // Calculate current stage group for progress
   const getCurrentGroupIndex = () => {
@@ -348,7 +389,7 @@ function UpsellFlow() {
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Find My Upsell Strategy
           </button>
-          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m offer course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
+          <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m money model course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
     )
@@ -517,20 +558,26 @@ function UpsellFlow() {
             </div>
           )}
 
-          <button
-            className="primary-button"
-            onClick={handleSaveResults}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Saving...' : 'Save Results'}
-          </button>
+          {viewingResults ? (
+            <button
+              className="primary-button"
+              onClick={() => navigate('/7-day-challenge')}
+            >
+              ← Back to 7-Day Challenge
+            </button>
+          ) : (
+            <button
+              className="primary-button"
+              onClick={handleSaveResults}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Saving...' : 'Save Results'}
+            </button>
+          )}
         </div>
       </div>
     )
   }
-
-
-
 
 
 

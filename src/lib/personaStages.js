@@ -55,9 +55,9 @@ export const PERSONA_STAGES = {
       ideation: {
         milestones: ['read_putting_it_together', 'decide_acquisition', 'decide_upsell', 'decide_downsell', 'decide_continuity', 'groan_challenge_completed'],
         flows_required: ['attraction_offer', 'upsell_flow', 'downsell_flow', 'continuity_flow'],
-        milestones_display: ['Read "Putting It All Together"', 'Attraction Offer Flow', 'Upsell Flow', 'Downsell Flow', 'Continuity Flow', 'Decide on Acquisition offer', 'Decide on Upsell offer', 'Decide on Downsell offer', 'Decide on Continuity offer', 'Complete a Groan Challenge'],
+        milestones_display: ['Read Money Model Guide', 'Attraction Offer Flow', 'Upsell Flow', 'Downsell Flow', 'Continuity Flow', 'Decide on Acquisition offer', 'Decide on Upsell offer', 'Decide on Downsell offer', 'Decide on Continuity offer', 'Complete a Groan Challenge'],
         challenge_streak: 7,
-        description: 'Read overview, complete all 4 money model flows, decide on each offer type, complete a groan challenge, and complete a 7-day challenge'
+        description: 'Read overview, complete all 4 money model flows, decide on each offer type, complete a groan challenge, and complete at least 1 challenge every day in the 7-day challenge'
       },
       creation: {
         milestones: ['create_acquisition_offer', 'create_upsell_offer', 'create_downsell_offer', 'create_continuity_offer', 'groan_challenge_completed'],

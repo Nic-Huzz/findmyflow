@@ -302,6 +302,10 @@
   box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
 }
 
+.primary-button.compact {
+  margin: 0 auto;
+}
+
 .primary-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;

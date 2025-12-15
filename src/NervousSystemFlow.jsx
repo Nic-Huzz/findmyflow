@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { completeFlowQuest } from './lib/questCompletion'
@@ -8,8 +8,10 @@ import './NervousSystemHealingCompass.css'
 export default function NervousSystemFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [currentScreen, setCurrentScreen] = useState('welcome')
+  const [viewingResults, setViewingResults] = useState(false)
   const [responses, setResponses] = useState({
     impact_goal: '',
     income_goal: '',
@@ -37,6 +39,58 @@ export default function NervousSystemFlow() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [reflection, setReflection] = useState(null)
   const [showCalibrationVideo, setShowCalibrationVideo] = useState(false)
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      try {
+        const { data, error } = await supabase
+          .from('nervous_system_responses')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+
+        if (error) throw error
+
+        if (data && data.length > 0) {
+          const saved = data[0]
+
+          // Populate responses state
+          setResponses(prev => ({
+            ...prev,
+            impact_goal: saved.impact_goal || '',
+            income_goal: saved.income_goal || '',
+            positive_change: saved.positive_change || '',
+            struggle_area: saved.current_struggle || '',
+            being_seen_edge: saved.being_seen_edge,
+            earning_edge: saved.earning_edge,
+            contracts_tested: saved.belief_test_results || {}
+          }))
+
+          // Populate reflection state
+          if (saved.archetype) {
+            setReflection({
+              archetype_name: saved.archetype,
+              archetype_description: '',
+              core_fear: saved.safety_contracts?.[0] || '',
+              fear_interpretation: '',
+              rewiring_needed: saved.rewiring_needed || '',
+              full_reflection: saved.reflection_text
+            })
+          }
+
+          setViewingResults(true)
+          setCurrentScreen('mirror-reflection')
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+    loadSavedResults()
+  }, [searchParams, user])
 
   // Binary search state for Test 1 (impact)
   const [test1CurrentAmount, setTest1CurrentAmount] = useState(null)
@@ -123,8 +177,8 @@ export default function NervousSystemFlow() {
     }
 
     if (responses.test4_self_sabotage === 'yes') {
-      contracts.push("If I succeed, I'll have to maintain it forever (and I can't)")
-      contracts.push("If I reach my goals, I'll discover I'm a fraud")
+      contracts.push("The higher I climb, the harder I'll fall")
+      contracts.push("If I reach my goals, they'll discover I'm a fraud")
     }
 
     if (responses.test5_feels_unsafe === 'yes') {
@@ -413,6 +467,7 @@ export default function NervousSystemFlow() {
           safety_contracts: yesContracts,
           reflection_text: reflection?.full_reflection,
           archetype: reflection?.archetype_name,
+          rewiring_needed: reflection?.rewiring_needed,
           being_seen_edge: responses.being_seen_edge,
           earning_edge: responses.earning_edge
         })
@@ -434,8 +489,8 @@ export default function NervousSystemFlow() {
   }
 
   // Format numbers nicely
-  const formatPeople = (num) => num >= 1000 ? `${(num / 1000).toFixed(0)}K` : num
-  const formatMoney = (num) => num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`
+  const formatPeople = (num) => num >= 1000000 ? `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M` : num >= 1000 ? `${(num / 1000).toFixed(0)}K` : num
+  const formatMoney = (num) => num >= 1000000 ? `$${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M` : num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`
 
   // Render functions for each screen
   const renderWelcome = () => (
@@ -704,7 +759,6 @@ export default function NervousSystemFlow() {
       >
         Continue
       </button>
-      <BackButton fromScreen="calibration-directions" />
 
       <button
         className="ns-hc-secondary-button"
@@ -996,6 +1050,7 @@ export default function NervousSystemFlow() {
       <div className="ns-hc-spinner"></div>
       <div className="ns-hc-processing-text">Analyzing your nervous system pattern...</div>
       <p className="ns-hc-processing-subtext">Generating your personalized reflection</p>
+      <p className="ns-hc-processing-subtext" style={{ marginTop: '16px', opacity: 0.7 }}>This process can take 10–15 seconds</p>
     </div>
   )
 
@@ -1068,9 +1123,15 @@ export default function NervousSystemFlow() {
           <p style={{ marginTop: 12, whiteSpace: 'pre-line' }}>{reflection.rewiring_needed}</p>
         </div>
 
-        <button className="ns-hc-primary-button" onClick={completeFlow}>
-          Continue to Results
-        </button>
+        {viewingResults ? (
+          <button className="ns-hc-primary-button" onClick={() => navigate('/7-day-challenge')}>
+            ← Back to 7-Day Challenge
+          </button>
+        ) : (
+          <button className="ns-hc-primary-button" onClick={completeFlow}>
+            Continue to Results
+          </button>
+        )}
       </div>
     )
   }

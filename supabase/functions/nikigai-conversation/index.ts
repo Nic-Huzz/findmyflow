@@ -56,20 +56,22 @@ CRITICAL: In the clusters JSON array, each cluster object MUST include:
 - "insight": the insight/summary paragraph you wrote (e.g., "This cluster highlights your courage to shed the old, explore the unknown...")
 The insight field should contain ONLY the summary paragraph, NOT the bullet points.
 
-SKILL PATTERN CLUSTERING (when CLUSTER TYPE is "skills"):
-- You are identifying SKILL THEMES and natural patterns from their activities
-- This is preliminary data - focus on exploratory patterns, not job recommendations
-- Name clusters as skill themes or activity types (e.g., "Creative Expression", "Analytical Problem-Solving", "Building & Making Things", "Teaching & Guiding Others")
-- For each skill pattern cluster:
-  * Group activities/skills that share an underlying motivation or approach
-  * Explain what this pattern reveals about how they naturally work
-  * Keep it exploratory and validating - "you're naturally drawn to..."
-  * Don't make job recommendations - just identify the patterns
+PRELIMINARY ROLE CLUSTERING (when CLUSTER TYPE is "skills"):
+- You are creating PRELIMINARY ASPIRATIONAL ROLE ideas based on early patterns
+- This is a first glimpse at potential career directions - keep it exploratory but inspiring
+- CRITICAL: Name roles creatively and aspirationally - NOT generic corporate titles or skill themes
+  * ✅ GOOD: "Creative Experience Designer", "Community Impact Leader", "Innovation Catalyst", "Wellness & Growth Guide"
+  * ❌ AVOID: "Creative Expression", "Problem-Solving", "Product Manager", "Consultant"
+- For each preliminary role:
+  * Group activities/interests that point toward this role direction
+  * Explain what this role could look like based on their early patterns
+  * Frame as possibilities: "you might thrive as..." or "this could evolve into..."
+  * Keep it inspiring but acknowledge these are early insights
 - Look for recurring themes across different life stages (childhood → high school → post-school)
-- Focus on intrinsic interests, not career paths yet
-- Help them see patterns they might not have noticed themselves
+- Focus on where their natural interests could lead them professionally
+- Help them see exciting possibilities they might not have considered
 
-ROLE CLUSTERING (when CLUSTER TYPE is "roles"):
+FINAL ROLE CLUSTERING (when CLUSTER TYPE is "roles"):
 - You are creating ASPIRATIONAL ROLE RECOMMENDATIONS that inspire and excite
 - Each cluster represents a unique career path that combines their talents in a meaningful way
 - CRITICAL: Name roles creatively and aspirationally - NOT generic corporate titles
@@ -90,11 +92,14 @@ ROLE CLUSTERING (when CLUSTER TYPE is "roles"):
 - Create 3-5 specific, inspiring role recommendations that feel personalized to them
 
 PERSONA CLUSTERING (when target is "persona"):
-- Create personas representing FORMER VERSIONS of this person
-- Each persona should be a specific life stage or struggle they went through
-- Name them descriptively (e.g., "The Overwhelmed New Entrepreneur", "The Creative Kid Who Felt Unseen")
+- Create personas representing FORMER VERSIONS of this person - real PEOPLE they can serve
+- Each persona should be a specific life stage or struggle the user went through
+- CRITICAL: Name them as PEOPLE with struggles, NOT as aspirational roles or archetypes
+  * GOOD examples: "The Overwhelmed New Entrepreneur", "The Creative Kid Who Felt Unseen", "The Burnt-Out Corporate Professional", "The First-Time Founder Drowning in Doubt"
+  * BAD examples: "Inner Alchemist", "Empowerment Architect", "Vision Catalyst", "Transformation Guide" (these are ROLES, not people)
+- The name should describe WHO the person is + their STRUGGLE or SITUATION
 - For each persona include: who they are, what they're struggling with, and what they need
-- These are the people this user is most qualified to help
+- These are real target audiences - people the user can market to and serve
 
 PROBLEMS CLUSTERING (when target is "problems"):
 - Identify the underlying CHANGE or IMPACT the user wants to create in the world
