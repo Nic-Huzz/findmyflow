@@ -57,6 +57,7 @@ function AppRouter() {
           <Routes>
             {/* Homepage - Persona Assessment */}
             <Route path="/" element={<PersonaAssessment />} />
+            <Route path="/log-in" element={<PersonaAssessment />} />
 
             {/* Attraction Offer Assessment - In-App Challenge */}
             <Route path="/attraction-offer" element={
