@@ -375,7 +375,7 @@ export default function FlowFinderProblems() {
   const renderQuestion2 = () => (
     <div className="container question-container">
       <div className="question-number">Question 2 of 7</div>
-      <h2 className="question-text">What impact have you created for others?</h2>
+      <h2 className="question-text">What impact have you enjoyed making for others?</h2>
       <p className="question-subtext">What difference have you made? How have you helped others?</p>
       <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
