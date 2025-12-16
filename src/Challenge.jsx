@@ -2317,12 +2317,6 @@ function Challenge() {
 
                     <p className="quest-description">{renderDescription(quest.description)}</p>
 
-                    {quest.actionLink && !completed && (
-                      <Link to={quest.actionLink} className="quest-action-link">
-                        {quest.actionLinkText || 'Go →'}
-                      </Link>
-                    )}
-
                     {quest.learnMore && !completed && (
                       <div className="learn-more-section">
                         <button
