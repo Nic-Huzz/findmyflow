@@ -112,15 +112,22 @@ serve(async (req) => {
 
       // Check if user's 7-day challenge is still active
       const { data: challenge } = await supabaseClient
-        .from('challenge_instances')
-        .select('start_date')
+        .from('challenge_progress')
+        .select('challenge_start_date, status')
         .eq('user_id', sub.user_id)
-        .order('start_date', { ascending: false })
+        .eq('status', 'active')
+        .order('challenge_start_date', { ascending: false })
         .limit(1)
         .single()
 
-      if (challenge && challenge.start_date) {
-        const daysSinceStart = Math.floor((Date.now() - new Date(challenge.start_date).getTime()) / (1000 * 60 * 60 * 24))
+      // Skip if no active challenge
+      if (!challenge) {
+        console.log(`Skipping user ${sub.user_id}: No active challenge`)
+        continue
+      }
+
+      if (challenge.challenge_start_date) {
+        const daysSinceStart = Math.floor((Date.now() - new Date(challenge.challenge_start_date).getTime()) / (1000 * 60 * 60 * 24))
         // Skip if challenge is complete (7+ days old)
         if (daysSinceStart >= 7) {
           console.log(`Skipping user ${sub.user_id}: Challenge completed ${daysSinceStart} days ago`)
