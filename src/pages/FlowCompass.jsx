@@ -18,6 +18,7 @@ const FlowCompass = () => {
   const [selectedProjectId, setSelectedProjectId] = useState('')
   const [selectedEnergy, setSelectedEnergy] = useState(null) // 'excited' or 'tired'
   const [selectedFlow, setSelectedFlow] = useState(null) // 'ease' or 'resistance'
+  const [comment, setComment] = useState('') // optional comment for quick log
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [timelineModal, setTimelineModal] = useState({ isOpen: false, project: null, entries: [] })
@@ -212,6 +213,10 @@ const FlowCompass = () => {
         direction = 'west'
       }
 
+      // Build reasoning text
+      const baseReasoning = `${selectedEnergy === 'excited' ? 'Excited' : 'Tired'} and ${selectedFlow === 'ease' ? 'flowing well' : 'facing resistance'}`
+      const reasoning = comment.trim() ? `${baseReasoning}: ${comment.trim()}` : baseReasoning
+
       const { data, error } = await supabase
         .from('flow_entries')
         .insert({
@@ -220,7 +225,7 @@ const FlowCompass = () => {
           direction,
           internal_state: selectedEnergy,
           external_state: selectedFlow,
-          reasoning: `Quick log: ${selectedEnergy} and ${selectedFlow === 'ease' ? 'flowing well' : 'facing resistance'}`
+          reasoning
         })
         .select()
         .single()
@@ -229,9 +234,10 @@ const FlowCompass = () => {
 
       console.log('✅ Quick log entry created:', data.id)
 
-      // Reset energy and flow but keep project selected
+      // Reset energy, flow, and comment but keep project selected
       setSelectedEnergy(null)
       setSelectedFlow(null)
+      setComment('')
 
       // Reload projects to update stats
       await loadProjects()
@@ -438,6 +444,18 @@ const FlowCompass = () => {
               <span>Facing Resistance</span>
             </button>
           </div>
+        </div>
+
+        {/* Comment Section */}
+        <div className="question-group">
+          <h3 className="question-heading">Add a comment <span style={{ fontWeight: 'normal', color: 'rgba(255,255,255,0.5)' }}>(optional)</span></h3>
+          <textarea
+            className="comment-input"
+            placeholder="What's on your mind about this project?"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            rows={2}
+          />
         </div>
 
         {/* Submit Button */}

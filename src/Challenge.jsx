@@ -4,6 +4,7 @@ import { useAuth } from './auth/AuthProvider'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
 import { sendNotification } from './lib/notifications'
+import confetti from 'canvas-confetti'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
 import ConversationLogInput from './components/ConversationLogInput'
@@ -20,6 +21,26 @@ import { checkStreakBreak } from './lib/streakTracking'
 import { initializeUserStageProgress } from './lib/graduationChecker'
 import { normalizePersona } from './data/personaProfiles'
 import './Challenge.css'
+
+// Confetti celebration for quest completion
+const triggerConfetti = (event) => {
+  // Get button position for localized confetti
+  const rect = event?.target?.getBoundingClientRect()
+  const x = rect ? (rect.left + rect.width / 2) / window.innerWidth : 0.5
+  const y = rect ? (rect.top + rect.height / 2) / window.innerHeight : 0.5
+
+  // Quick burst of rainbow confetti
+  confetti({
+    particleCount: 80,
+    spread: 60,
+    origin: { x, y },
+    colors: ['#ff0000', '#ff7700', '#ffdd00', '#00ff00', '#0099ff', '#6633ff', '#ff00ff'],
+    ticks: 150,
+    gravity: 1.2,
+    scalar: 0.9,
+    drift: 0
+  })
+}
 
 function Challenge() {
   const { user } = useAuth()
@@ -754,7 +775,7 @@ function Challenge() {
     }))
   }
 
-  const handleQuestComplete = async (quest, specialData = null) => {
+  const handleQuestComplete = async (quest, specialData = null, event = null) => {
     const inputValue = specialData || questInputs[quest.id]
 
     // Validate input based on type
@@ -1025,6 +1046,9 @@ function Challenge() {
       if (artifactUnlocked && categoryArtifact) {
         successMessage = `🎉 Quest complete! +${quest.points} points\n\n✨ You unlocked the ${categoryArtifact.name}!`
       }
+
+      // Trigger confetti celebration
+      triggerConfetti(event)
 
       alert(successMessage)
 
@@ -2026,7 +2050,7 @@ function Challenge() {
                             />
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2062,7 +2086,7 @@ function Challenge() {
                             </select>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2082,7 +2106,7 @@ function Challenge() {
                             </div>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2221,7 +2245,7 @@ function Challenge() {
                             />
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2257,7 +2281,7 @@ function Challenge() {
                             </select>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2277,7 +2301,7 @@ function Challenge() {
                             </div>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2398,7 +2422,7 @@ function Challenge() {
                             />
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2434,7 +2458,7 @@ function Challenge() {
                             </select>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2454,7 +2478,7 @@ function Challenge() {
                             </div>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2564,7 +2588,7 @@ function Challenge() {
                             />
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2600,7 +2624,7 @@ function Challenge() {
                             </select>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2620,7 +2644,7 @@ function Challenge() {
                             </div>
                             <button
                               className="quest-complete-btn"
-                              onClick={() => handleQuestComplete(quest)}
+                              onClick={(e) => handleQuestComplete(quest, null, e)}
                             >
                               Complete Quest
                             </button>
@@ -2744,7 +2768,7 @@ function Challenge() {
                               </select>
                               <button
                                 className="quest-complete-btn"
-                                onClick={() => handleQuestComplete(quest)}
+                                onClick={(e) => handleQuestComplete(quest, null, e)}
                               >
                                 Complete Quest
                               </button>
@@ -2762,7 +2786,7 @@ function Challenge() {
                               </div>
                               <button
                                 className="quest-complete-btn"
-                                onClick={() => handleQuestComplete(quest)}
+                                onClick={(e) => handleQuestComplete(quest, null, e)}
                               >
                                 Complete Quest
                               </button>

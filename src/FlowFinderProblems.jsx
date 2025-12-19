@@ -510,7 +510,22 @@ export default function FlowFinderProblems() {
 
       <button
         className="primary-button"
-        onClick={() => setCurrentScreen('q4')}
+        onClick={() => {
+          // Pre-fill Q4 with chapter names from Q3
+          const filledChapters = responses.q3_chapters.filter(ch => ch.trim())
+          if (filledChapters.length > 0) {
+            const prefilled = filledChapters.map(chapter => `${chapter} — `)
+            // Pad with empty strings if needed to maintain minimum 5 inputs
+            while (prefilled.length < 5) {
+              prefilled.push('')
+            }
+            setResponses(prev => ({
+              ...prev,
+              q4_struggles: prefilled
+            }))
+          }
+          setCurrentScreen('q4')
+        }}
         disabled={!hasMinimumAnswers('q3_chapters')}
         style={{ opacity: hasMinimumAnswers('q3_chapters') ? 1 : 0.5 }}
       >
@@ -520,11 +535,29 @@ export default function FlowFinderProblems() {
     </div>
   )
 
-  const renderQuestion4 = () => (
+  const renderQuestion4 = () => {
+    // Get chapter names for dynamic placeholders
+    const getPlaceholder = (index) => {
+      const chapter = responses.q3_chapters[index]?.trim()
+      if (chapter) {
+        return `${chapter} — describe the struggle...`
+      }
+      // Default placeholders if no chapter entered
+      const defaults = [
+        "The Explorer Years — finding a place I felt safe to be myself",
+        "The Rebuild — recovering from burnout and redefining success",
+        "The Awakening — letting go of others' expectations",
+        "Finding My Voice — overcoming fear of visibility",
+        "Building My Legacy — balancing ambition with presence"
+      ]
+      return defaults[index] || "Chapter name — describe the struggle..."
+    }
+
+    return (
     <div className="container question-container">
       <div className="question-number">Question 4 of 7</div>
       <h2 className="question-text">For each chapter, what struggle did you face?</h2>
-      <p className="question-subtext">Aim for at least 1 struggle per chapter, up to 3 per chapter</p>
+      <p className="question-subtext">We've pre-filled your chapter names — now add the struggle you faced</p>
       <div className="input-hint" style={{ textAlign: 'center', marginTop: '-6px', marginBottom: '-24px' }}>💡 Aim for 5+, the more the better</div>
 
       <div className="input-list">
@@ -534,11 +567,7 @@ export default function FlowFinderProblems() {
             <input
               type="text"
               className="text-input"
-              placeholder={index === 0 ? "The Explorer Years — finding a place I felt safe to be myself" :
-                           index === 1 ? "The Rebuild — recovering from burnout and redefining success" :
-                           index === 2 ? "The Awakening — letting go of others' expectations" :
-                           index === 3 ? "Finding My Voice — overcoming fear of visibility" :
-                           "Building My Legacy — balancing ambition with presence"}
+              placeholder={getPlaceholder(index)}
               value={value}
               onChange={(e) => updateResponse('q4_struggles', index, e.target.value)}
             />
@@ -566,7 +595,7 @@ export default function FlowFinderProblems() {
       </button>
       <BackButton fromScreen="q4" />
     </div>
-  )
+  )}
 
   const renderQuestion5 = () => (
     <div className="container question-container">
