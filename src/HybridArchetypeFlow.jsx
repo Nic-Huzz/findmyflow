@@ -403,15 +403,14 @@ const HybridArchetypeFlow = ({
                 handleBattleSelection(currentPair[0])
               }}
             >
-              <img 
-                src={`/images/archetypes/${imagePath}/${currentPair[0].image}`} 
+              <img
+                src={`/images/archetypes/${imagePath}/${currentPair[0].image}`}
                 alt={currentPair[0].name}
               />
-              {archetypeType === 'protective' && <h3 style={{ textAlign: 'center' }}>{currentPair[0].name}</h3>}
               <p><strong>{currentPair[0].description}</strong></p>
             </div>
             <div className="vs-divider">VS</div>
-            <div 
+            <div
               className="battle-card"
               onClick={(e) => {
                 e.preventDefault()
@@ -419,11 +418,10 @@ const HybridArchetypeFlow = ({
                 handleBattleSelection(currentPair[1])
               }}
             >
-              <img 
-                src={`/images/archetypes/${imagePath}/${currentPair[1].image}`} 
+              <img
+                src={`/images/archetypes/${imagePath}/${currentPair[1].image}`}
                 alt={currentPair[1].name}
               />
-              {archetypeType === 'protective' && <h3 style={{ textAlign: 'center' }}>{currentPair[1].name}</h3>}
               <p><strong>{currentPair[1].description}</strong></p>
             </div>
           </div>

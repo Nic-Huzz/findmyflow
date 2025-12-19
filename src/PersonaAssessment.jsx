@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import HybridArchetypeFlow from './HybridArchetypeFlow'
@@ -39,9 +39,13 @@ const STAGE_GROUPS = [
 
 function PersonaAssessment() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { user, signInWithCode, verifyCode } = useAuth()
 
-  const [stage, setStage] = useState(STAGES.WELCOME)
+  // If accessing via /log-in, skip to email capture for returning users
+  const isLoginRoute = location.pathname === '/log-in'
+
+  const [stage, setStage] = useState(isLoginRoute ? STAGES.EMAIL_CAPTURE : STAGES.WELCOME)
   const [assessment, setAssessment] = useState(null)
   const [personaAnswers, setPersonaAnswers] = useState({})
   const [assignedPersona, setAssignedPersona] = useState(null)
@@ -72,10 +76,10 @@ function PersonaAssessment() {
   // If user is already authenticated, redirect to dashboard
   // But skip this if we're in the middle of saving user data after verification
   useEffect(() => {
-    if (user && !isSavingUserData && stage === STAGES.WELCOME) {
+    if (user && !isSavingUserData && (stage === STAGES.WELCOME || isLoginRoute)) {
       navigate('/me')
     }
-  }, [user, navigate, isSavingUserData, stage])
+  }, [user, navigate, isSavingUserData, stage, isLoginRoute])
 
   // Calculate current stage group for progress
   const getCurrentGroupIndex = () => {
@@ -164,22 +168,24 @@ function PersonaAssessment() {
     setError(null)
 
     try {
-      // Save lead profile data first (before verification)
-      const sessionId = crypto.randomUUID()
-      const dbPersona = assignedPersona?.persona // Already in format like 'vibe_seeker'
+      // Only save lead profile data for new users (not returning users via /log-in)
+      if (!isLoginRoute) {
+        const sessionId = crypto.randomUUID()
+        const dbPersona = assignedPersona?.persona // Already in format like 'vibe_seeker'
 
-      await supabase.from('lead_flow_profiles').insert([{
-        session_id: sessionId,
-        user_name: userName,
-        email: email.toLowerCase(),
-        persona: assignedPersona?.persona, // Use snake_case format for consistency with profiles table
-        essence_archetype: essenceArchetype?.name,
-        protective_archetype: protectiveArchetype?.name,
-        context: {
-          persona_answers: personaAnswers,
-          persona_confidence: assignedPersona?.confidence
-        }
-      }])
+        await supabase.from('lead_flow_profiles').insert([{
+          session_id: sessionId,
+          user_name: userName,
+          email: email.toLowerCase(),
+          persona: assignedPersona?.persona, // Use snake_case format for consistency with profiles table
+          essence_archetype: essenceArchetype?.name,
+          protective_archetype: protectiveArchetype?.name,
+          context: {
+            persona_answers: personaAnswers,
+            persona_confidence: assignedPersona?.confidence
+          }
+        }])
+      }
 
       // Now send the verification code
       const result = await signInWithCode(email.toLowerCase())
@@ -209,6 +215,13 @@ function PersonaAssessment() {
       const result = await verifyCode(email.toLowerCase(), verificationCode)
       if (result.success) {
         const authUser = result.user
+
+        // For returning users (via /log-in), just redirect without setup
+        if (isLoginRoute) {
+          setStage(STAGES.SUCCESS)
+          setTimeout(() => navigate('/me'), 1500)
+          return
+        }
 
         // Create initial user_stage_progress record for new users
         if (authUser?.id) {
@@ -383,6 +396,9 @@ function PersonaAssessment() {
           <button className="primary-button" onClick={() => setStage(STAGES.PERSONA_Q1)}>
             Let's Begin
           </button>
+          <Link to="/log-in" className="login-link">
+            Already have an account? Log in
+          </Link>
         </div>
       </div>
     )
@@ -625,11 +641,14 @@ function PersonaAssessment() {
     const personaDisplay = getPersonaDisplay()
     return (
       <div className="persona-assessment">
-        {renderProgress()}
+        {!isLoginRoute && renderProgress()}
         <div className="capture-container">
-          <h2 className="capture-title">Perfect, {userName}!</h2>
+          <h2 className="capture-title">{isLoginRoute ? 'Welcome Back!' : `Perfect, ${userName}!`}</h2>
           <p className="capture-subtitle">
-            Enter your email to access your personalized profile and start your {personaDisplay?.flowName || 'discovery'} journey.
+            {isLoginRoute
+              ? 'Enter your email to log in and continue your journey.'
+              : `Enter your email to access your personalized profile and start your ${personaDisplay?.flowName || 'discovery'} journey.`
+            }
           </p>
           <form onSubmit={handleEmailSubmit} className="capture-form">
             <input
@@ -659,7 +678,7 @@ function PersonaAssessment() {
   if (stage === STAGES.CODE_VERIFY) {
     return (
       <div className="persona-assessment">
-        {renderProgress()}
+        {!isLoginRoute && renderProgress()}
         <div className="capture-container">
           <h2 className="capture-title">Check Your Email</h2>
           <p className="capture-subtitle">

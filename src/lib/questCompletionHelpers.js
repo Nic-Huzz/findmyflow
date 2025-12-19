@@ -7,25 +7,28 @@ import { normalizePersona } from '../data/personaProfiles';
  * Handle conversation_log quest completion
  * - Saves to conversation_logs table
  * - Increments conversations_logged counter in user_stage_progress
+ * - Creates milestone when milestone_count is reached (e.g., validation_responses_3 after 3 logs)
  */
-export const handleConversationLogCompletion = async (userId, challengeInstanceId, conversationData, stageProgress) => {
+export const handleConversationLogCompletion = async (userId, challengeInstanceId, conversationData, stageProgress, quest = null) => {
   try {
     const { person_type, conversation_summary, key_insights } = conversationData;
 
-    // Get current stage from user_stage_progress
+    // Get current stage and persona from user_stage_progress
     let currentStage = 'validation'; // default
+    let persona = stageProgress?.persona || 'vibe_riser';
     if (stageProgress?.current_stage) {
       currentStage = stageProgress.current_stage;
     } else {
       // Try to fetch if not provided
       const { data: progress } = await supabase
         .from('user_stage_progress')
-        .select('current_stage')
+        .select('current_stage, persona')
         .eq('user_id', userId)
         .single();
 
       if (progress) {
         currentStage = progress.current_stage;
+        persona = progress.persona;
       }
     }
 
@@ -54,10 +57,11 @@ export const handleConversationLogCompletion = async (userId, challengeInstanceI
       .eq('user_id', userId)
       .single();
 
+    let newCount = 1;
     if (fetchError) {
       console.error('Error fetching current progress:', fetchError);
     } else {
-      const newCount = (currentProgress?.conversations_logged || 0) + 1;
+      newCount = (currentProgress?.conversations_logged || 0) + 1;
       const { error: incrementError } = await supabase
         .from('user_stage_progress')
         .update({
@@ -72,7 +76,39 @@ export const handleConversationLogCompletion = async (userId, challengeInstanceI
       }
     }
 
-    return { success: true };
+    // Check if we should create a milestone (e.g., after 3 conversations)
+    if (quest?.milestone_type && quest?.milestone_count) {
+      if (newCount >= quest.milestone_count) {
+        // Check if milestone already exists
+        const { data: existingMilestone } = await supabase
+          .from('milestone_completions')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('milestone_id', quest.milestone_type)
+          .maybeSingle();
+
+        if (!existingMilestone) {
+          // Create the milestone
+          const { error: milestoneError } = await supabase
+            .from('milestone_completions')
+            .insert({
+              user_id: userId,
+              milestone_id: quest.milestone_type,
+              stage: currentStage,
+              persona: normalizePersona(persona),
+              evidence_text: `Completed ${newCount} conversations`
+            });
+
+          if (milestoneError) {
+            console.error('Error creating milestone from conversations:', milestoneError);
+          } else {
+            console.log(`✅ Created milestone ${quest.milestone_type} after ${newCount} conversations`);
+          }
+        }
+      }
+    }
+
+    return { success: true, conversationCount: newCount };
   } catch (error) {
     console.error('Error in handleConversationLogCompletion:', error);
     return { success: false, error: error.message };

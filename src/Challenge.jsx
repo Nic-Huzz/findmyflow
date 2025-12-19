@@ -795,7 +795,8 @@ function Challenge() {
           user.id,
           progress.challenge_instance_id,
           specialData,
-          stageProgress
+          stageProgress,
+          quest // Pass quest to check for milestone_type and milestone_count
         )
 
         if (!result.success) {
@@ -849,6 +850,34 @@ function Challenge() {
         const milestoneData = {
           milestone_type: quest.milestone_type,
           evidence_text: 'Completed via checkbox'
+        }
+
+        const result = await handleMilestoneCompletion(
+          user.id,
+          milestoneData,
+          stageProgress,
+          userData?.persona
+        )
+
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed this milestone!')
+            return
+          } else {
+            alert(`Error saving milestone: ${result.error}`)
+            return
+          }
+        }
+
+        // Reload stage progress
+        await loadStageProgress()
+      }
+
+      // Handle text quests that have a milestone_type (e.g., groan_challenge)
+      if (quest.inputType === 'text' && quest.milestone_type) {
+        const milestoneData = {
+          milestone_type: quest.milestone_type,
+          evidence_text: sanitizedReflection || 'Completed via text input'
         }
 
         const result = await handleMilestoneCompletion(

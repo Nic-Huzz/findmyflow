@@ -41,7 +41,7 @@
 
 .complete-button {
   width: 100%;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -54,7 +54,7 @@
 
 .complete-button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 .complete-button:active {

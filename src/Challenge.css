@@ -737,6 +737,32 @@
   transform: translateY(0);
 }
 
+/* Action link button - prominent button for quests with actionLink */
+.quest-action-btn {
+  display: block;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.quest-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.quest-action-btn:active {
+  transform: translateY(0);
+}
+
 .quest-flow-btn.coming-soon {
   background: #6c757d;
   cursor: not-allowed;

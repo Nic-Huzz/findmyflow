@@ -429,7 +429,7 @@ function PersonaSelectionFlow() {
                   </p>
                   <button
                     className="action-btn action-btn-primary"
-                    onClick={() => navigate('/nikigai-test')}
+                    onClick={() => navigate('/nikigai/skills')}
                   >
                     Start Flow Finder Process
                   </button>
