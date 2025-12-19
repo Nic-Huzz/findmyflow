@@ -1,0 +1,31 @@
+name: Scheduled Notifications
+
+on:
+  schedule:
+    # Run every hour at minute 0
+    - cron: '0 * * * *'
+  workflow_dispatch:
+    # Allow manual trigger for testing
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger scheduled notifications
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://qlwfcfypnoptsocdpxuv.supabase.co/functions/v1/scheduled-notifications" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            -d '{}')
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "Response: $body"
+          echo "HTTP Code: $http_code"
+
+          if [ "$http_code" != "200" ]; then
+            echo "Failed to send notifications"
+            exit 1
+          fi
