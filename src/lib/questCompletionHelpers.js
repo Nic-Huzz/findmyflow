@@ -9,7 +9,7 @@ import { normalizePersona } from '../data/personaProfiles';
  * - Increments conversations_logged counter in user_stage_progress
  * - Creates milestone when milestone_count is reached (e.g., validation_responses_3 after 3 logs)
  */
-export const handleConversationLogCompletion = async (userId, challengeInstanceId, conversationData, stageProgress, quest = null) => {
+export const handleConversationLogCompletion = async (userId, challengeInstanceId, conversationData, stageProgress, quest = null, projectId = null) => {
   try {
     const { person_type, conversation_summary, key_insights } = conversationData;
 
@@ -41,7 +41,8 @@ export const handleConversationLogCompletion = async (userId, challengeInstanceI
         conversation_summary,
         key_insights,
         person_type,
-        challenge_instance_id: challengeInstanceId
+        challenge_instance_id: challengeInstanceId,
+        project_id: projectId
       });
 
     if (logError) {
@@ -119,7 +120,7 @@ export const handleConversationLogCompletion = async (userId, challengeInstanceI
  * Handle milestone quest completion
  * - Saves to milestone_completions table
  */
-export const handleMilestoneCompletion = async (userId, milestoneData, stageProgress, persona) => {
+export const handleMilestoneCompletion = async (userId, milestoneData, stageProgress, persona, projectId = null) => {
   try {
     const { milestone_type, evidence_text } = milestoneData;
 
@@ -148,7 +149,8 @@ export const handleMilestoneCompletion = async (userId, milestoneData, stageProg
         milestone_id: milestone_type,
         stage: currentStage,
         persona: persona || 'vibe_seeker',
-        evidence_text
+        evidence_text,
+        project_id: projectId
       });
 
     if (milestoneError) {
@@ -325,7 +327,9 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
         quest_type: 'flow',
         points_earned: points,
         challenge_day: activeChallenge.current_day,
-        reflection_text: `Completed ${flowType} flow from home page`
+        reflection_text: `Completed ${flowType} flow from home page`,
+        project_id: activeChallenge.project_id || null,
+        stage: 1 // Flow Finder quests are Stage 1 (Validation)
       });
 
     if (completionError) {

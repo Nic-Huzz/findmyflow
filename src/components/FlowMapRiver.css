@@ -1,0 +1,212 @@
+/**
+ * FlowMapRiver.css
+ * Styles for the vertical aerial river visualization of Flow Compass entries
+ * Updated to Option H design (bottom-to-top flow)
+ */
+
+.flow-map-river {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.flow-map-river.loading {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.river-loading-indicator {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-river {
+  text-align: center;
+  padding: 40px 16px;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-river p {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.log-flow-button {
+  padding: 14px 28px;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.log-flow-button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* SVG Container */
+.river-svg-container {
+  width: 100%;
+  overflow: visible;
+}
+
+.river-svg {
+  width: 100%;
+  height: auto;
+  min-height: 280px;
+  max-height: 500px;
+  display: block;
+}
+
+/* Animated river highlight */
+.river-highlight {
+  stroke-dasharray: 20 10;
+  animation: flow-dash 2s linear infinite;
+}
+
+@keyframes flow-dash {
+  0% { stroke-dashoffset: 30; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Pulsing end indicator */
+.end-pulse {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { r: 16; opacity: 1; }
+  100% { r: 28; opacity: 0; }
+}
+
+/* Stuck point pulse animation */
+.stuck-pulse {
+  animation: stuck-ring 1.5s ease-out infinite;
+}
+
+@keyframes stuck-ring {
+  0% { r: 10; opacity: 1; }
+  100% { r: 20; opacity: 0; }
+}
+
+/* Marker hover effects */
+.river-marker {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.river-marker:hover circle {
+  filter: brightness(1.2);
+}
+
+/* Legend */
+.river-legend {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.legend-row:last-child {
+  margin-bottom: 0;
+}
+
+.legend-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-icon {
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 24px;
+  text-align: center;
+}
+
+.legend-dot-stuck {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+  margin-left: 4px;
+}
+
+.legend-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* View All Button */
+.view-all-button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-all-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--purple, #5e17eb);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .flow-map-river {
+    padding: 16px;
+  }
+
+  .river-svg {
+    min-height: 320px;
+  }
+
+  .legend-icon {
+    font-size: 1rem;
+  }
+
+  .legend-text {
+    font-size: 0.8rem;
+  }
+
+  .legend-dot-stuck {
+    width: 14px;
+    height: 14px;
+  }
+}

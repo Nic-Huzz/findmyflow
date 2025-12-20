@@ -2,7 +2,14 @@
 
 ## Project Overview
 
-FindMyFlow is a personal development web app that helps burnt-out professionals discover their ideal career path and build a business around their natural strengths. Users complete AI-guided "flows" (interactive questionnaires) to identify their skills, problems they solve, and ideal customer personas. The app is built on the **Nikigai** framework (Nic + Ikigai - the creator's adaptation of the Japanese concept). It supports three user archetypes (Vibe Seeker, Vibe Riser, Movement Maker) with different progression stages, gamified 7-day challenges, and a graduation system that tracks progress toward launching their own venture. The Money Model flows are based on Alex Hormozi's $100M Offers framework.
+FindMyFlow is a personal development web app that helps burnt-out professionals discover their ideal career path and build a business around their natural strengths. Users complete AI-guided "flows" (interactive questionnaires) to identify their skills, problems they solve, and ideal customer personas. The app is built on the **Nikigai** framework (Nic + Ikigai - the creator's adaptation of the Japanese concept).
+
+**Architecture (Dec 2024 Refactor):**
+- **Project-Centric**: Users can have multiple projects, each with its own stage progression
+- **Universal 6-Stage System**: All projects follow the same 6 stages (Validation → Product Creation → Testing → Money Models → Campaign Creation → Launch)
+- **Persona at User Level**: Three user personas (Vibe Seeker, Vibe Riser, Movement Maker) determine initial guidance, but stages are project-based
+- **Gamified 7-Day Challenges**: Stage-specific quests with groan challenges that push users past comfort zones
+- The Money Model flows are based on Alex Hormozi's $100M Offers framework.
 
 ---
 
@@ -41,8 +48,9 @@ Think of this project as building a LEGO castle:
 │   │
 │   ├── lib/                      # Hidden mechanisms (like the drawbridge pulley)
 │   │   ├── supabaseClient.js     # Database connection
-│   │   ├── personaStages.js      # Stage/graduation logic
-│   │   ├── graduationChecker.js  # Checks if user can graduate
+│   │   ├── stageConfig.js        # **NEW** Universal 6-stage configuration
+│   │   ├── graduationChecker.js  # Project-based graduation logic
+│   │   ├── personaStages.js      # Legacy persona stages (being deprecated)
 │   │   ├── streakTracking.js     # 7-day challenge streaks
 │   │   ├── aiHelper.js           # Claude AI integration
 │   │   └── clustering.js         # AI-powered skill/problem clustering
@@ -92,12 +100,22 @@ Think of this project as building a LEGO castle:
 
 ### Currently Built and Working:
 
-1. **Persona System** - Three user types with different journeys:
-   - **Vibe Seeker**: Exploring, finding clarity (1 stage)
-   - **Vibe Riser**: Building first product (4 stages: validation → creation → testing → launch)
-   - **Movement Maker**: Scaling a business (3 stages: ideation → creation → launch)
+1. **Universal 6-Stage System** (Dec 2024 Refactor) - All projects follow these stages:
+   | Stage | Name | Focus |
+   |-------|------|-------|
+   | 1 | Validation | Validate with real customers |
+   | 2 | Product Creation | Build core offer + lead magnet |
+   | 3 | Testing | Test with users, gather feedback |
+   | 4 | Money Models | Upsells, downsells, continuity |
+   | 5 | Campaign Creation | Lead generation strategy |
+   | 6 | Launch | Execute launch with leads funnel |
 
-2. **Flow Finder** - AI-guided discovery flows:
+2. **Persona System** - Three user types (determines initial guidance):
+   - **Vibe Seeker**: Exploring, needs Flow Finder first
+   - **Vibe Riser**: Building first product, can start from existing project
+   - **Movement Maker**: Scaling a business, often has existing traction
+
+3. **Flow Finder** - AI-guided discovery flows:
    - Skills identification (`/nikigai/skills`)
    - Problems you solve (`/nikigai/problems`)
    - Ideal customer persona (`/nikigai/persona`)
@@ -110,23 +128,36 @@ Think of this project as building a LEGO castle:
    - Lead Magnet flow
    - Leads Strategy flow
 
-4. **7-Day Challenge System** - Gamified daily quests with:
-   - Streak tracking
-   - Points and leaderboard
-   - Stage-specific quests (filtered by persona AND stage)
-   - Graduation requirements
-   - **Groan Challenges** - A core concept: "Groan" = your essence knows you're capable, but your body still has fear. These challenges push users past their comfort zone.
+5. **7-Day Challenge System** - Gamified daily quests with:
+   - Project selector (challenges tied to specific project)
+   - Stage tabs (1-6) for browsing stage-specific quests
+   - Points tracked per-project
+   - **Groan Challenges** - Stage-specific challenges that push users past comfort zones:
+     - Each stage has a unique groan challenge with specific fear to overcome
+     - Completing groan challenge is required for graduation
+     - Captures protective archetype (Ghost, People Pleaser, Perfectionist, Performer, Controller) and fear type
+   - **Groan Reflections** - When completing external/visibility quests:
+     - Flow Tracker: Captures Ease/Resistance + Excited/Tired (same as Flow Compass)
+     - Protective Voice: Which of 5 archetypes showed up
+     - Fear Type: What fear emerged (rejection, judgment, not good enough, failure, visibility, success)
    - **See `docs/7-day-challenge-system.md` for full documentation before making changes**
 
-5. **Nervous System Flow** (`/nervous-system`) - AI chat flow that reveals the boundaries trauma has created around visibility and earning
+6. **Nervous System Flow** (`/nervous-system`) - AI chat flow that reveals the boundaries trauma has created around visibility and earning
 
-6. **Healing Compass** (`/healing-compass`) - The process to heal the trauma creating those boundaries
+7. **Healing Compass** (`/healing-compass`) - The process to heal the trauma creating those boundaries
 
-7. **Flow Compass** - Tracks energy/progress on projects (N/E/S/W compass)
+8. **Flow Compass** - Tracks energy/progress on projects using N/E/S/W directions:
+   - **North (Green)**: Flow - Ease + Excited
+   - **East (Blue)**: Redirect - Resistance + Excited
+   - **South (Red)**: Rest - Resistance + Tired
+   - **West (Yellow)**: Honour - Ease + Tired
+   - Visualized as vertical aerial river (bottom-to-top)
 
-8. **Profile Dashboard** - Shows archetype, clusters, and progress
+9. **Profile Dashboard** - Shows archetype, clusters, and progress
 
-9. **Push Notifications** - Reminder system for challenges
+10. **Library of Answers** (`/library`) - All discoveries organized by category with project filter
+
+11. **Push Notifications** - Reminder system for challenges
 
 ---
 
@@ -136,11 +167,13 @@ Think of this project as building a LEGO castle:
 
 | Table | What it stores |
 |-------|----------------|
-| `user_stage_progress` | Current stage, persona, streak count per user |
-| `flow_sessions` | All assessment flow completions (tracks `flow_type` for graduation) |
-| `milestone_completions` | Completed milestones per user/persona |
-| `quest_completions` | Completed daily quests |
+| `user_stage_progress` | Persona, onboarding status per user |
+| `user_projects` | User's projects with `current_stage` (1-6), `is_primary`, `total_points` |
+| `flow_sessions` | All assessment flow completions (tracks `flow_type` + `project_id`) |
+| `milestone_completions` | Completed milestones per user/project |
+| `quest_completions` | Completed daily quests (with `project_id`) |
 | `challenge_instances` | Active 7-day challenge sessions |
+| `groan_reflections` | **NEW** Captures protective voices and fears on quest completion |
 
 ### Flow Data Tables:
 
@@ -226,11 +259,27 @@ Flows use JSON question files in `/public/` and the `NikigaiTest.jsx` component:
 
 AI responses handled by edge function `nikigai-conversation`.
 
-### 4. Graduation System
-Defined in `src/lib/personaStages.js`. Checks:
-- Required flows completed (`flow_sessions` table)
-- Required milestones achieved (`milestone_completions` table)
-- 7-day challenge streak
+### 4. Graduation System (Project-Based)
+Defined in `src/lib/stageConfig.js` and `src/lib/graduationChecker.js`.
+
+**To graduate a project to the next stage, user must complete:**
+- Required flows for the stage (`flow_sessions` table)
+- Required milestones (`milestone_completions` table)
+- Stage-specific groan challenge (`quest_completions` table)
+
+**Key Functions:**
+```javascript
+import { checkProjectGraduationEligibility, graduateProject } from './lib/graduationChecker'
+
+// Check if ready to graduate
+const result = await checkProjectGraduationEligibility(userId, projectId, challengeInstanceId)
+// Returns: { eligible, requirements: { flows, milestones, groanChallenge } }
+
+// Graduate to next stage
+await graduateProject(userId, projectId, currentStage, nextStage)
+```
+
+**Note:** Legacy persona-based graduation (`checkGraduationEligibility`) still exists for backwards compatibility but is being deprecated.
 
 ### 5. CSS Pattern
 Each component has a matching CSS file. Brand colors defined in `src/index.css`:
@@ -294,17 +343,24 @@ Query the database using the REST API script:
 
 ## What's Next
 
-Based on the current state, here are suggested features:
+### Completed (Dec 2024 Refactor):
+- [x] Project-Based Challenges - Multiple projects with stage progression
+- [x] Universal 6-Stage System - All projects follow same 6 stages
+- [x] Stage-Specific Groan Challenges - Each stage has unique groan challenge
+- [x] Groan Reflections Table - Captures fears/archetypes on quest completion
+- [x] FlowMapRiver Visualization - Vertical aerial river (bottom-to-top)
+- [x] Library of Answers with Project Filter
 
-1. **Project-Based Challenges** - Allow users to have multiple projects, each with its own stage progression. When starting a 7-day challenge, user selects which project to focus on.
+### Pending Features:
+1. **Groan Reflection UI** - Add inline capture when completing external quests (protective archetype + fear dropdown)
 
-2. **Badges & Achievements** - Add a `user_badges` table and award badges for milestones like "First Flow Completed", "7-Day Streak", "Stage Graduate", etc.
+2. **Badges & Achievements** - Add `user_badges` table and award badges for milestones
 
-3. **Pod Leaderboards** - Create group "pods" for the 7-day challenge with both individual and team leaderboards.
+3. **Pod Leaderboards** - Group "pods" for 7-day challenge with team scoring
 
-4. **Spiral Dynamics Assessment** - Add the disillusionment diagnostic flow as an in-app tool for Discovery stage users.
+4. **AI Personalization** - Use groan_reflections data to personalize coaching ("Your most common fear is judgment...")
 
-5. **Analytics Dashboard** - Track completion rates, time-to-graduation, popular flows, and user drop-off points.
+5. **Stage 5-6 Milestones** - Finalize milestone definitions for Campaign Creation and Launch stages
 
 ---
 

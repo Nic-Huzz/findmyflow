@@ -509,7 +509,7 @@ const FlowCompass = () => {
                     {stats.east > 0 && (
                       <div className="legend-item">
                         <div className="legend-dot momentum-east"></div>
-                        <span>{stats.east}% Pivoting</span>
+                        <span>{stats.east}% Redirect</span>
                       </div>
                     )}
                     {stats.south > 0 && (
@@ -600,7 +600,7 @@ const FlowCompass = () => {
                   {projectStats['unassigned'].east > 0 && (
                     <div className="legend-item">
                       <div className="legend-dot momentum-east"></div>
-                      <span>{projectStats['unassigned'].east}% Pivoting</span>
+                      <span>{projectStats['unassigned'].east}% Redirect</span>
                     </div>
                   )}
                   {projectStats['unassigned'].south > 0 && (

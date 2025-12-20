@@ -66,7 +66,7 @@ function FlowCompassInput({ quest, onComplete }) {
   const getDirectionLabel = () => {
     const dir = getDirection()
     if (dir === 'north') return 'Flowing (North)'
-    if (dir === 'east') return 'Pivoting (East)'
+    if (dir === 'east') return 'Redirect (East)'
     if (dir === 'south') return 'Resting (South)'
     if (dir === 'west') return 'Honouring (West)'
     return ''

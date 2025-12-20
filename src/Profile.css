@@ -185,6 +185,143 @@
   margin-top: 24px;
 }
 
+/* Project Stage Badge */
+.project-stage-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.project-stage-badge .persona-badge {
+  padding: 6px 12px;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.project-stage-badge .stage-info {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1a1a2e;
+}
+
+/* Home Action Buttons */
+.home-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.action-btn {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+}
+
+.action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.action-btn.secondary {
+  background: white;
+  color: #1a1a2e;
+  border: 2px solid #e8ecef;
+}
+
+.action-btn.secondary:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+/* Other Projects Section */
+.other-projects-section {
+  margin-top: 32px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.project-card-mini {
+  position: relative;
+  padding: 16px;
+  background: white;
+  border: 2px solid #e8ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.project-card-mini:hover {
+  border-color: #5e17eb;
+  transform: translateY(-2px);
+}
+
+.project-card-mini.primary {
+  border-color: var(--gold, #fbbf24);
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.project-card-mini .project-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1a1a2e;
+}
+
+.project-card-mini .project-stage {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.project-card-mini .primary-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: var(--gold, #fbbf24);
+  color: #1a1a2e;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.project-card-mini.add-new {
+  border-style: dashed;
+  border-color: #ccc;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.project-card-mini.add-new:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
 /* Stats Grid */
 .stats-grid {
   display: grid;

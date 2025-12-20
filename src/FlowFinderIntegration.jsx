@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from './lib/questCompletionHelpers'
+import { STAGES } from './lib/stageConfig'
 import './FlowFinder.css'
 
 // ClusterSlider component (extracted from NikigaiTest.jsx)
@@ -240,10 +241,19 @@ export default function FlowFinderIntegration() {
 
       if (outcomeError) throw outcomeError
 
-      // If adding to Flow Compass, create a project
+      // If adding to Flow Compass, create a project with project-based stage fields
       if (shouldAddToCompass) {
         const projectName = details?.name || `${selectedProblem.cluster_label} for ${selectedPersona.cluster_label}`
         console.log('📊 Creating Flow Compass project:', projectName)
+
+        // Check if user has existing projects to determine is_primary
+        const { data: existingProjects } = await supabase
+          .from('user_projects')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+
+        const isFirstProject = !existingProjects || existingProjects.length === 0
 
         const { data: projectData, error: projectError } = await supabase
           .from('user_projects')
@@ -253,7 +263,14 @@ export default function FlowFinderIntegration() {
             description: `Using ${selectedSkill.cluster_label} to help ${selectedPersona.cluster_label} with ${selectedProblem.cluster_label}`,
             status: 'active',
             source_flow: 'integration',
-            source_session_id: sessionId
+            source_session_id: sessionId,
+            // New project-based stage fields (Dec 2024)
+            current_stage: STAGES.VALIDATION,
+            total_points: 0,
+            is_primary: isFirstProject,
+            linked_skill_cluster_id: selectedSkill.id,
+            linked_problem_cluster_id: selectedProblem.id,
+            linked_persona_cluster_id: selectedPersona.id
           })
           .select()
 
@@ -262,6 +279,12 @@ export default function FlowFinderIntegration() {
         } else {
           console.log('✅ Project created:', projectData)
         }
+
+        // Mark onboarding as complete since user now has a project
+        await supabase
+          .from('user_stage_progress')
+          .update({ onboarding_completed: true })
+          .eq('user_id', user.id)
       }
 
       // Mark session as completed

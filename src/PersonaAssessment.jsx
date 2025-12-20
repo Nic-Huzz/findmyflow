@@ -8,13 +8,13 @@ import { essenceProfiles as essenceProfilesFlat } from './lib/data/essenceProfil
 import { protectiveProfiles } from './data/protectiveProfiles'
 import './PersonaAssessment.css'
 
-// Flow stages
+// Flow stages - Updated for Huzz intro (Dec 2024)
+// Persona questions moved to post-auth home screen
 const STAGES = {
-  WELCOME: 'welcome',
-  PERSONA_Q1: 'persona_q1',
-  PERSONA_Q2: 'persona_q2',
-  PERSONA_Q3: 'persona_q3',
-  PERSONA_REVEAL: 'persona_reveal',
+  HUZZ_INTRO_1: 'huzz_intro_1',
+  HUZZ_INTRO_2: 'huzz_intro_2',
+  HUZZ_INTRO_3: 'huzz_intro_3',
+  HUZZ_INTRO_4: 'huzz_intro_4',
   ESSENCE_INTRO: 'essence_intro',
   ESSENCE_FLOW: 'essence_flow',
   ESSENCE_REVEAL: 'essence_reveal',
@@ -29,8 +29,7 @@ const STAGES = {
 
 // Stage groupings for progress dots
 const STAGE_GROUPS = [
-  { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME] },
-  { id: 'persona', label: 'Persona', stages: [STAGES.PERSONA_Q1, STAGES.PERSONA_Q2, STAGES.PERSONA_Q3, STAGES.PERSONA_REVEAL] },
+  { id: 'intro', label: 'Intro', stages: [STAGES.HUZZ_INTRO_1, STAGES.HUZZ_INTRO_2, STAGES.HUZZ_INTRO_3, STAGES.HUZZ_INTRO_4] },
   { id: 'essence', label: 'Essence', stages: [STAGES.ESSENCE_INTRO, STAGES.ESSENCE_FLOW, STAGES.ESSENCE_REVEAL] },
   { id: 'protective', label: 'Protective', stages: [STAGES.PROTECTIVE_INTRO, STAGES.PROTECTIVE_FLOW, STAGES.PROTECTIVE_REVEAL] },
   { id: 'profile', label: 'Profile', stages: [STAGES.NAME_CAPTURE, STAGES.EMAIL_CAPTURE, STAGES.CODE_VERIFY] },
@@ -45,10 +44,8 @@ function PersonaAssessment() {
   // If accessing via /log-in, skip to email capture for returning users
   const isLoginRoute = location.pathname === '/log-in'
 
-  const [stage, setStage] = useState(isLoginRoute ? STAGES.EMAIL_CAPTURE : STAGES.WELCOME)
+  const [stage, setStage] = useState(isLoginRoute ? STAGES.EMAIL_CAPTURE : STAGES.HUZZ_INTRO_1)
   const [assessment, setAssessment] = useState(null)
-  const [personaAnswers, setPersonaAnswers] = useState({})
-  const [assignedPersona, setAssignedPersona] = useState(null)
   const [essenceArchetype, setEssenceArchetype] = useState(null)
   const [protectiveArchetype, setProtectiveArchetype] = useState(null)
   const [userName, setUserName] = useState('')
@@ -76,7 +73,7 @@ function PersonaAssessment() {
   // If user is already authenticated, redirect to dashboard
   // But skip this if we're in the middle of saving user data after verification
   useEffect(() => {
-    if (user && !isSavingUserData && (stage === STAGES.WELCOME || isLoginRoute)) {
+    if (user && !isSavingUserData && (stage === STAGES.HUZZ_INTRO_1 || isLoginRoute)) {
       navigate('/me')
     }
   }, [user, navigate, isSavingUserData, stage, isLoginRoute])
@@ -97,46 +94,6 @@ function PersonaAssessment() {
     const group = STAGE_GROUPS[groupIndex]
     const stageIndex = group.stages.indexOf(stage)
     return ((stageIndex + 1) / group.stages.length) * 100
-  }
-
-  // Calculate persona from answers
-  const calculatePersona = (answers) => {
-    const counts = { vibe_seeker: 0, vibe_riser: 0, movement_maker: 0 }
-    Object.values(answers).forEach(answer => {
-      if (counts[answer.persona] !== undefined) {
-        counts[answer.persona]++
-      }
-    })
-    let maxCount = 0
-    let winningPersona = 'vibe_seeker'
-    Object.entries(counts).forEach(([persona, count]) => {
-      if (count > maxCount) {
-        maxCount = count
-        winningPersona = persona
-      }
-    })
-    return {
-      persona: winningPersona,
-      confidence: maxCount === 3 ? 'high' : maxCount === 2 ? 'medium' : 'low'
-    }
-  }
-
-  // Handle persona question selection
-  const handlePersonaOption = (questionId, option) => {
-    const newAnswers = {
-      ...personaAnswers,
-      [questionId]: { value: option.value, persona: option.persona, label: option.label }
-    }
-    setPersonaAnswers(newAnswers)
-
-    // Move to next stage
-    if (stage === STAGES.PERSONA_Q1) setStage(STAGES.PERSONA_Q2)
-    else if (stage === STAGES.PERSONA_Q2) setStage(STAGES.PERSONA_Q3)
-    else if (stage === STAGES.PERSONA_Q3) {
-      const result = calculatePersona(newAnswers)
-      setAssignedPersona(result)
-      setTimeout(() => setStage(STAGES.PERSONA_REVEAL), 300)
-    }
   }
 
   // Handle essence archetype completion
@@ -171,18 +128,19 @@ function PersonaAssessment() {
       // Only save lead profile data for new users (not returning users via /log-in)
       if (!isLoginRoute) {
         const sessionId = crypto.randomUUID()
-        const dbPersona = assignedPersona?.persona // Already in format like 'vibe_seeker'
 
+        // Note: Persona is now determined post-auth in HomeFirstTime.jsx
+        // We save essence/protective archetypes here, persona will be updated later
         await supabase.from('lead_flow_profiles').insert([{
           session_id: sessionId,
           user_name: userName,
           email: email.toLowerCase(),
-          persona: assignedPersona?.persona, // Use snake_case format for consistency with profiles table
+          persona: null, // Will be set after persona assessment on home screen
           essence_archetype: essenceArchetype?.name,
           protective_archetype: protectiveArchetype?.name,
           context: {
-            persona_answers: personaAnswers,
-            persona_confidence: assignedPersona?.confidence
+            intro_completed: true,
+            archetypes_completed: true
           }
         }])
       }
@@ -224,50 +182,27 @@ function PersonaAssessment() {
         }
 
         // Create initial user_stage_progress record for new users
+        // Note: Persona will be determined post-auth via HomeFirstTime.jsx
         if (authUser?.id) {
-          const dbPersona = assignedPersona?.persona // Already in format like 'vibe_seeker'
-
-          // Set initial stage based on persona
-          const initialStages = {
-            vibe_seeker: 'clarity',
-            vibe_riser: 'validation',
-            movement_maker: 'ideation'
-          }
-          const initialStage = initialStages[dbPersona] || 'clarity'
-
-          // Update profiles table with persona (for consistency with graduation flow)
-          try {
-            await supabase
-              .from('profiles')
-              .update({ persona: dbPersona })
-              .eq('id', authUser.id)
-          } catch (profileError) {
-            console.warn('Failed to update profile persona:', profileError)
-            // Don't fail the whole flow if this fails
-          }
-
           // Check if stage progress already exists
           const { data: existingProgress } = await supabase
             .from('user_stage_progress')
-            .select('id, current_stage')
+            .select('id, current_stage, onboarding_completed')
             .eq('user_id', authUser.id)
             .maybeSingle()
 
           if (!existingProgress) {
-            // Create new stage progress record
+            // Create new stage progress record with onboarding_completed = false
+            // Persona and initial stage will be set after persona assessment on home screen
             await supabase.from('user_stage_progress').insert([{
               user_id: authUser.id,
-              persona: dbPersona,
-              current_stage: initialStage,
-              conversations_logged: 0
+              persona: null, // Will be set after persona assessment
+              current_stage: null, // Will be set after persona assessment
+              conversations_logged: 0,
+              onboarding_completed: false
             }])
-          } else if (existingProgress.current_stage === 'stage_1') {
-            // Fix legacy stage_1 format
-            await supabase
-              .from('user_stage_progress')
-              .update({ current_stage: initialStage, persona: dbPersona })
-              .eq('user_id', authUser.id)
           }
+          // If existingProgress exists, user is returning - don't overwrite their data
         }
 
         // Show success and redirect
@@ -285,12 +220,6 @@ function PersonaAssessment() {
 
   // Validate email format
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-
-  // Get persona display data
-  const getPersonaDisplay = () => {
-    if (!assignedPersona || !assessment) return null
-    return assessment.personas[assignedPersona.persona]
-  }
 
   // Get essence archetype display data
   const getEssenceDisplay = () => {
@@ -375,26 +304,21 @@ function PersonaAssessment() {
 
   // ============ RENDER STAGES ============
 
-  // WELCOME STAGE
-  if (stage === STAGES.WELCOME) {
+  // HUZZ INTRO SCREEN 1
+  if (stage === STAGES.HUZZ_INTRO_1) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
         <div className="welcome-container">
           <div className="welcome-content">
-            <h1 className="welcome-greeting">Welcome. I'm Zarlo 🌞 </h1>
+            <h1 className="welcome-greeting">Welcome! I'm Huzz!</h1>
             <div className="welcome-message">
-              <p><strong>Have you ever felt like you were made for more?</strong></p>
-              <p>I believe you're an instrument of life...</p>
-              <p>When you were a kid, you embodied this effortlessly: Playful, curious, zero shame.</p>
-              <p>Then life taught you to turn it down: "Be good. Don't be weird. Fit in."</p>
-              <p>But that original frequency? It's still inside you. It has a name, a shape, a purpose.</p>
-              <p>I'm here to help you nurture it — and amplify its impact in the world.</p>
-              <p className="welcome-cta-text">If you believe you're here to make a difference, scale your impact, and trust the universe — let's begin.</p>
+              <p>Ever since I quit my job two and a half years ago, I've developed an unwavering belief in <strong>'Flow'</strong>.</p>
+              <p>The idea that there's a unique path that only you could walk due to your combination of skills, experiences and circumstances.</p>
             </div>
           </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.PERSONA_Q1)}>
-            Let's Begin
+          <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_2)}>
+            Tell me more!
           </button>
           <Link to="/log-in" className="login-link">
             Already have an account? Log in
@@ -404,60 +328,71 @@ function PersonaAssessment() {
     )
   }
 
-  // PERSONA QUESTIONS
-  if ([STAGES.PERSONA_Q1, STAGES.PERSONA_Q2, STAGES.PERSONA_Q3].includes(stage)) {
-    const questionIndex = stage === STAGES.PERSONA_Q1 ? 0 : stage === STAGES.PERSONA_Q2 ? 1 : 2
-    const question = assessment?.questions?.[questionIndex]
-    if (!question) return null
-
+  // HUZZ INTRO SCREEN 2
+  if (stage === STAGES.HUZZ_INTRO_2) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
-        <div className="question-container">
-          <h2 className="question-text">{question.question}</h2>
-          {question.subtext && <p className="question-subtext">{question.subtext}</p>}
-          <div className="options-list">
-            {question.options.map((option, index) => (
-              <button
-                key={index}
-                className="option-card"
-                onClick={() => handlePersonaOption(question.id, option)}
-              >
-                <div className="option-label">{option.label}</div>
-                {option.description && <div className="option-description">{option.description}</div>}
-              </button>
-            ))}
+        <div className="welcome-container">
+          <div className="welcome-content">
+            <div className="welcome-message">
+              <p>I believe the universe communicates with us every day about what this path is.</p>
+              <p>The problem is it can't talk to us directly, so it uses what I like to call <strong>'Ease and Resistance'</strong>.</p>
+              <p>As an acronym it spells <strong>'EAR'</strong> — coincidence? 🤔</p>
+            </div>
           </div>
-        </div>
-      </div>
-    )
-  }
-
-  // PERSONA REVEAL
-  if (stage === STAGES.PERSONA_REVEAL) {
-    const personaDisplay = getPersonaDisplay()
-    if (!personaDisplay) return null
-
-    return (
-      <div className="persona-assessment">
-        {renderProgress()}
-        <div className="reveal-container">
-          <div className="reveal-badge" style={{ background: personaDisplay.color }}>
-            {personaDisplay.name}
-          </div>
-          <h1 className="reveal-tagline">{personaDisplay.tagline}</h1>
-          <p className="reveal-description">{personaDisplay.description}</p>
-          <div className="next-step-preview">
-            <span className="preview-label">Your flow:</span>
-            <span className="preview-value">{personaDisplay.flowName}</span>
-          </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.ESSENCE_INTRO)}>
+          <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_3)}>
             Continue
           </button>
         </div>
       </div>
     )
   }
+
+  // HUZZ INTRO SCREEN 3
+  if (stage === STAGES.HUZZ_INTRO_3) {
+    return (
+      <div className="persona-assessment">
+        {renderProgress()}
+        <div className="welcome-container">
+          <div className="welcome-content">
+            <div className="welcome-message">
+              <p>I believe when you find your flow — aligning what gives you flow internally, with what's flowing externally (ease) — life becomes <strong>crazy and magical</strong>.</p>
+              <p>It's the only way I can describe going from 13 headsets dancing on beaches in Thailand to 350 headsets hosting events at Bali Beach clubs in less than 12 months of quitting my job.</p>
+            </div>
+          </div>
+          <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_4)}>
+            I'm keen for a crazy, magical journey!
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // HUZZ INTRO SCREEN 4
+  if (stage === STAGES.HUZZ_INTRO_4) {
+    return (
+      <div className="persona-assessment">
+        {renderProgress()}
+        <div className="welcome-container">
+          <div className="welcome-content">
+            <div className="welcome-message">
+              <p>This webapp is designed to help you <strong>find your flow</strong>.</p>
+              <p>It has everything I wish I had on my journey from the beginning.</p>
+              <p>So you can go from idea to monetising your mission as fast as possible.</p>
+              <p className="welcome-cta-text">Ready to get started?</p>
+            </div>
+          </div>
+          <button className="primary-button" onClick={() => setStage(STAGES.ESSENCE_INTRO)}>
+            Yep!
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // NOTE: Persona questions moved to post-auth flow (HomeFirstTime.jsx)
+  // The 3-question persona assessment now happens after user creates account
 
   // ESSENCE INTRO
   if (stage === STAGES.ESSENCE_INTRO) {
@@ -467,13 +402,10 @@ function PersonaAssessment() {
         <div className="intro-container">
           <h2 className="intro-title">Discover Your Essence</h2>
           <p className="intro-text">
-            That original song you were born to share?<br />It has a name.
+            On my journey, I discovered something powerful — we all have an <strong>Essence Voice</strong>.
           </p>
           <p className="intro-text">
-            I call it your <strong>Essence Voice</strong>.
-          </p>
-          <p className="intro-text">
-            It's the version of you that feels most alive. Most authentic. Most magnetic.
+            It's that original song you were born to share. The version of you that feels most alive, most authentic, most magnetic.
           </p>
           <p className="intro-text">
             When you show up from this place, your impact doesn't feel like work — it feels like flow.
@@ -638,7 +570,6 @@ function PersonaAssessment() {
 
   // EMAIL CAPTURE
   if (stage === STAGES.EMAIL_CAPTURE) {
-    const personaDisplay = getPersonaDisplay()
     return (
       <div className="persona-assessment">
         {!isLoginRoute && renderProgress()}
@@ -647,7 +578,7 @@ function PersonaAssessment() {
           <p className="capture-subtitle">
             {isLoginRoute
               ? 'Enter your email to log in and continue your journey.'
-              : `Enter your email to access your personalized profile and start your ${personaDisplay?.flowName || 'discovery'} journey.`
+              : 'Enter your email to access your profile and start finding your flow.'
             }
           </p>
           <form onSubmit={handleEmailSubmit} className="capture-form">

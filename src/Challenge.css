@@ -227,6 +227,83 @@
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
+/* Stage Tabs Wrapper (for project-based challenges) */
+.stage-tabs-wrapper {
+  padding: 1rem 1.5rem;
+  background: rgba(94, 23, 235, 0.03);
+  border-bottom: 1px solid rgba(94, 23, 235, 0.1);
+}
+
+.selected-project-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.selected-project-info .project-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.change-project-btn {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid rgba(94, 23, 235, 0.3);
+  color: #5e17eb;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.change-project-btn:hover {
+  background: rgba(94, 23, 235, 0.1);
+  border-color: #5e17eb;
+}
+
+/* Quest Filters */
+.quest-filters {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.frequency-toggle,
+.rtype-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  padding: 0.5rem 1rem;
+  border: 1px solid #dee2e6;
+  background: white;
+  color: #495057;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.filter-chip.active {
+  background: #5e17eb;
+  color: white;
+  border-color: #5e17eb;
+}
+
 /* Content */
 .challenge-content {
   padding: 1.5rem;

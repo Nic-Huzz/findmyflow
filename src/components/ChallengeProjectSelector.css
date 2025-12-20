@@ -1,0 +1,269 @@
+/**
+ * ChallengeProjectSelector.css
+ * Styles for project selection in 7-day challenge
+ */
+
+.project-selector {
+  padding: 24px;
+}
+
+.project-selector.loading,
+.project-selector.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+  max-width: 300px;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Header */
+.selector-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.selector-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.selector-header p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Projects List */
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.project-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.project-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.project-card.selected {
+  border-color: var(--purple, #5e17eb);
+  background: rgba(94, 23, 235, 0.1);
+}
+
+.project-card.primary {
+  border-left: 4px solid var(--gold, #fbbf24);
+}
+
+/* Primary Badge */
+.primary-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  background: var(--gold, #fbbf24);
+  color: #1a1a2e;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 12px;
+}
+
+/* Project Info */
+.project-info {
+  margin-bottom: 16px;
+  padding-right: 60px;
+}
+
+.project-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.project-description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Project Meta */
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.stage-icon {
+  font-size: 1rem;
+}
+
+.points-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.points-value {
+  font-weight: 700;
+  color: var(--gold, #fbbf24);
+}
+
+.points-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Selection Indicator */
+.selection-indicator {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.project-card.selected .selection-indicator {
+  background: var(--purple, #5e17eb);
+  border-color: var(--purple, #5e17eb);
+  color: white;
+}
+
+/* Actions */
+.selector-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primary-button {
+  width: 100%;
+  padding: 16px;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #7c3aed;
+}
+
+.primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .project-selector {
+    padding: 16px;
+  }
+
+  .project-card {
+    padding: 16px;
+  }
+
+  .project-info {
+    padding-right: 40px;
+  }
+
+  .selection-indicator {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+    right: 16px;
+  }
+}

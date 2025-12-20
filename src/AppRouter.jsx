@@ -25,7 +25,9 @@ import Feedback from './Feedback'
 import NotificationSettings from './components/NotificationSettings'
 import RetreatLanding from './RetreatLanding'
 import FlowLibrary from './FlowLibrary'
+import LibraryOfAnswers from './pages/LibraryOfAnswers'
 import FlowCompass from './pages/FlowCompass'
+import FlowMapMockups from './components/FlowMapMockups'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import ValidationFlowsManager from './pages/ValidationFlowsManager'
 import AuthGate from './AuthGate'
@@ -111,6 +113,9 @@ function AppRouter() {
             {/* Money Model Guide - Educational Overview */}
             <Route path="/money-model-guide" element={<MoneyModelGuide />} />
 
+            {/* FlowMap Style Mockups - For Review */}
+            <Route path="/flow-mockups" element={<FlowMapMockups />} />
+
             <Route path="/retreats" element={<RetreatLanding />} />
 
             {/* Public Validation Flow - No Auth Required */}
@@ -183,7 +188,7 @@ function AppRouter() {
             } />
             <Route path="/library" element={
               <AuthGate>
-                <FlowLibrary />
+                <LibraryOfAnswers />
               </AuthGate>
             } />
 

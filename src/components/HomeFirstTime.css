@@ -1,0 +1,354 @@
+/**
+ * HomeFirstTime.css
+ * Styles for first-time user home screen
+ */
+
+.home-first-time {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Loading State */
+.loading-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Welcome Header */
+.welcome-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.welcome-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.welcome-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+/* Archetype Cards */
+.archetype-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.essence-card .card-badge {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.protective-card .card-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.archetype-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.card-tagline {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.card-detail {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* CTA Section */
+.cta-section {
+  margin-top: auto;
+  text-align: center;
+  padding: 32px 0;
+}
+
+.cta-section p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 16px;
+}
+
+.primary-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.primary-button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* Question Screen */
+.question-screen {
+  align-items: center;
+}
+
+.progress-dots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+
+.progress-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s;
+}
+
+.progress-dots .dot.active {
+  background: var(--purple, #5e17eb);
+  width: 24px;
+  border-radius: 5px;
+}
+
+.progress-dots .dot.completed {
+  background: #10b981;
+}
+
+.question-container {
+  flex: 1;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.question-container h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.question-subtext {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 40px;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: left;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--purple, #5e17eb);
+  transform: translateX(4px);
+}
+
+.option-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.option-description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Reveal Screen */
+.reveal-screen {
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.persona-badge {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 30px;
+  margin-bottom: 24px;
+}
+
+.reveal-content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.reveal-description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+
+/* Project Type Screen */
+.project-type-screen {
+  align-items: center;
+}
+
+.project-type-screen h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.project-type-screen .subtext {
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  max-width: 400px;
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.project-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--purple, #5e17eb);
+  transform: translateY(-2px);
+}
+
+.option-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.option-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.option-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Error State */
+.error-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.error-state button {
+  padding: 12px 24px;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .home-first-time {
+    padding: 16px;
+  }
+
+  .welcome-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .archetype-card h2 {
+    font-size: 1.25rem;
+  }
+
+  .question-container h2 {
+    font-size: 1.25rem;
+  }
+}

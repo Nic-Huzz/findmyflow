@@ -10,6 +10,8 @@ import PortalExplainer from './components/PortalExplainer'
 import ConversationLogInput from './components/ConversationLogInput'
 import MilestoneInput from './components/MilestoneInput'
 import FlowCompassInput from './components/FlowCompassInput'
+import ChallengeProjectSelector from './components/ChallengeProjectSelector'
+import ChallengeStageTabs from './components/ChallengeStageTabs'
 import {
   handleConversationLogCompletion,
   handleMilestoneCompletion,
@@ -18,8 +20,9 @@ import {
   getUserStageProgress
 } from './lib/questCompletionHelpers'
 import { checkStreakBreak } from './lib/streakTracking'
-import { initializeUserStageProgress } from './lib/graduationChecker'
+import { initializeUserStageProgress, checkAndGraduateProject } from './lib/graduationChecker'
 import { normalizePersona } from './data/personaProfiles'
+import { STAGES, STAGE_CONFIG, convertLegacyStage } from './lib/stageConfig'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -46,7 +49,9 @@ function Challenge() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('Flow Finder')
+  const [activeCategory, setActiveCategory] = useState('Groans')
+  const [activeRTypeFilter, setActiveRTypeFilter] = useState('All') // For Groans tab: All, Recognise, Rewire, Reconnect
+  const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('all') // For Groans/Healing: all, daily, weekly
   const [challengeData, setData] = useState(null)
   const [dailyReleaseChallenges, setDailyReleaseChallenges] = useState(null)
   const [progress, setProgress] = useState(null)
@@ -72,7 +77,13 @@ function Challenge() {
   const [showExplainer, setShowExplainer] = useState(false) // Track portal explainer visibility
   const settingsMenuRef = useRef(null) // Ref for clicking outside to close menu
 
-  const categories = ['Flow Finder', 'Daily', 'Weekly', 'Tracker', 'Bonus']
+  // Project-based challenge state (Dec 2024 refactor)
+  const [selectedProject, setSelectedProject] = useState(null) // Selected project for this challenge
+  const [activeStageTab, setActiveStageTab] = useState(1) // Active stage tab (1-6)
+  const [showProjectSelector, setShowProjectSelector] = useState(false) // Show project selection modal
+  const [projectStage, setProjectStage] = useState(1) // Current project's stage (1-6)
+
+  const categories = ['Groans', 'Healing', 'Flow Finder', 'Tracker', 'Bonus']
 
   useEffect(() => {
     loadChallengeData()
@@ -333,6 +344,21 @@ function Challenge() {
 
       setProgress(progressData)
 
+      // Load selected project if challenge has a project_id
+      if (progressData.project_id) {
+        const { data: projectData, error: projectError } = await supabase
+          .from('user_projects')
+          .select('*')
+          .eq('id', progressData.project_id)
+          .single()
+
+        if (!projectError && projectData) {
+          setSelectedProject(projectData)
+          setProjectStage(projectData.current_stage || 1)
+          setActiveStageTab(projectData.current_stage || 1)
+        }
+      }
+
       // Check if streak should be broken (user missed 2+ days)
       const streakResult = await checkStreakBreak(user.id, progressData.challenge_instance_id)
       if (streakResult.streak_broken) {
@@ -434,7 +460,7 @@ function Challenge() {
   const handlePlaySolo = () => {
     setGroupMode(null)
     setShowGroupSelection(false)
-    startChallenge(null)
+    setShowProjectSelector(true) // Show project selector before starting
   }
 
   const handleCreateGroup = async () => {
@@ -463,9 +489,6 @@ function Challenge() {
       setGroupData(groupData)
       setGroupMode('create')
 
-      // Start challenge with group_id
-      await startChallenge(groupData.id)
-
       // Add user to participants
       await supabase
         .from('challenge_participants')
@@ -474,13 +497,12 @@ function Challenge() {
           user_id: user.id
         }])
 
-      setShowGroupSelection(false)
-
       // Show success message with group code
-      alert(`🎉 Group created successfully!\n\nYour group code is: ${newCode}\n\nShare this code with friends to invite them to your challenge group. You can also find this code on the Leaderboard page.`)
+      alert(`🎉 Group created successfully!\n\nYour group code is: ${newCode}\n\nShare this code with friends to invite them to your challenge group.`)
 
-      // TODO: Send email with group code (requires email service setup)
-      // For now, the code is displayed in the alert and on the leaderboard
+      // Show project selector instead of immediately starting
+      setShowGroupSelection(false)
+      setShowProjectSelector(true)
     } catch (error) {
       console.error('Error creating group:', error)
       alert('Error creating group. Please try again.')
@@ -510,9 +532,6 @@ function Challenge() {
       setGroupCode(groupData.code)
       setGroupMode('join')
 
-      // Start challenge with group_id
-      await startChallenge(groupData.id)
-
       // Add user to participants
       await supabase
         .from('challenge_participants')
@@ -521,7 +540,9 @@ function Challenge() {
           user_id: user.id
         }])
 
+      // Show project selector instead of immediately starting
       setShowGroupSelection(false)
+      setShowProjectSelector(true)
     } catch (error) {
       console.error('Error joining group:', error)
       alert('Error joining group. Please try again.')
@@ -535,6 +556,79 @@ function Challenge() {
 
   const handleOpenExplainer = () => {
     setShowExplainer(true)
+  }
+
+  // Project-based challenge handlers
+  const handleProjectSelected = async (project) => {
+    setSelectedProject(project)
+    setProjectStage(project.current_stage || 1)
+    setActiveStageTab(project.current_stage || 1)
+    setShowProjectSelector(false)
+
+    // Start the challenge with the selected project
+    await startChallengeWithProject(project, groupData?.id || null)
+  }
+
+  const startChallengeWithProject = async (project, groupId = null) => {
+    try {
+      // First, abandon any active challenges for this user
+      await supabase.rpc('abandon_active_challenges', { p_user_id: user.id })
+
+      // Get session_id from lead_flow_profiles
+      const { data: profileData } = await supabase
+        .from('lead_flow_profiles')
+        .select('session_id')
+        .ilike('email', user.email)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      const sessionId = profileData?.session_id || `session_${Date.now()}`
+
+      // Generate new challenge instance ID
+      const challengeInstanceId = crypto.randomUUID()
+
+      const insertData = {
+        user_id: user.id,
+        session_id: sessionId,
+        challenge_instance_id: challengeInstanceId,
+        current_day: 0,
+        status: 'active',
+        challenge_start_date: new Date().toISOString(),
+        last_active_date: new Date().toISOString(),
+        persona: stageProgress?.persona || 'vibe_seeker',
+        current_stage: project.current_stage || 1,
+        project_id: project.id
+      }
+
+      if (groupId) {
+        insertData.group_id = groupId
+      }
+
+      const { data, error } = await supabase
+        .from('challenge_progress')
+        .insert([insertData])
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Error starting challenge with project:', error)
+        alert('Error starting challenge. Please try again.')
+        return
+      }
+
+      setProgress(data)
+      setShowOnboarding(false)
+    } catch (error) {
+      console.error('Error in startChallengeWithProject:', error)
+      alert('Error starting challenge. Please try again.')
+    }
+  }
+
+  // Modified to show project selector after group selection
+  const handleStartWithProjectSelection = () => {
+    setShowGroupSelection(false)
+    setShowProjectSelector(true)
   }
 
   const handleRestartChallenge = async () => {
@@ -552,13 +646,9 @@ function Challenge() {
         .eq('user_id', user.id)
         .eq('status', 'active')
 
-      // Start new challenge (reuse same group if user was in one)
-      await startChallenge(progress.group_id || null)
-
-      // Reload user progress
-      await loadUserProgress()
-
-      alert('🎉 New challenge started! Welcome to Day 1.')
+      // Show project selector to start new challenge with project selection
+      setShowProjectSelector(true)
+      setProgress(null) // Clear current progress to allow fresh start
     } catch (error) {
       console.error('Error restarting challenge:', error)
       alert('Error starting new challenge. Please try again.')
@@ -817,7 +907,8 @@ function Challenge() {
           progress.challenge_instance_id,
           specialData,
           stageProgress,
-          quest // Pass quest to check for milestone_type and milestone_count
+          quest, // Pass quest to check for milestone_type and milestone_count
+          selectedProject?.id // Pass project_id
         )
 
         if (!result.success) {
@@ -834,7 +925,8 @@ function Challenge() {
           user.id,
           specialData,
           stageProgress,
-          userData?.persona
+          userData?.persona,
+          selectedProject?.id // Pass project_id
         )
 
         if (!result.success) {
@@ -877,7 +969,8 @@ function Challenge() {
           user.id,
           milestoneData,
           stageProgress,
-          userData?.persona
+          userData?.persona,
+          selectedProject?.id // Pass project_id
         )
 
         if (!result.success) {
@@ -905,7 +998,8 @@ function Challenge() {
           user.id,
           milestoneData,
           stageProgress,
-          userData?.persona
+          userData?.persona,
+          selectedProject?.id // Pass project_id
         )
 
         if (!result.success) {
@@ -930,7 +1024,9 @@ function Challenge() {
         quest_category: quest.category,
         quest_type: quest.type,
         points_earned: quest.points,
-        challenge_day: progress.current_day
+        challenge_day: progress.current_day,
+        project_id: selectedProject?.id || null,
+        stage: quest.stage_required || null
       }
 
       // Add reflection_text for text/dropdown inputs, or structured data for special types
@@ -982,12 +1078,14 @@ function Challenge() {
       await handleStreakUpdate(user.id, progress.challenge_instance_id)
 
       // Calculate new points
-      const categoryLower = quest.category.toLowerCase()
-      const typeKey = quest.type === 'daily' ? 'daily' : 'weekly'
+      // R-type is now in quest.type (Recognise, Release, Rewire, Reconnect)
+      // Frequency is in quest.frequency (daily, weekly, anytime)
+      const rType = quest.type?.toLowerCase()
+      const frequencyKey = quest.frequency === 'weekly' ? 'weekly' : 'daily'
 
-      // Only these categories have dedicated points columns in challenge_progress
-      const categoriesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
-      const hasPointsColumn = categoriesWithColumns.includes(categoryLower)
+      // Only these R-types have dedicated points columns in challenge_progress
+      const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
+      const hasPointsColumn = rTypesWithColumns.includes(rType)
 
       const newTotalPoints = (progress.total_points || 0) + quest.points
 
@@ -997,9 +1095,9 @@ function Challenge() {
         last_active_date: new Date().toISOString()
       }
 
-      // Add category-specific points for Recognise/Release/Rewire/Reconnect quests
+      // Add R-type-specific points for Recognise/Release/Rewire/Reconnect quests
       if (hasPointsColumn) {
-        const pointsField = `${categoryLower}_${typeKey}_points`
+        const pointsField = `${rType}_${frequencyKey}_points`
         updateData[pointsField] = (progress[pointsField] || 0) + quest.points
       }
 
@@ -1020,6 +1118,26 @@ function Challenge() {
 
       setProgress(updatedProgress)
 
+      // Update project points if a project is selected
+      if (selectedProject?.id) {
+        const { error: projectError } = await supabase
+          .from('user_projects')
+          .update({
+            total_points: (selectedProject.total_points || 0) + quest.points
+          })
+          .eq('id', selectedProject.id)
+
+        if (projectError) {
+          console.error('Error updating project points:', projectError)
+        } else {
+          // Update local state
+          setSelectedProject(prev => ({
+            ...prev,
+            total_points: (prev?.total_points || 0) + quest.points
+          }))
+        }
+      }
+
       // Reload completions for this challenge instance
       const { data: newCompletions } = await supabase
         .from('quest_completions')
@@ -1032,9 +1150,9 @@ function Challenge() {
       // Clear input
       setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
 
-      // Check for artifact unlock (reusing categoryLower and typeKey from above)
+      // Check for artifact unlock
       const categoryArtifact = challengeData?.artifacts?.find(a => a.category === quest.category)
-      const artifactUnlocked = categoryArtifact && checkArtifactUnlock(quest.category, newTotalPoints, typeKey)
+      const artifactUnlocked = categoryArtifact && checkArtifactUnlock(quest.category, newTotalPoints, frequencyKey)
 
       // Show success message
       let successMessage = `✅ Quest complete! +${quest.points} points`
@@ -1060,23 +1178,66 @@ function Challenge() {
           await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints)
         }
       }, 500)
+
+      // Check for project graduation (after quest completion)
+      // Only check if a project is selected
+      if (selectedProject?.id && progress?.challenge_instance_id) {
+        try {
+          const graduationResult = await checkAndGraduateProject(
+            user.id,
+            selectedProject.id,
+            progress.challenge_instance_id
+          )
+
+          if (graduationResult.graduated) {
+            // Show celebration and update local state
+            const celebration = graduationResult.celebration_message
+            setTimeout(() => {
+              alert(`${celebration.title}\n\n${celebration.message}\n\n${celebration.next_step}`)
+              triggerConfetti()
+            }, 600)
+
+            // Update selected project's current stage
+            setSelectedProject(prev => ({
+              ...prev,
+              current_stage: graduationResult.new_stage
+            }))
+            setProjectStage(graduationResult.new_stage)
+            setActiveStageTab(graduationResult.new_stage)
+          }
+        } catch (gradError) {
+          console.error('Error checking graduation:', gradError)
+          // Don't block the quest completion on graduation check failure
+        }
+      }
     } catch (error) {
       console.error('Error in handleQuestComplete:', error)
       alert('Error completing quest. Please try again.')
     }
   }
 
-  const checkArtifactUnlock = (category, newPoints, typeKey) => {
+  const checkArtifactUnlock = (category, newPoints, frequencyKey) => {
     if (!challengeData) return false
 
     const artifact = challengeData.artifacts.find(a => a.category === category)
     if (!artifact) return false
 
-    const categoryLower = category.toLowerCase()
-    const dailyPoints = typeKey === 'daily' ? newPoints : (progress[`${categoryLower}_daily_points`] || 0)
-    const weeklyPoints = typeKey === 'weekly' ? newPoints : (progress[`${categoryLower}_weekly_points`] || 0)
+    // For artifacts with rCategories (Groans, Healing), check if total meets requirement
+    if (artifact.rCategories && artifact.totalRequired) {
+      // Sum up all points from completions in this category
+      const categoryCompletions = completions.filter(c => c.quest_category === category)
+      const totalCategoryPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
+      return totalCategoryPoints + (frequencyKey ? newPoints : 0) >= artifact.totalRequired
+    }
 
-    return dailyPoints >= artifact.dailyPointsRequired && weeklyPoints >= artifact.weeklyPointsRequired
+    // For simple artifacts (Flow Finder, Tracker), check single pointsRequired
+    if (artifact.pointsRequired) {
+      const categoryCompletions = completions.filter(c => c.quest_category === category)
+      const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
+      return currentPoints + newPoints >= artifact.pointsRequired
+    }
+
+    return false
   }
 
   // Helper to get valid quest IDs for current persona/stage
@@ -1099,9 +1260,16 @@ function Challenge() {
           }
         }
 
-        // Filter by stage
-        if (quest.stage_required && stageProgress?.current_stage) {
-          if (quest.stage_required !== stageProgress.current_stage) {
+        // Filter by stage (numeric comparison)
+        if (quest.stage_required) {
+          // Get current stage as number - use project stage if available, otherwise convert legacy stage
+          const currentStageNum = selectedProject?.current_stage ||
+            (typeof stageProgress?.current_stage === 'number'
+              ? stageProgress.current_stage
+              : convertLegacyStage(stageProgress?.current_stage))
+
+          // Quest stage is now numeric (1-6)
+          if (quest.stage_required !== currentStageNum) {
             return false
           }
         }
@@ -1134,18 +1302,62 @@ function Challenge() {
     )
     const total = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
-    // For Daily/Weekly categories, also break down by type
-    if (category === 'Daily' || category === 'Weekly') {
+    // For Groans/Healing categories, also break down by frequency
+    // Look up frequency from quest definition since it's not stored in completions
+    if (category === 'Groans' || category === 'Healing') {
+      const getQuestFrequency = (questId) => {
+        const quest = challengeData?.quests?.find(q => q.id === questId)
+        return quest?.frequency || 'daily'
+      }
       const dailyPoints = categoryCompletions
-        .filter(c => c.quest_type?.toLowerCase() === 'daily' || category === 'Daily')
+        .filter(c => getQuestFrequency(c.quest_id) === 'daily')
         .reduce((sum, c) => sum + (c.points_earned || 0), 0)
       const weeklyPoints = categoryCompletions
-        .filter(c => c.quest_type?.toLowerCase() === 'weekly' || category === 'Weekly')
+        .filter(c => getQuestFrequency(c.quest_id) === 'weekly')
         .reduce((sum, c) => sum + (c.points_earned || 0), 0)
       return { daily: dailyPoints, weekly: weeklyPoints, total }
     }
 
     return { daily: 0, weekly: 0, total }
+  }
+
+  // Calculate which stages are completed (all required quests for that stage done)
+  const getCompletedStages = () => {
+    if (!challengeData?.quests || !completions || completions.length === 0) return []
+
+    const completedStages = []
+
+    // Check stages 1-6
+    for (let stageNum = 1; stageNum <= 6; stageNum++) {
+      // Get all quests that require this stage
+      const stageQuests = challengeData.quests.filter(q => q.stage_required === stageNum)
+
+      if (stageQuests.length === 0) continue // No quests for this stage
+
+      // Check if all stage quests are completed (for current persona)
+      const userPersonaNormalized = normalizePersona(userData?.persona)
+      const relevantQuests = stageQuests.filter(quest => {
+        // If quest has persona_specific, check if user matches
+        if (quest.persona_specific && userPersonaNormalized) {
+          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+          return normalizedQuestPersonas.includes(userPersonaNormalized)
+        }
+        return true
+      })
+
+      if (relevantQuests.length === 0) continue
+
+      // Check if all relevant quests are completed
+      const allCompleted = relevantQuests.every(quest =>
+        completions.some(c => c.quest_id === quest.id)
+      )
+
+      if (allCompleted) {
+        completedStages.push(stageNum)
+      }
+    }
+
+    return completedStages
   }
 
   const getPointsToday = (category) => {
@@ -1267,8 +1479,8 @@ function Challenge() {
     // Get valid quest IDs for current persona/stage
     const validQuestIds = getValidQuestIds(category)
 
-    // For Daily and Weekly artifacts with R categories
-    if ((category === 'Daily' || category === 'Weekly') && artifact.rCategories) {
+    // For Groans and Healing artifacts with R categories
+    if ((category === 'Groans' || category === 'Healing') && artifact.rCategories) {
       const rCategoriesWithProgress = {}
 
       // Calculate points for each R category, filtered by persona/stage
@@ -1453,10 +1665,17 @@ function Challenge() {
         }
       }
 
-      // Filter by stage
-      if (quest.stage_required && stageProgress?.current_stage) {
-        if (quest.stage_required !== stageProgress.current_stage) {
-          console.log(`❌ Filtered out: ${quest.name} (stage mismatch: ${quest.stage_required} vs ${stageProgress.current_stage})`)
+      // Filter by stage (numeric comparison)
+      // Use activeStageTab for filtering when viewing (allows browsing different stages)
+      if (quest.stage_required) {
+        // If user is viewing a specific stage tab, filter to that stage
+        const viewingStage = activeStageTab || selectedProject?.current_stage ||
+          (typeof stageProgress?.current_stage === 'number'
+            ? stageProgress.current_stage
+            : convertLegacyStage(stageProgress?.current_stage))
+
+        if (quest.stage_required !== viewingStage) {
+          console.log(`❌ Filtered out: ${quest.name} (stage mismatch: ${quest.stage_required} vs ${viewingStage})`)
           return false
         }
       }
@@ -1465,30 +1684,49 @@ function Challenge() {
       return true
     })
 
-    console.log('✅ Final Flow Finder quests:', filteredQuests.length)
+    console.log('✅ Final Flow Finder quests:', filteredQuests.length, 'for stage', activeStageTab)
   }
 
-  // For Daily and Weekly tabs, group quests by type (the 4 R's)
+  // Apply R-type and frequency filters for Groans and Healing tabs
+  let displayQuests = filteredQuests
+  if (activeCategory === 'Groans' || activeCategory === 'Healing') {
+    // Filter by R-type (Recognise, Rewire, Reconnect for Groans; Recognise, Release for Healing)
+    if (activeRTypeFilter !== 'All') {
+      displayQuests = displayQuests.filter(q => q.type === activeRTypeFilter)
+    }
+    // Filter by frequency (daily, weekly, anytime)
+    if (activeFrequencyFilter !== 'all') {
+      displayQuests = displayQuests.filter(q => q.frequency === activeFrequencyFilter)
+    }
+  }
+
+  // For Groans and Healing tabs, group quests by type (the R's)
   // For Flow Finder, quests are already in the right category
   // For Bonus and Tracker, show all quests in that category
   const questsByType = {}
-  if (activeCategory === 'Daily' || activeCategory === 'Weekly') {
-    // Group by the 4 R's framework
-    const rTypes = ['Recognise', 'Release', 'Rewire', 'Reconnect']
+  if (activeCategory === 'Groans') {
+    // Group by the R's framework (no Release in Groans)
+    const rTypes = ['Recognise', 'Rewire', 'Reconnect', 'challenge']
     rTypes.forEach(type => {
-      questsByType[type] = filteredQuests.filter(q => q.type === type)
+      questsByType[type] = displayQuests.filter(q => q.type === type)
+    })
+  } else if (activeCategory === 'Healing') {
+    // Group by Release and Recognise
+    const rTypes = ['Recognise', 'Release']
+    rTypes.forEach(type => {
+      questsByType[type] = displayQuests.filter(q => q.type === type)
     })
   } else if (activeCategory === 'Flow Finder') {
     // Group by persona or show all
-    questsByType['all'] = filteredQuests
+    questsByType['all'] = displayQuests
   } else if (activeCategory === 'Bonus' || activeCategory === 'Tracker') {
-    questsByType['all'] = filteredQuests
+    questsByType['all'] = displayQuests
   }
 
-  // For backward compatibility with existing code structure
-  const dailyQuests = activeCategory === 'Daily' ? filteredQuests : []
-  const weeklyQuests = activeCategory === 'Weekly' ? filteredQuests : []
-  const bonusQuests = activeCategory === 'Bonus' ? filteredQuests : []
+  // For rendering - use displayQuests which has filters applied
+  const groansQuests = activeCategory === 'Groans' ? displayQuests : []
+  const healingQuests = activeCategory === 'Healing' ? displayQuests : []
+  const bonusQuests = activeCategory === 'Bonus' ? displayQuests : []
 
   if (showOnboarding) {
     return (
@@ -1590,6 +1828,20 @@ function Challenge() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Project selector modal
+  if (showProjectSelector) {
+    return (
+      <div className="challenge-container">
+        <div className="challenge-onboarding">
+          <ChallengeProjectSelector
+            onSelect={handleProjectSelected}
+            currentProjectId={selectedProject?.id}
+          />
         </div>
       </div>
     )
@@ -1718,6 +1970,101 @@ function Challenge() {
         ))}
       </div>
 
+      {/* Stage tabs for Flow Finder when project is selected */}
+      {activeCategory === 'Flow Finder' && selectedProject && (
+        <div className="stage-tabs-wrapper">
+          <div className="selected-project-info">
+            <span className="project-name">{selectedProject.name}</span>
+            <button
+              className="change-project-btn"
+              onClick={() => setShowProjectSelector(true)}
+            >
+              Change Project
+            </button>
+          </div>
+          <ChallengeStageTabs
+            currentStage={selectedProject.current_stage || 1}
+            completedStages={getCompletedStages()}
+            activeTab={activeStageTab}
+            onTabChange={setActiveStageTab}
+          />
+        </div>
+      )}
+
+      {/* Filter chips for Groans and Healing tabs */}
+      {(activeCategory === 'Groans' || activeCategory === 'Healing') && (
+        <div className="quest-filters">
+          {/* Frequency toggle */}
+          <div className="frequency-toggle">
+            <button
+              className={`filter-chip ${activeFrequencyFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveFrequencyFilter('all')}
+            >
+              All
+            </button>
+            <button
+              className={`filter-chip ${activeFrequencyFilter === 'daily' ? 'active' : ''}`}
+              onClick={() => setActiveFrequencyFilter('daily')}
+            >
+              Daily
+            </button>
+            <button
+              className={`filter-chip ${activeFrequencyFilter === 'weekly' ? 'active' : ''}`}
+              onClick={() => setActiveFrequencyFilter('weekly')}
+            >
+              Weekly
+            </button>
+          </div>
+
+          {/* R-type filter chips */}
+          <div className="rtype-filters">
+            <button
+              className={`filter-chip ${activeRTypeFilter === 'All' ? 'active' : ''}`}
+              onClick={() => setActiveRTypeFilter('All')}
+            >
+              All
+            </button>
+            {activeCategory === 'Groans' ? (
+              <>
+                <button
+                  className={`filter-chip ${activeRTypeFilter === 'Recognise' ? 'active' : ''}`}
+                  onClick={() => setActiveRTypeFilter('Recognise')}
+                >
+                  Recognise
+                </button>
+                <button
+                  className={`filter-chip ${activeRTypeFilter === 'Rewire' ? 'active' : ''}`}
+                  onClick={() => setActiveRTypeFilter('Rewire')}
+                >
+                  Rewire
+                </button>
+                <button
+                  className={`filter-chip ${activeRTypeFilter === 'Reconnect' ? 'active' : ''}`}
+                  onClick={() => setActiveRTypeFilter('Reconnect')}
+                >
+                  Reconnect
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className={`filter-chip ${activeRTypeFilter === 'Recognise' ? 'active' : ''}`}
+                  onClick={() => setActiveRTypeFilter('Recognise')}
+                >
+                  Recognise
+                </button>
+                <button
+                  className={`filter-chip ${activeRTypeFilter === 'Release' ? 'active' : ''}`}
+                  onClick={() => setActiveRTypeFilter('Release')}
+                >
+                  Release
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="challenge-content">
         {/* Leaderboard - show if activeCategory is Leaderboard even though not in tabs */}
         {activeCategory === 'Leaderboard' && (
@@ -1808,8 +2155,8 @@ function Challenge() {
 
             {!artifactProgress.unlocked && (
               <div className="artifact-bars">
-                {/* For Daily and Weekly: Show 4 R's sliders */}
-                {(activeCategory === 'Daily' || activeCategory === 'Weekly') && artifactProgress.rCategories ? (
+                {/* For Groans and Healing: Show R's sliders */}
+                {(activeCategory === 'Groans' || activeCategory === 'Healing') && artifactProgress.rCategories ? (
                   <>
                     {Object.entries(artifactProgress.rCategories).map(([rType, rData]) => (
                       <div key={rType} className="progress-bar-container">
@@ -1881,11 +2228,13 @@ function Challenge() {
         </div>
 
         {/* Quests for current category */}
-        {activeCategory === 'Daily' && filteredQuests.length > 0 && (
+        {activeCategory === 'Groans' && displayQuests.length > 0 && (
           <div className="quest-section">
-            <h2 className="section-title">Daily Quests</h2>
-            {['Recognise', 'Release', 'Rewire', 'Reconnect'].map(rType => {
-              const rTypeQuests = filteredQuests.filter(q => q.type === rType)
+            <h2 className="section-title">Groans</h2>
+            {['Recognise', 'Rewire', 'Reconnect', 'challenge'].filter(rType =>
+              activeRTypeFilter === 'All' || activeRTypeFilter === rType
+            ).map(rType => {
+              const rTypeQuests = displayQuests.filter(q => q.type === rType)
               if (rTypeQuests.length === 0) return null
 
               return (
@@ -2140,12 +2489,14 @@ function Challenge() {
     </div>
   )}
 
-        {/* Weekly Quests */}
-        {activeCategory === 'Weekly' && filteredQuests.length > 0 && (
+        {/* Healing Quests */}
+        {activeCategory === 'Healing' && displayQuests.length > 0 && (
           <div className="quest-section">
-            <h2 className="section-title">Weekly Quests</h2>
-            {['Recognise', 'Release', 'Rewire', 'Reconnect'].map(rType => {
-              const rTypeQuests = filteredQuests.filter(q => q.type === rType)
+            <h2 className="section-title">Healing</h2>
+            {['Recognise', 'Release'].filter(rType =>
+              activeRTypeFilter === 'All' || activeRTypeFilter === rType
+            ).map(rType => {
+              const rTypeQuests = displayQuests.filter(q => q.type === rType)
               if (rTypeQuests.length === 0) return null
 
               return (
@@ -2698,7 +3049,7 @@ function Challenge() {
                       </div>
 
                       {/* Daily Streak Bubbles for daily tracker */}
-                      {quest.type === 'Daily' && (
+                      {quest.frequency === 'daily' && (
                         <div className="daily-streak">
                           {dayLabels.map((label, index) => (
                             <div
@@ -2798,7 +3149,7 @@ function Challenge() {
                       {completed && (
                         <div className="quest-completed-section">
                           <div className="quest-completed-badge">
-                            ✅ Completed {quest.type === 'Daily' ? 'Today' : ''}
+                            ✅ Completed {quest.frequency === 'daily' ? 'Today' : ''}
                           </div>
                           {quest.flow_route && (
                             <button

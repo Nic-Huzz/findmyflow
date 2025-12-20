@@ -88,6 +88,16 @@
 
 .persona-assessment .welcome-container > .primary-button {
   margin-top: 12px;
+  max-width: 280px;
+  padding: 14px 28px;
+  height: auto !important;
+  min-height: 0 !important;
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: white !important;
+  font-size: 16px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .welcome-greeting {
@@ -235,6 +245,28 @@
   border-radius: 12px;
 }
 
+/* Intro screen button - fixed size (Essence/Protective intro) */
+.persona-assessment .intro-container > .primary-button {
+  margin-top: 16px;
+  max-width: 280px;
+  width: auto;
+  padding: 14px 32px;
+  height: auto !important;
+  min-height: 0 !important;
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: white !important;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.persona-assessment .intro-container > .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+}
+
 /* ============ REVEAL SCREENS ============ */
 
 .persona-assessment .reveal-container {
@@ -356,6 +388,27 @@
   margin: 0 0 32px;
 }
 
+/* Reveal screen button - fixed size (after archetype flows) */
+.persona-assessment .reveal-container > .primary-button {
+  max-width: 280px;
+  width: auto;
+  padding: 14px 32px;
+  height: auto !important;
+  min-height: 0 !important;
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: white !important;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.persona-assessment .reveal-container > .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+}
+
 /* ============ CAPTURE SCREENS ============ */
 
 .persona-assessment .capture-container {
@@ -422,15 +475,19 @@
 
 .primary-button {
   width: 100%;
+  max-width: 320px;
   padding: 16px 32px;
   background: linear-gradient(135deg, #9333EA, #7C3AED);
   border: none;
   border-radius: 12px;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  height: auto;
+  min-height: 0;
 }
 
 .primary-button:hover:not(:disabled) {

@@ -8,28 +8,28 @@
 export const FLOW_DIRECTIONS = {
   north: {
     id: 'north',
-    label: 'Continue',
+    label: 'Flow',
     fullLabel: 'Full Flow',
     internal: 'excited',
     external: 'ease',
-    color: '#10B981', // Green - Go!
-    icon: '⬆️',
+    color: '#10b981', // Green - Ease + Excited
+    icon: '→',
     emoji: '🚀',
     signal: "Continue doing this - you're in flow",
-    description: 'Excited energy + Easy results = Keep going!',
+    description: 'Ease + Excited = Keep going!',
     action: "Double down on what's working"
   },
   east: {
     id: 'east',
-    label: 'Pivot',
-    fullLabel: 'Pivot Required',
+    label: 'Redirect',
+    fullLabel: 'Redirect Required',
     internal: 'excited',
     external: 'resistance',
-    color: '#F59E0B', // Amber - Caution
-    icon: '➡️',
+    color: '#3b82f6', // Blue - Resistance + Excited
+    icon: '↓',
     emoji: '🔄',
-    signal: "You love it but something's not working - pivot the approach",
-    description: 'Excited energy + Hard results = Change your approach',
+    signal: "You love it but something's not working - redirect the approach",
+    description: 'Resistance + Excited = Change your approach',
     action: 'Try a different method'
   },
   south: {
@@ -38,24 +38,24 @@ export const FLOW_DIRECTIONS = {
     fullLabel: 'Rest or Stop',
     internal: 'tired',
     external: 'resistance',
-    color: '#EF4444', // Red - Stop
-    icon: '⬇️',
+    color: '#ef4444', // Red - Resistance + Tired
+    icon: '●',
     emoji: '🛑',
     signal: "Stop or rest - this isn't the path",
-    description: 'Tired energy + Hard results = Time to pause',
+    description: 'Resistance + Tired = Time to pause',
     action: 'Rest or reconsider this path'
   },
   west: {
     id: 'west',
-    label: 'Enjoy',
-    fullLabel: 'Celebrate & Rest',
+    label: 'Honour',
+    fullLabel: 'Honour Yourself',
     internal: 'tired',
     external: 'ease',
-    color: '#8B5CF6', // Purple - Celebrate
-    icon: '⬅️',
+    color: '#fbbf24', // Yellow - Ease + Tired
+    icon: '↑',
     emoji: '🎉',
-    signal: 'Time to honor yourself and your efforts',
-    description: 'Tired energy + Easy results = Take time to celebrate and rest',
+    signal: 'Time to honour yourself and your efforts',
+    description: 'Ease + Tired = Take time to celebrate and rest',
     action: 'Rest, reflect, and enjoy what you\'ve accomplished'
   }
 };

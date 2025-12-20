@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { essenceProfiles } from './data/essenceProfiles'
@@ -7,9 +7,10 @@ import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/personaProfiles'
 import { hasActiveChallenge } from './lib/questCompletion'
 import { graduateUser } from './lib/graduationChecker'
-import StageProgressCard from './components/StageProgressCard'
 import GraduationModal from './components/GraduationModal'
 import FlowMap from './components/FlowMap'
+import FlowMapRiver from './components/FlowMapRiver'
+import HomeFirstTime from './components/HomeFirstTime'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -25,6 +26,8 @@ const Profile = () => {
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [primaryProject, setPrimaryProject] = useState(null)
+  const [allProjects, setAllProjects] = useState([])
 
   useEffect(() => {
     // Only load profile when user is available
@@ -32,6 +35,7 @@ const Profile = () => {
       loadUserProfile()
       checkChallengeStatus()
       loadStageProgress()
+      loadUserProjects()
       checkFirstTimeUser()
     } else if (user === null) {
       // User is not authenticated
@@ -40,6 +44,33 @@ const Profile = () => {
     }
     // If user is still loading (undefined), keep loading state
   }, [user])
+
+  const loadUserProjects = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data: projects, error } = await supabase
+        .from('user_projects')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('is_primary', { ascending: false })
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error loading projects:', error)
+        return
+      }
+
+      setAllProjects(projects || [])
+
+      // Find primary project
+      const primary = projects?.find(p => p.is_primary) || projects?.[0]
+      setPrimaryProject(primary || null)
+    } catch (err) {
+      console.error('Error in loadUserProjects:', err)
+    }
+  }
 
   const checkFirstTimeUser = () => {
     const hasSeenOnboarding = localStorage.getItem(`profile_onboarding_seen_${user?.id}`)
@@ -241,6 +272,12 @@ const Profile = () => {
     )
   }
 
+  // Check if user needs to complete onboarding (first-time experience)
+  // Show HomeFirstTime if onboarding_completed is false
+  if (stageProgress && stageProgress.onboarding_completed === false) {
+    return <HomeFirstTime />
+  }
+
   // Get archetype data
   const essenceData = essenceProfiles.essence_archetypes.find(
     archetype => archetype.name === userData.essence_archetype
@@ -377,6 +414,9 @@ const Profile = () => {
           </li>
           <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
             🧭 Flow Compass
+          </li>
+          <li className="nav-item" onClick={() => { navigate('/library'); setSidebarOpen(false); }}>
+            📚 Library of Answers
           </li>
           <li className="nav-item" onClick={handleOpenOnboarding}>
             📖 Explainer
@@ -525,21 +565,26 @@ const Profile = () => {
           )}
         </div>
 
-        {/* Journey Guide Section */}
-        <h2 className="section-heading">Journey Guide</h2>
-
-        {stageProgress && (
-          <div className="stage-progress-section">
-            <StageProgressCard
-              persona={stageProgress.persona}
-              currentStage={stageProgress.current_stage}
-              onGraduate={handleGraduation}
-            />
+        {/* Project & Stage Info */}
+        {primaryProject && (
+          <div className="project-stage-badge">
+            <span className="persona-badge">{stageProgress?.persona?.replace('_', ' ') || 'Explorer'}</span>
+            <span className="stage-info">
+              {primaryProject.name} • Stage {primaryProject.current_stage || 1}
+            </span>
           </div>
         )}
 
-        {/* Flow Map - Shows user's journey data for all users */}
-        <FlowMap persona={stageProgress?.persona} />
+        {/* Flow Map River - Shows flow compass entries */}
+        {primaryProject ? (
+          <FlowMapRiver
+            projectId={primaryProject.id}
+            limit={20}
+            onViewAll={() => navigate('/flow-compass')}
+          />
+        ) : (
+          <FlowMap persona={stageProgress?.persona} />
+        )}
 
         {/* Graduation Modal */}
         <GraduationModal
@@ -551,24 +596,47 @@ const Profile = () => {
         {/* Ready To Find Your Flow Section */}
         <h2 className="section-heading">Ready To Find Your Flow?</h2>
 
-        {/* CTA Banner */}
-        <div className="cta-banner">
-          <div className="cta-content">
-            <h3>Live Your Ambitions Faster</h3>
-            <p>Start a 7-day-challenge to gamify your ambitions and advance through the persona stages</p>
-            <div className="cta-buttons">
+        {/* Action Buttons */}
+        <div className="home-action-buttons">
+          <button
+            className="action-btn primary"
+            onClick={() => navigate('/7-day-challenge')}
+          >
+            🎯 {hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge'}
+          </button>
+          <button
+            className="action-btn secondary"
+            onClick={() => navigate('/library')}
+          >
+            📚 Library of Answers
+          </button>
+        </div>
+
+        {/* Other Projects Section */}
+        {allProjects.length > 0 && (
+          <div className="other-projects-section">
+            <h2 className="section-heading">Your Projects</h2>
+            <div className="projects-grid">
+              {allProjects.map(project => (
+                <div
+                  key={project.id}
+                  className={`project-card-mini ${project.is_primary ? 'primary' : ''}`}
+                  onClick={() => navigate('/flow-compass')}
+                >
+                  <span className="project-name">{project.name}</span>
+                  <span className="project-stage">Stage {project.current_stage || 1}</span>
+                  {project.is_primary && <span className="primary-badge">Primary</span>}
+                </div>
+              ))}
               <button
-                className="btn-white"
-                onClick={() => navigate('/7-day-challenge')}
+                className="project-card-mini add-new"
+                onClick={() => navigate('/nikigai/skills')}
               >
-                {hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥'}
-              </button>
-              <button className="btn-outline" onClick={() => navigate('/feedback')}>
-                Give Feedback 💬
+                <span>+ New Project</span>
               </button>
             </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>

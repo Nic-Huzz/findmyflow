@@ -365,19 +365,19 @@
 }
 
 .momentum-north {
-  background: #10b981;
+  background: #10b981;  /* Green - Flow (Ease + Excited) */
 }
 
 .momentum-east {
-  background: #f59e0b;
+  background: #3b82f6;  /* Blue - Redirect (Resistance + Excited) */
 }
 
 .momentum-south {
-  background: #ef4444;
+  background: #ef4444;  /* Red - Rest (Resistance + Tired) */
 }
 
 .momentum-west {
-  background: #5e17eb;
+  background: #fbbf24;  /* Yellow - Honour (Ease + Tired) */
 }
 
 .momentum-legend {

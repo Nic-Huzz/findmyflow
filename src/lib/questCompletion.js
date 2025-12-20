@@ -124,21 +124,24 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
     console.log('✅ Quest completion created')
 
     // 5. Update challenge_progress points
-    const categoryLower = matchingQuest.category.toLowerCase()
-    const typeKey = matchingQuest.type === 'daily' ? 'daily' : 'weekly'
+    // R-type is now in matchingQuest.type (Recognise, Release, Rewire, Reconnect)
+    // Frequency is in matchingQuest.frequency (daily, weekly, anytime)
+    const rType = matchingQuest.type?.toLowerCase()
+    const frequency = matchingQuest.frequency || 'daily'
+    const frequencyKey = frequency === 'weekly' ? 'weekly' : 'daily'
 
-    // Only these categories have dedicated points columns in challenge_progress
-    const categoriesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
-    const hasPointsColumn = categoriesWithColumns.includes(categoryLower)
+    // Only these R-types have dedicated points columns in challenge_progress
+    const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
+    const hasPointsColumn = rTypesWithColumns.includes(rType)
 
     const updateData = {
       total_points: (activeChallenge.total_points || 0) + pointsEarned,
       last_active_date: new Date().toISOString()
     }
 
-    // Add category-specific points for Recognise/Release/Rewire/Reconnect quests
+    // Add R-type-specific points for Recognise/Release/Rewire/Reconnect quests
     if (hasPointsColumn) {
-      const pointsField = `${categoryLower}_${typeKey}_points`
+      const pointsField = `${rType}_${frequencyKey}_points`
       updateData[pointsField] = (activeChallenge[pointsField] || 0) + pointsEarned
     }
 

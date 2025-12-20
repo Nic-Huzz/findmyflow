@@ -1,0 +1,371 @@
+/**
+ * ExistingProjectFlow.css
+ * Styles for the existing project capture flow
+ */
+
+.existing-project-flow {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  padding: 20px;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--purple, #5e17eb);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.flow-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.flow-step h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.step-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.flow-input {
+  width: 100%;
+  padding: 16px;
+  font-size: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  margin-bottom: 24px;
+  transition: border-color 0.2s;
+}
+
+.flow-input:focus {
+  outline: none;
+  border-color: var(--purple, #5e17eb);
+}
+
+.flow-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.flow-textarea {
+  width: 100%;
+  padding: 16px;
+  font-size: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  margin-bottom: 24px;
+  resize: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.flow-textarea:focus {
+  outline: none;
+  border-color: var(--purple, #5e17eb);
+}
+
+.flow-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.primary-button {
+  flex: 1;
+  padding: 16px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #7c3aed;
+  transform: translateY(-1px);
+}
+
+.primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  padding: 16px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Options Grid */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.option-button {
+  padding: 16px;
+  font-size: 0.95rem;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.option-button.selected {
+  background: rgba(94, 23, 235, 0.2);
+  border-color: var(--purple, #5e17eb);
+}
+
+/* Feeling Options */
+.feeling-options .option-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.option-emoji {
+  font-size: 1.5rem;
+}
+
+/* Tag Input */
+.tag-input-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tag-input-container .flow-input {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.add-button {
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.add-button:hover {
+  background: #7c3aed;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  border-radius: 20px;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  opacity: 0.7;
+  padding: 0;
+}
+
+.tag button:hover {
+  opacity: 1;
+}
+
+.milestone-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.resistance-tag {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* Stage Options */
+.stage-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.stage-option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  color: white;
+  transition: all 0.2s;
+}
+
+.stage-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.stage-option.selected {
+  background: rgba(94, 23, 235, 0.2);
+  border-color: var(--purple, #5e17eb);
+}
+
+.stage-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--purple, #5e17eb);
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.stage-label {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Saving and Success States */
+.saving-step,
+.success-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.error-message {
+  color: #ef4444;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .existing-project-flow {
+    padding: 16px;
+  }
+
+  .flow-step h2 {
+    font-size: 1.5rem;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .secondary-button {
+    order: 1;
+  }
+}
