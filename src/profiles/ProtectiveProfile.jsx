@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from './lib/supabaseClient'
-import { useAuth } from './auth/AuthProvider'
-import { protectiveProfiles } from './data/protectiveProfiles'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { protectiveProfiles } from '../data/protectiveProfiles'
 import './ProtectiveProfile.css'
 
 const ProtectiveProfile = () => {

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { supabase } from './lib/supabaseClient'
-import { useAuth } from './auth/AuthProvider'
-import { syncFlowFinderWithChallenge } from './lib/questCompletionHelpers'
-import { STAGES } from './lib/stageConfig'
-import './FlowFinder.css'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import { STAGES } from '../lib/stageConfig'
+import '../FlowFinder.css'
 
 // ClusterSlider component (extracted from NikigaiTest.jsx)
 function ClusterSlider({ title, clusters, selectedIndex, onSelect }) {

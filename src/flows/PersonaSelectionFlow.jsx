@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from './lib/supabaseClient'
-import { useAuth } from './auth/AuthProvider'
-import { completeFlowQuest } from './lib/questCompletion'
-import './PersonaSelectionFlow.css'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { completeFlowQuest } from '../lib/questCompletion'
+import '../PersonaSelectionFlow.css'
 
 // Flow stages
 const STAGES = {

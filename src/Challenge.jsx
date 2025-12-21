@@ -10,12 +10,14 @@ import PortalExplainer from './components/PortalExplainer'
 import ConversationLogInput from './components/ConversationLogInput'
 import MilestoneInput from './components/MilestoneInput'
 import FlowCompassInput from './components/FlowCompassInput'
+import GroanReflectionInput from './components/GroanReflectionInput'
 import ChallengeProjectSelector from './components/ChallengeProjectSelector'
 import ChallengeStageTabs from './components/ChallengeStageTabs'
 import {
   handleConversationLogCompletion,
   handleMilestoneCompletion,
   handleFlowCompassCompletion,
+  handleGroanReflectionCompletion,
   handleStreakUpdate,
   getUserStageProgress
 } from './lib/questCompletionHelpers'
@@ -889,6 +891,12 @@ function Challenge() {
       return
     }
 
+    // Groan quests require special groan reflection data
+    if (quest.type === 'groan' && !specialData) {
+      alert('Please complete the groan reflection form.')
+      return
+    }
+
     if (quest.inputType === 'dropdown' && (!inputValue || inputValue.trim() === '')) {
       alert('Please select an option before completing this quest.')
       return
@@ -956,6 +964,54 @@ function Challenge() {
         }
 
         console.log('✅ Flow entry logged from quest:', result.entryId)
+      }
+
+      // Handle groan type quests - save reflection data
+      // Note: We save groan reflection BEFORE creating quest completion so we can link them
+      let groanReflectionId = null
+      if (quest.type === 'groan' && specialData) {
+        // Add groan_task from specialData as reflection_text
+        const groanReflectionData = {
+          ...specialData,
+          project_id: selectedProject?.id || null,
+          challenge_instance_id: progress.challenge_instance_id,
+          quest_category: quest.category,
+          stage: quest.stage_required || projectStage || null
+        }
+
+        const result = await handleGroanReflectionCompletion(
+          user.id,
+          groanReflectionData,
+          null // Quest completion ID will be updated after
+        )
+
+        if (!result.success) {
+          alert(`Error saving groan reflection: ${result.error}`)
+          return
+        }
+
+        groanReflectionId = result.reflectionId
+        console.log('✅ Groan reflection saved:', groanReflectionId)
+
+        // Also create milestone if quest has milestone_type
+        if (quest.milestone_type) {
+          const milestoneData = {
+            milestone_type: quest.milestone_type,
+            evidence_text: specialData.groan_task || 'Completed groan challenge'
+          }
+
+          const milestoneResult = await handleMilestoneCompletion(
+            user.id,
+            milestoneData,
+            stageProgress,
+            userData?.persona,
+            selectedProject?.id
+          )
+
+          if (!milestoneResult.success && !milestoneResult.alreadyCompleted) {
+            console.warn('Failed to save groan milestone:', milestoneResult.error)
+          }
+        }
       }
 
       // Handle checkbox quests that have a milestone_type (Bug Fix: save milestone for checkbox inputs)
@@ -1034,6 +1090,9 @@ function Challenge() {
         completionData.reflection_text = sanitizedReflection
       } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone' || quest.inputType === 'flow_compass') {
         completionData.reflection_text = JSON.stringify(specialData)
+      } else if (quest.type === 'groan' && specialData) {
+        // For groan quests, store the groan task as reflection text
+        completionData.reflection_text = specialData.groan_task || JSON.stringify(specialData)
       }
 
       // Check for duplicate completions
@@ -2388,6 +2447,14 @@ function Challenge() {
                               ? 'Start Mapping My Nervous System →'
                               : `Start ${quest.name} →`}
                           </Link>
+                        ) : quest.type === 'groan' ? (
+                          <GroanReflectionInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                            projectId={selectedProject?.id}
+                            challengeInstanceId={progress?.challenge_instance_id}
+                            stage={projectStage}
+                          />
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea
@@ -2585,6 +2652,14 @@ function Challenge() {
                               ? 'Start Mapping My Nervous System →'
                               : `Start ${quest.name} →`}
                           </Link>
+                        ) : quest.type === 'groan' ? (
+                          <GroanReflectionInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                            projectId={selectedProject?.id}
+                            challengeInstanceId={progress?.challenge_instance_id}
+                            stage={projectStage}
+                          />
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea
@@ -2928,6 +3003,14 @@ function Challenge() {
                               ? 'Start Mapping My Nervous System →'
                               : `Start ${quest.name} →`}
                           </Link>
+                        ) : quest.type === 'groan' ? (
+                          <GroanReflectionInput
+                            quest={quest}
+                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
+                            projectId={selectedProject?.id}
+                            challengeInstanceId={progress?.challenge_instance_id}
+                            stage={projectStage}
+                          />
                         ) : quest.inputType === 'text' ? (
                           <>
                             <textarea

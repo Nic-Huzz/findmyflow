@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import './HybridEssenceFlow.css' // Use the same CSS as hybrid essence flow
+import '../HybridEssenceFlow.css' // Use the same CSS as hybrid essence flow
 
 const HybridArchetypeFlow = ({ 
   archetypeType, // 'protective' or 'essence'
@@ -76,11 +76,7 @@ const HybridArchetypeFlow = ({
         action: 'right',
         timestamp: Date.now()
       }
-      setSwipeHistory(prev => {
-        const newHistory = [...prev, currentState]
-        console.log('Swipe history updated:', newHistory.length, 'items')
-        return newHistory
-      })
+      setSwipeHistory(prev => [...prev, currentState])
 
       const currentArchetype = archetypes[currentIndex]
       setSwipedRight(prev => [...prev, currentArchetype])
@@ -292,8 +288,6 @@ const HybridArchetypeFlow = ({
 
   // Handle battle selection
   const handleBattleSelection = (selectedArchetype) => {
-    console.log('Battle selection clicked:', selectedArchetype.name)
-    
     const currentPair = getNextBattlePair()
     if (!currentPair) return
     
@@ -307,24 +301,16 @@ const HybridArchetypeFlow = ({
     
     const winner = selectedArchetype
     const loser = currentPair.find(archetype => archetype !== selectedArchetype)
-    
-    console.log('Winner:', winner.name, 'Loser:', loser.name)
-    
+
     // Remove loser from remaining archetypes
     const updatedSwipedRight = swipedRight.filter(archetype => archetype !== loser)
-    console.log('Updated swiped right:', updatedSwipedRight.map(a => a.name))
     
     // Update state
     setSwipedRight(updatedSwipedRight)
-    setTotalBattlesCompleted(prev => {
-      const newTotal = prev + 1
-      console.log('Battle completed:', newTotal, 'Remaining archetypes:', updatedSwipedRight.length)
-      return newTotal
-    })
-    
+    setTotalBattlesCompleted(prev => prev + 1)
+
     if (updatedSwipedRight.length === 1) {
       // Battle complete - call onComplete immediately
-      console.log('Battle phase complete, calling onComplete')
       if (onComplete) {
         onComplete(updatedSwipedRight[0])
       }
@@ -336,7 +322,6 @@ const HybridArchetypeFlow = ({
     if (swipeHistory.length === 0 || isAnimating) return
 
     const previousState = swipeHistory[swipeHistory.length - 1]
-    console.log('Undoing swipe to state:', previousState)
 
     setCurrentIndex(previousState.currentIndex)
     setSwipedRight(previousState.swipedRight)
@@ -348,7 +333,6 @@ const HybridArchetypeFlow = ({
     if (battleHistory.length === 0) return
 
     const previousState = battleHistory[battleHistory.length - 1]
-    console.log('Undoing to state:', previousState)
 
     setSwipedRight(previousState.swipedRight)
     setTotalBattlesCompleted(previousState.totalBattlesCompleted)

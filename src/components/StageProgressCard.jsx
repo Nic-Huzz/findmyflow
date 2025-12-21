@@ -62,17 +62,6 @@ function StageProgressCard({ persona, currentStage, onGraduate }) {
   // Case-insensitive stage matching to handle potential database case differences
   const currentStageIndex = allStages.indexOf(currentStage?.toLowerCase());
 
-  // Debug logging to diagnose "all locked" issue
-  console.log('StageProgressCard Debug:', {
-    persona,
-    currentStage,
-    currentStageIndex,
-    stageFromDB: currentStage,
-    expectedStages: allStages,
-    requirements: requirements,
-    hasRequirements: !!requirements
-  });
-
   // Safety check: if stage not found, default to first stage (discover)
   const safeStageIndex = currentStageIndex === -1 ? 0 : currentStageIndex;
 

@@ -1,61 +1,49 @@
+/**
+ * MoneyModelFlowBase - Shared base component for Money Model flows
+ *
+ * Phase 3 of Money Model consolidation.
+ * This component handles the common logic for all 6 Money Model assessment flows.
+ */
+
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { supabase } from './lib/supabaseClient'
-import { useAuth } from './auth/AuthProvider'
-import { completeFlowQuest } from './lib/questCompletion'
-import './DownsellFlow.css'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { completeFlowQuest } from '../lib/questCompletion'
+import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import { STAGES } from './moneyModelConfigs'
 
-// Flow stages
-const STAGES = {
-  WELCOME: 'welcome',
-  Q1: 'q1',
-  Q2: 'q2',
-  Q3: 'q3',
-  Q4: 'q4',
-  Q5: 'q5',
-  Q6: 'q6',
-  Q7: 'q7',
-  Q8: 'q8',
-  Q9: 'q9',
-  Q10: 'q10',
-  CALCULATING: 'calculating',
-  REVEAL: 'reveal',
-  SUCCESS: 'success'
-}
-
-// Stage groupings for progress dots
-const STAGE_GROUPS = [
-  { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME] },
-  { id: 'business', label: 'Business', stages: [STAGES.Q1, STAGES.Q2, STAGES.Q3] },
-  { id: 'operations', label: 'Operations', stages: [STAGES.Q4, STAGES.Q5] },
-  { id: 'market', label: 'Market', stages: [STAGES.Q6, STAGES.Q7] },
-  { id: 'goals', label: 'Goals', stages: [STAGES.Q8, STAGES.Q9, STAGES.Q10] },
-  { id: 'results', label: 'Results', stages: [STAGES.CALCULATING, STAGES.REVEAL] },
-  { id: 'complete', label: 'Complete', stages: [STAGES.SUCCESS] }
-]
-
-function DownsellFlow() {
+/**
+ * MoneyModelFlowBase component
+ * @param {Object} config - Flow configuration from moneyModelConfigs.js
+ * @param {React.ReactNode} welcomeContent - Custom welcome message content
+ * @param {string} cssImport - CSS class for the flow (passed from wrapper)
+ */
+function MoneyModelFlowBase({ config, welcomeContent }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
 
+  // Core state
   const [stage, setStage] = useState(STAGES.WELCOME)
   const [questionsData, setQuestionsData] = useState(null)
   const [offersData, setOffersData] = useState(null)
   const [answers, setAnswers] = useState({})
   const [recommendedOffer, setRecommendedOffer] = useState(null)
   const [allOfferScores, setAllOfferScores] = useState([])
-  const [showAllOptions, setShowAllOptions] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showAllOptions, setShowAllOptions] = useState(false)
   const [viewingResults, setViewingResults] = useState(false)
+
+  // Question stages array
+  const questionStages = [
+    STAGES.Q1, STAGES.Q2, STAGES.Q3, STAGES.Q4, STAGES.Q5,
+    STAGES.Q6, STAGES.Q7, STAGES.Q8, STAGES.Q9, STAGES.Q10
+  ]
 
   // Go back handler
   const goBack = (fromStage) => {
-    const questionStages = [
-      STAGES.Q1, STAGES.Q2, STAGES.Q3, STAGES.Q4, STAGES.Q5,
-      STAGES.Q6, STAGES.Q7, STAGES.Q8, STAGES.Q9, STAGES.Q10
-    ]
     const currentIndex = questionStages.indexOf(fromStage)
     if (currentIndex === 0) {
       setStage(STAGES.WELCOME)
@@ -64,36 +52,13 @@ function DownsellFlow() {
     }
   }
 
-  // Back button component (positioned below options)
-  const BackButton = ({ fromStage }) => (
-    <button
-      className="back-button"
-      onClick={() => goBack(fromStage)}
-      style={{
-        background: 'transparent',
-        border: 'none',
-        color: 'rgba(255,255,255,0.6)',
-        cursor: 'pointer',
-        fontSize: '14px',
-        padding: '4px 0 2px 0',
-        marginTop: '16px',
-        marginBottom: '0',
-        display: 'block',
-        width: '100%',
-        textAlign: 'center'
-      }}
-    >
-      ← Go Back
-    </button>
-  )
-
   // Load questions and offers JSON
   useEffect(() => {
     const loadData = async () => {
       try {
         const [questionsRes, offersRes] = await Promise.all([
-          fetch('/downsell-questions.json'),
-          fetch('/Money Model/Downsell/offers.json')
+          fetch(config.questionsPath),
+          fetch(config.offersPath)
         ])
 
         if (!questionsRes.ok || !offersRes.ok) {
@@ -104,29 +69,35 @@ function DownsellFlow() {
         const offersJson = await offersRes.json()
 
         setQuestionsData(questionsJson)
-        setOffersData(offersJson)
+        // Handle both formats: top-level array or { offers: [...] }
+        setOffersData(Array.isArray(offersJson) ? offersJson : offersJson.offers)
       } catch (err) {
         setError(`Failed to load assessment: ${err.message}`)
       }
     }
     loadData()
-  }, [])
+  }, [config.questionsPath, config.offersPath])
 
-  // Check for ?results=true to show saved results directly
+  // Check for ?results=true to show saved results directly (if supported)
   useEffect(() => {
+    if (!config.hasViewingResults) return
+
     const loadSavedResults = async () => {
       if (searchParams.get('results') !== 'true' || !user || !offersData) return
 
       try {
         const { data: assessment, error } = await supabase
-          .from('downsell_assessments')
+          .from(config.dbTable)
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(1)
           .single()
 
-        if (error || !assessment) return
+        if (error || !assessment) {
+          console.log('No saved results found')
+          return
+        }
 
         const savedScores = assessment.all_offer_scores || []
         const reconstructedScores = savedScores.map(saved => {
@@ -152,25 +123,7 @@ function DownsellFlow() {
     }
 
     loadSavedResults()
-  }, [searchParams, user, offersData])
-
-  // Calculate current stage group for progress
-  const getCurrentGroupIndex = () => {
-    for (let i = 0; i < STAGE_GROUPS.length; i++) {
-      if (STAGE_GROUPS[i].stages.includes(stage)) {
-        return i
-      }
-    }
-    return 0
-  }
-
-  // Calculate progress within current group
-  const getGroupProgress = () => {
-    const groupIndex = getCurrentGroupIndex()
-    const group = STAGE_GROUPS[groupIndex]
-    const stageIndex = group.stages.indexOf(stage)
-    return ((stageIndex + 1) / group.stages.length) * 100
-  }
+  }, [searchParams, user, offersData, config.hasViewingResults, config.dbTable])
 
   // Calculate offer scores from answers
   const calculateOfferScores = (userAnswers) => {
@@ -180,9 +133,7 @@ function DownsellFlow() {
       let totalScore = 0
       const maxPossibleScore = offer.max_possible_score || 30
 
-      // Calculate weighted score for each question
       Object.entries(userAnswers).forEach(([questionId, answer]) => {
-        // Normalize questionId: q1_business_type -> Q1_business_type
         const normalizedQuestionId = questionId.replace(/^q(\d+)/, 'Q$1')
         const weights = offer.scoring_weights?.[normalizedQuestionId]
         if (weights && weights[answer.value] !== undefined) {
@@ -190,13 +141,11 @@ function DownsellFlow() {
         }
       })
 
-      // Check hard disqualifiers
       let isDisqualified = false
       let disqualificationReasons = []
       const disqualifiers = offer.hard_disqualifiers || offer.eligibility_rules?.hard_disqualifiers || []
       if (disqualifiers.length > 0) {
         disqualifiers.forEach(rule => {
-          // Find the matching question key by field name suffix
           const fieldName = rule.field.toLowerCase()
           const matchingKey = Object.keys(userAnswers).find(key =>
             key.endsWith('_' + fieldName)
@@ -221,7 +170,6 @@ function DownsellFlow() {
       }
     })
 
-    // Sort by score (disqualified offers go to bottom)
     return scores.sort((a, b) => {
       if (a.isDisqualified && !b.isDisqualified) return 1
       if (!a.isDisqualified && b.isDisqualified) return -1
@@ -237,21 +185,13 @@ function DownsellFlow() {
     }
     setAnswers(newAnswers)
 
-    // Determine next stage
-    const questionStages = [
-      STAGES.Q1, STAGES.Q2, STAGES.Q3, STAGES.Q4, STAGES.Q5,
-      STAGES.Q6, STAGES.Q7, STAGES.Q8, STAGES.Q9, STAGES.Q10
-    ]
     const currentIndex = questionStages.indexOf(stage)
 
     if (currentIndex < questionStages.length - 1) {
-      // Move to next question
       setStage(questionStages[currentIndex + 1])
     } else {
-      // All questions answered - calculate results
       setStage(STAGES.CALCULATING)
 
-      // Simulate calculation delay for better UX
       setTimeout(() => {
         const scores = calculateOfferScores(newAnswers)
         setAllOfferScores(scores)
@@ -262,7 +202,7 @@ function DownsellFlow() {
     }
   }
 
-  // Handle saving results (for authenticated users)
+  // Handle saving results
   const handleSaveResults = async () => {
     if (isLoading || !user) return
 
@@ -270,9 +210,8 @@ function DownsellFlow() {
     setError(null)
 
     try {
-      // Save assessment results
       const sessionId = crypto.randomUUID()
-      await supabase.from('downsell_assessments').insert([{
+      await supabase.from(config.dbTable).insert([{
         session_id: sessionId,
         user_id: user.id,
         user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
@@ -291,12 +230,12 @@ function DownsellFlow() {
         }))
       }])
 
-      // Track flow completion for graduation requirements
+      // Track flow completion
       try {
         await supabase.from('flow_sessions').insert({
           user_id: user.id,
-          flow_type: 'downsell_flow',
-          flow_version: 'downsell-offer-v1',
+          flow_type: config.flowType,
+          flow_version: config.flowVersion,
           status: 'completed',
           last_step_id: 'complete'
         })
@@ -306,17 +245,48 @@ function DownsellFlow() {
 
       // Complete challenge quest
       try {
+        const questId = typeof config.getQuestId === 'function'
+          ? config.getQuestId(user?.user_metadata?.persona)
+          : config.questId
+
         await completeFlowQuest({
           userId: user.id,
-          flowId: 'downsell_offer',
-          pointsEarned: 35
+          flowId: questId,
+          pointsEarned: config.pointsEarned
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
       }
 
+      // Handle milestone creation (for LeadMagnet)
+      if (config.createsMilestone) {
+        try {
+          const { data: stageProgress } = await supabase
+            .from('user_stage_progress')
+            .select('current_stage, persona')
+            .eq('user_id', user.id)
+            .single()
+
+          await supabase.from('milestone_completions').insert({
+            user_id: user.id,
+            milestone_id: config.milestoneId,
+            stage: stageProgress?.current_stage || 'validation',
+            persona: stageProgress?.persona || 'vibe_seeker',
+            evidence_text: `Completed ${config.name} flow: ${recommendedOffer?.offer?.name}`
+          })
+        } catch (milestoneError) {
+          console.warn('Milestone creation failed:', milestoneError)
+        }
+      }
+
       setStage(STAGES.SUCCESS)
-      setTimeout(() => navigate('/7-day-challenge'), 2000)
+
+      // Handle auto-navigation (for LeadMagnet)
+      if (config.autoNavigateOnSuccess) {
+        setTimeout(() => {
+          navigate(config.autoNavigatePath)
+        }, config.autoNavigateDelay)
+      }
     } catch (err) {
       setError('Failed to save results. Please try again.')
       console.error('Save error:', err)
@@ -325,70 +295,49 @@ function DownsellFlow() {
     }
   }
 
-
   // Get question by stage
   const getQuestionByStage = () => {
     if (!questionsData?.questions) return null
-    const questionStages = [
-      STAGES.Q1, STAGES.Q2, STAGES.Q3, STAGES.Q4, STAGES.Q5,
-      STAGES.Q6, STAGES.Q7, STAGES.Q8, STAGES.Q9, STAGES.Q10
-    ]
     const index = questionStages.indexOf(stage)
     return index >= 0 ? questionsData.questions[index] : null
   }
 
+  // ============ RENDER ============
+
   // Loading state
   if (!questionsData || !offersData) {
     return (
-      <div className="downsell-flow">
+      <div className={config.cssClass}>
         <div className="loading-state">
-          <div className="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
+          {error ? (
+            <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>
+              <h2>Error Loading Assessment</h2>
+              <p>{error}</p>
+            </div>
+          ) : (
+            <div className="typing-indicator">
+              <span></span><span></span><span></span>
+            </div>
+          )}
         </div>
       </div>
     )
   }
-
-  // Render progress indicators
-  const renderProgress = () => {
-    const currentGroupIndex = getCurrentGroupIndex()
-
-    return (
-      <div className="progress-container">
-        {/* Main progress dots */}
-        <div className="progress-dots">
-          {STAGE_GROUPS.map((group, index) => (
-            <div
-              key={group.id}
-              className={`progress-dot ${index < currentGroupIndex ? 'completed' : ''} ${index === currentGroupIndex ? 'active' : ''}`}
-            />
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  // ============ RENDER STAGES ============
 
   // WELCOME STAGE
   if (stage === STAGES.WELCOME) {
     return (
-      <div className="downsell-flow">
-        {renderProgress()}
+      <div className={config.cssClass}>
+        <ProgressDots stageGroups={config.stageGroups} currentStage={stage} />
         <div className="welcome-container">
           <div className="welcome-content">
-            <h1 className="welcome-greeting">Find Your Perfect Downsell Strategy</h1>
+            <h1 className="welcome-greeting">{config.title}</h1>
             <div className="welcome-message">
-              <p><strong>Turn "no" into "yes" and rescue revenue from lost deals.</strong></p>
-              <p>Downsells begin after a customer says no. They're not discounts—they're trades.</p>
-              <p>You work with the customer to find combinations of giving and getting until you find a match.</p>
-              <p>Through 10 questions we'll identify which of the three downsell strategies is best for you.</p>
-              <p>With the right strategy you'll boost conversions by 20-40% and turn "no" customers into loyal advocates.</p>
+              {welcomeContent}
             </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
-            Let's Find Your Downsell Strategy
+            Let's Find Your Offer
           </button>
           <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m money model course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
@@ -397,11 +346,6 @@ function DownsellFlow() {
   }
 
   // QUESTION STAGES (Q1-Q10)
-  const questionStages = [
-    STAGES.Q1, STAGES.Q2, STAGES.Q3, STAGES.Q4, STAGES.Q5,
-    STAGES.Q6, STAGES.Q7, STAGES.Q8, STAGES.Q9, STAGES.Q10
-  ]
-
   if (questionStages.includes(stage)) {
     const question = getQuestionByStage()
     if (!question) return null
@@ -409,8 +353,8 @@ function DownsellFlow() {
     const currentQuestionNumber = questionStages.indexOf(stage) + 1
 
     return (
-      <div className="downsell-flow">
-        {renderProgress()}
+      <div className={config.cssClass}>
+        <ProgressDots stageGroups={config.stageGroups} currentStage={stage} />
         <div className="question-container">
           <div className="question-number">Question {currentQuestionNumber} of 10</div>
           <h2 className="question-text">{question.question}</h2>
@@ -427,7 +371,7 @@ function DownsellFlow() {
               </button>
             ))}
           </div>
-          <BackButton fromStage={stage} />
+          {config.hasBackButton && <BackButton onClick={() => goBack(stage)} />}
         </div>
       </div>
     )
@@ -436,15 +380,14 @@ function DownsellFlow() {
   // CALCULATING STAGE
   if (stage === STAGES.CALCULATING) {
     return (
-      <div className="downsell-flow">
-        {renderProgress()}
+      <div className={config.cssClass}>
+        <ProgressDots stageGroups={config.stageGroups} currentStage={stage} />
         <div className="calculating-container">
-          <h2 className="calculating-title">Analyzing Your Business...</h2>
+          <h2 className="calculating-title">{config.calculatingTitle}</h2>
           <div className="calculating-steps">
-            <div className="calculating-step active">✓ Evaluating your objections & pricing</div>
-            <div className="calculating-step active">✓ Checking payment flexibility & modularity</div>
-            <div className="calculating-step active">✓ Scoring 3 downsell strategies</div>
-            <div className="calculating-step active">✓ Finding your best match</div>
+            {config.calculatingSteps.map((step, index) => (
+              <div key={index} className="calculating-step active">{step}</div>
+            ))}
           </div>
           <div className="typing-indicator">
             <span></span><span></span><span></span>
@@ -461,7 +404,6 @@ function DownsellFlow() {
     const confidenceLabel = confidencePercent >= 70 ? 'Excellent Fit' :
                            confidencePercent >= 55 ? 'Strong Fit' : 'Good Fit'
 
-    // Determine the rank of the current offer
     const nonDisqualifiedOffers = allOfferScores.filter(s => !s.isDisqualified)
     const currentRank = nonDisqualifiedOffers.findIndex(s => s.offer.name === recommendedOffer.offer.name)
     const getBadgeText = (rank) => {
@@ -472,8 +414,8 @@ function DownsellFlow() {
     }
 
     return (
-      <div className="downsell-flow">
-        {renderProgress()}
+      <div className={config.cssClass}>
+        <ProgressDots stageGroups={config.stageGroups} currentStage={stage} />
         <div className="reveal-container">
           <div className={`reveal-badge ${currentRank > 0 ? 'secondary' : ''}`}>{getBadgeText(currentRank)}</div>
           <h1 className="reveal-offer-name">{offer.name}</h1>
@@ -485,32 +427,36 @@ function DownsellFlow() {
           </div>
           <p className="reveal-description">{offer.description}</p>
 
-          <div className="funnel-preview">
-            <h3 className="preview-heading">Your Downsell Process:</h3>
-            <div className="funnel-steps">
-              {offer.funnel_template?.offer_structure?.map((step, index) => (
-                <div key={index} className="funnel-step">
-                  <span className="step-number">{index + 1}</span>
-                  <span className="step-text">{step}</span>
-                </div>
-              ))}
+          {offer.funnel_template?.offer_structure && (
+            <div className="funnel-preview">
+              <h3 className="preview-heading">Your Funnel Structure:</h3>
+              <div className="funnel-steps">
+                {offer.funnel_template.offer_structure.map((step, index) => (
+                  <div key={index} className="funnel-step">
+                    <span className="step-number">{index + 1}</span>
+                    <span className="step-text">{step}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="metrics-preview">
-            <h3 className="preview-heading">Key Metrics to Track:</h3>
-            <div className="metrics-grid">
-              {offer.funnel_template?.metrics?.map((metric, index) => (
-                <div key={index} className="metric-card">{metric}</div>
-              ))}
+          {offer.funnel_template?.metrics && (
+            <div className="metrics-preview">
+              <h3 className="preview-heading">Key Metrics to Track:</h3>
+              <div className="metrics-grid">
+                {offer.funnel_template.metrics.map((metric, index) => (
+                  <div key={index} className="metric-card">{metric}</div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {allOfferScores.length > 1 && (
             <div className="alternative-offers">
               <h3 className="preview-heading">Strategy Scores:</h3>
               <div className="offer-scores-list">
-                {(showAllOptions ? allOfferScores.filter(s => !s.isDisqualified) : allOfferScores.filter(s => !s.isDisqualified).slice(0, 3)).map((score, index) => (
+                {(showAllOptions ? nonDisqualifiedOffers : nonDisqualifiedOffers.slice(0, 3)).map((score, index) => (
                   <div key={index} className="score-item">
                     <div className="score-item-content">
                       <span className="score-name">{score.offer.name}</span>
@@ -525,18 +471,17 @@ function DownsellFlow() {
                   </div>
                 ))}
               </div>
-              {allOfferScores.filter(s => !s.isDisqualified).length > 3 && (
+              {nonDisqualifiedOffers.length > 3 && (
                 <button
                   className="see-all-options-btn"
                   onClick={() => setShowAllOptions(!showAllOptions)}
                 >
-                  {showAllOptions ? 'Show Less' : `See All ${allOfferScores.filter(s => !s.isDisqualified).length} Options`}
+                  {showAllOptions ? 'Show Less' : `See All ${nonDisqualifiedOffers.length} Options`}
                 </button>
               )}
             </div>
           )}
 
-          {/* Disqualified Offers Section */}
           {allOfferScores.some(s => s.isDisqualified) && (
             <div className="disqualified-offers">
               <h3 className="preview-heading disqualified-heading">Disqualified Strategies:</h3>
@@ -562,17 +507,24 @@ function DownsellFlow() {
             <button
               className="primary-button"
               onClick={() => navigate('/7-day-challenge')}
+              style={{ marginTop: '24px' }}
             >
               ← Back to 7-Day Challenge
             </button>
           ) : (
-            <button
-              className="primary-button"
-              onClick={handleSaveResults}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Saving...' : 'Save Results'}
-            </button>
+            <>
+              <button
+                className="primary-button"
+                onClick={handleSaveResults}
+                disabled={isLoading}
+                style={{ marginTop: '24px' }}
+              >
+                {isLoading ? 'Saving...' : `Save & Complete Quest (+${config.pointsEarned} pts)`}
+              </button>
+              <p style={{ marginTop: '12px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>
+                Saves your results and completes this challenge quest
+              </p>
+            </>
           )}
         </div>
       </div>
@@ -581,13 +533,23 @@ function DownsellFlow() {
 
   // SUCCESS STAGE
   if (stage === STAGES.SUCCESS) {
+    const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'there'
     return (
-      <div className="downsell-flow">
-        {renderProgress()}
+      <div className={config.cssClass}>
         <div className="success-container">
           <div className="success-icon">✓</div>
-          <h2 className="success-title">All Set!</h2>
-          <p className="success-message">Your downsell strategy has been saved. Redirecting to your dashboard...</p>
+          <h2>Quest Complete, {userName}!</h2>
+          <p style={{ marginBottom: '8px' }}>Your <strong>{recommendedOffer?.offer?.name}</strong> strategy is ready.</p>
+          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+{config.pointsEarned} points earned!</p>
+          {!config.autoNavigateOnSuccess && (
+            <button
+              className="primary-button"
+              onClick={() => navigate('/7-day-challenge')}
+              style={{ marginTop: '24px' }}
+            >
+              Return to 7-Day Challenge
+            </button>
+          )}
         </div>
       </div>
     )
@@ -596,4 +558,4 @@ function DownsellFlow() {
   return null
 }
 
-export default DownsellFlow
+export default MoneyModelFlowBase

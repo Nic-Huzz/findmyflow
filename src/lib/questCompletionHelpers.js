@@ -426,3 +426,55 @@ export const handleFlowCompassCompletion = async (userId, challengeInstanceId, f
     return { success: false, error: error.message };
   }
 };
+
+/**
+ * Handle groan reflection quest completion
+ * - Saves to groan_reflections table
+ * - Captures protective archetype, fear type, and flow direction
+ * - Used for AI personalization and healing journey tracking
+ */
+export const handleGroanReflectionCompletion = async (userId, groanData, questCompletionId = null) => {
+  try {
+    const {
+      groan_task,
+      protective_archetype,
+      fear_type,
+      flow_direction,
+      reflection_note,
+      project_id,
+      challenge_instance_id,
+      quest_category,
+      stage
+    } = groanData;
+
+    // Insert groan reflection
+    const { data: newReflection, error: reflectionError } = await supabase
+      .from('groan_reflections')
+      .insert({
+        user_id: userId,
+        quest_completion_id: questCompletionId,
+        project_id: project_id || null,
+        challenge_instance_id: challenge_instance_id || null,
+        protective_archetype,
+        fear_type,
+        flow_direction,
+        reflection_note: reflection_note || null,
+        quest_category: quest_category || 'Groans',
+        stage: stage || null
+      })
+      .select()
+      .single();
+
+    if (reflectionError) {
+      console.error('Error saving groan reflection:', reflectionError);
+      throw reflectionError;
+    }
+
+    console.log('✅ Groan reflection saved:', newReflection.id);
+
+    return { success: true, reflectionId: newReflection.id };
+  } catch (error) {
+    console.error('Error in handleGroanReflectionCompletion:', error);
+    return { success: false, error: error.message };
+  }
+};

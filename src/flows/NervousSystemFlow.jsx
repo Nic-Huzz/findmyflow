@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { supabase } from './lib/supabaseClient'
-import { useAuth } from './auth/AuthProvider'
-import { completeFlowQuest } from './lib/questCompletion'
-import './NervousSystemHealingCompass.css'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { completeFlowQuest } from '../lib/questCompletion'
+import '../NervousSystemHealingCompass.css'
 
 export default function NervousSystemFlow() {
   const { user } = useAuth()

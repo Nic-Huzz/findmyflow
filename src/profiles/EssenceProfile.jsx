@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { supabase } from './lib/supabaseClient'
-import { useAuth } from './auth/AuthProvider'
-import { essenceProfiles } from './data/essenceProfiles'
-import { hasActiveChallenge } from './lib/questCompletion'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { essenceProfiles } from '../data/essenceProfiles'
+import { hasActiveChallenge } from '../lib/questCompletion'
 import './EssenceProfile.css'
 
 const EssenceProfile = () => {

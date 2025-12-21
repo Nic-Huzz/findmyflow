@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { getDirectionColor, getDirectionLabel, getDirectionIcon, formatFlowDate } from '../lib/flowCompass'
-import './FlowCompass.css'
+import './FlowCompassPage.css'
 import '../Profile.css'
 
 /**
- * FlowCompass - Redesigned with card grid and quick log
+ * FlowCompassPage - Redesigned with card grid and quick log
  * Based on merged mockup design
  */
 
-const FlowCompass = () => {
+const FlowCompassPage = () => {
   const navigate = useNavigate()
   const { user, signOut } = useAuth()
   const [projects, setProjects] = useState([])
@@ -179,8 +179,6 @@ const FlowCompass = () => {
 
       if (error) throw error
 
-      console.log('✅ Project created:', data.id, data.name)
-
       // Close modal and reload projects
       setShowCreateModal(false)
       setNewProjectName('')
@@ -231,8 +229,6 @@ const FlowCompass = () => {
         .single()
 
       if (error) throw error
-
-      console.log('✅ Quick log entry created:', data.id)
 
       // Reset energy, flow, and comment but keep project selected
       setSelectedEnergy(null)
@@ -775,4 +771,4 @@ const FlowCompass = () => {
   )
 }
 
-export default FlowCompass
+export default FlowCompassPage

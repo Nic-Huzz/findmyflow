@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { resolvePrompt } from './lib/promptResolver'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
-import HybridArchetypeFlow from './HybridArchetypeFlow'
+import HybridArchetypeFlow from './flows/HybridArchetypeFlow'
 import { sanitizeText } from './lib/sanitize'
 
 // Helper function to convert markdown to HTML for basic formatting
@@ -81,9 +81,8 @@ function App() {
 
   // Handle hybrid flow completion
   const handleHybridFlowComplete = async (result) => {
-    console.log('✅ Hybrid flow completed:', result)
     setShowHybridFlow(false)
-    
+
     // Update context with the result
     const fieldName = hybridFlowType === 'protective' ? 'protective_archetype_selection' : 'essence_archetype_selection'
     const newContext = {
@@ -92,7 +91,6 @@ function App() {
       // Store completion flag
       [currentStep?.store_as]: true
     }
-    console.log('📝 Storing archetype result:', { fieldName, archetypeName: result.name })
     setContext(newContext)
     
     // Move to next step
@@ -167,12 +165,7 @@ function App() {
   }
 
   const handleSubmit = async () => {
-    console.log('🚀 handleSubmit called')
-    console.log('Current step:', currentStep?.step)
-    console.log('Input text:', inputText)
-
     if (!currentStep || isLoading || !inputText.trim()) {
-      console.log('❌ Early return - no currentStep, isLoading, or no input')
       return
     }
 

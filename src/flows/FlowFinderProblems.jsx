@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { supabase } from './lib/supabaseClient'
-import { useAuth } from './auth/AuthProvider'
-import { syncFlowFinderWithChallenge } from './lib/questCompletionHelpers'
-import './FlowFinder.css'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../auth/AuthProvider'
+import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import '../FlowFinder.css'
 
 export default function FlowFinderProblems() {
   const { user } = useAuth()
