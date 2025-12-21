@@ -590,12 +590,287 @@ Migrated all 6 flows to thin wrappers:
 
 ---
 
-## Next Steps
+## Part 6: Challenge.jsx Decomposition Plan
 
-1. **Future consideration:** Challenge.jsx decomposition (separate effort - 3,261 lines)
-2. **Optional cleanup:** Delete unused components (FlowHistory, FlowInsights, FlowLogModal, StageProgressCard)
+### Current State Analysis
+
+**File:** `src/Challenge.jsx`
+**Lines:** 3,261
+**Complexity:** Very High
+
+#### State Variables (30+)
+
+| Category | Variables |
+|----------|-----------|
+| UI State | `loading`, `activeCategory`, `activeRTypeFilter`, `activeFrequencyFilter`, `showOnboarding`, `showGroupSelection`, `showProjectSelector`, `showSettingsMenu`, `showExplainer`, `showLockedTooltip`, `expandedLearnMore` |
+| Data | `challengeData`, `dailyReleaseChallenges`, `progress`, `completions`, `userData`, `stageProgress` |
+| Quest Input | `questInputs` |
+| Group/Leaderboard | `groupMode`, `groupCode`, `groupCodeInput`, `groupData`, `leaderboard`, `leaderboardView`, `userRank` |
+| Prerequisites | `nervousSystemComplete`, `healingCompassComplete`, `pastParallelStory` |
+| Project-Based | `selectedProject`, `activeStageTab`, `projectStage` |
+
+#### Functions (35+)
+
+| Category | Functions |
+|----------|-----------|
+| Data Loading | `loadChallengeData`, `loadUserProgress`, `loadUserData`, `loadStageProgress`, `loadLeaderboard`, `loadGroupInfo`, `advanceDay` |
+| Prerequisite Checks | `checkNervousSystemComplete`, `checkHealingCompassComplete` |
+| Challenge/Group | `showGroupSelectionModal`, `handlePlaySolo`, `handleCreateGroup`, `handleJoinGroup`, `startChallenge`, `startChallengeWithProject`, `handleRestartChallenge`, `handleProjectSelected` |
+| Quest Completion | `handleQuestComplete` (~200 lines!), `isQuestCompletedToday`, `isQuestEverCompleted`, `isQuestLocked`, `getRequiredQuestName` |
+| Points/Progress | `getCategoryPoints`, `getPointsToday`, `checkArtifactUnlock`, `getArtifactProgress`, `getTabCompletionStatus`, `awardTabCompletionBonus`, `getValidQuestIds`, `getCompletedStages` |
+| UI Helpers | `toggleLearnMore`, `renderDescription`, `getDailyStreak`, `getDayLabels`, `getDailyReleaseChallenge`, `renderDailyReleaseChallenge`, `triggerConfetti`, `handleCloseExplainer`, `handleOpenExplainer` |
+
+#### Render Sections
+
+| Section | Lines (approx) | Notes |
+|---------|----------------|-------|
+| Onboarding | 60 | Shown when no active challenge |
+| Group Selection | 50 | Solo/Create/Join options |
+| Project Selector | 15 | Wrapper for ChallengeProjectSelector |
+| Loading/Error | 20 | Simple states |
+| Header | 100 | Points, day, badges, settings menu |
+| Category Tabs | 15 | 5 category buttons |
+| Stage Tabs | 20 | Flow Finder stage selector |
+| Filter Chips | 80 | R-type and frequency filters |
+| Leaderboard | 80 | Weekly/all-time views |
+| Artifact Progress | 70 | Progress bars per category |
+| Category Points | 20 | Points summary |
+| Quest Cards (Groans) | ~300 | Quest list for Groans |
+| Quest Cards (Healing) | ~200 | Quest list for Healing |
+| Quest Cards (Flow Finder) | ~200 | Quest list for Flow Finder |
+| Quest Cards (Bonus) | ~150 | Quest list for Bonus |
+| Quest Cards (Tracker) | ~150 | Quest list for Tracker |
+
+### Key Problem: Quest Card Duplication
+
+The quest card rendering logic is **repeated 5+ times** (once per category) with only minor variations. Each instance includes:
+- Quest header (name + points)
+- Streak bubbles (7-day visualization)
+- Description with markdown links
+- Learn More accordion
+- Input area (varies by inputType: text, dropdown, checkbox, flow, groan, conversation_log, milestone, flow_compass)
+- Locked state handling
+- Completed badge + View Results button
+
+**Estimated duplicated JSX:** ~1,200 lines
+
+---
+
+### Decomposition Strategy (6 Phases)
+
+#### Phase 1: Extract Custom Hook (ZERO RISK)
+
+**Create:** `src/hooks/useChallengeData.js`
+**Lines to extract:** ~700
+
+Move all state and data loading logic:
+- All 30+ useState declarations
+- All useEffect hooks for data loading
+- All prerequisite checking functions
+- Return object with state and handlers
+
+**Risk Level:** ZERO - Just moving code, no behavioral changes
+**Testing:** Load Challenge page, verify all data loads correctly
+
+---
+
+#### Phase 2: Extract QuestCard Component (LOW RISK)
+
+**Create:** `src/components/ChallengeQuest/QuestCard.jsx`
+**Lines to eliminate:** ~1,200
+
+Unified component that handles ALL quest types:
+
+```jsx
+<QuestCard
+  quest={quest}
+  completed={isQuestCompletedToday(quest.id, quest)}
+  locked={isQuestLocked(quest)}
+  streak={getDailyStreak(quest.id)}
+  dayLabels={getDayLabels()}
+  category={activeCategory}
+  questInput={questInputs[quest.id]}
+  onInputChange={(value) => setQuestInputs(...)}
+  onComplete={(data, event) => handleQuestComplete(quest, data, event)}
+  expandedLearnMore={expandedLearnMore[quest.id]}
+  onToggleLearnMore={() => toggleLearnMore(quest.id)}
+  showLockedTooltip={showLockedTooltip === quest.id}
+  onToggleLockedTooltip={() => setShowLockedTooltip(...)}
+  // Prerequisite flags for locking
+  healingCompassComplete={healingCompassComplete}
+  nervousSystemComplete={nervousSystemComplete}
+  // For groan quests
+  projectId={selectedProject?.id}
+  challengeInstanceId={progress?.challenge_instance_id}
+  stage={projectStage}
+  // Daily release content
+  dailyReleaseChallenge={getDailyReleaseChallenge()}
+  pastParallelStory={pastParallelStory}
+/>
+```
+
+**Risk Level:** LOW - Preserves exact rendering, just in a component
+**Testing:** Complete quests in each category, verify all input types work
+
+---
+
+#### Phase 3: Extract Header Component (LOW RISK)
+
+**Create:** `src/components/ChallengeHeader.jsx`
+**Lines to extract:** ~150
+
+Contents:
+- Total points display (clickable to leaderboard)
+- Day counter (Day X/7)
+- Complete badge (when Day 7)
+- Archetype badge
+- Settings menu (dropdown with Home, Explainer, Notifications)
+- Restart Challenge button
+
+**Risk Level:** LOW
+**Testing:** Click all header elements, verify navigation works
+
+---
+
+#### Phase 4: Extract Onboarding Screens (LOW RISK)
+
+**Create:** `src/components/ChallengeOnboarding.jsx`
+**Create:** `src/components/GroupSelectionModal.jsx`
+**Lines to extract:** ~150
+
+Move the three intro screens:
+1. Welcome/Onboarding (4 R's explanation)
+2. Group Selection (Solo/Create/Join)
+3. Project Selector wrapper
+
+**Risk Level:** LOW
+**Testing:** Start new challenge, verify onboarding flow works
+
+---
+
+#### Phase 5: Extract Leaderboard Section (LOW RISK)
+
+**Create:** `src/components/ChallengeLeaderboard.jsx`
+**Lines to extract:** ~100
+
+Contents:
+- Weekly/All-Time toggle
+- Group code display + WhatsApp share
+- Leaderboard entries with rank badges
+
+**Risk Level:** LOW
+**Testing:** Click Leaderboard, toggle views, verify data displays
+
+---
+
+#### Phase 6: Extract Filter & Progress Components (LOW RISK)
+
+**Create:** `src/components/QuestFilters.jsx` (~80 lines)
+- R-type filter chips (Recognise, Rewire, Reconnect, Release)
+- Frequency filter (All, Daily, Weekly)
+
+**Create:** `src/components/ArtifactProgressCard.jsx` (~80 lines)
+- Progress bars for each R-type
+- Unlock status display
+- Tab completion bonus text
+
+**Create:** `src/components/CategoryPointsSummary.jsx` (~30 lines)
+- Category total
+- Points today
+- Leaderboard button
+
+**Risk Level:** LOW
+**Testing:** Switch between tabs, verify filters and progress display correctly
+
+---
+
+### Implementation Order & Risk Assessment
+
+| Phase | Component | Lines | Risk | Confidence |
+|-------|-----------|-------|------|------------|
+| 1 | useChallengeData hook | ~700 | ZERO | 95% |
+| 2 | QuestCard | ~1,200 | LOW | 85% |
+| 3 | ChallengeHeader | ~150 | LOW | 90% |
+| 4 | Onboarding screens | ~150 | LOW | 90% |
+| 5 | ChallengeLeaderboard | ~100 | LOW | 90% |
+| 6 | Filters + Progress | ~190 | LOW | 90% |
+
+### Expected Results
+
+**Before:** 3,261 lines in one file
+
+**After:**
+| File | Lines |
+|------|-------|
+| Challenge.jsx (orchestrator) | ~400 |
+| useChallengeData.js | ~700 |
+| QuestCard.jsx | ~250 |
+| ChallengeHeader.jsx | ~100 |
+| ChallengeOnboarding.jsx | ~80 |
+| GroupSelectionModal.jsx | ~70 |
+| ChallengeLeaderboard.jsx | ~100 |
+| QuestFilters.jsx | ~80 |
+| ArtifactProgressCard.jsx | ~80 |
+| CategoryPointsSummary.jsx | ~30 |
+| **Total** | ~1,890 |
+
+**Reduction:** 3,261 → ~1,890 lines (**42% reduction**)
+
+More importantly:
+- Challenge.jsx becomes a readable orchestrator (~400 lines)
+- Each component has a single responsibility
+- QuestCard eliminates ~1,200 lines of duplication
+- Logic is testable in isolation
+
+---
+
+### De-Risking Strategy
+
+Same approach as Money Model consolidation:
+
+1. **Create backup before each phase:**
+   ```bash
+   cp src/Challenge.jsx src/Challenge.backup.jsx
+   ```
+
+2. **Test after each phase:**
+   - Load Challenge page
+   - Complete a quest in each category
+   - Verify leaderboard displays
+   - Verify streak tracking works
+   - Verify graduation checking works
+
+3. **Git commit after each phase:**
+   - Small, reversible commits
+   - Clear commit messages
+
+4. **Phase 1 first (ZERO risk):**
+   - Custom hook extraction has no behavioral changes
+   - If it breaks, easy to revert
+
+5. **Phase 2 is the big one:**
+   - QuestCard unification requires careful prop mapping
+   - May need to handle edge cases per category
+   - Test thoroughly before committing
+
+---
+
+## Completed Cleanup (After Money Model Consolidation)
+
+### Unused Components Deleted
+
+After verifying no imports reference these files, the following were deleted:
+
+| File | Lines | Reason |
+|------|-------|--------|
+| `src/components/FlowHistory.jsx` | 115 | Not imported anywhere |
+| `src/components/FlowInsights.jsx` | 147 | Not imported anywhere |
+| `src/components/FlowLogModal.jsx` | 202 | Not imported anywhere |
+| `src/components/StageProgressCard.jsx` | 98 | Not imported anywhere |
+
+**Total removed:** 562 lines of unused code
 
 ---
 
 *Document created: December 21, 2024*
-*Last updated: December 21, 2024 - Added Money Model consolidation results*
+*Last updated: December 21, 2024 - Added Challenge.jsx decomposition plan*
