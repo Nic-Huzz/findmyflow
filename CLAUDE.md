@@ -27,216 +27,296 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 
 ---
 
-## Folder Structure (LEGO Castle Analogy)
-
-Think of this project as building a LEGO castle:
+## Folder Structure
 
 ```
-/Users/nichurrell/Findmyflow/
-├── src/                          # The castle itself
-│   ├── components/               # Individual LEGO bricks (reusable pieces)
-│   │   ├── FlowCompass.jsx       # Direction picker (N/E/S/W)
-│   │   ├── FlowMap.jsx           # Dashboard clusters display
-│   │   ├── StageProgressCard.jsx # Progress tracking card
-│   │   ├── GraduationModal.jsx   # Stage completion celebration
+/Users/nichurrell/creations/Findmyflow/
+├── src/
+│   ├── flows/                         # All flow components (14 files)
+│   │   ├── MoneyModelFlowBase.jsx     # Shared base for all Money Model flows (450 lines)
+│   │   ├── moneyModelConfigs.js       # Configuration for 6 Money Model flows
+│   │   ├── AttractionOfferFlow.jsx    # Thin wrapper (~35 lines)
+│   │   ├── UpsellFlow.jsx             # Thin wrapper
+│   │   ├── DownsellFlow.jsx           # Thin wrapper
+│   │   ├── ContinuityFlow.jsx         # Thin wrapper
+│   │   ├── LeadsStrategyFlow.jsx      # Thin wrapper
+│   │   ├── LeadMagnetFlow.jsx         # Thin wrapper
+│   │   ├── FlowFinderSkills.jsx       # AI-guided skills discovery
+│   │   ├── FlowFinderProblems.jsx     # AI-guided problems discovery
+│   │   ├── FlowFinderPersona.jsx      # AI-guided persona discovery
+│   │   ├── FlowFinderIntegration.jsx  # Synthesis of all discoveries
+│   │   ├── NervousSystemFlow.jsx      # Nervous system calibration
+│   │   ├── HealingCompass.jsx         # Trauma healing flow
+│   │   ├── PersonaSelectionFlow.jsx   # Persona type selection
+│   │   └── HybridArchetypeFlow.jsx    # Archetype assessment
+│   │
+│   ├── hooks/                         # Custom React hooks
+│   │   └── useChallengeData.js        # All Challenge state & data loading (1,147 lines)
+│   │
+│   ├── components/                    # Reusable UI components
+│   │   ├── MoneyModelShared/          # Shared Money Model components
+│   │   │   ├── BackButton.jsx         # Navigation back button
+│   │   │   ├── ProgressDots.jsx       # Progress indicator
+│   │   │   └── index.js               # Barrel export
+│   │   │
+│   │   ├── QuestCard.jsx              # Unified quest card (317 lines)
+│   │   ├── ChallengeHeader.jsx        # Challenge header with points/settings
+│   │   ├── ChallengeOnboarding.jsx    # Welcome & group selection screens
+│   │   ├── ChallengeLeaderboard.jsx   # Leaderboard display
+│   │   ├── ChallengeFilters.jsx       # Filter chips for quests
+│   │   ├── ChallengeProjectSelector.jsx # Project selection UI
+│   │   ├── ChallengeStageTabs.jsx     # Stage tabs (1-6)
+│   │   │
+│   │   ├── GroanReflectionInput.jsx   # 5-step groan reflection form
+│   │   ├── FlowCompassInput.jsx       # N/E/S/W direction picker
+│   │   ├── ConversationLogInput.jsx   # Conversation logging form
+│   │   ├── MilestoneInput.jsx         # Milestone completion form
+│   │   │
+│   │   ├── FlowMap.jsx                # Dashboard clusters display
+│   │   ├── FlowMapRiver.jsx           # Vertical river visualization
+│   │   ├── FlowMapMockups.jsx         # Design mockups page
+│   │   ├── FlowCompass.jsx            # Direction picker wrapper
+│   │   │
+│   │   ├── GraduationModal.jsx        # Stage completion celebration
+│   │   ├── HomeFirstTime.jsx          # First-time user onboarding
+│   │   ├── ExistingProjectFlow.jsx    # Existing project onboarding
+│   │   ├── PortalExplainer.jsx        # Challenge explainer modal
+│   │   │
+│   │   ├── NotificationPrompt.jsx     # Push notification prompt
+│   │   ├── NotificationSettings.jsx   # Notification preferences
+│   │   ├── InstallPWA.jsx             # PWA install prompt
+│   │   └── ErrorBoundary.jsx          # React error boundary
+│   │
+│   ├── pages/                         # Full page components
+│   │   ├── FlowCompassPage.jsx        # Flow compass tracking page
+│   │   ├── LibraryOfAnswers.jsx       # All discoveries organized
+│   │   ├── ValidationFlowsManager.jsx # Validation survey manager
+│   │   └── PublicValidationFlow.jsx   # Public validation survey
+│   │
+│   ├── profiles/                      # Profile display components
+│   │   ├── EssenceProfile.jsx         # Essence archetype display
+│   │   └── ProtectiveProfile.jsx      # Protective archetype display
+│   │
+│   ├── lib/                           # Utilities and helpers
+│   │   ├── supabaseClient.js          # Database connection
+│   │   ├── stageConfig.js             # Universal 6-stage configuration
+│   │   ├── graduationChecker.js       # Project graduation logic
+│   │   ├── questCompletionHelpers.js  # Quest completion handlers
+│   │   ├── questCompletion.js         # Quest completion utilities
+│   │   ├── streakTracking.js          # 7-day streak logic
+│   │   ├── projectCreation.js         # Project creation utilities
+│   │   ├── flowCompass.js             # Flow compass utilities
+│   │   ├── aiHelper.js                # Claude AI integration
+│   │   ├── clustering.js              # AI-powered clustering
+│   │   ├── tagExtraction.js           # Tag extraction from responses
+│   │   ├── weighting.js               # Scoring/weighting functions
+│   │   ├── validationFlows.js         # Validation flow utilities
+│   │   ├── notifications.js           # Push notification utilities
+│   │   ├── personaStages.js           # Legacy persona stages
+│   │   ├── sanitize.js                # Input sanitization
+│   │   ├── analytics.js               # Analytics tracking
+│   │   ├── anthropicClient.js         # Anthropic API client
+│   │   ├── promptResolver.js          # Dynamic prompt resolution
+│   │   └── templates/                 # AI prompt templates
+│   │       ├── nervousSystemTemplates.js
+│   │       ├── essenceRevealTemplate.js
+│   │       └── protectiveMirrorTemplate.js
+│   │
+│   ├── data/                          # Static configuration
+│   │   ├── personaProfiles.js         # Persona definitions
+│   │   ├── protectiveProfiles.js      # Protective archetype data
+│   │   ├── essenceProfiles.js         # Essence archetype data
+│   │   └── nervousSystemBeliefs.js    # NS belief configurations
+│   │
+│   ├── auth/                          # Authentication
+│   │   └── AuthProvider.jsx           # Auth context provider
+│   │
+│   ├── archive/                       # Deprecated code (14 files)
+│   │
+│   ├── App.jsx                        # Main dashboard
+│   ├── AppRouter.jsx                  # Router config (all routes)
+│   ├── Challenge.jsx                  # 7-day challenge (1,058 lines, decomposed)
+│   ├── Profile.jsx                    # User profile page
+│   ├── PersonaAssessment.jsx          # Login/signup page
+│   ├── ArchetypeSelection.jsx         # Archetype picker
+│   ├── Feedback.jsx                   # User feedback form
+│   ├── MoneyModelGuide.jsx            # Money model overview
+│   ├── FlowLibrary.jsx                # Legacy flow library
+│   ├── RetreatLanding.jsx             # Retreat landing page
+│   └── AuthGate.jsx                   # Protected route wrapper
+│
+├── supabase/
+│   ├── functions/                     # Edge Functions
+│   │   ├── graduation-check/          # Graduation requirements
+│   │   ├── nikigai-conversation/      # AI conversation handler
+│   │   ├── nervous-system-mirror/     # NS AI analysis
+│   │   ├── scheduled-notifications/   # Cron job for notifications
 │   │   └── ...
-│   │
-│   ├── pages/                    # Rooms in the castle (full page views)
-│   │   ├── FlowCompass.jsx       # Flow tracking page
-│   │   ├── ValidationFlowsManager.jsx
-│   │   └── PublicValidationFlow.jsx
-│   │
-│   ├── lib/                      # Hidden mechanisms (like the drawbridge pulley)
-│   │   ├── supabaseClient.js     # Database connection
-│   │   ├── stageConfig.js        # **NEW** Universal 6-stage configuration
-│   │   ├── graduationChecker.js  # Project-based graduation logic
-│   │   ├── personaStages.js      # Legacy persona stages (being deprecated)
-│   │   ├── streakTracking.js     # 7-day challenge streaks
-│   │   ├── aiHelper.js           # Claude AI integration
-│   │   └── clustering.js         # AI-powered skill/problem clustering
-│   │
-│   ├── auth/                     # The castle guards (authentication)
-│   │   └── AuthProvider.jsx      # Auth context provider
-│   │
-│   ├── data/                     # Castle blueprints (static config)
-│   │   └── personaProfiles.js    # Persona definitions
-│   │
-│   ├── AppRouter.jsx             # The castle map (all routes)
-│   ├── App.jsx                   # Main dashboard (the throne room)
-│   ├── Challenge.jsx             # 7-day challenge system
-│   ├── NikigaiTest.jsx           # AI conversation flow engine
-│   ├── archive/                  # Deprecated code (move *.OLD.jsx files here)
-│   └── [FlowName]Flow.jsx        # Various assessment flows
+│   └── migrations/                    # Database migrations
 │
-├── supabase/                     # The storage chest (database)
-│   ├── functions/                # Castle messengers (Edge Functions)
-│   │   ├── graduation-check/     # Checks graduation requirements
-│   │   ├── nikigai-conversation/ # AI conversation handler
-│   │   ├── nervous-system-mirror/# Nervous system AI analysis
-│   │   └── ...
-│   └── migrations/               # Castle renovation history
+├── public/                            # Static assets
+│   ├── *.json                         # Flow question definitions
+│   └── Money Model/                   # Offer configurations
 │
-├── public/                       # Castle decorations (static assets)
-│   ├── *.json                    # Flow question definitions
-│   └── images/                   # Icons and images
+├── scripts/                           # Maintenance scripts
+│   ├── db-query.sh                    # Query database via REST API
+│   └── deploy-functions.sh            # Deploy edge functions
 │
-├── scripts/                      # Castle maintenance tools
-│   ├── db-query.sh               # Query database via REST API
-│   └── deploy-functions.sh       # Deploy edge functions
+├── docs/                              # Documentation
+│   ├── 7-day-challenge-system.md      # Challenge system docs
+│   ├── 2024-12-21-refactoring-session.md # Major refactoring docs
+│   ├── design-guide.md                # Brand colors, typography
+│   └── supabase-setup.md              # Database setup guide
 │
-├── docs/                         # Castle instruction manuals
-│   ├── 7-day-challenge-system.md # **READ THIS** before modifying Challenge.jsx
-│   ├── design-guide.md           # Brand colors, typography, components
-│   └── supabase-setup.md         # Database connection & migration guide
-│
-├── .env.local                    # Secret passages (credentials only you know)
-├── .github/workflows/            # Automatic castle builders (CI/CD)
-└── mockups/                      # Architectural sketches
+└── .github/workflows/                 # CI/CD
+    └── scheduled-notifications.yml    # Cron for notifications
 ```
+
+---
+
+## Routes & Pages
+
+| Route | Component | Description |
+|-------|-----------|-------------|
+| `/` | PersonaAssessment | Login/signup + persona selection |
+| `/me` | Profile | User dashboard with clusters |
+| `/7-day-challenge` | Challenge | Gamified daily quests |
+| `/library` | LibraryOfAnswers | All discoveries organized |
+| `/flow-compass` | FlowCompassPage | Energy tracking (N/E/S/W) |
+| `/archetypes` | ArchetypeSelection | View archetypes |
+| `/archetypes/essence` | EssenceProfile | Essence archetype details |
+| `/archetypes/protective` | ProtectiveProfile | Protective archetype details |
+| `/nikigai/skills` | FlowFinderSkills | AI skills discovery |
+| `/nikigai/problems` | FlowFinderProblems | AI problems discovery |
+| `/nikigai/persona` | FlowFinderPersona | AI persona discovery |
+| `/nikigai/integration` | FlowFinderIntegration | Synthesis flow |
+| `/nervous-system` | NervousSystemFlow | NS calibration |
+| `/healing-compass` | HealingCompass | Trauma healing |
+| `/attraction-offer` | AttractionOfferFlow | $100M Offer builder |
+| `/upsell-offer` | UpsellFlow | Upsell strategy |
+| `/downsell-offer` | DownsellFlow | Downsell strategy |
+| `/continuity-offer` | ContinuityFlow | Continuity model |
+| `/leads-strategy` | LeadsStrategyFlow | Lead gen strategy |
+| `/lead-magnet` | LeadMagnetFlow | Lead magnet type |
+| `/persona-selection` | PersonaSelectionFlow | Customer persona |
+| `/validation-flows` | ValidationFlowsManager | Survey manager |
+| `/v/:shareToken` | PublicValidationFlow | Public survey (no auth) |
+| `/settings/notifications` | NotificationSettings | Notification prefs |
+| `/feedback` | Feedback | User feedback |
+| `/retreats` | RetreatLanding | Retreat landing page |
+| `/money-model-guide` | MoneyModelGuide | Educational overview |
 
 ---
 
 ## Key Features
 
-### Currently Built and Working:
+### 1. Universal 6-Stage System
+All projects follow these stages:
 
-1. **Universal 6-Stage System** (Dec 2024 Refactor) - All projects follow these stages:
-   | Stage | Name | Focus |
-   |-------|------|-------|
-   | 1 | Validation | Validate with real customers |
-   | 2 | Product Creation | Build core offer + lead magnet |
-   | 3 | Testing | Test with users, gather feedback |
-   | 4 | Money Models | Upsells, downsells, continuity |
-   | 5 | Campaign Creation | Lead generation strategy |
-   | 6 | Launch | Execute launch with leads funnel |
+| Stage | Name | Focus |
+|-------|------|-------|
+| 1 | Validation | Validate with real customers |
+| 2 | Product Creation | Build core offer + lead magnet |
+| 3 | Testing | Test with users, gather feedback |
+| 4 | Money Models | Upsells, downsells, continuity |
+| 5 | Campaign Creation | Lead generation strategy |
+| 6 | Launch | Execute launch with leads funnel |
 
-2. **Persona System** - Three user types (determines initial guidance):
-   - **Vibe Seeker**: Exploring, needs Flow Finder first
-   - **Vibe Riser**: Building first product, can start from existing project
-   - **Movement Maker**: Scaling a business, often has existing traction
+### 2. 7-Day Challenge System
+Gamified quests organized by category:
+- **Groans**: Recognise, Rewire, Reconnect challenges
+- **Healing**: Recognise, Release challenges
+- **Flow Finder**: Discovery flows (Skills, Problems, Persona)
+- **Bonus**: Extra credit activities
+- **Tracker**: Flow compass logging
 
-3. **Flow Finder** - AI-guided discovery flows:
-   - Skills identification (`/nikigai/skills`)
-   - Problems you solve (`/nikigai/problems`)
-   - Ideal customer persona (`/nikigai/persona`)
-   - Integration/synthesis (`/nikigai/integration`)
+Key components:
+- `useChallengeData.js` - All state management (1,147 lines)
+- `QuestCard.jsx` - Unified quest rendering (317 lines)
+- `ChallengeHeader.jsx` - Points, day counter, settings
+- `ChallengeLeaderboard.jsx` - Weekly/all-time rankings
+- `ChallengeFilters.jsx` - Category/frequency filters
 
-3. **Money Model Flows** - Business building assessments:
-   - $100M Offer (`/100m-offer`)
-   - Attraction Offer (`/attraction-offer`)
-   - Upsell/Downsell/Continuity flows
-   - Lead Magnet flow
-   - Leads Strategy flow
+### 3. Money Model Flows (Consolidated)
+Six flows consolidated into one configurable base:
+- `MoneyModelFlowBase.jsx` - Shared logic (450 lines)
+- `moneyModelConfigs.js` - All 6 flow configurations
+- Each flow is now ~35 lines (94% reduction from original)
 
-5. **7-Day Challenge System** - Gamified daily quests with:
-   - Project selector (challenges tied to specific project)
-   - Stage tabs (1-6) for browsing stage-specific quests
-   - Points tracked per-project
-   - **Groan Challenges** - Stage-specific challenges that push users past comfort zones:
-     - Each stage has a unique groan challenge with specific fear to overcome
-     - Completing groan challenge is required for graduation
-     - Captures protective archetype (Ghost, People Pleaser, Perfectionist, Performer, Controller) and fear type
-   - **Groan Reflections** - When completing external/visibility quests:
-     - Flow Tracker: Captures Ease/Resistance + Excited/Tired (same as Flow Compass)
-     - Protective Voice: Which of 5 archetypes showed up
-     - Fear Type: What fear emerged (rejection, judgment, not good enough, failure, visibility, success)
-   - **See `docs/7-day-challenge-system.md` for full documentation before making changes**
+### 4. Flow Finder (AI-Guided Discovery)
+- Skills identification (`/nikigai/skills`)
+- Problems you solve (`/nikigai/problems`)
+- Ideal customer persona (`/nikigai/persona`)
+- Integration/synthesis (`/nikigai/integration`)
 
-6. **Nervous System Flow** (`/nervous-system`) - AI chat flow that reveals the boundaries trauma has created around visibility and earning
+### 5. Nervous System & Healing
+- **Nervous System Flow** - Reveals trauma boundaries around visibility/earning
+- **Healing Compass** - Process to heal those boundaries
 
-7. **Healing Compass** (`/healing-compass`) - The process to heal the trauma creating those boundaries
-
-8. **Flow Compass** - Tracks energy/progress on projects using N/E/S/W directions:
-   - **North (Green)**: Flow - Ease + Excited
-   - **East (Blue)**: Redirect - Resistance + Excited
-   - **South (Red)**: Rest - Resistance + Tired
-   - **West (Yellow)**: Honour - Ease + Tired
-   - Visualized as vertical aerial river (bottom-to-top)
-
-9. **Profile Dashboard** - Shows archetype, clusters, and progress
-
-10. **Library of Answers** (`/library`) - All discoveries organized by category with project filter
-
-11. **Push Notifications** - Reminder system for challenges
+### 6. Flow Compass
+Tracks energy using N/E/S/W directions:
+- **North (Green)**: Flow - Ease + Excited
+- **East (Blue)**: Redirect - Resistance + Excited
+- **South (Red)**: Rest - Resistance + Tired
+- **West (Yellow)**: Honour - Ease + Tired
 
 ---
 
-## Database Schema
+## Architecture Patterns
 
-### Core Tables:
+### 1. Custom Hook Extraction
+Large components extract state management into hooks:
+```javascript
+// Challenge.jsx uses useChallengeData hook
+import { useChallengeData } from './hooks/useChallengeData'
 
-| Table | What it stores |
-|-------|----------------|
-| `user_stage_progress` | Persona, onboarding status per user |
-| `user_projects` | User's projects with `current_stage` (1-6), `is_primary`, `total_points` |
-| `flow_sessions` | All assessment flow completions (tracks `flow_type` + `project_id`) |
-| `milestone_completions` | Completed milestones per user/project |
-| `quest_completions` | Completed daily quests (with `project_id`) |
-| `challenge_instances` | Active 7-day challenge sessions |
-| `groan_reflections` | **NEW** Captures protective voices and fears on quest completion |
+function Challenge() {
+  const {
+    loading, progress, completions,
+    handleQuestComplete, getCategoryPoints,
+    // ... 100+ more state/functions
+  } = useChallengeData()
 
-### Flow Data Tables:
+  // Component only handles rendering
+}
+```
 
-| Table | What it stores |
-|-------|----------------|
-| `nikigai_clusters` | AI-generated skill/problem/persona clusters |
-| `nikigai_responses` | User responses in flows |
-| `nikigai_key_outcomes` | Selected opportunities from flows |
-| `persona_profiles` | Customer persona definitions |
-| `nervous_system_responses` | Nervous system calibration data |
-| `healing_compass_responses` | Healing compass entries |
+### 2. Configurable Base Components
+Flows use a shared base with configuration:
+```javascript
+// LeadMagnetFlow.jsx - thin wrapper
+import MoneyModelFlowBase from './MoneyModelFlowBase'
+import { MONEY_MODEL_CONFIGS } from './moneyModelConfigs'
 
-### Validation Tables:
+function LeadMagnetFlow() {
+  return <MoneyModelFlowBase config={MONEY_MODEL_CONFIGS.leadMagnet} />
+}
+```
 
-| Table | What it stores |
-|-------|----------------|
-| `validation_flows` | User-created validation surveys |
-| `validation_responses` | Responses to validation surveys |
+### 3. Component Decomposition
+Large components broken into focused pieces:
+```javascript
+// Challenge.jsx orchestrates these components:
+<ChallengeHeader />        // Points, settings, day counter
+<ChallengeFilters />       // Category/frequency filters
+<ChallengeLeaderboard />   // Leaderboard display
+<QuestCard />              // Individual quest rendering
+<ChallengeOnboarding />    // Welcome/group selection
+```
 
-### Assessment Tables:
-
-| Table | What it stores |
-|-------|----------------|
-| `attraction_offer_assessments` | Attraction offer flow results |
-| `upsell_assessments` | Upsell flow results |
-| `downsell_assessments` | Downsell flow results |
-| `continuity_assessments` | Continuity flow results |
-| `leads_assessments` | Leads strategy results |
-| `lead_magnet_assessments` | Lead magnet flow results |
-
-### Supporting Tables:
-
-| Table | What it stores |
-|-------|----------------|
-| `user_projects` | User's project/business entities |
-| `flow_entries` | Flow compass direction logs |
-| `conversation_logs` | Logged conversations for challenges |
-| `profiles` | User profile data |
-| `push_subscriptions` | Web push notification subscriptions |
-
----
-
-## Important Patterns
-
-### 1. Data Fetching
+### 4. Data Fetching
 All database access uses Supabase client:
 ```javascript
 import { supabase } from './lib/supabaseClient'
 
-// Fetch
 const { data, error } = await supabase
   .from('table_name')
   .select('*')
   .eq('user_id', userId)
-
-// Insert
-const { error } = await supabase
-  .from('table_name')
-  .insert({ ... })
 ```
 
-### 2. Authentication
-All protected routes use `<AuthGate>`:
+### 5. Authentication
+Protected routes use `<AuthGate>`:
 ```jsx
 <Route path="/protected" element={
   <AuthGate>
@@ -245,59 +325,49 @@ All protected routes use `<AuthGate>`:
 } />
 ```
 
-Access user via hook:
-```javascript
-import { useAuth } from './auth/AuthProvider'
-const { user } = useAuth()
-```
+---
 
-### 3. AI Flows
-Flows use JSON question files in `/public/` and the `NikigaiTest.jsx` component:
-```jsx
-<NikigaiTest flowFile="100m-offer-flow.json" flowName="$100M Offer Builder" />
-```
+## Database Schema
 
-AI responses handled by edge function `nikigai-conversation`.
+### Core Tables
 
-### 4. Graduation System (Project-Based)
-Defined in `src/lib/stageConfig.js` and `src/lib/graduationChecker.js`.
+| Table | What it stores |
+|-------|----------------|
+| `user_stage_progress` | Persona, onboarding status per user |
+| `user_projects` | Projects with `current_stage` (1-6), `total_points` |
+| `flow_sessions` | Flow completions (tracks `flow_type` + `project_id`) |
+| `milestone_completions` | Completed milestones per user/project |
+| `quest_completions` | Daily quest completions (with `project_id`) |
+| `challenge_instances` | Active 7-day challenge sessions |
+| `groan_reflections` | Protective voices and fears on quest completion |
 
-**To graduate a project to the next stage, user must complete:**
-- Required flows for the stage (`flow_sessions` table)
-- Required milestones (`milestone_completions` table)
-- Stage-specific groan challenge (`quest_completions` table)
+### Flow Data Tables
 
-**Key Functions:**
-```javascript
-import { checkProjectGraduationEligibility, graduateProject } from './lib/graduationChecker'
+| Table | What it stores |
+|-------|----------------|
+| `nikigai_clusters` | AI-generated skill/problem/persona clusters |
+| `nikigai_responses` | User responses in flows |
+| `nikigai_key_outcomes` | Selected opportunities |
+| `persona_profiles` | Customer persona definitions |
+| `nervous_system_responses` | NS calibration data |
+| `healing_compass_responses` | Healing compass entries |
 
-// Check if ready to graduate
-const result = await checkProjectGraduationEligibility(userId, projectId, challengeInstanceId)
-// Returns: { eligible, requirements: { flows, milestones, groanChallenge } }
+### Assessment Tables
 
-// Graduate to next stage
-await graduateProject(userId, projectId, currentStage, nextStage)
-```
-
-**Note:** Legacy persona-based graduation (`checkGraduationEligibility`) still exists for backwards compatibility but is being deprecated.
-
-### 5. CSS Pattern
-Each component has a matching CSS file. Brand colors defined in `src/index.css`:
-```css
-:root {
-  --purple: #5e17eb;
-  --gold: #ffdd27;
-  --warm-gray: #f8f9fa;
-  --text-gray: #495057;
-}
-```
+| Table | What it stores |
+|-------|----------------|
+| `attraction_offer_assessments` | Attraction offer results |
+| `upsell_assessments` | Upsell flow results |
+| `downsell_assessments` | Downsell flow results |
+| `continuity_assessments` | Continuity flow results |
+| `leads_assessments` | Leads strategy results |
+| `lead_magnet_assessments` | Lead magnet results |
 
 ---
 
 ## Environment Variables
 
 Required in `.env.local`:
-
 ```
 VITE_SUPABASE_URL          # Supabase project URL
 VITE_SUPABASE_ANON_KEY     # Supabase anon/public key
@@ -307,7 +377,7 @@ VAPID_PRIVATE_KEY          # Web push private key (server-side)
 VAPID_EMAIL                # Email for VAPID
 ```
 
-For GitHub Actions (in repo secrets):
+For GitHub Actions:
 ```
 SUPABASE_PROJECT_REF       # qlwfcfypnoptsocdpxuv
 SUPABASE_ACCESS_TOKEN      # From Supabase dashboard
@@ -315,70 +385,38 @@ SUPABASE_ACCESS_TOKEN      # From Supabase dashboard
 
 ---
 
-## Communication Style
+## Recent Updates (Dec 2024)
 
-When explaining code changes to the user, use the LEGO castle analogy to make technical concepts accessible. For example:
+### Challenge.jsx Decomposition
+Reduced from 3,261 to 1,058 lines (68% reduction):
+- Extracted `useChallengeData.js` hook (1,147 lines)
+- Created `QuestCard.jsx` component (317 lines)
+- Created `ChallengeHeader.jsx` (108 lines)
+- Created `ChallengeOnboarding.jsx` (124 lines)
+- Created `ChallengeLeaderboard.jsx` (90 lines)
+- Created `ChallengeFilters.jsx` (86 lines)
 
-- "I'm adding a new brick to your components folder"
-- "This connects the form to your storage chest (database)"
-- "I'm updating the hidden mechanism (lib/) that controls graduation"
-- "This messenger (edge function) will talk to Claude AI for you"
-- "I'm adding a new room (page) to your castle"
+### Money Model Consolidation
+Reduced 6 flows from ~3,572 lines to ~209 lines (94% reduction):
+- Created `MoneyModelFlowBase.jsx` (450 lines)
+- Created `moneyModelConfigs.js` for all configurations
+- Each flow is now a thin wrapper (~35 lines)
 
----
-
-## Database Access (for Claude)
-
-Query the database using the REST API script:
-```bash
-./scripts/db-query.sh <table> [columns] [filters]
-
-# Examples:
-./scripts/db-query.sh user_stage_progress
-./scripts/db-query.sh flow_sessions "id,flow_type,status" "status=eq.completed&limit=10"
-./scripts/db-query.sh milestone_completions "*" "order=created_at.desc&limit=5"
-```
-
----
-
-## What's Next
-
-### Completed (Dec 2024 Refactor):
-- [x] Project-Based Challenges - Multiple projects with stage progression
-- [x] Universal 6-Stage System - All projects follow same 6 stages
-- [x] Stage-Specific Groan Challenges - Each stage has unique groan challenge
-- [x] Groan Reflections Table - Captures fears/archetypes on quest completion
-- [x] FlowMapRiver Visualization - Vertical aerial river (bottom-to-top)
-- [x] Library of Answers with Project Filter
-
-### Pending Features:
-1. **Groan Reflection UI** - Add inline capture when completing external quests (protective archetype + fear dropdown)
-
-2. **Badges & Achievements** - Add `user_badges` table and award badges for milestones
-
-3. **Pod Leaderboards** - Group "pods" for 7-day challenge with team scoring
-
-4. **AI Personalization** - Use groan_reflections data to personalize coaching ("Your most common fear is judgment...")
-
-5. **Stage 5-6 Milestones** - Finalize milestone definitions for Campaign Creation and Launch stages
+### Deleted Unused Components
+- FlowHistory.jsx
+- FlowInsights.jsx
+- FlowLogModal.jsx
+- StageProgressCard.jsx
 
 ---
 
 ## Quick Commands
 
 ```bash
-# Development
-npm run dev                    # Start dev server
-
-# Database
-npm run db:push               # Apply migrations
-npm run db:query <table>      # Query via REST API
-
-# Functions
-npm run functions:deploy      # Deploy edge functions
-
-# Build
-npm run build                 # Production build
+npm run dev              # Start dev server
+npm run build            # Production build
+npm run db:push          # Apply migrations
+./scripts/db-query.sh    # Query database
 ```
 
 ---
