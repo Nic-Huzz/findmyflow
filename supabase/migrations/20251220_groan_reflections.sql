@@ -39,7 +39,7 @@ CREATE TABLE groan_reflections (
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   quest_completion_id UUID REFERENCES quest_completions(id) ON DELETE SET NULL,
   project_id UUID REFERENCES user_projects(id) ON DELETE SET NULL,
-  challenge_instance_id UUID,  -- Links to challenge_progress.challenge_instance_id (no FK due to compound key)
+  challenge_instance_id UUID REFERENCES challenge_instances(id) ON DELETE SET NULL,
 
   -- Reflection data
   protective_archetype protective_archetype,

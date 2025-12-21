@@ -172,7 +172,7 @@ Think of this project as building a LEGO castle:
 | `flow_sessions` | All assessment flow completions (tracks `flow_type` + `project_id`) |
 | `milestone_completions` | Completed milestones per user/project |
 | `quest_completions` | Completed daily quests (with `project_id`) |
-| `challenge_progress` | 7-day challenge sessions with status (active/completed/abandoned) |
+| `challenge_instances` | Active 7-day challenge sessions |
 | `groan_reflections` | **NEW** Captures protective voices and fears on quest completion |
 
 ### Flow Data Tables:
