@@ -1,40 +1,27 @@
-import { useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from './auth/AuthProvider'
+import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
-import { sendNotification } from './lib/notifications'
 import confetti from 'canvas-confetti'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
-import ConversationLogInput from './components/ConversationLogInput'
-import MilestoneInput from './components/MilestoneInput'
-import FlowCompassInput from './components/FlowCompassInput'
-import GroanReflectionInput from './components/GroanReflectionInput'
 import ChallengeProjectSelector from './components/ChallengeProjectSelector'
 import ChallengeStageTabs from './components/ChallengeStageTabs'
-import {
-  handleConversationLogCompletion,
-  handleMilestoneCompletion,
-  handleFlowCompassCompletion,
-  handleGroanReflectionCompletion,
-  handleStreakUpdate,
-  getUserStageProgress
-} from './lib/questCompletionHelpers'
-import { checkStreakBreak } from './lib/streakTracking'
-import { initializeUserStageProgress, checkAndGraduateProject } from './lib/graduationChecker'
+import ChallengeHeader from './components/ChallengeHeader'
+import ChallengeOnboarding from './components/ChallengeOnboarding'
+import ChallengeLeaderboard from './components/ChallengeLeaderboard'
+import ChallengeFilters from './components/ChallengeFilters'
+import QuestCard from './components/QuestCard'
+import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
-import { STAGES, STAGE_CONFIG, convertLegacyStage } from './lib/stageConfig'
+import { convertLegacyStage } from './lib/stageConfig'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
 const triggerConfetti = (event) => {
-  // Get button position for localized confetti
   const rect = event?.target?.getBoundingClientRect()
   const x = rect ? (rect.left + rect.width / 2) / window.innerWidth : 0.5
   const y = rect ? (rect.top + rect.height / 2) / window.innerHeight : 0.5
 
-  // Quick burst of rainbow confetti
   confetti({
     particleCount: 80,
     spread: 60,
@@ -48,75 +35,99 @@ const triggerConfetti = (event) => {
 }
 
 function Challenge() {
-  const { user } = useAuth()
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('Groans')
-  const [activeRTypeFilter, setActiveRTypeFilter] = useState('All') // For Groans tab: All, Recognise, Rewire, Reconnect
-  const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('all') // For Groans/Healing: all, daily, weekly
-  const [challengeData, setData] = useState(null)
-  const [dailyReleaseChallenges, setDailyReleaseChallenges] = useState(null)
-  const [progress, setProgress] = useState(null)
-  const [completions, setCompletions] = useState([])
-  const [questInputs, setQuestInputs] = useState({})
-  const [showOnboarding, setShowOnboarding] = useState(false)
-  const [showGroupSelection, setShowGroupSelection] = useState(false)
-  const [groupMode, setGroupMode] = useState(null) // 'create', 'join', or null for solo
-  const [groupCode, setGroupCode] = useState('')
-  const [groupCodeInput, setGroupCodeInput] = useState('')
-  const [groupData, setGroupData] = useState(null)
-  const [leaderboard, setLeaderboard] = useState([])
-  const [leaderboardView, setLeaderboardView] = useState('weekly') // 'weekly' or 'alltime'
-  const [userRank, setUserRank] = useState(null)
-  const [userData, setUserData] = useState(null)
-  const [stageProgress, setStageProgress] = useState(null) // Track user's stage progress for graduation
-  const [expandedLearnMore, setExpandedLearnMore] = useState({}) // Track which quest's learn more is expanded
-  const [nervousSystemComplete, setNervousSystemComplete] = useState(false) // Track if nervous system flow is complete
-  const [healingCompassComplete, setHealingCompassComplete] = useState(false) // Track if healing compass flow is complete
-  const [pastParallelStory, setPastParallelStory] = useState(null) // Store past_parallel_story from healing compass
-  const [showLockedTooltip, setShowLockedTooltip] = useState(null) // Track which quest's locked tooltip is showing
-  const [showSettingsMenu, setShowSettingsMenu] = useState(false) // Track settings dropdown menu visibility
-  const [showExplainer, setShowExplainer] = useState(false) // Track portal explainer visibility
-  const settingsMenuRef = useRef(null) // Ref for clicking outside to close menu
-
-  // Project-based challenge state (Dec 2024 refactor)
-  const [selectedProject, setSelectedProject] = useState(null) // Selected project for this challenge
-  const [activeStageTab, setActiveStageTab] = useState(1) // Active stage tab (1-6)
-  const [showProjectSelector, setShowProjectSelector] = useState(false) // Show project selection modal
-  const [projectStage, setProjectStage] = useState(1) // Current project's stage (1-6)
-
-  const categories = ['Groans', 'Healing', 'Flow Finder', 'Tracker', 'Bonus']
-
-  useEffect(() => {
-    loadChallengeData()
-  }, [])
-
-  // Check if user has seen explainer and show on first visit
-  useEffect(() => {
-    if (progress && !showOnboarding) {
-      const hasSeenExplainer = localStorage.getItem('hasSeenPortalExplainer')
-      if (!hasSeenExplainer) {
-        setShowExplainer(true)
-      }
-    }
-  }, [progress, showOnboarding])
+  // Get all state and functions from the hook
+  const {
+    user,
+    navigate,
+    loading,
+    activeCategory,
+    setActiveCategory,
+    activeRTypeFilter,
+    setActiveRTypeFilter,
+    activeFrequencyFilter,
+    setActiveFrequencyFilter,
+    showOnboarding,
+    showGroupSelection,
+    showProjectSelector,
+    setShowProjectSelector,
+    showSettingsMenu,
+    setShowSettingsMenu,
+    showExplainer,
+    showLockedTooltip,
+    setShowLockedTooltip,
+    expandedLearnMore,
+    settingsMenuRef,
+    challengeData,
+    progress,
+    setProgress,
+    completions,
+    setCompletions,
+    questInputs,
+    setQuestInputs,
+    userData,
+    stageProgress,
+    groupCode,
+    groupCodeInput,
+    setGroupCodeInput,
+    leaderboard,
+    leaderboardView,
+    setLeaderboardView,
+    userRank,
+    nervousSystemComplete,
+    healingCompassComplete,
+    pastParallelStory,
+    selectedProject,
+    setSelectedProject,
+    activeStageTab,
+    setActiveStageTab,
+    projectStage,
+    setProjectStage,
+    categories,
+    BONUS_PERCENTAGE,
+    loadStageProgress,
+    showGroupSelectionModal,
+    handlePlaySolo,
+    handleCreateGroup,
+    handleJoinGroup,
+    handleProjectSelected,
+    handleRestartChallenge,
+    handleCloseExplainer,
+    handleOpenExplainer,
+    isQuestCompletedToday,
+    isQuestLocked,
+    getRequiredQuestName,
+    toggleLearnMore,
+    getCategoryPoints,
+    getPointsToday,
+    getCompletedStages,
+    checkArtifactUnlock,
+    getArtifactProgress,
+    getTabCompletionStatus,
+    awardTabCompletionBonus,
+    getDailyStreak,
+    getDayLabels,
+    getDailyReleaseChallenge,
+    handleConversationLogCompletion,
+    handleMilestoneCompletion,
+    handleFlowCompassCompletion,
+    handleGroanReflectionCompletion,
+    handleStreakUpdate,
+    checkAndGraduateProject
+  } = useChallengeData()
 
   // Helper function to render quest descriptions with markdown links
   const renderDescription = (description) => {
     if (!description) return null
 
-    // Match markdown links: [text](url)
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
     const parts = []
     let lastIndex = 0
     let match
 
     while ((match = linkRegex.exec(description)) !== null) {
-      // Add text before the link
       if (match.index > lastIndex) {
         parts.push(description.slice(lastIndex, match.index))
       }
-      // Add the link
       parts.push(
         <Link key={match.index} to={match[2]} className="quest-inline-link">
           {match[1]}
@@ -125,7 +136,6 @@ function Challenge() {
       lastIndex = match.index + match[0].length
     }
 
-    // Add remaining text after the last link
     if (lastIndex < description.length) {
       parts.push(description.slice(lastIndex))
     }
@@ -133,740 +143,45 @@ function Challenge() {
     return parts.length > 0 ? parts : description
   }
 
-  useEffect(() => {
-    if (user) {
-      loadUserProgress()
-      loadLeaderboard()
-      loadUserData()
-      checkNervousSystemComplete()
-      checkHealingCompassComplete()
-      loadStageProgress()
-    }
-  }, [user])
-
-  const checkNervousSystemComplete = async () => {
-    if (!user?.id) return
-
-    try {
-      const { data, error } = await supabase
-        .from('nervous_system_responses')
-        .select('id')
-        .eq('user_id', user.id)
-        .limit(1)
-
-      if (!error && data && data.length > 0) {
-        setNervousSystemComplete(true)
-      } else {
-        setNervousSystemComplete(false)
-      }
-    } catch (error) {
-      console.error('Error checking nervous system completion:', error)
-      setNervousSystemComplete(false)
-    }
+  // Helper for updating quest inputs
+  const handleInputChange = (questId, value) => {
+    setQuestInputs(prev => ({ ...prev, [questId]: value }))
   }
 
-  const checkHealingCompassComplete = async () => {
-    if (!user?.id) return
+  // Render the daily release challenge content
+  const renderDailyReleaseChallenge = () => {
+    const challenge = getDailyReleaseChallenge()
+    if (!challenge) return null
 
-    try {
-      const { data, error } = await supabase
-        .from('healing_compass_responses')
-        .select('past_parallel_story')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(1)
-
-      if (!error && data && data.length > 0) {
-        setHealingCompassComplete(true)
-        setPastParallelStory(data[0].past_parallel_story)
-      } else {
-        setHealingCompassComplete(false)
-        setPastParallelStory(null)
-      }
-    } catch (error) {
-      console.error('Error checking healing compass completion:', error)
-      setHealingCompassComplete(false)
-      setPastParallelStory(null)
-    }
-  }
-
-  const loadUserData = async () => {
-    if (!user?.email) return
-
-    try {
-      // Use ilike for case-insensitive email matching
-      const { data, error } = await supabase
-        .from('lead_flow_profiles')
-        .select('*')
-        .ilike('email', user.email)
-        .order('created_at', { ascending: false })
-        .limit(1)
-
-      if (!error && data && data.length > 0) {
-        setUserData(data[0])
-      }
-    } catch (error) {
-      console.error('Error loading user data:', error)
-    }
-  }
-
-  const loadStageProgress = async () => {
-    if (!user?.id) return
-
-    try {
-      const progress = await getUserStageProgress(user.id)
-      setStageProgress(progress)
-      // Note: Initialization logic moved to separate useEffect to avoid race condition
-    } catch (error) {
-      console.error('Error loading stage progress:', error)
-    }
-  }
-
-  // Initialize user stage progress when userData is available but stageProgress is not
-  // This fixes the race condition where loadStageProgress ran before userData was loaded
-  useEffect(() => {
-    const initializeStageIfNeeded = async () => {
-      if (!user?.id || !userData?.persona || stageProgress) return
-
-      try {
-        const result = await initializeUserStageProgress(user.id, userData.persona)
-        if (result.success) {
-          setStageProgress(result.data)
-        }
-      } catch (error) {
-        console.error('Error initializing stage progress:', error)
-      }
+    const replacePlaceholder = (text) => {
+      if (!text) return text
+      const storyText = pastParallelStory || 'the past event from your Healing Compass'
+      return text.replace(/\{\{past_event_details\}\}/g, storyText)
     }
 
-    initializeStageIfNeeded()
-  }, [user?.id, userData?.persona, stageProgress])
-
-  useEffect(() => {
-    if (user && progress) {
-      loadLeaderboard()
-      loadGroupInfo()
-    }
-  }, [leaderboardView, progress])
-
-  // Close settings menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (settingsMenuRef.current && !settingsMenuRef.current.contains(event.target)) {
-        setShowSettingsMenu(false)
-      }
-    }
-
-    if (showSettingsMenu) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [showSettingsMenu])
-
-  const loadGroupInfo = async () => {
-    if (!progress || !progress.group_id) return
-
-    try {
-      const { data, error } = await supabase
-        .from('challenge_groups')
-        .select('*')
-        .eq('id', progress.group_id)
-        .single()
-
-      if (!error && data) {
-        setGroupData(data)
-        setGroupCode(data.code)
-      }
-    } catch (error) {
-      console.error('Error loading group info:', error)
-    }
-  }
-
-  // Set up real-time subscription for leaderboard updates
-  useEffect(() => {
-    if (!user) return
-
-    const subscription = supabase
-      .channel('challenge_progress_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'challenge_progress' },
-        (payload) => {
-          console.log('Leaderboard update:', payload)
-          loadLeaderboard()
-        }
-      )
-      .subscribe()
-
-    return () => {
-      subscription.unsubscribe()
-    }
-  }, [user, leaderboardView])
-
-  const loadChallengeData = async () => {
-    try {
-      const response = await fetch('/challengeQuestsUpdate.json')
-      const data = await response.json()
-      setData(data)
-
-      // Load daily release challenges
-      const releaseChallengesResponse = await fetch('/dailyReleaseChallenges.json')
-      const releaseChallengesData = await releaseChallengesResponse.json()
-      setDailyReleaseChallenges(releaseChallengesData)
-    } catch (error) {
-      console.error('Error loading challenge data:', error)
-    }
-  }
-
-  const loadUserProgress = async () => {
-    try {
-      setLoading(true)
-
-      // Load active challenge progress only
-      const { data: progressData, error: progressError } = await supabase
-        .from('challenge_progress')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .order('challenge_start_date', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
-      if (progressError && progressError.code !== 'PGRST116') {
-        console.error('Error loading progress:', progressError)
-      }
-
-      if (!progressData) {
-        // No active challenge - show onboarding
-        setShowOnboarding(true)
-        setLoading(false)
-        return
-      }
-
-      setProgress(progressData)
-
-      // Load selected project if challenge has a project_id
-      if (progressData.project_id) {
-        const { data: projectData, error: projectError } = await supabase
-          .from('user_projects')
-          .select('*')
-          .eq('id', progressData.project_id)
-          .single()
-
-        if (!projectError && projectData) {
-          setSelectedProject(projectData)
-          setProjectStage(projectData.current_stage || 1)
-          setActiveStageTab(projectData.current_stage || 1)
-        }
-      }
-
-      // Check if streak should be broken (user missed 2+ days)
-      const streakResult = await checkStreakBreak(user.id, progressData.challenge_instance_id)
-      if (streakResult.streak_broken) {
-        console.log('⚠️ Streak was broken - reset to 0')
-        // Reload progress to get updated streak_days
-        const { data: updatedProgress } = await supabase
-          .from('challenge_progress')
-          .select('*')
-          .eq('challenge_instance_id', progressData.challenge_instance_id)
-          .single()
-        if (updatedProgress) {
-          setProgress(updatedProgress)
-        }
-      }
-
-      // Check if we need to advance the day
-      // Use calendar days instead of 24-hour periods
-      const lastActive = new Date(progressData.last_active_date)
-      const now = new Date()
-
-      // Reset time to midnight for proper day comparison
-      const lastActiveDay = new Date(lastActive.getFullYear(), lastActive.getMonth(), lastActive.getDate())
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-
-      const daysSinceLastActive = Math.floor((today - lastActiveDay) / (1000 * 60 * 60 * 24))
-
-      console.log('Day counter check:', {
-        lastActiveDate: progressData.last_active_date,
-        lastActiveDay: lastActiveDay.toISOString(),
-        today: today.toISOString(),
-        daysSinceLastActive,
-        currentDay: progressData.current_day
-      })
-
-      if (daysSinceLastActive >= 1 && progressData.current_day < 7) {
-        console.log('Advancing day from', progressData.current_day, 'to', Math.min(progressData.current_day + daysSinceLastActive, 7))
-        await advanceDay(progressData, daysSinceLastActive)
-      }
-
-      // Load quest completions for this challenge instance
-      const { data: completionsData, error: completionsError } = await supabase
-        .from('quest_completions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('challenge_instance_id', progressData.challenge_instance_id)
-
-      if (completionsError) {
-        console.error('Error loading completions:', completionsError)
-      } else {
-        setCompletions(completionsData || [])
-      }
-
-      setLoading(false)
-    } catch (error) {
-      console.error('Error in loadUserProgress:', error)
-      setLoading(false)
-    }
-  }
-
-  const advanceDay = async (currentProgress, daysToAdvance = 1) => {
-    const newDay = Math.min(currentProgress.current_day + daysToAdvance, 7)
-
-    console.log('Advancing from day', currentProgress.current_day, 'to day', newDay)
-
-    const { data, error} = await supabase
-      .from('challenge_progress')
-      .update({
-        current_day: newDay,
-        last_active_date: new Date().toISOString()
-      })
-      .eq('user_id', user.id)
-      .eq('challenge_instance_id', currentProgress.challenge_instance_id)
-      .select()
-      .single()
-
-    if (error) {
-      console.error('Error advancing day:', error)
-    } else {
-      console.log('Day advanced successfully:', data)
-      setProgress(data)
-
-      // Send notification about new day
-      if (newDay > currentProgress.current_day && newDay <= 7) {
-        await sendNotification(user.id, {
-          title: `Day ${newDay} Unlocked! 🎉`,
-          body: 'Your new daily quests are ready to complete',
-          url: '/7-day-challenge',
-          tag: `day-${newDay}`
-        })
-      }
-    }
-  }
-
-  const showGroupSelectionModal = () => {
-    setShowOnboarding(false)
-    setShowGroupSelection(true)
-  }
-
-  const handlePlaySolo = () => {
-    setGroupMode(null)
-    setShowGroupSelection(false)
-    setShowProjectSelector(true) // Show project selector before starting
-  }
-
-  const handleCreateGroup = async () => {
-    try {
-      // Call Supabase function to generate unique code
-      const { data, error } = await supabase.rpc('generate_group_code')
-
-      if (error) throw error
-
-      const newCode = data
-
-      // Create group
-      const { data: groupData, error: groupError } = await supabase
-        .from('challenge_groups')
-        .insert([{
-          code: newCode,
-          created_by: user.id,
-          start_date: new Date().toISOString().split('T')[0]
-        }])
-        .select()
-        .single()
-
-      if (groupError) throw groupError
-
-      setGroupCode(newCode)
-      setGroupData(groupData)
-      setGroupMode('create')
-
-      // Add user to participants
-      await supabase
-        .from('challenge_participants')
-        .insert([{
-          group_id: groupData.id,
-          user_id: user.id
-        }])
-
-      // Show success message with group code
-      alert(`🎉 Group created successfully!\n\nYour group code is: ${newCode}\n\nShare this code with friends to invite them to your challenge group.`)
-
-      // Show project selector instead of immediately starting
-      setShowGroupSelection(false)
-      setShowProjectSelector(true)
-    } catch (error) {
-      console.error('Error creating group:', error)
-      alert('Error creating group. Please try again.')
-    }
-  }
-
-  const handleJoinGroup = async () => {
-    if (!groupCodeInput || groupCodeInput.trim() === '') {
-      alert('Please enter a group code')
-      return
-    }
-
-    try {
-      // Find group by code
-      const { data: groupData, error: groupError } = await supabase
-        .from('challenge_groups')
-        .select('*')
-        .eq('code', groupCodeInput.trim().toUpperCase())
-        .single()
-
-      if (groupError || !groupData) {
-        alert('Invalid group code. Please check and try again.')
-        return
-      }
-
-      setGroupData(groupData)
-      setGroupCode(groupData.code)
-      setGroupMode('join')
-
-      // Add user to participants
-      await supabase
-        .from('challenge_participants')
-        .insert([{
-          group_id: groupData.id,
-          user_id: user.id
-        }])
-
-      // Show project selector instead of immediately starting
-      setShowGroupSelection(false)
-      setShowProjectSelector(true)
-    } catch (error) {
-      console.error('Error joining group:', error)
-      alert('Error joining group. Please try again.')
-    }
-  }
-
-  const handleCloseExplainer = () => {
-    setShowExplainer(false)
-    localStorage.setItem('hasSeenPortalExplainer', 'true')
-  }
-
-  const handleOpenExplainer = () => {
-    setShowExplainer(true)
-  }
-
-  // Project-based challenge handlers
-  const handleProjectSelected = async (project) => {
-    setSelectedProject(project)
-    setProjectStage(project.current_stage || 1)
-    setActiveStageTab(project.current_stage || 1)
-    setShowProjectSelector(false)
-
-    // Start the challenge with the selected project
-    await startChallengeWithProject(project, groupData?.id || null)
-  }
-
-  const startChallengeWithProject = async (project, groupId = null) => {
-    try {
-      // First, abandon any active challenges for this user
-      await supabase.rpc('abandon_active_challenges', { p_user_id: user.id })
-
-      // Get session_id from lead_flow_profiles
-      const { data: profileData } = await supabase
-        .from('lead_flow_profiles')
-        .select('session_id')
-        .ilike('email', user.email)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-
-      const sessionId = profileData?.session_id || `session_${Date.now()}`
-
-      // Generate new challenge instance ID
-      const challengeInstanceId = crypto.randomUUID()
-
-      const insertData = {
-        user_id: user.id,
-        session_id: sessionId,
-        challenge_instance_id: challengeInstanceId,
-        current_day: 0,
-        status: 'active',
-        challenge_start_date: new Date().toISOString(),
-        last_active_date: new Date().toISOString(),
-        persona: stageProgress?.persona || 'vibe_seeker',
-        current_stage: project.current_stage || 1,
-        project_id: project.id
-      }
-
-      if (groupId) {
-        insertData.group_id = groupId
-      }
-
-      const { data, error } = await supabase
-        .from('challenge_progress')
-        .insert([insertData])
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Error starting challenge with project:', error)
-        alert('Error starting challenge. Please try again.')
-        return
-      }
-
-      setProgress(data)
-      setShowOnboarding(false)
-    } catch (error) {
-      console.error('Error in startChallengeWithProject:', error)
-      alert('Error starting challenge. Please try again.')
-    }
-  }
-
-  // Modified to show project selector after group selection
-  const handleStartWithProjectSelection = () => {
-    setShowGroupSelection(false)
-    setShowProjectSelector(true)
-  }
-
-  const handleRestartChallenge = async () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to start a new 7-day challenge? Your current progress will be archived and you\'ll start fresh on Day 1.'
+    return (
+      <div className="daily-release-challenge">
+        <h4>{challenge.title}</h4>
+        <p className="challenge-description">{challenge.description}</p>
+
+        {challenge.videoUrl && (
+          <div className="challenge-video">
+            <a href={challenge.videoUrl} target="_blank" rel="noopener noreferrer" className="video-link">
+              Watch Guided Meditation
+            </a>
+          </div>
+        )}
+
+        <div className="challenge-instructions">
+          {challenge.instructions.map((instruction, index) => (
+            <p key={index} dangerouslySetInnerHTML={{ __html: replacePlaceholder(instruction) }} />
+          ))}
+        </div>
+      </div>
     )
-
-    if (!confirmed) return
-
-    try {
-      // Archive current challenge by setting status to 'completed'
-      await supabase
-        .from('challenge_progress')
-        .update({ status: 'completed' })
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-
-      // Show project selector to start new challenge with project selection
-      setShowProjectSelector(true)
-      setProgress(null) // Clear current progress to allow fresh start
-    } catch (error) {
-      console.error('Error restarting challenge:', error)
-      alert('Error starting new challenge. Please try again.')
-    }
   }
 
-  const startChallenge = async (groupId = null) => {
-    try {
-      // First, abandon any active challenges for this user
-      await supabase.rpc('abandon_active_challenges', { p_user_id: user.id })
-
-      // Get session_id from lead_flow_profiles (use ilike for case-insensitive email matching)
-      const { data: profileData } = await supabase
-        .from('lead_flow_profiles')
-        .select('session_id')
-        .ilike('email', user.email)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single()
-
-      const sessionId = profileData?.session_id || `session_${Date.now()}`
-
-      // Get user's current persona and stage
-      let userPersona = stageProgress?.persona
-      let userStage = stageProgress?.current_stage
-
-      // If not in state, fetch from database
-      if (!userPersona || !userStage) {
-        const { data: currentStageProgress } = await supabase
-          .from('user_stage_progress')
-          .select('persona, current_stage')
-          .eq('user_id', user.id)
-          .maybeSingle()
-
-        userPersona = currentStageProgress?.persona || 'vibe_seeker'
-        userStage = currentStageProgress?.current_stage || 'clarity'
-      }
-
-      // Generate new challenge instance ID
-      const challengeInstanceId = crypto.randomUUID()
-
-      const insertData = {
-        user_id: user.id,
-        session_id: sessionId,
-        challenge_instance_id: challengeInstanceId,
-        current_day: 0,
-        status: 'active',
-        challenge_start_date: new Date().toISOString(),
-        last_active_date: new Date().toISOString(),
-        persona: userPersona,
-        current_stage: userStage
-      }
-
-      if (groupId) {
-        insertData.group_id = groupId
-      }
-
-      const { data, error } = await supabase
-        .from('challenge_progress')
-        .insert([insertData])
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Error starting challenge:', error)
-        alert('Error starting challenge. Please try again.')
-        return
-      }
-
-      setProgress(data)
-      setShowOnboarding(false)
-    } catch (error) {
-      console.error('Error in startChallenge:', error)
-      alert('Error starting challenge. Please try again.')
-    }
-  }
-
-  const loadLeaderboard = async () => {
-    try {
-      if (!user) return
-
-      // Build the query for challenge_progress
-      let challengeQuery = supabase
-        .from('challenge_progress')
-        .select('*')
-        .eq('status', 'active')  // Only show active challenges
-        .order('total_points', { ascending: false })
-
-      // If user has a group, filter by group members
-      if (progress && progress.group_id) {
-        challengeQuery = challengeQuery.eq('group_id', progress.group_id)
-      } else if (leaderboardView === 'weekly' && progress) {
-        // Filter by weekly cohort if in weekly view (for non-group users)
-        const startDate = new Date(progress.challenge_start_date)
-        const weekStart = new Date(startDate)
-        weekStart.setDate(weekStart.getDate() - ((startDate.getDay() + 6) % 7)) // Start of week (Monday)
-        const weekEnd = new Date(weekStart)
-        weekEnd.setDate(weekEnd.getDate() + 7)
-
-        challengeQuery = challengeQuery
-          .gte('challenge_start_date', weekStart.toISOString())
-          .lt('challenge_start_date', weekEnd.toISOString())
-      }
-
-      const { data: challengeData, error: challengeError } = await challengeQuery
-
-      if (challengeError) {
-        console.error('Error loading leaderboard:', challengeError)
-        return
-      }
-
-      if (!challengeData || challengeData.length === 0) {
-        setLeaderboard([])
-        setUserRank(null)
-        return
-      }
-
-      // Get all session_ids to fetch profiles
-      const sessionIds = challengeData.map(entry => entry.session_id).filter(Boolean)
-
-      // Fetch user names from lead_flow_profiles
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('lead_flow_profiles')
-        .select('session_id, user_name, email')
-        .in('session_id', sessionIds)
-
-      if (profilesError) {
-        console.error('Error loading profiles:', profilesError)
-      }
-
-      // Create a map of session_id to user_name
-      const profileMap = {}
-      if (profilesData) {
-        profilesData.forEach(profile => {
-          profileMap[profile.session_id] = profile.user_name
-        })
-      }
-
-      // Process leaderboard data
-      const leaderboardData = challengeData.map((entry, index) => {
-        const userName = profileMap[entry.session_id] || 'Anonymous'
-        const firstName = userName.split(' ')[0] // First name only
-
-        return {
-          rank: index + 1,
-          userId: entry.user_id,
-          name: firstName,
-          totalPoints: entry.total_points || 0,
-          currentDay: entry.current_day,
-          isCurrentUser: entry.user_id === user.id
-        }
-      })
-
-      setLeaderboard(leaderboardData)
-
-      // Set current user's rank
-      const userEntry = leaderboardData.find(entry => entry.isCurrentUser)
-      setUserRank(userEntry?.rank || null)
-
-    } catch (error) {
-      console.error('Error in loadLeaderboard:', error)
-    }
-  }
-
-  const isQuestCompletedToday = (questId, quest) => {
-    const today = new Date().setHours(0, 0, 0, 0)
-
-    if (quest.type === 'daily') {
-      return completions.some(c => {
-        const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
-        return c.quest_id === questId && completedDate === today
-      })
-    } else {
-      // Weekly and anytime quests
-      const questCompletions = completions.filter(c => c.quest_id === questId)
-
-      if (quest.maxCompletions) {
-        return questCompletions.length >= quest.maxCompletions
-      }
-
-      if (quest.maxPerDay) {
-        const todayCompletions = questCompletions.filter(c => {
-          const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
-          return completedDate === today
-        })
-        return todayCompletions.length >= quest.maxPerDay
-      }
-
-      return questCompletions.length > 0
-    }
-  }
-
-  // Check if a quest has ever been completed (used for sequential unlocking)
-  const isQuestEverCompleted = (questId) => {
-    return completions.some(c => c.quest_id === questId)
-  }
-
-  // Check if a quest is locked due to requires_quest not being completed
-  const isQuestLocked = (quest) => {
-    if (!quest.requires_quest) return false
-    return !isQuestEverCompleted(quest.requires_quest)
-  }
-
-  // Get the name of the required quest for display
-  const getRequiredQuestName = (questId) => {
-    const quest = challengeData?.quests?.find(q => q.id === questId)
-    return quest?.name || questId
-  }
-
-  const toggleLearnMore = (questId) => {
-    setExpandedLearnMore(prev => ({
-      ...prev,
-      [questId]: !prev[questId]
-    }))
-  }
-
+  // Main quest completion handler
   const handleQuestComplete = async (quest, specialData = null, event = null) => {
     const inputValue = specialData || questInputs[quest.id]
 
@@ -891,7 +206,6 @@ function Challenge() {
       return
     }
 
-    // Groan quests require special groan reflection data
     if (quest.type === 'groan' && !specialData) {
       alert('Please complete the groan reflection form.')
       return
@@ -902,7 +216,6 @@ function Challenge() {
       return
     }
 
-    // Sanitize reflection text for text and dropdown inputs
     const sanitizedReflection = ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue)
       ? sanitizeText(inputValue)
       : null
@@ -915,8 +228,8 @@ function Challenge() {
           progress.challenge_instance_id,
           specialData,
           stageProgress,
-          quest, // Pass quest to check for milestone_type and milestone_count
-          selectedProject?.id // Pass project_id
+          quest,
+          selectedProject?.id
         )
 
         if (!result.success) {
@@ -924,7 +237,6 @@ function Challenge() {
           return
         }
 
-        // Reload stage progress to update conversation count
         await loadStageProgress()
       }
 
@@ -934,7 +246,7 @@ function Challenge() {
           specialData,
           stageProgress,
           userData?.persona,
-          selectedProject?.id // Pass project_id
+          selectedProject?.id
         )
 
         if (!result.success) {
@@ -946,7 +258,6 @@ function Challenge() {
           return
         }
 
-        // Reload stage progress
         await loadStageProgress()
       }
 
@@ -962,15 +273,10 @@ function Challenge() {
           alert(`Error logging flow: ${result.error}`)
           return
         }
-
-        console.log('✅ Flow entry logged from quest:', result.entryId)
       }
 
-      // Handle groan type quests - save reflection data
-      // Note: We save groan reflection BEFORE creating quest completion so we can link them
-      let groanReflectionId = null
+      // Handle groan type quests
       if (quest.type === 'groan' && specialData) {
-        // Add groan_task from specialData as reflection_text
         const groanReflectionData = {
           ...specialData,
           project_id: selectedProject?.id || null,
@@ -982,7 +288,7 @@ function Challenge() {
         const result = await handleGroanReflectionCompletion(
           user.id,
           groanReflectionData,
-          null // Quest completion ID will be updated after
+          null
         )
 
         if (!result.success) {
@@ -990,10 +296,6 @@ function Challenge() {
           return
         }
 
-        groanReflectionId = result.reflectionId
-        console.log('✅ Groan reflection saved:', groanReflectionId)
-
-        // Also create milestone if quest has milestone_type
         if (quest.milestone_type) {
           const milestoneData = {
             milestone_type: quest.milestone_type,
@@ -1014,7 +316,7 @@ function Challenge() {
         }
       }
 
-      // Handle checkbox quests that have a milestone_type (Bug Fix: save milestone for checkbox inputs)
+      // Handle checkbox quests with milestone_type
       if (quest.inputType === 'checkbox' && quest.milestone_type) {
         const milestoneData = {
           milestone_type: quest.milestone_type,
@@ -1026,7 +328,7 @@ function Challenge() {
           milestoneData,
           stageProgress,
           userData?.persona,
-          selectedProject?.id // Pass project_id
+          selectedProject?.id
         )
 
         if (!result.success) {
@@ -1039,11 +341,10 @@ function Challenge() {
           }
         }
 
-        // Reload stage progress
         await loadStageProgress()
       }
 
-      // Handle text quests that have a milestone_type (e.g., groan_challenge)
+      // Handle text quests with milestone_type
       if (quest.inputType === 'text' && quest.milestone_type) {
         const milestoneData = {
           milestone_type: quest.milestone_type,
@@ -1055,7 +356,7 @@ function Challenge() {
           milestoneData,
           stageProgress,
           userData?.persona,
-          selectedProject?.id // Pass project_id
+          selectedProject?.id
         )
 
         if (!result.success) {
@@ -1068,7 +369,6 @@ function Challenge() {
           }
         }
 
-        // Reload stage progress
         await loadStageProgress()
       }
 
@@ -1085,19 +385,15 @@ function Challenge() {
         stage: quest.stage_required || null
       }
 
-      // Add reflection_text for text/dropdown inputs, or structured data for special types
       if (quest.inputType === 'text' || quest.inputType === 'dropdown') {
         completionData.reflection_text = sanitizedReflection
       } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone' || quest.inputType === 'flow_compass') {
         completionData.reflection_text = JSON.stringify(specialData)
       } else if (quest.type === 'groan' && specialData) {
-        // For groan quests, store the groan task as reflection text
         completionData.reflection_text = specialData.groan_task || JSON.stringify(specialData)
       }
 
       // Check for duplicate completions
-      // For milestone quests, check if EVER completed (one-time only)
-      // For regular quests, check if completed TODAY (daily limit)
       const todayDate = new Date().toISOString().split('T')[0]
       let duplicateQuery = supabase
         .from('quest_completions')
@@ -1106,7 +402,6 @@ function Challenge() {
         .eq('challenge_instance_id', progress.challenge_instance_id)
         .eq('quest_id', quest.id)
 
-      // Milestone quests can only be completed once ever
       if (!quest.milestone_type) {
         duplicateQuery = duplicateQuery
           .gte('completed_at', `${todayDate}T00:00:00.000Z`)
@@ -1133,28 +428,21 @@ function Challenge() {
         return
       }
 
-      // Update streak
       await handleStreakUpdate(user.id, progress.challenge_instance_id)
 
       // Calculate new points
-      // R-type is now in quest.type (Recognise, Release, Rewire, Reconnect)
-      // Frequency is in quest.frequency (daily, weekly, anytime)
       const rType = quest.type?.toLowerCase()
       const frequencyKey = quest.frequency === 'weekly' ? 'weekly' : 'daily'
-
-      // Only these R-types have dedicated points columns in challenge_progress
       const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
       const hasPointsColumn = rTypesWithColumns.includes(rType)
 
       const newTotalPoints = (progress.total_points || 0) + quest.points
 
-      // Update progress
       const updateData = {
         total_points: newTotalPoints,
         last_active_date: new Date().toISOString()
       }
 
-      // Add R-type-specific points for Recognise/Release/Rewire/Reconnect quests
       if (hasPointsColumn) {
         const pointsField = `${rType}_${frequencyKey}_points`
         updateData[pointsField] = (progress[pointsField] || 0) + quest.points
@@ -1189,7 +477,6 @@ function Challenge() {
         if (projectError) {
           console.error('Error updating project points:', projectError)
         } else {
-          // Update local state
           setSelectedProject(prev => ({
             ...prev,
             total_points: (prev?.total_points || 0) + quest.points
@@ -1197,7 +484,7 @@ function Challenge() {
         }
       }
 
-      // Reload completions for this challenge instance
+      // Reload completions
       const { data: newCompletions } = await supabase
         .from('quest_completions')
         .select('*')
@@ -1205,32 +492,26 @@ function Challenge() {
         .eq('challenge_instance_id', progress.challenge_instance_id)
 
       setCompletions(newCompletions || [])
-
-      // Clear input
       setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
 
       // Check for artifact unlock
       const categoryArtifact = challengeData?.artifacts?.find(a => a.category === quest.category)
       const artifactUnlocked = categoryArtifact && checkArtifactUnlock(quest.category, newTotalPoints, frequencyKey)
 
-      // Show success message
-      let successMessage = `✅ Quest complete! +${quest.points} points`
+      let successMessage = `Quest complete! +${quest.points} points`
 
       if (quest.counts_toward_graduation) {
-        successMessage += '\n✨ Progress toward graduation!'
+        successMessage += '\nProgress toward graduation!'
       }
 
       if (artifactUnlocked && categoryArtifact) {
-        successMessage = `🎉 Quest complete! +${quest.points} points\n\n✨ You unlocked the ${categoryArtifact.name}!`
+        successMessage = `Quest complete! +${quest.points} points\n\nYou unlocked the ${categoryArtifact.name}!`
       }
 
-      // Trigger confetti celebration
       triggerConfetti(event)
-
       alert(successMessage)
 
-      // Check for tab completion bonus (after showing quest complete message)
-      // We need to recalculate with the new completions
+      // Check for tab completion bonus
       setTimeout(async () => {
         const tabStatus = getTabCompletionStatus(quest.category)
         if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
@@ -1238,8 +519,7 @@ function Challenge() {
         }
       }, 500)
 
-      // Check for project graduation (after quest completion)
-      // Only check if a project is selected
+      // Check for project graduation
       if (selectedProject?.id && progress?.challenge_instance_id) {
         try {
           const graduationResult = await checkAndGraduateProject(
@@ -1249,14 +529,12 @@ function Challenge() {
           )
 
           if (graduationResult.graduated) {
-            // Show celebration and update local state
             const celebration = graduationResult.celebration_message
             setTimeout(() => {
               alert(`${celebration.title}\n\n${celebration.message}\n\n${celebration.next_step}`)
               triggerConfetti()
             }, 600)
 
-            // Update selected project's current stage
             setSelectedProject(prev => ({
               ...prev,
               current_stage: graduationResult.new_stage
@@ -1266,7 +544,6 @@ function Challenge() {
           }
         } catch (gradError) {
           console.error('Error checking graduation:', gradError)
-          // Don't block the quest completion on graduation check failure
         }
       }
     } catch (error) {
@@ -1275,624 +552,81 @@ function Challenge() {
     }
   }
 
-  const checkArtifactUnlock = (category, newPoints, frequencyKey) => {
-    if (!challengeData) return false
-
-    const artifact = challengeData.artifacts.find(a => a.category === category)
-    if (!artifact) return false
-
-    // For artifacts with rCategories (Groans, Healing), check if total meets requirement
-    if (artifact.rCategories && artifact.totalRequired) {
-      // Sum up all points from completions in this category
-      const categoryCompletions = completions.filter(c => c.quest_category === category)
-      const totalCategoryPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-      return totalCategoryPoints + (frequencyKey ? newPoints : 0) >= artifact.totalRequired
-    }
-
-    // For simple artifacts (Flow Finder, Tracker), check single pointsRequired
-    if (artifact.pointsRequired) {
-      const categoryCompletions = completions.filter(c => c.quest_category === category)
-      const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-      return currentPoints + newPoints >= artifact.pointsRequired
-    }
-
-    return false
-  }
-
-  // Helper to get valid quest IDs for current persona/stage
-  const getValidQuestIds = (category) => {
-    if (!challengeData?.quests) return []
-
-    // normalizePersona imported from './data/personaProfiles'
-    const userPersonaNormalized = normalizePersona(userData?.persona)
-
-    return challengeData.quests
-      .filter(quest => {
-        // Must match category
-        if (quest.category !== category) return false
-
-        // Filter by persona
-        if (quest.persona_specific && userPersonaNormalized) {
-          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-          if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-            return false
-          }
-        }
-
-        // Filter by stage (numeric comparison)
-        if (quest.stage_required) {
-          // Get current stage as number - use project stage if available, otherwise convert legacy stage
-          const currentStageNum = selectedProject?.current_stage ||
-            (typeof stageProgress?.current_stage === 'number'
-              ? stageProgress.current_stage
-              : convertLegacyStage(stageProgress?.current_stage))
-
-          // Quest stage is now numeric (1-6)
-          if (quest.stage_required !== currentStageNum) {
-            return false
-          }
-        }
-
-        return true
-      })
-      .map(q => q.id)
-  }
-
-  const getCategoryPoints = (category) => {
-    if (!progress) return { daily: 0, weekly: 0, total: 0 }
-
-    // Categories that have dedicated columns in challenge_progress table
-    const categoriesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
-    const categoryLower = category.toLowerCase()
-
-    if (categoriesWithColumns.includes(categoryLower)) {
-      // Use database columns for these categories
-      const daily = progress[`${categoryLower}_daily_points`] || 0
-      const weekly = progress[`${categoryLower}_weekly_points`] || 0
-      return { daily, weekly, total: daily + weekly }
-    }
-
-    // Get valid quest IDs for current persona/stage
-    const validQuestIds = getValidQuestIds(category)
-
-    // Filter completions to only include valid quests for current persona/stage
-    const categoryCompletions = completions.filter(c =>
-      c.quest_category === category && validQuestIds.includes(c.quest_id)
-    )
-    const total = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-
-    // For Groans/Healing categories, also break down by frequency
-    // Look up frequency from quest definition since it's not stored in completions
-    if (category === 'Groans' || category === 'Healing') {
-      const getQuestFrequency = (questId) => {
-        const quest = challengeData?.quests?.find(q => q.id === questId)
-        return quest?.frequency || 'daily'
-      }
-      const dailyPoints = categoryCompletions
-        .filter(c => getQuestFrequency(c.quest_id) === 'daily')
-        .reduce((sum, c) => sum + (c.points_earned || 0), 0)
-      const weeklyPoints = categoryCompletions
-        .filter(c => getQuestFrequency(c.quest_id) === 'weekly')
-        .reduce((sum, c) => sum + (c.points_earned || 0), 0)
-      return { daily: dailyPoints, weekly: weeklyPoints, total }
-    }
-
-    return { daily: 0, weekly: 0, total }
-  }
-
-  // Calculate which stages are completed (all required quests for that stage done)
-  const getCompletedStages = () => {
-    if (!challengeData?.quests || !completions || completions.length === 0) return []
-
-    const completedStages = []
-
-    // Check stages 1-6
-    for (let stageNum = 1; stageNum <= 6; stageNum++) {
-      // Get all quests that require this stage
-      const stageQuests = challengeData.quests.filter(q => q.stage_required === stageNum)
-
-      if (stageQuests.length === 0) continue // No quests for this stage
-
-      // Check if all stage quests are completed (for current persona)
-      const userPersonaNormalized = normalizePersona(userData?.persona)
-      const relevantQuests = stageQuests.filter(quest => {
-        // If quest has persona_specific, check if user matches
-        if (quest.persona_specific && userPersonaNormalized) {
-          const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-          return normalizedQuestPersonas.includes(userPersonaNormalized)
-        }
-        return true
-      })
-
-      if (relevantQuests.length === 0) continue
-
-      // Check if all relevant quests are completed
-      const allCompleted = relevantQuests.every(quest =>
-        completions.some(c => c.quest_id === quest.id)
-      )
-
-      if (allCompleted) {
-        completedStages.push(stageNum)
-      }
-    }
-
-    return completedStages
-  }
-
-  const getPointsToday = (category) => {
-    if (!completions || completions.length === 0) return 0
-
-    const today = new Date().setHours(0, 0, 0, 0)
-
-    // Get valid quest IDs for current persona/stage
-    const validQuestIds = getValidQuestIds(category)
-
-    // Filter completions for this category that were completed today, only for valid quests
-    const todayCompletions = completions.filter(c => {
-      const completionDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
-      return c.quest_category === category &&
-        completionDate === today &&
-        validQuestIds.includes(c.quest_id)
-    })
-
-    // Sum up the points
-    return todayCompletions.reduce((sum, completion) => sum + (completion.points_earned || 0), 0)
-  }
-
-  // Tab Completion Bonus System
-  const BONUS_PERCENTAGE = 5 // 5% bonus for completing all quests in a tab
-
-  const getTabCompletionStatus = (category) => {
-    if (!challengeData || !completions) {
-      return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
-    }
-
-    // Get valid quest IDs for current persona/stage (applies to all categories)
-    const validQuestIds = getValidQuestIds(category)
-
-    // Get quests that are valid for this persona/stage
-    const categoryQuests = challengeData.quests.filter(q => validQuestIds.includes(q.id))
-
-    const totalQuests = categoryQuests.length
-    if (totalQuests === 0) {
-      return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
-    }
-
-    // Count completed quests (any completion, not just today)
-    const completedQuestIds = new Set(completions.map(c => c.quest_id))
-    const completedQuests = categoryQuests.filter(q => completedQuestIds.has(q.id)).length
-
-    // Calculate total possible points for this category
-    const totalPossiblePoints = categoryQuests.reduce((sum, q) => sum + (q.points || 0), 0)
-
-    // Calculate bonus points (15% of total category points)
-    const bonusPoints = Math.round(totalPossiblePoints * (BONUS_PERCENTAGE / 100))
-
-    const isComplete = completedQuests >= totalQuests
-    const percentage = Math.round((completedQuests / totalQuests) * 100)
-
-    // Check if bonus was already awarded (stored in progress)
-    const bonusKey = `${category.toLowerCase().replace(/\s+/g, '_')}_bonus_awarded`
-    const bonusAwarded = progress?.[bonusKey] || false
-
-    return {
-      totalQuests,
-      completedQuests,
-      isComplete,
-      bonusPoints,
-      bonusAwarded,
-      percentage,
-      bonusPercentage: BONUS_PERCENTAGE
-    }
-  }
-
-  // Award tab completion bonus
-  const awardTabCompletionBonus = async (category, bonusPoints) => {
-    if (!progress || !user) return
-
-    const bonusKey = `${category.toLowerCase().replace(/\s+/g, '_')}_bonus_awarded`
-
-    // Check if already awarded
-    if (progress[bonusKey]) return
-
-    try {
-      const newTotalPoints = (progress.total_points || 0) + bonusPoints
-
-      const updateData = {
-        total_points: newTotalPoints,
-        [bonusKey]: true,
-        last_active_date: new Date().toISOString()
-      }
-
-      const { data: updatedProgress, error } = await supabase
-        .from('challenge_progress')
-        .update(updateData)
-        .eq('user_id', user.id)
-        .eq('challenge_instance_id', progress.challenge_instance_id)
-        .eq('status', 'active')
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Error awarding tab bonus:', error)
-        return
-      }
-
-      setProgress(updatedProgress)
-
-      // Show celebration message
-      alert(`🎉 Tab Complete! +${bonusPoints} bonus points (${BONUS_PERCENTAGE}% boost)\n\nYou've completed all quests in ${category}!`)
-    } catch (error) {
-      console.error('Error in awardTabCompletionBonus:', error)
-    }
-  }
-
-  const getArtifactProgress = (category) => {
-    if (!challengeData) return null
-
-    const artifact = challengeData.artifacts.find(a => a.category === category)
-    if (!artifact) return null
-
-    const unlocked = progress?.[`${artifact.id}_unlocked`] || false
-
-    // Get valid quest IDs for current persona/stage
-    const validQuestIds = getValidQuestIds(category)
-
-    // For Groans and Healing artifacts with R categories
-    if ((category === 'Groans' || category === 'Healing') && artifact.rCategories) {
-      const rCategoriesWithProgress = {}
-
-      // Calculate points for each R category, filtered by persona/stage
-      Object.entries(artifact.rCategories).forEach(([rType, rData]) => {
-        // Get completions for this category and R type, only for valid quests
-        const rCompletions = completions.filter(c =>
-          c.quest_category === category &&
-          c.quest_type === rType &&
-          validQuestIds.includes(c.quest_id)
-        )
-        const currentPoints = rCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-
-        rCategoriesWithProgress[rType] = {
-          ...rData,
-          currentPoints
-        }
-      })
-
-      return {
-        ...artifact,
-        rCategories: rCategoriesWithProgress,
-        unlocked
-      }
-    }
-
-    // For Flow Finder: Calculate pointsRequired dynamically based on filtered quests (100% completion)
-    if (category === 'Flow Finder') {
-      // Get filtered quests using validQuestIds
-      const flowFinderQuests = challengeData.quests.filter(q => validQuestIds.includes(q.id))
-
-      // Calculate total possible points from filtered quests (100% completion)
-      const dynamicPointsRequired = flowFinderQuests.reduce((sum, q) => sum + (q.points || 0), 0)
-
-      // Filter completions to only include valid quests for current persona/stage
-      const categoryCompletions = completions.filter(c =>
-        c.quest_category === category && validQuestIds.includes(c.quest_id)
-      )
-      const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-
-      return {
-        ...artifact,
-        currentPoints,
-        pointsRequired: dynamicPointsRequired || artifact.pointsRequired, // Use dynamic or fallback to JSON value
-        unlocked
-      }
-    }
-
-    // For Tracker and Bonus artifacts - filter by valid quests
-    const categoryCompletions = completions.filter(c =>
-      c.quest_category === category && validQuestIds.includes(c.quest_id)
-    )
-    const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
-
-    return {
-      ...artifact,
-      currentPoints,
-      unlocked
-    }
-  }
-
-  const getArtifactEmoji = (category) => {
-    const emojiMap = {
-      'Recognise': '🗺️',
-      'Release': '⚓',
-      'Rewire': '🧢',
-      'Reconnect': '⛵'
-    }
-    return emojiMap[category] || '✨'
-  }
-
-  // Get the daily release challenge for the current day
-  const getDailyReleaseChallenge = () => {
-    if (!dailyReleaseChallenges || !progress) return null
-
-    const currentDay = progress.current_day
-    if (currentDay === 0 || currentDay > 7) return null
-
-    return dailyReleaseChallenges[currentDay.toString()]
-  }
-
-  // Render the daily release challenge content
-  const renderDailyReleaseChallenge = () => {
-    const challenge = getDailyReleaseChallenge()
-    if (!challenge) return null
-
-    // Replace {{past_event_details}} with actual data from healing compass
-    const replacePlaceholder = (text) => {
-      if (!text) return text
-      const storyText = pastParallelStory || 'the past event from your Healing Compass'
-      return text.replace(/\{\{past_event_details\}\}/g, storyText)
-    }
-
-    return (
-      <div className="daily-release-challenge">
-        <h4>{challenge.title}</h4>
-        <p className="challenge-description">{challenge.description}</p>
-
-        {challenge.videoUrl && (
-          <div className="challenge-video">
-            <a href={challenge.videoUrl} target="_blank" rel="noopener noreferrer" className="video-link">
-              📺 Watch Guided Meditation
-            </a>
-          </div>
-        )}
-
-        <div className="challenge-instructions">
-          {challenge.instructions.map((instruction, index) => (
-            <p key={index} dangerouslySetInnerHTML={{ __html: replacePlaceholder(instruction) }} />
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  const getDailyStreak = (questId) => {
-    if (!progress) return [false, false, false, false, false, false, false]
-
-    const challengeStart = new Date(progress.challenge_start_date)
-    challengeStart.setHours(0, 0, 0, 0)
-
-    // Get all completions for this quest
-    const questCompletions = completions.filter(c => c.quest_id === questId)
-
-    // Create array for 7 days [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
-    const streak = [false, false, false, false, false, false, false]
-
-    questCompletions.forEach(completion => {
-      const completionDate = new Date(completion.completed_at)
-      completionDate.setHours(0, 0, 0, 0)
-
-      // Calculate which day of the challenge this was (0-6)
-      const daysSinceStart = Math.floor((completionDate - challengeStart) / (1000 * 60 * 60 * 24))
-
-      if (daysSinceStart >= 0 && daysSinceStart < 7) {
-        streak[daysSinceStart] = true
-      }
-    })
-
-    return streak
-  }
-
-  const getDayLabels = () => {
-    if (!progress) return ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-
-    const challengeStart = new Date(progress.challenge_start_date)
-    const dayOfWeek = challengeStart.getDay() // 0 = Sunday, 1 = Monday, etc.
-    const allDayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] // Sunday to Saturday
-
-    // Create array starting from the challenge start day
-    const labels = []
-    for (let i = 0; i < 7; i++) {
-      labels.push(allDayLabels[(dayOfWeek + i) % 7])
-    }
-
-    return labels
-  }
-
   // Filter quests by the active category tab
-  let filteredQuests = challengeData?.quests.filter(q => q.category === activeCategory) || []
+  let filteredQuests = challengeData?.quests?.filter(q => q.category === activeCategory) || []
 
   // Filter by persona and stage for Flow Finder quests
   if (activeCategory === 'Flow Finder') {
-    // normalizePersona imported from './data/personaProfiles'
     const userPersonaNormalized = normalizePersona(userData?.persona)
 
-    console.log('🔍 Flow Finder Filtering Debug:', {
-      totalQuests: filteredQuests.length,
-      userPersona: userData?.persona,
-      userPersonaNormalized,
-      userStage: stageProgress?.current_stage,
-      hasUserData: !!userData,
-      hasStageProgress: !!stageProgress
-    })
-
     filteredQuests = filteredQuests.filter(quest => {
-      // Filter by persona
       if (quest.persona_specific && userPersonaNormalized) {
         const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
         if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-          console.log(`❌ Filtered out: ${quest.name} (persona mismatch: ${quest.persona_specific} vs ${userData.persona})`)
           return false
         }
       }
 
-      // Filter by stage (numeric comparison)
-      // Use activeStageTab for filtering when viewing (allows browsing different stages)
       if (quest.stage_required) {
-        // If user is viewing a specific stage tab, filter to that stage
         const viewingStage = activeStageTab || selectedProject?.current_stage ||
           (typeof stageProgress?.current_stage === 'number'
             ? stageProgress.current_stage
             : convertLegacyStage(stageProgress?.current_stage))
 
         if (quest.stage_required !== viewingStage) {
-          console.log(`❌ Filtered out: ${quest.name} (stage mismatch: ${quest.stage_required} vs ${viewingStage})`)
           return false
         }
       }
 
-      console.log(`✅ Keeping: ${quest.name}`)
       return true
     })
-
-    console.log('✅ Final Flow Finder quests:', filteredQuests.length, 'for stage', activeStageTab)
   }
 
   // Apply R-type and frequency filters for Groans and Healing tabs
   let displayQuests = filteredQuests
   if (activeCategory === 'Groans' || activeCategory === 'Healing') {
-    // Filter by R-type (Recognise, Rewire, Reconnect for Groans; Recognise, Release for Healing)
     if (activeRTypeFilter !== 'All') {
       displayQuests = displayQuests.filter(q => q.type === activeRTypeFilter)
     }
-    // Filter by frequency (daily, weekly, anytime)
     if (activeFrequencyFilter !== 'all') {
       displayQuests = displayQuests.filter(q => q.frequency === activeFrequencyFilter)
     }
   }
 
-  // For Groans and Healing tabs, group quests by type (the R's)
-  // For Flow Finder, quests are already in the right category
-  // For Bonus and Tracker, show all quests in that category
-  const questsByType = {}
-  if (activeCategory === 'Groans') {
-    // Group by the R's framework (no Release in Groans)
-    const rTypes = ['Recognise', 'Rewire', 'Reconnect', 'challenge']
-    rTypes.forEach(type => {
-      questsByType[type] = displayQuests.filter(q => q.type === type)
-    })
-  } else if (activeCategory === 'Healing') {
-    // Group by Release and Recognise
-    const rTypes = ['Recognise', 'Release']
-    rTypes.forEach(type => {
-      questsByType[type] = displayQuests.filter(q => q.type === type)
-    })
-  } else if (activeCategory === 'Flow Finder') {
-    // Group by persona or show all
-    questsByType['all'] = displayQuests
-  } else if (activeCategory === 'Bonus' || activeCategory === 'Tracker') {
-    questsByType['all'] = displayQuests
-  }
-
-  // For rendering - use displayQuests which has filters applied
-  const groansQuests = activeCategory === 'Groans' ? displayQuests : []
-  const healingQuests = activeCategory === 'Healing' ? displayQuests : []
-  const bonusQuests = activeCategory === 'Bonus' ? displayQuests : []
+  // ============================================
+  // Render: Onboarding
+  // ============================================
 
   if (showOnboarding) {
     return (
-      <div className="challenge-container">
-        <div className="challenge-onboarding">
-          <div className="onboarding-content">
-            <h1>🚀 Ready to Find Your Flow?</h1>
-            <p className="onboarding-intro">
-            You got the job. Made some money. Experienced the ladder.
-            </p>
-            <p className="onboarding-intro">
-            But somewhere along the way, you realised: This isn't it.
-            </p>
-            <p className="onboarding-intro">
-            You had your awakening...Now what?
-            </p>
-            <p className="onboarding-intro">
-              You know there's something more— you've felt it.
-            </p>
-            <p className="onboarding-intro">
-              Moments of aliveness. Impact. Flow.
-            </p>
-            <p className="onboarding-intro">
-              But you don't know how to get from where you are to where you sense you could be.
-            </p>
-            <p className="onboarding-intro">
-              That's what Find My Flow is for.
-            </p>
-            <p className="onboarding-intro">
-              Over the next 7 days you'll complete quests across four categories to help you re-find your flow and amplify your impact:
-            </p>
-
-            <div className="onboarding-categories">
-              <div className="onboarding-category">
-                <h3>🔍 Recognise</h3>
-                <p>Build awareness of what's blocking your flow and what your flow is</p>
-              </div>
-              <div className="onboarding-category">
-                <h3>🕊️ Release</h3>
-                <p>Let go of traumas blocking your flow</p>
-              </div>
-              <div className="onboarding-category">
-                <h3>⚡ Rewire</h3>
-                <p>Act in alignment with your flow</p>
-              </div>
-              <div className="onboarding-category">
-                <h3>🌊 Reconnect</h3>
-                <p>Live from your essence and find your flow</p>
-              </div>
-            </div>
-
-            <button className="start-challenge-btn" onClick={showGroupSelectionModal}>
-              Start My 7-Day Journey
-            </button>
-          </div>
-        </div>
-      </div>
+      <ChallengeOnboarding
+        screen="welcome"
+        onStartChallenge={showGroupSelectionModal}
+      />
     )
   }
+
+  // ============================================
+  // Render: Group Selection
+  // ============================================
 
   if (showGroupSelection) {
     return (
-      <div className="challenge-container">
-        <div className="challenge-onboarding">
-          <div className="onboarding-content">
-            <h1>🎯 Choose Your Challenge Mode</h1>
-            <p className="onboarding-intro">
-              Play solo or create/join a group to compete with friends and family!
-            </p>
-
-            <div className="group-selection-buttons">
-              <button className="group-mode-btn solo" onClick={handlePlaySolo}>
-                <div className="mode-icon">🎯</div>
-                <h3>Play Solo</h3>
-                <p>Complete the challenge on your own</p>
-              </button>
-
-              <button className="group-mode-btn create" onClick={handleCreateGroup}>
-                <div className="mode-icon">👥</div>
-                <h3>Create Group</h3>
-                <p>Start a new group and invite others</p>
-              </button>
-
-              <div className="group-mode-btn join">
-                <div className="mode-icon">🔗</div>
-                <h3>Join Group</h3>
-                <p>Enter a group code to join</p>
-                <input
-                  type="text"
-                  className="group-code-input"
-                  placeholder="Enter 6-digit code"
-                  value={groupCodeInput}
-                  onChange={(e) => setGroupCodeInput(e.target.value.toUpperCase())}
-                  maxLength={6}
-                />
-                <button className="join-group-btn" onClick={handleJoinGroup}>
-                  Join Group
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ChallengeOnboarding
+        screen="group-selection"
+        onPlaySolo={handlePlaySolo}
+        onCreateGroup={handleCreateGroup}
+        onJoinGroup={handleJoinGroup}
+        groupCodeInput={groupCodeInput}
+        onGroupCodeChange={setGroupCodeInput}
+      />
     )
   }
 
-  // Project selector modal
+  // ============================================
+  // Render: Project Selector
+  // ============================================
+
   if (showProjectSelector) {
     return (
       <div className="challenge-container">
@@ -1906,6 +640,10 @@ function Challenge() {
     )
   }
 
+  // ============================================
+  // Render: Loading
+  // ============================================
+
   if (loading) {
     return (
       <div className="challenge-container">
@@ -1913,6 +651,10 @@ function Challenge() {
       </div>
     )
   }
+
+  // ============================================
+  // Render: Error State
+  // ============================================
 
   if (!progress) {
     return (
@@ -1927,95 +669,26 @@ function Challenge() {
   const categoryPoints = getCategoryPoints(activeCategory)
   const artifactProgress = getArtifactProgress(activeCategory)
 
+  // ============================================
+  // Render: Main Challenge View
+  // ============================================
+
   return (
     <div className="challenge-container">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
       <NotificationPrompt />
-      <header className="challenge-header">
-        <h1>Gamify Your Ambitions</h1>
-
-        <div className="challenge-points">
-          <div className="total-points clickable" onClick={() => setActiveCategory('Leaderboard')}>
-            <span className="points-label">Total Points</span>
-            <span className="points-value">{progress.total_points || 0}</span>
-            {userRank && (
-              <>
-                <span className="points-separator">•</span>
-                <span className="points-label">Your Rank</span>
-                <span className="points-value">#{userRank}</span>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className="challenge-header-top">
-          <div className="challenge-header-badges">
-            <div className="challenge-day">
-              Day {progress.current_day}/7
-              {progress.current_day === 7 && (
-                <span className="challenge-complete-badge">
-                  <span className="complete-text">Complete!</span> 🎉
-                </span>
-              )}
-            </div>
-            {userData?.essence_archetype && (
-              <div
-                className="challenge-day archetype-badge"
-                title="View your archetypes"
-                onClick={() => navigate('/archetypes')}
-                style={{ cursor: 'pointer' }}
-              >
-                ✨ Archetypes
-              </div>
-            )}
-            <div className="settings-menu-container" ref={settingsMenuRef}>
-              <button
-                className="challenge-day settings-badge"
-                title="Settings"
-                onClick={() => setShowSettingsMenu(!showSettingsMenu)}
-              >
-                ⚙️
-              </button>
-              {showSettingsMenu && (
-                <div className="settings-dropdown">
-                  <button
-                    className="settings-menu-item"
-                    onClick={() => {
-                      navigate('/me')
-                      setShowSettingsMenu(false)
-                    }}
-                  >
-                    🏠 Home
-                  </button>
-                  <button
-                    className="settings-menu-item"
-                    onClick={() => {
-                      handleOpenExplainer()
-                      setShowSettingsMenu(false)
-                    }}
-                  >
-                    📖 Explainer
-                  </button>
-                  <button
-                    className="settings-menu-item"
-                    onClick={() => {
-                      navigate('/settings/notifications')
-                      setShowSettingsMenu(false)
-                    }}
-                  >
-                    🔔 Notifications
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        {progress.current_day === 7 && (
-          <button className="restart-challenge-btn" onClick={handleRestartChallenge}>
-            Start New 7-Day Challenge
-          </button>
-        )}
-      </header>
+      <ChallengeHeader
+        progress={progress}
+        userRank={userRank}
+        userData={userData}
+        navigate={navigate}
+        settingsMenuRef={settingsMenuRef}
+        showSettingsMenu={showSettingsMenu}
+        setShowSettingsMenu={setShowSettingsMenu}
+        handleOpenExplainer={handleOpenExplainer}
+        handleRestartChallenge={handleRestartChallenge}
+        onLeaderboardClick={() => setActiveCategory('Leaderboard')}
+      />
 
       <div className="challenge-tabs">
         {categories.map(category => (
@@ -2052,153 +725,25 @@ function Challenge() {
 
       {/* Filter chips for Groans and Healing tabs */}
       {(activeCategory === 'Groans' || activeCategory === 'Healing') && (
-        <div className="quest-filters">
-          {/* Frequency toggle */}
-          <div className="frequency-toggle">
-            <button
-              className={`filter-chip ${activeFrequencyFilter === 'all' ? 'active' : ''}`}
-              onClick={() => setActiveFrequencyFilter('all')}
-            >
-              All
-            </button>
-            <button
-              className={`filter-chip ${activeFrequencyFilter === 'daily' ? 'active' : ''}`}
-              onClick={() => setActiveFrequencyFilter('daily')}
-            >
-              Daily
-            </button>
-            <button
-              className={`filter-chip ${activeFrequencyFilter === 'weekly' ? 'active' : ''}`}
-              onClick={() => setActiveFrequencyFilter('weekly')}
-            >
-              Weekly
-            </button>
-          </div>
-
-          {/* R-type filter chips */}
-          <div className="rtype-filters">
-            <button
-              className={`filter-chip ${activeRTypeFilter === 'All' ? 'active' : ''}`}
-              onClick={() => setActiveRTypeFilter('All')}
-            >
-              All
-            </button>
-            {activeCategory === 'Groans' ? (
-              <>
-                <button
-                  className={`filter-chip ${activeRTypeFilter === 'Recognise' ? 'active' : ''}`}
-                  onClick={() => setActiveRTypeFilter('Recognise')}
-                >
-                  Recognise
-                </button>
-                <button
-                  className={`filter-chip ${activeRTypeFilter === 'Rewire' ? 'active' : ''}`}
-                  onClick={() => setActiveRTypeFilter('Rewire')}
-                >
-                  Rewire
-                </button>
-                <button
-                  className={`filter-chip ${activeRTypeFilter === 'Reconnect' ? 'active' : ''}`}
-                  onClick={() => setActiveRTypeFilter('Reconnect')}
-                >
-                  Reconnect
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className={`filter-chip ${activeRTypeFilter === 'Recognise' ? 'active' : ''}`}
-                  onClick={() => setActiveRTypeFilter('Recognise')}
-                >
-                  Recognise
-                </button>
-                <button
-                  className={`filter-chip ${activeRTypeFilter === 'Release' ? 'active' : ''}`}
-                  onClick={() => setActiveRTypeFilter('Release')}
-                >
-                  Release
-                </button>
-              </>
-            )}
-          </div>
-        </div>
+        <ChallengeFilters
+          activeCategory={activeCategory}
+          activeFrequencyFilter={activeFrequencyFilter}
+          setActiveFrequencyFilter={setActiveFrequencyFilter}
+          activeRTypeFilter={activeRTypeFilter}
+          setActiveRTypeFilter={setActiveRTypeFilter}
+        />
       )}
 
       <div className="challenge-content">
-        {/* Leaderboard - show if activeCategory is Leaderboard even though not in tabs */}
+        {/* Leaderboard */}
         {activeCategory === 'Leaderboard' && (
-          <div className="leaderboard-section">
-            <div className="leaderboard-header">
-              <h2 className="section-title">🏆 Leaderboard</h2>
-              <div className="leaderboard-toggle">
-                <button
-                  className={`toggle-btn ${leaderboardView === 'weekly' ? 'active' : ''}`}
-                  onClick={() => setLeaderboardView('weekly')}
-                >
-                  This Week
-                </button>
-                <button
-                  className={`toggle-btn ${leaderboardView === 'alltime' ? 'active' : ''}`}
-                  onClick={() => setLeaderboardView('alltime')}
-                >
-                  All Time
-                </button>
-              </div>
-            </div>
-
-            {groupCode && progress.current_day === 0 && (
-              <div className="group-code-display">
-                <div className="group-code-info">
-                  Group Code: <strong>{groupCode}</strong>
-                </div>
-                <button
-                  className="whatsapp-share-btn"
-                  onClick={() => {
-                    const message = `Join my 7-Day Find My Flow Challenge! Use code: ${groupCode}`
-                    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
-                    window.open(whatsappUrl, '_blank')
-                  }}
-                >
-                  <svg className="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                  </svg>
-                  Share group code via WhatsApp
-                </button>
-              </div>
-            )}
-
-            <div className="leaderboard-list">
-              {leaderboard.length === 0 && (
-                <div className="leaderboard-empty">
-                  <p>No participants yet. Be the first to complete a quest!</p>
-                </div>
-              )}
-
-              {leaderboard.map((entry) => (
-                <div
-                  key={entry.userId}
-                  className={`leaderboard-entry ${entry.isCurrentUser ? 'current-user' : ''}`}
-                >
-                  <div className="leaderboard-rank">
-                    {entry.rank === 1 && '🥇'}
-                    {entry.rank === 2 && '🥈'}
-                    {entry.rank === 3 && '🥉'}
-                    {entry.rank > 3 && `#${entry.rank}`}
-                  </div>
-                  <div className="leaderboard-info">
-                    <div className="leaderboard-name">
-                      {entry.name}
-                      {entry.isCurrentUser && <span className="you-badge">You</span>}
-                    </div>
-                    <div className="leaderboard-meta">Day {entry.currentDay}/7</div>
-                  </div>
-                  <div className="leaderboard-points">
-                    {entry.totalPoints} pts
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <ChallengeLeaderboard
+            leaderboard={leaderboard}
+            leaderboardView={leaderboardView}
+            setLeaderboardView={setLeaderboardView}
+            groupCode={groupCode}
+            currentDay={progress.current_day}
+          />
         )}
 
         {/* Quest Content - only show if not on Leaderboard tab */}
@@ -2208,13 +753,12 @@ function Challenge() {
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
-              <h3>{artifactProgress.unlocked ? '✅' : '🔒'} {artifactProgress.name}</h3>
+              <h3>{artifactProgress.unlocked ? 'Complete' : 'Locked'} {artifactProgress.name}</h3>
               <p className="artifact-description">{artifactProgress.description}</p>
             </div>
 
             {!artifactProgress.unlocked && (
               <div className="artifact-bars">
-                {/* For Groans and Healing: Show R's sliders */}
                 {(activeCategory === 'Groans' || activeCategory === 'Healing') && artifactProgress.rCategories ? (
                   <>
                     {Object.entries(artifactProgress.rCategories).map(([rType, rData]) => (
@@ -2233,7 +777,6 @@ function Challenge() {
                     ))}
                   </>
                 ) : (
-                  /* For Flow Finder and Tracker: Show simple progress */
                   <div className="progress-bar-container">
                     <div className="progress-bar-label">
                       <span>Progress</span>
@@ -2247,7 +790,6 @@ function Challenge() {
                     </div>
                   </div>
                 )}
-                {/* Tab Completion Bonus Text */}
                 {(() => {
                   const tabStatus = getTabCompletionStatus(activeCategory)
                   if (tabStatus.totalQuests === 0) return null
@@ -2261,7 +803,7 @@ function Challenge() {
 
             {artifactProgress.unlocked && (
               <div className="artifact-unlocked-message">
-                🎉 Artifact Unlocked! You've completed this category.
+                Artifact Unlocked! You've completed this category.
               </div>
             )}
           </div>
@@ -2302,259 +844,44 @@ function Challenge() {
                   <div className="quest-grid">
                     {rTypeQuests.map(quest => {
                       const completed = isQuestCompletedToday(quest.id, quest)
-                      const streak = getDailyStreak(quest.id)
-                      const dayLabels = getDayLabels()
-                      const isDailyQuestLocked = progress.current_day === 0
+                      const isDayZeroLocked = progress.current_day === 0
+                      const isReleaseDailyChallenge = quest.id === 'release_daily_challenge'
 
                       return (
-                        <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''} ${isDailyQuestLocked ? 'locked' : ''}`}>
-                    <div className="quest-header">
-                      <h3 className="quest-name">{quest.name}</h3>
-                      <span className="quest-points">+{quest.points} pts</span>
-                    </div>
-
-                    {/* Daily Streak Bubbles */}
-                    <div className="daily-streak">
-                      {dayLabels.map((label, index) => (
-                        <div
-                          key={index}
-                          className={`streak-bubble ${streak[index] ? 'completed' : ''}`}
-                          title={`Day ${index + 1}`}
-                        >
-                          {label}
-                        </div>
-                      ))}
-                    </div>
-
-                    <p className="quest-description">{renderDescription(quest.description)}</p>
-
-                    {/* Special handling for daily release challenge */}
-                    {quest.id === 'release_daily_challenge' && !completed && !isDailyQuestLocked && getDailyReleaseChallenge() && (
-                      <div className="learn-more-section">
-                        <button
-                          className="learn-more-toggle"
-                          onClick={() => toggleLearnMore(quest.id)}
-                        >
-                          <span>Today's Challenge</span>
-                          <svg
-                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M4 6L8 10L12 6"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                        {expandedLearnMore[quest.id] && (
-                          <div className="learn-more-content">
-                            {renderDailyReleaseChallenge()}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {/* Regular learn more for other quests */}
-                    {quest.id !== 'release_daily_challenge' && quest.learnMore && !completed && !isDailyQuestLocked && (
-                      <div className="learn-more-section">
-                        <button
-                          className="learn-more-toggle"
-                          onClick={() => toggleLearnMore(quest.id)}
-                        >
-                          <span>Learn More</span>
-                          <svg
-                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M4 6L8 10L12 6"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                        {expandedLearnMore[quest.id] && (
-                          <div className="learn-more-content">
-                            {quest.learnMore}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {isDailyQuestLocked && (
-                      <div className="quest-locked-message">
-                        🔒 Unlocked on Day 1 (Tomorrow)
-                      </div>
-                    )}
-
-                    {!completed && !isDailyQuestLocked && (
-                      <div className="quest-input-area">
-                        {quest.status === 'coming_soon' ? (
-                          <button className="quest-flow-btn coming-soon" disabled>
-                            Coming Soon
-                          </button>
-                        ) : quest.id === 'release_daily_challenge' && !healingCompassComplete ? (
-                          <div className="quest-locked-container">
-                            <textarea
-                              className="quest-textarea"
-                              placeholder={quest.placeholder}
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                              rows={3}
-                              disabled
-                            />
-                            <button
-                              className="quest-complete-btn locked"
-                              disabled
-                            >
-                              Complete Healing Compass to Unlock
-                              <span
-                                className="locked-info-icon"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
-                                }}
-                                onTouchEnd={(e) => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
-                                }}
-                              >
-                                ⓘ
-                              </span>
-                            </button>
-                            {showLockedTooltip === quest.id && (
-                              <div className="locked-tooltip">
-                                Complete the "Healing Compass" weekly quest to unlock daily release challenges
-                              </div>
-                            )}
-                          </div>
-                        ) : quest.inputType === 'flow' ? (
-                          <Link to={quest.flow_route} className="quest-flow-btn">
-                            {quest.id === 'recognise_nervous_system'
-                              ? 'Start Mapping My Nervous System →'
-                              : `Start ${quest.name} →`}
-                          </Link>
-                        ) : quest.type === 'groan' ? (
-                          <GroanReflectionInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                            projectId={selectedProject?.id}
-                            challengeInstanceId={progress?.challenge_instance_id}
-                            stage={projectStage}
-                          />
-                        ) : quest.inputType === 'text' ? (
-                          <>
-                            <textarea
-                              className="quest-textarea"
-                              placeholder={quest.placeholder}
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                              rows={3}
-                            />
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : quest.inputType === 'conversation_log' ? (
-                          <ConversationLogInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'milestone' ? (
-                          <MilestoneInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'flow_compass' ? (
-                          <FlowCompassInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'dropdown' ? (
-                          <>
-                            <select
-                              className="quest-dropdown"
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            >
-                              <option value="">Select an option...</option>
-                              {quest.options?.map(opt => (
-                                <option key={opt.value} value={opt.label}>
-                                  {opt.label}
-                                </option>
-                              ))}
-                            </select>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="quest-checkbox-area">
-                              <label className="quest-checkbox-label">
-                                {quest.actionLink ? (
-                                  <Link to={quest.actionLink} className="quest-inline-link">
-                                    {quest.actionLinkText || 'View'}
-                                  </Link>
-                                ) : (
-                                  'Mark as complete'
-                                )}
-                              </label>
-                            </div>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    )}
-
-                    {completed && (
-                      <div className="quest-completed-section">
-                        <div className="quest-completed-badge">
-                          ✅ Completed Today
-                        </div>
-                        {quest.flow_route && (
-                          <button
-                            className="view-results-btn"
-                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
-                          >
-                            View Results
-                          </button>
-                        )}
-                      </div>
-                    )}
+                        <QuestCard
+                          key={quest.id}
+                          quest={quest}
+                          completed={completed}
+                          isDayZeroLocked={isDayZeroLocked}
+                          showStreak={true}
+                          streak={getDailyStreak(quest.id)}
+                          dayLabels={getDayLabels()}
+                          questInput={questInputs[quest.id]}
+                          onInputChange={handleInputChange}
+                          onComplete={handleQuestComplete}
+                          expandedLearnMore={expandedLearnMore}
+                          onToggleLearnMore={toggleLearnMore}
+                          showLockedTooltip={showLockedTooltip}
+                          onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+                          renderDescription={renderDescription}
+                          dailyReleaseContent={isReleaseDailyChallenge && getDailyReleaseChallenge() ? renderDailyReleaseChallenge() : null}
+                          completedBadgeText="Completed Today"
+                          navigate={navigate}
+                          specialLockCheck={isReleaseDailyChallenge && !healingCompassComplete}
+                          specialLockMessage="Complete Healing Compass to Unlock"
+                          lockedMessage={'Complete the "Healing Compass" weekly quest to unlock daily release challenges'}
+                          selectedProject={selectedProject}
+                          progress={progress}
+                          projectStage={projectStage}
+                        />
+                      )
+                    })}
                   </div>
-                )
-              })}
-            </div>
+                </div>
+              )
+            })}
           </div>
-        )
-      })}
-    </div>
-  )}
+        )}
 
         {/* Healing Quests */}
         {activeCategory === 'Healing' && displayQuests.length > 0 && (
@@ -2572,194 +899,39 @@ function Challenge() {
                   <div className="quest-grid">
                     {rTypeQuests.map(quest => {
                       const completed = isQuestCompletedToday(quest.id, quest)
+                      const isHealingCompass = quest.id === 'recognise_healing_compass'
+
                       return (
-                        <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
-                    <div className="quest-header">
-                      <h3 className="quest-name">{quest.name}</h3>
-                      <span className="quest-points">+{quest.points} pts</span>
-                    </div>
-                    <p className="quest-description">{renderDescription(quest.description)}</p>
-
-                    {quest.learnMore && !completed && (
-                      <div className="learn-more-section">
-                        <button
-                          className="learn-more-toggle"
-                          onClick={() => toggleLearnMore(quest.id)}
-                        >
-                          <span>Learn More</span>
-                          <svg
-                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M4 6L8 10L12 6"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                        {expandedLearnMore[quest.id] && (
-                          <div className="learn-more-content">
-                            {quest.learnMore}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {!completed && (
-                      <div className="quest-input-area">
-                        {quest.status === 'coming_soon' ? (
-                          <button className="quest-flow-btn coming-soon" disabled>
-                            Coming Soon
-                          </button>
-                        ) : quest.id === 'recognise_healing_compass' && !nervousSystemComplete ? (
-                          <div className="quest-locked-container">
-                            <button
-                              className="quest-flow-btn locked"
-                              disabled
-                            >
-                              Locked
-                              <span
-                                className="locked-info-icon"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
-                                }}
-                                onTouchEnd={(e) => {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                  setShowLockedTooltip(showLockedTooltip === quest.id ? null : quest.id)
-                                }}
-                              >
-                                ⓘ
-                              </span>
-                            </button>
-                            {showLockedTooltip === quest.id && (
-                              <div className="locked-tooltip">
-                                Complete the "Map the Boundaries of Your Nervous System" challenge above to unlock
-                              </div>
-                            )}
-                          </div>
-                        ) : quest.inputType === 'flow' ? (
-                          <Link to={quest.flow_route} className="quest-flow-btn">
-                            {quest.id === 'recognise_nervous_system'
-                              ? 'Start Mapping My Nervous System →'
-                              : `Start ${quest.name} →`}
-                          </Link>
-                        ) : quest.type === 'groan' ? (
-                          <GroanReflectionInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                            projectId={selectedProject?.id}
-                            challengeInstanceId={progress?.challenge_instance_id}
-                            stage={projectStage}
-                          />
-                        ) : quest.inputType === 'text' ? (
-                          <>
-                            <textarea
-                              className="quest-textarea"
-                              placeholder={quest.placeholder}
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                              rows={3}
-                            />
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : quest.inputType === 'conversation_log' ? (
-                          <ConversationLogInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'milestone' ? (
-                          <MilestoneInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'flow_compass' ? (
-                          <FlowCompassInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'dropdown' ? (
-                          <>
-                            <select
-                              className="quest-dropdown"
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            >
-                              <option value="">Select an option...</option>
-                              {quest.options?.map(opt => (
-                                <option key={opt.value} value={opt.label}>
-                                  {opt.label}
-                                </option>
-                              ))}
-                            </select>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="quest-checkbox-area">
-                              <label className="quest-checkbox-label">
-                                {quest.actionLink ? (
-                                  <Link to={quest.actionLink} className="quest-inline-link">
-                                    {quest.actionLinkText || 'View'}
-                                  </Link>
-                                ) : (
-                                  'Mark as complete'
-                                )}
-                              </label>
-                            </div>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    )}
-
-                    {completed && (
-                      <div className="quest-completed-section">
-                        <div className="quest-completed-badge">
-                          ✅ Completed
-                        </div>
-                        {quest.flow_route && (
-                          <button
-                            className="view-results-btn"
-                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
-                          >
-                            View Results
-                          </button>
-                        )}
-                      </div>
-                    )}
+                        <QuestCard
+                          key={quest.id}
+                          quest={quest}
+                          completed={completed}
+                          showStreak={false}
+                          questInput={questInputs[quest.id]}
+                          onInputChange={handleInputChange}
+                          onComplete={handleQuestComplete}
+                          expandedLearnMore={expandedLearnMore}
+                          onToggleLearnMore={toggleLearnMore}
+                          showLockedTooltip={showLockedTooltip}
+                          onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+                          renderDescription={renderDescription}
+                          completedBadgeText="Completed"
+                          navigate={navigate}
+                          specialLockCheck={isHealingCompass && !nervousSystemComplete}
+                          specialLockMessage="Locked"
+                          lockedMessage={'Complete the "Map the Boundaries of Your Nervous System" challenge above to unlock'}
+                          selectedProject={selectedProject}
+                          progress={progress}
+                          projectStage={projectStage}
+                        />
+                      )
+                    })}
                   </div>
-                )
-              })}
-            </div>
+                </div>
+              )
+            })}
           </div>
-        )
-      })}
-    </div>
-  )}
+        )}
 
         {/* Flow Finder Quests */}
         {activeCategory === 'Flow Finder' && filteredQuests.length > 0 && (
@@ -2769,340 +941,66 @@ function Challenge() {
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
                 const locked = isQuestLocked(quest)
+
                 return (
-                  <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''} ${locked ? 'locked' : ''}`}>
-                    <div className="quest-header">
-                      <h3 className="quest-name">{locked ? '🔒 ' : ''}{quest.name}</h3>
-                      <span className="quest-points">+{quest.points} pts</span>
-                    </div>
-
-                    {/* Daily Streak Bubbles for quests with maxPerDay */}
-                    {quest.maxPerDay && (
-                      <div className="daily-streak">
-                        {getDayLabels().map((label, index) => {
-                          const streak = getDailyStreak(quest.id)
-                          return (
-                            <div
-                              key={index}
-                              className={`streak-bubble ${streak[index] ? 'completed' : ''}`}
-                              title={`Day ${index + 1}`}
-                            >
-                              {label}
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )}
-
-                    <p className="quest-description">{renderDescription(quest.description)}</p>
-
-                    {quest.learnMore && !completed && (
-                      <div className="learn-more-section">
-                        <button
-                          className="learn-more-toggle"
-                          onClick={() => toggleLearnMore(quest.id)}
-                        >
-                          <span>Learn More</span>
-                          <svg
-                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M4 6L8 10L12 6"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                        {expandedLearnMore[quest.id] && (
-                          <div className="learn-more-content">
-                            {quest.learnMore}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {!completed && !locked && (
-                      <div className="quest-input-area">
-                        {quest.status === 'coming_soon' ? (
-                          <button className="quest-flow-btn coming-soon" disabled>
-                            Coming Soon
-                          </button>
-                        ) : quest.inputType === 'flow' ? (
-                          <Link to={quest.flow_route} className="quest-flow-btn">
-                            Start {quest.name} →
-                          </Link>
-                        ) : quest.inputType === 'text' ? (
-                          <>
-                            <textarea
-                              className="quest-textarea"
-                              placeholder={quest.placeholder}
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                              rows={3}
-                            />
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : quest.inputType === 'conversation_log' ? (
-                          <ConversationLogInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'milestone' ? (
-                          <MilestoneInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'flow_compass' ? (
-                          <FlowCompassInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'dropdown' ? (
-                          <>
-                            <select
-                              className="quest-dropdown"
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            >
-                              <option value="">Select an option...</option>
-                              {quest.options?.map(opt => (
-                                <option key={opt.value} value={opt.label}>
-                                  {opt.label}
-                                </option>
-                              ))}
-                            </select>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="quest-checkbox-area">
-                              <label className="quest-checkbox-label">
-                                {quest.actionLink ? (
-                                  <Link to={quest.actionLink} className="quest-inline-link">
-                                    {quest.actionLinkText || 'View'}
-                                  </Link>
-                                ) : (
-                                  'Mark as complete'
-                                )}
-                              </label>
-                            </div>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    )}
-
-                    {!completed && locked && (
-                      <div className="quest-locked-message">
-                        🔒 Complete "{getRequiredQuestName(quest.requires_quest)}" first to unlock
-                      </div>
-                    )}
-
-                    {quest.counts_toward_graduation && !completed && quest.inputType !== 'conversation_log' && (
-                      <p className="graduation-note">✨ Counts toward stage graduation</p>
-                    )}
-
-                    {completed && (
-                      <div className="quest-completed-section">
-                        <div className="quest-completed-badge">
-                          ✅ Completed
-                        </div>
-                        {quest.flow_route && (
-                          <button
-                            className="view-results-btn"
-                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
-                          >
-                            View Results
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  <QuestCard
+                    key={quest.id}
+                    quest={quest}
+                    completed={completed}
+                    locked={locked}
+                    lockedPrerequisite={locked ? getRequiredQuestName(quest.requires_quest) : null}
+                    showStreak={!!quest.maxPerDay}
+                    streak={getDailyStreak(quest.id)}
+                    dayLabels={getDayLabels()}
+                    questInput={questInputs[quest.id]}
+                    onInputChange={handleInputChange}
+                    onComplete={handleQuestComplete}
+                    expandedLearnMore={expandedLearnMore}
+                    onToggleLearnMore={toggleLearnMore}
+                    showLockedTooltip={showLockedTooltip}
+                    onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+                    renderDescription={renderDescription}
+                    completedBadgeText="Completed"
+                    navigate={navigate}
+                    selectedProject={selectedProject}
+                    progress={progress}
+                    projectStage={projectStage}
+                  />
                 )
               })}
             </div>
           </div>
         )}
 
-        {/* Bonus Quests - only show if we're on the Bonus tab */}
+        {/* Bonus Quests */}
         {activeCategory === 'Bonus' && filteredQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Bonus Quests</h2>
             <div className="quest-grid">
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
+
                 return (
-                  <div key={quest.id} className={`quest-card bonus ${completed ? 'completed' : ''}`}>
-                    <div className="quest-header">
-                      <h3 className="quest-name">{quest.name}</h3>
-                      <span className="quest-points">+{quest.points} pts</span>
-                    </div>
-                    <p className="quest-description">{renderDescription(quest.description)}</p>
-
-                    {quest.learnMore && !completed && (
-                      <div className="learn-more-section">
-                        <button
-                          className="learn-more-toggle"
-                          onClick={() => toggleLearnMore(quest.id)}
-                        >
-                          <span>Learn More</span>
-                          <svg
-                            className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M4 6L8 10L12 6"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        </button>
-                        {expandedLearnMore[quest.id] && (
-                          <div className="learn-more-content">
-                            {quest.learnMore}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {!completed && (
-                      <div className="quest-input-area">
-                        {quest.status === 'coming_soon' ? (
-                          <button className="quest-flow-btn coming-soon" disabled>
-                            Coming Soon
-                          </button>
-                        ) : quest.inputType === 'flow' ? (
-                          <Link to={quest.flow_route} className="quest-flow-btn">
-                            {quest.id === 'recognise_nervous_system'
-                              ? 'Start Mapping My Nervous System →'
-                              : `Start ${quest.name} →`}
-                          </Link>
-                        ) : quest.type === 'groan' ? (
-                          <GroanReflectionInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                            projectId={selectedProject?.id}
-                            challengeInstanceId={progress?.challenge_instance_id}
-                            stage={projectStage}
-                          />
-                        ) : quest.inputType === 'text' ? (
-                          <>
-                            <textarea
-                              className="quest-textarea"
-                              placeholder={quest.placeholder}
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                              rows={3}
-                            />
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : quest.inputType === 'conversation_log' ? (
-                          <ConversationLogInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'milestone' ? (
-                          <MilestoneInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'flow_compass' ? (
-                          <FlowCompassInput
-                            quest={quest}
-                            onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                          />
-                        ) : quest.inputType === 'dropdown' ? (
-                          <>
-                            <select
-                              className="quest-dropdown"
-                              value={questInputs[quest.id] || ''}
-                              onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                            >
-                              <option value="">Select an option...</option>
-                              {quest.options?.map(opt => (
-                                <option key={opt.value} value={opt.label}>
-                                  {opt.label}
-                                </option>
-                              ))}
-                            </select>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <div className="quest-checkbox-area">
-                              <label className="quest-checkbox-label">
-                                {quest.actionLink ? (
-                                  <Link to={quest.actionLink} className="quest-inline-link">
-                                    {quest.actionLinkText || 'View'}
-                                  </Link>
-                                ) : (
-                                  'Mark as complete'
-                                )}
-                              </label>
-                            </div>
-                            <button
-                              className="quest-complete-btn"
-                              onClick={(e) => handleQuestComplete(quest, null, e)}
-                            >
-                              Complete Quest
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    )}
-
-                    {completed && (
-                      <div className="quest-completed-section">
-                        <div className="quest-completed-badge">
-                          ✅ Completed
-                        </div>
-                        {quest.flow_route && (
-                          <button
-                            className="view-results-btn"
-                            onClick={() => navigate(`${quest.flow_route}?results=true`)}
-                          >
-                            View Results
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  <QuestCard
+                    key={quest.id}
+                    quest={quest}
+                    completed={completed}
+                    showStreak={false}
+                    questInput={questInputs[quest.id]}
+                    onInputChange={handleInputChange}
+                    onComplete={handleQuestComplete}
+                    expandedLearnMore={expandedLearnMore}
+                    onToggleLearnMore={toggleLearnMore}
+                    showLockedTooltip={showLockedTooltip}
+                    onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+                    renderDescription={renderDescription}
+                    completedBadgeText="Completed"
+                    navigate={navigate}
+                    selectedProject={selectedProject}
+                    progress={progress}
+                    projectStage={projectStage}
+                    extraClass="bonus"
+                  />
                 )
               })}
             </div>
@@ -3121,130 +1019,29 @@ function Challenge() {
               <div className="quest-grid">
                 {filteredQuests.map(quest => {
                   const completed = isQuestCompletedToday(quest.id, quest)
-                  const streak = getDailyStreak(quest.id)
-                  const dayLabels = getDayLabels()
 
                   return (
-                    <div key={quest.id} className={`quest-card ${completed ? 'completed' : ''}`}>
-                      <div className="quest-header">
-                        <h3 className="quest-name">{quest.name}</h3>
-                        <span className="quest-points">+{quest.points} pts</span>
-                      </div>
-
-                      {/* Daily Streak Bubbles for daily tracker */}
-                      {quest.frequency === 'daily' && (
-                        <div className="daily-streak">
-                          {dayLabels.map((label, index) => (
-                            <div
-                              key={index}
-                              className={`streak-bubble ${streak[index] ? 'completed' : ''}`}
-                              title={`Day ${index + 1}`}
-                            >
-                              {label}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      <p className="quest-description">{renderDescription(quest.description)}</p>
-
-                      {quest.learnMore && !completed && (
-                        <div className="learn-more-section">
-                          <button
-                            className="learn-more-toggle"
-                            onClick={() => toggleLearnMore(quest.id)}
-                          >
-                            <span>Learn More</span>
-                            <svg
-                              className={`learn-more-arrow ${expandedLearnMore[quest.id] ? 'expanded' : ''}`}
-                              width="16"
-                              height="16"
-                              viewBox="0 0 16 16"
-                              fill="none"
-                            >
-                              <path
-                                d="M4 6L8 10L12 6"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </button>
-                          {expandedLearnMore[quest.id] && (
-                            <div className="learn-more-content">
-                              {quest.learnMore}
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      {!completed && (
-                        <div className="quest-input-area">
-                          {quest.inputType === 'flow_compass' ? (
-                            <FlowCompassInput
-                              quest={quest}
-                              onComplete={(quest, data) => handleQuestComplete(quest, data)}
-                            />
-                          ) : quest.inputType === 'dropdown' ? (
-                            <>
-                              <select
-                                className="quest-dropdown"
-                                value={questInputs[quest.id] || ''}
-                                onChange={(e) => setQuestInputs(prev => ({ ...prev, [quest.id]: e.target.value }))}
-                              >
-                                <option value="">Select an option...</option>
-                                {quest.options?.map(opt => (
-                                  <option key={opt.value} value={opt.label}>
-                                    {opt.label}
-                                  </option>
-                                ))}
-                              </select>
-                              <button
-                                className="quest-complete-btn"
-                                onClick={(e) => handleQuestComplete(quest, null, e)}
-                              >
-                                Complete Quest
-                              </button>
-                            </>
-                          ) : quest.status === 'coming_soon' ? (
-                            <button className="quest-flow-btn coming-soon" disabled>
-                              Coming Soon
-                            </button>
-                          ) : (
-                            <>
-                              <div className="quest-checkbox-area">
-                                <label className="quest-checkbox-label">
-                                  Mark as complete
-                                </label>
-                              </div>
-                              <button
-                                className="quest-complete-btn"
-                                onClick={(e) => handleQuestComplete(quest, null, e)}
-                              >
-                                Complete Quest
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      )}
-
-                      {completed && (
-                        <div className="quest-completed-section">
-                          <div className="quest-completed-badge">
-                            ✅ Completed {quest.frequency === 'daily' ? 'Today' : ''}
-                          </div>
-                          {quest.flow_route && (
-                            <button
-                              className="view-results-btn"
-                              onClick={() => navigate(`${quest.flow_route}?results=true`)}
-                            >
-                              View Results
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div>
+                    <QuestCard
+                      key={quest.id}
+                      quest={quest}
+                      completed={completed}
+                      showStreak={quest.frequency === 'daily'}
+                      streak={getDailyStreak(quest.id)}
+                      dayLabels={getDayLabels()}
+                      questInput={questInputs[quest.id]}
+                      onInputChange={handleInputChange}
+                      onComplete={handleQuestComplete}
+                      expandedLearnMore={expandedLearnMore}
+                      onToggleLearnMore={toggleLearnMore}
+                      showLockedTooltip={showLockedTooltip}
+                      onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+                      renderDescription={renderDescription}
+                      completedBadgeText={quest.frequency === 'daily' ? 'Completed Today' : 'Completed'}
+                      navigate={navigate}
+                      selectedProject={selectedProject}
+                      progress={progress}
+                      projectStage={projectStage}
+                    />
                   )
                 })}
               </div>

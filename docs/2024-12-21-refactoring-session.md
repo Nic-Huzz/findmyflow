@@ -872,5 +872,152 @@ After verifying no imports reference these files, the following were deleted:
 
 ---
 
+---
+
+## Part 7: Challenge.jsx Decomposition - COMPLETED
+
+### Summary
+
+Successfully decomposed `Challenge.jsx` from 3,261 lines to 1,058 lines (**68% reduction**) across 6 phases.
+
+### Phase 1: Extract Custom Hook (COMPLETED)
+
+**Created:** `src/hooks/useChallengeData.js` (1,147 lines)
+
+Extracted all state management and data loading:
+- 30+ useState declarations
+- All useEffect hooks for data loading
+- All data loading functions (loadChallengeData, loadUserProgress, loadLeaderboard, etc.)
+- All helper functions (getCategoryPoints, getDailyStreak, isQuestCompletedToday, etc.)
+- Returns ~100 state variables and functions to Challenge.jsx
+
+**Challenge.jsx reduction:** 3,261 → 2,068 lines
+
+---
+
+### Phase 2: Extract QuestCard Component (COMPLETED)
+
+**Created:** `src/components/QuestCard.jsx` (317 lines)
+
+Unified quest card component handling all variations:
+- Streak bubbles (daily quests)
+- Learn more sections
+- Special lock states (Healing Compass, Nervous System prerequisites)
+- All input types (text, dropdown, flow, conversation_log, milestone, flow_compass, groan)
+- Completed states with View Results buttons
+- Daily release challenge content
+
+Replaced ~1,200 lines of duplicated quest rendering across 5 categories (Groans, Healing, Flow Finder, Bonus, Tracker).
+
+**Challenge.jsx reduction:** 2,068 → 1,336 lines
+
+---
+
+### Phase 3: Extract Header Component (COMPLETED)
+
+**Created:** `src/components/ChallengeHeader.jsx` (108 lines)
+
+Contents:
+- Title "Gamify Your Ambitions"
+- Total points display with rank (clickable to leaderboard)
+- Day counter (Day X/7) with completion badge
+- Archetype badge (conditional)
+- Settings menu with dropdown (⚙️ Home, 📖 Explainer, 🔔 Notifications)
+- Restart Challenge button (Day 7)
+
+**Challenge.jsx reduction:** 1,336 → 1,264 lines
+
+---
+
+### Phase 4: Extract Onboarding Screens (COMPLETED)
+
+**Created:** `src/components/ChallengeOnboarding.jsx` (124 lines)
+
+Handles two screens via `screen` prop:
+1. **Welcome screen** (`screen="welcome"`)
+   - 🚀 Title and intro text
+   - Four R's explanation (🔍 Recognise, 🕊️ Release, ⚡ Rewire, 🌊 Reconnect)
+   - Start button
+
+2. **Group selection** (`screen="group-selection"`)
+   - 🎯 Title
+   - Solo (🎯), Create Group (👥), Join Group (🔗) options
+   - Group code input
+
+**Challenge.jsx reduction:** 1,264 → 1,182 lines
+
+---
+
+### Phase 5: Extract Leaderboard Component (COMPLETED)
+
+**Created:** `src/components/ChallengeLeaderboard.jsx` (90 lines)
+
+Contents:
+- Weekly/All-Time toggle
+- Group code display with WhatsApp share button
+- Leaderboard entries with medal emojis (🥇🥈🥉)
+- "You" badge for current user
+
+**Challenge.jsx reduction:** 1,182 → 1,118 lines
+
+---
+
+### Phase 6: Extract Filter Component (COMPLETED)
+
+**Created:** `src/components/ChallengeFilters.jsx` (86 lines)
+
+Contents:
+- Frequency filter (All, Daily, Weekly)
+- R-type filters (varies by category):
+  - Groans: All, Recognise, Rewire, Reconnect
+  - Healing: All, Recognise, Release
+
+**Challenge.jsx reduction:** 1,118 → 1,058 lines
+
+---
+
+### Final Results
+
+| Phase | Challenge.jsx Lines | New Component |
+|-------|---------------------|---------------|
+| Original | 3,261 | - |
+| Phase 1 | 2,068 | useChallengeData.js (1,147) |
+| Phase 2 | 1,336 | QuestCard.jsx (317) |
+| Phase 3 | 1,264 | ChallengeHeader.jsx (108) |
+| Phase 4 | 1,182 | ChallengeOnboarding.jsx (124) |
+| Phase 5 | 1,118 | ChallengeLeaderboard.jsx (90) |
+| Phase 6 | **1,058** | ChallengeFilters.jsx (86) |
+
+**Total reduction:** 3,261 → 1,058 lines (**68% reduction**)
+
+### New Files Created
+
+```
+src/
+├── hooks/
+│   └── useChallengeData.js      # 1,147 lines - All state & data loading
+│
+└── components/
+    ├── QuestCard.jsx            # 317 lines - Unified quest card
+    ├── ChallengeHeader.jsx      # 108 lines - Header with points/settings
+    ├── ChallengeOnboarding.jsx  # 124 lines - Welcome & group selection
+    ├── ChallengeLeaderboard.jsx # 90 lines - Leaderboard display
+    └── ChallengeFilters.jsx     # 86 lines - Filter chips
+```
+
+### Benefits Achieved
+
+1. **Challenge.jsx is now readable** - 1,058 lines (was 3,261)
+2. **Single responsibility** - Each component does one thing
+3. **Reusable QuestCard** - Eliminates ~1,200 lines of duplication
+4. **Testable logic** - Hook can be tested independently
+5. **Easier maintenance** - Changes to leaderboard don't risk breaking quests
+
+### Backup
+
+Original file preserved at `src/Challenge.backup.jsx` (3,261 lines)
+
+---
+
 *Document created: December 21, 2024*
-*Last updated: December 21, 2024 - Added Challenge.jsx decomposition plan*
+*Last updated: December 22, 2024 - Challenge.jsx decomposition completed*
