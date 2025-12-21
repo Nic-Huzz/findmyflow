@@ -72,18 +72,15 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Get all active users with push subscriptions and their preferences
+    // Get all push subscriptions
     const { data: subscriptions, error: fetchError } = await supabaseClient
       .from('push_subscriptions')
-      .select(`
-        *,
-        notification_preferences!inner(*)
-      `)
+      .select('*')
 
     if (fetchError) {
       console.error('Error fetching subscriptions:', fetchError)
       return new Response(
-        JSON.stringify({ error: 'Failed to fetch subscriptions' }),
+        JSON.stringify({ error: 'Failed to fetch subscriptions', details: fetchError.message }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -95,6 +92,25 @@ serve(async (req) => {
       )
     }
 
+    // Get notification preferences for all users with subscriptions
+    const userIds = [...new Set(subscriptions.map(s => s.user_id))]
+    const { data: allPrefs, error: prefsError } = await supabaseClient
+      .from('notification_preferences')
+      .select('*')
+      .in('user_id', userIds)
+
+    if (prefsError) {
+      console.error('Error fetching preferences:', prefsError)
+    }
+
+    // Create a map of user_id -> preferences
+    const prefsMap = new Map()
+    if (allPrefs) {
+      for (const pref of allPrefs) {
+        prefsMap.set(pref.user_id, pref)
+      }
+    }
+
     // Group subscriptions by timezone and notification hour
     const notificationsToSend: Array<{
       subscription: any,
@@ -103,10 +119,11 @@ serve(async (req) => {
 
     // Process subscriptions sequentially to handle async checks
     for (const sub of subscriptions) {
-      const prefs = sub.notification_preferences
+      const prefs = prefsMap.get(sub.user_id)
 
-      // Skip if user doesn't have any notifications enabled
+      // Skip if user doesn't have preferences or no notifications enabled
       if (!prefs || !(prefs.daily_quests || prefs.leaderboard_updates || prefs.group_activity || prefs.artifact_unlocks)) {
+        console.log(`Skipping user ${sub.user_id}: No preferences or notifications disabled`)
         continue
       }
 
