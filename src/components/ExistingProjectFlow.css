@@ -7,33 +7,46 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   padding: 20px;
 }
 
-.progress-bar {
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  margin-bottom: 40px;
-  overflow: hidden;
+/* Hide any rogue elements from global CSS */
+.existing-project-flow .card-image,
+.existing-project-flow .card-stack,
+.existing-project-flow .swipe-card,
+.existing-project-flow .swipe-container {
+  display: none !important;
 }
 
-.progress-fill {
+.existing-project-flow .progress-bar {
+  width: 80%;
+  max-width: 350px;
+  height: 4px !important;
+  flex: none !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 2px !important;
+  margin-bottom: 32px;
+  overflow: hidden;
+  position: relative;
+}
+
+.existing-project-flow .progress-fill {
   height: 100%;
-  background: var(--purple, #5e17eb);
+  background: #E9A23B;
   border-radius: 2px;
   transition: width 0.3s ease;
 }
 
 .flow-step {
-  flex: 1;
   display: flex;
   flex-direction: column;
   max-width: 500px;
   width: 100%;
-  margin: 0 auto;
+  text-align: center;
 }
 
 .flow-step h2 {
@@ -41,12 +54,14 @@
   font-weight: 600;
   margin-bottom: 12px;
   color: white;
+  text-align: center;
 }
 
 .step-subtitle {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 24px;
   line-height: 1.5;
+  text-align: center;
 }
 
 .flow-input {
@@ -105,7 +120,7 @@
   padding: 16px 24px;
   font-size: 1rem;
   font-weight: 600;
-  background: var(--purple, #5e17eb);
+  background: #E9A23B;
   color: white;
   border: none;
   border-radius: 12px;
@@ -114,7 +129,7 @@
 }
 
 .primary-button:hover:not(:disabled) {
-  background: #7c3aed;
+  background: #d4912f;
   transform: translateY(-1px);
 }
 
@@ -141,33 +156,37 @@
 }
 
 /* Options Grid */
-.options-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.existing-project-flow .options-grid {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
   margin-bottom: 24px;
+  width: 100%;
+  max-width: 400px;
 }
 
-.option-button {
-  padding: 16px;
-  font-size: 0.95rem;
-  text-align: left;
+.existing-project-flow .option-button {
+  padding: 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
   background: rgba(255, 255, 255, 0.05);
   color: white;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.option-button:hover {
+.existing-project-flow .option-button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateX(4px);
 }
 
-.option-button.selected {
-  background: rgba(94, 23, 235, 0.2);
-  border-color: var(--purple, #5e17eb);
+.existing-project-flow .option-button.selected {
+  background: rgba(233, 162, 59, 0.2);
+  border-color: #E9A23B;
 }
 
 /* Feeling Options */
@@ -240,14 +259,9 @@
   opacity: 1;
 }
 
-.milestone-tag {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-}
-
-.resistance-tag {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
+.skill-tag {
+  background: rgba(233, 162, 59, 0.2);
+  color: #E9A23B;
 }
 
 /* Stage Options */

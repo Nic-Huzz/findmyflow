@@ -10,6 +10,34 @@
   --border-gray: #dee2e6;
 }
 
+/* ============ GLOBAL ANIMATED TEXT ============ */
+/* Staggered fade-in for paragraphs - used across all flows */
+
+.animated-text p {
+  opacity: 0;
+  animation: globalFadeInUp 0.6s ease forwards;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.animated-text p:nth-child(1) { animation-delay: 0.1s; }
+.animated-text p:nth-child(2) { animation-delay: 0.4s; }
+.animated-text p:nth-child(3) { animation-delay: 0.7s; }
+.animated-text p:nth-child(4) { animation-delay: 1.0s; }
+.animated-text p:nth-child(5) { animation-delay: 1.3s; }
+.animated-text p:nth-child(6) { animation-delay: 1.6s; }
+.animated-text p:nth-child(7) { animation-delay: 1.9s; }
+
+@keyframes globalFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Reset and base styles */
 * { 
   box-sizing: border-box; 
@@ -226,8 +254,8 @@ body {
   margin-top: 8px;
 }
 
-/* Option buttons */
-.option-button {
+/* Option buttons - scoped to options-container to prevent global leakage */
+.options-container .option-button {
   background: var(--white);
   color: var(--text-gray);
   border: 2px solid var(--soft-gray);
@@ -244,14 +272,14 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.option-button:hover:not(:disabled) {
+.options-container .option-button:hover:not(:disabled) {
   background: var(--warm-gray);
   border-color: var(--purple);
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(94, 23, 235, 0.15);
 }
 
-.option-button:disabled {
+.options-container .option-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

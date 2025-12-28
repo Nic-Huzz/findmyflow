@@ -31,29 +31,30 @@
   gap: 6px;
   min-width: 70px;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
   border-radius: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #888;
   cursor: pointer;
   transition: all 0.2s;
   flex-shrink: 0;
 }
 
 .stage-tab:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #eee;
+  border-color: #ccc;
 }
 
 /* Tab States */
 .stage-tab.available {
-  color: rgba(255, 255, 255, 0.8);
+  color: #555;
+  background: #f0f0f0;
 }
 
 .stage-tab.current {
-  background: rgba(94, 23, 235, 0.15);
+  background: rgba(94, 23, 235, 0.1);
   border-color: var(--purple, #5e17eb);
-  color: white;
+  color: #5e17eb;
 }
 
 .stage-tab.completed {
@@ -63,8 +64,20 @@
 }
 
 .stage-tab.locked {
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: not-allowed;
+  color: #bbb;
+}
+
+/* Flow Finder - always accessible */
+.stage-tab.always-accessible {
+  border-style: dashed;
+}
+
+.stage-tab.always-accessible.available {
+  border-color: var(--purple, #5e17eb);
+  color: #5e17eb;
+  background: rgba(94, 23, 235, 0.05);
 }
 
 /* Active Tab */
@@ -112,17 +125,9 @@
   font-weight: 700;
 }
 
-/* Current Dot */
+/* Current Dot - hidden */
 .current-dot {
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
-  background: var(--purple, #5e17eb);
-  border-radius: 50%;
-  animation: pulse 2s infinite;
+  display: none;
 }
 
 @keyframes pulse {
@@ -137,14 +142,14 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e0e0e0;
   border-radius: 2px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--purple, #5e17eb), #10b981);
+  background: linear-gradient(90deg, #E9A23B, #f5b942);
   border-radius: 2px;
   transition: width 0.5s ease;
 }

@@ -10,6 +10,19 @@ import ConversationLogInput from './ConversationLogInput'
 import MilestoneInput from './MilestoneInput'
 import FlowCompassInput from './FlowCompassInput'
 import GroanReflectionInput from './GroanReflectionInput'
+import RecogniseQuestInput from './RecogniseQuestInput'
+import RewireQuestInput, { REWIRE_QUEST_IDS } from './RewireQuestInput'
+import ReconnectQuestInput, { RECONNECT_QUEST_IDS } from './ReconnectQuestInput'
+import ReleaseQuestInput, { RELEASE_QUEST_IDS } from './ReleaseQuestInput'
+
+// Recognise quest IDs that use the enhanced input
+const RECOGNISE_QUEST_IDS = [
+  'recognise_protective_observe',
+  'recognise_essence_observe',
+  'recognise_negative_frequency',
+  'recognise_positive_frequency',
+  'recognise_trigger_pattern'
+]
 
 function QuestCard({
   quest,
@@ -40,21 +53,34 @@ function QuestCard({
   progress,
   projectStage,
   // Extra class for styling
-  extraClass = ''
+  extraClass = '',
+  // For completion animation
+  justCompleted = false
 }) {
   const cardClasses = [
     'quest-card',
     completed ? 'completed' : '',
     locked || isDayZeroLocked ? 'locked' : '',
+    justCompleted ? 'just-completed' : '',
     extraClass
   ].filter(Boolean).join(' ')
+
+  // Frequency badge for daily/weekly
+  const showFrequencyBadge = quest.frequency === 'daily' || quest.frequency === 'weekly'
 
   return (
     <div className={cardClasses}>
       <div className="quest-header">
-        <h3 className="quest-name">
-          {locked && !isDayZeroLocked ? 'Locked ' : ''}{quest.name}
-        </h3>
+        <div className="quest-name-row">
+          <h3 className="quest-name">
+            {locked && !isDayZeroLocked ? 'Locked ' : ''}{quest.name}
+          </h3>
+          {showFrequencyBadge && (
+            <span className={`frequency-badge ${quest.frequency}`}>
+              {quest.frequency === 'daily' ? 'Daily' : 'Weekly'}
+            </span>
+          )}
+        </div>
         <span className="quest-points">+{quest.points} pts</span>
       </div>
 
@@ -204,6 +230,26 @@ function QuestCard({
             <Link to={quest.flow_route} className="quest-flow-btn">
               Start {quest.name}
             </Link>
+          ) : RECOGNISE_QUEST_IDS.includes(quest.id) ? (
+            <RecogniseQuestInput
+              quest={quest}
+              onComplete={(quest, data) => onComplete(quest, data)}
+            />
+          ) : REWIRE_QUEST_IDS.includes(quest.id) ? (
+            <RewireQuestInput
+              quest={quest}
+              onComplete={(quest, data) => onComplete(quest, data)}
+            />
+          ) : RECONNECT_QUEST_IDS.includes(quest.id) ? (
+            <ReconnectQuestInput
+              quest={quest}
+              onComplete={(quest, data) => onComplete(quest, data)}
+            />
+          ) : RELEASE_QUEST_IDS.includes(quest.id) ? (
+            <ReleaseQuestInput
+              quest={quest}
+              onComplete={(quest, data) => onComplete(quest, data)}
+            />
           ) : quest.type === 'groan' ? (
             <GroanReflectionInput
               quest={quest}
@@ -221,6 +267,54 @@ function QuestCard({
                 onChange={(e) => onInputChange(quest.id, e.target.value)}
                 rows={3}
               />
+              <button
+                className="quest-complete-btn"
+                onClick={(e) => onComplete(quest, null, e)}
+              >
+                Complete Quest
+              </button>
+            </>
+          ) : quest.inputType === 'text_with_tags' ? (
+            <>
+              <textarea
+                className="quest-textarea"
+                placeholder={quest.placeholder}
+                value={typeof questInput === 'object' ? questInput.text || '' : questInput || ''}
+                onChange={(e) => onInputChange(quest.id, {
+                  text: e.target.value,
+                  tags: typeof questInput === 'object' ? questInput.tags || [] : []
+                })}
+                rows={3}
+              />
+              {quest.tagOptions && (
+                <div className="quest-tag-selector">
+                  <span className="quest-tag-label">{quest.tagLabel || 'Select tags:'}</span>
+                  <div className="quest-tags">
+                    {quest.tagOptions.map(tag => {
+                      const currentTags = typeof questInput === 'object' ? questInput.tags || [] : []
+                      const isSelected = currentTags.includes(tag.value)
+                      return (
+                        <button
+                          key={tag.value}
+                          type="button"
+                          className={`quest-tag ${isSelected ? 'selected' : ''}`}
+                          onClick={() => {
+                            const newTags = isSelected
+                              ? currentTags.filter(t => t !== tag.value)
+                              : [...currentTags, tag.value]
+                            onInputChange(quest.id, {
+                              text: typeof questInput === 'object' ? questInput.text || '' : questInput || '',
+                              tags: newTags
+                            })
+                          }}
+                        >
+                          {tag.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
               <button
                 className="quest-complete-btn"
                 onClick={(e) => onComplete(quest, null, e)}
@@ -298,8 +392,12 @@ function QuestCard({
       {completed && (
         <div className="quest-completed-section">
           <div className="quest-completed-badge">
+            {justCompleted && <span className="checkmark-animation">✓</span>}
             {completedBadgeText}
           </div>
+          {justCompleted && (
+            <div className="points-fly-up">+{quest.points} pts</div>
+          )}
           {quest.flow_route && (
             <button
               className="view-results-btn"
@@ -308,6 +406,15 @@ function QuestCard({
               View Results
             </button>
           )}
+        </div>
+      )}
+
+      {/* Confetti burst on completion */}
+      {justCompleted && (
+        <div className="confetti-container">
+          {[...Array(12)].map((_, i) => (
+            <div key={i} className={`confetti confetti-${i}`} />
+          ))}
         </div>
       )}
     </div>

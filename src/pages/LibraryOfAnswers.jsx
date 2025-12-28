@@ -302,6 +302,29 @@ function LibraryOfAnswers() {
   // Render Money Model section
   const renderMoneyModel = () => (
     <div className="library-section">
+      {/* Project Filter - Only for Money Model since it's project-specific */}
+      {projects.length > 0 && (
+        <div className="project-filter">
+          <div className="project-filter-bubbles">
+            <button
+              className={`project-bubble ${selectedProjectId === 'all' ? 'active' : ''}`}
+              onClick={() => setSelectedProjectId('all')}
+            >
+              All Projects
+            </button>
+            {projects.map(project => (
+              <button
+                key={project.id}
+                className={`project-bubble ${selectedProjectId === project.id ? 'active' : ''}`}
+                onClick={() => setSelectedProjectId(project.id)}
+              >
+                {project.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Offers */}
       <div className="subsection">
         <h3>Attraction Offers</h3>
@@ -496,25 +519,6 @@ function LibraryOfAnswers() {
         <h1>Library of Answers</h1>
         <p>All your discoveries in one place</p>
 
-        {/* Project Filter */}
-        {projects.length > 0 && (
-          <div className="project-filter">
-            <label htmlFor="project-select">Filter by project:</label>
-            <select
-              id="project-select"
-              value={selectedProjectId}
-              onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="project-select"
-            >
-              <option value="all">All Projects</option>
-              {projects.map(project => (
-                <option key={project.id} value={project.id}>
-                  {project.name} {project.is_primary ? '(Primary)' : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
       </header>
 
       {/* Section Tabs */}

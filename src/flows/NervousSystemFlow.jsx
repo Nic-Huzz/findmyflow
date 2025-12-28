@@ -4,13 +4,14 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import '../NervousSystemHealingCompass.css'
+import '../FlowFinder.css'
 
 export default function NervousSystemFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
-  const [currentScreen, setCurrentScreen] = useState('welcome')
+  const [currentScreen, setCurrentScreen] = useState('time_check')
   const [viewingResults, setViewingResults] = useState(false)
   const [responses, setResponses] = useState({
     impact_goal: '',
@@ -110,7 +111,7 @@ export default function NervousSystemFlow() {
   // Go back handler
   const goBack = (fromScreen) => {
     const screenOrder = [
-      'welcome', 'q1', 'q2', 'q3', 'q4', 'subconscious-power', 'calibration', 'calibration-directions'
+      'time_check', 'journey', 'welcome', 'q1', 'q2', 'q3', 'q4', 'subconscious-power', 'calibration', 'calibration-directions'
     ]
     const currentIndex = screenOrder.indexOf(fromScreen)
     if (currentIndex > 0) {
@@ -143,6 +144,8 @@ export default function NervousSystemFlow() {
 
   function getScreenIndex(screen) {
     const screenMap = {
+      'time_check': 0,
+      'journey': 0,
       'welcome': 0,
       'q1': 1, 'q2': 2, 'q3': 3, 'q4': 4,
       'subconscious-power': 5,
@@ -493,22 +496,67 @@ export default function NervousSystemFlow() {
   const formatMoney = (num) => num >= 1000000 ? `$${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M` : num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`
 
   // Render functions for each screen
-  const renderWelcome = () => (
-    <div className="ns-hc-container ns-hc-welcome-container">
-      <h1 className="ns-hc-welcome-greeting">Nervous System Map</h1>
-      <div className="ns-hc-welcome-message">
-        <p><strong>Welcome, {user?.user_metadata?.name || 'there'}!</strong></p>
-        <p>Remember how we talked about your flow hitting a river bank?</p>
-        <p>What if the bank isn't external — what if it's <strong>inside you</strong>?</p>
-        <p>Your nervous system has a boundary around what feels 'safe'. Safe to earn. Safe to be seen. Safe to succeed.</p>
-        <p>Anything beyond that boundary? It pulls you back. Not because you lack capability — but because expansion feels dangerous to your system.</p>
-        <p>This is why ambitious people self-sabotage. Not because they're broken. Because their nervous system is protecting them from something.</p>
-        <p>Let's discover where your boundaries are — so you can expand them.</p>
+  const renderTimeCheck = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Nervous System Map</h1>
+      <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+        <p><span className="time-icon">⏱️</span></p>
+        <p><strong>This flow takes about 5-10 minutes</strong></p>
+        <p style={{ color: 'rgba(255,255,255,0.7)' }}>4 questions to map your nervous system boundaries.</p>
+        <p>Find a quiet moment where you can be honest with yourself.</p>
+        <p><strong>Your insights will be more valuable when you're present.</strong></p>
       </div>
 
-      <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('q1')}>
+      <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
+        I've Got Time, Let's Go
+      </button>
+      <button
+        className="primary-button"
+        onClick={() => navigate(-1)}
+        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
+      >
+        Come Back Later
+      </button>
+    </div>
+  )
+
+  const renderJourney = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Where This Fits</h1>
+      <div className="welcome-message animated-text">
+        <p><strong>In the Find My Flow journey...</strong></p>
+        <p className="highlight-box">
+          <span className="highlight-word">Flow Finder</span> helps you discover <em>what</em> you're meant to build.<br /><br />
+          <span className="highlight-word">Nervous System Map</span> reveals <em>why</em> you might be holding yourself back from building it.
+        </p>
+        <p>This flow uncovers the invisible boundaries your nervous system has created around success, visibility, and earning.</p>
+        <p>Once you see them, you can expand them.</p>
+      </div>
+
+      <button className="primary-button" onClick={() => setCurrentScreen('welcome')}>
+        Makes Sense!
+      </button>
+      <BackButton fromScreen="journey" />
+    </div>
+  )
+
+  const renderWelcome = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Your Internal Boundaries</h1>
+      <div className="welcome-message animated-text">
+        <p><strong>Welcome, {user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'there'}!</strong></p>
+        <p>Your nervous system has a boundary around what feels 'safe'.</p>
+        <p>Safe to earn. Safe to be seen. Safe to succeed.</p>
+        <p>Anything beyond that boundary? <strong>It pulls you back.</strong></p>
+        <p>Not because you lack capability — but because expansion feels dangerous to your system.</p>
+        <p>This is why ambitious people self-sabotage. Not because they're broken. Because their nervous system is protecting them from something.</p>
+        <p className="hint-text">Let's discover where your boundaries are — so you can expand them.</p>
+      </div>
+
+      <button className="primary-button glow-button" onClick={() => setCurrentScreen('q1')}>
         Let's Begin
       </button>
+      <BackButton fromScreen="welcome" />
     </div>
   )
 
@@ -627,7 +675,7 @@ export default function NervousSystemFlow() {
   const renderSubconsciousPower = () => (
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">The Power of Your Subconscious</h1>
-      <div className="ns-hc-welcome-message">
+      <div className="ns-hc-welcome-message animated-text">
         <p>Your <strong>conscious mind</strong> is what you're aware of right now — your thoughts, decisions, what you think you believe.</p>
         <p>But your <strong>subconscious mind</strong> runs 95% of your life. It controls your automatic patterns, emotional reactions, and deeply-held beliefs.</p>
         <p>This is why you can <em>want</em> something consciously (more clients, more visibility, more income) but still find yourself pulling back.</p>
@@ -773,7 +821,7 @@ export default function NervousSystemFlow() {
   const renderTriageIntro = () => (
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">Let's Find Your Edge</h1>
-      <div className="ns-hc-welcome-message">
+      <div className="ns-hc-welcome-message animated-text">
         <p>Now let's see where your system feels safe — and where it contracts.</p>
         <p>I'm going to give you <strong>5 statements to test</strong> using the sway test.</p>
         <p>Say each one out loud, notice your body's response, and let me know: <strong>YES or NO?</strong></p>
@@ -994,7 +1042,7 @@ export default function NervousSystemFlow() {
   const renderContractsIntro = () => (
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">Safety Contracts</h1>
-      <div className="ns-hc-welcome-message">
+      <div className="ns-hc-welcome-message animated-text">
         <p>Your nervous system operates on <strong>safety contracts</strong> — subconscious beliefs designed to protect you.</p>
         <p>These contracts feel true because they once <em>were</em> true. Something happened that taught your system to believe them.</p>
         <p>Now we'll test <strong>{safetyContracts.length} contracts</strong> to see which ones are still active in your system.</p>
@@ -1033,7 +1081,7 @@ export default function NervousSystemFlow() {
   const renderMirrorIntro = () => (
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">The Mirror</h1>
-      <div className="ns-hc-welcome-message">
+      <div className="ns-hc-welcome-message animated-text">
         <p>Now let's reflect back what your nervous system just revealed.</p>
         <p>This isn't judgment — it's <strong>pattern recognition</strong>.</p>
         <p>Understanding your protective pattern is the first step to expanding beyond it.</p>
@@ -1172,6 +1220,8 @@ export default function NervousSystemFlow() {
       </div>
 
       {/* Screen Content */}
+      {currentScreen === 'time_check' && renderTimeCheck()}
+      {currentScreen === 'journey' && renderJourney()}
       {currentScreen === 'welcome' && renderWelcome()}
       {currentScreen === 'q1' && renderQ1()}
       {currentScreen === 'q2' && renderQ2()}

@@ -9,7 +9,7 @@ export default function FlowFinderSkills() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
-  const [currentScreen, setCurrentScreen] = useState('welcome')
+  const [currentScreen, setCurrentScreen] = useState('time_check')
   const [responses, setResponses] = useState({
     q1_childhood: ['', '', '', '', ''],
     q2_highschool: ['', '', '', '', ''],
@@ -79,7 +79,7 @@ export default function FlowFinderSkills() {
 
   // Back button handler
   const goBack = (fromScreen) => {
-    const screenOrder = ['welcome', 'q1', 'q2', 'q3', 'processing1', 'q4', 'q5']
+    const screenOrder = ['time_check', 'journey', 'welcome', 'steve_jobs', 'q1', 'q2', 'q3', 'processing1', 'q4', 'q5']
     const currentIndex = screenOrder.indexOf(fromScreen)
     if (currentIndex > 0) {
       // Skip processing screens when going back
@@ -260,21 +260,92 @@ export default function FlowFinderSkills() {
     }
   }
 
-  const renderWelcome = () => (
+  const renderTimeCheck = () => (
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Flow Finder: Skills Discovery</h1>
-      <div className="welcome-message">
-        <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong></p>
-        <p>What does a business do? It solves a problem, for a person, using a set of skills.</p>
-        <p>By identifying skills we're passionate about using, people we're passionate about serving and problems we're passionate about solving - I believe we can identify our dream business opportunities and jobs.</p>
-        <p>The whole process is inspired by a Steve Jobs quote: <em>"you can't connect the dots looking forward, you can only connect them looking back".</em></p>
-        <p>This question flow will focus on identifying skills you're passionate about by reviewing different periods of your life.</p>
-        <p><strong>For each question, aim for 5+ bullet points.</strong> See each bullet point as a dot - the more dots we have, the better.</p>
+      <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+        <p><span className="time-icon">⏱️</span></p>
+        <p><strong>This flow takes about 15-20 minutes</strong></p>
+        <p style={{ color: 'rgba(255,255,255,0.7)' }}>5 questions about different periods of your life, with AI analysis between sections.</p>
+        <p>Find a quiet moment where you can reflect without rushing.</p>
+        <p><strong>Your insights will be more valuable when you're present.</strong></p>
       </div>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('q1')}>
-        Yep!
+      <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
+        I've Got Time, Let's Go
       </button>
+      <button
+        className="primary-button"
+        onClick={() => navigate(-1)}
+        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
+      >
+        Come Back Later
+      </button>
+    </div>
+  )
+
+  const renderJourney = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Where This Fits</h1>
+      <div className="welcome-message animated-text">
+        <p><strong>In the Find My Flow journey...</strong></p>
+        <p className="highlight-box">
+          <span className="highlight-word">Flow Finder: Skills</span> is the first step.<br /><br />
+          You'll discover the <em>skills and curiosities</em> that make you unique — the dots you've been collecting your whole life.
+        </p>
+        <p>After this, you'll also explore:</p>
+        <p style={{ color: 'rgba(255,255,255,0.8)', lineHeight: '1.8' }}>
+          • <strong>Problems</strong> — issues you naturally want to solve<br />
+          • <strong>Persona</strong> — the people you're meant to serve
+        </p>
+        <p>These three together create <span className="highlight-word">business opportunities that feel like play</span>.</p>
+      </div>
+
+      <button className="primary-button" onClick={() => setCurrentScreen('welcome')}>
+        Makes Sense!
+      </button>
+      <BackButton fromScreen="journey" />
+    </div>
+  )
+
+  const renderWelcome = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">The Foundation of Every Business</h1>
+      <div className="welcome-message animated-text">
+        <p><strong>Hey {user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'there'}!</strong></p>
+        <p>Every business, at its core, does three things:</p>
+        <p className="highlight-box">
+          It <span className="highlight-word">solves a problem</span>, for a <span className="highlight-word">specific person</span>, using a <span className="highlight-word">set of skills</span>.
+        </p>
+        <p>Flow Finder helps you discover all three.</p>
+        <p>When you find the intersection of skills you love using, problems you're passionate about solving, and people you genuinely want to serve — <strong>you find business opportunities that feel like play</strong>.</p>
+      </div>
+
+      <button className="primary-button" onClick={() => setCurrentScreen('steve_jobs')}>
+        Makes Sense!
+      </button>
+      <BackButton fromScreen="welcome" />
+    </div>
+  )
+
+  const renderSteveJobs = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Connecting the Dots</h1>
+      <div className="welcome-message animated-text">
+        <p className="quote-box">
+          "You can't connect the dots looking forward; you can only connect them looking backward. So you have to trust that the dots will somehow connect in your future."
+        </p>
+        <p style={{ textAlign: 'right', color: 'rgba(255,255,255,0.7)', marginTop: '4px', marginBottom: '20px' }}>— Steve Jobs</p>
+        <p>The <span className="highlight-word">curiosities</span> you've loved throughout your life aren't random.<br /><strong>They're clues.</strong></p>
+        <p>We're about to look back at different periods of your life and collect these "dots" — the things you naturally gravitated toward.</p>
+        <p>Then <strong>AI will help us find the patterns</strong> that connect them.</p>
+        <p className="hint-text">💡 For each question, aim for 5+ bullet points.<br />The more dots we collect, the clearer the patterns become.</p>
+      </div>
+
+      <button className="primary-button glow-button" onClick={() => setCurrentScreen('q1')}>
+        Let's Collect Some Dots!
+      </button>
+      <BackButton fromScreen="steve_jobs" />
     </div>
   )
 
@@ -628,7 +699,10 @@ export default function FlowFinderSkills() {
 
   // Main render logic
   const screens = {
+    time_check: renderTimeCheck,
+    journey: renderJourney,
     welcome: renderWelcome,
+    steve_jobs: renderSteveJobs,
     q1: renderQuestion1,
     q2: renderQuestion2,
     q3: renderQuestion3,
@@ -648,7 +722,7 @@ export default function FlowFinderSkills() {
             <div
               key={i}
               className={`progress-dot ${
-                i === 0 && currentScreen === 'welcome' ? 'active' :
+                i === 0 && ['time_check', 'journey', 'welcome', 'steve_jobs'].includes(currentScreen) ? 'active' :
                 i === 1 && ['q1', 'q2', 'q3'].includes(currentScreen) ? 'active' :
                 i === 2 && currentScreen === 'processing1' ? 'active' :
                 i === 3 && ['q4', 'q5'].includes(currentScreen) ? 'active' :

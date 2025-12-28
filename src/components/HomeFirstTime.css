@@ -5,7 +5,7 @@
 
 .home-first-time {
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   padding: 24px;
   display: flex;
@@ -154,13 +154,13 @@
 }
 
 .progress-dots .dot.active {
-  background: var(--purple, #5e17eb);
+  background: #E9A23B;
   width: 24px;
   border-radius: 5px;
 }
 
 .progress-dots .dot.completed {
-  background: #10b981;
+  background: #E9A23B;
 }
 
 .question-container {

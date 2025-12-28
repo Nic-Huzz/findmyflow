@@ -1,61 +1,41 @@
 /**
  * ExistingProjectFlow.jsx
  *
- * Captures existing projects for Vibe Risers and Movement Makers
- * who already have a project/business they're working on.
+ * Captures existing business info for Vibe Risers and Movement Makers
+ * who already have a business they're working on.
  *
- * Questions:
- * 1. Project name
- * 2. Brief description
- * 3. Skills used (text/optional link)
- * 4. Problem solved (text/optional link)
- * 5. Ideal customer (text/optional link)
- * 6. Duration working on it
- * 7. Major milestone moments
- * 8. Major resistant moments
- * 9. Current feeling about it
- * 10. Stage determination
+ * Questions (6 steps):
+ * 1. Business name
+ * 2. One-liner description
+ * 3. Skills used (tag input)
+ * 4. Problem solved
+ * 5. Ideal customer/persona
+ * 6. Stage determination
+ *
+ * Skills, problem, and persona are saved as seed clusters for Flow Finder.
  *
  * Created: Dec 2024
- * Part of project-based refactor (see docs/2024-12-20-major-refactor-plan.md)
+ * Updated: Dec 2024 - Simplified to 6 steps, added seed cluster capture
  */
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { createExistingProject } from '../lib/projectCreation'
-import { STAGES, determineStartingStage } from '../lib/stageConfig'
+import { STAGES } from '../lib/stageConfig'
 import { supabase } from '../lib/supabaseClient'
 import './ExistingProjectFlow.css'
 
 const FLOW_STAGES = {
   NAME: 'name',
   DESCRIPTION: 'description',
-  DURATION: 'duration',
-  MILESTONES: 'milestones',
-  RESISTANCE: 'resistance',
-  FEELING: 'feeling',
+  SKILLS: 'skills',
+  PROBLEM: 'problem',
+  PERSONA: 'persona',
   STAGE: 'stage',
   SAVING: 'saving',
   SUCCESS: 'success'
 }
-
-const DURATION_OPTIONS = [
-  { value: 'less_than_month', label: 'Less than a month' },
-  { value: '1_3_months', label: '1-3 months' },
-  { value: '3_6_months', label: '3-6 months' },
-  { value: '6_12_months', label: '6-12 months' },
-  { value: '1_2_years', label: '1-2 years' },
-  { value: 'more_than_2_years', label: 'More than 2 years' }
-]
-
-const FEELING_OPTIONS = [
-  { value: 'excited', label: 'Excited and energized', emoji: '🔥' },
-  { value: 'hopeful', label: 'Hopeful but uncertain', emoji: '🌱' },
-  { value: 'stuck', label: 'Stuck and looking for direction', emoji: '🧭' },
-  { value: 'frustrated', label: 'Frustrated but determined', emoji: '💪' },
-  { value: 'mixed', label: 'Mixed feelings', emoji: '🌊' }
-]
 
 const STAGE_OPTIONS = [
   { value: 'not_validated', label: "Haven't validated with customers yet", stage: STAGES.VALIDATION },
@@ -78,17 +58,15 @@ function ExistingProjectFlow({ onComplete, onBack }) {
   const [projectData, setProjectData] = useState({
     name: '',
     description: '',
-    duration: '',
-    milestoneMoments: [],
-    resistantMoments: [],
-    currentFeeling: '',
+    skills: [],
+    problem: '',
+    persona: '',
     stageAnswer: '',
     startingStage: STAGES.VALIDATION
   })
 
-  // Temp state for array inputs
-  const [currentMilestone, setCurrentMilestone] = useState('')
-  const [currentResistance, setCurrentResistance] = useState('')
+  // Temp state for skill input
+  const [currentSkill, setCurrentSkill] = useState('')
 
   const updateProjectData = (field, value) => {
     setProjectData(prev => ({ ...prev, [field]: value }))
@@ -100,19 +78,16 @@ function ExistingProjectFlow({ onComplete, onBack }) {
         if (projectData.name.trim()) setStage(FLOW_STAGES.DESCRIPTION)
         break
       case FLOW_STAGES.DESCRIPTION:
-        setStage(FLOW_STAGES.DURATION)
+        setStage(FLOW_STAGES.SKILLS)
         break
-      case FLOW_STAGES.DURATION:
-        if (projectData.duration) setStage(FLOW_STAGES.MILESTONES)
+      case FLOW_STAGES.SKILLS:
+        setStage(FLOW_STAGES.PROBLEM)
         break
-      case FLOW_STAGES.MILESTONES:
-        setStage(FLOW_STAGES.RESISTANCE)
+      case FLOW_STAGES.PROBLEM:
+        setStage(FLOW_STAGES.PERSONA)
         break
-      case FLOW_STAGES.RESISTANCE:
-        setStage(FLOW_STAGES.FEELING)
-        break
-      case FLOW_STAGES.FEELING:
-        if (projectData.currentFeeling) setStage(FLOW_STAGES.STAGE)
+      case FLOW_STAGES.PERSONA:
+        setStage(FLOW_STAGES.STAGE)
         break
       case FLOW_STAGES.STAGE:
         if (projectData.stageAnswer) handleSubmit()
@@ -130,51 +105,96 @@ function ExistingProjectFlow({ onComplete, onBack }) {
       case FLOW_STAGES.DESCRIPTION:
         setStage(FLOW_STAGES.NAME)
         break
-      case FLOW_STAGES.DURATION:
+      case FLOW_STAGES.SKILLS:
         setStage(FLOW_STAGES.DESCRIPTION)
         break
-      case FLOW_STAGES.MILESTONES:
-        setStage(FLOW_STAGES.DURATION)
+      case FLOW_STAGES.PROBLEM:
+        setStage(FLOW_STAGES.SKILLS)
         break
-      case FLOW_STAGES.RESISTANCE:
-        setStage(FLOW_STAGES.MILESTONES)
-        break
-      case FLOW_STAGES.FEELING:
-        setStage(FLOW_STAGES.RESISTANCE)
+      case FLOW_STAGES.PERSONA:
+        setStage(FLOW_STAGES.PROBLEM)
         break
       case FLOW_STAGES.STAGE:
-        setStage(FLOW_STAGES.FEELING)
+        setStage(FLOW_STAGES.PERSONA)
         break
       default:
         break
     }
   }
 
-  const addMilestone = () => {
-    if (currentMilestone.trim()) {
-      updateProjectData('milestoneMoments', [...projectData.milestoneMoments, currentMilestone.trim()])
-      setCurrentMilestone('')
+  const addSkill = () => {
+    if (currentSkill.trim() && !projectData.skills.includes(currentSkill.trim())) {
+      updateProjectData('skills', [...projectData.skills, currentSkill.trim()])
+      setCurrentSkill('')
     }
   }
 
-  const removeMilestone = (index) => {
-    updateProjectData('milestoneMoments', projectData.milestoneMoments.filter((_, i) => i !== index))
-  }
-
-  const addResistance = () => {
-    if (currentResistance.trim()) {
-      updateProjectData('resistantMoments', [...projectData.resistantMoments, currentResistance.trim()])
-      setCurrentResistance('')
-    }
-  }
-
-  const removeResistance = (index) => {
-    updateProjectData('resistantMoments', projectData.resistantMoments.filter((_, i) => i !== index))
+  const removeSkill = (index) => {
+    updateProjectData('skills', projectData.skills.filter((_, i) => i !== index))
   }
 
   const handleStageSelect = (option) => {
     updateProjectData('stageAnswer', option.value)
     updateProjectData('startingStage', option.stage)
+  }
+
+  const saveSeedClusters = async (projectId) => {
+    if (!user?.id) return
+
+    const seedClusters = []
+    const sessionId = crypto.randomUUID()
+
+    // Save skills as seed cluster
+    if (projectData.skills.length > 0) {
+      seedClusters.push({
+        user_id: user.id,
+        session_id: sessionId,
+        cluster_type: 'skills',
+        cluster_stage: 'seed',
+        cluster_label: `Skills: ${projectData.skills.slice(0, 3).join(', ')}${projectData.skills.length > 3 ? '...' : ''}`,
+        items: projectData.skills,
+        insight: `These are your core skills from ${projectData.name}.`,
+        source_tags: ['existing_project', projectId]
+      })
+    }
+
+    // Save problem as seed cluster
+    if (projectData.problem.trim()) {
+      seedClusters.push({
+        user_id: user.id,
+        session_id: sessionId,
+        cluster_type: 'problems',
+        cluster_stage: 'seed',
+        cluster_label: projectData.problem.substring(0, 50) + (projectData.problem.length > 50 ? '...' : ''),
+        items: [projectData.problem],
+        insight: `This is the main problem you solve with ${projectData.name}.`,
+        source_tags: ['existing_project', projectId]
+      })
+    }
+
+    // Save persona as seed cluster
+    if (projectData.persona.trim()) {
+      seedClusters.push({
+        user_id: user.id,
+        session_id: sessionId,
+        cluster_type: 'persona',
+        cluster_stage: 'seed',
+        cluster_label: projectData.persona.substring(0, 50) + (projectData.persona.length > 50 ? '...' : ''),
+        items: [projectData.persona],
+        insight: `This is your ideal customer for ${projectData.name}.`,
+        source_tags: ['existing_project', projectId]
+      })
+    }
+
+    if (seedClusters.length > 0) {
+      const { error } = await supabase
+        .from('nikigai_clusters')
+        .insert(seedClusters)
+
+      if (error) {
+        console.error('Error saving seed clusters:', error)
+      }
+    }
   }
 
   const handleSubmit = async () => {
@@ -191,14 +211,13 @@ function ExistingProjectFlow({ onComplete, onBack }) {
       const result = await createExistingProject(user.id, {
         name: projectData.name,
         description: projectData.description,
-        duration: projectData.duration,
-        milestoneMoments: projectData.milestoneMoments,
-        resistantMoments: projectData.resistantMoments,
-        currentFeeling: projectData.currentFeeling,
         startingStage: projectData.startingStage
       })
 
       if (result.success) {
+        // Save seed clusters for Flow Finder
+        await saveSeedClusters(result.project?.id)
+
         // Mark onboarding as complete
         await supabase
           .from('user_stage_progress')
@@ -223,10 +242,10 @@ function ExistingProjectFlow({ onComplete, onBack }) {
     }
   }
 
-  // Calculate progress
-  const stages = Object.values(FLOW_STAGES).filter(s => s !== 'saving' && s !== 'success')
-  const currentIndex = stages.indexOf(stage)
-  const progress = ((currentIndex + 1) / stages.length) * 100
+  // Calculate progress (6 main steps)
+  const mainStages = ['name', 'description', 'skills', 'problem', 'persona', 'stage']
+  const currentIndex = mainStages.indexOf(stage)
+  const progress = currentIndex >= 0 ? ((currentIndex + 1) / mainStages.length) * 100 : 0
 
   // Render stages
   return (
@@ -240,13 +259,13 @@ function ExistingProjectFlow({ onComplete, onBack }) {
       {/* NAME STAGE */}
       {stage === FLOW_STAGES.NAME && (
         <div className="flow-step">
-          <h2>Tell me about your project</h2>
-          <p className="step-subtitle">What's the name of your project or business?</p>
+          <h2>Tell me about your business</h2>
+          <p className="step-subtitle">What's the name of your business?</p>
           <input
             type="text"
             value={projectData.name}
             onChange={(e) => updateProjectData('name', e.target.value)}
-            placeholder="e.g., My Coaching Business"
+            placeholder="e.g., Flow Coaching"
             className="flow-input"
             autoFocus
           />
@@ -271,13 +290,13 @@ function ExistingProjectFlow({ onComplete, onBack }) {
       {stage === FLOW_STAGES.DESCRIPTION && (
         <div className="flow-step">
           <h2>Describe {projectData.name}</h2>
-          <p className="step-subtitle">In a sentence or two, what do you do?</p>
+          <p className="step-subtitle">In one sentence, what does it do?</p>
           <textarea
             value={projectData.description}
             onChange={(e) => updateProjectData('description', e.target.value)}
-            placeholder="I help [who] with [what] so they can [result]..."
+            placeholder="e.g., I help busy professionals find work-life balance through coaching"
             className="flow-textarea"
-            rows={4}
+            rows={3}
             autoFocus
           />
           <div className="button-row">
@@ -294,21 +313,60 @@ function ExistingProjectFlow({ onComplete, onBack }) {
         </div>
       )}
 
-      {/* DURATION STAGE */}
-      {stage === FLOW_STAGES.DURATION && (
+      {/* SKILLS STAGE */}
+      {stage === FLOW_STAGES.SKILLS && (
         <div className="flow-step">
-          <h2>How long have you been working on this?</h2>
-          <div className="options-grid">
-            {DURATION_OPTIONS.map(option => (
-              <button
-                key={option.value}
-                className={`option-button ${projectData.duration === option.value ? 'selected' : ''}`}
-                onClick={() => updateProjectData('duration', option.value)}
-              >
-                {option.label}
-              </button>
-            ))}
+          <h2>What skills do you use?</h2>
+          <p className="step-subtitle">Add the skills you bring to this business</p>
+
+          <div className="tag-input-container">
+            <input
+              type="text"
+              value={currentSkill}
+              onChange={(e) => setCurrentSkill(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
+              placeholder="e.g., coaching, writing, strategy..."
+              className="flow-input"
+              autoFocus
+            />
+            <button className="add-button" onClick={addSkill}>Add</button>
           </div>
+
+          {projectData.skills.length > 0 && (
+            <div className="tags-list">
+              {projectData.skills.map((skill, index) => (
+                <span key={index} className="tag skill-tag">
+                  {skill}
+                  <button onClick={() => removeSkill(index)}>&times;</button>
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="button-row">
+            <button className="secondary-button" onClick={handleBack}>
+              Back
+            </button>
+            <button className="primary-button" onClick={handleNext}>
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* PROBLEM STAGE */}
+      {stage === FLOW_STAGES.PROBLEM && (
+        <div className="flow-step">
+          <h2>What problem do you solve?</h2>
+          <p className="step-subtitle">What main problem do you solve for your customers?</p>
+          <textarea
+            value={projectData.problem}
+            onChange={(e) => updateProjectData('problem', e.target.value)}
+            placeholder="e.g., Busy professionals struggle to find work-life balance and feel burnt out"
+            className="flow-textarea"
+            rows={3}
+            autoFocus
+          />
           <div className="button-row">
             <button className="secondary-button" onClick={handleBack}>
               Back
@@ -316,7 +374,6 @@ function ExistingProjectFlow({ onComplete, onBack }) {
             <button
               className="primary-button"
               onClick={handleNext}
-              disabled={!projectData.duration}
             >
               Continue
             </button>
@@ -324,102 +381,19 @@ function ExistingProjectFlow({ onComplete, onBack }) {
         </div>
       )}
 
-      {/* MILESTONES STAGE */}
-      {stage === FLOW_STAGES.MILESTONES && (
+      {/* PERSONA STAGE */}
+      {stage === FLOW_STAGES.PERSONA && (
         <div className="flow-step">
-          <h2>Major milestone moments</h2>
-          <p className="step-subtitle">What wins or breakthroughs have you had? (Add as many as you like)</p>
-
-          <div className="tag-input-container">
-            <input
-              type="text"
-              value={currentMilestone}
-              onChange={(e) => setCurrentMilestone(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && addMilestone()}
-              placeholder="e.g., Got my first paying client"
-              className="flow-input"
-            />
-            <button className="add-button" onClick={addMilestone}>Add</button>
-          </div>
-
-          {projectData.milestoneMoments.length > 0 && (
-            <div className="tags-list">
-              {projectData.milestoneMoments.map((item, index) => (
-                <span key={index} className="tag milestone-tag">
-                  {item}
-                  <button onClick={() => removeMilestone(index)}>&times;</button>
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className="button-row">
-            <button className="secondary-button" onClick={handleBack}>
-              Back
-            </button>
-            <button className="primary-button" onClick={handleNext}>
-              Continue
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* RESISTANCE STAGE */}
-      {stage === FLOW_STAGES.RESISTANCE && (
-        <div className="flow-step">
-          <h2>Major resistant moments</h2>
-          <p className="step-subtitle">What challenges or blocks have you faced? (Add as many as you like)</p>
-
-          <div className="tag-input-container">
-            <input
-              type="text"
-              value={currentResistance}
-              onChange={(e) => setCurrentResistance(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && addResistance()}
-              placeholder="e.g., Fear of putting myself out there"
-              className="flow-input"
-            />
-            <button className="add-button" onClick={addResistance}>Add</button>
-          </div>
-
-          {projectData.resistantMoments.length > 0 && (
-            <div className="tags-list">
-              {projectData.resistantMoments.map((item, index) => (
-                <span key={index} className="tag resistance-tag">
-                  {item}
-                  <button onClick={() => removeResistance(index)}>&times;</button>
-                </span>
-              ))}
-            </div>
-          )}
-
-          <div className="button-row">
-            <button className="secondary-button" onClick={handleBack}>
-              Back
-            </button>
-            <button className="primary-button" onClick={handleNext}>
-              Continue
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* FEELING STAGE */}
-      {stage === FLOW_STAGES.FEELING && (
-        <div className="flow-step">
-          <h2>How are you feeling about it right now?</h2>
-          <div className="options-grid feeling-options">
-            {FEELING_OPTIONS.map(option => (
-              <button
-                key={option.value}
-                className={`option-button ${projectData.currentFeeling === option.value ? 'selected' : ''}`}
-                onClick={() => updateProjectData('currentFeeling', option.value)}
-              >
-                <span className="option-emoji">{option.emoji}</span>
-                {option.label}
-              </button>
-            ))}
-          </div>
+          <h2>Who is your ideal customer?</h2>
+          <p className="step-subtitle">Describe your ideal customer in a sentence</p>
+          <textarea
+            value={projectData.persona}
+            onChange={(e) => updateProjectData('persona', e.target.value)}
+            placeholder="e.g., Burnt-out executives in their 40s looking for a career change"
+            className="flow-textarea"
+            rows={3}
+            autoFocus
+          />
           <div className="button-row">
             <button className="secondary-button" onClick={handleBack}>
               Back
@@ -427,7 +401,6 @@ function ExistingProjectFlow({ onComplete, onBack }) {
             <button
               className="primary-button"
               onClick={handleNext}
-              disabled={!projectData.currentFeeling}
             >
               Continue
             </button>
@@ -438,7 +411,7 @@ function ExistingProjectFlow({ onComplete, onBack }) {
       {/* STAGE DETERMINATION */}
       {stage === FLOW_STAGES.STAGE && (
         <div className="flow-step">
-          <h2>Where is this project at?</h2>
+          <h2>Where is this business at?</h2>
           <p className="step-subtitle">This helps us show you the right tools and challenges</p>
           <div className="stage-options">
             {STAGE_OPTIONS.map(option => (
@@ -462,7 +435,7 @@ function ExistingProjectFlow({ onComplete, onBack }) {
               onClick={handleNext}
               disabled={!projectData.stageAnswer || isLoading}
             >
-              {isLoading ? 'Saving...' : 'Create Project'}
+              {isLoading ? 'Saving...' : 'Create Business'}
             </button>
           </div>
         </div>
@@ -472,8 +445,8 @@ function ExistingProjectFlow({ onComplete, onBack }) {
       {stage === FLOW_STAGES.SAVING && (
         <div className="flow-step saving-step">
           <div className="loading-spinner" />
-          <h2>Creating your project...</h2>
-          <p>Setting up {projectData.name}</p>
+          <h2>Setting up your business...</h2>
+          <p>Creating {projectData.name}</p>
         </div>
       )}
 
@@ -481,7 +454,7 @@ function ExistingProjectFlow({ onComplete, onBack }) {
       {stage === FLOW_STAGES.SUCCESS && (
         <div className="flow-step success-step">
           <div className="success-icon">✓</div>
-          <h2>Project Created!</h2>
+          <h2>Business Created!</h2>
           <p>Taking you to your dashboard...</p>
         </div>
       )}

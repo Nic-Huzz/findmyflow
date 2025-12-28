@@ -1,12 +1,13 @@
 /**
  * ChallengeStageTabs.jsx
  *
- * Displays the 6 universal stage tabs for the 7-day challenge.
- * Users can view quests for any stage but can only complete quests
- * from their current stage and previous stages.
+ * Displays the 7 universal stage tabs for the 7-day challenge.
+ * Stage 0 (Flow Finder) is user-level and always accessible.
+ * Stages 1-6 are project-level.
  *
  * Features:
- * - All 6 stages always visible
+ * - All 7 stages always visible (0 = Flow Finder, 1-6 = project stages)
+ * - Flow Finder (stage 0) always accessible regardless of project stage
  * - Current stage highlighted
  * - Completed stages shown with checkmark
  * - Future stages grayed out but visible
@@ -20,13 +21,13 @@ import { useState, useRef, useEffect } from 'react'
 import { STAGE_CONFIG, getAllStages } from '../lib/stageConfig'
 import './ChallengeStageTabs.css'
 
-function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onTabChange }) {
+function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onTabChange, flowFinderComplete = false }) {
   const tabsRef = useRef(null)
   const stages = getAllStages()
 
   // Auto-scroll to active tab on mount
   useEffect(() => {
-    if (tabsRef.current && activeTab) {
+    if (tabsRef.current && activeTab !== undefined) {
       const activeTabEl = tabsRef.current.querySelector(`[data-stage="${activeTab}"]`)
       if (activeTabEl) {
         activeTabEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
@@ -34,50 +35,66 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
     }
   }, [activeTab])
 
-  const getTabState = (stageId) => {
+  const getTabState = (stageId, stageConfig) => {
+    // Flow Finder (stage 0) - user-level, always accessible
+    if (stageConfig?.alwaysAccessible) {
+      if (flowFinderComplete) return 'completed'
+      return 'available'
+    }
+    // Regular project stages
     if (completedStages.includes(stageId)) return 'completed'
     if (stageId === currentStage) return 'current'
     if (stageId < currentStage) return 'available'
     return 'locked'
   }
 
-  const handleTabClick = (stageId) => {
+  const handleTabClick = (stageId, stageConfig) => {
+    // Flow Finder is always clickable
+    if (stageConfig?.alwaysAccessible) {
+      onTabChange(stageId)
+      return
+    }
     // Allow clicking on current and previous stages only
     if (stageId <= currentStage) {
       onTabChange(stageId)
     }
   }
 
+  // Calculate progress: stage 0 doesn't count toward project progress
+  const projectStages = stages.filter(s => !s.alwaysAccessible)
+  const progressPercent = currentStage >= 1
+    ? ((currentStage - 1) / (projectStages.length - 1)) * 100
+    : 0
+
   return (
     <div className="stage-tabs-container">
       <div className="stage-tabs" ref={tabsRef}>
         {stages.map(stage => {
-          const state = getTabState(stage.id)
+          const state = getTabState(stage.id, stage)
           const isActive = activeTab === stage.id
 
           return (
             <button
               key={stage.id}
               data-stage={stage.id}
-              className={`stage-tab ${state} ${isActive ? 'active' : ''}`}
-              onClick={() => handleTabClick(stage.id)}
+              className={`stage-tab ${state} ${isActive ? 'active' : ''} ${stage.alwaysAccessible ? 'always-accessible' : ''}`}
+              onClick={() => handleTabClick(stage.id, stage)}
               disabled={state === 'locked'}
               style={{ '--stage-color': stage.color }}
             >
               <span className="tab-icon">{stage.icon}</span>
               <span className="tab-label">{stage.shortName}</span>
               {state === 'completed' && <span className="completed-check">✓</span>}
-              {state === 'current' && <span className="current-dot" />}
             </button>
           )
         })}
       </div>
 
-      {/* Progress Indicator */}
+      {/* Progress Indicator - only for project stages (1-6) */}
       <div className="progress-line">
         <div
           className="progress-fill"
-          style={{ width: `${((currentStage - 1) / (stages.length - 1)) * 100}%` }}
+          style={{ width: `${progressPercent}%` }}
         />
       </div>
     </div>

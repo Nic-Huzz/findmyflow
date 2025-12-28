@@ -34,7 +34,8 @@
 }
 
 /* Flow Section - Minimal Clean Style with Brand Colors */
-.flow-section {
+/* Scoped to .flow-map to prevent global leakage */
+.flow-map .flow-section {
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -44,11 +45,11 @@
   margin-bottom: 16px;
 }
 
-.flow-section:last-of-type {
+.flow-map .flow-section:last-of-type {
   margin-bottom: 0;
 }
 
-.section-header {
+.flow-map .section-header {
   padding: 20px 24px;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -62,16 +63,16 @@
   margin: 0;
 }
 
-.section-header:hover {
+.flow-map .section-header:hover {
   background: #fafafa;
 }
 
-.section-header.expanded {
+.flow-map .section-header.expanded {
   background: white;
   border-bottom: none;
 }
 
-.flow-section .section-title {
+.flow-map .flow-section .section-title {
   display: flex;
   align-items: center;
   gap: 12px;

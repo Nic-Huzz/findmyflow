@@ -249,9 +249,9 @@
 
 /* Projects Grid
    ========================================================================== */
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+.main-content .projects-grid {
+  display: flex !important;
+  flex-direction: column !important;
   gap: 24px;
 }
 
@@ -671,14 +671,14 @@
 }
 
 /* Entry Card in Timeline */
-.entry-card {
+.timeline-entry .entry-card {
   background: #fafafa;
   border-radius: 12px;
   padding: 16px;
   transition: all 0.3s;
 }
 
-.entry-card:hover {
+.timeline-entry .entry-card:hover {
   background: #f5f5f5;
   transform: translateX(4px);
 }
@@ -807,6 +807,238 @@
   }
 }
 
+/* ============================================================================
+   SeeYourFlow-Style Quick Log
+   ============================================================================ */
+.quick-log.flow-style {
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.quick-log.flow-style .quick-log-title {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.quick-log.flow-style .question-group {
+  margin-bottom: 16px;
+}
+
+.quick-log.flow-style .question-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.quick-log.flow-style .two-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.quick-log.flow-style .option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.quick-log.flow-style .option-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.quick-log.flow-style .option-btn.selected {
+  background: rgba(233, 162, 59, 0.3);
+  border-color: #E9A23B;
+}
+
+.quick-log.flow-style .option-emoji {
+  font-size: 1.5rem;
+}
+
+/* Direction Preview */
+.quick-log.flow-style .direction-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.quick-log.flow-style .direction-preview.direction-north {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.quick-log.flow-style .direction-preview.direction-east {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.quick-log.flow-style .direction-preview.direction-south {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.quick-log.flow-style .direction-preview.direction-west {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.quick-log.flow-style .direction-arrow {
+  font-size: 1.2rem;
+}
+
+/* Headline Input */
+.quick-log.flow-style .headline-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.quick-log.flow-style .headline-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.quick-log.flow-style .headline-input:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+/* Comment Textarea */
+.quick-log.flow-style .comment-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: none;
+}
+
+.quick-log.flow-style .comment-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.quick-log.flow-style .comment-textarea:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+/* Date Options */
+.quick-log.flow-style .date-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.quick-log.flow-style .date-option {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.quick-log.flow-style .date-option:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.quick-log.flow-style .date-option.selected {
+  background: rgba(233, 162, 59, 0.3);
+  border-color: #E9A23B;
+}
+
+/* Month Picker */
+.quick-log.flow-style .month-picker {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.5l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  margin-top: 10px;
+}
+
+.quick-log.flow-style .month-picker:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+.quick-log.flow-style .month-picker option {
+  background: #4a0ea8;
+  color: white;
+}
+
+/* Submit Button */
+.quick-log.flow-style .submit-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  margin-top: 8px;
+}
+
+.quick-log.flow-style .submit-btn:hover:not(:disabled) {
+  background: #d4912f;
+  transform: translateY(-2px);
+}
+
+.quick-log.flow-style .submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Mobile Responsive
    ========================================================================== */
 @media (max-width: 768px) {
@@ -842,5 +1074,17 @@
 
   .button-row {
     grid-template-columns: 1fr;
+  }
+
+  .quick-log.flow-style .two-options {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .quick-log.flow-style .option-btn {
+    padding: 14px 10px;
+  }
+
+  .quick-log.flow-style .option-emoji {
+    font-size: 1.25rem;
   }
 }

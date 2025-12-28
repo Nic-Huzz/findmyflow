@@ -24,8 +24,8 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
 
-  // Core state
-  const [stage, setStage] = useState(STAGES.WELCOME)
+  // Core state - start with TIME_CHECK before welcome
+  const [stage, setStage] = useState(STAGES.TIME_CHECK)
   const [questionsData, setQuestionsData] = useState(null)
   const [offersData, setOffersData] = useState(null)
   const [answers, setAnswers] = useState({})
@@ -332,7 +332,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
         <div className="welcome-container">
           <div className="welcome-content">
             <h1 className="welcome-greeting">{config.title}</h1>
-            <div className="welcome-message">
+            <div className="welcome-message animated-text">
               {welcomeContent}
             </div>
           </div>
@@ -340,6 +340,37 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
             Let's Find Your Offer
           </button>
           <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m money model course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
+        </div>
+      </div>
+    )
+  }
+
+  // TIME CHECK STAGE (first screen, before welcome)
+  if (stage === STAGES.TIME_CHECK) {
+    return (
+      <div className={config.cssClass}>
+        <ProgressDots stageGroups={config.stageGroups} currentStage={stage} />
+        <div className="welcome-container">
+          <h1 className="welcome-greeting">{config.title}</h1>
+          <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+            <p><span className="time-icon">⏱️</span></p>
+            <p><strong>This flow takes about {config.timeEstimate || '3 minutes'}</strong></p>
+            <p style={{ color: 'rgba(255,255,255,0.7)' }}>{config.timeCheckMessage || "10 quick questions to find your best strategy."}</p>
+            <p>Find a quiet moment where you can think clearly.</p>
+          </div>
+          <button
+            className="primary-button glow-button"
+            onClick={() => setStage(STAGES.WELCOME)}
+          >
+            I've Got Time, Let's Go
+          </button>
+          <button
+            className="secondary-button"
+            onClick={() => navigate(-1)}
+            style={{ marginTop: '12px' }}
+          >
+            Come Back Later
+          </button>
         </div>
       </div>
     )

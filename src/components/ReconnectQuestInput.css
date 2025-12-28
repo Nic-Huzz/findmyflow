@@ -1,0 +1,480 @@
+/**
+ * ReconnectQuestInput.css
+ * Styles for enhanced Reconnect quest inputs
+ */
+
+.reconnect-input {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reconnect-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reconnect-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Textarea */
+.reconnect-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.reconnect-textarea:focus {
+  outline: none;
+  border-color: #0ea5e9;
+}
+
+.reconnect-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* State Selector (1-5 scale) */
+.state-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.state-end {
+  font-size: 1.25rem;
+}
+
+.state-buttons {
+  display: flex;
+  flex: 1;
+  gap: 0.25rem;
+}
+
+.state-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.state-btn:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.state-btn.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: white;
+}
+
+/* Connection rating (prayer) */
+.state-btn.connection.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+}
+
+/* Meaningfulness rating */
+.state-btn.meaningful.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+}
+
+/* Shift Display */
+.shift-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.shift-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.shift-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.shift-value.positive {
+  color: #22c55e;
+}
+
+.shift-value.negative {
+  color: #ef4444;
+}
+
+.shift-value.neutral {
+  color: #6b7280;
+}
+
+/* Dimension Grid */
+.dimension-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.375rem;
+}
+
+.dimension-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.5rem 0.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dimension-option:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.dimension-option.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: white;
+}
+
+.dimension-icon {
+  font-size: 1.25rem;
+}
+
+.dimension-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Breathwork Type Grid */
+.breathwork-type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.breathwork-type-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.breathwork-type-option:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.breathwork-type-option.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: white;
+}
+
+.breathwork-type-icon {
+  font-size: 1.5rem;
+}
+
+.breathwork-type-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Prayer Elements Grid */
+.prayer-elements-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+.prayer-element {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.625rem 0.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prayer-element:hover {
+  border-color: #c4b5fd;
+  background: #faf5ff;
+}
+
+.prayer-element.selected {
+  border-color: #8b5cf6;
+  background: #8b5cf6;
+  color: white;
+}
+
+.prayer-icon {
+  font-size: 1.25rem;
+}
+
+.prayer-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Duration Selector */
+.duration-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.duration-option {
+  padding: 0.625rem 0.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.duration-option:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.duration-option.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: white;
+}
+
+/* Drain Types Grid */
+.drain-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.375rem;
+}
+
+.drain-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.625rem 0.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.drain-option:hover {
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+.drain-option.selected {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.drain-icon {
+  font-size: 1.25rem;
+}
+
+.drain-label {
+  font-size: 0.575rem;
+  font-weight: 600;
+  text-align: center;
+  color: #374151;
+}
+
+.drain-option.selected .drain-label {
+  color: #991b1b;
+}
+
+/* Difficulty Selector */
+.difficulty-selector {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.375rem;
+}
+
+.difficulty-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.5rem 0.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficulty-option:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.difficulty-option.selected {
+  border-color: #7c3aed;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+}
+
+.difficulty-emoji {
+  font-size: 1.25rem;
+}
+
+.difficulty-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #374151;
+}
+
+.difficulty-option.selected .difficulty-label {
+  color: #6d28d9;
+}
+
+/* Outcome Grid */
+.outcome-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.outcome-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.outcome-option:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.outcome-option.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: white;
+}
+
+.outcome-icon {
+  font-size: 1.5rem;
+}
+
+.outcome-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Submit Button */
+.reconnect-submit-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.reconnect-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.reconnect-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .dimension-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .dimension-label {
+    font-size: 0.5rem;
+  }
+
+  .prayer-elements-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .prayer-label {
+    font-size: 0.5rem;
+  }
+
+  .duration-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .drain-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .drain-label {
+    font-size: 0.5rem;
+  }
+
+  .difficulty-selector {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .difficulty-label {
+    font-size: 0.45rem;
+  }
+}

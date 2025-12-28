@@ -6,10 +6,12 @@ import { essenceProfiles } from './data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/personaProfiles'
 import { hasActiveChallenge } from './lib/questCompletion'
+import { getStageShortName } from './lib/stageConfig'
 import { graduateUser } from './lib/graduationChecker'
 import GraduationModal from './components/GraduationModal'
 import FlowMap from './components/FlowMap'
 import FlowMapRiver from './components/FlowMapRiver'
+import SeeYourFlow from './components/SeeYourFlow'
 import HomeFirstTime from './components/HomeFirstTime'
 
 const Profile = () => {
@@ -22,12 +24,16 @@ const Profile = () => {
   const [expandedArchetypes, setExpandedArchetypes] = useState({ essence: false, protective: false })
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [hasChallenge, setHasChallenge] = useState(false)
+  const [challengePoints, setChallengePoints] = useState(0)
+  const [challengeDay, setChallengeDay] = useState(0)
+  const [questProgress, setQuestProgress] = useState({ dailyDone: 0, dailyTotal: 0, weeklyDone: 0, weeklyTotal: 0 })
   const [stageProgress, setStageProgress] = useState(null)
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [primaryProject, setPrimaryProject] = useState(null)
   const [allProjects, setAllProjects] = useState([])
+  const [riverRefreshKey, setRiverRefreshKey] = useState(0)
 
   useEffect(() => {
     // Only load profile when user is available
@@ -119,6 +125,66 @@ const Profile = () => {
     if (user?.id) {
       const active = await hasActiveChallenge(user.id)
       setHasChallenge(active)
+
+      // Also fetch challenge points and quest progress
+      if (active) {
+        const { data: progressData } = await supabase
+          .from('challenge_progress')
+          .select('total_points, challenge_instance_id, current_day')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .order('challenge_start_date', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (progressData) {
+          setChallengePoints(progressData.total_points || 0)
+          setChallengeDay(progressData.current_day || 0)
+
+          // Fetch quest data and completions to calculate progress
+          try {
+            const [questsResponse, completionsResponse] = await Promise.all([
+              fetch('/challengeQuestsUpdate.json'),
+              supabase
+                .from('quest_completions')
+                .select('quest_id, completed_at')
+                .eq('user_id', user.id)
+                .eq('challenge_instance_id', progressData.challenge_instance_id)
+            ])
+
+            const questData = await questsResponse.json()
+            const completions = completionsResponse.data || []
+
+            // Get today's date for daily quest check
+            const today = new Date().toISOString().split('T')[0]
+
+            // Filter active quests (not archived, not coming_soon)
+            const activeQuests = questData.quests?.filter(q => !q.archived && q.status !== 'coming_soon') || []
+
+            // Count daily quests
+            const dailyQuests = activeQuests.filter(q => q.frequency === 'daily')
+            const todayCompletions = completions.filter(c => c.completed_at?.startsWith(today))
+            const dailyDone = dailyQuests.filter(q =>
+              todayCompletions.some(c => c.quest_id === q.id)
+            ).length
+
+            // Count weekly quests
+            const weeklyQuests = activeQuests.filter(q => q.frequency === 'weekly')
+            const weeklyDone = weeklyQuests.filter(q =>
+              completions.some(c => c.quest_id === q.id)
+            ).length
+
+            setQuestProgress({
+              dailyDone,
+              dailyTotal: dailyQuests.length,
+              weeklyDone,
+              weeklyTotal: weeklyQuests.length
+            })
+          } catch (err) {
+            console.error('Error loading quest progress:', err)
+          }
+        }
+      }
     }
   }
 
@@ -290,29 +356,24 @@ const Profile = () => {
   // Onboarding slides with component snapshots
   const onboardingSlides = [
     {
-      title: "Welcome to Your Dashboard! 🎉",
-      content: "This is your home for discovering and living your flow.\n\nHere's a quick tour:",
-      componentSelector: null
-    },
-    {
-      title: "Your Voices 🎭",
-      content: "These are your Essence and Protective archetypes—the two voices inside you.\n\nClick to expand and explore deeper insights about each.",
+      title: "The Voices",
+      content: "These are your Essence and Protective archetypes—the two voices inside you.\n\nYour Essence is who you truly are. Your Protective voice developed to keep you safe.\n\nClick to expand and explore deeper insights about each.",
       componentSelector: ".stats-grid"
     },
     {
-      title: "Journey Guide 🗺️",
-      content: "Track your progress through different stages.\n\nEach persona has specific stages to complete, with graduation requirements clearly shown.",
-      componentSelector: ".stage-progress-section"
+      title: "Your Flow Map",
+      content: "See your journey visualised as a river.\n\nEach dot represents a moment you've logged—flowing, redirecting, resting, or honouring.\n\nSwitch between projects to see different journeys.",
+      componentSelector: ".flow-map-river"
     },
     {
-      title: "Flow Map 🧭",
-      content: "Your Flow Map shows three key sections:\n1. Flow Finder: Opportunities\n2. Nervous System Limitations: Your current limitations\n3. Flow Compass: Tracking your journey",
-      componentSelector: ".flow-map"
+      title: "Map Your Journey",
+      content: "Log your current state and map your highlights and challenges.\n\nFirst-time users will be guided through mapping their journey so far.\n\nReturning users can quickly log how they're flowing today.",
+      componentSelector: ".see-your-flow"
     },
     {
-      title: "Ready to Explore! ✨",
-      content: "Keen to take action and start advancing through stages?\n\nStart a 7-day challenge!\n\nWe're excited to support you on this journey.",
-      componentSelector: ".cta-banner"
+      title: "Ready to find your flow?",
+      content: "Start a 7-day challenge to take action and advance through your stages.\n\nComplete quests, track your progress, and discover your natural flow.\n\nWe're excited to support you on this journey.",
+      componentSelector: ".home-action-buttons"
     }
   ]
 
@@ -435,7 +496,6 @@ const Profile = () => {
       <div className="main-content">
         <div className="page-header">
           <h1 className="page-title">Welcome Back, {userData?.user_name || user?.email?.split('@')[0] || 'User'}</h1>
-          <p className="page-subtitle">Here's Your Profile:</p>
         </div>
 
         {/* Your Voices Section */}
@@ -483,6 +543,7 @@ const Profile = () => {
                 </div>
                 <div className="archetype-expanded-body">
                   <h3 className="archetype-name">{userData.essence_archetype}</h3>
+                  <p className="archetype-subtitle">Your Essence Voice</p>
                   <p className="archetype-description">
                     {essenceData?.poetic_line || 'Your essence voice'}
                   </p>
@@ -493,7 +554,7 @@ const Profile = () => {
                       navigate('/archetypes/essence');
                     }}
                   >
-                    Explore Deeper →
+                    Explore Your Essence →
                   </button>
                 </div>
               </div>
@@ -540,6 +601,7 @@ const Profile = () => {
                 </div>
                 <div className="archetype-expanded-body">
                   <h3 className="archetype-name">{userData.protective_archetype}</h3>
+                  <p className="archetype-subtitle">Your Protective Voice</p>
                   <p className="archetype-description">
                     {protectiveData?.summary || 'Your protective voice'}
                   </p>
@@ -550,38 +612,45 @@ const Profile = () => {
                       navigate('/archetypes/protective');
                     }}
                   >
-                    Learn More →
+                    Explore Your Protective →
                   </button>
                 </div>
               </div>
             )}
           </div>
-          {stageProgress && stageProgress.conversations_logged > 0 && (
-            <div className="stat-card blue">
-              <div className="stat-icon">💬</div>
-              <div className="stat-label">Conversations</div>
-              <div className="stat-value">{stageProgress.conversations_logged} logged</div>
-            </div>
-          )}
         </div>
 
-        {/* Project & Stage Info */}
-        {primaryProject && (
-          <div className="project-stage-badge">
-            <span className="persona-badge">{stageProgress?.persona?.replace('_', ' ') || 'Explorer'}</span>
-            <span className="stage-info">
-              {primaryProject.name} • Stage {primaryProject.current_stage || 1}
-            </span>
-          </div>
-        )}
-
         {/* Flow Map River - Shows flow compass entries */}
+        <h2 className="section-heading">Your Flow Map</h2>
         {primaryProject ? (
-          <FlowMapRiver
-            projectId={primaryProject.id}
-            limit={20}
-            onViewAll={() => navigate('/flow-compass')}
-          />
+          <>
+            <FlowMapRiver
+              key={riverRefreshKey}
+              projectId={primaryProject.id}
+              limit={20}
+              onViewAll={() => navigate('/flow-compass')}
+              projects={allProjects}
+              selectedProjectId={primaryProject.id}
+              onProjectSelect={(project) => {
+                setPrimaryProject(project)
+                setRiverRefreshKey(prev => prev + 1)
+              }}
+            />
+            <SeeYourFlow
+              key={`see-flow-${primaryProject.id}`}
+              project={primaryProject}
+              onUpdate={(updatedProject) => {
+                setPrimaryProject(updatedProject)
+                setAllProjects(prev =>
+                  prev.map(p => p.id === updatedProject.id ? updatedProject : p)
+                )
+              }}
+              onFlowEntryAdded={() => {
+                // Refresh the river by changing its key
+                setRiverRefreshKey(prev => prev + 1)
+              }}
+            />
+          </>
         ) : (
           <FlowMap persona={stageProgress?.persona} />
         )}
@@ -595,6 +664,54 @@ const Profile = () => {
 
         {/* Ready To Find Your Flow Section */}
         <h2 className="section-heading">Ready To Find Your Flow?</h2>
+
+        {/* Progress Strip - Shows project stage and quick stats */}
+        {primaryProject && (
+          <div className="progress-strip">
+            <div className="progress-strip-header">
+              <span className="progress-project-name">{primaryProject.name}</span>
+            </div>
+
+            <div className="progress-stats-row">
+              <div className="progress-stat-item">
+                <span className="progress-stat-icon">☀️</span>
+                <span className="progress-stat-value">{questProgress.dailyDone}/{questProgress.dailyTotal}</span>
+                <span className="progress-stat-label">Daily</span>
+              </div>
+
+              <div className="progress-stat-item">
+                <span className="progress-stat-icon">📅</span>
+                <span className="progress-stat-value">{questProgress.weeklyDone}/{questProgress.weeklyTotal}</span>
+                <span className="progress-stat-label">Weekly</span>
+              </div>
+
+              <div className="progress-stat-item">
+                <span className="progress-stat-icon">🎯</span>
+                <span className="progress-stat-value">{primaryProject.current_stage || 1}/6</span>
+                <span className="progress-stat-label">Stage</span>
+              </div>
+            </div>
+
+            <div className="progress-strip-bottom">
+              <div className="progress-stat">
+                <span className="progress-stat-value">{challengePoints || 0}</span>
+                <span className="progress-stat-label">Points</span>
+              </div>
+
+              <div className="progress-stage-tag">
+                <span className="progress-stage-label">Stage:</span>
+                <span className="progress-stage-name">{getStageShortName(primaryProject.current_stage || 1)}</span>
+              </div>
+
+              {hasChallenge && (
+                <div className="progress-stat">
+                  <span className="progress-stat-value">{Math.max(0, 7 - challengeDay)}</span>
+                  <span className="progress-stat-label">Days Left</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="home-action-buttons">
@@ -612,31 +729,6 @@ const Profile = () => {
           </button>
         </div>
 
-        {/* Other Projects Section */}
-        {allProjects.length > 0 && (
-          <div className="other-projects-section">
-            <h2 className="section-heading">Your Projects</h2>
-            <div className="projects-grid">
-              {allProjects.map(project => (
-                <div
-                  key={project.id}
-                  className={`project-card-mini ${project.is_primary ? 'primary' : ''}`}
-                  onClick={() => navigate('/flow-compass')}
-                >
-                  <span className="project-name">{project.name}</span>
-                  <span className="project-stage">Stage {project.current_stage || 1}</span>
-                  {project.is_primary && <span className="primary-badge">Primary</span>}
-                </div>
-              ))}
-              <button
-                className="project-card-mini add-new"
-                onClick={() => navigate('/nikigai/skills')}
-              >
-                <span>+ New Project</span>
-              </button>
-            </div>
-          </div>
-        )}
 
       </div>
     </div>

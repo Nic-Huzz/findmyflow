@@ -106,8 +106,8 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
   return (
     <div className="project-selector">
       <div className="selector-header">
-        <h2>Select Your Focus Project</h2>
-        <p>This project will be locked for your 7-day challenge</p>
+        <h2>Select The Focus For This Challenge</h2>
+        <p>This project will be the focus for this 7-day challenge</p>
       </div>
 
       <div className="projects-list">
@@ -133,10 +133,7 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
               </div>
 
               <div className="project-meta">
-                <div
-                  className="stage-badge"
-                  style={{ background: `${stageInfo.color}20`, color: stageInfo.color }}
-                >
+                <div className="stage-badge">
                   <span className="stage-icon">{stageInfo.icon}</span>
                   <span className="stage-name">{stageInfo.name}</span>
                 </div>

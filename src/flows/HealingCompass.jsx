@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import '../NervousSystemHealingCompass.css'
+import '../FlowFinder.css'
 
 export default function HealingCompass() {
   const { user } = useAuth()
@@ -28,7 +29,7 @@ export default function HealingCompass() {
 
   // Go back handler
   const goBack = (fromScreen) => {
-    const screenOrder = ['welcome', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8']
+    const screenOrder = ['time_check', 'journey', 'welcome', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8']
     const currentIndex = screenOrder.indexOf(fromScreen)
     if (currentIndex > 0) {
       setCurrentScreen(screenOrder[currentIndex - 1])
@@ -62,6 +63,8 @@ export default function HealingCompass() {
     const screenMap = {
       'loading': 0,
       'no-results': 0,
+      'time_check': 0,
+      'journey': 0,
       'welcome': 0,
       'q1': 1,
       'q2': 2,
@@ -142,7 +145,7 @@ export default function HealingCompass() {
         // First try safety_contracts array
         if (data[0].safety_contracts && data[0].safety_contracts.length > 0) {
           setSafetyContracts(data[0].safety_contracts)
-          setCurrentScreen('welcome')
+          setCurrentScreen('time_check')
         }
         // Fallback: Extract YES contracts from belief_test_results
         else if (data[0].belief_test_results) {
@@ -152,7 +155,7 @@ export default function HealingCompass() {
 
           if (yesContracts.length > 0) {
             setSafetyContracts(yesContracts)
-            setCurrentScreen('welcome')
+            setCurrentScreen('time_check')
           } else {
             alert('Please complete the Nervous System flow first to identify your safety contracts.')
             navigate('/nervous-system')
@@ -213,19 +216,65 @@ export default function HealingCompass() {
     }
   }
 
+  const renderTimeCheck = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Healing Compass</h1>
+      <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+        <p><span className="time-icon">⏱️</span></p>
+        <p><strong>This flow takes about 10-15 minutes</strong></p>
+        <p style={{ color: 'rgba(255,255,255,0.7)' }}>7 questions to trace and heal a limiting belief.</p>
+        <p>Find a quiet, safe space where you can be emotionally present.</p>
+        <p><strong>This work can bring up old memories — that's part of the healing.</strong></p>
+      </div>
+
+      <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
+        I'm Ready
+      </button>
+      <button
+        className="primary-button"
+        onClick={() => navigate(-1)}
+        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
+      >
+        Come Back Later
+      </button>
+    </div>
+  )
+
+  const renderJourney = () => (
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Where This Fits</h1>
+      <div className="welcome-message animated-text">
+        <p><strong>In the Find My Flow journey...</strong></p>
+        <p className="highlight-box">
+          <span className="highlight-word">Nervous System Map</span> revealed <em>what</em> beliefs are holding you back.<br /><br />
+          <span className="highlight-word">Healing Compass</span> helps you <em>heal</em> the root cause of those beliefs.
+        </p>
+        <p>We'll trace a safety contract back to its origin and remove the emotional "splinter" that created it.</p>
+        <p>This is deep work — and it's how lasting change happens.</p>
+      </div>
+
+      <button className="primary-button" onClick={() => setCurrentScreen('welcome')}>
+        Makes Sense!
+      </button>
+      <BackButton fromScreen="journey" />
+    </div>
+  )
+
   const renderWelcome = () => (
-    <div className="ns-hc-container ns-hc-welcome-container">
-      <h1 className="ns-hc-welcome-greeting">Healing Compass</h1>
-      <div className="ns-hc-welcome-message">
-        <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong> I'm excited to dive deeper with you.</p>
+    <div className="container welcome-container">
+      <h1 className="welcome-greeting">Let's Heal Together</h1>
+      <div className="welcome-message animated-text">
+        <p><strong>Hey {user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email?.split('@')[0] || 'there'}!</strong> I'm excited to dive deeper with you.</p>
         <p>Our mission here is to find the <strong>source</strong> of what's blocking your flow so we can heal it.</p>
         <p>In the Nervous System flow, you identified safety contracts that have been protecting you.</p>
         <p>Now let's trace one back to its origin — and remove the emotional splinter driving it.</p>
+        <p className="hint-text">Be gentle with yourself. This is powerful work.</p>
       </div>
 
-      <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('q1')}>
+      <button className="primary-button glow-button" onClick={() => setCurrentScreen('q1')}>
         Let's Begin
       </button>
+      <BackButton fromScreen="welcome" />
     </div>
   )
 
@@ -405,7 +454,7 @@ export default function HealingCompass() {
   const renderQ7 = () => (
     <div className="ns-hc-container ns-hc-welcome-container">
       <h1 className="ns-hc-welcome-greeting">The Emotional Splinter</h1>
-      <div className="ns-hc-welcome-message">
+      <div className="ns-hc-welcome-message animated-text">
         <p>So even though your essence has been pulling you <strong>forward</strong> in the pursuit of your ambitions...</p>
         <p>Your subconscious has been pulling you <strong>back</strong> in its attempt to protect you.</p>
         <p>This is the emotional splinter. A past hurt that never fully healed.</p>
@@ -494,6 +543,8 @@ export default function HealingCompass() {
       {/* Screen Content */}
       {currentScreen === 'loading' && renderLoading()}
       {currentScreen === 'no-results' && renderNoResults()}
+      {currentScreen === 'time_check' && renderTimeCheck()}
+      {currentScreen === 'journey' && renderJourney()}
       {currentScreen === 'welcome' && renderWelcome()}
       {currentScreen === 'q1' && renderQ1()}
       {currentScreen === 'q2' && renderQ2()}

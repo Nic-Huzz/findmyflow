@@ -73,9 +73,10 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   ├── MilestoneInput.jsx         # Milestone completion form
 │   │   │
 │   │   ├── FlowMap.jsx                # Dashboard clusters display
-│   │   ├── FlowMapRiver.jsx           # Vertical river visualization
+│   │   ├── FlowMapRiver.jsx           # Vertical river visualization (clickable with popups)
 │   │   ├── FlowMapMockups.jsx         # Design mockups page
 │   │   ├── FlowCompass.jsx            # Direction picker wrapper
+│   │   ├── SeeYourFlow.jsx            # Journey mapping + check-in component
 │   │   │
 │   │   ├── GraduationModal.jsx        # Stage completion celebration
 │   │   ├── HomeFirstTime.jsx          # First-time user onboarding
@@ -162,9 +163,11 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   ├── db-query.sh                    # Query database via REST API
 │   └── deploy-functions.sh            # Deploy edge functions
 │
-├── docs/                              # Documentation
+├── docs/                              # Documentation (31 files)
 │   ├── 7-day-challenge-system.md      # Challenge system docs
+│   ├── session-2024-12-26-journey-mapping.md # Journey mapping session
 │   ├── 2024-12-21-refactoring-session.md # Major refactoring docs
+│   ├── CSS-SCOPING-GUIDELINES.md      # CSS scoping best practices
 │   ├── design-guide.md                # Brand colors, typography
 │   └── supabase-setup.md              # Database setup guide
 │
@@ -260,6 +263,44 @@ Tracks energy using N/E/S/W directions:
 - **South (Red)**: Rest - Resistance + Tired
 - **West (Yellow)**: Honour - Ease + Tired
 
+### 7. Journey Mapping & SeeYourFlow
+Multi-step journey mapping for new users, check-in mode for returning users.
+
+**First-Time Flow (5 Steps):**
+| Step | Question | Creates |
+|------|----------|---------|
+| 1 | Current State (two-factor) | Flow entry with direction |
+| 2 | Journey Start (month picker) | Backdated entry tagged North |
+| 3 | Highlights (up to 3) | North entries with titles |
+| 4 | Challenges (up to 3) | East/South entries based on feeling |
+| 5 | Summary | Celebration with stats |
+
+**Returning User Mode:**
+- Two-factor questions (Excited/Tired + Great/Facing resistance)
+- Headline + Comment fields
+- Date option: "Most Recent" or "Choose Date"
+- Progress saved to localStorage for resume
+
+**Two-Factor Flow Model:**
+| Internal | External | Direction | Color |
+|----------|----------|-----------|-------|
+| Excited | Great (Ease) | North | Green |
+| Excited | Facing Resistance | East | Blue |
+| Tired | Great (Ease) | West | Yellow |
+| Tired | Facing Resistance | South | Red |
+
+### 8. First-Time Onboarding
+`HomeFirstTime.jsx` orchestrates new user onboarding:
+1. Welcome screen with user name
+2. 3 persona questions → persona reveal
+3. Branch by persona:
+   - Vibe Seeker → Flow Finder explainer → `/nikigai/skills`
+   - Vibe Riser/Movement Maker → Project type choice
+     - "Start Fresh" → Flow Finder
+     - "Existing Project" → `ExistingProjectFlow` (6-step capture)
+
+**ExistingProjectFlow** captures: Name → Description → Skills (3) → Problem → Persona → Stage
+
 ---
 
 ## Architecture Patterns
@@ -325,6 +366,30 @@ Protected routes use `<AuthGate>`:
 } />
 ```
 
+### 6. CSS Scoping Convention
+Always scope CSS selectors to parent containers to prevent conflicts:
+```css
+/* BAD - affects all .entry-card elements globally */
+.entry-card { background: #fafafa; }
+
+/* GOOD - scoped to parent container */
+.timeline-entry .entry-card { background: #fafafa; }
+
+/* GOOD - scoped with component class */
+.see-your-flow .entry-card { background: rgba(255,255,255,0.1); }
+```
+See `docs/CSS-SCOPING-GUIDELINES.md` for full conventions.
+
+### 7. localStorage for Progress
+Multi-step flows save progress to localStorage for resume:
+```javascript
+// Save progress
+localStorage.setItem(`journey_mapping_${userId}_${projectId}`, JSON.stringify({ step, data }))
+
+// Check completion
+localStorage.getItem(`journey_mapping_completed_${userId}_${projectId}`)
+```
+
 ---
 
 ## Database Schema
@@ -336,6 +401,7 @@ Protected routes use `<AuthGate>`:
 | `user_stage_progress` | Persona, onboarding status per user |
 | `user_projects` | Projects with `current_stage` (1-6), `total_points` |
 | `flow_sessions` | Flow completions (tracks `flow_type` + `project_id`) |
+| `flow_entries` | Flow compass entries (direction, internal/external state, headline, comment) |
 | `milestone_completions` | Completed milestones per user/project |
 | `quest_completions` | Daily quest completions (with `project_id`) |
 | `challenge_instances` | Active 7-day challenge sessions |
@@ -351,6 +417,7 @@ Protected routes use `<AuthGate>`:
 | `persona_profiles` | Customer persona definitions |
 | `nervous_system_responses` | NS calibration data |
 | `healing_compass_responses` | Healing compass entries |
+| `lead_flow_profiles` | Lead capture profiles with essence/protective archetypes |
 
 ### Assessment Tables
 
@@ -387,7 +454,20 @@ SUPABASE_ACCESS_TOKEN      # From Supabase dashboard
 
 ## Recent Updates (Dec 2024)
 
-### Challenge.jsx Decomposition
+### Dec 26-27: Journey Mapping & Flow River Popups
+**New Features:**
+- `SeeYourFlow.jsx` - 5-step journey mapping for first-time users, check-in mode for returning users
+- FlowMapRiver clickable markers with popup details
+- LocalStorage progress saving for journey mapping resume
+- Updated FlowCompassPage quick log with two-factor questions
+
+**CSS Fixes:**
+- Scoped `.entry-card` in FlowCompassPage.css to `.timeline-entry .entry-card` to prevent conflicts
+
+**Documentation:**
+- `docs/session-2024-12-26-journey-mapping.md` - Full session details
+
+### Dec 21: Challenge.jsx Decomposition
 Reduced from 3,261 to 1,058 lines (68% reduction):
 - Extracted `useChallengeData.js` hook (1,147 lines)
 - Created `QuestCard.jsx` component (317 lines)

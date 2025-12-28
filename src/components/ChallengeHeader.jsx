@@ -14,35 +14,40 @@ function ChallengeHeader({
   setShowSettingsMenu,
   handleOpenExplainer,
   handleRestartChallenge,
-  onLeaderboardClick
+  onLeaderboardClick,
+  streakDays = 0
 }) {
+  // Flame size based on streak length
+  const getFlameClass = () => {
+    if (streakDays >= 7) return 'streak-flame legendary'
+    if (streakDays >= 5) return 'streak-flame hot'
+    if (streakDays >= 3) return 'streak-flame warm'
+    if (streakDays >= 1) return 'streak-flame'
+    return 'streak-flame cold'
+  }
+
   return (
     <header className="challenge-header">
       <h1>Gamify Your Ambitions</h1>
 
-      <div className="challenge-points">
-        <div className="total-points clickable" onClick={onLeaderboardClick}>
-          <span className="points-label">Total Points</span>
-          <span className="points-value">{progress.total_points || 0}</span>
-          {userRank && (
-            <>
-              <span className="points-separator">•</span>
-              <span className="points-label">Your Rank</span>
-              <span className="points-value">#{userRank}</span>
-            </>
-          )}
-        </div>
-      </div>
-
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
+          <button
+            className="home-btn"
+            title="Go to Home"
+            onClick={() => navigate('/me')}
+          >
+            🏠
+          </button>
+          {/* Streak Flame */}
+          {streakDays > 0 && (
+            <div className="streak-badge" title={`${streakDays} day streak!`}>
+              <span className={getFlameClass()}>🔥</span>
+              <span className="streak-count">{streakDays}</span>
+            </div>
+          )}
           <div className="challenge-day">
-            Day {progress.current_day}/7
-            {progress.current_day === 7 && (
-              <span className="challenge-complete-badge">
-                <span className="complete-text">Complete!</span>
-              </span>
-            )}
+            Day {progress.current_day}/7 {progress.current_day === 7 && '🎉'}
           </div>
           {userData?.essence_archetype && (
             <div

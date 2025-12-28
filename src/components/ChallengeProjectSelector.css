@@ -5,6 +5,8 @@
 
 .project-selector {
   padding: 24px;
+  width: 100%;
+  max-width: 500px;
 }
 
 .project-selector.loading,
@@ -59,12 +61,15 @@
 }
 
 .selector-header h2 {
-  font-size: 1.5rem;
-  margin-bottom: 8px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: white;
 }
 
 .selector-header p {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
 }
 
 /* Projects List */
@@ -75,27 +80,29 @@
   margin-bottom: 32px;
 }
 
-.project-card {
+.project-selector .project-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   padding: 20px;
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: none;
 }
 
-.project-card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
+.project-selector .project-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
 }
 
-.project-card.selected {
-  border-color: var(--purple, #5e17eb);
-  background: rgba(94, 23, 235, 0.1);
+.project-selector .project-card.selected {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.project-card.primary {
+.project-selector .project-card.primary {
   border-left: 4px solid var(--gold, #fbbf24);
 }
 
@@ -124,11 +131,12 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 6px;
+  color: white;
 }
 
 .project-description {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -150,7 +158,9 @@
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
 }
 
 .stage-icon {
@@ -162,18 +172,18 @@
   align-items: center;
   gap: 4px;
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 20px;
 }
 
-.points-value {
+.challenge-project-selector .points-value {
   font-weight: 700;
-  color: var(--gold, #fbbf24);
+  color: white;
 }
 
 .points-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* Selection Indicator */
@@ -193,7 +203,7 @@
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.project-card.selected .selection-indicator {
+.project-selector .project-card.selected .selection-indicator {
   background: var(--purple, #5e17eb);
   border-color: var(--purple, #5e17eb);
   color: white;
@@ -204,12 +214,13 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-top: 16px;
 }
 
 .primary-button {
   width: 100%;
   padding: 16px;
-  background: var(--purple, #5e17eb);
+  background: #E9A23B;
   color: white;
   border: none;
   border-radius: 12px;
@@ -220,7 +231,8 @@
 }
 
 .primary-button:hover:not(:disabled) {
-  background: #7c3aed;
+  background: #d4922f;
+  transform: translateY(-2px);
 }
 
 .primary-button:disabled {
@@ -231,9 +243,9 @@
 .secondary-button {
   width: 100%;
   padding: 14px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 12px;
   font-size: 0.95rem;
   font-weight: 500;
@@ -242,8 +254,8 @@
 }
 
 .secondary-button:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 /* Responsive */

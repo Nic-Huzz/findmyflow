@@ -120,6 +120,109 @@
   text-align: center;
 }
 
+/* ============ TIME CHECK SCREEN ============ */
+
+.time-check-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 400px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.time-check-icon {
+  margin-bottom: 24px;
+}
+
+.time-check-icon .clock-emoji {
+  font-size: 64px;
+  display: block;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.time-check-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: white;
+}
+
+.time-check-estimate {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 12px;
+}
+
+.time-check-estimate strong {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.time-check-message {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0 0 32px;
+}
+
+.time-check-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.secondary-button {
+  width: 100%;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Time icon */
+.time-icon {
+  font-size: 3rem;
+  display: inline-block;
+}
+
+/* Glow button effect */
+.primary-button.glow-button {
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(251, 191, 36, 0.5);
+  }
+}
+
 /* ============ QUESTION SCREENS ============ */
 
 .question-container {

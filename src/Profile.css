@@ -234,11 +234,22 @@
 .action-btn.primary {
   background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
   color: white;
+  animation: ctaPulse 2s ease-in-out infinite;
 }
 
 .action-btn.primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  box-shadow: 0 4px 20px rgba(94, 23, 235, 0.5);
+  animation: none;
+}
+
+@keyframes ctaPulse {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(94, 23, 235, 0.5), 0 0 40px rgba(94, 23, 235, 0.2);
+  }
 }
 
 .action-btn.secondary {
@@ -360,8 +371,25 @@
 }
 
 .stat-card.clickable:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+.stat-card.clickable:active {
+  transform: translateY(-2px) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+/* Purple card hover accent */
+.stat-card.purple.clickable:hover {
+  box-shadow: 0 12px 28px rgba(94, 23, 235, 0.2);
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+/* Yellow card hover accent */
+.stat-card.yellow.clickable:hover {
+  box-shadow: 0 12px 28px rgba(233, 162, 59, 0.2);
+  border-color: rgba(233, 162, 59, 0.3);
 }
 
 .stat-card.clickable.expanded {
@@ -441,15 +469,15 @@
   font-weight: 800;
 }
 
-/* Expanded Archetype Styles */
+/* Expanded Archetype Styles - Card Style like Archetypes Page */
 .archetype-expanded {
-  background: white;
-  border: 1px solid #e8ecef;
-  border-top: none;
-  border-radius: 0 0 16px 16px;
+  background: #faf8f5;
+  border-radius: 0 0 20px 20px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
   animation: slideDown 0.3s ease-out;
+  border: 2px solid #E9A23B;
+  border-top: none;
 }
 
 @keyframes slideDown {
@@ -460,74 +488,85 @@
   }
   to {
     opacity: 1;
-    max-height: 600px;
+    max-height: 700px;
     transform: translateY(0);
   }
 }
 
 .archetype-expanded-header {
-  height: 250px;
+  padding: 24px 24px 0;
   position: relative;
-  overflow: hidden;
-  background: #f5f7fa;
+  display: flex;
+  justify-content: center;
 }
 
 .archetype-expanded-header img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 85%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .archetype-tag {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(255,255,255,0.95);
-  color: #5e17eb;
+  top: 36px;
+  left: 36px;
+  background: #E9A23B;
+  color: white;
   padding: 8px 16px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  z-index: 1;
-  backdrop-filter: blur(10px);
+  letter-spacing: 1px;
+  z-index: 2;
 }
 
 .archetype-expanded-body {
-  padding: 30px;
+  padding: 24px 30px 30px;
+  text-align: center;
 }
 
-.archetype-name {
-  font-size: 1.8rem;
+.archetype-expanded .archetype-name {
+  font-size: 1.75rem;
   color: #1a1a1a;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
   font-weight: 800;
 }
 
-.archetype-description {
+.archetype-expanded .archetype-subtitle {
+  font-size: 1rem;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.archetype-expanded .archetype-description {
   font-size: 0.95rem;
   line-height: 1.7;
-  color: #666;
-  margin-bottom: 25px;
+  color: #555;
+  margin-bottom: 24px;
 }
 
 .explore-button {
   width: 100%;
-  background: #5e17eb;
+  background: #E9A23B;
   color: white;
   border: none;
-  padding: 14px;
-  border-radius: 12px;
-  font-weight: 600;
+  padding: 16px;
+  border-radius: 30px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
   font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(233, 162, 59, 0.3);
 }
 
 .explore-button:hover {
-  background: #4912c4;
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+  background: #d4922f;
 }
 
 /* Archetype Cards */
@@ -999,6 +1038,167 @@
 
   .stat-card {
     padding: 20px;
+  }
+}
+
+/* ============ PROGRESS STRIP ============ */
+
+.progress-strip {
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.progress-strip-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.progress-project-name {
+  color: white;
+  font-weight: 800;
+  font-size: 1.25rem;
+  font-style: italic;
+}
+
+.progress-stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.progress-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  min-width: 80px;
+}
+
+.progress-stat-icon {
+  font-size: 1.2rem;
+  margin-bottom: 4px;
+}
+
+.progress-stat-item .progress-stat-value {
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.progress-stat-item .progress-stat-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+.progress-stage-tag {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  gap: 2px;
+}
+
+.progress-stage-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.progress-stage-name {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.progress-strip-bottom {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.progress-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  min-width: 80px;
+}
+
+.progress-stat-value {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.progress-stat-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .progress-strip {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .progress-project-name {
+    font-size: 1.1rem;
+  }
+
+  .progress-stats-row {
+    gap: 8px;
+  }
+
+  .progress-stat-item {
+    padding: 8px 12px;
+    min-width: 60px;
+  }
+
+  .progress-stat-icon {
+    font-size: 1rem;
+  }
+
+  .progress-stat-item .progress-stat-value {
+    font-size: 0.95rem;
+  }
+
+  .progress-stage-tag {
+    font-size: 0.8rem;
+    padding: 10px 12px;
+  }
+
+  .progress-stat {
+    padding: 10px 14px;
+    min-width: 60px;
+  }
+
+  .progress-stat-value {
+    font-size: 1.1rem;
   }
 }
 

@@ -30,7 +30,9 @@ const SCREENS = {
   PERSONA_Q2: 'persona_q2',
   PERSONA_Q3: 'persona_q3',
   PERSONA_REVEAL: 'persona_reveal',
+  VIBE_SEEKER_EXPLAINER: 'vibe_seeker_explainer',
   PROJECT_TYPE: 'project_type',
+  NEW_PROJECT_EXPLAINER: 'new_project_explainer',
   EXISTING_PROJECT: 'existing_project'
 }
 
@@ -173,8 +175,8 @@ function HomeFirstTime() {
   // Handle project type selection
   const handleProjectType = (type) => {
     if (type === 'new') {
-      // Go to Flow Finder
-      navigate('/nikigai/skills')
+      // Show explainer before Flow Finder
+      setCurrentScreen(SCREENS.NEW_PROJECT_EXPLAINER)
     } else {
       // Show existing project flow
       setCurrentScreen(SCREENS.EXISTING_PROJECT)
@@ -186,8 +188,8 @@ function HomeFirstTime() {
     const persona = assignedPersona?.persona
 
     if (persona === 'vibe_seeker') {
-      // Vibe Seekers always go to Flow Finder
-      navigate('/nikigai/skills')
+      // Vibe Seekers see explainer before Flow Finder
+      setCurrentScreen(SCREENS.VIBE_SEEKER_EXPLAINER)
     } else {
       // Vibe Risers and Movement Makers choose new or existing
       setCurrentScreen(SCREENS.PROJECT_TYPE)
@@ -215,44 +217,61 @@ function HomeFirstTime() {
   // ARCHETYPE REVEAL SCREEN
   if (currentScreen === SCREENS.ARCHETYPE_REVEAL) {
     return (
-      <div className="home-first-time">
-        <div className="welcome-header">
-          <h1>Welcome{userName ? `, ${userName}` : ''}!</h1>
-          <p>Here's what we've discovered about you...</p>
+      <div className="home-first-time" style={{
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        textAlign: 'center',
+        padding: '24px'
+      }}>
+        {/* Spacer for top */}
+        <div style={{ flex: 1 }} />
+
+        {/* Content centered */}
+        <div style={{ maxWidth: '400px' }}>
+          <h1 style={{
+            fontSize: '2rem',
+            fontWeight: 700,
+            marginBottom: '12px',
+            color: 'white'
+          }}>
+            Welcome{userName ? `, ${userName}` : ''}!
+          </h1>
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: '1.1rem',
+            marginBottom: '40px'
+          }}>
+            Let's get you set up 🙌🏼
+          </p>
+
+          <p style={{
+            fontSize: '1.2rem',
+            lineHeight: 1.7,
+            color: 'white',
+            marginBottom: '20px',
+            fontWeight: 500
+          }}>
+            To personalise your journey here's three quick questions.
+          </p>
+          <p style={{
+            fontSize: '1rem',
+            lineHeight: 1.6,
+            color: 'rgba(255, 255, 255, 0.7)'
+          }}>
+            Your answers will ensure we provide the best support for where you're at.
+          </p>
         </div>
 
-        {/* Essence Card */}
-        <div className="archetype-card essence-card">
-          <div className="card-badge">Your Essence</div>
-          <h2>{essenceArchetype?.name || 'Your Essence Voice'}</h2>
-          <p className="card-tagline">{essenceArchetype?.poetic_line || essenceArchetype?.essence || ''}</p>
-          {essenceArchetype?.superpower && (
-            <div className="card-detail">
-              <strong>Your Superpower:</strong> {essenceArchetype.superpower}
-            </div>
-          )}
-        </div>
+        {/* Spacer for bottom */}
+        <div style={{ flex: 1 }} />
 
-        {/* Protective Card */}
-        <div className="archetype-card protective-card">
-          <div className="card-badge">Your Protective Pattern</div>
-          <h2>{protectiveArchetype?.name || 'Your Protective Pattern'}</h2>
-          <p className="card-tagline">{protectiveArchetype?.summary || ''}</p>
-          {protectiveArchetype?.detailed?.howItShowsUp && (
-            <div className="card-detail">
-              {protectiveArchetype.detailed.howItShowsUp}
-            </div>
-          )}
-        </div>
-
-        {/* CTA */}
-        <div className="cta-section">
-          <p>Ready to discover your unique path?</p>
+        {/* Button at bottom */}
+        <div style={{ width: '100%', maxWidth: '400px', paddingBottom: '32px' }}>
           <button
             className="primary-button"
             onClick={() => setCurrentScreen(SCREENS.PERSONA_Q1)}
           >
-            Start Finding Your Flow
+            Let's Go
           </button>
         </div>
       </div>
@@ -289,17 +308,23 @@ function HomeFirstTime() {
 
         <div className="question-container">
           <h2>{question.question}</h2>
-          <p className="question-subtext">{question.subtext}</p>
+          <p className="question-subtext">Your answers help us personalise your journey</p>
 
           <div className="options-list">
             {question.options.map((option, index) => (
               <button
                 key={option.value}
                 className="option-button"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  borderRadius: '16px',
+                  color: 'white'
+                }}
                 onClick={() => handlePersonaOption(question.id, option)}
               >
-                <span className="option-label">{option.label}</span>
-                <span className="option-description">{option.description}</span>
+                <span className="option-label" style={{ color: 'white', fontWeight: 600, fontSize: '18px' }}>{option.label}</span>
+                <span className="option-description" style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '14px' }}>{option.description}</span>
               </button>
             ))}
           </div>
@@ -332,38 +357,194 @@ function HomeFirstTime() {
     )
   }
 
+  // VIBE SEEKER EXPLAINER SCREEN
+  if (currentScreen === SCREENS.VIBE_SEEKER_EXPLAINER) {
+    return (
+      <div className="home-first-time" style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        padding: '24px'
+      }}>
+        <div style={{ maxWidth: '400px', width: '100%' }}>
+          <h2 style={{
+            fontSize: '1.75rem',
+            fontWeight: 700,
+            marginBottom: '16px',
+            color: 'white'
+          }}>
+            Let's Find Your Flow
+          </h2>
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: '1rem',
+            lineHeight: 1.6,
+            marginBottom: '32px'
+          }}>
+            As a Vibe Seeker, you're ready to explore what lights you up.
+            The Flow Finder will guide you through discovering your unique skills,
+            the problems you naturally solve, and who you're meant to help.
+          </p>
+
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.08)',
+            borderRadius: '16px',
+            padding: '20px 24px',
+            marginBottom: '32px'
+          }}>
+            <p style={{
+              fontSize: '1.1rem',
+              color: 'rgba(255, 255, 255, 0.9)',
+              margin: 0
+            }}>
+              ⏱️ This takes about <strong>5 minutes</strong>
+            </p>
+          </div>
+
+          <div className="project-type-options">
+            <button
+              className="option-card"
+              onClick={() => navigate('/nikigai/skills')}
+            >
+              <span className="option-icon">🚀</span>
+              <span className="option-title">I have 5 minutes now</span>
+              <span className="option-desc">Let's start the Flow Finder</span>
+            </button>
+
+            <button
+              className="option-card"
+              onClick={() => navigate('/me')}
+            >
+              <span className="option-icon">⏰</span>
+              <span className="option-title">I'll do this later</span>
+              <span className="option-desc">Take me to my profile</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // NEW PROJECT EXPLAINER SCREEN (for Vibe Riser / Movement Maker choosing "start fresh")
+  if (currentScreen === SCREENS.NEW_PROJECT_EXPLAINER) {
+    return (
+      <div className="home-first-time" style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        padding: '24px'
+      }}>
+        <div style={{ maxWidth: '400px', width: '100%' }}>
+          <h2 style={{
+            fontSize: '1.75rem',
+            fontWeight: 700,
+            marginBottom: '16px',
+            color: 'white'
+          }}>
+            Let's Find Your Flow
+          </h2>
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: '1rem',
+            lineHeight: 1.6,
+            marginBottom: '32px'
+          }}>
+            {assignedPersona?.persona === 'movement_maker'
+              ? "Even with an established business, discovering new opportunities can unlock your next level of growth."
+              : "Let's discover what lights you up. The Flow Finder will guide you through identifying your unique skills, problems you solve, and who you're meant to help."
+            }
+          </p>
+
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.08)',
+            borderRadius: '16px',
+            padding: '20px 24px',
+            marginBottom: '32px'
+          }}>
+            <p style={{
+              fontSize: '1.1rem',
+              color: 'rgba(255, 255, 255, 0.9)',
+              margin: 0
+            }}>
+              ⏱️ This takes about <strong>5 minutes</strong>
+            </p>
+          </div>
+
+          <div className="project-type-options">
+            <button
+              className="option-card"
+              onClick={() => navigate('/nikigai/skills')}
+            >
+              <span className="option-icon">🚀</span>
+              <span className="option-title">I have 5 minutes now</span>
+              <span className="option-desc">Let's start the Flow Finder</span>
+            </button>
+
+            <button
+              className="option-card"
+              onClick={() => navigate('/me')}
+            >
+              <span className="option-icon">⏰</span>
+              <span className="option-title">I'll do this later</span>
+              <span className="option-desc">Take me to my profile</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // PROJECT TYPE SCREEN (for Vibe Riser / Movement Maker)
   if (currentScreen === SCREENS.PROJECT_TYPE) {
     const personaDisplay = getPersonaDisplay()
 
     return (
-      <div className="home-first-time project-type-screen">
-        <h2>Do you have an existing project?</h2>
-        <p className="subtext">
-          {assignedPersona?.persona === 'movement_maker'
-            ? "As a Movement Maker, you may have an existing business or want to explore new opportunities."
-            : "As a Vibe Riser, you may already be working on something or looking to start fresh."
-          }
-        </p>
+      <div className="home-first-time" style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        padding: '24px'
+      }}>
+        <div style={{ maxWidth: '400px', width: '100%' }}>
+          <h2 style={{
+            fontSize: '1.75rem',
+            fontWeight: 700,
+            marginBottom: '16px',
+            color: 'white'
+          }}>
+            Do you have an existing project?
+          </h2>
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: '1rem',
+            lineHeight: 1.6,
+            marginBottom: '40px'
+          }}>
+            {assignedPersona?.persona === 'movement_maker'
+              ? "As a Movement Maker, you may have an existing business or want to explore new opportunities."
+              : "As a Vibe Riser, you may already be working on something or looking to start fresh."
+            }
+          </p>
 
-        <div className="project-type-options">
-          <button
-            className="option-card"
-            onClick={() => handleProjectType('existing')}
-          >
-            <span className="option-icon">📁</span>
-            <span className="option-title">I have an existing project</span>
-            <span className="option-desc">Let's capture what you're working on</span>
-          </button>
+          <div className="project-type-options">
+            <button
+              className="option-card"
+              onClick={() => handleProjectType('existing')}
+            >
+              <span className="option-icon">📁</span>
+              <span className="option-title">I have an existing project</span>
+              <span className="option-desc">Let's capture what you're working on</span>
+            </button>
 
-          <button
-            className="option-card"
-            onClick={() => handleProjectType('new')}
-          >
-            <span className="option-icon">✨</span>
-            <span className="option-title">I want to start fresh</span>
-            <span className="option-desc">Let's discover a new opportunity</span>
-          </button>
+            <button
+              className="option-card"
+              onClick={() => handleProjectType('new')}
+            >
+              <span className="option-icon">✨</span>
+              <span className="option-title">I want to start fresh</span>
+              <span className="option-desc">Let's discover a new opportunity</span>
+            </button>
+          </div>
         </div>
       </div>
     )

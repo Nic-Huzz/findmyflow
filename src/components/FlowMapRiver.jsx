@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import { getStageShortName } from '../lib/stageConfig'
 import './FlowMapRiver.css'
 
 const DIRECTION_CONFIG = {
@@ -48,12 +49,13 @@ const DIRECTION_CONFIG = {
   }
 }
 
-function FlowMapRiver({ projectId, limit = 20, onViewAll }) {
+function FlowMapRiver({ projectId, limit = 20, onViewAll, projects = [], selectedProjectId, onProjectSelect }) {
   const { user } = useAuth()
   const navigate = useNavigate()
 
   const [entries, setEntries] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedEntry, setSelectedEntry] = useState(null)
 
   useEffect(() => {
     if (user?.id && projectId) {
@@ -100,13 +102,8 @@ function FlowMapRiver({ projectId, limit = 20, onViewAll }) {
       <div className="flow-map-river empty">
         <div className="empty-river">
           <span className="empty-icon">🧭</span>
-          <p>No flow entries yet</p>
-          <button
-            className="log-flow-button"
-            onClick={() => navigate('/flow-compass')}
-          >
-            Log Your First Entry
-          </button>
+          <p className="empty-text"><span>Complete</span><strong>'Map Your Journey'</strong><span>Below</span></p>
+          <span className="empty-arrow">↓</span>
         </div>
       </div>
     )
@@ -189,6 +186,27 @@ function FlowMapRiver({ projectId, limit = 20, onViewAll }) {
 
   return (
     <div className="flow-map-river">
+      {/* Entry Popup */}
+      {selectedEntry && (
+        <div className="entry-popup" onClick={() => setSelectedEntry(null)}>
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <div className="popup-header">
+              <span
+                className="popup-direction"
+                style={{ color: DIRECTION_CONFIG[selectedEntry.direction]?.color }}
+              >
+                {DIRECTION_CONFIG[selectedEntry.direction]?.icon} {DIRECTION_CONFIG[selectedEntry.direction]?.label}
+              </span>
+              <span className="popup-date">{selectedEntry.date}</span>
+            </div>
+            <p className="popup-description">
+              {selectedEntry.description || 'No description'}
+            </p>
+            <button className="popup-close" onClick={() => setSelectedEntry(null)}>✕</button>
+          </div>
+        </div>
+      )}
+
       {/* Vertical River SVG */}
       <div className="river-svg-container">
         <svg
@@ -255,9 +273,15 @@ function FlowMapRiver({ projectId, limit = 20, onViewAll }) {
             const cfg = DIRECTION_CONFIG[point.direction] || DIRECTION_CONFIG.north
             const isStuck = point.direction === 'south'
             const isLast = index === pathPoints.length - 2
+            const isSelected = selectedEntry?.id === point.id
 
             return (
-              <g key={point.id} className={`river-marker ${isStuck ? 'stuck' : ''}`}>
+              <g
+                key={point.id}
+                className={`river-marker ${isStuck ? 'stuck' : ''} ${isSelected ? 'selected' : ''}`}
+                onClick={() => setSelectedEntry(selectedEntry?.id === point.id ? null : point)}
+                style={{ cursor: 'pointer' }}
+              >
                 {isStuck ? (
                   <>
                     <circle
@@ -292,10 +316,11 @@ function FlowMapRiver({ projectId, limit = 20, onViewAll }) {
                     <circle
                       cx={point.x}
                       cy={point.y}
-                      r="12"
+                      r={isSelected ? 16 : 12}
                       fill={cfg.color}
                       stroke="white"
-                      strokeWidth="2"
+                      strokeWidth={isSelected ? 3 : 2}
+                      className={isSelected ? 'selected-pulse' : ''}
                     />
                     <text
                       x={point.x}
@@ -393,6 +418,25 @@ function FlowMapRiver({ projectId, limit = 20, onViewAll }) {
           </div>
         </div>
       </div>
+
+      {/* Project Selector */}
+      {projects.length > 0 && (
+        <div className="river-projects">
+          <div className="river-projects-label">Your Projects</div>
+          <div className="river-projects-list">
+            {projects.map(project => (
+              <button
+                key={project.id}
+                className={`river-project-chip ${project.id === selectedProjectId ? 'selected' : ''}`}
+                onClick={() => onProjectSelect && onProjectSelect(project)}
+              >
+                <span className="project-chip-name">{project.name}</span>
+                <span className="project-chip-stage">{getStageShortName(project.current_stage || 1)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* View All Button */}
       <button

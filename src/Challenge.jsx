@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
@@ -11,6 +12,8 @@ import ChallengeOnboarding from './components/ChallengeOnboarding'
 import ChallengeLeaderboard from './components/ChallengeLeaderboard'
 import ChallengeFilters from './components/ChallengeFilters'
 import QuestCard from './components/QuestCard'
+import FlowMapRiver from './components/FlowMapRiver'
+import GroansSummary from './components/GroansSummary'
 import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage } from './lib/stageConfig'
@@ -76,6 +79,7 @@ function Challenge() {
     nervousSystemComplete,
     healingCompassComplete,
     pastParallelStory,
+    flowFinderComplete,
     selectedProject,
     setSelectedProject,
     activeStageTab,
@@ -107,6 +111,7 @@ function Challenge() {
     getDailyStreak,
     getDayLabels,
     getDailyReleaseChallenge,
+    getConsecutiveStreakDays,
     handleConversationLogCompletion,
     handleMilestoneCompletion,
     handleFlowCompassCompletion,
@@ -114,6 +119,12 @@ function Challenge() {
     handleStreakUpdate,
     checkAndGraduateProject
   } = useChallengeData()
+
+  // State for tracking recently completed quest for animation
+  const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
+
+  // Search state for filtering quests
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Helper function to render quest descriptions with markdown links
   const renderDescription = (description) => {
@@ -216,9 +227,26 @@ function Challenge() {
       return
     }
 
-    const sanitizedReflection = ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue)
-      ? sanitizeText(inputValue)
-      : null
+    if (quest.inputType === 'text_with_tags') {
+      const textValue = typeof inputValue === 'object' ? inputValue?.text : inputValue
+      if (!textValue || textValue.trim() === '') {
+        alert('Please enter your response before completing this quest.')
+        return
+      }
+    }
+
+    // Handle text_with_tags input type (has object with text and tags)
+    let sanitizedReflection = null
+    if (quest.inputType === 'text_with_tags' && inputValue) {
+      const textValue = typeof inputValue === 'object' ? inputValue.text : inputValue
+      const tags = typeof inputValue === 'object' ? inputValue.tags : []
+      sanitizedReflection = JSON.stringify({
+        text: sanitizeText(textValue || ''),
+        tags: tags || []
+      })
+    } else if ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue) {
+      sanitizedReflection = sanitizeText(inputValue)
+    }
 
     try {
       // Handle special quest types BEFORE creating quest completion
@@ -385,7 +413,7 @@ function Challenge() {
         stage: quest.stage_required || null
       }
 
-      if (quest.inputType === 'text' || quest.inputType === 'dropdown') {
+      if (quest.inputType === 'text' || quest.inputType === 'dropdown' || quest.inputType === 'text_with_tags') {
         completionData.reflection_text = sanitizedReflection
       } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone' || quest.inputType === 'flow_compass') {
         completionData.reflection_text = JSON.stringify(specialData)
@@ -509,6 +537,11 @@ function Challenge() {
       }
 
       triggerConfetti(event)
+
+      // Set just completed for animation, clear after 3 seconds
+      setJustCompletedQuestId(quest.id)
+      setTimeout(() => setJustCompletedQuestId(null), 3000)
+
       alert(successMessage)
 
       // Check for tab completion bonus
@@ -552,11 +585,11 @@ function Challenge() {
     }
   }
 
-  // Filter quests by the active category tab
-  let filteredQuests = challengeData?.quests?.filter(q => q.category === activeCategory) || []
+  // Filter quests by the active category tab (exclude archived quests)
+  let filteredQuests = challengeData?.quests?.filter(q => q.category === activeCategory && !q.archived) || []
 
-  // Filter by persona and stage for Flow Finder quests
-  if (activeCategory === 'Flow Finder') {
+  // Filter by persona and stage for Business quests
+  if (activeCategory === 'Business') {
     const userPersonaNormalized = normalizePersona(userData?.persona)
 
     filteredQuests = filteredQuests.filter(quest => {
@@ -567,11 +600,14 @@ function Challenge() {
         }
       }
 
-      if (quest.stage_required) {
-        const viewingStage = activeStageTab || selectedProject?.current_stage ||
+      // Check stage_required - use !== undefined since stage 0 is valid
+      if (quest.stage_required !== undefined && quest.stage_required !== null) {
+        const viewingStage = activeStageTab !== undefined ? activeStageTab : (
+          selectedProject?.current_stage ||
           (typeof stageProgress?.current_stage === 'number'
             ? stageProgress.current_stage
             : convertLegacyStage(stageProgress?.current_stage))
+        )
 
         if (quest.stage_required !== viewingStage) {
           return false
@@ -579,6 +615,15 @@ function Challenge() {
       }
 
       return true
+    })
+
+    // Sort Business quests: put groan challenges last
+    filteredQuests.sort((a, b) => {
+      const aIsGroan = a.type === 'groan' || a.id?.startsWith('groan_stage')
+      const bIsGroan = b.type === 'groan' || b.id?.startsWith('groan_stage')
+      if (aIsGroan && !bIsGroan) return 1
+      if (!aIsGroan && bIsGroan) return -1
+      return 0
     })
   }
 
@@ -591,6 +636,15 @@ function Challenge() {
     if (activeFrequencyFilter !== 'all') {
       displayQuests = displayQuests.filter(q => q.frequency === activeFrequencyFilter)
     }
+  }
+
+  // Apply search filter
+  if (searchQuery.trim()) {
+    const query = searchQuery.toLowerCase()
+    displayQuests = displayQuests.filter(q =>
+      q.name?.toLowerCase().includes(query) ||
+      q.description?.toLowerCase().includes(query)
+    )
   }
 
   // ============================================
@@ -688,6 +742,7 @@ function Challenge() {
         handleOpenExplainer={handleOpenExplainer}
         handleRestartChallenge={handleRestartChallenge}
         onLeaderboardClick={() => setActiveCategory('Leaderboard')}
+        streakDays={getConsecutiveStreakDays()}
       />
 
       <div className="challenge-tabs">
@@ -702,36 +757,40 @@ function Challenge() {
         ))}
       </div>
 
-      {/* Stage tabs for Flow Finder when project is selected */}
-      {activeCategory === 'Flow Finder' && selectedProject && (
+      {/* Stage tabs for Business */}
+      {activeCategory === 'Business' && (
         <div className="stage-tabs-wrapper">
-          <div className="selected-project-info">
-            <span className="project-name">{selectedProject.name}</span>
-            <button
-              className="change-project-btn"
-              onClick={() => setShowProjectSelector(true)}
-            >
-              Change Project
-            </button>
-          </div>
-          <ChallengeStageTabs
-            currentStage={selectedProject.current_stage || 1}
-            completedStages={getCompletedStages()}
-            activeTab={activeStageTab}
-            onTabChange={setActiveStageTab}
-          />
+          {selectedProject ? (
+            <>
+              <div className="selected-project-info">
+                <span className="project-name">{selectedProject.name}</span>
+                <button
+                  className="change-project-btn"
+                  onClick={() => setShowProjectSelector(true)}
+                >
+                  Change Project
+                </button>
+              </div>
+              <ChallengeStageTabs
+                currentStage={selectedProject.current_stage || 1}
+                completedStages={getCompletedStages()}
+                activeTab={activeStageTab}
+                onTabChange={setActiveStageTab}
+                flowFinderComplete={flowFinderComplete}
+              />
+            </>
+          ) : (
+            <div className="no-project-prompt">
+              <p>Select a project to see stage-specific quests</p>
+              <button
+                className="select-project-btn"
+                onClick={() => setShowProjectSelector(true)}
+              >
+                Select Project
+              </button>
+            </div>
+          )}
         </div>
-      )}
-
-      {/* Filter chips for Groans and Healing tabs */}
-      {(activeCategory === 'Groans' || activeCategory === 'Healing') && (
-        <ChallengeFilters
-          activeCategory={activeCategory}
-          activeFrequencyFilter={activeFrequencyFilter}
-          setActiveFrequencyFilter={setActiveFrequencyFilter}
-          activeRTypeFilter={activeRTypeFilter}
-          setActiveRTypeFilter={setActiveRTypeFilter}
-        />
       )}
 
       <div className="challenge-content">
@@ -746,14 +805,23 @@ function Challenge() {
           />
         )}
 
-        {/* Quest Content - only show if not on Leaderboard tab */}
-        {activeCategory !== 'Leaderboard' && (
+        {/* Summary */}
+        {activeCategory === 'Summary' && (
+          <GroansSummary
+            onBack={() => setActiveCategory('Groans')}
+            progress={progress}
+            completions={completions}
+          />
+        )}
+
+        {/* Quest Content - only show if not on Leaderboard or Summary tab */}
+        {activeCategory !== 'Leaderboard' && activeCategory !== 'Summary' && (
           <>
         {/* Artifact Progress */}
         {artifactProgress && (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
-              <h3>{artifactProgress.unlocked ? 'Complete' : 'Locked'} {artifactProgress.name}</h3>
+              <h3>{artifactProgress.unlocked ? '✅' : '🔒'} {artifactProgress.name}</h3>
               <p className="artifact-description">{artifactProgress.description}</p>
             </div>
 
@@ -815,10 +883,16 @@ function Challenge() {
             <span>Category Total</span>
             <span className="point-value">{categoryPoints.total}</span>
           </div>
-          <div className="category-point-item">
-            <span>Points Today</span>
-            <span className="point-value">{getPointsToday(activeCategory)}</span>
-          </div>
+          <button
+            className="category-point-item summary-card-btn"
+            onClick={() => {
+              if (activeCategory === 'Groans') setActiveCategory('Summary')
+            }}
+            disabled={activeCategory !== 'Groans'}
+          >
+            <span className="summary-button-label">Summary</span>
+            <span className="summary-button-value">📊</span>
+          </button>
           <button
             className="category-point-item leaderboard-button"
             onClick={() => setActiveCategory('Leaderboard')}
@@ -832,10 +906,41 @@ function Challenge() {
         {activeCategory === 'Groans' && displayQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Groans</h2>
-            {['Recognise', 'Rewire', 'Reconnect', 'challenge'].filter(rType =>
+            <ChallengeFilters
+              activeCategory={activeCategory}
+              activeFrequencyFilter={activeFrequencyFilter}
+              setActiveFrequencyFilter={setActiveFrequencyFilter}
+              activeRTypeFilter={activeRTypeFilter}
+              setActiveRTypeFilter={setActiveRTypeFilter}
+            />
+            <div className="quest-search">
+              <input
+                type="text"
+                className="quest-search-input"
+                placeholder="Search challenges..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  className="quest-search-clear"
+                  onClick={() => setSearchQuery('')}
+                >
+                  ×
+                </button>
+              )}
+            </div>
+            {['Recognise', 'Rewire', 'Reconnect'].filter(rType =>
               activeRTypeFilter === 'All' || activeRTypeFilter === rType
             ).map(rType => {
-              const rTypeQuests = displayQuests.filter(q => q.type === rType)
+              const rTypeQuests = displayQuests
+                .filter(q => q.type === rType)
+                .sort((a, b) => {
+                  // Daily quests first, weekly second
+                  if (a.frequency === 'daily' && b.frequency !== 'daily') return -1
+                  if (a.frequency !== 'daily' && b.frequency === 'daily') return 1
+                  return 0
+                })
               if (rTypeQuests.length === 0) return null
 
               return (
@@ -853,7 +958,7 @@ function Challenge() {
                           quest={quest}
                           completed={completed}
                           isDayZeroLocked={isDayZeroLocked}
-                          showStreak={true}
+                          showStreak={quest.frequency === 'daily'}
                           streak={getDailyStreak(quest.id)}
                           dayLabels={getDayLabels()}
                           questInput={questInputs[quest.id]}
@@ -873,6 +978,7 @@ function Challenge() {
                           selectedProject={selectedProject}
                           progress={progress}
                           projectStage={projectStage}
+                          justCompleted={justCompletedQuestId === quest.id}
                         />
                       )
                     })}
@@ -887,10 +993,41 @@ function Challenge() {
         {activeCategory === 'Healing' && displayQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Healing</h2>
+            <ChallengeFilters
+              activeCategory={activeCategory}
+              activeFrequencyFilter={activeFrequencyFilter}
+              setActiveFrequencyFilter={setActiveFrequencyFilter}
+              activeRTypeFilter={activeRTypeFilter}
+              setActiveRTypeFilter={setActiveRTypeFilter}
+            />
+            <div className="quest-search">
+              <input
+                type="text"
+                className="quest-search-input"
+                placeholder="Search challenges..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              {searchQuery && (
+                <button
+                  className="quest-search-clear"
+                  onClick={() => setSearchQuery('')}
+                >
+                  ×
+                </button>
+              )}
+            </div>
             {['Recognise', 'Release'].filter(rType =>
               activeRTypeFilter === 'All' || activeRTypeFilter === rType
             ).map(rType => {
-              const rTypeQuests = displayQuests.filter(q => q.type === rType)
+              const rTypeQuests = displayQuests
+                .filter(q => q.type === rType)
+                .sort((a, b) => {
+                  // Daily quests first, weekly second
+                  if (a.frequency === 'daily' && b.frequency !== 'daily') return -1
+                  if (a.frequency !== 'daily' && b.frequency === 'daily') return 1
+                  return 0
+                })
               if (rTypeQuests.length === 0) return null
 
               return (
@@ -906,7 +1043,9 @@ function Challenge() {
                           key={quest.id}
                           quest={quest}
                           completed={completed}
-                          showStreak={false}
+                          showStreak={quest.frequency === 'daily'}
+                          streak={getDailyStreak(quest.id)}
+                          dayLabels={getDayLabels()}
                           questInput={questInputs[quest.id]}
                           onInputChange={handleInputChange}
                           onComplete={handleQuestComplete}
@@ -915,7 +1054,7 @@ function Challenge() {
                           showLockedTooltip={showLockedTooltip}
                           onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
                           renderDescription={renderDescription}
-                          completedBadgeText="Completed"
+                          completedBadgeText={quest.frequency === 'daily' ? "Completed Today" : "Completed"}
                           navigate={navigate}
                           specialLockCheck={isHealingCompass && !nervousSystemComplete}
                           specialLockMessage="Locked"
@@ -923,6 +1062,7 @@ function Challenge() {
                           selectedProject={selectedProject}
                           progress={progress}
                           projectStage={projectStage}
+                          justCompleted={justCompletedQuestId === quest.id}
                         />
                       )
                     })}
@@ -933,10 +1073,10 @@ function Challenge() {
           </div>
         )}
 
-        {/* Flow Finder Quests */}
-        {activeCategory === 'Flow Finder' && filteredQuests.length > 0 && (
+        {/* Business Quests */}
+        {activeCategory === 'Business' && filteredQuests.length > 0 && (
           <div className="quest-section">
-            <h2 className="section-title">Flow Finder Quests</h2>
+            <h2 className="section-title">Business</h2>
             <div className="quest-grid">
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
@@ -965,6 +1105,7 @@ function Challenge() {
                     selectedProject={selectedProject}
                     progress={progress}
                     projectStage={projectStage}
+                    justCompleted={justCompletedQuestId === quest.id}
                   />
                 )
               })}
@@ -1000,6 +1141,7 @@ function Challenge() {
                     progress={progress}
                     projectStage={projectStage}
                     extraClass="bonus"
+                    justCompleted={justCompletedQuestId === quest.id}
                   />
                 )
               })}
@@ -1041,9 +1183,21 @@ function Challenge() {
                       selectedProject={selectedProject}
                       progress={progress}
                       projectStage={projectStage}
+                      justCompleted={justCompletedQuestId === quest.id}
                     />
                   )
                 })}
+              </div>
+            )}
+
+            {/* Flow Map River */}
+            {selectedProject && (
+              <div className="flow-map-section">
+                <h2 className="section-title">Your Flow Journey</h2>
+                <FlowMapRiver
+                  projectId={selectedProject.id}
+                  limit={10}
+                />
               </div>
             )}
           </div>

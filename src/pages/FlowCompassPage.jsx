@@ -6,6 +6,29 @@ import { getDirectionColor, getDirectionLabel, getDirectionIcon, formatFlowDate 
 import './FlowCompassPage.css'
 import '../Profile.css'
 
+// Generate month options for date picker (last 5 years)
+const generateMonthOptions = () => {
+  const options = []
+  const now = new Date()
+  const currentYear = now.getFullYear()
+  const currentMonth = now.getMonth()
+
+  for (let year = currentYear; year >= currentYear - 5; year--) {
+    const maxMonth = year === currentYear ? currentMonth : 11
+    for (let month = maxMonth; month >= 0; month--) {
+      const date = new Date(year, month, 1)
+      options.push({
+        value: `${year}-${String(month + 1).padStart(2, '0')}`,
+        label: date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+      })
+    }
+  }
+
+  return options
+}
+
+const MONTH_OPTIONS = generateMonthOptions()
+
 /**
  * FlowCompassPage - Redesigned with card grid and quick log
  * Based on merged mockup design
@@ -18,7 +41,10 @@ const FlowCompassPage = () => {
   const [selectedProjectId, setSelectedProjectId] = useState('')
   const [selectedEnergy, setSelectedEnergy] = useState(null) // 'excited' or 'tired'
   const [selectedFlow, setSelectedFlow] = useState(null) // 'ease' or 'resistance'
+  const [headline, setHeadline] = useState('') // headline for quick log
   const [comment, setComment] = useState('') // optional comment for quick log
+  const [dateOption, setDateOption] = useState('recent') // 'recent' or 'custom'
+  const [customMonth, setCustomMonth] = useState(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [timelineModal, setTimelineModal] = useState({ isOpen: false, project: null, entries: [] })
@@ -191,29 +217,46 @@ const FlowCompassPage = () => {
     }
   }
 
+  // Helper to get date from month string
+  const getDateFromMonth = (monthStr) => {
+    if (!monthStr) return new Date()
+    const [year, month] = monthStr.split('-')
+    return new Date(parseInt(year), parseInt(month) - 1, 15)
+  }
+
+  // Get direction from energy + flow
+  const getDirection = () => {
+    if (selectedEnergy === 'excited' && selectedFlow === 'ease') return 'north'
+    if (selectedEnergy === 'excited' && selectedFlow === 'resistance') return 'east'
+    if (selectedEnergy === 'tired' && selectedFlow === 'resistance') return 'south'
+    if (selectedEnergy === 'tired' && selectedFlow === 'ease') return 'west'
+    return null
+  }
+
+  const getDirectionLabelLocal = (dir) => {
+    const labels = { north: 'Flow', east: 'Redirect', south: 'Rest', west: 'Honour' }
+    return labels[dir] || ''
+  }
+
   const handleQuickLog = async () => {
     if (!selectedProjectId || !selectedEnergy || !selectedFlow) {
       alert('Please complete all fields before logging.')
       return
     }
 
+    if (dateOption === 'custom' && !customMonth) {
+      alert('Please select a date.')
+      return
+    }
+
     setSubmitting(true)
     try {
-      // Determine direction from energy + flow
-      let direction
-      if (selectedEnergy === 'excited' && selectedFlow === 'ease') {
-        direction = 'north'
-      } else if (selectedEnergy === 'excited' && selectedFlow === 'resistance') {
-        direction = 'east'
-      } else if (selectedEnergy === 'tired' && selectedFlow === 'resistance') {
-        direction = 'south'
-      } else if (selectedEnergy === 'tired' && selectedFlow === 'ease') {
-        direction = 'west'
-      }
+      const direction = getDirection()
 
-      // Build reasoning text
-      const baseReasoning = `${selectedEnergy === 'excited' ? 'Excited' : 'Tired'} and ${selectedFlow === 'ease' ? 'flowing well' : 'facing resistance'}`
-      const reasoning = comment.trim() ? `${baseReasoning}: ${comment.trim()}` : baseReasoning
+      // Calculate logged_at based on date option
+      const loggedAt = dateOption === 'recent'
+        ? new Date().toISOString()
+        : getDateFromMonth(customMonth).toISOString()
 
       const { data, error } = await supabase
         .from('flow_entries')
@@ -223,17 +266,22 @@ const FlowCompassPage = () => {
           direction,
           internal_state: selectedEnergy,
           external_state: selectedFlow,
-          reasoning
+          activity_description: headline.trim() || 'Flow check-in',
+          reasoning: comment.trim() || 'Daily reflection',
+          logged_at: loggedAt
         })
         .select()
         .single()
 
       if (error) throw error
 
-      // Reset energy, flow, and comment but keep project selected
+      // Reset form but keep project selected
       setSelectedEnergy(null)
       setSelectedFlow(null)
+      setHeadline('')
       setComment('')
+      setDateOption('recent')
+      setCustomMonth(null)
 
       // Reload projects to update stats
       await loadProjects()
@@ -378,6 +426,9 @@ const FlowCompassPage = () => {
           <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
             🧭 Flow Compass
           </li>
+          <li className="nav-item" onClick={() => { navigate('/library'); setSidebarOpen(false); }}>
+            📚 Library of Answers
+          </li>
           <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
             💬 Give Feedback
           </li>
@@ -398,69 +449,123 @@ const FlowCompassPage = () => {
         </div>
       </div>
 
-      {/* Quick Log Section */}
-      <div className="quick-log">
-        <h2 className="quick-log-title">Quick Log</h2>
+      {/* Quick Log Section - Styled like SeeYourFlow */}
+      <div className="quick-log flow-style">
+        <h2 className="quick-log-title">Log Your Flow</h2>
 
         {/* Energy Question */}
         <div className="question-group">
-          <h3 className="question-heading">Are you feeling excited or tired?</h3>
-          <div className="button-row">
+          <label className="question-label">Are you feeling excited?</label>
+          <div className="two-options">
             <button
-              className={`energy-btn energy-excited ${selectedEnergy === 'excited' ? 'selected' : ''}`}
+              className={`option-btn ${selectedEnergy === 'excited' ? 'selected' : ''}`}
               onClick={() => setSelectedEnergy('excited')}
             >
-              Excited
+              <span className="option-emoji">🔥</span>
+              <span>Excited</span>
             </button>
             <button
-              className={`energy-btn energy-tired ${selectedEnergy === 'tired' ? 'selected' : ''}`}
+              className={`option-btn ${selectedEnergy === 'tired' ? 'selected' : ''}`}
               onClick={() => setSelectedEnergy('tired')}
             >
-              Tired
+              <span className="option-emoji">😴</span>
+              <span>Tired</span>
             </button>
           </div>
         </div>
 
         {/* Flow Question */}
         <div className="question-group">
-          <h3 className="question-heading">How is the project flowing?</h3>
-          <div className="button-row">
+          <label className="question-label">How is the business flowing?</label>
+          <div className="two-options">
             <button
-              className={`flow-btn flow-great ${selectedFlow === 'ease' ? 'selected' : ''}`}
+              className={`option-btn ${selectedFlow === 'ease' ? 'selected' : ''}`}
               onClick={() => setSelectedFlow('ease')}
             >
-              <span className="arrow-icon">↑</span>
+              <span className="option-emoji">✨</span>
               <span>Great</span>
             </button>
             <button
-              className={`flow-btn flow-resistance ${selectedFlow === 'resistance' ? 'selected' : ''}`}
+              className={`option-btn ${selectedFlow === 'resistance' ? 'selected' : ''}`}
               onClick={() => setSelectedFlow('resistance')}
             >
-              <span className="arrow-icon">→</span>
-              <span>Facing Resistance</span>
+              <span className="option-emoji">🧗</span>
+              <span>Facing resistance</span>
             </button>
           </div>
         </div>
 
-        {/* Comment Section */}
+        {/* Direction Preview */}
+        {selectedEnergy && selectedFlow && (
+          <div className={`direction-preview direction-${getDirection()}`}>
+            <span className="direction-arrow">→</span>
+            <span>{getDirectionLabelLocal(getDirection())}</span>
+          </div>
+        )}
+
+        {/* Headline */}
         <div className="question-group">
-          <h3 className="question-heading">Add a comment <span style={{ fontWeight: 'normal', color: 'rgba(255,255,255,0.5)' }}>(optional)</span></h3>
+          <label className="question-label">Headline</label>
+          <input
+            type="text"
+            className="headline-input"
+            placeholder="e.g., Landed a new client"
+            value={headline}
+            onChange={(e) => setHeadline(e.target.value)}
+          />
+        </div>
+
+        {/* Comment */}
+        <div className="question-group">
+          <label className="question-label">Comment (optional)</label>
           <textarea
-            className="comment-input"
-            placeholder="What's on your mind about this project?"
+            className="comment-textarea"
+            placeholder="Any additional thoughts..."
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            rows={2}
+            rows={3}
           />
+        </div>
+
+        {/* Date Option */}
+        <div className="question-group">
+          <label className="question-label">When</label>
+          <div className="date-options">
+            <button
+              className={`date-option ${dateOption === 'recent' ? 'selected' : ''}`}
+              onClick={() => setDateOption('recent')}
+            >
+              Most Recent
+            </button>
+            <button
+              className={`date-option ${dateOption === 'custom' ? 'selected' : ''}`}
+              onClick={() => setDateOption('custom')}
+            >
+              Choose Date
+            </button>
+          </div>
+
+          {dateOption === 'custom' && (
+            <select
+              className="month-picker"
+              value={customMonth || ''}
+              onChange={(e) => setCustomMonth(e.target.value)}
+            >
+              <option value="">Select month...</option>
+              {MONTH_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          )}
         </div>
 
         {/* Submit Button */}
         <button
-          className="submit-log-btn"
+          className="submit-btn"
           onClick={handleQuickLog}
-          disabled={!selectedProjectId || !selectedEnergy || !selectedFlow || submitting}
+          disabled={!selectedProjectId || !selectedEnergy || !selectedFlow || submitting || (dateOption === 'custom' && !customMonth)}
         >
-          {submitting ? 'Logging...' : 'Log Entry'}
+          {submitting ? 'Logging...' : 'Log Flow'}
         </button>
       </div>
 

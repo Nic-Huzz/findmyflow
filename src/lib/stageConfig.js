@@ -13,6 +13,7 @@
 // =============================================================================
 
 export const STAGES = {
+  FLOW_FINDER: 0,
   VALIDATION: 1,
   PRODUCT_CREATION: 2,
   TESTING: 3,
@@ -22,6 +23,22 @@ export const STAGES = {
 }
 
 export const STAGE_CONFIG = {
+  [STAGES.FLOW_FINDER]: {
+    id: 0,
+    name: 'Flow Finder',
+    shortName: 'Flow Finder',
+    description: 'Discover your unique skills, problems, and personas',
+    icon: '🧭',
+    color: '#5e17eb', // brand purple
+    requiredFlows: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
+    milestones: [],
+    groanChallenge: null, // No groan for Flow Finder
+    tabLabel: 'Flow Finder',
+    upsellPrompt: null,
+    externalLink: null,
+    isUserLevel: true, // Key flag: this stage is user-level, not project-level
+    alwaysAccessible: true // Can be accessed from any project stage
+  },
   [STAGES.VALIDATION]: {
     id: 1,
     name: 'Validation',
@@ -66,7 +83,7 @@ export const STAGE_CONFIG = {
     shortName: 'Testing',
     description: 'Test your product with real users and gather feedback',
     icon: '🎯',
-    color: '#ec4899', // pink
+    color: '#f59e0b', // amber
     requiredFlows: [],
     milestones: ['offer_tested_with_3', 'testing_complete', 'feedback_responses_3', 'improvements_identified'],
     groanChallenge: {
@@ -126,7 +143,7 @@ export const STAGE_CONFIG = {
     shortName: 'Launch',
     description: 'Execute your launch with your leads funnel',
     icon: '🚀',
-    color: '#ef4444', // red
+    color: '#E9A23B', // gold
     requiredFlows: ['attraction_offer'],
     milestones: ['acquisition_offer_launched'],
     groanChallenge: {

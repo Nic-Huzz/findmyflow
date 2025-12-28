@@ -304,16 +304,16 @@ function PersonaAssessment() {
 
   // ============ RENDER STAGES ============
 
-  // HUZZ INTRO SCREEN 1
+  // HUZZ INTRO SCREEN 1 - Animated text reveal
   if (stage === STAGES.HUZZ_INTRO_1) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
         <div className="welcome-container">
           <div className="welcome-content">
-            <h1 className="welcome-greeting">Welcome! I'm Huzz!</h1>
-            <div className="welcome-message">
-              <p>Ever since I quit my job two and a half years ago, I've developed an unwavering belief in <strong>'Flow'</strong>.</p>
+            <h1 className="welcome-greeting">Welcome! I'm Huzz! 🌞</h1>
+            <div className="welcome-message animated-text">
+              <p>Ever since I quit my job two and a half years ago, I've developed an unwavering belief in: <strong>'Flow'</strong>.</p>
               <p>The idea that there's a unique path that only you could walk due to your combination of skills, experiences and circumstances.</p>
             </div>
           </div>
@@ -328,17 +328,17 @@ function PersonaAssessment() {
     )
   }
 
-  // HUZZ INTRO SCREEN 2
+  // HUZZ INTRO SCREEN 2 - EAR glow highlight
   if (stage === STAGES.HUZZ_INTRO_2) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
         <div className="welcome-container">
           <div className="welcome-content">
-            <div className="welcome-message">
+            <div className="welcome-message animated-text">
               <p>I believe the universe communicates with us every day about what this path is.</p>
-              <p>The problem is it can't talk to us directly, so it uses what I like to call <strong>'Ease and Resistance'</strong>.</p>
-              <p>As an acronym it spells <strong>'EAR'</strong> — coincidence? 🤔</p>
+              <p>The problem is it can't talk to us directly,<br />so it uses what I like to call:<br /><strong>'Ease and Resistance'</strong>.</p>
+              <p>As an acronym it spells <span className="ear-highlight">'EAR'</span> — coincidence? 🤔</p>
             </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_3)}>
@@ -349,41 +349,57 @@ function PersonaAssessment() {
     )
   }
 
-  // HUZZ INTRO SCREEN 3
+  // HUZZ INTRO SCREEN 3 - Animated transformation stats
   if (stage === STAGES.HUZZ_INTRO_3) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
         <div className="welcome-container">
           <div className="welcome-content">
-            <div className="welcome-message">
-              <p>I believe when you find your flow — aligning what gives you flow internally, with what's flowing externally (ease) — life becomes <strong>crazy and magical</strong>.</p>
-              <p>It's the only way I can describe going from 13 headsets dancing on beaches in Thailand to 350 headsets hosting events at Bali Beach clubs in less than 12 months of quitting my job.</p>
+            <div className="welcome-message animated-text">
+              <p>I believe when you find your flow —<br />aligning what gives you flow internally, with what's flowing externally (ease) —<br /><strong>life becomes a magical adventure</strong>.</p>
+              <p>It's the only way I can describe my transformation:</p>
+            </div>
+            <div className="transformation-journey">
+              <div className="journey-from">
+                <span className="journey-emoji">🏖️</span>
+                <span className="journey-text">Dancing on beaches in Thailand<br/><strong>with 13 headsets</strong></span>
+              </div>
+              <div className="journey-arrow">
+                <span className="arrow-line"></span>
+                <span className="arrow-head">→</span>
+              </div>
+              <div className="journey-to">
+                <span className="journey-emoji">🎉</span>
+                <span className="journey-text">Hosting events at Bali Beach Clubs<br/><strong>with 350 headsets</strong></span>
+              </div>
+            </div>
+            <div className="welcome-message animated-text" style={{ marginTop: '12px' }}>
+              <p style={{ animationDelay: '0.6s' }}><strong>In less than 12 months of quitting my job.</strong></p>
             </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_4)}>
-            I'm keen for a crazy, magical journey!
+            I'm keen for a magical adventure!
           </button>
         </div>
       </div>
     )
   }
 
-  // HUZZ INTRO SCREEN 4
+  // HUZZ INTRO SCREEN 4 - Excitement build with button glow + background pulse
   if (stage === STAGES.HUZZ_INTRO_4) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
-        <div className="welcome-container">
-          <div className="welcome-content">
-            <div className="welcome-message">
-              <p>This webapp is designed to help you <strong>find your flow</strong>.</p>
-              <p>It has everything I wish I had on my journey from the beginning.</p>
-              <p>So you can go from idea to monetising your mission as fast as possible.</p>
+        <div className="welcome-container excitement-container">
+          <div className="welcome-content" style={{ position: 'relative', zIndex: 1 }}>
+            <div className="welcome-message animated-text">
+              <p>This webapp is designed to help you <strong>find your flow</strong> by gamifying the journey.</p>
+              <p><strong>My North Star is to empower you to go from idea to monetising your mission as fast as possible.</strong></p>
               <p className="welcome-cta-text">Ready to get started?</p>
             </div>
           </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.ESSENCE_INTRO)}>
+          <button className="primary-button glow-button" onClick={() => setStage(STAGES.ESSENCE_INTRO)} style={{ position: 'relative', zIndex: 1 }}>
             Yep!
           </button>
         </div>
@@ -394,28 +410,30 @@ function PersonaAssessment() {
   // NOTE: Persona questions moved to post-auth flow (HomeFirstTime.jsx)
   // The 3-question persona assessment now happens after user creates account
 
-  // ESSENCE INTRO
+  // ESSENCE INTRO - Animated text reveal
   if (stage === STAGES.ESSENCE_INTRO) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
         <div className="intro-container">
           <h2 className="intro-title">Discover Your Essence</h2>
-          <p className="intro-text">
-            On my journey, I discovered something powerful — we all have an <strong>Essence Voice</strong>.
-          </p>
-          <p className="intro-text">
-            It's that original song you were born to share. The version of you that feels most alive, most authentic, most magnetic.
-          </p>
-          <p className="intro-text">
-            When you show up from this place, your impact doesn't feel like work — it feels like flow.
-          </p>
-          <p className="intro-text">
-            There are 8 Essence Voices. One will feel like coming home.
-          </p>
-          <p className="intro-instruction">
-            Swipe right on the ones that resonate. Left on the ones that don't.
-          </p>
+          <div className="animated-text">
+            <p className="intro-text">
+              On my journey, I discovered something powerful — we all have an <strong>Essence Voice</strong>.
+            </p>
+            <p className="intro-text">
+              It's that original song you were born to share. The version of you that feels most alive, most authentic, most magnetic.
+            </p>
+            <p className="intro-text">
+              When you show up from this place, your impact doesn't feel like work — it feels like flow.
+            </p>
+            <p className="intro-text">
+              There are 8 Essence Voices. One will feel like coming home.
+            </p>
+            <p className="intro-instruction">
+              Swipe right on the ones that resonate. Left on the ones that don't.
+            </p>
+          </div>
           <button className="primary-button" onClick={() => setStage(STAGES.ESSENCE_FLOW)}>
             Let's Go
           </button>
@@ -466,28 +484,40 @@ function PersonaAssessment() {
     )
   }
 
-  // PROTECTIVE INTRO
+  // PROTECTIVE INTRO - Animated list reveal + icons + time estimate
   if (stage === STAGES.PROTECTIVE_INTRO) {
     return (
       <div className="persona-assessment">
         {renderProgress()}
         <div className="intro-container">
           <h2 className="intro-title">Identify What's Blocking You</h2>
-          <p className="intro-text">
-            Now let's explore what's been muting your song.
-          </p>
-          <p className="intro-text">
-            These are <strong>protective patterns</strong> you developed when you were younger to keep yourself safe from failure, rejection, or judgement.
-          </p>
-          <p className="intro-text">
-            <em>The Perfectionist. The People Pleaser. The Controller. The Performer. The Ghost.</em>
-          </p>
-          <p className="intro-text">
-            They were so effective they've now become the thing blocking you from sharing your {essenceArchetype?.name} gifts with the world.
-          </p>
-          <p className="intro-instruction">
-            Swipe right on the ones that sound familiar. Left on the ones that don't.
-          </p>
+          <div className="animated-text">
+            <p className="intro-text">
+              Now let's explore what's been muting your song.
+            </p>
+            <p className="intro-text">
+              These are <strong>protective patterns</strong> you developed when you were younger to keep yourself safe from failure, rejection, or judgement.
+            </p>
+          </div>
+          <div className="pattern-list">
+            <span className="pattern-item"><span className="pattern-icon">✨</span> The Perfectionist</span>
+            <span className="pattern-item"><span className="pattern-icon">🤝</span> The People Pleaser</span>
+            <span className="pattern-item"><span className="pattern-icon">🎮</span> The Controller</span>
+            <span className="pattern-item"><span className="pattern-icon">🎭</span> The Performer</span>
+            <span className="pattern-item"><span className="pattern-icon">👻</span> The Ghost</span>
+          </div>
+          <div className="animated-text">
+            <p className="intro-text" style={{ animationDelay: '1.2s' }}>
+              They were so effective they've now become the thing blocking you from sharing your {essenceArchetype?.name} gifts with the world.
+            </p>
+            <p className="intro-instruction" style={{ animationDelay: '1.5s' }}>
+              Swipe right on the ones that sound familiar. Left on the ones that don't.
+            </p>
+          </div>
+          <div className="time-estimate">
+            <span>⏱️</span>
+            <span>Takes ~2 minutes</span>
+          </div>
           <button className="primary-button" onClick={() => setStage(STAGES.PROTECTIVE_FLOW)}>
             Let's Go
           </button>

@@ -10,6 +10,7 @@
 // Shared STAGES constant used by all flows
 export const STAGES = {
   WELCOME: 'welcome',
+  TIME_CHECK: 'time_check',
   Q1: 'q1',
   Q2: 'q2',
   Q3: 'q3',
@@ -29,7 +30,7 @@ export const STAGES = {
 const STAGE_GROUP_TEMPLATES = {
   // Used by AttractionOffer, Downsell, Continuity
   marketGoals: [
-    { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME] },
+    { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME, STAGES.TIME_CHECK] },
     { id: 'business', label: 'Business', stages: [STAGES.Q1, STAGES.Q2, STAGES.Q3] },
     { id: 'operations', label: 'Operations', stages: [STAGES.Q4, STAGES.Q5] },
     { id: 'market', label: 'Market', stages: [STAGES.Q6, STAGES.Q7] },
@@ -39,7 +40,7 @@ const STAGE_GROUP_TEMPLATES = {
   ],
   // Used by Upsell
   strategyExecution: [
-    { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME] },
+    { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME, STAGES.TIME_CHECK] },
     { id: 'business', label: 'Business', stages: [STAGES.Q1, STAGES.Q2, STAGES.Q3] },
     { id: 'operations', label: 'Operations', stages: [STAGES.Q4, STAGES.Q5] },
     { id: 'strategy', label: 'Strategy', stages: [STAGES.Q6, STAGES.Q7] },
@@ -49,7 +50,7 @@ const STAGE_GROUP_TEMPLATES = {
   ],
   // Used by LeadsStrategy, LeadMagnet
   resourcesSkills: [
-    { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME] },
+    { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME, STAGES.TIME_CHECK] },
     { id: 'resources', label: 'Resources', stages: [STAGES.Q1, STAGES.Q2, STAGES.Q3] },
     { id: 'skills', label: 'Skills', stages: [STAGES.Q4, STAGES.Q5, STAGES.Q6] },
     { id: 'business', label: 'Business', stages: [STAGES.Q7, STAGES.Q8] },
@@ -90,6 +91,10 @@ export const MONEY_MODEL_CONFIGS = {
     hasSearchParams: true,      // Uses useSearchParams hook
     hasBackButton: true,        // Shows back button on questions
 
+    // Time check screen
+    timeEstimate: '3 minutes',
+    timeCheckMessage: "We'll ask 10 quick questions about your business to find your ideal attraction offer.",
+
     // Calculating stage text
     calculatingTitle: 'Analyzing Your Business...',
     calculatingSteps: [
@@ -121,6 +126,10 @@ export const MONEY_MODEL_CONFIGS = {
     hasSearchParams: true,
     hasBackButton: true,
 
+    // Time check screen
+    timeEstimate: '3 minutes',
+    timeCheckMessage: "We'll ask 10 quick questions to find the best way to increase your average order value.",
+
     calculatingTitle: 'Analyzing Your Business...',
     calculatingSteps: [
       '✓ Evaluating your customer base',
@@ -151,6 +160,10 @@ export const MONEY_MODEL_CONFIGS = {
     hasSearchParams: true,
     hasBackButton: true,
 
+    // Time check screen
+    timeEstimate: '3 minutes',
+    timeCheckMessage: "We'll ask 10 quick questions to find the best downsell strategy for capturing more sales.",
+
     calculatingTitle: 'Analyzing Your Business...',
     calculatingSteps: [
       '✓ Evaluating your offer structure',
@@ -180,6 +193,10 @@ export const MONEY_MODEL_CONFIGS = {
     hasViewingResults: true,
     hasSearchParams: true,
     hasBackButton: true,
+
+    // Time check screen
+    timeEstimate: '3 minutes',
+    timeCheckMessage: "We'll ask 10 quick questions to find the best recurring revenue model for your business.",
 
     calculatingTitle: 'Analyzing Your Business...',
     calculatingSteps: [
@@ -216,6 +233,10 @@ export const MONEY_MODEL_CONFIGS = {
     hasSearchParams: false,     // No search params
     hasBackButton: false,       // No back button
 
+    // Time check screen
+    timeEstimate: '3 minutes',
+    timeCheckMessage: "We'll ask 10 quick questions to find the best lead generation strategy for your situation.",
+
     calculatingTitle: 'Analyzing Your Situation...',
     calculatingSteps: [
       '✓ Evaluating your resources',
@@ -245,6 +266,10 @@ export const MONEY_MODEL_CONFIGS = {
     hasViewingResults: false,
     hasSearchParams: false,
     hasBackButton: false,
+
+    // Time check screen
+    timeEstimate: '3 minutes',
+    timeCheckMessage: "We'll ask 10 quick questions to find the perfect lead magnet type for your audience.",
 
     // Special features for LeadMagnet
     createsMilestone: true,

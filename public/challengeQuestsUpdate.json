@@ -6,7 +6,7 @@
       "type": "Recognise",
       "frequency": "daily",
       "name": "Essence Voice",
-      "description": "Where did your essence voice show up in your work today",
+      "description": "Where did your essence voice show up in your work today?",
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What were you doing?",
@@ -25,39 +25,23 @@
       "learnMore": "Your protective voice is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future."
     },
     {
-      "id": "recognise_positive_frequency",
-      "category": "Groans",
-      "type": "Recognise",
-      "frequency": "daily",
-      "name": "Positive Frequency",
-      "description": "What's a moment where you were challenged in your work today but reacted from a place of love?",
-      "points": 3,
-      "inputType": "text",
-      "placeholder": "What was the situation?",
-      "learnMore": "A love response is anything above 'courage' on the emotional frequency scale.\n\nIt includes:\nWillingness: 'Expressesing feelings without blame'.\nAcceptance: 'Making decisions from clarity, not emotion'.\nPeace: 'Seeing innocence in others, even in conflict'.\n\nThis is important because we attract what we are. If we find ourselves responding from anger throughout the day we will attract more anger. If we show up from these higher states we will attract more of them.\n\nTracking these moments builds awareness and accountability."
-    },
-    {
-      "id": "recognise_negative_frequency",
-      "category": "Groans",
-      "type": "Recognise",
-      "frequency": "daily",
-      "name": "Negative Frequency",
-      "description": "What's a moment you were challenged in your work today and reacted from a place of fear?",
-      "points": 3,
-      "inputType": "text",
-      "placeholder": "What was the situation? What caused you to be triggered?",
-      "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future."
-    },
-    {
       "id": "recognise_nonfiction_content",
-      "category": "Groans",
-      "type": "Recognise",
+      "category": "Business",
+      "type": "Flow Finder",
       "frequency": "weekly",
+      "stage_required": 0,
       "name": "Identify Your Curiosities",
       "description": "What was the topic of a podcast, book, or learning that you absolutely loved this week?",
       "points": 15,
-      "inputType": "text",
+      "inputType": "text_with_tags",
       "placeholder": "The more specific the topic the better",
+      "tagOptions": [
+        { "value": "skill", "label": "Skill" },
+        { "value": "problem", "label": "Problem" },
+        { "value": "persona", "label": "Persona" }
+      ],
+      "tagLabel": "This curiosity relates to:",
+      "multiSelectTags": true,
       "learnMore": "Your curiosities are breadcrumbs leading to what your essence is passionate about and the impact it wants to make in the world.\n\nThe topics you're excited to learn about reveal what you're meant to share with the world.\n\nMost people dismiss their interests as 'just hobbies,' but tracking them over time reveals patterns that point to your unique genius and potential business opportunities."
     },
     {
@@ -70,7 +54,9 @@
       "points": 5,
       "inputType": "text",
       "maxPerDay": 3,
-      "placeholder": "What did you do?"
+      "placeholder": "What did you do?",
+      "archived": true,
+      "archived_reason": "Consolidated into other Rewire quests - Dec 2024"
     },
     {
       "id": "rewire_dopamine_diet",
@@ -120,9 +106,10 @@
     },
     {
       "id": "rewire_3_percent_better",
-      "category": "Groans",
-      "type": "Rewire",
+      "category": "Business",
+      "type": "Flow Finder",
       "frequency": "weekly",
+      "stage_required": 0,
       "name": "3% Better",
       "description": "In your business what can you make 3% better this week?",
       "points": 20,
@@ -221,7 +208,7 @@
     {
       "id": "groan_challenge",
       "category": "Groans",
-      "type": "challenge",
+      "type": "Rewire",
       "frequency": "anytime",
       "name": "Groan Challenge",
       "description": "A groan is something your essence knows you're capable of but your body still resists. It's something that feels outside your comfort zone but you know that you can do.",
@@ -234,7 +221,7 @@
     },
     {
       "id": "groan_stage_1_validation",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 1 Groan: Validation",
@@ -249,7 +236,7 @@
     },
     {
       "id": "groan_stage_2_creation",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 2 Groan: Creation",
@@ -264,7 +251,7 @@
     },
     {
       "id": "groan_stage_3_testing",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 3 Groan: Testing",
@@ -279,7 +266,7 @@
     },
     {
       "id": "groan_stage_4_money",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 4 Groan: Money",
@@ -294,7 +281,7 @@
     },
     {
       "id": "groan_stage_5_campaign",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 5 Groan: Campaign",
@@ -309,7 +296,7 @@
     },
     {
       "id": "groan_stage_6_launch",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 6 Groan: Launch",
@@ -321,6 +308,42 @@
       "stage_required": 6,
       "counts_toward_graduation": true,
       "learnMore": "Fear of failure after going 'all in' is the final boss of the Launch stage.\n\nYour essence knows you're ready. Your body fears what happens if you commit publicly and it doesn't work.\n\nThis groan challenges you to make a public, undeniable commitment. Pick a date. Announce it. Burn the boats. When there's no escape route, you'll find resources and resilience you didn't know you had. And even if the launch doesn't go perfectly—you'll learn more from that than from another month of 'preparing.'"
+    },
+    {
+      "id": "recognise_positive_frequency",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "daily",
+      "name": "Positive Frequency",
+      "description": "What's a moment where you were challenged in your work today but reacted from a place of love?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the situation?",
+      "learnMore": "A love response is anything above 'courage' on the emotional frequency scale.\n\nIt includes:\nWillingness: 'Expressing feelings without blame'.\nAcceptance: 'Making decisions from clarity, not emotion'.\nPeace: 'Seeing innocence in others, even in conflict'.\n\nThis is important because we attract what we are. If we find ourselves responding from anger throughout the day we will attract more anger. If we show up from these higher states we will attract more of them.\n\nTracking these moments builds awareness and accountability."
+    },
+    {
+      "id": "recognise_negative_frequency",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "daily",
+      "name": "Negative Frequency",
+      "description": "What's a moment you were challenged in your work today and reacted from a place of fear?",
+      "points": 3,
+      "inputType": "text",
+      "placeholder": "What was the situation? What caused you to be triggered?",
+      "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future."
+    },
+    {
+      "id": "recognise_trigger_pattern",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "weekly",
+      "name": "Trigger Pattern",
+      "description": "What situations repeatedly triggered you this week? Identify the patterns.",
+      "points": 15,
+      "inputType": "text",
+      "placeholder": "What patterns did you notice in your triggers this week?",
+      "learnMore": "Our triggers are consistent — the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions."
     },
     {
       "id": "recognise_nervous_system",
@@ -405,11 +428,13 @@
       "points": 25,
       "inputType": "flow_compass",
       "placeholder": "What happened this week? What direction did you flow?",
-      "learnMore": "Internal flow = excitement or tired.\n\nDoes the thought of the action excite you or tire you?\n\nExternal flow = Ease or resistance.\n\nWhen you took action did your intentions came to life as expected and did serendipity's occur? This is Ease.\n\nOr did it not go as expected and did you face unexpected challenges? This is resistance.\n\nNorth = Action excited you and it flowed with ease. This is a signal for continuing.\n\nEast = Action excited you but you faced resistance. This is a signal that a pivot is required.\n\nSouth = Action felt tiring and you faced resistance. This is a signal that you need to rest and / or stop.\n\nWest = Action felt tiring but it led to a new opportunity dropping in. This is a single to potentially explore a new opportunity."
+      "learnMore": "Internal flow = excitement or tired.\n\nDoes the thought of the action excite you or tire you?\n\nExternal flow = Ease or resistance.\n\nWhen you took action did your intentions came to life as expected and did serendipity's occur? This is Ease.\n\nOr did it not go as expected and did you face unexpected challenges? This is resistance.\n\nNorth = Action excited you and it flowed with ease. This is a signal for continuing.\n\nEast = Action excited you but you faced resistance. This is a signal that a pivot is required.\n\nSouth = Action felt tiring and you faced resistance. This is a signal that you need to rest and / or stop.\n\nWest = Action felt tiring but it led to a new opportunity dropping in. This is a single to potentially explore a new opportunity.",
+      "archived": true,
+      "archived_reason": "Daily flow updates capture the same info - Dec 2024"
     },
     {
       "id": "flow_finder_skills",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "flow",
       "frequency": "anytime",
       "name": "Flow Finder: Skills",
@@ -418,14 +443,13 @@
       "inputType": "flow",
       "flow_id": "nikigai_skills",
       "flow_route": "/nikigai/skills",
-      "persona_specific": ["vibe_seeker"],
-      "stage_required": 1,
-      "counts_toward_graduation": true,
+      "stage_required": 0,
+      "counts_toward_graduation": false,
       "learnMore": "This flow helps you identify your natural talents and acquired skills. These form one pillar of your unique opportunities."
     },
     {
       "id": "flow_finder_problems",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "flow",
       "frequency": "anytime",
       "name": "Flow Finder: Problems",
@@ -434,15 +458,14 @@
       "inputType": "flow",
       "flow_id": "nikigai_problems",
       "flow_route": "/nikigai/problems",
-      "persona_specific": ["vibe_seeker"],
-      "stage_required": 1,
+      "stage_required": 0,
       "requires_quest": "flow_finder_skills",
-      "counts_toward_graduation": true,
+      "counts_toward_graduation": false,
       "learnMore": "Discover which problems energize you to solve. These become the foundation of your impact."
     },
     {
       "id": "flow_finder_persona",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "flow",
       "frequency": "anytime",
       "name": "Flow Finder: Personas",
@@ -451,15 +474,14 @@
       "inputType": "flow",
       "flow_id": "nikigai_persona",
       "flow_route": "/nikigai/persona",
-      "persona_specific": ["vibe_seeker"],
-      "stage_required": 1,
+      "stage_required": 0,
       "requires_quest": "flow_finder_problems",
-      "counts_toward_graduation": true,
+      "counts_toward_graduation": false,
       "learnMore": "Identify the people and communities you naturally connect with and want to serve."
     },
     {
       "id": "flow_finder_integration",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "flow",
       "frequency": "anytime",
       "name": "Putting It All Together",
@@ -468,15 +490,14 @@
       "inputType": "flow",
       "flow_id": "nikigai_integration",
       "flow_route": "/nikigai/integration",
-      "persona_specific": ["vibe_seeker"],
-      "stage_required": 1,
+      "stage_required": 0,
       "requires_quest": "flow_finder_persona",
-      "counts_toward_graduation": true,
+      "counts_toward_graduation": false,
       "learnMore": "Combine everything you've discovered to reveal concrete opportunities aligned with your flow."
     },
     {
       "id": "milestone_offer_created",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 2,
@@ -488,11 +509,13 @@
       "placeholder": "Describe your offer and what makes it valuable.",
       "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
-      "learnMore": "This milestone counts toward your graduation to the Testing stage."
+      "learnMore": "This milestone counts toward your graduation to the Testing stage.",
+      "archived": true,
+      "archive_reason": "Redundant - $100M Offer Builder flow already tracks offer creation"
     },
     {
       "id": "milestone_model_built",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 2,
@@ -504,11 +527,13 @@
       "placeholder": "Describe your money model and revenue streams.",
       "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
-      "learnMore": "This milestone counts toward your graduation to the Testing stage."
+      "learnMore": "This milestone counts toward your graduation to the Testing stage.",
+      "archived": true,
+      "archive_reason": "Wrong stage - Money Models are Stage 4, not Stage 2. Also redundant with Stage 4 assessment flows."
     },
     {
       "id": "milestone_offer_tested_with_3",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 3,
@@ -520,11 +545,13 @@
       "placeholder": "Who tested your offer? What was their response?",
       "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
-      "learnMore": "Testing your offer with real potential customers validates market fit. This counts toward your stage graduation."
+      "learnMore": "Testing your offer with real potential customers validates market fit. This counts toward your stage graduation.",
+      "archived": true,
+      "archive_reason": "Redundant - Validation flows and conversation logging already track customer testing"
     },
     {
       "id": "milestone_model_tested_with_3",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 3,
@@ -536,11 +563,13 @@
       "placeholder": "Who tested your model? What insights did you gain?",
       "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
-      "learnMore": "Testing your money model with real stakeholders validates its viability. This counts toward your stage graduation."
+      "learnMore": "Testing your money model with real stakeholders validates its viability. This counts toward your stage graduation.",
+      "archived": true,
+      "archive_reason": "Redundant - Validation flows and conversation logging already track customer testing"
     },
     {
       "id": "milestone_acquisition_offer_launched",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 6,
@@ -550,13 +579,12 @@
       "inputType": "milestone",
       "milestone_type": "acquisition_offer_launched",
       "placeholder": "Describe your acquisition offer and how you launched it.",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Launching your acquisition offer is the key to scaling. This milestone counts toward your stage graduation."
     },
     {
       "id": "flow_100m_offer",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 2,
@@ -566,13 +594,12 @@
       "inputType": "flow",
       "flow_id": "100m_offer",
       "flow_route": "/100m-offer",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "This flow helps you create a high-value offer by identifying what makes it uniquely valuable to your ideal customer. Complete this to unlock the next stage."
     },
     {
       "id": "flow_lead_magnet",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 2,
@@ -582,29 +609,27 @@
       "inputType": "flow",
       "flow_id": "lead_magnet",
       "flow_route": "/lead-magnet",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Create a compelling lead magnet that solves a specific problem for your ideal customer and builds trust."
     },
     {
-      "id": "flow_leads_strategy_vr",
-      "category": "Flow Finder",
-      "type": "Vibe Riser",
+      "id": "flow_leads_strategy",
+      "category": "Business",
+      "type": "Stage 5",
       "frequency": "anytime",
-      "stage_required": 6,
+      "stage_required": 5,
       "name": "Leads Strategy Assessment",
       "description": "Discover the best lead generation strategy for your business",
       "points": 40,
       "inputType": "flow",
       "flow_id": "leads_strategy",
       "flow_route": "/leads-strategy",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Identify your optimal lead generation strategy and create your customer acquisition funnel."
     },
     {
       "id": "milestone_read_money_model",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -613,7 +638,6 @@
       "points": 10,
       "inputType": "checkbox",
       "milestone_type": "read_putting_it_together",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "actionLink": "/money-model-guide",
       "actionLinkText": "Read Guide Here",
@@ -621,7 +645,7 @@
     },
     {
       "id": "flow_attraction_offer",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -631,13 +655,12 @@
       "inputType": "flow",
       "flow_id": "attraction_offer",
       "flow_route": "/attraction-offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Create the offer that attracts new customers into your ecosystem. This is the entry point to your money model."
     },
     {
       "id": "flow_upsell_offer",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -647,13 +670,12 @@
       "inputType": "flow",
       "flow_id": "upsell_offer",
       "flow_route": "/upsell-offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Create a premium upsell that delivers even more value to customers ready to invest more."
     },
     {
       "id": "flow_downsell_offer",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -663,13 +685,12 @@
       "inputType": "flow",
       "flow_id": "downsell_offer",
       "flow_route": "/downsell-offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Create an entry-level offer for people who aren't ready for your main offer yet."
     },
     {
       "id": "flow_continuity_offer",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -679,29 +700,12 @@
       "inputType": "flow",
       "flow_id": "continuity_offer",
       "flow_route": "/continuity-offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Create a membership or subscription offer that provides continuous value and recurring revenue."
     },
     {
-      "id": "flow_leads_strategy_mm",
-      "category": "Flow Finder",
-      "type": "Movement Maker",
-      "frequency": "anytime",
-      "stage_required": 6,
-      "name": "Leads Strategy Assessment",
-      "description": "Discover the best lead generation strategy for your business",
-      "points": 40,
-      "inputType": "flow",
-      "flow_id": "leads_strategy",
-      "flow_route": "/leads-strategy",
-      "persona_specific": ["movement_maker"],
-      "counts_toward_graduation": true,
-      "learnMore": "Identify your optimal lead generation strategy and create your customer acquisition funnel."
-    },
-    {
       "id": "flow_persona_validation",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 1,
@@ -711,13 +715,12 @@
       "inputType": "flow",
       "flow_id": "persona_selection",
       "flow_route": "/persona-selection",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "This flow helps you validate your target persona by exploring different combinations of the personas and problems you've identified. Understanding who you truly serve is the foundation of a successful business."
     },
     {
       "id": "milestone_validation_form_sent",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 1,
@@ -726,14 +729,13 @@
       "points": 15,
       "inputType": "checkbox",
       "milestone_type": "validation_form_sent",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "actionLink": "/validation-flows",
-      "actionLinkText": "Send validation form here"
+      "actionLinkText": "Send validation form & view answers here"
     },
     {
       "id": "milestone_validation_conversations",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 1,
@@ -745,13 +747,12 @@
       "milestone_count": 3,
       "placeholder": "What did you originally think and how was it different?",
       "conversation_fields": ["What were the key insights?", "What surprised you?"],
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Validation conversations help you understand if your idea solves a real problem people will pay for. Aim for 3 conversations to complete this milestone."
     },
     {
       "id": "milestone_lead_magnet_created",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 2,
@@ -761,13 +762,12 @@
       "inputType": "text",
       "milestone_type": "lead_magnet_created",
       "placeholder": "Share the link to your lead magnet or describe what you created",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Your lead magnet is the first step in your customer journey. Make it valuable and easy to consume."
     },
     {
       "id": "milestone_testing_complete",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 3,
@@ -776,13 +776,12 @@
       "points": 20,
       "inputType": "checkbox",
       "milestone_type": "testing_complete",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Testing with real users validates your product and reveals what needs improvement before launch."
     },
     {
       "id": "milestone_feedback_conversations",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 3,
@@ -793,13 +792,12 @@
       "milestone_type": "feedback_responses_3",
       "milestone_count": 3,
       "placeholder": "Who tested it? What feedback did they give?",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Feedback conversations help you refine your product based on real user experience. Aim for 3 feedback sessions to complete this milestone."
     },
     {
       "id": "milestone_improvements_identified",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser",
       "frequency": "anytime",
       "stage_required": 3,
@@ -809,13 +807,12 @@
       "inputType": "text",
       "milestone_type": "improvements_identified",
       "placeholder": "List the key improvements you'll make based on feedback",
-      "persona_specific": ["vibe_riser"],
       "counts_toward_graduation": true,
       "learnMore": "Identifying and implementing improvements shows you're listening to your customers and refining your offer."
     },
     {
       "id": "milestone_strategy_identified",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser, Movement Maker",
       "frequency": "anytime",
       "stage_required": 6,
@@ -825,13 +822,12 @@
       "inputType": "text",
       "milestone_type": "strategy_identified",
       "placeholder": "Describe your strategy and funnel stages",
-      "persona_specific": ["vibe_riser", "movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "A clear strategy and funnel ensures you know exactly how to attract and convert customers."
     },
     {
       "id": "milestone_decide_acquisition",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -848,13 +844,12 @@
         { "value": "pay_less_now_or_pay_more_later", "label": "Pay Less Now or Pay More Later" },
         { "value": "free_with_consumption_to_upsell", "label": "Free With Consumption" }
       ],
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Your attraction offer is the foundation of your customer journey. Choose wisely based on your assessment."
     },
     {
       "id": "milestone_decide_upsell",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -869,13 +864,12 @@
         { "value": "anchor_upsell", "label": "Anchor Upsell" },
         { "value": "rollover_upsell", "label": "Rollover Upsell" }
       ],
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Your upsell maximizes value for customers who want more. Make it irresistible."
     },
     {
       "id": "milestone_decide_downsell",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -889,13 +883,12 @@
         { "value": "trial_with_penalty", "label": "Trial With Penalty" },
         { "value": "feature_downsell", "label": "Feature Downsells" }
       ],
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Your downsell captures customers who aren't ready for your main offer yet. Don't leave money on the table."
     },
     {
       "id": "milestone_decide_continuity",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Movement Maker",
       "frequency": "anytime",
       "stage_required": 4,
@@ -912,77 +905,72 @@
         { "value": "auto_replenishment", "label": "Auto-Replenishment Subscription" },
         { "value": "pure_subscription", "label": "Pure Monthly Subscription/Membership" }
       ],
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Your continuity offer creates recurring revenue. This is the foundation of sustainable business."
     },
     {
       "id": "milestone_create_acquisition",
-      "category": "Flow Finder",
-      "type": "Movement Maker",
+      "category": "Business",
+      "type": "Stage 4",
       "frequency": "anytime",
-      "stage_required": 2,
+      "stage_required": 4,
       "name": "Create Acquisition Offer",
       "description": "Build and document your acquisition offer",
       "points": 30,
       "inputType": "text",
       "milestone_type": "create_acquisition_offer",
       "placeholder": "Share the link or describe your completed acquisition offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Turn your acquisition offer decision into reality. Create the offer that will bring customers into your ecosystem."
     },
     {
       "id": "milestone_create_upsell",
-      "category": "Flow Finder",
-      "type": "Movement Maker",
+      "category": "Business",
+      "type": "Stage 4",
       "frequency": "anytime",
-      "stage_required": 2,
+      "stage_required": 4,
       "name": "Create Upsell Offer",
       "description": "Build and document your upsell offer",
       "points": 30,
       "inputType": "text",
       "milestone_type": "create_upsell_offer",
       "placeholder": "Share the link or describe your completed upsell offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Create your premium upsell that delivers exceptional value to customers ready to invest more."
     },
     {
       "id": "milestone_create_downsell",
-      "category": "Flow Finder",
-      "type": "Movement Maker",
+      "category": "Business",
+      "type": "Stage 4",
       "frequency": "anytime",
-      "stage_required": 2,
+      "stage_required": 4,
       "name": "Create Downsell Offer",
       "description": "Build and document your downsell offer",
       "points": 30,
       "inputType": "text",
       "milestone_type": "create_downsell_offer",
       "placeholder": "Share the link or describe your completed downsell offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Create your entry-level offer that captures customers who need a lower commitment option."
     },
     {
       "id": "milestone_create_continuity",
-      "category": "Flow Finder",
-      "type": "Movement Maker",
+      "category": "Business",
+      "type": "Stage 4",
       "frequency": "anytime",
-      "stage_required": 2,
+      "stage_required": 4,
       "name": "Create Continuity Offer",
       "description": "Build and document your continuity/recurring offer",
       "points": 30,
       "inputType": "text",
       "milestone_type": "create_continuity_offer",
       "placeholder": "Share the link or describe your completed continuity offer",
-      "persona_specific": ["movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Create your recurring revenue offer that provides ongoing value to your most committed customers."
     },
     {
       "id": "daily_implementation",
-      "category": "Flow Finder",
+      "category": "Business",
       "type": "Vibe Riser, Movement Maker",
       "frequency": "daily",
       "stage_required": 6,
@@ -992,7 +980,6 @@
       "inputType": "text",
       "maxPerDay": 1,
       "placeholder": "What did you do today to move your launch forward?",
-      "persona_specific": ["vibe_riser", "movement_maker"],
       "counts_toward_graduation": true,
       "learnMore": "Consistent daily action is the key to successful launch. Track your implementation streak to build momentum."
     },
@@ -1066,7 +1053,7 @@
     {
       "id": "flow_finder_artifact",
       "name": "Flow Formula",
-      "category": "Flow Finder",
+      "category": "Business",
       "description": "Tasks to bring your flow to life.",
       "pointsRequired": 25,
       "image": "/images/artifacts/flow-formula.png"
@@ -1075,7 +1062,7 @@
       "id": "groans_mastery",
       "name": "Groans Mastery",
       "category": "Groans",
-      "description": "Tasks to support your growth everyday.",
+      "description": "Tasks your essence knows you're capable, but your body still has resistance.",
       "rCategories": {
         "Recognise": {
           "pointsRequired": 56,
@@ -1097,7 +1084,7 @@
       "id": "healing_mastery",
       "name": "Healing Mastery",
       "category": "Healing",
-      "description": "Tasks for deep healing work.",
+      "description": "Processing the micro-traumas creating fear around being yourself and living your ambitions.",
       "rCategories": {
         "Recognise": {
           "pointsRequired": 45,

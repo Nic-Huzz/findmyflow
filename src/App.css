@@ -76,18 +76,18 @@ body {
 }
 
 /* Chat container */
-.chat-container { 
-  flex: 1; 
-  overflow: hidden; 
+.chat-container {
+  flex: 1;
+  overflow: hidden;
   padding: 0 20px;
 }
 
-.messages { 
-  height: 100%; 
-  overflow-y: auto; 
+.messages {
+  height: 100%;
+  overflow-y: auto;
   padding: 20px 0;
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
@@ -215,8 +215,8 @@ body {
   margin-top: 8px;
 }
 
-/* Option buttons */
-.option-button {
+/* Option buttons - scoped to options-container to prevent global leakage */
+.options-container .option-button {
   background: var(--white);
   color: var(--text-gray);
   border: 2px solid var(--soft-gray);
@@ -233,14 +233,14 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.option-button:hover:not(:disabled) {
+.options-container .option-button:hover:not(:disabled) {
   background: var(--warm-gray);
   border-color: var(--purple);
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(94, 23, 235, 0.15);
 }
 
-.option-button:disabled {
+.options-container .option-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

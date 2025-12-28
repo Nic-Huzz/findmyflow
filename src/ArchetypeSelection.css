@@ -25,6 +25,7 @@
   color: white;
   position: relative;
   width: 100%;
+  min-height: 36px;
 }
 
 .archetype-selection-header .back-btn {
@@ -44,16 +45,20 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%);
+  margin: 0;
+  padding: 0;
 }
 
-.archetype-selection-header .page-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: white;
-  margin: 0;
-  line-height: 1;
-  text-align: center;
-  width: 100%;
+.archetype-selection-header h1.page-title {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: white !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  flex: 1;
+  display: block;
 }
 
 /* Content */

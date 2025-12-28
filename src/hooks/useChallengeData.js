@@ -29,7 +29,7 @@ export function useChallengeData() {
 
   // UI State
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('Groans')
+  const [activeCategory, setActiveCategory] = useState('Business')
   const [activeRTypeFilter, setActiveRTypeFilter] = useState('All')
   const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('all')
   const [showOnboarding, setShowOnboarding] = useState(false)
@@ -63,6 +63,7 @@ export function useChallengeData() {
   const [nervousSystemComplete, setNervousSystemComplete] = useState(false)
   const [healingCompassComplete, setHealingCompassComplete] = useState(false)
   const [pastParallelStory, setPastParallelStory] = useState(null)
+  const [flowFinderComplete, setFlowFinderComplete] = useState(false)
 
   // Project-Based State
   const [selectedProject, setSelectedProject] = useState(null)
@@ -70,7 +71,7 @@ export function useChallengeData() {
   const [projectStage, setProjectStage] = useState(1)
 
   // Constants
-  const categories = ['Groans', 'Healing', 'Flow Finder', 'Tracker', 'Bonus']
+  const categories = ['Business', 'Groans', 'Healing', 'Tracker', 'Bonus']
   const BONUS_PERCENTAGE = 5
 
   // ============================================
@@ -376,6 +377,33 @@ export function useChallengeData() {
       console.error('Error checking healing compass completion:', error)
       setHealingCompassComplete(false)
       setPastParallelStory(null)
+    }
+  }
+
+  // Check Flow Finder completion (user-level, not project-level)
+  const checkFlowFinderComplete = async () => {
+    if (!user?.id) return
+
+    try {
+      // Check if all 4 Flow Finder flows are complete (user-level, no project_id)
+      const flowFinderFlows = ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration']
+
+      const { data, error } = await supabase
+        .from('flow_sessions')
+        .select('flow_type')
+        .eq('user_id', user.id)
+        .in('flow_type', flowFinderFlows)
+
+      if (!error && data) {
+        const completedFlows = [...new Set(data.map(d => d.flow_type))]
+        const allComplete = flowFinderFlows.every(f => completedFlows.includes(f))
+        setFlowFinderComplete(allComplete)
+      } else {
+        setFlowFinderComplete(false)
+      }
+    } catch (error) {
+      console.error('Error checking flow finder completion:', error)
+      setFlowFinderComplete(false)
     }
   }
 
@@ -855,7 +883,7 @@ export function useChallengeData() {
       }
     }
 
-    if (category === 'Flow Finder') {
+    if (category === 'Business') {
       const flowFinderQuests = challengeData.quests.filter(q => validQuestIds.includes(q.id))
       const dynamicPointsRequired = flowFinderQuests.reduce((sum, q) => sum + (q.points || 0), 0)
 
@@ -1018,6 +1046,46 @@ export function useChallengeData() {
     return emojiMap[category] || '✨'
   }
 
+  // Calculate consecutive days with quest completions (for streak flame)
+  const getConsecutiveStreakDays = () => {
+    if (!completions || completions.length === 0) return 0
+
+    // Get unique dates of completions (normalized to date only)
+    const completionDates = new Set()
+    completions.forEach(c => {
+      const date = new Date(c.completed_at)
+      const dateKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+      completionDates.add(dateKey)
+    })
+
+    // Count consecutive days from today backwards
+    const today = new Date()
+    let streak = 0
+    let checkDate = new Date(today)
+
+    for (let i = 0; i < 30; i++) {
+      const dateKey = `${checkDate.getFullYear()}-${checkDate.getMonth()}-${checkDate.getDate()}`
+      if (completionDates.has(dateKey)) {
+        streak++
+        checkDate.setDate(checkDate.getDate() - 1)
+      } else if (i === 0) {
+        // If no completions today, check if yesterday started the streak
+        checkDate.setDate(checkDate.getDate() - 1)
+        const yesterdayKey = `${checkDate.getFullYear()}-${checkDate.getMonth()}-${checkDate.getDate()}`
+        if (completionDates.has(yesterdayKey)) {
+          streak++
+          checkDate.setDate(checkDate.getDate() - 1)
+        } else {
+          break
+        }
+      } else {
+        break
+      }
+    }
+
+    return streak
+  }
+
   // ============================================
   // useEffect Hooks
   // ============================================
@@ -1035,6 +1103,7 @@ export function useChallengeData() {
       loadUserData()
       checkNervousSystemComplete()
       checkHealingCompassComplete()
+      checkFlowFinderComplete()
       loadStageProgress()
     }
   }, [user])
@@ -1171,6 +1240,7 @@ export function useChallengeData() {
     nervousSystemComplete,
     healingCompassComplete,
     pastParallelStory,
+    flowFinderComplete,
 
     // Project-Based
     selectedProject,
@@ -1222,6 +1292,7 @@ export function useChallengeData() {
     getDayLabels,
     getDailyReleaseChallenge,
     getArtifactEmoji,
+    getConsecutiveStreakDays,
 
     // Quest Completion Handlers (from lib)
     handleConversationLogCompletion,
