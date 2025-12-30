@@ -240,7 +240,7 @@ function LibraryOfAnswers() {
   // Render Flow Finder section
   const renderFlowFinder = () => (
     <div className="library-section">
-      {/* AI Tools Section */}
+      {/* AI Tools Section - ARCHIVED FOR REVIEW
       {skillsClusters.length > 0 && problemsClusters.length > 0 && (
         <div className="ai-tools-container">
           <div className="ai-tools-header">AI-Powered Insights</div>
@@ -267,7 +267,6 @@ function LibraryOfAnswers() {
         </div>
       )}
 
-      {/* Coverage Matrix */}
       {showCoverageMatrix && (
         <CoverageMatrix
           skillsClusters={skillsClusters}
@@ -276,13 +275,13 @@ function LibraryOfAnswers() {
         />
       )}
 
-      {/* Niche Sharpener */}
       {showNicheSharpener && (
         <NicheSharpener
           embedded={true}
           onClose={() => setShowNicheSharpener(false)}
         />
       )}
+      END ARCHIVED */}
 
       {/* Skills */}
       <div className="subsection">
