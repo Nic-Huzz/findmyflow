@@ -2,35 +2,44 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './App'
 import PersonaAssessment from './PersonaAssessment'
-import AttractionOfferFlow from './AttractionOfferFlow'
-import UpsellFlow from './UpsellFlow'
-import DownsellFlow from './DownsellFlow'
-import ContinuityFlow from './ContinuityFlow'
-import LeadsStrategyFlow from './LeadsStrategyFlow'
-import LeadMagnetFlow from './LeadMagnetFlow'
-import PersonaSelectionFlow from './PersonaSelectionFlow'
+import AttractionOfferFlow from './flows/AttractionOfferFlow'
+import UpsellFlow from './flows/UpsellFlow'
+import DownsellFlow from './flows/DownsellFlow'
+import ContinuityFlow from './flows/ContinuityFlow'
+import LeadsStrategyFlow from './flows/LeadsStrategyFlow'
+import OfferBuilderFlow from './flows/OfferBuilderFlow'
+import LeadMagnetSelectionFlow from './flows/LeadMagnetSelectionFlow'
+import ProductSelectionFlow from './flows/ProductSelectionFlow'
+import FunnelBuilderFlow from './flows/FunnelBuilderFlow'
+import FunnelCalculator from './flows/FunnelCalculator'
+import PersonaSelectionFlow from './flows/PersonaSelectionFlow'
 import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
-import HealingCompass from './HealingCompass'
-import NervousSystemFlow from './NervousSystemFlow'
+import HealingCompass from './flows/HealingCompass'
+import NervousSystemFlow from './flows/NervousSystemFlow'
 import Challenge from './Challenge'
-import FlowFinderSkills from './FlowFinderSkills'
-import FlowFinderProblems from './FlowFinderProblems'
-import FlowFinderPersona from './FlowFinderPersona'
-import FlowFinderIntegration from './FlowFinderIntegration'
+import FlowFinderSkills from './flows/FlowFinderSkills'
+import FlowFinderProblems from './flows/FlowFinderProblems'
+import FlowFinderPersona from './flows/FlowFinderPersona'
+import FlowFinderIntegration from './flows/FlowFinderIntegration'
 import ArchetypeSelection from './ArchetypeSelection'
-import EssenceProfile from './EssenceProfile'
-import ProtectiveProfile from './ProtectiveProfile'
+import EssenceProfile from './profiles/EssenceProfile'
+import ProtectiveProfile from './profiles/ProtectiveProfile'
 import Feedback from './Feedback'
 import NotificationSettings from './components/NotificationSettings'
 import RetreatLanding from './RetreatLanding'
 import FlowLibrary from './FlowLibrary'
-import FlowCompass from './pages/FlowCompass'
+import LibraryOfAnswers from './pages/LibraryOfAnswers'
+import FlowCompassPage from './pages/FlowCompassPage'
+import FlowMapMockups from './components/FlowMapMockups'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import ValidationFlowsManager from './pages/ValidationFlowsManager'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
+import BottomToolbar from './components/BottomToolbar'
+import { ZarloWidget } from './components/Zarlo'
+import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import './App.css'
 import './PersonaAssessment.css'
 import './AttractionOfferFlow.css'
@@ -38,7 +47,6 @@ import './UpsellFlow.css'
 import './DownsellFlow.css'
 import './ContinuityFlow.css'
 import './LeadsStrategyFlow.css'
-import './LeadMagnetFlow.css'
 import './PersonaSelectionFlow.css'
 import './MoneyModelGuide.css'
 import './Profile.css'
@@ -48,6 +56,12 @@ import './Challenge.css'
 import './Feedback.css'
 import './RetreatLanding.css'
 import './FlowFinder.css'
+import './flows/LeadMagnetSelectionFlow.css'
+import './flows/ProductSelectionFlow.css'
+import './flows/FunnelBuilderFlow.css'
+import './flows/FunnelCalculator.css'
+import './components/BottomToolbar.css'
+import './components/WeeklyPlanningFlow.css'
 
 function AppRouter() {
   return (
@@ -94,10 +108,31 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Lead Magnet Type Assessment - In-App Challenge */}
-            <Route path="/lead-magnet" element={
+            {/* Funnel Builder - Stage 5 Campaign */}
+            <Route path="/funnel-builder" element={
               <AuthGate>
-                <LeadMagnetFlow />
+                <FunnelBuilderFlow />
+              </AuthGate>
+            } />
+
+            {/* $100M Offer Builder - Product Creation Stage */}
+            <Route path="/offer-builder" element={
+              <AuthGate>
+                <OfferBuilderFlow />
+              </AuthGate>
+            } />
+
+            {/* Lead Magnet Selection - Follows Offer Builder */}
+            <Route path="/lead-magnet-selection" element={
+              <AuthGate>
+                <LeadMagnetSelectionFlow />
+              </AuthGate>
+            } />
+
+            {/* Product Selection - Follows Offer Builder */}
+            <Route path="/product-selection" element={
+              <AuthGate>
+                <ProductSelectionFlow />
               </AuthGate>
             } />
 
@@ -110,6 +145,9 @@ function AppRouter() {
 
             {/* Money Model Guide - Educational Overview */}
             <Route path="/money-model-guide" element={<MoneyModelGuide />} />
+
+            {/* FlowMap Style Mockups - For Review */}
+            <Route path="/flow-mockups" element={<FlowMapMockups />} />
 
             <Route path="/retreats" element={<RetreatLanding />} />
 
@@ -134,6 +172,11 @@ function AppRouter() {
             <Route path="/7-day-challenge" element={
               <AuthGate>
                 <Challenge />
+              </AuthGate>
+            } />
+            <Route path="/weekly-planning" element={
+              <AuthGate>
+                <WeeklyPlanningFlow />
               </AuthGate>
             } />
             <Route path="/archetypes" element={
@@ -183,14 +226,14 @@ function AppRouter() {
             } />
             <Route path="/library" element={
               <AuthGate>
-                <FlowLibrary />
+                <LibraryOfAnswers />
               </AuthGate>
             } />
 
             {/* Phase 4: Flow Compass */}
             <Route path="/flow-compass" element={
               <AuthGate>
-                <FlowCompass />
+                <FlowCompassPage />
               </AuthGate>
             } />
 
@@ -200,7 +243,16 @@ function AppRouter() {
                 <ValidationFlowsManager />
               </AuthGate>
             } />
+
+            {/* Funnel Calculator - Stage 7 Tracking */}
+            <Route path="/funnel-calculator" element={
+              <AuthGate>
+                <FunnelCalculator />
+              </AuthGate>
+            } />
           </Routes>
+          <BottomToolbar />
+          <ZarloWidget />
         </Router>
       </AuthProvider>
     </ErrorBoundary>

@@ -9,7 +9,7 @@ function PortalExplainer({ onClose }) {
       title: "Welcome to Your Flow Portal! 🌊",
       content: (
         <>
-          <p>Over the next 7 days, you'll complete quests across four categories to help you find your flow and amplify your impact.</p>
+          <p>Over the next 7 days, you'll complete quests across five tabs to help you find your flow and amplify your impact.</p>
           <p>Let's take a quick tour to show you how everything works!</p>
         </>
       )
@@ -21,62 +21,62 @@ function PortalExplainer({ onClose }) {
           <p>Your quests are organized into 5 tabs, each serving a different purpose:</p>
           <div className="category-grid">
             <div className="explainer-category">
-              <div className="category-icon">🎯</div>
-              <h3>Flow Finder</h3>
-              <p>Persona-specific quests to find your flow</p>
+              <div className="category-icon">😤</div>
+              <h3>Groans</h3>
+              <p>Tasks your essence knows you're capable of, but your body still has resistance</p>
             </div>
             <div className="explainer-category">
-              <div className="category-icon">📆</div>
-              <h3>Daily</h3>
-              <p>Daily quests across the 4 R's framework</p>
+              <div className="category-icon">💜</div>
+              <h3>Healing</h3>
+              <p>Processing the micro-traumas creating fear around being yourself</p>
             </div>
             <div className="explainer-category">
-              <div className="category-icon">📋</div>
-              <h3>Weekly</h3>
-              <p>Weekly quests across the 4 R's framework</p>
+              <div className="category-icon">💼</div>
+              <h3>Business</h3>
+              <p>Build your offer, product, and launch strategy</p>
+            </div>
+            <div className="explainer-category">
+              <div className="category-icon">🧭</div>
+              <h3>Tracker</h3>
+              <p>Log your flow state with Flow Compass</p>
             </div>
             <div className="explainer-category">
               <div className="category-icon">⭐</div>
               <h3>Bonus</h3>
               <p>Extra quests for bonus points</p>
             </div>
-            <div className="explainer-category">
-              <div className="category-icon">🧭</div>
-              <h3>Tracker</h3>
-              <p>Track your flow with Flow Compass</p>
-            </div>
           </div>
         </>
       )
     },
     {
-      title: "The 4 R's Framework 🗺️",
+      title: "Groans & Healing 🗺️",
       content: (
         <>
-          <p>Daily and Weekly quests are organized using the 4 R's framework - four pillars to help you find your flow:</p>
+          <p>Groans and Healing tabs use the R's framework to help you work through resistance:</p>
           <div className="category-grid">
             <div className="explainer-category">
               <div className="category-icon">🔍</div>
               <h3>Recognise</h3>
-              <p>Build awareness of what's blocking your flow and what your flow is</p>
+              <p>Build awareness of patterns, triggers, and your essence voice</p>
             </div>
             <div className="explainer-category">
               <div className="category-icon">🕊️</div>
               <h3>Release</h3>
-              <p>Let go of traumas blocking your flow</p>
+              <p>Let go of stored emotions and traumas (Healing)</p>
             </div>
             <div className="explainer-category">
               <div className="category-icon">⚡</div>
               <h3>Rewire</h3>
-              <p>Act in alignment with your flow</p>
+              <p>Act despite fear and rewire old patterns (Groans)</p>
             </div>
             <div className="explainer-category">
               <div className="category-icon">🌊</div>
               <h3>Reconnect</h3>
-              <p>Live from your essence and find your flow</p>
+              <p>Morning routines to connect with your essence (Groans)</p>
             </div>
           </div>
-          <p className="quest-tip">💡 <strong>Tip:</strong> Complete quests from all 4 R's each day to unlock artifacts!</p>
+          <p className="quest-tip">💡 <strong>Tip:</strong> Filter by Daily or Weekly to focus on what's relevant today!</p>
         </>
       )
     },
@@ -134,8 +134,8 @@ function PortalExplainer({ onClose }) {
         <>
           <p>You now have everything you need to start your journey!</p>
           <div className="ready-checklist">
-            <div className="checklist-item">✓ Understand the 4 categories</div>
-            <div className="checklist-item">✓ Know the difference between daily and weekly quests</div>
+            <div className="checklist-item">✓ Understand the 5 quest tabs</div>
+            <div className="checklist-item">✓ Know the R's framework for growth</div>
             <div className="checklist-item">✓ Ready to earn points and climb the leaderboard</div>
             <div className="checklist-item">✓ Aware of how we protect your privacy</div>
           </div>

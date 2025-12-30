@@ -1,0 +1,1073 @@
+/**
+ * GroansSummary.css
+ * Styles for the Groans summary/insights page
+ */
+
+/* Groans Summary - Integrated style like leaderboard */
+.groans-summary {
+  background: transparent;
+  max-width: 100%;
+  margin: 0;
+}
+
+.groans-summary.full-page {
+  max-width: 100%;
+  min-height: auto;
+}
+
+.groans-summary .summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.groans-summary .summary-header h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.groans-summary .back-btn {
+  background: rgba(94, 23, 235, 0.1);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: #5e17eb;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.groans-summary .back-btn:hover {
+  background: rgba(94, 23, 235, 0.2);
+}
+
+/* Days Progress */
+.groans-summary .days-progress {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.groans-summary .days-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.groans-summary .days-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.groans-summary .days-percentage {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+.groans-summary .days-bar-container {
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.groans-summary .days-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+/* Archetype Balance */
+.groans-summary .archetype-balance {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.groans-summary .archetype-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.groans-summary .essence-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #22c55e;
+}
+
+.groans-summary .protective-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #7c3aed;
+}
+
+.groans-summary .archetype-bar-container {
+  height: 16px;
+  background: #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+}
+
+.groans-summary .archetype-bar {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.groans-summary .archetype-bar.essence {
+  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+}
+
+.groans-summary .archetype-bar.protective {
+  background: linear-gradient(90deg, #7c3aed 0%, #a78bfa 100%);
+}
+
+.groans-summary .archetype-percentages {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.groans-summary .summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Insight Hero */
+.groans-summary .insight-hero {
+  text-align: center;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  border-radius: 16px;
+  animation: groansFadeInUp 0.5s ease;
+  color: white;
+}
+
+.groans-summary .insight-hero.celebration {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  animation: groansCelebrate 0.5s ease;
+}
+
+@keyframes groansFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes groansCelebrate {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.groans-summary .insight-hero-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: groansBounce 1s ease infinite;
+}
+
+@keyframes groansBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.groans-summary .insight-hero-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.groans-summary .insight-hero-subtext {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Progress Row */
+.groans-summary .summary-section.progress-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: stretch;
+  background: transparent;
+  padding: 0;
+}
+
+/* Streak Card */
+.groans-summary .streak-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: white;
+  border-radius: 12px;
+  min-width: 100px;
+}
+
+.groans-summary .streak-flame {
+  font-size: 2rem;
+}
+
+.groans-summary .streak-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.groans-summary .streak-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ea580c;
+  line-height: 1;
+}
+
+.groans-summary .streak-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #9a3412;
+}
+
+/* Compact Days Progress */
+.groans-summary .days-progress.compact {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-radius: 12px;
+}
+
+/* Next Action Section */
+.groans-summary .next-action-section h3 {
+  color: #22c55e;
+}
+
+.groans-summary .next-action-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 2px solid #22c55e;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.groans-summary .next-action-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.groans-summary .next-action-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #22c55e;
+  border-radius: 50%;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.groans-summary .next-action-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.groans-summary .next-action-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #166534;
+}
+
+.groans-summary .next-action-reason {
+  font-size: 0.8125rem;
+  color: #15803d;
+}
+
+.groans-summary .summary-loading {
+  padding: 3rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Overview Stats */
+.groans-summary .summary-section.overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background: transparent;
+  padding: 0;
+}
+
+.groans-summary .stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.groans-summary .stat-card.total {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.groans-summary .stat-card.points {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.groans-summary .stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #5e17eb;
+  line-height: 1;
+}
+
+.groans-summary .stat-card.total .stat-value {
+  color: #5e17eb;
+}
+
+.groans-summary .stat-card.points .stat-value {
+  color: #b45309;
+}
+
+.groans-summary .stat-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+
+/* Summary Sections - Purple card style */
+.groans-summary .summary-section {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  border-radius: 16px;
+  padding: 1.25rem;
+  color: white;
+}
+
+/* Section Headers */
+.groans-summary .summary-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Empty hint text */
+.groans-summary .empty-hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  padding: 1rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-style: italic;
+}
+
+/* Voice Balance */
+.groans-summary .voice-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.groans-summary .voice-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.groans-summary .voice-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.groans-summary .voice-item.essence {
+  background: rgba(34, 197, 94, 0.25);
+}
+
+.groans-summary .voice-item.protective {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.groans-summary .voice-icon {
+  font-size: 1.25rem;
+}
+
+.groans-summary .voice-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  flex: 1;
+}
+
+.groans-summary .voice-percent {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: white;
+}
+
+.groans-summary .voice-item.essence .voice-percent {
+  color: #4ade80;
+}
+
+.groans-summary .voice-item.protective .voice-percent {
+  color: white;
+}
+
+.groans-summary .voice-bar-container {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+}
+
+.groans-summary .voice-bar {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.groans-summary .voice-bar.essence {
+  background: #4ade80;
+}
+
+.groans-summary .voice-bar.protective {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Percentage Grids */
+.groans-summary .percent-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.groans-summary .percent-grid.three-col {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.groans-summary .percent-grid.five-col {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.groans-summary .percent-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.625rem 0.375rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.groans-summary .percent-item.active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.groans-summary .percent-icon {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.groans-summary .percent-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.1;
+}
+
+.groans-summary .percent-item.active .percent-value {
+  color: white;
+}
+
+.groans-summary .percent-label {
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.groans-summary .percent-item.active .percent-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Responsive for 5-col grid */
+@media (max-width: 400px) {
+  .groans-summary .percent-grid.five-col {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .groans-summary .percent-grid.five-col .percent-icon {
+    font-size: 1rem;
+  }
+
+  .groans-summary .percent-grid.five-col .percent-value {
+    font-size: 0.875rem;
+  }
+
+  .groans-summary .percent-grid.five-col .percent-label {
+    font-size: 0.5rem;
+  }
+
+  .groans-summary .percent-grid.five-col .percent-item {
+    padding: 0.5rem 0.25rem;
+  }
+}
+
+/* Type Bars */
+.groans-summary .type-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.groans-summary .type-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.groans-summary .type-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.groans-summary .type-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groans-summary .type-count {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: white;
+}
+
+.groans-summary .bar-container {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.groans-summary .bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.groans-summary .bar.recognise {
+  background: linear-gradient(90deg, #fbbf24 0%, #fde68a 100%);
+}
+
+.groans-summary .bar.rewire {
+  background: linear-gradient(90deg, #4ade80 0%, #86efac 100%);
+}
+
+.groans-summary .bar.reconnect {
+  background: linear-gradient(90deg, #60a5fa 0%, #93c5fd 100%);
+}
+
+.groans-summary .bar.better {
+  background: linear-gradient(90deg, #4ade80 0%, #86efac 100%);
+}
+
+.groans-summary .bar.expected {
+  background: linear-gradient(90deg, #fbbf24 0%, #fde68a 100%);
+}
+
+.groans-summary .bar.harder {
+  background: linear-gradient(90deg, #f87171 0%, #fca5a5 100%);
+}
+
+/* Insight List */
+.groans-summary .insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.groans-summary .insight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.groans-summary .insight-icon {
+  font-size: 1.25rem;
+}
+
+.groans-summary .insight-label {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groans-summary .insight-count {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+}
+
+/* Layer Grid */
+.groans-summary .layer-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+.groans-summary .layer-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.groans-summary .layer-stat.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.groans-summary .layer-icon {
+  font-size: 1.25rem;
+}
+
+.groans-summary .layer-name {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.groans-summary .layer-stat.active .layer-name {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groans-summary .layer-count {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.groans-summary .layer-stat.active .layer-count {
+  color: white;
+}
+
+/* Layer Ladder V2 - Clean horizontal chips */
+.groans-summary .layer-ladder-section {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.groans-summary .layer-ladder-section h3 {
+  margin-bottom: 0.75rem;
+}
+
+.groans-summary .layer-ladder-v2 {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.groans-summary .layer-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  opacity: 0.5;
+}
+
+.groans-summary .layer-chip.conquered {
+  background: #dcfce7;
+  border-color: #22c55e;
+  opacity: 1;
+}
+
+.groans-summary .layer-chip.next {
+  background: #fef3c7;
+  border-color: #f59e0b;
+  border-style: dashed;
+  opacity: 1;
+  animation: chipPulse 2s ease-in-out infinite;
+}
+
+@keyframes chipPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.groans-summary .layer-chip-icon {
+  font-size: 1rem;
+}
+
+.groans-summary .layer-chip-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.groans-summary .layer-chip.conquered .layer-chip-label {
+  color: #166534;
+}
+
+.groans-summary .layer-chip.next .layer-chip-label {
+  color: #92400e;
+}
+
+.groans-summary .layer-chip-count {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background: #166534;
+  color: white;
+  padding: 0.125rem 0.375rem;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.groans-summary .layer-chip-next {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #92400e;
+  animation: arrowBounce 1s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(2px); }
+}
+
+.groans-summary .layer-ladder-hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* Outcome Bars */
+.groans-summary .outcome-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.groans-summary .outcome-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.groans-summary .outcome-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.groans-summary .outcome-icon {
+  font-size: 1rem;
+}
+
+.groans-summary .outcome-label {
+  flex: 1;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groans-summary .outcome-count {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: white;
+}
+
+/* Area Grid */
+.groans-summary .area-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.groans-summary .area-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.groans-summary .area-stat.active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.groans-summary .area-icon {
+  font-size: 1.25rem;
+}
+
+.groans-summary .area-name {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.groans-summary .area-stat.active .area-name {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groans-summary .area-count {
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.groans-summary .area-stat.active .area-count {
+  color: white;
+}
+
+/* Frequency Comparison */
+.groans-summary .frequency-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.groans-summary .frequency-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.groans-summary .frequency-header {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groans-summary .frequency-column.positive .frequency-header {
+  color: #4ade80;
+  border-color: #4ade80;
+}
+
+.groans-summary .frequency-column.negative .frequency-header {
+  color: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.groans-summary .freq-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.groans-summary .freq-count {
+  font-weight: 700;
+  color: white;
+}
+
+/* Intensity Display */
+.groans-summary .intensity-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.groans-summary .intensity-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.groans-summary .intensity-scale {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-right: 1rem;
+}
+
+.groans-summary .intensity-bar-visual {
+  flex: 1;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.groans-summary .intensity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24 0%, #fde68a 100%);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+/* Empty State */
+.groans-summary .empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.groans-summary .empty-state p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .groans-summary {
+    margin: 0.5rem;
+    border-radius: 16px;
+  }
+
+  .groans-summary .summary-content {
+    padding: 1rem;
+  }
+
+  .groans-summary .insight-hero {
+    padding: 1rem;
+  }
+
+  .groans-summary .insight-hero-emoji {
+    font-size: 2.5rem;
+  }
+
+  .groans-summary .insight-hero-title {
+    font-size: 1.25rem;
+  }
+
+  .groans-summary .summary-section.progress-row {
+    flex-direction: column;
+  }
+
+  .groans-summary .streak-card {
+    min-width: auto;
+  }
+
+  .groans-summary .summary-section.overview {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .groans-summary .layer-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .groans-summary .layer-name {
+    font-size: 0.5rem;
+  }
+
+  .groans-summary .area-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .groans-summary .area-name {
+    font-size: 0.55rem;
+  }
+
+  .groans-summary .frequency-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .groans-summary .intensity-display {
+    flex-wrap: wrap;
+  }
+
+  .groans-summary .intensity-bar-visual {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .groans-summary .next-action-card {
+    padding: 0.875rem;
+  }
+
+  .groans-summary .next-action-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .groans-summary .next-action-text {
+    font-size: 0.9375rem;
+  }
+}

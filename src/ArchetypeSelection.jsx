@@ -75,7 +75,7 @@ const ArchetypeSelection = () => {
           <button className="back-btn" onClick={() => navigate('/me')}>
             ←
           </button>
-          <h1 className="page-title">Your Archetypes</h1>
+          <h1 className="page-title">Your Voices</h1>
         </div>
       </div>
 
@@ -83,9 +83,9 @@ const ArchetypeSelection = () => {
       <div className="archetype-selection-content">
         {/* Intro */}
         <div className="intro-section">
-          <h2 className="intro-title">Explore Your Archetypes</h2>
+          <h2 className="intro-title">Explore Your Voices</h2>
           <p className="intro-text">
-            Choose which archetype you'd like to explore in depth. Learn about your patterns, powers, and path forward.
+            Choose which voice you'd like to explore in depth. Learn about your patterns, powers, and path forward.
           </p>
         </div>
 

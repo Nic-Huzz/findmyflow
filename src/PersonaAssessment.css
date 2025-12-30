@@ -21,20 +21,20 @@
   left: auto;
   right: auto;
   width: 100%;
-  padding: 16px 20px;
+  padding: 12px 20px 4px !important;
   background: transparent;
   z-index: 10;
   box-sizing: border-box;
 }
 
-.progress-dots {
+.persona-assessment .progress-dots {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 8px !important;
 }
 
-.progress-dot {
+.persona-assessment .progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -42,17 +42,17 @@
   transition: all 0.3s ease;
 }
 
-.progress-dot.completed {
+.persona-assessment .progress-dot.completed {
   background: #ffdd27;
 }
 
-.progress-dot.active {
+.persona-assessment .progress-dot.active {
   background: #ffdd27;
   box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
   transform: scale(1.2);
 }
 
-.section-progress {
+.persona-assessment .section-progress {
   width: 100%;
   max-width: 300px;
   height: 3px;
@@ -62,7 +62,7 @@
   overflow: hidden;
 }
 
-.section-progress-fill {
+.persona-assessment .section-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #ffdd27, #f59e0b);
   border-radius: 2px;
@@ -75,11 +75,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex: 1;
+  justify-content: flex-start;
+  flex: 0 1 auto;
   max-width: 500px;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  animation: slideInFromRight 0.5s ease;
+  padding-top: 8px !important;
+  margin-top: 0 !important;
 }
 
 .persona-assessment .welcome-content {
@@ -87,35 +89,45 @@
 }
 
 .persona-assessment .welcome-container > .primary-button {
-  margin-top: 12px;
+  margin-top: 8px;
+  max-width: 280px;
+  padding: 12px 28px;
+  height: auto !important;
+  min-height: 0 !important;
+  background: #E9A23B !important;
+  color: white !important;
+  font-size: 16px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
-.welcome-greeting {
+.persona-assessment .welcome-greeting {
   font-size: 32px;
   font-weight: 700;
-  margin: 0 0 32px;
+  margin: 0 0 20px;
   background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.welcome-message {
+.persona-assessment .welcome-message {
   text-align: center;
 }
 
-.welcome-message p {
-  font-size: 16px;
-  line-height: 1.8;
+.persona-assessment .welcome-message p {
+  font-size: 18px;
+  line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 16px;
+  margin: 0 0 12px;
 }
 
-.welcome-message strong {
+.persona-assessment .welcome-message strong {
   color: white;
 }
 
-.welcome-cta-text {
+.persona-assessment .welcome-cta-text {
   margin-top: 24px !important;
   font-style: italic;
   color: rgba(255, 255, 255, 0.7) !important;
@@ -135,27 +147,27 @@
   animation: fadeIn 0.3s ease;
 }
 
-.question-text {
+.persona-assessment .question-text {
   font-size: 26px;
   font-weight: 600;
   margin: 0 0 8px;
   line-height: 1.3;
 }
 
-.question-subtext {
+.persona-assessment .question-subtext {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.5);
   margin: 0 0 32px;
 }
 
-.options-list {
+.persona-assessment .options-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 100%;
 }
 
-.option-card {
+.persona-assessment .option-card {
   width: 100%;
   padding: 20px;
   background: rgba(255, 255, 255, 0.05);
@@ -166,24 +178,24 @@
   text-align: left;
 }
 
-.option-card:hover {
+.persona-assessment .option-card:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(147, 51, 234, 0.5);
   transform: translateY(-2px);
 }
 
-.option-card:active {
+.persona-assessment .option-card:active {
   transform: translateY(0);
 }
 
-.option-label {
+.persona-assessment .option-label {
   font-size: 18px;
   font-weight: 600;
   color: white;
   margin-bottom: 4px;
 }
 
-.option-description {
+.persona-assessment .option-description {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.5);
 }
@@ -235,6 +247,28 @@
   border-radius: 12px;
 }
 
+/* Intro screen button - fixed size (Essence/Protective intro) */
+.persona-assessment .intro-container > .primary-button {
+  margin-top: 16px;
+  max-width: 280px;
+  width: auto;
+  padding: 14px 32px;
+  height: auto !important;
+  min-height: 0 !important;
+  background: #E9A23B !important;
+  color: white !important;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.persona-assessment .intro-container > .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(233, 162, 59, 0.4);
+}
+
 /* ============ REVEAL SCREENS ============ */
 
 .persona-assessment .reveal-container {
@@ -259,6 +293,263 @@
   }
 }
 
+/* Subtle slide transition for Huzz intro slides */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============ HUZZ INTRO ANIMATIONS ============ */
+
+/* Staggered fade-in for paragraphs */
+.persona-assessment .animated-text p {
+  opacity: 0;
+  animation: personaFadeInUp 0.6s ease forwards;
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.persona-assessment .animated-text p:nth-child(1) { animation-delay: 0.1s; }
+.persona-assessment .animated-text p:nth-child(2) { animation-delay: 0.4s; }
+.persona-assessment .animated-text p:nth-child(3) { animation-delay: 0.7s; }
+.persona-assessment .animated-text p:nth-child(4) { animation-delay: 1.0s; }
+.persona-assessment .animated-text p:nth-child(5) { animation-delay: 1.3s; }
+.persona-assessment .animated-text p:nth-child(6) { animation-delay: 1.6s; }
+
+/* Subtle text shadow for intro text */
+.persona-assessment .intro-text-shadow {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes personaFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* EAR highlight glow */
+.persona-assessment .ear-highlight {
+  display: inline-block;
+  color: #ffdd27;
+  font-weight: 700;
+  text-shadow: 0 0 20px rgba(255, 221, 39, 0.6);
+  animation: personaEarPulse 2s ease-in-out infinite;
+}
+
+@keyframes personaEarPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(255, 221, 39, 0.4); }
+  50% { text-shadow: 0 0 30px rgba(255, 221, 39, 0.8), 0 0 40px rgba(255, 221, 39, 0.4); }
+}
+
+/* Transformation journey animation */
+.persona-assessment .transformation-journey {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 24px 0 16px;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.persona-assessment .journey-from,
+.persona-assessment .journey-to {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: personaJourneyFadeIn 0.6s ease forwards;
+}
+
+.persona-assessment .journey-from {
+  animation-delay: 0.2s;
+}
+
+.persona-assessment .journey-to {
+  animation-delay: 0.8s;
+}
+
+.persona-assessment .journey-emoji {
+  font-size: 32px;
+  animation: personaEmojiFloat 3s ease-in-out infinite;
+}
+
+.persona-assessment .journey-from .journey-emoji {
+  animation-delay: 0s;
+}
+
+.persona-assessment .journey-to .journey-emoji {
+  animation-delay: 1.5s;
+}
+
+@keyframes personaEmojiFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.persona-assessment .journey-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.persona-assessment .journey-arrow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  animation: personaJourneyArrowIn 0.4s ease forwards;
+  animation-delay: 0.5s;
+}
+
+.persona-assessment .arrow-line {
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 221, 39, 0.3), rgba(255, 221, 39, 0.8));
+  animation: personaArrowGrow 0.4s ease forwards;
+  animation-delay: 0.5s;
+  transform-origin: left;
+}
+
+.persona-assessment .arrow-head {
+  font-size: 24px;
+  color: #ffdd27;
+  text-shadow: 0 0 15px rgba(255, 221, 39, 0.5);
+  animation: personaArrowPulse 1.5s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes personaJourneyFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes personaJourneyArrowIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes personaArrowGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@keyframes personaArrowPulse {
+  0%, 100% { transform: translateX(0); opacity: 0.7; }
+  50% { transform: translateX(3px); opacity: 1; }
+}
+
+/* Excitement build - button glow */
+.persona-assessment .glow-button {
+  animation: personaButtonGlow 2s ease-in-out infinite;
+}
+
+@keyframes personaButtonGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(233, 162, 59, 0.4); }
+  50% { box-shadow: 0 4px 30px rgba(233, 162, 59, 0.7), 0 0 40px rgba(233, 162, 59, 0.3); }
+}
+
+/* Background pulse for intro 4 */
+.persona-assessment .excitement-container {
+  position: relative;
+}
+
+.persona-assessment .excitement-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 221, 39, 0.1) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  animation: personaBgPulse 3s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes personaBgPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+/* ============ PROTECTIVE INTRO ANIMATIONS ============ */
+
+/* Animated list reveal */
+.persona-assessment .pattern-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.persona-assessment .pattern-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  animation: personaPatternFadeIn 0.4s ease forwards;
+}
+
+.persona-assessment .pattern-item:nth-child(1) { animation-delay: 0.2s; }
+.persona-assessment .pattern-item:nth-child(2) { animation-delay: 0.4s; }
+.persona-assessment .pattern-item:nth-child(3) { animation-delay: 0.6s; }
+.persona-assessment .pattern-item:nth-child(4) { animation-delay: 0.8s; }
+.persona-assessment .pattern-item:nth-child(5) { animation-delay: 1.0s; }
+
+@keyframes personaPatternFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.persona-assessment .pattern-icon {
+  font-size: 16px;
+}
+
+/* Time estimate badge */
+.persona-assessment .time-estimate {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 8px;
+}
+
 .persona-assessment .reveal-badge {
   display: inline-block;
   padding: 8px 24px;
@@ -279,21 +570,21 @@
   background: linear-gradient(135deg, #F59E0B, #D97706);
 }
 
-.reveal-tagline {
+.persona-assessment .reveal-tagline {
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 16px;
   line-height: 1.2;
 }
 
-.reveal-description {
+.persona-assessment .reveal-description {
   font-size: 16px;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
   margin: 0 0 24px;
 }
 
-.next-step-preview {
+.persona-assessment .next-step-preview {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -303,25 +594,25 @@
   margin-bottom: 32px;
 }
 
-.preview-label {
+.persona-assessment .preview-label {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.preview-value {
+.persona-assessment .preview-value {
   font-size: 14px;
   font-weight: 600;
   color: #F59E0B;
 }
 
 /* Archetype reveal specific */
-.archetype-reveal {
+.persona-assessment .archetype-reveal {
   padding-top: 20px;
 }
 
-.archetype-image-container {
+.persona-assessment .archetype-image-container {
   width: 180px;
   height: 180px;
   border-radius: 20px;
@@ -330,30 +621,51 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
-.archetype-reveal-image {
+.persona-assessment .archetype-reveal-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.reveal-name {
+.persona-assessment .reveal-name {
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 12px;
 }
 
-.reveal-teaser {
+.persona-assessment .reveal-teaser {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   margin: 0 0 8px;
-  font-style: italic;
+  font-weight: 600;
 }
 
-.reveal-hint {
+.persona-assessment .reveal-hint {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0 0 32px;
+}
+
+/* Reveal screen button - fixed size (after archetype flows) */
+.persona-assessment .reveal-container > .primary-button {
+  max-width: 280px;
+  width: auto;
+  padding: 14px 32px;
+  height: auto !important;
+  min-height: 0 !important;
+  background: #E9A23B !important;
+  color: white !important;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.persona-assessment .reveal-container > .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(233, 162, 59, 0.4);
 }
 
 /* ============ CAPTURE SCREENS ============ */
@@ -369,27 +681,27 @@
   animation: fadeIn 0.5s ease;
 }
 
-.capture-title {
+.persona-assessment .capture-title {
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 12px;
 }
 
-.capture-subtitle {
+.persona-assessment .capture-subtitle {
   font-size: 16px;
   color: rgba(255, 255, 255, 0.7);
   margin: 0 0 32px;
   line-height: 1.5;
 }
 
-.capture-form {
+.persona-assessment .capture-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: 100%;
 }
 
-.capture-input {
+.persona-assessment .capture-input {
   width: 100%;
   padding: 16px 20px;
   background: rgba(255, 255, 255, 0.05);
@@ -402,16 +714,16 @@
   box-sizing: border-box;
 }
 
-.capture-input:focus {
+.persona-assessment .capture-input:focus {
   border-color: #9333EA;
   background: rgba(255, 255, 255, 0.08);
 }
 
-.capture-input::placeholder {
+.persona-assessment .capture-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.code-input {
+.persona-assessment .code-input {
   text-align: center;
   font-size: 24px;
   font-weight: 600;
@@ -420,30 +732,34 @@
 
 /* ============ BUTTONS ============ */
 
-.primary-button {
+.persona-assessment .primary-button {
   width: 100%;
+  max-width: 320px;
   padding: 16px 32px;
-  background: linear-gradient(135deg, #9333EA, #7C3AED);
+  background: #E9A23B;
   border: none;
   border-radius: 12px;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  height: auto;
+  min-height: 0;
 }
 
-.primary-button:hover:not(:disabled) {
+.persona-assessment .primary-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(147, 51, 234, 0.4);
+  box-shadow: 0 8px 24px rgba(233, 162, 59, 0.4);
 }
 
-.primary-button:disabled {
+.persona-assessment .primary-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.text-button {
+.persona-assessment .text-button {
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.5);
@@ -453,20 +769,20 @@
   transition: color 0.2s ease;
 }
 
-.text-button:hover {
+.persona-assessment .text-button:hover {
   color: white;
 }
 
-.login-link {
+.persona-assessment .login-link {
   display: block;
-  margin-top: 16px;
+  margin-top: 8px;
   color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.login-link:hover {
+.persona-assessment .login-link:hover {
   color: white;
   text-decoration: underline;
 }
@@ -483,7 +799,7 @@
   animation: fadeIn 0.5s ease;
 }
 
-.success-icon {
+.persona-assessment .success-icon {
   width: 80px;
   height: 80px;
   background: linear-gradient(135deg, #10B981, #059669);
@@ -493,10 +809,10 @@
   justify-content: center;
   font-size: 40px;
   margin-bottom: 24px;
-  animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: personaScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes scaleIn {
+@keyframes personaScaleIn {
   from {
     transform: scale(0);
   }
@@ -505,13 +821,13 @@
   }
 }
 
-.success-container h2 {
+.persona-assessment .success-container h2 {
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 8px;
 }
 
-.success-container p {
+.persona-assessment .success-container p {
   font-size: 16px;
   color: rgba(255, 255, 255, 0.6);
   margin: 0 0 24px;
@@ -519,7 +835,7 @@
 
 /* ============ ERROR MESSAGE ============ */
 
-.error-message {
+.persona-assessment .error-message {
   color: #EF4444;
   font-size: 14px;
   margin-top: 12px;
@@ -528,36 +844,36 @@
 
 /* ============ LOADING STATE ============ */
 
-.loading-state {
+.persona-assessment .loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
 }
 
-.typing-indicator {
+.persona-assessment .typing-indicator {
   display: flex;
   gap: 4px;
   justify-content: center;
 }
 
-.typing-indicator span {
+.persona-assessment .typing-indicator span {
   width: 8px;
   height: 8px;
   background: #9333EA;
   border-radius: 50%;
-  animation: typing 1.4s infinite ease-in-out both;
+  animation: personaTyping 1.4s infinite ease-in-out both;
 }
 
-.typing-indicator span:nth-child(1) {
+.persona-assessment .typing-indicator span:nth-child(1) {
   animation-delay: -0.32s;
 }
 
-.typing-indicator span:nth-child(2) {
+.persona-assessment .typing-indicator span:nth-child(2) {
   animation-delay: -0.16s;
 }
 
-@keyframes typing {
+@keyframes personaTyping {
   0%, 80%, 100% {
     transform: scale(0);
   }
@@ -570,10 +886,15 @@
 
 .archetype-flow-wrapper {
   padding-top: 70px;
+  overflow: hidden !important;
+  height: 100vh;
+  max-height: 100vh;
 }
 
 .archetype-flow-wrapper .hybrid-flow {
-  min-height: calc(100vh - 70px);
+  height: calc(100vh - 70px);
+  max-height: calc(100vh - 70px);
+  overflow: hidden !important;
 }
 
 /* ============ RESPONSIVE ============ */
@@ -587,52 +908,60 @@
     padding: 12px 16px;
   }
 
-  .progress-dots {
+  .persona-assessment .progress-dots {
     gap: 10px;
   }
 
-  .progress-dot {
+  .persona-assessment .progress-dot {
     width: 8px;
     height: 8px;
   }
 
-  .welcome-greeting {
+  .persona-assessment .welcome-greeting {
     font-size: 26px;
   }
 
-  .welcome-message p {
-    font-size: 15px;
+  .persona-assessment .welcome-message p {
+    font-size: 17px;
   }
 
-  .question-text {
+  .persona-assessment .question-text {
     font-size: 22px;
   }
 
-  .reveal-tagline,
-  .reveal-name {
+  .persona-assessment .reveal-tagline,
+  .persona-assessment .reveal-name {
     font-size: 26px;
   }
 
-  .intro-title,
-  .capture-title {
+  .persona-assessment .intro-title,
+  .persona-assessment .capture-title {
     font-size: 24px;
   }
 
-  .option-card {
+  .persona-assessment .option-card {
     padding: 16px;
   }
 
-  .option-label {
+  .persona-assessment .option-label {
     font-size: 16px;
   }
 
-  .archetype-image-container {
+  .persona-assessment .archetype-image-container {
     width: 150px;
     height: 150px;
   }
 
   .archetype-flow-wrapper {
     padding-top: 60px;
+    overflow: hidden !important;
+    height: 100vh;
+    max-height: 100vh;
+  }
+
+  .archetype-flow-wrapper .hybrid-flow {
+    height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
   }
 }
 

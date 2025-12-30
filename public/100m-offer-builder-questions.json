@@ -1,0 +1,191 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "total_questions": 10,
+    "estimated_completion_time_minutes": 8,
+    "last_updated": "2025-12-29"
+  },
+  "questions": [
+    {
+      "id": "q1_pain_level",
+      "type": "single_choice",
+      "question": "How much pain is your target customer experiencing?",
+      "subtext": "Rate out of 10 — don't choose 7 (it's the cop-out answer)",
+      "options": [
+        { "label": "1 - Minimal pain", "value": "1" },
+        { "label": "2", "value": "2" },
+        { "label": "3", "value": "3" },
+        { "label": "4", "value": "4" },
+        { "label": "5 - Moderate pain", "value": "5" },
+        { "label": "6", "value": "6" },
+        { "label": "8", "value": "8" },
+        { "label": "9", "value": "9" },
+        { "label": "10 - Extreme pain", "value": "10" }
+      ]
+    },
+    {
+      "id": "q2_problem_area",
+      "type": "single_choice",
+      "question": "What's their core problem area?",
+      "subtext": "The three universal problem categories",
+      "options": [
+        { "label": "Health", "value": "health", "description": "Physical health, mental health, fitness, wellness" },
+        { "label": "Wealth", "value": "wealth", "description": "Money, career, business, financial freedom" },
+        { "label": "Relationships", "value": "relationships", "description": "Love, family, friendships, social connections" }
+      ]
+    },
+    {
+      "id": "q3_spending_capacity",
+      "type": "single_choice",
+      "question": "How much money do they have to spend on a solution?",
+      "subtext": "Their annual income or budget for solving this problem",
+      "options": [
+        { "label": "$0–$25k", "value": "0_25k", "description": "Limited budget, price-sensitive" },
+        { "label": "$25k–$50k", "value": "25k_50k", "description": "Moderate budget" },
+        { "label": "$50k–$100k", "value": "50k_100k", "description": "Good budget available" },
+        { "label": "$100k–$250k", "value": "100k_250k", "description": "Strong purchasing power" },
+        { "label": "$250k+", "value": "250k_plus", "description": "Premium buyer" }
+      ]
+    },
+    {
+      "id": "q4_sunk_cost",
+      "type": "single_choice",
+      "question": "How large of a sunk cost do they have in their existing solution?",
+      "subtext": "What have they already invested trying to solve this?",
+      "options": [
+        { "label": "None - haven't tried anything", "value": "none" },
+        { "label": "Minimal ($0-$500)", "value": "minimal" },
+        { "label": "Moderate ($500-$5k)", "value": "moderate" },
+        { "label": "Significant ($5k-$50k)", "value": "significant" },
+        { "label": "Substantial ($50k+)", "value": "substantial" }
+      ]
+    },
+    {
+      "id": "q5_emotion",
+      "type": "single_choice",
+      "question": "What emotion are they feeling most strongly?",
+      "subtext": "The dominant emotional state driving them to seek a solution",
+      "options": [
+        { "label": "Frustrated", "value": "frustrated", "description": "They've tried things that didn't work" },
+        { "label": "Desperate", "value": "desperate", "description": "They need a solution urgently" },
+        { "label": "Hopeful", "value": "hopeful", "description": "They believe change is possible" },
+        { "label": "Skeptical", "value": "skeptical", "description": "They've been burned before" },
+        { "label": "Overwhelmed", "value": "overwhelmed", "description": "Too many options, don't know where to start" },
+        { "label": "Motivated", "value": "motivated", "description": "Ready to take action now" },
+        { "label": "Confused", "value": "confused", "description": "Don't understand what they need" }
+      ]
+    },
+    {
+      "id": "q6_niche_layers",
+      "type": "niche_4_layers",
+      "question": "Define your 4-layer niche",
+      "subtext": "Each layer gets more specific. The sharper your niche, the easier it is to stand out.",
+      "layers": [
+        {
+          "id": "layer1",
+          "label": "Layer 1: The Problem",
+          "placeholder": "e.g., Mental health",
+          "hint": "What broad problem do you solve?"
+        },
+        {
+          "id": "layer2",
+          "label": "Layer 2: + Who",
+          "placeholder": "e.g., Mental health for teenagers",
+          "hint": "Who specifically has this problem?"
+        },
+        {
+          "id": "layer3",
+          "label": "Layer 3: + Specific Who",
+          "placeholder": "e.g., Mental health for anxious teenage girls",
+          "hint": "Get more specific about your ideal customer"
+        },
+        {
+          "id": "layer4",
+          "label": "Layer 4: + Domain",
+          "placeholder": "e.g., Mental health for anxious teenage girls struggling with social media comparison",
+          "hint": "Add the specific situation or domain"
+        }
+      ],
+      "required": true
+    },
+    {
+      "id": "q7_excuses",
+      "type": "multi_section_inputs",
+      "question": "Why hasn't your audience solved their problem yet?",
+      "subtext": "These become the raw ingredients of your offer. Add at least 3 reasons per section.",
+      "sections": [
+        {
+          "id": "internal_beliefs",
+          "title": "Internal Beliefs",
+          "description": "What do they believe about themselves that holds them back?",
+          "placeholders": [
+            "e.g., 'I'm not smart enough to figure this out'",
+            "e.g., 'I don't deserve success or happiness'",
+            "e.g., 'I'm too old/young to start now'"
+          ],
+          "minInputs": 3
+        },
+        {
+          "id": "external_blockers",
+          "title": "External Blockers",
+          "description": "What outside factors do they blame?",
+          "placeholders": [
+            "e.g., 'I can't afford to invest in this'",
+            "e.g., 'I don't have enough time'",
+            "e.g., 'My partner/boss/family won't support me'"
+          ],
+          "minInputs": 3
+        },
+        {
+          "id": "motivation_gaps",
+          "title": "Motivation Gaps",
+          "description": "Why aren't they taking action despite knowing better?",
+          "placeholders": [
+            "e.g., 'I'll start when things calm down'",
+            "e.g., 'I need to do more research first'",
+            "e.g., 'It's not urgent enough yet'"
+          ],
+          "minInputs": 3
+        }
+      ],
+      "required": true
+    },
+    {
+      "id": "q8_solutions",
+      "type": "problem_solutions",
+      "question": "What solutions could you offer?",
+      "subtext": "For each problem you identified, describe a solution that addresses it directly.",
+      "solutionTypes": [
+        { "value": "one_to_one", "label": "1:1 Service", "description": "Personal coaching, consulting, done-for-you" },
+        { "value": "one_to_many", "label": "1:Many", "description": "Group program, course, community" },
+        { "value": "tech_digital", "label": "Tech/Digital", "description": "Software, app, templates" },
+        { "value": "physical_product", "label": "Physical", "description": "Book, equipment, merchandise" }
+      ],
+      "differentiators": [
+        { "label": "Faster", "value": "faster" },
+        { "label": "Easier", "value": "easier" },
+        { "label": "More Affordable", "value": "affordable" },
+        { "label": "Higher Quality", "value": "quality" }
+      ],
+      "required": true
+    },
+    {
+      "id": "q9_core_offer",
+      "type": "text_area",
+      "question": "Describe your Core Offer",
+      "subtext": "This is what people will pay for. Bring together your core product solution(s) and bonuses into one compelling offer.",
+      "placeholder": "Describe:\n• What transformation does it deliver?\n• What's included (core + bonuses)?\n• What makes it unique?\n• What results will they get?",
+      "minLength": 50,
+      "required": true
+    },
+    {
+      "id": "q10_lead_magnet_mvp",
+      "type": "text_area",
+      "question": "Describe your Lead Magnet MVP",
+      "subtext": "This is your free value that proves you can help. Keep it simple but impactful.",
+      "placeholder": "Describe:\n• What will they get for free?\n• How does it prove you can help?\n• What result will they see quickly?\n• How long will it take you to build?",
+      "minLength": 50,
+      "required": true
+    }
+  ]
+}

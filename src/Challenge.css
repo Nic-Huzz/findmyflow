@@ -3,7 +3,8 @@
 .challenge-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  padding-bottom: 2rem;
+  /* Space for bottom toolbar */
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0) + 2rem);
 }
 
 /* Header */
@@ -26,6 +27,68 @@
   text-align: center;
 }
 
+/* Week header row with type badge */
+.week-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.week-header-row h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.week-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Week info row - bubbles matching badge style */
+.week-info-row {
+  margin-top: 0.5rem;
+}
+
+.week-info-row .challenge-header-badges {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.week-type-bubble {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.groan-bubble {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.groan-bubble.completed {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.edit-badge {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.edit-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
 .challenge-header-top {
   display: flex;
   justify-content: center;
@@ -46,6 +109,164 @@
   font-weight: 600;
   font-size: 1rem;
   white-space: nowrap;
+}
+
+/* Rank Badge */
+.rank-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.2));
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fbbf24;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rank-badge:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.4), rgba(245, 158, 11, 0.3));
+  transform: scale(1.05);
+}
+
+/* Hero Stats - Large Rank + Score Display */
+.challenge-hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+.challenge-hero-stats:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.hero-rank {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-rank-trophy {
+  font-size: 2rem;
+}
+
+.hero-rank-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fbbf24;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-divider {
+  width: 2px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+}
+
+.hero-points {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-points-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.hero-points-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-streak {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero-streak-row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hero-streak-flame {
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.hero-streak-flame.warm {
+  filter: brightness(1.1);
+}
+
+.hero-streak-flame.hot {
+  filter: brightness(1.2);
+  animation: flamePulse 1s ease-in-out infinite;
+}
+
+.hero-streak-flame.legendary {
+  filter: brightness(1.3) saturate(1.2);
+  animation: flamePulse 0.5s ease-in-out infinite;
+}
+
+.hero-streak-flame.cold {
+  filter: grayscale(0.5) opacity(0.6);
+}
+
+@keyframes flamePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.hero-streak-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #fbbf24;
+}
+
+.hero-streak-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Leaderboard Button */
+.leaderboard-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.leaderboard-btn:hover {
+  background: rgba(255, 215, 0, 0.3);
+  transform: scale(1.05);
 }
 
 .challenge-day.group-code-badge {
@@ -191,6 +412,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   line-height: 1;
+  color: white;
 }
 
 /* Tabs */
@@ -226,6 +448,74 @@
   color: white;
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
+
+/* Stage Tabs Wrapper (for project-based challenges) */
+.stage-tabs-wrapper {
+  padding: 1rem 1.5rem;
+  background: rgba(94, 23, 235, 0.03);
+  border-bottom: 1px solid rgba(94, 23, 235, 0.1);
+}
+
+.selected-project-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.selected-project-info .project-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.change-project-btn {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px solid rgba(94, 23, 235, 0.3);
+  color: #5e17eb;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.change-project-btn:hover {
+  background: rgba(94, 23, 235, 0.1);
+  border-color: #5e17eb;
+}
+
+.no-project-prompt {
+  text-align: center;
+  padding: 1rem;
+}
+
+.no-project-prompt p {
+  margin: 0 0 12px 0;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.select-project-btn {
+  padding: 10px 20px;
+  background: #5e17eb;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.select-project-btn:hover {
+  background: #4a0ea8;
+  transform: translateY(-1px);
+}
+
+/* Quest Filters */
+/* Quest Filters - Now styled in ChallengeFilters.css */
 
 /* Content */
 .challenge-content {
@@ -268,11 +558,11 @@
   gap: 0;
 }
 
-.progress-bar-container {
+.challenge-container .progress-bar-container {
   width: 100%;
 }
 
-.progress-bar-label {
+.challenge-container .progress-bar-label {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
@@ -281,24 +571,24 @@
   color: #495057;
 }
 
-.progress-bar {
+.challenge-container .progress-bar {
   height: 12px;
   background: #e9ecef;
   border-radius: 6px;
   overflow: hidden;
 }
 
-.progress-bar-fill {
+.challenge-container .progress-bar-fill {
   height: 100%;
   transition: width 0.5s ease;
   border-radius: 6px;
 }
 
-.progress-bar-fill.daily {
+.challenge-container .progress-bar-fill.daily {
   background: linear-gradient(90deg, #5e17eb 0%, #8b5cf6 100%);
 }
 
-.progress-bar-fill.weekly {
+.challenge-container .progress-bar-fill.weekly {
   background: linear-gradient(90deg, #ffdd27 0%, #ffc107 100%);
 }
 
@@ -382,16 +672,154 @@
   color: #212529;
 }
 
+/* Summary Card Button */
+.category-point-item.summary-card-btn {
+  background: white;
+  color: #212529;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.category-point-item.summary-card-btn:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.category-point-item.summary-card-btn:disabled {
+  background: #f1f3f5;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.summary-button-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #212529;
+}
+
+.summary-button-label {
+  font-size: 0.875rem;
+  color: #212529;
+  margin-top: 0.5rem;
+}
+
+/* Quest Search */
+.quest-search {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.quest-search-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  background: white;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.quest-search-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+}
+
+.quest-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.quest-search-clear {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: #e9ecef;
+  color: #6c757d;
+  border-radius: 50%;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.quest-search-clear:hover {
+  background: #dee2e6;
+  color: #495057;
+}
+
 /* Quest Sections */
 .quest-section {
   margin-bottom: 3rem;
 }
 
-.section-title {
+.challenge-container .flow-map-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.challenge-container .section-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #212529;
-  margin: 0 0 1rem 0;
+  margin: 0 0 12px 0;
+}
+
+/* Section Header Row */
+.challenge-container .section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Summary Button */
+.summary-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.summary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* Summary Modal Overlay */
+.summary-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
 }
 
 .quest-subsection {
@@ -411,6 +839,47 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
+}
+
+/* Hidden Quests Section */
+.hidden-quests-section {
+  margin-top: 1rem;
+}
+
+.hidden-quests-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.hidden-quests-toggle:hover {
+  color: #5e17eb;
+}
+
+.hidden-quests-toggle .toggle-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.hidden-quests-toggle .toggle-label {
+  opacity: 0.8;
+}
+
+.quest-grid.hidden-grid {
+  margin-top: 1rem;
+  opacity: 0.7;
+}
+
+.quest-grid.hidden-grid .quest-card {
+  border: 2px dashed #d1d5db;
 }
 
 /* Quest Cards */
@@ -469,12 +938,61 @@
   gap: 1rem;
 }
 
+.quest-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
 .quest-name {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 700;
   color: #212529;
-  flex: 1;
+}
+
+/* Frequency Badge */
+.frequency-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.frequency-badge.daily {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.frequency-badge.weekly {
+  background: rgba(234, 179, 8, 0.15);
+  color: #ca8a04;
+}
+
+/* Planned badge for weekly plan quests */
+.planned-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Planned quest card highlight */
+.quest-card.planned {
+  border-left: 4px solid #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, white 100%);
+}
+
+.quest-card.planned:not(.completed):not(.locked) {
+  box-shadow: 0 2px 12px rgba(245, 158, 11, 0.15);
 }
 
 .quest-points {
@@ -577,11 +1095,11 @@
   color: #495057;
   line-height: 1.6;
   font-size: 0.875rem;
-  animation: slideDown 0.3s ease;
+  animation: challengeSlideDown 0.3s ease;
   white-space: pre-line; /* Preserve line breaks from \n */
 }
 
-@keyframes slideDown {
+@keyframes challengeSlideDown {
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -654,6 +1172,48 @@
 .quest-textarea:focus {
   outline: none;
   border-color: #5e17eb;
+}
+
+/* Tag Selector for text_with_tags input type */
+.quest-tag-selector {
+  margin: 0.75rem 0;
+}
+
+.quest-tag-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.quest-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.quest-tag {
+  padding: 0.5rem 1rem;
+  border: 2px solid #dee2e6;
+  border-radius: 20px;
+  background: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quest-tag:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.quest-tag.selected {
+  background: #5e17eb;
+  border-color: #5e17eb;
+  color: white;
 }
 
 .quest-dropdown {
@@ -821,7 +1381,7 @@
   text-align: center;
   z-index: 100;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  animation: tooltipFadeIn 0.2s ease;
+  animation: challengeTooltipFadeIn 0.2s ease;
 }
 
 .locked-tooltip::after {
@@ -834,7 +1394,7 @@
   border-top-color: #212529;
 }
 
-@keyframes tooltipFadeIn {
+@keyframes challengeTooltipFadeIn {
   from {
     opacity: 0;
     transform: translateX(-50%) translateY(4px);
@@ -897,10 +1457,35 @@
 /* Onboarding */
 .challenge-onboarding {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.challenge-onboarding .go-back-btn {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.challenge-onboarding .go-back-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .onboarding-content {
@@ -1153,7 +1738,7 @@
   border-radius: 12px;
 }
 
-.toggle-btn {
+.challenge-container .toggle-btn {
   padding: 0.5rem 1.5rem;
   border: none;
   background: transparent;
@@ -1165,12 +1750,12 @@
   font-size: 0.9375rem;
 }
 
-.toggle-btn:hover {
+.challenge-container .toggle-btn:hover {
   background: rgba(94, 23, 235, 0.1);
   color: #5e17eb;
 }
 
-.toggle-btn.active {
+.challenge-container .toggle-btn.active {
   background: white;
   color: #5e17eb;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1274,7 +1859,7 @@
     width: 100%;
   }
 
-  .toggle-btn {
+  .challenge-container .toggle-btn {
     flex: 1;
     text-align: center;
   }
@@ -1317,10 +1902,10 @@
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
-  animation: fadeIn 0.2s ease;
+  animation: challengeFadeIn 0.2s ease;
 }
 
-@keyframes fadeIn {
+@keyframes challengeFadeIn {
   from {
     opacity: 0;
   }
@@ -1338,10 +1923,10 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
+  animation: challengeSlideUp 0.3s ease;
 }
 
-@keyframes slideUp {
+@keyframes challengeSlideUp {
   from {
     transform: translateY(50px);
     opacity: 0;
@@ -1366,7 +1951,7 @@
   color: #212529;
 }
 
-.modal-close-btn {
+.challenge-container .modal-close-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -1382,7 +1967,7 @@
   line-height: 1;
 }
 
-.modal-close-btn:hover {
+.challenge-container .modal-close-btn:hover {
   background: #dee2e6;
   transform: rotate(90deg);
 }
@@ -1664,4 +2249,274 @@
 .tab-bonus-text.earned {
   color: #d97706;
   font-style: normal;
+}
+
+/* ============ STREAK FLAME ============ */
+
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.streak-count {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.streak-flame {
+  display: inline-block;
+  font-size: 1.1rem;
+  animation: challengeFlameFlicker 0.5s ease-in-out infinite alternate;
+}
+
+.streak-flame.warm {
+  font-size: 1.2rem;
+  animation: challengeFlameFlicker 0.4s ease-in-out infinite alternate;
+}
+
+.streak-flame.hot {
+  font-size: 1.3rem;
+  animation: challengeFlameFlicker 0.3s ease-in-out infinite alternate, challengeFlameGlow 1s ease-in-out infinite;
+}
+
+.streak-flame.legendary {
+  font-size: 1.4rem;
+  animation: challengeFlameFlicker 0.2s ease-in-out infinite alternate, challengeFlameGlow 0.5s ease-in-out infinite, challengeFlamePulse 1s ease-in-out infinite;
+}
+
+.streak-flame.cold {
+  opacity: 0.5;
+  filter: grayscale(1);
+  animation: none;
+}
+
+@keyframes challengeFlameFlicker {
+  0% { transform: scale(1) rotate(-3deg); }
+  100% { transform: scale(1.1) rotate(3deg); }
+}
+
+@keyframes challengeFlameGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 100, 0, 0.6)); }
+  50% { filter: drop-shadow(0 0 8px rgba(255, 150, 0, 0.8)); }
+}
+
+@keyframes challengeFlamePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* ============ QUEST COMPLETION ANIMATION ============ */
+
+.quest-card.just-completed {
+  animation: challengeQuestCompletePulse 0.6s ease-out;
+  position: relative;
+  overflow: visible;
+}
+
+@keyframes challengeQuestCompletePulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.02); box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3); }
+  100% { transform: scale(1); }
+}
+
+/* Checkmark animation */
+.checkmark-animation {
+  display: inline-block;
+  color: #10b981;
+  font-weight: bold;
+  margin-right: 6px;
+  animation: challengeCheckmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes challengeCheckmarkPop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Points flying up */
+.points-fly-up {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #5e17eb;
+  text-shadow: 0 2px 8px rgba(94, 23, 235, 0.3);
+  animation: challengePointsFlyUp 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes challengePointsFlyUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -200%) scale(1);
+  }
+}
+
+/* Confetti burst */
+.confetti-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: challengeConfettiBurst 0.8s ease-out forwards;
+}
+
+.confetti-0 { background: #5e17eb; animation-delay: 0ms; }
+.confetti-1 { background: #ffdd27; animation-delay: 20ms; }
+.confetti-2 { background: #10b981; animation-delay: 40ms; }
+.confetti-3 { background: #3b82f6; animation-delay: 60ms; }
+.confetti-4 { background: #ef4444; animation-delay: 80ms; }
+.confetti-5 { background: #5e17eb; animation-delay: 100ms; }
+.confetti-6 { background: #ffdd27; animation-delay: 120ms; }
+.confetti-7 { background: #10b981; animation-delay: 140ms; }
+.confetti-8 { background: #3b82f6; animation-delay: 160ms; }
+.confetti-9 { background: #ef4444; animation-delay: 180ms; }
+.confetti-10 { background: #5e17eb; animation-delay: 200ms; }
+.confetti-11 { background: #ffdd27; animation-delay: 220ms; }
+
+.confetti-0, .confetti-6 { --angle: -60deg; --distance: 60px; }
+.confetti-1, .confetti-7 { --angle: -30deg; --distance: 70px; }
+.confetti-2, .confetti-8 { --angle: 0deg; --distance: 65px; }
+.confetti-3, .confetti-9 { --angle: 30deg; --distance: 70px; }
+.confetti-4, .confetti-10 { --angle: 60deg; --distance: 60px; }
+.confetti-5, .confetti-11 { --angle: 90deg; --distance: 50px; }
+
+@keyframes challengeConfettiBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translate(
+        calc(cos(var(--angle)) * var(--distance)),
+        calc(sin(var(--angle)) * var(--distance) - 20px)
+      )
+      rotate(720deg)
+      scale(0.5);
+  }
+}
+
+/* ============================================
+   Skeleton Loading States
+   ============================================ */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.skeleton-title {
+  width: 180px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.skeleton-points {
+  width: 80px;
+  height: 36px;
+  border-radius: 20px;
+}
+
+.skeleton-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-tab {
+  width: 70px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.skeleton-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeleton-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.skeleton-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.skeleton-card-title {
+  width: 140px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.skeleton-card-badge {
+  width: 60px;
+  height: 28px;
+  border-radius: 14px;
+}
+
+.skeleton-card-desc {
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-card-desc.short {
+  width: 60%;
 }

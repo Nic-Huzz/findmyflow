@@ -1,9 +1,13 @@
 // Phase 3: Graduation Eligibility Checker
 // Checks if user meets requirements to graduate to the next stage
+//
+// Updated Dec 2024: Added project-based graduation check functions
+// See docs/2024-12-20-major-refactor-plan.md for architecture details
 
 import { supabase } from './supabaseClient';
 import { PERSONA_STAGES, getNextStage, getStageCelebration, getInitialStage, getAllMilestones } from './personaStages';
 import { normalizePersona } from '../data/personaProfiles';
+import { STAGE_CONFIG, getStageConfig, getGroanChallengeId } from './stageConfig';
 
 // Check if user has completed required flows
 const checkFlowsCompleted = async (userId, flowsRequired = []) => {
@@ -456,4 +460,323 @@ export const initializeUserStageProgress = async (userId, persona) => {
     console.error('Error initializing stage progress:', error);
     return { success: false, error: error.message };
   }
+};
+
+// =============================================================================
+// PROJECT-BASED GRADUATION CHECK (Dec 2024 Refactor)
+// =============================================================================
+
+/**
+ * Check if project has completed required flows for a stage
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {string[]} flowsRequired - Array of required flow IDs
+ */
+const checkProjectFlowsCompleted = async (userId, projectId, flowsRequired = []) => {
+  if (!flowsRequired || flowsRequired.length === 0) {
+    return { allCompleted: true, completedFlows: [] };
+  }
+
+  try {
+    const { data: completedSessions, error } = await supabase
+      .from('flow_sessions')
+      .select('flow_type, status')
+      .eq('user_id', userId)
+      .eq('project_id', projectId)
+      .eq('status', 'completed')
+      .in('flow_type', flowsRequired);
+
+    if (error) {
+      console.warn('Flow check error:', error.message);
+      return { allCompleted: false, completedFlows: [] };
+    }
+
+    const completedFlowTypes = new Set(completedSessions?.map(s => s.flow_type) || []);
+    const allCompleted = flowsRequired.every(flow => completedFlowTypes.has(flow));
+
+    return { allCompleted, completedFlows: Array.from(completedFlowTypes) };
+  } catch (error) {
+    console.warn('Error checking project flows:', error);
+    return { allCompleted: false, completedFlows: [] };
+  }
+};
+
+/**
+ * Check if project has completed required milestones for a stage
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {string[]} milestonesRequired - Array of required milestone IDs
+ */
+const checkProjectMilestones = async (userId, projectId, milestonesRequired = []) => {
+  if (!milestonesRequired || milestonesRequired.length === 0) {
+    return { allCompleted: true, completedMilestones: [] };
+  }
+
+  try {
+    const { data: completedMilestones, error } = await supabase
+      .from('milestone_completions')
+      .select('milestone_id')
+      .eq('user_id', userId)
+      .eq('project_id', projectId)
+      .in('milestone_id', milestonesRequired);
+
+    if (error) {
+      console.warn('Milestone check error:', error.message);
+      return { allCompleted: false, completedMilestones: [] };
+    }
+
+    const completedIds = completedMilestones?.map(m => m.milestone_id) || [];
+    const allCompleted = milestonesRequired.every(m => completedIds.includes(m));
+
+    return { allCompleted, completedMilestones: completedIds };
+  } catch (error) {
+    console.warn('Error checking project milestones:', error);
+    return { allCompleted: false, completedMilestones: [] };
+  }
+};
+
+/**
+ * Check if stage-specific groan challenge is completed within current challenge
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {number} stageNumber - Current stage number (1-6)
+ * @param {string} challengeInstanceId - Current challenge instance ID
+ */
+const checkStageGroanChallenge = async (userId, projectId, stageNumber, challengeInstanceId) => {
+  const groanChallengeId = getGroanChallengeId(stageNumber);
+
+  if (!groanChallengeId) {
+    console.warn(`No groan challenge defined for stage ${stageNumber}`);
+    return { completed: false, groanChallengeId: null };
+  }
+
+  try {
+    // Check quest_completions for the stage-specific groan challenge
+    const { data, error } = await supabase
+      .from('quest_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('project_id', projectId)
+      .eq('quest_id', groanChallengeId)
+      .eq('challenge_instance_id', challengeInstanceId)
+      .limit(1);
+
+    if (error) {
+      console.warn('Groan challenge check error:', error.message);
+      return { completed: false, groanChallengeId };
+    }
+
+    return {
+      completed: data && data.length > 0,
+      groanChallengeId
+    };
+  } catch (error) {
+    console.warn('Error checking groan challenge:', error);
+    return { completed: false, groanChallengeId };
+  }
+};
+
+/**
+ * Check if a project is eligible to graduate to the next stage
+ * Called after each quest completion
+ *
+ * Requirements for graduation (no streak required):
+ * - All required flows for the stage completed
+ * - All required milestones for the stage completed
+ * - Stage-specific groan challenge completed (within current challenge instance)
+ *
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {string} challengeInstanceId - Current challenge instance ID
+ */
+export const checkProjectGraduationEligibility = async (userId, projectId, challengeInstanceId) => {
+  try {
+    // Get project's current stage
+    const { data: project, error: projectError } = await supabase
+      .from('user_projects')
+      .select('id, name, current_stage')
+      .eq('id', projectId)
+      .eq('user_id', userId)
+      .single();
+
+    if (projectError || !project) {
+      return {
+        eligible: false,
+        error: 'Project not found',
+        checks: {},
+        next_stage: null
+      };
+    }
+
+    const currentStage = project.current_stage || 1;
+    const stageConfig = getStageConfig(currentStage);
+
+    if (!stageConfig) {
+      return {
+        eligible: false,
+        error: `Invalid stage: ${currentStage}`,
+        checks: {},
+        next_stage: null
+      };
+    }
+
+    // Check all requirements
+    const flowsCheck = await checkProjectFlowsCompleted(
+      userId,
+      projectId,
+      stageConfig.requiredFlows
+    );
+
+    const milestonesCheck = await checkProjectMilestones(
+      userId,
+      projectId,
+      stageConfig.milestones
+    );
+
+    const groanCheck = await checkStageGroanChallenge(
+      userId,
+      projectId,
+      currentStage,
+      challengeInstanceId
+    );
+
+    const checks = {
+      flows_completed: flowsCheck.allCompleted,
+      milestones_completed: milestonesCheck.allCompleted,
+      groan_challenge_completed: groanCheck.completed
+    };
+
+    // All checks must pass
+    const eligible = Object.values(checks).every(check => check === true);
+
+    // Calculate next stage (max is 6, stage 7 is "coming soon")
+    const nextStage = currentStage < 6 ? currentStage + 1 : null;
+
+    return {
+      eligible,
+      checks,
+      completed_flows: flowsCheck.completedFlows,
+      completed_milestones: milestonesCheck.completedMilestones,
+      groan_challenge_id: groanCheck.groanChallengeId,
+      current_stage: currentStage,
+      stage_name: stageConfig.name,
+      next_stage: nextStage,
+      project_id: projectId,
+      project_name: project.name
+    };
+  } catch (error) {
+    console.error('Error checking project graduation eligibility:', error);
+    return {
+      eligible: false,
+      error: error.message,
+      checks: {},
+      next_stage: null
+    };
+  }
+};
+
+/**
+ * Graduate a project to the next stage
+ * Updates user_projects.current_stage
+ *
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {number} fromStage - Current stage (1-6)
+ * @param {number} toStage - Next stage (2-7, or null if at max)
+ */
+export const graduateProject = async (userId, projectId, fromStage, toStage) => {
+  try {
+    if (!toStage || toStage > 6) {
+      // At max stage (6), stay at current stage
+      // Stage 7 is "coming soon" - projects repeat the cycle
+      return {
+        graduated: false,
+        message: 'Project is at maximum stage. Stage 7 coming soon!',
+        current_stage: fromStage
+      };
+    }
+
+    // Record graduation in stage_graduations table
+    const { error: graduationError } = await supabase
+      .from('stage_graduations')
+      .insert({
+        user_id: userId,
+        project_id: projectId,
+        from_stage: fromStage,
+        to_stage: toStage,
+        graduation_reason: `Project graduated from Stage ${fromStage} to Stage ${toStage}`
+      });
+
+    if (graduationError) {
+      console.warn('Failed to record graduation:', graduationError.message);
+      // Continue anyway - this is just for tracking
+    }
+
+    // Update project's current_stage
+    const { data: updatedProject, error: updateError } = await supabase
+      .from('user_projects')
+      .update({
+        current_stage: toStage,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', projectId)
+      .eq('user_id', userId)
+      .select()
+      .single();
+
+    if (updateError) {
+      throw new Error(`Failed to update project stage: ${updateError.message}`);
+    }
+
+    const toStageConfig = getStageConfig(toStage);
+
+    return {
+      graduated: true,
+      from_stage: fromStage,
+      new_stage: toStage,
+      project_id: projectId,
+      celebration_message: {
+        title: `🎉 Stage ${toStage} Unlocked!`,
+        message: `Congratulations! You've completed Stage ${fromStage} and unlocked ${toStageConfig?.name || `Stage ${toStage}`}!`,
+        next_step: toStageConfig?.description || 'Keep building momentum!'
+      }
+    };
+  } catch (error) {
+    console.error('Error graduating project:', error);
+    return {
+      graduated: false,
+      error: error.message
+    };
+  }
+};
+
+/**
+ * Trigger graduation check and graduate if eligible
+ * Call this after quest completion
+ *
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {string} challengeInstanceId - Current challenge instance ID
+ */
+export const checkAndGraduateProject = async (userId, projectId, challengeInstanceId) => {
+  const eligibility = await checkProjectGraduationEligibility(userId, projectId, challengeInstanceId);
+
+  if (!eligibility.eligible) {
+    return {
+      graduated: false,
+      eligibility
+    };
+  }
+
+  const result = await graduateProject(
+    userId,
+    projectId,
+    eligibility.current_stage,
+    eligibility.next_stage
+  );
+
+  return {
+    ...result,
+    eligibility
+  };
 };

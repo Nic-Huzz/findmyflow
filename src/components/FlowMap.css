@@ -19,22 +19,23 @@
   min-height: 200px;
 }
 
-.loading-spinner {
+.flow-map .loading-spinner {
   border: 3px solid #f3f3f3;
   border-top: 3px solid #5e17eb;
   border-radius: 50%;
   width: 40px;
   height: 40px;
-  animation: spin 1s linear infinite;
+  animation: flowMapSpin 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes flowMapSpin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
 /* Flow Section - Minimal Clean Style with Brand Colors */
-.flow-section {
+/* Scoped to .flow-map to prevent global leakage */
+.flow-map .flow-section {
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -44,11 +45,11 @@
   margin-bottom: 16px;
 }
 
-.flow-section:last-of-type {
+.flow-map .flow-section:last-of-type {
   margin-bottom: 0;
 }
 
-.section-header {
+.flow-map .section-header {
   padding: 20px 24px;
   cursor: pointer;
   transition: background 0.2s ease;
@@ -62,16 +63,16 @@
   margin: 0;
 }
 
-.section-header:hover {
+.flow-map .section-header:hover {
   background: #fafafa;
 }
 
-.section-header.expanded {
+.flow-map .section-header.expanded {
   background: white;
   border-bottom: none;
 }
 
-.flow-section .section-title {
+.flow-map .flow-section .section-title {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -83,7 +84,7 @@
   padding: 0;
 }
 
-.flow-section .section-icon {
+.flow-map .flow-section .section-icon {
   font-size: 24px !important;
   line-height: 1 !important;
   display: inline-flex;
@@ -99,7 +100,7 @@
   overflow: visible;
 }
 
-.expand-icon {
+.flow-map .expand-icon {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -112,14 +113,14 @@
   transition: all 0.3s ease;
 }
 
-.section-header.expanded .expand-icon {
+.flow-map .section-header.expanded .expand-icon {
   transform: rotate(180deg);
   background: #5e17eb;
   color: white;
 }
 
 /* Section Content - Clean Layout */
-.section-content {
+.flow-map .section-content {
   padding: 24px;
   background: #fafafa;
   border-top: none;
@@ -127,7 +128,7 @@
 }
 
 /* Flow Finder with Slider Style */
-.finder-category {
+.flow-map .finder-category {
   background: white;
   border-radius: 12px;
   padding: 20px;
@@ -135,11 +136,11 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.finder-category:last-child {
+.flow-map .finder-category:last-child {
   margin-bottom: 0;
 }
 
-.category-title {
+.flow-map .category-title {
   font-size: 13px;
   font-weight: 600;
   color: #1a1a1a;
@@ -150,23 +151,23 @@
 }
 
 /* Slider Container */
-.slider-container {
+.flow-map .slider-container {
   width: 100%;
   overflow: hidden;
   touch-action: pan-y;
   user-select: none;
 }
 
-.slider-content {
+.flow-map .slider-content {
   width: 100%;
   cursor: grab;
 }
 
-.slider-content:active {
+.flow-map .slider-content:active {
   cursor: grabbing;
 }
 
-.cluster-card {
+.flow-map .cluster-card {
   background: #f9f9f9;
   border-radius: 8px;
   padding: 24px;
@@ -179,14 +180,14 @@
   transition: transform 0.3s ease;
 }
 
-.cluster-label {
+.flow-map .cluster-label {
   font-size: 22px;
   font-weight: 700;
   color: #5e17eb;
   text-align: center;
 }
 
-.cluster-label.empty-state {
+.flow-map .cluster-label.empty-state {
   font-size: 14px;
   font-weight: 500;
   background: none;
@@ -196,7 +197,7 @@
 }
 
 /* Slider Controls */
-.slider-controls {
+.flow-map .slider-controls {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -204,7 +205,7 @@
   margin-top: 12px;
 }
 
-.slider-arrow {
+.flow-map .slider-arrow {
   background: #5e17eb;
   color: white;
   border: none;
@@ -220,17 +221,17 @@
   transition: all 0.2s;
 }
 
-.slider-arrow:hover {
+.flow-map .slider-arrow:hover {
   transform: scale(1.1);
   background: #4912c4;
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
-.slider-arrow:active {
+.flow-map .slider-arrow:active {
   transform: scale(0.9);
 }
 
-.slider-indicator {
+.flow-map .slider-indicator {
   text-align: center;
   font-size: 14px;
   color: #999;
@@ -238,7 +239,7 @@
 }
 
 /* Nervous System with Gold Highlights */
-.limitation-item {
+.flow-map .limitation-item {
   background: white;
   padding: 14px;
   border-radius: 8px;
@@ -246,11 +247,11 @@
   border-left: 3px solid #5e17eb;
 }
 
-.limitation-item:last-child {
+.flow-map .limitation-item:last-child {
   margin-bottom: 0;
 }
 
-.limitation-label {
+.flow-map .limitation-label {
   font-size: 12px;
   font-weight: 600;
   color: #5e17eb;
@@ -259,19 +260,19 @@
   letter-spacing: 0.5px;
 }
 
-.limitation-value {
+.flow-map .limitation-value {
   font-size: 15px;
   color: #1a1a1a;
   font-weight: 500;
 }
 
-.safety-contracts-list {
+.flow-map .safety-contracts-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.contract-item {
+.flow-map .contract-item {
   background: rgba(94, 23, 235, 0.1);
   padding: 8px 12px;
   border-radius: 6px;
@@ -281,38 +282,38 @@
   border-left: 3px solid #5e17eb;
 }
 
-.limitation-item.core-wound {
+.flow-map .limitation-item.core-wound {
   border-left-color: #ffdd27;
 }
 
-.core-wound .limitation-label {
+.flow-map .core-wound .limitation-label {
   background: linear-gradient(135deg, #ffdd27 0%, #d4a000 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.core-wound .limitation-value {
+.flow-map .core-wound .limitation-value {
   color: #92400e;
 }
 
-.core-wound-empty {
+.flow-map .core-wound-empty {
   color: #1a1a1a !important;
 }
 
 /* Flow Compass Minimal Style */
-.project-item {
+.flow-map .project-item {
   background: white;
   border-radius: 8px;
   margin-bottom: 10px;
   overflow: hidden;
 }
 
-.project-item:last-child {
+.flow-map .project-item:last-child {
   margin-bottom: 0;
 }
 
-.project-header {
+.flow-map .project-header {
   padding: 14px;
   cursor: pointer;
   display: flex;
@@ -321,23 +322,23 @@
   transition: background 0.2s ease;
 }
 
-.project-header:hover {
+.flow-map .project-header:hover {
   background: #fafafa;
 }
 
-.project-info {
+.flow-map .project-info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.project-name {
+.flow-map .project-name {
   font-size: 15px;
   font-weight: 600;
   color: #1a1a1a;
 }
 
-.latest-direction {
+.flow-map .latest-direction {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -347,33 +348,33 @@
   background: #f0f0f0;
 }
 
-.direction-indicator {
+.flow-map .direction-indicator {
   font-size: 16px;
   font-weight: bold;
 }
 
-.direction-north { color: #10b981; }
-.direction-east { color: #f59e0b; }
-.direction-south { color: #ef4444; }
-.direction-west { color: #5e17eb; }
+.flow-map .direction-north { color: #10b981; }
+.flow-map .direction-east { color: #f59e0b; }
+.flow-map .direction-south { color: #ef4444; }
+.flow-map .direction-west { color: #5e17eb; }
 
-.project-expand-icon {
+.flow-map .project-expand-icon {
   font-size: 18px;
   color: #999;
   transition: transform 0.3s ease;
 }
 
-.project-header.expanded .project-expand-icon {
+.flow-map .project-header.expanded .project-expand-icon {
   transform: rotate(90deg);
 }
 
-.project-history {
+.flow-map .project-history {
   padding: 14px;
   background: #fafafa;
   border-top: 1px solid #e0e0e0;
 }
 
-.history-title {
+.flow-map .history-title {
   font-size: 12px;
   font-weight: 600;
   color: #5e17eb;
@@ -382,13 +383,13 @@
   letter-spacing: 0.5px;
 }
 
-.history-list {
+.flow-map .history-list {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.history-entry {
+.flow-map .history-entry {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -398,24 +399,24 @@
   font-size: 13px;
 }
 
-.entry-direction {
+.flow-map .entry-direction {
   font-weight: 600;
   min-width: 70px;
 }
 
-.entry-date {
+.flow-map .entry-date {
   color: #999;
   font-size: 11px;
   min-width: 80px;
 }
 
-.entry-states {
+.flow-map .entry-states {
   color: #666;
   font-size: 11px;
   font-style: italic;
 }
 
-.empty-state {
+.flow-map .empty-state {
   text-align: center;
   padding: 20px;
   color: #999;
@@ -423,7 +424,7 @@
   font-style: italic;
 }
 
-.start-flow-button {
+.flow-map .start-flow-button {
   background: #5e17eb;
   color: white;
   border: none;
@@ -439,12 +440,12 @@
   display: block;
 }
 
-.start-flow-button:hover {
+.flow-map .start-flow-button:hover {
   background: #4912c4;
   transform: scale(1.02);
 }
 
-.empty-nervous-system {
+.flow-map .empty-nervous-system {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -453,52 +454,52 @@
 
 /* Mobile Responsive */
 @media (max-width: 600px) {
-  .flow-section .section-title {
+  .flow-map .flow-section .section-title {
     font-size: 20px !important;
   }
-  
-  .flow-section .section-icon {
+
+  .flow-map .flow-section .section-icon {
     font-size: 20px !important;
     min-width: 24px;
     min-height: 24px;
     line-height: 1 !important;
   }
 
-  .section-content {
+  .flow-map .section-content {
     padding: 16px;
   }
 
-  .finder-category,
-  .limitation-item,
-  .project-header {
+  .flow-map .finder-category,
+  .flow-map .limitation-item,
+  .flow-map .project-header {
     padding: 12px;
   }
 
-  .cluster-label {
+  .flow-map .cluster-label {
     font-size: 18px;
   }
 
-  .history-entry {
+  .flow-map .history-entry {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
   }
 
-  .entry-direction,
-  .entry-date {
+  .flow-map .entry-direction,
+  .flow-map .entry-date {
     min-width: auto;
   }
 }
 
 /* Nikigai Card Grid - Mockup Style */
-.nikigai-cards-grid {
+.flow-map .nikigai-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px;
   padding: 0;
 }
 
-.nikigai-card {
+.flow-map .nikigai-card {
   background: white;
   border-radius: 16px;
   padding: 28px;
@@ -507,12 +508,12 @@
   border: 1px solid #f0f0f0;
 }
 
-.nikigai-card:hover {
+.flow-map .nikigai-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
-.nikigai-card.empty {
+.flow-map .nikigai-card.empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -520,25 +521,25 @@
   padding: 32px 24px;
 }
 
-.nikigai-card.empty.locked {
+.flow-map .nikigai-card.empty.locked {
   background: #f9fafb;
   border: 1px dashed #d1d5db;
   cursor: not-allowed;
 }
 
-.nikigai-card.empty.locked:hover {
+.flow-map .nikigai-card.empty.locked:hover {
   transform: none;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.locked-message {
+.flow-map .locked-message {
   font-size: 0.875rem;
   color: #9ca3af;
   font-weight: 500;
   margin-top: 8px;
 }
 
-.card-icon {
+.flow-map .card-icon {
   width: 56px;
   height: 56px;
   border-radius: 12px;
@@ -549,19 +550,19 @@
   margin-bottom: 16px;
 }
 
-.icon-skill {
+.flow-map .icon-skill {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.icon-problem {
+.flow-map .icon-problem {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
-.icon-persona {
+.flow-map .icon-persona {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
-.card-label {
+.flow-map .card-label {
   font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -570,7 +571,7 @@
   margin-bottom: 8px;
 }
 
-.card-value {
+.flow-map .card-value {
   font-size: 1.5rem;
   font-weight: 700;
   color: #1f2937;
@@ -579,14 +580,14 @@
   min-height: 60px;
 }
 
-.card-description {
+.flow-map .card-description {
   font-size: 0.95rem;
   color: #6b7280;
   line-height: 1.5;
   margin-bottom: 16px;
 }
 
-.card-nav {
+.flow-map .card-nav {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -596,7 +597,7 @@
   border-top: 1px solid #f0f0f0;
 }
 
-.nav-arrow {
+.flow-map .nav-arrow {
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
@@ -611,16 +612,16 @@
   justify-content: center;
 }
 
-.nav-arrow:hover {
+.flow-map .nav-arrow:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.nav-arrow:active {
+.flow-map .nav-arrow:active {
   transform: scale(0.95);
 }
 
-.nav-indicator {
+.flow-map .nav-indicator {
   font-size: 0.875rem;
   color: #6b7280;
   font-weight: 600;
@@ -629,11 +630,11 @@
 }
 
 @media (max-width: 768px) {
-  .nikigai-cards-grid {
+  .flow-map .nikigai-cards-grid {
     grid-template-columns: 1fr;
   }
 
-  .card-value {
+  .flow-map .card-value {
     font-size: 1.25rem;
     min-height: 50px;
   }

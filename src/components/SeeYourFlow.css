@@ -1,0 +1,672 @@
+/**
+ * SeeYourFlow.css
+ * Styles for the multi-step journey mapping and check-in component
+ * Purple gradient background with white text
+ */
+
+.see-your-flow {
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  border-radius: 16px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.see-your-flow.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.see-your-flow .loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Header */
+.see-your-flow .flow-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.see-your-flow .flow-header:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.see-your-flow .flow-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.see-your-flow .flow-icon {
+  font-size: 1.25rem;
+}
+
+.see-your-flow .flow-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.see-your-flow .flow-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.see-your-flow .expand-icon {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: transform 0.3s ease;
+}
+
+.see-your-flow .expand-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Content */
+.see-your-flow .flow-content {
+  padding: 0 20px 20px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Progress Dots */
+.see-your-flow .progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-top: 4px;
+}
+
+.see-your-flow .progress-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.see-your-flow .progress-dots .dot.active {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.see-your-flow .progress-dots .dot.current {
+  background: #E9A23B;
+  transform: scale(1.2);
+}
+
+/* Step Content */
+.see-your-flow .step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.see-your-flow .step-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.see-your-flow .step-hint {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Question Sections */
+.see-your-flow .question-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.see-your-flow .question-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Two Options Row */
+.see-your-flow .two-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.see-your-flow .two-options.small {
+  gap: 8px;
+}
+
+.see-your-flow .option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.see-your-flow .option-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.see-your-flow .option-btn.selected {
+  background: rgba(233, 162, 59, 0.3);
+  border-color: #E9A23B;
+}
+
+.see-your-flow .option-btn.small {
+  padding: 10px 8px;
+  font-size: 0.85rem;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.see-your-flow .option-emoji {
+  font-size: 1.5rem;
+}
+
+.see-your-flow .option-btn.small .option-emoji {
+  font-size: 1rem;
+}
+
+/* Direction Preview */
+.see-your-flow .direction-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.see-your-flow .direction-preview.direction-north {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.see-your-flow .direction-preview.direction-east {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.see-your-flow .direction-preview.direction-south {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.see-your-flow .direction-preview.direction-west {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.see-your-flow .direction-arrow {
+  font-size: 1.2rem;
+}
+
+/* Month Picker */
+.see-your-flow .month-picker {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.5l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+
+.see-your-flow .month-picker:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+.see-your-flow .month-picker option {
+  background: #4a0ea8;
+  color: white;
+}
+
+.see-your-flow .month-picker.small {
+  padding: 10px 12px;
+  font-size: 0.85rem;
+}
+
+/* Cards Container */
+.see-your-flow .cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Entry Cards (Highlights & Challenges) */
+.see-your-flow .entry-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.see-your-flow .entry-card.highlight-card {
+  border-left: 4px solid #10b981;
+}
+
+.see-your-flow .entry-card.challenge-card {
+  border-left: 4px solid #f59e0b;
+}
+
+.see-your-flow .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.see-your-flow .card-number {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.see-your-flow .card-emoji {
+  font-size: 1.2rem;
+}
+
+.see-your-flow .card-title-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.see-your-flow .card-title-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.see-your-flow .card-title-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.see-your-flow .card-reflection {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: none;
+}
+
+.see-your-flow .card-reflection::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.see-your-flow .card-reflection:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.see-your-flow .feeling-select {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.see-your-flow .feeling-select label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Add Card Button */
+.see-your-flow .add-card-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.see-your-flow .add-card-btn:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Step Actions */
+.see-your-flow .step-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.see-your-flow .skip-btn {
+  flex: 1;
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.see-your-flow .skip-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.see-your-flow .next-btn {
+  flex: 2;
+  padding: 14px 24px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.see-your-flow .next-btn:hover:not(:disabled) {
+  background: #d4912f;
+  transform: translateY(-2px);
+}
+
+.see-your-flow .next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Summary Step */
+.see-your-flow .summary-step {
+  text-align: center;
+}
+
+.see-your-flow .summary-celebration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.see-your-flow .celebration-emoji {
+  font-size: 3rem;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.see-your-flow .summary-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+}
+
+.see-your-flow .summary-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.see-your-flow .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.see-your-flow .stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #E9A23B;
+}
+
+.see-your-flow .stat-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.see-your-flow .done-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.see-your-flow .done-btn:hover {
+  background: #d4912f;
+  transform: translateY(-2px);
+}
+
+/* Check-in Content (Returning Users) */
+.see-your-flow .checkin-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Headline Input */
+.see-your-flow .headline-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.see-your-flow .headline-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.see-your-flow .headline-input:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+/* Comment Input */
+.see-your-flow .comment-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: none;
+}
+
+.see-your-flow .comment-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.see-your-flow .comment-input:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+/* Date Options */
+.see-your-flow .date-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.see-your-flow .date-option {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.see-your-flow .date-option:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.see-your-flow .date-option.selected {
+  background: rgba(233, 162, 59, 0.3);
+  border-color: #E9A23B;
+}
+
+/* Submit Button */
+.see-your-flow .submit-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  margin-top: 8px;
+}
+
+.see-your-flow .submit-btn:hover:not(:disabled) {
+  background: #d4912f;
+  transform: translateY(-2px);
+}
+
+.see-your-flow .submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .see-your-flow {
+    margin-top: 12px;
+  }
+
+  .see-your-flow .flow-header {
+    padding: 14px 16px;
+  }
+
+  .see-your-flow .flow-content {
+    padding: 0 16px 16px;
+  }
+
+  .see-your-flow .step-title {
+    font-size: 1rem;
+  }
+
+  .see-your-flow .option-btn {
+    padding: 14px 10px;
+    font-size: 0.9rem;
+  }
+
+  .see-your-flow .option-emoji {
+    font-size: 1.25rem;
+  }
+
+  .see-your-flow .entry-card {
+    padding: 14px;
+  }
+
+  .see-your-flow .step-actions {
+    flex-direction: column;
+  }
+
+  .see-your-flow .skip-btn,
+  .see-your-flow .next-btn {
+    flex: none;
+    width: 100%;
+  }
+}

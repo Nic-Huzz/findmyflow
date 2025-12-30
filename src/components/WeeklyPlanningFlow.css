@@ -1,0 +1,896 @@
+/**
+ * WeeklyPlanningFlow.css
+ * Styles for the weekly planning flow component
+ */
+
+/* Week type theme variables */
+:root {
+  --week-push-primary: #ef4444;
+  --week-push-secondary: #dc2626;
+  --week-push-bg: linear-gradient(135deg, #7f1d1d 0%, #ef4444 50%, #f87171 100%);
+
+  --week-flow-primary: #3b82f6;
+  --week-flow-secondary: #2563eb;
+  --week-flow-bg: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+
+  --week-rest-primary: #8b5cf6;
+  --week-rest-secondary: #7c3aed;
+  --week-rest-bg: linear-gradient(135deg, #4a0ea8 0%, #8b5cf6 50%, #a78bfa 100%);
+
+  --week-launch-primary: #f59e0b;
+  --week-launch-secondary: #d97706;
+  --week-launch-bg: linear-gradient(135deg, #78350f 0%, #f59e0b 50%, #fbbf24 100%);
+}
+
+.weekly-planning-flow {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport for mobile */
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
+  transition: background 0.5s ease;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Week type themed backgrounds */
+.weekly-planning-flow.week-push {
+  background: var(--week-push-bg);
+}
+
+.weekly-planning-flow.week-flow {
+  background: var(--week-flow-bg);
+}
+
+.weekly-planning-flow.week-rest {
+  background: var(--week-rest-bg);
+}
+
+.weekly-planning-flow.week-launch {
+  background: var(--week-launch-bg);
+}
+
+/* Progress Bar */
+.planning-progress {
+  margin-bottom: 24px;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #fbbf24;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.weekly-planning-flow .progress-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Content Area */
+.planning-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+  overflow-y: auto;
+  min-height: 0; /* Required for flex child scrolling */
+}
+
+.planning-step {
+  display: flex;
+  flex-direction: column;
+}
+
+.planning-step h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-align: center;
+}
+
+.planning-step h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.step-subtitle {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 24px 0;
+  text-align: center;
+}
+
+/* Week Type Selection */
+.week-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.week-type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.week-type-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.week-type-card.selected {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--type-color, white);
+  box-shadow: 0 0 20px rgba(var(--type-color), 0.3);
+}
+
+.type-icon {
+  font-size: 2rem;
+}
+
+.type-label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.type-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+/* Foundation Check Step */
+.foundation-step {
+  text-align: center;
+}
+
+.foundation-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.foundation-info p {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+}
+
+.foundation-info p:last-child {
+  margin-bottom: 0;
+}
+
+.foundation-status {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.status-item.complete {
+  color: #10b981;
+}
+
+.status-item.incomplete {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.status-icon {
+  font-size: 1.25rem;
+}
+
+.foundation-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.foundation-btn {
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.foundation-btn.primary {
+  background: #fbbf24;
+  color: #1f2937;
+}
+
+.foundation-btn.primary:hover {
+  background: #f59e0b;
+}
+
+.foundation-btn.secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.foundation-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.foundation-btn.skip {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.foundation-btn.skip:hover {
+  color: white;
+}
+
+/* Morning Routine Step */
+.routine-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.routine-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.routine-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.routine-card.selected {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+}
+
+.routine-icon {
+  font-size: 1.5rem;
+}
+
+.routine-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.routine-points {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.routine-card.selected .routine-points {
+  color: #fbbf24;
+}
+
+.week-hint {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+/* Groan Carousel Step */
+.groan-step {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.groan-carousel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  overflow: hidden;
+  position: relative;
+  touch-action: pan-y pinch-zoom;
+}
+
+.groan-slide {
+  text-align: center;
+  padding: 20px 0;
+  animation: slideInFromRight 0.5s ease;
+}
+
+.groan-slide.slide-left {
+  animation: slideInFromRight 0.5s ease;
+}
+
+.groan-slide.slide-right {
+  animation: slideInFromLeft 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.groan-slide h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.groan-content {
+  font-size: 18px;
+  line-height: 1.7;
+  white-space: pre-line;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.groan-content strong {
+  color: white;
+}
+
+/* Swipe hint */
+.swipe-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 16px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.carousel-dot.active {
+  background: #fbbf24;
+  transform: scale(1.2);
+}
+
+.carousel-dot:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.groan-input-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.groan-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  margin-top: 20px;
+}
+
+.groan-label:first-of-type {
+  margin-top: 0;
+}
+
+.weekly-planning-flow .groan-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+  margin-bottom: 16px;
+}
+
+.weekly-planning-flow .groan-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.weekly-planning-flow .groan-textarea:focus {
+  outline: none;
+  border-color: #fbbf24;
+}
+
+.day-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.day-btn {
+  flex: 1;
+  min-width: 44px;
+  padding: 10px 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.day-btn.selected {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+/* Fear picker (multi-select) */
+.fear-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.fear-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  color: #374151;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fear-btn:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.fear-btn.selected {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: #8b5cf6;
+  color: #6d28d9;
+}
+
+.fear-icon {
+  font-size: 1.5rem;
+}
+
+.fear-label {
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Layer picker (5 visibility layers) */
+.layer-picker {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.layer-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 4px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  color: #374151;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.layer-btn:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.layer-btn.selected {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: #8b5cf6;
+  color: #6d28d9;
+}
+
+.layer-icon {
+  font-size: 1.25rem;
+}
+
+.layer-label {
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Layer explainer dropdown */
+.layer-explainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.layer-explainer-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.layer-explainer-text {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+
+/* Conditional Commitments Step */
+.commitments-step {
+  gap: 32px;
+}
+
+.commitment-section {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.commitment-toggle {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.toggle-btn.selected {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+}
+
+.commitment-details {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.commitment-details label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.practice-select {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.practice-select option {
+  background: #5e17eb;
+  color: white;
+}
+
+.improvement-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+}
+
+.improvement-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.improvement-textarea:focus {
+  outline: none;
+  border-color: #fbbf24;
+}
+
+/* Summary Step */
+.summary-step {
+  align-items: center;
+}
+
+.summary-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.summary-week {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.summary-type {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.weekly-planning-flow .summary-section {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.weekly-planning-flow .summary-section:last-child {
+  border-bottom: none;
+}
+
+.section-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.section-content {
+  flex: 1;
+}
+
+.section-content strong {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.section-content p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.error-message {
+  color: #fca5a5;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.875rem;
+}
+
+/* Navigation */
+.planning-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  max-width: 500px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.weekly-planning-flow .nav-btn {
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.weekly-planning-flow .nav-btn.back {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.weekly-planning-flow .nav-btn.back:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.weekly-planning-flow .nav-btn.next,
+.weekly-planning-flow .nav-btn.complete {
+  flex: 1;
+  background: #fbbf24;
+  color: #1f2937;
+}
+
+.weekly-planning-flow .nav-btn.next:hover:not(:disabled),
+.weekly-planning-flow .nav-btn.complete:hover:not(:disabled) {
+  background: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.weekly-planning-flow .nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .weekly-planning-flow {
+    padding: 16px;
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
+  }
+
+  .planning-step h2 {
+    font-size: 1.25rem;
+  }
+
+  .week-type-grid {
+    gap: 10px;
+  }
+
+  .week-type-card {
+    padding: 16px 12px;
+  }
+
+  .type-icon {
+    font-size: 1.5rem;
+  }
+
+  .routine-grid {
+    gap: 10px;
+  }
+
+  .routine-card {
+    padding: 12px 8px;
+  }
+
+  .day-picker {
+    gap: 6px;
+  }
+
+  .day-btn {
+    padding: 8px 2px;
+    font-size: 0.7rem;
+  }
+
+  .summary-card {
+    padding: 20px 16px;
+  }
+}

@@ -1,0 +1,114 @@
+/**
+ * ChallengeFilters.css
+ * Styles for frequency tabs and R-type filter chips
+ */
+
+.quest-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Frequency Tabs - Stage-tab style */
+.frequency-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.frequency-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 80px;
+  padding: 12px 20px;
+  background: #f5f5f5;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.frequency-tab:hover {
+  background: #eee;
+  border-color: #ccc;
+}
+
+.frequency-tab.active {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  border-color: #5e17eb;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.frequency-tab .tab-icon {
+  font-size: 1.25rem;
+  transition: transform 0.2s;
+}
+
+.frequency-tab.active .tab-icon {
+  transform: scale(1.1);
+}
+
+.frequency-tab .tab-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* R-Type Filter Chips */
+.rtype-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filter-chip {
+  padding: 8px 16px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.filter-chip.active {
+  background: #5e17eb;
+  border-color: #5e17eb;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .frequency-tab {
+    min-width: 70px;
+    padding: 10px 16px;
+  }
+
+  .frequency-tab .tab-icon {
+    font-size: 1.1rem;
+  }
+
+  .frequency-tab .tab-label {
+    font-size: 0.65rem;
+  }
+
+  .filter-chip {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}

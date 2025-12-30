@@ -1,0 +1,455 @@
+/**
+ * FunnelCalculator.css
+ * Styles for the Funnel Calculator tracking tool
+ */
+
+@import '../styles/flow-base.css';
+
+/* ============ CONTAINER ============ */
+
+.funnel-calculator {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  color: white;
+  padding: 20px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0));
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.funnel-calculator .loading-state {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* ============ HEADER ============ */
+
+.funnel-calculator .fc-header {
+  max-width: 600px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+.funnel-calculator .fc-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.funnel-calculator .fc-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+}
+
+/* Mode Toggle */
+.funnel-calculator .fc-mode-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 12px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.funnel-calculator .fc-mode-btn {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.funnel-calculator .fc-mode-btn.active {
+  background: #5e17eb;
+  color: white;
+}
+
+.funnel-calculator .fc-mode-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============ PLANNER CONTROLS ============ */
+
+.funnel-calculator .fc-planner-controls {
+  max-width: 600px;
+  margin: 0 auto 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.funnel-calculator .fc-awareness-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.funnel-calculator .fc-awareness-input label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.funnel-calculator .fc-awareness-input input {
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.funnel-calculator .fc-rates-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.funnel-calculator .fc-rates-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.funnel-calculator .fc-rates-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #5e17eb;
+}
+
+.funnel-calculator .fc-reset-btn {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.funnel-calculator .fc-reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============ FUNNEL VISUALIZATION ============ */
+
+.funnel-calculator .fc-funnel {
+  max-width: 600px;
+  margin: 0 auto 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.funnel-calculator .fc-stage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.funnel-calculator .fc-conversion-rate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.funnel-calculator .fc-rate-display {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.funnel-calculator .fc-rate-input {
+  width: 60px;
+  padding: 4px 8px;
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  border-radius: 4px;
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.funnel-calculator .fc-rate-arrow {
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.funnel-calculator .fc-stage-bar {
+  width: var(--stage-width, 100%);
+  background: var(--stage-color, #5e17eb);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: width 0.3s ease;
+}
+
+.funnel-calculator .fc-stage-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.funnel-calculator .fc-stage-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.funnel-calculator .fc-stage-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.funnel-calculator .fc-stage-sublabel {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.funnel-calculator .fc-stage-value {
+  flex-shrink: 0;
+}
+
+.funnel-calculator .fc-stage-value input {
+  width: 80px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: right;
+}
+
+.funnel-calculator .fc-stage-value input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.funnel-calculator .fc-calculated-value {
+  font-size: 18px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+/* ============ REVENUE SECTION ============ */
+
+.funnel-calculator .fc-revenue-section {
+  max-width: 600px;
+  margin: 0 auto 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.funnel-calculator .fc-revenue-section h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #fbbf24;
+}
+
+.funnel-calculator .fc-revenue-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 16px;
+}
+
+.funnel-calculator .fc-price-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.funnel-calculator .fc-price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.funnel-calculator .fc-price-row label {
+  flex: 1;
+  min-width: 120px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.funnel-calculator .fc-price-input {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.funnel-calculator .fc-currency {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.funnel-calculator .fc-price-input input {
+  width: 80px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.funnel-calculator .fc-revenue-result {
+  font-size: 14px;
+  font-weight: 600;
+  color: #22c55e;
+  min-width: 100px;
+  text-align: right;
+}
+
+.funnel-calculator .fc-total-revenue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.funnel-calculator .fc-total-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.funnel-calculator .fc-total-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #22c55e;
+}
+
+.funnel-calculator .fc-recurring-note {
+  width: 100%;
+  font-size: 13px;
+  color: #06b6d4;
+  text-align: right;
+}
+
+/* ============ BENCHMARKS ============ */
+
+.funnel-calculator .fc-benchmarks {
+  max-width: 600px;
+  margin: 0 auto 24px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.funnel-calculator .fc-benchmarks h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #fbbf24;
+}
+
+.funnel-calculator .fc-benchmark-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.funnel-calculator .fc-benchmark-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.funnel-calculator .fc-benchmark-item span:last-child {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============ ACTIONS ============ */
+
+.funnel-calculator .fc-actions {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 480px) {
+  .funnel-calculator {
+    padding: 16px;
+  }
+
+  .funnel-calculator .fc-header h1 {
+    font-size: 24px;
+  }
+
+  .funnel-calculator .fc-mode-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .funnel-calculator .fc-stage-bar {
+    padding: 12px;
+  }
+
+  .funnel-calculator .fc-stage-icon {
+    font-size: 20px;
+  }
+
+  .funnel-calculator .fc-stage-label {
+    font-size: 13px;
+  }
+
+  .funnel-calculator .fc-stage-value input,
+  .funnel-calculator .fc-calculated-value {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .funnel-calculator .fc-price-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .funnel-calculator .fc-revenue-result {
+    text-align: left;
+  }
+
+  .funnel-calculator .fc-total-value {
+    font-size: 24px;
+  }
+}

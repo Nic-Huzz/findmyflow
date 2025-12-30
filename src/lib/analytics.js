@@ -48,6 +48,11 @@ export async function sendEvent(eventName, payload = {}) {
   }
 }
 
+// Generic event tracker
+export async function trackEvent(eventName, payload = {}) {
+  return sendEvent(eventName, payload)
+}
+
 // Convenience trackers
 export async function trackLeadMagnetStart(variantId) {
   return sendEvent('leadmagnet_start', { variantId })
@@ -68,6 +73,29 @@ export async function trackAccountCreated({ userId, source }) {
 
 export async function trackProfileView({ userId, entry }) {
   return sendEvent('profile_view', { userId, entry })
+}
+
+// Weekly Planning Analytics
+export async function trackWeeklyPlanStarted({ weekType }) {
+  return sendEvent('weekly_plan_started', { weekType })
+}
+
+export async function trackWeeklyPlanCompleted({ weekType, morningRoutineCount, hasGroan, hasRelease, has3Percent }) {
+  return sendEvent('weekly_plan_completed', {
+    weekType,
+    morningRoutineCount,
+    hasGroan,
+    hasRelease,
+    has3Percent
+  })
+}
+
+export async function trackGroanCompleted({ weekType, dayPlanned, dayCompleted }) {
+  return sendEvent('groan_completed', { weekType, dayPlanned, dayCompleted })
+}
+
+export async function trackMorningRoutineCompleted({ routineType }) {
+  return sendEvent('morning_routine_completed', { routineType })
 }
 
 

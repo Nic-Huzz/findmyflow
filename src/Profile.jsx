@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { essenceProfiles } from './data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/personaProfiles'
 import { hasActiveChallenge } from './lib/questCompletion'
+import { getStageShortName } from './lib/stageConfig'
 import { graduateUser } from './lib/graduationChecker'
-import StageProgressCard from './components/StageProgressCard'
 import GraduationModal from './components/GraduationModal'
 import FlowMap from './components/FlowMap'
+import FlowMapRiver from './components/FlowMapRiver'
+import SeeYourFlow from './components/SeeYourFlow'
+import HomeFirstTime from './components/HomeFirstTime'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -21,10 +24,17 @@ const Profile = () => {
   const [expandedArchetypes, setExpandedArchetypes] = useState({ essence: false, protective: false })
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [hasChallenge, setHasChallenge] = useState(false)
+  const [challengePoints, setChallengePoints] = useState(0)
+  const [challengeDay, setChallengeDay] = useState(0)
+  const [questProgress, setQuestProgress] = useState({ dailyDone: 0, dailyTotal: 0, weeklyDone: 0, weeklyTotal: 0 })
   const [stageProgress, setStageProgress] = useState(null)
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [primaryProject, setPrimaryProject] = useState(null)
+  const [allProjects, setAllProjects] = useState([])
+  const [riverRefreshKey, setRiverRefreshKey] = useState(0)
+  const [streakData, setStreakData] = useState({ dailyStreak: 0, groanStreak: 0 })
 
   useEffect(() => {
     // Only load profile when user is available
@@ -32,7 +42,9 @@ const Profile = () => {
       loadUserProfile()
       checkChallengeStatus()
       loadStageProgress()
+      loadUserProjects()
       checkFirstTimeUser()
+      loadStreakData()
     } else if (user === null) {
       // User is not authenticated
       setLoading(false)
@@ -40,6 +52,111 @@ const Profile = () => {
     }
     // If user is still loading (undefined), keep loading state
   }, [user])
+
+  const loadUserProjects = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data: projects, error } = await supabase
+        .from('user_projects')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('is_primary', { ascending: false })
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.error('Error loading projects:', error)
+        return
+      }
+
+      setAllProjects(projects || [])
+
+      // Find primary project
+      const primary = projects?.find(p => p.is_primary) || projects?.[0]
+      setPrimaryProject(primary || null)
+    } catch (err) {
+      console.error('Error in loadUserProjects:', err)
+    }
+  }
+
+  const loadStreakData = async () => {
+    if (!user?.id) return
+
+    try {
+      // Get daily streak from quest completions
+      const { data: completions } = await supabase
+        .from('quest_completions')
+        .select('completed_at')
+        .eq('user_id', user.id)
+        .order('completed_at', { ascending: false })
+
+      // Calculate daily streak
+      let dailyStreak = 0
+      if (completions?.length > 0) {
+        const daysWithCompletions = new Set(
+          completions.map(c => c.completed_at?.split('T')[0])
+        )
+        const sortedDays = Array.from(daysWithCompletions).sort().reverse()
+        const today = new Date().toISOString().split('T')[0]
+        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
+
+        // Check if today or yesterday has completions
+        if (sortedDays.includes(today) || sortedDays.includes(yesterday)) {
+          let checkDate = new Date(sortedDays[0])
+          for (const dayStr of sortedDays) {
+            const expected = checkDate.toISOString().split('T')[0]
+            if (dayStr === expected) {
+              dailyStreak++
+              checkDate.setDate(checkDate.getDate() - 1)
+            } else {
+              break
+            }
+          }
+        }
+      }
+
+      // Get groan streak from weekly plans
+      const { data: weeklyPlans } = await supabase
+        .from('weekly_plans')
+        .select('week_start_date, weekly_groan_completed')
+        .eq('user_id', user.id)
+        .eq('weekly_groan_completed', true)
+        .order('week_start_date', { ascending: false })
+
+      // Calculate groan streak (consecutive weeks)
+      let groanStreak = 0
+      if (weeklyPlans?.length > 0) {
+        const today = new Date()
+        const currentWeekStart = new Date(today)
+        currentWeekStart.setDate(today.getDate() - today.getDay() + 1) // Monday
+        currentWeekStart.setHours(0, 0, 0, 0)
+
+        let checkWeek = new Date(currentWeekStart)
+
+        for (const plan of weeklyPlans) {
+          const planWeekStart = new Date(plan.week_start_date)
+          planWeekStart.setHours(0, 0, 0, 0)
+
+          // Check if this week matches expected week
+          const expectedWeekStr = checkWeek.toISOString().split('T')[0]
+          const planWeekStr = planWeekStart.toISOString().split('T')[0]
+
+          if (planWeekStr === expectedWeekStr) {
+            groanStreak++
+            checkWeek.setDate(checkWeek.getDate() - 7) // Previous week
+          } else if (planWeekStart < checkWeek) {
+            // Gap in weeks, streak broken
+            break
+          }
+        }
+      }
+
+      setStreakData({ dailyStreak, groanStreak })
+    } catch (err) {
+      console.error('Error loading streak data:', err)
+    }
+  }
 
   const checkFirstTimeUser = () => {
     const hasSeenOnboarding = localStorage.getItem(`profile_onboarding_seen_${user?.id}`)
@@ -88,6 +205,66 @@ const Profile = () => {
     if (user?.id) {
       const active = await hasActiveChallenge(user.id)
       setHasChallenge(active)
+
+      // Also fetch challenge points and quest progress
+      if (active) {
+        const { data: progressData } = await supabase
+          .from('challenge_progress')
+          .select('total_points, challenge_instance_id, current_day')
+          .eq('user_id', user.id)
+          .eq('status', 'active')
+          .order('challenge_start_date', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (progressData) {
+          setChallengePoints(progressData.total_points || 0)
+          setChallengeDay(progressData.current_day || 0)
+
+          // Fetch quest data and completions to calculate progress
+          try {
+            const [questsResponse, completionsResponse] = await Promise.all([
+              fetch('/challengeQuestsUpdate.json'),
+              supabase
+                .from('quest_completions')
+                .select('quest_id, completed_at')
+                .eq('user_id', user.id)
+                .eq('challenge_instance_id', progressData.challenge_instance_id)
+            ])
+
+            const questData = await questsResponse.json()
+            const completions = completionsResponse.data || []
+
+            // Get today's date for daily quest check
+            const today = new Date().toISOString().split('T')[0]
+
+            // Filter active quests (not archived, not coming_soon)
+            const activeQuests = questData.quests?.filter(q => !q.archived && q.status !== 'coming_soon') || []
+
+            // Count daily quests
+            const dailyQuests = activeQuests.filter(q => q.frequency === 'daily')
+            const todayCompletions = completions.filter(c => c.completed_at?.startsWith(today))
+            const dailyDone = dailyQuests.filter(q =>
+              todayCompletions.some(c => c.quest_id === q.id)
+            ).length
+
+            // Count weekly quests
+            const weeklyQuests = activeQuests.filter(q => q.frequency === 'weekly')
+            const weeklyDone = weeklyQuests.filter(q =>
+              completions.some(c => c.quest_id === q.id)
+            ).length
+
+            setQuestProgress({
+              dailyDone,
+              dailyTotal: dailyQuests.length,
+              weeklyDone,
+              weeklyTotal: weeklyQuests.length
+            })
+          } catch (err) {
+            console.error('Error loading quest progress:', err)
+          }
+        }
+      }
     }
   }
 
@@ -241,6 +418,12 @@ const Profile = () => {
     )
   }
 
+  // Check if user needs to complete onboarding (first-time experience)
+  // Show HomeFirstTime if onboarding_completed is false
+  if (stageProgress && stageProgress.onboarding_completed === false) {
+    return <HomeFirstTime />
+  }
+
   // Get archetype data
   const essenceData = essenceProfiles.essence_archetypes.find(
     archetype => archetype.name === userData.essence_archetype
@@ -253,29 +436,24 @@ const Profile = () => {
   // Onboarding slides with component snapshots
   const onboardingSlides = [
     {
-      title: "Welcome to Your Dashboard! 🎉",
-      content: "This is your home for discovering and living your flow.\n\nHere's a quick tour:",
-      componentSelector: null
-    },
-    {
-      title: "Your Voices 🎭",
-      content: "These are your Essence and Protective archetypes—the two voices inside you.\n\nClick to expand and explore deeper insights about each.",
+      title: "The Voices",
+      content: "These are your Essence and Protective archetypes—the two voices inside you.\n\nYour Essence is who you truly are. Your Protective voice developed to keep you safe.\n\nClick to expand and explore deeper insights about each.",
       componentSelector: ".stats-grid"
     },
     {
-      title: "Journey Guide 🗺️",
-      content: "Track your progress through different stages.\n\nEach persona has specific stages to complete, with graduation requirements clearly shown.",
-      componentSelector: ".stage-progress-section"
+      title: "Your Flow Map",
+      content: "See your journey visualised as a river.\n\nEach dot represents a moment you've logged—flowing, redirecting, resting, or honouring.\n\nSwitch between projects to see different journeys.",
+      componentSelector: ".flow-map-river"
     },
     {
-      title: "Flow Map 🧭",
-      content: "Your Flow Map shows three key sections:\n1. Flow Finder: Opportunities\n2. Nervous System Limitations: Your current limitations\n3. Flow Compass: Tracking your journey",
-      componentSelector: ".flow-map"
+      title: "Map Your Journey",
+      content: "Log your current state and map your highlights and challenges.\n\nFirst-time users will be guided through mapping their journey so far.\n\nReturning users can quickly log how they're flowing today.",
+      componentSelector: ".see-your-flow"
     },
     {
-      title: "Ready to Explore! ✨",
-      content: "Keen to take action and start advancing through stages?\n\nStart a 7-day challenge!\n\nWe're excited to support you on this journey.",
-      componentSelector: ".cta-banner"
+      title: "Ready to find your flow?",
+      content: "Start a 7-day challenge to take action and advance through your stages.\n\nComplete quests, track your progress, and discover your natural flow.\n\nWe're excited to support you on this journey.",
+      componentSelector: ".home-action-buttons"
     }
   ]
 
@@ -378,6 +556,9 @@ const Profile = () => {
           <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
             🧭 Flow Compass
           </li>
+          <li className="nav-item" onClick={() => { navigate('/library'); setSidebarOpen(false); }}>
+            📚 Library of Answers
+          </li>
           <li className="nav-item" onClick={handleOpenOnboarding}>
             📖 Explainer
           </li>
@@ -395,7 +576,6 @@ const Profile = () => {
       <div className="main-content">
         <div className="page-header">
           <h1 className="page-title">Welcome Back, {userData?.user_name || user?.email?.split('@')[0] || 'User'}</h1>
-          <p className="page-subtitle">Here's Your Profile:</p>
         </div>
 
         {/* Your Voices Section */}
@@ -443,6 +623,7 @@ const Profile = () => {
                 </div>
                 <div className="archetype-expanded-body">
                   <h3 className="archetype-name">{userData.essence_archetype}</h3>
+                  <p className="archetype-subtitle">Your Essence Voice</p>
                   <p className="archetype-description">
                     {essenceData?.poetic_line || 'Your essence voice'}
                   </p>
@@ -453,7 +634,7 @@ const Profile = () => {
                       navigate('/archetypes/essence');
                     }}
                   >
-                    Explore Deeper →
+                    Explore Your Essence →
                   </button>
                 </div>
               </div>
@@ -500,6 +681,7 @@ const Profile = () => {
                 </div>
                 <div className="archetype-expanded-body">
                   <h3 className="archetype-name">{userData.protective_archetype}</h3>
+                  <p className="archetype-subtitle">Your Protective Voice</p>
                   <p className="archetype-description">
                     {protectiveData?.summary || 'Your protective voice'}
                   </p>
@@ -510,36 +692,48 @@ const Profile = () => {
                       navigate('/archetypes/protective');
                     }}
                   >
-                    Learn More →
+                    Explore Your Protective →
                   </button>
                 </div>
               </div>
             )}
           </div>
-          {stageProgress && stageProgress.conversations_logged > 0 && (
-            <div className="stat-card blue">
-              <div className="stat-icon">💬</div>
-              <div className="stat-label">Conversations</div>
-              <div className="stat-value">{stageProgress.conversations_logged} logged</div>
-            </div>
-          )}
         </div>
 
-        {/* Journey Guide Section */}
-        <h2 className="section-heading">Journey Guide</h2>
-
-        {stageProgress && (
-          <div className="stage-progress-section">
-            <StageProgressCard
-              persona={stageProgress.persona}
-              currentStage={stageProgress.current_stage}
-              onGraduate={handleGraduation}
+        {/* Flow Map River - Shows flow compass entries */}
+        <h2 className="section-heading">Your Flow Map</h2>
+        {primaryProject ? (
+          <>
+            <FlowMapRiver
+              key={riverRefreshKey}
+              projectId={primaryProject.id}
+              limit={20}
+              onViewAll={() => navigate('/flow-compass')}
+              projects={allProjects}
+              selectedProjectId={primaryProject.id}
+              onProjectSelect={(project) => {
+                setPrimaryProject(project)
+                setRiverRefreshKey(prev => prev + 1)
+              }}
             />
-          </div>
+            <SeeYourFlow
+              key={`see-flow-${primaryProject.id}`}
+              project={primaryProject}
+              onUpdate={(updatedProject) => {
+                setPrimaryProject(updatedProject)
+                setAllProjects(prev =>
+                  prev.map(p => p.id === updatedProject.id ? updatedProject : p)
+                )
+              }}
+              onFlowEntryAdded={() => {
+                // Refresh the river by changing its key
+                setRiverRefreshKey(prev => prev + 1)
+              }}
+            />
+          </>
+        ) : (
+          <FlowMap persona={stageProgress?.persona} />
         )}
-
-        {/* Flow Map - Shows user's journey data for all users */}
-        <FlowMap persona={stageProgress?.persona} />
 
         {/* Graduation Modal */}
         <GraduationModal
@@ -551,24 +745,97 @@ const Profile = () => {
         {/* Ready To Find Your Flow Section */}
         <h2 className="section-heading">Ready To Find Your Flow?</h2>
 
-        {/* CTA Banner */}
-        <div className="cta-banner">
-          <div className="cta-content">
-            <h3>Live Your Ambitions Faster</h3>
-            <p>Start a 7-day-challenge to gamify your ambitions and advance through the persona stages</p>
-            <div className="cta-buttons">
-              <button
-                className="btn-white"
-                onClick={() => navigate('/7-day-challenge')}
-              >
-                {hasChallenge ? 'Continue 7-Day Challenge 🔥' : 'Join 7-Day Challenge 🔥'}
-              </button>
-              <button className="btn-outline" onClick={() => navigate('/feedback')}>
-                Give Feedback 💬
-              </button>
+        {/* Progress Strip - Shows project stage and quick stats */}
+        {primaryProject && (
+          <div className="progress-strip">
+            <div className="progress-strip-header">
+              <span className="progress-project-name">{primaryProject.name}</span>
+            </div>
+
+            <div className="progress-stats-row">
+              <div className="progress-stat-item">
+                <span className="progress-stat-icon">☀️</span>
+                <span className="progress-stat-value">{questProgress.dailyDone}/{questProgress.dailyTotal}</span>
+                <span className="progress-stat-label">Daily</span>
+              </div>
+
+              <div className="progress-stat-item">
+                <span className="progress-stat-icon">📅</span>
+                <span className="progress-stat-value">{questProgress.weeklyDone}/{questProgress.weeklyTotal}</span>
+                <span className="progress-stat-label">Weekly</span>
+              </div>
+
+              <div className="progress-stat-item">
+                <span className="progress-stat-icon">🎯</span>
+                <span className="progress-stat-value">{primaryProject.current_stage || 1}/6</span>
+                <span className="progress-stat-label">Stage</span>
+              </div>
+            </div>
+
+            <div className="progress-strip-bottom">
+              <div className="progress-stat">
+                <span className="progress-stat-value">{challengePoints || 0}</span>
+                <span className="progress-stat-label">Points</span>
+              </div>
+
+              <div className="progress-stage-tag">
+                <span className="progress-stage-label">Stage:</span>
+                <span className="progress-stage-name">{getStageShortName(primaryProject.current_stage || 1)}</span>
+              </div>
+
+              {hasChallenge && (
+                <div className="progress-stat">
+                  <span className="progress-stat-value">{Math.max(0, 7 - challengeDay)}</span>
+                  <span className="progress-stat-label">Days Left</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Streak Display */}
+        <div className="streak-display">
+          <div className="streak-item daily">
+            <span className={`streak-flame ${streakData.dailyStreak >= 7 ? 'legendary' : streakData.dailyStreak >= 5 ? 'hot' : streakData.dailyStreak >= 3 ? 'warm' : streakData.dailyStreak >= 1 ? '' : 'cold'}`}>
+              {streakData.dailyStreak > 0 ? '🔥' : '💤'}
+            </span>
+            <div className="streak-info">
+              <span className="streak-value">{streakData.dailyStreak}</span>
+              <span className="streak-label">Day Streak</span>
+            </div>
+          </div>
+          <div className="streak-item groan">
+            <span className={`streak-flame ${streakData.groanStreak >= 4 ? 'legendary' : streakData.groanStreak >= 2 ? 'warm' : ''}`}>
+              {streakData.groanStreak > 0 ? '💪' : '🌱'}
+            </span>
+            <div className="streak-info">
+              <span className="streak-value">{streakData.groanStreak}</span>
+              <span className="streak-label">Week Groan Streak</span>
             </div>
           </div>
         </div>
+
+        {/* Action Buttons */}
+        <div className="home-action-buttons">
+          <button
+            className="action-btn primary"
+            onClick={() => navigate('/7-day-challenge')}
+          >
+            🎯 {hasChallenge ? 'Continue 7-Day Challenge' : 'Start 7-Day Challenge'}
+          </button>
+          <a
+            className="action-btn support"
+            href="https://wa.me/61423220241?text=Hi%20Nic!%20I%20need%20some%20help%20with%20FindMyFlow"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Need help? Chat with me
+          </a>
+        </div>
+
 
       </div>
     </div>

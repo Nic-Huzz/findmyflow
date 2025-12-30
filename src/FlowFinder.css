@@ -1,6 +1,8 @@
 /* Flow Finder App Container */
 .flow-finder-app {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   padding: 20px;
@@ -8,7 +10,7 @@
 }
 
 /* Progress Indicators */
-.progress-container {
+.flow-finder-app .progress-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -18,13 +20,13 @@
   z-index: 100;
 }
 
-.progress-dots {
+.flow-finder-app .progress-dots {
   display: flex;
   justify-content: center;
   gap: 12px;
 }
 
-.progress-dot {
+.flow-finder-app .progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -32,18 +34,18 @@
   transition: all 0.3s ease;
 }
 
-.progress-dot.completed {
+.flow-finder-app .progress-dot.completed {
   background: #fbbf24;
 }
 
-.progress-dot.active {
+.flow-finder-app .progress-dot.active {
   background: #fbbf24;
   box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
   transform: scale(1.2);
 }
 
 /* Container */
-.container {
+.flow-finder-app .container {
   max-width: 700px;
   margin: 0 auto;
   animation: fadeIn 0.5s ease;
@@ -61,11 +63,37 @@
 }
 
 /* Welcome Screen */
-.welcome-container {
+.flow-finder-app .welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 600px;
   text-align: center;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  min-height: calc(100vh - 120px);
 }
 
-.welcome-greeting {
+/* Push buttons to bottom of welcome screen */
+.flow-finder-app .welcome-container > .primary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.flow-finder-app .welcome-container > .secondary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin: 4px auto 0 !important;
+}
+
+.flow-finder-app .welcome-greeting {
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 32px;
@@ -75,23 +103,103 @@
   background-clip: text;
 }
 
-.welcome-message p {
-  font-size: 16px;
+.flow-finder-app .welcome-message p {
+  font-size: 18px;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.85);
   margin: 0 0 16px;
 }
 
-.welcome-message strong {
+.flow-finder-app .welcome-message strong {
   color: white;
 }
 
+/* Animated text - staggered fade in */
+.flow-finder-app .welcome-message.animated-text p {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.flow-finder-app .welcome-message.animated-text p:nth-child(1) { animation-delay: 0.1s; }
+.flow-finder-app .welcome-message.animated-text p:nth-child(2) { animation-delay: 0.3s; }
+.flow-finder-app .welcome-message.animated-text p:nth-child(3) { animation-delay: 0.5s; }
+.flow-finder-app .welcome-message.animated-text p:nth-child(4) { animation-delay: 0.7s; }
+.flow-finder-app .welcome-message.animated-text p:nth-child(5) { animation-delay: 0.9s; }
+.flow-finder-app .welcome-message.animated-text p:nth-child(6) { animation-delay: 1.1s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Time icon */
+.flow-finder-app .time-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Highlight box - for key concepts */
+.flow-finder-app .highlight-box {
+  padding: 16px 20px;
+  margin: 16px 8px;
+  border-left: 3px solid rgba(251, 191, 36, 0.6);
+  background: rgba(251, 191, 36, 0.1);
+  border-radius: 0 8px 8px 0;
+  text-align: left;
+}
+
+/* Highlight word - golden glow */
+.flow-finder-app .highlight-word {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+/* Quote box - for Steve Jobs quote */
+.flow-finder-app .quote-box {
+  font-size: 1.05rem;
+  font-style: italic;
+  padding: 20px 24px;
+  margin: 8px 0;
+  border-left: 3px solid rgba(251, 191, 36, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0 12px 12px 0;
+  text-align: left;
+  line-height: 1.7;
+}
+
+/* Hint text - subtle instruction */
+.flow-finder-app .hint-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+/* Glow button - for CTAs */
+.flow-finder-app .glow-button {
+  animation: buttonGlow 2s ease-in-out infinite;
+}
+
+@keyframes buttonGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4); }
+  50% { box-shadow: 0 4px 30px rgba(251, 191, 36, 0.7), 0 0 40px rgba(251, 191, 36, 0.3); }
+}
+
 /* Question Screens */
-.question-container {
+.flow-finder-app .question-container {
   text-align: center;
 }
 
-.question-number {
+.flow-finder-app .question-number {
   font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
@@ -100,14 +208,14 @@
   margin-bottom: 16px;
 }
 
-.question-text {
+.flow-finder-app .question-text {
   font-size: 28px;
   font-weight: 600;
   margin: 0 0 8px;
   line-height: 1.3;
 }
 
-.question-subtext {
+.flow-finder-app .question-subtext {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.5);
   margin: 0 0 32px;
@@ -115,7 +223,7 @@
 }
 
 /* Multiple inputs */
-.input-list {
+.flow-finder-app .input-list {
   margin-top: 32px;
   display: flex;
   flex-direction: column;
@@ -123,20 +231,20 @@
   width: 100%;
 }
 
-.input-item {
+.flow-finder-app .input-item {
   display: flex;
   gap: 12px;
   align-items: center;
 }
 
-.input-number {
+.flow-finder-app .input-number {
   font-size: 14px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.5);
   min-width: 20px;
 }
 
-.text-input {
+.flow-finder-app .text-input {
   flex: 1;
   padding: 14px 16px;
   background: rgba(255, 255, 255, 0.05);
@@ -148,17 +256,17 @@
   transition: all 0.2s ease;
 }
 
-.text-input::placeholder {
+.flow-finder-app .text-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.text-input:focus {
+.flow-finder-app .text-input:focus {
   outline: none;
   border-color: rgba(251, 191, 36, 0.8);
   background: rgba(255, 255, 255, 0.1);
 }
 
-.add-more-btn {
+.flow-finder-app .add-more-btn {
   padding: 12px 24px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -172,12 +280,12 @@
   display: block;
 }
 
-.add-more-btn:hover {
+.flow-finder-app .add-more-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.input-hint {
+.flow-finder-app .input-hint {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.5);
   margin-top: 8px;
@@ -185,12 +293,12 @@
 }
 
 /* Processing/Loading Screen */
-.processing-container {
+.flow-finder-app .processing-container {
   text-align: center;
   padding: 60px 20px;
 }
 
-.spinner {
+.flow-finder-app .spinner {
   width: 80px;
   height: 80px;
   margin: 0 auto 32px;
@@ -205,26 +313,26 @@
   100% { transform: rotate(360deg); }
 }
 
-.processing-text {
+.flow-finder-app .processing-text {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 16px;
 }
 
-.processing-subtext {
+.flow-finder-app .processing-subtext {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.6);
   line-height: 1.6;
 }
 
 /* Cluster Grid */
-.cluster-grid {
+.flow-finder-app .cluster-grid {
   display: grid;
   gap: 16px;
   margin-top: 32px;
 }
 
-.cluster-card {
+.flow-finder-app .cluster-card {
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
@@ -234,33 +342,33 @@
   text-align: left;
 }
 
-.cluster-card:hover {
+.flow-finder-app .cluster-card:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(251, 191, 36, 0.5);
   transform: translateY(-2px);
 }
 
-.cluster-card h3 {
+.flow-finder-app .cluster-card h3 {
   font-size: 18px;
   font-weight: 700;
   color: #fbbf24;
   margin-bottom: 12px;
 }
 
-.cluster-card p {
+.flow-finder-app .cluster-card p {
   font-size: 14px;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.85);
   margin: 0;
 }
 
-.cluster-evidence {
+.flow-finder-app .cluster-evidence {
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.cluster-evidence-label {
+.flow-finder-app .cluster-evidence-label {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -268,65 +376,132 @@
   margin-bottom: 8px;
 }
 
-.evidence-list {
+.flow-finder-app .evidence-list {
   font-size: 13px;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.8);
   padding-left: 20px;
 }
 
-.evidence-list li {
+.flow-finder-app .evidence-list li {
   margin-bottom: 4px;
 }
 
 /* Buttons */
-.primary-button {
+.flow-finder-app .primary-button {
   width: 100%;
-  max-width: 400px;
-  padding: 16px 32px;
+  max-width: 320px;
+  padding: 14px 32px;
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
   border: none;
   border-radius: 12px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
-  margin: 32px auto 0;
+  margin: 24px auto 0;
   display: block;
 }
 
-.primary-button:hover {
+.flow-finder-app .primary-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
 }
 
-.primary-button.compact {
+.flow-finder-app .primary-button.compact {
   margin: 0 auto;
 }
 
-.primary-button:disabled {
+.flow-finder-app .primary-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
 
+.flow-finder-app .secondary-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 12px auto 0;
+  display: block;
+}
+
+.flow-finder-app .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Resume Prompt (Auto-Save) */
+.flow-finder-app .resume-prompt {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 auto 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.flow-finder-app .resume-prompt .resume-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #fbbf24;
+}
+
+.flow-finder-app .resume-prompt .resume-info {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.flow-finder-app .resume-prompt .resume-time {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-finder-app .resume-prompt .resume-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.flow-finder-app .resume-prompt .resume-actions .primary-button {
+  width: 100%;
+  max-width: 280px;
+  margin: 0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .question-text {
+  .flow-finder-app .question-text {
     font-size: 24px;
   }
 
-  .welcome-greeting {
+  .flow-finder-app .welcome-greeting {
     font-size: 28px;
   }
 
-  .cluster-card h3 {
+  .flow-finder-app .cluster-card h3 {
     font-size: 16px;
   }
 
-  .welcome-message p {
+  .flow-finder-app .welcome-message p {
     font-size: 18px;
   }
 }

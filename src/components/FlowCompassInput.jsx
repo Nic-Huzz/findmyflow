@@ -18,11 +18,10 @@ function FlowCompassInput({ quest, onComplete }) {
   const navigate = useNavigate()
   const [hasProject, setHasProject] = useState(null) // null = loading, true/false = result
   const [projectId, setProjectId] = useState(null) // Store the project ID for submission
-  const [step, setStep] = useState(1) // 1: quick log, 2: context
   const [selectedEnergy, setSelectedEnergy] = useState(null) // 'excited' or 'tired'
   const [selectedFlow, setSelectedFlow] = useState(null) // 'ease' or 'resistance'
-  const [activityDescription, setActivityDescription] = useState('')
-  const [reasoning, setReasoning] = useState('')
+  const [headline, setHeadline] = useState('')
+  const [comment, setComment] = useState('')
 
   // Check if user has a project on mount
   useEffect(() => {
@@ -65,24 +64,29 @@ function FlowCompassInput({ quest, onComplete }) {
 
   const getDirectionLabel = () => {
     const dir = getDirection()
-    if (dir === 'north') return 'Flowing (North)'
-    if (dir === 'east') return 'Pivoting (East)'
-    if (dir === 'south') return 'Resting (South)'
-    if (dir === 'west') return 'Honouring (West)'
+    if (dir === 'north') return 'Flow'
+    if (dir === 'east') return 'Redirect'
+    if (dir === 'south') return 'Rest'
+    if (dir === 'west') return 'Honour'
     return ''
   }
 
-  const handleContinue = () => {
-    if (!selectedEnergy || !selectedFlow) {
-      alert('Please answer both questions')
-      return
-    }
-    setStep(2)
+  const getDirectionEmoji = () => {
+    const dir = getDirection()
+    if (dir === 'north') return '🌊'
+    if (dir === 'east') return '🔄'
+    if (dir === 'south') return '🛏️'
+    if (dir === 'west') return '🙏'
+    return ''
+  }
+
+  const canSubmit = () => {
+    return selectedEnergy && selectedFlow && projectId
   }
 
   const handleSubmit = () => {
-    if (!reasoning || reasoning.trim().length < 10) {
-      alert('Please describe what happened (at least 10 characters)')
+    if (!selectedEnergy || !selectedFlow) {
+      alert('Please answer both questions')
       return
     }
 
@@ -99,8 +103,8 @@ function FlowCompassInput({ quest, onComplete }) {
       direction,
       internal_state: selectedEnergy,
       external_state: selectedFlow,
-      activity_description: activityDescription,
-      reasoning: reasoning.trim(),
+      activity_description: headline.trim() || 'Flow check-in',
+      reasoning: comment.trim() || 'Daily reflection',
       project_id: projectId
     }
 
@@ -140,113 +144,90 @@ function FlowCompassInput({ quest, onComplete }) {
 
   return (
     <div className="flow-compass-input">
-      {step === 1 && (
-        <div className="quick-log-step">
-          {/* Energy Question */}
-          <div className="question-group">
-            <h4 className="question-heading">Are you feeling excited or tired?</h4>
-            <div className="button-row">
-              <button
-                className={`energy-btn energy-excited ${selectedEnergy === 'excited' ? 'selected' : ''}`}
-                onClick={() => setSelectedEnergy('excited')}
-              >
-                Excited
-              </button>
-              <button
-                className={`energy-btn energy-tired ${selectedEnergy === 'tired' ? 'selected' : ''}`}
-                onClick={() => setSelectedEnergy('tired')}
-              >
-                Tired
-              </button>
-            </div>
+      <div className="checkin-view">
+        {/* Energy Question */}
+        <div className="question-group">
+          <h4 className="question-heading">Are you feeling excited or tired?</h4>
+          <div className="button-row">
+            <button
+              className={`energy-btn energy-excited ${selectedEnergy === 'excited' ? 'selected' : ''}`}
+              onClick={() => setSelectedEnergy('excited')}
+            >
+              <span className="option-emoji">🔥</span>
+              <span>Excited</span>
+            </button>
+            <button
+              className={`energy-btn energy-tired ${selectedEnergy === 'tired' ? 'selected' : ''}`}
+              onClick={() => setSelectedEnergy('tired')}
+            >
+              <span className="option-emoji">😴</span>
+              <span>Tired</span>
+            </button>
           </div>
-
-          {/* Flow Question */}
-          <div className="question-group">
-            <h4 className="question-heading">How is the project flowing?</h4>
-            <div className="button-row">
-              <button
-                className={`flow-btn flow-great ${selectedFlow === 'ease' ? 'selected' : ''}`}
-                onClick={() => setSelectedFlow('ease')}
-              >
-                <span className="arrow-icon">↑</span>
-                <span>Great</span>
-              </button>
-              <button
-                className={`flow-btn flow-resistance ${selectedFlow === 'resistance' ? 'selected' : ''}`}
-                onClick={() => setSelectedFlow('resistance')}
-              >
-                <span className="arrow-icon">→</span>
-                <span>Facing Resistance</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Direction Preview */}
-          {selectedEnergy && selectedFlow && (
-            <div className={`direction-preview direction-${getDirection()}`}>
-              <span className="direction-label">{getDirectionLabel()}</span>
-            </div>
-          )}
-
-          {/* Continue Button */}
-          <button
-            className="continue-btn"
-            onClick={handleContinue}
-            disabled={!selectedEnergy || !selectedFlow}
-          >
-            Continue
-          </button>
         </div>
-      )}
 
-      {step === 2 && (
-        <div className="context-step">
-          <button
-            className="back-btn"
-            onClick={() => setStep(1)}
-          >
-            ← Change Selection
-          </button>
-
-          <div className={`direction-badge direction-${getDirection()}`}>
-            {getDirectionLabel()}
+        {/* Flow Question */}
+        <div className="question-group">
+          <h4 className="question-heading">How is the project flowing?</h4>
+          <div className="button-row">
+            <button
+              className={`flow-btn flow-great ${selectedFlow === 'ease' ? 'selected' : ''}`}
+              onClick={() => setSelectedFlow('ease')}
+            >
+              <span className="option-emoji">✨</span>
+              <span>Great</span>
+            </button>
+            <button
+              className={`flow-btn flow-resistance ${selectedFlow === 'resistance' ? 'selected' : ''}`}
+              onClick={() => setSelectedFlow('resistance')}
+            >
+              <span className="option-emoji">🧗</span>
+              <span>Facing Resistance</span>
+            </button>
           </div>
-
-          <div className="input-group">
-            <label>What were you doing? (optional)</label>
-            <input
-              type="text"
-              value={activityDescription}
-              onChange={(e) => setActivityDescription(e.target.value)}
-              placeholder="e.g., Working on my project, Talking to customers..."
-              className="activity-input"
-            />
-          </div>
-
-          <div className="input-group">
-            <label>What happened? Why this direction? *</label>
-            <textarea
-              value={reasoning}
-              onChange={(e) => setReasoning(e.target.value)}
-              placeholder="Describe what you experienced..."
-              rows="3"
-              className="reasoning-textarea"
-            />
-            <span className="char-count">
-              {reasoning.length}/10 characters minimum
-            </span>
-          </div>
-
-          <button
-            className="complete-btn"
-            onClick={handleSubmit}
-            disabled={!reasoning || reasoning.trim().length < 10}
-          >
-            Complete Quest (+{quest.points} points)
-          </button>
         </div>
-      )}
+
+        {/* Direction Preview */}
+        {selectedEnergy && selectedFlow && (
+          <div className={`direction-preview direction-${getDirection()}`}>
+            <span className="direction-emoji">{getDirectionEmoji()}</span>
+            <span className="direction-label">{getDirectionLabel()}</span>
+          </div>
+        )}
+
+        {/* Headline */}
+        <div className="input-group">
+          <label>Headline</label>
+          <input
+            type="text"
+            value={headline}
+            onChange={(e) => setHeadline(e.target.value)}
+            placeholder="e.g., Landed a new client, Stuck on pricing..."
+            className="headline-input"
+          />
+        </div>
+
+        {/* Comment */}
+        <div className="input-group">
+          <label>Comment (optional)</label>
+          <textarea
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Any additional thoughts..."
+            rows="3"
+            className="comment-textarea"
+          />
+        </div>
+
+        {/* Complete Button */}
+        <button
+          className="complete-btn"
+          onClick={handleSubmit}
+          disabled={!canSubmit()}
+        >
+          Complete Quest (+{quest.points} points)
+        </button>
+      </div>
     </div>
   )
 }

@@ -1,0 +1,416 @@
+/**
+ * CoverageMatrix.css
+ *
+ * Styles for the Problem-Solution Coverage Matrix visualization.
+ * Uses the FindMyFlow purple/gold color scheme.
+ */
+
+.coverage-matrix {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+/* Header */
+.coverage-matrix .matrix-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.coverage-matrix .matrix-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 8px;
+}
+
+.coverage-matrix .matrix-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 16px;
+}
+
+/* Stats row */
+.coverage-matrix .matrix-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.coverage-matrix .stat {
+  text-align: center;
+}
+
+.coverage-matrix .stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}
+
+.coverage-matrix .stat-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Legend */
+.coverage-matrix .matrix-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.coverage-matrix .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.coverage-matrix .legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.coverage-matrix .legend-dot.high {
+  background: #22c55e;
+}
+
+.coverage-matrix .legend-dot.medium {
+  background: #fbbf24;
+}
+
+.coverage-matrix .legend-dot.low {
+  background: #f97316;
+}
+
+.coverage-matrix .legend-dot.none {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Scroll container */
+.coverage-matrix .matrix-scroll-container {
+  overflow-x: auto;
+  margin: 0 -12px;
+  padding: 0 12px;
+}
+
+/* Table */
+.coverage-matrix .matrix-table {
+  width: 100%;
+  min-width: 400px;
+  border-collapse: separate;
+  border-spacing: 4px;
+}
+
+.coverage-matrix .corner-cell {
+  background: transparent;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: left;
+  padding: 8px;
+  vertical-align: bottom;
+  min-width: 120px;
+}
+
+.coverage-matrix .skill-header,
+.coverage-matrix .problem-header {
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.coverage-matrix .skill-header {
+  text-align: center;
+  max-width: 100px;
+  vertical-align: bottom;
+}
+
+.coverage-matrix .skill-header .header-content {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100px;
+}
+
+.coverage-matrix .problem-header {
+  text-align: right;
+  white-space: nowrap;
+  max-width: 180px;
+}
+
+.coverage-matrix .problem-header .header-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Matrix cells */
+.coverage-matrix .matrix-cell {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.coverage-matrix .matrix-cell:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+.coverage-matrix .matrix-cell.selected {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.coverage-matrix .cell-score {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Cell color classes */
+.coverage-matrix .matrix-cell.high {
+  background: #22c55e;
+  color: white;
+}
+
+.coverage-matrix .matrix-cell.medium {
+  background: #fbbf24;
+  color: #1a1a2e;
+}
+
+.coverage-matrix .matrix-cell.low {
+  background: #f97316;
+  color: white;
+}
+
+.coverage-matrix .matrix-cell.none {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Cell details panel */
+.coverage-matrix .cell-details {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  position: relative;
+  animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.coverage-matrix .close-details {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.coverage-matrix .close-details:hover {
+  color: white;
+}
+
+.coverage-matrix .cell-details h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 16px;
+}
+
+.coverage-matrix .detail-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.coverage-matrix .detail-item {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.coverage-matrix .detail-item strong {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.coverage-matrix .match-score {
+  margin-bottom: 16px;
+}
+
+.coverage-matrix .score-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.coverage-matrix .score-badge.high {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.coverage-matrix .score-badge.medium {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.coverage-matrix .score-badge.low {
+  background: rgba(249, 115, 22, 0.2);
+  color: #f97316;
+}
+
+.coverage-matrix .score-badge.none {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.coverage-matrix .matches-list {
+  font-size: 13px;
+}
+
+.coverage-matrix .matches-list strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+}
+
+.coverage-matrix .match-item {
+  display: flex;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.coverage-matrix .match-type {
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 100px;
+}
+
+.coverage-matrix .match-values {
+  color: #fbbf24;
+}
+
+.coverage-matrix .no-matches {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+/* Persona toggle */
+.coverage-matrix .persona-toggle {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.coverage-matrix .toggle-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.coverage-matrix .toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.coverage-matrix .toggle-btn.active {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+/* Empty state */
+.coverage-matrix-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  margin-top: 24px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .coverage-matrix {
+    padding: 16px;
+  }
+
+  .coverage-matrix .matrix-stats {
+    gap: 20px;
+  }
+
+  .coverage-matrix .stat-value {
+    font-size: 20px;
+  }
+
+  .coverage-matrix .legend-item {
+    font-size: 11px;
+  }
+
+  .coverage-matrix .matrix-cell {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .coverage-matrix .cell-score {
+    font-size: 10px;
+  }
+
+  .coverage-matrix .detail-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .coverage-matrix .skill-header .header-content {
+    max-height: 80px;
+  }
+}

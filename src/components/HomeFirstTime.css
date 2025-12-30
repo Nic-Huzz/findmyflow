@@ -1,0 +1,354 @@
+/**
+ * HomeFirstTime.css
+ * Styles for first-time user home screen
+ */
+
+.home-first-time {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Loading State */
+.home-first-time .loading-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.home-first-time .loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: homeFirstTimeSpin 1s linear infinite;
+}
+
+@keyframes homeFirstTimeSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Welcome Header */
+.home-first-time .welcome-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.home-first-time .welcome-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.home-first-time .welcome-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+/* Archetype Cards */
+.home-first-time .archetype-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.home-first-time .card-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+
+.home-first-time .essence-card .card-badge {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.home-first-time .protective-card .card-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.home-first-time .archetype-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.home-first-time .card-tagline {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.home-first-time .card-detail {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* CTA Section */
+.home-first-time .cta-section {
+  margin-top: auto;
+  text-align: center;
+  padding: 32px 0;
+}
+
+.home-first-time .cta-section p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 16px;
+}
+
+.home-first-time .primary-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-first-time .primary-button:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* Question Screen */
+.home-first-time .question-screen {
+  align-items: center;
+}
+
+.home-first-time .progress-dots {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+
+.home-first-time .progress-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s;
+}
+
+.home-first-time .progress-dots .dot.active {
+  background: #E9A23B;
+  width: 24px;
+  border-radius: 5px;
+}
+
+.home-first-time .progress-dots .dot.completed {
+  background: #E9A23B;
+}
+
+.home-first-time .question-container {
+  flex: 1;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.home-first-time .question-container h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.home-first-time .question-subtext {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 40px;
+}
+
+.home-first-time .options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-first-time .option-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: left;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-first-time .option-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--purple, #5e17eb);
+  transform: translateX(4px);
+}
+
+.home-first-time .option-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.home-first-time .option-description {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Reveal Screen */
+.home-first-time .reveal-screen {
+  align-items: center;
+  justify-content: center;
+}
+
+.home-first-time .reveal-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.home-first-time .persona-badge {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 30px;
+  margin-bottom: 24px;
+}
+
+.home-first-time .reveal-content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.home-first-time .reveal-description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+
+/* Project Type Screen */
+.home-first-time .project-type-screen {
+  align-items: center;
+}
+
+.home-first-time .project-type-screen h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.home-first-time .project-type-screen .subtext {
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  max-width: 400px;
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.home-first-time .project-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.home-first-time .option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.home-first-time .option-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--purple, #5e17eb);
+  transform: translateY(-2px);
+}
+
+.home-first-time .option-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.home-first-time .option-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.home-first-time .option-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Error State */
+.home-first-time .error-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.home-first-time .error-state button {
+  padding: 12px 24px;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .home-first-time {
+    padding: 16px;
+  }
+
+  .home-first-time .welcome-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .home-first-time .archetype-card h2 {
+    font-size: 1.25rem;
+  }
+
+  .home-first-time .question-container h2 {
+    font-size: 1.25rem;
+  }
+}

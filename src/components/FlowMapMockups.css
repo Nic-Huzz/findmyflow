@@ -1,0 +1,983 @@
+/**
+ * FlowMapMockups.css
+ * Styles for the 3 FlowMap mockup options
+ */
+
+.mockups-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 40px 20px;
+  color: white;
+}
+
+.mockups-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.mockups-header h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.mockups-header p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.mockups-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Individual Mockup Option */
+.mockup-option {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s;
+}
+
+.mockup-option:hover {
+  border-color: #5e17eb;
+  transform: translateY(-4px);
+}
+
+.mockup-option h3 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: #5e17eb;
+}
+
+.mockup-desc {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION A: RIVER PATH STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.river-mockup {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.river-stats-mock {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-mock {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.river-path-mock {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  padding: 20px 0;
+  gap: 0;
+}
+
+.river-node-mock-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.river-line-mock {
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.river-node-mock {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.river-date-mock {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+}
+
+.river-legend-mock {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend-mock-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.legend-dot-mock {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION B: COMPASS WHEEL STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.compass-mockup {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.compass-wheel {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.compass-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: #1a1a2e;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.compass-total {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.compass-label {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.compass-quadrant {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.compass-quadrant.north { border-radius: 100% 0 0 0; }
+.compass-quadrant.east { border-radius: 0 100% 0 0; }
+.compass-quadrant.south { border-radius: 0 0 0 100%; }
+.compass-quadrant.west { border-radius: 0 0 100% 0; }
+
+.quadrant-fill {
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+}
+
+.quadrant-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.quadrant-icon {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.quadrant-count {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.quadrant-label {
+  font-size: 0.6rem;
+  opacity: 0.8;
+}
+
+.compass-recent {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recent-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.recent-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION C: GRID CALENDAR STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.calendar-mockup {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.calendar-day-label {
+  text-align: center;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 4px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-cell {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px;
+}
+
+.cell-icon {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.cell-label {
+  font-size: 0.6rem;
+  opacity: 0.8;
+}
+
+.calendar-summary {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-bar {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.summary-text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.calendar-legend {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PROS/CONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pros-cons strong {
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.pros strong {
+  color: #10b981;
+}
+
+.cons strong {
+  color: #ef4444;
+}
+
+.pros-cons ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.pros-cons li {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION D: FLOWING RIVER STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.flowing-river-mockup {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.river-scene {
+  position: relative;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* The flowing water */
+.river-water {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  height: 60px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+/* Animated wave overlays */
+.wave {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 25%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 75%,
+    transparent 100%
+  );
+  animation: wave-flow 3s linear infinite;
+}
+
+.wave-2 {
+  animation-delay: -1s;
+  opacity: 0.7;
+}
+
+.wave-3 {
+  animation-delay: -2s;
+  opacity: 0.5;
+}
+
+@keyframes wave-flow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(33.33%); }
+}
+
+/* River banks (top and bottom edges) */
+.river-bank {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(180deg,
+    rgba(26, 26, 46, 1) 0%,
+    rgba(26, 26, 46, 0) 100%
+  );
+}
+
+.bank-top {
+  top: 0;
+}
+
+.bank-bottom {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+/* Flow markers along the river */
+.flow-markers {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  right: 60px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.flow-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.marker-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--marker-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.marker-date {
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+  position: absolute;
+  top: 100%;
+  margin-top: 2px;
+}
+
+/* "Now" indicator at the end */
+.river-end {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.end-arrow {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  animation: pulse-arrow 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-arrow {
+  0%, 100% { opacity: 0.8; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(4px); }
+}
+
+.end-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Current state callout */
+.current-flow-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.state-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.state-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.state-text strong {
+  color: white;
+}
+
+/* Color legend */
+.river-color-legend {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.color-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.color-swatch {
+  width: 16px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.color-name {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION E: AERIAL RIVER STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.aerial-river-mockup {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.aerial-river-svg {
+  width: 100%;
+  height: 200px;
+  display: block;
+}
+
+/* Animated river highlight */
+.river-highlight {
+  stroke-dasharray: 20 10;
+  animation: flow-dash 2s linear infinite;
+}
+
+@keyframes flow-dash {
+  0% { stroke-dashoffset: 30; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* Pulsing end indicator */
+.end-pulse {
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { r: 16; opacity: 1; }
+  100% { r: 28; opacity: 0; }
+}
+
+/* Marker hover effect */
+.aerial-marker {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.aerial-marker:hover circle {
+  filter: brightness(1.2);
+}
+
+/* Journey summary */
+.aerial-summary {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.journey-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.journey-directions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.journey-step {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.journey-step.stuck {
+  animation: pulse-stuck 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-stuck {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Stuck point pulse animation */
+.stuck-pulse {
+  animation: stuck-ring 1.5s ease-out infinite;
+}
+
+@keyframes stuck-ring {
+  0% { r: 10; opacity: 1; }
+  100% { r: 20; opacity: 0; }
+}
+
+/* River flow legend */
+.aerial-legend {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.legend-row:last-child {
+  margin-bottom: 0;
+}
+
+.legend-item-aerial {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-arrow {
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 24px;
+  text-align: center;
+}
+
+.legend-dot-stuck {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+  margin-left: 4px;
+}
+
+.legend-text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.legend-sub {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION H: VERTICAL RIVER STYLES (Mobile Optimized)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.vertical-river-mockup {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.vertical-river-svg {
+  width: 100%;
+  height: 280px;
+  display: block;
+}
+
+/* Vertical journey summary */
+.vertical-summary {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.journey-directions.vertical {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.journey-directions.vertical .journey-step {
+  display: inline-block;
+}
+
+/* Vertical-optimized legend */
+.vertical-legend {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vertical-legend .legend-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.vertical-legend .legend-row:last-child {
+  margin-bottom: 0;
+}
+
+.vertical-legend .legend-item-aerial {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vertical-legend .legend-text {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Mobile-specific styles for vertical river */
+@media (max-width: 480px) {
+  .vertical-river-svg {
+    height: 320px;
+  }
+
+  .vertical-summary .journey-label {
+    font-size: 0.75rem;
+  }
+
+  .vertical-legend .legend-item-aerial {
+    gap: 6px;
+  }
+
+  .vertical-legend .legend-text {
+    font-size: 0.75rem;
+  }
+
+  .vertical-legend .legend-arrow {
+    font-size: 1rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION F: NEON TRAIL STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.neon-trail-mockup {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.neon-svg {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+.neon-particle {
+  filter: drop-shadow(0 0 6px white);
+}
+
+.neon-stuck {
+  animation: neon-pulse 1s ease-in-out infinite;
+}
+
+.neon-stuck-ring {
+  animation: neon-ring 1.5s ease-out infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes neon-ring {
+  0% { r: 8; opacity: 1; }
+  100% { r: 18; opacity: 0; }
+}
+
+.neon-end {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.neon-legend {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.neon-legend span {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPTION G: TERRAIN MAP STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.terrain-mockup {
+  background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.terrain-svg {
+  width: 100%;
+  height: 200px;
+  display: block;
+}
+
+.terrain-flow {
+  animation: terrain-dash 3s linear infinite;
+}
+
+@keyframes terrain-dash {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.terrain-end-pulse {
+  animation: terrain-pulse 2s ease-out infinite;
+}
+
+@keyframes terrain-pulse {
+  0% { r: 14; opacity: 1; }
+  100% { r: 22; opacity: 0; }
+}
+
+.terrain-legend {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.terrain-legend-title {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.terrain-legend-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.terrain-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terrain-legend-item span {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.elevation-bar {
+  width: 24px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.elevation-bar.high {
+  transform: rotate(-15deg);
+}
+
+.elevation-bar.low {
+  transform: rotate(15deg);
+}
+
+.elevation-bar.stuck {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: inset 0 0 4px rgba(0,0,0,0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.mockups-footer {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mockups-footer p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}

@@ -1,0 +1,405 @@
+/**
+ * GroanReflectionInput.css
+ * Styles for the Groan Reflection capture component
+ * Uses warm purple/orange gradient to match challenge theme
+ */
+
+.groan-reflection-input {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.15) 0%, rgba(245, 158, 11, 0.1) 100%);
+  border: 2px solid rgba(94, 23, 235, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Progress indicator */
+.groan-reflection-input .groan-progress {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.groan-reflection-input .progress-text {
+  font-size: 0.8rem;
+  color: #5e17eb !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Step container */
+.groan-reflection-input .groan-step {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Step header */
+.groan-reflection-input .step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.groan-reflection-input .step-icon {
+  font-size: 28px;
+}
+
+.groan-reflection-input .step-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #5e17eb;
+}
+
+.groan-reflection-input .step-description {
+  font-size: 0.9375rem;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+/* Textarea styles - scoped to prevent conflicts */
+.groan-reflection-input .groan-textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #5e17eb !important;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-family: inherit;
+  background: #ffffff !important;
+  color: #333 !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: vertical;
+  min-height: 80px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.15);
+}
+
+.groan-reflection-input .groan-textarea::placeholder {
+  color: #999 !important;
+  opacity: 0.7;
+}
+
+.groan-reflection-input .groan-textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.2);
+}
+
+.groan-reflection-input .groan-textarea.reflection {
+  min-height: 60px;
+}
+
+.groan-reflection-input .char-hint {
+  font-size: 0.8125rem;
+  color: #888;
+  margin-top: 8px;
+  text-align: right;
+}
+
+/* Archetype grid - scoped to prevent conflicts with Profile.css */
+.groan-reflection-input .archetype-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.groan-reflection-input .archetype-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  min-width: 0;
+  background: white;
+  border: 2px solid rgba(94, 23, 235, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.groan-reflection-input .archetype-card:hover {
+  background: rgba(94, 23, 235, 0.05);
+  transform: translateY(-2px);
+}
+
+.groan-reflection-input .archetype-card.selected {
+  background: rgba(94, 23, 235, 0.1);
+  border-color: #5e17eb;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
+}
+
+.groan-reflection-input .archetype-icon {
+  font-size: 24px;
+}
+
+.groan-reflection-input .archetype-name {
+  font-size: 0.6875rem !important;
+  font-weight: 600;
+  color: #333 !important;
+  line-height: 1.2;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.groan-reflection-input .archetype-desc {
+  font-size: 0.5625rem;
+  color: #666;
+  line-height: 1.2;
+}
+
+/* Fear grid */
+.groan-reflection-input .fear-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.groan-reflection-input .fear-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  background: white;
+  border: 2px solid rgba(94, 23, 235, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.groan-reflection-input .fear-card:hover {
+  background: rgba(94, 23, 235, 0.05);
+  transform: translateY(-2px);
+}
+
+.groan-reflection-input .fear-card.selected {
+  background: rgba(94, 23, 235, 0.15);
+  border-color: #5e17eb;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
+}
+
+.groan-reflection-input .fear-icon {
+  font-size: 24px;
+}
+
+.groan-reflection-input .fear-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+/* Other fear input */
+.groan-reflection-input .other-fear-input {
+  margin-top: 16px;
+}
+
+.groan-reflection-input .other-fear-input label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+/* Direction grid */
+.groan-reflection-input .direction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.groan-reflection-input .direction-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: white;
+  border: 2px solid rgba(94, 23, 235, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.groan-reflection-input .direction-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+}
+
+.groan-reflection-input .direction-card.selected {
+  border-width: 2px;
+}
+
+.groan-reflection-input .direction-icon {
+  font-size: 28px;
+}
+
+.groan-reflection-input .direction-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.groan-reflection-input .direction-desc {
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+}
+
+/* Selection summary */
+.groan-reflection-input .selection-summary {
+  background: rgba(94, 23, 235, 0.08);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.groan-reflection-input .summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(94, 23, 235, 0.15);
+}
+
+.groan-reflection-input .summary-item:last-child {
+  border-bottom: none;
+}
+
+.groan-reflection-input .summary-label {
+  font-size: 0.8125rem;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.groan-reflection-input .summary-value {
+  font-size: 0.875rem;
+  color: #333;
+  font-weight: 500;
+  text-align: right;
+}
+
+.groan-reflection-input .summary-value.direction-badge {
+  font-weight: 600;
+}
+
+/* Navigation buttons */
+.groan-reflection-input .groan-navigation {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.groan-reflection-input .nav-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.groan-reflection-input .nav-btn.back {
+  background: white;
+  color: #5e17eb;
+  flex: 0.4;
+  border: 2px solid #5e17eb;
+}
+
+.groan-reflection-input .nav-btn.back:hover {
+  background: rgba(94, 23, 235, 0.1);
+}
+
+.groan-reflection-input .nav-btn.next {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+}
+
+.groan-reflection-input .nav-btn.next:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(94, 23, 235, 0.3);
+}
+
+.groan-reflection-input .nav-btn.next:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.groan-reflection-input .nav-btn.complete {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+}
+
+.groan-reflection-input .nav-btn.complete:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3);
+}
+
+.groan-reflection-input .nav-btn.complete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Encouragement message */
+.groan-reflection-input .groan-encouragement {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #888;
+  font-style: italic;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(94, 23, 235, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .groan-reflection-input {
+    padding: 16px;
+  }
+
+  .groan-reflection-input .archetype-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .groan-reflection-input .fear-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .groan-reflection-input .direction-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .groan-reflection-input .groan-navigation {
+    flex-direction: row;
+  }
+
+  .groan-reflection-input .nav-btn.back {
+    flex: 0.4;
+  }
+}

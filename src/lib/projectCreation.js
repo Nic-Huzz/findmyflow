@@ -1,7 +1,9 @@
 // Project Auto-Creation Library
 // Handles automatic project creation from completed discovery flows
+// Updated Dec 2024: Project-based stage system (see docs/2024-12-20-major-refactor-plan.md)
 
 import { supabase } from './supabaseClient'
+import { STAGES } from './stageConfig'
 
 /**
  * Create a project from a completed Nikigai session
@@ -105,7 +107,25 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
       projectDescription = 'Building a grand slam offer that stands out in the market'
     }
 
-    // Step 4: Create the project (unique constraint prevents duplicates)
+    // Step 4: Fetch cluster IDs if this is from a nikigai flow
+    let linkedSkillClusterId = null
+    let linkedProblemClusterId = null
+    let linkedPersonaClusterId = null
+
+    if (flowType === 'nikigai') {
+      const selectedOpp = keyOutcomes?.[0]?.selected_opportunity
+      if (selectedOpp) {
+        linkedSkillClusterId = selectedOpp.skill?.cluster_id || null
+        linkedProblemClusterId = selectedOpp.problem?.cluster_id || null
+        linkedPersonaClusterId = selectedOpp.persona?.cluster_id || null
+      }
+    }
+
+    // Step 5: Create the project with project-based stage fields
+    // New projects start at Stage 1 (Validation)
+    // First project for user is set as primary
+    const isFirstProject = !existingProjects || existingProjects.length === 0
+
     const { data: newProject, error: createError } = await supabase
       .from('user_projects')
       .insert({
@@ -114,7 +134,14 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
         description: projectDescription,
         source_flow: flowType,
         source_session_id: sessionId,
-        status: 'active'
+        status: 'active',
+        // New project-based stage fields (Dec 2024)
+        current_stage: STAGES.VALIDATION,
+        total_points: 0,
+        is_primary: isFirstProject,
+        linked_skill_cluster_id: linkedSkillClusterId,
+        linked_problem_cluster_id: linkedProblemClusterId,
+        linked_persona_cluster_id: linkedPersonaClusterId
       })
       .select()
       .single()
@@ -145,16 +172,9 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
 
     console.log('✅ Project auto-created:', newProject.id, newProject.name)
 
-    // Step 5: Set as default project in user_stage_progress
-    const { error: updateError } = await supabase
-      .from('user_stage_progress')
-      .update({ default_project_id: newProject.id })
-      .eq('user_id', userId)
-
-    if (updateError) {
-      console.warn('⚠️ Could not set default project:', updateError)
-      // Non-critical error, don't fail the whole operation
-    }
+    // Step 6: Update user_stage_progress to track onboarding
+    // Note: is_primary flag on user_projects now handles "default project" logic
+    // The database trigger ensures only one project per user is primary
 
     return {
       success: true,
@@ -212,6 +232,90 @@ export const getOrCreateActiveProject = async (userId) => {
     }
   } catch (err) {
     console.error('❌ Error in getOrCreateActiveProject:', err)
+    return { success: false, error: err.message }
+  }
+}
+
+/**
+ * Create a project from the Existing Project Capture Flow
+ * Used for Vibe Risers with existing projects and Movement Makers
+ * This captures their story: duration, milestone moments, resistant moments, current feeling
+ *
+ * @param {string} userId - User's ID
+ * @param {Object} projectData - Project data from existing project flow
+ * @param {string} projectData.name - Project name
+ * @param {string} projectData.description - Project description
+ * @param {string} projectData.duration - How long working on this project
+ * @param {Array} projectData.milestoneMoments - Major milestone moments
+ * @param {Array} projectData.resistantMoments - Major resistant/challenging moments
+ * @param {string} projectData.currentFeeling - Current feeling about the project
+ * @param {number} projectData.startingStage - Stage to start at (1-6)
+ * @returns {Promise<{success: boolean, projectId?: string, error?: string}>}
+ */
+export const createExistingProject = async (userId, projectData) => {
+  try {
+    console.log('🎯 Creating project from existing project flow:', { userId, projectData })
+
+    const {
+      name,
+      description,
+      duration,
+      milestoneMoments,
+      resistantMoments,
+      currentFeeling,
+      startingStage = STAGES.VALIDATION
+    } = projectData
+
+    // Check if user already has projects
+    const { data: existingProjects, error: checkError } = await supabase
+      .from('user_projects')
+      .select('id, is_primary')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+
+    if (checkError) {
+      console.error('❌ Error checking existing projects:', checkError)
+    }
+
+    const isFirstProject = !existingProjects || existingProjects.length === 0
+
+    // Create the project
+    const { data: newProject, error: createError } = await supabase
+      .from('user_projects')
+      .insert({
+        user_id: userId,
+        name: name || 'My Project',
+        description: description || '',
+        source_flow: 'existing_project_capture',
+        status: 'active',
+        // Project-based stage fields
+        current_stage: startingStage,
+        total_points: 0,
+        is_primary: isFirstProject,
+        // Existing project story fields
+        duration: duration,
+        milestone_moments: milestoneMoments ? JSON.stringify(milestoneMoments) : null,
+        resistant_moments: resistantMoments ? JSON.stringify(resistantMoments) : null,
+        current_feeling: currentFeeling
+      })
+      .select()
+      .single()
+
+    if (createError) {
+      console.error('❌ Error creating project:', createError)
+      return { success: false, error: createError.message }
+    }
+
+    console.log('✅ Existing project captured:', newProject.id, newProject.name)
+
+    return {
+      success: true,
+      projectId: newProject.id,
+      projectName: newProject.name,
+      currentStage: startingStage
+    }
+  } catch (err) {
+    console.error('❌ Unexpected error in createExistingProject:', err)
     return { success: false, error: err.message }
   }
 }

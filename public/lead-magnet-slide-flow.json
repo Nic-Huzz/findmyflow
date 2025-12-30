@@ -9,7 +9,7 @@
     {
       "step": "lead_q1_intro_name",
       "step_order_index": 1.0,
-      "prompt": "Welcome!🌞 I'm Zarlo 👋🏼\n\n**Have you ever felt like you were made for more?**\n\nI believe you were.\n\nI believe you were made to flow like a river—to move with purpose, to nourish the world, to make a positive impact.\n\nI believe when you live from this place, the universe creates a current to support you.\n\n**I call this your flow.**\n\nIf you're keen to find you flow but feeling stuck - like your flow is hitting a river bank, I'm here to support.\n\nIf you believe you're here to make a difference, trust the universe and keen to amplify your impact—let's begin.\n\nWhat do I call you?",
+      "prompt": "Welcome!🌞 I'm Huzz 👋🏼\n\nEver since I quit my job two and a half years ago, I've developed an unwavering belief in 'Flow'.\n\nThe idea that there's a unique path that only you could walk due to your combination of skills, experiences and circumstances.\n\nI believe when you find your flow — aligning what gives you flow internally, with what's flowing externally — life becomes crazy and magical.\n\nThis webapp is designed to help you find your flow. It has everything I wish I had on my journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.\n\nWhat do I call you?",
       "tag_as": "user_name",
       "store_as": "lead_q1_name_complete",
       "instructions_to_gpt": "Wait for short name. Store exactly as provided. Do not proceed until captured."
