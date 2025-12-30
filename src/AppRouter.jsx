@@ -7,11 +7,11 @@ import UpsellFlow from './flows/UpsellFlow'
 import DownsellFlow from './flows/DownsellFlow'
 import ContinuityFlow from './flows/ContinuityFlow'
 import LeadsStrategyFlow from './flows/LeadsStrategyFlow'
-import LeadMagnetFlow from './flows/LeadMagnetFlow'
 import OfferBuilderFlow from './flows/OfferBuilderFlow'
 import LeadMagnetSelectionFlow from './flows/LeadMagnetSelectionFlow'
 import ProductSelectionFlow from './flows/ProductSelectionFlow'
 import FunnelBuilderFlow from './flows/FunnelBuilderFlow'
+import FunnelCalculator from './flows/FunnelCalculator'
 import PersonaSelectionFlow from './flows/PersonaSelectionFlow'
 import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
@@ -38,6 +38,7 @@ import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
+import { ZarloWidget } from './components/Zarlo'
 import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import './App.css'
 import './PersonaAssessment.css'
@@ -46,7 +47,6 @@ import './UpsellFlow.css'
 import './DownsellFlow.css'
 import './ContinuityFlow.css'
 import './LeadsStrategyFlow.css'
-import './LeadMagnetFlow.css'
 import './PersonaSelectionFlow.css'
 import './MoneyModelGuide.css'
 import './Profile.css'
@@ -59,6 +59,7 @@ import './FlowFinder.css'
 import './flows/LeadMagnetSelectionFlow.css'
 import './flows/ProductSelectionFlow.css'
 import './flows/FunnelBuilderFlow.css'
+import './flows/FunnelCalculator.css'
 import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
 
@@ -111,13 +112,6 @@ function AppRouter() {
             <Route path="/funnel-builder" element={
               <AuthGate>
                 <FunnelBuilderFlow />
-              </AuthGate>
-            } />
-
-            {/* Lead Magnet Type Assessment - In-App Challenge */}
-            <Route path="/lead-magnet" element={
-              <AuthGate>
-                <LeadMagnetFlow />
               </AuthGate>
             } />
 
@@ -249,8 +243,16 @@ function AppRouter() {
                 <ValidationFlowsManager />
               </AuthGate>
             } />
+
+            {/* Funnel Calculator - Stage 7 Tracking */}
+            <Route path="/funnel-calculator" element={
+              <AuthGate>
+                <FunnelCalculator />
+              </AuthGate>
+            } />
           </Routes>
           <BottomToolbar />
+          <ZarloWidget />
         </Router>
       </AuthProvider>
     </ErrorBoundary>

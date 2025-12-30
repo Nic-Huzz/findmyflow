@@ -48,6 +48,11 @@ export async function sendEvent(eventName, payload = {}) {
   }
 }
 
+// Generic event tracker
+export async function trackEvent(eventName, payload = {}) {
+  return sendEvent(eventName, payload)
+}
+
 // Convenience trackers
 export async function trackLeadMagnetStart(variantId) {
   return sendEvent('leadmagnet_start', { variantId })

@@ -9,6 +9,153 @@
   gap: 1rem;
 }
 
+/* Stepped Layout */
+.release-input.stepped {
+  gap: 0;
+}
+
+.release-input .step-progress {
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.release-input .progress-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7c3aed;
+}
+
+.release-input .step-content {
+  min-height: 200px;
+}
+
+.release-input .step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.release-input .step-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.release-input .step-icon {
+  font-size: 1.25rem;
+}
+
+.release-input .step-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+/* Step Navigation */
+.release-input .step-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.release-input .nav-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.release-input .nav-btn.back {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.release-input .nav-btn.back:hover {
+  background: #e5e7eb;
+}
+
+.release-input .nav-btn.next {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  margin-left: auto;
+}
+
+.release-input .nav-btn.next:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.release-input .nav-btn.next:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.release-input .nav-btn.complete {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  margin-left: auto;
+}
+
+.release-input .nav-btn.complete:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.release-input .nav-btn.complete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Character hint */
+.release-input .char-hint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.release-input .char-hint.met {
+  color: #f59e0b;
+}
+
+/* Selection Summary */
+.release-input .selection-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.release-input .summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.release-input .summary-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.release-input .summary-value {
+  font-size: 0.9375rem;
+  color: #1f2937;
+}
+
 .release-section {
   display: flex;
   flex-direction: column;
@@ -77,13 +224,13 @@
 }
 
 /* Emotion Grid */
-.emotion-grid {
+.release-input .emotion-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
-.emotion-option {
+.release-input .emotion-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -96,35 +243,35 @@
   transition: all 0.2s ease;
 }
 
-.emotion-option:hover {
+.release-input .emotion-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.emotion-option.selected {
+.release-input .emotion-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
-.emotion-icon {
+.release-input .emotion-icon {
   font-size: 1.5rem;
 }
 
-.emotion-label {
+.release-input .emotion-label {
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
 }
 
 /* Release Method Grid */
-.release-method-grid {
+.release-input .release-method-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
-.release-method-option {
+.release-input .release-method-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -137,35 +284,35 @@
   transition: all 0.2s ease;
 }
 
-.release-method-option:hover {
+.release-input .release-method-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.release-method-option.selected {
+.release-input .release-method-option.selected {
   border-color: #8b5cf6;
   background: #8b5cf6;
   color: white;
 }
 
-.release-method-icon {
+.release-input .release-method-icon {
   font-size: 1.5rem;
 }
 
-.release-method-label {
+.release-input .release-method-label {
   font-size: 0.7rem;
   font-weight: 600;
   text-align: center;
 }
 
 /* Trigger Grid */
-.trigger-grid {
+.release-input .trigger-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
-.trigger-option {
+.release-input .trigger-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -178,39 +325,39 @@
   transition: all 0.2s ease;
 }
 
-.trigger-option:hover {
+.release-input .trigger-option:hover {
   border-color: #fca5a5;
   background: #fef2f2;
 }
 
-.trigger-option.selected {
+.release-input .trigger-option.selected {
   border-color: #ef4444;
   background: #fef2f2;
 }
 
-.trigger-icon {
+.release-input .trigger-icon {
   font-size: 1.5rem;
 }
 
-.trigger-label {
+.release-input .trigger-label {
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
   color: #374151;
 }
 
-.trigger-option.selected .trigger-label {
+.release-input .trigger-option.selected .trigger-label {
   color: #991b1b;
 }
 
 /* Body Location Grid */
-.body-location-grid {
+.release-input .body-location-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.375rem;
 }
 
-.body-location-option {
+.release-input .body-location-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -223,22 +370,22 @@
   transition: all 0.2s ease;
 }
 
-.body-location-option:hover {
+.release-input .body-location-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.body-location-option.selected {
+.release-input .body-location-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
-.body-location-icon {
+.release-input .body-location-icon {
   font-size: 1.25rem;
 }
 
-.body-location-label {
+.release-input .body-location-label {
   font-size: 0.5rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -246,13 +393,13 @@
 }
 
 /* Big Release Grid */
-.big-release-grid {
+.release-input .big-release-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
 }
 
-.big-release-option {
+.release-input .big-release-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -265,39 +412,39 @@
   transition: all 0.2s ease;
 }
 
-.big-release-option:hover {
+.release-input .big-release-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.big-release-option.selected {
+.release-input .big-release-option.selected {
   border-color: #7c3aed;
   background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
 }
 
-.big-release-icon {
+.release-input .big-release-icon {
   font-size: 2rem;
 }
 
-.big-release-label {
+.release-input .big-release-label {
   font-size: 0.7rem;
   font-weight: 600;
   text-align: center;
   color: #374151;
 }
 
-.big-release-option.selected .big-release-label {
+.release-input .big-release-option.selected .big-release-label {
   color: #6d28d9;
 }
 
 /* Duration Grid */
-.duration-grid {
+.release-input .duration-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
-.duration-option {
+.release-input .duration-option {
   padding: 0.625rem 0.5rem;
   border: 2px solid #e5e7eb;
   border-radius: 10px;
@@ -310,25 +457,25 @@
   text-align: center;
 }
 
-.duration-option:hover {
+.release-input .duration-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.duration-option.selected {
+.release-input .duration-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
 /* Depth Grid */
-.depth-grid {
+.release-input .depth-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
-.depth-option {
+.release-input .depth-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -341,39 +488,39 @@
   transition: all 0.2s ease;
 }
 
-.depth-option:hover {
+.release-input .depth-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.depth-option.selected {
+.release-input .depth-option.selected {
   border-color: #8b5cf6;
   background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
 }
 
-.depth-emoji {
+.release-input .depth-emoji {
   font-size: 1.5rem;
 }
 
-.depth-label {
+.release-input .depth-label {
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   color: #374151;
 }
 
-.depth-option.selected .depth-label {
+.release-input .depth-option.selected .depth-label {
   color: #6d28d9;
 }
 
 /* Outcome Grid */
-.outcome-grid {
+.release-input .outcome-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
-.outcome-option {
+.release-input .outcome-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -386,45 +533,45 @@
   transition: all 0.2s ease;
 }
 
-.outcome-option:hover {
-  border-color: #86efac;
-  background: #f0fdf4;
+.release-input .outcome-option:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
 }
 
-.outcome-option.selected {
-  border-color: #22c55e;
-  background: #22c55e;
+.release-input .outcome-option.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
   color: white;
 }
 
-.outcome-icon {
+.release-input .outcome-icon {
   font-size: 1.5rem;
 }
 
-.outcome-label {
+.release-input .outcome-label {
   font-size: 0.65rem;
   font-weight: 600;
   text-align: center;
 }
 
 /* Intensity Scale */
-.intensity-scale {
+.release-input .intensity-scale {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.intensity-end {
+.release-input .intensity-end {
   font-size: 1.25rem;
 }
 
-.intensity-buttons {
+.release-input .intensity-buttons {
   display: flex;
   flex: 1;
   gap: 0.25rem;
 }
 
-.intensity-btn {
+.release-input .intensity-btn {
   flex: 1;
   padding: 0.5rem;
   border: 2px solid #e5e7eb;
@@ -437,19 +584,19 @@
   transition: all 0.2s ease;
 }
 
-.intensity-btn:hover {
+.release-input .intensity-btn:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.intensity-btn.selected {
+.release-input .intensity-btn.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
 /* Shift Display */
-.shift-display {
+.release-input .shift-display {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -457,28 +604,29 @@
   padding: 0.75rem;
   background: #f9fafb;
   border-radius: 12px;
+  margin-top: 0.5rem;
 }
 
-.shift-label {
+.release-input .shift-label {
   font-size: 0.875rem;
   font-weight: 500;
   color: #6b7280;
 }
 
-.shift-value {
-  font-size: 1rem;
+.release-input .shift-value {
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
-.shift-value.positive {
-  color: #22c55e;
+.release-input .shift-value.positive {
+  color: #f59e0b;
 }
 
-.shift-value.negative {
+.release-input .shift-value.negative {
   color: #ef4444;
 }
 
-.shift-value.neutral {
+.release-input .shift-value.neutral {
   color: #6b7280;
 }
 
@@ -509,39 +657,39 @@
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-  .emotion-grid {
+  .release-input .emotion-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .release-method-grid {
+  .release-input .release-method-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .trigger-grid {
+  .release-input .trigger-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .body-location-grid {
+  .release-input .body-location-grid {
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .body-location-label {
+  .release-input .body-location-label {
     font-size: 0.45rem;
   }
 
-  .big-release-grid {
+  .release-input .big-release-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .duration-grid {
+  .release-input .duration-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .depth-grid {
+  .release-input .depth-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 
-  .outcome-grid {
+  .release-input .outcome-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }

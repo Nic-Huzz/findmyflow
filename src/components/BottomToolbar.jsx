@@ -52,8 +52,11 @@ const HIDDEN_ROUTES = [
   '/downsell-offer',
   '/continuity-offer',
   '/leads-strategy',
-  '/lead-magnet',
   '/offer-builder',
+  '/lead-magnet-selection',
+  '/product-selection',
+  '/funnel-builder',
+  '/funnel-calculator',
   '/persona-selection'
 ]
 

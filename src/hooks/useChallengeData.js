@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
 import { sendNotification } from '../lib/notifications'
@@ -23,15 +23,36 @@ import { initializeUserStageProgress, checkAndGraduateProject } from '../lib/gra
 import { normalizePersona } from '../data/personaProfiles'
 import { convertLegacyStage } from '../lib/stageConfig'
 
+// Map URL tab params to internal category names
+const TAB_TO_CATEGORY = {
+  'quests': 'Business',
+  'business': 'Business',
+  'groans': 'Groans',
+  'healing': 'Healing',
+  'tracker': 'Tracker',
+  'bonus': 'Bonus',
+  'leaderboard': 'Leaderboard',
+  'summary': 'GroansSummary',
+  'healing-summary': 'HealingSummary'
+}
+
 export function useChallengeData() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Get initial category from URL params
+  const getInitialCategory = () => {
+    const params = new URLSearchParams(location.search)
+    const tabParam = params.get('tab')?.toLowerCase()
+    return TAB_TO_CATEGORY[tabParam] || 'Business'
+  }
 
   // UI State
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('Business')
+  const [activeCategory, setActiveCategory] = useState(getInitialCategory)
   const [activeRTypeFilter, setActiveRTypeFilter] = useState('All')
-  const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('all')
+  const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('daily')
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [showGroupSelection, setShowGroupSelection] = useState(false)
   const [showProjectSelector, setShowProjectSelector] = useState(false)
@@ -75,6 +96,15 @@ export function useChallengeData() {
   const [weeklyPlan, setWeeklyPlan] = useState(null)
   const [showWeeklyPlanning, setShowWeeklyPlanning] = useState(false)
   const [isSunday, setIsSunday] = useState(false)
+
+  // Sync activeCategory with URL params when they change
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const tabParam = params.get('tab')?.toLowerCase()
+    if (tabParam && TAB_TO_CATEGORY[tabParam]) {
+      setActiveCategory(TAB_TO_CATEGORY[tabParam])
+    }
+  }, [location.search])
 
   // Constants
   const categories = ['Business', 'Groans', 'Healing', 'Tracker', 'Bonus']

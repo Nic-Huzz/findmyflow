@@ -1,11 +1,12 @@
 /**
- * RecogniseQuestInput - Enhanced input component for Recognise quests
+ * RecogniseQuestInput - Multi-step input component for Recognise quests
  *
- * Handles 4 quest types:
+ * Handles 5 quest types with step-by-step slider UI:
  * - recognise_protective_observe (Protective Voice)
  * - recognise_essence_observe (Essence Voice)
  * - recognise_negative_frequency (Negative Frequency)
  * - recognise_positive_frequency (Positive Frequency)
+ * - recognise_trigger_pattern (Trigger Pattern)
  */
 
 import { useState, useEffect } from 'react'
@@ -91,6 +92,7 @@ const TRIGGER_TYPES = [
 
 function RecogniseQuestInput({ quest, onComplete }) {
   const { user } = useAuth()
+  const [step, setStep] = useState(1)
   const [userArchetypes, setUserArchetypes] = useState({
     essence: null,
     protective: null
@@ -107,7 +109,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
     intensity: 3,
     situation: '',
     protecting_from: '',
-    business_area: null, // Which business area the voice showed up in
+    business_area: null,
 
     // Essence Voice fields
     expression_type: '',
@@ -122,12 +124,25 @@ function RecogniseQuestInput({ quest, onComplete }) {
     trigger_type: ''
   })
 
+  // Get total steps based on quest type
+  const getTotalSteps = () => {
+    switch (quest.id) {
+      case 'recognise_protective_observe': return 4 // Voice+Area → Fear+Layer → Situation+Intensity → Summary
+      case 'recognise_essence_observe': return 3    // Area → Situation+Alignment → Summary
+      case 'recognise_negative_frequency':
+      case 'recognise_positive_frequency':
+      case 'recognise_trigger_pattern': return 3    // Selector → Area+Intensity → Situation → Summary (combined)
+      default: return 3
+    }
+  }
+
+  const totalSteps = getTotalSteps()
+
   // Fetch user archetypes on mount
   useEffect(() => {
     const fetchArchetypes = async () => {
       if (!user?.email) return
 
-      // Use email with ilike for case-insensitive matching (same as Profile.jsx)
       const { data, error } = await supabase
         .from('lead_flow_profiles')
         .select('essence_archetype, protective_archetype')
@@ -140,7 +155,6 @@ function RecogniseQuestInput({ quest, onComplete }) {
           essence: data[0].essence_archetype,
           protective: data[0].protective_archetype
         })
-        // Pre-select user's protective voice
         if (data[0].protective_archetype) {
           setFormData(prev => ({ ...prev, protective_voice: data[0].protective_archetype }))
         }
@@ -157,6 +171,52 @@ function RecogniseQuestInput({ quest, onComplete }) {
         ? prev.fears_triggered.filter(f => f !== fearId)
         : [...prev.fears_triggered, fearId]
     }))
+  }
+
+  const canContinue = () => {
+    if (quest.id === 'recognise_protective_observe') {
+      switch (step) {
+        case 1: return formData.protective_voice && formData.business_area !== null
+        case 2: return formData.fears_triggered.length > 0
+        case 3: return formData.situation.trim().length >= 10
+        case 4: return true
+        default: return false
+      }
+    } else if (quest.id === 'recognise_essence_observe') {
+      switch (step) {
+        case 1: return formData.business_area !== null
+        case 2: return formData.situation.trim().length >= 10 && formData.alignment !== null
+        case 3: return true
+        default: return false
+      }
+    } else if (quest.id === 'recognise_negative_frequency' || quest.id === 'recognise_positive_frequency') {
+      switch (step) {
+        case 1: return formData.frequency
+        case 2: return formData.area_of_life && formData.frequency_intensity && formData.situation.trim().length >= 10
+        case 3: return true
+        default: return false
+      }
+    } else if (quest.id === 'recognise_trigger_pattern') {
+      switch (step) {
+        case 1: return formData.trigger_type
+        case 2: return formData.area_of_life && formData.frequency_intensity && formData.situation.trim().length >= 10
+        case 3: return true
+        default: return false
+      }
+    }
+    return false
+  }
+
+  const handleNext = () => {
+    if (step < totalSteps) {
+      setStep(step + 1)
+    }
+  }
+
+  const handleBack = () => {
+    if (step > 1) {
+      setStep(step - 1)
+    }
   }
 
   const handleSubmit = async () => {
@@ -214,525 +274,799 @@ function RecogniseQuestInput({ quest, onComplete }) {
     }
   }
 
-  const isFormValid = () => {
-    if (quest.id === 'recognise_protective_observe') {
-      return formData.protective_voice && formData.fears_triggered.length > 0 && formData.situation.trim()
-    } else if (quest.id === 'recognise_essence_observe') {
-      return formData.expression_type && formData.situation.trim()
-    } else if (quest.id === 'recognise_negative_frequency' || quest.id === 'recognise_positive_frequency') {
-      return formData.frequency && formData.area_of_life && formData.frequency_intensity && formData.situation.trim()
-    } else if (quest.id === 'recognise_trigger_pattern') {
-      return formData.trigger_type && formData.area_of_life && formData.frequency_intensity && formData.situation.trim()
-    }
-    return false
-  }
+  // Helper getters
+  const getVoice = (id) => PROTECTIVE_VOICES.find(v => v.id === id)
+  const getFear = (id) => FEAR_TRIFECTA.find(f => f.id === id)
+  const getLayer = (id) => VULNERABILITY_LAYERS.find(l => l.id === id)
+  const getArea = (id) => BUSINESS_AREAS.find(a => a.id === id)
+  const getLifeArea = (id) => AREAS_OF_LIFE.find(a => a.id === id)
+  const getFrequency = (id, isPositive) => (isPositive ? POSITIVE_FREQUENCIES : NEGATIVE_FREQUENCIES).find(f => f.id === id)
+  const getTrigger = (id) => TRIGGER_TYPES.find(t => t.id === id)
 
-  // Get the other protective voices (not the user's default)
-  const otherVoices = PROTECTIVE_VOICES.filter(v => v.id !== userArchetypes.protective)
   const userVoice = PROTECTIVE_VOICES.find(v => v.id === userArchetypes.protective)
+  const otherVoices = PROTECTIVE_VOICES.filter(v => v.id !== userArchetypes.protective)
+  const userEssenceProfile = essenceProfiles.essence_archetypes?.find(p => p.name === userArchetypes.essence)
 
-  // Render Protective Voice quest
+  // ============ PROTECTIVE VOICE QUEST ============
   if (quest.id === 'recognise_protective_observe') {
     return (
-      <div className="recognise-input">
-        {/* Protective Voice Selector */}
-        <div className="recognise-section">
-          <label className="recognise-label">Which voice showed up?</label>
-          <div className="voice-selector">
-            {userVoice && (
-              <button
-                type="button"
-                className={`voice-option primary ${formData.protective_voice === userVoice.id ? 'selected' : ''}`}
-                onClick={() => {
-                  setFormData(prev => ({ ...prev, protective_voice: userVoice.id }))
-                  setShowOtherVoices(false)
-                }}
-              >
-                <span className="voice-icon">{userVoice.icon}</span>
-                <span className="voice-label">{userVoice.label}</span>
-              </button>
-            )}
-            <button
-              type="button"
-              className={`voice-option other-btn ${showOtherVoices ? 'active' : ''}`}
-              onClick={() => setShowOtherVoices(!showOtherVoices)}
-            >
-              Other ▼
-            </button>
-          </div>
+      <div className="recognise-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
+        </div>
 
-          {showOtherVoices && (
-            <div className="other-voices-grid">
-              {otherVoices.map(voice => (
+        {/* Step 1: Voice + Business Area */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🛡️</span>
+              <h4>Which voice showed up?</h4>
+            </div>
+            <p className="step-description">Which protective voice tried to hold you back?</p>
+            <div className="voice-selector">
+              {userVoice && (
                 <button
-                  key={voice.id}
                   type="button"
-                  className={`voice-option ${formData.protective_voice === voice.id ? 'selected' : ''}`}
+                  className={`voice-option primary ${formData.protective_voice === userVoice.id ? 'selected' : ''}`}
                   onClick={() => {
-                    setFormData(prev => ({ ...prev, protective_voice: voice.id }))
+                    setFormData(prev => ({ ...prev, protective_voice: userVoice.id }))
+                    setShowOtherVoices(false)
                   }}
                 >
-                  <span className="voice-icon">{voice.icon}</span>
-                  <span className="voice-label">{voice.label}</span>
+                  <span className="voice-icon">{userVoice.icon}</span>
+                  <span className="voice-label">{userVoice.label}</span>
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Fear Trifecta */}
-        <div className="recognise-section">
-          <label className="recognise-label">What fear did it trigger? (select all)</label>
-          <div className="fear-grid">
-            {FEAR_TRIFECTA.map(fear => (
+              )}
               <button
-                key={fear.id}
                 type="button"
-                className={`fear-option ${formData.fears_triggered.includes(fear.id) ? 'selected' : ''}`}
-                onClick={() => handleFearToggle(fear.id)}
+                className={`voice-option other-btn ${showOtherVoices ? 'active' : ''}`}
+                onClick={() => setShowOtherVoices(!showOtherVoices)}
               >
-                <span className="fear-icon">{fear.icon}</span>
-                <span className="fear-label">{fear.label}</span>
+                Other ▼
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Vulnerability Layer */}
-        <div className="recognise-section">
-          <label className="recognise-label">What layer were you in?</label>
-          <div className="layer-grid">
-            {VULNERABILITY_LAYERS.map(layer => (
-              <button
-                key={layer.id}
-                type="button"
-                className={`layer-option ${formData.vulnerability_layer === layer.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, vulnerability_layer: layer.id }))}
-                title={layer.fullLabel}
-              >
-                <span className="layer-icon">{layer.icon}</span>
-                <span className="layer-label">{layer.label}</span>
-              </button>
-            ))}
-          </div>
-          {formData.vulnerability_layer && (
-            <div className="layer-description">
-              {VULNERABILITY_LAYERS.find(l => l.id === formData.vulnerability_layer)?.description}
             </div>
-          )}
-        </div>
-
-        {/* Business Area */}
-        <div className="recognise-section">
-          <label className="recognise-label">Which business area?</label>
-          <div className="business-area-grid">
-            {BUSINESS_AREAS.map(area => (
-              <button
-                key={area.id}
-                type="button"
-                className={`area-option ${formData.business_area === area.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, business_area: area.id }))}
-                title={area.description}
-              >
-                <span className="area-icon">{area.icon}</span>
-                <span className="area-label">{area.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Intensity Slider */}
-        <div className="recognise-section">
-          <label className="recognise-label">How intense was it?</label>
-          <div className="intensity-slider">
-            <span className="intensity-end">😌</span>
-            <div className="intensity-buttons">
-              {[1, 2, 3, 4, 5].map(level => (
-                <button
-                  key={level}
-                  type="button"
-                  className={`intensity-btn ${formData.intensity === level ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, intensity: level }))}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
-            <span className="intensity-end">😰</span>
-          </div>
-        </div>
-
-        {/* Situation */}
-        <div className="recognise-section">
-          <label className="recognise-label">What happened?</label>
-          <textarea
-            className="recognise-textarea"
-            placeholder="Describe the situation..."
-            value={formData.situation}
-            onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
-            rows={3}
-          />
-        </div>
-
-        <button
-          className="recognise-submit-btn"
-          onClick={handleSubmit}
-          disabled={!isFormValid() || isSubmitting}
-        >
-          {isSubmitting ? 'Saving...' : 'Complete Quest'}
-        </button>
-      </div>
-    )
-  }
-
-  // Render Essence Voice quest
-  if (quest.id === 'recognise_essence_observe') {
-    const essenceExpressions = [
-      { id: 'created', label: 'Created', icon: '🎨' },
-      { id: 'connected', label: 'Connected', icon: '🤝' },
-      { id: 'led', label: 'Led', icon: '🎯' },
-      { id: 'taught', label: 'Taught', icon: '💡' },
-      { id: 'inspired', label: 'Inspired', icon: '🔥' },
-      { id: 'grew', label: 'Grew', icon: '🌱' }
-    ]
-
-    // Find the user's essence profile to get the one-liner
-    const userEssenceProfile = essenceProfiles.essence_archetypes?.find(
-      p => p.name === userArchetypes.essence
-    )
-
-    return (
-      <div className="recognise-input">
-        {/* Essence Archetype Display */}
-        {userArchetypes.essence && (
-          <div className="recognise-section essence-display">
-            <div className="essence-archetype-name">{userArchetypes.essence}</div>
-            {userEssenceProfile?.superpower && (
-              <div className="essence-one-liner">{userEssenceProfile.superpower}</div>
+            {showOtherVoices && (
+              <div className="other-voices-grid">
+                {otherVoices.map(voice => (
+                  <button
+                    key={voice.id}
+                    type="button"
+                    className={`voice-option ${formData.protective_voice === voice.id ? 'selected' : ''}`}
+                    onClick={() => setFormData(prev => ({ ...prev, protective_voice: voice.id }))}
+                  >
+                    <span className="voice-icon">{voice.icon}</span>
+                    <span className="voice-label">{voice.label}</span>
+                  </button>
+                ))}
+              </div>
             )}
+
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">💼</span>
+                <h4>Which business area?</h4>
+              </div>
+              <div className="business-area-grid">
+                {BUSINESS_AREAS.map(area => (
+                  <button
+                    key={area.id}
+                    type="button"
+                    className={`area-option ${formData.business_area === area.id ? 'selected' : ''}`}
+                    onClick={() => setFormData(prev => ({ ...prev, business_area: area.id }))}
+                    title={area.description}
+                  >
+                    <span className="area-icon">{area.icon}</span>
+                    <span className="area-label">{area.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Business Area */}
-        <div className="recognise-section">
-          <label className="recognise-label">Which business area?</label>
-          <div className="business-area-grid">
-            {BUSINESS_AREAS.map(area => (
-              <button
-                key={area.id}
-                type="button"
-                className={`area-option ${formData.business_area === area.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, business_area: area.id }))}
-                title={area.description}
-              >
-                <span className="area-icon">{area.icon}</span>
-                <span className="area-label">{area.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Situation */}
-        <div className="recognise-section">
-          <label className="recognise-label">What were you doing?</label>
-          <textarea
-            className="recognise-textarea"
-            placeholder="Describe what you were doing..."
-            value={formData.situation}
-            onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
-            rows={3}
-          />
-        </div>
-
-        {/* Alignment Slider */}
-        <div className="recognise-section">
-          <label className="recognise-label">How aligned did you feel?</label>
-          <div className="intensity-slider">
-            <span className="intensity-end">😐</span>
-            <div className="intensity-buttons">
-              {[1, 2, 3, 4, 5].map(level => (
+        {/* Step 2: Fears + Vulnerability Layer */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">💭</span>
+              <h4>What fear did it trigger?</h4>
+            </div>
+            <p className="step-description">Select all that apply</p>
+            <div className="fear-grid">
+              {FEAR_TRIFECTA.map(fear => (
                 <button
-                  key={level}
+                  key={fear.id}
                   type="button"
-                  className={`intensity-btn ${formData.alignment === level ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, alignment: level }))}
+                  className={`fear-option ${formData.fears_triggered.includes(fear.id) ? 'selected' : ''}`}
+                  onClick={() => handleFearToggle(fear.id)}
                 >
-                  {level}
+                  <span className="fear-icon">{fear.icon}</span>
+                  <span className="fear-label">{fear.label}</span>
                 </button>
               ))}
             </div>
-            <span className="intensity-end">✨</span>
-          </div>
-        </div>
 
-        <button
-          className="recognise-submit-btn"
-          onClick={handleSubmit}
-          disabled={!isFormValid() || isSubmitting}
-        >
-          {isSubmitting ? 'Saving...' : 'Complete Quest'}
-        </button>
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">🎯</span>
+                <h4>What layer were you in?</h4>
+              </div>
+              <p className="step-description">(optional)</p>
+              <div className="layer-grid">
+                {VULNERABILITY_LAYERS.map(layer => (
+                  <button
+                    key={layer.id}
+                    type="button"
+                    className={`layer-option ${formData.vulnerability_layer === layer.id ? 'selected' : ''}`}
+                    onClick={() => setFormData(prev => ({ ...prev, vulnerability_layer: layer.id }))}
+                    title={layer.fullLabel}
+                  >
+                    <span className="layer-icon">{layer.icon}</span>
+                    <span className="layer-label">{layer.label}</span>
+                  </button>
+                ))}
+              </div>
+              {formData.vulnerability_layer && (
+                <div className="layer-description">
+                  {VULNERABILITY_LAYERS.find(l => l.id === formData.vulnerability_layer)?.description}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Situation + Intensity */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">📝</span>
+              <h4>What happened?</h4>
+            </div>
+            <p className="step-description">Describe the situation where this voice showed up</p>
+            <textarea
+              className="recognise-textarea"
+              placeholder="Describe the situation..."
+              value={formData.situation}
+              onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.situation.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.situation.trim().length}/10 characters minimum
+            </p>
+
+            <div className="step-subsection">
+              <label className="recognise-label">How intense was it?</label>
+              <div className="intensity-slider">
+                <span className="intensity-end">😌</span>
+                <div className="intensity-buttons">
+                  {[1, 2, 3, 4, 5].map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn ${formData.intensity === level ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, intensity: level }))}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <span className="intensity-end">😰</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Summary */}
+        {step === 4 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Voice:</span>
+                <span className="summary-value">{getVoice(formData.protective_voice)?.icon} {getVoice(formData.protective_voice)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Fear(s):</span>
+                <span className="summary-value">
+                  {formData.fears_triggered.map(f => getFear(f)).filter(Boolean).map(f => `${f.icon} ${f.label}`).join(', ')}
+                </span>
+              </div>
+              {formData.vulnerability_layer && (
+                <div className="summary-item">
+                  <span className="summary-label">Layer:</span>
+                  <span className="summary-value">{getLayer(formData.vulnerability_layer)?.icon} {getLayer(formData.vulnerability_layer)?.label}</span>
+                </div>
+              )}
+              <div className="summary-item">
+                <span className="summary-label">Area:</span>
+                <span className="summary-value">{getArea(formData.business_area)?.icon} {getArea(formData.business_area)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Intensity:</span>
+                <span className="summary-value">{formData.intensity}/5</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Situation:</span>
+                <span className="summary-value">{formData.situation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
       </div>
     )
   }
 
-  // Render Negative Frequency quest
+  // ============ ESSENCE VOICE QUEST ============
+  if (quest.id === 'recognise_essence_observe') {
+    return (
+      <div className="recognise-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
+        </div>
+
+        {/* Step 1: Essence Display + Business Area */}
+        {step === 1 && (
+          <div className="step-content">
+            {userArchetypes.essence && (
+              <div className="essence-display">
+                <div className="essence-archetype-name">{userArchetypes.essence}</div>
+                {userEssenceProfile?.superpower && (
+                  <div className="essence-one-liner">{userEssenceProfile.superpower}</div>
+                )}
+              </div>
+            )}
+            <div className="step-header">
+              <span className="step-icon">💼</span>
+              <h4>Which business area?</h4>
+            </div>
+            <div className="business-area-grid">
+              {BUSINESS_AREAS.map(area => (
+                <button
+                  key={area.id}
+                  type="button"
+                  className={`area-option ${formData.business_area === area.id ? 'selected' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, business_area: area.id }))}
+                  title={area.description}
+                >
+                  <span className="area-icon">{area.icon}</span>
+                  <span className="area-label">{area.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Situation + Alignment */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">📝</span>
+              <h4>What were you doing?</h4>
+            </div>
+            <p className="step-description">Describe how your essence voice showed up</p>
+            <textarea
+              className="recognise-textarea"
+              placeholder="Describe what you were doing..."
+              value={formData.situation}
+              onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.situation.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.situation.trim().length}/10 characters minimum
+            </p>
+
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">✨</span>
+                <h4>How aligned did you feel?</h4>
+              </div>
+              <div className="intensity-slider">
+                <span className="intensity-end">😐</span>
+                <div className="intensity-buttons">
+                  {[1, 2, 3, 4, 5].map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn ${formData.alignment === level ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, alignment: level }))}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <span className="intensity-end">✨</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Summary */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              {userArchetypes.essence && (
+                <div className="summary-item">
+                  <span className="summary-label">Essence:</span>
+                  <span className="summary-value">{userArchetypes.essence}</span>
+                </div>
+              )}
+              <div className="summary-item">
+                <span className="summary-label">Area:</span>
+                <span className="summary-value">{getArea(formData.business_area)?.icon} {getArea(formData.business_area)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Situation:</span>
+                <span className="summary-value">{formData.situation}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Alignment:</span>
+                <span className="summary-value">{formData.alignment}/5</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ NEGATIVE FREQUENCY QUEST ============
   if (quest.id === 'recognise_negative_frequency') {
     return (
-      <div className="recognise-input">
-        {/* Frequency Selector */}
-        <div className="recognise-section">
-          <label className="recognise-label">I showed up from a place of...</label>
-          <div className="frequency-list">
-            {NEGATIVE_FREQUENCIES.map(freq => (
-              <button
-                key={freq.id}
-                type="button"
-                className={`frequency-option ${formData.frequency === freq.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, frequency: freq.id }))}
-              >
-                <span className="frequency-icon">{freq.icon}</span>
-                <div className="frequency-content">
-                  <span className="frequency-label">{freq.label}</span>
-                  <span className="frequency-desc">{freq.description}</span>
-                </div>
-              </button>
-            ))}
-          </div>
+      <div className="recognise-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
         </div>
 
-        {/* Area of Life */}
-        <div className="recognise-section">
-          <label className="recognise-label">What area of life?</label>
-          <div className="area-of-life-grid">
-            {AREAS_OF_LIFE.map(area => (
-              <button
-                key={area.id}
-                type="button"
-                className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
-              >
-                <span className="area-icon">{area.icon}</span>
-                <span className="area-label">{area.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Intensity */}
-        <div className="recognise-section">
-          <label className="recognise-label">How intense was it?</label>
-          <div className="intensity-slider">
-            <span className="intensity-end">😌</span>
-            <div className="intensity-buttons">
-              {[1, 2, 3, 4, 5].map(level => (
+        {/* Step 1: Frequency selector */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">📉</span>
+              <h4>I showed up from a place of...</h4>
+            </div>
+            <div className="frequency-list">
+              {NEGATIVE_FREQUENCIES.map(freq => (
                 <button
-                  key={level}
+                  key={freq.id}
                   type="button"
-                  className={`intensity-btn ${formData.frequency_intensity === level ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, frequency_intensity: level }))}
+                  className={`frequency-option ${formData.frequency === freq.id ? 'selected' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, frequency: freq.id }))}
                 >
-                  {level}
+                  <span className="frequency-icon">{freq.icon}</span>
+                  <div className="frequency-content">
+                    <span className="frequency-label">{freq.label}</span>
+                    <span className="frequency-desc">{freq.description}</span>
+                  </div>
                 </button>
               ))}
             </div>
-            <span className="intensity-end">😰</span>
           </div>
-        </div>
+        )}
 
-        {/* Situation */}
-        <div className="recognise-section">
-          <label className="recognise-label">What was the situation?</label>
-          <textarea
-            className="recognise-textarea"
-            placeholder="Describe what happened..."
-            value={formData.situation}
-            onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
-            rows={3}
-          />
-        </div>
+        {/* Step 2: Area + Intensity + Situation */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>What area of life?</h4>
+            </div>
+            <div className="area-of-life-grid">
+              {AREAS_OF_LIFE.map(area => (
+                <button
+                  key={area.id}
+                  type="button"
+                  className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
+                >
+                  <span className="area-icon">{area.icon}</span>
+                  <span className="area-label">{area.label}</span>
+                </button>
+              ))}
+            </div>
 
-        <button
-          className="recognise-submit-btn"
-          onClick={handleSubmit}
-          disabled={!isFormValid() || isSubmitting}
-        >
-          {isSubmitting ? 'Saving...' : 'Complete Quest'}
-        </button>
+            <div className="step-subsection">
+              <label className="recognise-label">How intense was it?</label>
+              <div className="intensity-slider">
+                <span className="intensity-end">😌</span>
+                <div className="intensity-buttons">
+                  {[1, 2, 3, 4, 5].map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn ${formData.frequency_intensity === level ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, frequency_intensity: level }))}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <span className="intensity-end">😰</span>
+              </div>
+            </div>
+
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">📝</span>
+                <h4>What was the situation?</h4>
+              </div>
+              <textarea
+                className="recognise-textarea"
+                placeholder="Describe what happened..."
+                value={formData.situation}
+                onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+                rows={3}
+              />
+              <p className={`char-hint ${formData.situation.trim().length >= 10 ? 'met' : ''}`}>
+                {formData.situation.trim().length}/10 characters minimum
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Summary */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Frequency:</span>
+                <span className="summary-value">{getFrequency(formData.frequency, false)?.icon} {getFrequency(formData.frequency, false)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Area:</span>
+                <span className="summary-value">{getLifeArea(formData.area_of_life)?.icon} {getLifeArea(formData.area_of_life)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Intensity:</span>
+                <span className="summary-value">{formData.frequency_intensity}/5</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Situation:</span>
+                <span className="summary-value">{formData.situation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
       </div>
     )
   }
 
-  // Render Positive Frequency quest
+  // ============ POSITIVE FREQUENCY QUEST ============
   if (quest.id === 'recognise_positive_frequency') {
     return (
-      <div className="recognise-input">
-        {/* Frequency Selector */}
-        <div className="recognise-section">
-          <label className="recognise-label">I showed up from a place of...</label>
-          <div className="frequency-list">
-            {POSITIVE_FREQUENCIES.map(freq => (
-              <button
-                key={freq.id}
-                type="button"
-                className={`frequency-option positive ${formData.frequency === freq.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, frequency: freq.id }))}
-              >
-                <span className="frequency-icon">{freq.icon}</span>
-                <div className="frequency-content">
-                  <span className="frequency-label">{freq.label}</span>
-                  <span className="frequency-desc">{freq.description}</span>
-                </div>
-              </button>
-            ))}
-          </div>
+      <div className="recognise-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
         </div>
 
-        {/* Area of Life */}
-        <div className="recognise-section">
-          <label className="recognise-label">What area of life?</label>
-          <div className="area-of-life-grid">
-            {AREAS_OF_LIFE.map(area => (
-              <button
-                key={area.id}
-                type="button"
-                className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
-              >
-                <span className="area-icon">{area.icon}</span>
-                <span className="area-label">{area.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Intensity */}
-        <div className="recognise-section">
-          <label className="recognise-label">How strong was this feeling?</label>
-          <div className="intensity-slider">
-            <span className="intensity-end">😌</span>
-            <div className="intensity-buttons">
-              {[1, 2, 3, 4, 5].map(level => (
+        {/* Step 1: Frequency selector */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✨</span>
+              <h4>I showed up from a place of...</h4>
+            </div>
+            <div className="frequency-list">
+              {POSITIVE_FREQUENCIES.map(freq => (
                 <button
-                  key={level}
+                  key={freq.id}
                   type="button"
-                  className={`intensity-btn positive ${formData.frequency_intensity === level ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, frequency_intensity: level }))}
+                  className={`frequency-option positive ${formData.frequency === freq.id ? 'selected' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, frequency: freq.id }))}
                 >
-                  {level}
+                  <span className="frequency-icon">{freq.icon}</span>
+                  <div className="frequency-content">
+                    <span className="frequency-label">{freq.label}</span>
+                    <span className="frequency-desc">{freq.description}</span>
+                  </div>
                 </button>
               ))}
             </div>
-            <span className="intensity-end">✨</span>
           </div>
-        </div>
+        )}
 
-        {/* Situation */}
-        <div className="recognise-section">
-          <label className="recognise-label">What was the situation?</label>
-          <textarea
-            className="recognise-textarea"
-            placeholder="Describe what happened..."
-            value={formData.situation}
-            onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
-            rows={3}
-          />
-        </div>
+        {/* Step 2: Area + Intensity + Situation */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>What area of life?</h4>
+            </div>
+            <div className="area-of-life-grid">
+              {AREAS_OF_LIFE.map(area => (
+                <button
+                  key={area.id}
+                  type="button"
+                  className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
+                >
+                  <span className="area-icon">{area.icon}</span>
+                  <span className="area-label">{area.label}</span>
+                </button>
+              ))}
+            </div>
 
-        <button
-          className="recognise-submit-btn"
-          onClick={handleSubmit}
-          disabled={!isFormValid() || isSubmitting}
-        >
-          {isSubmitting ? 'Saving...' : 'Complete Quest'}
-        </button>
+            <div className="step-subsection">
+              <label className="recognise-label">How strong was this feeling?</label>
+              <div className="intensity-slider">
+                <span className="intensity-end">😌</span>
+                <div className="intensity-buttons">
+                  {[1, 2, 3, 4, 5].map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn positive ${formData.frequency_intensity === level ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, frequency_intensity: level }))}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <span className="intensity-end">✨</span>
+              </div>
+            </div>
+
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">📝</span>
+                <h4>What was the situation?</h4>
+              </div>
+              <textarea
+                className="recognise-textarea"
+                placeholder="Describe what happened..."
+                value={formData.situation}
+                onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+                rows={3}
+              />
+              <p className={`char-hint ${formData.situation.trim().length >= 10 ? 'met' : ''}`}>
+                {formData.situation.trim().length}/10 characters minimum
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Summary */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Frequency:</span>
+                <span className="summary-value">{getFrequency(formData.frequency, true)?.icon} {getFrequency(formData.frequency, true)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Area:</span>
+                <span className="summary-value">{getLifeArea(formData.area_of_life)?.icon} {getLifeArea(formData.area_of_life)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Intensity:</span>
+                <span className="summary-value">{formData.frequency_intensity}/5</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Situation:</span>
+                <span className="summary-value">{formData.situation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
       </div>
     )
   }
 
-  // Render Trigger Pattern quest
+  // ============ TRIGGER PATTERN QUEST ============
   if (quest.id === 'recognise_trigger_pattern') {
     return (
-      <div className="recognise-input">
-        {/* Trigger Type Selector */}
-        <div className="recognise-section">
-          <label className="recognise-label">What triggered you?</label>
-          <div className="frequency-list">
-            {TRIGGER_TYPES.map(trigger => (
-              <button
-                key={trigger.id}
-                type="button"
-                className={`frequency-option ${formData.trigger_type === trigger.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, trigger_type: trigger.id }))}
-              >
-                <span className="frequency-icon">{trigger.icon}</span>
-                <div className="frequency-content">
-                  <span className="frequency-label">{trigger.label}</span>
-                  <span className="frequency-desc">{trigger.description}</span>
-                </div>
-              </button>
-            ))}
-          </div>
+      <div className="recognise-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
         </div>
 
-        {/* Area of Life */}
-        <div className="recognise-section">
-          <label className="recognise-label">What area of life?</label>
-          <div className="area-of-life-grid">
-            {AREAS_OF_LIFE.map(area => (
-              <button
-                key={area.id}
-                type="button"
-                className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
-              >
-                <span className="area-icon">{area.icon}</span>
-                <span className="area-label">{area.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Intensity */}
-        <div className="recognise-section">
-          <label className="recognise-label">How intense was the reaction?</label>
-          <div className="intensity-slider">
-            <span className="intensity-end">😌</span>
-            <div className="intensity-buttons">
-              {[1, 2, 3, 4, 5].map(level => (
+        {/* Step 1: Trigger Type */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">⚡</span>
+              <h4>What triggered you?</h4>
+            </div>
+            <div className="frequency-list">
+              {TRIGGER_TYPES.map(trigger => (
                 <button
-                  key={level}
+                  key={trigger.id}
                   type="button"
-                  className={`intensity-btn ${formData.frequency_intensity === level ? 'selected' : ''}`}
-                  onClick={() => setFormData(prev => ({ ...prev, frequency_intensity: level }))}
+                  className={`frequency-option ${formData.trigger_type === trigger.id ? 'selected' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, trigger_type: trigger.id }))}
                 >
-                  {level}
+                  <span className="frequency-icon">{trigger.icon}</span>
+                  <div className="frequency-content">
+                    <span className="frequency-label">{trigger.label}</span>
+                    <span className="frequency-desc">{trigger.description}</span>
+                  </div>
                 </button>
               ))}
             </div>
-            <span className="intensity-end">😰</span>
           </div>
-        </div>
+        )}
 
-        {/* Pattern Description */}
-        <div className="recognise-section">
-          <label className="recognise-label">Describe the trigger pattern</label>
-          <textarea
-            className="recognise-textarea"
-            placeholder="What happened? What pattern do you notice?"
-            value={formData.situation}
-            onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
-            rows={3}
-          />
-        </div>
+        {/* Step 2: Area + Intensity + Situation */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>What area of life?</h4>
+            </div>
+            <div className="area-of-life-grid">
+              {AREAS_OF_LIFE.map(area => (
+                <button
+                  key={area.id}
+                  type="button"
+                  className={`area-option ${formData.area_of_life === area.id ? 'selected' : ''}`}
+                  onClick={() => setFormData(prev => ({ ...prev, area_of_life: area.id }))}
+                >
+                  <span className="area-icon">{area.icon}</span>
+                  <span className="area-label">{area.label}</span>
+                </button>
+              ))}
+            </div>
 
-        <button
-          className="recognise-submit-btn"
-          onClick={handleSubmit}
-          disabled={!isFormValid() || isSubmitting}
-        >
-          {isSubmitting ? 'Saving...' : 'Complete Quest'}
-        </button>
+            <div className="step-subsection">
+              <label className="recognise-label">How intense was the reaction?</label>
+              <div className="intensity-slider">
+                <span className="intensity-end">😌</span>
+                <div className="intensity-buttons">
+                  {[1, 2, 3, 4, 5].map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn ${formData.frequency_intensity === level ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, frequency_intensity: level }))}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <span className="intensity-end">😰</span>
+              </div>
+            </div>
+
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">📝</span>
+                <h4>Describe the trigger pattern</h4>
+              </div>
+              <textarea
+                className="recognise-textarea"
+                placeholder="What happened? What pattern do you notice?"
+                value={formData.situation}
+                onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+                rows={3}
+              />
+              <p className={`char-hint ${formData.situation.trim().length >= 10 ? 'met' : ''}`}>
+                {formData.situation.trim().length}/10 characters minimum
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Summary */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Trigger:</span>
+                <span className="summary-value">{getTrigger(formData.trigger_type)?.icon} {getTrigger(formData.trigger_type)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Area:</span>
+                <span className="summary-value">{getLifeArea(formData.area_of_life)?.icon} {getLifeArea(formData.area_of_life)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Intensity:</span>
+                <span className="summary-value">{formData.frequency_intensity}/5</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Pattern:</span>
+                <span className="summary-value">{formData.situation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
       </div>
     )
   }

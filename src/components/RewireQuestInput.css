@@ -9,6 +9,157 @@
   gap: 1rem;
 }
 
+/* Stepped Layout */
+.rewire-input.stepped {
+  gap: 0;
+}
+
+.rewire-input .step-progress {
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.rewire-input .progress-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7c3aed;
+}
+
+.rewire-input .step-content {
+  min-height: 200px;
+}
+
+.rewire-input .step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.rewire-input .step-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.rewire-input .step-icon {
+  font-size: 1.25rem;
+}
+
+.rewire-input .step-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.rewire-input .step-subsection {
+  margin-top: 1.5rem;
+}
+
+/* Step Navigation */
+.rewire-input .step-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.rewire-input .nav-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rewire-input .nav-btn.back {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.rewire-input .nav-btn.back:hover {
+  background: #e5e7eb;
+}
+
+.rewire-input .nav-btn.next {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  margin-left: auto;
+}
+
+.rewire-input .nav-btn.next:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.rewire-input .nav-btn.next:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rewire-input .nav-btn.complete {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  margin-left: auto;
+}
+
+.rewire-input .nav-btn.complete:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.rewire-input .nav-btn.complete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Character hint */
+.rewire-input .char-hint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.rewire-input .char-hint.met {
+  color: #f59e0b;
+}
+
+/* Selection Summary */
+.rewire-input .selection-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.rewire-input .summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rewire-input .summary-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rewire-input .summary-value {
+  font-size: 0.9375rem;
+  color: #1f2937;
+}
+
 .rewire-section {
   display: flex;
   flex-direction: column;

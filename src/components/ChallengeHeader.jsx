@@ -51,44 +51,28 @@ function ChallengeHeader({
     <header className="challenge-header">
       <h1>Gamify Your Ambitions</h1>
 
-      {/* Row 1: Non-clickable info - Rank, Points, Streak, Week Type */}
-      <div className="challenge-header-top">
-        <div className="challenge-header-badges">
-          {/* Rank Badge - clickable to show leaderboard */}
-          {userRank && (
-            <div
-              className="rank-badge"
-              title={`Ranked #${userRank} on leaderboard`}
-              onClick={onLeaderboardClick}
-              style={{ cursor: 'pointer' }}
-            >
-              🏆 #{userRank}
-            </div>
-          )}
-          {/* Points */}
-          <div className="challenge-day">
-            {progress.total_points || 0} pts
+      {/* Hero Section: Rank + Score + Streak - Large prominent display */}
+      <div className="challenge-hero-stats" onClick={onLeaderboardClick} style={{ cursor: 'pointer' }}>
+        <div className="hero-rank">
+          <span className="hero-rank-trophy">🏆</span>
+          <span className="hero-rank-number">#{userRank || '-'}</span>
+        </div>
+        <div className="hero-divider" />
+        <div className="hero-points">
+          <span className="hero-points-value">{progress.total_points || 0}</span>
+          <span className="hero-points-label">points</span>
+        </div>
+        <div className="hero-divider" />
+        <div className="hero-streak">
+          <div className="hero-streak-row">
+            <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
+            <span className="hero-streak-value">{streakDays}</span>
           </div>
-          {/* Streak Flame */}
-          {streakDays > 0 && (
-            <div className="streak-badge" title={`${streakDays} day streak!`}>
-              <span className={getFlameClass()}>🔥</span>
-              <span className="streak-count">{streakDays}</span>
-            </div>
-          )}
-          {/* Week Type Badge */}
-          {weekTypeInfo && (
-            <div
-              className="challenge-day week-type-bubble"
-              style={{ backgroundColor: weekTypeInfo.color, color: 'white' }}
-            >
-              {weekTypeInfo.icon} {weekTypeInfo.label.toUpperCase()}
-            </div>
-          )}
+          <span className="hero-streak-label">day streak</span>
         </div>
       </div>
 
-      {/* Row 2: Clickable actions - Voices, Settings, Edit */}
+      {/* Row 2: Quick actions - Voices, Settings, Edit, Flow */}
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
           {userData?.essence_archetype && (
@@ -149,6 +133,15 @@ function ChallengeHeader({
               style={{ cursor: 'pointer' }}
             >
               ✏️ Edit
+            </div>
+          )}
+          {/* Week Type Badge */}
+          {weekTypeInfo && (
+            <div
+              className="challenge-day week-type-bubble"
+              style={{ backgroundColor: weekTypeInfo.color, color: 'white' }}
+            >
+              {weekTypeInfo.icon} {weekTypeInfo.label.toUpperCase()}
             </div>
           )}
         </div>

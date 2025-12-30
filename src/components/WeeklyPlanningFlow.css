@@ -812,7 +812,7 @@
   margin-right: auto;
 }
 
-.nav-btn {
+.weekly-planning-flow .nav-btn {
   padding: 14px 24px;
   border-radius: 12px;
   font-size: 1rem;
@@ -822,29 +822,29 @@
   border: none;
 }
 
-.nav-btn.back {
+.weekly-planning-flow .nav-btn.back {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
-.nav-btn.back:hover {
+.weekly-planning-flow .nav-btn.back:hover {
   background: rgba(255, 255, 255, 0.15);
 }
 
-.nav-btn.next,
-.nav-btn.complete {
+.weekly-planning-flow .nav-btn.next,
+.weekly-planning-flow .nav-btn.complete {
   flex: 1;
   background: #fbbf24;
   color: #1f2937;
 }
 
-.nav-btn.next:hover:not(:disabled),
-.nav-btn.complete:hover:not(:disabled) {
+.weekly-planning-flow .nav-btn.next:hover:not(:disabled),
+.weekly-planning-flow .nav-btn.complete:hover:not(:disabled) {
   background: #f59e0b;
   transform: translateY(-1px);
 }
 
-.nav-btn:disabled {
+.weekly-planning-flow .nav-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;

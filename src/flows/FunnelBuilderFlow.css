@@ -133,6 +133,31 @@
 .funnel-builder-flow .fb-prereq-note {
   color: rgba(255, 255, 255, 0.6);
   font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.funnel-builder-flow .fb-prereq-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.funnel-builder-flow .fb-prereq-actions .go-back-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: color 0.2s ease;
+}
+
+.funnel-builder-flow .fb-prereq-actions .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* ============ WELCOME ============ */
@@ -246,6 +271,84 @@
   margin-bottom: 24px;
 }
 
+.funnel-builder-flow .fb-card-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Lead Magnet Positioning Insight */
+.funnel-builder-flow .fb-positioning-insight {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.funnel-builder-flow .fb-positioning-insight h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #fbbf24;
+  text-align: center;
+}
+
+.funnel-builder-flow .fb-insight-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.funnel-builder-flow .fb-insight-role {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.funnel-builder-flow .fb-insight-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.funnel-builder-flow .fb-insight-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.funnel-builder-flow .fb-insight-suggestion {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Funnel Pattern Text */
+.funnel-builder-flow .fb-pattern-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 16px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Funnel step highlighting */
+.funnel-builder-flow .fb-funnel-step.highlight {
+  border: 1px solid rgba(251, 191, 36, 0.5);
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.funnel-builder-flow .fb-funnel-step.merged {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.funnel-builder-flow .fb-funnel-step.merged .fb-step-num {
+  background: #22c55e;
+}
+
 /* ============ SECTION (for each step) ============ */
 
 .funnel-builder-flow .fb-section {
@@ -269,6 +372,28 @@
 .funnel-builder-flow .fb-info-note {
   color: rgba(255, 255, 255, 0.7);
   font-size: 13px;
+}
+
+.funnel-builder-flow .fb-info-role {
+  display: block;
+  font-size: 13px;
+  color: #fbbf24;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.funnel-builder-flow .fb-merged-note {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: rgba(34, 197, 94, 0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.funnel-builder-flow .info-box.highlight {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
 .funnel-builder-flow .fb-options {
@@ -320,6 +445,21 @@
 .funnel-builder-flow .fb-summary-plus {
   color: #fbbf24;
   font-weight: 700;
+}
+
+.funnel-builder-flow .fb-summary-pattern {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.funnel-builder-flow .fb-summary-role {
+  font-size: 12px;
+  color: #fbbf24;
+  margin: 0 0 4px;
+  font-weight: 500;
 }
 
 .funnel-builder-flow .fb-summary-steps {

@@ -1,11 +1,7 @@
 /* Validation Flows Manager */
-.validation-manager-page {
-  min-height: 100vh;
-  background: #f8f9fa;
-  padding: 40px 20px;
-}
+/* Note: Uses .dashboard-container from Profile.css for sidebar layout */
 
-.validation-manager-page .manager-header {
+.dashboard-container .manager-header {
   margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
@@ -14,19 +10,19 @@
   gap: 20px;
 }
 
-.validation-manager-page .manager-header h1 {
+.dashboard-container .manager-header h1 {
   font-size: 32px;
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 8px;
 }
 
-.validation-manager-page .manager-header p {
+.dashboard-container .manager-header p {
   font-size: 16px;
   color: #6c757d;
 }
 
-.validation-manager-page .create-flow-btn {
+.dashboard-container .create-flow-btn {
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   border: none;
@@ -39,35 +35,35 @@
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
-.validation-manager-page .create-flow-btn:hover {
+.dashboard-container .create-flow-btn:hover {
   background: linear-gradient(135deg, #3d0b8a 0%, #4a12c7 50%, #6730d1 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(94, 23, 235, 0.4);
 }
 
 /* Manager Content */
-.validation-manager-page .manager-content {
+.dashboard-container .manager-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
 /* Flows List */
-.validation-manager-page .flows-list {
+.dashboard-container .flows-list {
   background: white;
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.validation-manager-page .flows-list h2 {
+.dashboard-container .flows-list h2 {
   font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 20px;
 }
 
-.validation-manager-page .flow-card {
+.dashboard-container .flow-card {
   background: #f8f9fa;
   border-radius: 12px;
   padding: 20px;
@@ -75,30 +71,30 @@
   transition: all 0.2s ease;
 }
 
-.validation-manager-page .flow-card:hover {
+.dashboard-container .flow-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.validation-manager-page .flow-card-header {
+.dashboard-container .flow-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
 }
 
-.validation-manager-page .flow-card-header h3 {
+.dashboard-container .flow-card-header h3 {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 4px;
 }
 
-.validation-manager-page .flow-card-header p {
+.dashboard-container .flow-card-header p {
   font-size: 14px;
   color: #6c757d;
 }
 
-.validation-manager-page .flow-status {
+.dashboard-container .flow-status {
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -106,46 +102,46 @@
   text-transform: uppercase;
 }
 
-.validation-manager-page .flow-status.active {
+.dashboard-container .flow-status.active {
   background: #d1fae5;
   color: #065f46;
 }
 
-.validation-manager-page .flow-status.inactive {
+.dashboard-container .flow-status.inactive {
   background: #fee2e2;
   color: #991b1b;
 }
 
-.validation-manager-page .flow-card-stats {
+.dashboard-container .flow-card-stats {
   display: flex;
   gap: 24px;
   margin-bottom: 16px;
 }
 
-.validation-manager-page .stat {
+.dashboard-container .stat {
   display: flex;
   flex-direction: column;
 }
 
-.validation-manager-page .stat-value {
+.dashboard-container .stat-value {
   font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
-.validation-manager-page .stat-label {
+.dashboard-container .stat-label {
   font-size: 12px;
   color: #6c757d;
   text-transform: uppercase;
 }
 
-.validation-manager-page .flow-card-actions {
+.dashboard-container .flow-card-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.validation-manager-page .flow-card-actions button {
+.dashboard-container .flow-card-actions button {
   background: white;
   border: 1px solid #dee2e6;
   border-radius: 8px;
@@ -156,29 +152,29 @@
   transition: all 0.2s ease;
 }
 
-.validation-manager-page .flow-card-actions button:hover {
+.dashboard-container .flow-card-actions button:hover {
   background: #f8f9fa;
   transform: translateY(-2px);
 }
 
-.validation-manager-page .copy-link-btn {
+.dashboard-container .copy-link-btn {
   background: #5e17eb !important;
   color: white !important;
   border: none !important;
 }
 
-.validation-manager-page .copy-link-btn:hover {
+.dashboard-container .copy-link-btn:hover {
   background: #4a12c7 !important;
 }
 
-.validation-manager-page .delete-btn:hover {
+.dashboard-container .delete-btn:hover {
   background: #fee2e2 !important;
   border-color: #ef4444 !important;
   color: #ef4444 !important;
 }
 
 /* Responses Viewer */
-.validation-manager-page .responses-viewer {
+.dashboard-container .responses-viewer {
   background: white;
   border-radius: 16px;
   padding: 24px;
@@ -187,7 +183,7 @@
   overflow-y: auto;
 }
 
-.validation-manager-page .responses-header {
+.dashboard-container .responses-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -196,13 +192,13 @@
   border-bottom: 1px solid #dee2e6;
 }
 
-.validation-manager-page .responses-header h2 {
+.dashboard-container .responses-header h2 {
   font-size: 20px;
   font-weight: 600;
   color: #1a1a1a;
 }
 
-.validation-manager-page .close-btn {
+.dashboard-container .close-btn {
   background: none;
   border: none;
   font-size: 32px;
@@ -219,13 +215,13 @@
   transition: all 0.2s ease;
 }
 
-.validation-manager-page .close-btn:hover {
+.dashboard-container .close-btn:hover {
   background: #f8f9fa;
   color: #1a1a1a;
 }
 
 /* Analytics Summary */
-.validation-manager-page .analytics-summary {
+.dashboard-container .analytics-summary {
   display: flex;
   gap: 24px;
   margin-bottom: 24px;
@@ -235,36 +231,36 @@
   color: white;
 }
 
-.validation-manager-page .analytics-stat {
+.dashboard-container .analytics-stat {
   flex: 1;
   text-align: center;
 }
 
-.validation-manager-page .analytics-value {
+.dashboard-container .analytics-value {
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
-.validation-manager-page .analytics-label {
+.dashboard-container .analytics-label {
   font-size: 14px;
   opacity: 0.9;
 }
 
 /* Responses List */
-.validation-manager-page .responses-list {
+.dashboard-container .responses-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.validation-manager-page .response-card {
+.dashboard-container .response-card {
   background: #f8f9fa;
   border-radius: 12px;
   padding: 20px;
 }
 
-.validation-manager-page .response-header {
+.dashboard-container .response-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -273,44 +269,44 @@
   border-bottom: 1px solid #dee2e6;
 }
 
-.validation-manager-page .response-email {
+.dashboard-container .response-email {
   font-size: 16px;
   font-weight: 600;
   color: #1a1a1a;
 }
 
-.validation-manager-page .response-date {
+.dashboard-container .response-date {
   font-size: 14px;
   color: #6c757d;
 }
 
-.validation-manager-page .response-answers {
+.dashboard-container .response-answers {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.validation-manager-page .response-item {
+.dashboard-container .response-item {
   padding: 12px;
   background: white;
   border-radius: 8px;
 }
 
-.validation-manager-page .response-question {
+.dashboard-container .response-question {
   font-size: 14px;
   font-weight: 600;
   color: #495057;
   margin-bottom: 6px;
 }
 
-.validation-manager-page .response-answer {
+.dashboard-container .response-answer {
   font-size: 14px;
   color: #1a1a1a;
   line-height: 1.5;
 }
 
 /* Modal */
-.validation-manager-page .modal-overlay {
+.dashboard-container .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -323,7 +319,7 @@
   z-index: 1000;
 }
 
-.validation-manager-page .modal-content {
+.dashboard-container .modal-content {
   background: white;
   border-radius: 16px;
   padding: 32px;
@@ -331,27 +327,27 @@
   width: 90%;
 }
 
-.validation-manager-page .modal-content h2 {
+.dashboard-container .modal-content h2 {
   font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 12px;
 }
 
-.validation-manager-page .modal-content p {
+.dashboard-container .modal-content p {
   font-size: 16px;
   color: #6c757d;
   margin-bottom: 24px;
 }
 
 /* Flow Type Selection */
-.validation-manager-page .flow-type-options {
+.dashboard-container .flow-type-options {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
 }
 
-.validation-manager-page .flow-type-card {
+.dashboard-container .flow-type-card {
   flex: 1;
   background: #f8f9fa;
   border: 2px solid #dee2e6;
@@ -362,32 +358,32 @@
   text-align: center;
 }
 
-.validation-manager-page .flow-type-card:hover {
+.dashboard-container .flow-type-card:hover {
   border-color: #5e17eb;
   background: #f5f0ff;
 }
 
-.validation-manager-page .flow-type-card.selected {
+.dashboard-container .flow-type-card.selected {
   border-color: #5e17eb;
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
 }
 
-.validation-manager-page .flow-type-card h3 {
+.dashboard-container .flow-type-card h3 {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 8px;
 }
 
-.validation-manager-page .flow-type-card p {
+.dashboard-container .flow-type-card p {
   font-size: 14px;
   color: #6c757d;
   margin-bottom: 12px;
   line-height: 1.4;
 }
 
-.validation-manager-page .flow-type-card .question-count {
+.dashboard-container .flow-type-card .question-count {
   display: inline-block;
   padding: 4px 12px;
   background: #5e17eb;
@@ -397,13 +393,13 @@
   font-weight: 600;
 }
 
-.validation-manager-page .modal-actions {
+.dashboard-container .modal-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
 }
 
-.validation-manager-page .modal-actions button {
+.dashboard-container .modal-actions button {
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
@@ -412,39 +408,39 @@
   transition: all 0.2s ease;
 }
 
-.validation-manager-page .cancel-btn {
+.dashboard-container .cancel-btn {
   background: white;
   border: 1px solid #dee2e6;
   color: #6c757d;
 }
 
-.validation-manager-page .cancel-btn:hover {
+.dashboard-container .cancel-btn:hover {
   background: #f8f9fa;
 }
 
-.validation-manager-page .confirm-btn {
+.dashboard-container .confirm-btn {
   background: #5e17eb;
   border: none;
   color: white;
 }
 
-.validation-manager-page .confirm-btn:hover {
+.dashboard-container .confirm-btn:hover {
   background: #4a12c7;
 }
 
-.validation-manager-page .confirm-btn:disabled {
+.dashboard-container .confirm-btn:disabled {
   background: #adb5bd;
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-.validation-manager-page .confirm-btn:disabled:hover {
+.dashboard-container .confirm-btn:disabled:hover {
   background: #adb5bd;
   transform: none;
 }
 
 /* Empty State */
-.validation-manager-page .empty-state {
+.dashboard-container .empty-state {
   text-align: center;
   padding: 40px 20px;
   color: #6c757d;
@@ -452,7 +448,7 @@
 }
 
 /* Loading */
-.validation-manager-page .loading {
+.dashboard-container .loading {
   text-align: center;
   padding: 60px 20px;
   font-size: 18px;
@@ -461,43 +457,43 @@
 
 /* Mobile Responsive */
 @media (max-width: 1024px) {
-  .validation-manager-page .manager-content {
+  .dashboard-container .manager-content {
     grid-template-columns: 1fr;
   }
 
-  .validation-manager-page .responses-viewer {
+  .dashboard-container .responses-viewer {
     grid-column: 1;
   }
 }
 
 @media (max-width: 768px) {
-  .validation-manager-page .manager-header {
+  .dashboard-container .manager-header {
     flex-direction: column;
     gap: 16px;
   }
 
-  .validation-manager-page .create-flow-btn {
+  .dashboard-container .create-flow-btn {
     width: 100%;
   }
 
-  .validation-manager-page .flow-card-actions {
+  .dashboard-container .flow-card-actions {
     flex-direction: column;
   }
 
-  .validation-manager-page .flow-card-actions button {
+  .dashboard-container .flow-card-actions button {
     width: 100%;
   }
 
-  .validation-manager-page .analytics-summary {
+  .dashboard-container .analytics-summary {
     flex-direction: column;
     gap: 16px;
   }
 
-  .validation-manager-page .flow-type-options {
+  .dashboard-container .flow-type-options {
     flex-direction: column;
   }
 
-  .validation-manager-page .modal-content {
+  .dashboard-container .modal-content {
     max-width: 90%;
     padding: 24px;
   }

@@ -19,7 +19,8 @@ export const STAGES = {
   TESTING: 3,
   MONEY_MODELS: 4,
   CAMPAIGN_CREATION: 5,
-  LAUNCH: 6
+  LAUNCH: 6,
+  TRACKING: 7
 }
 
 export const STAGE_CONFIG = {
@@ -123,7 +124,7 @@ export const STAGE_CONFIG = {
     icon: '📢',
     color: '#10b981', // emerald
     requiredFlows: ['leads_strategy'],
-    milestones: ['strategy_identified'],
+    milestones: ['launch_sequence_planned'],
     groanChallenge: {
       id: 'groan_stage_5_campaign',
       name: 'Campaign Groan',
@@ -144,8 +145,8 @@ export const STAGE_CONFIG = {
     description: 'Execute your launch with your leads funnel',
     icon: '🚀',
     color: '#E9A23B', // gold
-    requiredFlows: ['attraction_offer'],
-    milestones: ['acquisition_offer_launched'],
+    requiredFlows: [],
+    milestones: ['acquisition_offer_launched', 'first_10_signups', 'post_launch_review'],
     groanChallenge: {
       id: 'groan_stage_6_launch',
       name: 'Launch Groan',
@@ -158,6 +159,24 @@ export const STAGE_CONFIG = {
       name: 'Sales Tower + Analytics',
       description: 'CRM integration for sales and analytics'
     }
+  },
+  [STAGES.TRACKING]: {
+    id: 7,
+    name: 'Tracking',
+    shortName: 'Tracking',
+    description: 'Track your funnel metrics and optimize conversions',
+    icon: '📊',
+    color: '#06b6d4', // cyan
+    requiredFlows: [],
+    milestones: [],
+    groanChallenge: null, // No groan for Tracking
+    tabLabel: 'Tracking',
+    upsellPrompt: null,
+    externalLink: {
+      name: 'Analytics Dashboard',
+      description: 'Advanced funnel analytics and reporting'
+    },
+    alwaysAccessible: true // Can be accessed at any stage
   }
 }
 
@@ -219,9 +238,10 @@ export function getStageShortName(stageNumber) {
 
 /**
  * Get next stage number
+ * Note: TRACKING (7) is always accessible but not part of normal progression
  */
 export function getNextStage(currentStage) {
-  if (currentStage >= STAGES.LAUNCH) return null
+  if (currentStage >= STAGES.LAUNCH) return null // TRACKING is not part of normal progression
   return currentStage + 1
 }
 

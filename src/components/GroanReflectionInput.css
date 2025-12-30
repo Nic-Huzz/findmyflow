@@ -16,7 +16,7 @@
 }
 
 /* Progress indicator */
-.groan-progress {
+.groan-reflection-input .groan-progress {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 8px;
@@ -32,7 +32,7 @@
 }
 
 /* Step container */
-.groan-step {
+.groan-reflection-input .groan-step {
   animation: fadeIn 0.3s ease;
 }
 
@@ -48,25 +48,25 @@
 }
 
 /* Step header */
-.step-header {
+.groan-reflection-input .step-header {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
 }
 
-.step-icon {
+.groan-reflection-input .step-icon {
   font-size: 28px;
 }
 
-.step-header h4 {
+.groan-reflection-input .step-header h4 {
   margin: 0;
   font-size: 1.125rem;
   font-weight: 700;
   color: #5e17eb;
 }
 
-.step-description {
+.groan-reflection-input .step-description {
   font-size: 0.9375rem;
   color: #666;
   line-height: 1.5;
@@ -105,7 +105,7 @@
   min-height: 60px;
 }
 
-.char-hint {
+.groan-reflection-input .char-hint {
   font-size: 0.8125rem;
   color: #888;
   margin-top: 8px;
@@ -170,13 +170,13 @@
 }
 
 /* Fear grid */
-.fear-grid {
+.groan-reflection-input .fear-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
 }
 
-.fear-card {
+.groan-reflection-input .fear-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -189,22 +189,22 @@
   transition: all 0.2s;
 }
 
-.fear-card:hover {
+.groan-reflection-input .fear-card:hover {
   background: rgba(94, 23, 235, 0.05);
   transform: translateY(-2px);
 }
 
-.fear-card.selected {
+.groan-reflection-input .fear-card.selected {
   background: rgba(94, 23, 235, 0.15);
   border-color: #5e17eb;
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
 }
 
-.fear-icon {
+.groan-reflection-input .fear-icon {
   font-size: 24px;
 }
 
-.fear-label {
+.groan-reflection-input .fear-label {
   font-size: 0.8125rem;
   font-weight: 600;
   color: #333;
@@ -212,11 +212,11 @@
 }
 
 /* Other fear input */
-.other-fear-input {
+.groan-reflection-input .other-fear-input {
   margin-top: 16px;
 }
 
-.other-fear-input label {
+.groan-reflection-input .other-fear-input label {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
@@ -225,13 +225,13 @@
 }
 
 /* Direction grid */
-.direction-grid {
+.groan-reflection-input .direction-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-.direction-card {
+.groan-reflection-input .direction-card {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -244,40 +244,40 @@
   transition: all 0.2s;
 }
 
-.direction-card:hover {
+.groan-reflection-input .direction-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
 }
 
-.direction-card.selected {
+.groan-reflection-input .direction-card.selected {
   border-width: 2px;
 }
 
-.direction-icon {
+.groan-reflection-input .direction-icon {
   font-size: 28px;
 }
 
-.direction-label {
+.groan-reflection-input .direction-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: #333;
 }
 
-.direction-desc {
+.groan-reflection-input .direction-desc {
   font-size: 0.75rem;
   color: #666;
   text-align: center;
 }
 
 /* Selection summary */
-.selection-summary {
+.groan-reflection-input .selection-summary {
   background: rgba(94, 23, 235, 0.08);
   border-radius: 10px;
   padding: 14px;
   margin-bottom: 16px;
 }
 
-.summary-item {
+.groan-reflection-input .summary-item {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -286,88 +286,88 @@
   border-bottom: 1px solid rgba(94, 23, 235, 0.15);
 }
 
-.summary-item:last-child {
+.groan-reflection-input .summary-item:last-child {
   border-bottom: none;
 }
 
-.summary-label {
+.groan-reflection-input .summary-label {
   font-size: 0.8125rem;
   color: #888;
   flex-shrink: 0;
 }
 
-.summary-value {
+.groan-reflection-input .summary-value {
   font-size: 0.875rem;
   color: #333;
   font-weight: 500;
   text-align: right;
 }
 
-.summary-value.direction-badge {
+.groan-reflection-input .summary-value.direction-badge {
   font-weight: 600;
 }
 
 /* Navigation buttons */
-.groan-navigation {
+.groan-reflection-input .groan-navigation {
   display: flex;
   gap: 12px;
   margin-top: 20px;
 }
 
-.nav-btn {
+.groan-reflection-input .nav-btn {
   flex: 1;
-  padding: 14px 20px;
-  border-radius: 10px;
-  font-size: 0.9375rem;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   border: none;
 }
 
-.nav-btn.back {
+.groan-reflection-input .nav-btn.back {
   background: white;
   color: #5e17eb;
   flex: 0.4;
   border: 2px solid #5e17eb;
 }
 
-.nav-btn.back:hover {
+.groan-reflection-input .nav-btn.back:hover {
   background: rgba(94, 23, 235, 0.1);
 }
 
-.nav-btn.next {
+.groan-reflection-input .nav-btn.next {
   background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
   color: white;
 }
 
-.nav-btn.next:hover:not(:disabled) {
+.groan-reflection-input .nav-btn.next:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(94, 23, 235, 0.3);
 }
 
-.nav-btn.next:disabled {
+.groan-reflection-input .nav-btn.next:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.nav-btn.complete {
+.groan-reflection-input .nav-btn.complete {
   background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
   color: white;
 }
 
-.nav-btn.complete:hover:not(:disabled) {
+.groan-reflection-input .nav-btn.complete:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(124, 58, 237, 0.3);
 }
 
-.nav-btn.complete:disabled {
+.groan-reflection-input .nav-btn.complete:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 /* Encouragement message */
-.groan-encouragement {
+.groan-reflection-input .groan-encouragement {
   text-align: center;
   font-size: 0.875rem;
   color: #888;
@@ -383,23 +383,23 @@
     padding: 16px;
   }
 
-  .archetype-grid {
+  .groan-reflection-input .archetype-grid {
     grid-template-columns: 1fr 1fr;
   }
 
-  .fear-grid {
+  .groan-reflection-input .fear-grid {
     grid-template-columns: 1fr 1fr;
   }
 
-  .direction-grid {
+  .groan-reflection-input .direction-grid {
     grid-template-columns: 1fr;
   }
 
-  .groan-navigation {
-    flex-direction: column;
+  .groan-reflection-input .groan-navigation {
+    flex-direction: row;
   }
 
-  .nav-btn.back {
-    flex: 1;
+  .groan-reflection-input .nav-btn.back {
+    flex: 0.4;
   }
 }

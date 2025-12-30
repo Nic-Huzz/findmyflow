@@ -10,6 +10,7 @@ import ConversationLogInput from './ConversationLogInput'
 import MilestoneInput from './MilestoneInput'
 import FlowCompassInput from './FlowCompassInput'
 import GroanReflectionInput from './GroanReflectionInput'
+import LaunchReviewInput from './LaunchReviewInput'
 import RecogniseQuestInput from './RecogniseQuestInput'
 import RewireQuestInput, { REWIRE_QUEST_IDS } from './RewireQuestInput'
 import ReconnectQuestInput, { RECONNECT_QUEST_IDS } from './ReconnectQuestInput'
@@ -261,6 +262,13 @@ function QuestCard({
               projectId={selectedProject?.id}
               challengeInstanceId={progress?.challenge_instance_id}
               stage={projectStage}
+            />
+          ) : quest.inputType === 'launch_review' ? (
+            <LaunchReviewInput
+              quest={quest}
+              onComplete={(quest, data) => onComplete(quest, data)}
+              projectId={selectedProject?.id}
+              challengeInstanceId={progress?.challenge_instance_id}
             />
           ) : quest.inputType === 'text' ? (
             <>

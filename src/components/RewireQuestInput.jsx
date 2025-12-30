@@ -1,7 +1,7 @@
 /**
- * RewireQuestInput - Enhanced input component for Rewire quests
+ * RewireQuestInput - Multi-step input component for Rewire quests
  *
- * Handles 6 Rewire quest types with structured data capture for AI co-founder
+ * Handles 6 Rewire quest types with step-by-step slider UI
  */
 
 import { useState, useEffect } from 'react'
@@ -73,8 +73,10 @@ const OUTCOME_FEELINGS = [
 
 function RewireQuestInput({ quest, onComplete }) {
   const { user } = useAuth()
+  const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [userArchetypes, setUserArchetypes] = useState({ protective: null, essence: null })
+  const [showOtherVoices, setShowOtherVoices] = useState(false)
 
   // State for different quest types
   const [formData, setFormData] = useState({
@@ -90,7 +92,6 @@ function RewireQuestInput({ quest, onComplete }) {
     protectiveVoice: null,
     protectiveMessage: '',
     essenceResponse: '',
-    showOtherVoices: false,
 
     // Dopamine Diet
     fastFoodJoy: null,
@@ -112,12 +113,26 @@ function RewireQuestInput({ quest, onComplete }) {
     intensity: null
   })
 
+  // Get total steps based on quest type
+  const getTotalSteps = () => {
+    switch (quest.id) {
+      case 'rewire_behavior_change': return 4 // Autopilot → Shift → Outcome → Summary
+      case 'rewire_protective_to_essence': return 4 // Voice+Message → Response → Outcome → Summary
+      case 'rewire_dopamine_diet': return 4 // FastFood → Nutritious → Outcome → Summary
+      case 'rewire_future_successful_you': return 3 // Action → Outcome → Summary
+      case 'rewire_hell_yea': return 4 // Type → Event → WhatMadeIt → Summary
+      case 'reconnect_groan_wheel': return 4 // Fears+Layer → Action → Intensity/Outcome → Summary
+      default: return 3
+    }
+  }
+
+  const totalSteps = getTotalSteps()
+
   // Fetch user's archetypes
   useEffect(() => {
     const fetchArchetypes = async () => {
       if (!user?.email) return
 
-      // Use email with ilike for case-insensitive matching (same as Profile.jsx)
       const { data } = await supabase
         .from('lead_flow_profiles')
         .select('protective_archetype, essence_archetype')
@@ -130,7 +145,6 @@ function RewireQuestInput({ quest, onComplete }) {
           protective: data[0].protective_archetype,
           essence: data[0].essence_archetype
         })
-        // Set default protective voice to user's archetype
         if (data[0].protective_archetype) {
           setFormData(prev => ({ ...prev, protectiveVoice: data[0].protective_archetype }))
         }
@@ -140,10 +154,80 @@ function RewireQuestInput({ quest, onComplete }) {
     fetchArchetypes()
   }, [user])
 
+  const canContinue = () => {
+    switch (quest.id) {
+      case 'rewire_behavior_change':
+        switch (step) {
+          case 1: return formData.autopilotMoment.trim().length >= 10
+          case 2: return formData.consciousShift.trim().length >= 10
+          case 3: return formData.outcome !== null
+          case 4: return true
+          default: return false
+        }
+
+      case 'rewire_protective_to_essence':
+        switch (step) {
+          case 1: return formData.protectiveVoice !== null && formData.protectiveMessage.trim().length >= 10
+          case 2: return formData.essenceResponse.trim().length >= 10
+          case 3: return formData.outcome !== null
+          case 4: return true
+          default: return false
+        }
+
+      case 'rewire_dopamine_diet':
+        switch (step) {
+          case 1: return formData.fastFoodJoy !== null
+          case 2: return formData.nutritiousJoy !== null
+          case 3: return formData.outcome !== null
+          case 4: return true
+          default: return false
+        }
+
+      case 'rewire_future_successful_you':
+        switch (step) {
+          case 1: return formData.whatYouWerentGoingToDo.trim().length >= 10
+          case 2: return formData.outcome !== null
+          case 3: return true
+          default: return false
+        }
+
+      case 'rewire_hell_yea':
+        switch (step) {
+          case 1: return formData.hellYeaType !== null
+          case 2: return formData.eventDescription.trim().length >= 10
+          case 3: return formData.whatMadeItHellYea.trim().length >= 10
+          case 4: return true
+          default: return false
+        }
+
+      case 'reconnect_groan_wheel':
+        switch (step) {
+          case 1: return formData.vulnerabilityLayer !== null && formData.fears.length > 0
+          case 2: return formData.action.trim().length >= 10
+          case 3: return formData.intensity !== null && formData.outcome !== null
+          case 4: return true
+          default: return false
+        }
+
+      default: return false
+    }
+  }
+
+  const handleNext = () => {
+    if (step < totalSteps) {
+      setStep(step + 1)
+    }
+  }
+
+  const handleBack = () => {
+    if (step > 1) {
+      setStep(step - 1)
+    }
+  }
+
   const handleSubmit = () => {
     setLoading(true)
 
-    // Build structured data based on quest type
     let structuredData = {}
 
     switch (quest.id) {
@@ -209,391 +293,829 @@ function RewireQuestInput({ quest, onComplete }) {
     setLoading(false)
   }
 
-  const isValid = () => {
-    switch (quest.id) {
-      case 'rewire_behavior_change':
-        return formData.autopilotMoment.trim() && formData.consciousShift.trim() && formData.outcome
+  // Helper getters
+  const getVoice = (id) => PROTECTIVE_VOICES.find(v => v.id === id)
+  const getLayer = (id) => VULNERABILITY_LAYERS.find(l => l.id === id)
+  const getFear = (id) => FEAR_TRIFECTA.find(f => f.id === id)
+  const getFastFood = (id) => FAST_FOOD_JOY.find(f => f.id === id)
+  const getNutritious = (id) => NUTRITIOUS_JOY.find(n => n.id === id)
+  const getOutcome = (id) => OUTCOME_FEELINGS.find(o => o.id === id)
 
-      case 'rewire_protective_to_essence':
-        return formData.protectiveVoice && formData.protectiveMessage.trim() &&
-               formData.essenceResponse.trim() && formData.outcome
+  const userVoice = PROTECTIVE_VOICES.find(v => v.id === userArchetypes.protective)
+  const otherVoices = PROTECTIVE_VOICES.filter(v => v.id !== userArchetypes.protective)
 
-      case 'rewire_dopamine_diet':
-        return formData.fastFoodJoy && formData.nutritiousJoy && formData.outcome
-
-      case 'rewire_future_successful_you':
-        return formData.whatYouWerentGoingToDo.trim() && formData.outcome
-
-      case 'rewire_hell_yea':
-        return formData.hellYeaType && formData.eventDescription.trim() && formData.whatMadeItHellYea.trim()
-
-      case 'reconnect_groan_wheel':
-        return formData.vulnerabilityLayer && formData.fears.length > 0 &&
-               formData.action.trim() && formData.intensity && formData.outcome
-
-      default:
-        return false
-    }
-  }
-
-  // Render different forms based on quest type
-  const renderForm = () => {
-    switch (quest.id) {
-      case 'rewire_behavior_change':
-        return renderEmbodyEssence()
-      case 'rewire_protective_to_essence':
-        return renderProtectiveToEssence()
-      case 'rewire_dopamine_diet':
-        return renderDopamineDiet()
-      case 'rewire_future_successful_you':
-        return renderFutureSuccessfulYou()
-      case 'rewire_hell_yea':
-        return renderHellYea()
-      case 'reconnect_groan_wheel':
-        return renderEssenceVoiceGroan()
-      default:
-        return null
-    }
-  }
-
-  // Embody Your Essence
-  const renderEmbodyEssence = () => (
-    <>
-      <div className="rewire-section">
-        <label className="rewire-label">The auto-pilot moment</label>
-        <textarea
-          className="rewire-textarea"
-          placeholder="What were you doing on auto-pilot?"
-          value={formData.autopilotMoment}
-          onChange={(e) => setFormData({ ...formData, autopilotMoment: e.target.value })}
-          rows={2}
-        />
-      </div>
-
-      <div className="rewire-section">
-        <label className="rewire-label">How you consciously shifted</label>
-        <textarea
-          className="rewire-textarea"
-          placeholder="What did your essence voice guide you to do instead?"
-          value={formData.consciousShift}
-          onChange={(e) => setFormData({ ...formData, consciousShift: e.target.value })}
-          rows={2}
-        />
-      </div>
-
-      {renderOutcomeSelector()}
-    </>
-  )
-
-  // Protective to Essence Shift
-  const renderProtectiveToEssence = () => {
-    const userVoice = PROTECTIVE_VOICES.find(v => v.id === userArchetypes.protective)
-    const otherVoices = PROTECTIVE_VOICES.filter(v => v.id !== userArchetypes.protective)
-
+  // ============ EMBODY YOUR ESSENCE ============
+  if (quest.id === 'rewire_behavior_change') {
     return (
-      <>
-        <div className="rewire-section">
-          <label className="rewire-label">Which voice showed up?</label>
-          <div className="voice-selector">
-            {userVoice && (
-              <button
-                type="button"
-                className={`voice-option primary ${formData.protectiveVoice === userVoice.id ? 'selected' : ''}`}
-                onClick={() => setFormData({ ...formData, protectiveVoice: userVoice.id, showOtherVoices: false })}
-              >
-                <span className="voice-icon">{userVoice.icon}</span>
-                <span className="voice-label">{userVoice.label}</span>
-              </button>
-            )}
-            <button
-              type="button"
-              className={`voice-option other-btn ${formData.showOtherVoices ? 'active' : ''}`}
-              onClick={() => setFormData({ ...formData, showOtherVoices: !formData.showOtherVoices })}
-            >
-              Other
-            </button>
-          </div>
+      <div className="rewire-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
+        </div>
 
-          {formData.showOtherVoices && (
-            <div className="other-voices-grid">
-              {otherVoices.map(voice => (
+        {/* Step 1: Autopilot moment */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🤖</span>
+              <h4>The auto-pilot moment</h4>
+            </div>
+            <p className="step-description">What were you doing on auto-pilot?</p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="What were you doing on auto-pilot?"
+              value={formData.autopilotMoment}
+              onChange={(e) => setFormData({ ...formData, autopilotMoment: e.target.value })}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.autopilotMoment.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.autopilotMoment.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 2: Conscious shift */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✨</span>
+              <h4>How you consciously shifted</h4>
+            </div>
+            <p className="step-description">What did your essence voice guide you to do instead?</p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="What did your essence voice guide you to do instead?"
+              value={formData.consciousShift}
+              onChange={(e) => setFormData({ ...formData, consciousShift: e.target.value })}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.consciousShift.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.consciousShift.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 3: Outcome */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>How did it go?</h4>
+            </div>
+            <div className="outcome-selector">
+              {OUTCOME_FEELINGS.map(outcome => (
                 <button
-                  key={voice.id}
+                  key={outcome.id}
                   type="button"
-                  className={`voice-option ${formData.protectiveVoice === voice.id ? 'selected' : ''}`}
-                  onClick={() => setFormData({ ...formData, protectiveVoice: voice.id })}
+                  className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, outcome: outcome.id })}
                 >
-                  <span className="voice-icon">{voice.icon}</span>
-                  <span className="voice-label">{voice.label}</span>
+                  <span className="outcome-icon">{outcome.icon}</span>
+                  <span className="outcome-label">{outcome.label}</span>
                 </button>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Step 4: Summary */}
+        {step === 4 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Autopilot:</span>
+                <span className="summary-value">{formData.autopilotMoment}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Shift:</span>
+                <span className="summary-value">{formData.consciousShift}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Outcome:</span>
+                <span className="summary-value">{getOutcome(formData.outcome)?.icon} {getOutcome(formData.outcome)?.label}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
           )}
         </div>
-
-        <div className="rewire-section">
-          <label className="rewire-label">What was the protective voice saying?</label>
-          <textarea
-            className="rewire-textarea"
-            placeholder="What story or fear was it telling you?"
-            value={formData.protectiveMessage}
-            onChange={(e) => setFormData({ ...formData, protectiveMessage: e.target.value })}
-            rows={2}
-          />
-        </div>
-
-        <div className="rewire-section">
-          <label className="rewire-label">How did you respond from essence?</label>
-          <textarea
-            className="rewire-textarea"
-            placeholder="How did you shift and show up differently?"
-            value={formData.essenceResponse}
-            onChange={(e) => setFormData({ ...formData, essenceResponse: e.target.value })}
-            rows={2}
-          />
-        </div>
-
-        {renderOutcomeSelector()}
-      </>
+      </div>
     )
   }
 
-  // Dopamine Diet Change
-  const renderDopamineDiet = () => (
-    <>
-      <div className="rewire-section">
-        <label className="rewire-label">🍟 Fast-food joy you avoided</label>
-        <div className="joy-grid">
-          {FAST_FOOD_JOY.map(joy => (
-            <button
-              key={joy.id}
-              type="button"
-              className={`joy-option fast-food ${formData.fastFoodJoy === joy.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, fastFoodJoy: joy.id })}
-            >
-              <span className="joy-icon">{joy.icon}</span>
-              <span className="joy-label">{joy.label}</span>
-            </button>
-          ))}
+  // ============ PROTECTIVE TO ESSENCE SHIFT ============
+  if (quest.id === 'rewire_protective_to_essence') {
+    return (
+      <div className="rewire-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
         </div>
-      </div>
 
-      <div className="rewire-section">
-        <label className="rewire-label">🥗 Nutritious joy you chose</label>
-        <div className="joy-grid">
-          {NUTRITIOUS_JOY.map(joy => (
-            <button
-              key={joy.id}
-              type="button"
-              className={`joy-option nutritious ${formData.nutritiousJoy === joy.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, nutritiousJoy: joy.id })}
-            >
-              <span className="joy-icon">{joy.icon}</span>
-              <span className="joy-label">{joy.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+        {/* Step 1: Voice selector + Protective message */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🛡️</span>
+              <h4>Which voice showed up?</h4>
+            </div>
+            <div className="voice-selector">
+              {userVoice && (
+                <button
+                  type="button"
+                  className={`voice-option primary ${formData.protectiveVoice === userVoice.id ? 'selected' : ''}`}
+                  onClick={() => {
+                    setFormData({ ...formData, protectiveVoice: userVoice.id })
+                    setShowOtherVoices(false)
+                  }}
+                >
+                  <span className="voice-icon">{userVoice.icon}</span>
+                  <span className="voice-label">{userVoice.label}</span>
+                </button>
+              )}
+              <button
+                type="button"
+                className={`voice-option other-btn ${showOtherVoices ? 'active' : ''}`}
+                onClick={() => setShowOtherVoices(!showOtherVoices)}
+              >
+                Other ▼
+              </button>
+            </div>
+            {showOtherVoices && (
+              <div className="other-voices-grid">
+                {otherVoices.map(voice => (
+                  <button
+                    key={voice.id}
+                    type="button"
+                    className={`voice-option ${formData.protectiveVoice === voice.id ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, protectiveVoice: voice.id })}
+                  >
+                    <span className="voice-icon">{voice.icon}</span>
+                    <span className="voice-label">{voice.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
 
-      <div className="rewire-section">
-        <label className="rewire-label">Any notes on how it compared?</label>
-        <textarea
-          className="rewire-textarea"
-          placeholder="Optional: How did the nutritious joy compare?"
-          value={formData.comparisonNote}
-          onChange={(e) => setFormData({ ...formData, comparisonNote: e.target.value })}
-          rows={2}
-        />
-      </div>
-
-      {renderOutcomeSelector()}
-    </>
-  )
-
-  // Future Successful You
-  const renderFutureSuccessfulYou = () => (
-    <>
-      <div className="rewire-section">
-        <label className="rewire-label">What weren't you going to do?</label>
-        <textarea
-          className="rewire-textarea"
-          placeholder="What did future successful you do that present you resisted?"
-          value={formData.whatYouWerentGoingToDo}
-          onChange={(e) => setFormData({ ...formData, whatYouWerentGoingToDo: e.target.value })}
-          rows={3}
-        />
-      </div>
-
-      {renderOutcomeSelector()}
-    </>
-  )
-
-  // Make It A Hell Yea
-  const renderHellYea = () => (
-    <>
-      <div className="rewire-section">
-        <label className="rewire-label">How did this "Hell Yea" arrive?</label>
-        <div className="hell-yea-type-selector">
-          <button
-            type="button"
-            className={`hell-yea-option ${formData.hellYeaType === 'organic' ? 'selected' : ''}`}
-            onClick={() => setFormData({ ...formData, hellYeaType: 'organic' })}
-          >
-            <span className="hell-yea-icon">🌊</span>
-            <span className="hell-yea-label">Organic</span>
-            <span className="hell-yea-desc">It flowed into my life</span>
-          </button>
-          <button
-            type="button"
-            className={`hell-yea-option ${formData.hellYeaType === 'transformed' ? 'selected' : ''}`}
-            onClick={() => setFormData({ ...formData, hellYeaType: 'transformed' })}
-          >
-            <span className="hell-yea-icon">✨</span>
-            <span className="hell-yea-label">Transformed</span>
-            <span className="hell-yea-desc">I changed it into one</span>
-          </button>
-        </div>
-      </div>
-
-      <div className="rewire-section">
-        <label className="rewire-label">What was the event?</label>
-        <textarea
-          className="rewire-textarea"
-          placeholder="Describe the event or opportunity"
-          value={formData.eventDescription}
-          onChange={(e) => setFormData({ ...formData, eventDescription: e.target.value })}
-          rows={2}
-        />
-      </div>
-
-      <div className="rewire-section">
-        <label className="rewire-label">What made it a "Hell Yea"?</label>
-        <textarea
-          className="rewire-textarea"
-          placeholder="What specifically made this exciting?"
-          value={formData.whatMadeItHellYea}
-          onChange={(e) => setFormData({ ...formData, whatMadeItHellYea: e.target.value })}
-          rows={2}
-        />
-      </div>
-    </>
-  )
-
-  // Essence Voice Groan
-  const renderEssenceVoiceGroan = () => (
-    <>
-      <div className="rewire-section">
-        <label className="rewire-label">Which vulnerability layer?</label>
-        <div className="layer-grid">
-          {VULNERABILITY_LAYERS.map(layer => (
-            <button
-              key={layer.id}
-              type="button"
-              className={`layer-option ${formData.vulnerabilityLayer === layer.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, vulnerabilityLayer: layer.id })}
-            >
-              <span className="layer-icon">{layer.icon}</span>
-              <span className="layer-label">{layer.label}</span>
-            </button>
-          ))}
-        </div>
-        {formData.vulnerabilityLayer && (
-          <div className="layer-description">
-            {VULNERABILITY_LAYERS.find(l => l.id === formData.vulnerabilityLayer)?.description}
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">💬</span>
+                <h4>What was the protective voice saying?</h4>
+              </div>
+              <p className="step-description">What story or fear was it telling you?</p>
+              <textarea
+                className="rewire-textarea"
+                placeholder="What story or fear was it telling you?"
+                value={formData.protectiveMessage}
+                onChange={(e) => setFormData({ ...formData, protectiveMessage: e.target.value })}
+                rows={3}
+              />
+              <p className={`char-hint ${formData.protectiveMessage.trim().length >= 10 ? 'met' : ''}`}>
+                {formData.protectiveMessage.trim().length}/10 characters minimum
+              </p>
+            </div>
           </div>
         )}
-      </div>
 
-      <div className="rewire-section">
-        <label className="rewire-label">Which fears were present?</label>
-        <div className="fear-grid">
-          {FEAR_TRIFECTA.map(fear => (
-            <button
-              key={fear.id}
-              type="button"
-              className={`fear-option ${formData.fears.includes(fear.id) ? 'selected' : ''}`}
-              onClick={() => {
-                const newFears = formData.fears.includes(fear.id)
-                  ? formData.fears.filter(f => f !== fear.id)
-                  : [...formData.fears, fear.id]
-                setFormData({ ...formData, fears: newFears })
-              }}
-            >
-              <span className="fear-icon">{fear.icon}</span>
-              <span className="fear-label">{fear.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="rewire-section">
-        <label className="rewire-label">What action did you take?</label>
-        <textarea
-          className="rewire-textarea"
-          placeholder="What did your essence voice guide you to do?"
-          value={formData.action}
-          onChange={(e) => setFormData({ ...formData, action: e.target.value })}
-          rows={2}
-        />
-      </div>
-
-      <div className="rewire-section">
-        <label className="rewire-label">How intense was the groan? (1-5)</label>
-        <div className="intensity-slider">
-          <span className="intensity-end">😌</span>
-          <div className="intensity-buttons">
-            {[1, 2, 3, 4, 5].map(level => (
-              <button
-                key={level}
-                type="button"
-                className={`intensity-btn ${formData.intensity === level ? 'selected' : ''}`}
-                onClick={() => setFormData({ ...formData, intensity: level })}
-              >
-                {level}
-              </button>
-            ))}
+        {/* Step 2: Essence response */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✨</span>
+              <h4>How did you respond from essence?</h4>
+            </div>
+            <p className="step-description">How did you shift and show up differently?</p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="How did you shift and show up differently?"
+              value={formData.essenceResponse}
+              onChange={(e) => setFormData({ ...formData, essenceResponse: e.target.value })}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.essenceResponse.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.essenceResponse.trim().length}/10 characters minimum
+            </p>
           </div>
-          <span className="intensity-end">😰</span>
+        )}
+
+        {/* Step 3: Outcome */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>How did it go?</h4>
+            </div>
+            <div className="outcome-selector">
+              {OUTCOME_FEELINGS.map(outcome => (
+                <button
+                  key={outcome.id}
+                  type="button"
+                  className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, outcome: outcome.id })}
+                >
+                  <span className="outcome-icon">{outcome.icon}</span>
+                  <span className="outcome-label">{outcome.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Summary */}
+        {step === 4 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Voice:</span>
+                <span className="summary-value">{getVoice(formData.protectiveVoice)?.icon} {getVoice(formData.protectiveVoice)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Message:</span>
+                <span className="summary-value">{formData.protectiveMessage}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Response:</span>
+                <span className="summary-value">{formData.essenceResponse}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Outcome:</span>
+                <span className="summary-value">{getOutcome(formData.outcome)?.icon} {getOutcome(formData.outcome)?.label}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
         </div>
       </div>
+    )
+  }
 
-      {renderOutcomeSelector()}
-    </>
-  )
+  // ============ DOPAMINE DIET CHANGE ============
+  if (quest.id === 'rewire_dopamine_diet') {
+    return (
+      <div className="rewire-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
+        </div>
 
-  // Shared outcome selector
-  const renderOutcomeSelector = () => (
-    <div className="rewire-section">
-      <label className="rewire-label">How did it go?</label>
-      <div className="outcome-selector">
-        {OUTCOME_FEELINGS.map(outcome => (
-          <button
-            key={outcome.id}
-            type="button"
-            className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
-            onClick={() => setFormData({ ...formData, outcome: outcome.id })}
-          >
-            <span className="outcome-icon">{outcome.icon}</span>
-            <span className="outcome-label">{outcome.label}</span>
-          </button>
-        ))}
+        {/* Step 1: Fast-food joy */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🍟</span>
+              <h4>Fast-food joy you avoided</h4>
+            </div>
+            <p className="step-description">What quick dopamine hit did you resist?</p>
+            <div className="joy-grid">
+              {FAST_FOOD_JOY.map(joy => (
+                <button
+                  key={joy.id}
+                  type="button"
+                  className={`joy-option fast-food ${formData.fastFoodJoy === joy.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, fastFoodJoy: joy.id })}
+                >
+                  <span className="joy-icon">{joy.icon}</span>
+                  <span className="joy-label">{joy.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Nutritious joy */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🥗</span>
+              <h4>Nutritious joy you chose</h4>
+            </div>
+            <p className="step-description">What nourishing activity did you do instead?</p>
+            <div className="joy-grid">
+              {NUTRITIOUS_JOY.map(joy => (
+                <button
+                  key={joy.id}
+                  type="button"
+                  className={`joy-option nutritious ${formData.nutritiousJoy === joy.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, nutritiousJoy: joy.id })}
+                >
+                  <span className="joy-icon">{joy.icon}</span>
+                  <span className="joy-label">{joy.label}</span>
+                </button>
+              ))}
+            </div>
+            <div className="step-subsection">
+              <label className="rewire-label">Any notes on how it compared? (optional)</label>
+              <textarea
+                className="rewire-textarea"
+                placeholder="How did the nutritious joy compare?"
+                value={formData.comparisonNote}
+                onChange={(e) => setFormData({ ...formData, comparisonNote: e.target.value })}
+                rows={2}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Outcome */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>How did it go?</h4>
+            </div>
+            <div className="outcome-selector">
+              {OUTCOME_FEELINGS.map(outcome => (
+                <button
+                  key={outcome.id}
+                  type="button"
+                  className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, outcome: outcome.id })}
+                >
+                  <span className="outcome-icon">{outcome.icon}</span>
+                  <span className="outcome-label">{outcome.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Summary */}
+        {step === 4 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Avoided:</span>
+                <span className="summary-value">{getFastFood(formData.fastFoodJoy)?.icon} {getFastFood(formData.fastFoodJoy)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Chose:</span>
+                <span className="summary-value">{getNutritious(formData.nutritiousJoy)?.icon} {getNutritious(formData.nutritiousJoy)?.label}</span>
+              </div>
+              {formData.comparisonNote && (
+                <div className="summary-item">
+                  <span className="summary-label">Notes:</span>
+                  <span className="summary-value">{formData.comparisonNote}</span>
+                </div>
+              )}
+              <div className="summary-item">
+                <span className="summary-label">Outcome:</span>
+                <span className="summary-value">{getOutcome(formData.outcome)?.icon} {getOutcome(formData.outcome)?.label}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
-  return (
-    <div className="rewire-input">
-      {renderForm()}
+  // ============ FUTURE SUCCESSFUL YOU ============
+  if (quest.id === 'rewire_future_successful_you') {
+    return (
+      <div className="rewire-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
+        </div>
 
-      <button
-        className="rewire-submit-btn"
-        onClick={handleSubmit}
-        disabled={!isValid() || loading}
-      >
-        {loading ? 'Saving...' : 'Complete Quest'}
-      </button>
-    </div>
-  )
+        {/* Step 1: What you weren't going to do */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🚀</span>
+              <h4>What weren't you going to do?</h4>
+            </div>
+            <p className="step-description">What did future successful you do that present you resisted?</p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="What did future successful you do that present you resisted?"
+              value={formData.whatYouWerentGoingToDo}
+              onChange={(e) => setFormData({ ...formData, whatYouWerentGoingToDo: e.target.value })}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.whatYouWerentGoingToDo.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.whatYouWerentGoingToDo.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 2: Outcome */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🎯</span>
+              <h4>How did it go?</h4>
+            </div>
+            <div className="outcome-selector">
+              {OUTCOME_FEELINGS.map(outcome => (
+                <button
+                  key={outcome.id}
+                  type="button"
+                  className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, outcome: outcome.id })}
+                >
+                  <span className="outcome-icon">{outcome.icon}</span>
+                  <span className="outcome-label">{outcome.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Summary */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Action:</span>
+                <span className="summary-value">{formData.whatYouWerentGoingToDo}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Outcome:</span>
+                <span className="summary-value">{getOutcome(formData.outcome)?.icon} {getOutcome(formData.outcome)?.label}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ MAKE IT A HELL YEA ============
+  if (quest.id === 'rewire_hell_yea') {
+    return (
+      <div className="rewire-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
+        </div>
+
+        {/* Step 1: Hell Yea type */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">🔥</span>
+              <h4>How did this "Hell Yea" arrive?</h4>
+            </div>
+            <div className="hell-yea-type-selector">
+              <button
+                type="button"
+                className={`hell-yea-option ${formData.hellYeaType === 'organic' ? 'selected' : ''}`}
+                onClick={() => setFormData({ ...formData, hellYeaType: 'organic' })}
+              >
+                <span className="hell-yea-icon">🌊</span>
+                <span className="hell-yea-label">Organic</span>
+                <span className="hell-yea-desc">It flowed into my life</span>
+              </button>
+              <button
+                type="button"
+                className={`hell-yea-option ${formData.hellYeaType === 'transformed' ? 'selected' : ''}`}
+                onClick={() => setFormData({ ...formData, hellYeaType: 'transformed' })}
+              >
+                <span className="hell-yea-icon">✨</span>
+                <span className="hell-yea-label">Transformed</span>
+                <span className="hell-yea-desc">I changed it into one</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Event description */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">📝</span>
+              <h4>What was the event?</h4>
+            </div>
+            <p className="step-description">Describe the event or opportunity</p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="Describe the event or opportunity"
+              value={formData.eventDescription}
+              onChange={(e) => setFormData({ ...formData, eventDescription: e.target.value })}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.eventDescription.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.eventDescription.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 3: What made it hell yea */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">⭐</span>
+              <h4>What made it a "Hell Yea"?</h4>
+            </div>
+            <p className="step-description">What specifically made this exciting?</p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="What specifically made this exciting?"
+              value={formData.whatMadeItHellYea}
+              onChange={(e) => setFormData({ ...formData, whatMadeItHellYea: e.target.value })}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.whatMadeItHellYea.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.whatMadeItHellYea.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 4: Summary */}
+        {step === 4 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Type:</span>
+                <span className="summary-value">{formData.hellYeaType === 'organic' ? '🌊 Organic' : '✨ Transformed'}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Event:</span>
+                <span className="summary-value">{formData.eventDescription}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">What made it:</span>
+                <span className="summary-value">{formData.whatMadeItHellYea}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ ESSENCE VOICE GROAN ============
+  if (quest.id === 'reconnect_groan_wheel') {
+    return (
+      <div className="rewire-input stepped">
+        <div className="step-progress">
+          <span className="progress-text">Step {step} of {totalSteps}</span>
+        </div>
+
+        {/* Step 1: Fears + Vulnerability layer */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">💭</span>
+              <h4>Which fears were present?</h4>
+            </div>
+            <p className="step-description">Select all that apply</p>
+            <div className="fear-grid">
+              {FEAR_TRIFECTA.map(fear => (
+                <button
+                  key={fear.id}
+                  type="button"
+                  className={`fear-option ${formData.fears.includes(fear.id) ? 'selected' : ''}`}
+                  onClick={() => {
+                    const newFears = formData.fears.includes(fear.id)
+                      ? formData.fears.filter(f => f !== fear.id)
+                      : [...formData.fears, fear.id]
+                    setFormData({ ...formData, fears: newFears })
+                  }}
+                >
+                  <span className="fear-icon">{fear.icon}</span>
+                  <span className="fear-label">{fear.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="step-subsection">
+              <div className="step-header">
+                <span className="step-icon">🎯</span>
+                <h4>Which vulnerability layer?</h4>
+              </div>
+              <div className="layer-grid">
+                {VULNERABILITY_LAYERS.map(layer => (
+                  <button
+                    key={layer.id}
+                    type="button"
+                    className={`layer-option ${formData.vulnerabilityLayer === layer.id ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, vulnerabilityLayer: layer.id })}
+                  >
+                    <span className="layer-icon">{layer.icon}</span>
+                    <span className="layer-label">{layer.label}</span>
+                  </button>
+                ))}
+              </div>
+              {formData.vulnerabilityLayer && (
+                <div className="layer-description">
+                  {VULNERABILITY_LAYERS.find(l => l.id === formData.vulnerabilityLayer)?.description}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Action */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">⚡</span>
+              <h4>What action did you take?</h4>
+            </div>
+            <p className="step-description">What did your essence voice guide you to do?</p>
+            <textarea
+              className="rewire-textarea"
+              placeholder="What did your essence voice guide you to do?"
+              value={formData.action}
+              onChange={(e) => setFormData({ ...formData, action: e.target.value })}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.action.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.action.trim().length}/10 characters minimum
+            </p>
+          </div>
+        )}
+
+        {/* Step 3: Intensity + Outcome */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">📊</span>
+              <h4>How intense was the groan?</h4>
+            </div>
+            <div className="intensity-slider">
+              <span className="intensity-end">😌</span>
+              <div className="intensity-buttons">
+                {[1, 2, 3, 4, 5].map(level => (
+                  <button
+                    key={level}
+                    type="button"
+                    className={`intensity-btn ${formData.intensity === level ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, intensity: level })}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+              <span className="intensity-end">😰</span>
+            </div>
+
+            <div className="step-subsection">
+              <label className="rewire-label">How did it go?</label>
+              <div className="outcome-selector">
+                {OUTCOME_FEELINGS.map(outcome => (
+                  <button
+                    key={outcome.id}
+                    type="button"
+                    className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
+                    onClick={() => setFormData({ ...formData, outcome: outcome.id })}
+                  >
+                    <span className="outcome-icon">{outcome.icon}</span>
+                    <span className="outcome-label">{outcome.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Summary */}
+        {step === 4 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Layer:</span>
+                <span className="summary-value">{getLayer(formData.vulnerabilityLayer)?.icon} {getLayer(formData.vulnerabilityLayer)?.label}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Fears:</span>
+                <span className="summary-value">
+                  {formData.fears.map(f => getFear(f)).filter(Boolean).map(f => `${f.icon} ${f.label}`).join(', ')}
+                </span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Action:</span>
+                <span className="summary-value">{formData.action}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Intensity:</span>
+                <span className="summary-value">{formData.intensity}/5</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Outcome:</span>
+                <span className="summary-value">{getOutcome(formData.outcome)?.icon} {getOutcome(formData.outcome)?.label}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  return null
 }
 
 export { REWIRE_QUEST_IDS }

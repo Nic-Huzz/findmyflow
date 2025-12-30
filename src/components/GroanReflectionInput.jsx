@@ -54,15 +54,11 @@ const ARCHETYPES = [
   }
 ]
 
-// Fear types
+// Fear types - focused on the 3 core business fears
 const FEAR_TYPES = [
-  { id: 'rejection', label: 'Rejection', icon: '🚪', description: 'Fear of being turned away' },
   { id: 'judgment', label: 'Judgment', icon: '👁️', description: 'Fear of being criticized' },
   { id: 'not_good_enough', label: 'Not Good Enough', icon: '📉', description: 'Fear of inadequacy' },
-  { id: 'failure', label: 'Failure', icon: '💔', description: 'Fear of things not working out' },
-  { id: 'visibility', label: 'Being Seen', icon: '🔦', description: 'Fear of exposure' },
-  { id: 'success', label: 'Success', icon: '🏆', description: 'Fear of what success brings' },
-  { id: 'other', label: 'Something Else', icon: '❓', description: "I'll explain below" }
+  { id: 'failure', label: 'Failure', icon: '💔', description: 'Fear of things not working out' }
 ]
 
 // Flow directions for how the action felt
@@ -110,7 +106,6 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
   const [groanTask, setGroanTask] = useState('')
   const [selectedArchetype, setSelectedArchetype] = useState(null)
   const [selectedFears, setSelectedFears] = useState([])
-  const [otherFearText, setOtherFearText] = useState('')
   const [selectedDirection, setSelectedDirection] = useState(null)
   const [reflectionNote, setReflectionNote] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -121,12 +116,7 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
     switch (step) {
       case 1: return groanTask.trim().length >= 10
       case 2: return selectedArchetype !== null
-      case 3: {
-        if (selectedFears.length === 0) return false
-        // If "other" is selected, require text input
-        if (selectedFears.includes('other') && otherFearText.trim().length < 3) return false
-        return true
-      }
+      case 3: return selectedFears.length > 0
       case 4: return selectedDirection !== null
       case 5: return true // Reflection is optional
       default: return false
@@ -162,7 +152,6 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
         groan_task: groanTask.trim(),
         protective_archetype: selectedArchetype,
         fear_types: selectedFears,
-        other_fear_text: selectedFears.includes('other') ? otherFearText.trim() : null,
         flow_direction: selectedDirection,
         reflection_note: reflectionNote.trim() || null,
         project_id: projectId || null,
@@ -267,19 +256,6 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
               </button>
             ))}
           </div>
-          {selectedFears.includes('other') && (
-            <div className="other-fear-input">
-              <label>What fear was it?</label>
-              <input
-                type="text"
-                className="groan-textarea"
-                value={otherFearText}
-                onChange={(e) => setOtherFearText(e.target.value)}
-                placeholder="Describe the fear..."
-                style={{ minHeight: 'auto', padding: '12px' }}
-              />
-            </div>
-          )}
         </div>
       )}
 
@@ -338,7 +314,6 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
               <span className="summary-label">Fear(s) underneath:</span>
               <span className="summary-value">
                 {selectedFears.map(f => getFear(f)).filter(Boolean).map(f => `${f.icon} ${f.label}`).join(', ')}
-                {selectedFears.includes('other') && otherFearText && ` (${otherFearText})`}
               </span>
             </div>
             <div className="summary-item">

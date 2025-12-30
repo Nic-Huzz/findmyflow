@@ -1427,10 +1427,10 @@ function OfferBuilderFlow() {
           <h1 className="welcome-greeting">Lead Magnets</h1>
           <div className="education-content">
             <p className="education-intro">
-              <strong>Not all your solutions should be paid products.</strong>
+              <strong>After your attraction offer hooks them, what free value can you give in exchange for their email?</strong>
             </p>
             <p>
-              The best offers use some solutions as <strong>lead magnets</strong> — free value that proves you can help, building trust so they buy your core offer.
+              A <strong>lead magnet</strong> is the value exchange — something free that proves you can help, given to people who express interest in your attraction offer.
             </p>
 
             <div className="lm-types-grid">
@@ -1444,10 +1444,20 @@ function OfferBuilderFlow() {
             </div>
 
             <div className="education-callout">
+              <p><strong>The Funnel Flow:</strong></p>
+              <ul>
+                <li><strong>Attraction Offer</strong> — The hook that grabs attention</li>
+                <li><strong>Lead Magnet</strong> — Free value they get for expressing interest</li>
+                <li><strong>Nurture</strong> — Build trust over time</li>
+                <li><strong>Core Product</strong> — What they pay for</li>
+              </ul>
+            </div>
+
+            <div className="education-callout">
               <p><strong>Next:</strong> You'll categorize each solution as either:</p>
               <ul>
                 <li><strong>Core Product</strong> — What they pay for</li>
-                <li><strong>Lead Magnet</strong> — Free proof you can help</li>
+                <li><strong>Lead Magnet</strong> — Free value for expressing interest</li>
                 <li><strong>Bonus</strong> — Added value with core purchase</li>
                 <li><strong>Skip</strong> — Not pursuing this one</li>
               </ul>
@@ -1559,10 +1569,10 @@ function OfferBuilderFlow() {
 
                 <div className="cat-options">
                   {[
-                    { value: 'core_product', label: 'Core Product', icon: '💰' },
-                    { value: 'lead_magnet', label: 'Lead Magnet', icon: '🎁' },
-                    { value: 'bonus', label: 'Bonus', icon: '✨' },
-                    { value: 'skip', label: 'Skip', icon: '⏭️' }
+                    { value: 'core_product', label: 'Core Product', icon: '💰', hint: 'What they pay for' },
+                    { value: 'lead_magnet', label: 'Lead Magnet', icon: '🎁', hint: 'Free for expressing interest' },
+                    { value: 'bonus', label: 'Bonus', icon: '✨', hint: 'Added value with purchase' },
+                    { value: 'skip', label: 'Skip', icon: '⏭️', hint: 'Not pursuing' }
                   ].map((option) => (
                     <button
                       key={option.value}
@@ -1583,7 +1593,7 @@ function OfferBuilderFlow() {
 
           {!hasLeadMagnet() && isCategorizationValid() && (
             <p className="warning-text">
-              Tip: Consider making at least one solution a Lead Magnet to build trust first
+              Tip: Consider making at least one solution a Lead Magnet — something free you can give people who express interest in your attraction offer
             </p>
           )}
 

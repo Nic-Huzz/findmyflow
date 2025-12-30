@@ -735,7 +735,27 @@ function Challenge() {
   if (loading) {
     return (
       <div className="challenge-container">
-        <div className="challenge-loading">Loading your challenge...</div>
+        <div className="skeleton-header">
+          <div className="skeleton-title shimmer"></div>
+          <div className="skeleton-points shimmer"></div>
+        </div>
+        <div className="skeleton-tabs">
+          {[1, 2, 3, 4, 5].map(i => (
+            <div key={i} className="skeleton-tab shimmer"></div>
+          ))}
+        </div>
+        <div className="skeleton-cards">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="skeleton-card">
+              <div className="skeleton-card-header">
+                <div className="skeleton-card-title shimmer"></div>
+                <div className="skeleton-card-badge shimmer"></div>
+              </div>
+              <div className="skeleton-card-desc shimmer"></div>
+              <div className="skeleton-card-desc short shimmer"></div>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -1184,7 +1204,6 @@ function Challenge() {
         {/* Business Quests */}
         {activeCategory === 'Business' && filteredQuests.length > 0 && (
           <div className="quest-section">
-            <h2 className="section-title">Business</h2>
             <div className="quest-grid">
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)

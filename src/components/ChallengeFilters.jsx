@@ -8,11 +8,11 @@
 
 import './ChallengeFilters.css'
 
-// Frequency tab config
+// Frequency tab config - Daily first as default, then Weekly, then All
 const FREQUENCY_TABS = [
-  { id: 'all', label: 'All', icon: '📋' },
   { id: 'daily', label: 'Daily', icon: '☀️' },
-  { id: 'weekly', label: 'Weekly', icon: '📅' }
+  { id: 'weekly', label: 'Weekly', icon: '📅' },
+  { id: 'all', label: 'All', icon: '📋' }
 ]
 
 function ChallengeFilters({

@@ -306,10 +306,107 @@ SUPABASE_ACCESS_TOKEN=sbp_xxx npx supabase functions deploy product-positioning 
 
 ---
 
+## Session 4 Changes - Unified Funnel Framework
+
+### Funnel Builder + Attraction Offer Integration
+
+**Files Modified:**
+- `src/flows/OfferBuilderFlow.jsx` - Updated lead magnet education text
+- `src/flows/FunnelBuilderFlow.jsx` - Major restructure with attraction offer integration
+- `src/flows/FunnelBuilderFlow.css` - New styles for positioning insight, funnel patterns
+
+**Framework Implemented:**
+```
+Lead Methods (Core Four) → Attraction Offer (hook) → Lead Magnet (value exchange) → Nurture → Core Offer → Money Model
+```
+
+**New Features:**
+
+#### A. Attraction Offer to Lead Magnet Mapping
+Each attraction offer now maps to a specific lead magnet positioning:
+
+| Attraction Offer | Lead Magnet Role | Funnel Pattern |
+|-----------------|------------------|----------------|
+| Win Your Money Back | Preview before joining | LM → Trust → AO → Challenge → Results |
+| Flagship Giveaway | Bonus for entering | Giveaway → Instant LM → Nurture → Non-Winner Offer |
+| Decoy Offer | Comparison helper | LM → Identify Needs → Decoy Pricing → Best Tier |
+| Buy X Get Y Free | Sample/taste | Free Sample → Quality → Bundle → Repeat |
+| Pay Less Now/Later | Urgency amplifier | LM → Value → Time-Limited → Deadline → Re-offer |
+| Free With Consumption | IS the attraction offer (merged) | Free Experience → Consumption → Upsell → Premium |
+
+#### B. Updated Prerequisites
+FunnelBuilder now requires 3 prerequisites:
+1. Core Four Strategy (from Leads Strategy)
+2. Attraction Offer (from Attraction Offer flow)
+3. Lead Magnet Type (from Lead Magnet Selection)
+
+#### C. Enhanced Welcome/Overview
+- Shows all 3 components: Strategy → Attraction Offer → Lead Magnet
+- Displays "Lead Magnet Role" and positioning suggestion
+- Shows dynamic funnel pattern based on attraction offer type
+- Visual indicator for "merged" scenarios (Free With Consumption)
+
+#### D. Contextual Lead Magnet Delivery Step
+- Shows attraction offer → lead magnet connection
+- Displays role of lead magnet in the funnel
+- Placeholder text uses the positioning suggestion
+- Special note for merged scenarios
+
+#### E. Updated Summary & Success Screens
+- Full funnel flow: Strategy → Attraction → Magnet → Nurture → Convert
+- Funnel pattern text display
+- Lead magnet role shown in summary
+- Next steps updated to include attraction offer creation
+
+#### F. Save Function Updates
+Saves additional fields to `funnel_plans` table:
+- `attraction_offer`
+- `lead_magnet_role`
+- `funnel_pattern`
+
+**CSS Added (~100 lines):**
+- `.fb-positioning-insight` - Yellow highlighted insight box
+- `.fb-insight-*` - Role/suggestion styling
+- `.fb-pattern-text` - Funnel pattern display
+- `.fb-funnel-step.highlight` - Yellow border for attraction offer step
+- `.fb-funnel-step.merged` - Green styling for merged scenarios
+- `.fb-summary-pattern`, `.fb-summary-role` - Summary display styles
+
+---
+
+## Testing Checklist - Session 4
+
+### Funnel Builder Flow
+- [ ] Complete prerequisites: Leads Strategy, Attraction Offer, Lead Magnet Selection
+- [ ] Go to `/funnel-builder`
+- [ ] Verify prerequisites check shows all 3 items with correct values
+- [ ] Click "Let's Build Your Funnel"
+- [ ] Verify welcome page shows:
+  - [ ] 3 strategy cards (Core Four → Attraction → Lead Magnet)
+  - [ ] Yellow "How Your Lead Magnet Connects" insight box
+  - [ ] Lead Magnet Role display
+  - [ ] Positioning suggestion text
+  - [ ] Funnel Pattern in preview section
+  - [ ] Highlighted attraction offer step (yellow border)
+- [ ] If using "Free With Consumption" attraction offer:
+  - [ ] Verify "merged" step shows with green styling
+  - [ ] Verify step numbers adjust accordingly
+- [ ] Continue to Lead Magnet Delivery step
+- [ ] Verify context box shows: "Attraction Offer → Lead Magnet"
+- [ ] Verify placeholder uses positioning suggestion
+- [ ] Complete all steps
+- [ ] On Summary page, verify:
+  - [ ] All 3 components shown in header
+  - [ ] Funnel pattern text displayed
+  - [ ] Lead Magnet Role shown under Step 1
+- [ ] Save funnel → verify success screen shows full flow with attraction offer
+
+---
+
 ## Next Steps
 
 - [ ] Test Lead Magnet Selection flow end-to-end
 - [ ] Test Product Selection flow end-to-end
-- [ ] Re-organize FunnelBuilderFlow for recommended funnel method
+- [ ] Test Funnel Builder with all 6 attraction offer types
+- [ ] Create database migration for new `funnel_plans` columns if needed
 - [ ] Connect funnel builder to CRM feature
-- [ ] Link lead magnet to attraction offer in funnel flow

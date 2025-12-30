@@ -672,7 +672,83 @@ Money Model Pricing Courage Boost
 
 ---
 
-## Zarlo: The Orchestration Layer
+## Zarlo: The Co-Founder Guide
+
+### Philosophy
+
+Zarlo is NOT an AI that does things for you. Zarlo is a **guide and accountability partner** built on one core belief:
+
+> "You don't rise to the level of your ambitions. You fall to what feels safe to your nervous system."
+
+Every conversation, recommendation, and nudge ties back to this thesis.
+
+### Zarlo v1: Guide Mode
+
+Before Zarlo becomes a DOER (generating drafts, automating tasks), it starts as a **router and educator**:
+
+| Function | Description | Implementation |
+|----------|-------------|----------------|
+| **Intake Assessment** | Understands where user is stuck | Multi-choice + follow-up |
+| **NS Thesis Educator** | Explains WHY they're stuck (safety, not capability) | Scripted responses |
+| **Next Action Router** | Directs to the right flow/quest based on context | Rule-based routing |
+| **Accountability Partner** | "Did you do what you committed to?" | Daily check-in |
+| **Progress Mirror** | Reflects back patterns from their data | Basic aggregation |
+
+### Zarlo v1 Routing Logic
+
+```
+User's stated struggle → Zarlo's recommendation
+
+"I can't get visible"
+  → "That's a safety problem, not a courage problem.
+     Let's map your nervous system edge."
+  → Route: /nervous-system
+
+"I keep starting and stopping"
+  → "That's self-sabotage. Your system is pulling you back
+     because success feels unsafe."
+  → Route: /nervous-system (if not done) or /healing-compass
+
+"I don't know what to build"
+  → "Let's discover what you're naturally built for."
+  → Route: /nikigai/skills
+
+"I'm burnt out"
+  → "Your system needs safety first. Let's start gentle."
+  → Route: Healing tab, reduced quest load
+
+"I have an existing project"
+  → "Let's capture what you've built and find your current edge."
+  → Route: ExistingProjectFlow
+```
+
+### Zarlo Personality
+
+**Tone calibration based on Compass state:**
+- **North (Flow)**: Direct, challenging, "Let's push your edge"
+- **East (Challenged but excited)**: Encouraging, "You're in the growth zone"
+- **South (Drained)**: Gentle, protective, "Rest is part of the work"
+- **West (Coasting)**: Curious, "What would make this feel alive?"
+
+**Core phrases:**
+- "That's not a [X] problem - it's a safety problem"
+- "Your nervous system is protecting you from [X]"
+- "Let's find where your edge actually is"
+- "What would you do if it felt completely safe?"
+
+### Zarlo v2: DOER Mode (Future)
+
+Once users have data and Zarlo understands their patterns, it evolves to:
+- Generate draft responses (Draft Demon)
+- Suggest specific groans (Smart Groan Suggestions)
+- Pre-fill Money Model assessments (Offer Architect)
+- Automate Compass logging (Compass Autopilot)
+
+But v1 is about **guiding to the holy shit moment** (NS Map) and building trust.
+
+---
+
+## Zarlo (v2+): The Orchestration Layer
 
 Zarlo is the conversational interface that unifies all agents. Users don't think about "which agent"—they talk to Zarlo.
 
@@ -821,25 +897,37 @@ Prioritized by: Data Generation → WOM Trigger → Premium Upsell Signal
 | 10 | **Value Ladder** | Direct revenue. But needs upstream agents working first. | Stage 4+ |
 | 11 | **Offer Architect** | High value but Stage 4+ only. Smaller initial audience. | Clusters + Stage 4 |
 
-### Bali Beta Stack
+### Bali Beta Stack (Revised)
 
-**Phase 1 (Immediate - works with minimal data):**
-1. Life Quake Agent (burnout detection) - 3 days Compass
+**Phase 0 (Pre-Launch - Guide First):**
+1. **Zarlo v1 Chat Interface** - Guide mode only, no AI needed
+   - Intake assessment (where are you stuck?)
+   - NS thesis education (reframe their struggle)
+   - Route to NS Map / Flow Finder / Healing
+   - Basic accountability ("did you do it?")
+   - Implementation: React component + rule-based routing
+
+**Phase 1 (Launch Week - Core Experience):**
 2. Streak Guardian Agent (retention) - 1 day
-3. Compass Autopilot (2-tap logging) - None
-4. Pattern Insight Card (rule-based) - 5 groans
+3. Life Quake Agent (burnout detection) - 3 days Compass
+4. Compass Autopilot (2-tap logging) - None
 
-**Phase 2 (Post-validation - needs some history):**
-5. Smart Groan Suggestions (basic → personalized) - 3-5 groans + NS
-6. Pattern Mirror Agent (insight generation) - 5+ groans
-7. Draft Demon (quest pre-completion) - Pattern data available
-8. Zarlo chat interface - Orchestrates above
+**Phase 2 (Week 2+ - Pattern Recognition):**
+5. Pattern Insight Card (rule-based) - 5 groans
+6. Smart Groan Suggestions basic - 3 groans
+7. Archetype Tracker - 5 groans (which protective voice shows up most)
 
-**Phase 3 (Scale - needs 4+ weeks data):**
+**Phase 3 (Month 1+ - Personalization):**
+8. Pattern Mirror Agent (AI insight generation) - 5+ groans
 9. Fear Pattern Insights (deep analysis) - 4 weeks / 12+ groans
-10. Offer Architect (Money Model generation) - Stage 4+
-11. Validation Scout (survey automation) - Stage 1
-12. Full Morning Brief experience - All agents operational
+10. Release Effectiveness Agent - 5 releases
+11. NS Edge Tracker - 2+ NS completions
+
+**Phase 4 (Scale - DOER Mode):**
+12. Zarlo v2 with DOER agents
+13. Draft Demon (quest pre-completion)
+14. Offer Architect (Money Model generation)
+15. Validation Scout (survey automation)
 
 ---
 

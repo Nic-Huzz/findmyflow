@@ -1,6 +1,6 @@
 /**
  * ReconnectQuestInput.css
- * Styles for enhanced Reconnect quest inputs
+ * Styles for enhanced Reconnect quest inputs with multi-step slider UI
  */
 
 .reconnect-input {
@@ -9,10 +9,158 @@
   gap: 1rem;
 }
 
+/* Stepped Layout */
+.reconnect-input.stepped {
+  gap: 0;
+}
+
+.reconnect-input .step-progress {
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.reconnect-input .progress-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7c3aed;
+}
+
+.reconnect-input .step-content {
+  min-height: 200px;
+}
+
+.reconnect-input .step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.reconnect-input .step-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.reconnect-input .step-icon {
+  font-size: 1.25rem;
+}
+
+.reconnect-input .step-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+/* Step Navigation */
+.reconnect-input .step-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.reconnect-input .nav-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reconnect-input .nav-btn.back {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.reconnect-input .nav-btn.back:hover {
+  background: #e5e7eb;
+}
+
+.reconnect-input .nav-btn.next {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  margin-left: auto;
+}
+
+.reconnect-input .nav-btn.next:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.reconnect-input .nav-btn.next:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reconnect-input .nav-btn.complete {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  color: white;
+  margin-left: auto;
+}
+
+.reconnect-input .nav-btn.complete:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.reconnect-input .nav-btn.complete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Character hint */
+.reconnect-input .char-hint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+}
+
+.reconnect-input .char-hint.met {
+  color: #f59e0b;
+}
+
+/* Selection Summary */
+.reconnect-input .selection-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.reconnect-input .summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reconnect-input .summary-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reconnect-input .summary-value {
+  font-size: 0.9375rem;
+  color: #1f2937;
+}
+
 .reconnect-section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .reconnect-label {
@@ -35,7 +183,7 @@
 
 .reconnect-textarea:focus {
   outline: none;
-  border-color: #0ea5e9;
+  border-color: #7c3aed;
 }
 
 .reconnect-textarea::placeholder {
@@ -96,7 +244,7 @@
 }
 
 /* Shift Display */
-.shift-display {
+.reconnect-input .shift-display {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,28 +252,29 @@
   padding: 0.75rem;
   background: #f9fafb;
   border-radius: 12px;
+  margin-top: 0.5rem;
 }
 
-.shift-label {
+.reconnect-input .shift-label {
   font-size: 0.875rem;
   font-weight: 500;
   color: #6b7280;
 }
 
-.shift-value {
+.reconnect-input .shift-value {
   font-size: 1.5rem;
   font-weight: 700;
 }
 
-.shift-value.positive {
-  color: #22c55e;
+.reconnect-input .shift-value.positive {
+  color: #f59e0b;
 }
 
-.shift-value.negative {
+.reconnect-input .shift-value.negative {
   color: #ef4444;
 }
 
-.shift-value.neutral {
+.reconnect-input .shift-value.neutral {
   color: #6b7280;
 }
 
@@ -270,6 +419,7 @@
   font-weight: 600;
   color: #374151;
   transition: all 0.2s ease;
+  text-align: center;
 }
 
 .duration-option:hover {
@@ -476,5 +626,9 @@
 
   .difficulty-label {
     font-size: 0.45rem;
+  }
+
+  .breathwork-type-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

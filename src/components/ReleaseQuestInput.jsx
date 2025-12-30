@@ -1,5 +1,5 @@
 /**
- * ReleaseQuestInput - Enhanced input component for Release quests (Healing tab)
+ * ReleaseQuestInput - Multi-step slider UI for Release quests (Healing tab)
  *
  * Handles 3 Release quest types with structured data capture:
  * - release_daily_challenge (Daily Release Challenge)
@@ -90,8 +90,25 @@ const RELEASE_OUTCOMES = [
   { id: 'transformed', label: 'Transformed', icon: '🦋' }
 ]
 
+// Step configurations for each quest type
+const STEP_CONFIG = {
+  release_daily_challenge: {
+    totalSteps: 4,
+    stepTitles: ['Release Type', 'Emotion & Body', 'Intensity', 'Review']
+  },
+  release_negative_charge: {
+    totalSteps: 3,
+    stepTitles: ['What Triggered You', 'How You Released', 'Review']
+  },
+  release_weekly_big: {
+    totalSteps: 3,
+    stepTitles: ['Your Practice', 'What Surfaced', 'Review']
+  }
+}
+
 function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
   const [loading, setLoading] = useState(false)
+  const [step, setStep] = useState(1)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -118,6 +135,9 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
     outcome: null
   })
 
+  const config = STEP_CONFIG[quest.id] || { totalSteps: 2, stepTitles: ['Input', 'Review'] }
+  const totalSteps = config.totalSteps
+
   const handleEmotionToggle = (emotionId) => {
     setFormData(prev => ({
       ...prev,
@@ -142,7 +162,7 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
           safety_contract: formData.safetyContract,
           before_state: formData.beforeState,
           after_state: formData.afterState,
-          shift: formData.afterState - formData.beforeState,
+          shift: formData.beforeState - formData.afterState, // Lower is better for release
           notes: formData.notes
         }
         break
@@ -155,7 +175,7 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
           release_method: formData.releaseMethod,
           before_state: formData.beforeState,
           after_state: formData.afterState,
-          shift: formData.afterState - formData.beforeState,
+          shift: formData.beforeState - formData.afterState,
           notes: formData.notes
         }
         break
@@ -177,286 +197,500 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
     setLoading(false)
   }
 
-  const isValid = () => {
+  // Check if current step is valid
+  const canContinue = () => {
     switch (quest.id) {
       case 'release_daily_challenge':
-        // Safety contract is required if user has completed NS and has contracts
         const needsContract = safetyContracts && safetyContracts.length > 0
-        return formData.releaseType && formData.emotion &&
-               formData.beforeState && formData.afterState &&
-               (!needsContract || formData.safetyContract)
+        if (step === 1) return formData.releaseType && (!needsContract || formData.safetyContract)
+        if (step === 2) return formData.emotion && formData.bodyLocation
+        if (step === 3) return formData.beforeState && formData.afterState
+        return true
 
       case 'release_negative_charge':
-        return formData.trigger && formData.emotion &&
-               formData.releaseMethod && formData.beforeState && formData.afterState
+        if (step === 1) return formData.trigger && formData.emotion
+        if (step === 2) return formData.releaseMethod && formData.beforeState && formData.afterState
+        return true
 
       case 'release_weekly_big':
-        return formData.practiceType && formData.duration &&
-               formData.emotions.length > 0 && formData.depth && formData.outcome
+        if (step === 1) return formData.practiceType && formData.duration
+        if (step === 2) return formData.emotions.length > 0 && formData.depth && formData.outcome
+        return true
 
       default:
-        return false
+        return true
     }
   }
 
-  // Daily Release Challenge
-  const renderDailyChallenge = () => (
-    <>
-      {/* Safety Contract Dropdown - only show if user has contracts */}
-      {safetyContracts && safetyContracts.length > 0 && (
+  const handleNext = () => {
+    if (step < totalSteps) {
+      setStep(step + 1)
+    }
+  }
+
+  const handleBack = () => {
+    if (step > 1) {
+      setStep(step - 1)
+    }
+  }
+
+  // Render step content based on quest type and current step
+  const renderStepContent = () => {
+    switch (quest.id) {
+      case 'release_daily_challenge':
+        return renderDailyChallengeSteps()
+      case 'release_negative_charge':
+        return renderProcessingEmotionsSteps()
+      case 'release_weekly_big':
+        return renderBigReleaseSteps()
+      default:
+        return null
+    }
+  }
+
+  // Daily Release Challenge Steps
+  const renderDailyChallengeSteps = () => {
+    const needsContract = safetyContracts && safetyContracts.length > 0
+
+    if (step === 1) {
+      return (
+        <div className="step-content">
+          <div className="step-header">
+            <span className="step-icon">🌊</span>
+            <h4>Your Release</h4>
+          </div>
+
+          {needsContract && (
+            <div className="release-section">
+              <label className="release-label">Which safety contract are you releasing?</label>
+              <p className="release-hint">Select the limiting belief you're working on</p>
+              <select
+                className="release-select"
+                value={formData.safetyContract || ''}
+                onChange={(e) => setFormData({ ...formData, safetyContract: e.target.value })}
+              >
+                <option value="">Select a safety contract...</option>
+                {safetyContracts.map((contract, index) => (
+                  <option key={index} value={contract}>
+                    {contract}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="release-section">
+            <label className="release-label">What type of release?</label>
+            <div className="release-method-grid">
+              {RELEASE_METHODS.map(method => (
+                <button
+                  key={method.id}
+                  type="button"
+                  className={`release-method-option ${formData.releaseType === method.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, releaseType: method.id })}
+                >
+                  <span className="release-method-icon">{method.icon}</span>
+                  <span className="release-method-label">{method.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    if (step === 2) {
+      return (
+        <div className="step-content">
+          <div className="step-header">
+            <span className="step-icon">💫</span>
+            <h4>What You Released</h4>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">What emotion did you release?</label>
+            <div className="emotion-grid">
+              {EMOTIONS.map(emotion => (
+                <button
+                  key={emotion.id}
+                  type="button"
+                  className={`emotion-option ${formData.emotion === emotion.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, emotion: emotion.id })}
+                >
+                  <span className="emotion-icon">{emotion.icon}</span>
+                  <span className="emotion-label">{emotion.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">Where did you feel it in your body?</label>
+            <div className="body-location-grid">
+              {BODY_LOCATIONS.map(loc => (
+                <button
+                  key={loc.id}
+                  type="button"
+                  className={`body-location-option ${formData.bodyLocation === loc.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, bodyLocation: loc.id })}
+                >
+                  <span className="body-location-icon">{loc.icon}</span>
+                  <span className="body-location-label">{loc.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    if (step === 3) {
+      return (
+        <div className="step-content">
+          <div className="step-header">
+            <span className="step-icon">📊</span>
+            <h4>Intensity Shift</h4>
+          </div>
+
+          {renderIntensityScale()}
+
+          <div className="release-section">
+            <label className="release-label">Any notes? (optional)</label>
+            <textarea
+              className="release-textarea"
+              placeholder="What came up for you?"
+              value={formData.notes}
+              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              rows={2}
+            />
+          </div>
+        </div>
+      )
+    }
+
+    // Review step
+    return renderDailyChallengeReview()
+  }
+
+  const renderDailyChallengeReview = () => (
+    <div className="step-content">
+      <div className="step-header">
+        <span className="step-icon">🎯</span>
+        <h4>Review Your Release</h4>
+      </div>
+      <div className="selection-summary">
+        {formData.safetyContract && (
+          <div className="summary-item">
+            <span className="summary-label">Safety Contract</span>
+            <span className="summary-value">{formData.safetyContract}</span>
+          </div>
+        )}
+        <div className="summary-item">
+          <span className="summary-label">Release Type</span>
+          <span className="summary-value">
+            {RELEASE_METHODS.find(m => m.id === formData.releaseType)?.icon} {RELEASE_METHODS.find(m => m.id === formData.releaseType)?.label || '-'}
+          </span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Emotion</span>
+          <span className="summary-value">
+            {EMOTIONS.find(e => e.id === formData.emotion)?.icon} {EMOTIONS.find(e => e.id === formData.emotion)?.label || '-'}
+          </span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Body Location</span>
+          <span className="summary-value">
+            {BODY_LOCATIONS.find(b => b.id === formData.bodyLocation)?.icon} {BODY_LOCATIONS.find(b => b.id === formData.bodyLocation)?.label || '-'}
+          </span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Intensity Shift</span>
+          <span className="summary-value">
+            {formData.beforeState} → {formData.afterState}
+            ({formData.beforeState - formData.afterState > 0 ? '-' : '+'}{Math.abs(formData.beforeState - formData.afterState)} intensity)
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+
+  // Processing Your Emotions Steps
+  const renderProcessingEmotionsSteps = () => {
+    if (step === 1) {
+      return (
+        <div className="step-content">
+          <div className="step-header">
+            <span className="step-icon">⚡</span>
+            <h4>What Triggered You</h4>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">What triggered this emotion?</label>
+            <div className="trigger-grid">
+              {TRIGGERS.map(trigger => (
+                <button
+                  key={trigger.id}
+                  type="button"
+                  className={`trigger-option ${formData.trigger === trigger.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, trigger: trigger.id })}
+                >
+                  <span className="trigger-icon">{trigger.icon}</span>
+                  <span className="trigger-label">{trigger.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">What emotion were you feeling?</label>
+            <div className="emotion-grid">
+              {EMOTIONS.map(emotion => (
+                <button
+                  key={emotion.id}
+                  type="button"
+                  className={`emotion-option ${formData.emotion === emotion.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, emotion: emotion.id })}
+                >
+                  <span className="emotion-icon">{emotion.icon}</span>
+                  <span className="emotion-label">{emotion.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    if (step === 2) {
+      return (
+        <div className="step-content">
+          <div className="step-header">
+            <span className="step-icon">🌊</span>
+            <h4>How You Released</h4>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">How did you release it?</label>
+            <p className="release-hint">90 seconds is often enough for the emotion to pass</p>
+            <div className="release-method-grid">
+              {RELEASE_METHODS.map(method => (
+                <button
+                  key={method.id}
+                  type="button"
+                  className={`release-method-option ${formData.releaseMethod === method.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, releaseMethod: method.id })}
+                >
+                  <span className="release-method-icon">{method.icon}</span>
+                  <span className="release-method-label">{method.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {renderIntensityScale()}
+        </div>
+      )
+    }
+
+    // Review step
+    return (
+      <div className="step-content">
+        <div className="step-header">
+          <span className="step-icon">🎯</span>
+          <h4>Review</h4>
+        </div>
+        <div className="selection-summary">
+          <div className="summary-item">
+            <span className="summary-label">Trigger</span>
+            <span className="summary-value">
+              {TRIGGERS.find(t => t.id === formData.trigger)?.icon} {TRIGGERS.find(t => t.id === formData.trigger)?.label || '-'}
+            </span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Emotion</span>
+            <span className="summary-value">
+              {EMOTIONS.find(e => e.id === formData.emotion)?.icon} {EMOTIONS.find(e => e.id === formData.emotion)?.label || '-'}
+            </span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Release Method</span>
+            <span className="summary-value">
+              {RELEASE_METHODS.find(m => m.id === formData.releaseMethod)?.icon} {RELEASE_METHODS.find(m => m.id === formData.releaseMethod)?.label || '-'}
+            </span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Intensity Shift</span>
+            <span className="summary-value">
+              {formData.beforeState} → {formData.afterState}
+              ({formData.beforeState - formData.afterState > 0 ? '-' : '+'}{Math.abs(formData.beforeState - formData.afterState)} intensity)
+            </span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Big Release Steps
+  const renderBigReleaseSteps = () => {
+    if (step === 1) {
+      return (
+        <div className="step-content">
+          <div className="step-header">
+            <span className="step-icon">🌋</span>
+            <h4>Your Practice</h4>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">What type of release practice?</label>
+            <div className="big-release-grid">
+              {BIG_RELEASE_TYPES.map(type => (
+                <button
+                  key={type.id}
+                  type="button"
+                  className={`big-release-option ${formData.practiceType === type.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, practiceType: type.id })}
+                >
+                  <span className="big-release-icon">{type.icon}</span>
+                  <span className="big-release-label">{type.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">How long was your session?</label>
+            <div className="duration-grid">
+              {BIG_RELEASE_DURATIONS.map(d => (
+                <button
+                  key={d.id}
+                  type="button"
+                  className={`duration-option ${formData.duration === d.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, duration: d.id })}
+                >
+                  {d.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    if (step === 2) {
+      return (
+        <div className="step-content">
+          <div className="step-header">
+            <span className="step-icon">💫</span>
+            <h4>What Surfaced</h4>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">What emotions surfaced? (select all)</label>
+            <div className="emotion-grid">
+              {EMOTIONS.map(emotion => (
+                <button
+                  key={emotion.id}
+                  type="button"
+                  className={`emotion-option ${formData.emotions.includes(emotion.id) ? 'selected' : ''}`}
+                  onClick={() => handleEmotionToggle(emotion.id)}
+                >
+                  <span className="emotion-icon">{emotion.icon}</span>
+                  <span className="emotion-label">{emotion.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">How deep did you go?</label>
+            <div className="depth-grid">
+              {DEPTH_LEVELS.map(level => (
+                <button
+                  key={level.id}
+                  type="button"
+                  className={`depth-option ${formData.depth === level.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, depth: level.id })}
+                >
+                  <span className="depth-emoji">{level.emoji}</span>
+                  <span className="depth-label">{level.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="release-section">
+            <label className="release-label">How do you feel now?</label>
+            <div className="outcome-grid">
+              {RELEASE_OUTCOMES.map(outcome => (
+                <button
+                  key={outcome.id}
+                  type="button"
+                  className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
+                  onClick={() => setFormData({ ...formData, outcome: outcome.id })}
+                >
+                  <span className="outcome-icon">{outcome.icon}</span>
+                  <span className="outcome-label">{outcome.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    // Review step
+    return (
+      <div className="step-content">
+        <div className="step-header">
+          <span className="step-icon">🎯</span>
+          <h4>Review Your Session</h4>
+        </div>
+        <div className="selection-summary">
+          <div className="summary-item">
+            <span className="summary-label">Practice Type</span>
+            <span className="summary-value">
+              {BIG_RELEASE_TYPES.find(t => t.id === formData.practiceType)?.icon} {BIG_RELEASE_TYPES.find(t => t.id === formData.practiceType)?.label || '-'}
+            </span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Duration</span>
+            <span className="summary-value">
+              {BIG_RELEASE_DURATIONS.find(d => d.id === formData.duration)?.label || '-'}
+            </span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Emotions Surfaced</span>
+            <span className="summary-value">
+              {formData.emotions.map(id => EMOTIONS.find(e => e.id === id)?.icon).join(' ') || '-'}
+            </span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Depth</span>
+            <span className="summary-value">
+              {DEPTH_LEVELS.find(d => d.id === formData.depth)?.emoji} {DEPTH_LEVELS.find(d => d.id === formData.depth)?.label || '-'}
+            </span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-label">Outcome</span>
+            <span className="summary-value">
+              {RELEASE_OUTCOMES.find(o => o.id === formData.outcome)?.icon} {RELEASE_OUTCOMES.find(o => o.id === formData.outcome)?.label || '-'}
+            </span>
+          </div>
+        </div>
+
         <div className="release-section">
-          <label className="release-label">Which safety contract are you releasing?</label>
-          <p className="release-hint">Select the limiting belief you're working on today</p>
-          <select
-            className="release-select"
-            value={formData.safetyContract || ''}
-            onChange={(e) => setFormData({ ...formData, safetyContract: e.target.value })}
-          >
-            <option value="">Select a safety contract...</option>
-            {safetyContracts.map((contract, index) => (
-              <option key={index} value={contract}>
-                {contract}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      <div className="release-section">
-        <label className="release-label">What type of release?</label>
-        <div className="release-method-grid">
-          {RELEASE_METHODS.map(method => (
-            <button
-              key={method.id}
-              type="button"
-              className={`release-method-option ${formData.releaseType === method.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, releaseType: method.id })}
-            >
-              <span className="release-method-icon">{method.icon}</span>
-              <span className="release-method-label">{method.label}</span>
-            </button>
-          ))}
+          <label className="release-label">What came up? (optional)</label>
+          <textarea
+            className="release-textarea"
+            placeholder="Describe what you processed and released..."
+            value={formData.notes}
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+            rows={3}
+          />
         </div>
       </div>
-
-      <div className="release-section">
-        <label className="release-label">What emotion did you release?</label>
-        <div className="emotion-grid">
-          {EMOTIONS.map(emotion => (
-            <button
-              key={emotion.id}
-              type="button"
-              className={`emotion-option ${formData.emotion === emotion.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, emotion: emotion.id })}
-            >
-              <span className="emotion-icon">{emotion.icon}</span>
-              <span className="emotion-label">{emotion.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">Where did you feel it in your body?</label>
-        <div className="body-location-grid">
-          {BODY_LOCATIONS.map(loc => (
-            <button
-              key={loc.id}
-              type="button"
-              className={`body-location-option ${formData.bodyLocation === loc.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, bodyLocation: loc.id })}
-            >
-              <span className="body-location-icon">{loc.icon}</span>
-              <span className="body-location-label">{loc.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {renderIntensityScale()}
-
-      <div className="release-section">
-        <label className="release-label">Any notes? (optional)</label>
-        <textarea
-          className="release-textarea"
-          placeholder="What came up for you?"
-          value={formData.notes}
-          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          rows={2}
-        />
-      </div>
-    </>
-  )
-
-  // Processing Your Emotions
-  const renderProcessingEmotions = () => (
-    <>
-      <div className="release-section">
-        <label className="release-label">What triggered this emotion?</label>
-        <div className="trigger-grid">
-          {TRIGGERS.map(trigger => (
-            <button
-              key={trigger.id}
-              type="button"
-              className={`trigger-option ${formData.trigger === trigger.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, trigger: trigger.id })}
-            >
-              <span className="trigger-icon">{trigger.icon}</span>
-              <span className="trigger-label">{trigger.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">What emotion were you feeling?</label>
-        <div className="emotion-grid">
-          {EMOTIONS.map(emotion => (
-            <button
-              key={emotion.id}
-              type="button"
-              className={`emotion-option ${formData.emotion === emotion.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, emotion: emotion.id })}
-            >
-              <span className="emotion-icon">{emotion.icon}</span>
-              <span className="emotion-label">{emotion.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">How did you release it?</label>
-        <p className="release-hint">90 seconds is often enough for the emotion to pass</p>
-        <div className="release-method-grid">
-          {RELEASE_METHODS.map(method => (
-            <button
-              key={method.id}
-              type="button"
-              className={`release-method-option ${formData.releaseMethod === method.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, releaseMethod: method.id })}
-            >
-              <span className="release-method-icon">{method.icon}</span>
-              <span className="release-method-label">{method.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {renderIntensityScale()}
-
-      <div className="release-section">
-        <label className="release-label">Any reflections? (optional)</label>
-        <textarea
-          className="release-textarea"
-          placeholder="What did you notice?"
-          value={formData.notes}
-          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          rows={2}
-        />
-      </div>
-    </>
-  )
-
-  // Big Release
-  const renderBigRelease = () => (
-    <>
-      <div className="release-section">
-        <label className="release-label">What type of release practice?</label>
-        <div className="big-release-grid">
-          {BIG_RELEASE_TYPES.map(type => (
-            <button
-              key={type.id}
-              type="button"
-              className={`big-release-option ${formData.practiceType === type.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, practiceType: type.id })}
-            >
-              <span className="big-release-icon">{type.icon}</span>
-              <span className="big-release-label">{type.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">How long was your session?</label>
-        <div className="duration-grid">
-          {BIG_RELEASE_DURATIONS.map(d => (
-            <button
-              key={d.id}
-              type="button"
-              className={`duration-option ${formData.duration === d.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, duration: d.id })}
-            >
-              {d.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">What emotions surfaced? (select all)</label>
-        <div className="emotion-grid">
-          {EMOTIONS.map(emotion => (
-            <button
-              key={emotion.id}
-              type="button"
-              className={`emotion-option ${formData.emotions.includes(emotion.id) ? 'selected' : ''}`}
-              onClick={() => handleEmotionToggle(emotion.id)}
-            >
-              <span className="emotion-icon">{emotion.icon}</span>
-              <span className="emotion-label">{emotion.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">How deep did you go?</label>
-        <div className="depth-grid">
-          {DEPTH_LEVELS.map(level => (
-            <button
-              key={level.id}
-              type="button"
-              className={`depth-option ${formData.depth === level.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, depth: level.id })}
-            >
-              <span className="depth-emoji">{level.emoji}</span>
-              <span className="depth-label">{level.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">How do you feel now?</label>
-        <div className="outcome-grid">
-          {RELEASE_OUTCOMES.map(outcome => (
-            <button
-              key={outcome.id}
-              type="button"
-              className={`outcome-option ${formData.outcome === outcome.id ? 'selected' : ''}`}
-              onClick={() => setFormData({ ...formData, outcome: outcome.id })}
-            >
-              <span className="outcome-icon">{outcome.icon}</span>
-              <span className="outcome-label">{outcome.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">What came up? (optional)</label>
-        <textarea
-          className="release-textarea"
-          placeholder="Describe what you processed and released..."
-          value={formData.notes}
-          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          rows={3}
-        />
-      </div>
-    </>
-  )
+    )
+  }
 
   // Shared intensity scale (before/after)
   const renderIntensityScale = () => (
@@ -513,31 +747,45 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
     </>
   )
 
-  // Render appropriate form
-  const renderForm = () => {
-    switch (quest.id) {
-      case 'release_daily_challenge':
-        return renderDailyChallenge()
-      case 'release_negative_charge':
-        return renderProcessingEmotions()
-      case 'release_weekly_big':
-        return renderBigRelease()
-      default:
-        return null
-    }
-  }
+  const isReviewStep = step === totalSteps
 
   return (
-    <div className="release-input">
-      {renderForm()}
+    <div className="release-input stepped">
+      {/* Progress indicator */}
+      <div className="step-progress">
+        <span className="progress-text">
+          Step {step} of {totalSteps}: {config.stepTitles[step - 1]}
+        </span>
+      </div>
 
-      <button
-        className="release-submit-btn"
-        onClick={handleSubmit}
-        disabled={!isValid() || loading}
-      >
-        {loading ? 'Saving...' : 'Complete Quest'}
-      </button>
+      {renderStepContent()}
+
+      {/* Navigation */}
+      <div className="step-navigation">
+        {step > 1 && (
+          <button className="nav-btn back" onClick={handleBack}>
+            Back
+          </button>
+        )}
+
+        {!isReviewStep ? (
+          <button
+            className="nav-btn next"
+            onClick={handleNext}
+            disabled={!canContinue()}
+          >
+            Continue
+          </button>
+        ) : (
+          <button
+            className="nav-btn complete"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? 'Saving...' : 'Complete Quest'}
+          </button>
+        )}
+      </div>
     </div>
   )
 }

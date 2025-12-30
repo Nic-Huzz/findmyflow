@@ -81,9 +81,10 @@ export default function NervousSystemFlow() {
           if (saved.archetype) {
             setReflection({
               archetype_name: saved.archetype,
-              archetype_description: '',
-              core_fear: saved.safety_contracts?.[0] || '',
-              fear_interpretation: '',
+              archetype_description: saved.archetype_description || '',
+              safety_edges_summary: saved.safety_edges_summary || '',
+              core_fear: saved.core_fear || saved.safety_contracts?.[0] || '',
+              fear_interpretation: saved.fear_interpretation || '',
               rewiring_needed: saved.rewiring_needed || '',
               full_reflection: saved.reflection_text
             })
@@ -514,6 +515,10 @@ export default function NervousSystemFlow() {
           safety_contracts: yesContracts,
           reflection_text: reflection?.full_reflection,
           archetype: reflection?.archetype_name,
+          archetype_description: reflection?.archetype_description,
+          safety_edges_summary: reflection?.safety_edges_summary,
+          core_fear: reflection?.core_fear,
+          fear_interpretation: reflection?.fear_interpretation,
           rewiring_needed: reflection?.rewiring_needed,
           being_seen_edge: responses.being_seen_edge,
           earning_edge: responses.earning_edge
@@ -1224,9 +1229,17 @@ export default function NervousSystemFlow() {
           <p style={{ fontSize: 15, marginTop: 12 }}>{reflection.archetype_description}</p>
         </div>
 
+        {/* Safety Zones vs Contraction Zones */}
+        {reflection.safety_edges_summary && (
+          <div className="ns-hc-result-box">
+            <h3>🎯 Your Safety Zones vs. Contraction Zones</h3>
+            <p style={{ marginTop: 12, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{reflection.safety_edges_summary}</p>
+          </div>
+        )}
+
         {/* Current Limits */}
         <div className="ns-hc-result-box">
-          <h3>📊 What Your Current Limit Is:</h3>
+          <h3>📊 Your Nervous System Limits:</h3>
           <div style={{ marginTop: 12, paddingLeft: 8 }}>
             <p>💰 Earning up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)}/year</strong></p>
             <p>👥 Being visible to about <strong style={{ color: '#fbbf24' }}>{formatPeople(responses.being_seen_edge)} people</strong></p>
@@ -1279,6 +1292,25 @@ export default function NervousSystemFlow() {
           <h3 style={{ color: '#c4b5fd' }}>✨ What Needs Rewiring:</h3>
           <p style={{ marginTop: 12, whiteSpace: 'pre-line' }}>{reflection.rewiring_needed}</p>
         </div>
+
+        {/* Full Reflection Narrative */}
+        {reflection.full_reflection && (
+          <div className="ns-hc-result-box" style={{ background: 'rgba(255, 255, 255, 0.03)', borderColor: 'rgba(255, 255, 255, 0.15)' }}>
+            <h3>📖 Your Complete Reflection</h3>
+            <div
+              style={{ marginTop: 16, lineHeight: 1.8, fontSize: 15 }}
+              dangerouslySetInnerHTML={{
+                __html: reflection.full_reflection
+                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                  .replace(/\n\n/g, '</p><p style="margin-top: 16px;">')
+                  .replace(/\n/g, '<br/>')
+                  .replace(/^/, '<p>')
+                  .replace(/$/, '</p>')
+              }}
+            />
+          </div>
+        )}
 
         {viewingResults ? (
           <button className="ns-hc-primary-button" onClick={() => navigate('/7-day-challenge')}>

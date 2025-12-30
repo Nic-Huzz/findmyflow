@@ -741,6 +741,7 @@
 @media (max-width: 480px) {
   .offer-builder-flow {
     padding: 16px;
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
   }
 
   .offer-builder-flow .text-area-input {

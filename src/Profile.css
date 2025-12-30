@@ -691,13 +691,13 @@
   font-weight: 700;
 }
 
-.archetype-cards-grid {
+.dashboard-container .archetype-cards-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
 }
 
-.archetype-card {
+.dashboard-container .archetype-card {
   background: white;
   border-radius: 20px;
   overflow: hidden;
@@ -706,12 +706,12 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.archetype-card:hover {
+.dashboard-container .archetype-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.15);
 }
 
-.archetype-card.expanded {
+.dashboard-container .archetype-card.expanded {
   overflow: visible;
 }
 
@@ -744,15 +744,15 @@
   backdrop-filter: blur(10px);
 }
 
-.archetype-card.essence .archetype-tag {
+.dashboard-container .archetype-card.essence .archetype-tag {
   color: #d4a000;
 }
 
-.archetype-body {
+.dashboard-container .archetype-body {
   padding: 30px;
 }
 
-.archetype-name {
+.dashboard-container .archetype-name {
   font-size: 1.8rem;
   color: #1a1a1a;
   margin-bottom: 15px;
@@ -876,7 +876,7 @@
   padding: 8px 0;
 }
 
-.archetype-card.expanded {
+.dashboard-container .archetype-card.expanded {
   overflow: visible;
 }
 
@@ -1060,7 +1060,7 @@
     grid-template-columns: 1fr;
   }
 
-  .archetype-cards-grid {
+  .dashboard-container .archetype-cards-grid {
     grid-template-columns: 1fr;
   }
 }

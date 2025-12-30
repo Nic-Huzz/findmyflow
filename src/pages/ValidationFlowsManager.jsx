@@ -132,7 +132,7 @@ const ValidationFlowsManager = () => {
 
   if (loading) {
     return (
-      <div className="validation-manager-page">
+      <div className="dashboard-container">
         <div className="loading">Loading...</div>
       </div>
     )

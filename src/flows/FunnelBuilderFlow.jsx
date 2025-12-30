@@ -100,12 +100,77 @@ const LEAD_MAGNET_DETAILS = {
   }
 }
 
+// Attraction Offer details and lead magnet positioning
+const ATTRACTION_OFFER_DETAILS = {
+  win_your_money_back: {
+    name: 'Win Your Money Back',
+    icon: '🏆',
+    description: 'Results-driven offer where customers earn back their investment',
+    leadMagnetPosition: 'before', // Lead magnet comes before attraction offer
+    leadMagnetRole: 'Preview before joining',
+    leadMagnetSuggestion: 'Give a free preview (video training, PDF guide, or mini-challenge) that shows what they\'ll learn in the paid challenge',
+    bestMagnetTypes: ['free_step_1', 'reveal_problem'],
+    funnelPattern: 'Lead Magnet → Build Trust → Attraction Offer → Challenge → Results'
+  },
+  giveaway: {
+    name: 'Flagship Giveaway',
+    icon: '🎁',
+    description: 'High-attraction offer using a compelling prize or scholarship',
+    leadMagnetPosition: 'bonus', // Lead magnet is bonus for entering
+    leadMagnetRole: 'Bonus for entering',
+    leadMagnetSuggestion: 'Add a valuable bonus everyone gets just for entering (instant PDF, video training, or resource) while they wait for results',
+    bestMagnetTypes: ['free_step_1', 'reveal_problem'],
+    funnelPattern: 'Giveaway Entry → Instant Lead Magnet Bonus → Nurture → Non-Winner Offer'
+  },
+  decoy_offer: {
+    name: 'Decoy Offer (Good/Better/Best)',
+    icon: '📊',
+    description: 'Tiered pricing where a weaker offer makes premium look attractive',
+    leadMagnetPosition: 'before', // Lead magnet helps them decide
+    leadMagnetRole: 'Comparison helper',
+    leadMagnetSuggestion: 'Offer a free assessment or quiz that helps them identify which tier is right for them',
+    bestMagnetTypes: ['reveal_problem', 'free_trial'],
+    funnelPattern: 'Lead Magnet → Identify Needs → Decoy Pricing Page → Convert to Best Tier'
+  },
+  buy_x_get_y_free: {
+    name: 'Buy X Get Y Free',
+    icon: '🛒',
+    description: 'Value-stacking offer where buying includes bonus units/products',
+    leadMagnetPosition: 'sample', // Lead magnet is a sample
+    leadMagnetRole: 'Sample/taste',
+    leadMagnetSuggestion: 'Give them a free sample or trial-size version so they can experience the quality before buying the bundle',
+    bestMagnetTypes: ['free_trial', 'free_step_1'],
+    funnelPattern: 'Free Sample → Experience Quality → Bundle Offer → Repeat Purchase'
+  },
+  pay_less_now_or_pay_more_later: {
+    name: 'Pay Less Now or Pay More Later',
+    icon: '⏰',
+    description: 'Time-sensitive pricing creating urgency for early buyers',
+    leadMagnetPosition: 'urgency', // Lead magnet amplifies urgency
+    leadMagnetRole: 'Urgency amplifier',
+    leadMagnetSuggestion: 'Offer a free resource that demonstrates value + shows what they\'ll miss. Tie lead magnet to the deadline.',
+    bestMagnetTypes: ['free_step_1', 'reveal_problem'],
+    funnelPattern: 'Lead Magnet → Demonstrate Value → Time-Limited Offer → Deadline → Re-offer at Full Price'
+  },
+  free_with_consumption_to_upsell: {
+    name: 'Free With Consumption',
+    icon: '🎯',
+    description: 'First session/module free, experience leads to premium upsell',
+    leadMagnetPosition: 'merged', // Lead magnet IS the attraction offer
+    leadMagnetRole: 'Is the attraction offer',
+    leadMagnetSuggestion: 'Your lead magnet and attraction offer are the same thing! The free experience IS both the hook and the value exchange.',
+    bestMagnetTypes: ['free_trial'],
+    funnelPattern: 'Free Experience (LM + AO merged) → Consumption → Natural Upsell → Premium'
+  }
+}
+
 function FunnelBuilderFlow() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [coreStrategy, setCoreStrategy] = useState(null)
+  const [attractionOffer, setAttractionOffer] = useState(null)
   const [leadMagnetType, setLeadMagnetType] = useState(null)
   const [leadMagnetDetails, setLeadMagnetDetails] = useState(null)
 
@@ -133,7 +198,6 @@ function FunnelBuilderFlow() {
 
     try {
       // Load Core Four selection from leads_assessments
-      // Column names: recommended_strategy_id, recommended_strategy_name
       const { data: leadsData, error: leadsError } = await supabase
         .from('leads_assessments')
         .select('responses, recommended_strategy_id, recommended_strategy_name')
@@ -148,8 +212,22 @@ function FunnelBuilderFlow() {
 
       console.log('📊 Leads assessment data:', leadsData)
 
-      // Load Lead Magnet selection from offer_builder_assessments
-      // Data is in responses.lead_magnet_selections.types
+      // Load Attraction Offer selection from attraction_offer_assessments
+      const { data: attractionData, error: attractionError } = await supabase
+        .from('attraction_offer_assessments')
+        .select('responses, recommended_offer_id, recommended_offer_name')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (attractionError) {
+        console.error('Error loading attraction offer assessment:', attractionError)
+      }
+
+      console.log('📊 Attraction offer data:', attractionData)
+
+      // Load Lead Magnet selection from offer_builder_assessments (LeadMagnetSelectionFlow)
       const { data: offerData, error: offerError } = await supabase
         .from('offer_builder_assessments')
         .select('responses')
@@ -162,15 +240,12 @@ function FunnelBuilderFlow() {
         console.error('Error loading offer builder assessment:', offerError)
       }
 
-      // Extract lead magnet selections from offer builder data
-      const leadMagnetSelections = offerData?.responses?.lead_magnet_selections
-      console.log('📊 Lead magnet selections:', leadMagnetSelections)
+      console.log('📊 Lead magnet data from offer builder:', offerData?.responses?.lead_magnet_selections)
 
       // Set Core Four strategy
       if (leadsData?.recommended_strategy_id) {
         setCoreStrategy(leadsData.recommended_strategy_id)
       } else if (leadsData?.recommended_strategy_name) {
-        // Fallback: map name to ID
         const nameToId = {
           'Warm Outreach': 'warm_outreach',
           'Cold Outreach': 'cold_outreach',
@@ -183,13 +258,31 @@ function FunnelBuilderFlow() {
         }
       }
 
-      // Set Lead Magnet type from offer builder selections
-      if (leadMagnetSelections?.types) {
-        // Get the first selected type (user may have multiple lead magnets)
-        const selectedTypes = Object.values(leadMagnetSelections.types)
+      // Set Attraction Offer
+      if (attractionData?.recommended_offer_id) {
+        setAttractionOffer(attractionData.recommended_offer_id)
+      } else if (attractionData?.recommended_offer_name) {
+        // Map name to ID
+        const nameToId = {
+          'Win Your Money Back': 'win_your_money_back',
+          'Flagship Giveaway': 'giveaway',
+          'Decoy Offer (Good/Better/Best)': 'decoy_offer',
+          'Buy X Get Y Free': 'buy_x_get_y_free',
+          'Pay Less Now or Pay More Later': 'pay_less_now_or_pay_more_later',
+          'Free With Consumption': 'free_with_consumption_to_upsell'
+        }
+        const mappedId = nameToId[attractionData.recommended_offer_name]
+        if (mappedId) {
+          setAttractionOffer(mappedId)
+        }
+      }
+
+      // Set Lead Magnet type from LeadMagnetSelectionFlow (stored in offer_builder_assessments)
+      if (offerData?.responses?.lead_magnet_selections?.types) {
+        const selectedTypes = Object.values(offerData.responses.lead_magnet_selections.types)
         if (selectedTypes.length > 0) {
           setLeadMagnetType(selectedTypes[0])
-          setLeadMagnetDetails(leadMagnetSelections)
+          setLeadMagnetDetails(offerData.responses.lead_magnet_selections)
         }
       }
 
@@ -252,7 +345,10 @@ function FunnelBuilderFlow() {
         .upsert({
           user_id: user.id,
           core_strategy: coreStrategy,
+          attraction_offer: attractionOffer,
           lead_magnet_type: leadMagnetType,
+          lead_magnet_role: attractionDetails?.leadMagnetRole,
+          funnel_pattern: attractionDetails?.funnelPattern,
           delivery_method: funnelData.deliveryMethod,
           delivery_details: funnelData.deliveryDetails,
           nurture_method: funnelData.nurtureMethod,
@@ -270,6 +366,7 @@ function FunnelBuilderFlow() {
       // Complete quest
       await completeFlowQuest(user.id, 'funnel_builder', {
         core_strategy: coreStrategy,
+        attraction_offer: attractionOffer,
         lead_magnet_type: leadMagnetType,
         funnel_data: funnelData
       })
@@ -285,6 +382,7 @@ function FunnelBuilderFlow() {
   }
 
   const strategyDetails = coreStrategy ? CORE_FOUR_DETAILS[coreStrategy] : null
+  const attractionDetails = attractionOffer ? ATTRACTION_OFFER_DETAILS[attractionOffer] : null
   const magnetDetails = leadMagnetType ? LEAD_MAGNET_DETAILS[leadMagnetType] : null
 
   // Render loading
@@ -302,13 +400,12 @@ function FunnelBuilderFlow() {
   // Render prerequisites check
   if (stage === STAGES.PREREQUISITES_CHECK) {
     const hasStrategy = !!coreStrategy
+    const hasAttraction = !!attractionOffer
     const hasMagnet = !!leadMagnetType
-    const ready = hasStrategy && hasMagnet
+    const ready = hasStrategy && hasAttraction && hasMagnet
 
     return (
       <div className="funnel-builder-flow flow-base">
-        <BackButton onClick={() => navigate('/7-day-challenge')} />
-
         <div className="fb-prerequisites">
           <h1>Build Your Funnel</h1>
           <p className="fb-subtitle">Before we design your funnel, you need to complete these steps:</p>
@@ -329,14 +426,29 @@ function FunnelBuilderFlow() {
               )}
             </div>
 
+            <div className={`fb-prereq-item ${hasAttraction ? 'complete' : 'incomplete'}`}>
+              <div className="fb-prereq-icon">{hasAttraction ? '✓' : '2'}</div>
+              <div className="fb-prereq-content">
+                <h3>Attraction Offer</h3>
+                {hasAttraction ? (
+                  <p className="fb-prereq-value">{attractionDetails?.icon} {attractionDetails?.name}</p>
+                ) : (
+                  <p>Choose your hook that captures attention</p>
+                )}
+              </div>
+              {!hasAttraction && (
+                <Link to="/attraction-offer" className="fb-prereq-link">Complete →</Link>
+              )}
+            </div>
+
             <div className={`fb-prereq-item ${hasMagnet ? 'complete' : 'incomplete'}`}>
-              <div className="fb-prereq-icon">{hasMagnet ? '✓' : '2'}</div>
+              <div className="fb-prereq-icon">{hasMagnet ? '✓' : '3'}</div>
               <div className="fb-prereq-content">
                 <h3>Lead Magnet Type</h3>
                 {hasMagnet ? (
                   <p className="fb-prereq-value">{magnetDetails?.name}</p>
                 ) : (
-                  <p>Choose your lead magnet approach</p>
+                  <p>Choose your value exchange for email capture</p>
                 )}
               </div>
               {!hasMagnet && (
@@ -345,16 +457,34 @@ function FunnelBuilderFlow() {
             </div>
           </div>
 
-          {ready ? (
-            <button
-              className="primary-button"
-              onClick={() => setStage(STAGES.WELCOME)}
-            >
-              Let's Build Your Funnel
-            </button>
-          ) : (
-            <p className="fb-prereq-note">Complete both steps above to unlock the Funnel Builder</p>
-          )}
+          <div className="fb-prereq-actions">
+            {ready ? (
+              <>
+                <button
+                  className="primary-button"
+                  onClick={() => setStage(STAGES.WELCOME)}
+                >
+                  Let's Build Your Funnel
+                </button>
+                <button
+                  className="go-back-link"
+                  onClick={() => navigate('/7-day-challenge')}
+                >
+                  ← Go Back
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="fb-prereq-note">Complete all steps above to unlock the Funnel Builder</p>
+                <button
+                  className="go-back-link"
+                  onClick={() => navigate('/7-day-challenge')}
+                >
+                  ← Go Back
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     )
@@ -362,6 +492,8 @@ function FunnelBuilderFlow() {
 
   // Render welcome
   if (stage === STAGES.WELCOME) {
+    const isMerged = attractionDetails?.leadMagnetPosition === 'merged'
+
     return (
       <div className="funnel-builder-flow flow-base">
         <BackButton onClick={() => navigate('/7-day-challenge')} />
@@ -374,38 +506,72 @@ function FunnelBuilderFlow() {
             <div className="fb-strategy-card">
               <div className="fb-strategy-icon">{strategyDetails?.icon}</div>
               <h3>{strategyDetails?.name}</h3>
-              <p>{strategyDetails?.description}</p>
+              <p className="fb-card-desc">{strategyDetails?.description}</p>
             </div>
 
-            <div className="fb-plus">+</div>
+            <div className="fb-plus">→</div>
+
+            <div className="fb-strategy-card">
+              <div className="fb-strategy-icon">{attractionDetails?.icon}</div>
+              <h3>{attractionDetails?.name}</h3>
+              <p className="fb-card-desc">The Hook</p>
+            </div>
+
+            <div className="fb-plus">→</div>
 
             <div className="fb-strategy-card">
               <div className="fb-strategy-icon">🧲</div>
               <h3>{magnetDetails?.name}</h3>
-              <p>{magnetDetails?.examples}</p>
+              <p className="fb-card-desc">Value Exchange</p>
+            </div>
+          </div>
+
+          {/* Lead Magnet Positioning Insight */}
+          <div className="fb-positioning-insight">
+            <h4>How Your Lead Magnet Connects</h4>
+            <div className="fb-insight-content">
+              <div className="fb-insight-role">
+                <span className="fb-insight-label">Role:</span>
+                <span className="fb-insight-value">{attractionDetails?.leadMagnetRole}</span>
+              </div>
+              <p className="fb-insight-suggestion">{attractionDetails?.leadMagnetSuggestion}</p>
             </div>
           </div>
 
           <div className="fb-funnel-preview">
-            <h3>Your Funnel Flow</h3>
+            <h3>Your Funnel Pattern</h3>
+            <p className="fb-pattern-text">{attractionDetails?.funnelPattern}</p>
+
             <div className="fb-funnel-steps">
               <div className="fb-funnel-step">
                 <span className="fb-step-num">1</span>
                 <span>Attract with {strategyDetails?.name}</span>
               </div>
               <div className="fb-funnel-arrow">↓</div>
-              <div className="fb-funnel-step">
+              <div className="fb-funnel-step highlight">
                 <span className="fb-step-num">2</span>
-                <span>Capture with {magnetDetails?.name}</span>
+                <span>Hook with {attractionDetails?.name}</span>
               </div>
               <div className="fb-funnel-arrow">↓</div>
+              {isMerged ? (
+                <div className="fb-funnel-step merged">
+                  <span className="fb-step-num">✓</span>
+                  <span>Lead Magnet = Attraction Offer (merged)</span>
+                </div>
+              ) : (
+                <div className="fb-funnel-step">
+                  <span className="fb-step-num">3</span>
+                  <span>Capture with {magnetDetails?.name} ({attractionDetails?.leadMagnetRole})</span>
+                </div>
+              )}
+              <div className="fb-funnel-arrow">↓</div>
               <div className="fb-funnel-step">
-                <span className="fb-step-num">3</span>
+                <span className="fb-step-num">{isMerged ? '3' : '4'}</span>
                 <span>Nurture & Build Trust</span>
               </div>
               <div className="fb-funnel-arrow">↓</div>
               <div className="fb-funnel-step">
-                <span className="fb-step-num">4</span>
+                <span className="fb-step-num">{isMerged ? '4' : '5'}</span>
                 <span>Convert to Customer</span>
               </div>
             </div>
@@ -423,6 +589,8 @@ function FunnelBuilderFlow() {
 
   // Render Lead Magnet Delivery
   if (stage === STAGES.LEAD_MAGNET_DELIVERY) {
+    const isMerged = attractionDetails?.leadMagnetPosition === 'merged'
+
     return (
       <div className="funnel-builder-flow flow-base">
         <BackButton onClick={handleBack} />
@@ -433,6 +601,18 @@ function FunnelBuilderFlow() {
           <p className="fb-section-subtitle">
             How will people get your {magnetDetails?.name.toLowerCase()}?
           </p>
+
+          {/* Context box showing attraction offer connection */}
+          <div className="info-box highlight">
+            <strong>{attractionDetails?.icon} {attractionDetails?.name}</strong> → <strong>🧲 {magnetDetails?.name}</strong>
+            <br />
+            <span className="fb-info-role">Lead Magnet Role: {attractionDetails?.leadMagnetRole}</span>
+            {isMerged && (
+              <div className="fb-merged-note">
+                Since your lead magnet and attraction offer are merged, the "free experience" serves both purposes!
+              </div>
+            )}
+          </div>
 
           <div className="info-box">
             <strong>Your Lead Magnet:</strong> {magnetDetails?.name}
@@ -458,7 +638,7 @@ function FunnelBuilderFlow() {
             <textarea
               value={funnelData.deliveryDetails}
               onChange={(e) => handleInputChange('deliveryDetails', e.target.value)}
-              placeholder={`E.g., "After they complete the quiz, they'll see their results on a thank you page and get a detailed PDF via email..."`}
+              placeholder={attractionDetails?.leadMagnetSuggestion || `E.g., "After they complete the quiz, they'll see their results on a thank you page and get a detailed PDF via email..."`}
               rows={4}
             />
           </div>
@@ -628,6 +808,8 @@ function FunnelBuilderFlow() {
 
   // Render Summary
   if (stage === STAGES.SUMMARY) {
+    const isMerged = attractionDetails?.leadMagnetPosition === 'merged'
+
     return (
       <div className="funnel-builder-flow flow-base">
         <BackButton onClick={handleBack} />
@@ -641,11 +823,20 @@ function FunnelBuilderFlow() {
               <span>{strategyDetails?.icon}</span>
               <span>{strategyDetails?.name}</span>
             </div>
-            <span className="fb-summary-plus">+</span>
+            <span className="fb-summary-plus">→</span>
+            <div className="fb-summary-strategy">
+              <span>{attractionDetails?.icon}</span>
+              <span>{attractionDetails?.name}</span>
+            </div>
+            <span className="fb-summary-plus">→</span>
             <div className="fb-summary-magnet">
               <span>🧲</span>
               <span>{magnetDetails?.name}</span>
             </div>
+          </div>
+
+          <div className="fb-summary-pattern">
+            <strong>Pattern:</strong> {attractionDetails?.funnelPattern}
           </div>
 
           <div className="fb-summary-steps">
@@ -654,6 +845,7 @@ function FunnelBuilderFlow() {
                 <span className="fb-summary-step-num">1</span>
                 <h4>Lead Magnet Delivery</h4>
               </div>
+              <p className="fb-summary-role">{attractionDetails?.leadMagnetRole}</p>
               <p className="fb-summary-method">{funnelData.deliveryMethod}</p>
               <p className="fb-summary-details">{funnelData.deliveryDetails}</p>
             </div>
@@ -722,6 +914,8 @@ function FunnelBuilderFlow() {
             <div className="fb-success-flow">
               <span>{strategyDetails?.icon} {strategyDetails?.name}</span>
               <span>→</span>
+              <span>{attractionDetails?.icon} {attractionDetails?.name}</span>
+              <span>→</span>
               <span>🧲 {magnetDetails?.name}</span>
               <span>→</span>
               <span>💬 {funnelData.nurtureMethod}</span>
@@ -733,7 +927,8 @@ function FunnelBuilderFlow() {
           <div className="fb-success-next">
             <h3>Next Steps</h3>
             <ul>
-              <li>Build your lead magnet if you haven't already</li>
+              <li>Create your {attractionDetails?.name?.toLowerCase()} hook</li>
+              <li>Build your lead magnet ({attractionDetails?.leadMagnetRole?.toLowerCase()})</li>
               <li>Set up your delivery mechanism</li>
               <li>Create your nurture content/sequence</li>
               <li>Prepare your conversion process</li>
