@@ -73,6 +73,13 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
           const state = getTabState(stage.id, stage)
           const isActive = activeTab === stage.id
 
+          // Apply stage color directly when active for better browser support
+          const activeStyles = isActive ? {
+            background: stage.color,
+            borderColor: stage.color,
+            color: 'white'
+          } : {}
+
           return (
             <button
               key={stage.id}
@@ -80,7 +87,7 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
               className={`stage-tab ${state} ${isActive ? 'active' : ''} ${stage.alwaysAccessible ? 'always-accessible' : ''}`}
               onClick={() => handleTabClick(stage.id, stage)}
               disabled={state === 'locked'}
-              style={{ '--stage-color': stage.color }}
+              style={{ '--stage-color': stage.color, ...activeStyles }}
             >
               <span className="tab-icon">{stage.icon}</span>
               <span className="tab-label">{stage.shortName}</span>

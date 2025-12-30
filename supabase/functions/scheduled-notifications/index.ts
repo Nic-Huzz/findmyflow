@@ -41,6 +41,24 @@ const NOTIFICATIONS = {
   }
 }
 
+// Days of week mapping for weekly plan notifications
+const DAYS_OF_WEEK = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+
+// Get current day of week in a specific timezone (lowercase)
+function getCurrentDayInTimezone(timezone: string): string {
+  try {
+    const now = new Date()
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      weekday: 'long'
+    })
+    return formatter.format(now).toLowerCase()
+  } catch (error) {
+    console.error(`Invalid timezone for day check: ${timezone}`, error)
+    return ''
+  }
+}
+
 // Get current hour in a specific timezone
 function getCurrentHourInTimezone(timezone: string): number {
   try {
@@ -111,6 +129,34 @@ serve(async (req) => {
       }
     }
 
+    // Fetch current week's plans for all users with subscriptions
+    // Get the Monday of current week
+    const now = new Date()
+    const dayOfWeek = now.getUTCDay()
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+    const weekStart = new Date(now)
+    weekStart.setUTCDate(now.getUTCDate() + mondayOffset)
+    weekStart.setUTCHours(0, 0, 0, 0)
+    const weekStartStr = weekStart.toISOString().split('T')[0]
+
+    const { data: allWeeklyPlans, error: plansError } = await supabaseClient
+      .from('weekly_plans')
+      .select('*')
+      .in('user_id', userIds)
+      .eq('week_start', weekStartStr)
+
+    if (plansError) {
+      console.error('Error fetching weekly plans:', plansError)
+    }
+
+    // Create a map of user_id -> weekly plan
+    const plansMap = new Map()
+    if (allWeeklyPlans) {
+      for (const plan of allWeeklyPlans) {
+        plansMap.set(plan.user_id, plan)
+      }
+    }
+
     // Group subscriptions by timezone and notification hour
     const notificationsToSend: Array<{
       subscription: any,
@@ -127,7 +173,7 @@ serve(async (req) => {
         continue
       }
 
-      // Check if user's 7-day challenge is still active
+      // Check if user's challenge is still active
       const { data: challenge } = await supabaseClient
         .from('challenge_progress')
         .select('challenge_start_date, status')
@@ -143,15 +189,6 @@ serve(async (req) => {
         continue
       }
 
-      if (challenge.challenge_start_date) {
-        const daysSinceStart = Math.floor((Date.now() - new Date(challenge.challenge_start_date).getTime()) / (1000 * 60 * 60 * 24))
-        // Skip if challenge is complete (7+ days old)
-        if (daysSinceStart >= 7) {
-          console.log(`Skipping user ${sub.user_id}: Challenge completed ${daysSinceStart} days ago`)
-          continue
-        }
-      }
-
       // Get user's timezone (default to UTC if not set)
       const timezone = prefs.timezone || 'UTC'
 
@@ -163,11 +200,43 @@ serve(async (req) => {
         continue
       }
 
-      // Check if there's a notification for this hour
+      // Check if there's a standard notification for this hour
       const notification = NOTIFICATIONS[userLocalHour]
 
       if (notification) {
         notificationsToSend.push({ subscription: sub, notification })
+      }
+
+      // Check for weekly plan notifications at 8am
+      if (userLocalHour === 8) {
+        const weeklyPlan = plansMap.get(sub.user_id)
+        if (weeklyPlan) {
+          const userDay = getCurrentDayInTimezone(timezone)
+
+          // Check if today is groan day
+          if (weeklyPlan.weekly_groan_day === userDay && !weeklyPlan.weekly_groan_completed) {
+            const groanNotification = {
+              title: '🎯 Today is Your Groan Day!',
+              body: weeklyPlan.weekly_groan_description
+                ? `Time to push past your edge: "${weeklyPlan.weekly_groan_description}"`
+                : 'Time to complete your weekly groan challenge',
+              url: '/7-day-challenge?tab=Groans',
+              tag: 'weekly-groan-day'
+            }
+            notificationsToSend.push({ subscription: sub, notification: groanNotification })
+          }
+
+          // Check if today is big release day
+          if (weeklyPlan.big_release_day === userDay && weeklyPlan.big_release_practice) {
+            const releaseNotification = {
+              title: '🌊 Today is Your Release Day!',
+              body: `Time for your ${weeklyPlan.big_release_practice.replace(/_/g, ' ')} practice`,
+              url: '/7-day-challenge?tab=Healing',
+              tag: 'weekly-release-day'
+            }
+            notificationsToSend.push({ subscription: sub, notification: releaseNotification })
+          }
+        }
       }
     }
 

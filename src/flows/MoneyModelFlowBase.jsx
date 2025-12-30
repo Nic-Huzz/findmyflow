@@ -12,6 +12,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import { STAGES } from './moneyModelConfigs'
+import { useAutoSave } from '../hooks/useAutoSave'
 
 /**
  * MoneyModelFlowBase component
@@ -35,6 +36,11 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
   const [error, setError] = useState(null)
   const [showAllOptions, setShowAllOptions] = useState(false)
   const [viewingResults, setViewingResults] = useState(false)
+
+  // Auto-save state
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [savedProgressData, setSavedProgressData] = useState(null)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave(config.flowType, user?.id)
 
   // Question stages array
   const questionStages = [
@@ -77,6 +83,24 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
     }
     loadData()
   }, [config.questionsPath, config.offersPath])
+
+  // Check for saved progress on mount (auto-save)
+  useEffect(() => {
+    if (user) {
+      const saved = loadProgress()
+      if (saved && saved.stage && saved.stage !== STAGES.TIME_CHECK && saved.stage !== STAGES.SUCCESS) {
+        setSavedProgressData(saved)
+        setShowResumePrompt(true)
+      }
+    }
+  }, [user, loadProgress])
+
+  // Auto-save progress on state changes
+  useEffect(() => {
+    if (!user || stage === STAGES.TIME_CHECK || stage === STAGES.SUCCESS || stage === STAGES.CALCULATING) return
+    const progressData = { stage, answers }
+    saveProgress(progressData)
+  }, [stage, answers, user, saveProgress])
 
   // Check for ?results=true to show saved results directly (if supported)
   useEffect(() => {
@@ -202,6 +226,24 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
     }
   }
 
+  // Handle resuming saved progress (auto-save)
+  const handleResumeProgress = () => {
+    if (savedProgressData) {
+      setStage(savedProgressData.stage)
+      setAnswers(savedProgressData.answers || {})
+    }
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+  }
+
+  // Handle starting fresh (auto-save)
+  const handleStartFresh = () => {
+    clearProgress()
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+    setStage(STAGES.WELCOME)
+  }
+
   // Handle saving results
   const handleSaveResults = async () => {
     if (isLoading || !user) return
@@ -211,24 +253,34 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
 
     try {
       const sessionId = crypto.randomUUID()
-      await supabase.from(config.dbTable).insert([{
+
+      // Use configurable column names if provided, otherwise use defaults
+      const columns = config.dbColumns || {
+        recommendedId: 'recommended_offer_id',
+        recommendedName: 'recommended_offer_name',
+        allScores: 'all_offer_scores'
+      }
+
+      const insertData = {
         session_id: sessionId,
         user_id: user.id,
         user_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
         email: user.email,
         responses: answers,
-        recommended_offer_id: recommendedOffer?.offer?.id,
-        recommended_offer_name: recommendedOffer?.offer?.name,
+        [columns.recommendedId]: recommendedOffer?.offer?.id,
+        [columns.recommendedName]: recommendedOffer?.offer?.name,
         confidence_score: recommendedOffer?.confidence,
         total_score: recommendedOffer?.totalScore,
-        all_offer_scores: allOfferScores.map(s => ({
+        [columns.allScores]: allOfferScores.map(s => ({
           id: s.offer.id,
           name: s.offer.name,
           score: s.totalScore,
           confidence: s.confidence,
           disqualified: s.isDisqualified
         }))
-      }])
+      }
+
+      await supabase.from(config.dbTable).insert([insertData])
 
       // Track flow completion
       try {
@@ -245,15 +297,20 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
 
       // Complete challenge quest
       try {
-        const questId = typeof config.getQuestId === 'function'
-          ? config.getQuestId(user?.user_metadata?.persona)
-          : config.questId
+        // Use challengeFlowId (matches JSON flow_id) or fall back to questId for backwards compatibility
+        const flowId = config.challengeFlowId || config.questId || (
+          typeof config.getQuestId === 'function'
+            ? config.getQuestId(user?.user_metadata?.persona)
+            : null
+        )
 
-        await completeFlowQuest({
-          userId: user.id,
-          flowId: questId,
-          pointsEarned: config.pointsEarned
-        })
+        if (flowId) {
+          await completeFlowQuest({
+            userId: user.id,
+            flowId: flowId,
+            pointsEarned: config.pointsEarned
+          })
+        }
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
       }
@@ -279,6 +336,8 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
         }
       }
 
+      // Clear auto-saved progress on success
+      clearProgress()
       setStage(STAGES.SUCCESS)
 
       // Handle auto-navigation (for LeadMagnet)
@@ -339,6 +398,12 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           <button className="primary-button" onClick={() => setStage(STAGES.Q1)}>
             Let's Find Your Offer
           </button>
+          <button
+            className="go-back-link"
+            onClick={() => setStage(STAGES.TIME_CHECK)}
+          >
+            ← Go Back
+          </button>
           <p className="attribution-text">These strategies are based on Alex Hormozi's free 100m money model course. Find more of his epic acquisition content on IG: 'Hormozi', Podcast: 'The Game with Alex Hormozi', Youtube: AlexHormozi and website: Acquisition.com</p>
         </div>
       </div>
@@ -347,30 +412,77 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
 
   // TIME CHECK STAGE (first screen, before welcome)
   if (stage === STAGES.TIME_CHECK) {
+    // Helper to get readable stage name
+    const getStageDisplayName = (stageKey) => {
+      const stageNames = {
+        'welcome': 'Welcome',
+        'q1': 'Question 1', 'q2': 'Question 2', 'q3': 'Question 3',
+        'q4': 'Question 4', 'q5': 'Question 5', 'q6': 'Question 6',
+        'q7': 'Question 7', 'q8': 'Question 8', 'q9': 'Question 9',
+        'q10': 'Question 10', 'reveal': 'Results'
+      }
+      return stageNames[stageKey] || stageKey
+    }
+
+    // Helper to get time since last save
+    const getTimeSinceSave = () => {
+      if (!savedProgressData?.savedAt) return null
+      const minutesAgo = Math.floor((Date.now() - savedProgressData.savedAt) / 60000)
+      if (minutesAgo < 1) return 'just now'
+      if (minutesAgo < 60) return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`
+      const hoursAgo = Math.floor(minutesAgo / 60)
+      return `${hoursAgo} hour${hoursAgo === 1 ? '' : 's'} ago`
+    }
+
     return (
       <div className={config.cssClass}>
         <ProgressDots stageGroups={config.stageGroups} currentStage={stage} />
         <div className="welcome-container">
           <h1 className="welcome-greeting">{config.title}</h1>
-          <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
-            <p><span className="time-icon">⏱️</span></p>
-            <p><strong>This flow takes about {config.timeEstimate || '3 minutes'}</strong></p>
-            <p style={{ color: 'rgba(255,255,255,0.7)' }}>{config.timeCheckMessage || "10 quick questions to find your best strategy."}</p>
-            <p>Find a quiet moment where you can think clearly.</p>
-          </div>
-          <button
-            className="primary-button glow-button"
-            onClick={() => setStage(STAGES.WELCOME)}
-          >
-            I've Got Time, Let's Go
-          </button>
-          <button
-            className="secondary-button"
-            onClick={() => navigate(-1)}
-            style={{ marginTop: '12px' }}
-          >
-            Come Back Later
-          </button>
+
+          {/* Resume Prompt - shown if saved progress exists */}
+          {showResumePrompt && savedProgressData && (
+            <div className="resume-prompt">
+              <p className="resume-title">Welcome back!</p>
+              <p className="resume-info">
+                You have saved progress at <strong>{getStageDisplayName(savedProgressData.stage)}</strong>
+                <br />
+                <span className="resume-time">Last saved {getTimeSinceSave()}</span>
+              </p>
+              <div className="resume-actions">
+                <button className="primary-button" onClick={handleResumeProgress}>
+                  Continue Where I Left Off
+                </button>
+                <button className="secondary-button" onClick={handleStartFresh}>
+                  Start Fresh
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Normal time check content - shown if no resume prompt */}
+          {!showResumePrompt && (
+            <>
+              <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+                <p><span className="time-icon">⏱️</span></p>
+                <p><strong>This flow takes about {config.timeEstimate || '3 minutes'}</strong></p>
+                <p style={{ color: 'rgba(255,255,255,0.7)' }}>{config.timeCheckMessage || "10 quick questions to find your best strategy."}</p>
+                <p>Find a quiet moment where you can think clearly.</p>
+              </div>
+              <button
+                className="primary-button glow-button"
+                onClick={() => setStage(STAGES.WELCOME)}
+              >
+                I've Got Time, Let's Go
+              </button>
+              <button
+                className="secondary-button"
+                onClick={() => navigate(-1)}
+              >
+                Come Back Later
+              </button>
+            </>
+          )}
         </div>
       </div>
     )

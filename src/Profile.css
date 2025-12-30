@@ -4,6 +4,8 @@
   min-height: 100vh;
   background: #fafbfc;
   position: relative;
+  /* Space for bottom toolbar */
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0));
 }
 
 /* Mobile Top Bar */
@@ -213,6 +215,89 @@
 }
 
 /* Home Action Buttons */
+/* Streak Display */
+.streak-display {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.streak-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.streak-item .streak-flame {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.streak-item .streak-flame.cold {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+
+.streak-item .streak-flame.warm {
+  animation: flameWarm 1.5s ease-in-out infinite;
+}
+
+.streak-item .streak-flame.hot {
+  animation: flameHot 1s ease-in-out infinite;
+}
+
+.streak-item .streak-flame.legendary {
+  animation: flameLegendary 0.7s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 150, 0, 0.5));
+}
+
+@keyframes flameWarm {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes flameHot {
+  0%, 100% { transform: scale(1) rotate(-2deg); }
+  50% { transform: scale(1.1) rotate(2deg); }
+}
+
+@keyframes flameLegendary {
+  0%, 100% { transform: scale(1) rotate(-3deg); }
+  50% { transform: scale(1.15) rotate(3deg); }
+}
+
+.streak-item .streak-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.streak-item .streak-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  line-height: 1;
+}
+
+.streak-item .streak-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.streak-item.daily .streak-value {
+  color: #f59e0b;
+}
+
+.streak-item.groan .streak-value {
+  color: #5e17eb;
+}
+
 .home-action-buttons {
   display: flex;
   flex-direction: column;
@@ -261,6 +346,24 @@
 .action-btn.secondary:hover {
   border-color: #5e17eb;
   color: #5e17eb;
+}
+
+.action-btn.support {
+  background: transparent;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.action-btn.support:hover {
+  color: #25D366;
+  background: rgba(37, 211, 102, 0.1);
 }
 
 /* Other Projects Section */

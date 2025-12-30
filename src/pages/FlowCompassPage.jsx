@@ -376,7 +376,7 @@ const FlowCompassPage = () => {
 
   if (loading) {
     return (
-      <div className="dashboard-container">
+      <div className="dashboard-container flow-compass-page">
         <div className="loading">
           <div className="typing-indicator">
             <span></span><span></span><span></span>
@@ -387,7 +387,7 @@ const FlowCompassPage = () => {
   }
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container flow-compass-page">
       {/* Mobile Top Bar */}
       <div className="mobile-topbar">
         <div className="topbar-content">

@@ -1,0 +1,371 @@
+/**
+ * NicheSharpener.css
+ *
+ * Styles for the AI Niche Sharpener component.
+ * Uses the FindMyFlow purple/gold color scheme.
+ */
+
+.niche-sharpener {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 24px;
+  color: white;
+}
+
+.niche-sharpener.embedded {
+  background: transparent;
+  padding: 0;
+}
+
+/* Header */
+.niche-sharpener .ns-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.niche-sharpener .ns-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 8px;
+}
+
+.niche-sharpener .ns-header p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Loading State */
+.niche-sharpener-loading {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.niche-sharpener .ns-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  margin: 0 auto 24px;
+  animation: ns-spin 1s linear infinite;
+}
+
+@keyframes ns-spin {
+  to { transform: rotate(360deg); }
+}
+
+.niche-sharpener .ns-loading-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.niche-sharpener .ns-loading-subtext {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Insufficient/Error States */
+.niche-sharpener-insufficient,
+.niche-sharpener-error {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.niche-sharpener-insufficient h3,
+.niche-sharpener-error h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 12px;
+}
+
+.niche-sharpener-insufficient p,
+.niche-sharpener-error p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 24px;
+  max-width: 400px;
+  margin: 0 auto 24px;
+}
+
+/* Data Sources Badge */
+.niche-sharpener .ns-data-sources {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.niche-sharpener .ns-source-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Sections */
+.niche-sharpener .ns-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.niche-sharpener .ns-section.ns-highlight {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.niche-sharpener .ns-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px;
+}
+
+.niche-sharpener .ns-section-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 16px;
+}
+
+.niche-sharpener .ns-section-content {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+/* Niche Statement */
+.niche-sharpener .ns-niche-statement {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: white;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.niche-sharpener .ns-save-btn {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.niche-sharpener .ns-save-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.niche-sharpener .ns-save-btn.saved {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+/* Positioning Statement */
+.niche-sharpener .ns-positioning {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Refinement Options */
+.niche-sharpener .ns-refinements {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.niche-sharpener .ns-refinement-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.niche-sharpener .ns-refinement-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.niche-sharpener .ns-refinement-card.selected {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.niche-sharpener .ns-refinement-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.niche-sharpener .ns-refinement-number {
+  width: 24px;
+  height: 24px;
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.niche-sharpener .ns-refinement-option {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.5;
+}
+
+.niche-sharpener .ns-refinement-details {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.niche-sharpener .ns-pros {
+  color: #22c55e;
+  margin-bottom: 8px;
+}
+
+.niche-sharpener .ns-cons {
+  color: #f97316;
+}
+
+.niche-sharpener .ns-pros strong,
+.niche-sharpener .ns-cons strong {
+  color: inherit;
+}
+
+/* Action Items */
+.niche-sharpener .ns-action-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.niche-sharpener .ns-action-items li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.niche-sharpener .ns-action-items li:last-child {
+  margin-bottom: 0;
+}
+
+.niche-sharpener .ns-action-items li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  background: rgba(251, 191, 36, 0.3);
+  border: 2px solid #fbbf24;
+  border-radius: 50%;
+}
+
+/* Buttons */
+.niche-sharpener .ns-action-buttons,
+.niche-sharpener .ns-footer-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.niche-sharpener .ns-primary-btn {
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.niche-sharpener .ns-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(251, 191, 36, 0.4);
+}
+
+.niche-sharpener .ns-secondary-btn {
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.niche-sharpener .ns-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Idle State */
+.niche-sharpener .ns-idle {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .niche-sharpener {
+    padding: 16px;
+  }
+
+  .niche-sharpener .ns-niche-statement {
+    font-size: 18px;
+  }
+
+  .niche-sharpener .ns-action-buttons,
+  .niche-sharpener .ns-footer-actions {
+    flex-direction: column;
+  }
+
+  .niche-sharpener .ns-primary-btn,
+  .niche-sharpener .ns-secondary-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

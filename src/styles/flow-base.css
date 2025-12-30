@@ -1,0 +1,475 @@
+/**
+ * flow-base.css - Shared styles for all FindMyFlow assessment flows
+ *
+ * IMPORTANT: All styles are scoped to .flow-base parent class to prevent
+ * affecting other components in the app.
+ *
+ * Usage:
+ * 1. Import this at the top of flow-specific CSS files:
+ *    @import '../styles/flow-base.css';
+ *
+ * 2. Add 'flow-base' to your flow's container className:
+ *    <div className="my-flow flow-base">
+ *
+ * 3. Override specific styles with your flow's class:
+ *    .my-flow .primary-button { border-radius: 25px; }
+ */
+
+/* ============ PRIMARY BUTTON ============ */
+
+.flow-base .primary-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.flow-base .primary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.flow-base .primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.flow-base .primary-button.glow-button {
+  animation: flowGlow 2s ease-in-out infinite;
+}
+
+/* ============ SECONDARY BUTTON ============ */
+
+.flow-base .secondary-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flow-base .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============ WELCOME CONTAINER ============ */
+/* Use with flex parent container for button-at-bottom pattern */
+
+.flow-base .welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+/* Push buttons to bottom of welcome screen */
+.flow-base .welcome-container > .primary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.flow-base .welcome-container > .secondary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin: 4px auto 0 !important;
+}
+
+/* ============ WELCOME TEXT ============ */
+
+.flow-base .welcome-greeting {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.flow-base .welcome-message {
+  text-align: center;
+}
+
+.flow-base .welcome-message p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+}
+
+.flow-base .welcome-message strong {
+  color: white;
+}
+
+/* ============ TIME CHECK / TIMER ICON ============ */
+
+.flow-base .time-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.flow-base .time-check-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+  margin-top: auto;
+}
+
+/* ============ RESUME PROMPT ============ */
+
+.flow-base .resume-prompt {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 auto 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.flow-base .resume-prompt .resume-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #fbbf24;
+}
+
+.flow-base .resume-prompt .resume-info {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.flow-base .resume-prompt .resume-time {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-base .resume-prompt .resume-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.flow-base .resume-actions .primary-button {
+  width: 100%;
+  max-width: 280px;
+  margin: 0;
+}
+
+.flow-base .resume-actions .secondary-button {
+  width: 100%;
+  max-width: 280px;
+}
+
+/* ============ PROGRESS INDICATORS ============ */
+
+.flow-base .progress-container {
+  position: relative;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.flow-base .progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.flow-base .progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.flow-base .progress-dot.completed {
+  background: #ffdd27;
+}
+
+.flow-base .progress-dot.active {
+  background: #ffdd27;
+  box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
+  transform: scale(1.2);
+}
+
+.flow-base .section-progress {
+  width: 100%;
+  max-width: 300px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.flow-base .section-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffdd27, #f59e0b);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ============ LOADING STATE ============ */
+
+.flow-base .loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.flow-base .typing-indicator {
+  display: flex;
+  gap: 8px;
+}
+
+.flow-base .typing-indicator span {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: flowTyping 1.4s infinite;
+}
+
+.flow-base .typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.flow-base .typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ============ NAVIGATION BUTTONS ============ */
+
+.flow-base .nav-buttons {
+  display: flex;
+  gap: 12px;
+  margin: 24px auto 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.flow-base .nav-buttons .primary-button,
+.flow-base .nav-buttons .secondary-button {
+  flex: 1;
+}
+
+/* ============ GO BACK LINK ============ */
+
+.flow-base .go-back-link {
+  display: inline-block;
+  margin-top: 24px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.flow-base .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============ ERROR MESSAGE ============ */
+
+.flow-base .error-message {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* ============ INFO BOX ============ */
+
+.flow-base .info-box {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+/* ============ OPTION BUTTONS (for selections) ============ */
+
+.flow-base .option-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.flow-base .option-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.flow-base .option-btn.selected {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+/* ============ INPUT GROUPS ============ */
+
+.flow-base .input-group {
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.flow-base .input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.flow-base .input-group textarea {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.flow-base .input-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-base .input-group textarea:focus {
+  outline: none;
+  border-color: #fbbf24;
+}
+
+/* ============ ANIMATIONS ============ */
+
+@keyframes flowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flowGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(251, 191, 36, 0.5);
+  }
+}
+
+@keyframes flowTyping {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes flowScaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes flowSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============ SPINNER ============ */
+
+.flow-base .spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  animation: flowSpin 1s linear infinite;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 480px) {
+  .flow-base .welcome-greeting {
+    font-size: 26px;
+  }
+
+  .flow-base .welcome-message p {
+    font-size: 16px;
+  }
+
+  .flow-base .nav-buttons {
+    flex-direction: column;
+  }
+
+  .flow-base .nav-buttons .primary-button,
+  .flow-base .nav-buttons .secondary-button {
+    width: 100%;
+  }
+}

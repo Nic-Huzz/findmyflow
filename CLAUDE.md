@@ -129,6 +129,9 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   ├── essenceProfiles.js         # Essence archetype data
 │   │   └── nervousSystemBeliefs.js    # NS belief configurations
 │   │
+│   ├── styles/                        # Shared CSS
+│   │   └── flow-base.css              # Shared flow styles (buttons, resume, etc.)
+│   │
 │   ├── auth/                          # Authentication
 │   │   └── AuthProvider.jsx           # Auth context provider
 │   │
@@ -380,7 +383,32 @@ Always scope CSS selectors to parent containers to prevent conflicts:
 ```
 See `docs/CSS-SCOPING-GUIDELINES.md` for full conventions.
 
-### 7. localStorage for Progress
+### 7. Shared Flow CSS (flow-base.css)
+All assessment flows use shared styles from `src/styles/flow-base.css`:
+```css
+@import '../styles/flow-base.css';
+```
+
+**Shared classes available:**
+- `.primary-button` / `.secondary-button` - Standard button styling
+- `.welcome-container` - Flex container with button-at-bottom pattern
+- `.resume-prompt` - Resume session prompt (centered, max-width: 400px)
+- `.time-icon` - Stopwatch emoji (4rem)
+- `.nav-buttons` - Navigation button container
+- `.option-btn` - Selection option buttons
+- `.input-group` - Form input with label
+- `.info-box` - Info/help box styling
+- `.loading-state` / `.spinner` - Loading indicators
+- `.progress-dots` / `.progress-dot` - Progress indicators
+- `.error-message` - Error text styling
+
+**Creating new flows:**
+1. Import flow-base.css at top of flow CSS file
+2. Use standard class names for common UI elements
+3. Add flow-specific classes with `.my-flow .element` scoping
+4. Keep unique structural elements with flow-specific prefixes (e.g., `.fb-welcome`)
+
+### 8. localStorage for Progress
 Multi-step flows save progress to localStorage for resume:
 ```javascript
 // Save progress

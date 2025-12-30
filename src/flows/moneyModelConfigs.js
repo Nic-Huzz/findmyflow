@@ -79,9 +79,9 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'attraction_offer',
     flowVersion: 'attraction-offer-v1',
 
-    // Quest/Challenge integration
-    questId: 'attraction_offer',
-    pointsEarned: 35,
+    // Quest/Challenge integration - must match JSON flow_id
+    challengeFlowId: 'attraction_offer',
+    pointsEarned: 18,
 
     // Stage configuration
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
@@ -117,7 +117,7 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'upsell_flow',
     flowVersion: 'upsell-v1',
 
-    questId: 'upsell_offer',
+    challengeFlowId: 'upsell_offer',
     pointsEarned: 35,
 
     stageGroups: STAGE_GROUP_TEMPLATES.strategyExecution,
@@ -151,7 +151,7 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'downsell_flow',
     flowVersion: 'downsell-v1',
 
-    questId: 'downsell_offer',
+    challengeFlowId: 'downsell_offer',
     pointsEarned: 35,
 
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
@@ -185,7 +185,7 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'continuity_flow',
     flowVersion: 'continuity-v1',
 
-    questId: 'continuity_offer',
+    challengeFlowId: 'continuity_offer',
     pointsEarned: 35,
 
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
@@ -208,7 +208,7 @@ export const MONEY_MODEL_CONFIGS = {
   },
 
   leadsStrategy: {
-    name: 'Leads Strategy',
+    name: 'Core Four Strategy',
     title: 'Discover Your Perfect Lead Generation Strategy',
     cssClass: 'leads-strategy-flow',
 
@@ -219,13 +219,16 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: '100m_leads',
     flowVersion: 'leads-strategy-v1',
 
-    // Dynamic quest ID based on persona
-    getQuestId: (persona) => {
-      return persona === 'movement_maker'
-        ? 'flow_leads_strategy_mm'
-        : 'flow_leads_strategy_vr'
+    // Database column names (table uses strategy_ prefix)
+    dbColumns: {
+      recommendedId: 'recommended_strategy_id',
+      recommendedName: 'recommended_strategy_name',
+      allScores: 'all_strategy_scores'
     },
-    pointsEarned: 35,
+
+    // For challenge quest completion - must match JSON flow_id
+    challengeFlowId: 'leads_strategy',
+    pointsEarned: 20,
 
     stageGroups: STAGE_GROUP_TEMPLATES.resourcesSkills,
 
@@ -258,7 +261,14 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'lead_magnet_offer',
     flowVersion: 'lead-magnet-v1',
 
-    questId: 'flow_lead_magnet',
+    // Database column names (table uses type_ prefix)
+    dbColumns: {
+      recommendedId: 'recommended_type_id',
+      recommendedName: 'recommended_type_name',
+      allScores: 'all_type_scores'
+    },
+
+    challengeFlowId: 'lead_magnet',
     pointsEarned: 35,
 
     stageGroups: STAGE_GROUP_TEMPLATES.resourcesSkills,

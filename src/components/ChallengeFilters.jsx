@@ -1,8 +1,19 @@
 /**
- * ChallengeFilters - Filter chips for Groans and Healing tabs
+ * ChallengeFilters - Filter tabs and chips for Groans and Healing tabs
  *
- * Provides frequency (All/Daily/Weekly) and R-type filters.
+ * Features:
+ * - Frequency tabs (All/Daily/Weekly) - styled like stage tabs for view switching
+ * - R-type filter chips for category filtering
  */
+
+import './ChallengeFilters.css'
+
+// Frequency tab config
+const FREQUENCY_TABS = [
+  { id: 'all', label: 'All', icon: '📋' },
+  { id: 'daily', label: 'Daily', icon: '☀️' },
+  { id: 'weekly', label: 'Weekly', icon: '📅' }
+]
 
 function ChallengeFilters({
   activeCategory,
@@ -13,27 +24,21 @@ function ChallengeFilters({
 }) {
   return (
     <div className="quest-filters">
-      <div className="frequency-toggle">
-        <button
-          className={`filter-chip ${activeFrequencyFilter === 'all' ? 'active' : ''}`}
-          onClick={() => setActiveFrequencyFilter('all')}
-        >
-          All
-        </button>
-        <button
-          className={`filter-chip ${activeFrequencyFilter === 'daily' ? 'active' : ''}`}
-          onClick={() => setActiveFrequencyFilter('daily')}
-        >
-          Daily
-        </button>
-        <button
-          className={`filter-chip ${activeFrequencyFilter === 'weekly' ? 'active' : ''}`}
-          onClick={() => setActiveFrequencyFilter('weekly')}
-        >
-          Weekly
-        </button>
+      {/* Frequency Tabs - styled like stage tabs */}
+      <div className="frequency-tabs">
+        {FREQUENCY_TABS.map(tab => (
+          <button
+            key={tab.id}
+            className={`frequency-tab ${activeFrequencyFilter === tab.id ? 'active' : ''}`}
+            onClick={() => setActiveFrequencyFilter(tab.id)}
+          >
+            <span className="tab-icon">{tab.icon}</span>
+            <span className="tab-label">{tab.label}</span>
+          </button>
+        ))}
       </div>
 
+      {/* R-Type Filter Chips */}
       <div className="rtype-filters">
         <button
           className={`filter-chip ${activeRTypeFilter === 'All' ? 'active' : ''}`}

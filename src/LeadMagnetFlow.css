@@ -1,4 +1,4 @@
-/* LeadsStrategyFlow.css - Leads Strategy Assessment Flow */
+/* LeadMagnetFlow.css - Lead Magnet Assessment Flow */
 
 .lead-magnet-flow {
   min-height: 100vh;
@@ -6,7 +6,6 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  padding-top: 80px;
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   position: relative;
@@ -14,24 +13,23 @@
 
 /* ============ PROGRESS INDICATORS ============ */
 
-.progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+.lead-magnet-flow .progress-container {
+  position: relative;
+  width: 100%;
   padding: 16px 20px;
   background: transparent;
-  z-index: 100;
+  z-index: 10;
+  box-sizing: border-box;
 }
 
-.progress-dots {
+.lead-magnet-flow .progress-dots {
   display: flex;
   justify-content: center;
   gap: 12px;
   margin-bottom: 8px;
 }
 
-.progress-dot {
+.lead-magnet-flow .progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -39,17 +37,17 @@
   transition: all 0.3s ease;
 }
 
-.progress-dot.completed {
-  background: #fbbf24;
+.lead-magnet-flow .progress-dot.completed {
+  background: #ffdd27;
 }
 
-.progress-dot.active {
-  background: #fbbf24;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+.lead-magnet-flow .progress-dot.active {
+  background: #ffdd27;
+  box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
   transform: scale(1.2);
 }
 
-.section-progress {
+.lead-magnet-flow .section-progress {
   width: 100%;
   max-width: 300px;
   height: 3px;
@@ -59,24 +57,157 @@
   overflow: hidden;
 }
 
-.section-progress-fill {
+.lead-magnet-flow .section-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  background: linear-gradient(90deg, #ffdd27, #f59e0b);
   border-radius: 2px;
   transition: width 0.3s ease;
 }
 
 /* ============ WELCOME SCREEN ============ */
 
-.welcome-container {
+.lead-magnet-flow .welcome-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   flex: 1;
   max-width: 600px;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  animation: leadMagnetFadeIn 0.5s ease;
+  margin: 0 auto;
+  padding-bottom: 40px;
+  min-height: calc(100vh - 120px);
+}
+
+/* Push buttons to bottom of welcome screen */
+.lead-magnet-flow .welcome-container > .primary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.lead-magnet-flow .welcome-container > .secondary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin: 4px auto 0 !important;
+}
+
+.lead-magnet-flow .secondary-button {
+  width: 100%;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lead-magnet-flow .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.lead-magnet-flow .welcome-container > .secondary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin: 4px auto 0 !important;
+}
+
+.lead-magnet-flow .resume-prompt {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 auto 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.lead-magnet-flow .resume-prompt .resume-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #fbbf24;
+}
+
+.lead-magnet-flow .resume-prompt .resume-info {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.lead-magnet-flow .resume-prompt .resume-time {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lead-magnet-flow .resume-prompt .resume-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.lead-magnet-flow .resume-actions .primary-button {
+  width: 100%;
+  max-width: 280px;
+}
+
+.lead-magnet-flow .resume-actions .secondary-button {
+  width: 100%;
+  max-width: 280px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.lead-magnet-flow .go-back-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-top: 16px;
+  transition: color 0.2s ease;
+}
+
+.lead-magnet-flow .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Time icon for TIME_CHECK screen */
+.lead-magnet-flow .time-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Glow button effect */
+.lead-magnet-flow .primary-button.glow-button {
+  animation: leadMagnetGlow 2s ease-in-out infinite;
+}
+
+@keyframes leadMagnetGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(255, 221, 39, 0.5);
+  }
 }
 
 .welcome-content {
@@ -87,7 +218,7 @@
   font-size: 32px;
   font-weight: 700;
   margin: 0 0 32px;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -97,8 +228,8 @@
   text-align: center;
 }
 
-.welcome-message p {
-  font-size: 16px;
+.lead-magnet-flow .welcome-message p {
+  font-size: 18px;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.85);
   margin: 0 0 16px;
@@ -133,7 +264,7 @@
   width: 100%;
   max-width: 600px;
   text-align: center;
-  animation: fadeIn 0.3s ease;
+  animation: leadMagnetFadeIn 0.3s ease;
 }
 
 .question-number {
@@ -179,7 +310,7 @@
 
 .option-card:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(6, 182, 212, 0.5);
+  border-color: rgba(147, 51, 234, 0.5);
   transform: translateY(-2px);
 }
 
@@ -209,14 +340,14 @@
   flex: 1;
   max-width: 450px;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  animation: leadMagnetFadeIn 0.5s ease;
 }
 
 .calculating-title {
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 32px;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -254,11 +385,11 @@
   flex: 1;
   max-width: 600px;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  animation: leadMagnetFadeIn 0.5s ease;
   padding-bottom: 40px;
 }
 
-@keyframes fadeIn {
+@keyframes leadMagnetFadeIn {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -278,7 +409,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  background: linear-gradient(135deg, #ffdd27, #f59e0b);
   color: #1a1a2e;
 }
 
@@ -310,7 +441,7 @@
 
 .confidence-fill {
   height: 100%;
-  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  background: linear-gradient(90deg, #ffdd27, #f59e0b);
   border-radius: 100px;
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -365,7 +496,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0891b2, #06b6d4);
+  background: linear-gradient(135deg, #9333EA, #7C3AED);
   border-radius: 50%;
   font-size: 14px;
   font-weight: 700;
@@ -377,29 +508,6 @@
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.6;
   padding-top: 4px;
-}
-
-/* Tactics Preview Section */
-
-.tactics-preview {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-  text-align: left;
-}
-
-.tactics-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.tactic-item {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.85);
-  line-height: 1.6;
 }
 
 /* Metrics Preview Section */
@@ -469,7 +577,7 @@
 .score-value {
   font-size: 14px;
   font-weight: 700;
-  color: #fbbf24;
+  color: #ffdd27;
 }
 
 .select-option-btn {
@@ -533,7 +641,7 @@
   flex: 1;
   max-width: 400px;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  animation: leadMagnetFadeIn 0.5s ease;
 }
 
 .capture-title {
@@ -573,7 +681,7 @@
 
 .capture-input:focus {
   outline: none;
-  border-color: rgba(6, 182, 212, 0.8);
+  border-color: rgba(147, 51, 234, 0.8);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -607,30 +715,34 @@
 
 /* ============ BUTTONS ============ */
 
-.primary-button {
-  width: 100%;
-  padding: 16px 32px;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+.lead-magnet-flow .primary-button {
+  width: auto;
+  max-width: 280px;
+  padding: 14px 32px !important;
+  background: #E9A23B;
   border: none;
   border-radius: 12px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: center;
 }
 
-.primary-button:hover {
+.lead-magnet-flow .primary-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
 }
 
-.primary-button:active {
+.lead-magnet-flow .primary-button:active {
   transform: translateY(0);
 }
 
-.primary-button:disabled {
+.lead-magnet-flow .primary-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
@@ -645,7 +757,7 @@
   justify-content: center;
   flex: 1;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  animation: leadMagnetFadeIn 0.5s ease;
 }
 
 .success-icon {
@@ -684,35 +796,35 @@
 
 /* ============ LOADING STATE ============ */
 
-.loading-state {
+.lead-magnet-flow .loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
 }
 
-.typing-indicator {
+.lead-magnet-flow .typing-indicator {
   display: flex;
   gap: 8px;
 }
 
-.typing-indicator span {
+.lead-magnet-flow .typing-indicator span {
   width: 12px;
   height: 12px;
   background: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
-  animation: typing 1.4s infinite;
+  animation: leadMagnetTyping 1.4s infinite;
 }
 
-.typing-indicator span:nth-child(2) {
+.lead-magnet-flow .typing-indicator span:nth-child(2) {
   animation-delay: 0.2s;
 }
 
-.typing-indicator span:nth-child(3) {
+.lead-magnet-flow .typing-indicator span:nth-child(3) {
   animation-delay: 0.4s;
 }
 
-@keyframes typing {
+@keyframes leadMagnetTyping {
   0%, 60%, 100% {
     transform: translateY(0);
     opacity: 0.5;
@@ -728,7 +840,6 @@
 @media (max-width: 480px) {
   .lead-magnet-flow {
     padding: 16px;
-    padding-top: 70px;
   }
 
   .welcome-greeting {
@@ -748,7 +859,6 @@
   }
 
   .funnel-preview,
-  .tactics-preview,
   .metrics-preview,
   .alternative-offers {
     padding: 20px;
@@ -770,10 +880,10 @@
 /* iOS Safe Area Support */
 @supports (padding-top: env(safe-area-inset-top)) {
   .lead-magnet-flow {
-    padding-top: calc(80px + env(safe-area-inset-top));
+    padding-top: calc(20px + env(safe-area-inset-top));
   }
 
-  .progress-container {
+  .lead-magnet-flow .progress-container {
     padding-top: calc(16px + env(safe-area-inset-top));
   }
 }

@@ -41,7 +41,7 @@
   transition: width 0.3s ease;
 }
 
-.flow-step {
+.existing-project-flow .flow-step {
   display: flex;
   flex-direction: column;
   max-width: 500px;
@@ -49,7 +49,7 @@
   text-align: center;
 }
 
-.flow-step h2 {
+.existing-project-flow .flow-step h2 {
   font-size: 1.75rem;
   font-weight: 600;
   margin-bottom: 12px;
@@ -57,14 +57,14 @@
   text-align: center;
 }
 
-.step-subtitle {
+.existing-project-flow .step-subtitle {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 24px;
   line-height: 1.5;
   text-align: center;
 }
 
-.flow-input {
+.existing-project-flow .flow-input {
   width: 100%;
   padding: 16px;
   font-size: 1rem;
@@ -76,16 +76,16 @@
   transition: border-color 0.2s;
 }
 
-.flow-input:focus {
+.existing-project-flow .flow-input:focus {
   outline: none;
   border-color: var(--purple, #5e17eb);
 }
 
-.flow-input::placeholder {
+.existing-project-flow .flow-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.flow-textarea {
+.existing-project-flow .flow-textarea {
   width: 100%;
   padding: 16px;
   font-size: 1rem;
@@ -99,23 +99,23 @@
   transition: border-color 0.2s;
 }
 
-.flow-textarea:focus {
+.existing-project-flow .flow-textarea:focus {
   outline: none;
   border-color: var(--purple, #5e17eb);
 }
 
-.flow-textarea::placeholder {
+.existing-project-flow .flow-textarea::placeholder {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.button-row {
+.existing-project-flow .button-row {
   display: flex;
   gap: 12px;
   margin-top: auto;
   padding-top: 24px;
 }
 
-.primary-button {
+.existing-project-flow .primary-button {
   flex: 1;
   padding: 16px 24px;
   font-size: 1rem;
@@ -128,17 +128,17 @@
   transition: all 0.2s;
 }
 
-.primary-button:hover:not(:disabled) {
+.existing-project-flow .primary-button:hover:not(:disabled) {
   background: #d4912f;
   transform: translateY(-1px);
 }
 
-.primary-button:disabled {
+.existing-project-flow .primary-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.secondary-button {
+.existing-project-flow .secondary-button {
   padding: 16px 24px;
   font-size: 1rem;
   font-weight: 600;
@@ -150,7 +150,7 @@
   transition: all 0.2s;
 }
 
-.secondary-button:hover {
+.existing-project-flow .secondary-button:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.3);
 }
@@ -190,29 +190,29 @@
 }
 
 /* Feeling Options */
-.feeling-options .option-button {
+.existing-project-flow .feeling-options .option-button {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.option-emoji {
+.existing-project-flow .option-emoji {
   font-size: 1.5rem;
 }
 
 /* Tag Input */
-.tag-input-container {
+.existing-project-flow .tag-input-container {
   display: flex;
   gap: 8px;
   margin-bottom: 16px;
 }
 
-.tag-input-container .flow-input {
+.existing-project-flow .tag-input-container .flow-input {
   margin-bottom: 0;
   flex: 1;
 }
 
-.add-button {
+.existing-project-flow .add-button {
   padding: 12px 20px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -224,18 +224,18 @@
   white-space: nowrap;
 }
 
-.add-button:hover {
+.existing-project-flow .add-button:hover {
   background: #7c3aed;
 }
 
-.tags-list {
+.existing-project-flow .tags-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 24px;
 }
 
-.tag {
+.existing-project-flow .tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -244,7 +244,7 @@
   border-radius: 20px;
 }
 
-.tag button {
+.existing-project-flow .tag button {
   background: none;
   border: none;
   color: inherit;
@@ -255,24 +255,24 @@
   padding: 0;
 }
 
-.tag button:hover {
+.existing-project-flow .tag button:hover {
   opacity: 1;
 }
 
-.skill-tag {
+.existing-project-flow .skill-tag {
   background: rgba(233, 162, 59, 0.2);
   color: #E9A23B;
 }
 
 /* Stage Options */
-.stage-options {
+.existing-project-flow .stage-options {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-bottom: 24px;
 }
 
-.stage-option {
+.existing-project-flow .stage-option {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -286,17 +286,17 @@
   transition: all 0.2s;
 }
 
-.stage-option:hover {
+.existing-project-flow .stage-option:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-.stage-option.selected {
+.existing-project-flow .stage-option.selected {
   background: rgba(94, 23, 235, 0.2);
   border-color: var(--purple, #5e17eb);
 }
 
-.stage-number {
+.existing-project-flow .stage-number {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -309,14 +309,14 @@
   flex-shrink: 0;
 }
 
-.stage-label {
+.existing-project-flow .stage-label {
   font-size: 0.95rem;
   line-height: 1.4;
 }
 
 /* Saving and Success States */
-.saving-step,
-.success-step {
+.existing-project-flow .saving-step,
+.existing-project-flow .success-step {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -325,23 +325,23 @@
   text-align: center;
 }
 
-.loading-spinner {
+.existing-project-flow .loading-spinner {
   width: 48px;
   height: 48px;
   border: 3px solid rgba(255, 255, 255, 0.1);
   border-top-color: var(--purple, #5e17eb);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: existingProjectSpin 1s linear infinite;
   margin-bottom: 24px;
 }
 
-@keyframes spin {
+@keyframes existingProjectSpin {
   to {
     transform: rotate(360deg);
   }
 }
 
-.success-icon {
+.existing-project-flow .success-icon {
   width: 64px;
   height: 64px;
   background: #10b981;
@@ -353,7 +353,7 @@
   margin-bottom: 24px;
 }
 
-.error-message {
+.existing-project-flow .error-message {
   color: #ef4444;
   margin-bottom: 16px;
   padding: 12px;
@@ -367,19 +367,19 @@
     padding: 16px;
   }
 
-  .flow-step h2 {
+  .existing-project-flow .flow-step h2 {
     font-size: 1.5rem;
   }
 
-  .options-grid {
+  .existing-project-flow .options-grid {
     grid-template-columns: 1fr;
   }
 
-  .button-row {
+  .existing-project-flow .button-row {
     flex-direction: column;
   }
 
-  .secondary-button {
+  .existing-project-flow .secondary-button {
     order: 1;
   }
 }

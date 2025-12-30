@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useAutoSave } from '../hooks/useAutoSave'
 import '../NervousSystemHealingCompass.css'
 import '../FlowFinder.css'
 
@@ -40,6 +41,11 @@ export default function NervousSystemFlow() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [reflection, setReflection] = useState(null)
   const [showCalibrationVideo, setShowCalibrationVideo] = useState(false)
+
+  // Auto-save state
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [savedProgressData, setSavedProgressData] = useState(null)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave('nervous-system', user?.id)
 
   // Check for ?results=true to show saved results directly
   useEffect(() => {
@@ -93,6 +99,24 @@ export default function NervousSystemFlow() {
     loadSavedResults()
   }, [searchParams, user])
 
+  // Check for saved progress on mount (auto-save)
+  useEffect(() => {
+    if (user && searchParams.get('results') !== 'true') {
+      const saved = loadProgress()
+      if (saved && saved.currentScreen && saved.currentScreen !== 'time_check' && saved.currentScreen !== 'success') {
+        setSavedProgressData(saved)
+        setShowResumePrompt(true)
+      }
+    }
+  }, [user, loadProgress, searchParams])
+
+  // Auto-save progress on state changes
+  useEffect(() => {
+    if (!user || currentScreen === 'time_check' || currentScreen === 'success' || currentScreen === 'processing' || currentScreen === 'mirror-reflection') return
+    const progressData = { currentScreen, responses }
+    saveProgress(progressData)
+  }, [currentScreen, responses, user, saveProgress])
+
   // Binary search state for Test 1 (impact)
   const [test1CurrentAmount, setTest1CurrentAmount] = useState(null)
   const [test1Iteration, setTest1Iteration] = useState(0)
@@ -117,6 +141,26 @@ export default function NervousSystemFlow() {
     if (currentIndex > 0) {
       setCurrentScreen(screenOrder[currentIndex - 1])
     }
+  }
+
+  // Handle resuming saved progress (auto-save)
+  const handleResumeProgress = () => {
+    if (savedProgressData) {
+      setCurrentScreen(savedProgressData.currentScreen)
+      if (savedProgressData.responses) {
+        setResponses(savedProgressData.responses)
+      }
+    }
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+  }
+
+  // Handle starting fresh (auto-save)
+  const handleStartFresh = () => {
+    clearProgress()
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+    setCurrentScreen('journey')
   }
 
   // Back button component
@@ -484,6 +528,9 @@ export default function NervousSystemFlow() {
         pointsEarned: 25
       })
 
+      // Clear auto-saved progress on success
+      clearProgress()
+
       setCurrentScreen('success')
     } catch (err) {
       console.error('Error saving data:', err)
@@ -496,29 +543,92 @@ export default function NervousSystemFlow() {
   const formatMoney = (num) => num >= 1000000 ? `$${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M` : num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`
 
   // Render functions for each screen
-  const renderTimeCheck = () => (
-    <div className="container welcome-container">
-      <h1 className="welcome-greeting">Nervous System Map</h1>
-      <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
-        <p><span className="time-icon">⏱️</span></p>
-        <p><strong>This flow takes about 5-10 minutes</strong></p>
-        <p style={{ color: 'rgba(255,255,255,0.7)' }}>4 questions to map your nervous system boundaries.</p>
-        <p>Find a quiet moment where you can be honest with yourself.</p>
-        <p><strong>Your insights will be more valuable when you're present.</strong></p>
-      </div>
+  const renderTimeCheck = () => {
+    // Helper to get readable screen name
+    const getScreenDisplayName = (screen) => {
+      const screenNames = {
+        'journey': 'Journey Overview',
+        'welcome': 'Welcome',
+        'q1': 'Question 1',
+        'q2': 'Question 2',
+        'q3': 'Question 3',
+        'q4': 'Question 4',
+        'subconscious-power': 'Subconscious Power',
+        'calibration': 'Calibration',
+        'calibration-directions': 'Calibration Directions',
+        'triage-intro': 'Triage Intro',
+        'test1-initial': 'Test 1',
+        'test2-initial': 'Test 2',
+        'test3': 'Test 3',
+        'test4': 'Test 4',
+        'test5': 'Test 5',
+        'contracts-intro': 'Contracts Intro',
+        'contracts-test': 'Contracts Test',
+        'mirror-intro': 'Mirror Intro'
+      }
+      return screenNames[screen] || screen
+    }
 
-      <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
-        I've Got Time, Let's Go
-      </button>
-      <button
-        className="primary-button"
-        onClick={() => navigate(-1)}
-        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
-      >
-        Come Back Later
-      </button>
-    </div>
-  )
+    // Helper to get time since last save
+    const getTimeSinceSave = () => {
+      if (!savedProgressData?.savedAt) return null
+      const minutesAgo = Math.floor((Date.now() - savedProgressData.savedAt) / 60000)
+      if (minutesAgo < 1) return 'just now'
+      if (minutesAgo < 60) return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`
+      const hoursAgo = Math.floor(minutesAgo / 60)
+      return `${hoursAgo} hour${hoursAgo === 1 ? '' : 's'} ago`
+    }
+
+    return (
+      <div className="container welcome-container">
+        <h1 className="welcome-greeting">Nervous System Map</h1>
+
+        {/* Resume Prompt - shown if saved progress exists */}
+        {showResumePrompt && savedProgressData && (
+          <div className="resume-prompt">
+            <p className="resume-title">Welcome back!</p>
+            <p className="resume-info">
+              You have saved progress at <strong>{getScreenDisplayName(savedProgressData.currentScreen)}</strong>
+              <br />
+              <span className="resume-time">Last saved {getTimeSinceSave()}</span>
+            </p>
+            <div className="resume-actions">
+              <button className="primary-button" onClick={handleResumeProgress}>
+                Continue Where I Left Off
+              </button>
+              <button className="primary-button" onClick={handleStartFresh} style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none' }}>
+                Start Fresh
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Normal time check content - shown if no resume prompt */}
+        {!showResumePrompt && (
+          <>
+            <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+              <p><span className="time-icon">⏱️</span></p>
+              <p><strong>This flow takes about 5-10 minutes</strong></p>
+              <p style={{ color: 'rgba(255,255,255,0.7)' }}>4 questions to map your nervous system boundaries.</p>
+              <p>Find a quiet moment where you can be honest with yourself.</p>
+              <p><strong>Your insights will be more valuable when you're present.</strong></p>
+            </div>
+
+            <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
+              I've Got Time, Let's Go
+            </button>
+            <button
+              className="primary-button"
+              onClick={() => navigate(-1)}
+              style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
+            >
+              Come Back Later
+            </button>
+          </>
+        )}
+      </div>
+    )
+  }
 
   const renderJourney = () => (
     <div className="container welcome-container">
@@ -811,7 +921,6 @@ export default function NervousSystemFlow() {
       <button
         className="ns-hc-secondary-button"
         onClick={() => setCurrentScreen('calibration')}
-        style={{ marginTop: '8px' }}
       >
         Watch Calibration Video Again
       </button>

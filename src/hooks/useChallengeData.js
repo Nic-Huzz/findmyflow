@@ -61,6 +61,7 @@ export function useChallengeData() {
 
   // Prerequisite State
   const [nervousSystemComplete, setNervousSystemComplete] = useState(false)
+  const [safetyContracts, setSafetyContracts] = useState([])
   const [healingCompassComplete, setHealingCompassComplete] = useState(false)
   const [pastParallelStory, setPastParallelStory] = useState(null)
   const [flowFinderComplete, setFlowFinderComplete] = useState(false)
@@ -69,6 +70,11 @@ export function useChallengeData() {
   const [selectedProject, setSelectedProject] = useState(null)
   const [activeStageTab, setActiveStageTab] = useState(1)
   const [projectStage, setProjectStage] = useState(1)
+
+  // Weekly Planning State
+  const [weeklyPlan, setWeeklyPlan] = useState(null)
+  const [showWeeklyPlanning, setShowWeeklyPlanning] = useState(false)
+  const [isSunday, setIsSunday] = useState(false)
 
   // Constants
   const categories = ['Business', 'Groans', 'Healing', 'Tracker', 'Bonus']
@@ -236,6 +242,120 @@ export function useChallengeData() {
     }
   }
 
+  // Get Monday of current week
+  const getWeekStart = () => {
+    const now = new Date()
+    const day = now.getDay()
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1) // Adjust for Sunday
+    const monday = new Date(now.setDate(diff))
+    return monday.toISOString().split('T')[0]
+  }
+
+  // Get formatted week label
+  const getWeekLabel = () => {
+    const weekStart = getWeekStart()
+    const monday = new Date(weekStart + 'T00:00:00')
+    return monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  }
+
+  // Load weekly plan for current week
+  const loadWeeklyPlan = async () => {
+    if (!user?.id) return
+
+    try {
+      const weekStart = getWeekStart()
+      const today = new Date().getDay()
+      setIsSunday(today === 0)
+
+      const { data, error } = await supabase
+        .from('weekly_plans')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('week_start', weekStart)
+        .maybeSingle()
+
+      if (error) {
+        console.error('Error loading weekly plan:', error)
+        return
+      }
+
+      if (data) {
+        setWeeklyPlan(data)
+        setShowWeeklyPlanning(false)
+      } else {
+        // No plan for this week - show planning flow
+        setWeeklyPlan(null)
+        setShowWeeklyPlanning(true)
+      }
+    } catch (error) {
+      console.error('Error in loadWeeklyPlan:', error)
+    }
+  }
+
+  // Mark groan as completed
+  const completeWeeklyGroan = async () => {
+    if (!weeklyPlan?.id) return
+
+    try {
+      const { error } = await supabase
+        .from('weekly_plans')
+        .update({ weekly_groan_completed: true })
+        .eq('id', weeklyPlan.id)
+
+      if (!error) {
+        setWeeklyPlan(prev => ({ ...prev, weekly_groan_completed: true }))
+      }
+    } catch (error) {
+      console.error('Error completing weekly groan:', error)
+    }
+  }
+
+  // Handle weekly planning completion
+  const handleWeeklyPlanComplete = (planData) => {
+    setWeeklyPlan(planData)
+    setShowWeeklyPlanning(false)
+  }
+
+  // Map weekly plan routine IDs to quest IDs
+  const ROUTINE_TO_QUEST_MAP = {
+    meditation: 'reconnect_morning_meditation',
+    breathwork: 'reconnect_morning_breathwork',
+    rise_vibe_dance: 'reconnect_morning_dance',
+    daily_prayer: 'reconnect_daily_prayer',
+    self_identified: null // Custom activity, no specific quest
+  }
+
+  // Check if a quest is part of the weekly plan
+  const isQuestPlanned = (questId) => {
+    if (!weeklyPlan?.morning_routine) return false
+
+    // Check if quest matches any planned morning routine
+    for (const routineId of weeklyPlan.morning_routine) {
+      const mappedQuestId = ROUTINE_TO_QUEST_MAP[routineId]
+      if (mappedQuestId && mappedQuestId === questId) {
+        return true
+      }
+    }
+    return false
+  }
+
+  // Get the day a quest is planned for (for groan/release)
+  const getPlannedDay = (questId) => {
+    if (!weeklyPlan) return null
+
+    // Check if this is related to the weekly groan
+    if (questId.includes('groan') && weeklyPlan.weekly_groan_day) {
+      return weeklyPlan.weekly_groan_day
+    }
+
+    // Check if this is related to release practice
+    if (questId.includes('release') && weeklyPlan.big_release_day) {
+      return weeklyPlan.big_release_day
+    }
+
+    return null
+  }
+
   const loadLeaderboard = async () => {
     try {
       if (!user) return
@@ -340,18 +460,23 @@ export function useChallengeData() {
     try {
       const { data, error } = await supabase
         .from('nervous_system_responses')
-        .select('id')
+        .select('id, safety_contracts')
         .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
         .limit(1)
 
       if (!error && data && data.length > 0) {
         setNervousSystemComplete(true)
+        // Store the safety contracts for use in Release quests
+        setSafetyContracts(data[0].safety_contracts || [])
       } else {
         setNervousSystemComplete(false)
+        setSafetyContracts([])
       }
     } catch (error) {
       console.error('Error checking nervous system completion:', error)
       setNervousSystemComplete(false)
+      setSafetyContracts([])
     }
   }
 
@@ -859,26 +984,35 @@ export function useChallengeData() {
     const unlocked = progress?.[`${artifact.id}_unlocked`] || false
     const validQuestIds = getValidQuestIds(category)
 
-    if ((category === 'Groans' || category === 'Healing') && artifact.rCategories) {
-      const rCategoriesWithProgress = {}
+    if ((category === 'Groans' || category === 'Healing') && artifact.frequencyCategories) {
+      const frequencyCategoriesWithProgress = {}
 
-      Object.entries(artifact.rCategories).forEach(([rType, rData]) => {
-        const rCompletions = completions.filter(c =>
+      // Build a map of quest_id to frequency from the quests data
+      const questFrequencyMap = {}
+      challengeData.quests.forEach(quest => {
+        if (quest.category === category) {
+          questFrequencyMap[quest.id] = quest.frequency
+        }
+      })
+
+      Object.entries(artifact.frequencyCategories).forEach(([freqType, freqData]) => {
+        // freqType is 'Daily' or 'Weekly', quest.frequency is 'daily' or 'weekly'
+        const freqCompletions = completions.filter(c =>
           c.quest_category === category &&
-          c.quest_type === rType &&
-          validQuestIds.includes(c.quest_id)
+          validQuestIds.includes(c.quest_id) &&
+          questFrequencyMap[c.quest_id]?.toLowerCase() === freqType.toLowerCase()
         )
-        const currentPoints = rCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
+        const currentPoints = freqCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
-        rCategoriesWithProgress[rType] = {
-          ...rData,
+        frequencyCategoriesWithProgress[freqType] = {
+          ...freqData,
           currentPoints
         }
       })
 
       return {
         ...artifact,
-        rCategories: rCategoriesWithProgress,
+        frequencyCategories: frequencyCategoriesWithProgress,
         unlocked
       }
     }
@@ -1105,6 +1239,7 @@ export function useChallengeData() {
       checkHealingCompassComplete()
       checkFlowFinderComplete()
       loadStageProgress()
+      loadWeeklyPlan()
     }
   }, [user])
 
@@ -1238,6 +1373,7 @@ export function useChallengeData() {
 
     // Prerequisites
     nervousSystemComplete,
+    safetyContracts,
     healingCompassComplete,
     pastParallelStory,
     flowFinderComplete,
@@ -1249,6 +1385,19 @@ export function useChallengeData() {
     setActiveStageTab,
     projectStage,
     setProjectStage,
+
+    // Weekly Planning
+    weeklyPlan,
+    setWeeklyPlan,
+    showWeeklyPlanning,
+    setShowWeeklyPlanning,
+    isSunday,
+    getWeekLabel,
+    loadWeeklyPlan,
+    completeWeeklyGroan,
+    handleWeeklyPlanComplete,
+    isQuestPlanned,
+    getPlannedDay,
 
     // Constants
     categories,

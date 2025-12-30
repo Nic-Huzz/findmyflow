@@ -69,6 +69,16 @@ const AREAS_OF_LIFE = [
   { id: 'family', label: 'Family', icon: '👨‍👩‍👧' }
 ]
 
+// Business areas where protective/essence voices show up
+const BUSINESS_AREAS = [
+  { id: 'pricing', label: 'Pricing', icon: '💰', description: 'Setting prices, asking for money' },
+  { id: 'visibility_marketing', label: 'Visibility', icon: '📣', description: 'Posting, promoting, being seen' },
+  { id: 'sales', label: 'Sales', icon: '🤝', description: 'Pitching, closing deals' },
+  { id: 'content_creation', label: 'Content', icon: '✍️', description: 'Creating & sharing expertise' },
+  { id: 'client_delivery', label: 'Delivery', icon: '🎯', description: 'Client work, boundaries' },
+  { id: 'networking', label: 'Networking', icon: '🌐', description: 'Meeting people, partnerships' }
+]
+
 // Trigger types for Trigger Pattern quest
 const TRIGGER_TYPES = [
   { id: 'person', label: 'Person', icon: '👤', description: 'Someone triggered a reaction' },
@@ -97,6 +107,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
     intensity: 3,
     situation: '',
     protecting_from: '',
+    business_area: null, // Which business area the voice showed up in
 
     // Essence Voice fields
     expression_type: '',
@@ -161,6 +172,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
           fears_triggered: formData.fears_triggered,
           vulnerability_layer: formData.vulnerability_layer,
           intensity: formData.intensity,
+          business_area: formData.business_area,
           situation: formData.situation
         }
       } else if (quest.id === 'recognise_essence_observe') {
@@ -168,6 +180,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
           essence_archetype: userArchetypes.essence,
           expression_type: formData.expression_type,
           alignment: formData.alignment,
+          business_area: formData.business_area,
           situation: formData.situation
         }
       } else if (quest.id === 'recognise_negative_frequency') {
@@ -309,6 +322,25 @@ function RecogniseQuestInput({ quest, onComplete }) {
           )}
         </div>
 
+        {/* Business Area */}
+        <div className="recognise-section">
+          <label className="recognise-label">Which business area?</label>
+          <div className="business-area-grid">
+            {BUSINESS_AREAS.map(area => (
+              <button
+                key={area.id}
+                type="button"
+                className={`area-option ${formData.business_area === area.id ? 'selected' : ''}`}
+                onClick={() => setFormData(prev => ({ ...prev, business_area: area.id }))}
+                title={area.description}
+              >
+                <span className="area-icon">{area.icon}</span>
+                <span className="area-label">{area.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Intensity Slider */}
         <div className="recognise-section">
           <label className="recognise-label">How intense was it?</label>
@@ -375,28 +407,41 @@ function RecogniseQuestInput({ quest, onComplete }) {
         {userArchetypes.essence && (
           <div className="recognise-section essence-display">
             <div className="essence-archetype-name">{userArchetypes.essence}</div>
-            {userEssenceProfile?.essence && (
-              <div className="essence-one-liner">{userEssenceProfile.essence}</div>
+            {userEssenceProfile?.superpower && (
+              <div className="essence-one-liner">{userEssenceProfile.superpower}</div>
             )}
           </div>
         )}
 
-        {/* Expression Type */}
+        {/* Business Area */}
         <div className="recognise-section">
-          <label className="recognise-label">How did it show up?</label>
-          <div className="expression-grid">
-            {essenceExpressions.map(expr => (
+          <label className="recognise-label">Which business area?</label>
+          <div className="business-area-grid">
+            {BUSINESS_AREAS.map(area => (
               <button
-                key={expr.id}
+                key={area.id}
                 type="button"
-                className={`expression-option ${formData.expression_type === expr.id ? 'selected' : ''}`}
-                onClick={() => setFormData(prev => ({ ...prev, expression_type: expr.id }))}
+                className={`area-option ${formData.business_area === area.id ? 'selected' : ''}`}
+                onClick={() => setFormData(prev => ({ ...prev, business_area: area.id }))}
+                title={area.description}
               >
-                <span className="expression-icon">{expr.icon}</span>
-                <span className="expression-label">{expr.label}</span>
+                <span className="area-icon">{area.icon}</span>
+                <span className="area-label">{area.label}</span>
               </button>
             ))}
           </div>
+        </div>
+
+        {/* Situation */}
+        <div className="recognise-section">
+          <label className="recognise-label">What were you doing?</label>
+          <textarea
+            className="recognise-textarea"
+            placeholder="Describe what you were doing..."
+            value={formData.situation}
+            onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+            rows={3}
+          />
         </div>
 
         {/* Alignment Slider */}
@@ -418,18 +463,6 @@ function RecogniseQuestInput({ quest, onComplete }) {
             </div>
             <span className="intensity-end">✨</span>
           </div>
-        </div>
-
-        {/* Situation */}
-        <div className="recognise-section">
-          <label className="recognise-label">What were you doing?</label>
-          <textarea
-            className="recognise-textarea"
-            placeholder="Describe what you were doing..."
-            value={formData.situation}
-            onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
-            rows={3}
-          />
         </div>
 
         <button

@@ -5,7 +5,7 @@
   padding: 40px 20px;
 }
 
-.manager-header {
+.validation-manager-page .manager-header {
   margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
@@ -14,19 +14,19 @@
   gap: 20px;
 }
 
-.manager-header h1 {
+.validation-manager-page .manager-header h1 {
   font-size: 32px;
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 8px;
 }
 
-.manager-header p {
+.validation-manager-page .manager-header p {
   font-size: 16px;
   color: #6c757d;
 }
 
-.create-flow-btn {
+.validation-manager-page .create-flow-btn {
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   border: none;
@@ -39,35 +39,35 @@
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
-.create-flow-btn:hover {
+.validation-manager-page .create-flow-btn:hover {
   background: linear-gradient(135deg, #3d0b8a 0%, #4a12c7 50%, #6730d1 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(94, 23, 235, 0.4);
 }
 
 /* Manager Content */
-.manager-content {
+.validation-manager-page .manager-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
 /* Flows List */
-.flows-list {
+.validation-manager-page .flows-list {
   background: white;
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.flows-list h2 {
+.validation-manager-page .flows-list h2 {
   font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 20px;
 }
 
-.flow-card {
+.validation-manager-page .flow-card {
   background: #f8f9fa;
   border-radius: 12px;
   padding: 20px;
@@ -75,30 +75,30 @@
   transition: all 0.2s ease;
 }
 
-.flow-card:hover {
+.validation-manager-page .flow-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.flow-card-header {
+.validation-manager-page .flow-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
 }
 
-.flow-card-header h3 {
+.validation-manager-page .flow-card-header h3 {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 4px;
 }
 
-.flow-card-header p {
+.validation-manager-page .flow-card-header p {
   font-size: 14px;
   color: #6c757d;
 }
 
-.flow-status {
+.validation-manager-page .flow-status {
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -106,46 +106,46 @@
   text-transform: uppercase;
 }
 
-.flow-status.active {
+.validation-manager-page .flow-status.active {
   background: #d1fae5;
   color: #065f46;
 }
 
-.flow-status.inactive {
+.validation-manager-page .flow-status.inactive {
   background: #fee2e2;
   color: #991b1b;
 }
 
-.flow-card-stats {
+.validation-manager-page .flow-card-stats {
   display: flex;
   gap: 24px;
   margin-bottom: 16px;
 }
 
-.stat {
+.validation-manager-page .stat {
   display: flex;
   flex-direction: column;
 }
 
-.stat-value {
+.validation-manager-page .stat-value {
   font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
 }
 
-.stat-label {
+.validation-manager-page .stat-label {
   font-size: 12px;
   color: #6c757d;
   text-transform: uppercase;
 }
 
-.flow-card-actions {
+.validation-manager-page .flow-card-actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.flow-card-actions button {
+.validation-manager-page .flow-card-actions button {
   background: white;
   border: 1px solid #dee2e6;
   border-radius: 8px;
@@ -156,29 +156,29 @@
   transition: all 0.2s ease;
 }
 
-.flow-card-actions button:hover {
+.validation-manager-page .flow-card-actions button:hover {
   background: #f8f9fa;
   transform: translateY(-2px);
 }
 
-.copy-link-btn {
+.validation-manager-page .copy-link-btn {
   background: #5e17eb !important;
   color: white !important;
   border: none !important;
 }
 
-.copy-link-btn:hover {
+.validation-manager-page .copy-link-btn:hover {
   background: #4a12c7 !important;
 }
 
-.delete-btn:hover {
+.validation-manager-page .delete-btn:hover {
   background: #fee2e2 !important;
   border-color: #ef4444 !important;
   color: #ef4444 !important;
 }
 
 /* Responses Viewer */
-.responses-viewer {
+.validation-manager-page .responses-viewer {
   background: white;
   border-radius: 16px;
   padding: 24px;
@@ -187,7 +187,7 @@
   overflow-y: auto;
 }
 
-.responses-header {
+.validation-manager-page .responses-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -196,13 +196,13 @@
   border-bottom: 1px solid #dee2e6;
 }
 
-.responses-header h2 {
+.validation-manager-page .responses-header h2 {
   font-size: 20px;
   font-weight: 600;
   color: #1a1a1a;
 }
 
-.close-btn {
+.validation-manager-page .close-btn {
   background: none;
   border: none;
   font-size: 32px;
@@ -219,13 +219,13 @@
   transition: all 0.2s ease;
 }
 
-.close-btn:hover {
+.validation-manager-page .close-btn:hover {
   background: #f8f9fa;
   color: #1a1a1a;
 }
 
 /* Analytics Summary */
-.analytics-summary {
+.validation-manager-page .analytics-summary {
   display: flex;
   gap: 24px;
   margin-bottom: 24px;
@@ -235,36 +235,36 @@
   color: white;
 }
 
-.analytics-stat {
+.validation-manager-page .analytics-stat {
   flex: 1;
   text-align: center;
 }
 
-.analytics-value {
+.validation-manager-page .analytics-value {
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
-.analytics-label {
+.validation-manager-page .analytics-label {
   font-size: 14px;
   opacity: 0.9;
 }
 
 /* Responses List */
-.responses-list {
+.validation-manager-page .responses-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.response-card {
+.validation-manager-page .response-card {
   background: #f8f9fa;
   border-radius: 12px;
   padding: 20px;
 }
 
-.response-header {
+.validation-manager-page .response-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -273,44 +273,44 @@
   border-bottom: 1px solid #dee2e6;
 }
 
-.response-email {
+.validation-manager-page .response-email {
   font-size: 16px;
   font-weight: 600;
   color: #1a1a1a;
 }
 
-.response-date {
+.validation-manager-page .response-date {
   font-size: 14px;
   color: #6c757d;
 }
 
-.response-answers {
+.validation-manager-page .response-answers {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.response-item {
+.validation-manager-page .response-item {
   padding: 12px;
   background: white;
   border-radius: 8px;
 }
 
-.response-question {
+.validation-manager-page .response-question {
   font-size: 14px;
   font-weight: 600;
   color: #495057;
   margin-bottom: 6px;
 }
 
-.response-answer {
+.validation-manager-page .response-answer {
   font-size: 14px;
   color: #1a1a1a;
   line-height: 1.5;
 }
 
 /* Modal */
-.modal-overlay {
+.validation-manager-page .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -323,7 +323,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.validation-manager-page .modal-content {
   background: white;
   border-radius: 16px;
   padding: 32px;
@@ -331,27 +331,27 @@
   width: 90%;
 }
 
-.modal-content h2 {
+.validation-manager-page .modal-content h2 {
   font-size: 24px;
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 12px;
 }
 
-.modal-content p {
+.validation-manager-page .modal-content p {
   font-size: 16px;
   color: #6c757d;
   margin-bottom: 24px;
 }
 
 /* Flow Type Selection */
-.flow-type-options {
+.validation-manager-page .flow-type-options {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
 }
 
-.flow-type-card {
+.validation-manager-page .flow-type-card {
   flex: 1;
   background: #f8f9fa;
   border: 2px solid #dee2e6;
@@ -362,32 +362,32 @@
   text-align: center;
 }
 
-.flow-type-card:hover {
+.validation-manager-page .flow-type-card:hover {
   border-color: #5e17eb;
   background: #f5f0ff;
 }
 
-.flow-type-card.selected {
+.validation-manager-page .flow-type-card.selected {
   border-color: #5e17eb;
   background: linear-gradient(135deg, rgba(94, 23, 235, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
 }
 
-.flow-type-card h3 {
+.validation-manager-page .flow-type-card h3 {
   font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 8px;
 }
 
-.flow-type-card p {
+.validation-manager-page .flow-type-card p {
   font-size: 14px;
   color: #6c757d;
   margin-bottom: 12px;
   line-height: 1.4;
 }
 
-.flow-type-card .question-count {
+.validation-manager-page .flow-type-card .question-count {
   display: inline-block;
   padding: 4px 12px;
   background: #5e17eb;
@@ -397,13 +397,13 @@
   font-weight: 600;
 }
 
-.modal-actions {
+.validation-manager-page .modal-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
 }
 
-.modal-actions button {
+.validation-manager-page .modal-actions button {
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
@@ -412,39 +412,39 @@
   transition: all 0.2s ease;
 }
 
-.cancel-btn {
+.validation-manager-page .cancel-btn {
   background: white;
   border: 1px solid #dee2e6;
   color: #6c757d;
 }
 
-.cancel-btn:hover {
+.validation-manager-page .cancel-btn:hover {
   background: #f8f9fa;
 }
 
-.confirm-btn {
+.validation-manager-page .confirm-btn {
   background: #5e17eb;
   border: none;
   color: white;
 }
 
-.confirm-btn:hover {
+.validation-manager-page .confirm-btn:hover {
   background: #4a12c7;
 }
 
-.confirm-btn:disabled {
+.validation-manager-page .confirm-btn:disabled {
   background: #adb5bd;
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-.confirm-btn:disabled:hover {
+.validation-manager-page .confirm-btn:disabled:hover {
   background: #adb5bd;
   transform: none;
 }
 
 /* Empty State */
-.empty-state {
+.validation-manager-page .empty-state {
   text-align: center;
   padding: 40px 20px;
   color: #6c757d;
@@ -452,7 +452,7 @@
 }
 
 /* Loading */
-.loading {
+.validation-manager-page .loading {
   text-align: center;
   padding: 60px 20px;
   font-size: 18px;
@@ -461,43 +461,43 @@
 
 /* Mobile Responsive */
 @media (max-width: 1024px) {
-  .manager-content {
+  .validation-manager-page .manager-content {
     grid-template-columns: 1fr;
   }
 
-  .responses-viewer {
+  .validation-manager-page .responses-viewer {
     grid-column: 1;
   }
 }
 
 @media (max-width: 768px) {
-  .manager-header {
+  .validation-manager-page .manager-header {
     flex-direction: column;
     gap: 16px;
   }
 
-  .create-flow-btn {
+  .validation-manager-page .create-flow-btn {
     width: 100%;
   }
 
-  .flow-card-actions {
+  .validation-manager-page .flow-card-actions {
     flex-direction: column;
   }
 
-  .flow-card-actions button {
+  .validation-manager-page .flow-card-actions button {
     width: 100%;
   }
 
-  .analytics-summary {
+  .validation-manager-page .analytics-summary {
     flex-direction: column;
     gap: 16px;
   }
 
-  .flow-type-options {
+  .validation-manager-page .flow-type-options {
     flex-direction: column;
   }
 
-  .modal-content {
+  .validation-manager-page .modal-content {
     max-width: 90%;
     padding: 24px;
   }

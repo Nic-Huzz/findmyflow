@@ -2,7 +2,22 @@
  * ChallengeHeader - Header component for the Challenge page
  *
  * Displays total points, day counter, badges, and settings menu.
+ * Updated to show "Week of X" format for weekly planning system.
  */
+
+// Week type display info
+const WEEK_TYPES = {
+  push: { label: 'Push', icon: '🔥', color: '#ef4444' },
+  flow: { label: 'Flow', icon: '🌊', color: '#3b82f6' },
+  rest: { label: 'Rest', icon: '🌙', color: '#8b5cf6' },
+  launch: { label: 'Launch', icon: '🎯', color: '#f59e0b' }
+}
+
+// Days of week for groan display
+const DAYS_SHORT = {
+  monday: 'Mon', tuesday: 'Tue', wednesday: 'Wed',
+  thursday: 'Thu', friday: 'Fri', saturday: 'Sat', sunday: 'Sun'
+}
 
 function ChallengeHeader({
   progress,
@@ -15,7 +30,11 @@ function ChallengeHeader({
   handleOpenExplainer,
   handleRestartChallenge,
   onLeaderboardClick,
-  streakDays = 0
+  streakDays = 0,
+  weekLabel = null,
+  weekType = null,
+  weeklyPlan = null,
+  onEditPlan = null
 }) {
   // Flame size based on streak length
   const getFlameClass = () => {
@@ -26,19 +45,30 @@ function ChallengeHeader({
     return 'streak-flame cold'
   }
 
+  const weekTypeInfo = weekType ? WEEK_TYPES[weekType] : null
+
   return (
     <header className="challenge-header">
       <h1>Gamify Your Ambitions</h1>
 
+      {/* Row 1: Non-clickable info - Rank, Points, Streak, Week Type */}
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
-          <button
-            className="home-btn"
-            title="Go to Home"
-            onClick={() => navigate('/me')}
-          >
-            🏠
-          </button>
+          {/* Rank Badge - clickable to show leaderboard */}
+          {userRank && (
+            <div
+              className="rank-badge"
+              title={`Ranked #${userRank} on leaderboard`}
+              onClick={onLeaderboardClick}
+              style={{ cursor: 'pointer' }}
+            >
+              🏆 #{userRank}
+            </div>
+          )}
+          {/* Points */}
+          <div className="challenge-day">
+            {progress.total_points || 0} pts
+          </div>
           {/* Streak Flame */}
           {streakDays > 0 && (
             <div className="streak-badge" title={`${streakDays} day streak!`}>
@@ -46,17 +76,29 @@ function ChallengeHeader({
               <span className="streak-count">{streakDays}</span>
             </div>
           )}
-          <div className="challenge-day">
-            Day {progress.current_day}/7 {progress.current_day === 7 && '🎉'}
-          </div>
+          {/* Week Type Badge */}
+          {weekTypeInfo && (
+            <div
+              className="challenge-day week-type-bubble"
+              style={{ backgroundColor: weekTypeInfo.color, color: 'white' }}
+            >
+              {weekTypeInfo.icon} {weekTypeInfo.label.toUpperCase()}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Row 2: Clickable actions - Voices, Settings, Edit */}
+      <div className="challenge-header-top">
+        <div className="challenge-header-badges">
           {userData?.essence_archetype && (
             <div
               className="challenge-day archetype-badge"
-              title="View your archetypes"
+              title="View your voices"
               onClick={() => navigate('/archetypes')}
               style={{ cursor: 'pointer' }}
             >
-              Archetypes
+              🎭 Voices
             </div>
           )}
           <div className="settings-menu-container" ref={settingsMenuRef}>
@@ -99,8 +141,19 @@ function ChallengeHeader({
               </div>
             )}
           </div>
+          {/* Edit Plan button */}
+          {onEditPlan && (
+            <div
+              className="challenge-day edit-badge"
+              onClick={onEditPlan}
+              style={{ cursor: 'pointer' }}
+            >
+              ✏️ Edit
+            </div>
+          )}
         </div>
       </div>
+
       {progress.current_day === 7 && (
         <button className="restart-challenge-btn" onClick={handleRestartChallenge}>
           Start New 7-Day Challenge

@@ -32,13 +32,22 @@
       "stage_required": 0,
       "name": "Identify Your Curiosities",
       "description": "What was the topic of a podcast, book, or learning that you absolutely loved this week?",
-      "points": 15,
+      "points": 8,
       "inputType": "text_with_tags",
       "placeholder": "The more specific the topic the better",
       "tagOptions": [
-        { "value": "skill", "label": "Skill" },
-        { "value": "problem", "label": "Problem" },
-        { "value": "persona", "label": "Persona" }
+        {
+          "value": "skill",
+          "label": "Skill"
+        },
+        {
+          "value": "problem",
+          "label": "Problem"
+        },
+        {
+          "value": "persona",
+          "label": "Persona"
+        }
       ],
       "tagLabel": "This curiosity relates to:",
       "multiSelectTags": true,
@@ -112,7 +121,7 @@
       "stage_required": 0,
       "name": "3% Better",
       "description": "In your business what can you make 3% better this week?",
-      "points": 20,
+      "points": 10,
       "inputType": "text",
       "placeholder": "What did you improve by 3%?",
       "learnMore": "The 3% rule focuses on marginal gains as a recipe for success instead of massive transformation. These small consistent improvements compound exponentially.\n\nInstead of 'I need to completely overhaul my website,' you ask 'What's 3% better?' Maybe it's improving one headline, simplifying your offer, or speeding up your response time. Tiny improvements sustained over time create massive growth."
@@ -127,7 +136,7 @@
       "points": 20,
       "inputType": "text",
       "placeholder": "What did you do and how did it go?",
-      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play—even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway."
+      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play\u2014even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway."
     },
     {
       "id": "reconnect_morning_meditation",
@@ -203,7 +212,7 @@
       "points": 25,
       "inputType": "text",
       "placeholder": "What negative environment did you address?",
-      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish—it's essential."
+      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish\u2014it's essential."
     },
     {
       "id": "groan_challenge",
@@ -226,13 +235,13 @@
       "frequency": "anytime",
       "name": "Stage 1 Groan: Validation",
       "description": "Reach out to someone and ask for honest feedback on your idea, even though you fear they might reject it or say it's not good enough.",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "groan_stage_1_validation",
       "placeholder": "Who did you reach out to? What feedback did they give? How did it feel?",
       "stage_required": 1,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of rejection when asking for feedback is one of the biggest blockers in the Validation stage.\n\nYour essence knows you need real feedback to move forward, but your body fears hearing 'no' or 'this isn't good.'\n\nThis groan challenges you to face that fear directly. Remember: every piece of feedback—positive or negative—brings you closer to something that truly serves people."
+      "learnMore": "Fear of rejection when asking for feedback is one of the biggest blockers in the Validation stage.\n\nYour essence knows you need real feedback to move forward, but your body fears hearing 'no' or 'this isn't good.'\n\nThis groan challenges you to face that fear directly. Remember: every piece of feedback\u2014positive or negative\u2014brings you closer to something that truly serves people."
     },
     {
       "id": "groan_stage_2_creation",
@@ -241,7 +250,7 @@
       "frequency": "anytime",
       "name": "Stage 2 Groan: Creation",
       "description": "Ship something (a page, a product, content) before you feel it's 100% ready. Your essence knows it's good enough, but your body fears judgment.",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "groan_stage_2_creation",
       "placeholder": "What did you ship? What was your fear? How did it actually go?",
@@ -256,13 +265,13 @@
       "frequency": "anytime",
       "name": "Stage 3 Groan: Testing",
       "description": "Ask a tester to be brutally honest about what's NOT working. Sit with the discomfort of criticism without defending or explaining.",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "groan_stage_3_testing",
       "placeholder": "Who gave you feedback? What did they say wasn't working? How did you receive it?",
       "stage_required": 3,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of hearing negative feedback prevents growth in the Testing stage.\n\nYour essence knows that honest criticism is a gift—it shows you exactly where to improve. But your body wants to defend, explain, or avoid the discomfort.\n\nThis groan challenges you to actively seek out criticism and sit with it. Don't defend. Don't explain. Just listen and thank them. The discomfort you feel is growth happening."
+      "learnMore": "Fear of hearing negative feedback prevents growth in the Testing stage.\n\nYour essence knows that honest criticism is a gift\u2014it shows you exactly where to improve. But your body wants to defend, explain, or avoid the discomfort.\n\nThis groan challenges you to actively seek out criticism and sit with it. Don't defend. Don't explain. Just listen and thank them. The discomfort you feel is growth happening."
     },
     {
       "id": "groan_stage_4_money",
@@ -271,7 +280,7 @@
       "frequency": "anytime",
       "name": "Stage 4 Groan: Money",
       "description": "Tell someone your price confidently without apologizing, discounting, or over-explaining. Own your value even when it feels uncomfortable.",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "groan_stage_4_money",
       "placeholder": "What was the price conversation? How did you state your price? What happened?",
@@ -285,14 +294,14 @@
       "type": "groan",
       "frequency": "anytime",
       "name": "Stage 5 Groan: Campaign",
-      "description": "Put yourself out there publicly in a way that feels exposing—a video, a post, an interview. Let the world see the real you, not the polished version.",
-      "points": 30,
+      "description": "Put yourself out there publicly in a way that feels exposing\u2014a video, a post, an interview. Let the world see the real you, not the polished version.",
+      "points": 15,
       "inputType": "text",
       "milestone_type": "groan_stage_5_campaign",
       "placeholder": "What did you share publicly? What felt exposing about it? What response did you get?",
       "stage_required": 5,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of public visibility is the edge you hit in the Campaign Creation stage.\n\nYour essence wants to be seen—that's why you're building something. But your body fears judgment, criticism, and the vulnerability of being 'out there.'\n\nThis groan challenges you to show up as yourself, unpolished and real. The people who resonate with the real you are the ones you want to attract anyway. Let them find you."
+      "learnMore": "Fear of public visibility is the edge you hit in the Campaign Creation stage.\n\nYour essence wants to be seen\u2014that's why you're building something. But your body fears judgment, criticism, and the vulnerability of being 'out there.'\n\nThis groan challenges you to show up as yourself, unpolished and real. The people who resonate with the real you are the ones you want to attract anyway. Let them find you."
     },
     {
       "id": "groan_stage_6_launch",
@@ -301,13 +310,13 @@
       "frequency": "anytime",
       "name": "Stage 6 Groan: Launch",
       "description": "Make a bold, public commitment to your launch with a specific date. Announce it to your audience. No backing out, no moving the goalposts.",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "groan_stage_6_launch",
       "placeholder": "What commitment did you make? Where did you announce it? How does it feel?",
       "stage_required": 6,
       "counts_toward_graduation": true,
-      "learnMore": "Fear of failure after going 'all in' is the final boss of the Launch stage.\n\nYour essence knows you're ready. Your body fears what happens if you commit publicly and it doesn't work.\n\nThis groan challenges you to make a public, undeniable commitment. Pick a date. Announce it. Burn the boats. When there's no escape route, you'll find resources and resilience you didn't know you had. And even if the launch doesn't go perfectly—you'll learn more from that than from another month of 'preparing.'"
+      "learnMore": "Fear of failure after going 'all in' is the final boss of the Launch stage.\n\nYour essence knows you're ready. Your body fears what happens if you commit publicly and it doesn't work.\n\nThis groan challenges you to make a public, undeniable commitment. Pick a date. Announce it. Burn the boats. When there's no escape route, you'll find resources and resilience you didn't know you had. And even if the launch doesn't go perfectly\u2014you'll learn more from that than from another month of 'preparing.'"
     },
     {
       "id": "recognise_positive_frequency",
@@ -343,7 +352,7 @@
       "points": 15,
       "inputType": "text",
       "placeholder": "What patterns did you notice in your triggers this week?",
-      "learnMore": "Our triggers are consistent — the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions."
+      "learnMore": "Our triggers are consistent \u2014 the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions."
     },
     {
       "id": "recognise_nervous_system",
@@ -369,7 +378,7 @@
       "inputType": "flow",
       "flow_id": "healing_compass",
       "flow_route": "/healing-compass",
-      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism—understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
+      "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism\u2014understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
     },
     {
       "id": "release_daily_challenge",
@@ -392,7 +401,7 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What emotion were you feeling and how did you release it?",
-      "learnMore": "Emotions are energy in motion— see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'."
+      "learnMore": "Emotions are energy in motion\u2014 see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'."
     },
     {
       "id": "release_weekly_big",
@@ -404,7 +413,7 @@
       "points": 30,
       "inputType": "text",
       "placeholder": "What came up in the session? What did you process and release?",
-      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions—trust the process and let your body lead."
+      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions\u2014trust the process and let your body lead."
     },
     {
       "id": "recognise_flow_update",
@@ -439,7 +448,7 @@
       "frequency": "anytime",
       "name": "Flow Finder: Skills",
       "description": "Discover your unique skills and what you're naturally great at",
-      "points": 40,
+      "points": 20,
       "inputType": "flow",
       "flow_id": "nikigai_skills",
       "flow_route": "/nikigai/skills",
@@ -454,7 +463,7 @@
       "frequency": "anytime",
       "name": "Flow Finder: Problems",
       "description": "Identify the problems you're passionate about solving",
-      "points": 40,
+      "points": 20,
       "inputType": "flow",
       "flow_id": "nikigai_problems",
       "flow_route": "/nikigai/problems",
@@ -470,7 +479,7 @@
       "frequency": "anytime",
       "name": "Flow Finder: Personas",
       "description": "Discover who you're meant to serve and support",
-      "points": 30,
+      "points": 15,
       "inputType": "flow",
       "flow_id": "nikigai_persona",
       "flow_route": "/nikigai/persona",
@@ -486,7 +495,7 @@
       "frequency": "anytime",
       "name": "Putting It All Together",
       "description": "Integrate your skills, problems, and personas into unique opportunities",
-      "points": 30,
+      "points": 15,
       "inputType": "flow",
       "flow_id": "nikigai_integration",
       "flow_route": "/nikigai/integration",
@@ -503,11 +512,13 @@
       "stage_required": 2,
       "name": "Offer Milestone",
       "description": "Mark the completion of your core offer",
-      "points": 25,
+      "points": 13,
       "inputType": "milestone",
       "milestone_type": "offer_created",
       "placeholder": "Describe your offer and what makes it valuable.",
-      "persona_specific": ["vibe_riser"],
+      "persona_specific": [
+        "vibe_riser"
+      ],
       "counts_toward_graduation": true,
       "learnMore": "This milestone counts toward your graduation to the Testing stage.",
       "archived": true,
@@ -521,11 +532,13 @@
       "stage_required": 2,
       "name": "Money Model Milestone",
       "description": "Complete building your money model",
-      "points": 25,
+      "points": 13,
       "inputType": "milestone",
       "milestone_type": "model_built",
       "placeholder": "Describe your money model and revenue streams.",
-      "persona_specific": ["movement_maker"],
+      "persona_specific": [
+        "movement_maker"
+      ],
       "counts_toward_graduation": true,
       "learnMore": "This milestone counts toward your graduation to the Testing stage.",
       "archived": true,
@@ -539,11 +552,13 @@
       "stage_required": 3,
       "name": "Offer Testing Milestone",
       "description": "Test your offer with 3 people",
-      "points": 30,
+      "points": 15,
       "inputType": "milestone",
       "milestone_type": "offer_tested_with_3",
       "placeholder": "Who tested your offer? What was their response?",
-      "persona_specific": ["vibe_riser"],
+      "persona_specific": [
+        "vibe_riser"
+      ],
       "counts_toward_graduation": true,
       "learnMore": "Testing your offer with real potential customers validates market fit. This counts toward your stage graduation.",
       "archived": true,
@@ -557,11 +572,13 @@
       "stage_required": 3,
       "name": "Model Testing Milestone",
       "description": "Test your model with 3 people",
-      "points": 30,
+      "points": 15,
       "inputType": "milestone",
       "milestone_type": "model_tested_with_3",
       "placeholder": "Who tested your model? What insights did you gain?",
-      "persona_specific": ["movement_maker"],
+      "persona_specific": [
+        "movement_maker"
+      ],
       "counts_toward_graduation": true,
       "learnMore": "Testing your money model with real stakeholders validates its viability. This counts toward your stage graduation.",
       "archived": true,
@@ -570,12 +587,12 @@
     {
       "id": "milestone_acquisition_offer_launched",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Launch",
       "frequency": "anytime",
       "stage_required": 6,
       "name": "Acquisition Offer Launch",
       "description": "Launch your customer acquisition offer",
-      "points": 40,
+      "points": 20,
       "inputType": "milestone",
       "milestone_type": "acquisition_offer_launched",
       "placeholder": "Describe your acquisition offer and how you launched it.",
@@ -585,57 +602,107 @@
     {
       "id": "flow_100m_offer",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Product",
       "frequency": "anytime",
       "stage_required": 2,
-      "name": "$100M Offer Builder",
+      "name": "Offer Builder",
       "description": "Design your irresistible offer using Alex Hormozi's $100M framework",
-      "points": 35,
+      "points": 25,
       "inputType": "flow",
       "flow_id": "100m_offer",
-      "flow_route": "/100m-offer",
+      "flow_route": "/offer-builder",
       "counts_toward_graduation": true,
       "learnMore": "This flow helps you create a high-value offer by identifying what makes it uniquely valuable to your ideal customer. Complete this to unlock the next stage."
     },
     {
+      "id": "flow_product_selection",
+      "category": "Business",
+      "type": "Product",
+      "frequency": "anytime",
+      "stage_required": 2,
+      "name": "Product Designer",
+      "description": "Define your core product's value using the Value Equation framework",
+      "points": 30,
+      "inputType": "flow",
+      "flow_id": "product_selection",
+      "flow_route": "/product-selection",
+      "requires_quest": "flow_100m_offer",
+      "counts_toward_graduation": true,
+      "learnMore": "Apply Hormozi's Value Equation to your core product: Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort). This helps you maximize perceived value."
+    },
+    {
       "id": "flow_lead_magnet",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Product",
       "frequency": "anytime",
       "stage_required": 2,
       "name": "Lead Magnet Designer",
       "description": "Design the perfect lead magnet to attract your ideal customers",
-      "points": 35,
+      "points": 18,
       "inputType": "flow",
       "flow_id": "lead_magnet",
       "flow_route": "/lead-magnet",
+      "counts_toward_graduation": false,
+      "learnMore": "Create a compelling lead magnet that solves a specific problem for your ideal customer and builds trust.",
+      "archived": true,
+      "archive_reason": "Replaced by Lead Magnet Selector which applies types to specific solutions from Offer Builder"
+    },
+    {
+      "id": "flow_lead_magnet_selection",
+      "category": "Business",
+      "type": "Product",
+      "frequency": "anytime",
+      "stage_required": 2,
+      "name": "Lead Magnet Selector",
+      "description": "Choose the right type of lead magnet based on your prospect's journey",
+      "points": 30,
+      "inputType": "flow",
+      "flow_id": "lead_magnet_selection",
+      "flow_route": "/lead-magnet-selection",
+      "requires_quest": "flow_100m_offer",
       "counts_toward_graduation": true,
-      "learnMore": "Create a compelling lead magnet that solves a specific problem for your ideal customer and builds trust."
+      "learnMore": "Determine whether your lead magnet should reveal the problem (quiz/assessment), offer a free trial (sample/demo), or give away Step 1 (template/guide)."
     },
     {
       "id": "flow_leads_strategy",
       "category": "Business",
-      "type": "Stage 5",
+      "type": "Campaign",
       "frequency": "anytime",
       "stage_required": 5,
-      "name": "Leads Strategy Assessment",
+      "name": "Core Four Strategy",
       "description": "Discover the best lead generation strategy for your business",
-      "points": 40,
+      "points": 20,
       "inputType": "flow",
       "flow_id": "leads_strategy",
       "flow_route": "/leads-strategy",
       "counts_toward_graduation": true,
-      "learnMore": "Identify your optimal lead generation strategy and create your customer acquisition funnel."
+      "learnMore": "Choose from the Core Four lead generation methods: Warm Outreach, Cold Outreach, Post Free Content, or Run Paid Ads. We'll help you pick the right one based on your resources and skills."
+    },
+    {
+      "id": "flow_funnel_builder",
+      "category": "Business",
+      "type": "Campaign",
+      "frequency": "anytime",
+      "stage_required": 5,
+      "name": "Funnel Builder",
+      "description": "Design your complete lead generation funnel from lead magnet to customer",
+      "points": 35,
+      "inputType": "flow",
+      "flow_id": "funnel_builder",
+      "flow_route": "/funnel-builder",
+      "requires_quest": "flow_leads_strategy",
+      "counts_toward_graduation": true,
+      "learnMore": "Combine your Core Four strategy with your Lead Magnet to build a complete funnel: delivery method, nurture sequence, conversion mechanism, and follow-up plan."
     },
     {
       "id": "milestone_read_money_model",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Read Money Model Guide",
       "description": "Read the Money Model Guide to understand how all your offers work together",
-      "points": 10,
+      "points": 5,
       "inputType": "checkbox",
       "milestone_type": "read_putting_it_together",
       "counts_toward_graduation": true,
@@ -646,12 +713,12 @@
     {
       "id": "flow_attraction_offer",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Attraction Offer Assessment",
       "description": "Design your customer acquisition offer that draws people in",
-      "points": 35,
+      "points": 18,
       "inputType": "flow",
       "flow_id": "attraction_offer",
       "flow_route": "/attraction-offer",
@@ -661,12 +728,12 @@
     {
       "id": "flow_upsell_offer",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Upsell Offer Assessment",
       "description": "Design your upsell offer to increase customer value",
-      "points": 35,
+      "points": 18,
       "inputType": "flow",
       "flow_id": "upsell_offer",
       "flow_route": "/upsell-offer",
@@ -676,12 +743,12 @@
     {
       "id": "flow_downsell_offer",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Downsell Offer Assessment",
       "description": "Design your downsell offer to capture hesitant buyers",
-      "points": 35,
+      "points": 18,
       "inputType": "flow",
       "flow_id": "downsell_offer",
       "flow_route": "/downsell-offer",
@@ -691,12 +758,12 @@
     {
       "id": "flow_continuity_offer",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Continuity Offer Assessment",
       "description": "Design your recurring revenue offer for ongoing value",
-      "points": 35,
+      "points": 18,
       "inputType": "flow",
       "flow_id": "continuity_offer",
       "flow_route": "/continuity-offer",
@@ -706,12 +773,12 @@
     {
       "id": "flow_persona_validation",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Validation",
       "frequency": "anytime",
       "stage_required": 1,
       "name": "Persona Validation Assessment",
       "description": "Validate which persona and problem combination resonates most with your target audience",
-      "points": 25,
+      "points": 13,
       "inputType": "flow",
       "flow_id": "persona_selection",
       "flow_route": "/persona-selection",
@@ -721,12 +788,12 @@
     {
       "id": "milestone_validation_form_sent",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Validation",
       "frequency": "anytime",
       "stage_required": 1,
       "name": "Send Validation Form",
       "description": "Create and send your validation form to gather feedback on your idea.",
-      "points": 15,
+      "points": 8,
       "inputType": "checkbox",
       "milestone_type": "validation_form_sent",
       "counts_toward_graduation": true,
@@ -736,29 +803,32 @@
     {
       "id": "milestone_validation_conversations",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Validation",
       "frequency": "anytime",
       "stage_required": 1,
       "name": "Validation Conversations",
       "description": "Get three people to complete the validation form.",
-      "points": 10,
+      "points": 5,
       "inputType": "conversation_log",
       "milestone_type": "validation_responses_3",
       "milestone_count": 3,
       "placeholder": "What did you originally think and how was it different?",
-      "conversation_fields": ["What were the key insights?", "What surprised you?"],
+      "conversation_fields": [
+        "What were the key insights?",
+        "What surprised you?"
+      ],
       "counts_toward_graduation": true,
       "learnMore": "Validation conversations help you understand if your idea solves a real problem people will pay for. Aim for 3 conversations to complete this milestone."
     },
     {
       "id": "milestone_lead_magnet_created",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Product",
       "frequency": "anytime",
       "stage_required": 2,
       "name": "Lead Magnet Created",
       "description": "Enter your lead magnet design and share the link or describe what you created",
-      "points": 25,
+      "points": 13,
       "inputType": "text",
       "milestone_type": "lead_magnet_created",
       "placeholder": "Share the link to your lead magnet or describe what you created",
@@ -768,12 +838,12 @@
     {
       "id": "milestone_testing_complete",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Testing",
       "frequency": "anytime",
       "stage_required": 3,
       "name": "Testing Complete",
       "description": "Mark that you've completed testing your product/offer with real users",
-      "points": 20,
+      "points": 10,
       "inputType": "checkbox",
       "milestone_type": "testing_complete",
       "counts_toward_graduation": true,
@@ -782,12 +852,12 @@
     {
       "id": "milestone_feedback_conversations",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Testing",
       "frequency": "anytime",
       "stage_required": 3,
       "name": "Feedback Conversations",
       "description": "Get feedback from people who've tried your PRODUCT/OFFER. What works? What needs improvement?",
-      "points": 10,
+      "points": 5,
       "inputType": "conversation_log",
       "milestone_type": "feedback_responses_3",
       "milestone_count": 3,
@@ -798,12 +868,12 @@
     {
       "id": "milestone_improvements_identified",
       "category": "Business",
-      "type": "Vibe Riser",
+      "type": "Testing",
       "frequency": "anytime",
       "stage_required": 3,
       "name": "Improvements Identified",
       "description": "Based on your testing, what improvements are you going to make?",
-      "points": 15,
+      "points": 8,
       "inputType": "text",
       "milestone_type": "improvements_identified",
       "placeholder": "List the key improvements you'll make based on feedback",
@@ -813,12 +883,12 @@
     {
       "id": "milestone_strategy_identified",
       "category": "Business",
-      "type": "Vibe Riser, Movement Maker",
+      "type": "Launch",
       "frequency": "anytime",
       "stage_required": 6,
       "name": "Strategy & Funnel Defined",
       "description": "Document your lead generation strategy and define your funnel stages",
-      "points": 20,
+      "points": 10,
       "inputType": "text",
       "milestone_type": "strategy_identified",
       "placeholder": "Describe your strategy and funnel stages",
@@ -828,21 +898,39 @@
     {
       "id": "milestone_decide_acquisition",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Decide on Attraction Offer",
       "description": "Select which attraction offer you've decided to create",
-      "points": 15,
+      "points": 8,
       "inputType": "dropdown",
       "milestone_type": "decide_acquisition",
       "options": [
-        { "value": "win_your_money_back", "label": "Win Your Money Back" },
-        { "value": "giveaway", "label": "Flagship Giveaway" },
-        { "value": "decoy_offer", "label": "Decoy Offer (Good/Better/Best)" },
-        { "value": "buy_x_get_y_free", "label": "Buy X Get Y Free" },
-        { "value": "pay_less_now_or_pay_more_later", "label": "Pay Less Now or Pay More Later" },
-        { "value": "free_with_consumption_to_upsell", "label": "Free With Consumption" }
+        {
+          "value": "win_your_money_back",
+          "label": "Win Your Money Back"
+        },
+        {
+          "value": "giveaway",
+          "label": "Flagship Giveaway"
+        },
+        {
+          "value": "decoy_offer",
+          "label": "Decoy Offer (Good/Better/Best)"
+        },
+        {
+          "value": "buy_x_get_y_free",
+          "label": "Buy X Get Y Free"
+        },
+        {
+          "value": "pay_less_now_or_pay_more_later",
+          "label": "Pay Less Now or Pay More Later"
+        },
+        {
+          "value": "free_with_consumption_to_upsell",
+          "label": "Free With Consumption"
+        }
       ],
       "counts_toward_graduation": true,
       "learnMore": "Your attraction offer is the foundation of your customer journey. Choose wisely based on your assessment."
@@ -850,19 +938,31 @@
     {
       "id": "milestone_decide_upsell",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Decide on Upsell Offer",
       "description": "Select which upsell offer you've decided to create",
-      "points": 15,
+      "points": 8,
       "inputType": "dropdown",
       "milestone_type": "decide_upsell",
       "options": [
-        { "value": "classic_upsell", "label": "Classic Upsell" },
-        { "value": "menu_upsell", "label": "Menu Upsell" },
-        { "value": "anchor_upsell", "label": "Anchor Upsell" },
-        { "value": "rollover_upsell", "label": "Rollover Upsell" }
+        {
+          "value": "classic_upsell",
+          "label": "Classic Upsell"
+        },
+        {
+          "value": "menu_upsell",
+          "label": "Menu Upsell"
+        },
+        {
+          "value": "anchor_upsell",
+          "label": "Anchor Upsell"
+        },
+        {
+          "value": "rollover_upsell",
+          "label": "Rollover Upsell"
+        }
       ],
       "counts_toward_graduation": true,
       "learnMore": "Your upsell maximizes value for customers who want more. Make it irresistible."
@@ -870,18 +970,27 @@
     {
       "id": "milestone_decide_downsell",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Decide on Downsell Offer",
       "description": "Select which downsell offer you've decided to create",
-      "points": 15,
+      "points": 8,
       "inputType": "dropdown",
       "milestone_type": "decide_downsell",
       "options": [
-        { "value": "payment_plan_downsell", "label": "Payment Plan Downsells" },
-        { "value": "trial_with_penalty", "label": "Trial With Penalty" },
-        { "value": "feature_downsell", "label": "Feature Downsells" }
+        {
+          "value": "payment_plan_downsell",
+          "label": "Payment Plan Downsells"
+        },
+        {
+          "value": "trial_with_penalty",
+          "label": "Trial With Penalty"
+        },
+        {
+          "value": "feature_downsell",
+          "label": "Feature Downsells"
+        }
       ],
       "counts_toward_graduation": true,
       "learnMore": "Your downsell captures customers who aren't ready for your main offer yet. Don't leave money on the table."
@@ -889,21 +998,39 @@
     {
       "id": "milestone_decide_continuity",
       "category": "Business",
-      "type": "Movement Maker",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Decide on Continuity Offer",
       "description": "Select which continuity offer you've decided to create",
-      "points": 15,
+      "points": 8,
       "inputType": "dropdown",
       "milestone_type": "decide_continuity",
       "options": [
-        { "value": "signup_bonus_continuity", "label": "Continuity Bonus Offer" },
-        { "value": "commitment_discount", "label": "Free Duration with Commitment" },
-        { "value": "waived_fee_continuity", "label": "Waived Fee with Commitment" },
-        { "value": "downsell_to_continuity", "label": "Big Head, Long Tail (Downsell Upsell)" },
-        { "value": "auto_replenishment", "label": "Auto-Replenishment Subscription" },
-        { "value": "pure_subscription", "label": "Pure Monthly Subscription/Membership" }
+        {
+          "value": "signup_bonus_continuity",
+          "label": "Continuity Bonus Offer"
+        },
+        {
+          "value": "commitment_discount",
+          "label": "Free Duration with Commitment"
+        },
+        {
+          "value": "waived_fee_continuity",
+          "label": "Waived Fee with Commitment"
+        },
+        {
+          "value": "downsell_to_continuity",
+          "label": "Big Head, Long Tail (Downsell Upsell)"
+        },
+        {
+          "value": "auto_replenishment",
+          "label": "Auto-Replenishment Subscription"
+        },
+        {
+          "value": "pure_subscription",
+          "label": "Pure Monthly Subscription/Membership"
+        }
       ],
       "counts_toward_graduation": true,
       "learnMore": "Your continuity offer creates recurring revenue. This is the foundation of sustainable business."
@@ -911,12 +1038,12 @@
     {
       "id": "milestone_create_acquisition",
       "category": "Business",
-      "type": "Stage 4",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Create Acquisition Offer",
       "description": "Build and document your acquisition offer",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "create_acquisition_offer",
       "placeholder": "Share the link or describe your completed acquisition offer",
@@ -926,12 +1053,12 @@
     {
       "id": "milestone_create_upsell",
       "category": "Business",
-      "type": "Stage 4",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Create Upsell Offer",
       "description": "Build and document your upsell offer",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "create_upsell_offer",
       "placeholder": "Share the link or describe your completed upsell offer",
@@ -941,12 +1068,12 @@
     {
       "id": "milestone_create_downsell",
       "category": "Business",
-      "type": "Stage 4",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Create Downsell Offer",
       "description": "Build and document your downsell offer",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "create_downsell_offer",
       "placeholder": "Share the link or describe your completed downsell offer",
@@ -956,12 +1083,12 @@
     {
       "id": "milestone_create_continuity",
       "category": "Business",
-      "type": "Stage 4",
+      "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
       "name": "Create Continuity Offer",
       "description": "Build and document your continuity/recurring offer",
-      "points": 30,
+      "points": 15,
       "inputType": "text",
       "milestone_type": "create_continuity_offer",
       "placeholder": "Share the link or describe your completed continuity offer",
@@ -971,12 +1098,12 @@
     {
       "id": "daily_implementation",
       "category": "Business",
-      "type": "Vibe Riser, Movement Maker",
+      "type": "Launch",
       "frequency": "daily",
       "stage_required": 6,
       "name": "Daily Implementation",
       "description": "What action did you take today to implement your launch strategy?",
-      "points": 8,
+      "points": 4,
       "inputType": "text",
       "maxPerDay": 1,
       "placeholder": "What did you do today to move your launch forward?",
@@ -1063,17 +1190,13 @@
       "name": "Groans Mastery",
       "category": "Groans",
       "description": "Tasks your essence knows you're capable, but your body still has resistance.",
-      "rCategories": {
-        "Recognise": {
-          "pointsRequired": 56,
+      "frequencyCategories": {
+        "Daily": {
+          "pointsRequired": 126,
           "currentPoints": 0
         },
-        "Rewire": {
+        "Weekly": {
           "pointsRequired": 100,
-          "currentPoints": 0
-        },
-        "Reconnect": {
-          "pointsRequired": 70,
           "currentPoints": 0
         }
       },
@@ -1085,12 +1208,12 @@
       "name": "Healing Mastery",
       "category": "Healing",
       "description": "Processing the micro-traumas creating fear around being yourself and living your ambitions.",
-      "rCategories": {
-        "Recognise": {
+      "frequencyCategories": {
+        "Daily": {
           "pointsRequired": 45,
           "currentPoints": 0
         },
-        "Release": {
+        "Weekly": {
           "pointsRequired": 42,
           "currentPoints": 0
         }

@@ -478,11 +478,205 @@ Money Model Pricing Courage Boost
 
 ---
 
-## Alfred: The Orchestration Layer
+### 7. PATTERN INSIGHT CARD AGENT
 
-Alfred is the conversational interface that unifies all agents. Users don't think about "which agent"—they talk to Alfred.
+**Purpose:** Display personalized, actionable insights on the Groans Summary page
 
-### Alfred's Role
+**What it sees:**
+- Fear distribution across completions
+- Layer progression (SCREEN → LIVE → TRIBE → MONEY → HEART)
+- Area coverage (Work, Self, Family, etc.)
+- Essence/Protective voice balance
+- Comfort zone patterns (repeated fear + layer combos)
+
+**Pattern Detection Rules:**
+
+| Pattern | Trigger | Example Output |
+|---------|---------|----------------|
+| Fear Avoidance | One fear < 10% while others > 30% | "You face 'Judged' fears often but avoid 'Might Fail' - consider pushing into failure territory" |
+| Layer Plateau | Stuck at one layer for 3+ weeks | "You're comfortable at SCREEN level - ready to try a LIVE challenge?" |
+| Area Blind Spot | One area at 0% with 5+ total groans | "Work and Self show up often, but Family hasn't appeared - worth exploring?" |
+| Voice Imbalance | Essence or Protective > 80% | "You're very connected to your Essence - don't forget to acknowledge your Protective voice too" |
+| Comfort Zone | Same fear + layer combo 3+ times | "You keep facing 'Judged' at SCREEN level - time to level up?" |
+| Growth Celebration | New layer conquered | "You just conquered your first TRIBE challenge! How did it feel?" |
+
+**Inputs:**
+- `quest_completions` with `response_data` (fear, layer, area, outcome)
+- `groan_reflections` aggregated stats
+- Calculated percentages per category
+
+**Outputs:**
+```json
+{
+  "pattern_type": "FEAR_AVOIDANCE|LAYER_PLATEAU|AREA_BLIND_SPOT|...",
+  "insight_card": {
+    "headline": "<short attention-grabbing headline>",
+    "body": "<2-3 sentence insight>",
+    "suggested_action": "<specific next step>",
+    "cta_label": "Try This"
+  },
+  "confidence": 0.85,
+  "data_points_used": 12
+}
+```
+
+**Trigger:** On Groans Summary page load, cached daily
+
+**Technical Approach:**
+- **Phase 1**: Rule-based pattern detection (no AI needed)
+- **Phase 2**: AI-generated natural language using Claude Haiku
+- **Fallback**: If no strong pattern detected, show encouragement or tip
+
+**Minimum Data Required:** 5+ groan completions for meaningful patterns
+
+---
+
+### 8. FEAR PATTERN INSIGHTS AGENT
+
+**Purpose:** Deep analysis of fear avoidance vs. confrontation patterns over time
+
+**What it sees:**
+- Which fears user consistently faces vs. avoids
+- Layer progression over weeks/months
+- Outcome patterns (better/expected/harder) by fear type
+- Blind spots in fear categories
+
+**Inputs:**
+- `quest_completions` - All groan-related completions (4+ weeks history)
+- `groan_reflections` - Fear selections, layer choices, outcomes
+- `weekly_plans` - Weekly groan selections and completion status
+
+**Outputs:**
+```json
+{
+  "analysis_period": "4 weeks",
+  "entries_analyzed": 28,
+  "fear_avoidance_pattern": {
+    "frequently_faced": [
+      {"fear": "Judged", "count": 7, "success_rate": 0.85}
+    ],
+    "consistently_avoided": [
+      {"fear": "Might Fail", "count": 1, "last_attempted": "3 weeks ago"}
+    ],
+    "insight": "You frequently confront 'Judged' fears but tend to avoid 'Might Fail' situations. This might indicate underlying perfectionism."
+  },
+  "layer_comfort_zone": {
+    "comfortable_layers": ["SCREEN", "LIVE"],
+    "unexplored_layers": ["TRIBE", "MONEY", "HEART"],
+    "insight": "You're comfortable at SCREEN and LIVE levels but haven't ventured into TRIBE, MONEY, or HEART visibility layers yet."
+  },
+  "growth_edges": [
+    "Try a groan challenge involving your inner circle (TRIBE level)",
+    "Pick a task with potential for failure, not just judgment",
+    "Consider a money-related visibility challenge when ready"
+  ],
+  "blind_spot_alert": "No 'Not Enough' fears logged in 6 weeks - either you've mastered this fear, or it might be worth exploring why you avoid it."
+}
+```
+
+**Trigger:** Auto-generate after 4+ weeks of groan data, refresh weekly
+
+**Location:** Groans Summary page → "Deep Insights" expandable section
+
+**Minimum Data Required:** 4 weeks of consistent groan completions (12+ entries recommended)
+
+---
+
+### 9. SMART GROAN SUGGESTIONS AGENT
+
+**Purpose:** Recommend optimal next groan challenge based on NS calibration + history
+
+**What it sees:**
+- Nervous System visibility boundary (current safe edge)
+- Recent groan outcomes (better/expected/harder trends)
+- Current week type (Push/Flow/Rest/Launch)
+- Streak status and momentum
+- Pattern Mirror's detected themes
+
+**Algorithm:**
+```
+1. Get user's NS visibility boundary (e.g., stuck at LIVE level)
+2. Get their most recent groan outcomes (better/expected/harder)
+3. Factor in current week type:
+   - Push Week → suggest next layer up
+   - Flow Week → suggest comfort zone + slight stretch
+   - Rest Week → suggest easiest layer
+   - Launch Week → suggest whatever supports launch goals
+4. Consider streak:
+   - Long streak → can handle bigger push
+   - Streak at risk → suggest achievable win
+5. Factor in Pattern Mirror themes:
+   - If visibility fear dominant → prioritize visibility groans
+   - If pricing fear dominant → prioritize money-related groans
+6. Generate 2-3 suggestions ranked by fit
+```
+
+**Inputs:**
+- `nervous_system_responses` - Visibility boundaries, earning limits, safety contracts
+- `groan_reflections` - Past outcomes and intensity ratings
+- `weekly_plans` - Current week type
+- `challenge_instances` - Streak data
+- `pattern_insights` - Detected fear patterns
+
+**Outputs:**
+```json
+{
+  "recommended": {
+    "challenge_description": "Post a vulnerable reflection on social media",
+    "layer": "SCREEN",
+    "fear_type": "Judged",
+    "fit_score": 0.92,
+    "reasoning": [
+      "Your week type is FLOW (moderate push)",
+      "You've successfully completed 3 SCREEN challenges",
+      "Your NS data shows LIVE is your current edge",
+      "This builds momentum without overwhelming"
+    ]
+  },
+  "alternatives": [
+    {
+      "challenge_description": "Ask for feedback from a colleague",
+      "layer": "TRIBE",
+      "fear_type": "Judged",
+      "fit_score": 0.78,
+      "tag": "Bigger stretch"
+    },
+    {
+      "challenge_description": "Share a behind-the-scenes story",
+      "layer": "SCREEN",
+      "fear_type": "Not Enough",
+      "fit_score": 0.85,
+      "tag": "Easier win"
+    }
+  ],
+  "stretch_option": {
+    "challenge_description": "Go live on Instagram for 5 minutes",
+    "layer": "LIVE",
+    "fear_type": "Judged",
+    "note": "This would push your visibility boundary by one level"
+  }
+}
+```
+
+**Trigger:** When user opens Weekly Planning Flow or Groans tab
+
+**Integration Points:**
+1. **Weekly Planning Flow** - Show during groan selection step
+2. **Groans Tab** - "Suggested for You" section at top
+3. **Push Notifications** - "This week's groan suggestion"
+
+**Minimum Data Required:**
+- Basic suggestions: 3+ groan completions
+- Personalized suggestions: NS calibration completed + 5+ groan completions
+- Optimal suggestions: NS calibration + 4 weeks history + weekly plan active
+
+---
+
+## Zarlo: The Orchestration Layer
+
+Zarlo is the conversational interface that unifies all agents. Users don't think about "which agent"—they talk to Zarlo.
+
+### Zarlo's Role
 
 ```
 User: "I'm stuck"
@@ -503,9 +697,9 @@ User: "I'm stuck"
   fear."
 ```
 
-### Alfred's Voice
+### Zarlo's Voice
 
-Alfred combines Doer and Advisor into natural conversation:
+Zarlo combines Doer and Advisor into natural conversation:
 
 > "You've been in Product Creation for 12 days. I think the blocker is validation fear—your last 3 Groans mentioned 'what if they don't want it.'
 >
@@ -513,9 +707,9 @@ Alfred combines Doer and Advisor into natural conversation:
 >
 > Or if you need space first, I can switch you to Rest Protocol and we revisit Thursday."
 
-### Alfred Behaviors by Compass State
+### Zarlo Behaviors by Compass State
 
-| State | Alfred's Approach |
+| State | Zarlo's Approach |
 |-------|-------------------|
 | **North** | Aggressive Doer, cheerleading Advisor. "Let's ship." |
 | **East** | Drafts the scary thing, calls out avoidance. "This is the edge." |
@@ -526,7 +720,7 @@ Alfred combines Doer and Advisor into natural conversation:
 
 ## UX Integration
 
-### Recommended: The Alfred Layer
+### Recommended: The Zarlo Layer
 
 A persistent chat interface accessible from anywhere in the app.
 
@@ -538,7 +732,7 @@ A persistent chat interface accessible from anywhere in the app.
 **Interface:**
 ```
 ┌─────────────────────────────────────────┐
-│  Alfred                            ✕    │
+│  Zarlo                            ✕    │
 ├─────────────────────────────────────────┤
 │                                         │
 │  Morning! You've got 3 quests today.    │
@@ -601,7 +795,7 @@ Daily summary showing overnight agent activity:
 │  → Validation Survey ready to send  │
 │  → Day 6 of streak 🔥               │
 │                                     │
-│  [Open Dashboard]  [Talk to Alfred] │
+│  [Open Dashboard]  [Talk to Zarlo] │
 └─────────────────────────────────────┘
 ```
 
@@ -613,33 +807,39 @@ Daily summary showing overnight agent activity:
 
 Prioritized by: Data Generation → WOM Trigger → Premium Upsell Signal
 
-| Rank | Agent | Rationale |
-|------|-------|-----------|
-| 1 | **Life Quake** | Saves users at breaking point. Recovery stories = best WOM. |
-| 2 | **Pattern Mirror** | Creates "holy shit" moments. Natural retreat/premium upsell. |
-| 3 | **Streak Guardian** | Retention = everything for early metrics. Easy win. |
-| 4 | **Compass Autopilot** | Reduces friction dramatically. Enables daily engagement. |
-| 5 | **Draft Demon** | Removes busywork. Users get to transformation faster. |
-| 6 | **Stage Momentum** | Prevents silent churn. Moving users refer. |
-| 7 | **Value Ladder** | Direct revenue. But needs upstream agents working first. |
-| 8 | **Offer Architect** | High value but Stage 4+ only. Smaller initial audience. |
+| Rank | Agent | Rationale | Min Data |
+|------|-------|-----------|----------|
+| 1 | **Life Quake** | Saves users at breaking point. Recovery stories = best WOM. | 3 days Compass |
+| 2 | **Pattern Insight Card** | Immediate value on Groans Summary. Rule-based = no AI cost. | 5 groans |
+| 3 | **Streak Guardian** | Retention = everything for early metrics. Easy win. | 1 day activity |
+| 4 | **Compass Autopilot** | Reduces friction dramatically. Enables daily engagement. | None |
+| 5 | **Smart Groan Suggestions** | Guides next action. Works with minimal data, improves with more. | 3 groans (basic) |
+| 6 | **Pattern Mirror** | Creates "holy shit" moments. Natural retreat/premium upsell. | 5+ groans |
+| 7 | **Draft Demon** | Removes busywork. Users get to transformation faster. | Pattern data |
+| 8 | **Fear Pattern Insights** | Deep analysis but needs history. High value for engaged users. | 4 weeks (12+ groans) |
+| 9 | **Stage Momentum** | Prevents silent churn. Moving users refer. | 7 days at stage |
+| 10 | **Value Ladder** | Direct revenue. But needs upstream agents working first. | Stage 4+ |
+| 11 | **Offer Architect** | High value but Stage 4+ only. Smaller initial audience. | Clusters + Stage 4 |
 
 ### Bali Beta Stack
 
-**Phase 1 (Immediate):**
-1. Life Quake Agent (burnout detection)
-2. Streak Guardian Agent (retention)
-3. Compass Autopilot (2-tap logging)
+**Phase 1 (Immediate - works with minimal data):**
+1. Life Quake Agent (burnout detection) - 3 days Compass
+2. Streak Guardian Agent (retention) - 1 day
+3. Compass Autopilot (2-tap logging) - None
+4. Pattern Insight Card (rule-based) - 5 groans
 
-**Phase 2 (Post-validation):**
-4. Pattern Mirror Agent (insight generation)
-5. Draft Demon (quest pre-completion)
-6. Alfred chat interface
+**Phase 2 (Post-validation - needs some history):**
+5. Smart Groan Suggestions (basic → personalized) - 3-5 groans + NS
+6. Pattern Mirror Agent (insight generation) - 5+ groans
+7. Draft Demon (quest pre-completion) - Pattern data available
+8. Zarlo chat interface - Orchestrates above
 
-**Phase 3 (Scale):**
-7. Offer Architect (Money Model generation)
-8. Validation Scout (survey automation)
-9. Full Morning Brief experience
+**Phase 3 (Scale - needs 4+ weeks data):**
+9. Fear Pattern Insights (deep analysis) - 4 weeks / 12+ groans
+10. Offer Architect (Money Model generation) - Stage 4+
+11. Validation Scout (survey automation) - Stage 1
+12. Full Morning Brief experience - All agents operational
 
 ---
 
@@ -783,7 +983,7 @@ VOICE GUIDELINES:
 
 ## AI-First Build Checklist
 
-Proven playbook from Pirate Eddie (20k+ convos, pre-selling Academy Founding subs). This turns Alfred + Doers/Advisors into a transformation machine.
+Proven playbook from Pirate Eddie (20k+ convos, pre-selling Academy Founding subs). This turns Zarlo + Doers/Advisors into a transformation machine.
 
 ### Week 1: Intellectual Capital Audit
 
@@ -840,11 +1040,11 @@ const docWeights = {
 
 ### Day 3: Vibe-Create System Prompt
 
-**Goal:** Alfred's soul in one prompt.
+**Goal:** Zarlo's soul in one prompt.
 
-**Core Alfred System Prompt:**
+**Core Zarlo System Prompt:**
 ```
-You are Alfred, the AI Co-Founder of FindMyFlow.
+You are Zarlo, the AI Co-Founder of FindMyFlow.
 
 MISSION:
 Help burnt-out professionals build businesses around their natural strengths.
@@ -877,7 +1077,7 @@ Stage stall → Blocker diagnosis → Smallest viable action → Momentum restor
 ```
 Input: "Corporate resistance is killing me. I know I need to post but I can't."
 
-Expected Alfred Response:
+Expected Zarlo Response:
 - Acknowledge the resistance (not dismiss it)
 - Identify pattern (visibility fear likely)
 - Offer Doer action (draft the post for them?)
@@ -960,7 +1160,7 @@ New beta conversation logged →
   AI extracts potential FAQ →
     Formats with meta-prompt structure →
       Human reviews/approves →
-        Uploads to Alfred knowledge base →
+        Uploads to Zarlo knowledge base →
           Swarm gets smarter
 ```
 
@@ -972,7 +1172,7 @@ New beta conversation logged →
 
 **Segmentation by Compass Origin:**
 
-| First Compass Entry | Likely State | Alfred Path |
+| First Compass Entry | Likely State | Zarlo Path |
 |---------------------|--------------|-------------|
 | North (Flow) | Momentum, ready to build | Aggressive Doer. "Let's ship." |
 | East (Redirect) | Energy but blocks | Pattern work first. "What's the resistance?" |
@@ -1012,8 +1212,8 @@ PREMIUM SIGNALS (retreat, cohort, 1:1)
 
 **Goal:** Free → Paid conversion through delight + signal detection.
 
-**Top of Funnel (Alfred Delights):**
-- Free users get full Alfred access
+**Top of Funnel (Zarlo Delights):**
+- Free users get full Zarlo access
 - Drafts, Compass logging, pattern insights
 - Value delivered before ask
 - Pre-sells premium through demonstrated capability
@@ -1033,18 +1233,18 @@ PREMIUM SIGNALS (retreat, cohort, 1:1)
 
 **Data Flywheel:**
 ```
-Every Alfred conversation →
+Every Zarlo conversation →
   Maps user to persona/stage/readiness →
     Predicts premium fit →
       Surfaces to you for human outreach →
-        Conversion data feeds back to Alfred →
+        Conversion data feeds back to Zarlo →
           Better predictions
 ```
 
 **Pricing Tiers (Example):**
 | Tier | Price | What They Get |
 |------|-------|---------------|
-| Free | $0 | Full Alfred, 7-Day Challenge, basic flows |
+| Free | $0 | Full Zarlo, 7-Day Challenge, basic flows |
 | Better | $497 | All flows, premium drafts, priority patterns |
 | Best | $2,000+ | Cohort access, group calls, community |
 | Founding | $5,000+ | 1:1 with you, retreat access, lifetime |
@@ -1057,13 +1257,13 @@ Every Alfred conversation →
 |------|-------|-------------|
 | 1 | Intellectual Capital Audit | Indexed content library with scores |
 | 1 | Upload + Weight | RAG-ready database with priorities |
-| 1 | System Prompt | Alfred's soul defined and tested |
+| 1 | System Prompt | Zarlo's soul defined and tested |
 | 1 | Founding Sub Tests | 10 scenarios validated |
 | 2 | FAQ Swarm | 100+ structured FAQs |
 | 3 | Welcome Flywheel | Segmented onboarding paths |
 | Ongoing | Lead Gen Engine | Free→Premium conversion system |
 
-**The compound effect:** Every conversation makes Alfred smarter. Every pattern detected improves the swarm. Every premium conversion validates the flywheel. No index = no flywheel. Index everything.
+**The compound effect:** Every conversation makes Zarlo smarter. Every pattern detected improves the swarm. Every premium conversion validates the flywheel. No index = no flywheel. Index everything.
 
 ---
 
@@ -1149,7 +1349,7 @@ CREATE TABLE pattern_insights (
 
 ## Open Questions
 
-1. **Autonomy levels**: Should users choose how much Alfred does automatically vs. asks permission?
+1. **Autonomy levels**: Should users choose how much Zarlo does automatically vs. asks permission?
 
 2. **Voice training**: How do we learn user's writing voice for Draft Demon accuracy?
 
@@ -1167,7 +1367,7 @@ CREATE TABLE pattern_insights (
 
 - **Doer** handles production, logistics, busywork
 - **Advisor** handles insight, accountability, protection
-- **Alfred** orchestrates both through natural conversation
+- **Zarlo** orchestrates both through natural conversation
 - **Compass** determines intensity and approach
 
 The user gets a partner that does the tedious work and sees what they can't—freeing them to focus on the transformation that actually matters.

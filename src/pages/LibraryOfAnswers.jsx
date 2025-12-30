@@ -19,6 +19,8 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import CoverageMatrix from '../components/CoverageMatrix'
+import NicheSharpener from '../components/NicheSharpener'
 import './LibraryOfAnswers.css'
 
 const SECTIONS = {
@@ -33,6 +35,8 @@ function LibraryOfAnswers() {
   const [activeSection, setActiveSection] = useState(SECTIONS.FLOW_FINDER)
   const [loading, setLoading] = useState(true)
   const [expandedItem, setExpandedItem] = useState(null)
+  const [showCoverageMatrix, setShowCoverageMatrix] = useState(false)
+  const [showNicheSharpener, setShowNicheSharpener] = useState(false)
 
   // Project filter
   const [projects, setProjects] = useState([])
@@ -236,6 +240,50 @@ function LibraryOfAnswers() {
   // Render Flow Finder section
   const renderFlowFinder = () => (
     <div className="library-section">
+      {/* AI Tools Section */}
+      {skillsClusters.length > 0 && problemsClusters.length > 0 && (
+        <div className="ai-tools-container">
+          <div className="ai-tools-header">AI-Powered Insights</div>
+          <div className="ai-tools-buttons">
+            <button
+              className={`matrix-toggle-btn ${showCoverageMatrix ? 'active' : ''}`}
+              onClick={() => {
+                setShowCoverageMatrix(!showCoverageMatrix)
+                if (!showCoverageMatrix) setShowNicheSharpener(false)
+              }}
+            >
+              {showCoverageMatrix ? 'Hide Coverage Matrix' : 'Coverage Matrix'}
+            </button>
+            <button
+              className={`matrix-toggle-btn ${showNicheSharpener ? 'active' : ''}`}
+              onClick={() => {
+                setShowNicheSharpener(!showNicheSharpener)
+                if (!showNicheSharpener) setShowCoverageMatrix(false)
+              }}
+            >
+              {showNicheSharpener ? 'Hide Niche Sharpener' : 'AI Niche Sharpener'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Coverage Matrix */}
+      {showCoverageMatrix && (
+        <CoverageMatrix
+          skillsClusters={skillsClusters}
+          problemsClusters={problemsClusters}
+          personaClusters={personaClusters}
+        />
+      )}
+
+      {/* Niche Sharpener */}
+      {showNicheSharpener && (
+        <NicheSharpener
+          embedded={true}
+          onClose={() => setShowNicheSharpener(false)}
+        />
+      )}
+
       {/* Skills */}
       <div className="subsection">
         <h3>Skills</h3>

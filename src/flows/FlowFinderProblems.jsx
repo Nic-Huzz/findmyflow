@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import { useAutoSave } from '../hooks/useAutoSave'
 import '../FlowFinder.css'
 
 export default function FlowFinderProblems() {
@@ -26,10 +27,33 @@ export default function FlowFinderProblems() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [processingError, setProcessingError] = useState(null)
 
+  // Auto-save state
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [savedProgressData, setSavedProgressData] = useState(null)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave('flow-finder-problems', user?.id)
+
   // Create flow session on mount
   useEffect(() => {
     createSession()
   }, [])
+
+  // Check for saved progress on mount (auto-save)
+  useEffect(() => {
+    if (user) {
+      const saved = loadProgress()
+      if (saved && saved.currentScreen && saved.currentScreen !== 'welcome' && saved.currentScreen !== 'success') {
+        setSavedProgressData(saved)
+        setShowResumePrompt(true)
+      }
+    }
+  }, [user, loadProgress])
+
+  // Auto-save progress on state changes
+  useEffect(() => {
+    if (!user || currentScreen === 'welcome' || currentScreen === 'success' || currentScreen.startsWith('processing')) return
+    const progressData = { currentScreen, responses }
+    saveProgress(progressData)
+  }, [currentScreen, responses, user, saveProgress])
 
   const createSession = async () => {
     try {
@@ -79,6 +103,26 @@ export default function FlowFinderProblems() {
   // Get count of filled answers for display
   const getFilledCount = (questionKey) => {
     return responses[questionKey].filter(val => val.trim().length > 0).length
+  }
+
+  // Handle resuming saved progress (auto-save)
+  const handleResumeProgress = () => {
+    if (savedProgressData) {
+      setCurrentScreen(savedProgressData.currentScreen)
+      if (savedProgressData.responses) {
+        setResponses(savedProgressData.responses)
+      }
+    }
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+  }
+
+  // Handle starting fresh (auto-save)
+  const handleStartFresh = () => {
+    clearProgress()
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+    setCurrentScreen('q1')
   }
 
   // Intermediate clustering after Q2 (topics + impact)
@@ -250,6 +294,9 @@ export default function FlowFinderProblems() {
       // Sync with 7-day challenge if active
       await syncFlowFinderWithChallenge(user.id, 'problems')
 
+      // Clear auto-saved progress on success
+      clearProgress()
+
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
@@ -308,21 +355,73 @@ export default function FlowFinderProblems() {
     </button>
   )
 
-  const renderWelcome = () => (
-    <div className="container welcome-container">
-      <h1 className="welcome-greeting">Flow Finder: Problems Discovery</h1>
-      <div className="welcome-message">
-        <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong></p>
-        <p>Now let's discover the <strong>problems and changes you care about</strong> — the things that matter to you and the impact you want to create.</p>
-        <p>We'll explore your learning interests, impact you've made, life chapters, role models, and future vision.</p>
-        <p><strong>For each question, aim for 3-5+ bullet points.</strong></p>
-      </div>
+  const renderWelcome = () => {
+    // Helper to get readable screen name
+    const getScreenDisplayName = (screen) => {
+      const screenNames = {
+        'q1': 'Question 1 (Topics)',
+        'q2': 'Question 2 (Impact)',
+        'q3': 'Question 3 (Chapters)',
+        'q4': 'Question 4 (Struggles)',
+        'q5': 'Question 5 (Role Models)',
+        'q6': 'Question 6 (Future)',
+        'q7': 'Question 7 (Pulls)'
+      }
+      return screenNames[screen] || screen
+    }
 
-      <button className="primary-button" onClick={() => setCurrentScreen('q1')}>
-        Yep!
-      </button>
-    </div>
-  )
+    // Helper to get time since last save
+    const getTimeSinceSave = () => {
+      if (!savedProgressData?.savedAt) return null
+      const minutesAgo = Math.floor((Date.now() - savedProgressData.savedAt) / 60000)
+      if (minutesAgo < 1) return 'just now'
+      if (minutesAgo < 60) return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`
+      const hoursAgo = Math.floor(minutesAgo / 60)
+      return `${hoursAgo} hour${hoursAgo === 1 ? '' : 's'} ago`
+    }
+
+    return (
+      <div className="container welcome-container">
+        <h1 className="welcome-greeting">Flow Finder: Problems Discovery</h1>
+
+        {/* Resume Prompt - shown if saved progress exists */}
+        {showResumePrompt && savedProgressData && (
+          <div className="resume-prompt">
+            <p className="resume-title">Welcome back!</p>
+            <p className="resume-info">
+              You have saved progress at <strong>{getScreenDisplayName(savedProgressData.currentScreen)}</strong>
+              <br />
+              <span className="resume-time">Last saved {getTimeSinceSave()}</span>
+            </p>
+            <div className="resume-actions">
+              <button className="primary-button" onClick={handleResumeProgress}>
+                Continue Where I Left Off
+              </button>
+              <button className="primary-button" onClick={handleStartFresh} style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none' }}>
+                Start Fresh
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Normal welcome content - shown if no resume prompt */}
+        {!showResumePrompt && (
+          <>
+            <div className="welcome-message">
+              <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong></p>
+              <p>Now let's discover the <strong>problems and changes you care about</strong> — the things that matter to you and the impact you want to create.</p>
+              <p>We'll explore your learning interests, impact you've made, life chapters, role models, and future vision.</p>
+              <p><strong>For each question, aim for 3-5+ bullet points.</strong></p>
+            </div>
+
+            <button className="primary-button" onClick={() => setCurrentScreen('q1')}>
+              Yep!
+            </button>
+          </>
+        )}
+      </div>
+    )
+  }
 
   const renderQuestion1 = () => (
     <div className="container question-container">

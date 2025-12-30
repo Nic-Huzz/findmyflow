@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
+import { trackGroanCompleted } from './lib/analytics'
 import confetti from 'canvas-confetti'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
@@ -14,6 +15,8 @@ import ChallengeFilters from './components/ChallengeFilters'
 import QuestCard from './components/QuestCard'
 import FlowMapRiver from './components/FlowMapRiver'
 import GroansSummary from './components/GroansSummary'
+import HealingSummary from './components/HealingSummary'
+import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage } from './lib/stageConfig'
@@ -77,6 +80,7 @@ function Challenge() {
     setLeaderboardView,
     userRank,
     nervousSystemComplete,
+    safetyContracts,
     healingCompassComplete,
     pastParallelStory,
     flowFinderComplete,
@@ -86,6 +90,15 @@ function Challenge() {
     setActiveStageTab,
     projectStage,
     setProjectStage,
+    weeklyPlan,
+    showWeeklyPlanning,
+    setShowWeeklyPlanning,
+    isSunday,
+    getWeekLabel,
+    handleWeeklyPlanComplete,
+    completeWeeklyGroan,
+    isQuestPlanned,
+    getPlannedDay,
     categories,
     BONUS_PERCENTAGE,
     loadStageProgress,
@@ -125,6 +138,16 @@ function Challenge() {
 
   // Search state for filtering quests
   const [searchQuery, setSearchQuery] = useState('')
+
+  // State for showing hidden (non-planned) reconnect quests
+  const [showHiddenReconnect, setShowHiddenReconnect] = useState(false)
+
+  // Morning reconnect quest IDs that can be hidden if not planned
+  const MORNING_RECONNECT_QUEST_IDS = [
+    'reconnect_morning_meditation',
+    'reconnect_morning_breathwork',
+    'reconnect_morning_dance'
+  ]
 
   // Helper function to render quest descriptions with markdown links
   const renderDescription = (description) => {
@@ -323,6 +346,17 @@ function Challenge() {
           alert(`Error saving groan reflection: ${result.error}`)
           return
         }
+
+        // Mark weekly groan as completed in weekly plan
+        await completeWeeklyGroan()
+
+        // Track analytics
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()
+        trackGroanCompleted({
+          weekType: weeklyPlan?.week_type || 'unknown',
+          dayPlanned: weeklyPlan?.weekly_groan_day || 'unknown',
+          dayCompleted: today
+        })
 
         if (quest.milestone_type) {
           const milestoneData = {
@@ -707,6 +741,19 @@ function Challenge() {
   }
 
   // ============================================
+  // Render: Weekly Planning Flow
+  // ============================================
+
+  if (showWeeklyPlanning) {
+    return (
+      <WeeklyPlanningFlow
+        onComplete={handleWeeklyPlanComplete}
+        existingPlan={weeklyPlan}
+      />
+    )
+  }
+
+  // ============================================
   // Render: Error State
   // ============================================
 
@@ -743,6 +790,10 @@ function Challenge() {
         handleRestartChallenge={handleRestartChallenge}
         onLeaderboardClick={() => setActiveCategory('Leaderboard')}
         streakDays={getConsecutiveStreakDays()}
+        weekLabel={getWeekLabel()}
+        weekType={weeklyPlan?.week_type}
+        weeklyPlan={weeklyPlan}
+        onEditPlan={weeklyPlan ? () => setShowWeeklyPlanning(true) : null}
       />
 
       <div className="challenge-tabs">
@@ -805,8 +856,8 @@ function Challenge() {
           />
         )}
 
-        {/* Summary */}
-        {activeCategory === 'Summary' && (
+        {/* Groans Summary */}
+        {activeCategory === 'GroansSummary' && (
           <GroansSummary
             onBack={() => setActiveCategory('Groans')}
             progress={progress}
@@ -814,8 +865,16 @@ function Challenge() {
           />
         )}
 
-        {/* Quest Content - only show if not on Leaderboard or Summary tab */}
-        {activeCategory !== 'Leaderboard' && activeCategory !== 'Summary' && (
+        {/* Healing Summary */}
+        {activeCategory === 'HealingSummary' && (
+          <HealingSummary
+            onBack={() => setActiveCategory('Healing')}
+            progress={progress}
+          />
+        )}
+
+        {/* Quest Content - only show if not on Leaderboard or Summary tabs */}
+        {activeCategory !== 'Leaderboard' && activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
         {/* Artifact Progress */}
         {artifactProgress && (
@@ -827,18 +886,18 @@ function Challenge() {
 
             {!artifactProgress.unlocked && (
               <div className="artifact-bars">
-                {(activeCategory === 'Groans' || activeCategory === 'Healing') && artifactProgress.rCategories ? (
+                {(activeCategory === 'Groans' || activeCategory === 'Healing') && artifactProgress.frequencyCategories ? (
                   <>
-                    {Object.entries(artifactProgress.rCategories).map(([rType, rData]) => (
-                      <div key={rType} className="progress-bar-container">
+                    {Object.entries(artifactProgress.frequencyCategories).map(([freqType, freqData]) => (
+                      <div key={freqType} className="progress-bar-container">
                         <div className="progress-bar-label">
-                          <span>{rType}</span>
-                          <span>{rData.currentPoints}/{rData.pointsRequired}</span>
+                          <span>{freqType === 'Daily' ? '☀️' : '📅'} {freqType}</span>
+                          <span>{freqData.currentPoints}/{freqData.pointsRequired}</span>
                         </div>
                         <div className="progress-bar">
                           <div
-                            className="progress-bar-fill"
-                            style={{ width: `${Math.min((rData.currentPoints / rData.pointsRequired) * 100, 100)}%` }}
+                            className={`progress-bar-fill ${freqType.toLowerCase()}`}
+                            style={{ width: `${Math.min((freqData.currentPoints / freqData.pointsRequired) * 100, 100)}%` }}
                           ></div>
                         </div>
                       </div>
@@ -886,9 +945,10 @@ function Challenge() {
           <button
             className="category-point-item summary-card-btn"
             onClick={() => {
-              if (activeCategory === 'Groans') setActiveCategory('Summary')
+              if (activeCategory === 'Groans') setActiveCategory('GroansSummary')
+              if (activeCategory === 'Healing') setActiveCategory('HealingSummary')
             }}
-            disabled={activeCategory !== 'Groans'}
+            disabled={activeCategory !== 'Groans' && activeCategory !== 'Healing'}
           >
             <span className="summary-button-label">Summary</span>
             <span className="summary-button-value">📊</span>
@@ -943,46 +1003,84 @@ function Challenge() {
                 })
               if (rTypeQuests.length === 0) return null
 
+              // For Reconnect, split into visible (planned or non-morning) and hidden (non-planned morning)
+              const isReconnect = rType === 'Reconnect'
+              const visibleQuests = isReconnect
+                ? rTypeQuests.filter(q =>
+                    !MORNING_RECONNECT_QUEST_IDS.includes(q.id) || isQuestPlanned(q.id)
+                  )
+                : rTypeQuests
+              const hiddenQuests = isReconnect
+                ? rTypeQuests.filter(q =>
+                    MORNING_RECONNECT_QUEST_IDS.includes(q.id) && !isQuestPlanned(q.id)
+                  )
+                : []
+
+              // Don't render section if no visible quests and no hidden quests
+              if (visibleQuests.length === 0 && hiddenQuests.length === 0) return null
+
+              const renderQuestCard = (quest) => {
+                const completed = isQuestCompletedToday(quest.id, quest)
+                const isReleaseDailyChallenge = quest.id === 'release_daily_challenge'
+
+                return (
+                  <QuestCard
+                    key={quest.id}
+                    quest={quest}
+                    completed={completed}
+                    showStreak={quest.frequency === 'daily'}
+                    streak={getDailyStreak(quest.id)}
+                    dayLabels={getDayLabels()}
+                    questInput={questInputs[quest.id]}
+                    onInputChange={handleInputChange}
+                    onComplete={handleQuestComplete}
+                    expandedLearnMore={expandedLearnMore}
+                    onToggleLearnMore={toggleLearnMore}
+                    showLockedTooltip={showLockedTooltip}
+                    onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
+                    renderDescription={renderDescription}
+                    dailyReleaseContent={isReleaseDailyChallenge && getDailyReleaseChallenge() ? renderDailyReleaseChallenge() : null}
+                    completedBadgeText="Completed Today"
+                    navigate={navigate}
+                    specialLockCheck={isReleaseDailyChallenge && !nervousSystemComplete}
+                    specialLockMessage="Complete Nervous System to Unlock"
+                    lockedMessage={'Complete the "Nervous System Calibration" to unlock daily release challenges'}
+                    safetyContracts={safetyContracts}
+                    selectedProject={selectedProject}
+                    progress={progress}
+                    projectStage={projectStage}
+                    justCompleted={justCompletedQuestId === quest.id}
+                    isPlanned={isQuestPlanned(quest.id)}
+                    plannedDay={getPlannedDay(quest.id)}
+                  />
+                )
+              }
+
               return (
                 <div key={rType} className="quest-subsection">
                   <h3 className="subsection-title">{rType}</h3>
-                  <div className="quest-grid">
-                    {rTypeQuests.map(quest => {
-                      const completed = isQuestCompletedToday(quest.id, quest)
-                      const isDayZeroLocked = progress.current_day === 0
-                      const isReleaseDailyChallenge = quest.id === 'release_daily_challenge'
-
-                      return (
-                        <QuestCard
-                          key={quest.id}
-                          quest={quest}
-                          completed={completed}
-                          isDayZeroLocked={isDayZeroLocked}
-                          showStreak={quest.frequency === 'daily'}
-                          streak={getDailyStreak(quest.id)}
-                          dayLabels={getDayLabels()}
-                          questInput={questInputs[quest.id]}
-                          onInputChange={handleInputChange}
-                          onComplete={handleQuestComplete}
-                          expandedLearnMore={expandedLearnMore}
-                          onToggleLearnMore={toggleLearnMore}
-                          showLockedTooltip={showLockedTooltip}
-                          onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
-                          renderDescription={renderDescription}
-                          dailyReleaseContent={isReleaseDailyChallenge && getDailyReleaseChallenge() ? renderDailyReleaseChallenge() : null}
-                          completedBadgeText="Completed Today"
-                          navigate={navigate}
-                          specialLockCheck={isReleaseDailyChallenge && !healingCompassComplete}
-                          specialLockMessage="Complete Healing Compass to Unlock"
-                          lockedMessage={'Complete the "Healing Compass" weekly quest to unlock daily release challenges'}
-                          selectedProject={selectedProject}
-                          progress={progress}
-                          projectStage={projectStage}
-                          justCompleted={justCompletedQuestId === quest.id}
-                        />
-                      )
-                    })}
-                  </div>
+                  {visibleQuests.length > 0 && (
+                    <div className="quest-grid">
+                      {visibleQuests.map(renderQuestCard)}
+                    </div>
+                  )}
+                  {/* Hidden section for non-planned morning activities */}
+                  {hiddenQuests.length > 0 && (
+                    <div className="hidden-quests-section">
+                      <button
+                        className="hidden-quests-toggle"
+                        onClick={() => setShowHiddenReconnect(!showHiddenReconnect)}
+                      >
+                        <span className="toggle-icon">{showHiddenReconnect ? '▼' : '▶'}</span>
+                        <span className="toggle-label">Hidden ({hiddenQuests.length})</span>
+                      </button>
+                      {showHiddenReconnect && (
+                        <div className="quest-grid hidden-grid">
+                          {hiddenQuests.map(renderQuestCard)}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -1037,6 +1135,13 @@ function Challenge() {
                     {rTypeQuests.map(quest => {
                       const completed = isQuestCompletedToday(quest.id, quest)
                       const isHealingCompass = quest.id === 'recognise_healing_compass'
+                      const isReleaseDailyChallenge = quest.id === 'release_daily_challenge'
+
+                      // Determine lock state and message
+                      const isLocked = (isHealingCompass || isReleaseDailyChallenge) && !nervousSystemComplete
+                      const lockMessage = isReleaseDailyChallenge
+                        ? 'Complete the "Nervous System Calibration" to unlock daily release challenges'
+                        : 'Complete the "Map the Boundaries of Your Nervous System" challenge above to unlock'
 
                       return (
                         <QuestCard
@@ -1056,13 +1161,16 @@ function Challenge() {
                           renderDescription={renderDescription}
                           completedBadgeText={quest.frequency === 'daily' ? "Completed Today" : "Completed"}
                           navigate={navigate}
-                          specialLockCheck={isHealingCompass && !nervousSystemComplete}
-                          specialLockMessage="Locked"
-                          lockedMessage={'Complete the "Map the Boundaries of Your Nervous System" challenge above to unlock'}
+                          specialLockCheck={isLocked}
+                          specialLockMessage={isReleaseDailyChallenge ? "Complete Nervous System to Unlock" : "Locked"}
+                          lockedMessage={lockMessage}
+                          safetyContracts={safetyContracts}
                           selectedProject={selectedProject}
                           progress={progress}
                           projectStage={projectStage}
                           justCompleted={justCompletedQuestId === quest.id}
+                          isPlanned={isQuestPlanned(quest.id)}
+                          plannedDay={getPlannedDay(quest.id)}
                         />
                       )
                     })}
@@ -1106,6 +1214,8 @@ function Challenge() {
                     progress={progress}
                     projectStage={projectStage}
                     justCompleted={justCompletedQuestId === quest.id}
+                    isPlanned={isQuestPlanned(quest.id)}
+                    plannedDay={getPlannedDay(quest.id)}
                   />
                 )
               })}
@@ -1142,6 +1252,8 @@ function Challenge() {
                     projectStage={projectStage}
                     extraClass="bonus"
                     justCompleted={justCompletedQuestId === quest.id}
+                    isPlanned={isQuestPlanned(quest.id)}
+                    plannedDay={getPlannedDay(quest.id)}
                   />
                 )
               })}
@@ -1184,6 +1296,8 @@ function Challenge() {
                       progress={progress}
                       projectStage={projectStage}
                       justCompleted={justCompletedQuestId === quest.id}
+                      isPlanned={isQuestPlanned(quest.id)}
+                      plannedDay={getPlannedDay(quest.id)}
                     />
                   )
                 })}

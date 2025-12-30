@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import { useAutoSave } from '../hooks/useAutoSave'
 import { STAGES } from '../lib/stageConfig'
 import '../FlowFinder.css'
 
@@ -144,11 +145,42 @@ export default function FlowFinderIntegration() {
     problem: ''
   })
 
+  // Auto-save state
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [savedProgressData, setSavedProgressData] = useState(null)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave('flow-finder-integration', user?.id)
+
   // Create flow session on mount and load existing clusters
   useEffect(() => {
     createSession()
     loadClusters()
   }, [])
+
+  // Check for saved progress on mount (auto-save)
+  useEffect(() => {
+    if (user) {
+      const saved = loadProgress()
+      if (saved && saved.currentScreen && saved.currentScreen !== 'welcome' && saved.currentScreen !== 'success') {
+        setSavedProgressData(saved)
+        setShowResumePrompt(true)
+      }
+    }
+  }, [user, loadProgress])
+
+  // Auto-save progress on state changes
+  useEffect(() => {
+    if (!user || currentScreen === 'welcome' || currentScreen === 'success' || currentScreen === 'processing') return
+    const progressData = {
+      currentScreen,
+      selectedSkillIndex,
+      selectedProblemIndex,
+      selectedPersonaIndex,
+      opportunityType,
+      addToFlowCompass,
+      opportunityDetails
+    }
+    saveProgress(progressData)
+  }, [currentScreen, selectedSkillIndex, selectedProblemIndex, selectedPersonaIndex, opportunityType, addToFlowCompass, opportunityDetails, user, saveProgress])
 
   const createSession = async () => {
     try {
@@ -191,6 +223,29 @@ export default function FlowFinderIntegration() {
     } catch (err) {
       console.error('Error loading clusters:', err)
     }
+  }
+
+  // Handle resuming saved progress (auto-save)
+  const handleResumeProgress = () => {
+    if (savedProgressData) {
+      setCurrentScreen(savedProgressData.currentScreen)
+      if (savedProgressData.selectedSkillIndex !== undefined) setSelectedSkillIndex(savedProgressData.selectedSkillIndex)
+      if (savedProgressData.selectedProblemIndex !== undefined) setSelectedProblemIndex(savedProgressData.selectedProblemIndex)
+      if (savedProgressData.selectedPersonaIndex !== undefined) setSelectedPersonaIndex(savedProgressData.selectedPersonaIndex)
+      if (savedProgressData.opportunityType) setOpportunityType(savedProgressData.opportunityType)
+      if (savedProgressData.addToFlowCompass !== undefined) setAddToFlowCompass(savedProgressData.addToFlowCompass)
+      if (savedProgressData.opportunityDetails) setOpportunityDetails(savedProgressData.opportunityDetails)
+    }
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+  }
+
+  // Handle starting fresh (auto-save)
+  const handleStartFresh = () => {
+    clearProgress()
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+    setCurrentScreen('intro')
   }
 
   const saveSelectedCombination = async (isExisting = false, shouldAddToCompass = false, details = null) => {
@@ -299,6 +354,9 @@ export default function FlowFinderIntegration() {
       // Sync with 7-day challenge if active
       await syncFlowFinderWithChallenge(user.id, 'integration')
 
+      // Clear auto-saved progress on success
+      clearProgress()
+
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
@@ -307,47 +365,99 @@ export default function FlowFinderIntegration() {
     }
   }
 
-  const renderWelcome = () => (
-    <div className="container welcome-container">
-      <h1 className="welcome-greeting">Flow Finder: Connecting the Dots</h1>
-      <div className="welcome-message">
-        <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong></p>
-        <p>You've done incredible work discovering your:</p>
-      </div>
+  const renderWelcome = () => {
+    // Helper to get readable screen name
+    const getScreenDisplayName = (screen) => {
+      const screenNames = {
+        'intro': 'Introduction',
+        'sliders': 'Cluster Selection',
+        'confirm': 'Confirmation',
+        'opportunity_type': 'Opportunity Type',
+        'flow_compass_add': 'Flow Compass',
+        'existing_project': 'Existing Project',
+        'new_project': 'New Project'
+      }
+      return screenNames[screen] || screen
+    }
 
-      <div className="pillars-box" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', padding: '24px', margin: '32px 0', textAlign: 'left' }}>
-        <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-          <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>🎯</div>
-          <div className="pillar-content">
-            <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Skills</h4>
-            <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>What you're naturally good at</p>
-          </div>
-        </div>
-        <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-          <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>💡</div>
-          <div className="pillar-content">
-            <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Problems</h4>
-            <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>The change you want to create</p>
-          </div>
-        </div>
-        <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '0', paddingBottom: '0', borderBottom: 'none' }}>
-          <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>👥</div>
-          <div className="pillar-content">
-            <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Persona</h4>
-            <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>Who you're most qualified to serve</p>
-          </div>
-        </div>
-      </div>
+    // Helper to get time since last save
+    const getTimeSinceSave = () => {
+      if (!savedProgressData?.savedAt) return null
+      const minutesAgo = Math.floor((Date.now() - savedProgressData.savedAt) / 60000)
+      if (minutesAgo < 1) return 'just now'
+      if (minutesAgo < 60) return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`
+      const hoursAgo = Math.floor(minutesAgo / 60)
+      return `${hoursAgo} hour${hoursAgo === 1 ? '' : 's'} ago`
+    }
 
-      <div className="welcome-message">
-        <p>Now let's bring it all together into your unique <strong>Nikigai</strong> — the intersection where your gifts meet the world's needs.</p>
-      </div>
+    return (
+      <div className="container welcome-container">
+        <h1 className="welcome-greeting">Flow Finder: Connecting the Dots</h1>
 
-      <button className="primary-button" onClick={() => setCurrentScreen('processing')}>
-        Show me!
-      </button>
-    </div>
-  )
+        {/* Resume Prompt - shown if saved progress exists */}
+        {showResumePrompt && savedProgressData && (
+          <div className="resume-prompt">
+            <p className="resume-title">Welcome back!</p>
+            <p className="resume-info">
+              You have saved progress at <strong>{getScreenDisplayName(savedProgressData.currentScreen)}</strong>
+              <br />
+              <span className="resume-time">Last saved {getTimeSinceSave()}</span>
+            </p>
+            <div className="resume-actions">
+              <button className="primary-button" onClick={handleResumeProgress}>
+                Continue Where I Left Off
+              </button>
+              <button className="primary-button" onClick={handleStartFresh} style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none' }}>
+                Start Fresh
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Normal welcome content - shown if no resume prompt */}
+        {!showResumePrompt && (
+          <>
+            <div className="welcome-message">
+              <p><strong>Hey {user?.user_metadata?.name || 'there'}!</strong></p>
+              <p>You've done incredible work discovering your:</p>
+            </div>
+
+            <div className="pillars-box" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '12px', padding: '24px', margin: '32px 0', textAlign: 'left' }}>
+              <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>🎯</div>
+                <div className="pillar-content">
+                  <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Skills</h4>
+                  <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>What you're naturally good at</p>
+                </div>
+              </div>
+              <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>💡</div>
+                <div className="pillar-content">
+                  <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Problems</h4>
+                  <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>The change you want to create</p>
+                </div>
+              </div>
+              <div className="pillar-item" style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '0', paddingBottom: '0', borderBottom: 'none' }}>
+                <div className="pillar-icon" style={{ fontSize: '20px', marginTop: '2px' }}>👥</div>
+                <div className="pillar-content">
+                  <h4 style={{ fontSize: '14px', fontWeight: '700', color: '#fbbf24', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Persona</h4>
+                  <p style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.5', margin: '0' }}>Who you're most qualified to serve</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="welcome-message">
+              <p>Now let's bring it all together into your unique <strong>Nikigai</strong> — the intersection where your gifts meet the world's needs.</p>
+            </div>
+
+            <button className="primary-button" onClick={() => setCurrentScreen('processing')}>
+              Show me!
+            </button>
+          </>
+        )}
+      </div>
+    )
+  }
 
   const renderProcessing = () => (
     <div className="container processing-container">

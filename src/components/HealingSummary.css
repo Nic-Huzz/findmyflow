@@ -1,0 +1,453 @@
+/**
+ * HealingSummary.css
+ * Styles for the Healing summary/insights page
+ * Purple gradient theme to match Groans summary
+ */
+
+/* Healing Summary - Integrated style */
+.healing-summary {
+  background: transparent;
+  max-width: 100%;
+  margin: 0;
+}
+
+.healing-summary.full-page {
+  max-width: 100%;
+  min-height: auto;
+}
+
+.healing-summary .summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.healing-summary .summary-header h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.healing-summary .back-btn {
+  background: rgba(94, 23, 235, 0.1);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: #5e17eb;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.healing-summary .back-btn:hover {
+  background: rgba(94, 23, 235, 0.2);
+}
+
+.healing-summary .summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.healing-summary .summary-loading {
+  padding: 3rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Insight Hero */
+.healing-summary .insight-hero {
+  text-align: center;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  border-radius: 16px;
+  animation: healingFadeInUp 0.5s ease;
+  color: white;
+}
+
+@keyframes healingFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.healing-summary .insight-hero-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  animation: healingBounce 1s ease infinite;
+}
+
+@keyframes healingBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.healing-summary .insight-hero-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.healing-summary .insight-hero-subtext {
+  margin: 0;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Summary Sections - Purple card style */
+.healing-summary .summary-section {
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  border-radius: 16px;
+  padding: 1.25rem;
+  color: white;
+}
+
+/* Section Headers */
+.healing-summary .summary-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Empty hint text */
+.healing-summary .empty-hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  padding: 1rem 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-style: italic;
+}
+
+/* Voice Balance (Recognise vs Release) */
+.healing-summary .voice-balance {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.healing-summary .voice-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.healing-summary .voice-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.healing-summary .voice-item.recognise {
+  background: rgba(251, 191, 36, 0.25);
+}
+
+.healing-summary .voice-item.release {
+  background: rgba(56, 189, 248, 0.25);
+}
+
+.healing-summary .voice-icon {
+  font-size: 1.25rem;
+}
+
+.healing-summary .voice-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  flex: 1;
+}
+
+.healing-summary .voice-percent {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: white;
+}
+
+.healing-summary .voice-item.recognise .voice-percent {
+  color: #fde68a;
+}
+
+.healing-summary .voice-item.release .voice-percent {
+  color: #7dd3fc;
+}
+
+.healing-summary .voice-bar-container {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+}
+
+.healing-summary .voice-bar {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+
+.healing-summary .voice-bar.recognise {
+  background: #fbbf24;
+}
+
+.healing-summary .voice-bar.release {
+  background: #38bdf8;
+}
+
+/* Flow Data Display */
+.healing-summary .flow-data {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.healing-summary .flow-data-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.healing-summary .flow-data-row.full-width {
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.healing-summary .flow-data-row.full-width .flow-data-icon {
+  margin-bottom: 0.25rem;
+}
+
+.healing-summary .flow-data-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.healing-summary .flow-data-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.healing-summary .flow-data-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.healing-summary .flow-data-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  line-height: 1.3;
+}
+
+.healing-summary .flow-data-value.highlight {
+  font-size: 1.125rem;
+  color: #fde68a;
+}
+
+/* Safety Contracts List */
+.healing-summary .safety-contracts-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.healing-summary .safety-contract-chip {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 16px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #fde68a;
+}
+
+/* Milestone Grid (kept for backwards compatibility) */
+.healing-summary .milestone-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.healing-summary .milestone-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.healing-summary .milestone-item.complete {
+  background: rgba(74, 222, 128, 0.2);
+  border-color: rgba(74, 222, 128, 0.4);
+}
+
+.healing-summary .milestone-icon {
+  font-size: 1.5rem;
+}
+
+.healing-summary .milestone-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+}
+
+.healing-summary .milestone-item.complete .milestone-label {
+  color: #4ade80;
+}
+
+/* Insight List */
+.healing-summary .insight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.healing-summary .insight-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.healing-summary .insight-label {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: capitalize;
+}
+
+.healing-summary .insight-count {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+}
+
+/* Overview Stats */
+.healing-summary .summary-section.overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background: transparent;
+  padding: 0;
+}
+
+.healing-summary .stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.25rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.healing-summary .stat-card.total {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.healing-summary .stat-card.points {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.healing-summary .stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #5e17eb;
+  line-height: 1;
+}
+
+.healing-summary .stat-card.total .stat-value {
+  color: #5e17eb;
+}
+
+.healing-summary .stat-card.points .stat-value {
+  color: #b45309;
+}
+
+.healing-summary .stat-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+
+/* Empty State */
+.healing-summary .empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.healing-summary .empty-state p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .healing-summary .insight-hero {
+    padding: 1rem;
+  }
+
+  .healing-summary .insight-hero-emoji {
+    font-size: 2.5rem;
+  }
+
+  .healing-summary .insight-hero-title {
+    font-size: 1.25rem;
+  }
+
+  .healing-summary .milestone-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .healing-summary .milestone-label {
+    font-size: 0.65rem;
+  }
+}

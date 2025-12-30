@@ -90,7 +90,7 @@ const RELEASE_OUTCOMES = [
   { id: 'transformed', label: 'Transformed', icon: '🦋' }
 ]
 
-function ReleaseQuestInput({ quest, onComplete }) {
+function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
   const [loading, setLoading] = useState(false)
 
   // Form state
@@ -105,6 +105,7 @@ function ReleaseQuestInput({ quest, onComplete }) {
     // Daily Challenge
     releaseType: null,
     bodyLocation: null,
+    safetyContract: null, // Which safety contract they're releasing
 
     // Processing Emotions
     trigger: null,
@@ -138,6 +139,7 @@ function ReleaseQuestInput({ quest, onComplete }) {
           release_type: formData.releaseType,
           emotion: formData.emotion,
           body_location: formData.bodyLocation,
+          safety_contract: formData.safetyContract,
           before_state: formData.beforeState,
           after_state: formData.afterState,
           shift: formData.afterState - formData.beforeState,
@@ -178,8 +180,11 @@ function ReleaseQuestInput({ quest, onComplete }) {
   const isValid = () => {
     switch (quest.id) {
       case 'release_daily_challenge':
+        // Safety contract is required if user has completed NS and has contracts
+        const needsContract = safetyContracts && safetyContracts.length > 0
         return formData.releaseType && formData.emotion &&
-               formData.beforeState && formData.afterState
+               formData.beforeState && formData.afterState &&
+               (!needsContract || formData.safetyContract)
 
       case 'release_negative_charge':
         return formData.trigger && formData.emotion &&
@@ -197,6 +202,26 @@ function ReleaseQuestInput({ quest, onComplete }) {
   // Daily Release Challenge
   const renderDailyChallenge = () => (
     <>
+      {/* Safety Contract Dropdown - only show if user has contracts */}
+      {safetyContracts && safetyContracts.length > 0 && (
+        <div className="release-section">
+          <label className="release-label">Which safety contract are you releasing?</label>
+          <p className="release-hint">Select the limiting belief you're working on today</p>
+          <select
+            className="release-select"
+            value={formData.safetyContract || ''}
+            onChange={(e) => setFormData({ ...formData, safetyContract: e.target.value })}
+          >
+            <option value="">Select a safety contract...</option>
+            {safetyContracts.map((contract, index) => (
+              <option key={index} value={contract}>
+                {contract}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <div className="release-section">
         <label className="release-label">What type of release?</label>
         <div className="release-method-grid">

@@ -8,6 +8,10 @@ import DownsellFlow from './flows/DownsellFlow'
 import ContinuityFlow from './flows/ContinuityFlow'
 import LeadsStrategyFlow from './flows/LeadsStrategyFlow'
 import LeadMagnetFlow from './flows/LeadMagnetFlow'
+import OfferBuilderFlow from './flows/OfferBuilderFlow'
+import LeadMagnetSelectionFlow from './flows/LeadMagnetSelectionFlow'
+import ProductSelectionFlow from './flows/ProductSelectionFlow'
+import FunnelBuilderFlow from './flows/FunnelBuilderFlow'
 import PersonaSelectionFlow from './flows/PersonaSelectionFlow'
 import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
@@ -33,6 +37,8 @@ import ValidationFlowsManager from './pages/ValidationFlowsManager'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
+import BottomToolbar from './components/BottomToolbar'
+import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import './App.css'
 import './PersonaAssessment.css'
 import './AttractionOfferFlow.css'
@@ -50,6 +56,11 @@ import './Challenge.css'
 import './Feedback.css'
 import './RetreatLanding.css'
 import './FlowFinder.css'
+import './flows/LeadMagnetSelectionFlow.css'
+import './flows/ProductSelectionFlow.css'
+import './flows/FunnelBuilderFlow.css'
+import './components/BottomToolbar.css'
+import './components/WeeklyPlanningFlow.css'
 
 function AppRouter() {
   return (
@@ -96,10 +107,38 @@ function AppRouter() {
               </AuthGate>
             } />
 
+            {/* Funnel Builder - Stage 5 Campaign */}
+            <Route path="/funnel-builder" element={
+              <AuthGate>
+                <FunnelBuilderFlow />
+              </AuthGate>
+            } />
+
             {/* Lead Magnet Type Assessment - In-App Challenge */}
             <Route path="/lead-magnet" element={
               <AuthGate>
                 <LeadMagnetFlow />
+              </AuthGate>
+            } />
+
+            {/* $100M Offer Builder - Product Creation Stage */}
+            <Route path="/offer-builder" element={
+              <AuthGate>
+                <OfferBuilderFlow />
+              </AuthGate>
+            } />
+
+            {/* Lead Magnet Selection - Follows Offer Builder */}
+            <Route path="/lead-magnet-selection" element={
+              <AuthGate>
+                <LeadMagnetSelectionFlow />
+              </AuthGate>
+            } />
+
+            {/* Product Selection - Follows Offer Builder */}
+            <Route path="/product-selection" element={
+              <AuthGate>
+                <ProductSelectionFlow />
               </AuthGate>
             } />
 
@@ -139,6 +178,11 @@ function AppRouter() {
             <Route path="/7-day-challenge" element={
               <AuthGate>
                 <Challenge />
+              </AuthGate>
+            } />
+            <Route path="/weekly-planning" element={
+              <AuthGate>
+                <WeeklyPlanningFlow />
               </AuthGate>
             } />
             <Route path="/archetypes" element={
@@ -206,6 +250,7 @@ function AppRouter() {
               </AuthGate>
             } />
           </Routes>
+          <BottomToolbar />
         </Router>
       </AuthProvider>
     </ErrorBoundary>

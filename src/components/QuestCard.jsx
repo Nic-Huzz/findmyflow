@@ -30,7 +30,6 @@ function QuestCard({
   locked,
   lockedMessage,
   lockedPrerequisite,
-  isDayZeroLocked,
   showStreak,
   streak,
   dayLabels,
@@ -52,16 +51,22 @@ function QuestCard({
   selectedProject,
   progress,
   projectStage,
+  // For Release quests - safety contracts from Nervous System
+  safetyContracts,
   // Extra class for styling
   extraClass = '',
   // For completion animation
-  justCompleted = false
+  justCompleted = false,
+  // For weekly plan highlighting
+  isPlanned = false,
+  plannedDay = null
 }) {
   const cardClasses = [
     'quest-card',
     completed ? 'completed' : '',
-    locked || isDayZeroLocked ? 'locked' : '',
+    locked ? 'locked' : '',
     justCompleted ? 'just-completed' : '',
+    isPlanned ? 'planned' : '',
     extraClass
   ].filter(Boolean).join(' ')
 
@@ -73,11 +78,16 @@ function QuestCard({
       <div className="quest-header">
         <div className="quest-name-row">
           <h3 className="quest-name">
-            {locked && !isDayZeroLocked ? 'Locked ' : ''}{quest.name}
+            {locked ? 'Locked ' : ''}{quest.name}
           </h3>
           {showFrequencyBadge && (
             <span className={`frequency-badge ${quest.frequency}`}>
               {quest.frequency === 'daily' ? 'Daily' : 'Weekly'}
+            </span>
+          )}
+          {isPlanned && !completed && (
+            <span className="planned-badge" title={plannedDay ? `Planned for ${plannedDay}` : 'Part of your weekly plan'}>
+              📋 Planned
             </span>
           )}
         </div>
@@ -102,7 +112,7 @@ function QuestCard({
       <p className="quest-description">{renderDescription(quest.description)}</p>
 
       {/* Daily Release Challenge content (for release_daily_challenge quest) */}
-      {quest.id === 'release_daily_challenge' && !completed && !isDayZeroLocked && dailyReleaseContent && (
+      {quest.id === 'release_daily_challenge' && !completed && dailyReleaseContent && (
         <div className="learn-more-section">
           <button
             className="learn-more-toggle"
@@ -134,7 +144,7 @@ function QuestCard({
       )}
 
       {/* Learn More section (standard quests) */}
-      {quest.id !== 'release_daily_challenge' && quest.learnMore && !completed && !isDayZeroLocked && (
+      {quest.id !== 'release_daily_challenge' && quest.learnMore && !completed && (
         <div className="learn-more-section">
           <button
             className="learn-more-toggle"
@@ -165,13 +175,6 @@ function QuestCard({
         </div>
       )}
 
-      {/* Day 0 locked message */}
-      {isDayZeroLocked && (
-        <div className="quest-locked-message">
-          Unlocked on Day 1 (Tomorrow)
-        </div>
-      )}
-
       {/* Locked due to prerequisite quest */}
       {!completed && locked && lockedPrerequisite && (
         <div className="quest-locked-message">
@@ -180,7 +183,7 @@ function QuestCard({
       )}
 
       {/* Quest input area - only show if not completed and not locked */}
-      {!completed && !locked && !isDayZeroLocked && (
+      {!completed && !locked && (
         <div className="quest-input-area">
           {quest.status === 'coming_soon' ? (
             <button className="quest-flow-btn coming-soon" disabled>
@@ -249,6 +252,7 @@ function QuestCard({
             <ReleaseQuestInput
               quest={quest}
               onComplete={(quest, data) => onComplete(quest, data)}
+              safetyContracts={safetyContracts}
             />
           ) : quest.type === 'groan' ? (
             <GroanReflectionInput
@@ -384,7 +388,7 @@ function QuestCard({
       )}
 
       {/* Graduation note for Flow Finder quests */}
-      {quest.counts_toward_graduation && !completed && quest.inputType !== 'conversation_log' && !locked && !isDayZeroLocked && (
+      {quest.counts_toward_graduation && !completed && quest.inputType !== 'conversation_log' && !locked && (
         <p className="graduation-note">Counts toward stage graduation</p>
       )}
 

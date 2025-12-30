@@ -60,6 +60,43 @@
 }
 
 /* Welcome Screen */
+.ns-hc-app .welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+  text-align: center;
+  padding: 0 20px 40px;
+}
+
+.ns-hc-app .welcome-container .welcome-greeting {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ns-hc-app .welcome-container .welcome-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ns-hc-app .welcome-container .welcome-message p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+}
+
+.ns-hc-app .welcome-container .welcome-message strong {
+  color: white;
+}
+
 .ns-hc-welcome-container {
   text-align: center;
 }
@@ -327,7 +364,7 @@
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin: 12px auto 0;
+  margin: 4px auto 0 !important;
   display: block;
 }
 
@@ -340,6 +377,126 @@
 .ns-hc-secondary-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Generic button classes (for screens using .primary-button / .secondary-button) */
+.ns-hc-app .primary-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  margin: 32px auto 0;
+  display: block;
+}
+
+.ns-hc-app .primary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.ns-hc-app .primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ns-hc-app .primary-button.glow-button {
+  animation: nsHcGlow 2s ease-in-out infinite;
+}
+
+@keyframes nsHcGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(251, 191, 36, 0.6);
+  }
+}
+
+.ns-hc-app .secondary-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 16px 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 4px auto 0 !important;
+  display: block;
+}
+
+.ns-hc-app .secondary-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.ns-hc-app .secondary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Time icon for time check screen */
+.ns-hc-app .time-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Time check screen - position buttons at bottom */
+.ns-hc-app .time-check-buttons {
+  margin-top: auto;
+  padding-top: 40px;
+}
+
+/* Resume Prompt (Auto-Save) */
+.ns-hc-resume-prompt {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 auto 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.ns-hc-resume-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #fbbf24;
+}
+
+.ns-hc-resume-info {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.ns-hc-resume-time {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ns-hc-resume-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
 }
 
 /* Responsive */

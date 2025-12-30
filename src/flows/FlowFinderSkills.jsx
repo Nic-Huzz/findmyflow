@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import { useAutoSave } from '../hooks/useAutoSave'
 import '../FlowFinder.css'
 
 export default function FlowFinderSkills() {
@@ -22,6 +23,11 @@ export default function FlowFinderSkills() {
   const [sessionId, setSessionId] = useState(null)
   const [isProcessing, setIsProcessing] = useState(false)
 
+  // Auto-save state
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [savedProgressData, setSavedProgressData] = useState(null)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave('flow-finder-skills', user?.id)
+
   // Create flow session on mount
   useEffect(() => {
     createSession()
@@ -33,6 +39,24 @@ export default function FlowFinderSkills() {
       analyzePreliminary()
     }
   }, [currentScreen])
+
+  // Check for saved progress on mount (auto-save)
+  useEffect(() => {
+    if (user) {
+      const saved = loadProgress()
+      if (saved && saved.currentScreen && saved.currentScreen !== 'time_check' && saved.currentScreen !== 'success') {
+        setSavedProgressData(saved)
+        setShowResumePrompt(true)
+      }
+    }
+  }, [user, loadProgress])
+
+  // Auto-save progress on state changes
+  useEffect(() => {
+    if (!user || currentScreen === 'time_check' || currentScreen === 'success' || currentScreen === 'processing' || currentScreen === 'processing1') return
+    const progressData = { currentScreen, responses }
+    saveProgress(progressData)
+  }, [currentScreen, responses, user, saveProgress])
 
   const createSession = async () => {
     try {
@@ -87,6 +111,26 @@ export default function FlowFinderSkills() {
       if (screenOrder[targetIndex] === 'processing1') targetIndex = currentIndex - 2
       setCurrentScreen(screenOrder[Math.max(0, targetIndex)])
     }
+  }
+
+  // Handle resuming saved progress (auto-save)
+  const handleResumeProgress = () => {
+    if (savedProgressData) {
+      setCurrentScreen(savedProgressData.currentScreen)
+      if (savedProgressData.responses) {
+        setResponses(savedProgressData.responses)
+      }
+    }
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+  }
+
+  // Handle starting fresh (auto-save)
+  const handleStartFresh = () => {
+    clearProgress()
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+    setCurrentScreen('journey')
   }
 
   // Back button component (positioned below Continue button)
@@ -249,6 +293,9 @@ export default function FlowFinderSkills() {
       // Sync with 7-day challenge if active
       await syncFlowFinderWithChallenge(user.id, 'skills')
 
+      // Clear auto-saved progress on success
+      clearProgress()
+
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
@@ -260,29 +307,82 @@ export default function FlowFinderSkills() {
     }
   }
 
-  const renderTimeCheck = () => (
-    <div className="container welcome-container">
-      <h1 className="welcome-greeting">Flow Finder: Skills Discovery</h1>
-      <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
-        <p><span className="time-icon">⏱️</span></p>
-        <p><strong>This flow takes about 15-20 minutes</strong></p>
-        <p style={{ color: 'rgba(255,255,255,0.7)' }}>5 questions about different periods of your life, with AI analysis between sections.</p>
-        <p>Find a quiet moment where you can reflect without rushing.</p>
-        <p><strong>Your insights will be more valuable when you're present.</strong></p>
-      </div>
+  const renderTimeCheck = () => {
+    // Helper to get readable screen name
+    const getScreenDisplayName = (screen) => {
+      const screenNames = {
+        'journey': 'Journey Overview',
+        'welcome': 'Welcome',
+        'steve_jobs': 'Connecting the Dots',
+        'q1': 'Question 1 (Childhood)',
+        'q2': 'Question 2 (High School)',
+        'q3': 'Question 3 (Post-School)',
+        'q4': 'Question 4 (Work)',
+        'q5': 'Question 5 (Skills)'
+      }
+      return screenNames[screen] || screen
+    }
 
-      <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
-        I've Got Time, Let's Go
-      </button>
-      <button
-        className="primary-button"
-        onClick={() => navigate(-1)}
-        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
-      >
-        Come Back Later
-      </button>
-    </div>
-  )
+    // Helper to get time since last save
+    const getTimeSinceSave = () => {
+      if (!savedProgressData?.savedAt) return null
+      const minutesAgo = Math.floor((Date.now() - savedProgressData.savedAt) / 60000)
+      if (minutesAgo < 1) return 'just now'
+      if (minutesAgo < 60) return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`
+      const hoursAgo = Math.floor(minutesAgo / 60)
+      return `${hoursAgo} hour${hoursAgo === 1 ? '' : 's'} ago`
+    }
+
+    return (
+      <div className="container welcome-container">
+        <h1 className="welcome-greeting">Flow Finder: Skills Discovery</h1>
+
+        {/* Resume Prompt - shown if saved progress exists */}
+        {showResumePrompt && savedProgressData && (
+          <div className="resume-prompt">
+            <p className="resume-title">Welcome back!</p>
+            <p className="resume-info">
+              You have saved progress at <strong>{getScreenDisplayName(savedProgressData.currentScreen)}</strong>
+              <br />
+              <span className="resume-time">Last saved {getTimeSinceSave()}</span>
+            </p>
+            <div className="resume-actions">
+              <button className="primary-button" onClick={handleResumeProgress}>
+                Continue Where I Left Off
+              </button>
+              <button className="primary-button" onClick={handleStartFresh} style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none' }}>
+                Start Fresh
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Normal time check content - shown if no resume prompt */}
+        {!showResumePrompt && (
+          <>
+            <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+              <p><span className="time-icon">⏱️</span></p>
+              <p><strong>This flow takes about 15-20 minutes</strong></p>
+              <p style={{ color: 'rgba(255,255,255,0.7)' }}>5 questions about different periods of your life, with AI analysis between sections.</p>
+              <p>Find a quiet moment where you can reflect without rushing.</p>
+              <p><strong>Your insights will be more valuable when you're present.</strong></p>
+            </div>
+
+            <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
+              I've Got Time, Let's Go
+            </button>
+            <button
+              className="primary-button"
+              onClick={() => navigate(-1)}
+              style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
+            >
+              Come Back Later
+            </button>
+          </>
+        )}
+      </div>
+    )
+  }
 
   const renderJourney = () => (
     <div className="container welcome-container">

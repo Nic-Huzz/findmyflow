@@ -22,14 +22,14 @@
   box-sizing: border-box;
 }
 
-.progress-dots {
+.attraction-offer-flow .progress-dots {
   display: flex;
   justify-content: center;
   gap: 12px;
   margin-bottom: 8px;
 }
 
-.progress-dot {
+.attraction-offer-flow .progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -37,17 +37,17 @@
   transition: all 0.3s ease;
 }
 
-.progress-dot.completed {
+.attraction-offer-flow .progress-dot.completed {
   background: #ffdd27;
 }
 
-.progress-dot.active {
+.attraction-offer-flow .progress-dot.active {
   background: #ffdd27;
   box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
   transform: scale(1.2);
 }
 
-.section-progress {
+.attraction-offer-flow .section-progress {
   width: 100%;
   max-width: 300px;
   height: 3px;
@@ -57,7 +57,7 @@
   overflow: hidden;
 }
 
-.section-progress-fill {
+.attraction-offer-flow .section-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, #ffdd27, #f59e0b);
   border-radius: 2px;
@@ -66,15 +66,49 @@
 
 /* ============ WELCOME SCREEN ============ */
 
-.welcome-container {
+.attraction-offer-flow .welcome-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   flex: 1;
   max-width: 600px;
   text-align: center;
   animation: fadeIn 0.5s ease;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.attraction-offer-flow .welcome-container > .primary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.attraction-offer-flow .welcome-container > .secondary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin: 4px auto 0 !important;
+}
+
+.attraction-offer-flow .go-back-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-top: 16px;
+  transition: color 0.2s ease;
+}
+
+.attraction-offer-flow .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .welcome-content {
@@ -95,8 +129,8 @@
   text-align: center;
 }
 
-.welcome-message p {
-  font-size: 16px;
+.attraction-offer-flow .welcome-message p {
+  font-size: 18px;
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.85);
   margin: 0 0 16px;
@@ -120,71 +154,7 @@
   text-align: center;
 }
 
-/* ============ TIME CHECK SCREEN ============ */
-
-.time-check-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  max-width: 400px;
-  text-align: center;
-  animation: fadeIn 0.5s ease;
-}
-
-.time-check-icon {
-  margin-bottom: 24px;
-}
-
-.time-check-icon .clock-emoji {
-  font-size: 64px;
-  display: block;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-.time-check-title {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0 0 16px;
-  color: white;
-}
-
-.time-check-estimate {
-  font-size: 20px;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 12px;
-}
-
-.time-check-estimate strong {
-  color: #fbbf24;
-  font-weight: 700;
-}
-
-.time-check-message {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
-  margin: 0 0 32px;
-}
-
-.time-check-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-}
-
-.secondary-button {
+.attraction-offer-flow .secondary-button {
   width: 100%;
   padding: 14px 28px;
   background: transparent;
@@ -197,29 +167,30 @@
   transition: all 0.2s ease;
 }
 
-.secondary-button:hover {
+.attraction-offer-flow .secondary-button:hover {
   border-color: rgba(255, 255, 255, 0.5);
   color: white;
   background: rgba(255, 255, 255, 0.05);
 }
 
 /* Time icon */
-.time-icon {
-  font-size: 3rem;
-  display: inline-block;
+.attraction-offer-flow .time-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
 }
 
 /* Glow button effect */
-.primary-button.glow-button {
-  animation: glow 2s ease-in-out infinite;
+.attraction-offer-flow .primary-button.glow-button {
+  animation: attractionOfferGlow 2s ease-in-out infinite;
 }
 
-@keyframes glow {
+@keyframes attractionOfferGlow {
   0%, 100% {
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
   }
   50% {
-    box-shadow: 0 4px 24px rgba(251, 191, 36, 0.5);
+    box-shadow: 0 4px 24px rgba(255, 221, 39, 0.5);
   }
 }
 
@@ -355,11 +326,11 @@
   flex: 1;
   max-width: 600px;
   text-align: center;
-  animation: fadeIn 0.5s ease;
+  animation: attractionOfferFadeIn 0.5s ease;
   padding-bottom: 40px;
 }
 
-@keyframes fadeIn {
+@keyframes attractionOfferFadeIn {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -746,30 +717,34 @@
 
 /* ============ BUTTONS ============ */
 
-.primary-button {
-  width: 100%;
-  padding: 16px 32px;
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+.attraction-offer-flow .primary-button {
+  width: auto;
+  max-width: 280px;
+  padding: 14px 32px !important;
+  background: #E9A23B;
   border: none;
   border-radius: 12px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: center;
 }
 
-.primary-button:hover {
+.attraction-offer-flow .primary-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
 }
 
-.primary-button:active {
+.attraction-offer-flow .primary-button:active {
   transform: translateY(0);
 }
 
-.primary-button:disabled {
+.attraction-offer-flow .primary-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
@@ -823,35 +798,35 @@
 
 /* ============ LOADING STATE ============ */
 
-.loading-state {
+.attraction-offer-flow .loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
 }
 
-.typing-indicator {
+.attraction-offer-flow .typing-indicator {
   display: flex;
   gap: 8px;
 }
 
-.typing-indicator span {
+.attraction-offer-flow .typing-indicator span {
   width: 12px;
   height: 12px;
   background: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
-  animation: typing 1.4s infinite;
+  animation: attractionOfferTyping 1.4s infinite;
 }
 
-.typing-indicator span:nth-child(2) {
+.attraction-offer-flow .typing-indicator span:nth-child(2) {
   animation-delay: 0.2s;
 }
 
-.typing-indicator span:nth-child(3) {
+.attraction-offer-flow .typing-indicator span:nth-child(3) {
   animation-delay: 0.4s;
 }
 
-@keyframes typing {
+@keyframes attractionOfferTyping {
   0%, 60%, 100% {
     transform: translateY(0);
     opacity: 0.5;
@@ -913,4 +888,56 @@
   .attraction-offer-flow .progress-container {
     padding-top: calc(16px + env(safe-area-inset-top));
   }
+}
+
+/* ============ RESUME PROMPT (Auto-Save) ============ */
+
+.attraction-offer-flow .resume-prompt {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 auto 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: attractionOfferFadeIn 0.3s ease;
+}
+
+.resume-prompt .resume-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #fbbf24;
+}
+
+.resume-prompt .resume-info {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.resume-prompt .resume-time {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.resume-prompt .resume-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.resume-prompt .resume-actions .primary-button {
+  width: 100%;
+  max-width: 280px;
+}
+
+.resume-prompt .resume-actions .secondary-button {
+  width: 100%;
+  max-width: 280px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }

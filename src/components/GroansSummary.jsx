@@ -239,8 +239,37 @@ function GroansSummary({ onBack, progress, completions: passedCompletions }) {
 
   // Calculate archetype balance
   const totalArchetype = stats.essenceCount + stats.protectiveCount
-  const essencePercentage = totalArchetype > 0 ? Math.round((stats.essenceCount / totalArchetype) * 100) : 50
-  const protectivePercentage = totalArchetype > 0 ? 100 - essencePercentage : 50
+  const essencePercentage = totalArchetype > 0 ? Math.round((stats.essenceCount / totalArchetype) * 100) : 0
+  const protectivePercentage = totalArchetype > 0 ? 100 - essencePercentage : 0
+
+  // Calculate fear percentages
+  const totalFears = Object.values(stats.fears).reduce((a, b) => a + b, 0)
+  const fearPercentages = {
+    judged: totalFears > 0 ? Math.round(((stats.fears['judgment'] || stats.fears['judged'] || 0) / totalFears) * 100) : 0,
+    notEnough: totalFears > 0 ? Math.round(((stats.fears['worthiness'] || stats.fears['not_enough'] || 0) / totalFears) * 100) : 0,
+    mightFail: totalFears > 0 ? Math.round(((stats.fears['failure'] || stats.fears['might_fail'] || 0) / totalFears) * 100) : 0
+  }
+
+  // Calculate layer percentages
+  const totalLayers = Object.values(stats.vulnerabilityLayers).reduce((a, b) => a + b, 0)
+  const layerPercentages = {
+    screen: totalLayers > 0 ? Math.round(((stats.vulnerabilityLayers['Screen'] || 0) / totalLayers) * 100) : 0,
+    live: totalLayers > 0 ? Math.round(((stats.vulnerabilityLayers['Live'] || 0) / totalLayers) * 100) : 0,
+    tribe: totalLayers > 0 ? Math.round(((stats.vulnerabilityLayers['Tribe'] || 0) / totalLayers) * 100) : 0,
+    money: totalLayers > 0 ? Math.round(((stats.vulnerabilityLayers['Money'] || 0) / totalLayers) * 100) : 0,
+    heart: totalLayers > 0 ? Math.round(((stats.vulnerabilityLayers['Heart'] || 0) / totalLayers) * 100) : 0
+  }
+
+  // Calculate area of life percentages
+  const totalAreas = Object.values(stats.areasOfLife).reduce((a, b) => a + b, 0)
+  const areaPercentages = {
+    work: totalAreas > 0 ? Math.round(((stats.areasOfLife['work'] || 0) / totalAreas) * 100) : 0,
+    relationship: totalAreas > 0 ? Math.round(((stats.areasOfLife['relationship'] || 0) / totalAreas) * 100) : 0,
+    self: totalAreas > 0 ? Math.round(((stats.areasOfLife['self'] || 0) / totalAreas) * 100) : 0,
+    money: totalAreas > 0 ? Math.round(((stats.areasOfLife['money'] || 0) / totalAreas) * 100) : 0,
+    health: totalAreas > 0 ? Math.round(((stats.areasOfLife['health'] || 0) / totalAreas) * 100) : 0,
+    family: totalAreas > 0 ? Math.round(((stats.areasOfLife['family'] || 0) / totalAreas) * 100) : 0
+  }
 
   // Calculate streak (consecutive days)
   const calculateStreak = () => {
@@ -338,49 +367,119 @@ function GroansSummary({ onBack, progress, completions: passedCompletions }) {
           </div>
         )}
 
-        {/* Streak & Progress Row */}
-        <div className="summary-section progress-row">
-          {/* Streak */}
-          <div className="streak-card">
-            <div className="streak-flame">{currentStreak > 0 ? '🔥' : '💤'}</div>
-            <div className="streak-info">
-              <span className="streak-value">{currentStreak}</span>
-              <span className="streak-label">day streak</span>
+        {/* Voice Balance - Essence vs Protective */}
+        <div className="summary-section">
+          <h3>Voice Balance</h3>
+          {totalArchetype > 0 ? (
+            <div className="voice-balance">
+              <div className="voice-row">
+                <div className="voice-item essence">
+                  <span className="voice-icon">✨</span>
+                  <span className="voice-label">Essence</span>
+                  <span className="voice-percent">{essencePercentage}%</span>
+                </div>
+                <div className="voice-item protective">
+                  <span className="voice-icon">🛡️</span>
+                  <span className="voice-label">Protective</span>
+                  <span className="voice-percent">{protectivePercentage}%</span>
+                </div>
+              </div>
+              <div className="voice-bar-container">
+                <div className="voice-bar essence" style={{ width: `${essencePercentage}%` }} />
+                <div className="voice-bar protective" style={{ width: `${protectivePercentage}%` }} />
+              </div>
             </div>
-          </div>
-
-          {/* Days Progress */}
-          <div className="days-progress compact">
-            <div className="days-header">
-              <span className="days-label">{daysCompleted}/{Math.min(totalDays, 7)} days</span>
-              <span className="days-percentage">{daysPercentage}%</span>
-            </div>
-            <div className="days-bar-container">
-              <div className="days-bar" style={{ width: `${daysPercentage}%` }} />
-            </div>
-          </div>
+          ) : (
+            <p className="empty-hint">Complete challenges to see your voice balance</p>
+          )}
         </div>
 
-        {/* Archetype Balance */}
-        {totalArchetype > 0 && (
-          <div className="summary-section">
-            <h3>Archetype Balance</h3>
-            <div className="archetype-balance">
-              <div className="archetype-labels">
-                <span className="essence-label">✨ Essence ({stats.essenceCount})</span>
-                <span className="protective-label">🛡️ Protective ({stats.protectiveCount})</span>
+        {/* Fears Breakdown */}
+        <div className="summary-section">
+          <h3>Fear Triggers</h3>
+          {totalFears > 0 ? (
+            <div className="percent-grid three-col">
+              <div className="percent-item">
+                <span className="percent-icon">👁️</span>
+                <span className="percent-value">{fearPercentages.judged}%</span>
+                <span className="percent-label">Judged</span>
               </div>
-              <div className="archetype-bar-container">
-                <div className="archetype-bar essence" style={{ width: `${essencePercentage}%` }} />
-                <div className="archetype-bar protective" style={{ width: `${protectivePercentage}%` }} />
+              <div className="percent-item">
+                <span className="percent-icon">🤦</span>
+                <span className="percent-value">{fearPercentages.notEnough}%</span>
+                <span className="percent-label">Not Enough</span>
               </div>
-              <div className="archetype-percentages">
-                <span>{essencePercentage}%</span>
-                <span>{protectivePercentage}%</span>
+              <div className="percent-item">
+                <span className="percent-icon">💥</span>
+                <span className="percent-value">{fearPercentages.mightFail}%</span>
+                <span className="percent-label">Might Fail</span>
               </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <p className="empty-hint">Complete challenges to see fear patterns</p>
+          )}
+        </div>
+
+        {/* Visibility Layers Breakdown */}
+        <div className="summary-section">
+          <h3>Visibility Layers</h3>
+          {totalLayers > 0 ? (
+            <div className="percent-grid five-col">
+              <div className={`percent-item ${layerPercentages.screen > 0 ? 'active' : ''}`}>
+                <span className="percent-icon">📱</span>
+                <span className="percent-value">{layerPercentages.screen}%</span>
+                <span className="percent-label">Screen</span>
+              </div>
+              <div className={`percent-item ${layerPercentages.live > 0 ? 'active' : ''}`}>
+                <span className="percent-icon">⚡</span>
+                <span className="percent-value">{layerPercentages.live}%</span>
+                <span className="percent-label">Live</span>
+              </div>
+              <div className={`percent-item ${layerPercentages.tribe > 0 ? 'active' : ''}`}>
+                <span className="percent-icon">👥</span>
+                <span className="percent-value">{layerPercentages.tribe}%</span>
+                <span className="percent-label">Tribe</span>
+              </div>
+              <div className={`percent-item ${layerPercentages.money > 0 ? 'active' : ''}`}>
+                <span className="percent-icon">💰</span>
+                <span className="percent-value">{layerPercentages.money}%</span>
+                <span className="percent-label">Money</span>
+              </div>
+              <div className={`percent-item ${layerPercentages.heart > 0 ? 'active' : ''}`}>
+                <span className="percent-icon">💗</span>
+                <span className="percent-value">{layerPercentages.heart}%</span>
+                <span className="percent-label">Heart</span>
+              </div>
+            </div>
+          ) : (
+            <p className="empty-hint">Complete challenges to see layer breakdown</p>
+          )}
+        </div>
+
+        {/* Areas of Life */}
+        <div className="summary-section">
+          <h3>Areas of Life</h3>
+          {totalAreas > 0 ? (
+            <div className="percent-grid three-col">
+              {[
+                { id: 'work', label: 'Work', icon: '💼' },
+                { id: 'relationship', label: 'Relationship', icon: '💕' },
+                { id: 'self', label: 'Self', icon: '🪞' },
+                { id: 'money', label: 'Money', icon: '💰' },
+                { id: 'health', label: 'Health', icon: '🏥' },
+                { id: 'family', label: 'Family', icon: '👨‍👩‍👧' }
+              ].map(area => (
+                <div key={area.id} className={`percent-item ${areaPercentages[area.id] > 0 ? 'active' : ''}`}>
+                  <span className="percent-icon">{area.icon}</span>
+                  <span className="percent-value">{areaPercentages[area.id]}%</span>
+                  <span className="percent-label">{area.label}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="empty-hint">Complete Recognise challenges to see area patterns</p>
+          )}
+        </div>
 
         {/* Overview Stats */}
         <div className="summary-section overview">
@@ -394,228 +493,11 @@ function GroansSummary({ onBack, progress, completions: passedCompletions }) {
           </div>
         </div>
 
-        {/* By Type Distribution */}
-        <div className="summary-section">
-          <h3>By Type</h3>
-          <div className="type-bars">
-            <div className="type-bar">
-              <div className="type-info">
-                <span className="type-label">Recognise</span>
-                <span className="type-count">{stats.byType.Recognise}</span>
-              </div>
-              <div className="bar-container">
-                <div
-                  className="bar recognise"
-                  style={{ width: `${getPercentage(stats.byType.Recognise, totalByType)}%` }}
-                />
-              </div>
-            </div>
-            <div className="type-bar">
-              <div className="type-info">
-                <span className="type-label">Rewire</span>
-                <span className="type-count">{stats.byType.Rewire}</span>
-              </div>
-              <div className="bar-container">
-                <div
-                  className="bar rewire"
-                  style={{ width: `${getPercentage(stats.byType.Rewire, totalByType)}%` }}
-                />
-              </div>
-            </div>
-            <div className="type-bar">
-              <div className="type-info">
-                <span className="type-label">Reconnect</span>
-                <span className="type-count">{stats.byType.Reconnect}</span>
-              </div>
-              <div className="bar-container">
-                <div
-                  className="bar reconnect"
-                  style={{ width: `${getPercentage(stats.byType.Reconnect, totalByType)}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Protective Voices */}
-        {Object.keys(stats.protectiveVoices).length > 0 && (
-          <div className="summary-section">
-            <h3>Most Triggered Protective Voices</h3>
-            <div className="insight-list">
-              {sortedEntries(stats.protectiveVoices).map(([voice, count]) => (
-                <div key={voice} className="insight-item">
-                  <span className="insight-icon">
-                    {voice === 'People Pleaser' && '😊'}
-                    {voice === 'Performer' && '🎭'}
-                    {voice === 'Controller' && '🎯'}
-                    {voice === 'Perfectionist' && '✨'}
-                    {voice === 'Ghost' && '👻'}
-                  </span>
-                  <span className="insight-label">{voice}</span>
-                  <span className="insight-count">{count}x</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Fears */}
-        {Object.keys(stats.fears).length > 0 && (
-          <div className="summary-section">
-            <h3>Common Fears</h3>
-            <div className="insight-list">
-              {sortedEntries(stats.fears).map(([fear, count]) => (
-                <div key={fear} className="insight-item">
-                  <span className="insight-icon">
-                    {fear === 'judgment' && '👁️'}
-                    {fear === 'worthiness' && '🎭'}
-                    {fear === 'failure' && '💥'}
-                  </span>
-                  <span className="insight-label">
-                    {fear === 'judgment' && 'Fear of Judgment'}
-                    {fear === 'worthiness' && 'Not Enough'}
-                    {fear === 'failure' && 'Might Fail'}
-                    {!['judgment', 'worthiness', 'failure'].includes(fear) && fear}
-                  </span>
-                  <span className="insight-count">{count}x</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Vulnerability Layers */}
-        {Object.keys(stats.vulnerabilityLayers).length > 0 && (
-          <div className="summary-section">
-            <h3>Vulnerability Layers Explored</h3>
-            <div className="layer-grid">
-              {['Screen', 'Live', 'Tribe', 'Money', 'Heart'].map(layer => (
-                <div
-                  key={layer}
-                  className={`layer-stat ${stats.vulnerabilityLayers[layer] ? 'active' : ''}`}
-                >
-                  <span className="layer-icon">
-                    {layer === 'Screen' && '📱'}
-                    {layer === 'Live' && '⚡'}
-                    {layer === 'Tribe' && '👥'}
-                    {layer === 'Money' && '💰'}
-                    {layer === 'Heart' && '💗'}
-                  </span>
-                  <span className="layer-name">{layer}</span>
-                  <span className="layer-count">{stats.vulnerabilityLayers[layer] || 0}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Areas of Life */}
-        {Object.keys(stats.areasOfLife).length > 0 && (
-          <div className="summary-section">
-            <h3>Areas of Life</h3>
-            <div className="area-grid">
-              {[
-                { id: 'work', label: 'Work', icon: '💼' },
-                { id: 'relationship', label: 'Relationship', icon: '💕' },
-                { id: 'self', label: 'Self', icon: '🪞' },
-                { id: 'money', label: 'Money', icon: '💰' },
-                { id: 'health', label: 'Health', icon: '🏥' },
-                { id: 'family', label: 'Family', icon: '👨‍👩‍👧' }
-              ].map(area => (
-                <div
-                  key={area.id}
-                  className={`area-stat ${stats.areasOfLife[area.id] ? 'active' : ''}`}
-                >
-                  <span className="area-icon">{area.icon}</span>
-                  <span className="area-name">{area.label}</span>
-                  <span className="area-count">{stats.areasOfLife[area.id] || 0}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Trigger Types */}
-        {Object.keys(stats.triggerTypes).length > 0 && (
-          <div className="summary-section">
-            <h3>What Triggers You</h3>
-            <div className="insight-list">
-              {sortedEntries(stats.triggerTypes).map(([trigger, count]) => (
-                <div key={trigger} className="insight-item">
-                  <span className="insight-icon">
-                    {trigger === 'person' && '👤'}
-                    {trigger === 'situation' && '⚡'}
-                    {trigger === 'thought' && '💭'}
-                    {trigger === 'memory' && '📸'}
-                    {trigger === 'environment' && '🏠'}
-                    {trigger === 'body' && '🫀'}
-                  </span>
-                  <span className="insight-label" style={{ textTransform: 'capitalize' }}>{trigger}</span>
-                  <span className="insight-count">{count}x</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Emotional Frequencies */}
-        {(Object.keys(stats.positiveFrequencies).length > 0 || Object.keys(stats.negativeFrequencies).length > 0) && (
-          <div className="summary-section">
-            <h3>Emotional Frequencies</h3>
-            <div className="frequency-comparison">
-              {Object.keys(stats.positiveFrequencies).length > 0 && (
-                <div className="frequency-column positive">
-                  <span className="frequency-header">🌟 Positive</span>
-                  {sortedEntries(stats.positiveFrequencies).map(([freq, count]) => (
-                    <div key={freq} className="freq-item">
-                      <span style={{ textTransform: 'capitalize' }}>{freq}</span>
-                      <span className="freq-count">{count}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {Object.keys(stats.negativeFrequencies).length > 0 && (
-                <div className="frequency-column negative">
-                  <span className="frequency-header">🌑 Negative</span>
-                  {sortedEntries(stats.negativeFrequencies).map(([freq, count]) => (
-                    <div key={freq} className="freq-item">
-                      <span style={{ textTransform: 'capitalize' }}>{freq}</span>
-                      <span className="freq-count">{count}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Essence Expressions */}
-        {Object.keys(stats.essenceExpressions).length > 0 && (
-          <div className="summary-section">
-            <h3>How Your Essence Shows Up</h3>
-            <div className="insight-list">
-              {sortedEntries(stats.essenceExpressions).map(([expr, count]) => (
-                <div key={expr} className="insight-item">
-                  <span className="insight-icon">
-                    {expr === 'created' && '🎨'}
-                    {expr === 'connected' && '🤝'}
-                    {expr === 'led' && '🎯'}
-                    {expr === 'taught' && '💡'}
-                    {expr === 'inspired' && '🔥'}
-                    {expr === 'grew' && '🌱'}
-                  </span>
-                  <span className="insight-label" style={{ textTransform: 'capitalize' }}>{expr}</span>
-                  <span className="insight-count">{count}x</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Outcomes */}
         {Object.keys(stats.outcomes).length > 0 && (
           <div className="summary-section">
-            <h3>Outcome Trends</h3>
+            <h3>Groan Outcomes</h3>
             <div className="outcome-bars">
               {[
                 { id: 'better', label: 'Better Than Expected', icon: '🌟', color: '#22c55e' },
@@ -643,39 +525,6 @@ function GroansSummary({ onBack, progress, completions: passedCompletions }) {
                   </div>
                 )
               })}
-            </div>
-          </div>
-        )}
-
-        {/* Average Intensity */}
-        {stats.avgIntensity.count > 0 && (
-          <div className="summary-section">
-            <h3>Average Intensity</h3>
-            <div className="intensity-display">
-              <span className="intensity-value">
-                {(stats.avgIntensity.total / stats.avgIntensity.count).toFixed(1)}
-              </span>
-              <span className="intensity-scale">/ 5</span>
-              <div className="intensity-bar-visual">
-                <div
-                  className="intensity-fill"
-                  style={{ width: `${(stats.avgIntensity.total / stats.avgIntensity.count / 5) * 100}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Next Action Suggestion */}
-        {nextAction && (
-          <div className="summary-section next-action-section">
-            <h3>Suggested Next Step</h3>
-            <div className="next-action-card" onClick={onBack}>
-              <div className="next-action-icon">→</div>
-              <div className="next-action-content">
-                <span className="next-action-text">{nextAction.action}</span>
-                <span className="next-action-reason">{nextAction.reason}</span>
-              </div>
             </div>
           </div>
         )}

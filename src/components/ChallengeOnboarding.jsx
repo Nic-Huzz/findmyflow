@@ -4,6 +4,8 @@
  * Handles the initial welcome screen and group selection screen.
  */
 
+import { useNavigate } from 'react-router-dom'
+
 function ChallengeOnboarding({
   screen, // 'welcome' | 'group-selection'
   onStartChallenge,
@@ -11,12 +13,26 @@ function ChallengeOnboarding({
   onCreateGroup,
   onJoinGroup,
   groupCodeInput,
-  onGroupCodeChange
+  onGroupCodeChange,
+  onBack // Optional callback to go back
 }) {
+  const navigate = useNavigate()
+
+  const handleBack = () => {
+    if (onBack) {
+      onBack()
+    } else {
+      navigate('/me')
+    }
+  }
+
   if (screen === 'welcome') {
     return (
       <div className="challenge-container">
         <div className="challenge-onboarding">
+          <button className="go-back-btn" onClick={handleBack}>
+            ← Go Back
+          </button>
           <div className="onboarding-content">
             <h1>🚀 Ready to Find Your Flow?</h1>
             <p className="onboarding-intro">
@@ -41,25 +57,29 @@ function ChallengeOnboarding({
               That's what Find My Flow is for.
             </p>
             <p className="onboarding-intro">
-              Over the next 7 days you'll complete quests across four categories to help you re-find your flow and amplify your impact:
+              Over the next 7 days you'll complete quests across five tabs to help you re-find your flow and amplify your impact:
             </p>
 
             <div className="onboarding-categories">
               <div className="onboarding-category">
-                <h3>🔍 Recognise</h3>
-                <p>Build awareness of what's blocking your flow and what your flow is</p>
+                <h3>😤 Groans</h3>
+                <p>Push past resistance with Recognise, Rewire & Reconnect challenges</p>
               </div>
               <div className="onboarding-category">
-                <h3>🕊️ Release</h3>
-                <p>Let go of traumas blocking your flow</p>
+                <h3>💜 Healing</h3>
+                <p>Process micro-traumas with Recognise & Release exercises</p>
               </div>
               <div className="onboarding-category">
-                <h3>⚡ Rewire</h3>
-                <p>Act in alignment with your flow</p>
+                <h3>💼 Business</h3>
+                <p>Build your offer, product, and launch strategy stage by stage</p>
               </div>
               <div className="onboarding-category">
-                <h3>🌊 Reconnect</h3>
-                <p>Live from your essence and find your flow</p>
+                <h3>⭐ Bonus</h3>
+                <p>Extra quests for bonus points and deeper exploration</p>
+              </div>
+              <div className="onboarding-category">
+                <h3>🧭 Tracker</h3>
+                <p>Log your flow state daily with the Flow Compass</p>
               </div>
             </div>
 
@@ -76,6 +96,9 @@ function ChallengeOnboarding({
     return (
       <div className="challenge-container">
         <div className="challenge-onboarding">
+          <button className="go-back-btn" onClick={handleBack}>
+            ← Go Back
+          </button>
           <div className="onboarding-content">
             <h1>🎯 Choose Your Challenge Mode</h1>
             <p className="onboarding-intro">

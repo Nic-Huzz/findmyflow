@@ -3,7 +3,8 @@
 .challenge-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  padding-bottom: 2rem;
+  /* Space for bottom toolbar */
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0) + 2rem);
 }
 
 /* Header */
@@ -24,6 +25,68 @@
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
+}
+
+/* Week header row with type badge */
+.week-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.week-header-row h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.week-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Week info row - bubbles matching badge style */
+.week-info-row {
+  margin-top: 0.5rem;
+}
+
+.week-info-row .challenge-header-badges {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.week-type-bubble {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.groan-bubble {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.groan-bubble.completed {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.edit-badge {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.edit-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .challenge-header-top {
@@ -48,20 +111,24 @@
   white-space: nowrap;
 }
 
-/* Home Button */
-.home-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
+/* Rank Badge */
+.rank-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.2));
+  border: 1px solid rgba(251, 191, 36, 0.4);
   padding: 0.5rem 0.75rem;
   border-radius: 20px;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fbbf24;
   cursor: pointer;
   transition: all 0.2s ease;
-  line-height: 1;
 }
 
-.home-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+.rank-badge:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.4), rgba(245, 158, 11, 0.3));
   transform: scale(1.05);
 }
 
@@ -328,43 +395,7 @@
 }
 
 /* Quest Filters */
-.quest-filters {
-  padding: 0.75rem 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background: transparent;
-}
-
-.frequency-toggle,
-.rtype-filters {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.filter-chip {
-  padding: 0.5rem 1rem;
-  border: 1px solid #dee2e6;
-  background: white;
-  color: #495057;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.filter-chip:hover {
-  border-color: #5e17eb;
-  color: #5e17eb;
-}
-
-.filter-chip.active {
-  background: #5e17eb;
-  color: white;
-  border-color: #5e17eb;
-}
+/* Quest Filters - Now styled in ChallengeFilters.css */
 
 /* Content */
 .challenge-content {
@@ -407,11 +438,11 @@
   gap: 0;
 }
 
-.progress-bar-container {
+.challenge-container .progress-bar-container {
   width: 100%;
 }
 
-.progress-bar-label {
+.challenge-container .progress-bar-label {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
@@ -420,24 +451,24 @@
   color: #495057;
 }
 
-.progress-bar {
+.challenge-container .progress-bar {
   height: 12px;
   background: #e9ecef;
   border-radius: 6px;
   overflow: hidden;
 }
 
-.progress-bar-fill {
+.challenge-container .progress-bar-fill {
   height: 100%;
   transition: width 0.5s ease;
   border-radius: 6px;
 }
 
-.progress-bar-fill.daily {
+.challenge-container .progress-bar-fill.daily {
   background: linear-gradient(90deg, #5e17eb 0%, #8b5cf6 100%);
 }
 
-.progress-bar-fill.weekly {
+.challenge-container .progress-bar-fill.weekly {
   background: linear-gradient(90deg, #ffdd27 0%, #ffc107 100%);
 }
 
@@ -613,13 +644,13 @@
   margin-bottom: 3rem;
 }
 
-.flow-map-section {
+.challenge-container .flow-map-section {
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e5e7eb;
 }
 
-.section-title {
+.challenge-container .section-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #212529;
@@ -627,7 +658,7 @@
 }
 
 /* Section Header Row */
-.section-header-row {
+.challenge-container .section-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -688,6 +719,47 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
+}
+
+/* Hidden Quests Section */
+.hidden-quests-section {
+  margin-top: 1rem;
+}
+
+.hidden-quests-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.hidden-quests-toggle:hover {
+  color: #5e17eb;
+}
+
+.hidden-quests-toggle .toggle-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.hidden-quests-toggle .toggle-label {
+  opacity: 0.8;
+}
+
+.quest-grid.hidden-grid {
+  margin-top: 1rem;
+  opacity: 0.7;
+}
+
+.quest-grid.hidden-grid .quest-card {
+  border: 2px dashed #d1d5db;
 }
 
 /* Quest Cards */
@@ -779,6 +851,28 @@
 .frequency-badge.weekly {
   background: rgba(234, 179, 8, 0.15);
   color: #ca8a04;
+}
+
+/* Planned badge for weekly plan quests */
+.planned-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Planned quest card highlight */
+.quest-card.planned {
+  border-left: 4px solid #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, white 100%);
+}
+
+.quest-card.planned:not(.completed):not(.locked) {
+  box-shadow: 0 2px 12px rgba(16, 185, 129, 0.15);
 }
 
 .quest-points {
@@ -881,11 +975,11 @@
   color: #495057;
   line-height: 1.6;
   font-size: 0.875rem;
-  animation: slideDown 0.3s ease;
+  animation: challengeSlideDown 0.3s ease;
   white-space: pre-line; /* Preserve line breaks from \n */
 }
 
-@keyframes slideDown {
+@keyframes challengeSlideDown {
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -1167,7 +1261,7 @@
   text-align: center;
   z-index: 100;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  animation: tooltipFadeIn 0.2s ease;
+  animation: challengeTooltipFadeIn 0.2s ease;
 }
 
 .locked-tooltip::after {
@@ -1180,7 +1274,7 @@
   border-top-color: #212529;
 }
 
-@keyframes tooltipFadeIn {
+@keyframes challengeTooltipFadeIn {
   from {
     opacity: 0;
     transform: translateX(-50%) translateY(4px);
@@ -1245,12 +1339,33 @@
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   box-sizing: border-box;
+  position: relative;
+}
+
+.challenge-onboarding .go-back-btn {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.challenge-onboarding .go-back-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .onboarding-content {
@@ -1503,7 +1618,7 @@
   border-radius: 12px;
 }
 
-.toggle-btn {
+.challenge-container .toggle-btn {
   padding: 0.5rem 1.5rem;
   border: none;
   background: transparent;
@@ -1515,12 +1630,12 @@
   font-size: 0.9375rem;
 }
 
-.toggle-btn:hover {
+.challenge-container .toggle-btn:hover {
   background: rgba(94, 23, 235, 0.1);
   color: #5e17eb;
 }
 
-.toggle-btn.active {
+.challenge-container .toggle-btn.active {
   background: white;
   color: #5e17eb;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -1624,7 +1739,7 @@
     width: 100%;
   }
 
-  .toggle-btn {
+  .challenge-container .toggle-btn {
     flex: 1;
     text-align: center;
   }
@@ -1667,10 +1782,10 @@
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
-  animation: fadeIn 0.2s ease;
+  animation: challengeFadeIn 0.2s ease;
 }
 
-@keyframes fadeIn {
+@keyframes challengeFadeIn {
   from {
     opacity: 0;
   }
@@ -1688,10 +1803,10 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
+  animation: challengeSlideUp 0.3s ease;
 }
 
-@keyframes slideUp {
+@keyframes challengeSlideUp {
   from {
     transform: translateY(50px);
     opacity: 0;
@@ -1716,7 +1831,7 @@
   color: #212529;
 }
 
-.modal-close-btn {
+.challenge-container .modal-close-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -1732,7 +1847,7 @@
   line-height: 1;
 }
 
-.modal-close-btn:hover {
+.challenge-container .modal-close-btn:hover {
   background: #dee2e6;
   transform: rotate(90deg);
 }
@@ -2037,22 +2152,22 @@
 .streak-flame {
   display: inline-block;
   font-size: 1.1rem;
-  animation: flameFlicker 0.5s ease-in-out infinite alternate;
+  animation: challengeFlameFlicker 0.5s ease-in-out infinite alternate;
 }
 
 .streak-flame.warm {
   font-size: 1.2rem;
-  animation: flameFlicker 0.4s ease-in-out infinite alternate;
+  animation: challengeFlameFlicker 0.4s ease-in-out infinite alternate;
 }
 
 .streak-flame.hot {
   font-size: 1.3rem;
-  animation: flameFlicker 0.3s ease-in-out infinite alternate, flameGlow 1s ease-in-out infinite;
+  animation: challengeFlameFlicker 0.3s ease-in-out infinite alternate, challengeFlameGlow 1s ease-in-out infinite;
 }
 
 .streak-flame.legendary {
   font-size: 1.4rem;
-  animation: flameFlicker 0.2s ease-in-out infinite alternate, flameGlow 0.5s ease-in-out infinite, flamePulse 1s ease-in-out infinite;
+  animation: challengeFlameFlicker 0.2s ease-in-out infinite alternate, challengeFlameGlow 0.5s ease-in-out infinite, challengeFlamePulse 1s ease-in-out infinite;
 }
 
 .streak-flame.cold {
@@ -2061,17 +2176,17 @@
   animation: none;
 }
 
-@keyframes flameFlicker {
+@keyframes challengeFlameFlicker {
   0% { transform: scale(1) rotate(-3deg); }
   100% { transform: scale(1.1) rotate(3deg); }
 }
 
-@keyframes flameGlow {
+@keyframes challengeFlameGlow {
   0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 100, 0, 0.6)); }
   50% { filter: drop-shadow(0 0 8px rgba(255, 150, 0, 0.8)); }
 }
 
-@keyframes flamePulse {
+@keyframes challengeFlamePulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.15); }
 }
@@ -2079,12 +2194,12 @@
 /* ============ QUEST COMPLETION ANIMATION ============ */
 
 .quest-card.just-completed {
-  animation: questCompletePulse 0.6s ease-out;
+  animation: challengeQuestCompletePulse 0.6s ease-out;
   position: relative;
   overflow: visible;
 }
 
-@keyframes questCompletePulse {
+@keyframes challengeQuestCompletePulse {
   0% { transform: scale(1); }
   30% { transform: scale(1.02); box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3); }
   100% { transform: scale(1); }
@@ -2096,10 +2211,10 @@
   color: #10b981;
   font-weight: bold;
   margin-right: 6px;
-  animation: checkmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  animation: challengeCheckmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-@keyframes checkmarkPop {
+@keyframes challengeCheckmarkPop {
   0% { transform: scale(0); opacity: 0; }
   50% { transform: scale(1.3); }
   100% { transform: scale(1); opacity: 1; }
@@ -2115,12 +2230,12 @@
   font-weight: 800;
   color: #5e17eb;
   text-shadow: 0 2px 8px rgba(94, 23, 235, 0.3);
-  animation: pointsFlyUp 1s ease-out forwards;
+  animation: challengePointsFlyUp 1s ease-out forwards;
   pointer-events: none;
   z-index: 10;
 }
 
-@keyframes pointsFlyUp {
+@keyframes challengePointsFlyUp {
   0% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(0.5);
@@ -2151,7 +2266,7 @@
   width: 8px;
   height: 8px;
   border-radius: 2px;
-  animation: confettiBurst 0.8s ease-out forwards;
+  animation: challengeConfettiBurst 0.8s ease-out forwards;
 }
 
 .confetti-0 { background: #5e17eb; animation-delay: 0ms; }
@@ -2174,7 +2289,7 @@
 .confetti-4, .confetti-10 { --angle: 60deg; --distance: 60px; }
 .confetti-5, .confetti-11 { --angle: 90deg; --distance: 50px; }
 
-@keyframes confettiBurst {
+@keyframes challengeConfettiBurst {
   0% {
     opacity: 1;
     transform: translate(0, 0) rotate(0deg) scale(1);

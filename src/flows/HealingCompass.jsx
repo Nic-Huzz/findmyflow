@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useAutoSave } from '../hooks/useAutoSave'
 import '../NervousSystemHealingCompass.css'
 import '../FlowFinder.css'
 
@@ -24,6 +25,11 @@ export default function HealingCompass() {
     splinter_removal_consent: false
   })
 
+  // Auto-save state
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [savedProgressData, setSavedProgressData] = useState(null)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave('healing-compass', user?.id)
+
   const totalScreens = 9
   const currentScreenIndex = getScreenIndex(currentScreen)
 
@@ -34,6 +40,26 @@ export default function HealingCompass() {
     if (currentIndex > 0) {
       setCurrentScreen(screenOrder[currentIndex - 1])
     }
+  }
+
+  // Handle resuming saved progress (auto-save)
+  const handleResumeProgress = () => {
+    if (savedProgressData) {
+      setCurrentScreen(savedProgressData.currentScreen)
+      if (savedProgressData.responses) {
+        setResponses(savedProgressData.responses)
+      }
+    }
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+  }
+
+  // Handle starting fresh (auto-save)
+  const handleStartFresh = () => {
+    clearProgress()
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+    setCurrentScreen('journey')
   }
 
   // Back button component
@@ -128,6 +154,24 @@ export default function HealingCompass() {
     loadSafetyContracts()
   }, [user, searchParams])
 
+  // Check for saved progress on mount (auto-save)
+  useEffect(() => {
+    if (user && searchParams.get('results') !== 'true') {
+      const saved = loadProgress()
+      if (saved && saved.currentScreen && saved.currentScreen !== 'time_check' && saved.currentScreen !== 'success' && saved.currentScreen !== 'loading') {
+        setSavedProgressData(saved)
+        setShowResumePrompt(true)
+      }
+    }
+  }, [user, loadProgress, searchParams])
+
+  // Auto-save progress on state changes
+  useEffect(() => {
+    if (!user || currentScreen === 'time_check' || currentScreen === 'success' || currentScreen === 'loading' || currentScreen === 'no-results') return
+    const progressData = { currentScreen, responses }
+    saveProgress(progressData)
+  }, [currentScreen, responses, user, saveProgress])
+
   const loadSafetyContracts = async () => {
     if (!user?.id) return
 
@@ -202,6 +246,9 @@ export default function HealingCompass() {
         pointsEarned: 20
       })
 
+      // Clear auto-saved progress on completion
+      clearProgress()
+
       // Navigate based on selection
       if (selectedOption === 'continue_challenge') {
         navigate('/7-day-challenge')
@@ -216,27 +263,80 @@ export default function HealingCompass() {
     }
   }
 
+  // Helper to get readable screen name
+  const getScreenDisplayName = (screen) => {
+    const screenNames = {
+      'journey': 'Journey Context',
+      'welcome': 'Welcome',
+      'q1': 'Question 1 - Safety Contract',
+      'q2': 'Question 2 - Impact',
+      'q3': 'Question 3 - Origin',
+      'q4': 'Question 4 - What Happened',
+      'q5': 'Question 5 - Emotions',
+      'q6': 'Question 6 - Insight',
+      'q7': 'Question 7 - Splinter',
+      'q8': 'Question 8 - Healing Options'
+    }
+    return screenNames[screen] || screen
+  }
+
+  // Helper to get time since last save
+  const getTimeSinceSave = () => {
+    if (!savedProgressData?.savedAt) return null
+    const minutesAgo = Math.floor((Date.now() - savedProgressData.savedAt) / 60000)
+    if (minutesAgo < 1) return 'just now'
+    if (minutesAgo < 60) return `${minutesAgo} minute${minutesAgo === 1 ? '' : 's'} ago`
+    const hoursAgo = Math.floor(minutesAgo / 60)
+    return `${hoursAgo} hour${hoursAgo === 1 ? '' : 's'} ago`
+  }
+
   const renderTimeCheck = () => (
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Healing Compass</h1>
-      <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
-        <p><span className="time-icon">⏱️</span></p>
-        <p><strong>This flow takes about 10-15 minutes</strong></p>
-        <p style={{ color: 'rgba(255,255,255,0.7)' }}>7 questions to trace and heal a limiting belief.</p>
-        <p>Find a quiet, safe space where you can be emotionally present.</p>
-        <p><strong>This work can bring up old memories — that's part of the healing.</strong></p>
-      </div>
 
-      <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
-        I'm Ready
-      </button>
-      <button
-        className="primary-button"
-        onClick={() => navigate(-1)}
-        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
-      >
-        Come Back Later
-      </button>
+      {/* Resume Prompt - shown if saved progress exists */}
+      {showResumePrompt && savedProgressData && (
+        <div className="ns-hc-resume-prompt">
+          <p className="ns-hc-resume-title">Welcome back!</p>
+          <p className="ns-hc-resume-info">
+            You have saved progress at <strong>{getScreenDisplayName(savedProgressData.currentScreen)}</strong>
+            <br />
+            <span className="ns-hc-resume-time">Last saved {getTimeSinceSave()}</span>
+          </p>
+          <div className="ns-hc-resume-actions">
+            <button className="ns-hc-primary-button" style={{ margin: 0, maxWidth: '280px' }} onClick={handleResumeProgress}>
+              Continue Where I Left Off
+            </button>
+            <button className="ns-hc-secondary-button" style={{ margin: '12px 0 0 0', maxWidth: '280px' }} onClick={handleStartFresh}>
+              Start Fresh
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Normal time check content - shown if no resume prompt */}
+      {!showResumePrompt && (
+        <>
+          <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+            <p><span className="time-icon">⏱️</span></p>
+            <p><strong>This flow takes about 10-15 minutes</strong></p>
+            <p style={{ color: 'rgba(255,255,255,0.7)' }}>7 questions to trace and heal a limiting belief.</p>
+            <p>Find a quiet, safe space where you can be emotionally present.</p>
+            <p><strong>This work can bring up old memories — that's part of the healing.</strong></p>
+          </div>
+
+          <button className="primary-button glow-button" onClick={() => setCurrentScreen('journey')}>
+            I'm Ready
+          </button>
+          <button
+            className="primary-button"
+            onClick={() => navigate(-1)}
+            style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
+          >
+            Come Back Later
+          </button>
+        </>
+      )}
     </div>
   )
 
