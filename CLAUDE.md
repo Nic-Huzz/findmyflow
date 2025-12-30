@@ -6,9 +6,10 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 
 **Architecture (Dec 2024 Refactor):**
 - **Project-Centric**: Users can have multiple projects, each with its own stage progression
-- **Universal 6-Stage System**: All projects follow the same 6 stages (Validation → Product Creation → Testing → Money Models → Campaign Creation → Launch)
+- **Universal 7-Stage System**: All projects follow 6 progression stages + 1 always-accessible tracking stage
 - **Persona at User Level**: Three user personas (Vibe Seeker, Vibe Riser, Movement Maker) determine initial guidance, but stages are project-based
 - **Gamified 7-Day Challenges**: Stage-specific quests with groan challenges that push users past comfort zones
+- **Zarlo AI Co-Founder**: Context-aware AI assistant available on every page
 - The Money Model flows are based on Alex Hormozi's $100M Offers framework.
 
 ---
@@ -32,15 +33,19 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 ```
 /Users/nichurrell/creations/Findmyflow/
 ├── src/
-│   ├── flows/                         # All flow components (14 files)
+│   ├── flows/                         # All flow components
 │   │   ├── MoneyModelFlowBase.jsx     # Shared base for all Money Model flows (450 lines)
-│   │   ├── moneyModelConfigs.js       # Configuration for 6 Money Model flows
+│   │   ├── moneyModelConfigs.js       # Configuration for Money Model flows
 │   │   ├── AttractionOfferFlow.jsx    # Thin wrapper (~35 lines)
 │   │   ├── UpsellFlow.jsx             # Thin wrapper
 │   │   ├── DownsellFlow.jsx           # Thin wrapper
 │   │   ├── ContinuityFlow.jsx         # Thin wrapper
 │   │   ├── LeadsStrategyFlow.jsx      # Thin wrapper
-│   │   ├── LeadMagnetFlow.jsx         # Thin wrapper
+│   │   ├── OfferBuilderFlow.jsx       # $100M Offer builder
+│   │   ├── LeadMagnetSelectionFlow.jsx # Lead magnet type selector
+│   │   ├── ProductSelectionFlow.jsx   # Product value equation
+│   │   ├── FunnelBuilderFlow.jsx      # Campaign funnel builder
+│   │   ├── FunnelCalculator.jsx       # Stage 7 funnel metrics tracker
 │   │   ├── FlowFinderSkills.jsx       # AI-guided skills discovery
 │   │   ├── FlowFinderProblems.jsx     # AI-guided problems discovery
 │   │   ├── FlowFinderPersona.jsx      # AI-guided persona discovery
@@ -68,9 +73,21 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   ├── ChallengeStageTabs.jsx     # Stage tabs (1-6)
 │   │   │
 │   │   ├── GroanReflectionInput.jsx   # 5-step groan reflection form
+│   │   ├── RecogniseQuestInput.jsx    # Essence/protective voice tracking
+│   │   ├── RewireQuestInput.jsx       # Behavior change quests
+│   │   ├── ReleaseQuestInput.jsx      # Emotional release tracking
+│   │   ├── ReconnectQuestInput.jsx    # Meditation, breathwork, prayer
+│   │   ├── LaunchReviewInput.jsx      # 5-question launch rating
 │   │   ├── FlowCompassInput.jsx       # N/E/S/W direction picker
 │   │   ├── ConversationLogInput.jsx   # Conversation logging form
 │   │   ├── MilestoneInput.jsx         # Milestone completion form
+│   │   │
+│   │   ├── Zarlo/                     # AI Co-Founder widget
+│   │   │   ├── ZarloWidget.jsx        # Floating button trigger
+│   │   │   ├── ZarloChat.jsx          # Chat modal with streaming
+│   │   │   ├── ZarloMessage.jsx       # Individual message display
+│   │   │   ├── ZarloQuickReplies.jsx  # Suggested replies
+│   │   │   └── index.js               # Barrel export
 │   │   │
 │   │   ├── FlowMap.jsx                # Dashboard clusters display
 │   │   ├── FlowMapRiver.jsx           # Vertical river visualization (clickable with popups)
@@ -118,10 +135,13 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   ├── analytics.js               # Analytics tracking
 │   │   ├── anthropicClient.js         # Anthropic API client
 │   │   ├── promptResolver.js          # Dynamic prompt resolution
-│   │   └── templates/                 # AI prompt templates
-│   │       ├── nervousSystemTemplates.js
-│   │       ├── essenceRevealTemplate.js
-│   │       └── protectiveMirrorTemplate.js
+│   │   ├── templates/                 # AI prompt templates
+│   │   │   ├── nervousSystemTemplates.js
+│   │   │   ├── essenceRevealTemplate.js
+│   │   │   └── protectiveMirrorTemplate.js
+│   │   └── zarlo/                     # Zarlo AI system
+│   │       ├── zarloEngine.js         # Conversation management
+│   │       └── zarloPageContent.js    # Context-aware page content
 │   │
 │   ├── data/                          # Static configuration
 │   │   ├── personaProfiles.js         # Persona definitions
@@ -203,7 +223,11 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 | `/downsell-offer` | DownsellFlow | Downsell strategy |
 | `/continuity-offer` | ContinuityFlow | Continuity model |
 | `/leads-strategy` | LeadsStrategyFlow | Lead gen strategy |
-| `/lead-magnet` | LeadMagnetFlow | Lead magnet type |
+| `/offer-builder` | OfferBuilderFlow | $100M Offer builder |
+| `/lead-magnet-selection` | LeadMagnetSelectionFlow | Lead magnet type selector |
+| `/product-selection` | ProductSelectionFlow | Product value equation |
+| `/funnel-builder` | FunnelBuilderFlow | Campaign funnel builder |
+| `/funnel-calculator` | FunnelCalculator | Stage 7 funnel metrics |
 | `/persona-selection` | PersonaSelectionFlow | Customer persona |
 | `/validation-flows` | ValidationFlowsManager | Survey manager |
 | `/v/:shareToken` | PublicValidationFlow | Public survey (no auth) |
@@ -216,8 +240,8 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 
 ## Key Features
 
-### 1. Universal 6-Stage System
-All projects follow these stages:
+### 1. Universal 7-Stage System
+All projects follow these stages (Stage 7 is always accessible):
 
 | Stage | Name | Focus |
 |-------|------|-------|
@@ -227,6 +251,7 @@ All projects follow these stages:
 | 4 | Money Models | Upsells, downsells, continuity |
 | 5 | Campaign Creation | Lead generation strategy |
 | 6 | Launch | Execute launch with leads funnel |
+| 7 | Tracking | Funnel metrics & optimization (always accessible) |
 
 ### 2. 7-Day Challenge System
 Gamified quests organized by category:
@@ -304,6 +329,47 @@ Multi-step journey mapping for new users, check-in mode for returning users.
 
 **ExistingProjectFlow** captures: Name → Description → Skills (3) → Problem → Persona → Stage
 
+### 9. Zarlo AI Co-Founder
+Context-aware AI assistant available on every page via floating widget.
+
+**Components:**
+- `ZarloWidget.jsx` - Floating button (bottom-right)
+- `ZarloChat.jsx` - Modal with streaming chat
+- `zarloEngine.js` - Conversation management with Anthropic API
+- `zarloPageContent.js` - Page-specific context content
+
+**Features:**
+- Streams responses in real-time
+- Context-aware (knows which page user is on)
+- Conversation history saved to `zarlo_conversations` table
+- Quick reply suggestions based on context
+
+### 10. Funnel Calculator (Stage 7)
+Spreadsheet-like funnel tracking tool at `/funnel-calculator`.
+
+**Two Modes:**
+- **Actual Mode**: Track real campaign numbers
+- **Planner Mode**: Project outcomes with industry-average conversion rates
+
+**Funnel Stages Tracked:**
+1. Awareness (people reached)
+2. Attraction Offer (engagements)
+3. Lead Magnet (opt-ins)
+4. Nurture (engaged leads)
+5. Core Offer (sales)
+6. Upsell (conversions)
+7. Downsell (conversions)
+8. Continuity (subscribers)
+
+**Industry Average Rates (Planner Mode):**
+- Awareness → Attraction: 5%
+- Attraction → Lead Magnet: 25%
+- Lead Magnet → Nurture: 40%
+- Nurture → Core: 5%
+- Core → Upsell: 20%
+- Core → Downsell: 30%
+- Core → Continuity: 15%
+
 ---
 
 ## Architecture Patterns
@@ -328,12 +394,12 @@ function Challenge() {
 ### 2. Configurable Base Components
 Flows use a shared base with configuration:
 ```javascript
-// LeadMagnetFlow.jsx - thin wrapper
+// UpsellFlow.jsx - thin wrapper
 import MoneyModelFlowBase from './MoneyModelFlowBase'
 import { MONEY_MODEL_CONFIGS } from './moneyModelConfigs'
 
-function LeadMagnetFlow() {
-  return <MoneyModelFlowBase config={MONEY_MODEL_CONFIGS.leadMagnet} />
+function UpsellFlow() {
+  return <MoneyModelFlowBase config={MONEY_MODEL_CONFIGS.upsell} />
 }
 ```
 
@@ -457,6 +523,9 @@ localStorage.getItem(`journey_mapping_completed_${userId}_${projectId}`)
 | `continuity_assessments` | Continuity flow results |
 | `leads_assessments` | Leads strategy results |
 | `lead_magnet_assessments` | Lead magnet results |
+| `offer_builder_assessments` | $100M Offer builder results |
+| `funnel_metrics` | Funnel calculator tracking data |
+| `zarlo_conversations` | Zarlo AI chat history |
 
 ---
 
@@ -481,6 +550,39 @@ SUPABASE_ACCESS_TOKEN      # From Supabase dashboard
 ---
 
 ## Recent Updates (Dec 2024)
+
+### Dec 30: Stage 7 Tracking, Zarlo AI, Quest UI Overhaul
+**Stage 7: Funnel Calculator**
+- New always-accessible Tracking stage (Stage 7)
+- `FunnelCalculator.jsx` with Actual + Planner modes
+- Industry average conversion rates for projections
+- Revenue calculations (one-time + recurring)
+- `funnel_metrics` database table
+
+**Zarlo AI Co-Founder**
+- `ZarloWidget` floating button + modal on all pages
+- `ZarloChat` with streaming responses
+- Context-aware page content system
+- `zarloEngine.js` for conversation management
+- `zarlo_conversations` table for history
+
+**Quest Input Components Overhaul**
+- `RecogniseQuestInput` - Essence/protective voice cards
+- `RewireQuestInput` - Expanded with multiple quest types
+- `ReleaseQuestInput` - Improved daily/weekly release UI
+- `ReconnectQuestInput` - Meditation, breathwork, prayer tracking
+- `GroanReflectionInput` - Refined 5-step reflection flow
+- `LaunchReviewInput` - New 5-question launch rating system
+
+**New Challenge Quests**
+- Stage 5: Content Plan, Lead Capture, Nurture Sequence, CRM Setup
+- Stage 6: Launch Sequence, First 10 Signups, Post-Launch Review
+- Stage 7: Funnel Calculator, Baseline, Weekly Update
+
+**Other Changes**
+- Archived `LeadMagnetFlow` (replaced by `LeadMagnetSelectionFlow`)
+- `FunnelBuilderFlow` enhanced with offer stack display
+- New routes: `/offer-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`
 
 ### Dec 26-27: Journey Mapping & Flow River Popups
 **New Features:**
