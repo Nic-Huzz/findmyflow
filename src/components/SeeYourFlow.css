@@ -496,12 +496,14 @@
 .see-your-flow .stat-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #E9A23B;
+  color: white;
 }
 
 .see-your-flow .stat-label {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .see-your-flow .done-btn {
