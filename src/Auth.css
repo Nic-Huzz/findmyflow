@@ -162,6 +162,7 @@
   transition: all 0.2s ease;
   box-sizing: border-box;
   background: #f8f9fa;
+  color: #212529;
 }
 
 .input-group input:focus {

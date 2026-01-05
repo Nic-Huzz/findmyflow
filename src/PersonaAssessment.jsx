@@ -70,6 +70,13 @@ function PersonaAssessment() {
     loadAssessment()
   }, [])
 
+  // Handle route changes - when navigating to /log-in, jump to email capture
+  useEffect(() => {
+    if (isLoginRoute && stage !== STAGES.EMAIL_CAPTURE && stage !== STAGES.CODE_VERIFY && stage !== STAGES.SUCCESS) {
+      setStage(STAGES.EMAIL_CAPTURE)
+    }
+  }, [isLoginRoute])
+
   // If user is already authenticated, redirect to dashboard
   // But skip this if we're in the middle of saving user data after verification
   useEffect(() => {
@@ -317,12 +324,14 @@ function PersonaAssessment() {
               <p>The idea that there's a unique path that only you could walk due to your combination of skills, experiences and circumstances.</p>
             </div>
           </div>
-          <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_2)}>
-            Tell me more!
-          </button>
-          <Link to="/log-in" className="login-link">
-            Already have an account? Log in
-          </Link>
+          <div className="welcome-actions">
+            <button className="primary-button" onClick={() => setStage(STAGES.HUZZ_INTRO_2)}>
+              Tell me more!
+            </button>
+            <Link to="/log-in" className="login-link">
+              Already have an account? Log in
+            </Link>
+          </div>
         </div>
       </div>
     )

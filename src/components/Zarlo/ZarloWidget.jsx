@@ -12,7 +12,7 @@ import './Zarlo.css'
 
 // Routes where Zarlo should NOT appear
 const HIDDEN_ROUTES = [
-  '/v/' // Public validation flows - Zarlo has different behavior here
+  // All routes now have Zarlo enabled
 ]
 
 function ZarloWidget() {

@@ -16,6 +16,7 @@ const PublicValidationFlow = () => {
   const [error, setError] = useState(null)
   const [flowData, setFlowData] = useState(null)
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
+  const [stepHistory, setStepHistory] = useState([]) // Track visited step indices for back navigation
   const [currentAnswer, setCurrentAnswer] = useState('')
   const [textListAnswers, setTextListAnswers] = useState([])
   const [sessionToken, setSessionToken] = useState(null)
@@ -49,10 +50,17 @@ const PublicValidationFlow = () => {
 
       const flowJson = await response.json()
 
+      // Merge placeholders: flow record overrides JSON defaults
+      const mergedPlaceholders = {
+        ...(flowJson.placeholders || {}),
+        ...(flowRecord.placeholders || {})
+      }
+
       setFlowData({
         ...flowRecord,
         steps: flowJson.steps,
-        metadata: flowJson.metadata
+        metadata: flowJson.metadata,
+        placeholders: mergedPlaceholders
       })
 
       // Create or retrieve session
@@ -111,6 +119,40 @@ const PublicValidationFlow = () => {
   const generateSessionToken = () => {
     return Math.random().toString(36).substring(2, 15) +
            Math.random().toString(36).substring(2, 15)
+  }
+
+  // Replace {{placeholder}} patterns with actual values and convert markdown
+  const replacePlaceholders = (text) => {
+    if (!text || !flowData?.placeholders) return text
+
+    let result = text
+    Object.entries(flowData.placeholders).forEach(([key, value]) => {
+      const pattern = new RegExp(`\\{\\{${key}\\}\\}`, 'g')
+      result = result.replace(pattern, value)
+    })
+    return result
+  }
+
+  // Convert markdown **text** to <strong> and \n to <br/>
+  const formatPrompt = (text) => {
+    if (!text) return ''
+    let result = replacePlaceholders(text)
+    // Convert **text** to <strong>text</strong>
+    result = result.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    // Convert newlines to <br/>
+    result = result.replace(/\n/g, '<br/>')
+    return result
+  }
+
+  // Handle going back to previous step (uses step history)
+  const handleBack = () => {
+    if (stepHistory.length > 0) {
+      const previousIndex = stepHistory[stepHistory.length - 1]
+      setStepHistory(prev => prev.slice(0, -1))
+      setCurrentStepIndex(previousIndex)
+      setCurrentAnswer('')
+      setTextListAnswers([])
+    }
   }
 
   const saveResponse = async (stepId, questionText, answerType, answerValue) => {
@@ -174,8 +216,57 @@ const PublicValidationFlow = () => {
       )
     }
 
+    // Determine next step based on next_step_rules
+    const rules = currentStep.next_step_rules || []
+    let nextStepId = null
+
+    // Find matching rule
+    for (const rule of rules) {
+      if (rule.on_success) {
+        // Simple success rule - go to specified step
+        nextStepId = rule.on_success
+        break
+      } else if (rule.on_selection && rule.go_to) {
+        // Selection-based rule - match against current answer
+        if (rule.on_selection === currentAnswer) {
+          nextStepId = rule.go_to
+          break
+        }
+      }
+    }
+
+    // Handle "complete" as end of flow
+    if (nextStepId === 'complete') {
+      // Mark session as completed
+      await supabase
+        .from('validation_sessions')
+        .update({
+          completed_at: new Date().toISOString(),
+          is_completed: true
+        })
+        .eq('id', sessionId)
+
+      // Clear session storage
+      sessionStorage.removeItem(`validation_session_${shareToken}`)
+
+      // Go past the last step to show completion
+      setCurrentStepIndex(flowData.steps.length)
+      setCurrentAnswer('')
+      setTextListAnswers([])
+      return
+    }
+
+    // Find the index of the target step
+    let nextIndex = currentStepIndex + 1 // Default to next in array
+    if (nextStepId) {
+      const targetIndex = flowData.steps.findIndex(step => step.id === nextStepId)
+      if (targetIndex !== -1) {
+        nextIndex = targetIndex
+      }
+    }
+
     // Check if this is the last step
-    if (currentStepIndex === flowData.steps.length - 1) {
+    if (nextIndex >= flowData.steps.length) {
       // Mark session as completed
       await supabase
         .from('validation_sessions')
@@ -189,8 +280,9 @@ const PublicValidationFlow = () => {
       sessionStorage.removeItem(`validation_session_${shareToken}`)
     }
 
-    // Move to next step
-    setCurrentStepIndex(prev => prev + 1)
+    // Move to next step (push current to history for back navigation)
+    setStepHistory(prev => [...prev, currentStepIndex])
+    setCurrentStepIndex(nextIndex)
     setCurrentAnswer('')
     setTextListAnswers([])
   }
@@ -355,26 +447,36 @@ const PublicValidationFlow = () => {
           {/* Question Prompt */}
           <div
             className="validation-prompt"
-            dangerouslySetInnerHTML={{ __html: currentStep.assistant_prompt.replace(/\n/g, '<br/>') }}
+            dangerouslySetInnerHTML={{ __html: formatPrompt(currentStep.assistant_prompt) }}
           />
 
           {/* Input Field */}
           <div className="validation-input-section">
             {renderInput(currentStep.expected_inputs?.[0])}
           </div>
+        </div>
 
-          {/* Next Button */}
+        {/* Navigation Buttons - Fixed at bottom */}
+        <div className="validation-nav-buttons">
           <button
             className="validation-next-btn"
             onClick={handleNext}
             disabled={
+              currentStep.expected_inputs?.length > 0 &&
               !currentAnswer &&
               currentStep.expected_inputs?.[0]?.type !== 'text_list' &&
               textListAnswers.length === 0
             }
           >
-            {currentStepIndex === flowData.steps.length - 1 ? 'Finish' : 'Continue'}
+            {currentStep.button_text || (currentStepIndex === flowData.steps.length - 1 ? 'Finish' : 'Continue')}
           </button>
+
+          {/* Back Button - only show if there's history to go back to */}
+          {stepHistory.length > 0 && (
+            <button className="validation-back-btn" onClick={handleBack}>
+              ← Go Back
+            </button>
+          )}
         </div>
 
         {/* Footer */}

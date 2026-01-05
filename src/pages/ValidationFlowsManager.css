@@ -439,6 +439,116 @@
   transform: none;
 }
 
+/* Context Form (Step 2) */
+.dashboard-container .context-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.dashboard-container .context-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard-container .context-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.dashboard-container .context-form textarea {
+  padding: 12px 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.dashboard-container .context-form textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.dashboard-container .context-form textarea::placeholder {
+  color: #adb5bd;
+}
+
+.dashboard-container .context-form .form-hint {
+  font-size: 12px;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Dropdown with custom option */
+.dashboard-container .context-form .dropdown-with-custom select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+}
+
+.dashboard-container .context-form .dropdown-with-custom select:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.dashboard-container .context-form .custom-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard-container .context-form .switch-to-dropdown {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  padding: 4px 0;
+  transition: color 0.2s ease;
+}
+
+.dashboard-container .context-form .switch-to-dropdown:hover {
+  color: #4a0ea8;
+  text-decoration: underline;
+}
+
+.dashboard-container .context-form .flow-finder-hint {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+.dashboard-container .context-form .flow-finder-hint a {
+  color: #5e17eb;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.dashboard-container .context-form .flow-finder-hint a:hover {
+  color: #4a0ea8;
+}
+
 /* Empty State */
 .dashboard-container .empty-state {
   text-align: center;

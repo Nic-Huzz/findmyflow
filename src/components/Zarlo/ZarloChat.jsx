@@ -93,6 +93,7 @@ function ZarloChat({ onClose, challengeTab = null }) {
   const navigate = useNavigate()
   const location = useLocation()
   const messagesEndRef = useRef(null)
+  const initializedRef = useRef(false)
 
   // State
   const [loading, setLoading] = useState(true)
@@ -124,10 +125,12 @@ function ZarloChat({ onClose, challengeTab = null }) {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [onClose])
 
-  // Initialize Zarlo
+  // Initialize Zarlo (only once per mount)
   useEffect(() => {
+    if (initializedRef.current) return
+    initializedRef.current = true
     initializeZarlo()
-  }, [user, currentRoute])
+  }, [])
 
   const initializeZarlo = async () => {
     if (!user?.id) {
@@ -219,8 +222,11 @@ function ZarloChat({ onClose, challengeTab = null }) {
     const greeting = `${timeGreeting}! You're in **${pageContent.pageName}**`
     addMessage('zarlo', greeting)
 
-    // Check for next best action suggestion
-    const nextAction = getNextBestAction(userContext)
+    // Skip next best action for public validation flows (no NS map suggestions)
+    const isPublicValidation = currentRoute.startsWith('/v/')
+
+    // Check for next best action suggestion (skip for public validation)
+    const nextAction = isPublicValidation ? null : getNextBestAction(userContext)
     if (nextAction?.message) {
       // Add the suggestion as a follow-up message
       setTimeout(() => {

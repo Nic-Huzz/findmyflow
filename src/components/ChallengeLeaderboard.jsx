@@ -2,14 +2,14 @@
  * ChallengeLeaderboard - Leaderboard component for the Challenge page
  *
  * Displays weekly/all-time leaderboard with group code sharing.
+ * Updated for week-based system (Mon-Sun calendar weeks).
  */
 
 function ChallengeLeaderboard({
   leaderboard,
   leaderboardView,
   setLeaderboardView,
-  groupCode,
-  currentDay
+  groupCode
 }) {
   return (
     <div className="leaderboard-section">
@@ -31,7 +31,7 @@ function ChallengeLeaderboard({
         </div>
       </div>
 
-      {groupCode && currentDay === 0 && (
+      {groupCode && (
         <div className="group-code-display">
           <div className="group-code-info">
             Group Code: <strong>{groupCode}</strong>
@@ -39,7 +39,7 @@ function ChallengeLeaderboard({
           <button
             className="whatsapp-share-btn"
             onClick={() => {
-              const message = `Join my 7-Day Find My Flow Challenge! Use code: ${groupCode}`
+              const message = `Join my Find My Flow Challenge! Use code: ${groupCode}`
               const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`
               window.open(whatsappUrl, '_blank')
             }}
@@ -75,7 +75,6 @@ function ChallengeLeaderboard({
                 {entry.name}
                 {entry.isCurrentUser && <span className="you-badge">You</span>}
               </div>
-              <div className="leaderboard-meta">Day {entry.currentDay}/7</div>
             </div>
             <div className="leaderboard-points">
               {entry.totalPoints} pts

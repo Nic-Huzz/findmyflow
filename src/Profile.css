@@ -1136,11 +1136,18 @@
   }
 
   .stats-grid {
+    grid-template-columns: 1fr !important;
     gap: 15px;
   }
 
   .stat-card {
     padding: 20px;
+  }
+
+  /* Force archetype cards to stack on mobile */
+  .dashboard-container .archetype-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
   }
 }
 

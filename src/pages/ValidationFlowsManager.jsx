@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
+import { supabase } from '../lib/supabaseClient'
 import {
   getUserValidationFlows,
   createValidationFlow,
@@ -26,14 +27,59 @@ const ValidationFlowsManager = () => {
   const [analytics, setAnalytics] = useState(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [selectedFlowType, setSelectedFlowType] = useState(null)
+  const [createStep, setCreateStep] = useState(1) // 1 = type, 2 = context
+  const [placeholders, setPlaceholders] = useState({
+    problemArea: '',
+    solutionConcept: '',
+    audienceDescription: ''
+  })
   const [copiedToken, setCopiedToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // Flow Finder data for dropdowns
+  const [flowFinderProblems, setFlowFinderProblems] = useState([])
+  const [flowFinderPersonas, setFlowFinderPersonas] = useState([])
+  const [useCustomProblem, setUseCustomProblem] = useState(false)
+  const [useCustomPersona, setUseCustomPersona] = useState(false)
 
   useEffect(() => {
     if (user?.id) {
       loadFlows()
+      loadFlowFinderData()
     }
   }, [user])
+
+  const loadFlowFinderData = async () => {
+    try {
+      // Load problems from Flow Finder
+      const { data: problemClusters, error: problemError } = await supabase
+        .from('nikigai_clusters')
+        .select('cluster_label, insight')
+        .eq('user_id', user.id)
+        .eq('cluster_type', 'problems')
+        .order('created_at', { ascending: false })
+
+      if (problemClusters && problemClusters.length > 0) {
+        const problems = problemClusters.map(c => c.cluster_label || c.insight).filter(Boolean)
+        setFlowFinderProblems(problems)
+      }
+
+      // Load personas from Flow Finder
+      const { data: personaClusters, error: personaError } = await supabase
+        .from('nikigai_clusters')
+        .select('cluster_label, insight')
+        .eq('user_id', user.id)
+        .eq('cluster_type', 'persona')
+        .order('created_at', { ascending: false })
+
+      if (personaClusters && personaClusters.length > 0) {
+        const personas = personaClusters.map(c => c.cluster_label || c.insight).filter(Boolean)
+        setFlowFinderPersonas(personas)
+      }
+    } catch (err) {
+      console.error('Error loading Flow Finder data:', err)
+    }
+  }
 
   const loadFlows = async () => {
     setLoading(true)
@@ -42,21 +88,21 @@ const ValidationFlowsManager = () => {
     setLoading(false)
   }
 
-  const handleCreateFlow = async (flowType) => {
+  const handleCreateFlow = async () => {
     let flowConfig
 
-    if (flowType === 'validation') {
+    if (selectedFlowType === 'validation') {
       flowConfig = {
-        name: 'Vibe Riser Validation',
-        description: 'Customer discovery questions for Vibe Riser persona',
+        name: `Validation: ${placeholders.problemArea.substring(0, 30)}...`,
+        description: `Customer discovery for: ${placeholders.audienceDescription}`,
         jsonPath: 'validation-flow-vibe-riser.json',
         persona: 'vibe_riser',
         stage: 'validation'
       }
-    } else if (flowType === 'testing') {
+    } else if (selectedFlowType === 'testing') {
       flowConfig = {
-        name: 'Vibe Riser Testing Feedback',
-        description: 'Product feedback questions for Vibe Riser beta testers',
+        name: `Testing: ${placeholders.solutionConcept.substring(0, 30)}...`,
+        description: `Product feedback for: ${placeholders.audienceDescription}`,
         jsonPath: 'validation-flow-vibe-riser-testing.json',
         persona: 'vibe_riser',
         stage: 'testing'
@@ -69,17 +115,38 @@ const ValidationFlowsManager = () => {
       flowConfig.description,
       flowConfig.jsonPath,
       flowConfig.persona,
-      flowConfig.stage
+      flowConfig.stage,
+      placeholders
     )
 
     if (result.success) {
       alert(`Flow created! Share URL: ${result.shareUrl}`)
-      setShowCreateModal(false)
-      setSelectedFlowType(null)
+      resetCreateModal()
       loadFlows()
     } else {
       alert(`Error: ${result.error}`)
     }
+  }
+
+  const resetCreateModal = () => {
+    setShowCreateModal(false)
+    setSelectedFlowType(null)
+    setCreateStep(1)
+    setPlaceholders({
+      problemArea: '',
+      solutionConcept: '',
+      audienceDescription: ''
+    })
+    setUseCustomProblem(false)
+    setUseCustomPersona(false)
+  }
+
+  const canProceedToStep2 = () => selectedFlowType !== null
+
+  const canCreateFlow = () => {
+    return placeholders.problemArea.trim().length > 0 &&
+           placeholders.solutionConcept.trim().length > 0 &&
+           placeholders.audienceDescription.trim().length > 0
   }
 
   const handleViewResponses = async (flow) => {
@@ -324,46 +391,189 @@ const ValidationFlowsManager = () => {
 
         {/* Create Flow Modal */}
         {showCreateModal && (
-        <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
+        <div className="modal-overlay" onClick={resetCreateModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Create Validation Flow</h2>
-            <p>Choose which stage flow you want to create:</p>
+            {/* Step 1: Choose Flow Type */}
+            {createStep === 1 && (
+              <>
+                <h2>Create Validation Flow</h2>
+                <p>Choose which stage flow you want to create:</p>
 
-            <div className="flow-type-options">
-              <div
-                className={`flow-type-card ${selectedFlowType === 'validation' ? 'selected' : ''}`}
-                onClick={() => setSelectedFlowType('validation')}
-              >
-                <h3>Validation Stage</h3>
-                <p>Customer discovery questions - validate the problem and solution before building</p>
-                <span className="question-count">11 questions</span>
-              </div>
+                <div className="flow-type-options">
+                  <div
+                    className={`flow-type-card ${selectedFlowType === 'validation' ? 'selected' : ''}`}
+                    onClick={() => setSelectedFlowType('validation')}
+                  >
+                    <h3>Validation Stage</h3>
+                    <p>Customer discovery questions - validate the problem and solution before building</p>
+                    <span className="question-count">13 questions</span>
+                  </div>
 
-              <div
-                className={`flow-type-card ${selectedFlowType === 'testing' ? 'selected' : ''}`}
-                onClick={() => setSelectedFlowType('testing')}
-              >
-                <h3>Testing Stage</h3>
-                <p>Product feedback questions - gather insights from beta testers</p>
-                <span className="question-count">10 questions</span>
-              </div>
-            </div>
+                  <div
+                    className={`flow-type-card ${selectedFlowType === 'testing' ? 'selected' : ''}`}
+                    onClick={() => setSelectedFlowType('testing')}
+                  >
+                    <h3>Testing Stage</h3>
+                    <p>Product feedback questions - gather insights from beta testers</p>
+                    <span className="question-count">10 questions</span>
+                  </div>
+                </div>
 
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={() => {
-                setShowCreateModal(false)
-                setSelectedFlowType(null)
-              }}>
-                Cancel
-              </button>
-              <button
-                className="confirm-btn"
-                onClick={() => handleCreateFlow(selectedFlowType)}
-                disabled={!selectedFlowType}
-              >
-                Create Flow
-              </button>
-            </div>
+                <div className="modal-actions">
+                  <button className="cancel-btn" onClick={resetCreateModal}>
+                    Cancel
+                  </button>
+                  <button
+                    className="confirm-btn"
+                    onClick={() => setCreateStep(2)}
+                    disabled={!canProceedToStep2()}
+                  >
+                    Next: Add Context
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Step 2: Add Context */}
+            {createStep === 2 && (
+              <>
+                <h2>Add Context for Respondents</h2>
+                <p>This information will be shown to people taking your survey so they understand what you're asking about.</p>
+
+                <div className="context-form">
+                  {/* Problem Area - Dropdown or Custom */}
+                  <div className="form-group">
+                    <label>What problem are you solving?</label>
+                    {flowFinderProblems.length === 0 && (
+                      <div className="flow-finder-hint">
+                        💡 Complete <a href="/nikigai/problems" target="_blank">Flow Finder: Problems</a> to select from your discoveries
+                      </div>
+                    )}
+                    {!useCustomProblem && flowFinderProblems.length > 0 ? (
+                      <div className="dropdown-with-custom">
+                        <select
+                          value={placeholders.problemArea}
+                          onChange={(e) => {
+                            if (e.target.value === '__custom__') {
+                              setUseCustomProblem(true)
+                              setPlaceholders({ ...placeholders, problemArea: '' })
+                            } else {
+                              setPlaceholders({ ...placeholders, problemArea: e.target.value })
+                            }
+                          }}
+                        >
+                          <option value="">Select from Flow Finder...</option>
+                          {flowFinderProblems.map((problem, idx) => (
+                            <option key={idx} value={problem}>{problem}</option>
+                          ))}
+                          <option value="__custom__">✏️ Write my own...</option>
+                        </select>
+                      </div>
+                    ) : (
+                      <div className="custom-input-wrapper">
+                        <textarea
+                          placeholder="e.g., finding clarity and purpose in their career"
+                          value={placeholders.problemArea}
+                          onChange={(e) => setPlaceholders({ ...placeholders, problemArea: e.target.value })}
+                          rows={2}
+                        />
+                        {flowFinderProblems.length > 0 && (
+                          <button
+                            type="button"
+                            className="switch-to-dropdown"
+                            onClick={() => {
+                              setUseCustomProblem(false)
+                              setPlaceholders({ ...placeholders, problemArea: '' })
+                            }}
+                          >
+                            ← Choose from Flow Finder
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    <span className="form-hint">This helps respondents understand the context of your questions</span>
+                  </div>
+
+                  {/* Audience - Dropdown or Custom */}
+                  <div className="form-group">
+                    <label>Who is this for?</label>
+                    {flowFinderPersonas.length === 0 && (
+                      <div className="flow-finder-hint">
+                        💡 Complete <a href="/nikigai/persona" target="_blank">Flow Finder: Persona</a> to select from your discoveries
+                      </div>
+                    )}
+                    {!useCustomPersona && flowFinderPersonas.length > 0 ? (
+                      <div className="dropdown-with-custom">
+                        <select
+                          value={placeholders.audienceDescription}
+                          onChange={(e) => {
+                            if (e.target.value === '__custom__') {
+                              setUseCustomPersona(true)
+                              setPlaceholders({ ...placeholders, audienceDescription: '' })
+                            } else {
+                              setPlaceholders({ ...placeholders, audienceDescription: e.target.value })
+                            }
+                          }}
+                        >
+                          <option value="">Select from Flow Finder...</option>
+                          {flowFinderPersonas.map((persona, idx) => (
+                            <option key={idx} value={persona}>{persona}</option>
+                          ))}
+                          <option value="__custom__">✏️ Write my own...</option>
+                        </select>
+                      </div>
+                    ) : (
+                      <div className="custom-input-wrapper">
+                        <textarea
+                          placeholder="e.g., professionals feeling stuck or unfulfilled"
+                          value={placeholders.audienceDescription}
+                          onChange={(e) => setPlaceholders({ ...placeholders, audienceDescription: e.target.value })}
+                          rows={2}
+                        />
+                        {flowFinderPersonas.length > 0 && (
+                          <button
+                            type="button"
+                            className="switch-to-dropdown"
+                            onClick={() => {
+                              setUseCustomPersona(false)
+                              setPlaceholders({ ...placeholders, audienceDescription: '' })
+                            }}
+                          >
+                            ← Choose from Flow Finder
+                          </button>
+                        )}
+                      </div>
+                    )}
+                    <span className="form-hint">Describe your target audience so they can self-identify</span>
+                  </div>
+
+                  {/* Solution - Always textarea (moved to last) */}
+                  <div className="form-group">
+                    <label>What solution are you exploring?</label>
+                    <textarea
+                      placeholder="e.g., a guided discovery process to uncover your ideal path"
+                      value={placeholders.solutionConcept}
+                      onChange={(e) => setPlaceholders({ ...placeholders, solutionConcept: e.target.value })}
+                      rows={2}
+                    />
+                    <span className="form-hint">Briefly describe what you're thinking of building</span>
+                  </div>
+                </div>
+
+                <div className="modal-actions">
+                  <button className="cancel-btn" onClick={() => setCreateStep(1)}>
+                    Back
+                  </button>
+                  <button
+                    className="confirm-btn"
+                    onClick={handleCreateFlow}
+                    disabled={!canCreateFlow()}
+                  >
+                    Create Flow
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
         )}

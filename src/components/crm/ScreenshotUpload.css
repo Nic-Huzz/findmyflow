@@ -1,0 +1,595 @@
+/* Screenshot Upload - Light Theme */
+.screenshot-upload-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1001;
+}
+
+.screenshot-upload-overlay .screenshot-upload-modal {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+.screenshot-upload-overlay .screenshot-upload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.screenshot-upload-overlay .header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.screenshot-upload-overlay .header-icon {
+  font-size: 1.5rem;
+}
+
+.screenshot-upload-overlay .header-title h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: #212529;
+}
+
+.screenshot-upload-overlay .close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.screenshot-upload-overlay .close-btn:hover {
+  color: #495057;
+}
+
+/* Content */
+.screenshot-upload-overlay .screenshot-upload-content {
+  padding: 20px;
+}
+
+/* Upload Zone */
+.screenshot-upload-overlay .upload-zone {
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f8f9fa;
+  margin-bottom: 16px;
+}
+
+.screenshot-upload-overlay .upload-zone:hover {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.02);
+}
+
+.screenshot-upload-overlay .upload-zone.has-file {
+  padding: 12px;
+  border-style: solid;
+  border-color: #5e17eb;
+}
+
+.screenshot-upload-overlay .upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.screenshot-upload-overlay .upload-icon {
+  font-size: 3rem;
+  opacity: 0.7;
+}
+
+.screenshot-upload-overlay .upload-text {
+  margin: 0;
+  font-size: 1rem;
+  color: #212529;
+  font-weight: 500;
+}
+
+.screenshot-upload-overlay .upload-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Preview */
+.screenshot-upload-overlay .preview-container {
+  position: relative;
+  display: inline-block;
+}
+
+.screenshot-upload-overlay .preview-image {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.screenshot-upload-overlay .clear-preview {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Error */
+.screenshot-upload-overlay .upload-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+}
+
+.screenshot-upload-overlay .error-icon {
+  font-size: 1rem;
+}
+
+/* Tips */
+.screenshot-upload-overlay .upload-tips {
+  background: rgba(94, 23, 235, 0.05);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.screenshot-upload-overlay .upload-tips h4 {
+  margin: 0 0 8px 0;
+  font-size: 0.875rem;
+  color: #5e17eb;
+}
+
+.screenshot-upload-overlay .upload-tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.screenshot-upload-overlay .upload-tips li {
+  font-size: 0.8125rem;
+  color: #495057;
+  margin-bottom: 4px;
+}
+
+/* Actions */
+.screenshot-upload-overlay .upload-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.screenshot-upload-overlay .cancel-btn {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.screenshot-upload-overlay .cancel-btn:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.screenshot-upload-overlay .analyze-btn {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.screenshot-upload-overlay .analyze-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.screenshot-upload-overlay .analyze-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Analyzing State */
+.screenshot-upload-overlay .analyzing {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.screenshot-upload-overlay .analyzing-animation {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+}
+
+.screenshot-upload-overlay .analyzing-spinner {
+  position: absolute;
+  inset: 0;
+  border: 4px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: screenshot-spin 1s linear infinite;
+}
+
+@keyframes screenshot-spin {
+  to { transform: rotate(360deg); }
+}
+
+.screenshot-upload-overlay .analyzing-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.screenshot-upload-overlay .analyzing h4 {
+  margin: 0 0 8px 0;
+  color: #212529;
+}
+
+.screenshot-upload-overlay .analyzing p {
+  margin: 0 0 20px 0;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.screenshot-upload-overlay .analyzing-preview {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 8px;
+  opacity: 0.6;
+}
+
+/* Review State */
+.screenshot-upload-overlay .review {
+  padding: 16px 20px;
+}
+
+.screenshot-upload-overlay .confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.screenshot-upload-overlay .confidence-badge.high {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.screenshot-upload-overlay .confidence-badge.medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.screenshot-upload-overlay .confidence-badge.low {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+.screenshot-upload-overlay .platform-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-left: 8px;
+  margin-bottom: 12px;
+}
+
+/* Matching Deals */
+.screenshot-upload-overlay .matching-deals {
+  background: rgba(94, 23, 235, 0.05);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.screenshot-upload-overlay .matching-deals h4 {
+  margin: 0 0 10px 0;
+  font-size: 0.875rem;
+  color: #5e17eb;
+}
+
+.screenshot-upload-overlay .match-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.screenshot-upload-overlay .match-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.screenshot-upload-overlay .match-name {
+  font-weight: 600;
+  color: #212529;
+  font-size: 0.875rem;
+}
+
+.screenshot-upload-overlay .match-score {
+  font-size: 0.7rem;
+  color: #6c757d;
+}
+
+.screenshot-upload-overlay .update-existing-btn {
+  background: rgba(94, 23, 235, 0.1);
+  border: none;
+  color: #5e17eb;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.screenshot-upload-overlay .update-existing-btn:hover {
+  background: rgba(94, 23, 235, 0.15);
+}
+
+.screenshot-upload-overlay .match-divider {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 8px;
+}
+
+/* Review Fields */
+.screenshot-upload-overlay .review-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.screenshot-upload-overlay .field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.screenshot-upload-overlay .field-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.screenshot-upload-overlay .field-group input,
+.screenshot-upload-overlay .field-group select,
+.screenshot-upload-overlay .field-group textarea {
+  padding: 10px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #212529;
+  background: #f8f9fa;
+}
+
+.screenshot-upload-overlay .field-group input:focus,
+.screenshot-upload-overlay .field-group select:focus,
+.screenshot-upload-overlay .field-group textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background: #ffffff;
+}
+
+.screenshot-upload-overlay .field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.screenshot-upload-overlay .temperature-display {
+  padding: 10px 12px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.screenshot-upload-overlay .temp-badge {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.screenshot-upload-overlay .temp-badge.hot { color: #dc2626; }
+.screenshot-upload-overlay .temp-badge.warm { color: #d97706; }
+.screenshot-upload-overlay .temp-badge.cold { color: #2563eb; }
+
+/* Extracted Sections */
+.screenshot-upload-overlay .extracted-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.screenshot-upload-overlay .extracted-section.pain {
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.screenshot-upload-overlay .extracted-section label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin-bottom: 8px;
+}
+
+.screenshot-upload-overlay .key-points-list,
+.screenshot-upload-overlay .pain-points-list {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.screenshot-upload-overlay .key-points-list li,
+.screenshot-upload-overlay .pain-points-list li {
+  font-size: 0.8125rem;
+  color: #495057;
+  margin-bottom: 4px;
+}
+
+.screenshot-upload-overlay .pain-points-list li {
+  color: #dc2626;
+}
+
+/* Review Actions */
+.screenshot-upload-overlay .review-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e9ecef;
+}
+
+.screenshot-upload-overlay .back-btn {
+  background: none;
+  border: none;
+  color: #6c757d;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.screenshot-upload-overlay .back-btn:hover {
+  color: #212529;
+}
+
+.screenshot-upload-overlay .create-deal-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.screenshot-upload-overlay .create-deal-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Error State */
+.screenshot-upload-overlay .error-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.screenshot-upload-overlay .error-icon-large {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.screenshot-upload-overlay .error-state h4 {
+  margin: 0 0 8px 0;
+  color: #dc2626;
+}
+
+.screenshot-upload-overlay .error-message {
+  color: #6c757d;
+  font-size: 0.875rem;
+  margin-bottom: 20px;
+}
+
+.screenshot-upload-overlay .error-preview {
+  max-width: 100%;
+  max-height: 120px;
+  border-radius: 8px;
+  opacity: 0.5;
+  margin-bottom: 20px;
+}
+
+.screenshot-upload-overlay .error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.screenshot-upload-overlay .retry-btn {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .screenshot-upload-overlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .screenshot-upload-overlay .screenshot-upload-modal {
+    max-height: 85vh;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .screenshot-upload-overlay .field-row {
+    grid-template-columns: 1fr;
+  }
+}

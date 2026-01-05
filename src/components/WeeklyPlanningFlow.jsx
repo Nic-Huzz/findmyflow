@@ -10,7 +10,8 @@
  * 3. Morning Reconnect Builder
  * 4. Weekly Groan Carousel (Nic's story)
  * 5. Conditional Commitments (Healing Priority + 3% Improvement)
- * 6. Week Plan Summary
+ * 6. Group Selection (Solo / Create Group / Join Group)
+ * 7. Week Plan Summary
  *
  * Created: Dec 2024
  * See docs/weekly-planning-system-plan.md
@@ -132,6 +133,15 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   // Current step in the flow
   const [step, setStep] = useState(1)
 
+  // Group selection state
+  const [groupMode, setGroupMode] = useState(null) // 'solo' | 'create' | 'join'
+  const [groupCode, setGroupCode] = useState('')
+  const [groupCodeInput, setGroupCodeInput] = useState('')
+  const [groupData, setGroupData] = useState(null)
+  const [creatingGroup, setCreatingGroup] = useState(false)
+  const [joiningGroup, setJoiningGroup] = useState(false)
+  const [groupError, setGroupError] = useState(null)
+
   // Foundation check state
   const [hasNervousSystem, setHasNervousSystem] = useState(null)
   const [hasHealingCompass, setHasHealingCompass] = useState(null)
@@ -191,6 +201,98 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     }
   }
 
+  // Group handling functions
+  const handleCreateGroup = async () => {
+    if (creatingGroup) return
+    setCreatingGroup(true)
+    setGroupError(null)
+
+    try {
+      // Generate unique group code
+      const { data: newCode, error: codeError } = await supabase.rpc('generate_group_code')
+      if (codeError) throw codeError
+
+      // Create group record
+      const { data: newGroup, error: groupError } = await supabase
+        .from('challenge_groups')
+        .insert([{
+          code: newCode,
+          created_by: user.id,
+          start_date: new Date().toISOString().split('T')[0]
+        }])
+        .select()
+        .single()
+
+      if (groupError) throw groupError
+
+      // Add user as participant
+      await supabase
+        .from('challenge_participants')
+        .insert([{
+          group_id: newGroup.id,
+          user_id: user.id
+        }])
+
+      setGroupCode(newCode)
+      setGroupData(newGroup)
+      setGroupMode('create')
+    } catch (err) {
+      console.error('Error creating group:', err)
+      setGroupError('Failed to create group. Please try again.')
+    } finally {
+      setCreatingGroup(false)
+    }
+  }
+
+  const handleJoinGroup = async () => {
+    if (joiningGroup || !groupCodeInput.trim()) return
+    setJoiningGroup(true)
+    setGroupError(null)
+
+    try {
+      // Find group by code
+      const { data: foundGroup, error: findError } = await supabase
+        .from('challenge_groups')
+        .select('*')
+        .eq('code', groupCodeInput.trim().toUpperCase())
+        .single()
+
+      if (findError || !foundGroup) {
+        setGroupError('Invalid group code. Please check and try again.')
+        setJoiningGroup(false)
+        return
+      }
+
+      // Add user as participant (upsert to handle rejoining)
+      await supabase
+        .from('challenge_participants')
+        .upsert([{
+          group_id: foundGroup.id,
+          user_id: user.id
+        }], { onConflict: 'group_id,user_id' })
+
+      setGroupCode(foundGroup.code)
+      setGroupData(foundGroup)
+      setGroupMode('join')
+    } catch (err) {
+      console.error('Error joining group:', err)
+      setGroupError('Failed to join group. Please try again.')
+    } finally {
+      setJoiningGroup(false)
+    }
+  }
+
+  const handlePlaySolo = () => {
+    setGroupMode('solo')
+    setGroupData(null)
+    setGroupCode('')
+  }
+
+  const copyGroupCode = () => {
+    navigator.clipboard.writeText(groupCode)
+    alert('Group code copied to clipboard!')
+  }
+
   // Get Monday of current week
   const getWeekStart = () => {
     const now = new Date()
@@ -207,51 +309,66 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   }
 
   // Calculate total steps (accounting for conditional foundation step)
+  // Steps: Group(1) + WeekType(2) + Foundation?(3) + Morning(3/4) + Groan(4/5) + Commitments(5/6) + Summary(6/7)
   const getTotalSteps = () => {
-    return showFoundationStep ? 6 : 5
+    return showFoundationStep ? 7 : 6
   }
 
-  // Get actual step number for display
+  // Get actual step number for display (always show from 1)
   const getDisplayStep = () => {
-    if (!showFoundationStep && step > 1) {
-      return step - 1
-    }
     return step
   }
 
   // Navigation
   const canContinue = () => {
-    // Determine what's actually being rendered at this step
-    const isGroanStep = (showFoundationStep && step === 4) || (!showFoundationStep && step === 3)
-    const isMorningStep = (showFoundationStep && step === 3) || (!showFoundationStep && step === 2)
-    const isConditionalsStep = (showFoundationStep && step === 5) || (!showFoundationStep && step === 4)
-
+    // Step 1 is Week Type Selection
     if (step === 1) return weekType !== null
 
-    if (step === 2 && showFoundationStep) return true // Foundation check - can always skip
+    // Step 2: Foundation check (if shown) OR Morning routine (if no foundation)
+    if (step === 2) {
+      if (showFoundationStep) return true // Foundation check - can always skip
+      return morningRoutine.length > 0 // Morning routine
+    }
 
-    if (isMorningStep) return morningRoutine.length > 0
-
-    if (isGroanStep) {
-      if (groanSlide < GROAN_SLIDES.length - 1) return true // Can swipe through
-      // On last slide, require description, day, fears and layer
+    // Step 3: Morning routine (if foundation shown) OR Groan carousel (if no foundation)
+    if (step === 3) {
+      if (showFoundationStep) return morningRoutine.length > 0
+      // Groan step
+      if (groanSlide < GROAN_SLIDES.length - 1) return true
       return groanDescription.trim().length > 0 && groanDay !== null && groanFears.length > 0 && groanLayer !== null
     }
 
-    if (isConditionalsStep) return true // All optional
+    // Step 4: Groan (if foundation shown) OR Conditionals (if no foundation)
+    if (step === 4) {
+      if (showFoundationStep) {
+        // Groan step
+        if (groanSlide < GROAN_SLIDES.length - 1) return true
+        return groanDescription.trim().length > 0 && groanDay !== null && groanFears.length > 0 && groanLayer !== null
+      }
+      return true // Conditionals - all optional
+    }
 
-    // Summary or any other step
+    // Step 5: Conditionals (if foundation shown) OR Group Selection (if no foundation)
+    if (step === 5) {
+      if (showFoundationStep) return true // Conditionals - all optional
+      return groupMode !== null // Group selection
+    }
+
+    // Step 6: Group Selection (if foundation shown) OR Summary (if no foundation)
+    if (step === 6) {
+      if (showFoundationStep) return groupMode !== null // Group selection
+      return true // Summary
+    }
+
+    // Step 7: Summary (if foundation shown)
     return true
   }
 
   const handleNext = () => {
-    // Determine if we're on groan step
+    // Determine if we're on groan step (step 4 with foundation, step 3 without)
     const isGroanStep = (showFoundationStep && step === 4) || (!showFoundationStep && step === 3)
 
-    // Special handling for foundation step - skip step 2 (foundation check)
-    if (step === 1 && !showFoundationStep) {
-      setStep(2) // Go to morning routine (step 2 when no foundation)
-    } else if (isGroanStep && groanSlide < GROAN_SLIDES.length - 1) {
+    if (isGroanStep && groanSlide < GROAN_SLIDES.length - 1) {
       setSlideDirection('left')
       setGroanSlide(groanSlide + 1) // Just advance slide
     } else {
@@ -260,14 +377,12 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   }
 
   const handleBack = () => {
-    // Determine if we're on groan step
+    // Determine if we're on groan step (step 4 with foundation, step 3 without)
     const isGroanStep = (showFoundationStep && step === 4) || (!showFoundationStep && step === 3)
 
     if (isGroanStep && groanSlide > 0) {
       setSlideDirection('right')
       setGroanSlide(groanSlide - 1)
-    } else if (step === 2 && !showFoundationStep) {
-      setStep(1) // Skip back over foundation (which is step 2 when shown)
     } else {
       setStep(step - 1)
     }
@@ -293,6 +408,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
         user_id: user.id,
         week_start: weekStart,
         week_type: weekType,
+        group_id: groupData?.id || null, // Store group selection
         morning_routine: morningRoutine,
         weekly_groan_description: groanDescription.trim() || null,
         weekly_groan_day: groanDay,
@@ -304,6 +420,21 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
         three_percent_improvement: delivering ? threePercentImprovement.trim() : null,
         foundation_reminder: foundationReminder,
         updated_at: new Date().toISOString()
+      }
+
+      // Also update user's challenge_progress with the new group_id
+      if (groupMode === 'solo') {
+        // Clear group association
+        await supabase
+          .from('challenge_progress')
+          .update({ group_id: null })
+          .eq('user_id', user.id)
+      } else if (groupData?.id) {
+        // Set group association
+        await supabase
+          .from('challenge_progress')
+          .update({ group_id: groupData.id })
+          .eq('user_id', user.id)
       }
 
       // Upsert (update if exists, insert if not)
@@ -338,7 +469,134 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     }
   }
 
-  // Render Step 1: Week Type Selection
+  // Render Step 1: Group Selection
+  const renderGroupSelection = () => (
+    <div className="planning-step group-step">
+      <h2>How do you want to play this week?</h2>
+      <p className="step-subtitle">Compete on the leaderboard with friends or go solo</p>
+
+      {/* Mode selection cards */}
+      {!groupMode && (
+        <div className="group-mode-grid">
+          <button
+            className="group-mode-card solo"
+            onClick={handlePlaySolo}
+          >
+            <span className="mode-icon">🎯</span>
+            <span className="mode-label">Play Solo</span>
+            <span className="mode-desc">See everyone on the leaderboard</span>
+          </button>
+
+          <button
+            className="group-mode-card create"
+            onClick={handleCreateGroup}
+            disabled={creatingGroup}
+          >
+            <span className="mode-icon">✨</span>
+            <span className="mode-label">{creatingGroup ? 'Creating...' : 'Create a Group'}</span>
+            <span className="mode-desc">Start a new group and invite friends</span>
+          </button>
+
+          <button
+            className="group-mode-card join"
+            onClick={() => setGroupMode('joining')}
+          >
+            <span className="mode-icon">👥</span>
+            <span className="mode-label">Join a Group</span>
+            <span className="mode-desc">Enter a code from a friend</span>
+          </button>
+        </div>
+      )}
+
+      {/* Join group input */}
+      {groupMode === 'joining' && (
+        <div className="join-group-section">
+          <label>Enter group code:</label>
+          <input
+            type="text"
+            className="group-code-input"
+            value={groupCodeInput}
+            onChange={(e) => setGroupCodeInput(e.target.value.toUpperCase())}
+            placeholder="XXXX-XXXX"
+            maxLength={9}
+          />
+          <div className="join-actions">
+            <button
+              className="cancel-btn"
+              onClick={() => {
+                setGroupMode(null)
+                setGroupCodeInput('')
+                setGroupError(null)
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="join-btn"
+              onClick={handleJoinGroup}
+              disabled={joiningGroup || !groupCodeInput.trim()}
+            >
+              {joiningGroup ? 'Joining...' : 'Join Group'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Success states */}
+      {groupMode === 'solo' && (
+        <div className="group-success solo-success">
+          <span className="success-icon">🎯</span>
+          <h3>Going Solo!</h3>
+          <p>You'll see everyone on the leaderboard this week.</p>
+          <button className="change-btn" onClick={() => setGroupMode(null)}>
+            Change
+          </button>
+        </div>
+      )}
+
+      {groupMode === 'create' && groupCode && (
+        <div className="group-success create-success">
+          <span className="success-icon">✨</span>
+          <h3>Group Created!</h3>
+          <p>Share this code with friends:</p>
+          <div className="group-code-display">
+            <span className="code">{groupCode}</span>
+            <button className="copy-btn" onClick={copyGroupCode}>Copy</button>
+          </div>
+          <button className="change-btn" onClick={() => {
+            setGroupMode(null)
+            setGroupCode('')
+            setGroupData(null)
+          }}>
+            Start Over
+          </button>
+        </div>
+      )}
+
+      {groupMode === 'join' && (
+        <div className="group-success join-success">
+          <span className="success-icon">👥</span>
+          <h3>Joined Group!</h3>
+          <p>You'll compete with your group on the leaderboard.</p>
+          <div className="group-code-display">
+            <span className="code">{groupCode}</span>
+          </div>
+          <button className="change-btn" onClick={() => {
+            setGroupMode(null)
+            setGroupCode('')
+            setGroupData(null)
+            setGroupCodeInput('')
+          }}>
+            Leave Group
+          </button>
+        </div>
+      )}
+
+      {groupError && <p className="group-error">{groupError}</p>}
+    </div>
+  )
+
+  // Render Step 2: Week Type Selection
   const renderWeekTypeSelection = () => (
     <div className="planning-step week-type-step">
       <h2>What kind of week is this?</h2>
@@ -760,14 +1018,15 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       case 2: return showFoundationStep ? renderFoundationCheck() : renderMorningRoutine()
       case 3: return showFoundationStep ? renderMorningRoutine() : renderGroanCarousel()
       case 4: return showFoundationStep ? renderGroanCarousel() : renderConditionalCommitments()
-      case 5: return showFoundationStep ? renderConditionalCommitments() : renderSummary()
-      case 6: return renderSummary()
+      case 5: return showFoundationStep ? renderConditionalCommitments() : renderGroupSelection()
+      case 6: return showFoundationStep ? renderGroupSelection() : renderSummary()
+      case 7: return renderSummary()
       default: return null
     }
   }
 
   // Determine if we're on the summary step
-  const isSummaryStep = showFoundationStep ? step === 6 : step === 5
+  const isSummaryStep = showFoundationStep ? step === 7 : step === 6
 
   return (
     <div className={`weekly-planning-flow ${weekType ? `week-${weekType}` : ''}`}>

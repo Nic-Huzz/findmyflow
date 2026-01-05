@@ -4,7 +4,13 @@
 -- =============================================
 
 -- Clear existing scripts (for idempotency)
-DELETE FROM sales_scripts;
+-- Only delete if table exists
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'sales_scripts') THEN
+    DELETE FROM sales_scripts;
+  END IF;
+END $$;
 
 -- ============================================
 -- CATEGORY: TIME OBJECTIONS

@@ -1,0 +1,426 @@
+/* LTV Calculator Styles */
+.ltv-calculator {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+}
+
+.ltv-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.ltv-header .header-content h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #10b981, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ltv-header .header-content p {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Grid Layout */
+.ltv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.ltv-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.ltv-section h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: white;
+}
+
+.offer-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Input Groups */
+.input-group {
+  margin-bottom: 0;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+
+.input-group input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #10b981;
+}
+
+.input-with-prefix,
+.input-with-suffix {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.input-with-prefix span,
+.input-with-suffix span {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+
+.input-with-prefix input,
+.input-with-suffix input {
+  border: none;
+  background: transparent;
+  border-radius: 0;
+  padding: 10px;
+}
+
+/* Section Total */
+.section-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 10px;
+  margin-top: 16px;
+}
+
+.section-total span {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.section-total strong {
+  font-size: 1.125rem;
+  color: #10b981;
+}
+
+/* LTV Summary */
+.ltv-summary {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.ltv-summary h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: white;
+}
+
+/* Summary Cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.summary-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-card.primary {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.1));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.summary-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.summary-card.primary .summary-value {
+  font-size: 2rem;
+  color: #10b981;
+}
+
+/* Waterfall Chart */
+.waterfall-chart {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.waterfall-chart h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.waterfall-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 8px;
+  height: 280px;
+  padding-top: 30px;
+}
+
+.waterfall-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+.waterfall-value {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+.waterfall-bar-container {
+  flex: 1;
+  width: 100%;
+  max-width: 60px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px 6px 0 0;
+}
+
+.waterfall-bar {
+  position: absolute;
+  width: 100%;
+  border-radius: 4px;
+  transition: all 0.4s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.waterfall-connector {
+  position: absolute;
+  left: -12px;
+  width: 12px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.waterfall-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 8px;
+  text-align: center;
+}
+
+.waterfall-running-total {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+}
+
+/* Total Column */
+.total-column .waterfall-bar-container {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.total-bar {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%) !important;
+}
+
+.total-value {
+  color: #10b981 !important;
+  font-size: 0.85rem !important;
+}
+
+.total-column .waterfall-label {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.total-column .waterfall-running-total {
+  color: rgba(16, 185, 129, 0.6);
+}
+
+/* Revenue Breakdown */
+.revenue-breakdown {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.revenue-breakdown h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.breakdown-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.breakdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.breakdown-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.breakdown-label span:first-child {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.breakdown-label span:last-child {
+  color: white;
+  font-weight: 500;
+}
+
+.breakdown-bar {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.bar-fill.attraction { background: #6366f1; }
+.bar-fill.core { background: #8b5cf6; }
+.bar-fill.upsell { background: #10b981; }
+.bar-fill.downsell { background: #f59e0b; }
+.bar-fill.continuity { background: #06b6d4; }
+
+/* Total Row */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.total-row span {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.total-row strong {
+  font-size: 1.5rem;
+  color: #10b981;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .ltv-calculator {
+    padding: 16px;
+  }
+
+  .ltv-header {
+    flex-direction: column;
+  }
+
+  .offer-row {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .waterfall-container {
+    height: 220px;
+    gap: 4px;
+  }
+
+  .waterfall-bar-container {
+    max-width: 40px;
+  }
+
+  .waterfall-value {
+    font-size: 0.6rem;
+  }
+
+  .waterfall-label {
+    font-size: 0.6rem;
+  }
+
+  .waterfall-running-total {
+    font-size: 0.55rem;
+  }
+}

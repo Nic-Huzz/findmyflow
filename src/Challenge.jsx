@@ -107,7 +107,6 @@ function Challenge() {
     handleCreateGroup,
     handleJoinGroup,
     handleProjectSelected,
-    handleRestartChallenge,
     handleCloseExplainer,
     handleOpenExplainer,
     isQuestCompletedToday,
@@ -807,7 +806,6 @@ function Challenge() {
         showSettingsMenu={showSettingsMenu}
         setShowSettingsMenu={setShowSettingsMenu}
         handleOpenExplainer={handleOpenExplainer}
-        handleRestartChallenge={handleRestartChallenge}
         onLeaderboardClick={() => setActiveCategory('Leaderboard')}
         streakDays={getConsecutiveStreakDays()}
         weekLabel={getWeekLabel()}
@@ -872,7 +870,6 @@ function Challenge() {
             leaderboardView={leaderboardView}
             setLeaderboardView={setLeaderboardView}
             groupCode={groupCode}
-            currentDay={progress.current_day}
           />
         )}
 

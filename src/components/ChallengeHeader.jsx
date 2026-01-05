@@ -28,7 +28,6 @@ function ChallengeHeader({
   showSettingsMenu,
   setShowSettingsMenu,
   handleOpenExplainer,
-  handleRestartChallenge,
   onLeaderboardClick,
   streakDays = 0,
   weekLabel = null,
@@ -147,11 +146,6 @@ function ChallengeHeader({
         </div>
       </div>
 
-      {progress.current_day === 7 && (
-        <button className="restart-challenge-btn" onClick={handleRestartChallenge}>
-          Start New 7-Day Challenge
-        </button>
-      )}
     </header>
   )
 }

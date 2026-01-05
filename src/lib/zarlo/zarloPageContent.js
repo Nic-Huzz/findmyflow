@@ -437,13 +437,17 @@ export const SOUTH_MODE = {
 // ============================================
 
 export const PUBLIC_VALIDATION_CONTENT = {
+  pageId: 'public_validation',
+  pageName: 'Survey',
   whatIsThis: `Hey! You're filling out a survey for someone who's building something to help people like you. Your honest answers will directly shape what they create.`,
   whyMatters: `This isn't a corporate market research thing. A real human is on the other end, trying to understand your world so they can actually help. Your input matters more than you'd think.`,
   contextualPrompts: [
+    { id: 'what_is_this', label: 'What is this survey for?' },
     { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
-    { id: 'use_for_business', label: 'Can I use this for my own business?' }
+    { id: 'use_for_business', label: 'Can I use this for my business?' }
   ],
   faq: {
+    what_is_this: `Someone's building something to help people like you — and they want to get it right.\n\nInstead of guessing what you need, they're asking. Wild concept, right?\n\nYour answers go directly into shaping what gets built. No fluff. Just real input from real humans.`,
     what_is_fmf: `FindMyFlow is where burnt-out professionals figure out what they're meant to build and actually follow through on it.\n\nThe person who sent you this survey is using FindMyFlow to create something meaningful. They're not just chasing money — they're trying to solve a real problem for people like you.\n\nSound interesting? You might be a good fit too.`,
     use_for_business: `Absolutely. If you've got something you want to build — or you're stuck on something you've already started — FindMyFlow might be exactly what you need.\n\nHere's what makes it different: most people don't fail because they lack skills or strategy. They fail because their nervous system quietly sabotages them every time they try to grow.\n\nWe fix that part.`
   },

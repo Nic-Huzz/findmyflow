@@ -1,0 +1,353 @@
+/* Scripts Modal - Light Theme - Scoped to .scripts-modal-overlay */
+.scripts-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1001;
+}
+
+.scripts-modal-overlay .scripts-modal {
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+.scripts-modal-overlay .scripts-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.scripts-modal-overlay .modal-title h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #212529;
+}
+
+.scripts-modal-overlay .modal-deal-name {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.scripts-modal-overlay .scripts-close-btn {
+  background: transparent;
+  border: none;
+  color: #adb5bd;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.scripts-modal-overlay .scripts-close-btn:hover {
+  color: #495057;
+}
+
+/* Smart Suggestions Section */
+.scripts-modal-overlay .smart-suggestions-section {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(6, 182, 212, 0.08));
+  border-bottom: 1px solid #e9ecef;
+}
+
+.scripts-modal-overlay .smart-suggestions-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 0.875rem;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scripts-modal-overlay .smart-suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scripts-modal-overlay .smart-suggestion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.scripts-modal-overlay .suggestion-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.scripts-modal-overlay .suggestion-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.scripts-modal-overlay .suggestion-reason {
+  font-size: 0.75rem;
+  color: #059669;
+  font-style: italic;
+}
+
+/* Recommended Section */
+.scripts-modal-overlay .recommended-section {
+  padding: 16px 20px;
+  background: rgba(94, 23, 235, 0.05);
+  border-bottom: 1px solid #e9ecef;
+}
+
+.scripts-modal-overlay .recommended-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 0.875rem;
+  color: #5e17eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scripts-modal-overlay .rec-icon {
+  font-size: 1rem;
+}
+
+.scripts-modal-overlay .recommended-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scripts-modal-overlay .quick-script {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+}
+
+.scripts-modal-overlay .quick-script-name {
+  font-size: 0.875rem;
+  color: #212529;
+}
+
+.scripts-modal-overlay .quick-copy-btn {
+  background: rgba(94, 23, 235, 0.1);
+  border: none;
+  color: #5e17eb;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.scripts-modal-overlay .quick-copy-btn:hover {
+  background: rgba(94, 23, 235, 0.15);
+}
+
+.scripts-modal-overlay .quick-copy-btn.copied {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+/* Filters */
+.scripts-modal-overlay .scripts-modal-filters {
+  display: flex;
+  gap: 6px;
+  padding: 12px 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.scripts-modal-overlay .modal-filter {
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 16px;
+  color: #6c757d;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.scripts-modal-overlay .modal-filter:hover {
+  background: #e9ecef;
+  color: #212529;
+}
+
+.scripts-modal-overlay .modal-filter.active {
+  background: rgba(94, 23, 235, 0.1);
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.scripts-modal-overlay .modal-filter.recommended {
+  border-color: rgba(94, 23, 235, 0.4);
+}
+
+/* Scripts List */
+.scripts-modal-overlay .scripts-modal-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scripts-modal-overlay .scripts-modal-loading,
+.scripts-modal-overlay .scripts-modal-empty {
+  text-align: center;
+  padding: 32px;
+  color: #6c757d;
+}
+
+/* Script Card */
+.scripts-modal-overlay .modal-script-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.scripts-modal-overlay .modal-script-card:hover {
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+.scripts-modal-overlay .modal-script-card.expanded {
+  border-color: #5e17eb;
+  background: #ffffff;
+}
+
+.scripts-modal-overlay .modal-script-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.scripts-modal-overlay .modal-script-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.scripts-modal-overlay .modal-script-stage {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #5e17eb;
+}
+
+.scripts-modal-overlay .modal-script-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #212529;
+}
+
+.scripts-modal-overlay .modal-script-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scripts-modal-overlay .modal-copy-btn {
+  background: rgba(94, 23, 235, 0.1);
+  border: none;
+  color: #5e17eb;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.scripts-modal-overlay .modal-copy-btn:hover {
+  background: rgba(94, 23, 235, 0.15);
+}
+
+.scripts-modal-overlay .modal-copy-btn.copied {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.scripts-modal-overlay .modal-expand {
+  font-size: 0.65rem;
+  color: #adb5bd;
+}
+
+/* Script Body */
+.scripts-modal-overlay .modal-script-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid #e9ecef;
+}
+
+.scripts-modal-overlay .modal-script-text {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: #212529;
+  background: rgba(94, 23, 235, 0.05);
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #5e17eb;
+  white-space: pre-wrap;
+  margin-top: 12px;
+}
+
+.scripts-modal-overlay .modal-script-tip {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  color: #d97706;
+  font-style: italic;
+}
+
+/* Footer */
+.scripts-modal-overlay .scripts-modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.scripts-modal-overlay .footer-hint {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .scripts-modal-overlay {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .scripts-modal {
+    max-height: 80vh;
+    border-radius: 16px 16px 0 0;
+  }
+}

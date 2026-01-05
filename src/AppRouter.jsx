@@ -12,6 +12,7 @@ import LeadMagnetSelectionFlow from './flows/LeadMagnetSelectionFlow'
 import ProductSelectionFlow from './flows/ProductSelectionFlow'
 import FunnelBuilderFlow from './flows/FunnelBuilderFlow'
 import FunnelCalculator from './flows/FunnelCalculator'
+import OfferBuilder100M from './flows/OfferBuilder100M'
 import PersonaSelectionFlow from './flows/PersonaSelectionFlow'
 import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
@@ -34,6 +35,17 @@ import FlowCompassPage from './pages/FlowCompassPage'
 import FlowMapMockups from './components/FlowMapMockups'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import ValidationFlowsManager from './pages/ValidationFlowsManager'
+import {
+  CRMDashboard,
+  CRMMarketing,
+  CRMSales,
+  CRMAnalytics,
+  PTUFCalculator,
+  LTVCalculator,
+  CACTracker,
+  SalesScripts,
+  SmartAlerts,
+} from './pages/crm'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -119,6 +131,13 @@ function AppRouter() {
             <Route path="/offer-builder" element={
               <AuthGate>
                 <OfferBuilderFlow />
+              </AuthGate>
+            } />
+
+            {/* $100M Offer Builder v2 - 8-Step Flow with 3 Parallel Versions */}
+            <Route path="/offer-builder-v2" element={
+              <AuthGate>
+                <OfferBuilder100M />
               </AuthGate>
             } />
 
@@ -248,6 +267,55 @@ function AppRouter() {
             <Route path="/funnel-calculator" element={
               <AuthGate>
                 <FunnelCalculator />
+              </AuthGate>
+            } />
+
+            {/* CRM Tower - Command Center */}
+            <Route path="/crm" element={
+              <AuthGate>
+                <CRMDashboard />
+              </AuthGate>
+            } />
+            <Route path="/crm/marketing" element={
+              <AuthGate>
+                <CRMMarketing />
+              </AuthGate>
+            } />
+            <Route path="/crm/sales" element={
+              <AuthGate>
+                <CRMSales />
+              </AuthGate>
+            } />
+            <Route path="/crm/analytics" element={
+              <AuthGate>
+                <CRMAnalytics />
+              </AuthGate>
+            } />
+
+            {/* Hormozi Features */}
+            <Route path="/crm/ptuf" element={
+              <AuthGate>
+                <PTUFCalculator />
+              </AuthGate>
+            } />
+            <Route path="/crm/ltv" element={
+              <AuthGate>
+                <LTVCalculator />
+              </AuthGate>
+            } />
+            <Route path="/crm/cac" element={
+              <AuthGate>
+                <CACTracker />
+              </AuthGate>
+            } />
+            <Route path="/crm/scripts" element={
+              <AuthGate>
+                <SalesScripts />
+              </AuthGate>
+            } />
+            <Route path="/crm/alerts" element={
+              <AuthGate>
+                <SmartAlerts />
               </AuthGate>
             } />
           </Routes>

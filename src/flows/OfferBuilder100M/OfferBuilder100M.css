@@ -1,0 +1,2885 @@
+/**
+ * OfferBuilder100M - $100M Offer Builder Styles
+ *
+ * Uses FindMyFlow CSS variables and patterns.
+ * Scoped to .offer-builder-100m to prevent conflicts.
+ */
+
+@import '../../styles/flow-base.css';
+
+/* ==========================================
+   MAIN CONTAINER
+   ========================================== */
+
+.offer-builder-100m {
+  min-height: 100vh;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+   PROGRESS HEADER
+   ========================================== */
+
+.offer-builder-100m .progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .step-indicator {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================
+   TIME CHECK & RESUME SCREENS
+   ========================================== */
+
+.offer-builder-100m .time-check,
+.offer-builder-100m .resume-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  padding: 40px 20px;
+}
+
+.offer-builder-100m .time-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .time-check h2,
+.offer-builder-100m .resume-prompt h2 {
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .time-tip {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 32px;
+}
+
+.offer-builder-100m .resume-details {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0 24px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offer-builder-100m .resume-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* ==========================================
+   WELCOME SCREEN
+   ========================================== */
+
+.offer-builder-100m .welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.offer-builder-100m .welcome-content {
+  max-width: 600px;
+  text-align: center;
+}
+
+.offer-builder-100m .welcome-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .welcome-content h1 {
+  font-size: 2rem;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .welcome-text {
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.offer-builder-100m .welcome-text p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.offer-builder-100m .framework-preview {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.offer-builder-100m .framework-preview h3 {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+.offer-builder-100m .framework-preview ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.offer-builder-100m .framework-preview li {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.offer-builder-100m .framework-preview li:last-child {
+  border-bottom: none;
+}
+
+.offer-builder-100m .ready-prompt {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 24px;
+}
+
+/* ==========================================
+   FINDMYFLOW CONTEXT PANELS (Shared)
+   ========================================== */
+
+/* FindMyFlow Context Panel (Step 1A) */
+.offer-builder-100m .findmyflow-context {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .context-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--purple, #8B5CF6);
+  text-transform: uppercase;
+}
+
+.offer-builder-100m .context-icon {
+  font-size: 1.2rem;
+}
+
+.offer-builder-100m .context-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-builder-100m .context-section {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .context-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.offer-builder-100m .context-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.offer-builder-100m .context-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+}
+
+.offer-builder-100m .skill-tag {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #60a5fa;
+}
+
+.offer-builder-100m .problem-tag {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.offer-builder-100m .context-persona {
+  color: rgba(255, 255, 255, 0.8);
+  font-style: italic;
+  margin-left: 8px;
+}
+
+.offer-builder-100m .context-tip {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 8px;
+}
+
+/* Validation Proof Panel (Step 3) */
+.offer-builder-100m .validation-proof-panel {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .proof-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #22C55E;
+  text-transform: uppercase;
+}
+
+.offer-builder-100m .panel-icon {
+  font-size: 1.2rem;
+}
+
+.offer-builder-100m .proof-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-builder-100m .proof-panel-section {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .proof-panel-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.offer-builder-100m .quote-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.offer-builder-100m .validation-quote {
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #22C55E;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.offer-builder-100m .results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.offer-builder-100m .validation-result {
+  padding: 8px 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #22C55E;
+}
+
+.offer-builder-100m .proof-tip {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 8px;
+}
+
+/* Validation Objections Panel (Step 6) */
+.offer-builder-100m .validation-objections-panel {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(245, 158, 11, 0.1));
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .objections-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #EF4444;
+  text-transform: uppercase;
+}
+
+.offer-builder-100m .objections-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-builder-100m .objections-intro {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offer-builder-100m .objections-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.offer-builder-100m .objection-chip {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .objection-chip:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #EF4444;
+}
+
+.offer-builder-100m .objection-chip.added {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22C55E;
+}
+
+.offer-builder-100m .objection-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.offer-builder-100m .objections-tip {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================
+   STEP 1A: BUCKET SELECTION
+   ========================================== */
+
+.offer-builder-100m .bucket-selection {
+  padding: 20px 0;
+}
+
+.offer-builder-100m .question-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.offer-builder-100m .step-label {
+  display: inline-block;
+  background: var(--purple, #8B5CF6);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .question-header h2 {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .question-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+}
+
+/* AI Suggestion */
+.offer-builder-100m .ai-suggestion {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.offer-builder-100m .suggestion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .suggestion-icon {
+  font-size: 1.5rem;
+}
+
+.offer-builder-100m .suggestion-label {
+  font-weight: 600;
+  color: var(--purple, #8B5CF6);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.offer-builder-100m .suggestion-text {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .suggestion-reasoning {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .suggestion-question {
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .suggestion-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Bucket Cards */
+.offer-builder-100m .bucket-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.offer-builder-100m .bucket-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offer-builder-100m .bucket-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+}
+
+.offer-builder-100m .bucket-card.selected {
+  border-color: var(--purple, #8B5CF6);
+  background: rgba(139, 92, 246, 0.15);
+}
+
+.offer-builder-100m .bucket-card:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.offer-builder-100m .bucket-emoji {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .bucket-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .bucket-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .bucket-examples {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .bucket-examples strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.offer-builder-100m .bucket-examples ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.offer-builder-100m .bucket-examples li {
+  padding: 4px 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offer-builder-100m .bucket-examples li::before {
+  content: '•';
+  margin-right: 8px;
+  color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .bucket-common {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 12px;
+}
+
+/* ==========================================
+   STEP 1B: DREAM OUTCOME
+   ========================================== */
+
+.offer-builder-100m .dream-outcome-step {
+  padding: 20px 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.offer-builder-100m .bucket-confirmation {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .question-prompt {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .think-about {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+/* Examples Panel */
+.offer-builder-100m .examples-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 600px) {
+  .offer-builder-100m .examples-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+.offer-builder-100m .examples-column {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.offer-builder-100m .examples-column.bad {
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.offer-builder-100m .examples-column.good {
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.offer-builder-100m .examples-column h4 {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.offer-builder-100m .example {
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .example-text {
+  display: block;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.offer-builder-100m .example-reason {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Validation Insights */
+.offer-builder-100m .validation-insights {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .insights-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--blue, #3B82F6);
+}
+
+.offer-builder-100m .insights-icon {
+  font-size: 1.2rem;
+}
+
+.offer-builder-100m .insights-content p {
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .language-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-right: 8px;
+  font-size: 0.85rem;
+}
+
+.offer-builder-100m .insights-tip {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offer-builder-100m .ai-example {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  font-style: italic;
+}
+
+/* Dream Input */
+.offer-builder-100m .dream-input-group {
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .dream-input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .dream-input-group textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  color: white;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.offer-builder-100m .dream-input-group textarea:focus {
+  outline: none;
+  border-color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 8px;
+}
+
+/* Validation Feedback */
+.offer-builder-100m .validation-feedback {
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .validation-feedback.approved {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.offer-builder-100m .validation-feedback.needs-work {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.offer-builder-100m .feedback-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .feedback-header.success {
+  color: #22C55E;
+}
+
+.offer-builder-100m .feedback-header.warning {
+  color: #F59E0B;
+}
+
+.offer-builder-100m .feedback-icon {
+  font-size: 1.5rem;
+}
+
+.offer-builder-100m .feedback-score {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .feedback-breakdown {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .score-item {
+  font-size: 0.9rem;
+}
+
+.offer-builder-100m .score-item.warn {
+  color: #F59E0B;
+}
+
+.offer-builder-100m .feedback-detail {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.offer-builder-100m .feedback-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.offer-builder-100m .feedback-message {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================
+   STEP 2: GENERATE VERSIONS
+   ========================================== */
+
+.offer-builder-100m .generating-versions {
+  padding: 20px 0;
+  text-align: center;
+}
+
+.offer-builder-100m .generation-info {
+  margin-bottom: 32px;
+}
+
+.offer-builder-100m .generation-info p {
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .generation-progress {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.offer-builder-100m .spinner.large {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+}
+
+.offer-builder-100m .progress-text {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .progress-steps {
+  text-align: left;
+}
+
+.offer-builder-100m .progress-step {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.3s ease;
+}
+
+.offer-builder-100m .progress-step.active {
+  color: #22C55E;
+}
+
+/* Versions Display */
+.offer-builder-100m .versions-display {
+  padding: 20px 0;
+}
+
+.offer-builder-100m .versions-intro {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.offer-builder-100m .versions-note {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+.offer-builder-100m .versions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+/* Version Card */
+.offer-builder-100m .version-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.offer-builder-100m .version-card.product {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.offer-builder-100m .version-card.service {
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.offer-builder-100m .version-card.hybrid {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.offer-builder-100m .version-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .version-icon {
+  font-size: 1.5rem;
+}
+
+.offer-builder-100m .version-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .version-name {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .version-section {
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .version-section h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .deliverables-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.offer-builder-100m .deliverables-list li {
+  padding: 4px 0;
+  font-size: 0.9rem;
+}
+
+.offer-builder-100m .deliverables-list li::before {
+  content: '•';
+  margin-right: 8px;
+  color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .deliverables-list li.more {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.offer-builder-100m .deliverables-list li.more::before {
+  content: '';
+}
+
+/* Investment Grid */
+.offer-builder-100m .investment-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.offer-builder-100m .investment-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+}
+
+.offer-builder-100m .investment-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+}
+
+.offer-builder-100m .investment-value {
+  font-weight: 600;
+}
+
+/* Start Now Badge */
+.offer-builder-100m .start-now {
+  text-align: center;
+}
+
+.offer-builder-100m .start-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.offer-builder-100m .start-badge.yes {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22C55E;
+}
+
+.offer-builder-100m .start-badge.no {
+  background: rgba(239, 68, 68, 0.2);
+  color: #EF4444;
+}
+
+.offer-builder-100m .start-reason {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 8px;
+}
+
+/* Max Customers */
+.offer-builder-100m .max-customers {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--purple, #8B5CF6);
+}
+
+/* Pros & Cons */
+.offer-builder-100m .pros-cons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.offer-builder-100m .pro-item,
+.offer-builder-100m .con-item {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+/* Pricing & Revenue */
+.offer-builder-100m .price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+.offer-builder-100m .revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.offer-builder-100m .revenue-item {
+  text-align: center;
+}
+
+.offer-builder-100m .revenue-label {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .revenue-value {
+  font-weight: 600;
+  color: #22C55E;
+}
+
+/* Expand Toggle */
+.offer-builder-100m .expand-toggle {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-top: 16px;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .expand-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Versions Footer */
+.offer-builder-100m .versions-footer {
+  text-align: center;
+}
+
+.offer-builder-100m .versions-footer p {
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================
+   COMING SOON PLACEHOLDER
+   ========================================== */
+
+.offer-builder-100m .coming-soon {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.offer-builder-100m .coming-soon h2 {
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .coming-soon p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+}
+
+/* ==========================================
+   LOADING & ERROR STATES
+   ========================================== */
+
+.offer-builder-100m .loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.offer-builder-100m .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--purple, #8B5CF6);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.offer-builder-100m .spinner-inline {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.offer-builder-100m .error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.offer-builder-100m .error-message button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.offer-builder-100m .primary-button {
+  background: var(--purple, #8B5CF6);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.offer-builder-100m .primary-button:hover {
+  background: var(--purple-dark, #7C3AED);
+  transform: translateY(-2px);
+}
+
+.offer-builder-100m .primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.offer-builder-100m .secondary-button {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.offer-builder-100m .secondary-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .offer-builder-100m {
+    padding: 16px;
+  }
+
+  .offer-builder-100m .welcome-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .offer-builder-100m .bucket-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-builder-100m .versions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-builder-100m .investment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-builder-100m .pros-cons {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-builder-100m .revenue-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* ==========================================
+   STEP 3: PROOF STACK
+   ========================================== */
+
+.offer-builder-100m .proof-stack-step,
+.offer-builder-100m .speed-advantage-step,
+.offer-builder-100m .ease-factor-step,
+.offer-builder-100m .obstacles-step,
+.offer-builder-100m .bonuses-step {
+  padding: 20px 0;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.offer-builder-100m .instruction {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+}
+
+/* Proof Options */
+.offer-builder-100m .proof-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .proof-option {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .proof-option.selected {
+  border-color: var(--purple, #8B5CF6);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.offer-builder-100m .proof-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.offer-builder-100m .proof-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.offer-builder-100m .checkmark {
+  font-size: 1.2rem;
+  opacity: 0.3;
+}
+
+.offer-builder-100m .proof-option.selected .checkmark {
+  opacity: 1;
+}
+
+.offer-builder-100m .proof-label {
+  font-weight: 500;
+}
+
+.offer-builder-100m .proof-detail {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .proof-detail textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.offer-builder-100m .proof-example {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 8px;
+}
+
+/* Version Tabs */
+.offer-builder-100m .version-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.offer-builder-100m .tab {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .tab.active {
+  background: var(--purple, #8B5CF6);
+  border-color: var(--purple, #8B5CF6);
+  color: white;
+}
+
+/* Analysis Content */
+.offer-builder-100m .analysis-content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .analysis-header h3 {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offer-builder-100m .proof-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .proof-section:last-of-type {
+  border-bottom: none;
+}
+
+.offer-builder-100m .proof-section h4 {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .proof-text {
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .proof-why {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .support-item {
+  margin-bottom: 12px;
+  padding-left: 16px;
+  border-left: 2px solid rgba(139, 92, 246, 0.3);
+}
+
+.offer-builder-100m .proof-score,
+.offer-builder-100m .speed-score,
+.offer-builder-100m .ease-score {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.offer-builder-100m .score-label {
+  font-weight: 500;
+}
+
+.offer-builder-100m .score-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--purple, #8B5CF6);
+}
+
+/* ==========================================
+   STEP 4: SPEED ADVANTAGE
+   ========================================== */
+
+.offer-builder-100m .speed-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .input-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .input-group input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+}
+
+.offer-builder-100m .input-group input:focus {
+  outline: none;
+  border-color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .vs-divider {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--purple, #8B5CF6);
+  padding: 8px 0;
+}
+
+.offer-builder-100m .helper-text {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .examples-list {
+  margin-top: 12px;
+}
+
+.offer-builder-100m .example-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  flex-wrap: wrap;
+}
+
+.offer-builder-100m .example-traditional {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-100m .example-arrow {
+  color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .example-yours {
+  color: #22C55E;
+}
+
+.offer-builder-100m .speed-multiplier {
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+  border-radius: 16px;
+  margin-bottom: 20px;
+}
+
+.offer-builder-100m .multiplier-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+.offer-builder-100m .multiplier-label {
+  font-size: 1.2rem;
+  margin-left: 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .time-comparison {
+  margin-bottom: 20px;
+}
+
+.offer-builder-100m .comparison-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.offer-builder-100m .comparison-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.offer-builder-100m .comparison-item.yours {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.offer-builder-100m .outcome-timelines {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.offer-builder-100m .timeline-item h4 {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .marketing-angle blockquote {
+  background: rgba(139, 92, 246, 0.1);
+  border-left: 3px solid var(--purple, #8B5CF6);
+  padding: 12px 16px;
+  margin: 8px 0;
+  font-style: italic;
+  border-radius: 0 8px 8px 0;
+}
+
+.offer-builder-100m .reality-check {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.offer-builder-100m .reality-check h4 {
+  color: #F59E0B;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .reality-check ul {
+  margin: 8px 0 0 20px;
+}
+
+/* ==========================================
+   STEP 5: EASE FACTOR
+   ========================================== */
+
+.offer-builder-100m .ease-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .ease-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .ease-option:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.offer-builder-100m .ease-option.selected {
+  border-color: var(--purple, #8B5CF6);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.offer-builder-100m .ease-option input[type="checkbox"] {
+  display: none;
+}
+
+.offer-builder-100m .ease-option .option-label {
+  flex: 1;
+}
+
+.offer-builder-100m .ease-option.custom {
+  position: relative;
+}
+
+.offer-builder-100m .remove-custom {
+  background: rgba(239, 68, 68, 0.2);
+  border: none;
+  color: #EF4444;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.offer-builder-100m .add-custom {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .add-custom input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+}
+
+.offer-builder-100m .add-custom button {
+  padding: 12px 20px;
+  background: var(--purple, #8B5CF6);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.offer-builder-100m .add-custom button:disabled {
+  opacity: 0.5;
+}
+
+.offer-builder-100m .selection-count {
+  text-align: center;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .ease-list h4 {
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .ease-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.offer-builder-100m .ease-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.offer-builder-100m .ease-why {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-100m .marketing-copy {
+  margin: 16px 0;
+}
+
+/* ==========================================
+   STEP 6A: OBSTACLES
+   ========================================== */
+
+.offer-builder-100m .add-obstacle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.offer-builder-100m .add-obstacle input {
+  flex: 1;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+}
+
+.offer-builder-100m .add-obstacle input:focus {
+  outline: none;
+  border-color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .add-obstacle button {
+  padding: 14px 24px;
+  background: var(--purple, #8B5CF6);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.offer-builder-100m .add-obstacle button:disabled {
+  opacity: 0.5;
+}
+
+.offer-builder-100m .obstacles-list {
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .obstacles-list h4 {
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .no-obstacles {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.offer-builder-100m .obstacles-list ol {
+  padding-left: 24px;
+}
+
+.offer-builder-100m .obstacles-list li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.offer-builder-100m .obstacle-text {
+  flex: 1;
+  font-style: italic;
+}
+
+.offer-builder-100m .remove-btn {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.offer-builder-100m .examples-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .examples-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.offer-builder-100m .example-chip {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .example-chip:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .example-chip.added {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22C55E;
+}
+
+.offer-builder-100m .example-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.offer-builder-100m .validation-info {
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 24px;
+}
+
+/* ==========================================
+   STEP 6B: BONUSES
+   ========================================== */
+
+.offer-builder-100m .bonuses-step.generating {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.offer-builder-100m .generation-progress {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.offer-builder-100m .progress-detail {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.offer-builder-100m .bonuses-content {
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .bonuses-header h3 {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.offer-builder-100m .bonus-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .bonus-card.selected {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.offer-builder-100m .bonus-card.skipped {
+  opacity: 0.6;
+}
+
+.offer-builder-100m .bonus-card.editing {
+  border-color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .obstacle-reference {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .obstacle-reference p {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .bonus-suggestion {
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .suggestion-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--purple, #8B5CF6);
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .bonus-name {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.offer-builder-100m .bonus-description,
+.offer-builder-100m .bonus-reasoning {
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .bonus-description strong,
+.offer-builder-100m .bonus-reasoning strong,
+.offer-builder-100m .bonus-value strong {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+.offer-builder-100m .bonus-value {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.offer-builder-100m .value-amount {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+.offer-builder-100m .bonus-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.offer-builder-100m .action-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-100m .action-btn.use {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22C55E;
+}
+
+.offer-builder-100m .action-btn.use.active {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.offer-builder-100m .action-btn.customize {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--purple, #8B5CF6);
+}
+
+.offer-builder-100m .action-btn.skip {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .total-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(139, 92, 246, 0.1));
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.offer-builder-100m .total-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+/* Bonus Editor */
+.offer-builder-100m .edit-field {
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .edit-field label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .edit-field input,
+.offer-builder-100m .edit-field textarea {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+}
+
+.offer-builder-100m .edit-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ========================================
+   Step 7: Final Selection
+   ======================================== */
+
+.offer-builder-100m .final-selection-step {
+  padding: 20px 0;
+}
+
+.offer-builder-100m .view-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.offer-builder-100m .view-toggle button {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offer-builder-100m .view-toggle button.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: #8B5CF6;
+  color: white;
+}
+
+.offer-builder-100m .ai-recommendation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .rec-icon {
+  font-size: 1.2rem;
+}
+
+.offer-builder-100m .rec-score {
+  background: rgba(34, 197, 94, 0.2);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #22C55E;
+}
+
+/* Version Cards (Final Selection) */
+.offer-builder-100m .version-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .final-selection-step .version-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.offer-builder-100m .final-selection-step .version-card:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+.offer-builder-100m .final-selection-step .version-card.selected {
+  border-color: #22C55E;
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.offer-builder-100m .final-selection-step .version-card.recommended {
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.offer-builder-100m .recommended-badge {
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  background: #8B5CF6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.offer-builder-100m .card-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .version-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .card-header h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+}
+
+.offer-builder-100m .version-type {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+/* Score Display */
+.offer-builder-100m .score-display {
+  text-align: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 2px solid;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .score-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.offer-builder-100m .score-grade {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.offer-builder-100m .score-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+/* Score Breakdown */
+.offer-builder-100m .score-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .breakdown-item {
+  text-align: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.offer-builder-100m .breakdown-label {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.offer-builder-100m .breakdown-value {
+  font-weight: 600;
+  color: #8B5CF6;
+}
+
+/* Price Section */
+.offer-builder-100m .price-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .price,
+.offer-builder-100m .revenue {
+  text-align: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.offer-builder-100m .price-label,
+.offer-builder-100m .revenue-label {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-100m .price-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+.offer-builder-100m .revenue-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #8B5CF6;
+}
+
+/* Bonus Section */
+.offer-builder-100m .final-selection-step .bonus-section {
+  text-align: center;
+  padding: 8px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(251, 191, 36, 0.05));
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .bonus-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .final-selection-step .bonus-value {
+  font-weight: 600;
+  color: #FCD34D;
+}
+
+/* Quick Stats */
+.offer-builder-100m .quick-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .stat {
+  text-align: center;
+}
+
+.offer-builder-100m .stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-100m .stat-value {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Select Button */
+.offer-builder-100m .select-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offer-builder-100m .select-btn:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: #8B5CF6;
+}
+
+.offer-builder-100m .select-btn.selected {
+  background: #22C55E;
+  border-color: #22C55E;
+}
+
+/* Comparison Table */
+.offer-builder-100m .comparison-table-container {
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.offer-builder-100m .comparison-table th,
+.offer-builder-100m .comparison-table td {
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .comparison-table th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.offer-builder-100m .comparison-table th:hover {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.offer-builder-100m .comparison-table th.selected {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22C55E;
+}
+
+.offer-builder-100m .comparison-table th:first-child {
+  text-align: left;
+  cursor: default;
+}
+
+.offer-builder-100m .comparison-table th:first-child:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.offer-builder-100m .comparison-table td:first-child {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .comparison-table .score-row td {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Selection Summary */
+.offer-builder-100m .selection-summary {
+  text-align: center;
+  padding: 20px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .selection-summary h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+}
+
+.offer-builder-100m .summary-score {
+  margin-top: 12px;
+  font-size: 1.1rem;
+}
+
+/* ========================================
+   Step 8: Grand Slam Score
+   ======================================== */
+
+.offer-builder-100m .grand-slam-step {
+  padding: 20px 0;
+}
+
+/* Grand Slam Score Display */
+.offer-builder-100m .grand-slam-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 3px solid;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.offer-builder-100m .grand-slam-score .score-number {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.offer-builder-100m .score-max {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-100m .score-info {
+  text-align: center;
+}
+
+.offer-builder-100m .grade-badge {
+  display: inline-block;
+  padding: 8px 24px;
+  border-radius: 8px;
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .grade-label {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Value Equation */
+.offer-builder-100m .value-equation {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .equation-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .equation-formula {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.offer-builder-100m .equation-numerator,
+.offer-builder-100m .equation-denominator {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.offer-builder-100m .equation-divider {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-100m .factor {
+  text-align: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.offer-builder-100m .factor-label {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+.offer-builder-100m .factor-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #22C55E;
+}
+
+.offer-builder-100m .operator {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Stack Slide */
+.offer-builder-100m .stack-slide {
+  background: linear-gradient(135deg, rgba(15, 15, 30, 0.9), rgba(30, 30, 60, 0.9));
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .stack-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  color: white;
+}
+
+.offer-builder-100m .stack-icon {
+  font-size: 2rem;
+}
+
+.offer-builder-100m .stack-header h3 {
+  margin: 0;
+  flex: 1;
+}
+
+.offer-builder-100m .stack-type {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.offer-builder-100m .stack-section {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .stack-section:last-child {
+  border-bottom: none;
+}
+
+.offer-builder-100m .section-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .dream-section {
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.offer-builder-100m .dream-text {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #FCD34D;
+  margin: 0;
+}
+
+.offer-builder-100m .deliverables-section .deliverables-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+
+.offer-builder-100m .deliverables-section .deliverables-list li {
+  padding: 8px 0 8px 24px;
+  position: relative;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.offer-builder-100m .deliverables-section .deliverables-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #22C55E;
+}
+
+.offer-builder-100m .section-value {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .value-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .value-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #22C55E;
+}
+
+/* Bonus Section in Stack */
+.offer-builder-100m .stack-section.bonus-section {
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.offer-builder-100m .bonus-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .bonus-item {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.offer-builder-100m .bonus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.offer-builder-100m .bonus-name {
+  font-weight: 600;
+  color: #8B5CF6;
+}
+
+.offer-builder-100m .stack-section .bonus-value {
+  color: #FCD34D;
+  font-weight: 600;
+}
+
+.offer-builder-100m .bonus-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Total Section */
+.offer-builder-100m .total-section {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(139, 92, 246, 0.1));
+  border-left: 4px solid;
+}
+
+.offer-builder-100m .total-value {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .total-label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.offer-builder-100m .total-amount {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #22C55E;
+}
+
+.offer-builder-100m .price-today {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 2px dashed rgba(255, 255, 255, 0.2);
+}
+
+.offer-builder-100m .price-today .price-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .price-today .price-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #8B5CF6;
+}
+
+/* Highlights Section */
+.offer-builder-100m .highlights-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.offer-builder-100m .highlight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.offer-builder-100m .highlight-icon {
+  font-size: 1.5rem;
+}
+
+.offer-builder-100m .highlight-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Action Buttons */
+.offer-builder-100m .action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .action-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offer-builder-100m .copy-btn {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid #3B82F6;
+  color: #3B82F6;
+}
+
+.offer-builder-100m .copy-btn:hover {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.offer-builder-100m .save-btn {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid #22C55E;
+  color: #22C55E;
+}
+
+.offer-builder-100m .save-btn:hover {
+  background: rgba(34, 197, 94, 0.3);
+}
+
+/* Next Steps */
+.offer-builder-100m .next-steps {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .next-steps h4 {
+  margin: 0 0 16px 0;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-100m .next-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-builder-100m .next-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.offer-builder-100m .step-num {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #8B5CF6;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.offer-builder-100m .step-text {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ========================================
+   Success Screen
+   ======================================== */
+
+.offer-builder-100m .success-step {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.offer-builder-100m .success-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.offer-builder-100m .success-step h2 {
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .success-summary {
+  padding: 24px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .offer-name {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .final-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.offer-builder-100m .final-score .score-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.offer-builder-100m .success-message {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 32px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.offer-builder-100m .success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 300px;
+  margin: 0 auto 32px;
+}
+
+.offer-builder-100m .celebration-confetti {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  font-size: 2rem;
+}
+
+.offer-builder-100m .celebration-confetti span {
+  animation: sparkle 1.5s ease infinite;
+}
+
+.offer-builder-100m .celebration-confetti span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.offer-builder-100m .celebration-confetti span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.offer-builder-100m .celebration-confetti span:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.offer-builder-100m .celebration-confetti span:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+/* ========================================
+   Mobile Responsive
+   ======================================== */
+
+@media (max-width: 768px) {
+  .offer-builder-100m .grand-slam-score {
+    flex-direction: column;
+    padding: 24px;
+  }
+
+  .offer-builder-100m .equation-numerator,
+  .offer-builder-100m .equation-denominator {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .offer-builder-100m .highlights-section {
+    grid-template-columns: 1fr;
+  }
+
+  .offer-builder-100m .action-buttons {
+    flex-direction: column;
+  }
+
+  .offer-builder-100m .action-btn {
+    width: 100%;
+  }
+}

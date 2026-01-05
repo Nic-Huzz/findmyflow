@@ -256,6 +256,230 @@
   color: white;
 }
 
+/* Group Selection Step */
+.group-step {
+  text-align: center;
+}
+
+.group-mode-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.group-mode-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.group-mode-card:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.group-mode-card:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.group-mode-card .mode-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.group-mode-card .mode-label {
+  font-size: 1.125rem;
+  font-weight: 600;
+  display: block;
+}
+
+.group-mode-card .mode-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  display: block;
+  margin-top: 2px;
+}
+
+/* Join group input */
+.join-group-section {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: left;
+}
+
+.join-group-section label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.group-code-input {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 4px;
+  font-family: monospace;
+  text-transform: uppercase;
+}
+
+.group-code-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 2px;
+}
+
+.group-code-input:focus {
+  outline: none;
+  border-color: #fbbf24;
+}
+
+.join-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.join-actions .cancel-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.join-actions .cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.join-actions .join-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: #fbbf24;
+  border: none;
+  border-radius: 10px;
+  color: #1f2937;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.join-actions .join-btn:hover:not(:disabled) {
+  background: #f59e0b;
+}
+
+.join-actions .join-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Group success states */
+.group-success {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.group-success .success-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.group-success h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.group-success p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 20px 0;
+}
+
+.group-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 16px 24px;
+  margin-bottom: 20px;
+}
+
+.group-code-display .code {
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 4px;
+  color: #fbbf24;
+}
+
+.group-code-display .copy-btn {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.group-code-display .copy-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.group-success .change-btn {
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.group-success .change-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.group-error {
+  color: #fca5a5;
+  font-size: 0.875rem;
+  margin-top: 16px;
+  text-align: center;
+}
+
 /* Morning Routine Step */
 .routine-grid {
   display: grid;

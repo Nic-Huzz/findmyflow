@@ -390,24 +390,24 @@ export function useChallengeData() {
     try {
       if (!user) return
 
+      // Get current calendar week (Monday to Sunday)
+      const now = new Date()
+      const day = now.getDay()
+      const mondayOffset = day === 0 ? -6 : 1 - day // Adjust for Sunday
+      const currentWeekStart = new Date(now)
+      currentWeekStart.setDate(now.getDate() + mondayOffset)
+      currentWeekStart.setHours(0, 0, 0, 0)
+      const currentWeekEnd = new Date(currentWeekStart)
+      currentWeekEnd.setDate(currentWeekStart.getDate() + 7)
+
+      // Get all active challenge participants
       let challengeQuery = supabase
         .from('challenge_progress')
         .select('*')
         .eq('status', 'active')
-        .order('total_points', { ascending: false })
 
       if (progress && progress.group_id) {
         challengeQuery = challengeQuery.eq('group_id', progress.group_id)
-      } else if (leaderboardView === 'weekly' && progress) {
-        const startDate = new Date(progress.challenge_start_date)
-        const weekStart = new Date(startDate)
-        weekStart.setDate(weekStart.getDate() - ((startDate.getDay() + 6) % 7))
-        const weekEnd = new Date(weekStart)
-        weekEnd.setDate(weekEnd.getDate() + 7)
-
-        challengeQuery = challengeQuery
-          .gte('challenge_start_date', weekStart.toISOString())
-          .lt('challenge_start_date', weekEnd.toISOString())
       }
 
       const { data: challengeData, error: challengeError } = await challengeQuery
@@ -423,7 +423,47 @@ export function useChallengeData() {
         return
       }
 
-      const sessionIds = challengeData.map(entry => entry.session_id).filter(Boolean)
+      // For weekly view, calculate points from quest_completions this week
+      let leaderboardData = []
+
+      if (leaderboardView === 'weekly') {
+        // Get all quest completions for this week for all active users
+        const userIds = challengeData.map(entry => entry.user_id)
+
+        const { data: weeklyCompletions, error: completionsError } = await supabase
+          .from('quest_completions')
+          .select('user_id, points_earned')
+          .in('user_id', userIds)
+          .gte('completed_at', currentWeekStart.toISOString())
+          .lt('completed_at', currentWeekEnd.toISOString())
+
+        if (completionsError) {
+          console.error('Error loading weekly completions:', completionsError)
+          return
+        }
+
+        // Sum points per user for this week
+        const weeklyPointsMap = {}
+        if (weeklyCompletions) {
+          weeklyCompletions.forEach(completion => {
+            weeklyPointsMap[completion.user_id] = (weeklyPointsMap[completion.user_id] || 0) + (completion.points_earned || 0)
+          })
+        }
+
+        // Build leaderboard with weekly points
+        leaderboardData = challengeData.map(entry => ({
+          ...entry,
+          weeklyPoints: weeklyPointsMap[entry.user_id] || 0
+        }))
+
+        // Sort by weekly points
+        leaderboardData.sort((a, b) => b.weeklyPoints - a.weeklyPoints)
+      } else {
+        // All-time view: sort by total_points
+        leaderboardData = [...challengeData].sort((a, b) => (b.total_points || 0) - (a.total_points || 0))
+      }
+
+      const sessionIds = leaderboardData.map(entry => entry.session_id).filter(Boolean)
 
       const { data: profilesData, error: profilesError } = await supabase
         .from('lead_flow_profiles')
@@ -441,7 +481,7 @@ export function useChallengeData() {
         })
       }
 
-      const leaderboardData = challengeData.map((entry, index) => {
+      const formattedLeaderboard = leaderboardData.map((entry, index) => {
         const userName = profileMap[entry.session_id] || 'Anonymous'
         const firstName = userName.split(' ')[0]
 
@@ -449,15 +489,16 @@ export function useChallengeData() {
           rank: index + 1,
           userId: entry.user_id,
           name: firstName,
-          totalPoints: entry.total_points || 0,
-          currentDay: entry.current_day,
+          totalPoints: leaderboardView === 'weekly' ? entry.weeklyPoints : (entry.total_points || 0),
+          weeklyPoints: entry.weeklyPoints || 0,
+          allTimePoints: entry.total_points || 0,
           isCurrentUser: entry.user_id === user.id
         }
       })
 
-      setLeaderboard(leaderboardData)
+      setLeaderboard(formattedLeaderboard)
 
-      const userEntry = leaderboardData.find(entry => entry.isCurrentUser)
+      const userEntry = formattedLeaderboard.find(entry => entry.isCurrentUser)
       setUserRank(userEntry?.rank || null)
 
     } catch (error) {
@@ -819,12 +860,14 @@ export function useChallengeData() {
   const isQuestCompletedToday = (questId, quest) => {
     const today = new Date().setHours(0, 0, 0, 0)
 
-    if (quest.type === 'daily') {
+    // Daily quests: check if completed TODAY only
+    if (quest.frequency === 'daily') {
       return completions.some(c => {
         const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
         return c.quest_id === questId && completedDate === today
       })
     } else {
+      // Non-daily quests: check completion limits or any completion
       const questCompletions = completions.filter(c => c.quest_id === questId)
 
       if (quest.maxCompletions) {

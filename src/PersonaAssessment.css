@@ -75,19 +75,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  flex: 0 1 auto;
+  flex: 1;
   max-width: 500px;
   text-align: center;
   animation: slideInFromRight 0.5s ease;
-  padding-top: 8px !important;
-  margin-top: 0 !important;
+  padding-bottom: 40px;
 }
 
 .persona-assessment .welcome-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-bottom: 12px;
 }
 
+/* Button actions wrapper - positioned at bottom */
+.persona-assessment .welcome-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.persona-assessment .welcome-actions .primary-button,
 .persona-assessment .welcome-container > .primary-button {
   margin-top: 8px;
   max-width: 280px;
@@ -699,6 +712,11 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
+}
+
+.persona-assessment .capture-form .primary-button {
+  width: 100%;
+  max-width: none;
 }
 
 .persona-assessment .capture-input {

@@ -8,6 +8,10 @@ import { supabase } from './supabaseClient'
  * @param {string} flowJsonPath - Path to JSON file (e.g., 'validation-flow-vibe-riser.json')
  * @param {string} persona - Persona type (optional)
  * @param {string} stage - Stage (optional)
+ * @param {Object} placeholders - Custom placeholders for the flow (optional)
+ * @param {string} placeholders.problemArea - The problem area being validated
+ * @param {string} placeholders.solutionConcept - The solution concept being tested
+ * @param {string} placeholders.audienceDescription - Description of target audience
  * @returns {Promise<{success: boolean, shareToken?: string, flowId?: string, error?: string}>}
  */
 export async function createValidationFlow(
@@ -16,7 +20,8 @@ export async function createValidationFlow(
   flowDescription,
   flowJsonPath,
   persona = null,
-  stage = null
+  stage = null,
+  placeholders = null
 ) {
   try {
     // Generate unique share token
@@ -32,6 +37,7 @@ export async function createValidationFlow(
         flow_json_path: flowJsonPath,
         persona,
         stage,
+        placeholders,
         is_active: true
       })
       .select()

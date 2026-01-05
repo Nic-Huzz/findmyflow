@@ -1,0 +1,438 @@
+/* CAC Tracker Styles */
+.cac-tracker {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+}
+
+.cac-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.cac-header .header-content {
+  flex: 1;
+}
+
+.cac-header .header-content h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #ec4899, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.cac-header .header-content p {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.timeframe-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.timeframe-toggle button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.timeframe-toggle button.active {
+  background: #ec4899;
+  color: white;
+}
+
+/* Summary Cards */
+.cac-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cac-summary .summary-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cac-summary .summary-card.primary {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(244, 114, 182, 0.1));
+  border-color: rgba(236, 72, 153, 0.3);
+}
+
+.cac-summary .summary-card.excellent {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.cac-summary .summary-card.healthy {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.cac-summary .summary-card.warning {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.cac-summary .summary-card.danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.summary-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.summary-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+
+.summary-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-card.excellent .summary-status { color: #10b981; }
+.summary-card.healthy .summary-status { color: #06b6d4; }
+.summary-card.warning .summary-status { color: #f59e0b; }
+.summary-card.danger .summary-status { color: #ef4444; }
+
+/* LTV Input Row */
+.ltv-input-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ltv-input-row label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ltv-input-row .input-with-prefix {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 140px;
+}
+
+.ltv-input-row .input-with-prefix span {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ltv-input-row .input-with-prefix input {
+  border: none;
+  background: transparent;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
+.payback-info {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: auto;
+}
+
+.payback-info strong {
+  color: #ec4899;
+}
+
+/* Channels Section */
+.channels-section h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: white;
+}
+
+.channels-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.channel-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 3px solid var(--channel-color);
+}
+
+.channel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.channel-icon {
+  font-size: 1.25rem;
+}
+
+.channel-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: white;
+}
+
+.channel-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.channel-inputs .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.channel-inputs .input-group label {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.channel-inputs .input-group input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 8px;
+  color: white;
+  font-size: 0.75rem;
+  width: 100%;
+}
+
+.input-with-prefix.small {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.input-with-prefix.small span {
+  padding: 8px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+}
+
+.input-with-prefix.small input {
+  border: none;
+  background: transparent;
+  padding: 8px 6px;
+  font-size: 0.75rem;
+}
+
+.channel-metrics {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Results Table */
+.results-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.results-section h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: white;
+}
+
+.results-table-wrapper {
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.results-table th {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.results-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.results-table tfoot td {
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.channel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: white;
+}
+
+.results-table td.excellent { color: #10b981; }
+.results-table td.healthy { color: #06b6d4; }
+.results-table td.warning { color: #f59e0b; }
+.results-table td.danger { color: #ef4444; }
+
+/* Recommendations */
+.recommendations {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.recommendations h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: white;
+}
+
+.rec-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rec-card {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.rec-card.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.rec-card.success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.rec-card strong {
+  display: block;
+  margin-bottom: 6px;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.rec-card p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cac-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .channels-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .cac-tracker {
+    padding: 16px;
+  }
+
+  .cac-header {
+    flex-direction: column;
+  }
+
+  .timeframe-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ltv-input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .payback-info {
+    margin-left: 0;
+    text-align: center;
+  }
+}
