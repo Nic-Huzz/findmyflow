@@ -597,8 +597,8 @@ function App() {
 
   if (error) {
     return (
-      <div className="app">
-        <div className="error">
+      <div className="app-container">
+        <div className="app-error">
           {error}
         </div>
       </div>
@@ -607,9 +607,9 @@ function App() {
 
   if (!flow) {
     return (
-      <div className="app">
-        <div className="loading">
-          <div className="typing-indicator">
+      <div className="app-container">
+        <div className="app-loading">
+          <div className="app-typing">
             <span></span><span></span><span></span>
           </div>
         </div>
@@ -620,7 +620,7 @@ function App() {
   // Render hybrid flow if active
   if (showHybridFlow && hybridFlowType) {
     return (
-      <div className="app">
+      <div className="app-container">
         <HybridArchetypeFlow
           archetypeType={hybridFlowType}
           onComplete={handleHybridFlowComplete}
@@ -637,19 +637,19 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <header className="header">
+    <div className="app-container">
+      <header className="app-header">
         <h1>Find My Flow</h1>
         <p>Live Your Ambitions Quicker</p>
       </header>
 
-      <main className="chat-container">
-        <div className="messages">
+      <main className="app-chat">
+        <div className="app-messages">
           {messages.map(message => (
-            <div key={message.id} className={`message ${message.isAI ? 'ai' : 'user'}`}>
-              <div className="bubble">
+            <div key={message.id} className={`app-message ${message.isAI ? 'ai' : 'user'}`}>
+              <div className="app-bubble">
                 {message.kind === 'completion' ? (
-                  <div className="text">
+                  <div className="app-text">
                     <div dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                     <div style={{ marginTop: 8 }}>
                       <button
@@ -671,33 +671,33 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="text" dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
+                  <div className="app-text" dangerouslySetInnerHTML={{ __html: formatMarkdown(message.text) }} />
                 )}
-                <div className="timestamp">{message.timestamp}</div>
+                <div className="app-timestamp">{message.timestamp}</div>
               </div>
             </div>
           ))}
-          
+
           {isLoading && (
-            <div className="message ai">
-              <div className="bubble">
-                <div className="typing-indicator">
+            <div className="app-message ai">
+              <div className="app-bubble">
+                <div className="app-typing">
                   <span></span><span></span><span></span>
                 </div>
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
       </main>
 
       {currentStep?.options && currentStep.options.length > 0 && (
-        <div className="options-container">
+        <div className="app-options">
           {currentStep.options.map((option, index) => (
             <button
               key={index}
-              className="option-button"
+              className="app-option-btn"
               onClick={() => handleOptionClick(option)}
               disabled={isLoading}
             >
@@ -709,16 +709,16 @@ function App() {
 
       {/* Email confirmation buttons */}
       {showEmailConfirmation && (
-        <div className="options-container">
+        <div className="app-options">
           <button
-            className="option-button"
+            className="app-option-btn"
             onClick={handleEmailConfirm}
             disabled={isLoading}
           >
             ✓ Yes, that's correct
           </button>
           <button
-            className="option-button"
+            className="app-option-btn"
             onClick={handleEmailChange}
             disabled={isLoading}
           >
@@ -728,9 +728,9 @@ function App() {
       )}
 
       {currentStep && !currentStep.options && !showEmailConfirmation && (
-        <div className="input-bar">
+        <div className="app-input-bar">
           <textarea
-            className="message-input"
+            className="app-message-input"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -739,7 +739,7 @@ function App() {
             rows={1}
           />
           <button
-            className="send-button"
+            className="app-send-btn"
             onClick={handleSubmit}
             disabled={isLoading || !inputText.trim()}
           >

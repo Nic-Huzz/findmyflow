@@ -110,6 +110,23 @@
   font-style: italic;
 }
 
+/* Pattern-Based Section - from Win/Loss data */
+.scripts-modal-overlay .smart-suggestions-section.pattern-based {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.08), rgba(239, 68, 68, 0.08));
+}
+
+.scripts-modal-overlay .smart-suggestions-section.pattern-based h4 {
+  color: #ea580c;
+}
+
+.scripts-modal-overlay .smart-suggestion.pattern {
+  border-color: rgba(249, 115, 22, 0.25);
+}
+
+.scripts-modal-overlay .smart-suggestion.pattern .suggestion-reason {
+  color: #ea580c;
+}
+
 /* Recommended Section */
 .scripts-modal-overlay .recommended-section {
   padding: 16px 20px;
@@ -346,7 +363,7 @@
     align-items: flex-end;
   }
 
-  .scripts-modal {
+  .scripts-modal-overlay .scripts-modal {
     max-height: 80vh;
     border-radius: 16px 16px 0 0;
   }

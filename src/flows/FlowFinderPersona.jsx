@@ -1,47 +1,100 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
-import '../FlowFinder.css'
+import { JOURNEY_STAGES } from '../lib/wheelTaxonomy'
+import './FlowFinder.css'
 
 export default function FlowFinderPersona() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [currentScreen, setCurrentScreen] = useState('welcome')
+  const [viewingResults, setViewingResults] = useState(false)
   const [clusters, setClusters] = useState([])
   const [sessionId, setSessionId] = useState(null)
   const [isProcessing, setIsProcessing] = useState(false)
+  // Journey stage ratings for each persona: { 'cluster_label': 'awakening' | 'struggling' | 'ready' }
+  const [personaRatings, setPersonaRatings] = useState({})
 
   // Auto-save state
   const [showResumePrompt, setShowResumePrompt] = useState(false)
   const [savedProgressData, setSavedProgressData] = useState(null)
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('flow-finder-persona', user?.id)
 
-  // Create flow session on mount
+  // Create flow session on mount (skip if viewing results)
   useEffect(() => {
-    createSession()
+    if (searchParams.get('results') !== 'true') {
+      createSession()
+    }
   }, [])
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      setViewingResults(true)
+      try {
+        // Load saved clusters from database
+        const { data: savedClusters, error } = await supabase
+          .from('nikigai_clusters')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('cluster_type', 'persona')
+          .eq('cluster_stage', 'final')
+          .order('created_at', { ascending: false })
+
+        if (error) throw error
+
+        if (savedClusters && savedClusters.length > 0) {
+          // Get most recent session's clusters
+          const mostRecentSessionId = savedClusters[0].session_id
+          const sessionClusters = savedClusters.filter(c => c.session_id === mostRecentSessionId)
+
+          // Transform to match expected format
+          const formattedClusters = sessionClusters.map(c => ({
+            label: c.cluster_label,
+            insight: c.insight,
+            items: c.items || [],
+            journeyStage: c.proficiency || c.items?.[0]?.journeyStage || null // Support both new and legacy format
+          }))
+
+          setClusters(formattedClusters)
+          setCurrentScreen('success')
+        } else {
+          // No saved results, show welcome
+          setViewingResults(false)
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+        setViewingResults(false)
+      }
+    }
+
+    loadSavedResults()
+  }, [searchParams, user])
 
   // Check for saved progress on mount (auto-save)
   useEffect(() => {
-    if (user) {
+    if (user && !viewingResults) {
       const saved = loadProgress()
       if (saved && saved.currentScreen && saved.currentScreen !== 'welcome' && saved.currentScreen !== 'success') {
         setSavedProgressData(saved)
         setShowResumePrompt(true)
       }
     }
-  }, [user, loadProgress])
+  }, [user, loadProgress, viewingResults])
 
   // Auto-save progress on state changes
   useEffect(() => {
-    if (!user || currentScreen === 'welcome' || currentScreen === 'success' || currentScreen === 'processing') return
-    const progressData = { currentScreen }
+    if (!user || currentScreen === 'welcome' || currentScreen === 'success' || currentScreen === 'processing' || viewingResults) return
+    const progressData = { currentScreen, personaRatings, clusters }
     saveProgress(progressData)
-  }, [currentScreen, user, saveProgress])
+  }, [currentScreen, personaRatings, clusters, user, saveProgress, viewingResults])
 
   const createSession = async () => {
     try {
@@ -57,8 +110,10 @@ export default function FlowFinderPersona() {
 
       if (error) throw error
       setSessionId(data.id)
+      return data.id
     } catch (err) {
       console.error('Error creating session:', err)
+      return null
     }
   }
 
@@ -66,6 +121,12 @@ export default function FlowFinderPersona() {
   const handleResumeProgress = () => {
     if (savedProgressData) {
       setCurrentScreen(savedProgressData.currentScreen)
+      if (savedProgressData.personaRatings) {
+        setPersonaRatings(savedProgressData.personaRatings)
+      }
+      if (savedProgressData.clusters) {
+        setClusters(savedProgressData.clusters)
+      }
     }
     setShowResumePrompt(false)
     setSavedProgressData(null)
@@ -79,7 +140,31 @@ export default function FlowFinderPersona() {
     setCurrentScreen('confirm')
   }
 
+  // Update rating for a persona
+  const setPersonaRating = (personaLabel, rating) => {
+    setPersonaRatings(prev => ({
+      ...prev,
+      [personaLabel]: rating
+    }))
+  }
+
+  // Check if all personas have been rated
+  const allPersonasRated = () => {
+    return clusters.every(cluster => personaRatings[cluster.label])
+  }
+
   const analyzeJourney = async () => {
+    // Safety check for sessionId
+    let currentSessionId = sessionId
+    if (!currentSessionId) {
+      console.error('No session ID - attempting to create one')
+      currentSessionId = await createSession()
+      if (!currentSessionId) {
+        alert('Error starting flow. Please refresh and try again.')
+        return
+      }
+    }
+
     setIsProcessing(true)
     setCurrentScreen('processing')
 
@@ -127,16 +212,49 @@ export default function FlowFinderPersona() {
       console.log('✅ API Response:', data)
 
       const returnedClusters = data.clusters || []
+      setClusters(returnedClusters)
 
-      // Save clusters to database
-      const clustersToSave = returnedClusters.map(cluster => ({
+      // Go to rating screen instead of success
+      setCurrentScreen('rating')
+    } catch (err) {
+      console.error('Error analyzing journey:', err)
+      alert('Error generating insights. Please try again.')
+      setCurrentScreen('confirm')
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  // Save clusters with journey stage ratings to database
+  const saveWithRatings = async () => {
+    let currentSessionId = sessionId
+    if (!currentSessionId) {
+      currentSessionId = await createSession()
+      if (!currentSessionId) {
+        alert('Error saving. Please try again.')
+        return
+      }
+    }
+
+    try {
+      // Add journey stage to each cluster
+      const clustersWithRatings = clusters.map(cluster => ({
+        ...cluster,
+        journeyStage: personaRatings[cluster.label] || 'struggling'
+      }))
+
+      // Save clusters to database with proficiency column
+      const clustersToSave = clustersWithRatings.map(cluster => ({
         user_id: user.id,
-        session_id: sessionId,
+        session_id: currentSessionId,
         cluster_type: 'persona',
-        cluster_stage: 'final',  // Required field: 'preview', 'intermediate', or 'final'
+        cluster_stage: 'final',
         cluster_label: cluster.label,
         insight: cluster.insight,
-        items: Array.isArray(cluster.items) ? cluster.items : []  // Changed from 'evidence' to 'items'
+        proficiency: cluster.journeyStage, // awakening, struggling, or ready
+        items: (cluster.items || []).map(item => ({
+          text: typeof item === 'string' ? item : item.text || item
+        }))
       }))
 
       console.log('💾 Saving to database:', clustersToSave)
@@ -150,13 +268,14 @@ export default function FlowFinderPersona() {
         throw insertError
       }
 
-      setClusters(data.clusters)
+      // Update local state with ratings
+      setClusters(clustersWithRatings)
 
       // Mark session as completed
       await supabase
         .from('flow_sessions')
         .update({ status: 'completed', completed_at: new Date().toISOString() })
-        .eq('id', sessionId)
+        .eq('id', currentSessionId)
 
       // Sync with 7-day challenge if active
       await syncFlowFinderWithChallenge(user.id, 'persona')
@@ -167,11 +286,8 @@ export default function FlowFinderPersona() {
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
-      console.error('Error analyzing journey:', err)
-      alert('Error generating insights. Please try again.')
-      setCurrentScreen('confirm')
-    } finally {
-      setIsProcessing(false)
+      console.error('Error saving with ratings:', err)
+      alert('Error saving. Please try again.')
     }
   }
 
@@ -179,7 +295,8 @@ export default function FlowFinderPersona() {
     // Helper to get readable screen name
     const getScreenDisplayName = (screen) => {
       const screenNames = {
-        'confirm': 'Ready to Generate'
+        'confirm': 'Ready to Generate',
+        'rating': 'Rating Personas'
       }
       return screenNames[screen] || screen
     }
@@ -296,80 +413,239 @@ export default function FlowFinderPersona() {
     </div>
   )
 
-  const renderSuccess = () => (
-    <div className="container welcome-container">
-      <h1 className="welcome-greeting">Here's what we discovered about you</h1>
-      <div className="welcome-message">
-        <p>Based on your journey, we've identified 5 personas—former versions of yourself who need what you've learned:</p>
-      </div>
+  const renderRating = () => {
+    const ratedCount = Object.keys(personaRatings).length
+    const totalCount = clusters.length
 
-      {/* All Clusters (Read-only, no selection) */}
-      <div className="cluster-grid" style={{ margin: '32px 0' }}>
-        {clusters.map((cluster, index) => (
-          <div
-            key={index}
-            className="cluster-card"
-            style={{ cursor: 'default', borderColor: 'rgba(251, 191, 36, 0.3)' }}
-          >
-            <h3>{cluster.label}</h3>
-            <p>{cluster.insight}</p>
-            <div className="cluster-evidence">
-              <div className="cluster-evidence-label">Why you're qualified to serve them:</div>
-              <ul className="evidence-list">
-                {cluster.items?.map((item, i) => (
-                  <li key={i}>"{item}"</li>
-                ))}
-              </ul>
-            </div>
+    return (
+      <div className="container question-container">
+        <div className="question-number">Final Step</div>
+        <h2 className="question-text">Where are they on their journey?</h2>
+        <p className="question-subtext">
+          For each persona, where are they in becoming aware of their problem?
+        </p>
+
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: '12px',
+          padding: '16px',
+          marginBottom: '24px'
+        }}>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '12px', flexWrap: 'wrap' }}>
+            {JOURNEY_STAGES.map(stage => (
+              <div key={stage.id} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: stage.color }} />
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>{stage.label}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', textAlign: 'center', margin: 0 }}>
+            {ratedCount} of {totalCount} rated
+          </p>
+        </div>
 
-      <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>✓ Persona Discovery Complete!</h1>
-      <div className="welcome-message">
-        <p>These are former versions of you. You understand their struggles because you've lived them. You know what they need because you needed it too.</p>
-        <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's bring it all together and find your unique opportunity.</p>
-      </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+          {clusters.map((cluster, index) => (
+            <div
+              key={index}
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                borderRadius: '12px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}
+            >
+              <div>
+                <div style={{ fontWeight: '600', color: 'white', marginBottom: '4px' }}>{cluster.label}</div>
+                <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)' }}>{cluster.insight}</div>
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => setPersonaRating(cluster.label, 'awakening')}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    background: personaRatings[cluster.label] === 'awakening'
+                      ? '#fbbf24'
+                      : 'rgba(251, 191, 36, 0.15)',
+                    color: personaRatings[cluster.label] === 'awakening'
+                      ? '#1a1a2e'
+                      : '#fbbf24',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Awakening
+                </button>
+                <button
+                  onClick={() => setPersonaRating(cluster.label, 'struggling')}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    background: personaRatings[cluster.label] === 'struggling'
+                      ? '#60a5fa'
+                      : 'rgba(96, 165, 250, 0.15)',
+                    color: personaRatings[cluster.label] === 'struggling'
+                      ? '#1a1a2e'
+                      : '#60a5fa',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Struggling
+                </button>
+                <button
+                  onClick={() => setPersonaRating(cluster.label, 'ready')}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    background: personaRatings[cluster.label] === 'ready'
+                      ? '#6BCB77'
+                      : 'rgba(107, 203, 119, 0.15)',
+                    color: personaRatings[cluster.label] === 'ready'
+                      ? '#1a1a2e'
+                      : '#6BCB77',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Ready
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
-      <Link to="/nikigai/integration" className="primary-button">
-        Continue to Connecting the Dots
-      </Link>
-      <Link
-        to="/me"
-        className="primary-button"
-        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px', display: 'block', textDecoration: 'none', textAlign: 'center' }}
-      >
-        Save & Return to Dashboard
-      </Link>
-    </div>
-  )
+        <button
+          className="primary-button"
+          onClick={saveWithRatings}
+          disabled={!allPersonasRated()}
+          style={{ opacity: allPersonasRated() ? 1 : 0.5 }}
+        >
+          Save & See Results
+        </button>
+      </div>
+    )
+  }
+
+  const renderSuccess = () => {
+    // Get journey stage info for display
+    const getJourneyStageInfo = (stage) => {
+      return JOURNEY_STAGES.find(s => s.id === stage) || JOURNEY_STAGES[1]
+    }
+
+    return (
+      <div className="container welcome-container">
+        <h1 className="welcome-greeting">Here's what we discovered about you</h1>
+        <div className="welcome-message">
+          <p>Based on your journey, we've identified {clusters.length} personas—former versions of yourself who need what you've learned:</p>
+        </div>
+
+        {/* All Clusters with journey stage badges */}
+        <div className="cluster-grid" style={{ margin: '32px 0' }}>
+          {clusters.map((cluster, index) => {
+            const stageInfo = getJourneyStageInfo(cluster.journeyStage || personaRatings[cluster.label])
+            return (
+              <div
+                key={index}
+                className="cluster-card"
+                style={{ cursor: 'default', borderColor: 'rgba(251, 191, 36, 0.3)' }}
+              >
+                {stageInfo && (
+                  <div style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    background: `${stageInfo.color}20`,
+                    color: stageInfo.color,
+                    padding: '4px 10px',
+                    borderRadius: '12px',
+                    fontSize: '12px',
+                    fontWeight: '600',
+                    marginBottom: '12px'
+                  }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: stageInfo.color }} />
+                    {stageInfo.label}
+                  </div>
+                )}
+                <h3>{cluster.label}</h3>
+                <p>{cluster.insight}</p>
+                <div className="cluster-evidence">
+                  <div className="cluster-evidence-label">Why you're qualified to serve them:</div>
+                  <ul className="evidence-list">
+                    {(cluster.items || []).map((item, i) => (
+                      <li key={i}>"{typeof item === 'string' ? item : item.text || item}"</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>✓ Persona Discovery Complete!</h1>
+        <div className="welcome-message">
+          <p>These are former versions of you. You understand their struggles because you've lived them. You know what they need because you needed it too.</p>
+          <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's bring it all together and find your unique opportunity.</p>
+        </div>
+
+        <Link to="/nikigai/integration" className="primary-button">
+          Continue to Connecting the Dots
+        </Link>
+        <Link
+          to="/me"
+          className="primary-button"
+          style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px', display: 'block', textDecoration: 'none', textAlign: 'center' }}
+        >
+          Save & Return to Dashboard
+        </Link>
+      </div>
+    )
+  }
 
   // Main render logic
   const screens = {
     welcome: renderWelcome,
     confirm: renderConfirm,
     processing: renderProcessing,
+    rating: renderRating,
     success: renderSuccess
   }
 
   return (
     <div className="flow-finder-app">
-      {/* Progress Dots - 4 dots for simpler flow */}
+      {/* Progress Dots - 5 dots for flow with rating */}
       <div className="progress-container">
         <div className="progress-dots">
-          {[...Array(4)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <div
               key={i}
               className={`progress-dot ${
                 i === 0 && currentScreen === 'welcome' ? 'active' :
                 i === 1 && currentScreen === 'confirm' ? 'active' :
                 i === 2 && currentScreen === 'processing' ? 'active' :
-                i === 3 && currentScreen === 'success' ? 'active' :
+                i === 3 && currentScreen === 'rating' ? 'active' :
+                i === 4 && currentScreen === 'success' ? 'active' :
                 ''
               } ${
-                (i === 0 && ['confirm', 'processing', 'success'].includes(currentScreen)) ||
-                (i === 1 && ['processing', 'success'].includes(currentScreen)) ||
-                (i === 2 && currentScreen === 'success')
+                (i === 0 && ['confirm', 'processing', 'rating', 'success'].includes(currentScreen)) ||
+                (i === 1 && ['processing', 'rating', 'success'].includes(currentScreen)) ||
+                (i === 2 && ['rating', 'success'].includes(currentScreen)) ||
+                (i === 3 && currentScreen === 'success')
                 ? 'completed' : ''
               }`}
             ></div>

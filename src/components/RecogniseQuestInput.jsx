@@ -7,12 +7,16 @@
  * - recognise_negative_frequency (Negative Frequency)
  * - recognise_positive_frequency (Positive Frequency)
  * - recognise_trigger_pattern (Trigger Pattern)
+ *
+ * Refactored to use shared useSteppedForm hook and StepProgress component.
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import essenceProfiles from '../data/essenceProfiles'
+import { useSteppedForm } from '../hooks/useSteppedForm'
+import { StepProgress } from './QuestInputShared'
 import './RecogniseQuestInput.css'
 
 // Protective voice options
@@ -90,53 +94,138 @@ const TRIGGER_TYPES = [
   { id: 'body', label: 'Body', icon: '🫀', description: 'Physical sensation or state' }
 ]
 
+// Step configurations for each quest type
+const STEP_CONFIGS = {
+  recognise_protective_observe: { totalSteps: 4, stepTitles: ['Voice & Area', 'Fears & Layer', 'Situation', 'Review'] },
+  recognise_essence_observe: { totalSteps: 3, stepTitles: ['Business Area', 'Situation', 'Review'] },
+  recognise_negative_frequency: { totalSteps: 3, stepTitles: ['Frequency', 'Details', 'Review'] },
+  recognise_positive_frequency: { totalSteps: 3, stepTitles: ['Frequency', 'Details', 'Review'] },
+  recognise_trigger_pattern: { totalSteps: 3, stepTitles: ['Trigger Type', 'Details', 'Review'] }
+}
+
+// Initial form data
+const INITIAL_FORM_DATA = {
+  // Protective Voice fields
+  protective_voice: '',
+  fears_triggered: [],
+  vulnerability_layer: null,
+  intensity: 3,
+  situation: '',
+  protecting_from: '',
+  business_area: null,
+  // Essence Voice fields
+  expression_type: '',
+  alignment: 3,
+  // Frequency fields
+  frequency: '',
+  area_of_life: null,
+  frequency_intensity: null,
+  // Trigger Pattern fields
+  trigger_type: ''
+}
+
 function RecogniseQuestInput({ quest, onComplete }) {
   const { user } = useAuth()
-  const [step, setStep] = useState(1)
   const [userArchetypes, setUserArchetypes] = useState({
     essence: null,
     protective: null
   })
   const [showOtherVoices, setShowOtherVoices] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Form state
-  const [formData, setFormData] = useState({
-    // Protective Voice fields
-    protective_voice: '',
-    fears_triggered: [],
-    vulnerability_layer: null,
-    intensity: 3,
-    situation: '',
-    protecting_from: '',
-    business_area: null,
+  const config = STEP_CONFIGS[quest.id] || { totalSteps: 3, stepTitles: ['Input', 'Details', 'Review'] }
 
-    // Essence Voice fields
-    expression_type: '',
-    alignment: 3,
-
-    // Frequency fields
-    frequency: '',
-    area_of_life: null,
-    frequency_intensity: null,
-
-    // Trigger Pattern fields
-    trigger_type: ''
-  })
-
-  // Get total steps based on quest type
-  const getTotalSteps = () => {
-    switch (quest.id) {
-      case 'recognise_protective_observe': return 4 // Voice+Area → Fear+Layer → Situation+Intensity → Summary
-      case 'recognise_essence_observe': return 3    // Area → Situation+Alignment → Summary
-      case 'recognise_negative_frequency':
-      case 'recognise_positive_frequency':
-      case 'recognise_trigger_pattern': return 3    // Selector → Area+Intensity → Situation → Summary (combined)
-      default: return 3
+  // Validation function
+  const validateStep = useCallback((currentStep, data) => {
+    if (quest.id === 'recognise_protective_observe') {
+      switch (currentStep) {
+        case 1: return data.protective_voice && data.business_area !== null
+        case 2: return data.fears_triggered.length > 0
+        case 3: return data.situation.trim().length >= 10
+        case 4: return true
+        default: return false
+      }
+    } else if (quest.id === 'recognise_essence_observe') {
+      switch (currentStep) {
+        case 1: return data.business_area !== null
+        case 2: return data.situation.trim().length >= 10 && data.alignment !== null
+        case 3: return true
+        default: return false
+      }
+    } else if (quest.id === 'recognise_negative_frequency' || quest.id === 'recognise_positive_frequency') {
+      switch (currentStep) {
+        case 1: return data.frequency
+        case 2: return data.area_of_life && data.frequency_intensity && data.situation.trim().length >= 10
+        case 3: return true
+        default: return false
+      }
+    } else if (quest.id === 'recognise_trigger_pattern') {
+      switch (currentStep) {
+        case 1: return data.trigger_type
+        case 2: return data.area_of_life && data.frequency_intensity && data.situation.trim().length >= 10
+        case 3: return true
+        default: return false
+      }
     }
-  }
+    return false
+  }, [quest.id])
 
-  const totalSteps = getTotalSteps()
+  // Build response data for submission
+  const buildResponseData = useCallback((data) => {
+    if (quest.id === 'recognise_protective_observe') {
+      return {
+        protective_voice: data.protective_voice,
+        fears_triggered: data.fears_triggered,
+        vulnerability_layer: data.vulnerability_layer,
+        intensity: data.intensity,
+        business_area: data.business_area,
+        situation: data.situation
+      }
+    } else if (quest.id === 'recognise_essence_observe') {
+      return {
+        essence_archetype: userArchetypes.essence,
+        expression_type: data.expression_type,
+        alignment: data.alignment,
+        business_area: data.business_area,
+        situation: data.situation
+      }
+    } else if (quest.id === 'recognise_negative_frequency' || quest.id === 'recognise_positive_frequency') {
+      return {
+        frequency: data.frequency,
+        area_of_life: data.area_of_life,
+        intensity: data.frequency_intensity,
+        situation: data.situation
+      }
+    } else if (quest.id === 'recognise_trigger_pattern') {
+      return {
+        trigger_type: data.trigger_type,
+        area_of_life: data.area_of_life,
+        intensity: data.frequency_intensity,
+        situation: data.situation
+      }
+    }
+    return data
+  }, [quest.id, userArchetypes.essence])
+
+  const {
+    step,
+    formData,
+    setFormData,
+    isSubmitting,
+    isReviewStep,
+    totalSteps,
+    canContinue,
+    handleNext,
+    handleBack,
+    toggleArrayItem
+  } = useSteppedForm({
+    totalSteps: config.totalSteps,
+    initialData: INITIAL_FORM_DATA,
+    validateStep,
+    onSubmit: async (data) => {
+      const responseData = buildResponseData(data)
+      await onComplete(quest, JSON.stringify(responseData))
+    }
+  })
 
   // Fetch user archetypes on mount
   useEffect(() => {
@@ -164,114 +253,15 @@ function RecogniseQuestInput({ quest, onComplete }) {
     fetchArchetypes()
   }, [user])
 
+  // Handle fear toggle using hook's toggleArrayItem
   const handleFearToggle = (fearId) => {
-    setFormData(prev => ({
-      ...prev,
-      fears_triggered: prev.fears_triggered.includes(fearId)
-        ? prev.fears_triggered.filter(f => f !== fearId)
-        : [...prev.fears_triggered, fearId]
-    }))
+    toggleArrayItem('fears_triggered', fearId)
   }
 
-  const canContinue = () => {
-    if (quest.id === 'recognise_protective_observe') {
-      switch (step) {
-        case 1: return formData.protective_voice && formData.business_area !== null
-        case 2: return formData.fears_triggered.length > 0
-        case 3: return formData.situation.trim().length >= 10
-        case 4: return true
-        default: return false
-      }
-    } else if (quest.id === 'recognise_essence_observe') {
-      switch (step) {
-        case 1: return formData.business_area !== null
-        case 2: return formData.situation.trim().length >= 10 && formData.alignment !== null
-        case 3: return true
-        default: return false
-      }
-    } else if (quest.id === 'recognise_negative_frequency' || quest.id === 'recognise_positive_frequency') {
-      switch (step) {
-        case 1: return formData.frequency
-        case 2: return formData.area_of_life && formData.frequency_intensity && formData.situation.trim().length >= 10
-        case 3: return true
-        default: return false
-      }
-    } else if (quest.id === 'recognise_trigger_pattern') {
-      switch (step) {
-        case 1: return formData.trigger_type
-        case 2: return formData.area_of_life && formData.frequency_intensity && formData.situation.trim().length >= 10
-        case 3: return true
-        default: return false
-      }
-    }
-    return false
-  }
-
-  const handleNext = () => {
-    if (step < totalSteps) {
-      setStep(step + 1)
-    }
-  }
-
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1)
-    }
-  }
-
+  // Submit handler
   const handleSubmit = async () => {
-    if (isSubmitting) return
-    setIsSubmitting(true)
-
-    try {
-      let responseData = {}
-
-      if (quest.id === 'recognise_protective_observe') {
-        responseData = {
-          protective_voice: formData.protective_voice,
-          fears_triggered: formData.fears_triggered,
-          vulnerability_layer: formData.vulnerability_layer,
-          intensity: formData.intensity,
-          business_area: formData.business_area,
-          situation: formData.situation
-        }
-      } else if (quest.id === 'recognise_essence_observe') {
-        responseData = {
-          essence_archetype: userArchetypes.essence,
-          expression_type: formData.expression_type,
-          alignment: formData.alignment,
-          business_area: formData.business_area,
-          situation: formData.situation
-        }
-      } else if (quest.id === 'recognise_negative_frequency') {
-        responseData = {
-          frequency: formData.frequency,
-          area_of_life: formData.area_of_life,
-          intensity: formData.frequency_intensity,
-          situation: formData.situation
-        }
-      } else if (quest.id === 'recognise_positive_frequency') {
-        responseData = {
-          frequency: formData.frequency,
-          area_of_life: formData.area_of_life,
-          intensity: formData.frequency_intensity,
-          situation: formData.situation
-        }
-      } else if (quest.id === 'recognise_trigger_pattern') {
-        responseData = {
-          trigger_type: formData.trigger_type,
-          area_of_life: formData.area_of_life,
-          intensity: formData.frequency_intensity,
-          situation: formData.situation
-        }
-      }
-
-      await onComplete(quest, JSON.stringify(responseData))
-    } catch (error) {
-      console.error('Error completing quest:', error)
-    } finally {
-      setIsSubmitting(false)
-    }
+    const responseData = buildResponseData(formData)
+    await onComplete(quest, JSON.stringify(responseData))
   }
 
   // Helper getters
@@ -291,9 +281,11 @@ function RecogniseQuestInput({ quest, onComplete }) {
   if (quest.id === 'recognise_protective_observe') {
     return (
       <div className="recognise-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Voice + Business Area */}
         {step === 1 && (
@@ -519,9 +511,11 @@ function RecogniseQuestInput({ quest, onComplete }) {
   if (quest.id === 'recognise_essence_observe') {
     return (
       <div className="recognise-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Essence Display + Business Area */}
         {step === 1 && (
@@ -652,9 +646,11 @@ function RecogniseQuestInput({ quest, onComplete }) {
   if (quest.id === 'recognise_negative_frequency') {
     return (
       <div className="recognise-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Frequency selector */}
         {step === 1 && (
@@ -793,9 +789,11 @@ function RecogniseQuestInput({ quest, onComplete }) {
   if (quest.id === 'recognise_positive_frequency') {
     return (
       <div className="recognise-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Frequency selector */}
         {step === 1 && (
@@ -934,9 +932,11 @@ function RecogniseQuestInput({ quest, onComplete }) {
   if (quest.id === 'recognise_trigger_pattern') {
     return (
       <div className="recognise-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Trigger Type */}
         {step === 1 && (

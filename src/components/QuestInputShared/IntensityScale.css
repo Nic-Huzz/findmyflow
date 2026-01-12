@@ -1,0 +1,98 @@
+/**
+ * IntensityScale.css
+ * Styles for the shared before/after intensity slider component
+ */
+
+.intensity-scale-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.intensity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.intensity-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Intensity Scale */
+.intensity-scale {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.intensity-end {
+  font-size: 1.25rem;
+}
+
+.intensity-buttons {
+  display: flex;
+  flex: 1;
+  gap: 0.25rem;
+}
+
+.intensity-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.intensity-btn:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.intensity-btn.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: white;
+}
+
+/* Shift Display */
+.shift-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  margin-top: 0.5rem;
+}
+
+.shift-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.shift-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.shift-value.positive {
+  color: #f59e0b;
+}
+
+.shift-value.negative {
+  color: #ef4444;
+}
+
+.shift-value.neutral {
+  color: #6b7280;
+}

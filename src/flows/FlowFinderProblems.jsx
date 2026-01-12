@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
-import '../FlowFinder.css'
+import { GradientWheel } from '../components/CompetenceWheels'
+import { PROBLEM_SEGMENTS, PROBLEMS_PROFICIENCY_RINGS } from '../lib/wheelTaxonomy'
+import './FlowFinder.css'
 
 export default function FlowFinderProblems() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [currentScreen, setCurrentScreen] = useState('welcome')
+  const [viewingResults, setViewingResults] = useState(false)
   const [responses, setResponses] = useState({
     q1_topics: ['', '', '', '', ''],
     q2_impact: ['', '', '', '', ''],
@@ -26,6 +30,84 @@ export default function FlowFinderProblems() {
   const [sessionId, setSessionId] = useState(null)
   const [isProcessing, setIsProcessing] = useState(false)
   const [processingError, setProcessingError] = useState(null)
+  // Cluster-level proficiency ratings: { 'cluster_label': 'exploring' | 'pursuing' | 'proven' }
+  const [clusterRatings, setClusterRatings] = useState({})
+  const [litCells, setLitCells] = useState(new Set())
+
+  // Add hue values to segments for wheel rendering
+  const problemsWithHue = useMemo(() =>
+    PROBLEM_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    []
+  )
+
+  // Map cluster labels to wheel segment indices
+  const mapClusterToSegments = (clusterLabel) => {
+    const labelLower = clusterLabel.toLowerCase()
+    const segmentMappings = {
+      // Physical vitality
+      health: [0], fitness: [0], body: [0], energy: [0], sleep: [0], nutrition: [0], physical: [0],
+      // Mental wellbeing
+      anxiety: [1], stress: [1], mindset: [1], mental: [1], emotions: [1], burnout: [1], wellbeing: [1],
+      // Personal mastery
+      skills: [2], productivity: [2], habits: [2], growth: [2], learning: [2], mastery: [2], personal: [2],
+      // Intimate bonds
+      relationship: [3], family: [3], parenting: [3], love: [3], marriage: [3], intimate: [3],
+      // Service & care
+      caregiving: [4], disability: [4], healthcare: [4], support: [4], service: [4], care: [4],
+      // Creative expression
+      art: [5], creativity: [5], voice: [5], expression: [5], identity: [5], creative: [5],
+      // Local impact
+      team: [6], organization: [6], community: [6], workplace: [6], culture: [6], local: [6],
+      // Cultural movements
+      movement: [7], belonging: [7], trends: [7], social: [7], cultural: [7],
+      // Economic freedom
+      money: [8], business: [8], career: [8], income: [8], financial: [8], freedom: [8], economic: [8],
+      // Social justice
+      inequality: [9], discrimination: [9], rights: [9], fairness: [9], advocacy: [9], justice: [9],
+      // Planetary health
+      climate: [10], environment: [10], sustainability: [10], planet: [10], planetary: [10],
+      // Human progress
+      technology: [11], innovation: [11], future: [11], education: [11], progress: [11], human: [11],
+    }
+    const matchedSegments = new Set()
+    Object.entries(segmentMappings).forEach(([keyword, indices]) => {
+      if (labelLower.includes(keyword)) {
+        indices.forEach(i => matchedSegments.add(i))
+      }
+    })
+    return matchedSegments.size > 0 ? Array.from(matchedSegments) : [0]
+  }
+
+  // Map proficiency rating to ring index (0-2) for 3-ring wheel
+  const getRingForProficiency = (rating) => {
+    switch (rating) {
+      case 'exploring': return 0
+      case 'pursuing': return 1
+      case 'proven': return 2
+      default: return 1
+    }
+  }
+
+  // Update lit cells when clusters or cluster ratings change
+  useEffect(() => {
+    if (clusters.length > 0) {
+      const newLitCells = new Set()
+
+      clusters.forEach(cluster => {
+        const segmentIndices = mapClusterToSegments(cluster.label || cluster.cluster_label || '')
+
+        // Get proficiency from cluster-level rating (Option B)
+        const proficiency = cluster.proficiency || clusterRatings[cluster.label] || 'pursuing'
+        const ringIdx = getRingForProficiency(proficiency)
+
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-${ringIdx}`)
+        })
+      })
+
+      setLitCells(newLitCells)
+    }
+  }, [clusters, clusterRatings])
 
   // Auto-save state
   const [showResumePrompt, setShowResumePrompt] = useState(false)
@@ -229,9 +311,13 @@ export default function FlowFinderProblems() {
     try {
       // Transform responses to match edge function format
       const allItems = []
-      Object.entries(responses).forEach(([key, values]) => {
-        values.forEach(val => {
-          if (val.trim()) allItems.push(val.trim())
+
+      // All questions - just collect items without ratings
+      ;['q1_topics', 'q2_impact', 'q3_chapters', 'q4_struggles', 'q5_rolemodels', 'q6_future', 'q7_pulls'].forEach(key => {
+        responses[key].forEach(val => {
+          if (val.trim()) {
+            allItems.push(val.trim())
+          }
         })
       })
 
@@ -242,7 +328,7 @@ export default function FlowFinderProblems() {
         store_as: 'problems_all'
       }]
 
-      // Call Claude API to generate clusters with new format
+      // Call Claude API to generate clusters
       const { data, error } = await supabase.functions.invoke('nikigai-conversation', {
         body: {
           currentStep: { id: 'problems_final', assistant_prompt: 'Problems clustering from all responses' },
@@ -261,15 +347,55 @@ export default function FlowFinderProblems() {
 
       const returnedClusters = data.clusters || []
 
+      // Store clusters for rating - don't save to DB yet
+      setClusters(returnedClusters)
+
+      // Reset cluster ratings for fresh rating
+      setClusterRatings({})
+
+      // Navigate to cluster rating screen
+      setCurrentScreen('cluster_rating')
+    } catch (err) {
+      console.error('Error analyzing responses:', err)
+      setProcessingError('Error generating insights. Please try again.')
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  // Save clusters with ratings to database
+  const saveWithRatings = async () => {
+    let currentSessionId = sessionId
+    if (!currentSessionId) {
+      currentSessionId = await createSession()
+      if (!currentSessionId) {
+        alert('Error saving. Please try again.')
+        return
+      }
+    }
+
+    setIsProcessing(true)
+    setCurrentScreen('saving')
+
+    try {
+      // Add proficiency rating to each cluster
+      const clustersWithRatings = clusters.map(cluster => ({
+        ...cluster,
+        proficiency: clusterRatings[cluster.label] || 'pursuing'
+      }))
+
       // Save clusters to database
-      const clustersToSave = returnedClusters.map(cluster => ({
+      const clustersToSave = clustersWithRatings.map(cluster => ({
         user_id: user.id,
         session_id: currentSessionId,
         cluster_type: 'problems',
         cluster_stage: 'final',
         cluster_label: cluster.label,
         insight: cluster.insight,
-        items: Array.isArray(cluster.items) ? cluster.items : []
+        proficiency: cluster.proficiency,
+        items: (cluster.items || []).map(item =>
+          typeof item === 'string' ? { text: item } : item
+        )
       }))
 
       console.log('💾 Saving to database:', clustersToSave)
@@ -283,7 +409,8 @@ export default function FlowFinderProblems() {
         throw insertError
       }
 
-      setClusters(data.clusters)
+      // Update clusters state with ratings for wheel display
+      setClusters(clustersWithRatings)
 
       // Mark session as completed
       await supabase
@@ -300,8 +427,9 @@ export default function FlowFinderProblems() {
       // Navigate to success screen
       setCurrentScreen('success')
     } catch (err) {
-      console.error('Error analyzing responses:', err)
-      setProcessingError('Error generating insights. Please try again.')
+      console.error('Error saving:', err)
+      setProcessingError('Error saving your results. Please try again.')
+      setCurrentScreen('cluster_rating')
     } finally {
       setIsProcessing(false)
     }
@@ -309,15 +437,29 @@ export default function FlowFinderProblems() {
 
   // Back button handler
   const goBack = (fromScreen) => {
-    const screenOrder = ['welcome', 'q1', 'q2', 'processing1', 'q3', 'q4', 'q5', 'processing2', 'q6', 'q7']
+    const screenOrder = ['welcome', 'q1', 'q2', 'processing1', 'q3', 'q4', 'q5', 'processing2', 'q6', 'q7', 'processing', 'cluster_rating']
     const currentIndex = screenOrder.indexOf(fromScreen)
     if (currentIndex > 0) {
       // Skip processing screens when going back
       let targetIndex = currentIndex - 1
       if (screenOrder[targetIndex] === 'processing1') targetIndex = currentIndex - 2
       if (screenOrder[targetIndex] === 'processing2') targetIndex = currentIndex - 2
+      if (screenOrder[targetIndex] === 'processing') targetIndex = currentIndex - 2
       setCurrentScreen(screenOrder[Math.max(0, targetIndex)])
     }
+  }
+
+  // Update cluster rating
+  const setClusterRating = (clusterLabel, rating) => {
+    setClusterRatings(prev => ({
+      ...prev,
+      [clusterLabel]: rating
+    }))
+  }
+
+  // Check if all clusters have been rated
+  const allClustersRated = () => {
+    return clusters.length > 0 && clusters.every(cluster => clusterRatings[cluster.label])
   }
 
   // Validation message component
@@ -879,6 +1021,157 @@ export default function FlowFinderProblems() {
     </div>
   )
 
+  const renderClusterRating = () => {
+    const ratedCount = Object.keys(clusterRatings).length
+    const totalCount = clusters.length
+
+    return (
+      <div className="container question-container">
+        <div className="question-number">Rate Your Problem Themes</div>
+        <h2 className="question-text">Where are you with each theme?</h2>
+        <p className="question-subtext">
+          For each problem area you care about, rate your current stage of engagement.
+        </p>
+
+        <div style={{
+          background: 'rgba(255,255,255,0.03)',
+          borderRadius: '12px',
+          padding: '16px',
+          marginBottom: '24px'
+        }}>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '12px', flexWrap: 'wrap' }}>
+            {PROBLEMS_PROFICIENCY_RINGS.map(ring => (
+              <div key={ring.id} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: ring.color }} />
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>{ring.label}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', textAlign: 'center', marginBottom: '8px' }}>
+            <strong>Exploring</strong> = Just learning about this &nbsp;|&nbsp;
+            <strong>Pursuing</strong> = Actively working on it &nbsp;|&nbsp;
+            <strong>Proven</strong> = Solved it / Helping others
+          </div>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', textAlign: 'center', margin: 0 }}>
+            {ratedCount} of {totalCount} rated
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '32px' }}>
+          {clusters.map((cluster, index) => (
+            <div
+              key={index}
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                borderRadius: '16px',
+                padding: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                borderLeft: clusterRatings[cluster.label] ? '3px solid #6BCB77' : '3px solid rgba(255,255,255,0.2)'
+              }}
+            >
+              <div style={{ fontWeight: '600', color: '#fbbf24', fontSize: '1.1rem' }}>{cluster.label}</div>
+              <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.7)', lineHeight: '1.5' }}>
+                {cluster.insight}
+              </div>
+              <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginTop: '4px' }}>
+                Based on: {(cluster.items || []).slice(0, 3).map(item =>
+                  `"${typeof item === 'string' ? item.substring(0, 30) : item.text?.substring(0, 30)}..."`
+                ).join(', ')}
+              </div>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                <button
+                  onClick={() => setClusterRating(cluster.label, 'exploring')}
+                  style={{
+                    flex: 1,
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '14px',
+                    background: clusterRatings[cluster.label] === 'exploring'
+                      ? '#fbbf24'
+                      : 'rgba(251, 191, 36, 0.15)',
+                    color: clusterRatings[cluster.label] === 'exploring'
+                      ? '#1a1a2e'
+                      : '#fbbf24',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Exploring
+                </button>
+                <button
+                  onClick={() => setClusterRating(cluster.label, 'pursuing')}
+                  style={{
+                    flex: 1,
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '14px',
+                    background: clusterRatings[cluster.label] === 'pursuing'
+                      ? '#60a5fa'
+                      : 'rgba(96, 165, 250, 0.15)',
+                    color: clusterRatings[cluster.label] === 'pursuing'
+                      ? '#1a1a2e'
+                      : '#60a5fa',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Pursuing
+                </button>
+                <button
+                  onClick={() => setClusterRating(cluster.label, 'proven')}
+                  style={{
+                    flex: 1,
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '14px',
+                    background: clusterRatings[cluster.label] === 'proven'
+                      ? '#6BCB77'
+                      : 'rgba(107, 203, 119, 0.15)',
+                    color: clusterRatings[cluster.label] === 'proven'
+                      ? '#1a1a2e'
+                      : '#6BCB77',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Proven
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          className="primary-button"
+          onClick={saveWithRatings}
+          disabled={!allClustersRated()}
+          style={{ opacity: allClustersRated() ? 1 : 0.5 }}
+        >
+          Save & See My Results
+        </button>
+        <BackButton fromScreen="cluster_rating" />
+      </div>
+    )
+  }
+
+  const renderSaving = () => (
+    <div className="container processing-container">
+      <div className="spinner"></div>
+      <div className="processing-text">Saving your results...</div>
+      <div className="processing-subtext">
+        Just a moment while we save your problem themes.
+      </div>
+    </div>
+  )
+
   const renderProcessing = () => (
     <div className="container processing-container">
       {isProcessing ? (
@@ -918,26 +1211,79 @@ export default function FlowFinderProblems() {
         <p>Based on your responses, we've identified {clusters.length} problem themes that represent the impact you want to create in the world:</p>
       </div>
 
-      {/* All Clusters (Read-only, no selection) */}
-      <div className="cluster-grid" style={{ margin: '32px 0' }}>
-        {clusters.map((cluster, index) => (
-          <div
-            key={index}
-            className="cluster-card"
-            style={{ cursor: 'default', borderColor: 'rgba(251, 191, 36, 0.3)' }}
-          >
-            <h3>{cluster.label}</h3>
-            <p>{cluster.insight}</p>
-            <div className="cluster-evidence">
-              <div className="cluster-evidence-label">Based on your responses:</div>
-              <ul className="evidence-list">
-                {cluster.items?.map((item, i) => (
-                  <li key={i}>"{item}"</li>
-                ))}
-              </ul>
+      {/* Problems Wheel Visualization */}
+      <div className="wheel-reveal" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px 0' }}>
+        <GradientWheel
+          segments={problemsWithHue}
+          rings={PROBLEMS_PROFICIENCY_RINGS}
+          litCells={litCells}
+          size={300}
+          centerLabel="PROBLEMS"
+          interactive={false}
+          celebrate={true}
+        />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'transparent' }}></span>
+            Inner: Exploring
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.3)' }}></span>
+            Middle: Pursuing
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.6)' }}></span>
+            Outer: Proven
+          </span>
+        </div>
+        <div style={{ fontSize: '13px', color: '#6BCB77', marginTop: '12px', fontWeight: '500' }}>
+          {litCells.size} problem areas identified
+        </div>
+      </div>
+
+      {/* All Clusters with Proficiency Badges */}
+      <div className="cluster-grid" style={{ margin: '24px 0' }}>
+        {clusters.map((cluster, index) => {
+          const proficiency = cluster.proficiency || 'pursuing'
+          const proficiencyColors = {
+            exploring: { bg: 'rgba(251, 191, 36, 0.2)', text: '#fbbf24' },
+            pursuing: { bg: 'rgba(96, 165, 250, 0.2)', text: '#60a5fa' },
+            proven: { bg: 'rgba(107, 203, 119, 0.2)', text: '#6BCB77' }
+          }
+          const colors = proficiencyColors[proficiency]
+
+          return (
+            <div
+              key={index}
+              className="cluster-card"
+              style={{ cursor: 'default', borderColor: 'rgba(251, 191, 36, 0.3)' }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <h3 style={{ margin: 0 }}>{cluster.label}</h3>
+                <span style={{
+                  fontSize: '11px',
+                  fontWeight: '600',
+                  textTransform: 'uppercase',
+                  padding: '4px 8px',
+                  borderRadius: '12px',
+                  background: colors.bg,
+                  color: colors.text
+                }}>
+                  {proficiency}
+                </span>
+              </div>
+              <p>{cluster.insight}</p>
+              <div className="cluster-evidence">
+                <div className="cluster-evidence-label">Based on your responses:</div>
+                <ul className="evidence-list">
+                  {(cluster.items || []).map((item, i) => (
+                    <li key={i}>"{typeof item === 'string' ? item : item.text || item}"</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>✓ Problems Discovery Complete!</h1>
@@ -973,6 +1319,8 @@ export default function FlowFinderProblems() {
       'q6': 5,
       'q7': 5,
       'processing': 6,
+      'cluster_rating': 6,
+      'saving': 7,
       'success': 7
     }
     return screenToStep[currentScreen] || 0
@@ -991,6 +1339,8 @@ export default function FlowFinderProblems() {
     q6: renderQuestion6,
     q7: renderQuestion7,
     processing: renderProcessing,
+    cluster_rating: renderClusterRating,
+    saving: renderSaving,
     success: renderSuccess
   }
 

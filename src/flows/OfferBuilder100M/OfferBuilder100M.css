@@ -14,8 +14,14 @@
 .offer-builder-100m {
   min-height: 100vh;
   padding: 20px;
+  padding-top: 80px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
   max-width: 800px;
   margin: 0 auto;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  position: relative;
+  box-sizing: border-box;
 }
 
 /* ==========================================
@@ -160,8 +166,8 @@
 
 /* FindMyFlow Context Panel (Step 1A) */
 .offer-builder-100m .findmyflow-context {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 24px;
@@ -174,7 +180,7 @@
   margin-bottom: 16px;
   font-weight: 600;
   font-size: 0.85rem;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
   text-transform: uppercase;
 }
 
@@ -234,6 +240,237 @@
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   margin-top: 8px;
+}
+
+/* V1 Offer Builder Context Panel */
+.offer-builder-100m .v1-offer-context,
+.offer-builder-100m .v1-offer-insights {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.08));
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .v1-offer-context .context-header,
+.offer-builder-100m .v1-offer-insights .insights-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #fbbf24;
+  text-transform: uppercase;
+}
+
+.offer-builder-100m .v1-offer-context .context-value,
+.offer-builder-100m .v1-offer-insights .context-value {
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+/* Enhanced V1 Insights Panel (Step 1B) */
+.offer-builder-100m .v1-offer-insights.enhanced {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.08));
+  border: 2px solid rgba(251, 191, 36, 0.35);
+}
+
+.offer-builder-100m .niche-summary {
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .niche-line {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.offer-builder-100m .why-layer-highlight {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .why-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fbbf24;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .why-quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: white;
+  margin: 0 0 12px 0;
+  padding-left: 16px;
+  border-left: 3px solid #fbbf24;
+}
+
+.offer-builder-100m .why-explanation {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.offer-builder-100m .ai-starting-point {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.offer-builder-100m .starting-point-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #a78bfa;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .starting-point-quote {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: white;
+  margin: 0 0 16px 0;
+  padding-left: 16px;
+  border-left: 3px solid #a78bfa;
+}
+
+.offer-builder-100m .use-starting-point-btn {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.offer-builder-100m .use-starting-point-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  transform: translateY(-1px);
+}
+
+.offer-builder-100m .use-starting-point-btn:disabled {
+  background: rgba(139, 92, 246, 0.3);
+  cursor: default;
+}
+
+.offer-builder-100m .spinner-inline.small {
+  width: 12px;
+  height: 12px;
+  border-width: 2px;
+  margin-right: 6px;
+}
+
+.offer-builder-100m .v1-obstacles-panel {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.08));
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .v1-obstacles-panel .objection-chip.internal {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.offer-builder-100m .v1-obstacles-panel .objection-chip.external {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.offer-builder-100m .v1-obstacles-panel .objection-chip.motivation {
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.offer-builder-100m .v1-obstacles-panel .obstacle-source {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+/* V1 Bonus Suggestions Panel (Step 6B) */
+.offer-builder-100m .v1-bonus-suggestions {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.08));
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .v1-suggestions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #fbbf24;
+  text-transform: uppercase;
+}
+
+.offer-builder-100m .v1-suggestions-intro {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .v1-suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-builder-100m .v1-suggestion-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.offer-builder-100m .v1-suggestion-chip.lead-magnet {
+  border-left: 3px solid #f59e0b;
+}
+
+.offer-builder-100m .v1-suggestion-chip.bonus {
+  border-left: 3px solid #8b5cf6;
+}
+
+.offer-builder-100m .v1-suggestion-chip .suggestion-type {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .v1-suggestion-chip .suggestion-text {
+  font-size: 0.95rem;
+  color: white;
+}
+
+.offer-builder-100m .v1-suggestion-chip .suggestion-problem {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.offer-builder-100m .v1-suggestions-tip {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Validation Proof Panel (Step 3) */
@@ -312,6 +549,105 @@
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   margin-top: 8px;
+}
+
+/* Sunk Cost Contrast Panel (Step 3) */
+.offer-builder-100m .sunk-cost-panel {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(251, 191, 36, 0.08));
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .sunk-cost-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #f87171;
+  text-transform: uppercase;
+}
+
+.offer-builder-100m .sunk-cost-intro {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .sunk-cost-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .sunk-stat {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  text-align: center;
+  flex: 1;
+  min-width: 100px;
+}
+
+.offer-builder-100m .sunk-stat .stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f87171;
+}
+
+.offer-builder-100m .sunk-stat .stat-label {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+.offer-builder-100m .failed-solutions {
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .failed-solutions ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+}
+
+.offer-builder-100m .failed-solutions li {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.offer-builder-100m .contrast-tips {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.offer-builder-100m .contrast-tips .tip-header {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .contrast-example {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.offer-builder-100m .contrast-example:last-child {
+  margin-bottom: 0;
 }
 
 /* Validation Objections Panel (Step 6) */
@@ -398,7 +734,7 @@
 
 .offer-builder-100m .step-label {
   display: inline-block;
-  background: var(--purple, #8B5CF6);
+  background: #fbbf24;
   color: white;
   padding: 4px 12px;
   border-radius: 20px;
@@ -418,8 +754,8 @@
 
 /* AI Suggestion */
 .offer-builder-100m .ai-suggestion {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 16px;
   padding: 24px;
   max-width: 500px;
@@ -439,7 +775,7 @@
 
 .offer-builder-100m .suggestion-label {
   font-weight: 600;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
   text-transform: uppercase;
   font-size: 0.9rem;
 }
@@ -494,8 +830,8 @@
 }
 
 .offer-builder-100m .bucket-card.selected {
-  border-color: var(--purple, #8B5CF6);
-  background: rgba(139, 92, 246, 0.15);
+  border-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
 }
 
 .offer-builder-100m .bucket-card:disabled {
@@ -546,7 +882,7 @@
 .offer-builder-100m .bucket-examples li::before {
   content: '•';
   margin-right: 8px;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
 }
 
 .offer-builder-100m .bucket-common {
@@ -567,8 +903,8 @@
 }
 
 .offer-builder-100m .bucket-confirmation {
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 8px;
   padding: 12px 16px;
   text-align: center;
@@ -636,8 +972,8 @@
 
 /* Validation Insights */
 .offer-builder-100m .validation-insights {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 24px;
@@ -707,7 +1043,7 @@
 
 .offer-builder-100m .dream-input-group textarea:focus {
   outline: none;
-  border-color: var(--purple, #8B5CF6);
+  border-color: #fbbf24;
 }
 
 .offer-builder-100m .char-count {
@@ -905,7 +1241,7 @@
 .offer-builder-100m .version-name {
   font-size: 1.2rem;
   margin-bottom: 16px;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
 }
 
 .offer-builder-100m .version-section {
@@ -933,7 +1269,7 @@
 .offer-builder-100m .deliverables-list li::before {
   content: '•';
   margin-right: 8px;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
 }
 
 .offer-builder-100m .deliverables-list li.more {
@@ -1000,7 +1336,7 @@
 .offer-builder-100m .max-customers {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
 }
 
 /* Pros & Cons */
@@ -1113,7 +1449,7 @@
   width: 32px;
   height: 32px;
   border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--purple, #8B5CF6);
+  border-top-color: #fbbf24;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -1157,22 +1493,23 @@
    ========================================== */
 
 .offer-builder-100m .primary-button {
-  background: var(--purple, #8B5CF6);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 14px 28px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
   width: 100%;
   max-width: 300px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .offer-builder-100m .primary-button:hover {
-  background: var(--purple-dark, #7C3AED);
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
 }
 
 .offer-builder-100m .primary-button:disabled {
@@ -1181,22 +1518,28 @@
   transform: none;
 }
 
+.offer-builder-100m .primary-button.glow-button {
+  animation: ob100mGlow 2s ease-in-out infinite;
+}
+
 .offer-builder-100m .secondary-button {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 14px 28px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
   width: 100%;
   max-width: 300px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .offer-builder-100m .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
   background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* ==========================================
@@ -1270,8 +1613,8 @@
 }
 
 .offer-builder-100m .proof-option.selected {
-  border-color: var(--purple, #8B5CF6);
-  background: rgba(139, 92, 246, 0.1);
+  border-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
 }
 
 .offer-builder-100m .proof-checkbox {
@@ -1344,8 +1687,8 @@
 }
 
 .offer-builder-100m .tab.active {
-  background: var(--purple, #8B5CF6);
-  border-color: var(--purple, #8B5CF6);
+  background: #fbbf24;
+  border-color: #fbbf24;
   color: white;
 }
 
@@ -1378,7 +1721,7 @@
 .offer-builder-100m .proof-section h4 {
   font-size: 0.9rem;
   margin-bottom: 8px;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
 }
 
 .offer-builder-100m .proof-text {
@@ -1394,7 +1737,7 @@
 .offer-builder-100m .support-item {
   margin-bottom: 12px;
   padding-left: 16px;
-  border-left: 2px solid rgba(139, 92, 246, 0.3);
+  border-left: 2px solid rgba(251, 191, 36, 0.3);
 }
 
 .offer-builder-100m .proof-score,
@@ -1404,7 +1747,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(251, 191, 36, 0.1);
   border-radius: 8px;
   margin-top: 16px;
 }
@@ -1416,7 +1759,7 @@
 .offer-builder-100m .score-value {
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
 }
 
 /* ==========================================
@@ -1448,14 +1791,14 @@
 
 .offer-builder-100m .input-group input:focus {
   outline: none;
-  border-color: var(--purple, #8B5CF6);
+  border-color: #fbbf24;
 }
 
 .offer-builder-100m .vs-divider {
   text-align: center;
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
   padding: 8px 0;
 }
 
@@ -1484,7 +1827,7 @@
 }
 
 .offer-builder-100m .example-arrow {
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
 }
 
 .offer-builder-100m .example-yours {
@@ -1494,7 +1837,7 @@
 .offer-builder-100m .speed-multiplier {
   text-align: center;
   padding: 24px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+  background: rgba(251, 191, 36, 0.15);
   border-radius: 16px;
   margin-bottom: 20px;
 }
@@ -1548,8 +1891,8 @@
 }
 
 .offer-builder-100m .marketing-angle blockquote {
-  background: rgba(139, 92, 246, 0.1);
-  border-left: 3px solid var(--purple, #8B5CF6);
+  background: rgba(251, 191, 36, 0.1);
+  border-left: 3px solid #fbbf24;
   padding: 12px 16px;
   margin: 8px 0;
   font-style: italic;
@@ -1601,8 +1944,8 @@
 }
 
 .offer-builder-100m .ease-option.selected {
-  border-color: var(--purple, #8B5CF6);
-  background: rgba(139, 92, 246, 0.1);
+  border-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
 }
 
 .offer-builder-100m .ease-option input[type="checkbox"] {
@@ -1644,7 +1987,7 @@
 
 .offer-builder-100m .add-custom button {
   padding: 12px 20px;
-  background: var(--purple, #8B5CF6);
+  background: #fbbf24;
   border: none;
   border-radius: 8px;
   color: white;
@@ -1707,12 +2050,12 @@
 
 .offer-builder-100m .add-obstacle input:focus {
   outline: none;
-  border-color: var(--purple, #8B5CF6);
+  border-color: #fbbf24;
 }
 
 .offer-builder-100m .add-obstacle button {
   padding: 14px 24px;
-  background: var(--purple, #8B5CF6);
+  background: #fbbf24;
   border: none;
   border-radius: 12px;
   color: white;
@@ -1792,8 +2135,8 @@
 }
 
 .offer-builder-100m .example-chip:hover:not(:disabled) {
-  background: rgba(139, 92, 246, 0.1);
-  border-color: var(--purple, #8B5CF6);
+  background: rgba(251, 191, 36, 0.1);
+  border-color: #fbbf24;
 }
 
 .offer-builder-100m .example-chip.added {
@@ -1862,7 +2205,7 @@
 }
 
 .offer-builder-100m .bonus-card.editing {
-  border-color: var(--purple, #8B5CF6);
+  border-color: #fbbf24;
 }
 
 .offer-builder-100m .obstacle-reference {
@@ -1885,7 +2228,7 @@
   align-items: center;
   gap: 8px;
   font-size: 0.85rem;
-  color: var(--purple, #8B5CF6);
+  color: #fbbf24;
   margin-bottom: 12px;
 }
 
@@ -1947,9 +2290,9 @@
 }
 
 .offer-builder-100m .action-btn.customize {
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  color: var(--purple, #8B5CF6);
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
 }
 
 .offer-builder-100m .action-btn.skip {
@@ -1963,7 +2306,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(139, 92, 246, 0.1));
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(251, 191, 36, 0.1));
   border-radius: 12px;
   margin-top: 20px;
 }
@@ -2029,8 +2372,8 @@
 }
 
 .offer-builder-100m .view-toggle button.active {
-  background: rgba(139, 92, 246, 0.2);
-  border-color: #8B5CF6;
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
   color: white;
 }
 
@@ -2040,7 +2383,7 @@
   gap: 8px;
   justify-content: center;
   padding: 12px 20px;
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(139, 92, 246, 0.1));
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(251, 191, 36, 0.1));
   border: 1px solid rgba(34, 197, 94, 0.2);
   border-radius: 12px;
   margin-bottom: 24px;
@@ -2077,7 +2420,7 @@
 }
 
 .offer-builder-100m .final-selection-step .version-card:hover {
-  border-color: rgba(139, 92, 246, 0.4);
+  border-color: rgba(251, 191, 36, 0.4);
   transform: translateY(-2px);
 }
 
@@ -2087,14 +2430,14 @@
 }
 
 .offer-builder-100m .final-selection-step .version-card.recommended {
-  border-color: rgba(139, 92, 246, 0.4);
+  border-color: rgba(251, 191, 36, 0.4);
 }
 
 .offer-builder-100m .recommended-badge {
   position: absolute;
   top: -10px;
   right: 20px;
-  background: #8B5CF6;
+  background: #fbbf24;
   color: white;
   padding: 4px 12px;
   border-radius: 20px;
@@ -2173,7 +2516,7 @@
 
 .offer-builder-100m .breakdown-value {
   font-weight: 600;
-  color: #8B5CF6;
+  color: #fbbf24;
 }
 
 /* Price Section */
@@ -2208,7 +2551,7 @@
 .offer-builder-100m .revenue-value {
   font-size: 1rem;
   font-weight: 600;
-  color: #8B5CF6;
+  color: #fbbf24;
 }
 
 /* Bonus Section */
@@ -2267,8 +2610,8 @@
 }
 
 .offer-builder-100m .select-btn:hover {
-  background: rgba(139, 92, 246, 0.2);
-  border-color: #8B5CF6;
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
 }
 
 .offer-builder-100m .select-btn.selected {
@@ -2302,7 +2645,7 @@
 }
 
 .offer-builder-100m .comparison-table th:hover {
-  background: rgba(139, 92, 246, 0.1);
+  background: rgba(251, 191, 36, 0.1);
 }
 
 .offer-builder-100m .comparison-table th.selected {
@@ -2572,7 +2915,7 @@
 
 /* Bonus Section in Stack */
 .offer-builder-100m .stack-section.bonus-section {
-  background: rgba(139, 92, 246, 0.05);
+  background: rgba(251, 191, 36, 0.05);
 }
 
 .offer-builder-100m .bonus-list {
@@ -2597,7 +2940,7 @@
 
 .offer-builder-100m .bonus-name {
   font-weight: 600;
-  color: #8B5CF6;
+  color: #fbbf24;
 }
 
 .offer-builder-100m .stack-section .bonus-value {
@@ -2613,7 +2956,7 @@
 
 /* Total Section */
 .offer-builder-100m .total-section {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(139, 92, 246, 0.1));
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(251, 191, 36, 0.1));
   border-left: 4px solid;
 }
 
@@ -2650,7 +2993,7 @@
 .offer-builder-100m .price-today .price-amount {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #8B5CF6;
+  color: #fbbf24;
 }
 
 /* Highlights Section */
@@ -2747,7 +3090,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #8B5CF6;
+  background: #fbbf24;
   border-radius: 50%;
   font-weight: 600;
   font-size: 0.9rem;
@@ -2853,6 +3196,26 @@
 @keyframes sparkle {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+@keyframes ob100mGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(251, 191, 36, 0.5);
+  }
+}
+
+@keyframes ob100mFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ========================================

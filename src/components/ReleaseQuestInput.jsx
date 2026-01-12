@@ -5,9 +5,12 @@
  * - release_daily_challenge (Daily Release Challenge)
  * - release_negative_charge (Processing Your Emotions)
  * - release_weekly_big (Big Release)
+ *
+ * Refactored to use shared useSteppedForm hook and IntensityScale component.
  */
 
-import { useState } from 'react'
+import { useSteppedForm } from '../hooks/useSteppedForm'
+import { IntensityScale, StepProgress } from './QuestInputShared'
 import './ReleaseQuestInput.css'
 
 // Release quest IDs
@@ -106,132 +109,111 @@ const STEP_CONFIG = {
   }
 }
 
+// Initial form data
+const INITIAL_FORM_DATA = {
+  emotion: null,
+  emotions: [],
+  beforeState: null,
+  afterState: null,
+  notes: '',
+  releaseType: null,
+  bodyLocation: null,
+  safetyContract: null,
+  trigger: null,
+  releaseMethod: null,
+  practiceType: null,
+  duration: null,
+  depth: null,
+  outcome: null
+}
+
 function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
-  const [loading, setLoading] = useState(false)
-  const [step, setStep] = useState(1)
-
-  // Form state
-  const [formData, setFormData] = useState({
-    // Shared
-    emotion: null,
-    emotions: [], // for multi-select
-    beforeState: null,
-    afterState: null,
-    notes: '',
-
-    // Daily Challenge
-    releaseType: null,
-    bodyLocation: null,
-    safetyContract: null, // Which safety contract they're releasing
-
-    // Processing Emotions
-    trigger: null,
-    releaseMethod: null,
-
-    // Big Release
-    practiceType: null,
-    duration: null,
-    depth: null,
-    outcome: null
-  })
-
   const config = STEP_CONFIG[quest.id] || { totalSteps: 2, stepTitles: ['Input', 'Review'] }
-  const totalSteps = config.totalSteps
 
-  const handleEmotionToggle = (emotionId) => {
-    setFormData(prev => ({
-      ...prev,
-      emotions: prev.emotions.includes(emotionId)
-        ? prev.emotions.filter(e => e !== emotionId)
-        : [...prev.emotions, emotionId]
-    }))
-  }
-
-  const handleSubmit = () => {
-    setLoading(true)
-
-    let structuredData = {}
-
+  // Validation function for each step
+  const validateStep = (step, data) => {
     switch (quest.id) {
-      case 'release_daily_challenge':
-        structuredData = {
-          quest_type: 'daily_release',
-          release_type: formData.releaseType,
-          emotion: formData.emotion,
-          body_location: formData.bodyLocation,
-          safety_contract: formData.safetyContract,
-          before_state: formData.beforeState,
-          after_state: formData.afterState,
-          shift: formData.beforeState - formData.afterState, // Lower is better for release
-          notes: formData.notes
-        }
-        break
-
-      case 'release_negative_charge':
-        structuredData = {
-          quest_type: 'process_emotions',
-          trigger: formData.trigger,
-          emotion: formData.emotion,
-          release_method: formData.releaseMethod,
-          before_state: formData.beforeState,
-          after_state: formData.afterState,
-          shift: formData.beforeState - formData.afterState,
-          notes: formData.notes
-        }
-        break
-
-      case 'release_weekly_big':
-        structuredData = {
-          quest_type: 'big_release',
-          practice_type: formData.practiceType,
-          duration: formData.duration,
-          emotions_surfaced: formData.emotions,
-          depth: formData.depth,
-          outcome: formData.outcome,
-          notes: formData.notes
-        }
-        break
-    }
-
-    onComplete(quest, structuredData)
-    setLoading(false)
-  }
-
-  // Check if current step is valid
-  const canContinue = () => {
-    switch (quest.id) {
-      case 'release_daily_challenge':
+      case 'release_daily_challenge': {
         const needsContract = safetyContracts && safetyContracts.length > 0
-        if (step === 1) return formData.releaseType && (!needsContract || formData.safetyContract)
-        if (step === 2) return formData.emotion && formData.bodyLocation
-        if (step === 3) return formData.beforeState && formData.afterState
+        if (step === 1) return data.releaseType && (!needsContract || data.safetyContract)
+        if (step === 2) return data.emotion && data.bodyLocation
+        if (step === 3) return data.beforeState && data.afterState
         return true
-
+      }
       case 'release_negative_charge':
-        if (step === 1) return formData.trigger && formData.emotion
-        if (step === 2) return formData.releaseMethod && formData.beforeState && formData.afterState
+        if (step === 1) return data.trigger && data.emotion
+        if (step === 2) return data.releaseMethod && data.beforeState && data.afterState
         return true
-
       case 'release_weekly_big':
-        if (step === 1) return formData.practiceType && formData.duration
-        if (step === 2) return formData.emotions.length > 0 && formData.depth && formData.outcome
+        if (step === 1) return data.practiceType && data.duration
+        if (step === 2) return data.emotions.length > 0 && data.depth && data.outcome
         return true
-
       default:
         return true
     }
   }
 
-  const handleNext = () => {
-    if (step < totalSteps) {
-      setStep(step + 1)
+  // Build structured data for submission
+  const buildStructuredData = (data) => {
+    switch (quest.id) {
+      case 'release_daily_challenge':
+        return {
+          quest_type: 'daily_release',
+          release_type: data.releaseType,
+          emotion: data.emotion,
+          body_location: data.bodyLocation,
+          safety_contract: data.safetyContract,
+          before_state: data.beforeState,
+          after_state: data.afterState,
+          shift: data.beforeState - data.afterState,
+          notes: data.notes
+        }
+      case 'release_negative_charge':
+        return {
+          quest_type: 'process_emotions',
+          trigger: data.trigger,
+          emotion: data.emotion,
+          release_method: data.releaseMethod,
+          before_state: data.beforeState,
+          after_state: data.afterState,
+          shift: data.beforeState - data.afterState,
+          notes: data.notes
+        }
+      case 'release_weekly_big':
+        return {
+          quest_type: 'big_release',
+          practice_type: data.practiceType,
+          duration: data.duration,
+          emotions_surfaced: data.emotions,
+          depth: data.depth,
+          outcome: data.outcome,
+          notes: data.notes
+        }
+      default:
+        return data
     }
   }
 
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1)
-    }
+  const {
+    step,
+    formData,
+    setFormData,
+    isSubmitting,
+    isReviewStep,
+    canContinue,
+    handleNext,
+    handleBack,
+    toggleArrayItem
+  } = useSteppedForm({
+    totalSteps: config.totalSteps,
+    initialData: INITIAL_FORM_DATA,
+    validateStep,
+    onSubmit: (data) => onComplete(quest, buildStructuredData(data))
+  })
+
+  // Submit handler that uses the hook's submission
+  const handleSubmit = () => {
+    onComplete(quest, buildStructuredData(formData))
   }
 
   // Render step content based on quest type and current step
@@ -352,7 +334,14 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
             <h4>Intensity Shift</h4>
           </div>
 
-          {renderIntensityScale()}
+          <IntensityScale
+            beforeValue={formData.beforeState}
+            afterValue={formData.afterState}
+            onBeforeChange={(val) => setFormData({ ...formData, beforeState: val })}
+            onAfterChange={(val) => setFormData({ ...formData, afterState: val })}
+            beforeLabel="Intensity before releasing"
+            afterLabel="Intensity after releasing"
+          />
 
           <div className="release-section">
             <label className="release-label">Any notes? (optional)</label>
@@ -487,7 +476,14 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
             </div>
           </div>
 
-          {renderIntensityScale()}
+          <IntensityScale
+            beforeValue={formData.beforeState}
+            afterValue={formData.afterState}
+            onBeforeChange={(val) => setFormData({ ...formData, beforeState: val })}
+            onAfterChange={(val) => setFormData({ ...formData, afterState: val })}
+            beforeLabel="Intensity before releasing"
+            afterLabel="Intensity after releasing"
+          />
         </div>
       )
     }
@@ -592,7 +588,7 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
                   key={emotion.id}
                   type="button"
                   className={`emotion-option ${formData.emotions.includes(emotion.id) ? 'selected' : ''}`}
-                  onClick={() => handleEmotionToggle(emotion.id)}
+                  onClick={() => toggleArrayItem('emotions', emotion.id)}
                 >
                   <span className="emotion-icon">{emotion.icon}</span>
                   <span className="emotion-label">{emotion.label}</span>
@@ -692,71 +688,14 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
     )
   }
 
-  // Shared intensity scale (before/after)
-  const renderIntensityScale = () => (
-    <>
-      <div className="release-section">
-        <label className="release-label">Intensity before releasing</label>
-        <div className="intensity-scale">
-          <span className="intensity-end">😌</span>
-          <div className="intensity-buttons">
-            {[1, 2, 3, 4, 5].map(level => (
-              <button
-                key={level}
-                type="button"
-                className={`intensity-btn ${formData.beforeState === level ? 'selected' : ''}`}
-                onClick={() => setFormData({ ...formData, beforeState: level })}
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-          <span className="intensity-end">😰</span>
-        </div>
-      </div>
-
-      <div className="release-section">
-        <label className="release-label">Intensity after releasing</label>
-        <div className="intensity-scale">
-          <span className="intensity-end">😌</span>
-          <div className="intensity-buttons">
-            {[1, 2, 3, 4, 5].map(level => (
-              <button
-                key={level}
-                type="button"
-                className={`intensity-btn ${formData.afterState === level ? 'selected' : ''}`}
-                onClick={() => setFormData({ ...formData, afterState: level })}
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-          <span className="intensity-end">😰</span>
-        </div>
-      </div>
-
-      {formData.beforeState && formData.afterState && (
-        <div className="shift-display">
-          <span className="shift-label">Shift:</span>
-          <span className={`shift-value ${formData.beforeState - formData.afterState > 0 ? 'positive' : formData.beforeState - formData.afterState < 0 ? 'negative' : 'neutral'}`}>
-            {formData.beforeState - formData.afterState > 0 ? '-' : '+'}
-            {Math.abs(formData.beforeState - formData.afterState)} intensity
-          </span>
-        </div>
-      )}
-    </>
-  )
-
-  const isReviewStep = step === totalSteps
-
   return (
     <div className="release-input stepped">
       {/* Progress indicator */}
-      <div className="step-progress">
-        <span className="progress-text">
-          Step {step} of {totalSteps}: {config.stepTitles[step - 1]}
-        </span>
-      </div>
+      <StepProgress
+        currentStep={step}
+        totalSteps={config.totalSteps}
+        stepTitle={config.stepTitles[step - 1]}
+      />
 
       {renderStepContent()}
 
@@ -780,9 +719,9 @@ function ReleaseQuestInput({ quest, onComplete, safetyContracts = [] }) {
           <button
             className="nav-btn complete"
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={isSubmitting}
           >
-            {loading ? 'Saving...' : 'Complete Quest'}
+            {isSubmitting ? 'Saving...' : 'Complete Quest'}
           </button>
         )}
       </div>

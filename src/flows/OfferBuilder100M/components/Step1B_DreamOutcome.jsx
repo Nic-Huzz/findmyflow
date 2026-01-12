@@ -49,28 +49,28 @@ const BUCKET_PROMPTS = {
       ]
     }
   },
-  relationships: {
-    title: 'RELATIONSHIPS 💕',
-    focus: 'their connection transformation',
-    dreamType: 'RELATIONSHIP dream they fantasize about',
-    thinkAbout: 'Romance, family, friendships, belonging',
+  love: {
+    title: 'LOVE 💕',
+    focus: 'their love of life transformation',
+    dreamType: 'LOVE dream they fantasize about',
+    thinkAbout: 'Self-love, purpose, passion, joy, connection',
     examples: {
       bad: [
-        { text: 'Find a girlfriend', reason: 'transaction' },
-        { text: 'Better communication', reason: 'skill, not outcome' },
-        { text: 'Make friends', reason: 'vague' }
+        { text: 'Find a partner', reason: 'too narrow' },
+        { text: 'Be happier', reason: 'vague' },
+        { text: 'Feel less lonely', reason: 'negative framing' }
       ],
       good: [
-        { text: 'Never eat dinner alone again', reason: 'belonging' },
-        { text: 'My kids actually want to talk to me', reason: 'relationship quality' },
-        { text: 'Walk into parties and feel wanted', reason: 'social confidence' }
+        { text: 'Wake up excited to be alive', reason: 'passion for life' },
+        { text: 'Look in the mirror and truly love who I see', reason: 'self-love' },
+        { text: 'Feel like I\'m finally living my purpose', reason: 'meaning & fulfillment' }
       ]
     }
   }
 }
 
-function Step1B_DreamOutcome({ bucket, contextData, onComplete, setIsLoading, setError }) {
-  const [dreamOutcome, setDreamOutcome] = useState('')
+function Step1B_DreamOutcome({ bucket, contextData, initialData, onComplete, setIsLoading, setError }) {
+  const [dreamOutcome, setDreamOutcome] = useState(initialData?.dreamOutcome || '')
   const [validation, setValidation] = useState(null)
   const [isValidating, setIsValidating] = useState(false)
   const [aiExample, setAiExample] = useState(null)
@@ -80,10 +80,21 @@ function Step1B_DreamOutcome({ bucket, contextData, onComplete, setIsLoading, se
     (contextData.validationData.mainPainPoint ||
      contextData.validationData.desiredOutcome)
 
-  // Generate AI example based on validation data
+  // V1 Offer Builder foundation data
+  const v1Data = contextData.offerBuilderData
+  // Extract niche layers (handle both layer1/2/3/4 and what/who/how/why formats)
+  const v1NicheLayers = v1Data?.responses?.q6_niche_layers?.layers || v1Data?.niche_layers || {}
+  const nicheWhat = v1NicheLayers.layer1 || v1NicheLayers.what || ''
+  const nicheWho = v1NicheLayers.layer2 || v1NicheLayers.who || ''
+  const nicheHow = v1NicheLayers.layer3 || v1NicheLayers.how || ''
+  const nicheWhy = v1NicheLayers.layer4 || v1NicheLayers.why || ''
+  const hasV1Data = nicheWhy || nicheWho || v1Data?.problem_area
+  const hasNicheWhy = nicheWhy.length > 0
+
+  // Generate AI example based on validation data and V1 foundation (especially the "why" layer)
   useEffect(() => {
     const generateExample = async () => {
-      if (!hasValidationData) return
+      if (!hasValidationData && !hasV1Data) return
 
       try {
         const { data, error } = await supabase.functions.invoke('offer-builder-ai', {
@@ -91,7 +102,17 @@ function Step1B_DreamOutcome({ bucket, contextData, onComplete, setIsLoading, se
             action: 'generate_dream_example',
             context: {
               bucket,
-              validationData: contextData.validationData
+              validationData: contextData.validationData,
+              // V1 Offer Builder foundation for personalized examples
+              // The "why" layer is the key - it's the emotional driver to flip into a dream
+              offerBuilderV1: hasV1Data ? {
+                problemArea: v1Data?.problem_area,
+                nicheWhat,
+                nicheWho,
+                nicheHow,
+                nicheWhy, // This is the gold - the emotional "why" to transform
+                problemReasons: v1Data?.responses?.q7_excuses?.sections || v1Data?.problem_reasons
+              } : null
             }
           }
         })
@@ -105,7 +126,7 @@ function Step1B_DreamOutcome({ bucket, contextData, onComplete, setIsLoading, se
     }
 
     generateExample()
-  }, [bucket, contextData.validationData, hasValidationData])
+  }, [bucket, contextData.validationData, hasValidationData, hasV1Data, v1Data, nicheWhat, nicheWho, nicheHow, nicheWhy])
 
   // Validate the dream outcome
   const handleValidate = async () => {
@@ -125,7 +146,13 @@ function Step1B_DreamOutcome({ bucket, contextData, onComplete, setIsLoading, se
             bucket,
             dreamOutcome: dreamOutcome.trim(),
             persona: contextData.persona,
-            validationData: contextData.validationData
+            validationData: contextData.validationData,
+            // V1 Offer Builder foundation for better validation
+            offerBuilderV1: v1Data ? {
+              problemArea: v1Data.problem_area,
+              niche: v1Data.niche_layers,
+              problemReasons: v1Data.problem_reasons
+            } : null
           }
         }
       })
@@ -154,6 +181,13 @@ function Step1B_DreamOutcome({ bucket, contextData, onComplete, setIsLoading, se
       dreamOutcome.trim(),
       validation ? Math.round(validation.total_score / 5) : 5
     )
+  }
+
+  // Use AI example as starting point
+  const useAsStartingPoint = () => {
+    if (aiExample) {
+      setDreamOutcome(aiExample)
+    }
   }
 
   return (
@@ -235,6 +269,60 @@ function Step1B_DreamOutcome({ bucket, contextData, onComplete, setIsLoading, se
               <p className="ai-example">
                 <strong>Example based on your data:</strong><br />
                 "{aiExample}"
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* V1 Offer Builder insights - Enhanced with "why" layer focus */}
+      {hasV1Data && !hasValidationData && (
+        <div className="v1-offer-insights enhanced">
+          <div className="insights-header">
+            <span className="insights-icon">📦</span>
+            <span>FROM YOUR OFFER FOUNDATION</span>
+          </div>
+          <div className="insights-content">
+            {/* Niche summary */}
+            {(nicheWhat || nicheWho) && (
+              <div className="niche-summary">
+                <p className="niche-line">
+                  <strong>Your niche:</strong> {nicheWhat}{nicheWho ? ` for ${nicheWho}` : ''}
+                </p>
+              </div>
+            )}
+
+            {/* The WHY layer - highlighted prominently */}
+            {hasNicheWhy && (
+              <div className="why-layer-highlight">
+                <div className="why-label">Their deeper "WHY" from your niche:</div>
+                <blockquote className="why-quote">"{nicheWhy}"</blockquote>
+                <p className="why-explanation">
+                  💡 This is the emotional driver. Transform it into a vivid dream they can visualize.
+                </p>
+              </div>
+            )}
+
+            {/* AI-generated starting point */}
+            {aiExample && (
+              <div className="ai-starting-point">
+                <div className="starting-point-label">✨ AI-GENERATED STARTING POINT:</div>
+                <blockquote className="starting-point-quote">"{aiExample}"</blockquote>
+                <button
+                  type="button"
+                  className="use-starting-point-btn"
+                  onClick={useAsStartingPoint}
+                  disabled={dreamOutcome === aiExample}
+                >
+                  {dreamOutcome === aiExample ? '✓ Using This' : 'Use This As Starting Point'}
+                </button>
+              </div>
+            )}
+
+            {/* Fallback if no AI example yet */}
+            {!aiExample && hasNicheWhy && (
+              <p className="insights-tip">
+                <span className="spinner-inline small"></span> Generating personalized starting point...
               </p>
             )}
           </div>

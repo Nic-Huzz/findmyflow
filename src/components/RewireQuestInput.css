@@ -160,20 +160,20 @@
   color: #1f2937;
 }
 
-.rewire-section {
+.rewire-input .rewire-section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.rewire-label {
+.rewire-input .rewire-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: #374151;
 }
 
 /* Textarea */
-.rewire-textarea {
+.rewire-input .rewire-textarea {
   width: 100%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
@@ -184,12 +184,12 @@
   transition: border-color 0.2s ease;
 }
 
-.rewire-textarea:focus {
+.rewire-input .rewire-textarea:focus {
   outline: none;
   border-color: #10b981;
 }
 
-.rewire-textarea::placeholder {
+.rewire-input .rewire-textarea::placeholder {
   color: #9ca3af;
 }
 
@@ -259,7 +259,7 @@
 }
 
 /* Layer Description */
-.layer-description {
+.rewire-input .layer-description {
   margin-top: 0.5rem;
   padding: 0.625rem 0.75rem;
   background: #fefce8;
@@ -271,13 +271,13 @@
 }
 
 /* Joy Grid (Dopamine Diet) */
-.joy-grid {
+.rewire-input .joy-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
-.joy-option {
+.rewire-input .joy-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -290,42 +290,42 @@
   transition: all 0.2s ease;
 }
 
-.joy-option.fast-food:hover {
+.rewire-input .joy-option.fast-food:hover {
   border-color: #fca5a5;
   background: #fef2f2;
 }
 
-.joy-option.fast-food.selected {
+.rewire-input .joy-option.fast-food.selected {
   border-color: #ef4444;
   background: #fef2f2;
 }
 
-.joy-option.nutritious:hover {
+.rewire-input .joy-option.nutritious:hover {
   border-color: #86efac;
   background: #f0fdf4;
 }
 
-.joy-option.nutritious.selected {
+.rewire-input .joy-option.nutritious.selected {
   border-color: #22c55e;
   background: #f0fdf4;
 }
 
-.joy-icon {
+.rewire-input .joy-icon {
   font-size: 1.5rem;
 }
 
-.joy-label {
+.rewire-input .joy-label {
   font-size: 0.7rem;
   font-weight: 600;
   text-align: center;
   color: #374151;
 }
 
-.joy-option.fast-food.selected .joy-label {
+.rewire-input .joy-option.fast-food.selected .joy-label {
   color: #991b1b;
 }
 
-.joy-option.nutritious.selected .joy-label {
+.rewire-input .joy-option.nutritious.selected .joy-label {
   color: #166534;
 }
 
@@ -413,13 +413,13 @@
 }
 
 /* Hell Yea Type Selector */
-.hell-yea-type-selector {
+.rewire-input .hell-yea-type-selector {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
 }
 
-.hell-yea-option {
+.rewire-input .hell-yea-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -432,37 +432,37 @@
   transition: all 0.2s ease;
 }
 
-.hell-yea-option:hover {
+.rewire-input .hell-yea-option:hover {
   border-color: #fbbf24;
   background: #fffbeb;
 }
 
-.hell-yea-option.selected {
+.rewire-input .hell-yea-option.selected {
   border-color: #f59e0b;
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
 }
 
-.hell-yea-icon {
+.rewire-input .hell-yea-icon {
   font-size: 2rem;
 }
 
-.hell-yea-label {
+.rewire-input .hell-yea-label {
   font-size: 0.875rem;
   font-weight: 700;
   color: #374151;
 }
 
-.hell-yea-option.selected .hell-yea-label {
+.rewire-input .hell-yea-option.selected .hell-yea-label {
   color: #92400e;
 }
 
-.hell-yea-desc {
+.rewire-input .hell-yea-desc {
   font-size: 0.7rem;
   color: #6b7280;
   text-align: center;
 }
 
-.hell-yea-option.selected .hell-yea-desc {
+.rewire-input .hell-yea-option.selected .hell-yea-desc {
   color: #a16207;
 }
 
@@ -508,13 +508,13 @@
 }
 
 /* Outcome Selector */
-.outcome-selector {
+.rewire-input .outcome-selector {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
-.outcome-option {
+.rewire-input .outcome-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -527,22 +527,22 @@
   transition: all 0.2s ease;
 }
 
-.outcome-option:hover {
+.rewire-input .outcome-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.outcome-option.selected {
+.rewire-input .outcome-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
-.outcome-icon {
+.rewire-input .outcome-icon {
   font-size: 1.25rem;
 }
 
-.outcome-label {
+.rewire-input .outcome-label {
   font-size: 0.65rem;
   font-weight: 600;
   text-align: center;
@@ -575,11 +575,11 @@
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-  .joy-grid {
+  .rewire-input .joy-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .joy-label {
+  .rewire-input .joy-label {
     font-size: 0.6rem;
   }
 
@@ -595,11 +595,11 @@
     grid-template-columns: 1fr;
   }
 
-  .outcome-label {
+  .rewire-input .outcome-label {
     font-size: 0.6rem;
   }
 
-  .hell-yea-type-selector {
+  .rewire-input .hell-yea-type-selector {
     grid-template-columns: 1fr;
   }
 }

@@ -6,7 +6,7 @@
 
 import MoneyModelFlowBase from './MoneyModelFlowBase'
 import { MONEY_MODEL_CONFIGS } from './moneyModelConfigs'
-import '../AttractionOfferFlow.css'
+import './AttractionOfferFlow.css'
 
 function AttractionOfferFlow() {
   const config = MONEY_MODEL_CONFIGS.attractionOffer

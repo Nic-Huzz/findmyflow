@@ -1,0 +1,312 @@
+/**
+ * CompetitorSnapshotFlow Styles
+ *
+ * Clean, focused flow design for competitor data collection.
+ */
+
+.competitor-flow {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.competitor-flow .competitor-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.competitor-flow .back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #a0a0b0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.competitor-flow .back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.competitor-flow .progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.competitor-flow .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #10b981);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.competitor-flow .step-counter {
+  font-size: 0.85rem;
+  color: #6b7280;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Content */
+.competitor-flow .competitor-content {
+  flex: 1;
+  padding: 32px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.competitor-flow .step-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.competitor-flow .step-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.competitor-flow .step-header h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.competitor-flow .step-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #a0a0b0;
+}
+
+/* Fields */
+.competitor-flow .fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.competitor-flow .field-intro {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #a0a0b0;
+  line-height: 1.5;
+}
+
+.competitor-flow .field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.competitor-flow .field-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+}
+
+.competitor-flow .field-label .required {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.competitor-flow .field-help {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Competitor Name Rows */
+.competitor-flow .competitor-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.competitor-flow .competitor-number {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(94, 23, 235, 0.2);
+  color: #a78bfa;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* Text Input */
+.competitor-flow .text-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  color: white;
+  font-family: inherit;
+}
+
+.competitor-flow .text-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.15);
+}
+
+.competitor-flow .text-input::placeholder {
+  color: #6b7280;
+}
+
+/* Pricing Input */
+.competitor-flow .pricing-input {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.competitor-flow .currency-symbol {
+  padding: 14px 0 14px 16px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.competitor-flow .pricing-input input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 14px 16px 14px 8px;
+  font-size: 1rem;
+  color: white;
+  font-family: inherit;
+}
+
+.competitor-flow .pricing-input input:focus {
+  outline: none;
+}
+
+.competitor-flow .pricing-input:focus-within {
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.15);
+}
+
+/* Textarea */
+.competitor-flow .textarea-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  color: white;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.competitor-flow .textarea-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.15);
+}
+
+.competitor-flow .textarea-input::placeholder {
+  color: #6b7280;
+}
+
+/* Advantage Tips */
+.competitor-flow .advantage-tips {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.competitor-flow .tips-title {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.competitor-flow .advantage-tips ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.competitor-flow .advantage-tips li {
+  font-size: 0.85rem;
+  color: #6ee7b7;
+  margin-bottom: 4px;
+}
+
+.competitor-flow .advantage-tips li:last-child {
+  margin-bottom: 0;
+}
+
+/* Error */
+.competitor-flow .error-message {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Footer */
+.competitor-flow .competitor-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 15, 26, 0.8);
+}
+
+.competitor-flow .next-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.competitor-flow .next-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.4);
+}
+
+.competitor-flow .next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .competitor-flow .competitor-content {
+    padding: 24px 16px;
+  }
+
+  .competitor-flow .step-header h2 {
+    font-size: 1.25rem;
+  }
+}

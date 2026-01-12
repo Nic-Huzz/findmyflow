@@ -17,6 +17,7 @@ export const SCRIPT_STAGES = [
 
 /**
  * Fetch all active scripts
+ * Maps database columns to expected field names
  */
 export async function fetchScripts() {
   const { data, error } = await supabase
@@ -25,7 +26,54 @@ export async function fetchScripts() {
     .eq('is_active', true)
     .order('sort_order', { ascending: true })
 
-  return { data, error }
+  // Map database fields to expected names
+  const mappedData = data?.map(script => ({
+    ...script,
+    name: script.script_name,
+    stage: mapCategoryToStage(script.category),
+    tips: script.follow_up_if_a || script.follow_up_if_b
+  }))
+
+  return { data: mappedData, error }
+}
+
+// Map category to stage values
+function mapCategoryToStage(category) {
+  const mapping = {
+    // Standard stages
+    'opener': 'opener',
+    'discovery': 'discovery',
+    'trust': 'trust',
+    'urgency': 'urgency',
+    'offer': 'offer',
+    'objection': 'objection',
+    'close': 'close',
+    'follow-up': 'follow-up',
+    // Common variations
+    'opening': 'opener',
+    'qualify': 'discovery',
+    'build trust': 'trust',
+    'create urgency': 'urgency',
+    'present offer': 'offer',
+    'handle objection': 'objection',
+    'closing': 'close',
+    'followup': 'follow-up',
+    // Objection categories (map to 'objection' stage)
+    'time': 'objection',
+    'price': 'objection',
+    'authority': 'objection',
+    'self_doubt': 'objection',
+    'timing': 'objection',
+    'comparison': 'objection',
+    'commitment': 'objection',
+    'final': 'objection',
+  }
+  return mapping[category?.toLowerCase()] || 'objection'
+}
+
+// Get objection type from category for smart suggestions
+export function getObjectionType(category) {
+  return category?.toUpperCase() || 'OTHER'
 }
 
 /**

@@ -3,6 +3,66 @@
  */
 import { supabase } from './supabaseClient'
 
+// ============================================
+// IMAGE COMPRESSION (Cost Optimization)
+// ============================================
+
+/**
+ * Compress an image file to reduce API costs
+ * @param {File} file - Original image file
+ * @param {Object} options - Compression options
+ * @returns {Promise<Blob>} - Compressed image blob
+ */
+export async function compressImage(file, options = {}) {
+  const {
+    maxWidth = 1200,
+    maxHeight = 1200,
+    quality = 0.8,
+    type = 'image/jpeg'
+  } = options
+
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    img.onload = () => {
+      // Calculate new dimensions
+      let { width, height } = img
+
+      if (width > maxWidth) {
+        height = (height * maxWidth) / width
+        width = maxWidth
+      }
+      if (height > maxHeight) {
+        width = (width * maxHeight) / height
+        height = maxHeight
+      }
+
+      canvas.width = width
+      canvas.height = height
+
+      // Draw and compress
+      ctx.drawImage(img, 0, 0, width, height)
+      canvas.toBlob(
+        blob => {
+          if (blob) {
+            console.log(`📷 Image compressed: ${file.size} → ${blob.size} bytes (${Math.round((1 - blob.size / file.size) * 100)}% reduction)`)
+            resolve(blob)
+          } else {
+            reject(new Error('Canvas toBlob failed'))
+          }
+        },
+        type,
+        quality
+      )
+    }
+
+    img.onerror = () => reject(new Error('Failed to load image'))
+    img.src = URL.createObjectURL(file)
+  })
+}
+
 /**
  * Convert a File to base64 string
  */
@@ -176,4 +236,231 @@ function mapProductInterest(interest) {
   }
 
   return 'Core Offer'
+}
+
+// ============================================
+// POST METRICS SCREENSHOT ANALYSIS
+// ============================================
+
+/**
+ * Analyze a post metrics screenshot using Claude Vision
+ * @param {File} imageFile - The image file to analyze
+ * @returns {Promise<{metrics: object, success: boolean}>}
+ */
+export async function analyzeMetricsScreenshot(imageFile) {
+  try {
+    // Compress image to reduce API costs (max 1200px, 80% quality)
+    const compressed = await compressImage(imageFile, {
+      maxWidth: 1200,
+      maxHeight: 1200,
+      quality: 0.8,
+      type: 'image/jpeg'
+    })
+
+    // Convert compressed blob to base64
+    const base64 = await fileToBase64(new File([compressed], 'compressed.jpg', { type: 'image/jpeg' }))
+
+    // Call the edge function
+    const { data, error } = await supabase.functions.invoke('analyze-metrics-screenshot', {
+      body: {
+        imageBase64: base64,
+        mimeType: 'image/jpeg'
+      }
+    })
+
+    if (error) {
+      console.error('Edge function error:', error)
+      return { metrics: null, success: false, error: error.message }
+    }
+
+    return data
+  } catch (err) {
+    console.error('Metrics screenshot analysis error:', err)
+    return { metrics: null, success: false, error: err.message }
+  }
+}
+
+/**
+ * Upload a metrics screenshot to Supabase storage
+ * @param {string} userId - The user's ID
+ * @param {File} file - The image file
+ * @param {string} contentId - Content history ID to associate with
+ * @returns {Promise<{url: string, path: string} | null>}
+ */
+export async function uploadMetricsScreenshot(userId, file, contentId) {
+  try {
+    // Generate unique filename
+    const timestamp = Date.now()
+    const extension = file.name.split('.').pop() || 'jpg'
+    const filename = `${userId}/metrics/${contentId}_${timestamp}.${extension}`
+
+    // Upload to storage (reusing deal-screenshots bucket)
+    const { data, error } = await supabase.storage
+      .from('deal-screenshots')
+      .upload(filename, file, {
+        cacheControl: '3600',
+        upsert: false
+      })
+
+    if (error) {
+      console.error('Upload error:', error)
+      return null
+    }
+
+    // Get the public URL
+    const { data: urlData } = supabase.storage
+      .from('deal-screenshots')
+      .getPublicUrl(data.path)
+
+    return {
+      url: urlData.publicUrl,
+      path: data.path
+    }
+  } catch (err) {
+    console.error('Metrics screenshot upload error:', err)
+    return null
+  }
+}
+
+/**
+ * Save metrics to content history
+ * @param {string} contentId - Content history record ID
+ * @param {object} metrics - Extracted metrics object
+ * @param {string} screenshotUrl - URL of the uploaded screenshot
+ * @returns {Promise<boolean>}
+ */
+export async function saveContentMetrics(contentId, metrics, screenshotUrl = null) {
+  try {
+    const engagementData = {
+      likes: metrics.likes,
+      comments: metrics.comments,
+      shares: metrics.shares,
+      saves: metrics.saves,
+      impressions: metrics.impressions,
+      reach: metrics.reach,
+      engagement_rate: metrics.engagement_rate,
+      profile_visits: metrics.profile_visits,
+      follows: metrics.follows,
+      link_clicks: metrics.link_clicks,
+      video_views: metrics.video_views,
+      average_watch_time: metrics.average_watch_time,
+      performance_tier: metrics.performance_tier,
+      insights: metrics.insights,
+      screenshot_url: screenshotUrl,
+      recorded_at: new Date().toISOString()
+    }
+
+    const { error } = await supabase
+      .from('content_history')
+      .update({
+        engagement_data: engagementData,
+        status: 'posted'
+      })
+      .eq('id', contentId)
+
+    if (error) {
+      console.error('Save metrics error:', error)
+      return false
+    }
+
+    return true
+  } catch (err) {
+    console.error('Save content metrics error:', err)
+    return false
+  }
+}
+
+/**
+ * Update content strategy with metrics from screenshot analysis
+ * Uses rolling average to blend new data with existing
+ *
+ * @param {string} userId - User ID
+ * @param {object} metrics - Extracted metrics from screenshot
+ * @returns {Promise<boolean>}
+ */
+export async function updateStrategyFromScreenshot(userId, metrics) {
+  try {
+    // Get the reach/impressions from the screenshot
+    const newViews = metrics.reach || metrics.impressions
+    if (!newViews || newViews <= 0) {
+      console.log('No reach/impressions in metrics, skipping strategy update')
+      return false
+    }
+
+    // Get existing strategy
+    const { data: strategy, error: fetchError } = await supabase
+      .from('content_strategies')
+      .select('avg_views_per_post, follower_count')
+      .eq('user_id', userId)
+      .maybeSingle()
+
+    if (fetchError) {
+      console.error('Error fetching strategy:', fetchError)
+      return false
+    }
+
+    if (!strategy) {
+      console.log('No strategy found for user, skipping update')
+      return false
+    }
+
+    // Calculate new rolling average (weighted: 2/3 existing, 1/3 new)
+    const existingViews = strategy.avg_views_per_post || 0
+    const updatedAvg = existingViews > 0
+      ? Math.round((existingViews * 2 + newViews) / 3)
+      : newViews
+
+    // Update strategy with new average
+    const { error: updateError } = await supabase
+      .from('content_strategies')
+      .update({
+        avg_views_per_post: updatedAvg,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', userId)
+
+    if (updateError) {
+      console.error('Error updating strategy:', updateError)
+      return false
+    }
+
+    console.log(`📊 Strategy updated: avg_views_per_post ${existingViews} → ${updatedAvg} (new post: ${newViews})`)
+
+    // Also store individual post data in marketing_metrics for detailed tracking
+    const postDate = metrics.post_date || new Date().toISOString().split('T')[0]
+    const { error: metricsError } = await supabase
+      .from('marketing_metrics')
+      .upsert({
+        user_id: userId,
+        period_type: 'post',
+        period_start: postDate,
+        period_end: postDate,
+        total_reach: metrics.reach || 0,
+        total_impressions: metrics.impressions || 0,
+        total_engagements: (metrics.likes || 0) + (metrics.comments || 0) + (metrics.shares || 0) + (metrics.saves || 0),
+        engagement_rate: metrics.engagement_rate,
+        posts_count: 1,
+        platform_breakdown: metrics.platform ? {
+          [metrics.platform.toLowerCase()]: {
+            reach: metrics.reach,
+            impressions: metrics.impressions,
+            likes: metrics.likes,
+            comments: metrics.comments,
+            shares: metrics.shares,
+          }
+        } : {},
+      }, {
+        onConflict: 'user_id,period_type,period_start'
+      })
+
+    if (metricsError) {
+      // Non-critical - log but don't fail
+      console.warn('Error storing marketing_metrics:', metricsError)
+    }
+
+    return true
+  } catch (err) {
+    console.error('Update strategy from screenshot error:', err)
+    return false
+  }
 }

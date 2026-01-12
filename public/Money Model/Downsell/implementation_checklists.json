@@ -1,0 +1,446 @@
+{
+  "payment_plan_downsell": {
+    "name": "Payment Plan Downsell (7-Step Framework)",
+    "summary": "Offer the same product with flexible payment terms. Customers pay full price (or more) but with less upfront cost. Follow the 7-step framework from most profitable to least.",
+    "target_metrics": {
+      "close_rate_increase": "20-40% more sales",
+      "paid_in_full_rate": "Should NOT decrease",
+      "payment_completion_rate": "70%+ finish payments",
+      "revenue_per_lead": "Significant increase"
+    },
+    "hormozi_principle": "Always reward full payment first. Only move to payment plans after confirming they can't pay in full. The goal is to capture customers who would otherwise say no, not to cannibalize full-pay customers.",
+    "implementation_checklist": [
+      {
+        "phase": "The 7-Step Downsell Sequence",
+        "tasks": [
+          {
+            "task": "Step 1: Reward Full Payment",
+            "description": "Always offer a discount for paying in full TODAY",
+            "script": "'If you can pay in full today, I can give you [X% off / bonus worth $X]. This is the best deal available.'",
+            "purpose": "Captures maximum revenue from those who can pay"
+          },
+          {
+            "task": "Step 2: Third-Party Financing",
+            "description": "Offer external financing options (Affirm, Klarna, PayPal Credit, credit card)",
+            "script": "'No problem. Do you have a credit card with enough room, or would you like to use [financing option]?'",
+            "purpose": "You get paid in full, they spread payments"
+          },
+          {
+            "task": "Step 3: Half Now, Half Later",
+            "description": "Split payment into two: half today, half on next paycheck",
+            "script": "'What if we did half now ($X) and the other half in two weeks when you get paid?'",
+            "purpose": "Low commitment to start, aligned with cash flow"
+          },
+          {
+            "task": "Step 4: Check Desire Level (1-10)",
+            "description": "Before going further, confirm they actually want it",
+            "script": "'On a scale of 1-10, how badly do you want this result? ... If it's 8+, let's figure out how to make this work. If it's 7 or below, maybe we should look at a different option.'",
+            "purpose": "Don't waste time on low-desire prospects; consider feature downsell instead"
+          },
+          {
+            "task": "Step 5: Three Payments",
+            "description": "Split into thirds: 1/3 today, 1/3 next paycheck, 1/3 after that",
+            "script": "'What if we did three payments of $X each? First one today, then aligned with your next two paychecks.'",
+            "timing": "Schedule payments on their actual paycheck dates"
+          },
+          {
+            "task": "Step 6: Spread Over Duration",
+            "description": "Spread payments evenly across the program/service duration",
+            "script": "'What if we spread this across the full 16 weeks? That's just $X per week.'",
+            "example": "$1,600 program → 16 payments of $100/week",
+            "purpose": "Matches payments to value delivery"
+          },
+          {
+            "task": "Step 7: Free Trial (Last Resort)",
+            "description": "Only as final option—free trial with completion requirements",
+            "script": "'Here's what I can do. You can start for free, but you need to [complete X actions]. If you do, you keep going free. If you don't, the card on file gets charged.'",
+            "link": "See Trial With Penalty offer for full implementation"
+          }
+        ]
+      },
+      {
+        "phase": "Payment Infrastructure",
+        "tasks": [
+          {
+            "task": "Set up recurring payment processing",
+            "description": "Ensure you can charge cards on schedule",
+            "tools": ["Stripe Subscriptions", "PayPal Recurring", "Square Subscriptions"]
+          },
+          {
+            "task": "Create payment schedule templates",
+            "description": "Pre-built options for each step of the 7-step framework",
+            "templates": ["Pay in full", "2 payments", "3 payments", "Weekly over duration", "Monthly over duration"]
+          },
+          {
+            "task": "Align payments with customer paycheck dates",
+            "description": "Ask when they get paid and schedule around that",
+            "script": "'When do you typically get paid—1st and 15th, or every two weeks?'",
+            "benefit": "Dramatically reduces failed payments"
+          },
+          {
+            "task": "Set up failed payment recovery",
+            "description": "Automatic retry and notification system for failed payments",
+            "sequence": ["Retry in 3 days", "Email reminder", "Retry again", "Personal outreach"]
+          }
+        ]
+      },
+      {
+        "phase": "Protecting Full-Pay Revenue",
+        "tasks": [
+          {
+            "task": "Never offer payment plan FIRST",
+            "description": "Always attempt full payment and reward it before mentioning plans",
+            "critical": "If full-pay rate drops, you're offering plans too early"
+          },
+          {
+            "task": "Make full payment obviously better",
+            "description": "Full payment should have clear advantages",
+            "advantages": ["Lower total cost", "Better bonuses", "Priority access", "No payment tracking hassle"]
+          },
+          {
+            "task": "Track full-pay vs. payment plan ratio",
+            "description": "Monitor this closely—shouldn't shift dramatically",
+            "warning_sign": "If payment plan % jumps significantly, you're cannibalizing"
+          }
+        ]
+      },
+      {
+        "phase": "Follow-Up Sequence",
+        "tasks": [
+          {
+            "task": "Day 0: Welcome + payment schedule",
+            "description": "Confirm schedule, align with paycheck dates"
+          },
+          {
+            "task": "Day 3: Value reinforcement",
+            "description": "Remind why they bought—reduce buyer's remorse"
+          },
+          {
+            "task": "Day 7: Quick win delivery",
+            "description": "Help them get early result—increases completion"
+          },
+          {
+            "task": "2 days before each payment: Reminder + value",
+            "description": "Remind payment coming, reinforce value received"
+          },
+          {
+            "task": "Completion: Celebrate + upsell",
+            "description": "When they finish paying, offer next tier"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Offering payment plans before attempting full payment",
+      "Not aligning payments with customer's paycheck schedule",
+      "Skipping the desire check (Step 4) and pushing low-desire prospects",
+      "No failed payment recovery system",
+      "Treating payment plan customers as less important"
+    ],
+    "quick_wins": [
+      "Start with Steps 1-3 only (simplest to implement)",
+      "Always ask 'When do you get paid?' for scheduling",
+      "Add 10-15% to payment plan total to incentivize full payment"
+    ]
+  },
+
+  "trial_with_penalty": {
+    "name": "Trial With Penalty",
+    "summary": "Free trial where customers must meet requirements (show up, do homework, complete actions) or pay fees. Card on file FIRST, terms SECOND. Uses 'avoiding fees' as motivator.",
+    "target_metrics": {
+      "card_capture_rate": "90%+ (card first)",
+      "trial_activation": "80%+ actually start",
+      "compliance_rate": "60-80% complete requirements",
+      "trial_to_paid_conversion": "40-60%"
+    },
+    "hormozi_principle": "Get card FIRST, explain terms SECOND. 'That's just how we've always done it.' People avoid losing money (fees) more than they pursue gaining money (refunds).",
+    "implementation_checklist": [
+      {
+        "phase": "Card Capture Strategy",
+        "tasks": [
+          {
+            "task": "Get card BEFORE explaining trial terms",
+            "description": "Capture payment method first as 'account setup'",
+            "script": "'Great! Let me get your account set up. I'll need a card on file—that's just how we've always done it.'",
+            "key": "Don't explain the trial until AFTER you have the card"
+          },
+          {
+            "task": "Frame card capture as standard procedure",
+            "description": "Make it feel routine, not suspicious",
+            "language": ["To complete your profile...", "For your account...", "That's just how our system works..."]
+          },
+          {
+            "task": "Then explain the trial terms",
+            "description": "After card captured, explain what they need to do",
+            "script": "'Perfect. Now here's how the trial works. As long as you [do X, Y, Z], it's completely free. Here's what that looks like...'"
+          }
+        ]
+      },
+      {
+        "phase": "Compliance Requirements Design",
+        "tasks": [
+          {
+            "task": "Define 'staying and paying' timeline",
+            "description": "Explain how long it takes to hit their goal",
+            "script": "'Based on what you told me, realistically it takes X months to get [result]. So we ask for at least that commitment.'",
+            "purpose": "Sets expectation for ongoing engagement"
+          },
+          {
+            "task": "Create consumption commitments",
+            "description": "Specific actions they must complete to stay free",
+            "examples": ["Attend 3 calls per week", "Submit weekly homework", "Post progress in community", "Complete onboarding within 48 hours", "Check in monthly"]
+          },
+          {
+            "task": "Design fee structure for non-compliance",
+            "description": "Associate fees with NOT consuming, not with penalties",
+            "examples": ["Missed session: $50", "Missed homework: $25", "No weekly check-in: $30"],
+            "framing": "'These aren't penalties—they're accountability fees. If you do the work, you never pay them.'"
+          },
+          {
+            "task": "Require sales consultation check-ins",
+            "description": "Build in mandatory calls for upsell opportunities",
+            "schedule": "Week 1, Week 3, End of trial",
+            "purpose": "Each check-in is an upsell opportunity"
+          }
+        ]
+      },
+      {
+        "phase": "Check-In Upsell Strategy",
+        "tasks": [
+          {
+            "task": "Check-In 1 (Week 1-2): The Upgrade",
+            "description": "If they like it, upsell to paid",
+            "script": "'How's it going so far? Great! Since you're loving it, let me show you what the full program looks like and get your billing set up.'"
+          },
+          {
+            "task": "Check-In 2 (Week 3-4): The Swap",
+            "description": "If they hate it, diagnose why and offer better fit",
+            "script": "'I hear some frustration. Let me understand what's not working... Based on that, I think [different product] might actually be better for you. Want me to swap you over?'"
+          },
+          {
+            "task": "Check-In 3 (End of Trial): The Recovery",
+            "description": "If they didn't use it, re-engage or collect fees",
+            "sequence": ["Multiple outreach attempts", "Offer fee waiver if they return", "Offer different product", "If no response, charge accumulated fees"]
+          }
+        ]
+      },
+      {
+        "phase": "Trial Operations",
+        "tasks": [
+          {
+            "task": "Create compliance tracking system",
+            "description": "Track who's completing requirements and who's not",
+            "track": ["Attendance", "Homework submissions", "Check-in completions", "Community engagement"]
+          },
+          {
+            "task": "Set up automated compliance reminders",
+            "description": "Nudge before they miss requirements",
+            "timing": "24 hours before deadline, 1 hour before deadline"
+          },
+          {
+            "task": "Build fee charging workflow",
+            "description": "How and when fees are charged to card on file",
+            "timing": "Charge weekly or at end of trial based on accumulated fees"
+          },
+          {
+            "task": "Create trial-to-paid conversion flow",
+            "description": "Seamless transition from trial to paying customer"
+          }
+        ]
+      },
+      {
+        "phase": "Email/Communication Sequence",
+        "tasks": [
+          {
+            "task": "Day 0: Welcome + how to stay free forever",
+            "description": "Explain exactly what they need to do to never pay a fee"
+          },
+          {
+            "task": "Day 1: First action reminder",
+            "description": "Push them to complete first requirement immediately"
+          },
+          {
+            "task": "Day 3: Quick win delivery",
+            "description": "Help them see value fast so they WANT to upgrade"
+          },
+          {
+            "task": "Weekly: Compliance status update",
+            "description": "Show what they've completed and what's pending"
+          },
+          {
+            "task": "End of trial: Conversion or fee collection",
+            "description": "Convert to paid OR collect fees for non-compliance"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Explaining trial terms BEFORE getting card (kills conversion)",
+      "Making requirements too easy (no engagement = no conversion)",
+      "Making requirements too hard (frustration = bad reviews)",
+      "Not following up on non-compliant users",
+      "Forgetting to use check-ins as upsell opportunities"
+    ],
+    "quick_wins": [
+      "Script the card capture moment word-for-word",
+      "Start with 3 simple requirements (show up, do homework, check in)",
+      "Make first requirement completable within 24 hours"
+    ]
+  },
+
+  "feature_downsell": {
+    "name": "Feature Downsell",
+    "summary": "Remove features from HIGHEST to LOWEST value so customers see what they're losing. They often 're-upsell' themselves when they realize the value of removed features.",
+    "target_metrics": {
+      "downsell_conversion": "20-40% of 'no' customers",
+      "re_upsell_rate": "30-50% upgrade later",
+      "customer_satisfaction": "Higher than expected (you helped them)",
+      "cancellation_prevention": "50-70% of would-be cancels"
+    },
+    "hormozi_principle": "Remove highest-value features FIRST. After seeing the price difference, customers realize the value of what's removed and often add features back. You're helping them find the BEST DEAL, not the cheapest option.",
+    "implementation_checklist": [
+      {
+        "phase": "Feature Hierarchy",
+        "tasks": [
+          {
+            "task": "List all features by value to customer",
+            "description": "Rank features from most valuable to least valuable",
+            "format": "Feature | Value to Customer | Cost to Deliver | Remove Order",
+            "principle": "Remove highest-value features first so they feel the loss"
+          },
+          {
+            "task": "Calculate price for each feature removal",
+            "description": "Determine how much to reduce price when each feature is removed",
+            "approach": "Price reduction should be LESS than perceived value of feature"
+          },
+          {
+            "task": "Create feature tier packages",
+            "description": "Pre-built options at different price points",
+            "tiers": ["Full (all features)", "Standard (most features)", "Basic (core features)", "Starter (minimum viable)"],
+            "naming": "Give each tier a name, not just a price"
+          },
+          {
+            "task": "Document feature-to-outcome mapping",
+            "description": "Know which features deliver which outcomes",
+            "use": "Helps prescribe right tier for customer's goals"
+          }
+        ]
+      },
+      {
+        "phase": "Downsell Conversation Flow",
+        "tasks": [
+          {
+            "task": "Step 1: Remove highest-value feature first",
+            "description": "Show them what they'd lose and the new price",
+            "script": "'What if we removed [most valuable feature]? That brings the price down to $X. How does that feel?'"
+          },
+          {
+            "task": "Step 2: Wait for reaction",
+            "description": "Let them process the loss of the feature",
+            "watch_for": "Often they say 'Wait, I actually want that...' (re-upsell)"
+          },
+          {
+            "task": "Step 3: Continue if needed",
+            "description": "If still too expensive, remove next feature",
+            "script": "'Okay, if we also remove [next feature], we're at $X. Better?'"
+          },
+          {
+            "task": "Step 4: Temperature check after 2 downsells",
+            "description": "Check desire level (1-10) before continuing",
+            "script": "'On a scale of 1-10, how much do you want this result now? ... If 8+, let's keep finding the right fit. If 7 or below, maybe we should look at a payment plan instead.'"
+          },
+          {
+            "task": "Step 5: Position as finding BEST DEAL",
+            "description": "Frame yourself as helpful guide, not desperate salesperson",
+            "script": "'I want to find the best deal for YOU—not just the cheapest option. What matters most to you?'"
+          },
+          {
+            "task": "Step 6: Combine with payment plan if needed",
+            "description": "Once they like a feature combo, payment plan the price",
+            "script": "'Perfect. So you want [features X, Y, Z] at $X. What if we spread that over 3 payments?'"
+          }
+        ]
+      },
+      {
+        "phase": "Re-Upsell Strategy",
+        "tasks": [
+          {
+            "task": "Mid-experience feature upgrade",
+            "description": "After they're engaged, offer to add back removed features",
+            "timing": "2-4 weeks into program when they see value",
+            "script": "'Now that you're seeing results, want to add [removed feature] to accelerate?'"
+          },
+          {
+            "task": "Training on removed features",
+            "description": "Educate them on value of premium features",
+            "approach": "Free orientation showing what premium features enable"
+          },
+          {
+            "task": "Cancellation downsell-to-save",
+            "description": "When current customers try to cancel, feature downsell to retain",
+            "script": "'Before you cancel, what if we moved you to [lower tier] instead? You'd keep [core benefits] at a lower price.'",
+            "result": "Often becomes 2nd highest LTV customer group"
+          }
+        ]
+      },
+      {
+        "phase": "Implementation",
+        "tasks": [
+          {
+            "task": "Create tier comparison chart",
+            "description": "Visual showing what's included in each tier"
+          },
+          {
+            "task": "Train team on downsell flow",
+            "description": "Practice removing features in right order"
+          },
+          {
+            "task": "Set up tier tracking",
+            "description": "Know which customers are on which tier for re-upsell"
+          },
+          {
+            "task": "Build cancellation-to-downsell flow",
+            "description": "Intercept cancellations with downsell offer"
+          }
+        ]
+      },
+      {
+        "phase": "Follow-Up Sequence",
+        "tasks": [
+          {
+            "task": "Day 0: Reinforce smart choice",
+            "description": "Confirm their tier choice was the best deal for them"
+          },
+          {
+            "task": "Week 1: Deliver massive value",
+            "description": "Prove the value of what they DID buy"
+          },
+          {
+            "task": "Week 2-3: Show premium possibilities",
+            "description": "Tease what premium features enable"
+          },
+          {
+            "task": "Month 1: Check-in and diagnose",
+            "description": "Are they hitting limits? Ready for upgrade?"
+          },
+          {
+            "task": "Month 2: Upgrade offer",
+            "description": "Offer to add back specific features they need"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Removing lowest-value features first (no pain = no re-upsell)",
+      "Not offering payment plans on downsold packages",
+      "Treating downsell customers as second-class",
+      "Not tracking for re-upsell opportunities",
+      "Missing the cancellation-to-downsell opportunity"
+    ],
+    "quick_wins": [
+      "Create just 3 tiers to start (Full, Standard, Basic)",
+      "Add cancellation flow that offers tier downgrade first",
+      "Train team to pause after removing each feature (let them feel the loss)"
+    ]
+  }
+}

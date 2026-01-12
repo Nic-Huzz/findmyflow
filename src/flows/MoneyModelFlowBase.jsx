@@ -10,7 +10,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
-import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import { BackButton, ProgressDots, ChecklistDisplay } from '../components/MoneyModelShared'
 import { STAGES } from './moneyModelConfigs'
 import { useAutoSave } from '../hooks/useAutoSave'
 
@@ -645,6 +645,13 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
               </div>
             </div>
           )}
+
+          {/* Implementation Checklist - Tier 1 Sales Tower */}
+          <ChecklistDisplay
+            flowType={config.flowType}
+            offerId={offer.id}
+            offerName={offer.name}
+          />
 
           {viewingResults ? (
             <button

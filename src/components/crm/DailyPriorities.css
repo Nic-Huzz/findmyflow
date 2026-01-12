@@ -1,0 +1,564 @@
+/**
+ * Daily Priorities Component Styles
+ * "Here's what to do today" widget
+ */
+
+.daily-priorities {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.daily-priorities.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+}
+
+.daily-priorities .dp-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: dp-spin 0.8s linear infinite;
+}
+
+@keyframes dp-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* All Clear State */
+.daily-priorities.all-clear {
+  text-align: center;
+  padding: 2rem;
+}
+
+.daily-priorities.all-clear .dp-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.daily-priorities.all-clear .dp-icon {
+  font-size: 2.5rem;
+  color: #10b981;
+}
+
+.daily-priorities.all-clear h3 {
+  margin: 0;
+  color: #10b981;
+  font-size: 1.25rem;
+}
+
+.daily-priorities.all-clear .dp-message {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0.75rem 0 1.25rem;
+}
+
+.daily-priorities.all-clear .dp-action-btn {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.daily-priorities.all-clear .dp-action-btn:hover {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+/* Header */
+.daily-priorities .dp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.daily-priorities .dp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.daily-priorities .dp-icon {
+  font-size: 1.25rem;
+}
+
+.daily-priorities .dp-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.daily-priorities .dp-urgent-badge {
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.daily-priorities .dp-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.daily-priorities .dp-count {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+}
+
+.daily-priorities .dp-expand-icon {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+
+/* Content */
+.daily-priorities .dp-content {
+  margin-top: 1rem;
+}
+
+.daily-priorities.collapsed .dp-content {
+  display: none;
+}
+
+/* Sections */
+.daily-priorities .dp-section {
+  margin-bottom: 1rem;
+}
+
+.daily-priorities .dp-section:last-of-type {
+  margin-bottom: 0.75rem;
+}
+
+.daily-priorities .dp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.375rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.daily-priorities .section-icon {
+  font-size: 0.9rem;
+}
+
+.daily-priorities .section-title {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  flex: 1;
+}
+
+.daily-priorities .section-count {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 8px;
+}
+
+/* Section-specific colors */
+.daily-priorities .dp-section.urgent .section-title {
+  color: #ef4444;
+}
+
+.daily-priorities .dp-section.urgent .section-count {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.daily-priorities .dp-section.follow-ups .section-title {
+  color: #3b82f6;
+}
+
+.daily-priorities .dp-section.meetings .section-title {
+  color: #8b5cf6;
+}
+
+.daily-priorities .dp-section.stale .section-title {
+  color: #f59e0b;
+}
+
+.daily-priorities .dp-section.high-value .section-title {
+  color: #10b981;
+}
+
+/* Items */
+.daily-priorities .dp-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.daily-priorities .dp-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.daily-priorities .dp-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+/* Item type borders */
+.daily-priorities .dp-item.very-stale {
+  border-left-color: #ef4444;
+}
+
+.daily-priorities .dp-item.follow-up {
+  border-left-color: #3b82f6;
+}
+
+.daily-priorities .dp-item.meeting {
+  border-left-color: #8b5cf6;
+}
+
+.daily-priorities .dp-item.stale {
+  border-left-color: #f59e0b;
+}
+
+.daily-priorities .dp-item.high-value {
+  border-left-color: #10b981;
+}
+
+/* Item content */
+.daily-priorities .dp-item-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.375rem;
+}
+
+.daily-priorities .dp-item-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.daily-priorities .dp-item-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.daily-priorities .dp-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.daily-priorities .dp-item-stage {
+  font-size: 0.65rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.daily-priorities .dp-item-tag {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+}
+
+.daily-priorities .dp-item-tag.urgent {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.daily-priorities .dp-item-tag.warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.daily-priorities .dp-item-tag.overdue {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.daily-priorities .dp-item-tag.meeting {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.daily-priorities .dp-item-tag.high-value {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+/* Why Context - explains the reason for priority */
+.daily-priorities .dp-item-why {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.375rem;
+  line-height: 1.3;
+}
+
+/* AI Talking Points */
+.daily-priorities .dp-item-talking-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+  border-radius: 6px;
+  border-left: 2px solid #8b5cf6;
+}
+
+.daily-priorities .dp-item-talking-point .talking-point-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.daily-priorities .dp-item-talking-point .talking-point-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Action hint */
+.daily-priorities .dp-item-action-hint {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  margin-top: 0.375rem;
+}
+
+/* One-Click Actions */
+.daily-priorities .dp-item-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 0.5rem;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.daily-priorities .dp-item-actions.visible {
+  opacity: 1;
+  height: auto;
+  padding-top: 0.375rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.daily-priorities .dp-quick-btn {
+  flex: 1;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.daily-priorities .dp-quick-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.daily-priorities .dp-quick-btn.log {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.daily-priorities .dp-quick-btn.log:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.daily-priorities .dp-quick-btn.script {
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.daily-priorities .dp-quick-btn.script:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.6);
+}
+
+.daily-priorities .dp-quick-btn.schedule {
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.daily-priorities .dp-quick-btn.schedule:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.6);
+}
+
+.daily-priorities .dp-quick-btn.view {
+  border-color: rgba(107, 114, 128, 0.4);
+}
+
+.daily-priorities .dp-quick-btn.view:hover {
+  background: rgba(107, 114, 128, 0.2);
+  border-color: rgba(107, 114, 128, 0.6);
+}
+
+/* Show actions on touch devices */
+@media (hover: none) {
+  .daily-priorities .dp-item-actions {
+    opacity: 1;
+    height: auto;
+    padding-top: 0.375rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* View All Button */
+.daily-priorities .dp-view-all {
+  width: 100%;
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  padding: 0.625rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.daily-priorities .dp-view-all:hover {
+  background: rgba(139, 92, 246, 0.25);
+}
+
+/* Ascension Section */
+.daily-priorities .dp-section.ascension .section-title {
+  color: #8b5cf6;
+}
+
+.daily-priorities .dp-section.ascension .section-count {
+  background: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+}
+
+/* Ascension Task Items */
+.daily-priorities .dp-item.ascension-task {
+  border-left-color: #8b5cf6;
+}
+
+.daily-priorities .dp-item.ascension-task.upsell {
+  border-left-color: #8b5cf6;
+}
+
+.daily-priorities .dp-item.ascension-task.downsell {
+  border-left-color: #f59e0b;
+}
+
+.daily-priorities .dp-item.ascension-task.continuity {
+  border-left-color: #ec4899;
+}
+
+.daily-priorities .dp-item.ascension-task.winback {
+  border-left-color: #3b82f6;
+}
+
+.daily-priorities .ascension-type-icon {
+  margin-right: 0.375rem;
+}
+
+.daily-priorities .dp-item-type-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Ascension Action Buttons */
+.daily-priorities .dp-quick-btn.complete {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.daily-priorities .dp-quick-btn.complete:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.6);
+  color: #10b981;
+}
+
+.daily-priorities .dp-quick-btn.dismiss {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.daily-priorities .dp-quick-btn.dismiss:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #ef4444;
+}
+
+/* See More Button */
+.daily-priorities .dp-see-more {
+  display: block;
+  width: 100%;
+  background: transparent;
+  color: #8b5cf6;
+  border: none;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 0.375rem;
+  transition: color 0.2s;
+}
+
+.daily-priorities .dp-see-more:hover {
+  color: #a78bfa;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .daily-priorities {
+    padding: 1rem;
+  }
+
+  .daily-priorities .dp-item {
+    padding: 0.625rem;
+  }
+
+  .daily-priorities .dp-item-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .daily-priorities .dp-item-value {
+    font-size: 0.75rem;
+  }
+}

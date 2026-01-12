@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Wheel Visualization - FindMyFlow</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #6BCB77;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 40px;
+    }
+
+    .mockup-section {
+      margin-bottom: 60px;
+      padding: 30px;
+      background: #111;
+      border-radius: 16px;
+      border: 1px solid #222;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* ========================================
+       COLOR WHEEL STYLES
+       ======================================== */
+
+    .wheel-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .color-wheel {
+      position: relative;
+      width: 300px;
+      height: 300px;
+    }
+
+    .color-wheel canvas {
+      border-radius: 50%;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .wheel-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: #0a0a0a;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .wheel-center-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .wheel-center-label {
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ========================================
+       LIT SEGMENTS INFO
+       ======================================== */
+
+    .lit-segments {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .segment-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+    }
+
+    .segment-badge.lit {
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .segment-color {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .segment-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .segment-title {
+      font-size: 11px;
+      color: #888;
+    }
+
+    /* ========================================
+       CLUSTER CONTAINER
+       ======================================== */
+
+    .cluster-container {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .flow-context {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .wheel-section {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .wheel-section-title {
+      font-size: 14px;
+      color: #888;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    /* ========================================
+       CLUSTERS
+       ======================================== */
+
+    .clusters-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0 16px;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .clusters-divider::before,
+    .clusters-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #333;
+    }
+
+    .cluster-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .cluster-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .cluster-items {
+      margin-bottom: 10px;
+    }
+
+    .cluster-item {
+      font-size: 13px;
+      color: #ccc;
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .cluster-item::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #6BCB77;
+    }
+
+    .cluster-insight {
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+      padding-top: 8px;
+      border-top: 1px solid #333;
+    }
+
+    /* ========================================
+       CONTROLS
+       ======================================== */
+
+    .demo-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .demo-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .demo-btn.primary {
+      background: #6BCB77;
+      color: #000;
+    }
+
+    .demo-btn.primary:hover {
+      background: #5ab868;
+    }
+
+    .demo-btn.secondary {
+      background: #333;
+      color: #fff;
+    }
+
+    .demo-btn.secondary:hover {
+      background: #444;
+    }
+
+    /* ========================================
+       SIZE COMPARISON
+       ======================================== */
+
+    .size-comparison {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .size-item {
+      text-align: center;
+    }
+
+    .size-label {
+      font-size: 13px;
+      color: #888;
+      margin-top: 12px;
+    }
+
+    /* ========================================
+       NOTES
+       ======================================== */
+
+    .notes {
+      background: #1a1a1a;
+      border-left: 3px solid #6BCB77;
+      padding: 16px 20px;
+      margin-top: 20px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .notes-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6BCB77;
+      margin-bottom: 8px;
+    }
+
+    .notes-content {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.6;
+    }
+
+    .notes-content li {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>True Color Wheel Visualization</h1>
+    <p class="subtitle">Smooth gradient wheel where lit segments illuminate with full color</p>
+
+    <!-- ========================================
+         MINI WHEEL WITH CLUSTERS
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">Mini Wheel Above Clusters</h2>
+      <p class="section-desc">During clustering reveals - compact wheel showing which areas lit up</p>
+
+      <div class="cluster-container">
+        <div class="flow-context">Flow Finder: Skills • Step 3 of 5</div>
+
+        <div class="wheel-section">
+          <div class="wheel-section-title">Your responses touched these areas:</div>
+          <div class="wheel-wrapper">
+            <div class="color-wheel" style="width: 160px; height: 160px;">
+              <canvas id="miniWheel" width="160" height="160"></canvas>
+              <div class="wheel-center" style="width: 50px; height: 50px;">
+                <div class="wheel-center-value" style="font-size: 16px;">2</div>
+                <div class="wheel-center-label" style="font-size: 8px;">areas</div>
+              </div>
+            </div>
+            <div class="lit-segments">
+              <div class="segment-badge lit">
+                <div class="segment-color" style="background: #FF8E53; color: #FF8E53;"></div>
+                <div>
+                  <div class="segment-name">The Pattern Spotter</div>
+                  <div class="segment-title">Analyzing</div>
+                </div>
+              </div>
+              <div class="segment-badge lit">
+                <div class="segment-color" style="background: #FFD93D; color: #FFD93D;"></div>
+                <div>
+                  <div class="segment-name">The Chess Player</div>
+                  <div class="segment-title">Strategizing</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clusters-divider">Here's how we grouped your answers</div>
+
+        <div class="cluster-card">
+          <div class="cluster-name">Strategic Thinking</div>
+          <div class="cluster-items">
+            <div class="cluster-item">"I naturally think about the big picture"</div>
+            <div class="cluster-item">"I'm always planning 3 steps ahead"</div>
+          </div>
+          <div class="cluster-insight">This cluster reveals your natural ability to see patterns and plan strategically.</div>
+        </div>
+
+        <div class="cluster-card">
+          <div class="cluster-name">Pattern Recognition</div>
+          <div class="cluster-items">
+            <div class="cluster-item">"I can spot patterns in data that others miss"</div>
+            <div class="cluster-item">"Numbers and spreadsheets make sense to me"</div>
+          </div>
+          <div class="cluster-insight">You have a gift for turning raw information into meaningful insights.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         FULL WHEEL AT COMPLETION
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">Full Wheel at Flow Completion</h2>
+      <p class="section-desc">Celebratory moment showing all segments discovered in this flow</p>
+
+      <div class="cluster-container" style="max-width: 700px;">
+        <div class="flow-context">Flow Finder: Skills • Complete!</div>
+
+        <div class="wheel-wrapper" style="padding: 20px 0;">
+          <div class="color-wheel" style="width: 280px; height: 280px;">
+            <canvas id="fullWheel" width="280" height="280"></canvas>
+            <div class="wheel-center">
+              <div class="wheel-center-value">4</div>
+              <div class="wheel-center-label">of 12</div>
+            </div>
+          </div>
+
+          <div class="lit-segments">
+            <div class="segment-badge lit">
+              <div class="segment-color" style="background: #FF8E53; color: #FF8E53;"></div>
+              <div>
+                <div class="segment-name">The Pattern Spotter</div>
+                <div class="segment-title">Analyzing</div>
+              </div>
+            </div>
+            <div class="segment-badge lit">
+              <div class="segment-color" style="background: #FFD93D; color: #FFD93D;"></div>
+              <div>
+                <div class="segment-name">The Chess Player</div>
+                <div class="segment-title">Strategizing</div>
+              </div>
+            </div>
+            <div class="segment-badge lit">
+              <div class="segment-color" style="background: #4D96FF; color: #4D96FF;"></div>
+              <div>
+                <div class="segment-name">The Maker</div>
+                <div class="segment-title">Building</div>
+              </div>
+            </div>
+            <div class="segment-badge lit">
+              <div class="segment-color" style="background: #FF5722; color: #FF5722;"></div>
+              <div>
+                <div class="segment-name">The Voice</div>
+                <div class="segment-title">Expressing</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-controls">
+          <button class="demo-btn secondary">View in Library</button>
+          <button class="demo-btn primary">Continue to Problems Flow →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         SIZE OPTIONS
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">Size Options</h2>
+      <p class="section-desc">Different sizes for different contexts</p>
+
+      <div class="size-comparison">
+        <div class="size-item">
+          <div class="color-wheel" style="width: 80px; height: 80px;">
+            <canvas id="tinyWheel" width="80" height="80"></canvas>
+          </div>
+          <div class="size-label">80px - Inline/Badge</div>
+        </div>
+
+        <div class="size-item">
+          <div class="color-wheel" style="width: 140px; height: 140px;">
+            <canvas id="smallWheel" width="140" height="140"></canvas>
+          </div>
+          <div class="size-label">140px - Mini</div>
+        </div>
+
+        <div class="size-item">
+          <div class="color-wheel" style="width: 220px; height: 220px;">
+            <canvas id="medWheel" width="220" height="220"></canvas>
+          </div>
+          <div class="size-label">220px - Standard</div>
+        </div>
+
+        <div class="size-item">
+          <div class="color-wheel" style="width: 300px; height: 300px;">
+            <canvas id="largeWheel" width="300" height="300"></canvas>
+          </div>
+          <div class="size-label">300px - Large/Hero</div>
+        </div>
+      </div>
+
+      <div class="demo-controls">
+        <button class="demo-btn primary" onclick="animateAllWheels()">Animate Lighting</button>
+        <button class="demo-btn secondary" onclick="resetWheels()">Reset</button>
+      </div>
+    </div>
+
+    <!-- ========================================
+         INTERACTIVE DEMO
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">Interactive Demo</h2>
+      <p class="section-desc">Click segments to toggle them on/off</p>
+
+      <div class="wheel-wrapper">
+        <div class="color-wheel" style="width: 320px; height: 320px;">
+          <canvas id="interactiveWheel" width="320" height="320"></canvas>
+          <div class="wheel-center" style="width: 90px; height: 90px;">
+            <div class="wheel-center-value" id="litCount">0</div>
+            <div class="wheel-center-label">of 12</div>
+          </div>
+        </div>
+
+        <div class="lit-segments" id="segmentList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <div class="demo-controls">
+        <button class="demo-btn secondary" onclick="clearInteractive()">Clear All</button>
+        <button class="demo-btn primary" onclick="randomLit()">Random Selection</button>
+      </div>
+
+      <div class="notes">
+        <div class="notes-title">How it works</div>
+        <ul class="notes-content">
+          <li>Full color wheel is always visible as context</li>
+          <li>Unlit segments are desaturated (grayscale) and dimmed</li>
+          <li>Lit segments show full vibrant color with subtle glow</li>
+          <li>Smooth gradient transitions between segments</li>
+          <li>Click any segment to toggle - watch the color pop!</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Segment definitions with colors positioned around the wheel
+    const SEGMENTS = [
+      { id: 'clarifying', name: 'Clarifying', title: 'The Translator', hue: 0 },
+      { id: 'analyzing', name: 'Analyzing', title: 'The Pattern Spotter', hue: 30 },
+      { id: 'strategizing', name: 'Strategizing', title: 'The Chess Player', hue: 60 },
+      { id: 'organizing', name: 'Organizing', title: 'The Systems Architect', hue: 90 },
+      { id: 'building', name: 'Building', title: 'The Maker', hue: 120 },
+      { id: 'designing', name: 'Designing', title: 'The Experience Crafter', hue: 150 },
+      { id: 'creating', name: 'Creating', title: 'The Originator', hue: 180 },
+      { id: 'expressing', name: 'Expressing', title: 'The Voice', hue: 210 },
+      { id: 'connecting', name: 'Connecting', title: 'The Bridge Builder', hue: 240 },
+      { id: 'influencing', name: 'Influencing', title: 'The Catalyst', hue: 270 },
+      { id: 'nurturing', name: 'Nurturing', title: 'The Grower', hue: 300 },
+      { id: 'synthesizing', name: 'Synthesizing', title: 'The Integrator', hue: 330 },
+    ];
+
+    // Draw a color wheel on a canvas
+    function drawColorWheel(canvas, litSegments = [], animate = false) {
+      const ctx = canvas.getContext('2d');
+      const size = canvas.width;
+      const center = size / 2;
+      const outerRadius = size / 2 - 2;
+      const innerRadius = size * 0.15;
+
+      ctx.clearRect(0, 0, size, size);
+
+      // Draw each segment
+      const segmentAngle = 360 / SEGMENTS.length;
+
+      for (let i = 0; i < 360; i += 1) {
+        const segmentIndex = Math.floor(i / segmentAngle);
+        const isLit = litSegments.includes(segmentIndex);
+
+        const startAngle = (i - 90) * Math.PI / 180;
+        const endAngle = (i + 1 - 90) * Math.PI / 180;
+
+        // Create gradient from center to edge
+        const gradient = ctx.createRadialGradient(center, center, innerRadius, center, center, outerRadius);
+
+        if (isLit) {
+          // Full color for lit segments
+          gradient.addColorStop(0, `hsla(${i}, 60%, 95%, 1)`);
+          gradient.addColorStop(0.5, `hsla(${i}, 90%, 60%, 1)`);
+          gradient.addColorStop(1, `hsla(${i}, 100%, 50%, 1)`);
+        } else {
+          // Desaturated/dimmed for unlit
+          gradient.addColorStop(0, `hsla(${i}, 5%, 40%, 0.3)`);
+          gradient.addColorStop(0.5, `hsla(${i}, 10%, 30%, 0.4)`);
+          gradient.addColorStop(1, `hsla(${i}, 15%, 25%, 0.5)`);
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(center, center);
+        ctx.arc(center, center, outerRadius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+
+      // Draw inner circle (hole)
+      ctx.beginPath();
+      ctx.arc(center, center, innerRadius, 0, Math.PI * 2);
+      ctx.fillStyle = '#0a0a0a';
+      ctx.fill();
+
+      // Add subtle glow for lit segments
+      if (litSegments.length > 0) {
+        ctx.globalCompositeOperation = 'screen';
+        for (const segIdx of litSegments) {
+          const startHue = segIdx * segmentAngle;
+          const midHue = startHue + segmentAngle / 2;
+
+          const glowGradient = ctx.createRadialGradient(center, center, outerRadius * 0.5, center, center, outerRadius * 1.1);
+          glowGradient.addColorStop(0, `hsla(${midHue}, 100%, 50%, 0)`);
+          glowGradient.addColorStop(0.7, `hsla(${midHue}, 100%, 50%, 0.1)`);
+          glowGradient.addColorStop(1, `hsla(${midHue}, 100%, 50%, 0)`);
+
+          const startAngle = (startHue - 90) * Math.PI / 180;
+          const endAngle = (startHue + segmentAngle - 90) * Math.PI / 180;
+
+          ctx.beginPath();
+          ctx.moveTo(center, center);
+          ctx.arc(center, center, outerRadius * 1.1, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fillStyle = glowGradient;
+          ctx.fill();
+        }
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    }
+
+    // Initialize static wheels
+    function initStaticWheels() {
+      // Mini wheel - 2 segments lit (Analyzing, Strategizing)
+      drawColorWheel(document.getElementById('miniWheel'), [1, 2]);
+
+      // Full wheel - 4 segments lit
+      drawColorWheel(document.getElementById('fullWheel'), [1, 2, 4, 7]);
+
+      // Size comparison wheels
+      drawColorWheel(document.getElementById('tinyWheel'), [1, 2, 4]);
+      drawColorWheel(document.getElementById('smallWheel'), [1, 2, 4]);
+      drawColorWheel(document.getElementById('medWheel'), [1, 2, 4]);
+      drawColorWheel(document.getElementById('largeWheel'), [1, 2, 4]);
+    }
+
+    // Interactive wheel state
+    let interactiveLit = [];
+
+    function initInteractiveWheel() {
+      const canvas = document.getElementById('interactiveWheel');
+      drawColorWheel(canvas, interactiveLit);
+      updateSegmentList();
+
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left - canvas.width / 2;
+        const y = e.clientY - rect.top - canvas.height / 2;
+
+        // Calculate angle from center
+        let angle = Math.atan2(y, x) * 180 / Math.PI + 90;
+        if (angle < 0) angle += 360;
+
+        // Determine which segment was clicked
+        const segmentIndex = Math.floor(angle / 30);
+
+        // Check if click is within the wheel (not the center hole)
+        const distance = Math.sqrt(x * x + y * y);
+        const innerRadius = canvas.width * 0.15;
+        const outerRadius = canvas.width / 2 - 2;
+
+        if (distance > innerRadius && distance < outerRadius) {
+          toggleSegment(segmentIndex);
+        }
+      });
+    }
+
+    function toggleSegment(index) {
+      const idx = interactiveLit.indexOf(index);
+      if (idx > -1) {
+        interactiveLit.splice(idx, 1);
+      } else {
+        interactiveLit.push(index);
+      }
+      drawColorWheel(document.getElementById('interactiveWheel'), interactiveLit);
+      updateSegmentList();
+    }
+
+    function updateSegmentList() {
+      const container = document.getElementById('segmentList');
+      const countEl = document.getElementById('litCount');
+
+      countEl.textContent = interactiveLit.length;
+
+      container.innerHTML = interactiveLit.sort((a, b) => a - b).map(idx => {
+        const seg = SEGMENTS[idx];
+        const color = `hsl(${seg.hue}, 100%, 50%)`;
+        return `
+          <div class="segment-badge lit">
+            <div class="segment-color" style="background: ${color}; color: ${color};"></div>
+            <div>
+              <div class="segment-name">${seg.title}</div>
+              <div class="segment-title">${seg.name}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function clearInteractive() {
+      interactiveLit = [];
+      drawColorWheel(document.getElementById('interactiveWheel'), interactiveLit);
+      updateSegmentList();
+    }
+
+    function randomLit() {
+      interactiveLit = [];
+      const count = Math.floor(Math.random() * 5) + 2; // 2-6 segments
+      while (interactiveLit.length < count) {
+        const idx = Math.floor(Math.random() * 12);
+        if (!interactiveLit.includes(idx)) {
+          interactiveLit.push(idx);
+        }
+      }
+      drawColorWheel(document.getElementById('interactiveWheel'), interactiveLit);
+      updateSegmentList();
+    }
+
+    // Animation for size comparison
+    function animateAllWheels() {
+      const canvases = ['tinyWheel', 'smallWheel', 'medWheel', 'largeWheel'];
+      const targetLit = [1, 2, 4, 7];
+      let currentLit = [];
+
+      canvases.forEach(id => drawColorWheel(document.getElementById(id), []));
+
+      targetLit.forEach((segIdx, i) => {
+        setTimeout(() => {
+          currentLit.push(segIdx);
+          canvases.forEach(id => drawColorWheel(document.getElementById(id), [...currentLit]));
+        }, (i + 1) * 400);
+      });
+    }
+
+    function resetWheels() {
+      const canvases = ['tinyWheel', 'smallWheel', 'medWheel', 'largeWheel'];
+      canvases.forEach(id => drawColorWheel(document.getElementById(id), []));
+
+      setTimeout(() => {
+        canvases.forEach(id => drawColorWheel(document.getElementById(id), [1, 2, 4]));
+      }, 300);
+    }
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      initStaticWheels();
+      initInteractiveWheel();
+    });
+  </script>
+</body>
+</html>

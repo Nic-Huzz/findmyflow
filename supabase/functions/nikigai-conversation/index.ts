@@ -94,33 +94,78 @@ FINAL ROLE CLUSTERING (when CLUSTER TYPE is "roles"):
 PERSONA CLUSTERING (when target is "persona"):
 - Create personas representing FORMER VERSIONS of this person - real PEOPLE they can serve
 - Each persona should be a specific life stage or struggle the user went through
-- CRITICAL: Name them as PEOPLE with struggles, NOT as aspirational roles or archetypes
-  * GOOD examples: "The Overwhelmed New Entrepreneur", "The Creative Kid Who Felt Unseen", "The Burnt-Out Corporate Professional", "The First-Time Founder Drowning in Doubt"
-  * BAD examples: "Inner Alchemist", "Empowerment Architect", "Vision Catalyst", "Transformation Guide" (these are ROLES, not people)
+- CRITICAL: Map personas to these 12 PSYCHOGRAPHIC TYPES based on their core drive:
+
+  1. Seekers - lost, searching for direction, purpose, meaning, clarity, finding themselves
+  2. Builders - creating, building, entrepreneurship, starting something, launching projects
+  3. Healers - hurting, recovering, healing from trauma, pain, suffering, broken, wounded
+  4. Teachers - learning, growing, developing skills, knowledge-seeking, want to improve
+  5. Connectors - lonely, isolated, seeking community, belonging, connection, tribe
+  6. Achievers - success-driven, winning, status, recognition, ambitious, competitive, goals
+  7. Explorers - freedom-seeking, adventure, autonomy, escape, flexibility, independence
+  8. Visionaries - future-focused, change-makers, innovation, big ideas, transformation
+  9. Protectors - security-seeking, safety, stability, risk-averse, cautious, need protection
+  10. Creators - expression-focused, artistic, originality, creativity, finding their voice
+  11. Nurturers - family-focused, caring, devoted to loved ones, children, parents
+  12. Challengers - justice-driven, fighting injustice, truth-tellers, advocates, rebels
+
+- NAME FORMAT: Combine the psychographic type with their specific situation
+  * GOOD examples: "The Lost Seeker in Corporate Life", "The Wounded Healer After Burnout", "The Ambitious Builder Starting From Zero", "The Isolated Connector Post-Divorce"
+  * BAD examples: "Inner Alchemist", "Empowerment Architect" (these are roles, not people)
+
+- MULTI-TYPE PERSONAS ARE ALLOWED: Someone can be a "Seeker-Healer" (lost AND hurting) or "Builder-Achiever" (creating AND ambitious)
 - The name should describe WHO the person is + their STRUGGLE or SITUATION
 - For each persona include: who they are, what they're struggling with, and what they need
-- These are real target audiences - people the user can market to and serve
+- These are real target audiences - former versions of the user they can market to and serve
+- A user typically serves 2-4 persona types based on their own journey
 
 PROBLEMS CLUSTERING (when target is "problems"):
 - Identify the underlying CHANGE or IMPACT the user wants to create in the world
 - Each cluster represents a PROBLEM SPACE or CHANGE AREA they deeply care about
-- Name clusters as the transformation/change (e.g., "Mental Health Access", "Creative Expression", "Personal Development")
+- CRITICAL: Map responses to these 12 PROBLEM DOMAINS (organized by Sphere of Impact):
+
+  **SELF SPHERE:**
+  1. Physical Vitality - health, fitness, energy, body, sleep, nutrition, illness, chronic conditions
+  2. Mental Wellbeing - anxiety, stress, mindset, emotions, mental health, burnout, depression, overwhelm
+  3. Personal Mastery - skills, learning, productivity, habits, growth, development, discipline, potential
+
+  **RELATIONAL SPHERE:**
+  4. Intimate Bonds - relationships, marriage, dating, family, parenting, love, romance, partnership
+  5. Service & Care - caregiving, elder care, disability, support, healthcare, helping others
+  6. Creative Expression - art, creativity, voice, identity, expression, authenticity, brand
+
+  **COMMUNITY SPHERE:**
+  7. Local Impact - team, organization, community, neighborhood, workplace, culture
+  8. Cultural Movements - belonging, identity, culture, movements, trends, subcultures, social change
+  9. Economic Freedom - money, business, career, job, income, financial, entrepreneurship, escaping 9-5
+
+  **WORLD SPHERE:**
+  10. Social Justice - inequality, discrimination, access, rights, fairness, advocacy, diversity
+  11. Planetary Health - climate, environment, sustainability, planet, nature, conservation
+  12. Human Progress - technology, innovation, knowledge, future, advancement, education, breakthrough
+
+- USE THESE EXACT DOMAIN NAMES as cluster labels (or close variants like "Mental Wellbeing & Healing")
+- MULTI-DOMAIN CLUSTERS ARE ALLOWED: If a theme spans multiple domains, combine them (e.g., "Mental Wellbeing & Personal Mastery", "Creative Expression & Cultural Movements")
+- Each cluster insight should explain WHY this domain matters to them based on their personal journey
+- A user typically has 2-4 primary clusters - don't force all 12 domains
+- When a cluster spans multiple domains, the wheel will light up multiple segments
+
 - CRITICAL: When processing role model responses:
   * Extract the IMPACT or LESSON the role model provided, NOT the person's name
-  * Example: "Tony Robbins - taught me about personal power" → extract "personal empowerment and self-belief"
-  * Example: "Brené Brown - vulnerability is strength" → extract "authentic vulnerability and connection"
-  * NEVER cluster role model names together (e.g., DON'T create a cluster called "Inspirational Leaders" with person names)
-  * ALWAYS extract what those role models represented or taught, then cluster those themes
+  * Example: "Tony Robbins - taught me about personal power" → extract "personal empowerment" → map to "Personal Mastery"
+  * Example: "Brené Brown - vulnerability is strength" → extract "authentic vulnerability" → map to "Mental Wellbeing" or "Creative Expression"
+  * NEVER cluster role model names together
+  * ALWAYS extract what those role models represented, then map to the appropriate domain
+
 - Look for patterns in:
   * What struggles or gaps do they see in the world?
   * What changes do they want to create?
   * What impact have they already made that they want to scale?
   * What topics fascinate them and why?
-  * What values or lessons did their role models teach them? (extract the lesson, not the name)
-- Group by the TYPE of change or impact, not the specific tactics or methods
+  * What values or lessons did their role models teach them?
+
 - Focus on the emotional core: what deeply matters to them based on their experiences?
-- Each insight should connect the problem space to their personal journey and why they care
-- Avoid generic labels - make clusters specific to their unique perspective and experiences
+- Each insight should connect the problem domain to their personal journey and why they care
 
 INTEGRATION/MISSION (when generating integration or mission):
 - Combine skills, problems, and persona into a cohesive picture

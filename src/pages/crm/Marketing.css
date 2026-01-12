@@ -1,0 +1,756 @@
+/* CRM Marketing Quest Board Styles */
+.crm-marketing {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  overflow-x: hidden;
+}
+
+.crm-marketing .crm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+}
+
+.crm-marketing .crm-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: crm-spin 1s linear infinite;
+}
+
+/* Header */
+.crm-marketing .marketing-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.crm-marketing .back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+
+.crm-marketing .back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.crm-marketing .header-content h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.crm-marketing .week-label {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Header Actions */
+.crm-marketing .header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.crm-marketing .crm-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.crm-marketing .performance-btn,
+.crm-marketing .queue-btn,
+.crm-marketing .story-bank-btn,
+.crm-marketing .strategy-btn {
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.crm-marketing .performance-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.crm-marketing .queue-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+.crm-marketing .story-bank-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.crm-marketing .strategy-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.crm-marketing .performance-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.crm-marketing .queue-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.crm-marketing .story-bank-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.crm-marketing .strategy-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* Week Navigation */
+.crm-marketing .week-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.crm-marketing .week-nav-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crm-marketing .week-nav-btn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.3);
+}
+
+.crm-marketing .week-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.crm-marketing .current-week-badge {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Week Progress */
+.crm-marketing .week-progress {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.crm-marketing .progress-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.crm-marketing .progress-text {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.crm-marketing .progress-rate {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #8b5cf6;
+}
+
+.crm-marketing .progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.crm-marketing .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Day Tabs */
+.crm-marketing .day-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.crm-marketing .day-tab {
+  position: relative;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.crm-marketing .day-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.crm-marketing .day-tab.active {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+  color: white;
+}
+
+.crm-marketing .day-tab.today {
+  border-color: #8b5cf6;
+}
+
+.crm-marketing .today-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+}
+
+/* Tasks List */
+.crm-marketing .tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.crm-marketing .empty-day {
+  text-align: center;
+  padding: 48px 24px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.crm-marketing .task-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s;
+}
+
+.crm-marketing .task-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.crm-marketing .task-card.completed {
+  opacity: 0.7;
+}
+
+.crm-marketing .task-card.completed .task-type {
+  text-decoration: line-through;
+}
+
+.crm-marketing .task-checkbox {
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.crm-marketing .task-card.completed .task-checkbox {
+  background: #10b981;
+  border-color: #10b981;
+}
+
+.crm-marketing .task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.crm-marketing .task-type {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: white;
+}
+
+.crm-marketing .task-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 0.75rem;
+}
+
+.crm-marketing .task-platform {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.crm-marketing .task-points {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.crm-marketing .task-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.crm-marketing .engagement-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.crm-marketing .engagement-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.crm-marketing .quick-generate-btn {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.crm-marketing .quick-generate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+/* Quick Generate Modal */
+.crm-marketing .quick-generate-modal {
+  background: #1e1e3f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.crm-marketing .qg-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.crm-marketing .qg-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  color: white;
+}
+
+.crm-marketing .qg-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.crm-marketing .qg-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.crm-marketing .qg-task-info {
+  display: flex;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(139, 92, 246, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.crm-marketing .qg-task-type {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #a78bfa;
+}
+
+.crm-marketing .qg-task-platform {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.crm-marketing .qg-generator {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Override content generator styles in dark modal */
+.crm-marketing .qg-generator .content-generator-trigger {
+  display: none;
+}
+
+.crm-marketing .qg-generator .content-generator-overlay {
+  position: static;
+  background: transparent;
+  padding: 0;
+}
+
+.crm-marketing .qg-generator .content-generator-modal {
+  box-shadow: none;
+  max-height: none;
+}
+
+/* Modal */
+.crm-marketing .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+}
+
+.crm-marketing .engagement-modal {
+  background: #1e1e3f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.crm-marketing .engagement-modal h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+  color: white;
+}
+
+.crm-marketing .modal-task {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 24px 0;
+  font-size: 0.875rem;
+}
+
+.crm-marketing .engagement-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.crm-marketing .engagement-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.crm-marketing .engagement-field label {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.crm-marketing .engagement-field input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.crm-marketing .engagement-field input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+}
+
+.crm-marketing .modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.crm-marketing .cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.crm-marketing .cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.crm-marketing .save-btn {
+  background: #8b5cf6;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.crm-marketing .save-btn:hover {
+  background: #7c3aed;
+}
+
+/* ============================================
+   ONBOARDING STAGES (Explainer + Time Check)
+   Matches Money Models pattern
+   ============================================ */
+
+.crm-marketing .crm-onboarding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 24px;
+}
+
+.crm-marketing .onboarding-content {
+  max-width: 480px;
+  text-align: center;
+  animation: crm-fadeIn 0.4s ease-out;
+}
+
+.crm-marketing .onboarding-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.crm-marketing .onboarding-content h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: white;
+}
+
+.crm-marketing .onboarding-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 24px 0;
+}
+
+.crm-marketing .onboarding-description {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 32px 0;
+  line-height: 1.6;
+}
+
+.crm-marketing .onboarding-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.crm-marketing .benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.crm-marketing .benefit-icon {
+  font-size: 1.25rem;
+}
+
+.crm-marketing .benefit-item span:last-child {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Onboarding Buttons */
+.crm-marketing .crm-primary-btn {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 12px;
+}
+
+.crm-marketing .crm-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.crm-marketing .crm-primary-btn.glow-btn {
+  animation: crm-glow 2s ease-in-out infinite;
+}
+
+.crm-marketing .crm-secondary-btn {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.crm-marketing .crm-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.crm-marketing .onboarding-skip-note {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 16px;
+}
+
+/* Animations */
+@keyframes crm-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes crm-glow {
+  0%, 100% {
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(139, 92, 246, 0.5);
+  }
+}
+
+/* Story Bank Modal */
+.crm-marketing .story-bank-modal {
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.crm-marketing .story-bank-modal .story-bank {
+  min-height: auto;
+  border-radius: 16px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .crm-marketing {
+    padding: 16px;
+  }
+
+  .crm-marketing .marketing-header {
+    flex-direction: column;
+  }
+
+  .crm-marketing .engagement-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .crm-marketing .onboarding-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .crm-marketing .onboarding-icon {
+    font-size: 3rem;
+  }
+}

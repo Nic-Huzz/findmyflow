@@ -1,0 +1,670 @@
+/**
+ * ZarloImplementationCoach Styles
+ *
+ * Slide-in panel for AI implementation assistance.
+ * Desktop: 400px slide-in from right
+ * Mobile: Full-screen modal
+ */
+
+/* Backdrop */
+.coach-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Main Panel */
+.coach-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 420px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+  to { transform: translateX(0); }
+}
+
+/* Header */
+.coach-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: white;
+}
+
+.coach-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.coach-icon {
+  font-size: 2rem;
+}
+
+.coach-header-text h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.coach-header-text p {
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.coach-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.coach-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Task Info */
+.coach-task-info {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.coach-task-info .task-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #5e17eb20, #7c3aed20);
+  color: #5e17eb;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.coach-task-info h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.coach-task-info .task-desc {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* Content Area */
+.coach-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Loading */
+.coach-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: 16px;
+}
+
+.coach-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.coach-loading p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Guidance Only */
+.coach-guidance {
+  text-align: center;
+}
+
+.guidance-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.coach-guidance h4 {
+  margin: 0 0 20px;
+  font-size: 1.125rem;
+  color: #212529;
+}
+
+.guidance-principle {
+  background: #fff8e6;
+  border-left: 4px solid #fbbf24;
+  padding: 12px 16px;
+  text-align: left;
+  margin-bottom: 20px;
+  border-radius: 0 8px 8px 0;
+}
+
+.guidance-principle strong {
+  display: block;
+  font-size: 0.75rem;
+  color: #92400e;
+  margin-bottom: 4px;
+}
+
+.guidance-principle p {
+  margin: 0;
+  font-style: italic;
+  color: #78350f;
+  font-size: 0.9rem;
+}
+
+.guidance-description {
+  text-align: left;
+  background: #f0f9ff;
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-left: 3px solid #3b82f6;
+}
+
+.guidance-description p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #1e40af;
+  line-height: 1.5;
+}
+
+.guidance-tips {
+  text-align: left;
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.guidance-tips h5 {
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.guidance-tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.guidance-tips li {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.guidance-script {
+  text-align: left;
+  background: #faf5ff;
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-left: 3px solid #8b5cf6;
+}
+
+.guidance-script h5 {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: #6d28d9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.guidance-script .script-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #5b21b6;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.guidance-actions {
+  margin-top: 24px;
+}
+
+/* Context Confirm */
+.coach-context {
+  /* context confirm styles */
+}
+
+.context-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.context-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  font-size: 0.875rem;
+}
+
+.context-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #212529;
+}
+
+.context-items {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.context-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.context-item:last-child {
+  border-bottom: none;
+}
+
+.context-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  flex-shrink: 0;
+}
+
+.context-value {
+  font-size: 0.875rem;
+  color: #212529;
+  font-weight: 500;
+  text-align: right;
+  margin-left: 12px;
+}
+
+.context-empty {
+  color: #6c757d;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px;
+}
+
+.context-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Questions */
+.coach-questions h4 {
+  margin: 0 0 20px;
+  font-size: 1rem;
+  color: #212529;
+}
+
+.question-group {
+  margin-bottom: 20px;
+}
+
+.question-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 6px;
+}
+
+.question-label .required {
+  color: #dc2626;
+  margin-left: 4px;
+}
+
+.question-help {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin: 0 0 10px;
+}
+
+.question-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.question-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+}
+
+.question-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.coach-questions .option-btn {
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #495057;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.coach-questions .option-btn:hover {
+  background: #e9ecef;
+  border-color: #5e17eb;
+}
+
+.coach-questions .option-btn.selected {
+  background: #5e17eb10;
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.question-actions {
+  margin-top: 24px;
+}
+
+.coach-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  background: #fef2f2;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+
+/* Generating */
+.coach-generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  text-align: center;
+}
+
+.generating-animation {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.generating-dot {
+  width: 12px;
+  height: 12px;
+  background: #5e17eb;
+  border-radius: 50%;
+  animation: bounce 1.4s ease-in-out infinite;
+}
+
+.generating-dot:nth-child(1) { animation-delay: 0s; }
+.generating-dot:nth-child(2) { animation-delay: 0.2s; }
+.generating-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.coach-generating p {
+  color: #495057;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.generating-tip {
+  color: #6c757d !important;
+  font-size: 0.8rem !important;
+  margin-top: 8px !important;
+}
+
+/* Result */
+.coach-result {
+  /* result styles */
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.result-icon {
+  font-size: 1.5rem;
+}
+
+.result-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #212529;
+}
+
+.result-content {
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.result-content pre {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  line-height: 1.5;
+}
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.result-tips {
+  background: #f0f9ff;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.result-tips h5 {
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: #0369a1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.result-tips ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.result-tips li {
+  font-size: 0.85rem;
+  color: #0c4a6e;
+  margin-bottom: 4px;
+}
+
+.result-complete {
+  margin-top: 24px;
+}
+
+/* Buttons */
+.coach-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.coach-btn.primary {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: white;
+  width: 100%;
+}
+
+.coach-btn.primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.coach-btn.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.coach-btn.secondary {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  width: 100%;
+}
+
+.coach-btn.secondary:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.coach-btn.icon {
+  padding: 10px 14px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  flex: 1;
+}
+
+.coach-btn.icon:hover:not(:disabled) {
+  background: #e9ecef;
+}
+
+.coach-btn.icon:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.coach-btn.icon.saved {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #059669;
+}
+
+/* Footer */
+.coach-footer {
+  padding: 12px 20px;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.coach-footer p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #adb5bd;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .coach-panel {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .coach-header {
+    padding: 14px 16px;
+  }
+
+  .coach-task-info {
+    padding: 14px 16px;
+  }
+
+  .coach-content {
+    padding: 16px;
+  }
+
+  .result-content {
+    max-height: 250px;
+  }
+
+  .result-actions {
+    flex-direction: column;
+  }
+
+  .coach-btn.icon {
+    width: 100%;
+  }
+}

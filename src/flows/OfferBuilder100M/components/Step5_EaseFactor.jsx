@@ -25,11 +25,12 @@ const EASE_OPTIONS = [
   { id: 'no_equipment', label: 'No special equipment needed' }
 ]
 
-function Step5_EaseFactor({ bucket, dreamOutcome, onComplete, setIsLoading, setError }) {
-  const [selectedOptions, setSelectedOptions] = useState([])
-  const [customOptions, setCustomOptions] = useState([])
+function Step5_EaseFactor({ bucket, dreamOutcome, initialData, onComplete, setIsLoading, setError }) {
+  // Restore from initialData if available
+  const [selectedOptions, setSelectedOptions] = useState(initialData?.easeData?.selectedOptions || [])
+  const [customOptions, setCustomOptions] = useState(initialData?.easeData?.customOptions || [])
   const [newCustom, setNewCustom] = useState('')
-  const [analysis, setAnalysis] = useState(null)
+  const [analysis, setAnalysis] = useState(initialData?.easeAnalysis || null)
   const [activeTab, setActiveTab] = useState('product')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
 
@@ -103,6 +104,9 @@ function Step5_EaseFactor({ bucket, dreamOutcome, onComplete, setIsLoading, setE
   const handleContinue = () => {
     onComplete({
       eliminatedRequirements: getAllSelectedLabels(),
+      // Include raw selections for restoration when navigating back
+      selectedOptions,
+      customOptions,
       analysis
     })
   }

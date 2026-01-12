@@ -1,0 +1,112 @@
+/* WheelDemo - Test page styles */
+
+.wheel-demo {
+  min-height: 100vh;
+  background: #0a0a0a;
+  color: #fff;
+  padding: 40px 20px;
+}
+
+.demo-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.demo-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.demo-header p {
+  color: #888;
+  font-size: 14px;
+}
+
+.wheels-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto 60px;
+}
+
+@media (max-width: 1100px) {
+  .wheels-container {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+}
+
+.wheel-section {
+  background: #111;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+}
+
+.wheel-section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.wheel-dims {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.ring-labels {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  font-size: 10px;
+  color: #666;
+}
+
+.ring-label {
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.cell-count {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #6BCB77;
+  font-weight: 500;
+}
+
+/* Mini wheels section */
+.mini-demo {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mini-demo h3 {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.mini-wheels {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.mini-wheel-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.mini-wheel-item span {
+  font-size: 12px;
+  color: #666;
+}

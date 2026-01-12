@@ -1,0 +1,793 @@
+/* Weekly Planning Session Styles */
+.weekly-planning {
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+}
+
+.weekly-planning .wps-loading,
+.weekly-planning .wps-generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  text-align: center;
+}
+
+.weekly-planning .wps-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: wps-spin 1s linear infinite;
+}
+
+.weekly-planning .wps-spinner.large {
+  width: 56px;
+  height: 56px;
+  border-width: 4px;
+}
+
+@keyframes wps-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Content Container */
+.weekly-planning .wps-content {
+  max-width: 560px;
+  margin: 0 auto;
+  animation: wps-fadeIn 0.3s ease-out;
+}
+
+@keyframes wps-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.weekly-planning .wps-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.weekly-planning .wps-step {
+  display: inline-block;
+  padding: 6px 16px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #a78bfa;
+  margin-bottom: 16px;
+}
+
+.weekly-planning .wps-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+}
+
+.weekly-planning .wps-philosophy {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  margin: 0;
+}
+
+.weekly-planning .wps-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Score Card */
+.weekly-planning .wps-score-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.weekly-planning .wps-score-card.excellent {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.weekly-planning .wps-score-card.good {
+  border-color: rgba(59, 130, 246, 0.4);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.weekly-planning .wps-score-card.needs-work {
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.weekly-planning .wps-score-card.low {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.weekly-planning .wps-score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.weekly-planning .wps-score-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.weekly-planning .wps-week-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.weekly-planning .wps-score-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.weekly-planning .wps-score-card.excellent .wps-score-value { color: #22c55e; }
+.weekly-planning .wps-score-card.good .wps-score-value { color: #3b82f6; }
+.weekly-planning .wps-score-card.needs-work .wps-score-value { color: #fbbf24; }
+.weekly-planning .wps-score-card.low .wps-score-value { color: #ef4444; }
+
+.weekly-planning .wps-score-detail {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 16px;
+}
+
+.weekly-planning .wps-score-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.weekly-planning .wps-score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease-out;
+}
+
+.weekly-planning .wps-score-card.excellent .wps-score-fill { background: #22c55e; }
+.weekly-planning .wps-score-card.good .wps-score-fill { background: #3b82f6; }
+.weekly-planning .wps-score-card.needs-work .wps-score-fill { background: #fbbf24; }
+.weekly-planning .wps-score-card.low .wps-score-fill { background: #ef4444; }
+
+.weekly-planning .wps-score-message {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Task Breakdown */
+.weekly-planning .wps-breakdown {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.weekly-planning .wps-breakdown h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px 0;
+}
+
+.weekly-planning .wps-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.weekly-planning .wps-breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.weekly-planning .wps-breakdown-type {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.weekly-planning .wps-breakdown-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.weekly-planning .wps-breakdown-rate {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.weekly-planning .wps-breakdown-rate.excellent { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+.weekly-planning .wps-breakdown-rate.good { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.weekly-planning .wps-breakdown-rate.needs-work { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+.weekly-planning .wps-breakdown-rate.low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+/* No Data State */
+.weekly-planning .wps-no-data {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.weekly-planning .wps-no-data-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.weekly-planning .wps-no-data h3 {
+  font-size: 1.1rem;
+  margin: 0 0 8px 0;
+}
+
+.weekly-planning .wps-no-data p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Strategy Review (Step 2) */
+.weekly-planning .wps-strategy-review {
+  margin-bottom: 24px;
+}
+
+.weekly-planning .wps-current-strategy {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.weekly-planning .wps-current-strategy h3,
+.weekly-planning .wps-adjustments h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px 0;
+}
+
+.weekly-planning .wps-strategy-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weekly-planning .wps-strategy-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weekly-planning .wps-strategy-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.weekly-planning .wps-strategy-value {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+/* Adjustments */
+.weekly-planning .wps-adjustments {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.weekly-planning .wps-suggestion {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.weekly-planning .wps-suggestion-icon {
+  font-size: 1.2rem;
+}
+
+.weekly-planning .wps-suggestion p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.weekly-planning .wps-adjustment-option {
+  margin-bottom: 12px;
+}
+
+.weekly-planning .wps-adjustment-option label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.weekly-planning .wps-adjustment-option label:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.weekly-planning .wps-adjustment-option input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #8b5cf6;
+}
+
+.weekly-planning .wps-adjustment-option span {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Generate Preview (Step 3) */
+.weekly-planning .wps-generate-preview {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.weekly-planning .wps-generate-preview h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 16px 0;
+}
+
+.weekly-planning .wps-preview-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.weekly-planning .wps-preview-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.weekly-planning .wps-preview-icon {
+  font-size: 1.2rem;
+}
+
+/* Error State */
+.weekly-planning .wps-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.weekly-planning .wps-error p {
+  font-size: 0.9rem;
+  color: #ef4444;
+  margin: 0;
+}
+
+/* Progress Text */
+.weekly-planning .wps-progress-text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Complete State */
+.weekly-planning .wps-complete {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.weekly-planning .wps-complete-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.weekly-planning .wps-complete h1 {
+  font-size: 1.75rem;
+  margin: 0 0 12px 0;
+}
+
+.weekly-planning .wps-complete p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 8px 0;
+}
+
+.weekly-planning .wps-complete-tip {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 32px;
+}
+
+/* Buttons */
+.weekly-planning .wps-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weekly-planning .wps-primary-btn {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.weekly-planning .wps-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+.weekly-planning .wps-generate-btn {
+  animation: wps-glow 2s ease-in-out infinite;
+}
+
+@keyframes wps-glow {
+  0%, 100% { box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3); }
+  50% { box-shadow: 0 4px 24px rgba(139, 92, 246, 0.5); }
+}
+
+.weekly-planning .wps-back-btn,
+.weekly-planning .wps-skip-btn {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.weekly-planning .wps-back-btn:hover,
+.weekly-planning .wps-skip-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ================================
+   Preview Stage (Step 3) - Quick Context
+   ================================ */
+
+/* Context Info Box */
+.weekly-planning .wps-context-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.weekly-planning .wps-info-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.weekly-planning .wps-context-info p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.weekly-planning .wps-context-info strong {
+  color: #a78bfa;
+}
+
+/* Tasks Preview List */
+.weekly-planning .wps-tasks-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Task Card */
+.weekly-planning .wps-task-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.weekly-planning .wps-task-card:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.weekly-planning .wps-task-card.expanded {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.weekly-planning .wps-task-card.has-context {
+  border-left: 3px solid #22c55e;
+}
+
+/* Task Header */
+.weekly-planning .wps-task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.weekly-planning .wps-task-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.weekly-planning .wps-task-day {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.weekly-planning .wps-task-type {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+}
+
+.weekly-planning .wps-task-platform {
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.weekly-planning .wps-task-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.weekly-planning .wps-context-badge {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.weekly-planning .wps-expand-icon {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.4);
+  width: 24px;
+  text-align: center;
+}
+
+/* Task Context (Expanded) */
+.weekly-planning .wps-task-context {
+  padding: 0 16px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  animation: wps-slideDown 0.2s ease-out;
+}
+
+@keyframes wps-slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 400px;
+  }
+}
+
+/* Input Mode Toggle */
+.weekly-planning .wps-input-toggle {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  width: fit-content;
+  margin: 16px 0 12px;
+}
+
+.weekly-planning .wps-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.weekly-planning .wps-toggle-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.weekly-planning .wps-toggle-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Context Input */
+.weekly-planning .wps-context-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  margin-top: 12px;
+}
+
+.weekly-planning .wps-context-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.weekly-planning .wps-context-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.weekly-planning .wps-context-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 8px 0 0;
+}
+
+/* Preview Summary */
+.weekly-planning .wps-preview-summary {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.weekly-planning .wps-summary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.weekly-planning .wps-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #a78bfa;
+}
+
+.weekly-planning .wps-stat-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Disabled button state */
+.weekly-planning .wps-primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .weekly-planning {
+    padding: 16px;
+  }
+
+  .weekly-planning .wps-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .weekly-planning .wps-score-value {
+    font-size: 2.5rem;
+  }
+
+  .weekly-planning .wps-score-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .weekly-planning .wps-task-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .weekly-planning .wps-task-header {
+    padding: 12px;
+  }
+
+  .weekly-planning .wps-context-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

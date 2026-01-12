@@ -1,5 +1,5 @@
 /**
- * Step1A_BucketSelection - Choose Wealth/Health/Relationships bucket
+ * Step1A_BucketSelection - Choose Wealth/Health/Love bucket
  *
  * Features:
  * - AI suggestion based on validation data (if available)
@@ -41,20 +41,20 @@ const BUCKETS = {
     ],
     commonFor: 'Fitness, wellness, nutrition, biohacking'
   },
-  relationships: {
-    id: 'relationships',
+  love: {
+    id: 'love',
     emoji: '💕',
-    title: 'RELATIONSHIPS',
-    subtitle: '"I want better connections"',
+    title: 'LOVE',
+    subtitle: '"I want to love my life"',
     examples: [
-      'Find romance',
-      'Strengthen family bonds',
-      'Make meaningful friendships',
-      'Feel belonging',
-      'Build network',
-      'Social confidence'
+      'Wake up excited for the day',
+      'Feel deeply connected',
+      'Love myself unconditionally',
+      'Find my purpose',
+      'Experience real joy',
+      'Feel truly alive'
     ],
-    commonFor: 'Dating, parenting, communication, networking'
+    commonFor: 'Self-love, purpose, passion, connection, fulfillment'
   }
 }
 
@@ -70,7 +70,8 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
       const hasData = contextData.skills?.length > 0 ||
                      contextData.problems?.length > 0 ||
                      contextData.persona ||
-                     contextData.validationData
+                     contextData.validationData ||
+                     contextData.offerBuilderData // V1 data available
 
       if (!hasData) {
         setShowAllCards(true)
@@ -80,6 +81,15 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
       setIsLoading(true)
 
       try {
+        // Extract V1 foundation data for better bucket suggestion
+        const v1Data = contextData.offerBuilderData
+        const v1Context = v1Data ? {
+          problemArea: v1Data.problem_area,
+          niche: v1Data.niche_layers,
+          problemReasons: v1Data.problem_reasons,
+          coreProduct: v1Data.solutions?.find(s => s.category === 'core_product')
+        } : null
+
         const { data, error } = await supabase.functions.invoke('offer-builder-ai', {
           body: {
             action: 'suggest_bucket',
@@ -87,7 +97,9 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
               skills: contextData.skills,
               problems: contextData.problems,
               persona: contextData.persona,
-              validationData: contextData.validationData
+              validationData: contextData.validationData,
+              // V1 Offer Builder foundation data
+              offerBuilderV1: v1Context
             }
           }
         })
@@ -184,6 +196,9 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
   // Check if we have FindMyFlow data to display
   const hasFlowData = contextData.skills?.length > 0 || contextData.problems?.length > 0
 
+  // Check if we have V1 Offer Builder data
+  const hasV1Data = contextData.offerBuilderData?.problem_area || contextData.offerBuilderData?.niche_layers
+
   // Show all bucket cards
   return (
     <div className="bucket-selection">
@@ -238,6 +253,45 @@ function Step1A_BucketSelection({ contextData, onSelect, setIsLoading, setError 
             )}
             <p className="context-tip">
               💡 Use these insights to pick the bucket that aligns with your transformation.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* V1 Offer Builder Context Panel */}
+      {hasV1Data && (
+        <div className="v1-offer-context">
+          <div className="context-header">
+            <span className="context-icon">📦</span>
+            <span>FROM YOUR OFFER FOUNDATION</span>
+          </div>
+          <div className="context-content">
+            {contextData.offerBuilderData.problem_area && (
+              <div className="context-section">
+                <strong>Problem area:</strong>
+                <span className="context-value">
+                  "{contextData.offerBuilderData.problem_area}"
+                </span>
+              </div>
+            )}
+            {contextData.offerBuilderData.niche_layers?.what && (
+              <div className="context-section">
+                <strong>What you do:</strong>
+                <span className="context-value">
+                  "{contextData.offerBuilderData.niche_layers.what}"
+                </span>
+              </div>
+            )}
+            {contextData.offerBuilderData.niche_layers?.who && (
+              <div className="context-section">
+                <strong>Who you serve:</strong>
+                <span className="context-value">
+                  "{contextData.offerBuilderData.niche_layers.who}"
+                </span>
+              </div>
+            )}
+            <p className="context-tip">
+              💡 Your foundation helps us suggest the right bucket for your Grand Slam Offer.
             </p>
           </div>
         </div>

@@ -156,21 +156,21 @@
   color: #1f2937;
 }
 
-.reconnect-section {
+.reconnect-input .reconnect-section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.reconnect-label {
+.reconnect-input .reconnect-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: #374151;
 }
 
 /* Textarea */
-.reconnect-textarea {
+.reconnect-input .reconnect-textarea {
   width: 100%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
@@ -181,33 +181,33 @@
   transition: border-color 0.2s ease;
 }
 
-.reconnect-textarea:focus {
+.reconnect-input .reconnect-textarea:focus {
   outline: none;
   border-color: #7c3aed;
 }
 
-.reconnect-textarea::placeholder {
+.reconnect-input .reconnect-textarea::placeholder {
   color: #9ca3af;
 }
 
 /* State Selector (1-5 scale) */
-.state-selector {
+.reconnect-input .state-selector {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.state-end {
+.reconnect-input .state-end {
   font-size: 1.25rem;
 }
 
-.state-buttons {
+.reconnect-input .state-buttons {
   display: flex;
   flex: 1;
   gap: 0.25rem;
 }
 
-.state-btn {
+.reconnect-input .state-btn {
   flex: 1;
   padding: 0.5rem;
   border: 2px solid #e5e7eb;
@@ -220,25 +220,25 @@
   transition: all 0.2s ease;
 }
 
-.state-btn:hover {
+.reconnect-input .state-btn:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.state-btn.selected {
+.reconnect-input .state-btn.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
 /* Connection rating (prayer) */
-.state-btn.connection.selected {
+.reconnect-input .state-btn.connection.selected {
   border-color: #7c3aed;
   background: #7c3aed;
 }
 
 /* Meaningfulness rating */
-.state-btn.meaningful.selected {
+.reconnect-input .state-btn.meaningful.selected {
   border-color: #7c3aed;
   background: #7c3aed;
 }
@@ -279,13 +279,13 @@
 }
 
 /* Dimension Grid */
-.dimension-grid {
+.reconnect-input .dimension-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.375rem;
 }
 
-.dimension-option {
+.reconnect-input .dimension-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -298,22 +298,22 @@
   transition: all 0.2s ease;
 }
 
-.dimension-option:hover {
+.reconnect-input .dimension-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.dimension-option.selected {
+.reconnect-input .dimension-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
-.dimension-icon {
+.reconnect-input .dimension-icon {
   font-size: 1.25rem;
 }
 
-.dimension-label {
+.reconnect-input .dimension-label {
   font-size: 0.625rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -321,13 +321,13 @@
 }
 
 /* Breathwork Type Grid */
-.breathwork-type-grid {
+.reconnect-input .breathwork-type-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
-.breathwork-type-option {
+.reconnect-input .breathwork-type-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -340,35 +340,35 @@
   transition: all 0.2s ease;
 }
 
-.breathwork-type-option:hover {
+.reconnect-input .breathwork-type-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.breathwork-type-option.selected {
+.reconnect-input .breathwork-type-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
-.breathwork-type-icon {
+.reconnect-input .breathwork-type-icon {
   font-size: 1.5rem;
 }
 
-.breathwork-type-label {
+.reconnect-input .breathwork-type-label {
   font-size: 0.65rem;
   font-weight: 600;
   text-align: center;
 }
 
 /* Prayer Elements Grid */
-.prayer-elements-grid {
+.reconnect-input .prayer-elements-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
 }
 
-.prayer-element {
+.reconnect-input .prayer-element {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -381,35 +381,35 @@
   transition: all 0.2s ease;
 }
 
-.prayer-element:hover {
+.reconnect-input .prayer-element:hover {
   border-color: #c4b5fd;
   background: #faf5ff;
 }
 
-.prayer-element.selected {
+.reconnect-input .prayer-element.selected {
   border-color: #8b5cf6;
   background: #8b5cf6;
   color: white;
 }
 
-.prayer-icon {
+.reconnect-input .prayer-icon {
   font-size: 1.25rem;
 }
 
-.prayer-label {
+.reconnect-input .prayer-label {
   font-size: 0.625rem;
   font-weight: 600;
   text-align: center;
 }
 
 /* Duration Selector */
-.duration-selector {
+.reconnect-input .duration-selector {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
 }
 
-.duration-option {
+.reconnect-input .duration-option {
   padding: 0.625rem 0.5rem;
   border: 2px solid #e5e7eb;
   border-radius: 10px;
@@ -422,25 +422,25 @@
   text-align: center;
 }
 
-.duration-option:hover {
+.reconnect-input .duration-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.duration-option.selected {
+.reconnect-input .duration-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
 /* Drain Types Grid */
-.drain-grid {
+.reconnect-input .drain-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.375rem;
 }
 
-.drain-option {
+.reconnect-input .drain-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -453,39 +453,39 @@
   transition: all 0.2s ease;
 }
 
-.drain-option:hover {
+.reconnect-input .drain-option:hover {
   border-color: #fca5a5;
   background: #fef2f2;
 }
 
-.drain-option.selected {
+.reconnect-input .drain-option.selected {
   border-color: #ef4444;
   background: #fef2f2;
 }
 
-.drain-icon {
+.reconnect-input .drain-icon {
   font-size: 1.25rem;
 }
 
-.drain-label {
+.reconnect-input .drain-label {
   font-size: 0.575rem;
   font-weight: 600;
   text-align: center;
   color: #374151;
 }
 
-.drain-option.selected .drain-label {
+.reconnect-input .drain-option.selected .drain-label {
   color: #991b1b;
 }
 
 /* Difficulty Selector */
-.difficulty-selector {
+.reconnect-input .difficulty-selector {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.375rem;
 }
 
-.difficulty-option {
+.reconnect-input .difficulty-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -498,21 +498,21 @@
   transition: all 0.2s ease;
 }
 
-.difficulty-option:hover {
+.reconnect-input .difficulty-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.difficulty-option.selected {
+.reconnect-input .difficulty-option.selected {
   border-color: #7c3aed;
   background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
 }
 
-.difficulty-emoji {
+.reconnect-input .difficulty-emoji {
   font-size: 1.25rem;
 }
 
-.difficulty-label {
+.reconnect-input .difficulty-label {
   font-size: 0.5rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -520,18 +520,18 @@
   color: #374151;
 }
 
-.difficulty-option.selected .difficulty-label {
+.reconnect-input .difficulty-option.selected .difficulty-label {
   color: #6d28d9;
 }
 
 /* Outcome Grid */
-.outcome-grid {
+.reconnect-input .outcome-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 
-.outcome-option {
+.reconnect-input .outcome-option {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -544,29 +544,29 @@
   transition: all 0.2s ease;
 }
 
-.outcome-option:hover {
+.reconnect-input .outcome-option:hover {
   border-color: #a78bfa;
   background: #faf5ff;
 }
 
-.outcome-option.selected {
+.reconnect-input .outcome-option.selected {
   border-color: #7c3aed;
   background: #7c3aed;
   color: white;
 }
 
-.outcome-icon {
+.reconnect-input .outcome-icon {
   font-size: 1.5rem;
 }
 
-.outcome-label {
+.reconnect-input .outcome-label {
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
 }
 
 /* Submit Button */
-.reconnect-submit-btn {
+.reconnect-input .reconnect-submit-btn {
   width: 100%;
   padding: 0.875rem 1.5rem;
   background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
@@ -580,55 +580,55 @@
   margin-top: 0.5rem;
 }
 
-.reconnect-submit-btn:hover:not(:disabled) {
+.reconnect-input .reconnect-submit-btn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
-.reconnect-submit-btn:disabled {
+.reconnect-input .reconnect-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-  .dimension-grid {
+  .reconnect-input .dimension-grid {
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .dimension-label {
+  .reconnect-input .dimension-label {
     font-size: 0.5rem;
   }
 
-  .prayer-elements-grid {
+  .reconnect-input .prayer-elements-grid {
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .prayer-label {
+  .reconnect-input .prayer-label {
     font-size: 0.5rem;
   }
 
-  .duration-selector {
+  .reconnect-input .duration-selector {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .drain-grid {
+  .reconnect-input .drain-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .drain-label {
+  .reconnect-input .drain-label {
     font-size: 0.5rem;
   }
 
-  .difficulty-selector {
+  .reconnect-input .difficulty-selector {
     grid-template-columns: repeat(5, 1fr);
   }
 
-  .difficulty-label {
+  .reconnect-input .difficulty-label {
     font-size: 0.45rem;
   }
 
-  .breathwork-type-grid {
+  .reconnect-input .breathwork-type-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }

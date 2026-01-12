@@ -6,7 +6,7 @@
 
 import MoneyModelFlowBase from './MoneyModelFlowBase'
 import { MONEY_MODEL_CONFIGS } from './moneyModelConfigs'
-import '../LeadsStrategyFlow.css'
+import './LeadsStrategyFlow.css'
 
 function LeadsStrategyFlow() {
   const config = MONEY_MODEL_CONFIGS.leadsStrategy

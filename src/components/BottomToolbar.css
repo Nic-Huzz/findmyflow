@@ -85,6 +85,42 @@
   padding-bottom: calc(60px + env(safe-area-inset-bottom, 0));
 }
 
+/* CRM Section Toolbar Styles */
+.bottom-toolbar.crm-toolbar {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f5ff 100%);
+  border-top-color: #e9e5f5;
+}
+
+.crm-toolbar .toolbar-item {
+  color: #6b7280;
+}
+
+.crm-toolbar .toolbar-item:hover {
+  color: #5e17eb;
+}
+
+.crm-toolbar .toolbar-item.active {
+  color: #5e17eb;
+}
+
+.crm-toolbar .toolbar-item.active::after {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+}
+
+/* Return/Portal button styling */
+.crm-toolbar .toolbar-item.return-item {
+  color: #5e17eb;
+  opacity: 0.85;
+}
+
+.crm-toolbar .toolbar-item.return-item:hover {
+  opacity: 1;
+}
+
+.crm-toolbar .toolbar-item.return-item .toolbar-icon {
+  font-size: 1.3rem;
+}
+
 /* Dark mode support (optional, for future) */
 @media (prefers-color-scheme: dark) {
   .bottom-toolbar {
@@ -103,6 +139,16 @@
 
   .toolbar-item.active::after {
     background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+  }
+
+  /* CRM toolbar dark mode */
+  .bottom-toolbar.crm-toolbar {
+    background: linear-gradient(180deg, #1f2937 0%, #1a1625 100%);
+    border-top-color: #2d2640;
+  }
+
+  .crm-toolbar .toolbar-item.return-item {
+    color: #a78bfa;
   }
 }
 

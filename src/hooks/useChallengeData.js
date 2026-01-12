@@ -859,6 +859,7 @@ export function useChallengeData() {
 
   const isQuestCompletedToday = (questId, quest) => {
     const today = new Date().setHours(0, 0, 0, 0)
+    const weekStart = new Date(getWeekStart() + 'T00:00:00').getTime()
 
     // Daily quests: check if completed TODAY only
     if (quest.frequency === 'daily') {
@@ -866,8 +867,14 @@ export function useChallengeData() {
         const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
         return c.quest_id === questId && completedDate === today
       })
+    } else if (quest.frequency === 'weekly') {
+      // Weekly quests: check if completed THIS WEEK (since Monday)
+      return completions.some(c => {
+        const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
+        return c.quest_id === questId && completedDate >= weekStart
+      })
     } else {
-      // Non-daily quests: check completion limits or any completion
+      // Other quests (one-time, etc.): check completion limits or any completion
       const questCompletions = completions.filter(c => c.quest_id === questId)
 
       if (quest.maxCompletions) {
@@ -946,19 +953,27 @@ export function useChallengeData() {
   const getCategoryPoints = (category) => {
     if (!progress) return { daily: 0, weekly: 0, total: 0 }
 
+    // Get current week start for filtering
+    const weekStart = new Date(getWeekStart() + 'T00:00:00')
+
     const categoriesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
     const categoryLower = category.toLowerCase()
 
-    if (categoriesWithColumns.includes(categoryLower)) {
-      const daily = progress[`${categoryLower}_daily_points`] || 0
-      const weekly = progress[`${categoryLower}_weekly_points`] || 0
-      return { daily, weekly, total: daily + weekly }
-    }
+    // Note: For categories with stored columns, we'd need to recalculate weekly
+    // For now, calculate from completions for all categories
 
     const validQuestIds = getValidQuestIds(category)
-    const categoryCompletions = completions.filter(c =>
-      c.quest_category === category && validQuestIds.includes(c.quest_id)
-    )
+
+    // Filter completions by category AND current week only
+    const categoryCompletions = completions.filter(c => {
+      if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) {
+        return false
+      }
+      // Only count completions from current week
+      const completionDate = new Date(c.completed_at)
+      return completionDate >= weekStart
+    })
+
     const total = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
     if (category === 'Groans' || category === 'Healing') {
@@ -1057,6 +1072,9 @@ export function useChallengeData() {
     const unlocked = progress?.[`${artifact.id}_unlocked`] || false
     const validQuestIds = getValidQuestIds(category)
 
+    // Get current week start for filtering
+    const weekStart = new Date(getWeekStart() + 'T00:00:00')
+
     if ((category === 'Groans' || category === 'Healing') && artifact.frequencyCategories) {
       const frequencyCategoriesWithProgress = {}
 
@@ -1070,11 +1088,14 @@ export function useChallengeData() {
 
       Object.entries(artifact.frequencyCategories).forEach(([freqType, freqData]) => {
         // freqType is 'Daily' or 'Weekly', quest.frequency is 'daily' or 'weekly'
-        const freqCompletions = completions.filter(c =>
-          c.quest_category === category &&
-          validQuestIds.includes(c.quest_id) &&
-          questFrequencyMap[c.quest_id]?.toLowerCase() === freqType.toLowerCase()
-        )
+        // Filter by current week only
+        const freqCompletions = completions.filter(c => {
+          if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) return false
+          if (questFrequencyMap[c.quest_id]?.toLowerCase() !== freqType.toLowerCase()) return false
+          // Only count completions from current week
+          const completionDate = new Date(c.completed_at)
+          return completionDate >= weekStart
+        })
         const currentPoints = freqCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
         frequencyCategoriesWithProgress[freqType] = {
@@ -1094,9 +1115,12 @@ export function useChallengeData() {
       const flowFinderQuests = challengeData.quests.filter(q => validQuestIds.includes(q.id))
       const dynamicPointsRequired = flowFinderQuests.reduce((sum, q) => sum + (q.points || 0), 0)
 
-      const categoryCompletions = completions.filter(c =>
-        c.quest_category === category && validQuestIds.includes(c.quest_id)
-      )
+      // Filter by current week
+      const categoryCompletions = completions.filter(c => {
+        if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) return false
+        const completionDate = new Date(c.completed_at)
+        return completionDate >= weekStart
+      })
       const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
       return {
@@ -1107,8 +1131,12 @@ export function useChallengeData() {
       }
     }
 
-    const categoryCompletions = completions.filter(c =>
-      c.quest_category === category && validQuestIds.includes(c.quest_id)
+    // Filter by current week
+    const categoryCompletions = completions.filter(c => {
+      if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) return false
+      const completionDate = new Date(c.completed_at)
+      return completionDate >= weekStart
+    }
     )
     const currentPoints = categoryCompletions.reduce((sum, c) => sum + (c.points_earned || 0), 0)
 
@@ -1197,10 +1225,9 @@ export function useChallengeData() {
   // ============================================
 
   const getDailyStreak = (questId) => {
-    if (!progress) return [false, false, false, false, false, false, false]
-
-    const challengeStart = new Date(progress.challenge_start_date)
-    challengeStart.setHours(0, 0, 0, 0)
+    // Use current week (Monday to Sunday) for auto-rolling challenge
+    const weekStart = new Date(getWeekStart() + 'T00:00:00')
+    weekStart.setHours(0, 0, 0, 0)
 
     const questCompletions = completions.filter(c => c.quest_id === questId)
     const streak = [false, false, false, false, false, false, false]
@@ -1209,10 +1236,11 @@ export function useChallengeData() {
       const completionDate = new Date(completion.completed_at)
       completionDate.setHours(0, 0, 0, 0)
 
-      const daysSinceStart = Math.floor((completionDate - challengeStart) / (1000 * 60 * 60 * 24))
+      const daysSinceWeekStart = Math.floor((completionDate - weekStart) / (1000 * 60 * 60 * 24))
 
-      if (daysSinceStart >= 0 && daysSinceStart < 7) {
-        streak[daysSinceStart] = true
+      // Only show completions from current week (days 0-6)
+      if (daysSinceWeekStart >= 0 && daysSinceWeekStart < 7) {
+        streak[daysSinceWeekStart] = true
       }
     })
 
@@ -1220,18 +1248,9 @@ export function useChallengeData() {
   }
 
   const getDayLabels = () => {
-    if (!progress) return ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-
-    const challengeStart = new Date(progress.challenge_start_date)
-    const dayOfWeek = challengeStart.getDay()
-    const allDayLabels = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-
-    const labels = []
-    for (let i = 0; i < 7; i++) {
-      labels.push(allDayLabels[(dayOfWeek + i) % 7])
-    }
-
-    return labels
+    // Week always starts Monday for auto-rolling challenge
+    // Day 0 = Monday, Day 6 = Sunday
+    return ['M', 'T', 'W', 'T', 'F', 'S', 'S']
   }
 
   const getDailyReleaseChallenge = () => {

@@ -5,7 +5,7 @@
  * (Product/Service/Hybrid) for comparison and final selection.
  *
  * Steps:
- * 1A: Bucket Selection (Wealth/Health/Relationships)
+ * 1A: Bucket Selection (Wealth/Health/Love)
  * 1B: Dream Outcome (bucket-specific, AI validated)
  * 2:  Generate 3 Versions (Product/Service/Hybrid)
  * 3:  Proof Stack Builder (for all 3)
@@ -80,7 +80,7 @@ function OfferBuilder100M() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Offer creation data
+  // Offer creation data (includes all step state for back/forth navigation)
   const [offerData, setOfferData] = useState({
     bucket: null,
     bucketConfidence: null,
@@ -104,6 +104,9 @@ function OfferBuilder100M() {
       service: [],
       hybrid: []
     },
+    // For Step 6B state restoration
+    bonusSuggestions: null,
+    selectedBonuses: null,
     selectedVersion: null,
     grandSlamScore: null,
     stackSlide: null
@@ -114,7 +117,9 @@ function OfferBuilder100M() {
     skills: [],
     problems: [],
     persona: null,
-    validationData: null
+    validationData: null,
+    // V1 Offer Builder data (foundation)
+    offerBuilderData: null
   })
 
   // Resume prompt state
@@ -144,7 +149,7 @@ function OfferBuilder100M() {
         }
 
         // Load context from other flows
-        const [skillsRes, problemsRes, personaRes, validationRes] = await Promise.all([
+        const [skillsRes, problemsRes, personaRes, validationRes, offerV1Res] = await Promise.all([
           supabase
             .from('nikigai_clusters')
             .select('cluster_data')
@@ -170,6 +175,14 @@ function OfferBuilder100M() {
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1)
+            .single(),
+          // V1 Offer Builder data (foundation for V2)
+          supabase
+            .from('offer_builder_assessments')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
             .single()
         ])
 
@@ -177,7 +190,8 @@ function OfferBuilder100M() {
           skills: skillsRes.data?.cluster_data || [],
           problems: problemsRes.data?.cluster_data || [],
           persona: personaRes.data || null,
-          validationData: validationRes.data?.responses || null
+          validationData: validationRes.data?.responses || null,
+          offerBuilderData: offerV1Res.data || null
         })
       } catch (err) {
         console.error('Error loading context data:', err)
@@ -384,6 +398,7 @@ function OfferBuilder100M() {
         <Step1B_DreamOutcome
           bucket={offerData.bucket}
           contextData={contextData}
+          initialData={{ dreamOutcome: offerData.dreamOutcome }}
           onComplete={(dreamOutcome, score) => {
             updateOfferData({ dreamOutcome, dreamOutcomeScore: score })
             goToStage(STAGES.STEP_2)
@@ -412,6 +427,10 @@ function OfferBuilder100M() {
           dreamOutcome={offerData.dreamOutcome}
           bucket={offerData.bucket}
           contextData={contextData}
+          initialData={{
+            proofData: offerData.proofData,
+            proofAnalysis: offerData.proofAnalysis
+          }}
           onComplete={(proofResult) => {
             updateOfferData({
               proofData: proofResult.proofData,
@@ -428,6 +447,10 @@ function OfferBuilder100M() {
         <Step4_SpeedAdvantage
           bucket={offerData.bucket}
           dreamOutcome={offerData.dreamOutcome}
+          initialData={{
+            speedData: offerData.speedData,
+            speedAnalysis: offerData.speedAnalysis
+          }}
           onComplete={(speedResult) => {
             updateOfferData({
               speedData: {
@@ -447,9 +470,17 @@ function OfferBuilder100M() {
         <Step5_EaseFactor
           bucket={offerData.bucket}
           dreamOutcome={offerData.dreamOutcome}
+          initialData={{
+            easeData: offerData.easeData,
+            easeAnalysis: offerData.easeAnalysis
+          }}
           onComplete={(easeResult) => {
             updateOfferData({
-              easeData: easeResult.eliminatedRequirements,
+              easeData: {
+                eliminatedRequirements: easeResult.eliminatedRequirements,
+                selectedOptions: easeResult.selectedOptions,
+                customOptions: easeResult.customOptions
+              },
               easeAnalysis: easeResult.analysis
             })
             goToStage(STAGES.STEP_6A)
@@ -463,6 +494,7 @@ function OfferBuilder100M() {
         <Step6_Obstacles
           bucket={offerData.bucket}
           contextData={contextData}
+          initialData={{ obstacles: offerData.obstacles }}
           onComplete={(obstacles) => {
             updateOfferData({ obstacles })
             goToStage(STAGES.STEP_6B)
@@ -476,8 +508,17 @@ function OfferBuilder100M() {
           obstacles={offerData.obstacles}
           dreamOutcome={offerData.dreamOutcome}
           bucket={offerData.bucket}
-          onComplete={(bonuses) => {
-            updateOfferData({ bonuses })
+          contextData={contextData}
+          initialData={{
+            bonusSuggestions: offerData.bonusSuggestions,
+            selectedBonuses: offerData.selectedBonuses
+          }}
+          onComplete={(result) => {
+            updateOfferData({
+              bonuses: result.bonuses,
+              bonusSuggestions: result.bonusSuggestions,
+              selectedBonuses: result.selectedBonuses
+            })
             goToStage(STAGES.STEP_7)
           }}
           setIsLoading={setIsLoading}

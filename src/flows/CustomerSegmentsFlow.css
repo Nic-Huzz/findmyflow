@@ -1,0 +1,298 @@
+/**
+ * CustomerSegmentsFlow Styles
+ *
+ * Clean, focused flow design for customer data collection.
+ */
+
+.segments-flow {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.segments-flow .segments-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.segments-flow .back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #a0a0b0;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.segments-flow .back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.segments-flow .progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.segments-flow .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #10b981);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.segments-flow .step-counter {
+  font-size: 0.85rem;
+  color: #6b7280;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Content */
+.segments-flow .segments-content {
+  flex: 1;
+  padding: 32px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.segments-flow .step-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.segments-flow .step-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.segments-flow .step-header h2 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.segments-flow .step-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #a0a0b0;
+}
+
+/* Fields */
+.segments-flow .fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.segments-flow .field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.segments-flow .field-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+}
+
+.segments-flow .field-label .required {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.segments-flow .field-help {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* Textarea */
+.segments-flow .textarea-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  color: white;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.segments-flow .textarea-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.15);
+}
+
+.segments-flow .textarea-input::placeholder {
+  color: #6b7280;
+}
+
+/* Slider */
+.segments-flow .slider-input {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.segments-flow .slider-input input[type="range"] {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.segments-flow .slider-input input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.4);
+}
+
+.segments-flow .slider-value {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+}
+
+/* Rating */
+.segments-flow .rating-input {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.segments-flow .rating-track {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.segments-flow .rating-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.segments-flow .rating-dot:hover {
+  border-color: #5e17eb;
+}
+
+.segments-flow .rating-dot.active {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border-color: transparent;
+}
+
+.segments-flow .rating-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Multi Text */
+.segments-flow .multi-text-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.segments-flow .text-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  color: white;
+  font-family: inherit;
+}
+
+.segments-flow .text-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.15);
+}
+
+.segments-flow .text-input::placeholder {
+  color: #6b7280;
+}
+
+/* Error */
+.segments-flow .error-message {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #ef4444;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Footer */
+.segments-flow .segments-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 15, 26, 0.8);
+}
+
+.segments-flow .next-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.segments-flow .next-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.4);
+}
+
+.segments-flow .next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .segments-flow .segments-content {
+    padding: 24px 16px;
+  }
+
+  .segments-flow .step-header h2 {
+    font-size: 1.25rem;
+  }
+}

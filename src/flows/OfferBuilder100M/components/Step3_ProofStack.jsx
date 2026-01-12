@@ -49,9 +49,9 @@ const PROOF_TYPES = [
   }
 ]
 
-function Step3_ProofStack({ dreamOutcome, bucket, contextData, onComplete, setIsLoading, setError }) {
-  const [proofData, setProofData] = useState({})
-  const [analysis, setAnalysis] = useState(null)
+function Step3_ProofStack({ dreamOutcome, bucket, contextData, initialData, onComplete, setIsLoading, setError }) {
+  const [proofData, setProofData] = useState(initialData?.proofData || {})
+  const [analysis, setAnalysis] = useState(initialData?.proofAnalysis || null)
   const [activeTab, setActiveTab] = useState('product')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
 
@@ -90,6 +90,10 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, onComplete, setIs
     setIsAnalyzing(true)
 
     try {
+      // Extract sunk cost for AI context
+      const v1SunkCost = contextData?.offerBuilderData?.responses?.q4_sunk_cost ||
+        contextData?.offerBuilderData?.sunk_cost || null
+
       const { data, error } = await supabase.functions.invoke('offer-builder-ai', {
         body: {
           action: 'analyze_proof_stack',
@@ -98,7 +102,9 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, onComplete, setIs
             bucket,
             persona: contextData.persona,
             validationData: contextData.validationData,
-            proofData
+            proofData,
+            // V1 sunk cost data for contrast messaging in proof stack
+            sunkCost: v1SunkCost
           }
         }
       })
@@ -211,6 +217,11 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, onComplete, setIs
     contextData.validationData?.outcomes || []
   const hasValidationProof = validationQuotes.length > 0 || validationResults.length > 0
 
+  // Extract sunk cost data from V1 Offer Builder
+  const v1Data = contextData?.offerBuilderData
+  const sunkCost = v1Data?.responses?.q4_sunk_cost || v1Data?.sunk_cost || null
+  const hasSunkCost = sunkCost && (sunkCost.amount || sunkCost.attempts || sunkCost.description)
+
   // Input form view
   return (
     <div className="proof-stack-step">
@@ -259,6 +270,60 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, onComplete, setIs
             <p className="proof-tip">
               💡 Use these real quotes in your "case studies" section below!
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Sunk Cost Contrast Panel (from V1 Offer Builder) */}
+      {hasSunkCost && (
+        <div className="sunk-cost-panel">
+          <div className="sunk-cost-header">
+            <span className="panel-icon">💸</span>
+            <span>CONTRAST MESSAGING OPPORTUNITY</span>
+          </div>
+          <div className="sunk-cost-content">
+            <p className="sunk-cost-intro">
+              Your customers have already invested in solving this problem:
+            </p>
+            <div className="sunk-cost-stats">
+              {sunkCost.amount && (
+                <div className="sunk-stat">
+                  <span className="stat-value">${typeof sunkCost.amount === 'number' ? sunkCost.amount.toLocaleString() : sunkCost.amount}</span>
+                  <span className="stat-label">spent on failed solutions</span>
+                </div>
+              )}
+              {sunkCost.attempts && (
+                <div className="sunk-stat">
+                  <span className="stat-value">{sunkCost.attempts}</span>
+                  <span className="stat-label">different things tried</span>
+                </div>
+              )}
+              {sunkCost.timeWasted && (
+                <div className="sunk-stat">
+                  <span className="stat-value">{sunkCost.timeWasted}</span>
+                  <span className="stat-label">time wasted</span>
+                </div>
+              )}
+            </div>
+            {sunkCost.failedSolutions && sunkCost.failedSolutions.length > 0 && (
+              <div className="failed-solutions">
+                <strong>What hasn't worked for them:</strong>
+                <ul>
+                  {sunkCost.failedSolutions.slice(0, 4).map((sol, i) => (
+                    <li key={i}>{sol}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div className="contrast-tips">
+              <p className="tip-header">💡 Use this in your proof messaging:</p>
+              <div className="contrast-example">
+                <em>"Unlike the ${sunkCost.amount || 'thousands'} you've spent on {sunkCost.failedSolutions?.[0] || 'solutions that didn\'t work'}..."</em>
+              </div>
+              <div className="contrast-example">
+                <em>"You've already tried {sunkCost.attempts || 'multiple approaches'}. Here's why this is different..."</em>
+              </div>
+            </div>
           </div>
         </div>
       )}

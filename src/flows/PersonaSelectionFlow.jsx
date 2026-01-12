@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
-import '../PersonaSelectionFlow.css'
+import './PersonaSelectionFlow.css'
 
 // Flow stages
 const STAGES = {

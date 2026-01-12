@@ -6,7 +6,7 @@
 
 import MoneyModelFlowBase from './MoneyModelFlowBase'
 import { MONEY_MODEL_CONFIGS } from './moneyModelConfigs'
-import '../DownsellFlow.css'
+import './DownsellFlow.css'
 
 function DownsellFlow() {
   const config = MONEY_MODEL_CONFIGS.downsell

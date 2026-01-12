@@ -1,0 +1,175 @@
+/**
+ * ProjectSwitcher.css
+ * Styles for the project dropdown switcher
+ */
+
+.project-switcher {
+  position: relative;
+  display: inline-flex;
+}
+
+.project-switcher.loading {
+  opacity: 0.6;
+}
+
+.current-project {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--white, #ffffff);
+  border: 1px solid var(--border-gray, #dee2e6);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-gray, #495057);
+}
+
+.current-project:hover {
+  border-color: var(--purple, #5e17eb);
+  background: #faf8ff;
+}
+
+.project-icon {
+  font-size: 16px;
+}
+
+.project-name {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.project-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 200px;
+  max-width: 280px;
+  background: var(--white, #ffffff);
+  border: 1px solid var(--border-gray, #dee2e6);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  animation: dropdownFadeIn 0.15s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.project-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text-gray, #495057);
+  transition: background-color 0.15s ease;
+}
+
+.project-option:hover {
+  background: #f8f5ff;
+}
+
+.project-option.active {
+  background: #f0ebff;
+  color: var(--purple, #5e17eb);
+}
+
+.option-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.checkmark {
+  color: var(--purple, #5e17eb);
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.dropdown-divider {
+  margin: 4px 0;
+  border: none;
+  border-top: 1px solid var(--border-gray, #dee2e6);
+}
+
+.new-project-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--purple, #5e17eb);
+  transition: background-color 0.15s ease;
+}
+
+.new-project-btn:hover {
+  background: #f8f5ff;
+}
+
+/* No projects state */
+.project-switcher.no-projects .create-first-btn {
+  padding: 8px 16px;
+  background: var(--purple, #5e17eb);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.project-switcher.no-projects .create-first-btn:hover {
+  background: #4c12c4;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .current-project {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+
+  .project-name {
+    max-width: 100px;
+  }
+
+  .project-dropdown {
+    min-width: 180px;
+    max-width: 240px;
+  }
+}

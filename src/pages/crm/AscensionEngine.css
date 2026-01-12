@@ -1,0 +1,940 @@
+/**
+ * Ascension Engine Styles
+ */
+
+.ascension-engine {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.ascension-engine.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.ascension-engine .ae-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 92, 246, 0.2);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: ae-spin 0.8s linear infinite;
+}
+
+@keyframes ae-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Header */
+.ascension-engine .ae-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.ascension-engine .ae-title-section h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: #fff;
+}
+
+.ascension-engine .ae-subtitle {
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.ascension-engine .ae-quick-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.ascension-engine .ae-stat {
+  text-align: center;
+}
+
+.ascension-engine .ae-stat .stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ascension-engine .ae-stat .stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tasks Banner */
+.ascension-engine .ae-tasks-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.15) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ascension-engine .tasks-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.ascension-engine .tasks-icon {
+  font-size: 1.25rem;
+}
+
+.ascension-engine .tasks-title {
+  font-weight: 600;
+  color: #fff;
+}
+
+.ascension-engine .tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ascension-engine .task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border-left: 3px solid #8b5cf6;
+}
+
+.ascension-engine .task-item.upsell { border-left-color: #8b5cf6; }
+.ascension-engine .task-item.downsell { border-left-color: #f59e0b; }
+.ascension-engine .task-item.continuity { border-left-color: #ec4899; }
+.ascension-engine .task-item.winback { border-left-color: #10b981; }
+
+.ascension-engine .task-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ascension-engine .task-type-badge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.ascension-engine .task-title {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.ascension-engine .task-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ascension-engine .task-btn {
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ascension-engine .task-btn.complete {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+}
+
+.ascension-engine .task-btn.complete:hover {
+  background: rgba(16, 185, 129, 0.3);
+}
+
+.ascension-engine .task-btn.dismiss {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ascension-engine .task-btn.dismiss:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Tabs */
+.ascension-engine .ae-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0;
+}
+
+.ascension-engine .ae-tab {
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+
+.ascension-engine .ae-tab:hover {
+  color: #fff;
+}
+
+.ascension-engine .ae-tab.active {
+  color: #8b5cf6;
+  border-bottom-color: #8b5cf6;
+}
+
+/* Empty State */
+.ascension-engine .ae-empty-state {
+  text-align: center;
+  padding: 3rem;
+}
+
+.ascension-engine .ae-empty-state .empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.ascension-engine .ae-empty-state h3 {
+  color: #fff;
+  margin: 0 0 0.5rem;
+}
+
+.ascension-engine .ae-empty-state p {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Value Ladder View */
+.ascension-engine .value-ladder-view {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.ascension-engine .ladder-visual {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .ladder-title {
+  margin: 0 0 1.5rem;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.ascension-engine .ladder-rungs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ascension-engine .ladder-rung {
+  position: relative;
+}
+
+.ascension-engine .rung-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: var(--rung-color);
+  background: linear-gradient(90deg, var(--rung-color) 0%, color-mix(in srgb, var(--rung-color) 50%, transparent) 100%);
+  border-radius: 8px;
+  min-width: 200px;
+  transition: width 0.3s ease;
+}
+
+.ascension-engine .rung-icon {
+  font-size: 1.25rem;
+}
+
+.ascension-engine .rung-info {
+  flex: 1;
+}
+
+.ascension-engine .rung-label {
+  display: block;
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.ascension-engine .rung-count {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ascension-engine .rung-value {
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.ascension-engine .ascension-rate {
+  position: absolute;
+  right: -50px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #10b981;
+}
+
+/* Ladder Metrics */
+.ascension-engine .ladder-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ascension-engine .metric-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .metric-icon {
+  font-size: 2rem;
+}
+
+.ascension-engine .metric-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.ascension-engine .metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ascension-engine .metric-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Customers View */
+.ascension-engine .customers-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ascension-engine .customers-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ascension-engine .filter-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ascension-engine .filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .filter-btn.active {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  color: #a78bfa;
+}
+
+.ascension-engine .customers-grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 1rem;
+}
+
+.ascension-engine .customers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.ascension-engine .customer-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.ascension-engine .customer-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ascension-engine .customer-card.selected {
+  border-color: rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.ascension-engine .customer-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ascension-engine .customer-name {
+  font-weight: 600;
+  color: #fff;
+}
+
+.ascension-engine .customer-ltv {
+  font-weight: 600;
+  color: #10b981;
+}
+
+.ascension-engine .customer-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ascension-engine .customer-rung {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.ascension-engine .customer-purchases {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Customer Journey */
+.ascension-engine .customer-journey {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .journey-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ascension-engine .journey-header h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.ascension-engine .journey-header .close-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.ascension-engine .journey-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ascension-engine .journey-stat {
+  text-align: center;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.ascension-engine .journey-stat .stat-value {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ascension-engine .journey-stat .stat-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.ascension-engine .journey-timeline h4 {
+  margin: 0 0 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.ascension-engine .timeline-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-left: 1rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .timeline-event {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.ascension-engine .event-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: absolute;
+  left: -1.4rem;
+}
+
+.ascension-engine .event-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.ascension-engine .event-rung {
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.ascension-engine .event-value {
+  color: #10b981;
+  font-size: 0.85rem;
+}
+
+.ascension-engine .event-date {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Retention View */
+.ascension-engine .retention-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ascension-engine .retention-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.ascension-engine .retention-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.ascension-engine .retention-stat.mrr {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.ascension-engine .retention-stat .stat-icon {
+  font-size: 1.5rem;
+}
+
+.ascension-engine .retention-stat .stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.ascension-engine .retention-stat .stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ascension-engine .continuity-list h3 {
+  margin: 0 0 1rem;
+  color: #fff;
+}
+
+.ascension-engine .continuity-customers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ascension-engine .continuity-customer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.ascension-engine .customer-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ascension-engine .continuity-customer .customer-info {
+  flex: 1;
+}
+
+.ascension-engine .continuity-customer .customer-name {
+  display: block;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ascension-engine .continuity-customer .customer-value {
+  font-size: 0.85rem;
+  color: #10b981;
+}
+
+.ascension-engine .customer-tenure {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ascension-engine .churn-btn {
+  padding: 0.4rem 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  color: #ef4444;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ascension-engine .churn-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+/* Churn Modal */
+.ascension-engine .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.ascension-engine .churn-modal {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .churn-modal h3 {
+  margin: 0 0 1rem;
+  color: #fff;
+}
+
+.ascension-engine .churn-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ascension-engine .churn-reason-btn {
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+}
+
+.ascension-engine .churn-reason-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.ascension-engine .cancel-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+}
+
+/* Triggers View */
+.ascension-engine .triggers-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ascension-engine .triggers-header {
+  margin-bottom: 0.5rem;
+}
+
+.ascension-engine .triggers-header h3 {
+  margin: 0;
+  color: #fff;
+}
+
+.ascension-engine .triggers-description {
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.ascension-engine .triggers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ascension-engine .trigger-card {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .trigger-card.inactive {
+  opacity: 0.5;
+}
+
+.ascension-engine .trigger-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.ascension-engine .trigger-flow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 20px;
+}
+
+.ascension-engine .trigger-from,
+.ascension-engine .trigger-to {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #a78bfa;
+  text-transform: capitalize;
+}
+
+.ascension-engine .trigger-arrow {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ascension-engine .trigger-name {
+  color: #fff;
+  font-weight: 500;
+}
+
+.ascension-engine .trigger-timing {
+  margin-bottom: 0.75rem;
+}
+
+.ascension-engine .timing-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.ascension-engine .timing-badge.immediate {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.ascension-engine .timing-badge.delayed {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.ascension-engine .trigger-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ascension-engine .toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+}
+
+.ascension-engine .toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ascension-engine .toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  transition: 0.3s;
+}
+
+.ascension-engine .toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.ascension-engine .toggle-switch input:checked + .toggle-slider {
+  background: #8b5cf6;
+}
+
+.ascension-engine .toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.ascension-engine .edit-btn {
+  padding: 0.4rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.ascension-engine .trigger-edit {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ascension-engine .edit-field {
+  margin-bottom: 1rem;
+}
+
+.ascension-engine .edit-field label {
+  display: block;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.5rem;
+}
+
+.ascension-engine .edit-field input {
+  width: 100%;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.ascension-engine .edit-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ascension-engine .save-btn {
+  padding: 0.5rem 1rem;
+  background: #8b5cf6;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.ascension-engine .no-customers {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ascension-engine .no-customers .hint {
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .ascension-engine .value-ladder-view {
+    grid-template-columns: 1fr;
+  }
+
+  .ascension-engine .customers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ascension-engine .ae-header {
+    flex-direction: column;
+  }
+
+  .ascension-engine .ae-quick-stats {
+    width: 100%;
+    justify-content: space-around;
+  }
+}

@@ -1,6 +1,7 @@
 /**
  * Smart Alerts - Intelligent Business Notifications
  * Tracks key metrics and triggers alerts when action is needed
+ * Includes AI-generated recommendations from the recommendations engine
  */
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +11,12 @@ import {
   fetchDeals,
   fetchWeeklyMarketingStats,
   calculateRevenueStats,
+  fetchPendingRecommendations,
+  markRecommendationViewed,
+  markRecommendationActed,
+  dismissRecommendation,
+  refreshRecommendations,
+  DISMISS_REASONS,
 } from '../../lib/crm'
 import './SmartAlerts.css'
 
@@ -20,6 +27,11 @@ const ALERT_TYPES = {
   marketing: { icon: '📝', color: '#06b6d4', category: 'Marketing' },
   celebration: { icon: '🎉', color: '#ec4899', category: 'Win' },
   warning: { icon: '⚠️', color: '#ef4444', category: 'Warning' },
+  // AI Recommendation categories
+  funnel: { icon: '🎯', color: '#3b82f6', category: 'Funnel' },
+  sales: { icon: '💼', color: '#8b5cf6', category: 'Sales' },
+  pricing: { icon: '💵', color: '#10b981', category: 'Pricing' },
+  capacity: { icon: '📈', color: '#f59e0b', category: 'Capacity' },
 }
 
 export default function SmartAlerts() {
@@ -29,7 +41,9 @@ export default function SmartAlerts() {
   const [stats, setStats] = useState(null)
   const [deals, setDeals] = useState([])
   const [marketingStats, setMarketingStats] = useState(null)
+  const [recommendations, setRecommendations] = useState([])
   const [dismissedAlerts, setDismissedAlerts] = useState([])
+  const [refreshingRecs, setRefreshingRecs] = useState(false)
 
   useEffect(() => {
     if (user?.id) {
@@ -45,20 +59,52 @@ export default function SmartAlerts() {
   async function loadData() {
     setLoading(true)
     try {
-      const [statsResult, dealsResult, marketingResult] = await Promise.all([
+      const [statsResult, dealsResult, marketingResult, recsResult] = await Promise.all([
         fetchUserStats(user.id),
         fetchDeals(user.id),
         fetchWeeklyMarketingStats(user.id),
+        fetchPendingRecommendations(user.id),
       ])
 
       if (statsResult.data) setStats(statsResult.data)
       if (dealsResult.data) setDeals(dealsResult.data)
       if (marketingResult.data) setMarketingStats(marketingResult.data)
+      if (recsResult.data) setRecommendations(recsResult.data)
     } catch (err) {
       console.error('Error loading data:', err)
     } finally {
       setLoading(false)
     }
+  }
+
+  async function handleRefreshRecommendations() {
+    setRefreshingRecs(true)
+    try {
+      const result = await refreshRecommendations(user.id)
+      if (result.data) {
+        setRecommendations(result.data)
+      }
+    } catch (err) {
+      console.error('Error refreshing recommendations:', err)
+    } finally {
+      setRefreshingRecs(false)
+    }
+  }
+
+  async function handleRecommendationAction(rec) {
+    // Mark as acted upon
+    await markRecommendationActed(rec.id, user.id)
+    // Navigate to action URL
+    if (rec.action_url) {
+      navigate(rec.action_url)
+    }
+    // Remove from local state
+    setRecommendations(prev => prev.filter(r => r.id !== rec.id))
+  }
+
+  async function handleDismissRecommendation(recId, reason = null) {
+    await dismissRecommendation(recId, user.id, reason)
+    setRecommendations(prev => prev.filter(r => r.id !== recId))
   }
 
   const revenueStats = useMemo(() => {
@@ -249,13 +295,47 @@ export default function SmartAlerts() {
         )}
       </header>
 
-      {alerts.length === 0 ? (
+      {/* AI-Generated Recommendations Section */}
+      {recommendations.length > 0 && (
+        <section className="recommendations-section">
+          <div className="section-header">
+            <h2>🤖 AI Recommendations</h2>
+            <button
+              className="refresh-btn"
+              onClick={handleRefreshRecommendations}
+              disabled={refreshingRecs}
+            >
+              {refreshingRecs ? '...' : '↻ Refresh'}
+            </button>
+          </div>
+          <p className="section-desc">Personalized insights based on your business data</p>
+          <div className="recommendations-list">
+            {recommendations.map(rec => (
+              <RecommendationCard
+                key={rec.id}
+                rec={rec}
+                onAction={() => handleRecommendationAction(rec)}
+                onDismiss={(reason) => handleDismissRecommendation(rec.id, reason)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {alerts.length === 0 && recommendations.length === 0 ? (
         <div className="no-alerts">
           <span className="no-alerts-icon">✅</span>
           <h2>All Clear!</h2>
-          <p>No alerts right now. Keep up the great work!</p>
+          <p>No alerts or recommendations right now. Keep up the great work!</p>
+          <button
+            className="generate-btn"
+            onClick={handleRefreshRecommendations}
+            disabled={refreshingRecs}
+          >
+            {refreshingRecs ? 'Analyzing...' : 'Generate Recommendations'}
+          </button>
         </div>
-      ) : (
+      ) : alerts.length > 0 && (
         <>
           {/* High Priority */}
           {groupedAlerts.high.length > 0 && (
@@ -355,6 +435,79 @@ function AlertCard({ alert, onDismiss, onAction }) {
       <button className="dismiss-btn" onClick={onDismiss} title="Dismiss">
         ×
       </button>
+    </div>
+  )
+}
+
+function RecommendationCard({ rec, onAction, onDismiss }) {
+  const [showDismissOptions, setShowDismissOptions] = useState(false)
+  const typeInfo = ALERT_TYPES[rec.category] || ALERT_TYPES.marketing
+  const priorityClass = rec.priority === 'high' ? 'rec-high' : rec.priority === 'low' ? 'rec-low' : ''
+
+  function handleDismissClick() {
+    setShowDismissOptions(!showDismissOptions)
+  }
+
+  function handleDismissWithReason(reason) {
+    onDismiss(reason)
+    setShowDismissOptions(false)
+  }
+
+  return (
+    <div className={`recommendation-card ${priorityClass}`} style={{ '--rec-color': typeInfo.color }}>
+      <div className="rec-icon">{typeInfo.icon}</div>
+      <div className="rec-content">
+        <div className="rec-header">
+          <span className="rec-category">{typeInfo.category}</span>
+          <span className={`rec-priority priority-${rec.priority}`}>{rec.priority}</span>
+        </div>
+        <h3 className="rec-title">{rec.title}</h3>
+        <p className="rec-description">{rec.description}</p>
+        {rec.trigger_data && (
+          <div className="rec-context">
+            {rec.trigger_type === 'funnel_health' && rec.trigger_data.rate !== undefined && (
+              <span className="context-tag">Current: {rec.trigger_data.rate}%</span>
+            )}
+            {rec.trigger_type === 'win_loss_pattern' && rec.trigger_data.count && (
+              <span className="context-tag">{rec.trigger_data.count} occurrences</span>
+            )}
+            {rec.trigger_type === 'capacity' && rec.trigger_data.utilization && (
+              <span className="context-tag">{rec.trigger_data.utilization}% full</span>
+            )}
+          </div>
+        )}
+        {rec.action_text && (
+          <button className="rec-action" onClick={onAction}>
+            {rec.action_text} →
+          </button>
+        )}
+      </div>
+      <div className="dismiss-container">
+        <button className="dismiss-btn" onClick={handleDismissClick} title="Dismiss">
+          ×
+        </button>
+        {showDismissOptions && (
+          <div className="dismiss-options">
+            <span className="dismiss-label">Why dismiss?</span>
+            {DISMISS_REASONS.map(reason => (
+              <button
+                key={reason.id}
+                className="dismiss-reason-btn"
+                onClick={() => handleDismissWithReason(reason.id)}
+              >
+                <span className="reason-icon">{reason.icon}</span>
+                <span className="reason-label">{reason.label}</span>
+              </button>
+            ))}
+            <button
+              className="dismiss-reason-btn dismiss-skip"
+              onClick={() => handleDismissWithReason(null)}
+            >
+              Skip
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

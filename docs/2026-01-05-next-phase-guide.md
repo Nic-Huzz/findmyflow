@@ -1,12 +1,12 @@
 # Flow Academy - Next Phase Build Guide
 
-**Date:** January 5, 2026
+**Date:** January 5, 2026 (Updated: January 6, 2026)
 **Purpose:** Guide for continuing Flow Academy V1 development
 **Priority:** Complete Phase 1 before moving to Phase 2
 
 ---
 
-## Current State: Foundation Complete
+## Current State: Foundation Complete + Phase 1 Progress
 
 All core modules are built and functional:
 
@@ -15,8 +15,8 @@ All core modules are built and functional:
 | FindMyFlow (Persona) | `/src/flows/FindMyFlow/` | Complete |
 | Validation Surveys | `/src/flows/ValidationFlow/` | Complete |
 | $100M Offer Builder v2 | `/src/flows/OfferBuilder100M/` | Complete |
-| CRM Dashboard | `/src/pages/crm/CRMDashboard.jsx` | Complete |
-| CRM Marketing | `/src/pages/crm/CRMMarketing.jsx` | Complete |
+| CRM Dashboard | `/src/pages/crm/CRMDashboard.jsx` | Complete + Project Switcher |
+| CRM Marketing | `/src/pages/crm/CRMMarketing.jsx` | Complete + Week Nav + AI Generator |
 | CRM Sales | `/src/pages/crm/CRMSales.jsx` | Complete + Lead Scoring |
 | CRM Analytics | `/src/pages/crm/CRMAnalytics.jsx` | Complete |
 | PTUF Calculator | `/src/pages/crm/PTUFCalculator.jsx` | Complete |
@@ -25,10 +25,57 @@ All core modules are built and functional:
 | Sales Scripts | `/src/pages/crm/SalesScripts.jsx` | Complete + 15 scripts |
 | Smart Alerts | `/src/pages/crm/SmartAlerts.jsx` | Complete |
 | Lead Scoring | `/src/components/crm/LeadScoreSliders.jsx` | Complete |
-| Scripts Modal | `/src/components/crm/ScriptsModal.jsx` | Complete |
+| Scripts Modal | `/src/components/crm/ScriptsModal.jsx` | Complete + Smart Suggestions |
+| Project Switcher | `/src/components/crm/ProjectSwitcher.jsx` | **NEW - Complete** |
+| Content Generator | `/src/components/crm/ContentGenerator.jsx` | **NEW - Complete** |
+| Content Context | `/src/lib/contentContext.js` | **NEW - Complete** |
+| Bottom Toolbar (CRM) | `/src/components/BottomToolbar.jsx` | **Updated - CRM-aware** |
 
 **Theme:** Light (purple #5e17eb, gold #ffdd27, warm-gray #f8f9fa)
-**Build Status:** 334 modules, no errors
+**Build Status:** 334+ modules
+
+---
+
+## Completed Updates (January 6, 2026)
+
+### Done: CRM Bottom Toolbar
+- Updated `/src/components/BottomToolbar.jsx` to detect CRM routes
+- When in `/crm/*`, shows: Sales | Marketing | Analytics | Portal
+- Portal returns to `/7-day-challenge`
+- Added CRM-specific styling in `/src/components/BottomToolbar.css`
+
+### Done: Project Switcher
+- Created `/src/components/crm/ProjectSwitcher.jsx`
+- Created `/src/components/crm/ProjectSwitcher.css`
+- Added to CRM Dashboard header
+- Persists selection to localStorage
+- Fetches projects from `user_projects` table
+
+### Done: AI Content Generation
+- Created `/src/lib/contentContext.js` - Gathers context from all user data
+- Created `/supabase/functions/content-generator/index.ts` - Edge Function
+- Created `/src/components/crm/ContentGenerator.jsx` - UI modal
+- Created `/src/components/crm/ContentGenerator.css` - Styles
+- Integrated into `/src/pages/crm/CRMMarketing.jsx`
+- Supports 5 content types: Transformation Story, Educational, Pain Agitation, Social Proof, Offer Teaser
+- Supports 5 platforms: Instagram, LinkedIn, Twitter/X, Email, Facebook
+- Shows context completeness meter (persona, validation, offer, marketing, deals)
+
+### Done: AI Content Generator Enhancements
+- Added **Tone Selector** (6 tones: Authentic, Bold, Warm, Witty, Inspirational, Educational)
+- Added **Character Counter** with platform limits (Twitter 280, Instagram 2200, LinkedIn 3000, etc.)
+- Added **Refinement Options** (Make Shorter, Add Detail, More Professional, More Casual, Add Urgency, More Storytelling)
+- Added **Editable Content Area** - users can edit generated content directly before copying
+- Added **Quick Generate Button** on Marketing task cards (sparkle icon on uncompleted tasks)
+- Added Quick Generate Modal in `/src/pages/crm/CRMMarketing.jsx`
+
+### Already Existed (Verified)
+- Week Navigation in Marketing (`weekOffset` state)
+- Offer Builder → CRM Products (`fetchUserProducts()`)
+- Smart Script Suggestions (`getSmartSuggestions()` in ScriptsModal)
+- Persona → Offer Builder (`Step1A_BucketSelection` shows FindMyFlow context panel + AI bucket suggestion)
+- Validation → Offer Builder (`Step1B_DreamOutcome` shows validation insights panel + AI dream example)
+- Platform Analytics (`CRMAnalytics.jsx` has full platform breakdown with engagement/leads/revenue)
 
 ---
 
@@ -291,7 +338,264 @@ const platformStats = await fetchPlatformBreakdown(userId, weekStart, weekEnd)
 **Priority:** MEDIUM
 **Goal:** Single view showing everything that matters today
 
-### 2.1 Unified Dashboard Design
+### 2.1 Project Switcher
+
+**What:** Users can have multiple projects (businesses/offers). The Command Center needs a way to switch between them.
+
+**Current State:** Project is likely selected elsewhere or defaulted. No visible switcher in CRM.
+
+**Implementation:**
+
+**UI Component:**
+```jsx
+// /src/components/crm/ProjectSwitcher.jsx
+function ProjectSwitcher({ currentProject, onSwitch }) {
+  const [projects, setProjects] = useState([])
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    fetchUserProjects(userId).then(setProjects)
+  }, [])
+
+  return (
+    <div className="project-switcher">
+      <button className="current-project" onClick={() => setIsOpen(!isOpen)}>
+        <span className="project-icon">📁</span>
+        <span className="project-name">{currentProject?.name || 'Select Project'}</span>
+        <span className="dropdown-arrow">▼</span>
+      </button>
+
+      {isOpen && (
+        <div className="project-dropdown">
+          {projects.map(project => (
+            <button
+              key={project.id}
+              className={project.id === currentProject?.id ? 'active' : ''}
+              onClick={() => {
+                onSwitch(project)
+                setIsOpen(false)
+              }}
+            >
+              {project.name}
+              {project.id === currentProject?.id && ' ✓'}
+            </button>
+          ))}
+          <hr />
+          <button className="new-project" onClick={() => navigate('/projects/new')}>
+            + Create New Project
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+**Placement:** Top-left of Command Center header
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  📁 My Coaching Biz ▼          COMMAND CENTER    [Settings] │
+├─────────────────────────────────────────────────────────────┤
+```
+
+**Data Flow:**
+- Selected project stored in context/state
+- All CRM queries filter by `project_id`
+- Switching project reloads all dashboard data
+
+**Files to Create:**
+- `/src/components/crm/ProjectSwitcher.jsx`
+- `/src/components/crm/ProjectSwitcher.css`
+
+**Files to Modify:**
+- `/src/pages/crm/CRMDashboard.jsx` - Add ProjectSwitcher to header
+- `/src/context/ProjectContext.jsx` - Create or update project context
+
+---
+
+### 2.2 CRM Bottom Toolbar
+
+**What:** When user enters the CRM section, the bottom navigation toolbar changes to CRM-specific actions.
+
+**Main App Toolbar:**
+```
+┌─────────────────────────────────────────┐
+│  🏠 Home  │  🎯 Challenge  │  📊 Progress  │  ⚙️ Settings  │
+└─────────────────────────────────────────┘
+```
+
+**CRM Toolbar (when in /crm/* routes):**
+```
+┌─────────────────────────────────────────┐
+│  💰 Sales  │  📣 Marketing  │  📊 Analytics  │  🔙 Portal  │
+└─────────────────────────────────────────┘
+```
+
+**Implementation:**
+
+```jsx
+// /src/components/layout/BottomToolbar.jsx
+function BottomToolbar() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  // Check if we're in CRM section
+  const isCRMSection = location.pathname.startsWith('/crm')
+
+  if (isCRMSection) {
+    return (
+      <nav className="bottom-toolbar crm-toolbar">
+        <button
+          className={location.pathname === '/crm/sales' ? 'active' : ''}
+          onClick={() => navigate('/crm/sales')}
+        >
+          <span className="icon">💰</span>
+          <span className="label">Sales</span>
+        </button>
+
+        <button
+          className={location.pathname === '/crm/marketing' ? 'active' : ''}
+          onClick={() => navigate('/crm/marketing')}
+        >
+          <span className="icon">📣</span>
+          <span className="label">Marketing</span>
+        </button>
+
+        <button
+          className={location.pathname === '/crm/analytics' ? 'active' : ''}
+          onClick={() => navigate('/crm/analytics')}
+        >
+          <span className="icon">📊</span>
+          <span className="label">Analytics</span>
+        </button>
+
+        <button
+          className="portal-return"
+          onClick={() => navigate('/challenge')}
+        >
+          <span className="icon">🔙</span>
+          <span className="label">Portal</span>
+        </button>
+      </nav>
+    )
+  }
+
+  // Default main app toolbar
+  return (
+    <nav className="bottom-toolbar main-toolbar">
+      {/* ... existing main toolbar items ... */}
+    </nav>
+  )
+}
+```
+
+**Styling:**
+```css
+/* /src/components/layout/BottomToolbar.css */
+.bottom-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--white);
+  border-top: 1px solid var(--border-gray);
+  padding-bottom: env(safe-area-inset-bottom); /* iOS safe area */
+  z-index: 100;
+}
+
+.bottom-toolbar button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: var(--text-gray);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.bottom-toolbar button.active {
+  color: var(--purple);
+}
+
+.bottom-toolbar button .icon {
+  font-size: 20px;
+}
+
+.bottom-toolbar button .label {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* CRM-specific styling */
+.crm-toolbar {
+  background: linear-gradient(180deg, var(--white) 0%, #f8f5ff 100%);
+}
+
+.crm-toolbar .portal-return {
+  color: var(--purple);
+  opacity: 0.8;
+}
+
+.crm-toolbar .portal-return:hover {
+  opacity: 1;
+}
+```
+
+**Quick Access to CRM Tools:**
+
+Optionally, add a "more" menu or swipe-up drawer for quick access to:
+- PTUF Calculator
+- LTV Calculator
+- CAC Tracker
+- Sales Scripts
+- Smart Alerts
+
+```jsx
+// Long-press or swipe-up on any toolbar item to show tools drawer
+<ToolsDrawer>
+  <ToolLink to="/crm/ptuf" icon="🧮" label="PTUF Calculator" />
+  <ToolLink to="/crm/ltv" icon="💎" label="LTV Calculator" />
+  <ToolLink to="/crm/cac" icon="📈" label="CAC Tracker" />
+  <ToolLink to="/crm/scripts" icon="📝" label="Sales Scripts" />
+  <ToolLink to="/crm/alerts" icon="🔔" label="Smart Alerts" />
+</ToolsDrawer>
+```
+
+**Files to Create/Modify:**
+- `/src/components/layout/BottomToolbar.jsx` - Update with CRM detection
+- `/src/components/layout/BottomToolbar.css` - Add CRM toolbar styles
+- `/src/components/layout/ToolsDrawer.jsx` - Optional quick-access drawer
+
+**Route Detection Logic:**
+```javascript
+const CRM_ROUTES = [
+  '/crm',
+  '/crm/sales',
+  '/crm/marketing',
+  '/crm/analytics',
+  '/crm/ptuf',
+  '/crm/ltv',
+  '/crm/cac',
+  '/crm/scripts',
+  '/crm/alerts'
+]
+
+const isCRMSection = CRM_ROUTES.some(route =>
+  location.pathname === route || location.pathname.startsWith(route + '/')
+)
+```
+
+---
+
+### 2.3 Unified Dashboard Design
 
 **Location:** Could replace or enhance `/src/pages/crm/CRMDashboard.jsx`
 
@@ -871,19 +1175,21 @@ src/
 ## Priority Order for Implementation
 
 ### Quick Wins (1-2 days each)
-1. **1.3 Offer Builder → CRM Products** - Dynamic product dropdown from user's offers
-2. **1.6.1 Week Navigation** - Browse past/future weeks in Marketing
-3. **1.5 Smart Script Suggestions** - Recommend scripts based on lead score
+1. ~~**2.2 CRM Bottom Toolbar** - Context-aware nav (Sales/Marketing/Analytics/Portal)~~ **DONE**
+2. ~~**1.3 Offer Builder → CRM Products** - Dynamic product dropdown from user's offers~~ **DONE (existed)**
+3. ~~**1.6.1 Week Navigation** - Browse past/future weeks in Marketing~~ **DONE (existed)**
+4. ~~**1.5 Smart Script Suggestions** - Recommend scripts based on lead score~~ **DONE (existed)**
 
 ### Core Integrations (2-3 days each)
-4. **1.1 Persona → Offer Builder** - FindMyFlow data pre-fills Offer Builder
-5. **1.2 Validation → Offer Builder** - Survey insights enhance proof/objections
-6. **3.1 AI Content Generation** - Connected to all user data (major differentiator)
+5. ~~**2.1 Project Switcher** - Switch between projects in Command Center~~ **DONE**
+6. ~~**1.1 Persona → Offer Builder** - FindMyFlow data pre-fills Offer Builder~~ **DONE (existed)**
+7. ~~**1.2 Validation → Offer Builder** - Survey insights enhance proof/objections~~ **DONE (existed)**
+8. ~~**3.1 AI Content Generation** - Connected to all user data (major differentiator)~~ **DONE + Enhanced**
 
 ### System Improvements (3-5 days each)
-7. **1.6.2 Platform Analytics** - Breakdown by LinkedIn/Twitter/Instagram
-8. **1.4 Unified Gamification** - Single points system across all modules
-9. **2.1 Command Center Dashboard** - Unified view of everything
+9. ~~**1.6.2 Platform Analytics** - Breakdown by LinkedIn/Twitter/Instagram~~ **DONE (existed)**
+10. **1.4 Unified Gamification** - Single points system across all modules (HOLD - needs formal plan)
+11. **2.3 Command Center Dashboard** - Unified view of everything
 
 ---
 

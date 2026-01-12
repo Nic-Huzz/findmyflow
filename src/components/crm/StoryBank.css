@@ -1,0 +1,794 @@
+/**
+ * Story Bank Component Styles
+ */
+
+.story-bank {
+  min-height: 100vh;
+  background: #1a1a2e;
+  color: white;
+  padding: 24px;
+}
+
+/* Header */
+.story-bank .sb-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.story-bank .sb-header-content h2 {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+}
+
+.story-bank .sb-header-content p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.story-bank .sb-close-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.story-bank .sb-close-btn:hover {
+  color: white;
+}
+
+.story-bank .sb-back-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.story-bank .sb-back-btn:hover {
+  color: white;
+}
+
+/* Stats Bar */
+.story-bank .sb-stats {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.story-bank .sb-stat-total {
+  display: flex;
+  flex-direction: column;
+  padding-right: 24px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.story-bank .sb-stat-num {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00d4aa;
+}
+
+.story-bank .sb-stat-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.story-bank .sb-stat-categories {
+  display: flex;
+  gap: 16px;
+}
+
+.story-bank .sb-stat-cat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.story-bank .sb-stat-icon {
+  font-size: 1.2rem;
+}
+
+.story-bank .sb-stat-count {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Category Filter */
+.story-bank .sb-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.story-bank .sb-filter-btn {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.story-bank .sb-filter-btn.active {
+  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  border-color: transparent;
+  color: #1a1a2e;
+  font-weight: 600;
+}
+
+/* Gap Analysis Alert */
+.story-bank .sb-gap-alert {
+  padding: 16px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.story-bank .sb-gap-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #fbbf24;
+}
+
+.story-bank .sb-gap-icon {
+  font-size: 1.25rem;
+}
+
+.story-bank .sb-gap-alert p {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.story-bank .sb-gap-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.story-bank .sb-gap-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.story-bank .sb-gap-item:hover {
+  background: rgba(0, 212, 170, 0.1);
+  border-color: rgba(0, 212, 170, 0.3);
+}
+
+.story-bank .sb-gap-add {
+  color: #00d4aa;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+/* Add Buttons Container */
+.story-bank .sb-add-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Add Button */
+.story-bank .sb-add-btn {
+  flex: 1;
+  padding: 16px;
+  background: rgba(0, 212, 170, 0.1);
+  border: 2px dashed rgba(0, 212, 170, 0.3);
+  border-radius: 12px;
+  color: #00d4aa;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-add-btn:hover {
+  background: rgba(0, 212, 170, 0.2);
+  border-color: rgba(0, 212, 170, 0.5);
+}
+
+/* Interview Button */
+.story-bank .sb-interview-btn {
+  flex: 1;
+  padding: 16px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 2px dashed rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  color: #a78bfa;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-interview-btn:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* Mine Stories Button */
+.story-bank .sb-mine-btn {
+  flex: 1;
+  padding: 16px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 2px dashed rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  color: #fbbf24;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-mine-btn:hover {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+/* Stories List */
+.story-bank .sb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.story-bank .sb-loading {
+  text-align: center;
+  padding: 40px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Empty State */
+.story-bank .sb-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+}
+
+.story-bank .sb-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.story-bank .sb-empty h3 {
+  margin: 0 0 8px;
+  color: white;
+}
+
+.story-bank .sb-empty p {
+  margin: 0 0 20px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.story-bank .sb-empty-add {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  border: none;
+  border-radius: 8px;
+  color: #1a1a2e;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Story Card */
+.story-bank .sb-story-card {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-story-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.story-bank .sb-story-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.story-bank .sb-story-category {
+  padding: 4px 10px;
+  background: rgba(0, 212, 170, 0.15);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #00d4aa;
+}
+
+.story-bank .sb-story-title {
+  font-weight: 600;
+  flex: 1;
+}
+
+.story-bank .sb-story-uses {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.story-bank .sb-story-content {
+  margin: 0 0 16px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.story-bank .sb-story-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.story-bank .sb-action-btn {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.story-bank .sb-action-btn.delete:hover {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+}
+
+/* Form Styles */
+.story-bank .sb-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 700px;
+}
+
+.story-bank .sb-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.story-bank .sb-form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.story-bank .sb-form-group input,
+.story-bank .sb-form-group textarea {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.story-bank .sb-form-group input:focus,
+.story-bank .sb-form-group textarea:focus {
+  outline: none;
+  border-color: #00d4aa;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.story-bank .sb-form-group textarea {
+  resize: vertical;
+  min-height: 150px;
+  line-height: 1.6;
+}
+
+.story-bank .sb-char-count {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: right;
+}
+
+/* Category Grid */
+.story-bank .sb-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.story-bank .sb-category-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-category-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.story-bank .sb-category-btn.active {
+  background: rgba(0, 212, 170, 0.15);
+  border-color: #00d4aa;
+  color: white;
+}
+
+.story-bank .sb-cat-icon {
+  font-size: 1.25rem;
+}
+
+.story-bank .sb-cat-label {
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Prompt Box */
+.story-bank .sb-prompt {
+  padding: 16px;
+  background: rgba(0, 212, 170, 0.08);
+  border: 1px solid rgba(0, 212, 170, 0.2);
+  border-radius: 10px;
+}
+
+.story-bank .sb-prompt-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #00d4aa;
+}
+
+.story-bank .sb-prompt-text {
+  margin: 0 0 12px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+.story-bank .sb-prompt-example {
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.story-bank .sb-example-label {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 4px;
+}
+
+.story-bank .sb-prompt-example p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Input Mode Toggle */
+.story-bank .sb-input-toggle {
+  display: flex;
+  gap: 8px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.story-bank .sb-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-toggle-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.story-bank .sb-toggle-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Form Actions */
+.story-bank .sb-form-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.story-bank .sb-cancel-btn {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.story-bank .sb-save-btn {
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  border: none;
+  border-radius: 8px;
+  color: #1a1a2e;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.story-bank .sb-save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+}
+
+.story-bank .sb-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ========================================
+   Interview Mode Styles
+   ======================================== */
+
+.story-bank .sb-interview {
+  max-width: 600px;
+}
+
+.story-bank .sb-interview-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: #a78bfa;
+  margin-bottom: 20px;
+}
+
+.story-bank .sb-interview-progress {
+  margin-bottom: 24px;
+}
+
+.story-bank .sb-progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.story-bank .sb-progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.story-bank .sb-progress-text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.story-bank .sb-interview-question {
+  margin-bottom: 24px;
+}
+
+.story-bank .sb-interview-question h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.story-bank .sb-interview-hint {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  font-style: italic;
+}
+
+.story-bank .sb-interview-input {
+  width: 100%;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 120px;
+  margin: 16px 0;
+  line-height: 1.6;
+}
+
+.story-bank .sb-interview-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.story-bank .sb-interview-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.story-bank .sb-interview-nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.story-bank .sb-nav-back {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.story-bank .sb-nav-back:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.story-bank .sb-nav-back:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.story-bank .sb-nav-next {
+  flex: 2;
+  padding: 14px;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.story-bank .sb-nav-next:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.story-bank .sb-nav-next:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.story-bank .sb-skip-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.story-bank .sb-skip-btn:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .story-bank .sb-stats {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .story-bank .sb-stat-total {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-right: 0;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+
+  .story-bank .sb-filter {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 12px;
+  }
+
+  .story-bank .sb-filter-btn {
+    white-space: nowrap;
+  }
+
+  .story-bank .sb-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .story-bank .sb-add-buttons {
+    flex-direction: column;
+  }
+
+  .story-bank .sb-gap-list {
+    flex-direction: column;
+  }
+
+  .story-bank .sb-interview-question h3 {
+    font-size: 1.1rem;
+  }
+}

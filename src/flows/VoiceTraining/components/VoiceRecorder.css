@@ -1,0 +1,221 @@
+/**
+ * VoiceRecorder Component Styles
+ */
+
+.voice-recorder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: rgba(0, 212, 170, 0.05);
+  border: 1px dashed rgba(0, 212, 170, 0.3);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.voice-recorder.recording {
+  background: rgba(0, 212, 170, 0.1);
+  border-color: rgba(0, 212, 170, 0.6);
+  border-style: solid;
+}
+
+.voice-recorder.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Controls */
+.voice-recorder .vr-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.voice-recorder .vr-record-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  border: none;
+  border-radius: 50px;
+  color: #1a1a2e;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+}
+
+.voice-recorder .vr-record-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+}
+
+.voice-recorder .vr-record-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.voice-recorder .vr-record-btn.active {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+  animation: pulse-recording 1.5s ease-in-out infinite;
+}
+
+.voice-recorder .vr-mic-icon {
+  font-size: 1.25rem;
+}
+
+/* Recording indicator */
+.voice-recorder .vr-recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.voice-recorder .vr-pulse {
+  width: 12px;
+  height: 12px;
+  background: #ff6b6b;
+  border-radius: 50%;
+  animation: pulse-dot 1s ease-in-out infinite;
+}
+
+.voice-recorder .vr-recording-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Visualizer */
+.voice-recorder .vr-visualizer {
+  width: 100%;
+  max-width: 300px;
+  height: 60px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Interim transcript */
+.voice-recorder .vr-interim {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.voice-recorder .vr-interim-label {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.voice-recorder .vr-interim-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+  animation: fade-in 0.2s ease;
+}
+
+/* Error */
+.voice-recorder .vr-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+  color: #ff6b6b;
+  font-size: 0.9rem;
+}
+
+.voice-recorder .vr-error-icon {
+  font-size: 1rem;
+}
+
+/* Hint */
+.voice-recorder .vr-hint {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  text-align: center;
+  margin: 0;
+}
+
+/* Unsupported state */
+.vr-unsupported {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.vr-unsupported .vr-unsupported-icon {
+  font-size: 2rem;
+  opacity: 0.3;
+}
+
+.vr-unsupported p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+.vr-unsupported .vr-unsupported-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Animations */
+@keyframes pulse-recording {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .voice-recorder {
+    padding: 1rem;
+  }
+
+  .voice-recorder .vr-record-btn {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .voice-recorder .vr-visualizer {
+    height: 50px;
+  }
+}

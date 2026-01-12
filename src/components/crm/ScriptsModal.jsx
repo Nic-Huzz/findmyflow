@@ -1,9 +1,10 @@
 /**
  * ScriptsModal - Quick script picker for deal cards
- * Shows recommended scripts based on deal stage
+ * Shows recommended scripts based on deal stage AND objection patterns
  */
 import { useState, useEffect } from 'react'
 import { fetchScripts, SCRIPT_STAGES, logScriptUsage } from '../../lib/scripts'
+import { getDealOutcomeStats } from '../../lib/crm'
 import './ScriptsModal.css'
 
 // Map deal stages to script stages
@@ -15,83 +16,128 @@ const DEAL_TO_SCRIPT_STAGE = {
   lost: 'follow-up',
 }
 
-// Get smart suggestions based on lead scores
+// Get smart suggestions based on lead scores and deal context
 function getSmartSuggestions(deal, scripts) {
   const suggestions = []
 
-  // Only suggest if deal has lead scores
-  if (!deal.pain_score && !deal.trust_score && !deal.urgency_score && !deal.fit_score) {
-    return suggestions
+  // Check for notes mentioning specific objections
+  const notes = (deal.notes || '').toLowerCase()
+  const notesKeywords = {
+    'price': ['price', 'expensive', 'cost', 'afford', 'budget', 'money'],
+    'time': ['think about', 'consider', 'later', 'wait'],
+    'timing': ['busy', 'not now', 'bad time', 'schedule'],
+    'authority': ['research', 'tried before', 'skeptical'],
+    'self_doubt': ['can\'t do', 'won\'t work', 'not sure'],
+    'commitment': ['cancel', 'guarantee', 'refund'],
+    'comparison': ['cheaper', 'competitor', 'alternative'],
   }
 
-  // Low pain score - need to highlight cost of inaction
-  if (deal.pain_score && deal.pain_score < 5) {
-    const script = scripts.find(s => s.name?.toLowerCase().includes('cost') || s.name?.toLowerCase().includes('inaction'))
-    if (script) {
-      suggestions.push({
-        script,
-        reason: `Low pain score (${deal.pain_score}/10) - amplify the problem`
-      })
+  // Check notes for objection keywords
+  Object.entries(notesKeywords).forEach(([category, keywords]) => {
+    if (keywords.some(kw => notes.includes(kw))) {
+      const script = scripts.find(s => s.category?.toUpperCase() === category.toUpperCase())
+      if (script && !suggestions.find(s => s.script.id === script.id)) {
+        suggestions.push({
+          script,
+          reason: `Notes mention "${category}" objection`
+        })
+      }
     }
-  }
+  })
 
-  // Low trust score - need social proof
+  // Score-based suggestions
   if (deal.trust_score && deal.trust_score < 5) {
-    const script = scripts.find(s => s.name?.toLowerCase().includes('proof') || s.name?.toLowerCase().includes('testimonial') || s.name?.toLowerCase().includes('case'))
-    if (script) {
+    // Low trust - suggest AUTHORITY scripts
+    const script = scripts.find(s => s.category?.toUpperCase() === 'AUTHORITY')
+    if (script && !suggestions.find(s => s.script.id === script.id)) {
       suggestions.push({
         script,
-        reason: `Low trust score (${deal.trust_score}/10) - build credibility`
+        reason: `Low trust (${deal.trust_score}/10) - handle skepticism`
       })
     }
   }
 
-  // Low urgency score - create time pressure
   if (deal.urgency_score && deal.urgency_score < 5) {
-    const script = scripts.find(s => s.name?.toLowerCase().includes('urgency') || s.name?.toLowerCase().includes('opportunity') || s.name?.toLowerCase().includes('now'))
-    if (script) {
+    // Low urgency - suggest TIME/TIMING scripts
+    const script = scripts.find(s => s.category?.toUpperCase() === 'TIME' || s.category?.toUpperCase() === 'TIMING')
+    if (script && !suggestions.find(s => s.script.id === script.id)) {
       suggestions.push({
         script,
-        reason: `Low urgency score (${deal.urgency_score}/10) - create momentum`
+        reason: `Low urgency (${deal.urgency_score}/10) - overcome delay`
       })
     }
   }
 
-  // Low fit score - need to qualify or reframe
   if (deal.fit_score && deal.fit_score < 5) {
-    const script = scripts.find(s => s.name?.toLowerCase().includes('qualify') || s.name?.toLowerCase().includes('fit'))
-    if (script) {
+    // Low fit - suggest SELF_DOUBT scripts
+    const script = scripts.find(s => s.category?.toUpperCase() === 'SELF_DOUBT')
+    if (script && !suggestions.find(s => s.script.id === script.id)) {
       suggestions.push({
         script,
-        reason: `Low fit score (${deal.fit_score}/10) - confirm alignment`
+        reason: `Low fit (${deal.fit_score}/10) - build confidence`
       })
     }
   }
 
-  // Proposal stage - use closing scripts
+  // Proposal stage - likely price objections coming
   if (deal.status === 'proposal') {
-    const closeScript = scripts.find(s => s.stage === 'close' || s.name?.toLowerCase().includes('close'))
-    if (closeScript && !suggestions.find(s => s.script.id === closeScript.id)) {
+    const priceScript = scripts.find(s => s.category?.toUpperCase() === 'PRICE')
+    if (priceScript && !suggestions.find(s => s.script.id === priceScript.id)) {
       suggestions.push({
-        script: closeScript,
-        reason: `Proposal stage - ready to close`
+        script: priceScript,
+        reason: `Proposal stage - prepare for price discussion`
       })
     }
   }
 
-  // High scores overall - upsell opportunity
-  const totalScore = (deal.pain_score || 0) + (deal.trust_score || 0) + (deal.urgency_score || 0) + (deal.fit_score || 0)
-  if (totalScore >= 32) { // 8+ average across all 4
-    const upsellScript = scripts.find(s => s.name?.toLowerCase().includes('upsell') || s.name?.toLowerCase().includes('premium'))
-    if (upsellScript && !suggestions.find(s => s.script.id === upsellScript.id)) {
+  // If no suggestions yet, suggest FINAL scripts for closing
+  if (suggestions.length === 0 && deal.status === 'proposal') {
+    const finalScript = scripts.find(s => s.category?.toUpperCase() === 'FINAL')
+    if (finalScript) {
       suggestions.push({
-        script: upsellScript,
-        reason: `High lead score (${totalScore}/40) - consider upselling`
+        script: finalScript,
+        reason: `Ready to close - final objection handler`
       })
     }
   }
 
   return suggestions.slice(0, 3) // Max 3 suggestions
+}
+
+// Map loss reasons from deal outcomes to script categories
+const LOSS_REASON_TO_SCRIPT = {
+  price: 'PRICE',
+  timing: 'TIMING',
+  competitor: 'COMPARISON',
+  no_decision: 'TIME',
+  fit: 'SELF_DOUBT',
+  trust: 'AUTHORITY',
+}
+
+// Get suggestions based on user's historical objection patterns
+function getPatternSuggestions(patterns, scripts) {
+  if (!patterns?.topLossReasons?.length) return []
+
+  const suggestions = []
+
+  patterns.topLossReasons.slice(0, 3).forEach(([reason, count]) => {
+    const scriptCategory = LOSS_REASON_TO_SCRIPT[reason]
+    if (scriptCategory) {
+      const script = scripts.find(s => s.category?.toUpperCase() === scriptCategory)
+      if (script && !suggestions.find(s => s.script.id === script.id)) {
+        const percent = patterns.totalLosses > 0
+          ? Math.round((count / patterns.totalLosses) * 100)
+          : 0
+        suggestions.push({
+          script,
+          reason: `${percent}% of your losses cite "${reason.replace(/_/g, ' ')}"`,
+          priority: count,
+        })
+      }
+    }
+  })
+
+  return suggestions.sort((a, b) => b.priority - a.priority).slice(0, 2)
 }
 
 export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
@@ -100,16 +146,23 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
   const [selectedStage, setSelectedStage] = useState(DEAL_TO_SCRIPT_STAGE[deal.status] || 'all')
   const [copiedId, setCopiedId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
+  const [objectionPatterns, setObjectionPatterns] = useState(null)
 
   useEffect(() => {
-    loadScripts()
+    loadData()
   }, [])
 
-  async function loadScripts() {
+  async function loadData() {
     setLoading(true)
-    const { data } = await fetchScripts()
-    if (data) {
-      setScripts(data)
+    const [scriptsResult, patternsResult] = await Promise.all([
+      fetchScripts(),
+      userId ? getDealOutcomeStats(userId) : Promise.resolve(null),
+    ])
+    if (scriptsResult.data) {
+      setScripts(scriptsResult.data)
+    }
+    if (patternsResult) {
+      setObjectionPatterns(patternsResult)
     }
     setLoading(false)
   }
@@ -134,6 +187,7 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
 
   const recommendedScripts = scripts.filter(s => s.stage === recommendedStage)
   const smartSuggestions = getSmartSuggestions(deal, scripts)
+  const patternSuggestions = getPatternSuggestions(objectionPatterns, scripts)
 
   return (
     <div className="scripts-modal-overlay" onClick={onClose}>
@@ -145,6 +199,32 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
           </div>
           <button className="scripts-close-btn" onClick={onClose}>×</button>
         </div>
+
+        {/* Pattern-Based Suggestions from Win/Loss Data */}
+        {patternSuggestions.length > 0 && (
+          <div className="smart-suggestions-section pattern-based">
+            <h4>
+              <span className="rec-icon">📊</span>
+              Based on Your Patterns
+            </h4>
+            <div className="smart-suggestions-list">
+              {patternSuggestions.map(({ script, reason }) => (
+                <div key={script.id} className="smart-suggestion pattern">
+                  <div className="suggestion-info">
+                    <span className="suggestion-name">{script.name}</span>
+                    <span className="suggestion-reason">{reason}</span>
+                  </div>
+                  <button
+                    className={`quick-copy-btn ${copiedId === script.id ? 'copied' : ''}`}
+                    onClick={() => handleCopyScript(script)}
+                  >
+                    {copiedId === script.id ? '✓' : '📋'}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Smart Suggestions based on Lead Score */}
         {smartSuggestions.length > 0 && (

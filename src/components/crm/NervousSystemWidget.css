@@ -1,0 +1,415 @@
+/**
+ * Nervous System Widget Styles
+ */
+
+.ns-widget {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+  color: white;
+}
+
+.ns-widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.ns-widget-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ns-icon {
+  font-size: 1.5rem;
+}
+
+.ns-widget-title h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: white;
+}
+
+.ns-expand-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 6px 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ns-expand-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* Loading State */
+.ns-widget-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ns-skeleton {
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  animation: ns-shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.ns-skeleton-bar {
+  height: 24px;
+  width: 100%;
+}
+
+.ns-skeleton-bar.short {
+  width: 60%;
+}
+
+@keyframes ns-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Empty State */
+.ns-widget-empty {
+  opacity: 0.8;
+}
+
+.ns-empty-state {
+  text-align: center;
+  padding: 20px;
+}
+
+.ns-empty-state p {
+  margin: 0 0 8px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ns-empty-hint {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Category Breakdown */
+.ns-category-breakdown {
+  margin-bottom: 16px;
+}
+
+.ns-category-bar {
+  display: flex;
+  height: 28px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.ns-category-fill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.5s ease;
+}
+
+.ns-category-fill.external {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+}
+
+.ns-category-fill.internal {
+  background: linear-gradient(135deg, #a855f7, #c084fc);
+}
+
+.ns-category-fill span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+}
+
+.ns-category-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.ns-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ns-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.ns-legend-item.external .ns-legend-dot {
+  background: #60a5fa;
+}
+
+.ns-legend-item.internal .ns-legend-dot {
+  background: #c084fc;
+}
+
+/* Insight Card */
+.ns-insight {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  border-left: 3px solid;
+}
+
+.ns-insight-high {
+  border-left-color: #f87171;
+}
+
+.ns-insight-medium {
+  border-left-color: #fbbf24;
+}
+
+.ns-insight-low {
+  border-left-color: #4ade80;
+}
+
+.ns-insight-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.ns-insight-content h4 {
+  margin: 0 0 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+}
+
+.ns-insight-content p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+/* Top Resistance */
+.ns-top-resistance {
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.ns-resistance-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ns-resistance-icon {
+  font-size: 1.75rem;
+}
+
+.ns-resistance-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ns-resistance-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.ns-resistance-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.ns-resistance-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.ns-resistance-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ns-stat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.ns-stat-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Trend Indicators */
+.ns-trend {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.ns-trend-improving {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.ns-trend-increasing {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.ns-trend-stable {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.ns-trend-neutral {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Expanded View */
+.ns-expanded {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.ns-all-insights {
+  margin-bottom: 16px;
+}
+
+.ns-all-insights h4,
+.ns-pattern-section h4 {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ns-pattern-section {
+  margin-bottom: 16px;
+}
+
+.ns-pattern-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ns-pattern-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border-left: 3px solid #c084fc;
+}
+
+.ns-pattern-item.external {
+  border-left-color: #60a5fa;
+}
+
+.ns-pattern-icon {
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.ns-pattern-name {
+  flex: 1;
+  font-size: 0.875rem;
+  color: white;
+}
+
+.ns-pattern-count {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  min-width: 30px;
+}
+
+.ns-pattern-intensity {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 40px;
+  text-align: right;
+}
+
+.ns-pattern-trend {
+  font-size: 0.875rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Footer */
+.ns-widget-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 16px;
+}
+
+.ns-period,
+.ns-total {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .ns-resistance-stats {
+    flex-wrap: wrap;
+  }
+
+  .ns-pattern-item {
+    flex-wrap: wrap;
+  }
+
+  .ns-pattern-name {
+    flex: 0 0 100%;
+    order: 1;
+    margin-top: 6px;
+  }
+
+  .ns-pattern-icon {
+    order: 0;
+  }
+
+  .ns-pattern-count,
+  .ns-pattern-intensity,
+  .ns-pattern-trend {
+    order: 2;
+  }
+}

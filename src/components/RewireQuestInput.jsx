@@ -2,11 +2,15 @@
  * RewireQuestInput - Multi-step input component for Rewire quests
  *
  * Handles 6 Rewire quest types with step-by-step slider UI
+ *
+ * Refactored to use shared useSteppedForm hook and StepProgress component.
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import { useSteppedForm } from '../hooks/useSteppedForm'
+import { StepProgress } from './QuestInputShared'
 import './RewireQuestInput.css'
 
 // Rewire quest IDs
@@ -71,62 +75,176 @@ const OUTCOME_FEELINGS = [
   { id: 'harder', label: 'Harder Than Expected', icon: '😤' }
 ]
 
+// Step configurations for each quest type
+const STEP_CONFIGS = {
+  rewire_behavior_change: { totalSteps: 4, stepTitles: ['Autopilot', 'Shift', 'Outcome', 'Review'] },
+  rewire_protective_to_essence: { totalSteps: 4, stepTitles: ['Voice', 'Response', 'Outcome', 'Review'] },
+  rewire_dopamine_diet: { totalSteps: 4, stepTitles: ['Avoided', 'Chose', 'Outcome', 'Review'] },
+  rewire_future_successful_you: { totalSteps: 3, stepTitles: ['Action', 'Outcome', 'Review'] },
+  rewire_hell_yea: { totalSteps: 4, stepTitles: ['Type', 'Event', 'What Made It', 'Review'] },
+  reconnect_groan_wheel: { totalSteps: 4, stepTitles: ['Fears & Layer', 'Action', 'Intensity', 'Review'] }
+}
+
+// Initial form data
+const INITIAL_REWIRE_FORM_DATA = {
+  // Common
+  situation: '',
+  outcome: null,
+  // Embody Your Essence
+  autopilotMoment: '',
+  consciousShift: '',
+  // Protective to Essence
+  protectiveVoice: null,
+  protectiveMessage: '',
+  essenceResponse: '',
+  // Dopamine Diet
+  fastFoodJoy: null,
+  nutritiousJoy: null,
+  comparisonNote: '',
+  // Future Successful You
+  whatYouWerentGoingToDo: '',
+  vulnerabilityLayer: null,
+  // Make It A Hell Yea
+  hellYeaType: null,
+  eventDescription: '',
+  whatMadeItHellYea: '',
+  // Essence Voice Groan
+  fears: [],
+  action: '',
+  intensity: null
+}
+
 function RewireQuestInput({ quest, onComplete }) {
   const { user } = useAuth()
-  const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(false)
   const [userArchetypes, setUserArchetypes] = useState({ protective: null, essence: null })
   const [showOtherVoices, setShowOtherVoices] = useState(false)
 
-  // State for different quest types
-  const [formData, setFormData] = useState({
-    // Common
-    situation: '',
-    outcome: null,
+  const config = STEP_CONFIGS[quest.id] || { totalSteps: 3, stepTitles: ['Input', 'Details', 'Review'] }
 
-    // Embody Your Essence
-    autopilotMoment: '',
-    consciousShift: '',
-
-    // Protective to Essence
-    protectiveVoice: null,
-    protectiveMessage: '',
-    essenceResponse: '',
-
-    // Dopamine Diet
-    fastFoodJoy: null,
-    nutritiousJoy: null,
-    comparisonNote: '',
-
-    // Future Successful You
-    whatYouWerentGoingToDo: '',
-    vulnerabilityLayer: null,
-
-    // Make It A Hell Yea
-    hellYeaType: null, // 'organic' or 'transformed'
-    eventDescription: '',
-    whatMadeItHellYea: '',
-
-    // Essence Voice Groan
-    fears: [],
-    action: '',
-    intensity: null
-  })
-
-  // Get total steps based on quest type
-  const getTotalSteps = () => {
+  // Validation function
+  const validateStep = useCallback((currentStep, data) => {
     switch (quest.id) {
-      case 'rewire_behavior_change': return 4 // Autopilot → Shift → Outcome → Summary
-      case 'rewire_protective_to_essence': return 4 // Voice+Message → Response → Outcome → Summary
-      case 'rewire_dopamine_diet': return 4 // FastFood → Nutritious → Outcome → Summary
-      case 'rewire_future_successful_you': return 3 // Action → Outcome → Summary
-      case 'rewire_hell_yea': return 4 // Type → Event → WhatMadeIt → Summary
-      case 'reconnect_groan_wheel': return 4 // Fears+Layer → Action → Intensity/Outcome → Summary
-      default: return 3
+      case 'rewire_behavior_change':
+        switch (currentStep) {
+          case 1: return data.autopilotMoment.trim().length >= 10
+          case 2: return data.consciousShift.trim().length >= 10
+          case 3: return data.outcome !== null
+          case 4: return true
+          default: return false
+        }
+      case 'rewire_protective_to_essence':
+        switch (currentStep) {
+          case 1: return data.protectiveVoice !== null && data.protectiveMessage.trim().length >= 10
+          case 2: return data.essenceResponse.trim().length >= 10
+          case 3: return data.outcome !== null
+          case 4: return true
+          default: return false
+        }
+      case 'rewire_dopamine_diet':
+        switch (currentStep) {
+          case 1: return data.fastFoodJoy !== null
+          case 2: return data.nutritiousJoy !== null
+          case 3: return data.outcome !== null
+          case 4: return true
+          default: return false
+        }
+      case 'rewire_future_successful_you':
+        switch (currentStep) {
+          case 1: return data.whatYouWerentGoingToDo.trim().length >= 10
+          case 2: return data.outcome !== null
+          case 3: return true
+          default: return false
+        }
+      case 'rewire_hell_yea':
+        switch (currentStep) {
+          case 1: return data.hellYeaType !== null
+          case 2: return data.eventDescription.trim().length >= 10
+          case 3: return data.whatMadeItHellYea.trim().length >= 10
+          case 4: return true
+          default: return false
+        }
+      case 'reconnect_groan_wheel':
+        switch (currentStep) {
+          case 1: return data.vulnerabilityLayer !== null && data.fears.length > 0
+          case 2: return data.action.trim().length >= 10
+          case 3: return data.intensity !== null && data.outcome !== null
+          case 4: return true
+          default: return false
+        }
+      default: return false
     }
-  }
+  }, [quest.id])
 
-  const totalSteps = getTotalSteps()
+  // Build structured data for submission
+  const buildStructuredData = useCallback((data) => {
+    switch (quest.id) {
+      case 'rewire_behavior_change':
+        return {
+          quest_type: 'embody_essence',
+          autopilot_moment: data.autopilotMoment,
+          conscious_shift: data.consciousShift,
+          outcome: data.outcome
+        }
+      case 'rewire_protective_to_essence':
+        return {
+          quest_type: 'protective_to_essence',
+          protective_voice: data.protectiveVoice,
+          protective_message: data.protectiveMessage,
+          essence_response: data.essenceResponse,
+          outcome: data.outcome
+        }
+      case 'rewire_dopamine_diet':
+        return {
+          quest_type: 'dopamine_diet',
+          fast_food_joy: data.fastFoodJoy,
+          nutritious_joy: data.nutritiousJoy,
+          comparison_note: data.comparisonNote,
+          outcome: data.outcome
+        }
+      case 'rewire_future_successful_you':
+        return {
+          quest_type: 'future_successful_you',
+          what_you_werent_going_to_do: data.whatYouWerentGoingToDo,
+          outcome: data.outcome
+        }
+      case 'rewire_hell_yea':
+        return {
+          quest_type: 'hell_yea',
+          type: data.hellYeaType,
+          event_description: data.eventDescription,
+          what_made_it_hell_yea: data.whatMadeItHellYea
+        }
+      case 'reconnect_groan_wheel':
+        return {
+          quest_type: 'essence_voice_groan',
+          vulnerability_layer: data.vulnerabilityLayer,
+          fears: data.fears,
+          action: data.action,
+          intensity: data.intensity,
+          outcome: data.outcome
+        }
+      default:
+        return data
+    }
+  }, [quest.id])
+
+  const {
+    step,
+    formData,
+    setFormData,
+    isSubmitting,
+    isReviewStep,
+    totalSteps,
+    canContinue,
+    handleNext,
+    handleBack,
+    toggleArrayItem
+  } = useSteppedForm({
+    totalSteps: config.totalSteps,
+    initialData: INITIAL_REWIRE_FORM_DATA,
+    validateStep,
+    onSubmit: (data) => onComplete(quest, buildStructuredData(data))
+  })
 
   // Fetch user's archetypes
   useEffect(() => {
@@ -154,143 +272,9 @@ function RewireQuestInput({ quest, onComplete }) {
     fetchArchetypes()
   }, [user])
 
-  const canContinue = () => {
-    switch (quest.id) {
-      case 'rewire_behavior_change':
-        switch (step) {
-          case 1: return formData.autopilotMoment.trim().length >= 10
-          case 2: return formData.consciousShift.trim().length >= 10
-          case 3: return formData.outcome !== null
-          case 4: return true
-          default: return false
-        }
-
-      case 'rewire_protective_to_essence':
-        switch (step) {
-          case 1: return formData.protectiveVoice !== null && formData.protectiveMessage.trim().length >= 10
-          case 2: return formData.essenceResponse.trim().length >= 10
-          case 3: return formData.outcome !== null
-          case 4: return true
-          default: return false
-        }
-
-      case 'rewire_dopamine_diet':
-        switch (step) {
-          case 1: return formData.fastFoodJoy !== null
-          case 2: return formData.nutritiousJoy !== null
-          case 3: return formData.outcome !== null
-          case 4: return true
-          default: return false
-        }
-
-      case 'rewire_future_successful_you':
-        switch (step) {
-          case 1: return formData.whatYouWerentGoingToDo.trim().length >= 10
-          case 2: return formData.outcome !== null
-          case 3: return true
-          default: return false
-        }
-
-      case 'rewire_hell_yea':
-        switch (step) {
-          case 1: return formData.hellYeaType !== null
-          case 2: return formData.eventDescription.trim().length >= 10
-          case 3: return formData.whatMadeItHellYea.trim().length >= 10
-          case 4: return true
-          default: return false
-        }
-
-      case 'reconnect_groan_wheel':
-        switch (step) {
-          case 1: return formData.vulnerabilityLayer !== null && formData.fears.length > 0
-          case 2: return formData.action.trim().length >= 10
-          case 3: return formData.intensity !== null && formData.outcome !== null
-          case 4: return true
-          default: return false
-        }
-
-      default: return false
-    }
-  }
-
-  const handleNext = () => {
-    if (step < totalSteps) {
-      setStep(step + 1)
-    }
-  }
-
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1)
-    }
-  }
-
+  // Submit handler
   const handleSubmit = () => {
-    setLoading(true)
-
-    let structuredData = {}
-
-    switch (quest.id) {
-      case 'rewire_behavior_change':
-        structuredData = {
-          quest_type: 'embody_essence',
-          autopilot_moment: formData.autopilotMoment,
-          conscious_shift: formData.consciousShift,
-          outcome: formData.outcome
-        }
-        break
-
-      case 'rewire_protective_to_essence':
-        structuredData = {
-          quest_type: 'protective_to_essence',
-          protective_voice: formData.protectiveVoice,
-          protective_message: formData.protectiveMessage,
-          essence_response: formData.essenceResponse,
-          outcome: formData.outcome
-        }
-        break
-
-      case 'rewire_dopamine_diet':
-        structuredData = {
-          quest_type: 'dopamine_diet',
-          fast_food_joy: formData.fastFoodJoy,
-          nutritious_joy: formData.nutritiousJoy,
-          comparison_note: formData.comparisonNote,
-          outcome: formData.outcome
-        }
-        break
-
-      case 'rewire_future_successful_you':
-        structuredData = {
-          quest_type: 'future_successful_you',
-          what_you_werent_going_to_do: formData.whatYouWerentGoingToDo,
-          outcome: formData.outcome
-        }
-        break
-
-      case 'rewire_hell_yea':
-        structuredData = {
-          quest_type: 'hell_yea',
-          type: formData.hellYeaType,
-          event_description: formData.eventDescription,
-          what_made_it_hell_yea: formData.whatMadeItHellYea
-        }
-        break
-
-      case 'reconnect_groan_wheel':
-        structuredData = {
-          quest_type: 'essence_voice_groan',
-          vulnerability_layer: formData.vulnerabilityLayer,
-          fears: formData.fears,
-          action: formData.action,
-          intensity: formData.intensity,
-          outcome: formData.outcome
-        }
-        break
-    }
-
-    onComplete(quest, structuredData)
-    setLoading(false)
+    onComplete(quest, buildStructuredData(formData))
   }
 
   // Helper getters
@@ -308,9 +292,11 @@ function RewireQuestInput({ quest, onComplete }) {
   if (quest.id === 'rewire_behavior_change') {
     return (
       <div className="rewire-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Autopilot moment */}
         {step === 1 && (
@@ -411,8 +397,8 @@ function RewireQuestInput({ quest, onComplete }) {
               Continue →
             </button>
           ) : (
-            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
             </button>
           )}
         </div>
@@ -424,9 +410,11 @@ function RewireQuestInput({ quest, onComplete }) {
   if (quest.id === 'rewire_protective_to_essence') {
     return (
       <div className="rewire-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Voice selector + Protective message */}
         {step === 1 && (
@@ -575,8 +563,8 @@ function RewireQuestInput({ quest, onComplete }) {
               Continue →
             </button>
           ) : (
-            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
             </button>
           )}
         </div>
@@ -588,9 +576,11 @@ function RewireQuestInput({ quest, onComplete }) {
   if (quest.id === 'rewire_dopamine_diet') {
     return (
       <div className="rewire-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Fast-food joy */}
         {step === 1 && (
@@ -713,8 +703,8 @@ function RewireQuestInput({ quest, onComplete }) {
               Continue →
             </button>
           ) : (
-            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
             </button>
           )}
         </div>
@@ -726,9 +716,11 @@ function RewireQuestInput({ quest, onComplete }) {
   if (quest.id === 'rewire_future_successful_you') {
     return (
       <div className="rewire-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: What you weren't going to do */}
         {step === 1 && (
@@ -804,8 +796,8 @@ function RewireQuestInput({ quest, onComplete }) {
               Continue →
             </button>
           ) : (
-            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
             </button>
           )}
         </div>
@@ -817,9 +809,11 @@ function RewireQuestInput({ quest, onComplete }) {
   if (quest.id === 'rewire_hell_yea') {
     return (
       <div className="rewire-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Hell Yea type */}
         {step === 1 && (
@@ -927,8 +921,8 @@ function RewireQuestInput({ quest, onComplete }) {
               Continue →
             </button>
           ) : (
-            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
             </button>
           )}
         </div>
@@ -940,9 +934,11 @@ function RewireQuestInput({ quest, onComplete }) {
   if (quest.id === 'reconnect_groan_wheel') {
     return (
       <div className="rewire-input stepped">
-        <div className="step-progress">
-          <span className="progress-text">Step {step} of {totalSteps}</span>
-        </div>
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
 
         {/* Step 1: Fears + Vulnerability layer */}
         {step === 1 && (
@@ -958,12 +954,7 @@ function RewireQuestInput({ quest, onComplete }) {
                   key={fear.id}
                   type="button"
                   className={`fear-option ${formData.fears.includes(fear.id) ? 'selected' : ''}`}
-                  onClick={() => {
-                    const newFears = formData.fears.includes(fear.id)
-                      ? formData.fears.filter(f => f !== fear.id)
-                      : [...formData.fears, fear.id]
-                    setFormData({ ...formData, fears: newFears })
-                  }}
+                  onClick={() => toggleArrayItem('fears', fear.id)}
                 >
                   <span className="fear-icon">{fear.icon}</span>
                   <span className="fear-label">{fear.label}</span>
@@ -1106,8 +1097,8 @@ function RewireQuestInput({ quest, onComplete }) {
               Continue →
             </button>
           ) : (
-            <button className="nav-btn complete" onClick={handleSubmit} disabled={loading}>
-              {loading ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
             </button>
           )}
         </div>

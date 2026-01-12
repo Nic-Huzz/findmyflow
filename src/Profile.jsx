@@ -411,8 +411,39 @@ const Profile = () => {
   if (!userData) {
     return (
       <div className="app">
-        <div className="error">
-          No profile data found. Please complete the lead magnet flow first.
+        <div className="error" style={{ textAlign: 'center', padding: '2rem' }}>
+          {!user ? (
+            <>
+              <p style={{ marginBottom: '1rem' }}>You're not logged in.</p>
+              <Link
+                to="/log-in"
+                style={{
+                  color: '#8B5CF6',
+                  textDecoration: 'underline',
+                  fontSize: '1.1rem'
+                }}
+              >
+                Click here to log in
+              </Link>
+            </>
+          ) : (
+            <>
+              <p style={{ marginBottom: '1rem' }}>No profile data found.</p>
+              <p style={{ marginBottom: '1rem', opacity: 0.8 }}>
+                Complete the onboarding to get started.
+              </p>
+              <Link
+                to="/log-in"
+                style={{
+                  color: '#8B5CF6',
+                  textDecoration: 'underline',
+                  fontSize: '1.1rem'
+                }}
+              >
+                Start onboarding
+              </Link>
+            </>
+          )}
         </div>
       </div>
     )

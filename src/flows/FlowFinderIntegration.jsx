@@ -5,7 +5,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { STAGES } from '../lib/stageConfig'
-import '../FlowFinder.css'
+import './FlowFinder.css'
 
 // ClusterSlider component (extracted from NikigaiTest.jsx)
 function ClusterSlider({ title, clusters, selectedIndex, onSelect }) {

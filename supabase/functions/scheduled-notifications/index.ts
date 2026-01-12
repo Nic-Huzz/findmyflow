@@ -201,10 +201,14 @@ serve(async (req) => {
         continue
       }
 
+      // Log the detected hour for debugging
+      console.log(`User ${sub.user_id}: timezone=${timezone}, localHour=${userLocalHour}`)
+
       // Check if there's a standard notification for this hour
       const notification = NOTIFICATIONS[userLocalHour]
 
       if (notification) {
+        console.log(`User ${sub.user_id}: Adding notification for hour ${userLocalHour}`)
         notificationsToSend.push({ subscription: sub, notification })
       }
 
@@ -239,6 +243,104 @@ serve(async (req) => {
           }
         }
       }
+
+      // Check for pending recommendations at 9am (business hours nudge)
+      if (userLocalHour === 9) {
+        const { data: pendingRecs, error: recsError } = await supabaseClient
+          .from('recommendations')
+          .select('id, priority, title')
+          .eq('user_id', sub.user_id)
+          .eq('status', 'pending')
+          .order('priority', { ascending: true })
+          .limit(3)
+
+        if (!recsError && pendingRecs && pendingRecs.length > 0) {
+          const highPriority = pendingRecs.filter(r => r.priority === 'high').length
+          const recNotification = {
+            title: highPriority > 0
+              ? `🤖 ${highPriority} High Priority Insight${highPriority > 1 ? 's' : ''}`
+              : `🤖 ${pendingRecs.length} AI Insight${pendingRecs.length > 1 ? 's' : ''} Waiting`,
+            body: pendingRecs[0].title,
+            url: '/crm/alerts',
+            tag: 'recommendations-nudge'
+          }
+          notificationsToSend.push({ subscription: sub, notification: recNotification })
+        }
+      }
+
+      // Daily Priority Notifications at 8am
+      if (userLocalHour === 8) {
+        // Check for overdue follow-ups
+        const today = new Date().toISOString().split('T')[0]
+        const { data: overdueDeals, error: overdueError } = await supabaseClient
+          .from('deals')
+          .select('id, contact_name, value, next_follow_up_date')
+          .eq('user_id', sub.user_id)
+          .not('status', 'in', '("won","lost")')
+          .lt('next_follow_up_date', today)
+          .limit(5)
+
+        // Check for very stale deals (14+ days no activity)
+        const staleDate = new Date()
+        staleDate.setDate(staleDate.getDate() - 14)
+        const staleDateStr = staleDate.toISOString()
+
+        const { data: staleDeals, error: staleError } = await supabaseClient
+          .from('deals')
+          .select('id, contact_name, value, updated_at')
+          .eq('user_id', sub.user_id)
+          .not('status', 'in', '("won","lost")')
+          .lt('updated_at', staleDateStr)
+          .limit(5)
+
+        const overdueCount = (!overdueError && overdueDeals) ? overdueDeals.length : 0
+        const staleCount = (!staleError && staleDeals) ? staleDeals.length : 0
+        const urgentTotal = overdueCount + staleCount
+
+        if (urgentTotal > 0) {
+          let bodyText = ''
+          if (overdueCount > 0 && staleCount > 0) {
+            bodyText = `${overdueCount} overdue follow-up${overdueCount > 1 ? 's' : ''} & ${staleCount} deal${staleCount > 1 ? 's' : ''} going cold`
+          } else if (overdueCount > 0) {
+            const topDeal = overdueDeals![0]
+            bodyText = `${topDeal.contact_name} follow-up overdue${overdueCount > 1 ? ` (+${overdueCount - 1} more)` : ''}`
+          } else {
+            const topDeal = staleDeals![0]
+            bodyText = `${topDeal.contact_name} needs attention${staleCount > 1 ? ` (+${staleCount - 1} more)` : ''}`
+          }
+
+          const priorityNotification = {
+            title: `📋 ${urgentTotal} Priority Action${urgentTotal > 1 ? 's' : ''} Today`,
+            body: bodyText,
+            url: '/crm',
+            tag: 'daily-priorities-morning'
+          }
+          notificationsToSend.push({ subscription: sub, notification: priorityNotification })
+        }
+      }
+
+      // Afternoon follow-up reminder at 2pm
+      if (userLocalHour === 14) {
+        const today = new Date().toISOString().split('T')[0]
+        const { data: todayFollowUps, error: fuError } = await supabaseClient
+          .from('deals')
+          .select('id, contact_name, value, next_follow_up_date')
+          .eq('user_id', sub.user_id)
+          .not('status', 'in', '("won","lost")')
+          .lte('next_follow_up_date', today)
+          .limit(3)
+
+        if (!fuError && todayFollowUps && todayFollowUps.length > 0) {
+          const topDeal = todayFollowUps[0]
+          const afternoonNotification = {
+            title: `📞 ${todayFollowUps.length} Follow-up${todayFollowUps.length > 1 ? 's' : ''} Remaining`,
+            body: `Don't forget: ${topDeal.contact_name}${todayFollowUps.length > 1 ? ` and ${todayFollowUps.length - 1} more` : ''}`,
+            url: '/crm',
+            tag: 'daily-priorities-afternoon'
+          }
+          notificationsToSend.push({ subscription: sub, notification: afternoonNotification })
+        }
+      }
     }
 
     console.log(`Found ${notificationsToSend.length} notifications to send`)
@@ -263,11 +365,15 @@ serve(async (req) => {
       )
     }
 
-    // Import web-push library
-    const webpush = await import('https://esm.sh/web-push@3.6.6')
+    // Import web-push library using npm: specifier for better Deno compatibility
+    const webpush = await import('npm:web-push@3.6.7')
 
     // Configure web-push
-    webpush.setVapidDetails(vapidEmail, vapidPublicKey, vapidPrivateKey)
+    webpush.default.setVapidDetails(
+      `mailto:${vapidEmail}`,
+      vapidPublicKey,
+      vapidPrivateKey
+    )
 
     // Send notifications
     const results = await Promise.allSettled(
@@ -288,7 +394,7 @@ serve(async (req) => {
             keys: subscription.keys
           }
 
-          await webpush.sendNotification(pushSubscription, payload)
+          await webpush.default.sendNotification(pushSubscription, payload)
           return { success: true, endpoint: subscription.endpoint }
         } catch (error: any) {
           console.error('Error sending to subscription:', error)

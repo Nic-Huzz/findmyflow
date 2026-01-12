@@ -15,12 +15,21 @@
  * Part of project-based refactor (see docs/2024-12-20-major-refactor-plan.md)
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import CoverageMatrix from '../components/CoverageMatrix'
 import NicheSharpener from '../components/NicheSharpener'
+import { GradientWheel } from '../components/CompetenceWheels'
+import {
+  SKILLS_SEGMENTS,
+  PROFICIENCY_RINGS,
+  PROBLEM_SEGMENTS,
+  PROBLEMS_PROFICIENCY_RINGS,
+  PERSONA_SEGMENTS,
+  JOURNEY_STAGES
+} from '../lib/wheelTaxonomy'
 import './LibraryOfAnswers.css'
 
 const SECTIONS = {
@@ -60,6 +69,277 @@ function LibraryOfAnswers() {
 
   // Healing Compass data
   const [healingEntries, setHealingEntries] = useState([])
+
+  // Add hue values to segments for wheel rendering
+  const skillsWithHue = useMemo(() =>
+    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    []
+  )
+
+  const problemsWithHue = useMemo(() =>
+    PROBLEM_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    []
+  )
+
+  const personasWithHue = useMemo(() =>
+    PERSONA_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    []
+  )
+
+  // Map cluster labels to wheel segment indices for Skills
+  const mapClusterToSegments = (clusterLabel) => {
+    const labelLower = clusterLabel.toLowerCase()
+    const segmentMappings = {
+      clarifying: [0], explaining: [0], teaching: [0], translating: [0],
+      analyzing: [1], analysis: [1], data: [1], patterns: [1], research: [1],
+      strategizing: [2], strategy: [2], planning: [2], vision: [2],
+      organizing: [3], systems: [3], operations: [3], processes: [3],
+      building: [4], making: [4], engineering: [4], coding: [4], developing: [4],
+      designing: [5], design: [5], ux: [5], visual: [5], aesthetic: [5],
+      creating: [6], creative: [6], art: [6], writing: [6], ideation: [6],
+      expressing: [7], storytelling: [7], presenting: [7], speaking: [7],
+      connecting: [8], networking: [8], collaboration: [8], facilitating: [8],
+      influencing: [9], sales: [9], persuading: [9], motivating: [9],
+      nurturing: [10], coaching: [10], mentoring: [10], supporting: [10],
+      synthesizing: [11], integrating: [11], wisdom: [11], 'big picture': [11],
+      'problem solving': [1, 2], 'problem-solving': [1, 2],
+      'team building': [8, 10], leadership: [2, 9],
+      communication: [0, 7], 'project management': [2, 3],
+      innovation: [4, 6], entrepreneurship: [2, 4, 9],
+      learning: [0, 6], experience: [5, 6], engagement: [8, 9],
+      community: [8, 10], healing: [10, 11], growth: [10, 11],
+      playful: [6, 8], interaction: [7, 8], performance: [7, 9],
+    }
+    const matchedSegments = new Set()
+    Object.entries(segmentMappings).forEach(([keyword, indices]) => {
+      if (labelLower.includes(keyword)) {
+        indices.forEach(i => matchedSegments.add(i))
+      }
+    })
+    return matchedSegments.size > 0 ? Array.from(matchedSegments) : [0]
+  }
+
+  // Map proficiency rating to ring index (0-2) for 3-ring wheel
+  const getRingForProficiency = (rating) => {
+    switch (rating) {
+      case 'emerging': return 0
+      case 'establishing': return 1
+      case 'mastering': return 2
+      default: return 1
+    }
+  }
+
+  // Calculate lit cells from skills clusters using proficiency ratings
+  const skillsLitCells = useMemo(() => {
+    if (skillsClusters.length === 0) return new Set()
+    const newLitCells = new Set()
+
+    skillsClusters.forEach(cluster => {
+      const segmentIndices = mapClusterToSegments(cluster.cluster_label)
+
+      // Check if items have proficiency data (new format: [{text, rating}, ...])
+      const items = cluster.items || []
+      const hasRatings = items.length > 0 && typeof items[0] === 'object' && items[0].rating
+
+      if (hasRatings) {
+        // Calculate dominant proficiency for this cluster
+        const proficiencyCounts = { emerging: 0, establishing: 0, mastering: 0 }
+        items.forEach(item => {
+          if (item.rating) proficiencyCounts[item.rating]++
+        })
+
+        let dominantProficiency = 'establishing'
+        let maxCount = 0
+        Object.entries(proficiencyCounts).forEach(([level, count]) => {
+          if (count > maxCount) {
+            maxCount = count
+            dominantProficiency = level
+          }
+        })
+
+        const ringIdx = getRingForProficiency(dominantProficiency)
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-${ringIdx}`)
+        })
+      } else {
+        // Legacy format (string items) - default to middle ring
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-1`)
+        })
+      }
+    })
+
+    return newLitCells
+  }, [skillsClusters])
+
+  // Map cluster labels to wheel segment indices for Problems
+  const mapProblemClusterToSegments = (clusterLabel) => {
+    const labelLower = clusterLabel.toLowerCase()
+    const segmentMappings = {
+      // Physical vitality
+      health: [0], fitness: [0], body: [0], energy: [0], sleep: [0], nutrition: [0],
+      // Mental wellbeing
+      anxiety: [1], stress: [1], mindset: [1], mental: [1], emotions: [1], burnout: [1],
+      // Personal mastery
+      skills: [2], productivity: [2], habits: [2], growth: [2], learning: [2],
+      // Intimate bonds
+      relationship: [3], family: [3], parenting: [3], love: [3], marriage: [3],
+      // Service & care
+      caregiving: [4], disability: [4], healthcare: [4], support: [4],
+      // Creative expression
+      art: [5], creativity: [5], voice: [5], expression: [5], identity: [5],
+      // Local impact
+      team: [6], organization: [6], community: [6], workplace: [6], culture: [6],
+      // Cultural movements
+      movement: [7], belonging: [7], trends: [7], social: [7],
+      // Economic freedom
+      money: [8], business: [8], career: [8], income: [8], financial: [8], freedom: [8],
+      // Social justice
+      inequality: [9], discrimination: [9], rights: [9], fairness: [9], advocacy: [9],
+      // Planetary health
+      climate: [10], environment: [10], sustainability: [10], planet: [10],
+      // Human progress
+      technology: [11], innovation: [11], future: [11], education: [11],
+    }
+    const matchedSegments = new Set()
+    Object.entries(segmentMappings).forEach(([keyword, indices]) => {
+      if (labelLower.includes(keyword)) {
+        indices.forEach(i => matchedSegments.add(i))
+      }
+    })
+    return matchedSegments.size > 0 ? Array.from(matchedSegments) : [0]
+  }
+
+  // Map problem proficiency rating to ring index (0-2) for 3-ring wheel
+  const getRingForProblemProficiency = (rating) => {
+    switch (rating) {
+      case 'exploring': return 0
+      case 'pursuing': return 1
+      case 'proven': return 2
+      default: return 1
+    }
+  }
+
+  // Calculate lit cells from problems clusters using proficiency ratings
+  const problemsLitCells = useMemo(() => {
+    if (problemsClusters.length === 0) return new Set()
+    const newLitCells = new Set()
+
+    problemsClusters.forEach(cluster => {
+      const segmentIndices = mapProblemClusterToSegments(cluster.cluster_label)
+
+      // Check if items have proficiency data (new format: [{text, rating}, ...])
+      const items = cluster.items || []
+      const hasRatings = items.length > 0 && typeof items[0] === 'object' && items[0].rating
+
+      if (hasRatings) {
+        // Calculate dominant proficiency for this cluster
+        const proficiencyCounts = { exploring: 0, pursuing: 0, proven: 0 }
+        items.forEach(item => {
+          if (item.rating) proficiencyCounts[item.rating]++
+        })
+
+        let dominantProficiency = 'pursuing'
+        let maxCount = 0
+        Object.entries(proficiencyCounts).forEach(([level, count]) => {
+          if (count > maxCount) {
+            maxCount = count
+            dominantProficiency = level
+          }
+        })
+
+        const ringIdx = getRingForProblemProficiency(dominantProficiency)
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-${ringIdx}`)
+        })
+      } else {
+        // Legacy format (string items) - default to middle ring
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-1`)
+        })
+      }
+    })
+
+    return newLitCells
+  }, [problemsClusters])
+
+  // Map cluster labels to wheel segment indices for Personas
+  const mapPersonaClusterToSegments = (clusterLabel) => {
+    const labelLower = clusterLabel.toLowerCase()
+    const segmentMappings = {
+      // Seekers
+      seeker: [0], lost: [0], direction: [0], purpose: [0], meaning: [0], clarity: [0],
+      // Builders
+      builder: [1], creating: [1], building: [1], entrepreneur: [1], starting: [1],
+      // Healers
+      healer: [2], healing: [2], trauma: [2], pain: [2], suffering: [2], recovery: [2],
+      // Teachers
+      teacher: [3], learning: [3], growing: [3], knowledge: [3], education: [3],
+      // Connectors
+      connector: [4], lonely: [4], isolated: [4], community: [4], belonging: [4],
+      // Achievers
+      achiever: [5], success: [5], winning: [5], status: [5], ambitious: [5],
+      // Explorers
+      explorer: [6], freedom: [6], adventure: [6], autonomy: [6], travel: [6],
+      // Visionaries
+      visionary: [7], future: [7], change: [7], innovation: [7], transformation: [7],
+      // Protectors
+      protector: [8], security: [8], safety: [8], stability: [8], risk: [8],
+      // Creators
+      creator: [9], expression: [9], art: [9], originality: [9], voice: [9],
+      // Nurturers
+      nurturer: [10], family: [10], caring: [10], devoted: [10], children: [10],
+      // Challengers
+      challenger: [11], injustice: [11], disruption: [11], truth: [11], advocacy: [11],
+    }
+    const matchedSegments = new Set()
+    Object.entries(segmentMappings).forEach(([keyword, indices]) => {
+      if (labelLower.includes(keyword)) {
+        indices.forEach(i => matchedSegments.add(i))
+      }
+    })
+    return matchedSegments.size > 0 ? Array.from(matchedSegments) : [0]
+  }
+
+  // Map journey stage to ring index (0-2) for 3-ring wheel
+  const getRingForJourneyStage = (stage) => {
+    switch (stage) {
+      case 'awakening': return 0
+      case 'struggling': return 1
+      case 'ready': return 2
+      default: return 1
+    }
+  }
+
+  // Calculate lit cells from persona clusters using journey stages
+  const personasLitCells = useMemo(() => {
+    if (personaClusters.length === 0) return new Set()
+    const newLitCells = new Set()
+
+    personaClusters.forEach(cluster => {
+      const segmentIndices = mapPersonaClusterToSegments(cluster.cluster_label)
+
+      // Check if items have journey stage data (new format: [{text, journeyStage}, ...])
+      const items = cluster.items || []
+      const hasStage = items.length > 0 && typeof items[0] === 'object' && items[0].journeyStage
+
+      if (hasStage) {
+        // Use the cluster's journey stage (all items in a persona cluster have same stage)
+        const journeyStage = items[0].journeyStage || 'struggling'
+        const ringIdx = getRingForJourneyStage(journeyStage)
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-${ringIdx}`)
+        })
+      } else {
+        // Legacy format (string items) - default to middle ring
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-1`)
+        })
+      }
+    })
+
+    return newLitCells
+  }, [personaClusters])
 
   // Fetch projects on mount
   useEffect(() => {
@@ -289,9 +569,38 @@ function LibraryOfAnswers() {
         {skillsClusters.length === 0 ? (
           <p className="empty-text">No skills discovered yet. <Link to="/nikigai/skills">Start Flow Finder</Link></p>
         ) : (
-          <div className="cards-grid">
-            {skillsClusters.map(renderClusterCard)}
-          </div>
+          <>
+            <div className="skills-wheel-container">
+              <GradientWheel
+                segments={skillsWithHue}
+                rings={PROFICIENCY_RINGS}
+                litCells={skillsLitCells}
+                size={260}
+                centerLabel="SKILLS"
+                interactive={false}
+              />
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'transparent' }}></span>
+                  Inner: Emerging
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.3)' }}></span>
+                  Middle: Establishing
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.6)' }}></span>
+                  Outer: Mastering
+                </span>
+              </div>
+              <div style={{ textAlign: 'center', marginTop: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                {skillsLitCells.size} skill areas identified
+              </div>
+            </div>
+            <div className="cards-grid">
+              {skillsClusters.map(renderClusterCard)}
+            </div>
+          </>
         )}
       </div>
 
@@ -299,11 +608,40 @@ function LibraryOfAnswers() {
       <div className="subsection">
         <h3>Problems</h3>
         {problemsClusters.length === 0 ? (
-          <p className="empty-text">No problems identified yet.</p>
+          <p className="empty-text">No problems identified yet. <Link to="/nikigai/problems">Start Problems Flow</Link></p>
         ) : (
-          <div className="cards-grid">
-            {problemsClusters.map(renderClusterCard)}
-          </div>
+          <>
+            <div className="skills-wheel-container">
+              <GradientWheel
+                segments={problemsWithHue}
+                rings={PROBLEMS_PROFICIENCY_RINGS}
+                litCells={problemsLitCells}
+                size={260}
+                centerLabel="PROBLEMS"
+                interactive={false}
+              />
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'transparent' }}></span>
+                  Inner: Exploring
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.3)' }}></span>
+                  Middle: Pursuing
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.6)' }}></span>
+                  Outer: Proven
+                </span>
+              </div>
+              <div style={{ textAlign: 'center', marginTop: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                {problemsLitCells.size} problem areas identified
+              </div>
+            </div>
+            <div className="cards-grid">
+              {problemsClusters.map(renderClusterCard)}
+            </div>
+          </>
         )}
       </div>
 
@@ -311,11 +649,40 @@ function LibraryOfAnswers() {
       <div className="subsection">
         <h3>Personas</h3>
         {personaClusters.length === 0 ? (
-          <p className="empty-text">No personas created yet.</p>
+          <p className="empty-text">No personas created yet. <Link to="/nikigai/persona">Start Persona Flow</Link></p>
         ) : (
-          <div className="cards-grid">
-            {personaClusters.map(renderClusterCard)}
-          </div>
+          <>
+            <div className="skills-wheel-container">
+              <GradientWheel
+                segments={personasWithHue}
+                rings={JOURNEY_STAGES}
+                litCells={personasLitCells}
+                size={260}
+                centerLabel="PERSONAS"
+                interactive={false}
+              />
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'transparent' }}></span>
+                  Inner: Awakening
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', background: 'rgba(255,255,255,0.3)' }}></span>
+                  Middle: Struggling
+                </span>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'rgba(255,255,255,0.6)' }}></span>
+                  Outer: Ready
+                </span>
+              </div>
+              <div style={{ textAlign: 'center', marginTop: '8px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                {personasLitCells.size} persona areas identified
+              </div>
+            </div>
+            <div className="cards-grid">
+              {personaClusters.map(renderClusterCard)}
+            </div>
+          </>
         )}
       </div>
 

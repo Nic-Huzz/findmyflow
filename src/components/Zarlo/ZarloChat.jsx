@@ -42,9 +42,9 @@ function getTimeGreeting() {
   return 'Good evening'
 }
 
-// Get next best action based on user context
+// Get next best action based on user context (now wheel-aware)
 function getNextBestAction(userContext) {
-  const { hasCompletedNS, hasCompletedFlowFinder, groanCount, currentStage } = userContext
+  const { hasCompletedNS, hasCompletedFlowFinder, groanCount, currentStage, wheelSummary, gapAnalysis } = userContext
 
   // Priority 1: Nervous System Map - the core differentiator
   if (!hasCompletedNS) {
@@ -54,11 +54,54 @@ function getNextBestAction(userContext) {
     }
   }
 
-  // Priority 2: Flow Finder for clarity
-  if (!hasCompletedFlowFinder) {
+  // Priority 2: Flow Finder for clarity (now wheel-aware)
+  if (!hasCompletedFlowFinder || wheelSummary?.skills === 0) {
     return {
       message: "Ready to discover what you're actually here to build?",
-      action: { id: 'flow_finder', label: 'Start Flow Finder', route: '/nikigai/skills' }
+      action: { id: 'flow_finder', label: 'Start Skills Discovery', route: '/nikigai/skills' }
+    }
+  }
+
+  // Priority 2.5: Problems discovery if skills done but no problems
+  if (wheelSummary?.skills > 0 && wheelSummary?.problems === 0) {
+    return {
+      message: `Your ${wheelSummary.topSkill} skills are mapped! Now let's discover what problems you're passionate about solving.`,
+      action: { id: 'problems_finder', label: 'Discover Problems', route: '/nikigai/problems' }
+    }
+  }
+
+  // Priority 2.6: Persona discovery if skills + problems done but no personas
+  if (wheelSummary?.skills > 0 && wheelSummary?.problems > 0 && wheelSummary?.personas === 0) {
+    return {
+      message: `You know your skills and the problems you care about. Now let's identify WHO you're meant to serve.`,
+      action: { id: 'persona_finder', label: 'Discover Your Persona', route: '/nikigai/persona' }
+    }
+  }
+
+  // Priority 2.7: Show alignment-based opportunity if all three wheels done
+  if (wheelSummary?.hasFullAlignment && gapAnalysis?.opportunities?.length > 0) {
+    const topOpportunity = gapAnalysis.opportunities[0]
+    if (topOpportunity.priority === 'immediate') {
+      return {
+        message: `🎯 **${topOpportunity.title}** - ${topOpportunity.description}`,
+        action: { id: 'opportunity', label: topOpportunity.action || 'Take action', route: '/offer-builder' }
+      }
+    }
+  }
+
+  // Priority 2.8: Address gaps if detected
+  if (gapAnalysis?.gaps?.length > 0) {
+    const topGap = gapAnalysis.gaps.find(g => g.severity === 'high')
+    if (topGap) {
+      const gapRoutes = {
+        'skill_without_problem': '/nikigai/problems',
+        'problem_without_persona': '/nikigai/persona',
+        'skill_without_persona': '/nikigai/persona',
+      }
+      return {
+        message: topGap.message,
+        action: { id: 'fill_gap', label: topGap.suggestion?.split(':')[0] || 'Fill this gap', route: gapRoutes[topGap.type] || '/7-day-challenge' }
+      }
     }
   }
 

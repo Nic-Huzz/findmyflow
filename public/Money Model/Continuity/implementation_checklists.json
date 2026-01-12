@@ -1,0 +1,758 @@
+{
+  "signup_bonus_continuity": {
+    "name": "Continuity Bonus Offer",
+    "summary": "Offer a high-value bonus (worth MORE than the first payment) when customers sign up for continuity TODAY. Creates urgency and increases immediate conversion.",
+    "target_metrics": {
+      "signup_lift": "20-40% increase",
+      "bonus_hunter_churn": "Monitor—should be minimal if bonus is aligned",
+      "ltv_vs_onetime": "3-4x over 12-20 months"
+    },
+    "hormozi_principle": "The bonus must have more perceived value than the first continuity payment. This flips the psychology—they're getting MORE value than they're paying for month one.",
+    "implementation_checklist": [
+      {
+        "phase": "Bonus Design",
+        "tasks": [
+          {
+            "task": "Choose a high-value bonus",
+            "description": "Select something with high perceived value but low marginal cost to you",
+            "examples": ["All past content/products", "Physical product bundle", "1-on-1 accelerator call", "Exclusive community access", "Lifetime tool access"],
+            "requirement": "Perceived value > First month payment"
+          },
+          {
+            "task": "Calculate bonus value vs. first payment",
+            "description": "Ensure the math makes the offer irresistible",
+            "example": "Monthly: $59/mo, Bonus: $800 value of past products → They get $800 for $59"
+          },
+          {
+            "task": "Ensure bonus relates to core offer",
+            "description": "Bonus should attract people who want your main thing",
+            "principle": "Related bonuses attract right customers; unrelated bonuses attract bonus hunters who churn"
+          },
+          {
+            "task": "Make bonus deliverable immediately",
+            "description": "Instant gratification reinforces their decision",
+            "options": ["Digital delivery", "Immediate access", "Shipped same day"]
+          }
+        ]
+      },
+      {
+        "phase": "Offer Structure",
+        "tasks": [
+          {
+            "task": "Present continuity value clearly",
+            "description": "Explain what they get every month",
+            "format": "Every month you get [X, Y, Z] for just $X/month"
+          },
+          {
+            "task": "Stack the bonus value",
+            "description": "Show all bonus components with crossed-out prices",
+            "format": "[Bonus 1] - $X value, [Bonus 2] - $X value, [Bonus 3] - $X value = $XXX Total"
+          },
+          {
+            "task": "Create TODAY-only urgency",
+            "description": "Bonus only available for immediate signup",
+            "script": "'This bonus is only available if you join TODAY. After this call, it's gone.'",
+            "enforcement": "Actually remove the bonus after the window"
+          },
+          {
+            "task": "Explain how bonus complements subscription",
+            "description": "Show how bonus + ongoing subscription = complete solution",
+            "example": "'The bonus gives you everything we've ever created. The membership gives you everything we'll create going forward.'"
+          }
+        ]
+      },
+      {
+        "phase": "Churn Prevention",
+        "tasks": [
+          {
+            "task": "Ensure bonus attracts right customers",
+            "description": "If churn spikes after bonus campaign, bonus is misaligned",
+            "fix": "Change bonus to something more related to core value"
+          },
+          {
+            "task": "Onboard bonus recipients properly",
+            "description": "Help them consume bonus AND engage with subscription",
+            "danger": "If they only consume bonus, they'll cancel"
+          },
+          {
+            "task": "Track bonus recipient retention vs. non-bonus",
+            "description": "Monitor if bonus signups have different churn patterns"
+          }
+        ]
+      },
+      {
+        "phase": "Examples by Business Type",
+        "tasks": [
+          {
+            "task": "Physical Product Example",
+            "description": "Get every product we've ever made FREE ($800 value) when you sign up for monthly shipments at $59/mo"
+          },
+          {
+            "task": "Digital Product Example",
+            "description": "Get all 40 past newsletters ($15,880 value) when you become a member for $399/mo after 30-day trial"
+          },
+          {
+            "task": "Service Example",
+            "description": "Get our Short-Term Accelerator ($1000 value) FREE when you join VIP membership at $100/mo"
+          },
+          {
+            "task": "SaaS Example",
+            "description": "Get lifetime access to premium templates ($500 value) when you subscribe to Pro at $29/mo"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Bonus value less than first payment (not compelling)",
+      "Bonus unrelated to core offer (attracts wrong people who churn)",
+      "Not enforcing TODAY-only deadline (loses urgency)",
+      "Forgetting to onboard on subscription value (just consume bonus and leave)",
+      "Not tracking bonus vs. non-bonus cohort retention"
+    ],
+    "quick_wins": [
+      "Bundle all past content/products as the bonus (high perceived value, zero marginal cost)",
+      "Add physical component to digital subscription (increases perceived value)",
+      "Make bonus consumption the first onboarding step (builds engagement)"
+    ]
+  },
+
+  "commitment_discount": {
+    "name": "Free Duration with Commitment",
+    "summary": "Give X free months/services if they commit to Y months. Four approaches: Upfront, At the End, Spread Over Time, After First Payments. People think about monthly price, not total term.",
+    "target_metrics": {
+      "commitment_rate": "60-90% choose commitment option",
+      "ltv_increase": "2-4x vs month-to-month",
+      "early_cancellation": "Track and minimize"
+    },
+    "hormozi_principle": "People think more about PRICE than TERM. They'll commit to 12 months if the monthly price is right, even if they'd never consciously choose a year contract.",
+    "implementation_checklist": [
+      {
+        "phase": "Pricing Structure",
+        "tasks": [
+          {
+            "task": "Set standalone (month-to-month) price",
+            "description": "This should be 1.33x to 3x the commitment price",
+            "conversion_data": {
+              "3x_price": "90% choose continuity",
+              "2x_price": "70% choose continuity",
+              "1.66x_price": "60% choose continuity",
+              "1.33x_price": "50% choose continuity"
+            }
+          },
+          {
+            "task": "Calculate commitment price with free months",
+            "description": "Determine how many free months to include",
+            "example": "$100/mo × 12 months = $1200, Give 3 free = $900/year = $75/mo effective"
+          },
+          {
+            "task": "Present price difference clearly",
+            "description": "Show monthly savings prominently",
+            "format": "'Pay $199/mo OR commit for 12 months and pay just $99/mo (save $1200!)'"
+          }
+        ]
+      },
+      {
+        "phase": "4 Discount Application Methods",
+        "tasks": [
+          {
+            "task": "Option 1: UPFRONT Free Time",
+            "description": "Free trial period, then contract starts",
+            "best_for": "When you need to enforce contracts (like cell phone carriers)",
+            "example": "3 months free, then 12-month contract at $100/mo",
+            "psychology": "They experience value before paying"
+          },
+          {
+            "task": "Option 2: AT THE END Free Time",
+            "description": "Pay for X months, get Y free at the end",
+            "best_for": "Reward loyal customers, reduce mid-contract churn",
+            "example": "Pay for 9 months, get months 10-12 free",
+            "psychology": "They 'earn' the discount"
+          },
+          {
+            "task": "Option 3: SPREAD Over Time",
+            "description": "Discount applied every month across full term",
+            "best_for": "Maximum engagement throughout term",
+            "example": "Instead of $100/mo, pay $75/mo for all 12 months",
+            "psychology": "Feels like ongoing savings every month"
+          },
+          {
+            "task": "Option 4: AFTER First Payments",
+            "description": "Pay normally for 1-2 months, then discount kicks in",
+            "best_for": "Covering advertising/acquisition costs first",
+            "example": "First 2 months at $100, months 3-12 at $75",
+            "psychology": "You recoup CAC before discounting"
+          }
+        ]
+      },
+      {
+        "phase": "Presentation",
+        "tasks": [
+          {
+            "task": "Emphasize price, de-emphasize term",
+            "description": "Lead with the monthly savings, not the commitment",
+            "script": "'You can do $199/month with no commitment, or get the EXACT same thing for just $99/month...'",
+            "then": "After they're interested in price: '...with our annual membership'"
+          },
+          {
+            "task": "Show total savings prominently",
+            "description": "Calculate and display annual savings",
+            "format": "'Save $1,200 over the year' or 'Get 3 months FREE'"
+          },
+          {
+            "task": "Create comparison visual",
+            "description": "Side-by-side showing monthly vs. annual option"
+          }
+        ]
+      },
+      {
+        "phase": "Cancellation Policy",
+        "tasks": [
+          {
+            "task": "Define early cancellation terms",
+            "description": "What happens if they try to cancel mid-commitment",
+            "options": ["Pay remaining balance", "Pay difference between discount and full rate for months used", "Prorated fee"],
+            "principle": "Make leaving cost more than staying"
+          },
+          {
+            "task": "Communicate terms clearly upfront",
+            "description": "Don't surprise them—explain the commitment",
+            "script": "'This is a 12-month commitment. If life changes, you can cancel but would owe [X].'"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Standalone price too close to commitment price (not enough incentive)",
+      "Emphasizing the term instead of the price savings",
+      "No cancellation policy (they can just leave)",
+      "Cancellation policy too harsh (bad reviews, chargebacks)",
+      "Not testing which of the 4 application methods works best"
+    ],
+    "quick_wins": [
+      "Start with 2x price differential (70% should choose commitment)",
+      "Use 'Spread Over Time' method first (simplest to implement)",
+      "A/B test different commitment lengths (6mo vs 12mo vs 24mo)"
+    ]
+  },
+
+  "waived_fee_continuity": {
+    "name": "Waived Fee with Commitment",
+    "summary": "Waive your setup/onboarding fee (3-5x monthly rate) if they commit to 12+ months. If they cancel early, they pay the fee. Best for high-setup-cost businesses.",
+    "target_metrics": {
+      "commitment_rate": "70-90% choose commitment",
+      "early_cancellation": "Should drop significantly",
+      "ltv": "Fee waiver should pay off in additional months retained"
+    },
+    "hormozi_principle": "Fee should be 3-5x your monthly rate. People will avoid paying a fee more than they'll seek a discount. Make leaving cost more than staying.",
+    "implementation_checklist": [
+      {
+        "phase": "Fee Structure",
+        "tasks": [
+          {
+            "task": "Calculate your onboarding/setup costs",
+            "description": "What does it actually cost to onboard a new customer?",
+            "include": ["Training time", "Account setup", "Initial consultations", "Resources created", "Tech setup"]
+          },
+          {
+            "task": "Set fee at 3-5x monthly rate",
+            "description": "Fee should be significant enough to deter early cancellation",
+            "example": "Monthly rate: $1,000 → Setup fee: $3,000-$5,000",
+            "principle": "Larger fee = more choose commitment; Smaller fee = more upfront cash"
+          },
+          {
+            "task": "Set minimum commitment length",
+            "description": "At least 12 months to earn fee waiver",
+            "recommendation": "12 months minimum, consider 18-24 for higher-fee services"
+          }
+        ]
+      },
+      {
+        "phase": "Offer Presentation",
+        "tasks": [
+          {
+            "task": "Explain why the fee exists",
+            "description": "Justify the fee with real setup costs",
+            "script": "'Our onboarding involves [X, Y, Z] which costs us about $5,000 per client. That's why we charge a setup fee.'"
+          },
+          {
+            "task": "Present Option A: Pay Fee + Month-to-Month",
+            "description": "For those who want flexibility",
+            "format": "'Pay $5,000 setup + $1,000/month. Cancel anytime after setup.'"
+          },
+          {
+            "task": "Present Option B: Waive Fee + Commitment",
+            "description": "For those who want to save",
+            "format": "'Or, commit to 12 months and we'll waive the $5,000 fee entirely. You just pay $1,000/month.'",
+            "emphasis": "'That's $5,000 in your pocket'"
+          },
+          {
+            "task": "Let them choose",
+            "description": "Present both options and ask which they prefer"
+          }
+        ]
+      },
+      {
+        "phase": "Cancellation Policy",
+        "tasks": [
+          {
+            "task": "Define fee collection on early cancel",
+            "description": "If they break commitment, they pay the waived fee",
+            "script": "'If you need to cancel before 12 months, the $5,000 setup fee becomes due.'",
+            "clear": "Explain this upfront, get signed agreement"
+          },
+          {
+            "task": "Consider prorated alternative",
+            "description": "Some businesses prorate based on time served",
+            "example": "Cancel at month 6 = Pay $2,500 (half the fee)",
+            "tradeoff": "More fair, but less deterrent"
+          },
+          {
+            "task": "Create signed commitment agreement",
+            "description": "Document the terms legally",
+            "includes": ["Monthly rate", "Commitment length", "Fee amount", "Cancellation terms"]
+          }
+        ]
+      },
+      {
+        "phase": "Psychology",
+        "tasks": [
+          {
+            "task": "Understand loss aversion",
+            "description": "People hate losing money more than they like saving it",
+            "application": "The fee they'd have to PAY if they cancel feels worse than the fee they SAVED"
+          },
+          {
+            "task": "Make staying cheaper than leaving",
+            "description": "At any point, the cost to cancel should exceed cost to continue",
+            "example": "At month 8 with 4 months left at $1,000 = $4,000 to stay. Cancel fee = $5,000. Staying is cheaper."
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Fee too small (not enough deterrent)",
+      "Fee too large (feels unreasonable, causes disputes)",
+      "Not explaining fee rationale (feels like a trap)",
+      "Not getting signed agreement (can't enforce)",
+      "Commitment too short (12 months minimum)"
+    ],
+    "quick_wins": [
+      "Start with 3x monthly as fee (test higher later)",
+      "Use clear contract language reviewed by legal",
+      "Train team to present BOTH options equally (let customer choose)"
+    ]
+  },
+
+  "downsell_to_continuity": {
+    "name": "Big Head, Long Tail (Downsell Upsell)",
+    "summary": "Sell a high upfront payment PLUS a small monthly fee. Get more cash upfront by selling shorter duration with added value for less. People focus on monthly price over term.",
+    "target_metrics": {
+      "upfront_cash": "Equal or higher than before",
+      "average_months_retained": "Track lifetime",
+      "ltv": "3-4x one-time sale over 12-20 months"
+    },
+    "hormozi_principle": "People think about MONTHLY CASH FLOW more than DURATION. The power of commitments and contracts dramatically increases LTV. Price divided by churn rate equals lifetime revenue.",
+    "implementation_checklist": [
+      {
+        "phase": "Structure Design",
+        "tasks": [
+          {
+            "task": "Define the 'Big Head'",
+            "description": "Upfront payment for initial value/training",
+            "examples": ["Initial training program", "Setup and onboarding", "Core content/product", "Foundation course"],
+            "pricing": "Should cover your acquisition and initial delivery costs"
+          },
+          {
+            "task": "Define the 'Long Tail'",
+            "description": "Ongoing monthly value delivery",
+            "examples": ["Monthly coaching calls", "Community access", "New content releases", "Ongoing support", "Implementation help"],
+            "pricing": "Lower than what they'd pay for standalone monthly"
+          },
+          {
+            "task": "Calculate the math vs. one-time sale",
+            "description": "Compare total value over 12-20 months",
+            "example": "One-time: $1,000. Big Head + Tail: $500 + $50/mo × 20 months = $1,500. LTV increased 50%."
+          }
+        ]
+      },
+      {
+        "phase": "Pricing Psychology",
+        "tasks": [
+          {
+            "task": "Set monthly lower than psychological threshold",
+            "description": "Monthly should feel 'almost nothing'",
+            "thresholds": ["Under $50", "Under $100", "Under $200"],
+            "principle": "People accept small ongoing payments more than large one-time"
+          },
+          {
+            "task": "Show effective savings",
+            "description": "Compare to buying separately",
+            "example": "'Training: $500 + Monthly coaching: $100/mo = $1,700/year. OR: Join now and get both for $500 + just $50/mo = $1,100/year'"
+          },
+          {
+            "task": "Use churn rate to project LTV",
+            "description": "Price / Churn Rate = Lifetime Revenue",
+            "examples": {
+              "example_1": "$100/mo at 10% churn = $1,000 LTV",
+              "example_2": "$100/mo at 3% churn = $3,333 LTV (3x improvement)"
+            }
+          }
+        ]
+      },
+      {
+        "phase": "The Downsell Conversation",
+        "tasks": [
+          {
+            "task": "Step 1: Acknowledge satisfaction",
+            "description": "Start from their positive experience",
+            "script": "'So you've enjoyed everything so far?'"
+          },
+          {
+            "task": "Step 2: Ask permission to share",
+            "description": "Get buy-in before presenting",
+            "script": "'Mind if I tell you about a way to save a little and get more?'"
+          },
+          {
+            "task": "Step 3: Show the long-term vision",
+            "description": "Frame as partnership",
+            "script": "'Given you've enjoyed [current offer], we want you here long-term. Here's what we're gonna do...'"
+          },
+          {
+            "task": "Step 4: Present the reward",
+            "description": "More value for less monthly",
+            "script": "'If you're in this with us for the long term, we want to reward you with MORE stuff for LESS. Sound good?'"
+          }
+        ]
+      },
+      {
+        "phase": "Value Stacking",
+        "tasks": [
+          {
+            "task": "Don't just lower price—ADD VALUE",
+            "description": "Justify continuity with ongoing value delivery",
+            "principle": "They should get more in the long tail, not just pay for less"
+          },
+          {
+            "task": "Bundle one-time value upfront",
+            "description": "The 'big head' gives immediate results",
+            "examples": ["Complete training program", "Done-for-you setup", "Core transformation content"]
+          },
+          {
+            "task": "Add ongoing implementation support",
+            "description": "The 'long tail' keeps them engaged",
+            "examples": ["Monthly coaching", "Community access", "New content", "Accountability", "Office hours"]
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Monthly fee too high (feels like another large purchase)",
+      "No real value in the ongoing (just 'access')",
+      "Not tracking months retained (don't know if it's working)",
+      "Big head too small (doesn't cover acquisition costs)",
+      "Not adding ongoing value (just extracting money)"
+    ],
+    "quick_wins": [
+      "Start with existing product, add monthly community/coaching",
+      "Set monthly at 10% of one-time price (feels small)",
+      "Create one new piece of content/value per month minimum"
+    ]
+  },
+
+  "auto_replenishment": {
+    "name": "Auto-Replenishment Subscription",
+    "summary": "Automatically ship consumable physical products on a recurring schedule. Customers never run out, you get predictable revenue. Best for products with natural consumption cycles.",
+    "target_metrics": {
+      "subscription_rate": "30-50% of buyers choose subscription",
+      "churn_rate": "Under 10% monthly",
+      "ltv_vs_onetime": "5-10x over lifetime"
+    },
+    "hormozi_principle": "For consumable products, the question isn't IF they'll buy again, but WHERE. Make it easier to stay subscribed than to shop around.",
+    "implementation_checklist": [
+      {
+        "phase": "Product Fit",
+        "tasks": [
+          {
+            "task": "Verify product is consumable",
+            "description": "Product must be used up and need replacement",
+            "examples": ["Supplements", "Coffee/tea", "Pet food", "Beauty products", "Cleaning supplies", "Office supplies", "Food items"],
+            "not_suitable": ["Electronics", "Furniture", "One-time purchases"]
+          },
+          {
+            "task": "Identify consumption cycle",
+            "description": "How often do customers typically need to reorder?",
+            "options": ["Weekly", "Bi-weekly", "Monthly", "Quarterly"],
+            "method": "Survey existing customers or track reorder patterns"
+          },
+          {
+            "task": "Calculate unit economics for subscription",
+            "description": "Can you offer discount and still profit?",
+            "formula": "(Subscription Price - COGS - Shipping) × Avg Months Retained = Profit per Subscriber"
+          }
+        ]
+      },
+      {
+        "phase": "Subscription Models",
+        "tasks": [
+          {
+            "task": "Replenishment Model",
+            "description": "Same product delivered on schedule",
+            "examples": ["Dog food every month", "Razors every 2 weeks", "Vitamins every 30 days"],
+            "best_for": "Staple products with predictable usage"
+          },
+          {
+            "task": "Curation Model",
+            "description": "Different/curated products each delivery",
+            "examples": ["Subscription boxes", "Coffee of the month", "Book club"],
+            "best_for": "Discovery-based categories"
+          },
+          {
+            "task": "Access Model",
+            "description": "Ongoing access plus new releases",
+            "examples": ["Wine club with new releases", "Exclusive product drops"],
+            "best_for": "Premium/collectible products"
+          },
+          {
+            "task": "Choose your model",
+            "description": "Select based on product type and customer preference"
+          }
+        ]
+      },
+      {
+        "phase": "Value Proposition",
+        "tasks": [
+          {
+            "task": "Convenience messaging",
+            "description": "Never run out, automatic delivery",
+            "copy": "'Never worry about running out. We'll deliver automatically.'"
+          },
+          {
+            "task": "Savings incentive",
+            "description": "Discount vs. one-time purchase",
+            "typical_discount": "10-20% off",
+            "copy": "'Subscribe & Save 15%'"
+          },
+          {
+            "task": "Exclusivity offer",
+            "description": "Subscriber-only benefits",
+            "examples": ["Early access to new products", "Subscriber-only flavors", "Free gifts quarterly"]
+          },
+          {
+            "task": "Flexibility promise",
+            "description": "Reduce commitment anxiety",
+            "copy": "'Skip, pause, or cancel anytime. No questions asked.'"
+          }
+        ]
+      },
+      {
+        "phase": "Operations",
+        "tasks": [
+          {
+            "task": "Set up subscription management system",
+            "description": "Platform for managing recurring orders",
+            "tools": ["Recharge", "Bold Subscriptions", "Ordergroove", "Native Shopify subscriptions"]
+          },
+          {
+            "task": "Implement skip/pause functionality",
+            "description": "Let customers skip a delivery instead of canceling",
+            "benefit": "Dramatically reduces churn"
+          },
+          {
+            "task": "Create modification options",
+            "description": "Let customers change frequency, quantity, products",
+            "options": ["Change delivery date", "Add/remove products", "Adjust quantity", "Switch variants"]
+          },
+          {
+            "task": "Set up shipping optimization",
+            "description": "Reduce shipping costs for recurring orders",
+            "strategies": ["Batch shipments", "Negotiate carrier rates", "Optimize box sizes"]
+          }
+        ]
+      },
+      {
+        "phase": "Retention",
+        "tasks": [
+          {
+            "task": "Monitor usage patterns",
+            "description": "Track if customers are accumulating product (sign they'll cancel)"
+          },
+          {
+            "task": "Implement surprise & delight",
+            "description": "Occasional free gifts or upgrades for subscribers"
+          },
+          {
+            "task": "Create win-back campaigns",
+            "description": "Re-engage cancelled subscribers",
+            "offer": "Special discount or bonus to return"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "Shipping costs eat into profit (optimize logistics)",
+      "No skip option (forces cancellation instead of pause)",
+      "Discount too deep (not profitable)",
+      "Discount too small (not compelling)",
+      "Not tracking product accumulation (surprise cancellations)"
+    ],
+    "quick_wins": [
+      "Offer Subscribe & Save on product pages (15% off)",
+      "Add 'Never Run Out' messaging prominently",
+      "Implement skip functionality before anything else"
+    ]
+  },
+
+  "pure_subscription": {
+    "name": "Pure Monthly Subscription/Membership",
+    "summary": "Simple recurring monthly or annual subscription for access to content, software, community, or services. The cleanest continuity model when you can deliver ongoing value.",
+    "target_metrics": {
+      "mrr": "Monthly Recurring Revenue growth",
+      "churn_rate": "Under 5% for SaaS, under 10% for content/coaching",
+      "ltgp": "Lifetime Gross Profit (Margin × LTV)",
+      "cac_recovery": "Months to recover Customer Acquisition Cost"
+    },
+    "hormozi_principle": "The best businesses have recurring revenue at their core. LTGP (Lifetime Gross Profit) is what matters: Gross Margin × Lifetime Value. Optimize for both.",
+    "implementation_checklist": [
+      {
+        "phase": "Value Definition",
+        "tasks": [
+          {
+            "task": "Define monthly value delivery",
+            "description": "What do subscribers get each month?",
+            "examples": ["New content releases", "Software features", "Community access", "Coaching calls", "Support", "New tools/templates"],
+            "principle": "Must be valuable enough that they'd miss it if gone"
+          },
+          {
+            "task": "Create content/feature calendar",
+            "description": "Plan what you'll deliver each month",
+            "minimum": "At least one new valuable thing per month"
+          },
+          {
+            "task": "Document the transformation",
+            "description": "What outcome does the subscription help them achieve?",
+            "format": "After X months, subscribers typically [outcome]"
+          }
+        ]
+      },
+      {
+        "phase": "Pricing Strategy",
+        "tasks": [
+          {
+            "task": "Set monthly price",
+            "description": "Based on value delivered and market positioning",
+            "consider": ["Competitor pricing", "Value delivered", "Target customer budget", "Your unit economics"]
+          },
+          {
+            "task": "Create annual option",
+            "description": "15-20% discount for annual commitment",
+            "example": "$29/mo OR $249/year (save $99)",
+            "bonus": "Bill every 4 weeks instead of monthly = 8.3% more annual revenue"
+          },
+          {
+            "task": "Consider tiered pricing",
+            "description": "Multiple levels for different needs/budgets",
+            "tiers": ["Basic", "Pro", "Premium/VIP"],
+            "benefit": "Captures more of the market"
+          },
+          {
+            "task": "Plan free trial",
+            "description": "7-30 days to demonstrate value",
+            "decision": "Trial length based on time needed to show value"
+          }
+        ]
+      },
+      {
+        "phase": "Onboarding",
+        "tasks": [
+          {
+            "task": "Create activation checklist",
+            "description": "Key actions new subscribers must take",
+            "examples": ["Complete profile", "Join community", "Attend first call", "Use one feature"],
+            "goal": "Get them to 'aha moment' fast"
+          },
+          {
+            "task": "Design welcome sequence",
+            "description": "Emails guiding them through first week",
+            "sequence": ["Welcome + quick win", "Feature highlight", "Community intro", "Success story", "First value delivery"]
+          },
+          {
+            "task": "Set up usage monitoring",
+            "description": "Track engagement to identify at-risk subscribers",
+            "indicators": ["Login frequency", "Feature usage", "Community activity", "Content consumption"]
+          }
+        ]
+      },
+      {
+        "phase": "Churn Reduction",
+        "tasks": [
+          {
+            "task": "Design cancellation flow",
+            "description": "Offer alternatives before they leave",
+            "options": ["Pause subscription", "Downgrade tier", "Discount offer", "Different product"],
+            "script": "'Before you cancel, let me show you some options...'"
+          },
+          {
+            "task": "Implement exit interview",
+            "description": "Understand why and offer to solve",
+            "question": "'What would have to change for you to stay?'",
+            "outcome": "Either solve it or learn for future"
+          },
+          {
+            "task": "Create win-back campaigns",
+            "description": "Re-engage cancelled members",
+            "timing": "30, 60, 90 days after cancellation",
+            "offer": "Special return offer or show what they've missed"
+          },
+          {
+            "task": "Set up proactive outreach",
+            "description": "Reach out when engagement drops",
+            "trigger": "No login in X days, or usage below threshold",
+            "action": "Personal email or call to check in"
+          }
+        ]
+      },
+      {
+        "phase": "Key Metrics",
+        "tasks": [
+          {
+            "task": "Track MRR (Monthly Recurring Revenue)",
+            "description": "Total monthly subscription revenue"
+          },
+          {
+            "task": "Track Churn Rate",
+            "description": "% of subscribers who cancel each month",
+            "targets": {"saas": "Under 5%", "content": "Under 10%", "coaching": "Under 10%"}
+          },
+          {
+            "task": "Calculate LTGP",
+            "description": "Lifetime Gross Profit = Gross Margin × LTV",
+            "formula": "LTV = Monthly Price / Churn Rate. LTGP = LTV × Gross Margin %"
+          },
+          {
+            "task": "Monitor Net Revenue Retention",
+            "description": "Are existing customers expanding or contracting?",
+            "target": "Over 100% (upgrades exceed downgrades)"
+          },
+          {
+            "task": "Calculate CAC Recovery",
+            "description": "How many months to recover acquisition cost?",
+            "formula": "CAC / (Monthly Price × Gross Margin)",
+            "target": "Under 12 months"
+          }
+        ]
+      }
+    ],
+    "common_mistakes": [
+      "No new value each month (people feel stuck)",
+      "Not monitoring engagement (surprise churn)",
+      "Making cancellation too easy (no save attempts)",
+      "Making cancellation too hard (bad reviews, chargebacks)",
+      "Not tracking unit economics (unprofitable growth)"
+    ],
+    "quick_wins": [
+      "Add pause option to cancellation flow (keeps billing relationship)",
+      "Implement 'what you'll miss' email after cancellation",
+      "Create subscriber-only benefit that's visible (FOMO for non-subscribers)"
+    ]
+  }
+}

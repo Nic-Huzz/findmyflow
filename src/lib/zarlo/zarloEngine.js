@@ -7,6 +7,7 @@
 
 import { supabase } from '../supabaseClient'
 import { getPageContent, getChallengeTabContent, ROUTING_OPTIONS, SOUTH_MODE } from './zarloPageContent'
+import { generateZarloWheelContext, getWheelSummary, analyzeGapsAndOpportunities } from '../wheelAlignment'
 
 // ============================================
 // INTAKE FLOW
@@ -254,6 +255,144 @@ export async function saveZarloState(userId, updates) {
 }
 
 /**
+ * Load user's wheel data from nikigai_clusters
+ * Returns structured data for alignment calculations
+ */
+export async function loadWheelData(userId) {
+  if (!userId) return { skills: [], problems: [], personas: [] }
+
+  try {
+    const { data: clusters, error } = await supabase
+      .from('nikigai_clusters')
+      .select('cluster_type, cluster_label, proficiency, cluster_stage')
+      .eq('user_id', userId)
+      .eq('cluster_stage', 'final')
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+
+    // Group by cluster type and extract segment info
+    const wheelData = {
+      skills: [],
+      problems: [],
+      personas: [],
+    }
+
+    // Process clusters - map cluster labels back to segment IDs
+    const processedLabels = new Set() // Avoid duplicates
+
+    clusters?.forEach(cluster => {
+      const key = `${cluster.cluster_type}-${cluster.cluster_label}`
+      if (processedLabels.has(key)) return
+      processedLabels.add(key)
+
+      // Map cluster label to segment ID (simplified - uses lowercase match)
+      const segmentId = mapClusterLabelToSegmentId(cluster.cluster_label, cluster.cluster_type)
+
+      if (segmentId) {
+        const entry = {
+          segmentId,
+          proficiency: cluster.proficiency || 'establishing',
+          label: cluster.cluster_label,
+        }
+
+        if (cluster.cluster_type === 'skills') {
+          wheelData.skills.push(entry)
+        } else if (cluster.cluster_type === 'problems') {
+          wheelData.problems.push(entry)
+        } else if (cluster.cluster_type === 'persona') {
+          wheelData.personas.push(entry)
+        }
+      }
+    })
+
+    return wheelData
+  } catch (err) {
+    console.error('Error loading wheel data:', err)
+    return { skills: [], problems: [], personas: [] }
+  }
+}
+
+/**
+ * Map a cluster label to its taxonomy segment ID
+ * Uses keyword matching from the taxonomy
+ */
+function mapClusterLabelToSegmentId(label, clusterType) {
+  const labelLower = (label || '').toLowerCase()
+
+  // Skills mappings
+  const skillsKeywords = {
+    clarifying: ['clarify', 'explain', 'teach', 'translat', 'simplif', 'communicat'],
+    analyzing: ['analyz', 'analysis', 'data', 'pattern', 'research', 'debug', 'diagnos'],
+    strategizing: ['strateg', 'plan', 'priorit', 'vision', 'roadmap', 'decision'],
+    organizing: ['organiz', 'system', 'process', 'operation', 'structure', 'efficien'],
+    building: ['build', 'make', 'code', 'engineer', 'develop', 'prototype', 'construct'],
+    designing: ['design', 'ux', 'visual', 'aesthetic', 'interface', 'experience'],
+    creating: ['creat', 'art', 'writ', 'ideat', 'invent', 'imagin', 'compos'],
+    expressing: ['express', 'story', 'perform', 'present', 'voice', 'speak', 'articulat'],
+    connecting: ['connect', 'network', 'empathy', 'facilitat', 'collaborat', 'relationship'],
+    influencing: ['influenc', 'sell', 'persuad', 'convinc', 'motivat', 'negotiat', 'advocat'],
+    nurturing: ['nurtur', 'coach', 'mentor', 'develop', 'support', 'care', 'guide', 'grow'],
+    synthesizing: ['synthesiz', 'integrat', 'wisdom', 'big-picture', 'holist', 'meaning'],
+  }
+
+  // Problems mappings
+  const problemsKeywords = {
+    physical_vitality: ['physical', 'health', 'fitness', 'body', 'energy', 'vitality', 'sleep', 'nutrition'],
+    mental_wellbeing: ['mental', 'wellbeing', 'anxiety', 'stress', 'mindset', 'emotion', 'burnout'],
+    personal_mastery: ['personal', 'mastery', 'skill', 'learning', 'productiv', 'habit', 'growth'],
+    intimate_bonds: ['intimate', 'relationship', 'marriage', 'dating', 'family', 'parent', 'love'],
+    service_care: ['service', 'care', 'caregiv', 'elder', 'disabil', 'support', 'healthcare'],
+    creative_expression: ['creative', 'expression', 'art', 'voice', 'identity', 'authentic', 'brand'],
+    local_impact: ['local', 'community', 'team', 'organization', 'neighborhood', 'culture', 'workplace'],
+    cultural_movements: ['cultural', 'movement', 'belonging', 'trend', 'subculture', 'social'],
+    economic_freedom: ['economic', 'freedom', 'money', 'business', 'career', 'financial', 'entrepreneur', '9-5'],
+    social_justice: ['social', 'justice', 'inequality', 'discriminat', 'rights', 'fairness', 'diversity'],
+    planetary_health: ['planet', 'climate', 'environment', 'sustainab', 'nature', 'conservation', 'green'],
+    human_progress: ['human', 'progress', 'technology', 'innovation', 'future', 'education', 'breakthrough'],
+  }
+
+  // Persona mappings
+  const personaKeywords = {
+    seekers: ['seeker', 'lost', 'direction', 'purpose', 'meaning', 'clarity', 'finding'],
+    builders: ['builder', 'creating', 'building', 'making', 'entrepreneur', 'starting', 'launching'],
+    healers: ['healer', 'hurt', 'recover', 'healing', 'trauma', 'pain', 'wound'],
+    teachers: ['teacher', 'learning', 'growing', 'knowledge', 'education', 'skill', 'improve'],
+    connectors: ['connector', 'lonely', 'isolated', 'community', 'belonging', 'tribe', 'friend'],
+    achievers: ['achiever', 'success', 'winning', 'status', 'recognition', 'ambitious', 'competitive'],
+    explorers: ['explorer', 'freedom', 'adventure', 'autonomy', 'escape', 'travel', 'independent'],
+    visionaries: ['visionary', 'future', 'change', 'innovation', 'transform', 'vision', 'disrupt'],
+    protectors: ['protector', 'security', 'safety', 'stability', 'risk', 'protection', 'secure'],
+    creators: ['creator', 'expression', 'art', 'originality', 'creativity', 'unique', 'artistic'],
+    nurturers: ['nurturer', 'family', 'caring', 'devoted', 'loved ones', 'children', 'parent'],
+    challengers: ['challenger', 'injustice', 'change', 'truth', 'advocacy', 'rebel', 'fight'],
+  }
+
+  const keywordMap = clusterType === 'skills' ? skillsKeywords
+    : clusterType === 'problems' ? problemsKeywords
+    : personaKeywords
+
+  // Find best match
+  let bestMatch = null
+  let bestScore = 0
+
+  Object.entries(keywordMap).forEach(([segmentId, keywords]) => {
+    let score = 0
+    keywords.forEach(keyword => {
+      if (labelLower.includes(keyword)) {
+        score++
+      }
+    })
+    if (score > bestScore) {
+      bestScore = score
+      bestMatch = segmentId
+    }
+  })
+
+  return bestMatch
+}
+
+/**
  * Get user context for routing decisions
  */
 export async function getUserContext(userId) {
@@ -265,19 +404,26 @@ export async function getUserContext(userId) {
       { data: flowFinderData },
       { data: groanData },
       { data: compassData },
-      { data: stageData }
+      { data: stageData },
+      wheelData
     ] = await Promise.all([
       supabase.from('nervous_system_responses').select('id').eq('user_id', userId).limit(1),
       supabase.from('nikigai_clusters').select('id').eq('user_id', userId).limit(1),
       supabase.from('quest_completions').select('id, quest_category').eq('user_id', userId).in('quest_category', ['Recognise', 'Rewire', 'Reconnect']),
       supabase.from('flow_entries').select('direction, created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(5),
-      supabase.from('user_stage_progress').select('*').eq('user_id', userId).single()
+      supabase.from('user_stage_progress').select('*').eq('user_id', userId).single(),
+      loadWheelData(userId)
     ])
 
     // Check for South pattern (3+ South in last 5 entries)
     const recentDirections = compassData?.map(c => c.direction) || []
     const southCount = recentDirections.filter(d => d === 'south').length
     const isInSouth = southCount >= 3
+
+    // Generate wheel context for Zarlo
+    const wheelContext = generateZarloWheelContext(wheelData)
+    const wheelSummary = getWheelSummary(wheelData)
+    const gapAnalysis = analyzeGapsAndOpportunities(wheelData)
 
     return {
       hasCompletedNS: nsData?.length > 0,
@@ -286,7 +432,12 @@ export async function getUserContext(userId) {
       lastCompassDirection: compassData?.[0]?.direction,
       isInSouth,
       currentStage: stageData?.current_stage || 1,
-      persona: stageData?.persona_type
+      persona: stageData?.persona_type,
+      // Wheel data
+      wheelData,
+      wheelContext,
+      wheelSummary,
+      gapAnalysis,
     }
   } catch (err) {
     console.error('Error getting user context:', err)

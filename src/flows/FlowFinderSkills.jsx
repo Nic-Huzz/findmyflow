@@ -1,16 +1,20 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect, useMemo } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
-import '../FlowFinder.css'
+import { GradientWheel } from '../components/CompetenceWheels'
+import { SKILLS_SEGMENTS, PROFICIENCY_RINGS } from '../lib/wheelTaxonomy'
+import './FlowFinder.css'
 
 export default function FlowFinderSkills() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const [currentScreen, setCurrentScreen] = useState('time_check')
+  const [viewingResults, setViewingResults] = useState(false)
   const [responses, setResponses] = useState({
     q1_childhood: ['', '', '', '', ''],
     q2_highschool: ['', '', '', '', ''],
@@ -22,16 +26,168 @@ export default function FlowFinderSkills() {
   const [preliminaryClusters, setPreliminaryClusters] = useState([])
   const [sessionId, setSessionId] = useState(null)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [litCells, setLitCells] = useState(new Set())
+  // Proficiency ratings for Q3-Q5 items: { 'item_text': 'emerging' | 'establishing' | 'mastering' }
+  const [proficiencyRatings, setProficiencyRatings] = useState({})
+
+  // Add hue values to segments for wheel rendering
+  const skillsWithHue = useMemo(() =>
+    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    []
+  )
+
+  // Map cluster labels to wheel segment indices
+  const mapClusterToSegments = (clusterLabel) => {
+    const labelLower = clusterLabel.toLowerCase()
+
+    // Map common cluster themes to segment indices
+    const segmentMappings = {
+      // Direct matches
+      clarifying: [0], explaining: [0], teaching: [0], translating: [0],
+      analyzing: [1], analysis: [1], data: [1], patterns: [1], research: [1],
+      strategizing: [2], strategy: [2], planning: [2], vision: [2],
+      organizing: [3], systems: [3], operations: [3], processes: [3],
+      building: [4], making: [4], engineering: [4], coding: [4], developing: [4],
+      designing: [5], design: [5], ux: [5], visual: [5], aesthetic: [5],
+      creating: [6], creative: [6], art: [6], writing: [6], ideation: [6],
+      expressing: [7], storytelling: [7], presenting: [7], speaking: [7],
+      connecting: [8], networking: [8], collaboration: [8], facilitating: [8],
+      influencing: [9], sales: [9], persuading: [9], motivating: [9],
+      nurturing: [10], coaching: [10], mentoring: [10], supporting: [10],
+      synthesizing: [11], integrating: [11], wisdom: [11], 'big picture': [11],
+      // Compound terms
+      'problem solving': [1, 2], 'problem-solving': [1, 2],
+      'team building': [8, 10], leadership: [2, 9],
+      communication: [0, 7], 'project management': [2, 3],
+      innovation: [4, 6], entrepreneurship: [2, 4, 9],
+    }
+
+    // Find matching segments
+    const matchedSegments = new Set()
+    Object.entries(segmentMappings).forEach(([keyword, indices]) => {
+      if (labelLower.includes(keyword)) {
+        indices.forEach(i => matchedSegments.add(i))
+      }
+    })
+
+    // Default to first segment if no match
+    return matchedSegments.size > 0 ? Array.from(matchedSegments) : [0]
+  }
+
+  // Map proficiency rating to ring index (0-2) for 3-ring wheel
+  // emerging = inner (0), establishing = middle (1), mastering = outer (2)
+  const getRingForProficiency = (rating) => {
+    switch (rating) {
+      case 'emerging': return 0
+      case 'establishing': return 1
+      case 'mastering': return 2
+      default: return 1 // Default to establishing
+    }
+  }
+
+  // Update lit cells when clusters change - use proficiency for ring placement
+  useEffect(() => {
+    if (clusters.length > 0 || preliminaryClusters.length > 0) {
+      const newLitCells = new Set()
+
+      // Preliminary clusters (no proficiency data) - use inner ring (emerging)
+      preliminaryClusters.forEach(cluster => {
+        const segmentIndices = mapClusterToSegments(cluster.label)
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-0`) // Inner ring only
+        })
+      })
+
+      // Final clusters - use proficiency ratings for ring placement
+      clusters.forEach(cluster => {
+        const segmentIndices = mapClusterToSegments(cluster.label)
+
+        // Use cluster-level proficiency if available, otherwise calculate from items
+        let dominantProficiency = cluster.proficiency
+
+        if (!dominantProficiency) {
+          // Fallback: calculate from item ratings
+          const itemsWithProficiency = cluster.itemsWithProficiency || []
+          const proficiencyCounts = { emerging: 0, establishing: 0, mastering: 0 }
+          itemsWithProficiency.forEach(item => {
+            if (item.rating) proficiencyCounts[item.rating]++
+          })
+
+          dominantProficiency = 'establishing'
+          let maxCount = 0
+          Object.entries(proficiencyCounts).forEach(([level, count]) => {
+            if (count > maxCount) {
+              maxCount = count
+              dominantProficiency = level
+            }
+          })
+        }
+
+        // Light up cell at the appropriate ring (single ring per cluster)
+        const ringIdx = getRingForProficiency(dominantProficiency)
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-${ringIdx}`)
+        })
+      })
+
+      setLitCells(newLitCells)
+    }
+  }, [clusters, preliminaryClusters])
 
   // Auto-save state
   const [showResumePrompt, setShowResumePrompt] = useState(false)
   const [savedProgressData, setSavedProgressData] = useState(null)
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('flow-finder-skills', user?.id)
 
-  // Create flow session on mount
+  // Create flow session on mount (skip if viewing results)
   useEffect(() => {
-    createSession()
+    if (searchParams.get('results') !== 'true') {
+      createSession()
+    }
   }, [])
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      try {
+        // Load saved clusters from database
+        const { data: savedClusters, error } = await supabase
+          .from('nikigai_clusters')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('cluster_type', 'skills')
+          .eq('cluster_stage', 'final')
+          .order('created_at', { ascending: false })
+          .limit(10)
+
+        if (error) {
+          console.error('Error loading saved clusters:', error)
+          return
+        }
+
+        if (savedClusters && savedClusters.length > 0) {
+          // Convert to the format expected by renderSuccess
+          const formattedClusters = savedClusters.map(c => ({
+            label: c.cluster_label,
+            insight: c.insight,
+            items: c.items || [],
+            proficiency: c.proficiency || null, // Load cluster-level proficiency
+            itemsWithProficiency: c.items || [] // For wheel calculation
+          }))
+
+          setClusters(formattedClusters)
+          setViewingResults(true)
+          setCurrentScreen('success')
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+
+    loadSavedResults()
+  }, [searchParams, user])
 
   // Trigger preliminary analysis when reaching processing1 screen
   useEffect(() => {
@@ -103,7 +259,7 @@ export default function FlowFinderSkills() {
 
   // Back button handler
   const goBack = (fromScreen) => {
-    const screenOrder = ['time_check', 'journey', 'welcome', 'steve_jobs', 'q1', 'q2', 'q3', 'processing1', 'q4', 'q5']
+    const screenOrder = ['time_check', 'journey', 'welcome', 'steve_jobs', 'q1', 'q2', 'q3', 'processing1', 'q4', 'q5', 'rating']
     const currentIndex = screenOrder.indexOf(fromScreen)
     if (currentIndex > 0) {
       // Skip processing screens when going back
@@ -111,6 +267,34 @@ export default function FlowFinderSkills() {
       if (screenOrder[targetIndex] === 'processing1') targetIndex = currentIndex - 2
       setCurrentScreen(screenOrder[Math.max(0, targetIndex)])
     }
+  }
+
+  // Get all Q3-Q5 items for proficiency rating
+  const getBusinessRelevantItems = () => {
+    const items = []
+    const q3Items = responses.q3_postschool.filter(r => r.trim().length > 0)
+    const q4Items = responses.q4_work.filter(r => r.trim().length > 0)
+    const q5Items = responses.q5_skills.filter(r => r.trim().length > 0)
+
+    q3Items.forEach(item => items.push({ text: item, source: 'q3' }))
+    q4Items.forEach(item => items.push({ text: item, source: 'q4' }))
+    q5Items.forEach(item => items.push({ text: item, source: 'q5' }))
+
+    return items
+  }
+
+  // Update proficiency rating for an item
+  const setItemRating = (itemText, rating) => {
+    setProficiencyRatings(prev => ({
+      ...prev,
+      [itemText]: rating
+    }))
+  }
+
+  // Check if all items have been rated
+  const allItemsRated = () => {
+    const items = getBusinessRelevantItems()
+    return items.every(item => proficiencyRatings[item.text])
   }
 
   // Handle resuming saved progress (auto-save)
@@ -207,10 +391,28 @@ export default function FlowFinderSkills() {
 
     try {
       // Transform responses to match edge function format
+      // Include proficiency ratings for Q3-Q5 items
       const allItems = []
-      Object.entries(responses).forEach(([key, values]) => {
-        values.forEach(val => {
-          if (val.trim()) allItems.push(val.trim())
+      const itemsWithRatings = []
+
+      // Q1-Q2: Pattern items (childhood/highschool) - no ratings
+      ;['q1_childhood', 'q2_highschool'].forEach(key => {
+        responses[key].forEach(val => {
+          if (val.trim()) {
+            allItems.push(val.trim())
+            itemsWithRatings.push({ text: val.trim(), source: key, rating: null })
+          }
+        })
+      })
+
+      // Q3-Q5: Business-relevant items - include ratings
+      ;['q3_postschool', 'q4_work', 'q5_skills'].forEach(key => {
+        responses[key].forEach(val => {
+          if (val.trim()) {
+            const rating = proficiencyRatings[val.trim()] || 'establishing'
+            allItems.push(`${val.trim()} [${rating}]`)
+            itemsWithRatings.push({ text: val.trim(), source: key, rating })
+          }
         })
       })
 
@@ -218,7 +420,8 @@ export default function FlowFinderSkills() {
       const allResponses = [{
         user_id: user.id,
         response_raw: allItems.join('\n'),
-        store_as: 'all_skills'
+        store_as: 'all_skills',
+        items_with_ratings: itemsWithRatings
       }]
 
       // Debug: Log what we're sending
@@ -228,7 +431,8 @@ export default function FlowFinderSkills() {
         shouldCluster: true,
         clusterType: 'roles',
         clusterSources: ['all_skills'],
-        allResponses: allResponses
+        allResponses: allResponses,
+        proficiencyRatings: proficiencyRatings
       })
 
       // Call Claude API to generate clusters using the format it expects
@@ -257,15 +461,47 @@ export default function FlowFinderSkills() {
 
       console.log('📦 Clusters to save:', returnedClusters)
 
-      // Save clusters to database
-      const clustersToSave = returnedClusters.map(cluster => ({
+      // Enrich clusters with proficiency ratings for each item
+      const enrichedClusters = returnedClusters.map(cluster => {
+        const itemsWithProficiency = (cluster.items || []).map(item => {
+          // Clean item text (remove any [rating] suffix that might have been added)
+          const cleanItem = item.replace(/\s*\[(emerging|establishing|mastering)\]\s*$/i, '').trim()
+          const rating = proficiencyRatings[cleanItem] || null
+          return { text: cleanItem, rating }
+        })
+
+        // Calculate dominant proficiency for this cluster
+        const proficiencyCounts = { emerging: 0, establishing: 0, mastering: 0 }
+        itemsWithProficiency.forEach(item => {
+          if (item.rating) proficiencyCounts[item.rating]++
+        })
+
+        let dominantProficiency = 'establishing' // default
+        let maxCount = 0
+        Object.entries(proficiencyCounts).forEach(([level, count]) => {
+          if (count > maxCount) {
+            maxCount = count
+            dominantProficiency = level
+          }
+        })
+
+        return { ...cluster, itemsWithProficiency, proficiency: dominantProficiency }
+      })
+
+      // Save clusters to database - items column is jsonb so we can store structured data
+      const clustersToSave = enrichedClusters.map(cluster => ({
         user_id: user.id,
         session_id: sessionId,
         cluster_type: 'skills',
         cluster_stage: 'final',  // Required field: 'preview', 'intermediate', or 'final'
         cluster_label: cluster.label,
         insight: cluster.insight,
-        items: Array.isArray(cluster.items) ? cluster.items : []  // Changed from 'evidence' to 'items'
+        proficiency: cluster.proficiency, // emerging, establishing, or mastering
+        // Store items with proficiency ratings as structured JSON
+        items: cluster.itemsWithProficiency.map(i => ({
+          text: i.text,
+          rating: i.rating
+        }))
       }))
 
       console.log('💾 Saving to database:', clustersToSave)
@@ -282,7 +518,8 @@ export default function FlowFinderSkills() {
 
       console.log('✅ Saved to database:', insertData)
 
-      setClusters(returnedClusters)
+      // Store enriched clusters with proficiency data
+      setClusters(enrichedClusters)
 
       // Mark session as completed
       await supabase
@@ -480,7 +717,7 @@ export default function FlowFinderSkills() {
       </button>
 
       {!hasMinimumResponses('q1_childhood') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '24px', marginBottom: '8px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -528,7 +765,7 @@ export default function FlowFinderSkills() {
       </button>
 
       {!hasMinimumResponses('q2_highschool') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '24px', marginBottom: '8px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -576,7 +813,7 @@ export default function FlowFinderSkills() {
       </button>
 
       {!hasMinimumResponses('q3_postschool') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '24px', marginBottom: '8px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -609,7 +846,7 @@ export default function FlowFinderSkills() {
       )
     }
 
-    // Show preliminary clusters
+    // Show preliminary clusters with wheel
     return (
       <div className="container welcome-container">
         <h1 className="welcome-greeting">Here are some early patterns we're seeing</h1>
@@ -617,7 +854,22 @@ export default function FlowFinderSkills() {
           <p>Based on your childhood, high school, and recent activities, here are some skill themes emerging:</p>
         </div>
 
-        <div className="cluster-grid" style={{ margin: '32px 0' }}>
+        {/* Skills Wheel Visualization */}
+        <div className="wheel-reveal" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px 0' }}>
+          <GradientWheel
+            segments={skillsWithHue}
+            rings={PROFICIENCY_RINGS}
+            litCells={litCells}
+            size={240}
+            centerLabel="SKILLS"
+            interactive={false}
+          />
+          <div style={{ fontSize: '12px', color: '#888', marginTop: '12px' }}>
+            {litCells.size} skill areas lighting up
+          </div>
+        </div>
+
+        <div className="cluster-grid" style={{ margin: '24px 0' }}>
           {preliminaryClusters.map((cluster, index) => (
             <div
               key={index}
@@ -672,7 +924,7 @@ export default function FlowFinderSkills() {
       </button>
 
       {!hasMinimumResponses('q4_work') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '24px', marginBottom: '8px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
@@ -720,22 +972,171 @@ export default function FlowFinderSkills() {
       </button>
 
       {!hasMinimumResponses('q5_skills') && (
-        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '40px', marginBottom: '-28px', textAlign: 'center' }}>
+        <div className="input-hint" style={{ color: '#fbbf24', marginTop: '24px', marginBottom: '8px', textAlign: 'center' }}>
           Please provide at least 3 answers to continue
         </div>
       )}
 
       <button
         className="primary-button"
-        onClick={analyzeResponses}
+        onClick={() => setCurrentScreen('rating')}
         disabled={!hasMinimumResponses('q5_skills')}
         style={{ opacity: hasMinimumResponses('q5_skills') ? 1 : 0.5 }}
       >
-        Analyze My Answers
+        Continue
       </button>
       <BackButton fromScreen="q5" />
     </div>
   )
+
+  const renderRating = () => {
+    const items = getBusinessRelevantItems()
+    const ratedCount = Object.keys(proficiencyRatings).length
+    const totalCount = items.length
+
+    return (
+      <div className="container question-container">
+        <div className="question-number">Final Step</div>
+        <h2 className="question-text">Rate your proficiency</h2>
+        <p className="question-subtext">
+          For each skill, ask yourself: <em>"Could I confidently teach this to someone else?"</em>
+        </p>
+
+        <div className="rating-legend" style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '16px',
+          marginBottom: '24px',
+          fontSize: '12px',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: '#fbbf24', fontWeight: '600' }}>Emerging</div>
+            <div style={{ color: 'rgba(255,255,255,0.6)' }}>Still learning</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: '#60a5fa', fontWeight: '600' }}>Establishing</div>
+            <div style={{ color: 'rgba(255,255,255,0.6)' }}>Can do well</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: '#6BCB77', fontWeight: '600' }}>Mastering</div>
+            <div style={{ color: 'rgba(255,255,255,0.6)' }}>Could teach it</div>
+          </div>
+        </div>
+
+        <div className="rating-list" style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          maxHeight: '50vh',
+          overflowY: 'auto',
+          padding: '4px'
+        }}>
+          {items.map((item, index) => (
+            <div
+              key={index}
+              className="rating-item"
+              style={{
+                background: 'rgba(255,255,255,0.08)',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}
+            >
+              <div style={{ fontWeight: '500', color: 'white' }}>{item.text}</div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => setItemRating(item.text, 'emerging')}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    background: proficiencyRatings[item.text] === 'emerging'
+                      ? '#fbbf24'
+                      : 'rgba(251, 191, 36, 0.15)',
+                    color: proficiencyRatings[item.text] === 'emerging'
+                      ? '#1a1a2e'
+                      : '#fbbf24',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Emerging
+                </button>
+                <button
+                  onClick={() => setItemRating(item.text, 'establishing')}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    background: proficiencyRatings[item.text] === 'establishing'
+                      ? '#60a5fa'
+                      : 'rgba(96, 165, 250, 0.15)',
+                    color: proficiencyRatings[item.text] === 'establishing'
+                      ? '#1a1a2e'
+                      : '#60a5fa',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Establishing
+                </button>
+                <button
+                  onClick={() => setItemRating(item.text, 'mastering')}
+                  style={{
+                    flex: 1,
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '500',
+                    fontSize: '13px',
+                    background: proficiencyRatings[item.text] === 'mastering'
+                      ? '#6BCB77'
+                      : 'rgba(107, 203, 119, 0.15)',
+                    color: proficiencyRatings[item.text] === 'mastering'
+                      ? '#1a1a2e'
+                      : '#6BCB77',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  Mastering
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: 'center', margin: '16px 0', fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>
+          {ratedCount} of {totalCount} rated
+        </div>
+
+        {!allItemsRated() && (
+          <div className="input-hint" style={{ color: '#fbbf24', marginBottom: '8px', textAlign: 'center' }}>
+            Please rate all items to continue
+          </div>
+        )}
+
+        <button
+          className="primary-button"
+          onClick={analyzeResponses}
+          disabled={!allItemsRated()}
+          style={{ opacity: allItemsRated() ? 1 : 0.5 }}
+        >
+          Analyze My Skills
+        </button>
+        <BackButton fromScreen="rating" />
+      </div>
+    )
+  }
 
   const renderProcessing = () => (
     <div className="container processing-container">
@@ -751,13 +1152,48 @@ export default function FlowFinderSkills() {
 
   const renderSuccess = () => (
     <div className="container welcome-container">
-      <h1 className="welcome-greeting">Here's what we discovered about you</h1>
+      <h1 className="welcome-greeting">
+        {viewingResults ? 'Your Skills Profile' : "Here's what we discovered about you"}
+      </h1>
       <div className="welcome-message">
-        <p>Based on your responses, we've identified 4 role archetypes where you naturally thrive:</p>
+        <p>
+          {viewingResults
+            ? 'Here are the skill archetypes we identified from your discovery flow:'
+            : "Based on your responses, we've identified your skill archetypes:"}
+        </p>
+      </div>
+
+      {/* Skills Wheel Visualization - Full Size */}
+      <div className="wheel-reveal" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px 0' }}>
+        <GradientWheel
+          segments={skillsWithHue}
+          rings={PROFICIENCY_RINGS}
+          litCells={litCells}
+          size={300}
+          centerLabel="SKILLS"
+          interactive={false}
+          celebrate={!viewingResults}
+        />
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '12px', fontSize: '11px' }}>
+          {PROFICIENCY_RINGS.map((r, i) => (
+            <span key={r.id} style={{
+              padding: '4px 10px',
+              background: `${r.color}20`,
+              borderRadius: '12px',
+              color: r.color,
+              fontWeight: '500'
+            }}>
+              {i === 0 ? '← Inner ' : ''}{r.label}{i === PROFICIENCY_RINGS.length - 1 ? ' Outer →' : ''}
+            </span>
+          ))}
+        </div>
+        <div style={{ fontSize: '13px', color: '#6BCB77', marginTop: '12px', fontWeight: '500' }}>
+          {litCells.size} skill × proficiency combinations identified
+        </div>
       </div>
 
       {/* All Clusters (Read-only, no selection) */}
-      <div className="cluster-grid" style={{ margin: '32px 0' }}>
+      <div className="cluster-grid" style={{ margin: '24px 0' }}>
         {clusters.map((cluster, index) => (
           <div
             key={index}
@@ -778,22 +1214,48 @@ export default function FlowFinderSkills() {
         ))}
       </div>
 
-      <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>✓ Skills Discovery Complete!</h1>
-      <div className="welcome-message">
-        <p>These role archetypes represent where you naturally thrive—the intersection of your talents, interests, and energy.</p>
-        <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's discover the problems you're passionate about solving.</p>
-      </div>
+      {viewingResults ? (
+        <>
+          <button
+            className="primary-button"
+            onClick={() => navigate(-1)}
+          >
+            Back
+          </button>
+          <button
+            className="primary-button"
+            onClick={() => {
+              setViewingResults(false)
+              setCurrentScreen('time_check')
+              setClusters([])
+              setLitCells(new Set())
+              navigate('/nikigai/skills', { replace: true })
+            }}
+            style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px' }}
+          >
+            Retake Flow
+          </button>
+        </>
+      ) : (
+        <>
+          <h1 className="welcome-greeting" style={{ marginTop: '40px' }}>Skills Discovery Complete!</h1>
+          <div className="welcome-message">
+            <p>These role archetypes represent where you naturally thrive—the intersection of your talents, interests, and energy.</p>
+            <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's discover the problems you're passionate about solving.</p>
+          </div>
 
-      <Link to="/nikigai/problems" className="primary-button">
-        Continue to Problems Discovery
-      </Link>
-      <Link
-        to="/me"
-        className="primary-button"
-        style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px', display: 'block', textDecoration: 'none', textAlign: 'center' }}
-      >
-        Save & Return to Dashboard
-      </Link>
+          <Link to="/nikigai/problems" className="primary-button">
+            Continue to Problems Discovery
+          </Link>
+          <Link
+            to="/me"
+            className="primary-button"
+            style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none', marginTop: '12px', display: 'block', textDecoration: 'none', textAlign: 'center' }}
+          >
+            Save & Return to Dashboard
+          </Link>
+        </>
+      )}
     </div>
   )
 
@@ -809,6 +1271,7 @@ export default function FlowFinderSkills() {
     processing1: renderProcessing1,
     q4: renderQuestion4,
     q5: renderQuestion5,
+    rating: renderRating,
     processing: renderProcessing,
     success: renderSuccess
   }

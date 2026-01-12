@@ -1,0 +1,366 @@
+/**
+ * ContentQueue Page Styles
+ */
+
+.cq-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+  padding: 1rem;
+  padding-bottom: 100px;
+}
+
+.cq-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cq-back-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cq-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.cq-page-title {
+  flex: 1;
+}
+
+.cq-page-title h1 {
+  color: white;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.cq-page-title p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}
+
+.cq-page-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cq-action-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cq-action-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.cq-action-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  color: white;
+}
+
+.cq-action-primary:hover {
+  background: linear-gradient(135deg, #7c7ff2 0%, #9d75f7 100%);
+  transform: translateY(-1px);
+}
+
+/* Tabs */
+.cq-tabs {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.cq-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cq-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cq-tab.active {
+  background: rgba(139, 92, 246, 0.2);
+  color: white;
+}
+
+.cq-tab-icon {
+  font-size: 1.1rem;
+}
+
+.cq-tab-badge {
+  background: rgba(239, 68, 68, 0.8);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.cq-tab-badge.cq-badge-scheduled {
+  background: rgba(59, 130, 246, 0.8);
+}
+
+.cq-tab-badge.cq-badge-posted {
+  background: rgba(16, 185, 129, 0.8);
+}
+
+/* Content Area */
+.cq-content {
+  min-height: 400px;
+}
+
+/* List Styles */
+.cq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cq-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.cq-item.needs-metrics {
+  border-left: 3px solid #f59e0b;
+}
+
+.cq-item.has-metrics {
+  border-left: 3px solid #10b981;
+}
+
+.cq-item-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.cq-platform {
+  font-size: 0.875rem;
+  color: #8b5cf6;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.cq-date {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cq-metrics-badge {
+  margin-left: auto;
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.cq-metrics-done {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.cq-metrics-pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.cq-item-content {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+.cq-metrics-summary {
+  display: flex;
+  gap: 16px;
+  padding: 8px 0;
+  margin-bottom: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.813rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cq-item-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cq-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cq-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.cq-btn-posted {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+.cq-btn-posted:hover {
+  background: rgba(16, 185, 129, 0.25);
+}
+
+.cq-btn-metrics {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #a78bfa;
+}
+
+.cq-btn-metrics:hover {
+  background: rgba(139, 92, 246, 0.25);
+}
+
+/* Empty & Loading States */
+.cq-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.cq-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.cq-empty h3 {
+  color: white;
+  font-size: 1.25rem;
+  margin: 0 0 8px 0;
+}
+
+.cq-empty p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.cq-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Toast Notification */
+.cq-toast {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 3000;
+  animation: cq-toast-in 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.cq-toast-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.cq-toast-error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+@keyframes cq-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .cq-page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .cq-back-btn {
+    align-self: flex-start;
+  }
+
+  .cq-page-title {
+    text-align: center;
+  }
+
+  .cq-page-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cq-tabs {
+    flex-wrap: wrap;
+  }
+
+  .cq-tab {
+    min-width: 30%;
+  }
+
+  .cq-tab-label {
+    display: none;
+  }
+}

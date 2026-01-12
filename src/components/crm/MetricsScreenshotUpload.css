@@ -1,0 +1,738 @@
+/**
+ * MetricsScreenshotUpload.css
+ * Styles for post metrics screenshot analysis
+ */
+
+/* Overlay */
+.msu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: msu-fadeIn 0.2s ease;
+}
+
+@keyframes msu-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal */
+.msu-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: msu-slideUp 0.3s ease;
+}
+
+@keyframes msu-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.msu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f0ebff 0%, #e8f5e9 100%);
+}
+
+.msu-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.msu-header-icon {
+  font-size: 24px;
+}
+
+.msu-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.msu-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 20px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msu-close:hover {
+  background: #e9ecef;
+  color: #212529;
+}
+
+/* Content Area */
+.msu-content {
+  padding: 24px;
+}
+
+.msu-intro {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* Empty State */
+.msu-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+.msu-empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* Content List */
+.msu-content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.msu-content-item {
+  width: 100%;
+  padding: 14px 16px;
+  background: #f8f9fa;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.msu-content-item:hover {
+  background: #ffffff;
+  border-color: #5e17eb;
+}
+
+.msu-content-item.has-metrics {
+  background: #e8f5e9;
+}
+
+.msu-content-item.has-metrics:hover {
+  background: #c8e6c9;
+  border-color: #2e7d32;
+}
+
+.msu-content-preview {
+  font-size: 13px;
+  color: #212529;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.msu-content-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.msu-platform,
+.msu-type,
+.msu-date {
+  padding: 2px 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  color: #495057;
+}
+
+.msu-has-metrics-badge {
+  padding: 2px 8px;
+  background: #c8e6c9;
+  border-radius: 4px;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+/* Selected Content */
+.msu-selected-content {
+  padding: 14px 16px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.msu-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c757d;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.msu-selected-preview {
+  font-size: 13px;
+  color: #212529;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.msu-change-btn {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msu-change-btn:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+/* Upload Zone */
+.msu-upload-zone {
+  border: 2px dashed #dee2e6;
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: #fafafa;
+  margin-bottom: 20px;
+}
+
+.msu-upload-zone:hover {
+  border-color: #5e17eb;
+  background: #f8f6ff;
+}
+
+.msu-upload-zone.has-file {
+  padding: 12px;
+  border-style: solid;
+  border-color: #5e17eb;
+  background: #ffffff;
+}
+
+.msu-upload-placeholder {
+  color: #6c757d;
+}
+
+.msu-upload-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.msu-upload-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  margin: 0 0 6px;
+}
+
+.msu-upload-hint {
+  font-size: 13px;
+  margin: 0;
+  color: #adb5bd;
+}
+
+/* Preview */
+.msu-preview-container {
+  position: relative;
+}
+
+.msu-preview-image {
+  max-width: 100%;
+  max-height: 250px;
+  border-radius: 8px;
+}
+
+.msu-clear-preview {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.msu-clear-preview:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Error */
+.msu-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #dc2626;
+  margin-bottom: 16px;
+}
+
+.msu-error-icon {
+  flex-shrink: 0;
+}
+
+/* Tips */
+.msu-tips {
+  padding: 14px 16px;
+  background: #fffbeb;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.msu-tips h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.msu-tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.msu-tips li {
+  font-size: 12px;
+  color: #78350f;
+  margin-bottom: 4px;
+}
+
+.msu-tips li:last-child {
+  margin-bottom: 0;
+}
+
+/* Actions */
+.msu-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.msu-cancel-btn,
+.msu-back-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msu-cancel-btn:hover,
+.msu-back-btn:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  color: #495057;
+}
+
+.msu-analyze-btn,
+.msu-save-btn {
+  flex: 1;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msu-analyze-btn:hover:not(:disabled),
+.msu-save-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.35);
+}
+
+.msu-analyze-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Analyzing State */
+.msu-analyzing {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.msu-analyzing h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #212529;
+}
+
+.msu-analyzing p {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.msu-analyzing-animation {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+}
+
+.msu-analyzing-spinner {
+  position: absolute;
+  inset: 0;
+  border: 4px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: msu-spin 1s linear infinite;
+}
+
+@keyframes msu-spin {
+  to { transform: rotate(360deg); }
+}
+
+.msu-analyzing-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  animation: msu-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes msu-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.msu-analyzing-preview {
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: 8px;
+  opacity: 0.6;
+}
+
+/* Review State */
+.msu-review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.msu-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.msu-confidence {
+  font-size: 12px;
+  color: #6c757d;
+  padding: 4px 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.msu-platform-detected {
+  font-size: 13px;
+  color: #5e17eb;
+  font-weight: 500;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background: #f0ebff;
+  border-radius: 8px;
+}
+
+/* Metrics Grid */
+.msu-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.msu-metric-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.msu-metric-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.msu-metric-field input {
+  width: 100%;
+  padding: 10px 12px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #212529;
+  transition: all 0.15s ease;
+}
+
+.msu-metric-field input:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background: #ffffff;
+}
+
+.msu-metric-field input::placeholder {
+  color: #adb5bd;
+}
+
+/* Insights */
+.msu-insights {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #f0ebff 0%, #e8f5e9 100%);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.msu-insights h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5e17eb;
+}
+
+.msu-insights ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.msu-insights li {
+  font-size: 13px;
+  color: #212529;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.msu-insights li:last-child {
+  margin-bottom: 0;
+}
+
+/* Saving State */
+.msu-saving {
+  text-align: center;
+  padding: 60px 24px;
+}
+
+.msu-saving-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: msu-spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+.msu-saving p {
+  margin: 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+/* Success State */
+.msu-success {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.msu-success-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 32px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+.msu-success h4 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #212529;
+}
+
+.msu-success p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.msu-success-note {
+  font-size: 13px;
+  color: #5e17eb;
+  margin-bottom: 24px !important;
+}
+
+.msu-done-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msu-done-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+}
+
+.msu-another-btn {
+  padding: 12px 24px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msu-another-btn:hover {
+  background: #e9ecef;
+}
+
+/* Error State */
+.msu-error-state {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.msu-error-icon-large {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.msu-error-state h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+  color: #dc2626;
+}
+
+.msu-error-message {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.msu-retry-btn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.msu-retry-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.35);
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .msu-overlay {
+    padding: 10px;
+  }
+
+  .msu-modal {
+    max-height: 95vh;
+  }
+
+  .msu-header {
+    padding: 16px 20px;
+  }
+
+  .msu-content {
+    padding: 20px;
+  }
+
+  .msu-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .msu-actions {
+    flex-direction: column;
+  }
+
+  .msu-review-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}

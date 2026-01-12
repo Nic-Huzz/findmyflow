@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competence Wheel Mockups - FindMyFlow</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #6BCB77;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 40px;
+    }
+
+    .mockup-section {
+      margin-bottom: 60px;
+      padding: 30px;
+      background: #111;
+      border-radius: 16px;
+      border: 1px solid #222;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-desc {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: #6BCB77;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .badge.alt {
+      background: #4D96FF;
+    }
+
+    /* ========================================
+       CLUSTER CONTAINER (simulates flow UI)
+       ======================================== */
+
+    .cluster-container {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .flow-context {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    /* ========================================
+       MINI WHEEL (Option A)
+       ======================================== */
+
+    .mini-wheel-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 16px;
+      background: rgba(107, 203, 119, 0.05);
+      border: 1px solid rgba(107, 203, 119, 0.2);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .mini-wheel-svg {
+      flex-shrink: 0;
+    }
+
+    .mini-wheel-content {
+      flex: 1;
+    }
+
+    .mini-wheel-title {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .mini-wheel-segments {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .segment-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      font-size: 13px;
+      animation: tagPop 0.4s ease-out;
+    }
+
+    .segment-tag.lit {
+      background: linear-gradient(135deg, rgba(107, 203, 119, 0.2), rgba(77, 150, 255, 0.2));
+      border: 1px solid rgba(107, 203, 119, 0.4);
+    }
+
+    .segment-tag .icon {
+      font-size: 14px;
+    }
+
+    @keyframes tagPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ========================================
+       FULL WHEEL (Option B)
+       ======================================== */
+
+    .full-wheel-section {
+      text-align: center;
+      padding: 24px;
+      background: rgba(107, 203, 119, 0.05);
+      border: 1px solid rgba(107, 203, 119, 0.2);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .full-wheel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .full-wheel-subtitle {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .full-wheel-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .lit-segments-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .lit-segment-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      animation: cardSlide 0.5s ease-out;
+    }
+
+    .lit-segment-card .icon {
+      font-size: 20px;
+    }
+
+    .lit-segment-info {
+      text-align: left;
+    }
+
+    .lit-segment-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #6BCB77;
+    }
+
+    .lit-segment-tagline {
+      font-size: 11px;
+      color: #888;
+    }
+
+    @keyframes cardSlide {
+      0% { transform: translateY(10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* ========================================
+       AI CLUSTERS (existing format)
+       ======================================== */
+
+    .clusters-section {
+      margin-top: 20px;
+    }
+
+    .clusters-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .clusters-divider::before,
+    .clusters-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #333;
+    }
+
+    .cluster-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .cluster-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .cluster-items {
+      margin-bottom: 10px;
+    }
+
+    .cluster-item {
+      font-size: 13px;
+      color: #ccc;
+      padding: 4px 0;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .cluster-item::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #6BCB77;
+    }
+
+    .cluster-insight {
+      font-size: 12px;
+      color: #888;
+      font-style: italic;
+      padding-top: 8px;
+      border-top: 1px solid #333;
+    }
+
+    /* ========================================
+       SVG WHEEL STYLES
+       ======================================== */
+
+    .wheel-segment {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .wheel-segment.unlit {
+      opacity: 0.25;
+    }
+
+    .wheel-segment.lit {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px currentColor);
+    }
+
+    .wheel-segment:hover {
+      opacity: 0.9;
+      transform-origin: center;
+    }
+
+    /* Lighting animation */
+    @keyframes segmentLight {
+      0% { opacity: 0.25; filter: none; }
+      50% { opacity: 1; filter: drop-shadow(0 0 15px currentColor) brightness(1.3); }
+      100% { opacity: 1; filter: drop-shadow(0 0 8px currentColor); }
+    }
+
+    .wheel-segment.lighting {
+      animation: segmentLight 0.8s ease-out forwards;
+    }
+
+    .wheel-label {
+      font-size: 8px;
+      fill: #666;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+
+    .wheel-label.lit {
+      fill: #fff;
+      font-weight: 600;
+    }
+
+    /* ========================================
+       COMPLETION CELEBRATION
+       ======================================== */
+
+    .completion-section {
+      text-align: center;
+      padding: 40px 24px;
+      background: linear-gradient(135deg, rgba(107, 203, 119, 0.1), rgba(77, 150, 255, 0.1));
+      border: 1px solid rgba(107, 203, 119, 0.3);
+      border-radius: 16px;
+    }
+
+    .completion-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      animation: bounce 1s ease infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .completion-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .completion-subtitle {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 24px;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #333;
+      border-radius: 4px;
+      overflow: hidden;
+      max-width: 300px;
+      margin: 0 auto 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6BCB77, #4D96FF);
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+
+    .progress-label {
+      font-size: 13px;
+      color: #888;
+    }
+
+    /* ========================================
+       DEMO CONTROLS
+       ======================================== */
+
+    .demo-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #333;
+    }
+
+    .demo-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .demo-btn.primary {
+      background: #6BCB77;
+      color: #000;
+    }
+
+    .demo-btn.primary:hover {
+      background: #5ab868;
+    }
+
+    .demo-btn.secondary {
+      background: #333;
+      color: #fff;
+    }
+
+    .demo-btn.secondary:hover {
+      background: #444;
+    }
+
+    /* ========================================
+       COMPARISON LAYOUT
+       ======================================== */
+
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 30px;
+    }
+
+    @media (max-width: 600px) {
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ========================================
+       NOTES
+       ======================================== */
+
+    .notes {
+      background: #1a1a1a;
+      border-left: 3px solid #6BCB77;
+      padding: 16px 20px;
+      margin-top: 20px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .notes-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #6BCB77;
+      margin-bottom: 8px;
+    }
+
+    .notes-content {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    .notes-content li {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Competence Wheel + Clusters Mockup</h1>
+    <p class="subtitle">Exploring how wheels enhance the cluster reveal experience</p>
+
+    <!-- ========================================
+         OPTION A: MINI WHEEL
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">
+        Option A: Mini Wheel
+        <span class="badge">Recommended for during flow</span>
+      </h2>
+      <p class="section-desc">Compact wheel sits above clusters, showing which segments just lit up. Saves space while adding visual context.</p>
+
+      <div class="cluster-container">
+        <div class="flow-context">Flow Finder: Skills &bull; Step 3 of 5</div>
+
+        <!-- Mini Wheel Section -->
+        <div class="mini-wheel-section">
+          <svg class="mini-wheel-svg" width="80" height="80" viewBox="0 0 100 100">
+            <!-- 12 segments -->
+            <path class="wheel-segment unlit" d="M50 50 L50 10 A40 40 0 0 1 84.6 30 Z" fill="#FF6B6B"/>
+            <path class="wheel-segment lit lighting" d="M50 50 L84.6 30 A40 40 0 0 1 90 50 Z" fill="#FF8E53"/>
+            <path class="wheel-segment lit lighting" style="animation-delay: 0.2s" d="M50 50 L90 50 A40 40 0 0 1 84.6 70 Z" fill="#FFD93D"/>
+            <path class="wheel-segment unlit" d="M50 50 L84.6 70 A40 40 0 0 1 50 90 Z" fill="#6BCB77"/>
+            <path class="wheel-segment unlit" d="M50 50 L50 90 A40 40 0 0 1 15.4 70 Z" fill="#4D96FF"/>
+            <path class="wheel-segment unlit" d="M50 50 L15.4 70 A40 40 0 0 1 10 50 Z" fill="#9B59B6"/>
+            <path class="wheel-segment unlit" d="M50 50 L10 50 A40 40 0 0 1 15.4 30 Z" fill="#E91E63"/>
+            <path class="wheel-segment unlit" d="M50 50 L15.4 30 A40 40 0 0 1 50 10 Z" fill="#FF5722"/>
+            <!-- Center hole -->
+            <circle cx="50" cy="50" r="15" fill="#1a1a1a"/>
+          </svg>
+
+          <div class="mini-wheel-content">
+            <div class="mini-wheel-title">Your responses touched:</div>
+            <div class="mini-wheel-segments">
+              <span class="segment-tag lit">
+                <span class="icon">📊</span>
+                <span>The Pattern Spotter</span>
+              </span>
+              <span class="segment-tag lit" style="animation-delay: 0.15s">
+                <span class="icon">🎯</span>
+                <span>The Chess Player</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Existing Clusters -->
+        <div class="clusters-section">
+          <div class="clusters-divider">Here's how we grouped your answers</div>
+
+          <div class="cluster-card">
+            <div class="cluster-name">Strategic Thinking</div>
+            <div class="cluster-items">
+              <div class="cluster-item">"I naturally think about the big picture"</div>
+              <div class="cluster-item">"I'm always planning 3 steps ahead"</div>
+              <div class="cluster-item">"People come to me for decision-making"</div>
+            </div>
+            <div class="cluster-insight">This cluster reveals your natural ability to see patterns and plan strategically.</div>
+          </div>
+
+          <div class="cluster-card">
+            <div class="cluster-name">Pattern Recognition</div>
+            <div class="cluster-items">
+              <div class="cluster-item">"I can spot patterns in data that others miss"</div>
+              <div class="cluster-item">"Numbers and spreadsheets make sense to me"</div>
+            </div>
+            <div class="cluster-insight">You have a gift for turning raw information into meaningful insights.</div>
+          </div>
+        </div>
+
+        <div class="demo-controls">
+          <button class="demo-btn primary" onclick="replayMiniAnimation()">Replay Animation</button>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="notes-title">Why Mini Works Here</div>
+        <ul class="notes-content">
+          <li>Compact - doesn't overwhelm the cluster content</li>
+          <li>Quick visual confirmation of progress</li>
+          <li>Segment tags use aspirational titles ("The Pattern Spotter")</li>
+          <li>Animation draws attention without being distracting</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ========================================
+         OPTION B: FULL WHEEL
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">
+        Option B: Full Wheel
+        <span class="badge alt">Recommended for flow completion</span>
+      </h2>
+      <p class="section-desc">Larger wheel with labels, showing the full picture. More impactful for milestone moments.</p>
+
+      <div class="cluster-container">
+        <div class="flow-context">Flow Finder: Skills &bull; Clustering Complete</div>
+
+        <!-- Full Wheel Section -->
+        <div class="full-wheel-section">
+          <div class="full-wheel-title">Your Skills Wheel is Growing!</div>
+          <div class="full-wheel-subtitle">You've discovered 4 of 12 skill areas</div>
+
+          <div class="full-wheel-container">
+            <svg width="220" height="220" viewBox="0 0 240 240">
+              <!-- 12 segments with labels -->
+              <!-- Segment 1: Clarifying -->
+              <path class="wheel-segment unlit" d="M120 120 L120 30 A90 90 0 0 1 175 52.7 Z" fill="#FF6B6B"/>
+              <!-- Segment 2: Analyzing - LIT -->
+              <path class="wheel-segment lit lighting" d="M120 120 L175 52.7 A90 90 0 0 1 210 120 Z" fill="#FF8E53"/>
+              <!-- Segment 3: Strategizing - LIT -->
+              <path class="wheel-segment lit lighting" style="animation-delay: 0.2s" d="M120 120 L210 120 A90 90 0 0 1 175 187.3 Z" fill="#FFD93D"/>
+              <!-- Segment 4: Organizing -->
+              <path class="wheel-segment unlit" d="M120 120 L175 187.3 A90 90 0 0 1 120 210 Z" fill="#6BCB77"/>
+              <!-- Segment 5: Building - LIT -->
+              <path class="wheel-segment lit lighting" style="animation-delay: 0.4s" d="M120 120 L120 210 A90 90 0 0 1 65 187.3 Z" fill="#4D96FF"/>
+              <!-- Segment 6: Designing -->
+              <path class="wheel-segment unlit" d="M120 120 L65 187.3 A90 90 0 0 1 30 120 Z" fill="#9B59B6"/>
+              <!-- Segment 7: Creating -->
+              <path class="wheel-segment unlit" d="M120 120 L30 120 A90 90 0 0 1 65 52.7 Z" fill="#E91E63"/>
+              <!-- Segment 8: Expressing - LIT -->
+              <path class="wheel-segment lit lighting" style="animation-delay: 0.6s" d="M120 120 L65 52.7 A90 90 0 0 1 120 30 Z" fill="#FF5722"/>
+
+              <!-- Center hole -->
+              <circle cx="120" cy="120" r="35" fill="#1a1a1a"/>
+
+              <!-- Center text -->
+              <text x="120" y="115" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">4</text>
+              <text x="120" y="132" text-anchor="middle" fill="#888" font-size="10">of 12</text>
+
+              <!-- Labels around wheel -->
+              <text class="wheel-label" x="147" y="25" transform="rotate(15, 147, 25)">Clarifying</text>
+              <text class="wheel-label lit" x="200" y="75" transform="rotate(45, 200, 75)">Analyzing</text>
+              <text class="wheel-label lit" x="215" y="140" transform="rotate(75, 215, 140)">Strategizing</text>
+              <text class="wheel-label" x="190" y="200" transform="rotate(105, 190, 200)">Organizing</text>
+              <text class="wheel-label lit" x="120" y="230">Building</text>
+              <text class="wheel-label" x="50" y="200" transform="rotate(-105, 50, 200)">Designing</text>
+              <text class="wheel-label" x="25" y="140" transform="rotate(-75, 25, 140)">Creating</text>
+              <text class="wheel-label lit" x="40" y="75" transform="rotate(-45, 40, 75)">Expressing</text>
+            </svg>
+          </div>
+
+          <div class="lit-segments-list">
+            <div class="lit-segment-card" style="animation-delay: 0.1s">
+              <span class="icon">📊</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Pattern Spotter</div>
+                <div class="lit-segment-tagline">You see what others miss</div>
+              </div>
+            </div>
+            <div class="lit-segment-card" style="animation-delay: 0.2s">
+              <span class="icon">🎯</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Chess Player</div>
+                <div class="lit-segment-tagline">You think 10 moves ahead</div>
+              </div>
+            </div>
+            <div class="lit-segment-card" style="animation-delay: 0.3s">
+              <span class="icon">🔨</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Maker</div>
+                <div class="lit-segment-tagline">You turn ideas into reality</div>
+              </div>
+            </div>
+            <div class="lit-segment-card" style="animation-delay: 0.4s">
+              <span class="icon">🎙️</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Voice</div>
+                <div class="lit-segment-tagline">You give form to what matters</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clusters below -->
+        <div class="clusters-section">
+          <div class="clusters-divider">Your Skill Clusters</div>
+
+          <div class="cluster-card">
+            <div class="cluster-name">Strategic Analysis</div>
+            <div class="cluster-items">
+              <div class="cluster-item">"I naturally think about the big picture"</div>
+              <div class="cluster-item">"I can spot patterns in data that others miss"</div>
+            </div>
+            <div class="cluster-insight">Your strategic mind combines with pattern recognition to see opportunities others miss.</div>
+          </div>
+
+          <div class="cluster-card">
+            <div class="cluster-name">Creative Building</div>
+            <div class="cluster-items">
+              <div class="cluster-item">"I love building things from scratch"</div>
+              <div class="cluster-item">"I can articulate complex ideas clearly"</div>
+            </div>
+            <div class="cluster-insight">You don't just have ideas - you bring them to life and communicate their value.</div>
+          </div>
+        </div>
+
+        <div class="demo-controls">
+          <button class="demo-btn primary" onclick="replayFullAnimation()">Replay Animation</button>
+        </div>
+      </div>
+
+      <div class="notes">
+        <div class="notes-title">Why Full Works at Completion</div>
+        <ul class="notes-content">
+          <li>Creates a celebratory milestone moment</li>
+          <li>Shows cumulative progress (4 of 12)</li>
+          <li>Aspirational titles + taglines reinforce identity</li>
+          <li>Labels on wheel help users learn the vocabulary</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ========================================
+         FLOW COMPLETION CELEBRATION
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">
+        Flow Completion Moment
+        <span class="badge">End of Flow Finder Skills</span>
+      </h2>
+      <p class="section-desc">When user completes an entire flow, celebrate with full wheel + progress tracking.</p>
+
+      <div class="cluster-container" style="max-width: 700px">
+        <div class="completion-section">
+          <div class="completion-icon">🎯</div>
+          <div class="completion-title">Skills Flow Complete!</div>
+          <div class="completion-subtitle">You've discovered 4 skill areas on your wheel</div>
+
+          <div class="full-wheel-container">
+            <svg width="200" height="200" viewBox="0 0 240 240">
+              <path class="wheel-segment unlit" d="M120 120 L120 30 A90 90 0 0 1 175 52.7 Z" fill="#FF6B6B"/>
+              <path class="wheel-segment lit" d="M120 120 L175 52.7 A90 90 0 0 1 210 120 Z" fill="#FF8E53"/>
+              <path class="wheel-segment lit" d="M120 120 L210 120 A90 90 0 0 1 175 187.3 Z" fill="#FFD93D"/>
+              <path class="wheel-segment unlit" d="M120 120 L175 187.3 A90 90 0 0 1 120 210 Z" fill="#6BCB77"/>
+              <path class="wheel-segment lit" d="M120 120 L120 210 A90 90 0 0 1 65 187.3 Z" fill="#4D96FF"/>
+              <path class="wheel-segment unlit" d="M120 120 L65 187.3 A90 90 0 0 1 30 120 Z" fill="#9B59B6"/>
+              <path class="wheel-segment unlit" d="M120 120 L30 120 A90 90 0 0 1 65 52.7 Z" fill="#E91E63"/>
+              <path class="wheel-segment lit" d="M120 120 L65 52.7 A90 90 0 0 1 120 30 Z" fill="#FF5722"/>
+              <circle cx="120" cy="120" r="35" fill="#1a1a1a"/>
+              <text x="120" y="118" text-anchor="middle" fill="#6BCB77" font-size="24" font-weight="700">33%</text>
+              <text x="120" y="135" text-anchor="middle" fill="#888" font-size="10">Complete</text>
+            </svg>
+          </div>
+
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 33%"></div>
+          </div>
+          <div class="progress-label">Continue with Problems flow to discover more</div>
+
+          <div class="lit-segments-list" style="margin-top: 24px">
+            <div class="lit-segment-card">
+              <span class="icon">📊</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Pattern Spotter</div>
+              </div>
+            </div>
+            <div class="lit-segment-card">
+              <span class="icon">🎯</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Chess Player</div>
+              </div>
+            </div>
+            <div class="lit-segment-card">
+              <span class="icon">🔨</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Maker</div>
+              </div>
+            </div>
+            <div class="lit-segment-card">
+              <span class="icon">🎙️</span>
+              <div class="lit-segment-info">
+                <div class="lit-segment-name">The Voice</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-controls" style="border-top: none; padding-top: 16px">
+            <button class="demo-btn secondary">View in Library</button>
+            <button class="demo-btn primary">Continue to Problems Flow →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         SIDE BY SIDE COMPARISON
+         ======================================== -->
+    <div class="mockup-section">
+      <h2 class="section-title">Quick Comparison</h2>
+      <p class="section-desc">Mini wheel for mid-flow clustering, Full wheel for completion moments</p>
+
+      <div class="comparison">
+        <div>
+          <h3 style="margin-bottom: 16px; font-size: 16px;">During Clustering</h3>
+          <div style="background: #1a1a1a; padding: 16px; border-radius: 12px;">
+            <div class="mini-wheel-section" style="margin-bottom: 0">
+              <svg class="mini-wheel-svg" width="60" height="60" viewBox="0 0 100 100">
+                <path class="wheel-segment unlit" d="M50 50 L50 10 A40 40 0 0 1 84.6 30 Z" fill="#FF6B6B"/>
+                <path class="wheel-segment lit" d="M50 50 L84.6 30 A40 40 0 0 1 90 50 Z" fill="#FF8E53"/>
+                <path class="wheel-segment lit" d="M50 50 L90 50 A40 40 0 0 1 84.6 70 Z" fill="#FFD93D"/>
+                <path class="wheel-segment unlit" d="M50 50 L84.6 70 A40 40 0 0 1 50 90 Z" fill="#6BCB77"/>
+                <path class="wheel-segment unlit" d="M50 50 L50 90 A40 40 0 0 1 15.4 70 Z" fill="#4D96FF"/>
+                <path class="wheel-segment unlit" d="M50 50 L15.4 70 A40 40 0 0 1 10 50 Z" fill="#9B59B6"/>
+                <path class="wheel-segment unlit" d="M50 50 L10 50 A40 40 0 0 1 15.4 30 Z" fill="#E91E63"/>
+                <path class="wheel-segment unlit" d="M50 50 L15.4 30 A40 40 0 0 1 50 10 Z" fill="#FF5722"/>
+                <circle cx="50" cy="50" r="12" fill="#1a1a1a"/>
+              </svg>
+              <div class="mini-wheel-content">
+                <div class="mini-wheel-title">Your responses touched:</div>
+                <div class="mini-wheel-segments">
+                  <span class="segment-tag lit"><span class="icon">📊</span> Pattern Spotter</span>
+                  <span class="segment-tag lit"><span class="icon">🎯</span> Chess Player</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p style="color: #888; font-size: 13px; margin-top: 12px;">✓ Compact &bull; Quick context &bull; Non-intrusive</p>
+        </div>
+
+        <div>
+          <h3 style="margin-bottom: 16px; font-size: 16px;">At Completion</h3>
+          <div style="background: #1a1a1a; padding: 16px; border-radius: 12px; text-align: center;">
+            <svg width="120" height="120" viewBox="0 0 240 240">
+              <path class="wheel-segment unlit" d="M120 120 L120 30 A90 90 0 0 1 175 52.7 Z" fill="#FF6B6B"/>
+              <path class="wheel-segment lit" d="M120 120 L175 52.7 A90 90 0 0 1 210 120 Z" fill="#FF8E53"/>
+              <path class="wheel-segment lit" d="M120 120 L210 120 A90 90 0 0 1 175 187.3 Z" fill="#FFD93D"/>
+              <path class="wheel-segment unlit" d="M120 120 L175 187.3 A90 90 0 0 1 120 210 Z" fill="#6BCB77"/>
+              <path class="wheel-segment lit" d="M120 120 L120 210 A90 90 0 0 1 65 187.3 Z" fill="#4D96FF"/>
+              <path class="wheel-segment unlit" d="M120 120 L65 187.3 A90 90 0 0 1 30 120 Z" fill="#9B59B6"/>
+              <path class="wheel-segment unlit" d="M120 120 L30 120 A90 40 0 0 1 65 52.7 Z" fill="#E91E63"/>
+              <path class="wheel-segment lit" d="M120 120 L65 52.7 A90 90 0 0 1 120 30 Z" fill="#FF5722"/>
+              <circle cx="120" cy="120" r="30" fill="#1a1a1a"/>
+              <text x="120" y="125" text-anchor="middle" fill="#6BCB77" font-size="18" font-weight="700">4/12</text>
+            </svg>
+            <div style="font-size: 14px; margin-top: 8px;">Skills Wheel: 33% discovered</div>
+          </div>
+          <p style="color: #888; font-size: 13px; margin-top: 12px;">✓ Celebratory &bull; Shows progress &bull; Memorable</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Animation replay functions
+    function replayMiniAnimation() {
+      const segments = document.querySelectorAll('.mini-wheel-section .wheel-segment.lit');
+      const tags = document.querySelectorAll('.mini-wheel-section .segment-tag');
+
+      segments.forEach(seg => {
+        seg.classList.remove('lighting');
+        void seg.offsetWidth; // Trigger reflow
+        seg.classList.add('lighting');
+      });
+
+      tags.forEach((tag, i) => {
+        tag.style.animation = 'none';
+        void tag.offsetWidth;
+        tag.style.animation = `tagPop 0.4s ease-out ${i * 0.15}s both`;
+      });
+    }
+
+    function replayFullAnimation() {
+      const segments = document.querySelectorAll('.full-wheel-section .wheel-segment.lit');
+      const cards = document.querySelectorAll('.full-wheel-section .lit-segment-card');
+
+      segments.forEach(seg => {
+        seg.classList.remove('lighting');
+        void seg.offsetWidth;
+        seg.classList.add('lighting');
+      });
+
+      cards.forEach((card, i) => {
+        card.style.animation = 'none';
+        void card.offsetWidth;
+        card.style.animation = `cardSlide 0.5s ease-out ${i * 0.1}s both`;
+      });
+    }
+
+    // Auto-play animations on load
+    window.addEventListener('load', () => {
+      setTimeout(replayMiniAnimation, 500);
+      setTimeout(replayFullAnimation, 1000);
+    });
+  </script>
+</body>
+</html>

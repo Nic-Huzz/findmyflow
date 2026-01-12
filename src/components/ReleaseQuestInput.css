@@ -156,19 +156,19 @@
   color: #1f2937;
 }
 
-.release-section {
+.release-input .release-section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.release-label {
+.release-input .release-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: #374151;
 }
 
-.release-hint {
+.release-input .release-hint {
   font-size: 0.75rem;
   color: #6b7280;
   margin: 0;
@@ -176,7 +176,7 @@
 }
 
 /* Textarea */
-.release-textarea {
+.release-input .release-textarea {
   width: 100%;
   padding: 0.75rem;
   border: 2px solid #e5e7eb;
@@ -187,17 +187,17 @@
   transition: border-color 0.2s ease;
 }
 
-.release-textarea:focus {
+.release-input .release-textarea:focus {
   outline: none;
   border-color: #ec4899;
 }
 
-.release-textarea::placeholder {
+.release-input .release-textarea::placeholder {
   color: #9ca3af;
 }
 
 /* Select dropdown for safety contracts */
-.release-select {
+.release-input .release-select {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 2px solid #e5e7eb;
@@ -214,12 +214,12 @@
   padding-right: 2.5rem;
 }
 
-.release-select:focus {
+.release-input .release-select:focus {
   outline: none;
   border-color: #ec4899;
 }
 
-.release-select option {
+.release-input .release-select option {
   padding: 0.5rem;
 }
 
@@ -631,7 +631,7 @@
 }
 
 /* Submit Button */
-.release-submit-btn {
+.release-input .release-submit-btn {
   width: 100%;
   padding: 0.875rem 1.5rem;
   background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
@@ -645,12 +645,12 @@
   margin-top: 0.5rem;
 }
 
-.release-submit-btn:hover:not(:disabled) {
+.release-input .release-submit-btn:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
-.release-submit-btn:disabled {
+.release-input .release-submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

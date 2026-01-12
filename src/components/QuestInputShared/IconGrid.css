@@ -1,0 +1,145 @@
+/**
+ * IconGrid.css
+ * Styles for the shared selectable icon grid component
+ */
+
+.icon-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* Grid Items */
+.icon-grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-grid-icon {
+  font-size: 1.5rem;
+}
+
+.icon-grid-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  color: #374151;
+}
+
+/* Hover States by Color Scheme */
+.icon-grid--purple .icon-grid-item:hover {
+  border-color: #a78bfa;
+  background: #faf5ff;
+}
+
+.icon-grid--pink .icon-grid-item:hover {
+  border-color: #f9a8d4;
+  background: #fdf2f8;
+}
+
+.icon-grid--red .icon-grid-item:hover {
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+.icon-grid--blue .icon-grid-item:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+/* Selected States by Color Scheme */
+.icon-grid--purple .icon-grid-item.selected {
+  border-color: #7c3aed;
+  background: #7c3aed;
+  color: white;
+}
+
+.icon-grid--purple .icon-grid-item.selected .icon-grid-label {
+  color: white;
+}
+
+.icon-grid--pink .icon-grid-item.selected {
+  border-color: #ec4899;
+  background: #ec4899;
+  color: white;
+}
+
+.icon-grid--pink .icon-grid-item.selected .icon-grid-label {
+  color: white;
+}
+
+.icon-grid--red .icon-grid-item.selected {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.icon-grid--red .icon-grid-item.selected .icon-grid-label {
+  color: #991b1b;
+}
+
+.icon-grid--blue .icon-grid-item.selected {
+  border-color: #3b82f6;
+  background: #3b82f6;
+  color: white;
+}
+
+.icon-grid--blue .icon-grid-item.selected .icon-grid-label {
+  color: white;
+}
+
+/* Variants */
+
+/* Compact - smaller padding, smaller icons */
+.icon-grid--compact .icon-grid-item {
+  padding: 0.5rem 0.25rem;
+  gap: 0.125rem;
+}
+
+.icon-grid--compact .icon-grid-icon {
+  font-size: 1.25rem;
+}
+
+.icon-grid--compact .icon-grid-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Large - bigger padding, larger icons */
+.icon-grid--large .icon-grid-item {
+  padding: 1rem 0.5rem;
+}
+
+.icon-grid--large .icon-grid-icon {
+  font-size: 2rem;
+}
+
+.icon-grid--large .icon-grid-label {
+  font-size: 0.7rem;
+}
+
+/* Selected state for large variant - gradient background instead of solid */
+.icon-grid--large.icon-grid--purple .icon-grid-item.selected {
+  border-color: #7c3aed;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  color: #374151;
+}
+
+.icon-grid--large.icon-grid--purple .icon-grid-item.selected .icon-grid-label {
+  color: #6d28d9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .icon-grid--compact .icon-grid-label {
+    font-size: 0.45rem;
+  }
+}

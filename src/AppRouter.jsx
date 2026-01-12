@@ -1,77 +1,123 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import App from './App'
+
+// Static imports - Core infrastructure and frequently accessed pages
 import PersonaAssessment from './PersonaAssessment'
-import AttractionOfferFlow from './flows/AttractionOfferFlow'
-import UpsellFlow from './flows/UpsellFlow'
-import DownsellFlow from './flows/DownsellFlow'
-import ContinuityFlow from './flows/ContinuityFlow'
-import LeadsStrategyFlow from './flows/LeadsStrategyFlow'
-import OfferBuilderFlow from './flows/OfferBuilderFlow'
-import LeadMagnetSelectionFlow from './flows/LeadMagnetSelectionFlow'
-import ProductSelectionFlow from './flows/ProductSelectionFlow'
-import FunnelBuilderFlow from './flows/FunnelBuilderFlow'
-import FunnelCalculator from './flows/FunnelCalculator'
-import OfferBuilder100M from './flows/OfferBuilder100M'
-import PersonaSelectionFlow from './flows/PersonaSelectionFlow'
-import MoneyModelGuide from './MoneyModelGuide'
 import Profile from './Profile'
-import HealingCompass from './flows/HealingCompass'
-import NervousSystemFlow from './flows/NervousSystemFlow'
 import Challenge from './Challenge'
-import FlowFinderSkills from './flows/FlowFinderSkills'
-import FlowFinderProblems from './flows/FlowFinderProblems'
-import FlowFinderPersona from './flows/FlowFinderPersona'
-import FlowFinderIntegration from './flows/FlowFinderIntegration'
-import ArchetypeSelection from './ArchetypeSelection'
-import EssenceProfile from './profiles/EssenceProfile'
-import ProtectiveProfile from './profiles/ProtectiveProfile'
-import Feedback from './Feedback'
-import NotificationSettings from './components/NotificationSettings'
-import RetreatLanding from './RetreatLanding'
-import FlowLibrary from './FlowLibrary'
-import LibraryOfAnswers from './pages/LibraryOfAnswers'
-import FlowCompassPage from './pages/FlowCompassPage'
-import FlowMapMockups from './components/FlowMapMockups'
 import PublicValidationFlow from './pages/PublicValidationFlow'
-import ValidationFlowsManager from './pages/ValidationFlowsManager'
-import {
-  CRMDashboard,
-  CRMMarketing,
-  CRMSales,
-  CRMAnalytics,
-  PTUFCalculator,
-  LTVCalculator,
-  CACTracker,
-  SalesScripts,
-  SmartAlerts,
-} from './pages/crm'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
-import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
+
+// Loading component for Suspense fallback
+function LoadingSpinner() {
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '60vh',
+      color: '#5e17eb'
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⏳</div>
+        <div>Loading...</div>
+      </div>
+    </div>
+  )
+}
+
+// Lazy-loaded flows - Money Model
+const AttractionOfferFlow = lazy(() => import('./flows/AttractionOfferFlow'))
+const UpsellFlow = lazy(() => import('./flows/UpsellFlow'))
+const DownsellFlow = lazy(() => import('./flows/DownsellFlow'))
+const ContinuityFlow = lazy(() => import('./flows/ContinuityFlow'))
+const LeadsStrategyFlow = lazy(() => import('./flows/LeadsStrategyFlow'))
+const OfferBuilderFlow = lazy(() => import('./flows/OfferBuilderFlow'))
+const LeadMagnetSelectionFlow = lazy(() => import('./flows/LeadMagnetSelectionFlow'))
+const ProductSelectionFlow = lazy(() => import('./flows/ProductSelectionFlow'))
+const FunnelBuilderFlow = lazy(() => import('./flows/FunnelBuilderFlow'))
+const FunnelCalculator = lazy(() => import('./flows/FunnelCalculator'))
+const OfferBuilder100M = lazy(() => import('./flows/OfferBuilder100M'))
+const PersonaSelectionFlow = lazy(() => import('./flows/PersonaSelectionFlow'))
+
+// Lazy-loaded flows - FlowFinder
+const FlowFinderSkills = lazy(() => import('./flows/FlowFinderSkills'))
+const FlowFinderProblems = lazy(() => import('./flows/FlowFinderProblems'))
+const FlowFinderPersona = lazy(() => import('./flows/FlowFinderPersona'))
+const FlowFinderIntegration = lazy(() => import('./flows/FlowFinderIntegration'))
+
+// Lazy-loaded flows - Healing & Nervous System
+const HealingCompass = lazy(() => import('./flows/HealingCompass'))
+const NervousSystemFlow = lazy(() => import('./flows/NervousSystemFlow'))
+
+// Lazy-loaded flows - Setup & Training
+const BusinessBaselineFlow = lazy(() => import('./flows/BusinessBaselineFlow'))
+const CustomerSegmentsFlow = lazy(() => import('./flows/CustomerSegmentsFlow'))
+const CompetitorSnapshotFlow = lazy(() => import('./flows/CompetitorSnapshotFlow'))
+const VoiceTraining = lazy(() => import('./flows/VoiceTraining'))
+
+// Lazy-loaded pages - CRM
+const Dashboard = lazy(() => import('./pages/crm/Dashboard'))
+const Marketing = lazy(() => import('./pages/crm/Marketing'))
+const Sales = lazy(() => import('./pages/crm/Sales'))
+const Analytics = lazy(() => import('./pages/crm/Analytics'))
+const ContentHistory = lazy(() => import('./pages/crm/ContentHistory'))
+const ContentQueue = lazy(() => import('./pages/crm/ContentQueue'))
+const PerformanceDashboard = lazy(() => import('./pages/crm/PerformanceDashboard'))
+const ImplementationTracker = lazy(() => import('./pages/crm/ImplementationTracker'))
+const GeneratedAssetsLibrary = lazy(() => import('./pages/crm/GeneratedAssetsLibrary'))
+const AutonomousSetup = lazy(() => import('./pages/crm/AutonomousSetup'))
+const PTUFCalculator = lazy(() => import('./pages/crm/PTUFCalculator'))
+const LTVCalculator = lazy(() => import('./pages/crm/LTVCalculator'))
+const CACTracker = lazy(() => import('./pages/crm/CACTracker'))
+const SalesScripts = lazy(() => import('./pages/crm/SalesScripts'))
+const SmartAlerts = lazy(() => import('./pages/crm/SmartAlerts'))
+const ContentCreate = lazy(() => import('./pages/crm/ContentCreate'))
+const AscensionEngine = lazy(() => import('./pages/crm/AscensionEngine'))
+const ObjectionPatterns = lazy(() => import('./pages/crm/ObjectionPatterns'))
+
+// Lazy-loaded pages - Other
+const MoneyModelGuide = lazy(() => import('./MoneyModelGuide'))
+const ArchetypeSelection = lazy(() => import('./ArchetypeSelection'))
+const EssenceProfile = lazy(() => import('./profiles/EssenceProfile'))
+const ProtectiveProfile = lazy(() => import('./profiles/ProtectiveProfile'))
+const Feedback = lazy(() => import('./Feedback'))
+const NotificationSettings = lazy(() => import('./components/NotificationSettings'))
+const LibraryOfAnswers = lazy(() => import('./pages/LibraryOfAnswers'))
+const FlowCompassPage = lazy(() => import('./pages/FlowCompassPage'))
+const FlowMapMockups = lazy(() => import('./components/FlowMapMockups'))
+const ValidationFlowsManager = lazy(() => import('./pages/ValidationFlowsManager'))
+const WheelDemo = lazy(() => import('./pages/WheelDemo'))
+const WeeklyPlanningFlow = lazy(() => import('./components/WeeklyPlanningFlow'))
 import './App.css'
 import './PersonaAssessment.css'
-import './AttractionOfferFlow.css'
-import './UpsellFlow.css'
-import './DownsellFlow.css'
-import './ContinuityFlow.css'
-import './LeadsStrategyFlow.css'
-import './PersonaSelectionFlow.css'
+import './flows/AttractionOfferFlow.css'
+import './flows/UpsellFlow.css'
+import './flows/DownsellFlow.css'
+import './flows/ContinuityFlow.css'
+import './flows/LeadsStrategyFlow.css'
+import './flows/PersonaSelectionFlow.css'
 import './MoneyModelGuide.css'
 import './Profile.css'
 import './Auth.css'
 import './HybridEssenceFlow.css'
 import './Challenge.css'
 import './Feedback.css'
-import './RetreatLanding.css'
-import './FlowFinder.css'
+import './flows/FlowFinder.css'
 import './flows/LeadMagnetSelectionFlow.css'
 import './flows/ProductSelectionFlow.css'
 import './flows/FunnelBuilderFlow.css'
 import './flows/FunnelCalculator.css'
+import './flows/BusinessBaselineFlow.css'
+import './flows/CustomerSegmentsFlow.css'
+import './flows/CompetitorSnapshotFlow.css'
+import './pages/crm/AutonomousSetup.css'
+import './pages/crm/AscensionEngine.css'
+import './pages/crm/ObjectionPatterns.css'
 import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
 
@@ -80,10 +126,11 @@ function AppRouter() {
     <ErrorBoundary>
       <AuthProvider>
         <Router>
-          <Routes>
-            {/* Homepage - Persona Assessment */}
-            <Route path="/" element={<PersonaAssessment />} />
-            <Route path="/log-in" element={<PersonaAssessment />} />
+          <Suspense fallback={<LoadingSpinner />}>
+            <Routes>
+              {/* Homepage - Persona Assessment */}
+              <Route path="/" element={<PersonaAssessment />} />
+              <Route path="/log-in" element={<PersonaAssessment />} />
 
             {/* Attraction Offer Assessment - In-App Challenge */}
             <Route path="/attraction-offer" element={
@@ -167,8 +214,7 @@ function AppRouter() {
 
             {/* FlowMap Style Mockups - For Review */}
             <Route path="/flow-mockups" element={<FlowMapMockups />} />
-
-            <Route path="/retreats" element={<RetreatLanding />} />
+            <Route path="/wheel-demo" element={<WheelDemo />} />
 
             {/* Public Validation Flow - No Auth Required */}
             <Route path="/v/:shareToken" element={<PublicValidationFlow />} />
@@ -273,22 +319,37 @@ function AppRouter() {
             {/* CRM Tower - Command Center */}
             <Route path="/crm" element={
               <AuthGate>
-                <CRMDashboard />
+                <Dashboard />
               </AuthGate>
             } />
             <Route path="/crm/marketing" element={
               <AuthGate>
-                <CRMMarketing />
+                <Marketing />
               </AuthGate>
             } />
             <Route path="/crm/sales" element={
               <AuthGate>
-                <CRMSales />
+                <Sales />
               </AuthGate>
             } />
             <Route path="/crm/analytics" element={
               <AuthGate>
-                <CRMAnalytics />
+                <Analytics />
+              </AuthGate>
+            } />
+            <Route path="/crm/content-history" element={
+              <AuthGate>
+                <ContentHistory />
+              </AuthGate>
+            } />
+            <Route path="/crm/content-queue" element={
+              <AuthGate>
+                <ContentQueue />
+              </AuthGate>
+            } />
+            <Route path="/crm/performance" element={
+              <AuthGate>
+                <PerformanceDashboard />
               </AuthGate>
             } />
 
@@ -318,7 +379,64 @@ function AppRouter() {
                 <SmartAlerts />
               </AuthGate>
             } />
-          </Routes>
+            <Route path="/crm/content-create" element={
+              <AuthGate>
+                <ContentCreate />
+              </AuthGate>
+            } />
+            <Route path="/crm/implementations" element={
+              <AuthGate>
+                <ImplementationTracker />
+              </AuthGate>
+            } />
+            <Route path="/crm/assets" element={
+              <AuthGate>
+                <GeneratedAssetsLibrary />
+              </AuthGate>
+            } />
+
+            {/* Autonomous Setup - Tier 4 Data Collection */}
+            <Route path="/crm/setup" element={
+              <AuthGate>
+                <AutonomousSetup />
+              </AuthGate>
+            } />
+            <Route path="/crm/setup/business-baseline" element={
+              <AuthGate>
+                <BusinessBaselineFlow />
+              </AuthGate>
+            } />
+            <Route path="/crm/setup/customer-segments" element={
+              <AuthGate>
+                <CustomerSegmentsFlow />
+              </AuthGate>
+            } />
+            <Route path="/crm/setup/competitor-snapshot" element={
+              <AuthGate>
+                <CompetitorSnapshotFlow />
+              </AuthGate>
+            } />
+
+            {/* Voice Training Studio */}
+            <Route path="/voice-training" element={
+              <AuthGate>
+                <VoiceTraining />
+              </AuthGate>
+            } />
+
+            {/* Ascension Engine & Retention */}
+            <Route path="/crm/ascension" element={
+              <AuthGate>
+                <AscensionEngine />
+              </AuthGate>
+            } />
+            <Route path="/crm/objections" element={
+              <AuthGate>
+                <ObjectionPatterns />
+              </AuthGate>
+            } />
+            </Routes>
+          </Suspense>
           <BottomToolbar />
           <ZarloWidget />
         </Router>

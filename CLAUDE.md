@@ -166,7 +166,6 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   ├── Feedback.jsx                   # User feedback form
 │   ├── MoneyModelGuide.jsx            # Money model overview
 │   ├── FlowLibrary.jsx                # Legacy flow library
-│   ├── RetreatLanding.jsx             # Retreat landing page
 │   └── AuthGate.jsx                   # Protected route wrapper
 │
 ├── supabase/
@@ -233,7 +232,6 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 | `/v/:shareToken` | PublicValidationFlow | Public survey (no auth) |
 | `/settings/notifications` | NotificationSettings | Notification prefs |
 | `/feedback` | Feedback | User feedback |
-| `/retreats` | RetreatLanding | Retreat landing page |
 | `/money-model-guide` | MoneyModelGuide | Educational overview |
 
 ---

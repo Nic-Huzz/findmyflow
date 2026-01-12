@@ -10,30 +10,67 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
 
-function Step6_Bonuses({ obstacles, dreamOutcome, bucket, onComplete, setIsLoading, setError }) {
-  const [bonusSuggestions, setBonusSuggestions] = useState(null)
-  const [selectedBonuses, setSelectedBonuses] = useState({
+function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialData, onComplete, setIsLoading, setError }) {
+  // Restore from initialData if available (skip generation)
+  const hasInitialData = initialData?.bonusSuggestions && Object.keys(initialData.bonusSuggestions).length > 0
+  const [bonusSuggestions, setBonusSuggestions] = useState(initialData?.bonusSuggestions || null)
+  const [selectedBonuses, setSelectedBonuses] = useState(initialData?.selectedBonuses || {
     product: [],
     service: [],
     hybrid: []
   })
   const [activeTab, setActiveTab] = useState('product')
-  const [isGenerating, setIsGenerating] = useState(true)
+  const [isGenerating, setIsGenerating] = useState(!hasInitialData)
   const [editingBonus, setEditingBonus] = useState(null)
 
-  // Generate bonuses on mount
+  // Extract V1 lead magnet and bonus solutions
+  const v1Data = contextData?.offerBuilderData
+  const v1Solutions = v1Data?.responses?.q8_solutions?.solutions || []
+  const v1Categories = v1Data?.responses?.solution_categories || {}
+
+  const v1LeadMagnets = v1Solutions.filter((sol, idx) =>
+    v1Categories[`solution_${idx}`] === 'lead_magnet'
+  )
+  const v1Bonuses = v1Solutions.filter((sol, idx) =>
+    v1Categories[`solution_${idx}`] === 'bonus'
+  )
+  const hasV1Suggestions = v1LeadMagnets.length > 0 || v1Bonuses.length > 0
+
+  // Generate bonuses on mount (skip if restoring from initialData)
   useEffect(() => {
+    // Skip generation if we have initialData
+    if (hasInitialData) {
+      setIsGenerating(false)
+      return
+    }
+
     const generateBonuses = async () => {
       setIsGenerating(true)
 
       try {
+        // Prepare V1 bonus suggestions for AI context
+        const v1BonusSuggestions = hasV1Suggestions ? {
+          leadMagnets: v1LeadMagnets.map(sol => ({
+            description: sol.description,
+            type: sol.solutionType,
+            problemSolved: sol.problemText
+          })),
+          bonuses: v1Bonuses.map(sol => ({
+            description: sol.description,
+            type: sol.solutionType,
+            problemSolved: sol.problemText
+          }))
+        } : null
+
         const { data, error } = await supabase.functions.invoke('offer-builder-ai', {
           body: {
             action: 'generate_bonuses',
             context: {
               obstacles,
               dreamOutcome,
-              bucket
+              bucket,
+              // V1 Offer Builder bonus/lead magnet ideas for smarter suggestions
+              offerBuilderV1: v1BonusSuggestions
             }
           }
         })
@@ -58,7 +95,7 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, onComplete, setIsLoadi
     }
 
     generateBonuses()
-  }, [obstacles, dreamOutcome, bucket, setError])
+  }, [obstacles, dreamOutcome, bucket, setError, hasInitialData, hasV1Suggestions, v1LeadMagnets, v1Bonuses])
 
   // Toggle bonus selection
   const toggleBonus = (version, index) => {
@@ -111,7 +148,12 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, onComplete, setIsLoadi
       return
     }
 
-    onComplete(finalBonuses)
+    // Include all state for restoration when navigating back
+    onComplete({
+      bonuses: finalBonuses,
+      bonusSuggestions,
+      selectedBonuses
+    })
   }
 
   // Loading state
@@ -161,6 +203,38 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, onComplete, setIsLoadi
           🎓 Hybrid ({selectedBonuses.hybrid.length})
         </button>
       </div>
+
+      {/* V1 Offer Foundation Suggestions Panel */}
+      {hasV1Suggestions && (
+        <div className="v1-bonus-suggestions">
+          <div className="v1-suggestions-header">
+            <span className="panel-icon">📦</span>
+            <span>IDEAS FROM YOUR OFFER FOUNDATION</span>
+          </div>
+          <p className="v1-suggestions-intro">
+            You can adapt these as bonuses for any version:
+          </p>
+          <div className="v1-suggestions-list">
+            {v1LeadMagnets.map((sol, idx) => (
+              <div key={`lm-${idx}`} className="v1-suggestion-chip lead-magnet">
+                <span className="suggestion-type">🎁 Lead Magnet</span>
+                <span className="suggestion-text">{sol.description}</span>
+                <span className="suggestion-problem">Solves: {sol.problemText}</span>
+              </div>
+            ))}
+            {v1Bonuses.map((sol, idx) => (
+              <div key={`bonus-${idx}`} className="v1-suggestion-chip bonus">
+                <span className="suggestion-type">✨ Bonus</span>
+                <span className="suggestion-text">{sol.description}</span>
+                <span className="suggestion-problem">Solves: {sol.problemText}</span>
+              </div>
+            ))}
+          </div>
+          <p className="v1-suggestions-tip">
+            💡 The AI has used these ideas to generate version-specific bonuses below.
+          </p>
+        </div>
+      )}
 
       <div className="bonuses-content">
         <div className="bonuses-header">

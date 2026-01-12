@@ -4,8 +4,8 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
-import '../NervousSystemHealingCompass.css'
-import '../FlowFinder.css'
+import './NervousSystemHealingCompass.css'
+import './FlowFinder.css'
 
 export default function HealingCompass() {
   const { user } = useAuth()

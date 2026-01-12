@@ -6,7 +6,7 @@
 
 import MoneyModelFlowBase from './MoneyModelFlowBase'
 import { MONEY_MODEL_CONFIGS } from './moneyModelConfigs'
-import '../ContinuityFlow.css'
+import './ContinuityFlow.css'
 
 function ContinuityFlow() {
   const config = MONEY_MODEL_CONFIGS.continuity

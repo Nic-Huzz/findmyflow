@@ -30,20 +30,20 @@ const OBSTACLE_EXAMPLES = {
     "Need accountability",
     "Don't believe they can change"
   ],
-  relationships: [
-    "Too shy or introverted",
-    "Don't know what to say",
-    "Afraid of rejection",
+  love: [
+    "Don't believe they deserve happiness",
     "Past trauma holding them back",
-    "Don't have time to meet people",
-    "In a bad situation they can't leave",
-    "Need ongoing support",
-    "Don't believe they deserve love/connection"
+    "Afraid of getting their hopes up",
+    "Too busy surviving to thrive",
+    "Don't know where to start",
+    "Have tried self-help before and failed",
+    "Need ongoing support and accountability",
+    "Don't believe real change is possible for them"
   ]
 }
 
-function Step6_Obstacles({ bucket, contextData, onComplete, setError }) {
-  const [obstacles, setObstacles] = useState([])
+function Step6_Obstacles({ bucket, contextData, initialData, onComplete, setError }) {
+  const [obstacles, setObstacles] = useState(initialData?.obstacles || [])
   const [newObstacle, setNewObstacle] = useState('')
 
   const examples = OBSTACLE_EXAMPLES[bucket] || OBSTACLE_EXAMPLES.wealth
@@ -53,6 +53,37 @@ function Step6_Obstacles({ bucket, contextData, onComplete, setError }) {
     contextData?.validationData?.concerns ||
     contextData?.validationData?.hesitations || []
   const hasValidationObjections = validationObjections.length > 0
+
+  // Extract obstacles from V1 Offer Builder (problem_reasons)
+  const v1Data = contextData?.offerBuilderData
+  const v1Obstacles = []
+  if (v1Data?.problem_reasons) {
+    // Internal beliefs → obstacles
+    if (v1Data.problem_reasons.internal_beliefs) {
+      v1Data.problem_reasons.internal_beliefs.forEach(belief => {
+        if (typeof belief === 'string' && belief.trim()) {
+          v1Obstacles.push({ text: belief.trim(), source: 'internal' })
+        }
+      })
+    }
+    // External blockers → obstacles
+    if (v1Data.problem_reasons.external_blockers) {
+      v1Data.problem_reasons.external_blockers.forEach(blocker => {
+        if (typeof blocker === 'string' && blocker.trim()) {
+          v1Obstacles.push({ text: blocker.trim(), source: 'external' })
+        }
+      })
+    }
+    // Motivation gaps → obstacles
+    if (v1Data.problem_reasons.motivation_gaps) {
+      v1Data.problem_reasons.motivation_gaps.forEach(gap => {
+        if (typeof gap === 'string' && gap.trim()) {
+          v1Obstacles.push({ text: gap.trim(), source: 'motivation' })
+        }
+      })
+    }
+  }
+  const hasV1Obstacles = v1Obstacles.length > 0
 
   // Add obstacle
   const addObstacle = () => {
@@ -98,6 +129,45 @@ function Step6_Obstacles({ bucket, contextData, onComplete, setError }) {
       <p className="question-subtitle">
         Hormozi's secret: Your bonuses should remove every excuse someone has for NOT buying.
       </p>
+
+      {/* V1 Offer Builder Obstacles Panel */}
+      {hasV1Obstacles && (
+        <div className="v1-obstacles-panel">
+          <div className="objections-panel-header">
+            <span className="panel-icon">📦</span>
+            <span>OBSTACLES FROM YOUR OFFER FOUNDATION</span>
+          </div>
+          <div className="objections-panel-content">
+            <p className="objections-intro">
+              Real obstacles you identified in your offer foundation:
+            </p>
+            <div className="objections-list">
+              {v1Obstacles.slice(0, 8).map((obstacle, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className={`objection-chip ${obstacle.source} ${obstacles.includes(obstacle.text) ? 'added' : ''}`}
+                  onClick={() => {
+                    if (!obstacles.includes(obstacle.text) && obstacles.length < 10) {
+                      setObstacles(prev => [...prev, obstacle.text])
+                    }
+                  }}
+                  disabled={obstacles.includes(obstacle.text) || obstacles.length >= 10}
+                >
+                  {obstacles.includes(obstacle.text) ? '✓ ' : '+ '}
+                  {obstacle.text}
+                  <span className="obstacle-source">
+                    ({obstacle.source === 'internal' ? 'belief' : obstacle.source === 'external' ? 'blocker' : 'motivation'})
+                  </span>
+                </button>
+              ))}
+            </div>
+            <p className="objections-tip">
+              💡 Click to add these foundation obstacles to your list!
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Validation Objections Panel */}
       {hasValidationObjections && (

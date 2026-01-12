@@ -2,9 +2,13 @@
  * ReconnectQuestInput - Multi-step slider UI for Reconnect quests
  *
  * Handles 7 Reconnect quest types with structured data capture for AI co-founder
+ *
+ * Refactored to use shared useSteppedForm hook and StepProgress component.
  */
 
-import { useState } from 'react'
+import { useCallback } from 'react'
+import { useSteppedForm } from '../hooks/useSteppedForm'
+import { StepProgress } from './QuestInputShared'
 import './ReconnectQuestInput.css'
 
 // Reconnect quest IDs
@@ -86,211 +90,166 @@ const OUTCOME_FEELINGS = [
 ]
 
 // Step configurations for each quest type
-const STEP_CONFIG = {
-  reconnect_morning_meditation: {
-    totalSteps: 3,
-    stepTitles: ['Duration', 'How You Felt', 'Review']
-  },
-  reconnect_morning_dance: {
-    totalSteps: 2,
-    stepTitles: ['How You Felt', 'Review']
-  },
-  reconnect_morning_breathwork: {
-    totalSteps: 3,
-    stepTitles: ['Breathwork Type', 'How You Felt', 'Review']
-  },
-  reconnect_self_identified: {
-    totalSteps: 3,
-    stepTitles: ['Your Activity', 'How You Felt', 'Review']
-  },
-  reconnect_daily_prayer: {
-    totalSteps: 3,
-    stepTitles: ['Prayer Elements', 'Connection', 'Review']
-  },
-  reconnect_weekly_task: {
-    totalSteps: 3,
-    stepTitles: ['Your Practice', 'Experience', 'Review']
-  },
-  reconnect_remove_negative: {
-    totalSteps: 4,
-    stepTitles: ['What You Addressed', 'Your Action', 'How It Felt', 'Review']
-  }
+const STEP_CONFIGS = {
+  reconnect_morning_meditation: { totalSteps: 3, stepTitles: ['Duration', 'How You Felt', 'Review'] },
+  reconnect_morning_dance: { totalSteps: 2, stepTitles: ['How You Felt', 'Review'] },
+  reconnect_morning_breathwork: { totalSteps: 3, stepTitles: ['Breathwork Type', 'How You Felt', 'Review'] },
+  reconnect_self_identified: { totalSteps: 3, stepTitles: ['Your Activity', 'How You Felt', 'Review'] },
+  reconnect_daily_prayer: { totalSteps: 3, stepTitles: ['Prayer Elements', 'Connection', 'Review'] },
+  reconnect_weekly_task: { totalSteps: 3, stepTitles: ['Your Practice', 'Experience', 'Review'] },
+  reconnect_remove_negative: { totalSteps: 4, stepTitles: ['What You Addressed', 'Your Action', 'How It Felt', 'Review'] }
+}
+
+// Initial form data
+const INITIAL_RECONNECT_FORM_DATA = {
+  // Before/After state (1-5 scale)
+  beforeState: null,
+  afterState: null,
+  // Meditation specific
+  meditationDuration: null,
+  // Breathwork specific
+  breathworkType: null,
+  // Self-Identified Activity
+  dimension: null,
+  activityDescription: '',
+  // Daily Prayer
+  prayerElements: [],
+  prayerNote: '',
+  connectionRating: null,
+  // Weekly Task
+  duration: null,
+  practiceDescription: '',
+  meaningfulnessRating: null,
+  // Environment Hygiene
+  drainType: null,
+  actionDescription: '',
+  difficulty: null,
+  outcome: null
 }
 
 function ReconnectQuestInput({ quest, onComplete }) {
-  const [loading, setLoading] = useState(false)
-  const [step, setStep] = useState(1)
+  const config = STEP_CONFIGS[quest.id] || { totalSteps: 2, stepTitles: ['Input', 'Review'] }
 
-  // State for different quest types
-  const [formData, setFormData] = useState({
-    // Before/After state (1-5 scale)
-    beforeState: null,
-    afterState: null,
-
-    // Meditation specific
-    meditationDuration: null,
-
-    // Breathwork specific
-    breathworkType: null,
-
-    // Self-Identified Activity
-    dimension: null,
-    activityDescription: '',
-
-    // Daily Prayer
-    prayerElements: [],
-    prayerNote: '',
-    connectionRating: null,
-
-    // Weekly Task
-    duration: null,
-    practiceDescription: '',
-    meaningfulnessRating: null,
-
-    // Environment Hygiene
-    drainType: null,
-    actionDescription: '',
-    difficulty: null,
-    outcome: null
-  })
-
-  const config = STEP_CONFIG[quest.id] || { totalSteps: 2, stepTitles: ['Input', 'Review'] }
-  const totalSteps = config.totalSteps
-
-  const handleSubmit = () => {
-    setLoading(true)
-
-    // Build structured data based on quest type
-    let structuredData = {}
-
+  // Validation function
+  const validateStep = useCallback((currentStep, data) => {
     switch (quest.id) {
       case 'reconnect_morning_meditation':
-        structuredData = {
-          quest_type: 'meditation',
-          duration: formData.meditationDuration,
-          before_state: formData.beforeState,
-          after_state: formData.afterState,
-          shift: formData.afterState - formData.beforeState
-        }
-        break
-
+        if (currentStep === 1) return data.meditationDuration
+        if (currentStep === 2) return data.beforeState && data.afterState
+        return true
       case 'reconnect_morning_dance':
-        structuredData = {
-          quest_type: 'dance',
-          before_state: formData.beforeState,
-          after_state: formData.afterState,
-          shift: formData.afterState - formData.beforeState
-        }
-        break
-
+        if (currentStep === 1) return data.beforeState && data.afterState
+        return true
       case 'reconnect_morning_breathwork':
-        structuredData = {
-          quest_type: 'breathwork',
-          breathwork_type: formData.breathworkType,
-          before_state: formData.beforeState,
-          after_state: formData.afterState,
-          shift: formData.afterState - formData.beforeState
-        }
-        break
-
+        if (currentStep === 1) return data.breathworkType
+        if (currentStep === 2) return data.beforeState && data.afterState
+        return true
       case 'reconnect_self_identified':
-        structuredData = {
-          quest_type: 'self_identified_activity',
-          dimension: formData.dimension,
-          activity: formData.activityDescription,
-          before_state: formData.beforeState,
-          after_state: formData.afterState,
-          shift: formData.afterState - formData.beforeState
-        }
-        break
-
+        if (currentStep === 1) return data.dimension && data.activityDescription.trim().length >= 10
+        if (currentStep === 2) return data.beforeState && data.afterState
+        return true
       case 'reconnect_daily_prayer':
-        structuredData = {
-          quest_type: 'daily_prayer',
-          elements: formData.prayerElements,
-          note: formData.prayerNote,
-          connection_rating: formData.connectionRating
-        }
-        break
-
+        if (currentStep === 1) return data.prayerElements.length > 0
+        if (currentStep === 2) return data.connectionRating
+        return true
       case 'reconnect_weekly_task':
-        structuredData = {
-          quest_type: 'weekly_reconnection',
-          dimension: formData.dimension,
-          duration: formData.duration,
-          practice: formData.practiceDescription,
-          meaningfulness: formData.meaningfulnessRating
-        }
-        break
-
+        if (currentStep === 1) return data.dimension && data.duration
+        if (currentStep === 2) return data.practiceDescription.trim().length >= 10 && data.meaningfulnessRating
+        return true
       case 'reconnect_remove_negative':
-        structuredData = {
-          quest_type: 'environment_hygiene',
-          drain_type: formData.drainType,
-          action: formData.actionDescription,
-          difficulty: formData.difficulty,
-          outcome: formData.outcome
-        }
-        break
-    }
-
-    onComplete(quest, structuredData)
-    setLoading(false)
-  }
-
-  // Check if current step is valid
-  const canContinue = () => {
-    switch (quest.id) {
-      case 'reconnect_morning_meditation':
-        if (step === 1) return formData.meditationDuration
-        if (step === 2) return formData.beforeState && formData.afterState
+        if (currentStep === 1) return data.drainType
+        if (currentStep === 2) return data.actionDescription.trim().length >= 10
+        if (currentStep === 3) return data.difficulty && data.outcome
         return true
-
-      case 'reconnect_morning_dance':
-        if (step === 1) return formData.beforeState && formData.afterState
-        return true
-
-      case 'reconnect_morning_breathwork':
-        if (step === 1) return formData.breathworkType
-        if (step === 2) return formData.beforeState && formData.afterState
-        return true
-
-      case 'reconnect_self_identified':
-        if (step === 1) return formData.dimension && formData.activityDescription.trim().length >= 10
-        if (step === 2) return formData.beforeState && formData.afterState
-        return true
-
-      case 'reconnect_daily_prayer':
-        if (step === 1) return formData.prayerElements.length > 0
-        if (step === 2) return formData.connectionRating
-        return true
-
-      case 'reconnect_weekly_task':
-        if (step === 1) return formData.dimension && formData.duration
-        if (step === 2) return formData.practiceDescription.trim().length >= 10 && formData.meaningfulnessRating
-        return true
-
-      case 'reconnect_remove_negative':
-        if (step === 1) return formData.drainType
-        if (step === 2) return formData.actionDescription.trim().length >= 10
-        if (step === 3) return formData.difficulty && formData.outcome
-        return true
-
       default:
         return true
     }
-  }
+  }, [quest.id])
 
-  const handleNext = () => {
-    if (step < totalSteps) {
-      setStep(step + 1)
+  // Build structured data for submission
+  const buildStructuredData = useCallback((data) => {
+    switch (quest.id) {
+      case 'reconnect_morning_meditation':
+        return {
+          quest_type: 'meditation',
+          duration: data.meditationDuration,
+          before_state: data.beforeState,
+          after_state: data.afterState,
+          shift: data.afterState - data.beforeState
+        }
+      case 'reconnect_morning_dance':
+        return {
+          quest_type: 'dance',
+          before_state: data.beforeState,
+          after_state: data.afterState,
+          shift: data.afterState - data.beforeState
+        }
+      case 'reconnect_morning_breathwork':
+        return {
+          quest_type: 'breathwork',
+          breathwork_type: data.breathworkType,
+          before_state: data.beforeState,
+          after_state: data.afterState,
+          shift: data.afterState - data.beforeState
+        }
+      case 'reconnect_self_identified':
+        return {
+          quest_type: 'self_identified_activity',
+          dimension: data.dimension,
+          activity: data.activityDescription,
+          before_state: data.beforeState,
+          after_state: data.afterState,
+          shift: data.afterState - data.beforeState
+        }
+      case 'reconnect_daily_prayer':
+        return {
+          quest_type: 'daily_prayer',
+          elements: data.prayerElements,
+          note: data.prayerNote,
+          connection_rating: data.connectionRating
+        }
+      case 'reconnect_weekly_task':
+        return {
+          quest_type: 'weekly_reconnection',
+          dimension: data.dimension,
+          duration: data.duration,
+          practice: data.practiceDescription,
+          meaningfulness: data.meaningfulnessRating
+        }
+      case 'reconnect_remove_negative':
+        return {
+          quest_type: 'environment_hygiene',
+          drain_type: data.drainType,
+          action: data.actionDescription,
+          difficulty: data.difficulty,
+          outcome: data.outcome
+        }
+      default:
+        return data
     }
-  }
+  }, [quest.id])
 
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1)
-    }
+  const {
+    step,
+    formData,
+    setFormData,
+    isSubmitting,
+    isReviewStep,
+    totalSteps,
+    canContinue,
+    handleNext,
+    handleBack,
+    toggleArrayItem
+  } = useSteppedForm({
+    totalSteps: config.totalSteps,
+    initialData: INITIAL_RECONNECT_FORM_DATA,
+    validateStep,
+    onSubmit: (data) => onComplete(quest, buildStructuredData(data))
+  })
+
+  // Submit handler
+  const handleSubmit = () => {
+    onComplete(quest, buildStructuredData(formData))
   }
 
   // Helper to render state selectors (before/after)
@@ -633,12 +592,7 @@ function ReconnectQuestInput({ quest, onComplete }) {
                 key={el.id}
                 type="button"
                 className={`prayer-element ${formData.prayerElements.includes(el.id) ? 'selected' : ''}`}
-                onClick={() => {
-                  const newElements = formData.prayerElements.includes(el.id)
-                    ? formData.prayerElements.filter(e => e !== el.id)
-                    : [...formData.prayerElements, el.id]
-                  setFormData({ ...formData, prayerElements: newElements })
-                }}
+                onClick={() => toggleArrayItem('prayerElements', el.id)}
               >
                 <span className="prayer-icon">{el.icon}</span>
                 <span className="prayer-label">{el.label}</span>
@@ -943,16 +897,14 @@ function ReconnectQuestInput({ quest, onComplete }) {
     )
   }
 
-  const isReviewStep = step === totalSteps
-
   return (
     <div className="reconnect-input stepped">
       {/* Progress indicator */}
-      <div className="step-progress">
-        <span className="progress-text">
-          Step {step} of {totalSteps}: {config.stepTitles[step - 1]}
-        </span>
-      </div>
+      <StepProgress
+        currentStep={step}
+        totalSteps={totalSteps}
+        stepTitle={config.stepTitles[step - 1]}
+      />
 
       {renderStepContent()}
 
@@ -976,9 +928,9 @@ function ReconnectQuestInput({ quest, onComplete }) {
           <button
             className="nav-btn complete"
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={isSubmitting}
           >
-            {loading ? 'Saving...' : 'Complete Quest'}
+            {isSubmitting ? 'Saving...' : 'Complete Quest'}
           </button>
         )}
       </div>

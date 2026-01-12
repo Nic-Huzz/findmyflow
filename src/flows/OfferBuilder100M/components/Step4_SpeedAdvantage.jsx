@@ -21,17 +21,17 @@ const BUCKET_EXAMPLES = {
     { traditional: '6 months to build habit', yours: '21 days to routine' },
     { traditional: '3 years to master practice', yours: '30 days to fundamentals' }
   ],
-  relationships: [
-    { traditional: '2 years of therapy', yours: '8 weeks breakthrough' },
-    { traditional: '6 months dating apps', yours: '30 days to date' },
-    { traditional: '12 months to rebuild trust', yours: '90 days reconnection' }
+  love: [
+    { traditional: 'Years of self-doubt', yours: '30 days to self-love' },
+    { traditional: '5 years searching for purpose', yours: '90 days clarity' },
+    { traditional: 'Lifetime of feeling stuck', yours: '8 weeks transformation' }
   ]
 }
 
-function Step4_SpeedAdvantage({ bucket, dreamOutcome, onComplete, setIsLoading, setError }) {
-  const [traditionalTime, setTraditionalTime] = useState('')
-  const [yourTime, setYourTime] = useState('')
-  const [analysis, setAnalysis] = useState(null)
+function Step4_SpeedAdvantage({ bucket, dreamOutcome, initialData, onComplete, setIsLoading, setError }) {
+  const [traditionalTime, setTraditionalTime] = useState(initialData?.speedData?.traditionalTime || '')
+  const [yourTime, setYourTime] = useState(initialData?.speedData?.yourTime || '')
+  const [analysis, setAnalysis] = useState(initialData?.speedAnalysis || null)
   const [activeTab, setActiveTab] = useState('product')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
 

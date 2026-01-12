@@ -466,3 +466,64 @@
     width: 100%;
   }
 }
+
+/* Skills Wheel Container */
+.library-of-answers .skills-wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+}
+
+.library-of-answers .skills-wheel-container .skills-wheel {
+  max-width: 320px;
+}
+
+.library-of-answers .skills-wheel-container .wheel-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.library-of-answers .skills-wheel-container .wheel-title {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0 0 4px;
+}
+
+.library-of-answers .skills-wheel-container .wheel-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.library-of-answers .skills-wheel-container .wheel-insights {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.library-of-answers .skills-wheel-container .insight-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.library-of-answers .skills-wheel-container .insight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+}
+
+.library-of-answers .skills-wheel-container .insight-highlight {
+  color: #fbbf24;
+  font-weight: 600;
+}

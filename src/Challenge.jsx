@@ -446,12 +446,30 @@ function Challenge() {
         stage: quest.stage_required || null
       }
 
+      // Quest types that use specialized input components with structured data
+      const structuredDataTypes = ['reconnect', 'recognise', 'rewire', 'release']
+      const hasStructuredData = structuredDataTypes.includes(quest.type?.toLowerCase()) && specialData
+
+      // Helper to safely stringify data (avoid double-stringification)
+      const safeStringify = (data) => {
+        if (typeof data === 'string') return data
+        return JSON.stringify(data)
+      }
+
       if (quest.inputType === 'text' || quest.inputType === 'dropdown' || quest.inputType === 'text_with_tags') {
-        completionData.reflection_text = sanitizedReflection
+        // For quests with specialized inputs, use the structured specialData
+        if (hasStructuredData) {
+          completionData.reflection_text = safeStringify(specialData)
+        } else {
+          completionData.reflection_text = sanitizedReflection
+        }
       } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone' || quest.inputType === 'flow_compass') {
-        completionData.reflection_text = JSON.stringify(specialData)
+        completionData.reflection_text = safeStringify(specialData)
       } else if (quest.type === 'groan' && specialData) {
-        completionData.reflection_text = specialData.groan_task || JSON.stringify(specialData)
+        completionData.reflection_text = specialData.groan_task || safeStringify(specialData)
+      } else if (hasStructuredData) {
+        // Fallback for any other quests with specialized input components
+        completionData.reflection_text = safeStringify(specialData)
       }
 
       // Check for duplicate completions

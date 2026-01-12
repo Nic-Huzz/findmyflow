@@ -77,12 +77,26 @@ function PersonaAssessment() {
     }
   }, [isLoginRoute])
 
-  // If user is already authenticated, redirect to dashboard
-  // But skip this if we're in the middle of saving user data after verification
+  // If user is already authenticated, check if they have profile data
+  // If they do, redirect to dashboard. If not, let them continue onboarding.
   useEffect(() => {
-    if (user && !isSavingUserData && (stage === STAGES.HUZZ_INTRO_1 || isLoginRoute)) {
-      navigate('/me')
+    const checkProfileAndRedirect = async () => {
+      if (user && !isSavingUserData && (stage === STAGES.HUZZ_INTRO_1 || isLoginRoute)) {
+        // Check if user has profile data
+        const { data: profile } = await supabase
+          .from('lead_flow_profiles')
+          .select('id')
+          .eq('email', user.email)
+          .maybeSingle()
+
+        if (profile) {
+          // User has profile, redirect to dashboard
+          navigate('/me')
+        }
+        // If no profile, let them continue onboarding
+      }
     }
+    checkProfileAndRedirect()
   }, [user, navigate, isSavingUserData, stage, isLoginRoute])
 
   // Calculate current stage group for progress

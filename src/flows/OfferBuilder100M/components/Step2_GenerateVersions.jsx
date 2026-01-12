@@ -19,6 +19,14 @@ function Step2_GenerateVersions({ bucket, dreamOutcome, contextData, onComplete,
     finalizing: false
   })
 
+  // Extract V1 core product solutions for seeding
+  const v1Data = contextData?.offerBuilderData
+  const v1CoreProducts = v1Data?.responses?.q8_solutions?.solutions?.filter(sol => {
+    const solId = `solution_${v1Data.responses.q8_solutions.solutions.indexOf(sol)}`
+    return v1Data.responses.solution_categories?.[solId] === 'core_product'
+  }) || []
+  const hasV1CoreProducts = v1CoreProducts.length > 0
+
   // Generate versions on mount
   useEffect(() => {
     const generateVersions = async () => {
@@ -30,6 +38,18 @@ function Step2_GenerateVersions({ bucket, dreamOutcome, contextData, onComplete,
         await new Promise(r => setTimeout(r, 500))
         setGenerationProgress({ analyzing: true, generating: true, finalizing: false })
 
+        // Prepare V1 foundation data for AI context
+        const v1Foundation = v1Data ? {
+          coreProducts: v1CoreProducts.map(sol => ({
+            description: sol.description,
+            type: sol.solutionType,
+            differentiators: sol.differentiators,
+            problemSolved: sol.problemText
+          })),
+          niche: v1Data.responses?.q6_niche_layers?.layers,
+          problemArea: v1Data.problem_area
+        } : null
+
         const { data, error } = await supabase.functions.invoke('offer-builder-ai', {
           body: {
             action: 'generate_versions',
@@ -38,7 +58,9 @@ function Step2_GenerateVersions({ bucket, dreamOutcome, contextData, onComplete,
               dreamOutcome,
               skills: contextData.skills,
               persona: contextData.persona,
-              validationData: contextData.validationData
+              validationData: contextData.validationData,
+              // V1 Offer Builder foundation for smarter version generation
+              offerBuilderV1: v1Foundation
             }
           }
         })
@@ -84,6 +106,11 @@ function Step2_GenerateVersions({ bucket, dreamOutcome, contextData, onComplete,
             <div className={`progress-step ${generationProgress.analyzing ? 'active' : ''}`}>
               {generationProgress.analyzing ? '✓' : '○'} Analyzing your skills (from FindMyFlow)
             </div>
+            {hasV1CoreProducts && (
+              <div className={`progress-step ${generationProgress.analyzing ? 'active' : ''}`}>
+                {generationProgress.analyzing ? '✓' : '○'} Using {v1CoreProducts.length} core product idea{v1CoreProducts.length > 1 ? 's' : ''} from Offer Foundation
+              </div>
+            )}
             <div className={`progress-step ${generationProgress.generating ? 'active' : ''}`}>
               {generationProgress.generating ? '✓' : '○'} Generating 3 delivery formats
             </div>
