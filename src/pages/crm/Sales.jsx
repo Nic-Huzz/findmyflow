@@ -598,7 +598,7 @@ export default function Sales() {
       {/* Scripts Modal */}
       {showScriptsModal && selectedDeal && (
         <ScriptsModal
-          deal={selectedDeal}
+          deal={{ ...selectedDeal, ...leadScores }}
           userId={user.id}
           onClose={() => setShowScriptsModal(false)}
           onScriptUsed={() => {}}

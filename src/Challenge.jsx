@@ -79,6 +79,7 @@ function Challenge() {
     leaderboardView,
     setLeaderboardView,
     userRank,
+    currentWeeklyPoints,
     nervousSystemComplete,
     safetyContracts,
     healingCompassComplete,
@@ -830,6 +831,7 @@ function Challenge() {
         weekType={weeklyPlan?.week_type}
         weeklyPlan={weeklyPlan}
         onEditPlan={weeklyPlan ? () => setShowWeeklyPlanning(true) : null}
+        weeklyPoints={currentWeeklyPoints}
       />
 
       <div className="challenge-tabs">

@@ -1,0 +1,317 @@
+/**
+ * WheelPicker.css
+ * Styles for the wheel segment picker with ring follow-up
+ */
+
+.wheel-picker {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Header */
+.wheel-picker .wheel-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.wheel-picker .wheel-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.wheel-picker .wheel-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 12px;
+}
+
+.wheel-picker .selection-count {
+  display: inline-block;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Content */
+.wheel-picker .wheel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Segment Groups */
+.wheel-picker .segment-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wheel-picker .group-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  padding-left: 4px;
+  margin: 0;
+}
+
+/* Segment Grid */
+.wheel-picker .segment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+/* Segment Button */
+.wheel-picker .segment-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.wheel-picker .segment-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--segment-color, rgba(255, 255, 255, 0.2));
+  transform: translateY(-2px);
+}
+
+.wheel-picker .segment-button.selected {
+  background: rgba(var(--segment-color-rgb, 255, 255, 255), 0.1);
+  border-color: var(--segment-color);
+  box-shadow: 0 0 20px rgba(var(--segment-color-rgb, 255, 255, 255), 0.2);
+}
+
+.wheel-picker .segment-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.wheel-picker .segment-button.disabled:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.wheel-picker .segment-icon {
+  font-size: 28px;
+}
+
+.wheel-picker .segment-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+}
+
+.wheel-picker .segment-ring-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+/* Ring Picker Overlay */
+.wheel-picker .ring-picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  animation: wp-fadeIn 0.2s ease;
+}
+
+@keyframes wp-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.wheel-picker .ring-picker-modal {
+  background: #1a1a2e;
+  border-radius: 20px;
+  padding: 32px 24px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: wp-slideUp 0.3s ease;
+}
+
+@keyframes wp-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wheel-picker .ring-picker-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.wheel-picker .ring-picker-header .segment-icon {
+  font-size: 48px;
+}
+
+.wheel-picker .ring-picker-header h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+.wheel-picker .ring-question {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 24px;
+}
+
+/* Ring Options */
+.wheel-picker .ring-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.wheel-picker .ring-option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid var(--ring-color, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.wheel-picker .ring-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.wheel-picker .ring-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+
+.wheel-picker .ring-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.wheel-picker .cancel-button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 16px;
+  transition: color 0.2s ease;
+}
+
+.wheel-picker .cancel-button:hover {
+  color: white;
+}
+
+/* Selected Summary */
+.wheel-picker .selected-summary {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wheel-picker .selected-summary h4 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 12px;
+}
+
+.wheel-picker .selected-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wheel-picker .selected-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid;
+  border-radius: 100px;
+}
+
+.wheel-picker .chip-icon {
+  font-size: 16px;
+}
+
+.wheel-picker .chip-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: white;
+}
+
+.wheel-picker .chip-ring {
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+
+.wheel-picker .chip-remove {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.wheel-picker .chip-remove:hover {
+  color: #EF4444;
+}

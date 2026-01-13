@@ -21,16 +21,25 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { essenceProfiles } from '../data/essenceProfiles'
 import { protectiveProfiles } from '../data/protectiveProfiles'
+import {
+  determineGuidanceEmphasis,
+  derivePersonaFromWealthLadder,
+  getValidGoalsForWealthLadder,
+  determineOnboardingPath,
+  getPersonaDisplay
+} from '../lib/onboardingV2'
+import { PersonaReveal, QuickCapture } from './onboarding'
 import ExistingProjectFlow from './ExistingProjectFlow'
 import './HomeFirstTime.css'
 
 const SCREENS = {
   ARCHETYPE_REVEAL: 'archetype_reveal',
-  PERSONA_Q1: 'persona_q1',
-  PERSONA_Q2: 'persona_q2',
-  PERSONA_Q3: 'persona_q3',
+  PERSONA_Q1: 'persona_q1',      // Q1: Journey stage (employment status)
+  PERSONA_Q2: 'persona_q2',      // Q2: Wealth ladder
+  PERSONA_Q3: 'persona_q3',      // Q3: Goal (with greyed out options)
   PERSONA_REVEAL: 'persona_reveal',
   VIBE_SEEKER_EXPLAINER: 'vibe_seeker_explainer',
+  QUICK_CAPTURE: 'quick_capture', // Quick capture for paths 2-4
   PROJECT_TYPE: 'project_type',
   NEW_PROJECT_EXPLAINER: 'new_project_explainer',
   EXISTING_PROJECT: 'existing_project'
@@ -53,6 +62,13 @@ function HomeFirstTime() {
   const [personaQuestions, setPersonaQuestions] = useState(null)
   const [personaAnswers, setPersonaAnswers] = useState({})
   const [assignedPersona, setAssignedPersona] = useState(null)
+
+  // Onboarding V2: Wealth ladder + emphasis data
+  const [employmentStatus, setEmploymentStatus] = useState(null)
+  const [hasSideProject, setHasSideProject] = useState(false)
+  const [wealthLadderRung, setWealthLadderRung] = useState(null)
+  const [primaryGoal, setPrimaryGoal] = useState(null)
+  const [guidanceEmphasis, setGuidanceEmphasis] = useState(null)
 
   // Load user data and persona questions on mount
   useEffect(() => {
@@ -113,62 +129,82 @@ function HomeFirstTime() {
     }
   }
 
-  // Calculate persona from answers
-  const calculatePersona = (answers) => {
-    const counts = { vibe_seeker: 0, vibe_riser: 0, movement_maker: 0 }
-    Object.values(answers).forEach(answer => {
-      if (counts[answer.persona] !== undefined) {
-        counts[answer.persona]++
-      }
-    })
-
-    let maxCount = 0
-    let winningPersona = 'vibe_seeker'
-    Object.entries(counts).forEach(([persona, count]) => {
-      if (count > maxCount) {
-        maxCount = count
-        winningPersona = persona
-      }
-    })
-
-    return {
-      persona: winningPersona,
-      confidence: maxCount === 3 ? 'high' : maxCount === 2 ? 'medium' : 'low'
-    }
+  // Handle Q1 (Journey Stage) selection
+  const handleQ1Selection = (option) => {
+    setEmploymentStatus(option.value)
+    setHasSideProject(
+      option.value === 'employed_building' ||
+      option.value === 'solo_early' ||
+      option.value === 'solo_established'
+    )
+    setPersonaAnswers(prev => ({
+      ...prev,
+      q1_journey: { value: option.value, persona: option.persona, label: option.label }
+    }))
+    setTimeout(() => setCurrentScreen(SCREENS.PERSONA_Q2), 300)
   }
 
-  // Handle persona question selection
-  const handlePersonaOption = (questionId, option) => {
-    const newAnswers = {
-      ...personaAnswers,
-      [questionId]: { value: option.value, persona: option.persona, label: option.label }
-    }
-    setPersonaAnswers(newAnswers)
-
-    // Move to next screen
-    if (currentScreen === SCREENS.PERSONA_Q1) {
-      setCurrentScreen(SCREENS.PERSONA_Q2)
-    } else if (currentScreen === SCREENS.PERSONA_Q2) {
-      setCurrentScreen(SCREENS.PERSONA_Q3)
-    } else if (currentScreen === SCREENS.PERSONA_Q3) {
-      const result = calculatePersona(newAnswers)
-      setAssignedPersona(result)
-      savePersonaToDatabase(result.persona)
-      setTimeout(() => setCurrentScreen(SCREENS.PERSONA_REVEAL), 300)
-    }
+  // Handle Q2 (Wealth Ladder) selection
+  const handleQ2Selection = (option) => {
+    const ladderValue = option.data?.wealth_ladder || option.value
+    setWealthLadderRung(ladderValue)
+    // Reset goal when wealth ladder changes (may invalidate previous selection)
+    setPrimaryGoal(null)
+    setPersonaAnswers(prev => ({
+      ...prev,
+      q2_created: { value: option.value, persona: option.persona, label: option.label, wealth_ladder: ladderValue }
+    }))
+    setTimeout(() => setCurrentScreen(SCREENS.PERSONA_Q3), 300)
   }
 
-  // Save persona to database
-  const savePersonaToDatabase = async (persona) => {
+  // Handle Q3 (Goal) selection - with validation
+  const handleQ3Selection = (option) => {
+    const validGoals = getValidGoalsForWealthLadder(wealthLadderRung)
+    if (!validGoals.includes(option.value)) return // Shouldn't happen, but safety check
+
+    setPrimaryGoal(option.value)
+    const emphasis = determineGuidanceEmphasis(wealthLadderRung, option.value)
+    setGuidanceEmphasis(emphasis)
+
+    // Derive persona from wealth ladder (V2 approach - persona is derived, not voted)
+    const derivedPersona = derivePersonaFromWealthLadder(wealthLadderRung)
+
+    setPersonaAnswers(prev => ({
+      ...prev,
+      q3_goal: { value: option.value, persona: option.persona, label: option.label }
+    }))
+
+    setAssignedPersona({
+      persona: derivedPersona,
+      confidence: 'high' // V2 uses wealth ladder derivation, always high confidence
+    })
+
+    // Save all V2 data to database
+    saveOnboardingV2Data(derivedPersona, emphasis, option.value)
+    setTimeout(() => setCurrentScreen(SCREENS.PERSONA_REVEAL), 300)
+  }
+
+  // Save all V2 onboarding data to database
+  const saveOnboardingV2Data = async (persona, emphasis, goal) => {
     if (!user?.id) return
 
     try {
       await supabase
         .from('user_stage_progress')
-        .update({ persona: persona })
+        .update({
+          persona: persona,
+          employment_status: employmentStatus,
+          has_side_project: hasSideProject,
+          wealth_ladder_rung: wealthLadderRung,
+          primary_goal: goal,
+          guidance_emphasis: emphasis,
+          onboarding_v2_completed: true,
+          // Set initial stage based on wealth ladder
+          current_stage: wealthLadderRung === 'pre_ladder' ? null : 1
+        })
         .eq('user_id', user.id)
     } catch (err) {
-      console.error('Error saving persona:', err)
+      console.error('Error saving V2 onboarding data:', err)
     }
   }
 
@@ -183,23 +219,27 @@ function HomeFirstTime() {
     }
   }
 
-  // Handle after persona reveal
+  // Handle after persona reveal - uses path routing logic
   const handleContinueAfterPersona = () => {
-    const persona = assignedPersona?.persona
+    // Get the full path configuration based on wealth ladder + goal
+    const pathConfig = determineOnboardingPath(wealthLadderRung, primaryGoal)
 
-    if (persona === 'vibe_seeker') {
-      // Vibe Seekers see explainer before Flow Finder
+    if (pathConfig.path === 1) {
+      // Path 1 (Pre-ladder): Show Flow Finder explainer
       setCurrentScreen(SCREENS.VIBE_SEEKER_EXPLAINER)
+    } else if (pathConfig.showQuickCapture) {
+      // Paths 2-4: Go to Quick Capture flow
+      setCurrentScreen(SCREENS.QUICK_CAPTURE)
     } else {
-      // Vibe Risers and Movement Makers choose new or existing
-      setCurrentScreen(SCREENS.PROJECT_TYPE)
+      // Fallback: Go to profile
+      navigate('/me')
     }
   }
 
-  // Get persona display data
-  const getPersonaDisplay = () => {
-    if (!assignedPersona || !personaQuestions) return null
-    return personaQuestions.personas[assignedPersona.persona]
+  // Handle Quick Capture completion
+  const handleQuickCaptureComplete = (capturedData) => {
+    // Navigate to report card to see their captured data
+    navigate('/report-card')
   }
 
   // Loading state
@@ -278,7 +318,7 @@ function HomeFirstTime() {
     )
   }
 
-  // PERSONA QUESTIONS
+  // PERSONA QUESTIONS (Q1-Q3 with V2 logic)
   if (currentScreen === SCREENS.PERSONA_Q1 || currentScreen === SCREENS.PERSONA_Q2 || currentScreen === SCREENS.PERSONA_Q3) {
     const questionIndex = currentScreen === SCREENS.PERSONA_Q1 ? 0
       : currentScreen === SCREENS.PERSONA_Q2 ? 1 : 2
@@ -295,6 +335,29 @@ function HomeFirstTime() {
       )
     }
 
+    // Get valid goals for Q3 based on Q2 wealth ladder answer
+    const validGoals = currentScreen === SCREENS.PERSONA_Q3
+      ? getValidGoalsForWealthLadder(wealthLadderRung)
+      : null
+
+    // Get warm transition text
+    const transitionText = currentScreen === SCREENS.PERSONA_Q2
+      ? personaQuestions?.ux_config?.warm_transitions?.after_q1
+      : currentScreen === SCREENS.PERSONA_Q3
+        ? personaQuestions?.ux_config?.warm_transitions?.after_q2
+        : null
+
+    // Determine handler based on question
+    const handleOptionClick = (option) => {
+      if (currentScreen === SCREENS.PERSONA_Q1) {
+        handleQ1Selection(option)
+      } else if (currentScreen === SCREENS.PERSONA_Q2) {
+        handleQ2Selection(option)
+      } else if (currentScreen === SCREENS.PERSONA_Q3) {
+        handleQ3Selection(option)
+      }
+    }
+
     return (
       <div className="home-first-time question-screen">
         <div className="progress-dots">
@@ -307,52 +370,93 @@ function HomeFirstTime() {
         </div>
 
         <div className="question-container">
+          {transitionText && (
+            <p className="transition-text" style={{
+              color: 'rgba(255, 255, 255, 0.6)',
+              fontSize: '14px',
+              fontStyle: 'italic',
+              marginBottom: '16px'
+            }}>
+              {transitionText}
+            </p>
+          )}
           <h2>{question.question}</h2>
-          <p className="question-subtext">Your answers help us personalise your journey</p>
+          <p className="question-subtext">{question.subtext || 'Your answers help us personalise your journey'}</p>
 
           <div className="options-list">
-            {question.options.map((option, index) => (
-              <button
-                key={option.value}
-                className="option-button"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  borderRadius: '16px',
-                  color: 'white'
-                }}
-                onClick={() => handlePersonaOption(question.id, option)}
-              >
-                <span className="option-label" style={{ color: 'white', fontWeight: 600, fontSize: '18px' }}>{option.label}</span>
-                <span className="option-description" style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '14px' }}>{option.description}</span>
-              </button>
-            ))}
+            {question.options.map((option) => {
+              // For Q3, check if this option is valid based on wealth ladder
+              const isDisabled = validGoals && !validGoals.includes(option.value)
+
+              return (
+                <button
+                  key={option.value}
+                  className={`option-button ${isDisabled ? 'disabled-option' : ''}`}
+                  style={{
+                    background: isDisabled ? 'rgba(255, 255, 255, 0.02)' : 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${isDisabled ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.15)'}`,
+                    borderRadius: '16px',
+                    color: 'white',
+                    opacity: isDisabled ? 0.4 : 1,
+                    cursor: isDisabled ? 'not-allowed' : 'pointer'
+                  }}
+                  onClick={() => !isDisabled && handleOptionClick(option)}
+                  disabled={isDisabled}
+                >
+                  <span className="option-label" style={{ color: 'white', fontWeight: 600, fontSize: '18px' }}>{option.label}</span>
+                  <span className="option-description" style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '14px' }}>{option.description}</span>
+                  {isDisabled && (
+                    <span style={{
+                      display: 'block',
+                      fontSize: '11px',
+                      color: 'rgba(255, 255, 255, 0.4)',
+                      marginTop: '4px',
+                      fontStyle: 'italic'
+                    }}>
+                      Not available at your stage
+                    </span>
+                  )}
+                </button>
+              )
+            })}
           </div>
+
+          {/* Back button for Q2 and Q3 */}
+          {(currentScreen === SCREENS.PERSONA_Q2 || currentScreen === SCREENS.PERSONA_Q3) && (
+            <button
+              className="back-link"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'rgba(255, 255, 255, 0.5)',
+                fontSize: '14px',
+                marginTop: '24px',
+                cursor: 'pointer'
+              }}
+              onClick={() => setCurrentScreen(
+                currentScreen === SCREENS.PERSONA_Q2 ? SCREENS.PERSONA_Q1 : SCREENS.PERSONA_Q2
+              )}
+            >
+              Back
+            </button>
+          )}
         </div>
       </div>
     )
   }
 
-  // PERSONA REVEAL SCREEN
+  // PERSONA REVEAL SCREEN - Using new PersonaReveal component
   if (currentScreen === SCREENS.PERSONA_REVEAL) {
-    const personaDisplay = getPersonaDisplay()
-
     return (
       <div className="home-first-time reveal-screen">
-        <div className="reveal-content">
-          <div className="persona-badge" style={{ background: personaDisplay?.color || '#5e17eb' }}>
-            {personaDisplay?.name || 'Your Persona'}
-          </div>
-          <h2>{personaDisplay?.tagline || ''}</h2>
-          <p className="reveal-description">{personaDisplay?.description || ''}</p>
-
-          <button
-            className="primary-button"
-            onClick={handleContinueAfterPersona}
-          >
-            Continue
-          </button>
-        </div>
+        <PersonaReveal
+          persona={assignedPersona?.persona}
+          wealthLadder={wealthLadderRung}
+          emphasis={guidanceEmphasis}
+          showWealthLadder={true}
+          showEmphasis={false}
+          onContinue={handleContinueAfterPersona}
+        />
       </div>
     )
   }
@@ -547,6 +651,19 @@ function HomeFirstTime() {
           </div>
         </div>
       </div>
+    )
+  }
+
+  // QUICK CAPTURE FLOW (for paths 2-4)
+  if (currentScreen === SCREENS.QUICK_CAPTURE) {
+    return (
+      <QuickCapture
+        userId={user?.id}
+        wealthLadder={wealthLadderRung}
+        guidanceEmphasis={guidanceEmphasis}
+        onComplete={handleQuickCaptureComplete}
+        onBack={() => setCurrentScreen(SCREENS.PERSONA_REVEAL)}
+      />
     )
   }
 

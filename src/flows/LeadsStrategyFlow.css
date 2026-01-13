@@ -290,7 +290,7 @@
   width: 100%;
 }
 
-.option-card {
+.leads-strategy-flow .option-card {
   width: 100%;
   padding: 20px;
   background: rgba(255, 255, 255, 0.05);
@@ -301,26 +301,27 @@
   text-align: left;
 }
 
-.option-card:hover {
+.leads-strategy-flow .option-card:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(147, 51, 234, 0.5);
   transform: translateY(-2px);
 }
 
-.option-card:active {
+.leads-strategy-flow .option-card:active {
   transform: translateY(0);
 }
 
-.option-label {
+.leads-strategy-flow .option-label {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   color: white;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
-.option-description {
+.leads-strategy-flow .option-description {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ============ CALCULATING SCREEN ============ */
@@ -859,11 +860,11 @@
     grid-template-columns: 1fr;
   }
 
-  .option-label {
+  .leads-strategy-flow .option-label {
     font-size: 16px;
   }
 
-  .option-description {
+  .leads-strategy-flow .option-description {
     font-size: 13px;
   }
 }

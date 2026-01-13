@@ -2,6 +2,7 @@
 .crm-sales {
   min-height: 100vh;
   padding: 24px;
+  padding-bottom: 100px; /* Account for fixed footer toolbar */
   background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
   color: #495057;
 }
@@ -620,6 +621,7 @@
 @media (max-width: 640px) {
   .crm-sales {
     padding: 16px;
+    padding-bottom: 100px; /* Account for fixed footer toolbar */
   }
 
   .crm-sales .sales-header {

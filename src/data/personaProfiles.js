@@ -4,7 +4,7 @@
 const personaProfiles = {
   // New snake_case keys (for new system)
   "vibe_seeker": {
-    name: "Vibe Seeker",
+    name: "Flow Seeker",
     tagline: "Finding Your Direction",
     summary: "You're beginning to sense there's more to life than what you've been living.",
     color: "#9333EA",
@@ -24,7 +24,7 @@ const personaProfiles = {
     }
   },
   "vibe_riser": {
-    name: "Vibe Riser",
+    name: "Flow Finder",
     tagline: "Bringing It To Life",
     summary: "You know your direction but need help bringing it to life.",
     color: "#F59E0B",
@@ -70,7 +70,7 @@ const personaProfiles = {
   },
 
   // Legacy PascalCase keys (for backwards compatibility)
-  "Vibe Seeker": {
+  "Flow Seeker": {
     summary: "You're beginning to sense there's more to life than what you've been living.",
     detailed: {
       description:
@@ -79,7 +79,7 @@ const personaProfiles = {
       image: "/images/personas/vibe-seeker.png"
     }
   },
-  "Vibe Riser": {
+  "Flow Finder": {
     summary: "You're connected but wanting to live more in alignment with your essence.",
     detailed: {
       description:
@@ -104,9 +104,13 @@ const personaProfiles = {
 const normalizePersona = (persona) => {
   if (!persona) return null;
   const mapping = {
+    // New display names
+    'Flow Seeker': 'vibe_seeker',
+    'Flow Finder': 'vibe_riser',
+    'Movement Maker': 'movement_maker',
+    // Legacy display names (backwards compatibility)
     'Vibe Seeker': 'vibe_seeker',
-    'Vibe Riser': 'vibe_riser',
-    'Movement Maker': 'movement_maker'
+    'Vibe Riser': 'vibe_riser'
   };
   // Return mapped value, or normalize unknown formats to snake_case
   return mapping[persona] || persona.toLowerCase().replace(/\s+/g, '_');

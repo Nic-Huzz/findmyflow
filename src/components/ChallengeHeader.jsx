@@ -33,7 +33,8 @@ function ChallengeHeader({
   weekLabel = null,
   weekType = null,
   weeklyPlan = null,
-  onEditPlan = null
+  onEditPlan = null,
+  weeklyPoints = 0
 }) {
   // Flame size based on streak length
   const getFlameClass = () => {
@@ -58,7 +59,7 @@ function ChallengeHeader({
         </div>
         <div className="hero-divider" />
         <div className="hero-points">
-          <span className="hero-points-value">{progress.total_points || 0}</span>
+          <span className="hero-points-value">{weeklyPoints}</span>
           <span className="hero-points-label">points</span>
         </div>
         <div className="hero-divider" />

@@ -8,6 +8,7 @@ import { supabase } from './supabaseClient';
 import { PERSONA_STAGES, getNextStage, getStageCelebration, getInitialStage, getAllMilestones } from './personaStages';
 import { normalizePersona } from '../data/personaProfiles';
 import { STAGE_CONFIG, getStageConfig, getGroanChallengeId } from './stageConfig';
+import { checkEmphasisProgression } from './onboardingV2';
 
 // Check if user has completed required flows
 const checkFlowsCompleted = async (userId, flowsRequired = []) => {
@@ -728,6 +729,42 @@ export const graduateProject = async (userId, projectId, fromStage, toStage) => 
       throw new Error(`Failed to update project stage: ${updateError.message}`);
     }
 
+    // Auto-progress emphasis if applicable (Onboarding V2)
+    let emphasisProgressed = false;
+    let newEmphasis = null;
+    try {
+      const { data: userProgress } = await supabase
+        .from('user_stage_progress')
+        .select('guidance_emphasis')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (userProgress?.guidance_emphasis) {
+        const progression = checkEmphasisProgression(
+          userProgress.guidance_emphasis,
+          fromStage,
+          toStage
+        );
+
+        if (progression.shouldProgress && progression.newEmphasis) {
+          await supabase
+            .from('user_stage_progress')
+            .update({
+              guidance_emphasis: progression.newEmphasis,
+              updated_at: new Date().toISOString()
+            })
+            .eq('user_id', userId);
+
+          emphasisProgressed = true;
+          newEmphasis = progression.newEmphasis;
+          console.log(`📈 Auto-progressed emphasis from ${userProgress.guidance_emphasis} to ${progression.newEmphasis}`);
+        }
+      }
+    } catch (emphasisError) {
+      console.warn('Failed to auto-progress emphasis:', emphasisError.message);
+      // Continue anyway - this is optional enhancement
+    }
+
     const toStageConfig = getStageConfig(toStage);
 
     return {
@@ -735,6 +772,8 @@ export const graduateProject = async (userId, projectId, fromStage, toStage) => 
       from_stage: fromStage,
       new_stage: toStage,
       project_id: projectId,
+      emphasis_progressed: emphasisProgressed,
+      new_emphasis: newEmphasis,
       celebration_message: {
         title: `🎉 Stage ${toStage} Unlocked!`,
         message: `Congratulations! You've completed Stage ${fromStage} and unlocked ${toStageConfig?.name || `Stage ${toStage}`}!`,

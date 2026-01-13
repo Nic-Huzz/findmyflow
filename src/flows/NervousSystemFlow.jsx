@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { FlowFeedback } from '../components/FlowFeedback'
 import './NervousSystemHealingCompass.css'
 import './FlowFinder.css'
 
@@ -1332,6 +1333,11 @@ export default function NervousSystemFlow() {
         <p>You've identified the safety contracts limiting your flow.</p>
         <p>The next step is to <strong>heal the root cause</strong> through the Healing Compass.</p>
       </div>
+
+      <FlowFeedback
+        flowType="nervous_system"
+        userId={user?.id}
+      />
 
       <button className="ns-hc-primary-button" onClick={() => navigate('/healing-compass')}>
         Proceed to Healing Compass

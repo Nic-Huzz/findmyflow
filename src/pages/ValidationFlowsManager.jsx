@@ -10,6 +10,7 @@ import {
   deleteValidationFlow,
   getFlowAnalytics
 } from '../lib/validationFlows'
+import { PROBLEM_SEGMENTS, PERSONA_SEGMENTS } from '../lib/wheelTaxonomy'
 import './ValidationFlowsManager.css'
 import '../Profile.css'
 
@@ -36,50 +37,28 @@ const ValidationFlowsManager = () => {
   const [copiedToken, setCopiedToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  // Flow Finder data for dropdowns
-  const [flowFinderProblems, setFlowFinderProblems] = useState([])
-  const [flowFinderPersonas, setFlowFinderPersonas] = useState([])
+  // Taxonomy data for dropdowns
   const [useCustomProblem, setUseCustomProblem] = useState(false)
   const [useCustomPersona, setUseCustomPersona] = useState(false)
+
+  // Format taxonomy segments for dropdowns
+  const problemOptions = PROBLEM_SEGMENTS.map(s => ({
+    value: s.displayName,
+    label: `${s.icon} ${s.displayName}`,
+    tagline: s.tagline
+  }))
+
+  const personaOptions = PERSONA_SEGMENTS.map(s => ({
+    value: s.displayName,
+    label: `${s.icon} ${s.displayName}`,
+    tagline: s.tagline
+  }))
 
   useEffect(() => {
     if (user?.id) {
       loadFlows()
-      loadFlowFinderData()
     }
   }, [user])
-
-  const loadFlowFinderData = async () => {
-    try {
-      // Load problems from Flow Finder
-      const { data: problemClusters, error: problemError } = await supabase
-        .from('nikigai_clusters')
-        .select('cluster_label, insight')
-        .eq('user_id', user.id)
-        .eq('cluster_type', 'problems')
-        .order('created_at', { ascending: false })
-
-      if (problemClusters && problemClusters.length > 0) {
-        const problems = problemClusters.map(c => c.cluster_label || c.insight).filter(Boolean)
-        setFlowFinderProblems(problems)
-      }
-
-      // Load personas from Flow Finder
-      const { data: personaClusters, error: personaError } = await supabase
-        .from('nikigai_clusters')
-        .select('cluster_label, insight')
-        .eq('user_id', user.id)
-        .eq('cluster_type', 'persona')
-        .order('created_at', { ascending: false })
-
-      if (personaClusters && personaClusters.length > 0) {
-        const personas = personaClusters.map(c => c.cluster_label || c.insight).filter(Boolean)
-        setFlowFinderPersonas(personas)
-      }
-    } catch (err) {
-      console.error('Error loading Flow Finder data:', err)
-    }
-  }
 
   const loadFlows = async () => {
     setLoading(true)
@@ -444,12 +423,7 @@ const ValidationFlowsManager = () => {
                   {/* Problem Area - Dropdown or Custom */}
                   <div className="form-group">
                     <label>What problem are you solving?</label>
-                    {flowFinderProblems.length === 0 && (
-                      <div className="flow-finder-hint">
-                        💡 Complete <a href="/nikigai/problems" target="_blank">Flow Finder: Problems</a> to select from your discoveries
-                      </div>
-                    )}
-                    {!useCustomProblem && flowFinderProblems.length > 0 ? (
+                    {!useCustomProblem ? (
                       <div className="dropdown-with-custom">
                         <select
                           value={placeholders.problemArea}
@@ -462,9 +436,9 @@ const ValidationFlowsManager = () => {
                             }
                           }}
                         >
-                          <option value="">Select from Flow Finder...</option>
-                          {flowFinderProblems.map((problem, idx) => (
-                            <option key={idx} value={problem}>{problem}</option>
+                          <option value="">Select a problem domain...</option>
+                          {problemOptions.map((option, idx) => (
+                            <option key={idx} value={option.value}>{option.label}</option>
                           ))}
                           <option value="__custom__">✏️ Write my own...</option>
                         </select>
@@ -477,18 +451,16 @@ const ValidationFlowsManager = () => {
                           onChange={(e) => setPlaceholders({ ...placeholders, problemArea: e.target.value })}
                           rows={2}
                         />
-                        {flowFinderProblems.length > 0 && (
-                          <button
-                            type="button"
-                            className="switch-to-dropdown"
-                            onClick={() => {
-                              setUseCustomProblem(false)
-                              setPlaceholders({ ...placeholders, problemArea: '' })
-                            }}
-                          >
-                            ← Choose from Flow Finder
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          className="switch-to-dropdown"
+                          onClick={() => {
+                            setUseCustomProblem(false)
+                            setPlaceholders({ ...placeholders, problemArea: '' })
+                          }}
+                        >
+                          ← Choose from taxonomy
+                        </button>
                       </div>
                     )}
                     <span className="form-hint">This helps respondents understand the context of your questions</span>
@@ -497,12 +469,7 @@ const ValidationFlowsManager = () => {
                   {/* Audience - Dropdown or Custom */}
                   <div className="form-group">
                     <label>Who is this for?</label>
-                    {flowFinderPersonas.length === 0 && (
-                      <div className="flow-finder-hint">
-                        💡 Complete <a href="/nikigai/persona" target="_blank">Flow Finder: Persona</a> to select from your discoveries
-                      </div>
-                    )}
-                    {!useCustomPersona && flowFinderPersonas.length > 0 ? (
+                    {!useCustomPersona ? (
                       <div className="dropdown-with-custom">
                         <select
                           value={placeholders.audienceDescription}
@@ -515,9 +482,9 @@ const ValidationFlowsManager = () => {
                             }
                           }}
                         >
-                          <option value="">Select from Flow Finder...</option>
-                          {flowFinderPersonas.map((persona, idx) => (
-                            <option key={idx} value={persona}>{persona}</option>
+                          <option value="">Select a persona type...</option>
+                          {personaOptions.map((option, idx) => (
+                            <option key={idx} value={option.value}>{option.label}</option>
                           ))}
                           <option value="__custom__">✏️ Write my own...</option>
                         </select>
@@ -530,18 +497,16 @@ const ValidationFlowsManager = () => {
                           onChange={(e) => setPlaceholders({ ...placeholders, audienceDescription: e.target.value })}
                           rows={2}
                         />
-                        {flowFinderPersonas.length > 0 && (
-                          <button
-                            type="button"
-                            className="switch-to-dropdown"
-                            onClick={() => {
-                              setUseCustomPersona(false)
-                              setPlaceholders({ ...placeholders, audienceDescription: '' })
-                            }}
-                          >
-                            ← Choose from Flow Finder
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          className="switch-to-dropdown"
+                          onClick={() => {
+                            setUseCustomPersona(false)
+                            setPlaceholders({ ...placeholders, audienceDescription: '' })
+                          }}
+                        >
+                          ← Choose from taxonomy
+                        </button>
                       </div>
                     )}
                     <span className="form-hint">Describe your target audience so they can self-identify</span>

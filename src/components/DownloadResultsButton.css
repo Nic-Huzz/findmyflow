@@ -1,0 +1,46 @@
+/* Download Results Button Styles */
+
+.download-results-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 16px auto;
+}
+
+.download-results-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-1px);
+}
+
+.download-results-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.download-results-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.download-results-btn.downloading {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.download-icon {
+  font-size: 16px;
+}
+
+.download-label {
+  letter-spacing: 0.02em;
+}

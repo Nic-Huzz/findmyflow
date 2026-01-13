@@ -72,6 +72,7 @@ const HIDDEN_ROUTES = [
   '/',
   '/log-in',
   '/v/', // Public validation flows
+  '/try/', // Public lead magnet flows
   '/weekly-planning', // Full-screen planning flow
   '/nikigai/', // Flow finder flows
   '/nervous-system',

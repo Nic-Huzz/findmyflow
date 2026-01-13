@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow Report Card - Mockup</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+      min-height: 100vh;
+      padding: 24px;
+      color: white;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .report-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .share-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .share-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .section-header {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    /* Identity Section */
+    .identity-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .identity-item:last-child {
+      border-bottom: none;
+    }
+
+    .identity-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .identity-value {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .identity-value span {
+      font-weight: 600;
+    }
+
+    .status-complete {
+      color: #10B981;
+      font-size: 0.8rem;
+    }
+
+    .status-empty {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.8rem;
+    }
+
+    /* Wealth Ladder */
+    .wealth-ladder {
+      padding: 20px 0;
+    }
+
+    .ladder-track {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .ladder-track::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-50%);
+    }
+
+    .ladder-node {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .ladder-node.completed {
+      background: #10B981;
+      border-color: #10B981;
+    }
+
+    .ladder-node.current {
+      background: #F59E0B;
+      border-color: #F59E0B;
+      width: 20px;
+      height: 20px;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+    }
+
+    .ladder-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .ladder-labels span.current-label {
+      color: #F59E0B;
+      font-weight: 600;
+    }
+
+    .current-position {
+      text-align: center;
+      margin-top: 16px;
+      padding: 12px;
+      background: rgba(245, 158, 11, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .current-position span {
+      color: #F59E0B;
+      font-weight: 600;
+    }
+
+    /* Flow Section */
+    .flow-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .flow-item:last-child {
+      border-bottom: none;
+    }
+
+    .flow-content {
+      flex: 1;
+    }
+
+    .flow-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 4px;
+    }
+
+    .flow-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .flow-tag {
+      background: rgba(147, 51, 234, 0.2);
+      color: #A78BFA;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+    }
+
+    .flow-value {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    /* Product Suite */
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .product-item:last-child {
+      border-bottom: none;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-tier {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .product-name {
+      font-size: 0.85rem;
+      color: white;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .product-meta {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 2px;
+    }
+
+    .add-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      color: rgba(255, 255, 255, 0.6);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Metrics Section */
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .metric-item:last-child {
+      border-bottom: none;
+    }
+
+    .metric-label {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .metric-value {
+      font-weight: 600;
+      color: #10B981;
+    }
+
+    /* Progress Section */
+    .progress-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .progress-label {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .progress-percent {
+      font-weight: 700;
+      color: #F59E0B;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #F59E0B, #10B981);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-count {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-align: right;
+    }
+
+    /* Next Recommended */
+    .next-recommended {
+      margin-top: 20px;
+      background: linear-gradient(135deg, rgba(147, 51, 234, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(147, 51, 234, 0.2);
+    }
+
+    .next-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+    }
+
+    .next-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .next-description {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 16px;
+    }
+
+    .next-cta {
+      background: linear-gradient(135deg, #9333EA 0%, #7C3AED 100%);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+    }
+
+    .next-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(147, 51, 234, 0.4);
+    }
+
+    /* Toggle for demo */
+    .demo-toggle {
+      margin-bottom: 24px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .demo-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .demo-btn.active {
+      background: #9333EA;
+      border-color: #9333EA;
+    }
+
+    /* State variations */
+    .empty-state {
+      display: none;
+    }
+
+    .filled-state {
+      display: block;
+    }
+
+    body.show-empty .empty-state {
+      display: flex;
+    }
+
+    body.show-empty .filled-state {
+      display: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+      }
+
+      .report-card {
+        padding: 16px;
+      }
+
+      .header h1 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Demo Controls -->
+    <div class="demo-toggle">
+      <button class="demo-btn active" onclick="setView('mixed')">Mixed State</button>
+      <button class="demo-btn" onclick="setView('empty')">Empty State</button>
+      <button class="demo-btn" onclick="setView('complete')">Complete State</button>
+    </div>
+
+    <div class="report-card">
+      <!-- Header -->
+      <div class="header">
+        <h1>Your Flow Report Card</h1>
+        <button class="share-btn">Share PDF</button>
+      </div>
+
+      <!-- Identity Section -->
+      <div class="section">
+        <div class="section-header">Identity</div>
+
+        <div class="identity-item">
+          <span class="identity-label">Essence</span>
+          <div class="identity-value">
+            <span>The Visionary</span>
+            <span class="status-complete">&#10003;</span>
+          </div>
+        </div>
+
+        <div class="identity-item">
+          <span class="identity-label">Protective</span>
+          <div class="identity-value">
+            <span>The Perfectionist</span>
+            <span class="status-complete">&#10003;</span>
+          </div>
+        </div>
+
+        <div class="identity-item">
+          <span class="identity-label">Persona</span>
+          <div class="identity-value">
+            <span>Flow Finder</span>
+            <span class="status-complete">&#10003;</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wealth Ladder Section -->
+      <div class="section">
+        <div class="section-header">Wealth Ladder Position</div>
+
+        <div class="wealth-ladder">
+          <div class="ladder-track">
+            <div class="ladder-node completed"></div>
+            <div class="ladder-node current"></div>
+            <div class="ladder-node"></div>
+            <div class="ladder-node"></div>
+          </div>
+          <div class="ladder-labels">
+            <span>Job</span>
+            <span class="current-label">Service</span>
+            <span>Productized</span>
+            <span>Products</span>
+          </div>
+          <div class="current-position">
+            You're at <span>Service</span> level, trading time for money
+          </div>
+        </div>
+      </div>
+
+      <!-- Your Flow Section -->
+      <div class="section">
+        <div class="section-header">Your Flow</div>
+
+        <div class="flow-item">
+          <div class="flow-content">
+            <div class="flow-label">Skills (3 discovered)</div>
+            <div class="flow-tags filled-state">
+              <span class="flow-tag">Strategic thinking</span>
+              <span class="flow-tag">Simplifying complexity</span>
+              <span class="flow-tag">Building systems</span>
+            </div>
+            <button class="add-btn empty-state">+ Discover skills</button>
+          </div>
+          <span class="status-complete filled-state">&#10003;</span>
+        </div>
+
+        <div class="flow-item">
+          <div class="flow-content">
+            <div class="flow-label">Problems You Solve</div>
+            <div class="flow-value filled-state">Overwhelmed entrepreneurs need clarity and systems</div>
+            <button class="add-btn empty-state">+ Discover problems</button>
+          </div>
+          <span class="status-complete filled-state">&#10003;</span>
+        </div>
+
+        <div class="flow-item">
+          <div class="flow-content">
+            <div class="flow-label">Ideal Customer</div>
+            <div class="flow-value filled-state">Solo consultants, 2-5 years in business</div>
+            <button class="add-btn empty-state">+ Define customer</button>
+          </div>
+          <span class="status-complete filled-state">&#10003;</span>
+        </div>
+      </div>
+
+      <!-- Product Suite Section -->
+      <div class="section">
+        <div class="section-header">Product Suite</div>
+
+        <div class="product-item">
+          <div class="product-info">
+            <div class="product-tier">Attraction Offer</div>
+            <div class="product-name empty-state" style="color: rgba(255,255,255,0.4)">Not created yet</div>
+          </div>
+          <button class="add-btn">+ Add</button>
+        </div>
+
+        <div class="product-item">
+          <div class="product-info">
+            <div class="product-tier">Core Offer</div>
+            <div class="product-name filled-state">90-Day Clarity Sprint</div>
+            <div class="product-meta filled-state">Packaged Service - $2,500</div>
+          </div>
+          <span class="status-complete filled-state">&#10003;</span>
+          <button class="add-btn empty-state">+ Add</button>
+        </div>
+
+        <div class="product-item">
+          <div class="product-info">
+            <div class="product-tier">Upsell</div>
+            <div class="product-name empty-state" style="color: rgba(255,255,255,0.4)">Not created yet</div>
+          </div>
+          <button class="add-btn">+ Add</button>
+        </div>
+
+        <div class="product-item">
+          <div class="product-info">
+            <div class="product-tier">Downsell</div>
+            <div class="product-name empty-state" style="color: rgba(255,255,255,0.4)">Not created yet</div>
+          </div>
+          <button class="add-btn">+ Add</button>
+        </div>
+
+        <div class="product-item">
+          <div class="product-info">
+            <div class="product-tier">Continuity</div>
+            <div class="product-name empty-state" style="color: rgba(255,255,255,0.4)">Not created yet</div>
+          </div>
+          <button class="add-btn">+ Add</button>
+        </div>
+      </div>
+
+      <!-- Business Metrics Section -->
+      <div class="section">
+        <div class="section-header">Business Metrics</div>
+
+        <div class="metric-item">
+          <span class="metric-label">Revenue Goal</span>
+          <span class="metric-value filled-state">$10,000/mo</span>
+          <button class="add-btn empty-state">Set goal</button>
+        </div>
+
+        <div class="metric-item">
+          <span class="metric-label">This Month</span>
+          <span class="metric-value filled-state">$4,200</span>
+          <span class="status-empty empty-state">Not tracking</span>
+        </div>
+
+        <div class="metric-item">
+          <span class="metric-label">Active Leads</span>
+          <span class="metric-value filled-state">12</span>
+          <button class="add-btn empty-state">Set up CRM</button>
+        </div>
+      </div>
+
+      <!-- Progress Section -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">Profile Completeness</span>
+          <span class="progress-percent">47%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 47%"></div>
+        </div>
+        <div class="progress-count">8 of 17 items complete</div>
+      </div>
+
+      <!-- Next Recommended -->
+      <div class="next-recommended">
+        <div class="next-label">Next Recommended</div>
+        <div class="next-title">Add an Attraction Offer</div>
+        <div class="next-description">
+          This is how people discover your core offer. A great attraction offer makes selling easy.
+        </div>
+        <button class="next-cta">Create Attraction Offer &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setView(view) {
+      // Update button states
+      document.querySelectorAll('.demo-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Update body class
+      document.body.classList.remove('show-empty');
+
+      if (view === 'empty') {
+        document.body.classList.add('show-empty');
+        document.querySelector('.progress-percent').textContent = '18%';
+        document.querySelector('.progress-fill').style.width = '18%';
+        document.querySelector('.progress-count').textContent = '3 of 17 items complete';
+      } else if (view === 'complete') {
+        document.querySelector('.progress-percent').textContent = '100%';
+        document.querySelector('.progress-fill').style.width = '100%';
+        document.querySelector('.progress-count').textContent = '17 of 17 items complete';
+        // Hide all add buttons, show all filled states
+        document.querySelectorAll('.add-btn').forEach(btn => btn.style.display = 'none');
+        document.querySelectorAll('.filled-state').forEach(el => el.style.display = 'block');
+        document.querySelectorAll('.empty-state').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.status-complete').forEach(el => el.style.display = 'inline');
+        // Update next recommended for complete state
+        document.querySelector('.next-title').textContent = 'You\'re all set!';
+        document.querySelector('.next-description').textContent = 'Your profile is complete. Focus on executing your strategy and tracking results.';
+        document.querySelector('.next-cta').textContent = 'Go to Dashboard';
+      } else {
+        // Mixed state - reset to default
+        document.querySelector('.progress-percent').textContent = '47%';
+        document.querySelector('.progress-fill').style.width = '47%';
+        document.querySelector('.progress-count').textContent = '8 of 17 items complete';
+        document.querySelectorAll('.add-btn').forEach(btn => btn.style.display = '');
+        document.querySelectorAll('.filled-state').forEach(el => el.style.display = '');
+        document.querySelectorAll('.empty-state').forEach(el => el.style.display = '');
+        document.querySelectorAll('.status-complete').forEach(el => el.style.display = '');
+        document.querySelector('.next-title').textContent = 'Add an Attraction Offer';
+        document.querySelector('.next-description').textContent = 'This is how people discover your core offer. A great attraction offer makes selling easy.';
+        document.querySelector('.next-cta').textContent = 'Create Attraction Offer →';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -570,19 +570,26 @@
       "archive_reason": "Redundant - Validation flows and conversation logging already track customer testing"
     },
     {
-      "id": "milestone_acquisition_offer_launched",
+      "id": "milestone_attraction_offer_launched",
       "category": "Business",
       "type": "Launch",
       "frequency": "anytime",
       "stage_required": 6,
-      "name": "Acquisition Offer Launch",
-      "description": "Launch your customer acquisition offer",
+      "name": "Attraction Offer Launch",
+      "description": "Launch your attraction offer",
       "points": 20,
       "inputType": "milestone",
-      "milestone_type": "acquisition_offer_launched",
-      "placeholder": "Describe your acquisition offer and how you launched it.",
+      "milestone_type": "attraction_offer_launched",
+      "dropdown_options": [
+        { "value": "win_your_money_back", "label": "Win Your Money Back" },
+        { "value": "giveaway", "label": "Flagship Giveaway" },
+        { "value": "decoy_offer", "label": "Decoy Offer (Good/Better/Best)" },
+        { "value": "buy_x_get_y_free", "label": "Buy X Get Y Free" },
+        { "value": "pay_less_now_or_pay_more_later", "label": "Pay Less Now or Pay More Later" },
+        { "value": "free_with_consumption_to_upsell", "label": "Free With Consumption" }
+      ],
       "counts_toward_graduation": true,
-      "learnMore": "Launching your acquisition offer is the key to scaling. This milestone counts toward your stage graduation."
+      "learnMore": "Launching your attraction offer is the key to scaling. This milestone counts toward your stage graduation."
     },
     {
       "id": "milestone_first_10_signups",

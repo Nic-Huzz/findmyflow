@@ -23,11 +23,14 @@ import {
   getMilestoneMessage,
   getPromptsForPage,
   getPromptResponse,
+  getPublicFlowGreeting,
+  getPublicFlowPrompts,
+  determinePublicZarloAction,
   INTAKE_STRUGGLES,
   ACCOUNTABILITY_RESPONSES,
   STANDARD_PROMPTS
 } from '../../lib/zarlo/zarloEngine'
-import { getPageContent, getChallengeTabContent, ROUTING_OPTIONS, SOUTH_MODE } from '../../lib/zarlo/zarloPageContent'
+import { getPageContent, getChallengeTabContent, ROUTING_OPTIONS, SOUTH_MODE, isPublicRoute } from '../../lib/zarlo/zarloPageContent'
 import { trackEvent } from '../../lib/analytics'
 import './Zarlo.css'
 
@@ -176,6 +179,13 @@ function ZarloChat({ onClose, challengeTab = null }) {
   }, [])
 
   const initializeZarlo = async () => {
+    // Check if this is a public route (sales mode)
+    if (isPublicRoute(currentRoute)) {
+      showPublicSalesMode()
+      setLoading(false)
+      return
+    }
+
     if (!user?.id) {
       // Show page context without personalization
       showPageContext()
@@ -285,6 +295,48 @@ function ZarloChat({ onClose, challengeTab = null }) {
     } else {
       setCurrentOptions(prompts)
     }
+  }
+
+  // ============================================
+  // PUBLIC SALES MODE (Lead Magnet Flows)
+  // ============================================
+
+  const showPublicSalesMode = () => {
+    setCurrentMode('public_sales')
+    setShowCommitmentInput(false)
+
+    // Track public flow open
+    trackEvent('zarlo_public_opened', {
+      route: currentRoute
+    })
+
+    // Get the sales-focused greeting
+    const greeting = getPublicFlowGreeting(currentRoute)
+    addMessage('zarlo', greeting)
+
+    // Get sales-focused prompts
+    const prompts = getPublicFlowPrompts(currentRoute)
+    setCurrentOptions(prompts)
+  }
+
+  const handlePublicSalesPrompt = (option) => {
+    addMessage('user', option.label)
+
+    // Get response for the prompt
+    const response = getPromptResponse(currentRoute, option.id, null)
+
+    // Track public prompt click
+    trackEvent('zarlo_public_prompt', {
+      prompt_id: option.id,
+      route: currentRoute
+    })
+
+    setTimeout(() => {
+      addMessage('zarlo', response)
+      // Show remaining prompts (excluding the one just clicked)
+      const prompts = getPublicFlowPrompts(currentRoute)
+      setCurrentOptions(prompts.filter(p => p.id !== option.id))
+    }, 300)
   }
 
   // ============================================
@@ -667,6 +719,10 @@ That's it. No action required. Just awareness.`)
         // Already handled above
         break
 
+      case 'public_sales':
+        handlePublicSalesPrompt(option)
+        break
+
       case 'context':
       default:
         handleContextPrompt(option)
@@ -785,6 +841,9 @@ That's it. No action required. Just awareness.`)
     )
   }
 
+  // Determine subtitle based on mode
+  const zarloSubtitle = currentMode === 'public_sales' ? 'Your guide' : 'Your flow guide'
+
   return (
     <div className="zarlo-chat">
       <div className="zarlo-header">
@@ -792,7 +851,7 @@ That's it. No action required. Just awareness.`)
           <span className="zarlo-avatar">🌞</span>
           <div className="zarlo-header-info">
             <h3>Zarlo</h3>
-            <span className="zarlo-subtitle">Your flow guide</span>
+            <span className="zarlo-subtitle">{zarloSubtitle}</span>
           </div>
         </div>
         <button className="zarlo-close-btn" onClick={onClose}>×</button>

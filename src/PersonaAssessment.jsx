@@ -9,7 +9,7 @@ import { protectiveProfiles } from './data/protectiveProfiles'
 import './PersonaAssessment.css'
 
 // Flow stages - Updated for Huzz intro (Dec 2024)
-// Persona questions moved to post-auth home screen
+// Q1-Q3 persona/wealth ladder questions moved to post-auth HomeFirstTime.jsx
 const STAGES = {
   HUZZ_INTRO_1: 'huzz_intro_1',
   HUZZ_INTRO_2: 'huzz_intro_2',
@@ -156,7 +156,7 @@ function PersonaAssessment() {
           session_id: sessionId,
           user_name: userName,
           email: email.toLowerCase(),
-          persona: null, // Will be set after persona assessment on home screen
+          persona: null, // Will be set after Q1-Q3 assessment in HomeFirstTime
           essence_archetype: essenceArchetype?.name,
           protective_archetype: protectiveArchetype?.name,
           context: {
@@ -203,7 +203,7 @@ function PersonaAssessment() {
         }
 
         // Create initial user_stage_progress record for new users
-        // Note: Persona will be determined post-auth via HomeFirstTime.jsx
+        // Note: Persona and V2 fields will be set after Q1-Q3 in HomeFirstTime.jsx
         if (authUser?.id) {
           // Check if stage progress already exists
           const { data: existingProgress } = await supabase
@@ -214,11 +214,11 @@ function PersonaAssessment() {
 
           if (!existingProgress) {
             // Create new stage progress record with onboarding_completed = false
-            // Persona and initial stage will be set after persona assessment on home screen
+            // Persona and V2 fields will be set after Q1-Q3 assessment in HomeFirstTime
             await supabase.from('user_stage_progress').insert([{
               user_id: authUser.id,
-              persona: null, // Will be set after persona assessment
-              current_stage: null, // Will be set after persona assessment
+              persona: null, // Will be set after Q1-Q3 assessment
+              current_stage: null, // Will be set after Q1-Q3 assessment
               conversations_logged: 0,
               onboarding_completed: false
             }])

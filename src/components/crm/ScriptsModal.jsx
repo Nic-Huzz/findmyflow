@@ -143,7 +143,7 @@ function getPatternSuggestions(patterns, scripts) {
 export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
   const [scripts, setScripts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedStage, setSelectedStage] = useState(DEAL_TO_SCRIPT_STAGE[deal.status] || 'all')
+  const [selectedFilter, setSelectedFilter] = useState(null) // Will be set after load
   const [copiedId, setCopiedId] = useState(null)
   const [expandedId, setExpandedId] = useState(null)
   const [objectionPatterns, setObjectionPatterns] = useState(null)
@@ -151,6 +151,19 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
   useEffect(() => {
     loadData()
   }, [])
+
+  // Set default filter after scripts load
+  useEffect(() => {
+    if (!loading && scripts.length > 0 && selectedFilter === null) {
+      const smartSuggs = getSmartSuggestions(deal, scripts)
+      const patternSuggs = getPatternSuggestions(objectionPatterns, scripts)
+      if (smartSuggs.length > 0 || patternSuggs.length > 0) {
+        setSelectedFilter('smart')
+      } else {
+        setSelectedFilter('all')
+      }
+    }
+  }, [loading, scripts, objectionPatterns])
 
   async function loadData() {
     setLoading(true)
@@ -180,14 +193,26 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
     }
   }
 
-  const recommendedStage = DEAL_TO_SCRIPT_STAGE[deal.status]
-  const filteredScripts = selectedStage === 'all'
-    ? scripts
-    : scripts.filter(s => s.stage === selectedStage)
-
-  const recommendedScripts = scripts.filter(s => s.stage === recommendedStage)
   const smartSuggestions = getSmartSuggestions(deal, scripts)
   const patternSuggestions = getPatternSuggestions(objectionPatterns, scripts)
+  const allSuggestions = [...smartSuggestions, ...patternSuggestions]
+
+  // Build filtered scripts list based on selected filter
+  let filteredScripts = []
+  let suggestionReasons = {} // Map script ID to reason for smart tab
+
+  if (selectedFilter === 'smart') {
+    filteredScripts = allSuggestions.map(s => s.script)
+    allSuggestions.forEach(s => {
+      suggestionReasons[s.script.id] = s.reason
+    })
+  } else if (selectedFilter === 'all' || selectedFilter === null) {
+    filteredScripts = scripts
+  } else {
+    filteredScripts = scripts.filter(s => s.category?.toUpperCase() === selectedFilter.toUpperCase())
+  }
+
+  const hasSmartSuggestions = allSuggestions.length > 0
 
   return (
     <div className="scripts-modal-overlay" onClick={onClose}>
@@ -200,94 +225,27 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
           <button className="scripts-close-btn" onClick={onClose}>×</button>
         </div>
 
-        {/* Pattern-Based Suggestions from Win/Loss Data */}
-        {patternSuggestions.length > 0 && (
-          <div className="smart-suggestions-section pattern-based">
-            <h4>
-              <span className="rec-icon">📊</span>
-              Based on Your Patterns
-            </h4>
-            <div className="smart-suggestions-list">
-              {patternSuggestions.map(({ script, reason }) => (
-                <div key={script.id} className="smart-suggestion pattern">
-                  <div className="suggestion-info">
-                    <span className="suggestion-name">{script.name}</span>
-                    <span className="suggestion-reason">{reason}</span>
-                  </div>
-                  <button
-                    className={`quick-copy-btn ${copiedId === script.id ? 'copied' : ''}`}
-                    onClick={() => handleCopyScript(script)}
-                  >
-                    {copiedId === script.id ? '✓' : '📋'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Smart Suggestions based on Lead Score */}
-        {smartSuggestions.length > 0 && (
-          <div className="smart-suggestions-section">
-            <h4>
-              <span className="rec-icon">🎯</span>
-              Smart Suggestions for {deal.contact_name}
-            </h4>
-            <div className="smart-suggestions-list">
-              {smartSuggestions.map(({ script, reason }) => (
-                <div key={script.id} className="smart-suggestion">
-                  <div className="suggestion-info">
-                    <span className="suggestion-name">{script.name}</span>
-                    <span className="suggestion-reason">{reason}</span>
-                  </div>
-                  <button
-                    className={`quick-copy-btn ${copiedId === script.id ? 'copied' : ''}`}
-                    onClick={() => handleCopyScript(script)}
-                  >
-                    {copiedId === script.id ? '✓' : '📋'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Recommended Scripts */}
-        {recommendedScripts.length > 0 && (
-          <div className="recommended-section">
-            <h4>
-              <span className="rec-icon">⭐</span>
-              Recommended for {deal.status.charAt(0).toUpperCase() + deal.status.slice(1)} Stage
-            </h4>
-            <div className="recommended-list">
-              {recommendedScripts.slice(0, 3).map(script => (
-                <div key={script.id} className="quick-script">
-                  <span className="quick-script-name">{script.name}</span>
-                  <button
-                    className={`quick-copy-btn ${copiedId === script.id ? 'copied' : ''}`}
-                    onClick={() => handleCopyScript(script)}
-                  >
-                    {copiedId === script.id ? '✓' : '📋'}
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Stage Filter */}
+        {/* Filter Tabs */}
         <div className="scripts-modal-filters">
+          {hasSmartSuggestions && (
+            <button
+              className={`modal-filter smart-filter ${selectedFilter === 'smart' ? 'active' : ''}`}
+              onClick={() => setSelectedFilter('smart')}
+            >
+              🎯 Smart
+            </button>
+          )}
           <button
-            className={`modal-filter ${selectedStage === 'all' ? 'active' : ''}`}
-            onClick={() => setSelectedStage('all')}
+            className={`modal-filter ${selectedFilter === 'all' || (!hasSmartSuggestions && selectedFilter === null) ? 'active' : ''}`}
+            onClick={() => setSelectedFilter('all')}
           >
             All
           </button>
           {SCRIPT_STAGES.map(stage => (
             <button
               key={stage.value}
-              className={`modal-filter ${selectedStage === stage.value ? 'active' : ''} ${stage.value === recommendedStage ? 'recommended' : ''}`}
-              onClick={() => setSelectedStage(stage.value)}
+              className={`modal-filter emoji-filter ${selectedFilter === stage.value ? 'active' : ''}`}
+              onClick={() => setSelectedFilter(stage.value)}
             >
               {stage.emoji}
             </button>
@@ -299,7 +257,11 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
           {loading ? (
             <div className="scripts-modal-loading">Loading scripts...</div>
           ) : filteredScripts.length === 0 ? (
-            <div className="scripts-modal-empty">No scripts found</div>
+            <div className="scripts-modal-empty">
+              {selectedFilter === 'smart'
+                ? 'No smart suggestions - try adjusting lead scores'
+                : 'No scripts found'}
+            </div>
           ) : (
             filteredScripts.map(script => (
               <div
@@ -313,6 +275,9 @@ export default function ScriptsModal({ deal, userId, onClose, onScriptUsed }) {
                   <div className="modal-script-info">
                     <span className="modal-script-stage">{script.category}</span>
                     <span className="modal-script-name">{script.name}</span>
+                    {suggestionReasons[script.id] && (
+                      <span className="modal-script-reason">{suggestionReasons[script.id]}</span>
+                    )}
                   </div>
                   <div className="modal-script-actions">
                     <button

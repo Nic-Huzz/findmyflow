@@ -1,15 +1,15 @@
 /**
  * LaunchReviewInput.css
  * Styling for the multi-step launch review component
- * Light theme for Challenge page integration
+ * Dark purple theme matching other quest inputs
  */
 
 .launch-review-input {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   border-radius: 16px;
   padding: 24px;
   margin-top: 16px;
-  border: 1px solid #dee2e6;
+  border: none;
 }
 
 /* Progress indicator */
@@ -30,12 +30,12 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #dee2e6;
+  background: rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
 }
 
 .launch-review-input .progress-dot.active {
-  background: #7c3aed;
+  background: #ffffff;
   transform: scale(1.2);
 }
 
@@ -45,7 +45,7 @@
 
 .launch-review-input .progress-text {
   font-size: 0.875rem;
-  color: #6c757d;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Step content */
@@ -69,11 +69,11 @@
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #212529;
+  color: #ffffff;
 }
 
 .launch-review-input .step-description {
-  color: #495057;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 0.9375rem;
   margin-bottom: 20px;
   line-height: 1.5;
@@ -88,9 +88,9 @@
   width: 100%;
   padding: 16px;
   border-radius: 12px;
-  border: 1px solid #dee2e6;
-  background: #ffffff;
-  color: #212529;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   font-size: 1rem;
   font-family: inherit;
   resize: none;
@@ -99,17 +99,17 @@
 
 .launch-review-input .launch-review-textarea:focus {
   outline: none;
-  border-color: #7c3aed;
-  background: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .launch-review-input .launch-review-textarea::placeholder {
-  color: #adb5bd;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .launch-review-input .char-hint {
   font-size: 0.8125rem;
-  color: #6c757d;
+  color: rgba(255, 255, 255, 0.6);
   margin-top: 8px;
   text-align: right;
 }
@@ -135,7 +135,7 @@
 .launch-review-input .satisfaction-value {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #212529;
+  color: #ffffff;
 }
 
 .launch-review-input .slider-container {
@@ -146,7 +146,7 @@
 
 .launch-review-input .slider-label {
   font-size: 0.8125rem;
-  color: #6c757d;
+  color: rgba(255, 255, 255, 0.7);
   min-width: 80px;
 }
 
@@ -164,7 +164,7 @@
   appearance: none;
   height: 8px;
   border-radius: 4px;
-  background: #dee2e6;
+  background: rgba(255, 255, 255, 0.2);
   outline: none;
 }
 
@@ -174,10 +174,10 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #7c3aed;
+  background: #ffffff;
   cursor: pointer;
-  border: 3px solid #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 3px solid #5e17eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s ease;
 }
 
@@ -189,28 +189,28 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #7c3aed;
+  background: #ffffff;
   cursor: pointer;
-  border: 3px solid #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 3px solid #5e17eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Review summary */
 .launch-review-input .review-summary {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 16px;
   margin-top: 20px;
   margin-bottom: 16px;
   text-align: left;
-  border: 1px solid #dee2e6;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .launch-review-input .review-summary h5 {
   margin: 0 0 12px 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6c757d;
+  color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -234,7 +234,7 @@
 
 .launch-review-input .summary-text {
   font-size: 0.9375rem;
-  color: #212529;
+  color: #ffffff;
   line-height: 1.4;
 }
 
@@ -257,27 +257,27 @@
 }
 
 .launch-review-input .nav-btn.back {
-  background: #ffffff;
-  color: #495057;
-  border: 1px solid #dee2e6;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .launch-review-input .nav-btn.back:hover {
-  background: #f8f9fa;
-  color: #212529;
-  border-color: #adb5bd;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .launch-review-input .nav-btn.next,
 .launch-review-input .nav-btn.complete {
-  background: #7c3aed;
-  color: #fff;
+  background: #ffffff;
+  color: #5e17eb;
   margin-left: auto;
 }
 
 .launch-review-input .nav-btn.next:hover,
 .launch-review-input .nav-btn.complete:hover {
-  background: #6d28d9;
+  background: #f0f0f0;
 }
 
 .launch-review-input .nav-btn:disabled {
@@ -286,17 +286,18 @@
 }
 
 .launch-review-input .nav-btn.complete {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #10b981;
+  color: #ffffff;
 }
 
 .launch-review-input .nav-btn.complete:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: #059669;
 }
 
 /* Encouragement */
 .launch-review-input .launch-review-encouragement {
   text-align: center;
-  color: #6c757d;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.875rem;
   font-style: italic;
   margin-top: 16px;

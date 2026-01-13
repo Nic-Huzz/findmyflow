@@ -6,7 +6,7 @@
  */
 
 import { supabase } from '../supabaseClient'
-import { getPageContent, getChallengeTabContent, ROUTING_OPTIONS, SOUTH_MODE } from './zarloPageContent'
+import { getPageContent, getChallengeTabContent, ROUTING_OPTIONS, SOUTH_MODE, isPublicRoute, PUBLIC_FLOW_CONTENT } from './zarloPageContent'
 import { generateZarloWheelContext, getWheelSummary, analyzeGapsAndOpportunities } from '../wheelAlignment'
 
 // ============================================
@@ -514,6 +514,61 @@ export function determineZarloAction(zarloState, userContext, currentRoute) {
  */
 export function getStruggleConfig(struggleId) {
   return INTAKE_STRUGGLES.find(s => s.id === struggleId)
+}
+
+// ============================================
+// PUBLIC FLOW MODE (Sales Rep)
+// ============================================
+
+export const PUBLIC_FLOW_GREETINGS = {
+  '/try/nervous-system': `Hey! I'm Zarlo — your guide through this assessment. 👋\n\nYou're about to discover something most people never see: the invisible beliefs that are quietly running your life.\n\nGot questions as you go? I'm right here.`,
+
+  '/try/offer/attraction': `Hey! I'm Zarlo — here to help you figure out your offer. 👋\n\nThis assessment is based on Alex Hormozi's $100M Offers framework. By the end, you'll know exactly what type of offer fits YOU.\n\nGot questions? I'm here.`,
+
+  '/try/offer/default': `Hey! I'm Zarlo — your guide through this assessment. 👋\n\nBy the end, you'll have real clarity on your strategy — not just theory, but a direction you can actually act on.\n\nQuestions along the way? I'm here.`
+}
+
+/**
+ * Get greeting for public flows
+ */
+export function getPublicFlowGreeting(route) {
+  if (route === '/try/nervous-system') {
+    return PUBLIC_FLOW_GREETINGS['/try/nervous-system']
+  }
+  if (route.startsWith('/try/offer/')) {
+    const flowType = route.split('/')[3]
+    return PUBLIC_FLOW_GREETINGS[`/try/offer/${flowType}`] || PUBLIC_FLOW_GREETINGS['/try/offer/default']
+  }
+  return PUBLIC_FLOW_GREETINGS['/try/offer/default']
+}
+
+/**
+ * Get prompts for public flows (sales-focused)
+ */
+export function getPublicFlowPrompts(route) {
+  const pageContent = getPageContent(route)
+
+  // For public flows, we show sales-focused prompts
+  const basePrompts = [
+    { id: 'what_is', label: 'What is this?' },
+    { id: 'why_matters', label: 'Why does this matter?' }
+  ]
+
+  const contextualPrompts = pageContent.contextualPrompts || []
+
+  return [...basePrompts, ...contextualPrompts]
+}
+
+/**
+ * Determine Zarlo action for public routes
+ */
+export function determinePublicZarloAction(route) {
+  return {
+    mode: 'public_sales',
+    route,
+    greeting: getPublicFlowGreeting(route),
+    prompts: getPublicFlowPrompts(route)
+  }
 }
 
 /**

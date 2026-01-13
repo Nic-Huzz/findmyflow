@@ -176,6 +176,14 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
     <div className="groan-reflection-input">
       {/* Progress indicator */}
       <div className="groan-progress">
+        <div className="progress-dots">
+          {Array.from({ length: totalSteps }, (_, index) => (
+            <div
+              key={index}
+              className={`progress-dot ${index + 1 === step ? 'active' : ''} ${index + 1 < step ? 'completed' : ''}`}
+            />
+          ))}
+        </div>
         <span className="progress-text">Step {step} of {totalSteps}</span>
       </div>
 
@@ -183,6 +191,7 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
       {step === 1 && (
         <div className="groan-step">
           <div className="step-header">
+            <span className="step-icon">😬</span>
             <h4>What about this challenge felt like a groan?</h4>
           </div>
           <p className="step-description">

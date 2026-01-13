@@ -433,7 +433,142 @@ export const SOUTH_MODE = {
 }
 
 // ============================================
-// PUBLIC VALIDATION FLOW (Sales Rep Mode)
+// PUBLIC LEAD MAGNET FLOWS (Sales Rep Mode)
+// ============================================
+
+export const PUBLIC_FLOW_CONTENT = {
+  // Money Model flows (all share similar context)
+  '/try/offer/attraction': {
+    pageId: 'public_attraction_offer',
+    pageName: 'Attraction Offer Assessment',
+    whatIsThis: `You're taking a free assessment based on Alex Hormozi's $100M Offers framework. In a few minutes, you'll know exactly what type of offer fits your skills and audience — and how to position it so people actually want to buy.`,
+    whyMatters: `Most people guess at their offer and hope it works. This assessment cuts through the guesswork and shows you the strategic path forward.\n\nAnd here's the thing most business tools won't tell you: knowing WHAT to build is only half the battle. The other half? Actually doing it without your brain sabotaging you every step of the way.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'how_different', label: 'How is this different?' },
+      { id: 'what_next', label: 'What happens after this?' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow is where burnt-out professionals figure out what they're meant to build — and actually follow through on it.\n\nImagine if Write of Passage, HubSpot, Kit, and an AI business coach had a baby... and that baby also understood why you keep procrastinating on the things you KNOW you should do.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow. It has everything Huzz wishes he had on his journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.`,
+      how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nFindMyFlow treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
+      what_next: `After you finish this assessment, you'll see your results and have a chance to explore the full FindMyFlow experience.\n\nInside, you'd get:\n• AI-guided discovery of your skills, ideal customers, and what to build\n• Nervous system work to clear the invisible blocks\n• A gamified 7-day challenge to expand your comfort zone\n• CRM to manage your customer relationships\n• Content and marketing strategy tools\n\nBasically everything you need to go from "I have an idea" to "I have paying customers" — without the usual self-sabotage along the way.`
+    }
+  },
+
+  '/try/offer/upsell': {
+    pageId: 'public_upsell_offer',
+    pageName: 'Upsell Strategy Assessment',
+    whatIsThis: `You're figuring out your upsell strategy — what to offer people AFTER they buy your main thing. This isn't about squeezing more money out of people. It's about serving the ones who want to go deeper.`,
+    whyMatters: `The best upsells feel like a gift, not a pitch. When someone gets great results from you, they naturally ask "what's next?" Having an answer ready isn't pushy — it's helpful.\n\nThis assessment helps you design that next step strategically.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'how_different', label: 'How is this different?' },
+      { id: 'what_next', label: 'What happens after this?' }
+    ],
+    faq: {} // Will inherit from shared
+  },
+
+  '/try/offer/downsell': {
+    pageId: 'public_downsell_offer',
+    pageName: 'Downsell Strategy Assessment',
+    whatIsThis: `You're designing an accessible entry point — something valuable for people who aren't ready for your main offer yet. Think of it as a trust-builder that lets people experience your magic at a lower commitment.`,
+    whyMatters: `Not everyone is ready to buy your main thing. A good downsell serves them anyway AND builds the relationship for when they ARE ready.\n\nSome of your biggest fans will start as downsell customers.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'how_different', label: 'How is this different?' },
+      { id: 'what_next', label: 'What happens after this?' }
+    ],
+    faq: {}
+  },
+
+  '/try/offer/continuity': {
+    pageId: 'public_continuity_offer',
+    pageName: 'Continuity Strategy Assessment',
+    whatIsThis: `You're exploring recurring revenue models — memberships, subscriptions, ongoing support. The stuff that lets you stop starting from zero every month.`,
+    whyMatters: `One-time sales = hamster wheel. Continuity = stability.\n\nEven a small amount of recurring revenue ($1-2K/month) completely changes how your nervous system feels about money. You can breathe. You can take creative risks. You're not in desperation mode.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'how_different', label: 'How is this different?' },
+      { id: 'what_next', label: 'What happens after this?' }
+    ],
+    faq: {}
+  },
+
+  '/try/offer/leads': {
+    pageId: 'public_leads_strategy',
+    pageName: 'Lead Strategy Assessment',
+    whatIsThis: `You're mapping out how you'll attract people into your world. Where will they come from? What will draw them in? This is the top of your funnel — the foundation of everything else.`,
+    whyMatters: `No leads = no business. But trying to be everywhere at once = burnout.\n\nA clear strategy helps you show up consistently where YOUR people actually hang out. No more random acts of marketing.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'how_different', label: 'How is this different?' },
+      { id: 'what_next', label: 'What happens after this?' }
+    ],
+    faq: {}
+  },
+
+  '/try/offer/lead-magnet': {
+    pageId: 'public_lead_magnet',
+    pageName: 'Lead Magnet Assessment',
+    whatIsThis: `You're figuring out what free thing to offer in exchange for someone's email. Could be a PDF, video, quiz, template, or mini-course. Something that gives people a taste of your value.`,
+    whyMatters: `A lead magnet lets people experience you before they pay. It builds trust, shows your expertise, and starts the relationship.\n\nPlus, email lists are still one of the most valuable assets you can own. Social platforms come and go — your list is yours.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'how_different', label: 'How is this different?' },
+      { id: 'what_next', label: 'What happens after this?' }
+    ],
+    faq: {}
+  },
+
+  '/try/nervous-system': {
+    pageId: 'public_nervous_system',
+    pageName: 'Nervous System Assessment',
+    whatIsThis: `You're about to discover the invisible line where your nervous system says "nope, too scary" — even when your brain says "let's go."\n\nThrough some simple questions (and maybe a body-based test), we'll find the beliefs that are quietly running the show behind the scenes.`,
+    whyMatters: `Here's the sneaky truth nobody talks about:\n\n**You don't rise to the level of your ambitions. You fall to what your nervous system thinks is safe.**\n\nIt's like having an overprotective bodyguard who won't let you into the VIP section of your own life. This assessment shows you exactly where that bouncer is standing.\n\nOnce you see the line, you can start moving it.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'how_different', label: 'How is this different?' },
+      { id: 'why_ns', label: 'Why does nervous system stuff matter for business?' },
+      { id: 'what_next', label: 'What happens after this?' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow is where burnt-out professionals figure out what they're meant to build — and actually follow through on it.\n\nImagine if Write of Passage, HubSpot, Kit, and an AI business coach had a baby... and that baby also understood why you keep procrastinating on the things you KNOW you should do.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow. It has everything Huzz wishes he had on his journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.`,
+      how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nFindMyFlow treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
+      why_ns: `Ever wonder why you KNOW what to do but can't make yourself do it?\n\nThat's not a discipline problem. It's a nervous system problem.\n\nYour body learned somewhere along the way that being visible, charging money, or putting yourself out there = danger. Maybe you got rejected. Maybe you were laughed at. Maybe success meant losing people you loved.\n\nNow that belief runs in the background like invisible software, quietly vetoing your dreams.\n\n**Most business programs ignore this entirely.** They give you more strategy, more tactics, more "just do it" energy. And you keep not doing it.\n\nWe fix the root cause first. Then the tactics actually work.`,
+      what_next: `After you finish this assessment, you'll see what beliefs might be holding you back — and have a chance to explore the full FindMyFlow experience.\n\nInside, you'd get:\n• Deep nervous system work to clear those invisible blocks\n• AI-guided discovery of your skills, ideal customers, and what to build\n• A gamified 7-day challenge to expand your comfort zone\n• Healing practices to process stuck emotions\n• CRM, content tools, marketing strategy — the whole tactical stack\n\nIt's everything you need to build something meaningful without your brain sabotaging you along the way.`
+    }
+  }
+}
+
+// Shared FAQ responses for public flows (to avoid repetition)
+const SHARED_PUBLIC_FAQ = {
+  what_is_fmf: PUBLIC_FLOW_CONTENT['/try/nervous-system'].faq.what_is_fmf,
+  what_is_flow: PUBLIC_FLOW_CONTENT['/try/offer/attraction'].faq.what_is_flow,
+  how_different: PUBLIC_FLOW_CONTENT['/try/nervous-system'].faq.how_different,
+  what_next: PUBLIC_FLOW_CONTENT['/try/offer/attraction'].faq.what_next
+}
+
+// Apply shared FAQs to flows that don't have custom ones
+Object.keys(PUBLIC_FLOW_CONTENT).forEach(route => {
+  if (route.startsWith('/try/offer/')) {
+    PUBLIC_FLOW_CONTENT[route].faq = {
+      ...SHARED_PUBLIC_FAQ,
+      ...PUBLIC_FLOW_CONTENT[route].faq
+    }
+  }
+})
+
+// ============================================
+// PUBLIC VALIDATION FLOW (Survey Mode)
 // ============================================
 
 export const PUBLIC_VALIDATION_CONTENT = {
@@ -470,6 +605,22 @@ export function getPageContent(route) {
     return PAGE_CONTENT[route]
   }
 
+  // Check for public lead magnet flows
+  if (route.startsWith('/try/')) {
+    // Handle /try/offer/:flowType routes
+    if (route.startsWith('/try/offer/')) {
+      const flowType = route.split('/')[3]
+      const publicRoute = `/try/offer/${flowType}`
+      return PUBLIC_FLOW_CONTENT[publicRoute] || PUBLIC_FLOW_CONTENT['/try/offer/attraction']
+    }
+    // Handle /try/nervous-system
+    if (route === '/try/nervous-system') {
+      return PUBLIC_FLOW_CONTENT['/try/nervous-system']
+    }
+    // Fallback for other /try routes
+    return PUBLIC_FLOW_CONTENT['/try/offer/attraction']
+  }
+
   // Check for dynamic routes
   if (route.startsWith('/nikigai/')) {
     const subRoute = route.split('/')[2]
@@ -482,6 +633,13 @@ export function getPageContent(route) {
 
   // Fallback
   return PAGE_CONTENT.default
+}
+
+/**
+ * Check if a route is a public (non-authenticated) flow
+ */
+export function isPublicRoute(route) {
+  return route.startsWith('/try/') || route.startsWith('/v/')
 }
 
 /**

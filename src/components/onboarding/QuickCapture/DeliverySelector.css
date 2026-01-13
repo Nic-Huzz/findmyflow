@@ -1,0 +1,170 @@
+/**
+ * DeliverySelector.css
+ */
+
+.delivery-selector {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.delivery-selector .selector-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 4px;
+  text-align: center;
+}
+
+.delivery-selector .selector-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+/* Category Options */
+.delivery-selector .category-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.delivery-selector .category-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delivery-selector .category-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(147, 51, 234, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Type Options */
+.delivery-selector .type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.delivery-selector .type-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.delivery-selector .type-option:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(147, 51, 234, 0.4);
+}
+
+.delivery-selector .type-option.selected {
+  background: rgba(147, 51, 234, 0.1);
+  border-color: #9333EA;
+}
+
+.delivery-selector .type-option .option-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.delivery-selector .type-option .option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.delivery-selector .type-option .option-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.delivery-selector .type-option .option-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.delivery-selector .type-option .option-examples {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* Subtype Options */
+.delivery-selector .subtype-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.delivery-selector .subtype-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delivery-selector .subtype-option:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(147, 51, 234, 0.4);
+}
+
+.delivery-selector .subtype-option.selected {
+  background: rgba(147, 51, 234, 0.1);
+  border-color: #9333EA;
+}
+
+/* Shared */
+.delivery-selector .option-icon {
+  font-size: 28px;
+}
+
+.delivery-selector .option-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+
+.delivery-selector .option-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.delivery-selector .back-button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  margin-top: 16px;
+  cursor: pointer;
+  padding: 8px;
+  align-self: center;
+}
+
+.delivery-selector .back-button:hover {
+  color: white;
+}

@@ -1409,6 +1409,17 @@ export function useChallengeData() {
   }, [user, leaderboardView])
 
   // ============================================
+  // Compute current user's weekly points
+  // ============================================
+  const currentWeeklyPoints = (() => {
+    if (!completions || completions.length === 0) return 0
+    const weekStart = new Date(getWeekStart() + 'T00:00:00')
+    return completions
+      .filter(c => new Date(c.completed_at) >= weekStart)
+      .reduce((sum, c) => sum + (c.points_earned || 0), 0)
+  })()
+
+  // ============================================
   // Return all state and functions
   // ============================================
 
@@ -1462,6 +1473,7 @@ export function useChallengeData() {
     leaderboardView,
     setLeaderboardView,
     userRank,
+    currentWeeklyPoints,
 
     // Prerequisites
     nervousSystemComplete,

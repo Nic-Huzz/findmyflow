@@ -1,0 +1,130 @@
+.email-gate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 20px;
+}
+
+.email-gate-content {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.email-gate-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  animation: emailGatePulse 2s ease-in-out infinite;
+}
+
+@keyframes emailGatePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.email-gate-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 12px;
+}
+
+.email-gate-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 32px;
+  line-height: 1.5;
+}
+
+.email-gate-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.email-input-wrapper {
+  position: relative;
+}
+
+.email-input {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.email-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.email-input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.email-input.has-error {
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+.email-error {
+  position: absolute;
+  bottom: -22px;
+  left: 0;
+  font-size: 12px;
+  color: #ef4444;
+}
+
+.email-submit-button {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.email-submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.email-submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.email-gate-privacy {
+  margin-top: 20px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .email-gate-title {
+    font-size: 24px;
+  }
+
+  .email-gate-subtitle {
+    font-size: 14px;
+  }
+
+  .email-input,
+  .email-submit-button {
+    padding: 14px 18px;
+    font-size: 15px;
+  }
+}

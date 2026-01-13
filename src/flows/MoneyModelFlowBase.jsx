@@ -13,6 +13,7 @@ import { completeFlowQuest } from '../lib/questCompletion'
 import { BackButton, ProgressDots, ChecklistDisplay } from '../components/MoneyModelShared'
 import { STAGES } from './moneyModelConfigs'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { FlowFeedback } from '../components/FlowFeedback'
 
 /**
  * MoneyModelFlowBase component
@@ -691,6 +692,12 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           <h2>Quest Complete, {userName}!</h2>
           <p style={{ marginBottom: '8px' }}>Your <strong>{recommendedOffer?.offer?.name}</strong> strategy is ready.</p>
           <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+{config.pointsEarned} points earned!</p>
+
+          <FlowFeedback
+            flowType={config.flowType}
+            userId={user?.id}
+          />
+
           {!config.autoNavigateOnSuccess && (
             <button
               className="primary-button"

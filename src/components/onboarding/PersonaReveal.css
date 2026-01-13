@@ -1,0 +1,256 @@
+/**
+ * PersonaReveal.css
+ * Styles for the animated persona reveal component
+ */
+
+.persona-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 24px;
+  min-height: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.persona-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Persona Badge */
+.persona-reveal .persona-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  border-radius: 100px;
+  margin-bottom: 24px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.persona-reveal .persona-badge.animate-in {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.persona-reveal .persona-icon {
+  font-size: 32px;
+}
+
+.persona-reveal .persona-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.5px;
+}
+
+/* Tagline */
+.persona-reveal .persona-tagline {
+  font-size: 20px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 16px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+}
+
+.persona-reveal .persona-tagline.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Description */
+.persona-reveal .persona-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 400px;
+  margin: 0 0 32px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s;
+}
+
+.persona-reveal .persona-description.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Wealth Ladder Indicator */
+.persona-reveal .wealth-ladder-indicator {
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease 0.3s, transform 0.4s ease 0.3s;
+}
+
+.persona-reveal .wealth-ladder-indicator.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.persona-reveal .ladder-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 16px;
+}
+
+.persona-reveal .ladder-visual {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.persona-reveal .ladder-visual::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.persona-reveal .ladder-rung {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.persona-reveal .rung-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.persona-reveal .ladder-rung.active .rung-dot {
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 0 20px currentColor;
+}
+
+.persona-reveal .rung-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+
+.persona-reveal .ladder-rung.active .rung-label {
+  color: white;
+  font-weight: 600;
+}
+
+/* Emphasis Indicator */
+.persona-reveal .emphasis-indicator {
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s;
+}
+
+.persona-reveal .emphasis-indicator.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.persona-reveal .emphasis-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px;
+}
+
+.persona-reveal .emphasis-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  border: 2px solid;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.persona-reveal .emphasis-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Next Step */
+.persona-reveal .next-step {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px 24px;
+  max-width: 360px;
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease 0.4s, transform 0.4s ease 0.4s;
+}
+
+.persona-reveal .next-step.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.persona-reveal .next-step-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.persona-reveal .next-step-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Continue Button */
+.persona-reveal .continue-button {
+  width: 100%;
+  max-width: 360px;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.4s ease 0.5s;
+  opacity: 0;
+}
+
+.persona-reveal .continue-button.fade-in {
+  opacity: 1;
+}
+
+.persona-reveal .continue-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.persona-reveal .continue-button:active {
+  transform: translateY(0);
+}

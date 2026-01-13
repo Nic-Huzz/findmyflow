@@ -54,6 +54,10 @@ const FlowFinderIntegration = lazy(() => import('./flows/FlowFinderIntegration')
 const HealingCompass = lazy(() => import('./flows/HealingCompass'))
 const NervousSystemFlow = lazy(() => import('./flows/NervousSystemFlow'))
 
+// Lazy-loaded flows - Public Lead Magnets (no auth required)
+const PublicMoneyModelFlow = lazy(() => import('./flows/PublicMoneyModelFlow'))
+const PublicNervousSystemFlow = lazy(() => import('./flows/PublicNervousSystemFlow'))
+
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazy(() => import('./flows/BusinessBaselineFlow'))
 const CustomerSegmentsFlow = lazy(() => import('./flows/CustomerSegmentsFlow'))
@@ -88,6 +92,7 @@ const ProtectiveProfile = lazy(() => import('./profiles/ProtectiveProfile'))
 const Feedback = lazy(() => import('./Feedback'))
 const NotificationSettings = lazy(() => import('./components/NotificationSettings'))
 const LibraryOfAnswers = lazy(() => import('./pages/LibraryOfAnswers'))
+const FlowReportCard = lazy(() => import('./pages/FlowReportCard'))
 const FlowCompassPage = lazy(() => import('./pages/FlowCompassPage'))
 const FlowMapMockups = lazy(() => import('./components/FlowMapMockups'))
 const ValidationFlowsManager = lazy(() => import('./pages/ValidationFlowsManager'))
@@ -219,6 +224,10 @@ function AppRouter() {
             {/* Public Validation Flow - No Auth Required */}
             <Route path="/v/:shareToken" element={<PublicValidationFlow />} />
 
+            {/* Public Lead Magnet Flows - No Auth Required */}
+            <Route path="/try/offer/:flowType" element={<PublicMoneyModelFlow />} />
+            <Route path="/try/nervous-system" element={<PublicNervousSystemFlow />} />
+
             <Route path="/me" element={
               <AuthGate>
                 <Profile />
@@ -292,6 +301,11 @@ function AppRouter() {
             <Route path="/library" element={
               <AuthGate>
                 <LibraryOfAnswers />
+              </AuthGate>
+            } />
+            <Route path="/report-card" element={
+              <AuthGate>
+                <FlowReportCard />
               </AuthGate>
             } />
 

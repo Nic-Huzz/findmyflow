@@ -1,6 +1,11 @@
+/**
+ * MilestoneInput.css
+ * Dark purple theme matching other quest inputs
+ */
+
 .milestone-input {
-  background: linear-gradient(135deg, rgba(94, 23, 235, 0.15) 0%, rgba(124, 58, 237, 0.1) 100%);
-  border: 2px solid rgba(94, 23, 235, 0.3);
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  border: none;
   border-radius: 12px;
   padding: 20px;
   margin-top: 12px;
@@ -8,20 +13,22 @@
 
 .milestone-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 16px;
+  text-align: center;
 }
 
 .milestone-icon {
-  font-size: 32px;
+  font-size: 2.5rem;
 }
 
 .milestone-header h4 {
   margin: 0;
-  font-size: 18px;
-  font-weight: 700;
-  color: #5e17eb;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .milestone-input .input-group {
@@ -32,38 +39,68 @@
   display: block;
   font-size: 14px;
   font-weight: 600;
-  color: #333;
+  color: #ffffff !important;
   margin-bottom: 8px;
+  text-align: center;
 }
 
 .milestone-input textarea {
   width: 100%;
   padding: 12px;
-  border: 2px solid rgba(94, 23, 235, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
-  background: white;
-  color: #333;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   resize: vertical;
   min-height: 80px;
 }
 
 .milestone-input textarea::placeholder {
-  color: #999;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .milestone-input textarea:focus {
   outline: none;
-  border-color: #5e17eb;
-  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Select dropdown */
+.milestone-input .milestone-select {
+  width: 100%;
+  padding: 14px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.milestone-input .milestone-select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.milestone-input .milestone-select option {
+  background: #5e17eb;
+  color: #ffffff;
+  padding: 10px;
 }
 
 .complete-button.milestone {
   width: 100%;
-  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
-  color: white;
+  background: #ffffff;
+  color: #5e17eb;
   border: none;
   padding: 14px 24px;
   border-radius: 8px;
@@ -71,12 +108,13 @@
   font-weight: 700;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .complete-button.milestone:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(94, 23, 235, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: #f0f0f0;
 }
 
 .complete-button.milestone:active {
@@ -86,7 +124,7 @@
 .milestone-note {
   margin-top: 12px;
   font-size: 12px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
   text-align: center;
   font-style: italic;

@@ -3,6 +3,49 @@
  */
 import { supabase } from './supabaseClient'
 
+// Valid deal stages that match database constraint
+const VALID_STAGES = ['lead', 'qualified', 'booked', 'showed', 'pitched', 'follow_up', 'won', 'lost']
+
+// Map AI-suggested stages to valid database stages
+function mapToValidStage(suggestedStage) {
+  if (!suggestedStage) return 'lead'
+
+  const lower = suggestedStage.toLowerCase().trim()
+
+  // Direct matches
+  if (VALID_STAGES.includes(lower)) return lower
+
+  // Common AI variations mapped to valid stages
+  const stageMap = {
+    'new': 'lead',
+    'inquiry': 'lead',
+    'interested': 'lead',
+    'initial': 'lead',
+    'discovery': 'qualified',
+    'qualifying': 'qualified',
+    'meeting': 'booked',
+    'scheduled': 'booked',
+    'call_booked': 'booked',
+    'attended': 'showed',
+    'met': 'showed',
+    'presented': 'pitched',
+    'proposal': 'pitched',
+    'sent_proposal': 'pitched',
+    'follow-up': 'follow_up',
+    'followup': 'follow_up',
+    'pending': 'follow_up',
+    'negotiating': 'follow_up',
+    'closed': 'won',
+    'converted': 'won',
+    'sale': 'won',
+    'rejected': 'lost',
+    'dead': 'lost',
+    'no_response': 'lost',
+  }
+
+  return stageMap[lower] || 'lead'
+}
+
 // ============================================
 // IMAGE COMPRESSION (Cost Optimization)
 // ============================================
@@ -204,7 +247,7 @@ export function mapExtractedToDeal(extracted) {
     contact_email: extracted.contact_email || '',
     product_type: mapProductInterest(extracted.product_interest),
     value: extracted.estimated_value || 497,
-    status: extracted.suggested_stage || 'lead',
+    status: mapToValidStage(extracted.suggested_stage),
     source: extracted.platform_detected || 'Screenshot',
     notes: notesArray.join('\n'),
     pain_score: scores.pain,

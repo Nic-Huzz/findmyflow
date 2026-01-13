@@ -3,36 +3,63 @@
  */
 import { supabase } from './supabaseClient'
 
-// Script stages for filtering
-export const SCRIPT_STAGES = [
-  { value: 'opener', label: 'Openers', emoji: '👋' },
-  { value: 'discovery', label: 'Discovery', emoji: '🔍' },
-  { value: 'trust', label: 'Trust Builders', emoji: '🤝' },
-  { value: 'urgency', label: 'Urgency', emoji: '⏰' },
-  { value: 'offer', label: 'Offer Stack', emoji: '💎' },
-  { value: 'objection', label: 'Objection Handling', emoji: '🛡️' },
-  { value: 'close', label: 'Close Attempts', emoji: '🎯' },
-  { value: 'follow-up', label: 'Follow-Up', emoji: '📧' },
+// Script categories for filtering - matches actual database categories
+export const SCRIPT_CATEGORIES = [
+  { value: 'TIME', label: 'Time Objections', emoji: '⏰' },
+  { value: 'PRICE', label: 'Price Objections', emoji: '💰' },
+  { value: 'AUTHORITY', label: 'Authority/Trust', emoji: '🛡️' },
+  { value: 'SELF_DOUBT', label: 'Self-Doubt', emoji: '🤔' },
+  { value: 'TIMING', label: 'Timing', emoji: '📅' },
+  { value: 'COMPARISON', label: 'Comparison', emoji: '⚖️' },
+  { value: 'COMMITMENT', label: 'Commitment', emoji: '🤝' },
+  { value: 'FINAL', label: 'Final Push', emoji: '🎯' },
 ]
+
+// Legacy export for backwards compatibility
+export const SCRIPT_STAGES = SCRIPT_CATEGORIES
 
 /**
  * Fetch all active scripts
  * Maps database columns to expected field names
  */
 export async function fetchScripts() {
-  const { data, error } = await supabase
+  // Fetch all scripts - don't filter by is_active in query (column may not exist)
+  let { data, error } = await supabase
     .from('sales_scripts')
     .select('*')
-    .eq('is_active', true)
     .order('sort_order', { ascending: true })
 
+  if (error) {
+    console.error('Error fetching scripts:', error)
+    return { data: null, error }
+  }
+
+  // Debug: log first script's columns to understand structure
+  if (data && data.length > 0) {
+    console.log('Script columns:', Object.keys(data[0]))
+    console.log('First script raw:', data[0])
+  }
+
+  // Filter active scripts if column exists
+  if (data && data.length > 0 && 'is_active' in data[0]) {
+    data = data.filter(s => s.is_active !== false)
+  }
+
   // Map database fields to expected names
-  const mappedData = data?.map(script => ({
-    ...script,
-    name: script.script_name,
-    stage: mapCategoryToStage(script.category),
-    tips: script.follow_up_if_a || script.follow_up_if_b
-  }))
+  // Columns: script_name, subcategory, category (TIME/PRICE/etc)
+  const mappedData = data?.map(script => {
+    // Get the display name - handle null, undefined, AND empty strings
+    const scriptName = script.script_name?.trim()
+    const subcategory = script.subcategory?.trim()
+    const displayName = scriptName || subcategory || `${script.category} Script`
+
+    return {
+      ...script,
+      name: displayName,
+      stage: script.stage || mapCategoryToStage(script.category),
+      tips: script.tips || script.follow_up_if_a || script.follow_up_if_b
+    }
+  })
 
   return { data: mappedData, error }
 }

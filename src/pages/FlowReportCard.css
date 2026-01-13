@@ -1,0 +1,475 @@
+/**
+ * FlowReportCard.css
+ */
+
+.flow-report-card {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 20px;
+}
+
+/* Loading */
+.flow-report-card .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+}
+
+.flow-report-card .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #9333EA;
+  border-radius: 50%;
+  animation: frc-spin 1s linear infinite;
+}
+
+@keyframes frc-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Header */
+.flow-report-card .report-header {
+  max-width: 800px;
+  margin: 0 auto 24px;
+}
+
+.flow-report-card .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+
+.flow-report-card .back-link:hover {
+  color: white;
+}
+
+.flow-report-card .report-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin: 0;
+}
+
+/* Hero Section */
+.flow-report-card .hero-section {
+  max-width: 800px;
+  margin: 0 auto 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.flow-report-card .persona-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(192, 132, 252, 0.1));
+  border: 1px solid rgba(147, 51, 234, 0.4);
+  border-radius: 100px;
+}
+
+.flow-report-card .persona-icon {
+  font-size: 24px;
+}
+
+.flow-report-card .persona-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+
+.flow-report-card .ladder-position {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.flow-report-card .ladder-icon {
+  font-size: 28px;
+}
+
+.flow-report-card .ladder-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flow-report-card .ladder-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.flow-report-card .ladder-description {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-report-card .emphasis-badge {
+  padding: 10px 16px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 100px;
+}
+
+.flow-report-card .emphasis-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #10B981;
+}
+
+/* Wheels Section */
+.flow-report-card .wheels-container {
+  max-width: 800px;
+  margin: 0 auto 32px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.flow-report-card .wheels-container h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.flow-report-card .wheel-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flow-report-card .wheel-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.flow-report-card .wheel-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flow-report-card .wheel-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.flow-report-card .wheel-tab.active {
+  background: rgba(147, 51, 234, 0.2);
+  border-color: #9333EA;
+  color: white;
+}
+
+.flow-report-card .tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: #9333EA;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+}
+
+.flow-report-card .wheel-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 280px;
+}
+
+.flow-report-card .wheel-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px;
+  text-align: center;
+}
+
+.flow-report-card .wheel-empty .empty-icon {
+  font-size: 48px;
+  opacity: 0.5;
+}
+
+.flow-report-card .wheel-empty p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.flow-report-card .capture-link {
+  padding: 10px 20px;
+  background: #9333EA;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.flow-report-card .capture-link:hover {
+  background: #7C22CE;
+}
+
+/* Products Section */
+.flow-report-card .products-container {
+  max-width: 800px;
+  margin: 0 auto 32px;
+}
+
+.flow-report-card .products-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.flow-report-card .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.flow-report-card .section-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.flow-report-card .product-count {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-report-card .products-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px;
+  text-align: center;
+}
+
+.flow-report-card .products-empty .empty-icon {
+  font-size: 48px;
+  opacity: 0.5;
+}
+
+.flow-report-card .products-empty p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.flow-report-card .products-empty .empty-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Products Ladder */
+.flow-report-card .products-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flow-report-card .tier-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.flow-report-card .tier-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 12px;
+  border-left: 3px solid;
+}
+
+.flow-report-card .tier-icon {
+  font-size: 16px;
+}
+
+.flow-report-card .tier-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flow-report-card .tier-products {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 24px;
+}
+
+.flow-report-card .product-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+.flow-report-card .product-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.flow-report-card .product-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.flow-report-card .product-type-icon {
+  font-size: 20px;
+}
+
+.flow-report-card .product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flow-report-card .product-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.flow-report-card .product-type {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-report-card .product-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: #10B981;
+}
+
+/* Quick Actions */
+.flow-report-card .quick-actions {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.flow-report-card .action-btn {
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.flow-report-card .action-btn.primary {
+  background: #9333EA;
+  color: white;
+}
+
+.flow-report-card .action-btn.primary:hover {
+  background: #7C22CE;
+  transform: translateY(-2px);
+}
+
+.flow-report-card .action-btn.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.flow-report-card .action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .flow-report-card {
+    padding: 16px;
+  }
+
+  .flow-report-card .report-header h1 {
+    font-size: 24px;
+  }
+
+  .flow-report-card .hero-section {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .flow-report-card .persona-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .flow-report-card .wheel-tabs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .flow-report-card .wheel-tab {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+
+  .flow-report-card .quick-actions {
+    flex-direction: column;
+  }
+
+  .flow-report-card .action-btn {
+    text-align: center;
+  }
+}

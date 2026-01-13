@@ -1,0 +1,237 @@
+.flow-feedback {
+  margin-top: 32px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.flow-feedback-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.flow-feedback-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.toggle-icon {
+  font-size: 10px;
+  opacity: 0.6;
+  transition: transform 0.2s ease;
+}
+
+.toggle-text {
+  font-weight: 500;
+}
+
+.toggle-hint {
+  font-size: 12px;
+  opacity: 0.5;
+  margin-left: auto;
+}
+
+.flow-feedback-content {
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: feedbackSlideDown 0.2s ease;
+}
+
+@keyframes feedbackSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feedback-question {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feedback-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Enjoyment Options - Emoji buttons in a row */
+.feedback-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.enjoyment-options {
+  gap: 10px;
+}
+
+.feedback-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.feedback-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.feedback-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.option-emoji {
+  font-size: 20px;
+}
+
+.flow-feedback .option-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  white-space: nowrap;
+}
+
+.flow-feedback .feedback-option.selected .option-label {
+  color: #fbbf24;
+  font-weight: 500;
+}
+
+/* Timing Options - Horizontal pills */
+.timing-options {
+  gap: 8px;
+}
+
+.timing-option {
+  flex-direction: row;
+  padding: 8px 14px;
+  min-width: auto;
+}
+
+.flow-feedback .timing-option .option-label {
+  font-size: 13px;
+}
+
+/* Text inputs */
+.feedback-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  transition: border-color 0.2s ease;
+}
+
+.feedback-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.feedback-textarea:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+/* Submit button */
+.feedback-submit {
+  align-self: flex-start;
+  padding: 10px 20px;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  color: #fbbf24;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-submit:hover:not(:disabled) {
+  background: rgba(251, 191, 36, 0.25);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.feedback-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Submitted state */
+.flow-feedback-submitted {
+  background: rgba(107, 203, 119, 0.1);
+  border-color: rgba(107, 203, 119, 0.3);
+}
+
+.flow-feedback-thanks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 20px;
+  color: #6BCB77;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.thanks-emoji {
+  font-size: 18px;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  .enjoyment-options {
+    justify-content: space-between;
+  }
+
+  .feedback-option {
+    flex: 1;
+    min-width: calc(25% - 8px);
+    padding: 8px 6px;
+  }
+
+  .option-emoji {
+    font-size: 18px;
+  }
+
+  .option-label {
+    font-size: 10px;
+  }
+
+  .timing-options {
+    flex-wrap: wrap;
+  }
+
+  .timing-option {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+  }
+}
