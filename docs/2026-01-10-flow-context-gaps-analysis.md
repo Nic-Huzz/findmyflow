@@ -30,10 +30,237 @@ Data collected → Stored in table → NEVER retrieved by downstream flows
 | 5 | Healing Compass → Quest Inputs | MEDIUM | Inconsistent |
 | 6 | Persona → Lead Scoring | MEDIUM | No connection |
 | 7 | Funnel Builder → Calculator | LOW | Complete disconnect |
+| **8** | **Quick Capture → Offer Builder** | **HIGH** | **NEW: Products not pre-populating** |
+| **9** | **Wealth Ladder → Product Defaults** | **MEDIUM** | **NEW: Category defaults not enforced** |
+| **10** | **Offer Builder V1 → Grand Slam V2** | **HIGH** | **NEW: Check prerequisite exists** |
+| **11** | **Grand Slam V2 → CRM/Content** | **MEDIUM** | **NEW: Bonuses/guarantee not used** |
+| **12** | **Guidance Emphasis → Quest System** | **HIGH** | **NEW: Emphasis not filtering quests** |
+| **13** | **Quick Capture ↔ Flow Finder Merge** | **MEDIUM** | **NEW: Two sources, no reconciliation** |
 
 ---
 
 ## Detailed Gap Analysis
+
+### NEW GAPS (Onboarding V2 - Jan 2026)
+
+---
+
+### Gap 8: Quick Capture → Offer Builder (HIGH PRIORITY)
+
+**Status:** Products captured but not used downstream
+
+**Files:**
+- `src/components/QuickCapture.jsx` (saves to `products` table)
+- `src/flows/OfferBuilder100M/index.jsx` (doesn't fetch `products`)
+- `src/flows/GrandSlamOfferFlow.jsx` (doesn't fetch `products`)
+
+**Current State:**
+- Quick Capture saves products with `money_model_tier` (attraction/core/upsell/downsell/continuity)
+- Products include `product_type`, `price_amount`, `status`
+- Offer Builder V1 does NOT fetch from `products` table
+- Grand Slam V2 does NOT show existing products
+
+**The Problem:**
+- User captures "Coaching Program - $2,000 - Core" in Quick Capture
+- Goes to Offer Builder → starts from scratch
+- No "You already have products defined, let's enhance them" prompt
+- Duplication of effort, inconsistent data
+
+**What SHOULD be shared:**
+| Source Data | Target Field | Benefit |
+|-------------|--------------|---------|
+| products.name | Offer Builder pre-fill | Skip naming step |
+| products.price_amount | Price suggestions | Consistent pricing |
+| products.money_model_tier | Tier selection | Auto-categorize |
+| products.product_type | Service vs Product version | Right flow path |
+
+**Tables:** `products` → `offer_builder_assessments`
+
+**Fix Complexity:** MEDIUM - need to add fetch + pre-population logic
+
+---
+
+### Gap 9: Wealth Ladder → Product Category Defaults (MEDIUM PRIORITY)
+
+**Status:** Wealth ladder sets default but not enforced/used
+
+**Files:**
+- `src/lib/onboardingV2.js` (determines default category)
+- `src/components/MultiProductCapture.jsx` (receives wealthLadder prop)
+- `src/components/DeliverySelector.jsx` (product type selection)
+
+**Current State:**
+- `onboardingV2.js` calculates default product category from wealth_ladder_rung:
+  - `pre_ladder` → no default
+  - `service` → custom_service
+  - `productized` → packaged_service / live_group
+  - `products` → digital_product
+- This is passed to MultiProductCapture but unclear if used
+
+**The Problem:**
+- User at "service" rung should default to service products
+- User at "products" rung should default to digital products
+- May not be enforcing these defaults consistently
+- No validation that products match wealth ladder position
+
+**What SHOULD be shared:**
+| Source Data | Target Field | Benefit |
+|-------------|--------------|---------|
+| wealth_ladder_rung | Default product_type | Contextual defaults |
+| wealth_ladder_rung | Available product types | Hide irrelevant options |
+| wealth_ladder_rung | Pricing suggestions | Stage-appropriate pricing |
+
+**Tables:** `user_stage_progress.wealth_ladder_rung` → `products.product_type`
+
+**Fix Complexity:** LOW - verify implementation, add validation
+
+---
+
+### Gap 10: Offer Builder V1 → Grand Slam V2 (HIGH PRIORITY)
+
+**Status:** Prerequisite check exists but data transfer unclear
+
+**Files:**
+- `src/flows/GrandSlamOfferFlow.jsx` (checks for V1 completion)
+- `src/flows/OfferBuilder100M/index.jsx` (V1 source)
+
+**Current State:**
+- Grand Slam V2 requires V1 `offer_builder_assessments` to exist
+- Fetches V1 data to show core products in review step
+- Has `useAutoSave` with 24hr localStorage expiration
+
+**The Problem:**
+- Does V1 Dream Outcome inform V2 Offer Naming suggestions?
+- Does V1 Proof Stack inform V2 Guarantee recommendations?
+- Does V1 price inform V2 Bonus value calculations?
+- V2 should build ON V1, not just require it
+
+**What SHOULD be shared:**
+| Source Data | Target Field | Benefit |
+|-------------|--------------|---------|
+| V1 dream_outcome | V2 offer_name suggestions | Consistent naming |
+| V1 proof_stack | V2 guarantee type | Aligned proof |
+| V1 price | V2 bonus value ranges | Proportional bonuses |
+| V1 obstacles | V2 bonus problem_solved | Target bonuses at obstacles |
+
+**Tables:** `offer_builder_assessments` → `grand_slam_offers`
+
+**Fix Complexity:** MEDIUM - add context-aware suggestions
+
+---
+
+### Gap 11: Grand Slam V2 → CRM/Content (MEDIUM PRIORITY)
+
+**Status:** Grand Slam outputs not used downstream
+
+**Files:**
+- `src/flows/GrandSlamOfferFlow.jsx` (outputs to `grand_slam_offers`)
+- `src/pages/crm/Sales.jsx` (doesn't fetch `grand_slam_offers`)
+- `src/components/crm/ContentGenerator.jsx` (doesn't fetch `grand_slam_offers`)
+
+**Current State:**
+- Grand Slam V2 captures: bonuses[], guarantee, scarcity, offer_name
+- These are rich marketing assets
+- CRM doesn't show "This deal includes these bonuses"
+- Content Generator doesn't suggest "Create content about your guarantee"
+
+**The Problem:**
+- User crafts compelling bonuses: "Quick-Start Guide ($497 value)"
+- Goes to create content → no suggestion to promote bonuses
+- Goes to close deal → can't reference specific bonuses
+- Grand Slam work is siloed, not leveraged
+
+**What SHOULD be shared:**
+| Source Data | Target Field | Benefit |
+|-------------|--------------|---------|
+| bonuses[] | Content Generator presets | "Promote your bonus" content |
+| guarantee | Content Generator topics | Trust-building content |
+| scarcity | CRM deal urgency | Reference scarcity in follow-up |
+| offer_name | CRM deal name | Consistent offer naming |
+| total_bonus_value | Sales pitch | "Total value: $X" |
+
+**Tables:** `grand_slam_offers` → `content_history`, `sales_deals`
+
+**Fix Complexity:** MEDIUM - add fetching and UI surfacing
+
+---
+
+### Gap 12: Guidance Emphasis → Quest System (HIGH PRIORITY)
+
+**Status:** Emphasis calculated but may not filter quests
+
+**Files:**
+- `src/lib/onboardingV2.js` (defines 8 emphasis types with quest priorities)
+- `src/hooks/useChallengeData.js` (quest loading logic)
+- `src/Challenge.jsx` (quest display)
+
+**Current State:**
+- `EMPHASIS_CONFIG` defines for each emphasis:
+  - `primaryQuests`: Array of quest IDs to prioritize
+  - `heroTitle`: Dashboard hero messaging
+  - `zarloPersonality`: AI coaching style
+  - `stageRange`: Which stages are relevant
+- Unclear if Challenge.jsx actually filters/prioritizes by emphasis
+
+**The Problem:**
+- User with `client_acquisition` emphasis should see CRM quests first
+- User with `deep_discovery` should see FlowFinder quests first
+- If emphasis isn't connected, users get generic quest order
+- Zarlo personality may not be adapting
+
+**What SHOULD be shared:**
+| Source Data | Target Field | Benefit |
+|-------------|--------------|---------|
+| guidance_emphasis | Quest sort order | Relevant quests first |
+| guidance_emphasis | Dashboard hero | Personalized messaging |
+| guidance_emphasis | Zarlo prompts | Contextual coaching |
+| guidance_emphasis | Available stages | Hide irrelevant stages |
+
+**Tables:** `user_stage_progress.guidance_emphasis` → Quest UI
+
+**Fix Complexity:** MEDIUM - verify implementation, add missing connections
+
+---
+
+### Gap 13: Quick Capture ↔ Flow Finder Merge (MEDIUM PRIORITY)
+
+**Status:** Two data sources, no reconciliation
+
+**Files:**
+- `src/components/QuickCapture.jsx` (source: 'quick_capture')
+- `src/flows/FlowFinderSkills.jsx` (source: 'flow_finder')
+- Both write to `nikigai_responses`
+
+**Current State:**
+- Quick Capture users (Paths 2-4) capture skills/problems/personas quickly
+- Flow Finder users (Path 1) do deep AI-guided discovery
+- Both write to `nikigai_responses` with different `source` values
+- Quick Capture users can LATER do Flow Finder
+
+**The Problem:**
+- User does Quick Capture: selects 3 skills from wheel
+- Later does Flow Finder: discovers 5 more skills via AI
+- Are these merged? Deduplicated?
+- Does Flow Finder show "You previously selected X, let's explore deeper"?
+- Library of Answers: shows both sources? Merged view?
+
+**What SHOULD be shared:**
+| Source Data | Target Field | Benefit |
+|-------------|--------------|---------|
+| Quick Capture skills | Flow Finder starting point | Build on existing |
+| Flow Finder skills | Quick Capture refinement | Update selections |
+| Both sources | Library of Answers | Unified view |
+| Both sources | Offer Builder | Complete skill set |
+
+**Tables:** `nikigai_responses` (source: 'quick_capture' vs 'flow_finder')
+
+**Fix Complexity:** MEDIUM - add merge/dedup logic, show provenance
+
+---
+
+## ORIGINAL GAPS (Still Valid)
+
+---
 
 ### Gap 1: Discovery → Offer Builder (HIGH PRIORITY)
 
@@ -289,26 +516,55 @@ Data collected → Stored in table → NEVER retrieved by downstream flows
    - Files: `RewireQuestInput.jsx`, `ReleaseQuestInput.jsx`
    - Change: Add same `lead_flow_profiles` fetch logic
 
+4. **Gap 9 - Verify wealth ladder defaults**
+   - Files: `MultiProductCapture.jsx`, `DeliverySelector.jsx`
+   - Change: Ensure wealthLadder prop is used to set default product_type
+
 ### Medium Effort (4-8 hours each)
 
-4. **Gap 2 - Voice Training archetype integration**
+5. **Gap 2 - Voice Training archetype integration**
    - File: `VoiceTraining/index.jsx`
    - Change: Fetch archetypes, show personalized intro
 
-5. **Gap 3 - Link offer details to deal outcomes**
+6. **Gap 3 - Link offer details to deal outcomes**
    - Files: `dealService.js`, `DealOutcomeModal.jsx`
    - Change: Join `offer_builder_assessments` on deal resolution
 
-6. **Gap 6 - Auto-calculate fit score**
+7. **Gap 6 - Auto-calculate fit score**
    - Files: `dealService.js`, `Sales.jsx`
    - Change: Compare deal contact to `persona_profiles`
 
+8. **Gap 8 - Products → Offer Builder pre-population** ⭐ NEW
+   - Files: `OfferBuilder100M/index.jsx`, `GrandSlamOfferFlow.jsx`
+   - Change: Fetch `products` table, pre-populate with existing products
+   - Show: "You have 3 products defined. Let's enhance them."
+
+9. **Gap 10 - V1 → Grand Slam V2 context** ⭐ NEW
+   - File: `GrandSlamOfferFlow.jsx`
+   - Change: Use V1 dream_outcome for naming suggestions
+   - Use V1 obstacles to suggest bonus problem_solved fields
+
+10. **Gap 12 - Guidance Emphasis → Quests** ⭐ NEW
+    - Files: `useChallengeData.js`, `Challenge.jsx`
+    - Change: Sort quests by `EMPHASIS_CONFIG[emphasis].primaryQuests`
+    - Verify Zarlo personality adapts to emphasis
+
 ### Larger Effort (1-2 days)
 
-7. **Gap 7 - Bridge Funnel Builder to Calculator**
-   - New table: `funnel_builder_assessments`
-   - New migration file
-   - Update both flow components
+11. **Gap 7 - Bridge Funnel Builder to Calculator**
+    - New table: `funnel_builder_assessments`
+    - New migration file
+    - Update both flow components
+
+12. **Gap 11 - Grand Slam V2 → CRM/Content** ⭐ NEW
+    - Files: `Sales.jsx`, `ContentGenerator.jsx`, `gatherContentContext()`
+    - Change: Fetch `grand_slam_offers`, add bonuses/guarantee to context
+    - Add "Promote your bonus" content presets
+
+13. **Gap 13 - Quick Capture ↔ Flow Finder merge** ⭐ NEW
+    - Files: `FlowFinderSkills.jsx`, `LibraryOfAnswers.jsx`
+    - Change: Show Quick Capture selections as starting point
+    - Merge/dedup responses in Library view
 
 ---
 

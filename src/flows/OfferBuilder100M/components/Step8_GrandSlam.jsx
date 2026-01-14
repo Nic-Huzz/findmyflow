@@ -24,9 +24,9 @@ function Step8_GrandSlam({ offerData, selectedVersion, score, onComplete, setIsL
   const versionBonuses = bonuses?.[selectedVersion] || []
 
   const versionLabels = {
-    product: { icon: '📦', name: 'Product', color: '#3b82f6' },
-    service: { icon: '🤝', name: 'Service', color: '#8b5cf6' },
-    hybrid: { icon: '🎓', name: 'Hybrid', color: '#ec4899' }
+    service: { icon: '💼', name: 'Service', color: '#8b5cf6' },
+    productized: { icon: '📦', name: 'Productized', color: '#ec4899' },
+    product: { icon: '🛠️', name: 'Product', color: '#3b82f6' }
   }
 
   const label = versionLabels[selectedVersion]

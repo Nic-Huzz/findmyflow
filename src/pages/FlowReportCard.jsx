@@ -434,9 +434,6 @@ function FlowReportCard() {
         <Link to="/7-day-challenge" className="action-btn primary">
           Continue Challenge
         </Link>
-        <Link to="/nikigai/skills" className="action-btn secondary">
-          Explore More Skills
-        </Link>
         <Link to="/library" className="action-btn secondary">
           Full Library
         </Link>

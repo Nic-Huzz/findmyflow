@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import WheelPicker from '../components/onboarding/QuickCapture/WheelPicker'
+import {
+  PERSONA_SEGMENTS,
+  PROBLEM_SEGMENTS,
+  JOURNEY_STAGES,
+  PROBLEMS_PROFICIENCY_RINGS
+} from '../lib/wheelTaxonomy'
 import './PersonaSelectionFlow.css'
 
 // Flow stages
@@ -833,10 +840,41 @@ function PersonaSelectionFlow() {
   return null
 }
 
-// Custom Input Stage Component
+// Custom Input Stage Component - Uses Wheel Taxonomy instead of free text
 function CustomInputStage({ setStage, addCustomCombo, STAGES }) {
-  const [customPersona, setCustomPersona] = useState('')
-  const [customProblem, setCustomProblem] = useState('')
+  const [selectedPersona, setSelectedPersona] = useState([])
+  const [selectedProblem, setSelectedProblem] = useState([])
+
+  // Format selected items into readable strings
+  const formatPersonaString = () => {
+    if (selectedPersona.length === 0) return null
+    const segment = PERSONA_SEGMENTS.find(s => s.id === selectedPersona[0].id)
+    const ring = JOURNEY_STAGES.find(r => r.id === selectedPersona[0].ring)
+    if (!segment) return null
+    // e.g., "Seekers who are Awakening - lost, direction, purpose"
+    return `${segment.displayName} (${ring?.label || 'any stage'}) - ${segment.tagline.toLowerCase()}`
+  }
+
+  const formatProblemString = () => {
+    if (selectedProblem.length === 0) return null
+    const segment = PROBLEM_SEGMENTS.find(s => s.id === selectedProblem[0].id)
+    const ring = PROBLEMS_PROFICIENCY_RINGS.find(r => r.id === selectedProblem[0].ring)
+    if (!segment) return null
+    // e.g., "Physical Vitality (Proven) - helping bodies thrive"
+    return `${segment.displayName} (${ring?.label || 'any level'}) - ${segment.tagline.toLowerCase()}`
+  }
+
+  const canAdd = selectedPersona.length > 0 && selectedProblem.length > 0
+
+  const handleAddCombo = () => {
+    const personaStr = formatPersonaString()
+    const problemStr = formatProblemString()
+    if (personaStr && problemStr) {
+      addCustomCombo(personaStr, problemStr)
+      setSelectedPersona([])
+      setSelectedProblem([])
+    }
+  }
 
   return (
     <div className="persona-selection-flow">
@@ -851,30 +889,41 @@ function CustomInputStage({ setStage, addCustomCombo, STAGES }) {
 
       <div className="container">
         <h1 className="page-title">Add Custom Combination</h1>
-        <p className="page-subtitle">Define your own persona and problem combination</p>
+        <p className="page-subtitle">Select a persona type and problem domain from the wheel taxonomy</p>
 
-        <div className="custom-input-form">
-          <div className="form-group">
-            <label className="form-label">Who they are:</label>
-            <textarea
-              className="form-textarea"
-              placeholder="e.g., Ambitious entrepreneurs building their first online business"
-              value={customPersona}
-              onChange={(e) => setCustomPersona(e.target.value)}
-              rows={3}
+        <div className="custom-input-form wheel-picker-form">
+          <div className="wheel-picker-section">
+            <WheelPicker
+              type="personas"
+              max={1}
+              selected={selectedPersona}
+              onSelect={setSelectedPersona}
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">What they're struggling with:</label>
-            <textarea
-              className="form-textarea"
-              placeholder="e.g., Struggling with imposter syndrome and self-doubt when putting themselves out there"
-              value={customProblem}
-              onChange={(e) => setCustomProblem(e.target.value)}
-              rows={3}
+          <div className="wheel-picker-section">
+            <WheelPicker
+              type="problems"
+              max={1}
+              selected={selectedProblem}
+              onSelect={setSelectedProblem}
             />
           </div>
+
+          {/* Preview of selection */}
+          {canAdd && (
+            <div className="selection-preview">
+              <h4 className="preview-heading">Your Combination:</h4>
+              <div className="preview-item">
+                <span className="preview-label">Persona:</span>
+                <span className="preview-value">{formatPersonaString()}</span>
+              </div>
+              <div className="preview-item">
+                <span className="preview-label">Problem:</span>
+                <span className="preview-value">{formatProblemString()}</span>
+              </div>
+            </div>
+          )}
 
           <div className="custom-input-actions">
             <button
@@ -885,11 +934,8 @@ function CustomInputStage({ setStage, addCustomCombo, STAGES }) {
             </button>
             <button
               className="action-btn action-btn-primary"
-              onClick={() => {
-                addCustomCombo(customPersona, customProblem)
-                setCustomPersona('')
-                setCustomProblem('')
-              }}
+              onClick={handleAddCombo}
+              disabled={!canAdd}
             >
               Add Combination
             </button>

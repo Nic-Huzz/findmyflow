@@ -11,6 +11,7 @@ import { AuthProvider } from './auth/AuthProvider'
 import ErrorBoundary from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
+import { OnboardingProvider } from './context/OnboardingContext'
 
 // Loading component for Suspense fallback
 function LoadingSpinner() {
@@ -41,7 +42,7 @@ const LeadMagnetSelectionFlow = lazy(() => import('./flows/LeadMagnetSelectionFl
 const ProductSelectionFlow = lazy(() => import('./flows/ProductSelectionFlow'))
 const FunnelBuilderFlow = lazy(() => import('./flows/FunnelBuilderFlow'))
 const FunnelCalculator = lazy(() => import('./flows/FunnelCalculator'))
-const OfferBuilder100M = lazy(() => import('./flows/OfferBuilder100M'))
+const GrandSlamOfferFlow = lazy(() => import('./flows/GrandSlamOfferFlow'))
 const PersonaSelectionFlow = lazy(() => import('./flows/PersonaSelectionFlow'))
 
 // Lazy-loaded flows - FlowFinder
@@ -117,6 +118,7 @@ import './flows/LeadMagnetSelectionFlow.css'
 import './flows/ProductSelectionFlow.css'
 import './flows/FunnelBuilderFlow.css'
 import './flows/FunnelCalculator.css'
+import './flows/GrandSlamOfferFlow.css'
 import './flows/BusinessBaselineFlow.css'
 import './flows/CustomerSegmentsFlow.css'
 import './flows/CompetitorSnapshotFlow.css'
@@ -130,6 +132,7 @@ function AppRouter() {
   return (
     <ErrorBoundary>
       <AuthProvider>
+        <OnboardingProvider>
         <Router>
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
@@ -186,10 +189,10 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* $100M Offer Builder v2 - 8-Step Flow with 3 Parallel Versions */}
+            {/* Grand Slam Offer Builder V2 - Bonuses, Guarantee, Scarcity */}
             <Route path="/offer-builder-v2" element={
               <AuthGate>
-                <OfferBuilder100M />
+                <GrandSlamOfferFlow />
               </AuthGate>
             } />
 
@@ -454,6 +457,7 @@ function AppRouter() {
           <BottomToolbar />
           <ZarloWidget />
         </Router>
+        </OnboardingProvider>
       </AuthProvider>
     </ErrorBoundary>
   )

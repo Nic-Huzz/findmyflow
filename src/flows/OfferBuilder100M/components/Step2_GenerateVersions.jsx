@@ -2,7 +2,7 @@
  * Step2_GenerateVersions - Generate 3 parallel offer versions
  *
  * Features:
- * - AI generates Product/Service/Hybrid versions
+ * - AI generates Service/Productized/Product versions (aligned with wealth ladder)
  * - Shows investment requirements, pros/cons, revenue potential
  * - All 3 versions displayed for review before continuing
  */
@@ -156,28 +156,31 @@ function Step2_GenerateVersions({ bucket, dreamOutcome, contextData, onComplete,
       </div>
 
       <div className="versions-grid">
-        {/* Product Version */}
-        <VersionCard
-          type="product"
-          icon="📦"
-          label="VERSION 1: PRODUCT"
-          version={versions.product}
-        />
-
         {/* Service Version */}
         <VersionCard
           type="service"
-          icon="🤝"
-          label="VERSION 2: SERVICE"
+          icon="💼"
+          label="VERSION 1: SERVICE"
+          sublabel="Someone does it for me"
           version={versions.service}
         />
 
-        {/* Hybrid Version */}
+        {/* Productized Version */}
         <VersionCard
-          type="hybrid"
-          icon="🎓"
-          label="VERSION 3: HYBRID"
-          version={versions.hybrid}
+          type="productized"
+          icon="📦"
+          label="VERSION 2: PRODUCTIZED"
+          sublabel="A guided process"
+          version={versions.productized}
+        />
+
+        {/* Product Version */}
+        <VersionCard
+          type="product"
+          icon="🛠️"
+          label="VERSION 3: PRODUCT"
+          sublabel="Tools I use myself"
+          version={versions.product}
         />
       </div>
 
@@ -195,7 +198,7 @@ function Step2_GenerateVersions({ bucket, dreamOutcome, contextData, onComplete,
 }
 
 // Version Card Component
-function VersionCard({ type, icon, label, version }) {
+function VersionCard({ type, icon, label, sublabel, version }) {
   const [expanded, setExpanded] = useState(false)
 
   if (!version) {
@@ -204,6 +207,7 @@ function VersionCard({ type, icon, label, version }) {
         <div className="version-header">
           <span className="version-icon">{icon}</span>
           <span className="version-label">{label}</span>
+          {sublabel && <span className="version-sublabel">{sublabel}</span>}
         </div>
         <p className="version-error">Failed to generate this version</p>
       </div>
@@ -215,6 +219,7 @@ function VersionCard({ type, icon, label, version }) {
       <div className="version-header">
         <span className="version-icon">{icon}</span>
         <span className="version-label">{label}</span>
+        {sublabel && <span className="version-sublabel">{sublabel}</span>}
       </div>
 
       <h3 className="version-name">"{version.name}"</h3>
@@ -250,7 +255,7 @@ function VersionCard({ type, icon, label, version }) {
           </div>
           <div className="investment-item">
             <span className="investment-label">Ongoing time:</span>
-            <span className="investment-value">{version.investment?.ongoingTime || '?'} hrs/{type === 'product' ? 'week' : type === 'service' ? 'customer' : 'cohort'}</span>
+            <span className="investment-value">{version.investment?.ongoingTime || '?'} hrs/{type === 'service' ? 'customer' : type === 'productized' ? 'cohort' : 'week'}</span>
           </div>
         </div>
       </div>

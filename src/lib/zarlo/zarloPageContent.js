@@ -101,6 +101,105 @@ export const PAGE_CONTENT = {
   },
 
   // ============================================
+  // ONBOARDING V2 (HomeFirstTime)
+  // ============================================
+
+  'onboarding_welcome': {
+    pageId: 'onboarding_welcome',
+    pageName: 'Welcome',
+    whatIsThis: `This is your first step into FindMyFlow! We're about to ask you three quick questions to personalise your experience. No wrong answers — just honest ones.`,
+    whyMatters: `Everyone's journey is different. Someone still exploring needs different guidance than someone who's already running a business.\n\nThese questions help us meet you where you are — not where we assume you are.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'why_questions', label: 'Why do you need to ask me questions?' },
+      { id: 'what_happens', label: 'What happens after I answer?' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
+      why_questions: `Because one-size-fits-all doesn't work.\n\nSomeone still in a 9-5 figuring things out needs different support than someone who's already quit and needs to make money yesterday.\n\nThese three questions help us understand where you're at so we can actually help — not just throw generic advice at you.`,
+      what_happens: `After you answer, we'll show you your "persona" — basically which stage of the journey you're on.\n\nThen, depending on your answers, you'll either:\n• Start discovering what you're meant to build (Flow Finder)\n• Or capture what you're already working on (Quick Capture)\n\nEither way, you'll be set up and ready to go in about 5 minutes.`
+    }
+  },
+
+  'onboarding_q1': {
+    pageId: 'onboarding_q1',
+    pageName: 'Journey Stage',
+    whatIsThis: `This question helps us understand your current work situation. Are you employed? Self-employed? Building something on the side? Each path has different challenges and opportunities.`,
+    whyMatters: `Your employment status shapes everything:\n\n• **Still employed?** You need strategies that work around a job\n• **Recently quit?** Time pressure is real — we'll focus on momentum\n• **Already running something?** Let's optimise what you've got\n\nNo judgment here. Every path is valid.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'which_pick', label: "I'm between options — which should I pick?" },
+      { id: 'why_matters', label: 'Why does this matter?' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
+      which_pick: `Pick the one that feels most true RIGHT NOW.\n\nIf you're employed but have a side project, pick the "building something on the side" option.\n\nIf you're between jobs and not sure what's next, pick whatever reflects your current reality.\n\nYou can always adjust later. This isn't a permanent label — it's just where you're starting from.`,
+      why_matters: `It changes the advice we give you.\n\nSomeone with a full-time job needs evening/weekend-friendly strategies. Someone who just quit needs faster paths to income. Someone established needs optimization, not basics.\n\nWe don't want to waste your time with stuff that doesn't apply to your situation.`
+    }
+  },
+
+  'onboarding_q2': {
+    pageId: 'onboarding_q2',
+    pageName: 'Business Ladder',
+    whatIsThis: `This is about what you've created so far — not what you dream of creating. Have you built anything? Sold anything? Or are you still in discovery mode?\n\nWe call this the "Business Ladder" — where you currently stand in building income from your own work.`,
+    whyMatters: `The Business Ladder has four rungs:\n\n• **Still discovering** — No concrete offer yet (that's okay!)\n• **Trading time** — You have a service, working with clients directly\n• **Productised service** — Systematised your service, less 1:1 time\n• **Products** — Digital products, courses, things that sell while you sleep\n\nEach rung has different challenges. We'll tailor your experience accordingly.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'not_sure_rung', label: "I'm not sure which rung I'm on" },
+      { id: 'want_higher', label: 'I want to be higher on the ladder' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
+      not_sure_rung: `Here's a quick test:\n\n**Do you have paying customers?**\n• No → You're "Still discovering"\n• Yes → Keep going...\n\n**How do you deliver value?**\n• 1:1 calls, custom work, your time = each sale → "Trading time"\n• Some systems, but still mostly you involved → "Productised service"\n• Products that sell without you there → "Products"\n\nPick what's most true today. Don't pick where you want to be — pick where you ARE.`,
+      want_higher: `That's exactly why you're here!\n\nBut here's the thing: you can't skip rungs. Each one builds skills and insights you need for the next.\n\nPeople who try to jump straight to "passive income products" without going through the earlier stages usually fail. They don't understand their customers well enough yet.\n\nWe'll help you climb — but we'll make sure you're building on solid ground.`
+    }
+  },
+
+  'onboarding_q3': {
+    pageId: 'onboarding_q3',
+    pageName: 'Primary Goal',
+    whatIsThis: `This is about what you want to focus on RIGHT NOW. Not your life mission — just your next chapter. What's the thing that would make the biggest difference?`,
+    whyMatters: `We can't help you with everything at once. Focus creates progress.\n\nSome options might be greyed out based on your previous answers — that's intentional. Certain goals only make sense at certain stages.\n\nPick the one that resonates most. You can always shift focus later.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'greyed_out', label: 'Why are some options greyed out?' },
+      { id: 'want_all', label: 'I want to do all of these!' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
+      greyed_out: `Some goals don't make sense for where you are on the Business Ladder.\n\nFor example, you can't "scale your business" if you don't have a business yet. You can't "optimise your funnel" if you don't have customers.\n\nThe greyed-out options will unlock as you progress. Think of them as future levels in a game — they're coming, just not yet.`,
+      want_all: `Ha! Classic ambitious human. I respect it.\n\nBut here's the truth: trying to do everything at once is a recipe for doing nothing well.\n\nPick ONE focus for now. We'll help you make real progress on that thing. Then you can shift to the next priority.\n\nFocused action beats scattered intention every single time.`
+    }
+  },
+
+  'onboarding_persona_reveal': {
+    pageId: 'onboarding_persona_reveal',
+    pageName: 'Your Persona',
+    whatIsThis: `Based on your answers, we've identified your "persona" — which stage of the journey you're on. This helps us personalise everything that comes next.`,
+    whyMatters: `Your persona isn't a personality test. It's a practical label that shapes:\n\n• Which quests and challenges you see\n• What advice is most relevant\n• How we talk to you about progress\n\nIt's based on where you ARE, not who you are as a person. As you grow, your persona can change too.`,
+    contextualPrompts: [
+      { id: 'what_is_fmf', label: 'What is FindMyFlow?' },
+      { id: 'what_is_flow', label: 'What do you mean by "find my flow"?' },
+      { id: 'what_personas', label: 'What are the different personas?' },
+      { id: 'change_later', label: 'Can this change later?' }
+    ],
+    faq: {
+      what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow.`,
+      what_personas: `There are three main personas:\n\n**Flow Seeker** — Still discovering what you want to build. Focus: exploration, self-discovery, finding your direction.\n\n**Flow Finder** — You know what you're building, now making it real. Focus: creation, validation, first customers.\n\n**Movement Maker** — You've got something working, time to grow. Focus: scaling, systems, bigger impact.\n\nEach one has different challenges and different wins. None is "better" — they're just different chapters.`,
+      change_later: `Absolutely. Your persona is based on where you are TODAY.\n\nAs you make progress — get your first customers, build your first product, scale your systems — you'll naturally move through the personas.\n\nThink of it like levels in a game. You don't stay at Level 1 forever. You level up by doing the work.`
+    }
+  },
+
+  // ============================================
   // 7-DAY CHALLENGE
   // ============================================
 
@@ -402,7 +501,7 @@ export const PAGE_CONTENT = {
       { id: 'something_else', label: 'I want to do something else' }
     ],
     faq: {
-      what_is: `You're in FindMyFlow — where burnt-out professionals figure out what they're meant to build and actually follow through on it.`,
+      what_is: `You're in FindMyFlow — where people who want to create a positive impact figure out what they're meant to build and actually follow through on it.`,
       why_matters: `Here's the sneaky truth: you don't rise to the level of your ambitions — you fall to what your nervous system thinks is safe. Everything here is designed to help you find that line and expand it.`,
       something_else: `No problem! What do you want to focus on?\n\n• Understand why you're stuck → Nervous System Map\n• Figure out what to build → Flow Finder\n• Push your comfort zone → 7-Day Challenge\n• Heal and process → Healing tab\n• Work on your offer → Money Model flows\n• See your progress → Library of Answers`
     }
@@ -450,7 +549,7 @@ export const PUBLIC_FLOW_CONTENT = {
       { id: 'what_next', label: 'What happens after this?' }
     ],
     faq: {
-      what_is_fmf: `FindMyFlow is where burnt-out professionals figure out what they're meant to build — and actually follow through on it.\n\nImagine if Write of Passage, HubSpot, Kit, and an AI business coach had a baby... and that baby also understood why you keep procrastinating on the things you KNOW you should do.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow. It has everything Huzz wishes he had on his journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.`,
       how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nFindMyFlow treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
       what_next: `After you finish this assessment, you'll see your results and have a chance to explore the full FindMyFlow experience.\n\nInside, you'd get:\n• AI-guided discovery of your skills, ideal customers, and what to build\n• Nervous system work to clear the invisible blocks\n• A gamified 7-day challenge to expand your comfort zone\n• CRM to manage your customer relationships\n• Content and marketing strategy tools\n\nBasically everything you need to go from "I have an idea" to "I have paying customers" — without the usual self-sabotage along the way.`
@@ -540,7 +639,7 @@ export const PUBLIC_FLOW_CONTENT = {
       { id: 'what_next', label: 'What happens after this?' }
     ],
     faq: {
-      what_is_fmf: `FindMyFlow is where burnt-out professionals figure out what they're meant to build — and actually follow through on it.\n\nImagine if Write of Passage, HubSpot, Kit, and an AI business coach had a baby... and that baby also understood why you keep procrastinating on the things you KNOW you should do.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
+      what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build — and actually follow through on it.\n\nImagine if a university, HubSpot, a marketing agency, and an AI business coach had a baby... and that baby also understood what's causing you to feel stuck.\n\nThat's us. Strategy + healing + accountability + tools. All in one place.`,
       what_is_flow: `Ever since Huzz (the creator) quit his job two and a half years ago, he developed an unwavering belief in 'Flow'.\n\nThe idea that there's a **unique path that only YOU could walk** — due to your combination of skills, experiences, and circumstances.\n\nWhen you find your flow — aligning what gives you flow *internally* with what's flowing *externally* — life becomes crazy and magical.\n\nThis app is designed to help you find that flow. It has everything Huzz wishes he had on his journey from the beginning.\n\nSo you can go from idea to monetising your mission as fast as possible.`,
       how_different: `Here's what nobody else is doing:\n\n**Most business tools assume you'll just... execute.** They give you the strategy and expect you to follow through. But you've probably noticed — knowing what to do and DOING it are very different things.\n\nFindMyFlow treats the root cause: the fear, perfectionism, and imposter syndrome that keep you stuck. We work WITH your nervous system instead of pretending it doesn't exist.\n\nPlus we've got the tactical stuff too — CRM, content generation, marketing strategy, gamified accountability. It's the whole stack.`,
       why_ns: `Ever wonder why you KNOW what to do but can't make yourself do it?\n\nThat's not a discipline problem. It's a nervous system problem.\n\nYour body learned somewhere along the way that being visible, charging money, or putting yourself out there = danger. Maybe you got rejected. Maybe you were laughed at. Maybe success meant losing people you loved.\n\nNow that belief runs in the background like invisible software, quietly vetoing your dreams.\n\n**Most business programs ignore this entirely.** They give you more strategy, more tactics, more "just do it" energy. And you keep not doing it.\n\nWe fix the root cause first. Then the tactics actually work.`,
@@ -583,7 +682,7 @@ export const PUBLIC_VALIDATION_CONTENT = {
   ],
   faq: {
     what_is_this: `Someone's building something to help people like you — and they want to get it right.\n\nInstead of guessing what you need, they're asking. Wild concept, right?\n\nYour answers go directly into shaping what gets built. No fluff. Just real input from real humans.`,
-    what_is_fmf: `FindMyFlow is where burnt-out professionals figure out what they're meant to build and actually follow through on it.\n\nThe person who sent you this survey is using FindMyFlow to create something meaningful. They're not just chasing money — they're trying to solve a real problem for people like you.\n\nSound interesting? You might be a good fit too.`,
+    what_is_fmf: `FindMyFlow is where people who want to create a positive impact figure out what they're meant to build and actually follow through on it.\n\nThe person who sent you this survey is using FindMyFlow to create something meaningful. They're not just chasing money — they're trying to solve a real problem for people like you.\n\nSound interesting? You might be a good fit too.`,
     use_for_business: `Absolutely. If you've got something you want to build — or you're stuck on something you've already started — FindMyFlow might be exactly what you need.\n\nHere's what makes it different: most people don't fail because they lack skills or strategy. They fail because their nervous system quietly sabotages them every time they try to grow.\n\nWe fix that part.`
   },
   completionCTA: {
@@ -654,4 +753,24 @@ export function getChallengeTabContent(tab) {
   }
 
   return PAGE_CONTENT[tabMap[tab]] || PAGE_CONTENT['/7-day-challenge']
+}
+
+/**
+ * Get screen-specific content for Onboarding V2 (HomeFirstTime)
+ * @param {string} screen - One of: 'welcome', 'q1', 'q2', 'q3', 'persona_reveal'
+ */
+export function getOnboardingContent(screen) {
+  const screenMap = {
+    welcome: 'onboarding_welcome',
+    archetype_reveal: 'onboarding_welcome', // Same as welcome
+    persona_q1: 'onboarding_q1',
+    persona_q2: 'onboarding_q2',
+    persona_q3: 'onboarding_q3',
+    persona_reveal: 'onboarding_persona_reveal',
+    q1: 'onboarding_q1',
+    q2: 'onboarding_q2',
+    q3: 'onboarding_q3'
+  }
+
+  return PAGE_CONTENT[screenMap[screen]] || PAGE_CONTENT['onboarding_welcome']
 }

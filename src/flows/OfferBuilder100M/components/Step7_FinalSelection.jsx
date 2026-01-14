@@ -2,7 +2,7 @@
  * Step7_FinalSelection - Compare all 3 versions and choose one
  *
  * Features:
- * - Side-by-side comparison of Product/Service/Hybrid
+ * - Side-by-side comparison of Service/Productized/Product (aligned with wealth ladder)
  * - Shows all accumulated data (proof, speed, ease, bonuses)
  * - Calculates preliminary Grand Slam Score for each
  * - User selects their preferred version
@@ -10,11 +10,15 @@
 
 import { useState, useMemo } from 'react'
 
-function Step7_FinalSelection({ offerData, onComplete, setError }) {
+function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) {
   const [selectedVersion, setSelectedVersion] = useState(null)
   const [viewMode, setViewMode] = useState('cards') // 'cards' or 'table'
 
   const { versions, proofAnalysis, speedAnalysis, easeAnalysis, bonuses, dreamOutcome, bucket } = offerData
+
+  // Extract customer solution preferences from validation data
+  const customerPreferences = contextData?.validationData?.solutionPreferences
+  const hasCustomerPreferences = customerPreferences?.hasPreferences && customerPreferences?.totalVotes > 0
 
   // Calculate preliminary scores for comparison
   const scores = useMemo(() => {
@@ -56,9 +60,9 @@ function Step7_FinalSelection({ offerData, onComplete, setError }) {
     }
 
     return {
-      product: calculateScore('product'),
       service: calculateScore('service'),
-      hybrid: calculateScore('hybrid')
+      productized: calculateScore('productized'),
+      product: calculateScore('product')
     }
   }, [versions, proofAnalysis, speedAnalysis, easeAnalysis, bonuses])
 
@@ -74,15 +78,15 @@ function Step7_FinalSelection({ offerData, onComplete, setError }) {
 
   // Get recommendation
   const recommendation = useMemo(() => {
-    const productScore = scores.product?.total || 0
     const serviceScore = scores.service?.total || 0
-    const hybridScore = scores.hybrid?.total || 0
+    const productizedScore = scores.productized?.total || 0
+    const productScore = scores.product?.total || 0
 
-    const max = Math.max(productScore, serviceScore, hybridScore)
+    const max = Math.max(serviceScore, productizedScore, productScore)
 
-    if (max === productScore) return 'product'
     if (max === serviceScore) return 'service'
-    return 'hybrid'
+    if (max === productizedScore) return 'productized'
+    return 'product'
   }, [scores])
 
   // Handle selection
@@ -100,9 +104,9 @@ function Step7_FinalSelection({ offerData, onComplete, setError }) {
   }
 
   const versionLabels = {
-    product: { icon: '📦', name: 'Product', desc: 'Scalable, self-serve' },
-    service: { icon: '🤝', name: 'Service', desc: 'High-touch, done-with-you' },
-    hybrid: { icon: '🎓', name: 'Hybrid', desc: 'Group/cohort model' }
+    service: { icon: '💼', name: 'Service', desc: 'Someone does it for me' },
+    productized: { icon: '📦', name: 'Productized', desc: 'A guided process' },
+    product: { icon: '🛠️', name: 'Product', desc: 'Tools I use myself' }
   }
 
   return (
@@ -140,10 +144,59 @@ function Step7_FinalSelection({ offerData, onComplete, setError }) {
         <span className="rec-score">Score: {scores[recommendation]?.total}</span>
       </div>
 
+      {/* Customer Preferences from Validation Surveys */}
+      {hasCustomerPreferences && (
+        <div className="customer-preferences">
+          <div className="preferences-header">
+            <span className="pref-icon">📊</span>
+            <span>Your Customers Prefer: </span>
+            <strong>
+              {versionLabels[customerPreferences.recommendedVersion]?.icon}{' '}
+              {versionLabels[customerPreferences.recommendedVersion]?.name}
+            </strong>
+            <span className="pref-votes">
+              ({customerPreferences.breakdown[customerPreferences.recommendedVersion]} of {customerPreferences.totalVotes} votes)
+            </span>
+          </div>
+
+          {/* Vote breakdown */}
+          <div className="preferences-breakdown">
+            {['service', 'productized', 'product'].map(version => {
+              const count = customerPreferences.breakdown[version]
+              const percentage = Math.round((count / customerPreferences.totalVotes) * 100)
+              const isWinner = version === customerPreferences.recommendedVersion
+              return (
+                <div key={version} className={`breakdown-bar ${isWinner ? 'winner' : ''}`}>
+                  <span className="bar-label">{versionLabels[version]?.icon} {versionLabels[version]?.name}</span>
+                  <div className="bar-track">
+                    <div className="bar-fill" style={{ width: `${percentage}%` }} />
+                  </div>
+                  <span className="bar-count">{count}</span>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Specific types requested */}
+          {customerPreferences.recommendedVersion && customerPreferences.specificTypes[customerPreferences.recommendedVersion]?.length > 0 && (
+            <div className="specific-types">
+              <span className="types-label">They specifically want:</span>
+              <div className="types-list">
+                {customerPreferences.specificTypes[customerPreferences.recommendedVersion].slice(0, 3).map((type, i) => (
+                  <span key={i} className="type-chip">
+                    {type.text} {type.count > 1 && <span className="type-count">×{type.count}</span>}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Card View */}
       {viewMode === 'cards' && (
         <div className="version-cards">
-          {['product', 'service', 'hybrid'].map((version) => {
+          {['service', 'productized', 'product'].map((version) => {
             const versionData = versions?.[version]
             const score = scores[version]
             const label = versionLabels[version]
@@ -245,79 +298,79 @@ function Step7_FinalSelection({ offerData, onComplete, setError }) {
               <tr>
                 <th>Metric</th>
                 <th
-                  className={selectedVersion === 'product' ? 'selected' : ''}
-                  onClick={() => handleSelect('product')}
-                >
-                  {versionLabels.product.icon} Product
-                </th>
-                <th
                   className={selectedVersion === 'service' ? 'selected' : ''}
                   onClick={() => handleSelect('service')}
                 >
                   {versionLabels.service.icon} Service
                 </th>
                 <th
-                  className={selectedVersion === 'hybrid' ? 'selected' : ''}
-                  onClick={() => handleSelect('hybrid')}
+                  className={selectedVersion === 'productized' ? 'selected' : ''}
+                  onClick={() => handleSelect('productized')}
                 >
-                  {versionLabels.hybrid.icon} Hybrid
+                  {versionLabels.productized.icon} Productized
+                </th>
+                <th
+                  className={selectedVersion === 'product' ? 'selected' : ''}
+                  onClick={() => handleSelect('product')}
+                >
+                  {versionLabels.product.icon} Product
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr className="score-row">
                 <td>Grand Slam Score</td>
-                <td style={{ color: scores.product?.grade.color }}>{scores.product?.total} ({scores.product?.grade.letter})</td>
                 <td style={{ color: scores.service?.grade.color }}>{scores.service?.total} ({scores.service?.grade.letter})</td>
-                <td style={{ color: scores.hybrid?.grade.color }}>{scores.hybrid?.total} ({scores.hybrid?.grade.letter})</td>
+                <td style={{ color: scores.productized?.grade.color }}>{scores.productized?.total} ({scores.productized?.grade.letter})</td>
+                <td style={{ color: scores.product?.grade.color }}>{scores.product?.total} ({scores.product?.grade.letter})</td>
               </tr>
               <tr>
                 <td>Price</td>
-                <td>${versions?.product?.suggestedPrice?.toLocaleString()}</td>
                 <td>${versions?.service?.suggestedPrice?.toLocaleString()}</td>
-                <td>${versions?.hybrid?.suggestedPrice?.toLocaleString()}</td>
+                <td>${versions?.productized?.suggestedPrice?.toLocaleString()}</td>
+                <td>${versions?.product?.suggestedPrice?.toLocaleString()}</td>
               </tr>
               <tr>
                 <td>Proof Score</td>
-                <td>{scores.product?.proofScore}/10</td>
                 <td>{scores.service?.proofScore}/10</td>
-                <td>{scores.hybrid?.proofScore}/10</td>
+                <td>{scores.productized?.proofScore}/10</td>
+                <td>{scores.product?.proofScore}/10</td>
               </tr>
               <tr>
                 <td>Speed Score</td>
-                <td>{scores.product?.speedScore}/10</td>
                 <td>{scores.service?.speedScore}/10</td>
-                <td>{scores.hybrid?.speedScore}/10</td>
+                <td>{scores.productized?.speedScore}/10</td>
+                <td>{scores.product?.speedScore}/10</td>
               </tr>
               <tr>
                 <td>Ease Score</td>
-                <td>{scores.product?.easeScore}/10</td>
                 <td>{scores.service?.easeScore}/10</td>
-                <td>{scores.hybrid?.easeScore}/10</td>
+                <td>{scores.productized?.easeScore}/10</td>
+                <td>{scores.product?.easeScore}/10</td>
               </tr>
               <tr>
                 <td>Bonus Value</td>
-                <td>${scores.product?.bonusValue?.toLocaleString()}</td>
                 <td>${scores.service?.bonusValue?.toLocaleString()}</td>
-                <td>${scores.hybrid?.bonusValue?.toLocaleString()}</td>
+                <td>${scores.productized?.bonusValue?.toLocaleString()}</td>
+                <td>${scores.product?.bonusValue?.toLocaleString()}</td>
               </tr>
               <tr>
                 <td>Month 3 Revenue</td>
-                <td>${versions?.product?.revenue?.month3?.toLocaleString()}</td>
                 <td>${versions?.service?.revenue?.month3?.toLocaleString()}</td>
-                <td>${versions?.hybrid?.revenue?.month3?.toLocaleString()}</td>
+                <td>${versions?.productized?.revenue?.month3?.toLocaleString()}</td>
+                <td>${versions?.product?.revenue?.month3?.toLocaleString()}</td>
               </tr>
               <tr>
                 <td>Setup Timeline</td>
-                <td>{versions?.product?.investment?.setupTimeline}</td>
                 <td>{versions?.service?.investment?.setupTimeline}</td>
-                <td>{versions?.hybrid?.investment?.setupTimeline}</td>
+                <td>{versions?.productized?.investment?.setupTimeline}</td>
+                <td>{versions?.product?.investment?.setupTimeline}</td>
               </tr>
               <tr>
                 <td>Max Customers/Mo</td>
-                <td>{versions?.product?.maxCustomersPerMonth}</td>
                 <td>{versions?.service?.maxCustomersPerMonth}</td>
-                <td>{versions?.hybrid?.maxCustomersPerMonth}</td>
+                <td>{versions?.productized?.maxCustomersPerMonth}</td>
+                <td>{versions?.product?.maxCustomersPerMonth}</td>
               </tr>
             </tbody>
           </table>

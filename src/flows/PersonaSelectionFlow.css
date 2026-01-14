@@ -84,6 +84,11 @@
   padding-bottom: 20px;
 }
 
+.persona-selection-flow .welcome-bottom .primary-button {
+  width: 100%;
+  max-width: none;
+}
+
 .persona-selection-flow .welcome-greeting {
   font-size: 32px;
   font-weight: 700;
@@ -428,6 +433,63 @@
 .persona-selection-flow .custom-input-actions {
   display: flex;
   gap: 12px;
+}
+
+/* Wheel Picker Form Styles */
+.persona-selection-flow .wheel-picker-form {
+  padding: 24px;
+}
+
+.persona-selection-flow .wheel-picker-section {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.persona-selection-flow .wheel-picker-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 24px;
+  padding-bottom: 0;
+}
+
+/* Selection Preview */
+.persona-selection-flow .selection-preview {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.persona-selection-flow .preview-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fbbf24;
+  margin: 0 0 16px;
+}
+
+.persona-selection-flow .preview-item {
+  margin-bottom: 12px;
+}
+
+.persona-selection-flow .preview-item:last-child {
+  margin-bottom: 0;
+}
+
+.persona-selection-flow .preview-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.persona-selection-flow .preview-value {
+  font-size: 14px;
+  color: white;
+  line-height: 1.5;
 }
 
 /* Questions Stage */

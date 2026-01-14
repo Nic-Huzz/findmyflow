@@ -36,6 +36,19 @@ const ValidationFlowsManager = () => {
   })
   const [copiedToken, setCopiedToken] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [previewFlow, setPreviewFlow] = useState(null)
+  const [previewSteps, setPreviewSteps] = useState([])
+  const [previewLoading, setPreviewLoading] = useState(false)
+  const [qrCodeFlow, setQrCodeFlow] = useState(null)
+  const [editFlow, setEditFlow] = useState(null)
+  const [editPlaceholders, setEditPlaceholders] = useState({
+    problemArea: '',
+    solutionConcept: '',
+    audienceDescription: ''
+  })
+  const [editSaving, setEditSaving] = useState(false)
+  const [aiSummary, setAiSummary] = useState(null)
+  const [aiSummaryLoading, setAiSummaryLoading] = useState(false)
 
   // Taxonomy data for dropdowns
   const [useCustomProblem, setUseCustomProblem] = useState(false)
@@ -130,6 +143,7 @@ const ValidationFlowsManager = () => {
 
   const handleViewResponses = async (flow) => {
     setSelectedFlow(flow)
+    setAiSummary(null) // Clear previous AI summary
     const data = await getFlowResponses(flow.id)
     const analyticsData = await getFlowAnalytics(flow.id)
     setResponses(data)
@@ -163,8 +177,258 @@ const ValidationFlowsManager = () => {
     setTimeout(() => setCopiedToken(null), 2000)
   }
 
+  // Export responses to CSV
+  const exportToCSV = () => {
+    if (!responses || responses.length === 0) {
+      alert('No responses to export')
+      return
+    }
+
+    // Get all unique questions across responses
+    const allQuestions = new Set()
+    responses.forEach(session => {
+      session.responses.forEach((r, idx) => {
+        allQuestions.add(`Q${idx + 1}: ${r.question_text}`)
+      })
+    })
+    const questionHeaders = Array.from(allQuestions)
+
+    // Build CSV header
+    const headers = ['Email', 'Completed At', ...questionHeaders]
+
+    // Build CSV rows
+    const rows = responses.map(session => {
+      const row = [
+        session.respondent_email || 'Anonymous',
+        new Date(session.completed_at).toLocaleString()
+      ]
+
+      // Add answers in order
+      questionHeaders.forEach((qHeader, idx) => {
+        const response = session.responses[idx]
+        if (response) {
+          const answer = Array.isArray(response.answer_value)
+            ? response.answer_value.join('; ')
+            : String(response.answer_value || '')
+          row.push(`"${answer.replace(/"/g, '""')}"`)
+        } else {
+          row.push('')
+        }
+      })
+
+      return row
+    })
+
+    // Create CSV content
+    const csvContent = [
+      headers.map(h => `"${h.replace(/"/g, '""')}"`).join(','),
+      ...rows.map(r => r.join(','))
+    ].join('\n')
+
+    // Download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(blob)
+    link.download = `${selectedFlow.flow_name.replace(/[^a-z0-9]/gi, '_')}_responses_${new Date().toISOString().split('T')[0]}.csv`
+    link.click()
+    URL.revokeObjectURL(link.href)
+  }
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen)
+  }
+
+  // Preview flow
+  const handlePreviewFlow = async (flow) => {
+    setPreviewFlow(flow)
+    setPreviewLoading(true)
+
+    try {
+      const response = await fetch(`/${flow.flow_json_path}`)
+      if (!response.ok) throw new Error('Failed to load flow questions')
+
+      const flowJson = await response.json()
+
+      // Replace placeholders in steps
+      const mergedPlaceholders = {
+        ...(flowJson.placeholders || {}),
+        ...(flow.placeholders || {})
+      }
+
+      const processedSteps = flowJson.steps.map(step => ({
+        ...step,
+        assistant_prompt: replacePlaceholdersInText(step.assistant_prompt, mergedPlaceholders)
+      }))
+
+      setPreviewSteps(processedSteps)
+    } catch (err) {
+      console.error('Error loading preview:', err)
+      setPreviewSteps([])
+    } finally {
+      setPreviewLoading(false)
+    }
+  }
+
+  const replacePlaceholdersInText = (text, placeholders) => {
+    if (!text || !placeholders) return text
+    let result = text
+    Object.entries(placeholders).forEach(([key, value]) => {
+      const pattern = new RegExp(`\\{\\{${key}\\}\\}`, 'g')
+      result = result.replace(pattern, value)
+    })
+    return result
+  }
+
+  const closePreview = () => {
+    setPreviewFlow(null)
+    setPreviewSteps([])
+  }
+
+  // Edit flow
+  const handleEditFlow = (flow) => {
+    setEditFlow(flow)
+    setEditPlaceholders({
+      problemArea: flow.placeholders?.problemArea || '',
+      solutionConcept: flow.placeholders?.solutionConcept || '',
+      audienceDescription: flow.placeholders?.audienceDescription || ''
+    })
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editFlow) return
+
+    setEditSaving(true)
+    try {
+      // Update flow name and description based on new placeholders
+      const newName = editFlow.flow_json_path?.includes('testing')
+        ? `Testing: ${editPlaceholders.solutionConcept.substring(0, 30)}...`
+        : `Validation: ${editPlaceholders.problemArea.substring(0, 30)}...`
+
+      const newDescription = `For: ${editPlaceholders.audienceDescription}`
+
+      const { error } = await supabase
+        .from('validation_flows')
+        .update({
+          flow_name: newName,
+          flow_description: newDescription,
+          placeholders: editPlaceholders,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', editFlow.id)
+
+      if (error) throw error
+
+      loadFlows()
+      closeEditModal()
+    } catch (err) {
+      console.error('Error updating flow:', err)
+      alert('Failed to update flow. Please try again.')
+    } finally {
+      setEditSaving(false)
+    }
+  }
+
+  const closeEditModal = () => {
+    setEditFlow(null)
+    setEditPlaceholders({
+      problemArea: '',
+      solutionConcept: '',
+      audienceDescription: ''
+    })
+  }
+
+  const canSaveEdit = () => {
+    return editPlaceholders.problemArea.trim().length > 0 &&
+           editPlaceholders.solutionConcept.trim().length > 0 &&
+           editPlaceholders.audienceDescription.trim().length > 0
+  }
+
+  // Generate AI Summary
+  const generateAiSummary = async () => {
+    if (!responses || responses.length === 0) {
+      alert('No responses to summarize')
+      return
+    }
+
+    setAiSummaryLoading(true)
+    setAiSummary(null)
+
+    try {
+      // Prepare responses for summarization
+      const responseData = responses.map(session => ({
+        email: session.respondent_email || 'Anonymous',
+        answers: session.responses.map((r, idx) => ({
+          question: `Q${idx + 1}: ${r.question_text}`,
+          answer: Array.isArray(r.answer_value)
+            ? r.answer_value.join(', ')
+            : String(r.answer_value || '')
+        }))
+      }))
+
+      // Call edge function for AI summary
+      const { data, error } = await supabase.functions.invoke('validation-summary', {
+        body: {
+          flowName: selectedFlow.flow_name,
+          flowDescription: selectedFlow.flow_description,
+          responses: responseData,
+          totalResponses: responses.length
+        }
+      })
+
+      if (error) throw error
+
+      setAiSummary(data.summary)
+    } catch (err) {
+      console.error('Error generating AI summary:', err)
+      // Fallback to local summary if edge function fails
+      generateLocalSummary()
+    } finally {
+      setAiSummaryLoading(false)
+    }
+  }
+
+  // Fallback local summary if edge function unavailable
+  const generateLocalSummary = () => {
+    if (!responses || responses.length === 0) return
+
+    const summary = {
+      overview: `Analysis of ${responses.length} responses for "${selectedFlow.flow_name}"`,
+      highlights: [],
+      patterns: []
+    }
+
+    // Analyze each question's responses
+    const questionAnswers = {}
+    responses.forEach(session => {
+      session.responses.forEach((r, idx) => {
+        const key = `Q${idx + 1}`
+        if (!questionAnswers[key]) {
+          questionAnswers[key] = { question: r.question_text, answers: [] }
+        }
+        const answer = Array.isArray(r.answer_value)
+          ? r.answer_value.join(', ')
+          : String(r.answer_value || '')
+        if (answer) questionAnswers[key].answers.push(answer)
+      })
+    })
+
+    // Find common themes
+    Object.entries(questionAnswers).forEach(([key, data]) => {
+      if (data.answers.length > 0) {
+        const uniqueAnswers = [...new Set(data.answers)]
+        if (uniqueAnswers.length <= 3 && data.answers.length > 1) {
+          summary.patterns.push(`${key}: Common answer - "${uniqueAnswers[0]}"`)
+        } else {
+          summary.highlights.push(`${key}: ${data.answers.length} diverse responses`)
+        }
+      }
+    })
+
+    if (summary.patterns.length === 0) {
+      summary.patterns.push('Responses show diverse perspectives across questions')
+    }
+
+    setAiSummary(summary)
   }
 
   const getUserInitials = (email) => {
@@ -289,10 +553,28 @@ const ValidationFlowsManager = () => {
                     {copiedToken === flow.share_token ? '✓ Copied!' : '📋 Copy Link'}
                   </button>
                   <button
+                    className="qr-btn"
+                    onClick={() => setQrCodeFlow(flow)}
+                  >
+                    📱 QR Code
+                  </button>
+                  <button
+                    className="preview-btn"
+                    onClick={() => handlePreviewFlow(flow)}
+                  >
+                    👁️ Preview
+                  </button>
+                  <button
                     className="view-responses-btn"
                     onClick={() => handleViewResponses(flow)}
                   >
                     View Responses
+                  </button>
+                  <button
+                    className="edit-btn"
+                    onClick={() => handleEditFlow(flow)}
+                  >
+                    ✏️ Edit
                   </button>
                   <button
                     className="toggle-status-btn"
@@ -317,7 +599,16 @@ const ValidationFlowsManager = () => {
           <div className="responses-viewer">
             <div className="responses-header">
               <h2>{selectedFlow.flow_name} - Responses</h2>
-              <button className="close-btn" onClick={() => setSelectedFlow(null)}>×</button>
+              <div className="responses-header-actions">
+                <button
+                  className="export-btn"
+                  onClick={exportToCSV}
+                  disabled={responses.length === 0}
+                >
+                  📥 Export CSV
+                </button>
+                <button className="close-btn" onClick={() => setSelectedFlow(null)}>×</button>
+              </div>
             </div>
 
             {/* Analytics Summary */}
@@ -333,6 +624,63 @@ const ValidationFlowsManager = () => {
                 </div>
               </div>
             )}
+
+            {/* AI Summary Section */}
+            <div className="ai-summary-section">
+              <div className="ai-summary-header">
+                <h3>🤖 AI Insights</h3>
+                <button
+                  className="generate-summary-btn"
+                  onClick={generateAiSummary}
+                  disabled={aiSummaryLoading || responses.length === 0}
+                >
+                  {aiSummaryLoading ? 'Analyzing...' : aiSummary ? 'Regenerate' : 'Generate Summary'}
+                </button>
+              </div>
+
+              {aiSummaryLoading && (
+                <div className="ai-summary-loading">
+                  <div className="spinner"></div>
+                  <p>Analyzing responses...</p>
+                </div>
+              )}
+
+              {aiSummary && !aiSummaryLoading && (
+                <div className="ai-summary-content">
+                  {typeof aiSummary === 'string' ? (
+                    <p className="ai-summary-text">{aiSummary}</p>
+                  ) : (
+                    <>
+                      <p className="ai-summary-overview">{aiSummary.overview}</p>
+                      {aiSummary.highlights && aiSummary.highlights.length > 0 && (
+                        <div className="ai-summary-list">
+                          <h4>Key Highlights</h4>
+                          <ul>
+                            {aiSummary.highlights.map((h, i) => (
+                              <li key={i}>{h}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {aiSummary.patterns && aiSummary.patterns.length > 0 && (
+                        <div className="ai-summary-list">
+                          <h4>Patterns Found</h4>
+                          <ul>
+                            {aiSummary.patterns.map((p, i) => (
+                              <li key={i}>{p}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+
+              {!aiSummary && !aiSummaryLoading && responses.length > 0 && (
+                <p className="ai-summary-hint">Click "Generate Summary" to get AI-powered insights from your responses.</p>
+              )}
+            </div>
 
             {/* Individual Responses */}
             <div className="responses-list">
@@ -541,6 +889,160 @@ const ValidationFlowsManager = () => {
             )}
           </div>
         </div>
+        )}
+
+        {/* Preview Modal */}
+        {previewFlow && (
+          <div className="modal-overlay" onClick={closePreview}>
+            <div className="preview-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="preview-header">
+                <h2>Flow Preview</h2>
+                <p>{previewFlow.flow_name}</p>
+                <button className="close-btn" onClick={closePreview}>×</button>
+              </div>
+
+              {previewLoading ? (
+                <div className="preview-loading">
+                  <div className="spinner"></div>
+                  <p>Loading preview...</p>
+                </div>
+              ) : (
+                <div className="preview-steps">
+                  {previewSteps.map((step, index) => (
+                    <div key={step.id || index} className="preview-step">
+                      <div className="preview-step-number">{index + 1}</div>
+                      <div className="preview-step-content">
+                        <div className="preview-question">{step.assistant_prompt}</div>
+                        {step.expected_inputs?.[0] && (
+                          <div className="preview-input-type">
+                            Input type: <span>{step.expected_inputs[0].type}</span>
+                            {step.expected_inputs[0].options && (
+                              <div className="preview-options">
+                                Options: {step.expected_inputs[0].options.join(', ')}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="preview-footer">
+                <a
+                  href={`/v/${previewFlow.share_token}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="open-flow-btn"
+                >
+                  Open Full Flow →
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* QR Code Modal */}
+        {qrCodeFlow && (
+          <div className="modal-overlay" onClick={() => setQrCodeFlow(null)}>
+            <div className="qr-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="qr-header">
+                <h2>Share via QR Code</h2>
+                <p>{qrCodeFlow.flow_name}</p>
+                <button className="close-btn" onClick={() => setQrCodeFlow(null)}>×</button>
+              </div>
+
+              <div className="qr-content">
+                <div className="qr-code-container">
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`${window.location.origin}/v/${qrCodeFlow.share_token}`)}`}
+                    alt="QR Code"
+                    className="qr-code-image"
+                  />
+                </div>
+
+                <div className="qr-url">
+                  <code>{`${window.location.origin}/v/${qrCodeFlow.share_token}`}</code>
+                </div>
+
+                <div className="qr-actions">
+                  <button
+                    className="copy-url-btn"
+                    onClick={() => copyShareLink(qrCodeFlow.share_token)}
+                  >
+                    {copiedToken === qrCodeFlow.share_token ? '✓ Copied!' : '📋 Copy URL'}
+                  </button>
+                  <a
+                    href={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&data=${encodeURIComponent(`${window.location.origin}/v/${qrCodeFlow.share_token}`)}`}
+                    download={`${qrCodeFlow.flow_name.replace(/[^a-z0-9]/gi, '_')}_qr.png`}
+                    className="download-qr-btn"
+                  >
+                    ⬇️ Download QR
+                  </a>
+                </div>
+              </div>
+
+              <div className="qr-tip">
+                Print this QR code or share it in person to quickly get people to your validation survey.
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Flow Modal */}
+        {editFlow && (
+          <div className="modal-overlay" onClick={closeEditModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <h2>Edit Flow Context</h2>
+              <p>Update the context information for your validation survey.</p>
+
+              <div className="context-form">
+                <div className="form-group">
+                  <label>What problem are you solving?</label>
+                  <textarea
+                    placeholder="e.g., finding clarity and purpose in their career"
+                    value={editPlaceholders.problemArea}
+                    onChange={(e) => setEditPlaceholders({ ...editPlaceholders, problemArea: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Who is this for?</label>
+                  <textarea
+                    placeholder="e.g., professionals feeling stuck or unfulfilled"
+                    value={editPlaceholders.audienceDescription}
+                    onChange={(e) => setEditPlaceholders({ ...editPlaceholders, audienceDescription: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>What solution are you exploring?</label>
+                  <textarea
+                    placeholder="e.g., a guided discovery process to uncover your ideal path"
+                    value={editPlaceholders.solutionConcept}
+                    onChange={(e) => setEditPlaceholders({ ...editPlaceholders, solutionConcept: e.target.value })}
+                    rows={2}
+                  />
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button className="cancel-btn" onClick={closeEditModal}>
+                  Cancel
+                </button>
+                <button
+                  className="confirm-btn"
+                  onClick={handleSaveEdit}
+                  disabled={!canSaveEdit() || editSaving}
+                >
+                  {editSaving ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

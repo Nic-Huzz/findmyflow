@@ -494,7 +494,7 @@ export const JOURNEY_STAGES = [
     id: 'awakening',
     label: 'Awakening',
     ring: 'inner',
-    color: '#fbbf24', // Yellow
+    color: '#E9A23B', // Orange
     description: 'Just realized they have this problem',
     mindset: 'Something needs to change',
     businessAdvice: 'Educational content, free resources, awareness building',
@@ -503,7 +503,7 @@ export const JOURNEY_STAGES = [
     id: 'struggling',
     label: 'Struggling',
     ring: 'middle',
-    color: '#60a5fa', // Blue
+    color: '#E9A23B', // Orange
     description: 'Actively trying to solve, hitting walls',
     mindset: "I've tried things, nothing works",
     businessAdvice: 'Done-with-you offers, coaching, guided programs',
@@ -512,7 +512,7 @@ export const JOURNEY_STAGES = [
     id: 'ready',
     label: 'Ready',
     ring: 'outer',
-    color: '#6BCB77', // Green
+    color: '#E9A23B', // Orange
     description: 'Have budget, urgency, seeking solution',
     mindset: 'I need help NOW, take my money',
     businessAdvice: 'Premium offers, done-for-you, high-touch services',
@@ -528,7 +528,7 @@ export const PROBLEMS_PROFICIENCY_RINGS = [
     id: 'exploring',
     label: 'Exploring',
     ring: 'inner',
-    color: '#fbbf24', // Yellow
+    color: '#E9A23B', // Orange
     description: 'New opportunity, curious but haven\'t pursued yet',
     indicators: ['Interested but haven\'t started', 'Researching the space', 'No track record yet'],
     businessAdvice: 'Research more, test interest before committing, find mentors in this space',
@@ -537,7 +537,7 @@ export const PROBLEMS_PROFICIENCY_RINGS = [
     id: 'pursuing',
     label: 'Pursuing',
     ring: 'middle',
-    color: '#60a5fa', // Blue
+    color: '#E9A23B', // Orange
     description: 'Currently working on this problem',
     indicators: ['Actively building solutions', 'Learning through doing', 'Growing experience'],
     businessAdvice: 'Build here, document your journey, create offers while learning',
@@ -546,7 +546,7 @@ export const PROBLEMS_PROFICIENCY_RINGS = [
     id: 'proven',
     label: 'Proven',
     ring: 'outer',
-    color: '#6BCB77', // Green
+    color: '#E9A23B', // Orange
     description: 'Previously pursued, have results and experience',
     indicators: ['Have success stories', 'Battle-tested knowledge', 'Others seek your advice'],
     businessAdvice: 'Lead with this, case studies, premium positioning, teaching content',
@@ -609,7 +609,7 @@ export const PROFICIENCY_RINGS = [
     id: 'emerging',
     label: 'Emerging',
     ring: 'inner',
-    color: '#fbbf24', // Yellow
+    color: '#E9A23B', // Orange
     description: 'Still learning, passionate but developing',
     indicators: ['Still learning', 'Wouldn\'t offer professionally yet', 'Need more practice'],
     businessAdvice: 'Growth opportunity - develop before monetizing, or partner with experts',
@@ -618,7 +618,7 @@ export const PROFICIENCY_RINGS = [
     id: 'establishing',
     label: 'Establishing',
     ring: 'middle',
-    color: '#60a5fa', // Blue
+    color: '#E9A23B', // Orange
     description: 'Competent and building experience',
     indicators: ['Can do it well', 'Wouldn\'t call myself expert', 'Building track record'],
     businessAdvice: 'Supporting offer - "done for you" services, share your journey',
@@ -627,7 +627,7 @@ export const PROFICIENCY_RINGS = [
     id: 'mastering',
     label: 'Mastering',
     ring: 'outer',
-    color: '#6BCB77', // Green
+    color: '#E9A23B', // Orange
     description: 'Expert level, could teach others',
     indicators: ['Could teach this confidently', 'People come to me for advice', 'Significant experience'],
     businessAdvice: 'Lead with this - core offer, premium pricing, teaching content',

@@ -65,9 +65,9 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
   // Get wheel title
   const wheelTitle = useMemo(() => {
     switch (type) {
-      case 'skills': return 'Your Skills'
-      case 'problems': return 'Problems You Solve'
-      case 'personas': return 'Who You Help'
+      case 'skills': return 'Skills In Your Offering'
+      case 'problems': return 'Problems Your Offering Solves'
+      case 'personas': return 'Who Your Offering Helps'
       default: return 'Select'
     }
   }, [type])
@@ -75,9 +75,9 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
   // Get wheel subtitle
   const wheelSubtitle = useMemo(() => {
     switch (type) {
-      case 'skills': return `Select up to ${max} skills that come naturally to you`
-      case 'problems': return `Select up to ${max} problem areas you help with`
-      case 'personas': return `Select up to ${max} types of people you serve`
+      case 'skills': return `Select up to ${max} skills you use in your current offering`
+      case 'problems': return `Select up to ${max} problems your offering addresses`
+      case 'personas': return `Select up to ${max} types of people your offering serves`
       default: return `Select up to ${max}`
     }
   }, [type, max])
@@ -201,7 +201,7 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
                     className={`segment-button ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}
                     style={{
                       '--segment-color': segment.color,
-                      borderColor: isSelected ? segment.color : undefined
+                      borderColor: isSelected ? '#E9A23B' : undefined
                     }}
                     onClick={() => handleSegmentClick(segment.id)}
                     disabled={isDisabled}
@@ -238,7 +238,7 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
                 <div
                   key={item.id}
                   className="selected-chip"
-                  style={{ borderColor: segment?.color }}
+                  style={{ borderColor: '#E9A23B' }}
                 >
                   <span className="chip-icon">{segment?.icon}</span>
                   <span className="chip-name">{segment?.displayName}</span>

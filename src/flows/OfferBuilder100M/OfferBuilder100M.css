@@ -719,6 +719,55 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+/* Validation Section Types */
+.offer-builder-100m .validation-section {
+  margin-bottom: 16px;
+}
+
+.offer-builder-100m .validation-section:last-of-type {
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .section-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+}
+
+.offer-builder-100m .objection-chip.direct {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.offer-builder-100m .objection-chip.direct:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.offer-builder-100m .objection-chip.belief {
+  border-color: rgba(168, 85, 247, 0.4);
+  font-style: italic;
+}
+
+.offer-builder-100m .objection-chip.belief:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.15);
+}
+
+.offer-builder-100m .objection-chip.emotion {
+  border-color: rgba(245, 158, 11, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.offer-builder-100m .objection-chip.emotion:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.offer-builder-100m .emotion-source {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
 /* ==========================================
    STEP 1A: BUCKET SELECTION
    ========================================== */
@@ -1216,7 +1265,7 @@
   border-color: rgba(34, 197, 94, 0.3);
 }
 
-.offer-builder-100m .version-card.hybrid {
+.offer-builder-100m .version-card.productized {
   border-color: rgba(168, 85, 247, 0.3);
 }
 
@@ -2391,6 +2440,110 @@
 
 .offer-builder-100m .rec-icon {
   font-size: 1.2rem;
+}
+
+/* Customer Preferences Panel (Step 7) */
+.offer-builder-100m .customer-preferences {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(168, 85, 247, 0.1));
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.offer-builder-100m .preferences-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .pref-icon {
+  font-size: 1.2rem;
+}
+
+.offer-builder-100m .pref-votes {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .preferences-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.offer-builder-100m .breakdown-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.offer-builder-100m .breakdown-bar .bar-label {
+  width: 120px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offer-builder-100m .breakdown-bar .bar-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.offer-builder-100m .breakdown-bar .bar-fill {
+  height: 100%;
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.offer-builder-100m .breakdown-bar.winner .bar-fill {
+  background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+}
+
+.offer-builder-100m .breakdown-bar .bar-count {
+  width: 30px;
+  text-align: right;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-100m .specific-types {
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-100m .types-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-right: 8px;
+}
+
+.offer-builder-100m .types-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.offer-builder-100m .type-chip {
+  padding: 4px 10px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.offer-builder-100m .type-count {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-left: 2px;
 }
 
 .offer-builder-100m .rec-score {

@@ -1242,6 +1242,72 @@
   border-color: #8b5cf6;
 }
 
+/* Grand Slam Dropdown Input */
+.grand-slam-dropdown-input {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grand-slam-dropdown-input .loading-state {
+  text-align: center;
+  color: #6b7280;
+  padding: 16px;
+  font-size: 14px;
+}
+
+.grand-slam-dropdown-input .locked-message,
+.grand-slam-dropdown-input .no-data-message {
+  text-align: center;
+  padding: 20px;
+  background: rgba(94, 23, 235, 0.05);
+  border: 1px dashed rgba(94, 23, 235, 0.3);
+  border-radius: 12px;
+}
+
+.grand-slam-dropdown-input .lock-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.grand-slam-dropdown-input .locked-message p,
+.grand-slam-dropdown-input .no-data-message p {
+  color: #6b7280;
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.grand-slam-dropdown-input .unlock-link {
+  display: inline-block;
+  color: #5e17eb;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.grand-slam-dropdown-input .unlock-link:hover {
+  text-decoration: underline;
+}
+
+.grand-slam-dropdown-input .grand-slam-select {
+  background-color: #f8f9ff;
+  border-color: #5e17eb;
+}
+
+.grand-slam-dropdown-input .selection-preview {
+  background: rgba(94, 23, 235, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.grand-slam-dropdown-input .selection-details {
+  color: #6b7280;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.5;
+}
+
 .quest-checkbox-area {
   padding: 0.5rem 0;
 }

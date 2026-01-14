@@ -63,11 +63,16 @@ export const STAGE_CONFIG = {
     id: 2,
     name: 'Product Creation',
     shortName: 'Product',
-    description: 'Build your core offer and lead magnet',
+    description: 'Build your Grand Slam offer with bonuses, guarantee, and scarcity',
     icon: '🛠️',
     color: '#8b5cf6', // violet
-    requiredFlows: ['100m_offer', 'lead_magnet'],
-    milestones: ['offer_created', 'lead_magnet_created'],
+    requiredFlows: ['100m_offer', 'offer_builder_v2', 'lead_magnet_selection', 'product_selection'],
+    milestones: [
+      'lead_magnet_created',
+      'grand_slam_bonuses_created',
+      'grand_slam_guarantee_created',
+      'grand_slam_scarcity_created'
+    ],
     groanChallenge: {
       id: 'groan_stage_2_creation',
       name: 'Creation Groan',
@@ -101,11 +106,22 @@ export const STAGE_CONFIG = {
     id: 4,
     name: 'Money Models',
     shortName: 'Money Models',
-    description: 'Expand your offer stack with upsells, downsells, and continuity',
+    description: 'Build your complete product suite with attraction, upsell, downsell, and continuity',
     icon: '💰',
     color: '#f59e0b', // amber
-    requiredFlows: ['upsell_offer', 'downsell_offer', 'continuity_offer'],
-    milestones: ['decide_acquisition', 'decide_upsell', 'decide_downsell', 'decide_continuity'],
+    requiredFlows: ['attraction_offer', 'upsell_offer', 'downsell_offer', 'continuity_offer'],
+    milestones: [
+      'decide_acquisition',
+      'decide_upsell',
+      'decide_downsell',
+      'decide_continuity',
+      'create_acquisition_offer',
+      'create_upsell_offer',
+      'create_downsell_offer',
+      'create_continuity_offer',
+      'product_suite_mapped',
+      'money_model_stack_complete'
+    ],
     groanChallenge: {
       id: 'groan_stage_4_money',
       name: 'Money Groan',

@@ -39,80 +39,84 @@ function PersonaReveal({
 
   return (
     <div className={`persona-reveal ${isVisible ? 'visible' : ''}`}>
-      {/* Persona Badge */}
-      <div
-        className={`persona-badge ${isVisible ? 'animate-in' : ''}`}
-        style={{ backgroundColor: personaData.color }}
-      >
-        <span className="persona-icon">{personaData.icon}</span>
-        <span className="persona-name">{personaData.name}</span>
-      </div>
+      {/* Content wrapper */}
+      <div className="reveal-content">
+        {/* Persona Badge */}
+        <div
+          className={`persona-badge ${isVisible ? 'animate-in' : ''}`}
+          style={{ backgroundColor: personaData.color }}
+        >
+          <span className="persona-icon">{personaData.icon}</span>
+          <span className="persona-name">{personaData.name}</span>
+        </div>
 
-      {/* Tagline */}
-      <h2 className={`persona-tagline ${showDetails ? 'fade-in' : ''}`}>
-        {personaData.tagline}
-      </h2>
+        {/* Tagline */}
+        <h2 className={`persona-tagline ${showDetails ? 'fade-in' : ''}`}>
+          {personaData.tagline}
+        </h2>
 
-      {/* Description */}
-      <p className={`persona-description ${showDetails ? 'fade-in' : ''}`}>
-        {personaData.description}
-      </p>
+        {/* Description */}
+        <p className={`persona-description ${showDetails ? 'fade-in' : ''}`}>
+          {personaData.description}
+        </p>
 
-      {/* Wealth Ladder Position */}
-      {showWealthLadder && (
-        <div className={`wealth-ladder-indicator ${showDetails ? 'fade-in' : ''}`}>
-          <div className="ladder-label">Your position on the Wealth Ladder</div>
-          <div className="ladder-visual">
-            {['pre_ladder', 'service', 'productized', 'products'].map((rung, index) => {
-              const isActive = rung === wealthLadder
-              const isPast = getWealthLadderDisplay(rung).position < ladderData.position
-              return (
-                <div
-                  key={rung}
-                  className={`ladder-rung ${isActive ? 'active' : ''} ${isPast ? 'past' : ''}`}
-                >
+        {/* Wealth Ladder Position */}
+        {showWealthLadder && (
+          <div className={`wealth-ladder-indicator ${showDetails ? 'fade-in' : ''}`}>
+            <div className="ladder-label">Your position on the Business Ladder</div>
+            <div className="ladder-visual">
+              {['pre_ladder', 'service', 'productized', 'products'].map((rung, index) => {
+                const isActive = rung === wealthLadder
+                const isPast = getWealthLadderDisplay(rung).position < ladderData.position
+                return (
                   <div
-                    className="rung-dot"
-                    style={{
-                      backgroundColor: isActive ? ladderData.color : isPast ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'
-                    }}
-                  />
-                  <span className="rung-label">{getWealthLadderDisplay(rung).shortLabel}</span>
-                </div>
-              )
-            })}
+                    key={rung}
+                    className={`ladder-rung ${isActive ? 'active' : ''} ${isPast ? 'past' : ''}`}
+                  >
+                    <div
+                      className="rung-dot"
+                      style={{
+                        backgroundColor: isActive ? ladderData.color : isPast ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'
+                      }}
+                    />
+                    <span className="rung-label">{getWealthLadderDisplay(rung).shortLabel}</span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Emphasis Focus (optional) */}
-      {showEmphasis && emphasisData && (
-        <div className={`emphasis-indicator ${showDetails ? 'fade-in' : ''}`}>
-          <div className="emphasis-label">Your Focus</div>
-          <div
-            className="emphasis-badge"
-            style={{ borderColor: emphasisData.color }}
-          >
-            {emphasisData.label}
+        {/* Emphasis Focus (optional) */}
+        {showEmphasis && emphasisData && (
+          <div className={`emphasis-indicator ${showDetails ? 'fade-in' : ''}`}>
+            <div className="emphasis-label">Your Focus</div>
+            <div
+              className="emphasis-badge"
+              style={{ borderColor: emphasisData.color }}
+            >
+              {emphasisData.label}
+            </div>
+            <p className="emphasis-description">{emphasisData.description}</p>
           </div>
-          <p className="emphasis-description">{emphasisData.description}</p>
-        </div>
-      )}
+        )}
 
-      {/* Next Step */}
-      <div className={`next-step ${showDetails ? 'fade-in' : ''}`}>
-        <div className="next-step-label">{personaData.nextStepLabel}</div>
-        <p className="next-step-description">{personaData.nextStepDescription}</p>
+        {/* Next Step */}
+        <div className={`next-step ${showDetails ? 'fade-in' : ''}`}>
+          <div className="next-step-label">{personaData.nextStepLabel}</div>
+          <p className="next-step-description">{personaData.nextStepDescription}</p>
+        </div>
       </div>
 
-      {/* Continue Button */}
-      <button
-        className={`continue-button ${showDetails ? 'fade-in' : ''}`}
-        onClick={onContinue}
-        style={{ backgroundColor: personaData.color }}
-      >
-        Continue
-      </button>
+      {/* Continue Button - pinned at bottom */}
+      <div className="button-container">
+        <button
+          className={`continue-button ${showDetails ? 'fade-in' : ''}`}
+          onClick={onContinue}
+        >
+          Continue
+        </button>
+      </div>
     </div>
   )
 }

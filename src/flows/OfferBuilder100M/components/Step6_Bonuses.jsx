@@ -15,11 +15,11 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
   const hasInitialData = initialData?.bonusSuggestions && Object.keys(initialData.bonusSuggestions).length > 0
   const [bonusSuggestions, setBonusSuggestions] = useState(initialData?.bonusSuggestions || null)
   const [selectedBonuses, setSelectedBonuses] = useState(initialData?.selectedBonuses || {
-    product: [],
     service: [],
-    hybrid: []
+    productized: [],
+    product: []
   })
-  const [activeTab, setActiveTab] = useState('product')
+  const [activeTab, setActiveTab] = useState('service')
   const [isGenerating, setIsGenerating] = useState(!hasInitialData)
   const [editingBonus, setEditingBonus] = useState(null)
 
@@ -81,9 +81,9 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
         // Auto-select all bonuses initially
         if (data) {
           setSelectedBonuses({
-            product: data.product?.map((_, i) => i) || [],
             service: data.service?.map((_, i) => i) || [],
-            hybrid: data.hybrid?.map((_, i) => i) || []
+            productized: data.productized?.map((_, i) => i) || [],
+            product: data.product?.map((_, i) => i) || []
           })
         }
       } catch (err) {
@@ -129,7 +129,7 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
   // Get final bonuses for completion
   const getFinalBonuses = () => {
     const result = {}
-    for (const version of ['product', 'service', 'hybrid']) {
+    for (const version of ['service', 'productized', 'product']) {
       result[version] = selectedBonuses[version].map(index =>
         bonusSuggestions[version][index]
       ).filter(Boolean)
@@ -185,22 +185,22 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
 
       <div className="version-tabs">
         <button
-          className={`tab ${activeTab === 'product' ? 'active' : ''}`}
-          onClick={() => setActiveTab('product')}
-        >
-          📦 Product ({selectedBonuses.product.length})
-        </button>
-        <button
           className={`tab ${activeTab === 'service' ? 'active' : ''}`}
           onClick={() => setActiveTab('service')}
         >
-          🤝 Service ({selectedBonuses.service.length})
+          💼 Service ({selectedBonuses.service.length})
         </button>
         <button
-          className={`tab ${activeTab === 'hybrid' ? 'active' : ''}`}
-          onClick={() => setActiveTab('hybrid')}
+          className={`tab ${activeTab === 'productized' ? 'active' : ''}`}
+          onClick={() => setActiveTab('productized')}
         >
-          🎓 Hybrid ({selectedBonuses.hybrid.length})
+          📦 Productized ({selectedBonuses.productized.length})
+        </button>
+        <button
+          className={`tab ${activeTab === 'product' ? 'active' : ''}`}
+          onClick={() => setActiveTab('product')}
+        >
+          🛠️ Product ({selectedBonuses.product.length})
         </button>
       </div>
 
@@ -238,7 +238,7 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
 
       <div className="bonuses-content">
         <div className="bonuses-header">
-          <h3>BONUSES FOR: {activeTab === 'product' ? '📦 PRODUCT' : activeTab === 'service' ? '🤝 SERVICE' : '🎓 HYBRID'} VERSION</h3>
+          <h3>BONUSES FOR: {activeTab === 'service' ? '💼 SERVICE' : activeTab === 'productized' ? '📦 PRODUCTIZED' : '🛠️ PRODUCT'} VERSION</h3>
         </div>
 
         {versionBonuses.map((bonus, index) => {

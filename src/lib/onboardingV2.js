@@ -106,17 +106,26 @@ export function determineGuidanceEmphasis(wealthLadder, goal) {
 }
 
 /**
- * Derive persona from wealth ladder position
- * Mirrors the database function derive_persona_from_wealth_ladder()
+ * Derive persona from wealth ladder position and employment status
+ * Movement Maker only if self-employed AND on products rung
+ * @param {string} wealthLadder - pre_ladder, service, productized, products
+ * @param {string} employmentStatus - employed, side_project, self_employed (optional)
  */
-export function derivePersonaFromWealthLadder(wealthLadder) {
-  switch (wealthLadder) {
-    case 'pre_ladder': return 'vibe_seeker'
-    case 'service':
-    case 'productized': return 'vibe_riser'
-    case 'products': return 'movement_maker'
-    default: return 'vibe_seeker'
+export function derivePersonaFromWealthLadder(wealthLadder, employmentStatus = null) {
+  // Flow Seeker: Still exploring
+  if (wealthLadder === 'pre_ladder') {
+    return 'vibe_seeker'
   }
+
+  // Movement Maker: Only if self-employed AND has products
+  // Someone with products but still employed is a Flow Finder
+  if (wealthLadder === 'products') {
+    const isFullTime = employmentStatus === 'self_employed'
+    return isFullTime ? 'movement_maker' : 'vibe_riser'
+  }
+
+  // Flow Finder: Service or productized (regardless of employment)
+  return 'vibe_riser'
 }
 
 /**
@@ -300,7 +309,7 @@ export function getEmphasisConfig(emphasisId) {
 export const PERSONA_DISPLAY = {
   vibe_seeker: {
     id: 'vibe_seeker',
-    name: 'Vibe Seeker',
+    name: 'Flow Seeker',
     tagline: 'The Explorer',
     description: "You're at the start of an exciting journey. You have skills, passions, and ideas - now it's time to discover how they connect into something meaningful.",
     color: '#9333EA',
@@ -311,10 +320,10 @@ export const PERSONA_DISPLAY = {
 
   vibe_riser: {
     id: 'vibe_riser',
-    name: 'Vibe Riser',
+    name: 'Flow Finder',
     tagline: 'The Builder',
     description: "You've started building something real. Now it's time to refine your offer, attract the right clients, and create consistent momentum.",
-    color: '#3B82F6',
+    color: '#F59E0B',
     icon: '🚀',
     nextStepLabel: 'Capture Your Offering',
     nextStepDescription: "Let's document what you've built"
@@ -325,7 +334,7 @@ export const PERSONA_DISPLAY = {
     name: 'Movement Maker',
     tagline: 'The Scaler',
     description: "You've proven your model works. Now it's time to optimize your systems, expand your reach, and scale what's already successful.",
-    color: '#10B981',
+    color: '#EAB308',
     icon: '🌟',
     nextStepLabel: 'Map Your Suite',
     nextStepDescription: "Let's capture your product ecosystem"
@@ -351,7 +360,7 @@ export const WEALTH_LADDER_DISPLAY = {
     description: 'Still discovering what to build',
     icon: '💭',
     position: 0,
-    color: '#9333EA'
+    color: '#EA580C'
   },
   service: {
     id: 'service',
@@ -360,7 +369,7 @@ export const WEALTH_LADDER_DISPLAY = {
     description: 'Trading time for money',
     icon: '🤝',
     position: 1,
-    color: '#3B82F6'
+    color: '#F59E0B'
   },
   productized: {
     id: 'productized',
@@ -369,7 +378,7 @@ export const WEALTH_LADDER_DISPLAY = {
     description: 'Packaged offerings and programs',
     icon: '📦',
     position: 2,
-    color: '#8B5CF6'
+    color: '#EAB308'
   },
   products: {
     id: 'products',
@@ -378,7 +387,7 @@ export const WEALTH_LADDER_DISPLAY = {
     description: 'Create once, sell many',
     icon: '🛍️',
     position: 3,
-    color: '#10B981'
+    color: '#FBBF24'
   }
 }
 

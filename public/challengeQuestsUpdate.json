@@ -659,14 +659,30 @@
       "type": "Product",
       "frequency": "anytime",
       "stage_required": 2,
-      "name": "Offer Builder",
-      "description": "Design your irresistible offer using Alex Hormozi's $100M framework",
+      "name": "Offer Builder V1",
+      "description": "Categorize your solutions into Core Product, Lead Magnet, and Bonuses",
       "points": 25,
       "inputType": "flow",
       "flow_id": "100m_offer",
       "flow_route": "/offer-builder",
       "counts_toward_graduation": true,
-      "learnMore": "This flow helps you create a high-value offer by identifying what makes it uniquely valuable to your ideal customer. Complete this to unlock the next stage."
+      "learnMore": "This flow helps you categorize the solutions you've brainstormed into your offer stack:\n\n• **Core Product** - What they pay for\n• **Lead Magnet** - Free value for expressing interest\n• **Bonus** - Added value with purchase\n\nComplete this first, then use Offer Builder V2 to refine your Grand Slam offer."
+    },
+    {
+      "id": "flow_offer_builder_v2",
+      "category": "Business",
+      "type": "Product",
+      "frequency": "anytime",
+      "stage_required": 2,
+      "name": "Grand Slam Offer Builder",
+      "description": "Design your irresistible 'Grand Slam' offer with bonuses, guarantee, and scarcity",
+      "points": 35,
+      "inputType": "flow",
+      "flow_id": "offer_builder_v2",
+      "flow_route": "/offer-builder-v2",
+      "requires_quest": "flow_100m_offer",
+      "counts_toward_graduation": true,
+      "learnMore": "A Grand Slam Offer is so good people feel stupid saying no. Build on your V1 foundation to add:\n\n• **Bonuses** - Value adds that increase perceived value (aim for 10x price in bonus value)\n• **Guarantee** - Risk reversal that removes hesitation\n• **Scarcity/Urgency** - Real reasons to act now\n• **Naming** - A compelling name that captures attention\n\nThis flow uses Alex Hormozi's Value Equation: Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort)"
     },
     {
       "id": "flow_product_selection",
@@ -988,6 +1004,57 @@
       "learnMore": "Your lead magnet is the first step in your customer journey. Make it valuable and easy to consume."
     },
     {
+      "id": "grand_slam_bonuses",
+      "category": "Business",
+      "type": "Product",
+      "frequency": "anytime",
+      "stage_required": 2,
+      "name": "Design Your Bonuses",
+      "description": "Select the bonus you've implemented from your Grand Slam Offer",
+      "points": 20,
+      "inputType": "grand_slam_dropdown",
+      "data_source": "bonuses",
+      "requires_quest": "flow_offer_builder_v2",
+      "milestone_type": "grand_slam_bonuses_created",
+      "placeholder": "Select a bonus you've created",
+      "counts_toward_graduation": true,
+      "learnMore": "Great bonuses address specific obstacles your customer faces AFTER buying your core offer.\n\n**Bonus Formula:**\n• Identify obstacles to achieving the dream outcome\n• Create solutions for each obstacle\n• Name them compellingly\n• Stack the value (aim for 10x the price in total bonus value)\n\n**Examples:**\n• Quick-start guide (reduces time delay)\n• Templates/swipe files (reduces effort)\n• Community access (increases likelihood of success)\n• Bonus training on specific challenge (addresses objection)"
+    },
+    {
+      "id": "grand_slam_guarantee",
+      "category": "Business",
+      "type": "Product",
+      "frequency": "anytime",
+      "stage_required": 2,
+      "name": "Create Your Guarantee",
+      "description": "Confirm the guarantee you designed in your Grand Slam Offer",
+      "points": 15,
+      "inputType": "grand_slam_dropdown",
+      "data_source": "guarantee",
+      "requires_quest": "flow_offer_builder_v2",
+      "milestone_type": "grand_slam_guarantee_created",
+      "placeholder": "Select your guarantee type",
+      "counts_toward_graduation": true,
+      "learnMore": "A guarantee transfers risk from the buyer to you. The stronger the guarantee, the more confident your prospect feels.\n\n**Types of Guarantees:**\n• **Unconditional** - \"30-day money-back, no questions asked\"\n• **Conditional** - \"If you complete all modules and don't see results, full refund\"\n• **Performance** - \"If you don't get [specific result], I'll work with you until you do\"\n• **Anti-guarantee** - \"All sales final\" (works when demand exceeds supply)\n\nMatch your guarantee to your offer confidence and customer type."
+    },
+    {
+      "id": "grand_slam_scarcity",
+      "category": "Business",
+      "type": "Product",
+      "frequency": "anytime",
+      "stage_required": 2,
+      "name": "Define Scarcity & Urgency",
+      "description": "Confirm the scarcity/urgency element from your Grand Slam Offer",
+      "points": 15,
+      "inputType": "grand_slam_dropdown",
+      "data_source": "scarcity",
+      "requires_quest": "flow_offer_builder_v2",
+      "milestone_type": "grand_slam_scarcity_created",
+      "placeholder": "Select your scarcity type",
+      "counts_toward_graduation": true,
+      "learnMore": "Scarcity and urgency give prospects a reason to act NOW rather than \"someday.\"\n\n**Ethical Scarcity Types:**\n• **Cohort-based** - Limited spots per cohort (natural capacity limit)\n• **Time-based** - Enrollment windows, launch periods\n• **Bonus-based** - Bonuses expire after deadline\n• **Price-based** - Early-bird pricing, founding member rates\n• **Inventory** - Limited supply (physical products)\n\n**Key Rule:** Only use scarcity that's REAL. Fake scarcity destroys trust.\n\nIf you can serve unlimited customers, create real constraints (cohort sizes, personal bandwidth, etc.)"
+    },
+    {
       "id": "milestone_testing_complete",
       "category": "Business",
       "type": "Testing",
@@ -1231,6 +1298,57 @@
       "placeholder": "Share the link or describe your completed continuity offer",
       "counts_toward_graduation": true,
       "learnMore": "Create your recurring revenue offer that provides ongoing value to your most committed customers."
+    },
+    {
+      "id": "product_suite_map",
+      "category": "Business",
+      "type": "Money Models",
+      "frequency": "anytime",
+      "stage_required": 4,
+      "name": "Map Your Product Suite",
+      "description": "Visualize your complete product ecosystem showing how each offer connects and leads to the next",
+      "points": 25,
+      "inputType": "text",
+      "milestone_type": "product_suite_mapped",
+      "placeholder": "Describe your product suite: What's your attraction offer? Core offer? What's the customer journey from first touch to highest tier?",
+      "counts_toward_graduation": true,
+      "learnMore": "A Product Suite Map shows your complete money model ecosystem:\n\n**The Journey:**\n```\nAttraction Offer → Lead Magnet → Core Offer\n                                    ↓\n                              Upsell Path\n                                    ↓\n                              Continuity\n                    (+ Downsell for price objectors)\n```\n\n**What to include:**\n• Each product/offer name\n• Product type (service, course, digital, etc.)\n• Price point for each tier\n• How customers move between offers\n• Expected conversion rates\n\nThis becomes your business blueprint."
+    },
+    {
+      "id": "money_model_complete",
+      "category": "Business",
+      "type": "Money Models",
+      "frequency": "anytime",
+      "stage_required": 4,
+      "name": "Money Model Stack Complete",
+      "description": "Confirm you have all 5 tiers of your money model designed and documented",
+      "points": 30,
+      "inputType": "checklist",
+      "milestone_type": "money_model_stack_complete",
+      "checklistItems": [
+        {
+          "id": "attraction_ready",
+          "label": "Attraction Offer designed and documented"
+        },
+        {
+          "id": "core_ready",
+          "label": "Core Offer designed with Grand Slam elements"
+        },
+        {
+          "id": "upsell_ready",
+          "label": "Upsell path defined for customers who want more"
+        },
+        {
+          "id": "downsell_ready",
+          "label": "Downsell option ready for price objectors"
+        },
+        {
+          "id": "continuity_ready",
+          "label": "Continuity model established for recurring revenue"
+        }
+      ],
+      "counts_toward_graduation": true,
+      "learnMore": "The complete Money Model Stack ensures you capture maximum value from every customer:\n\n**The 5 Tiers:**\n1. **Attraction** - Gets people in the door (free/low cost)\n2. **Core** - Your main revenue driver\n3. **Upsell** - Premium tier for top customers\n4. **Downsell** - Captures hesitant buyers\n5. **Continuity** - Creates recurring revenue\n\nWith all 5 tiers, you have:\n• Multiple entry points for different customers\n• Ways to serve different budget levels\n• Recurring revenue for stability\n• Higher lifetime customer value\n\nYou're now ready for Campaign Creation!"
     },
     {
       "id": "daily_implementation",

@@ -53,6 +53,18 @@ function QuickCapture({
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState(null)
 
+  // Transition state for smooth page changes
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isEntering, setIsEntering] = useState(true)
+
+  // Clear entering state after animation
+  useEffect(() => {
+    if (isEntering) {
+      const timer = setTimeout(() => setIsEntering(false), 300)
+      return () => clearTimeout(timer)
+    }
+  }, [isEntering, currentStep])
+
   // Helper to get display name for segments
   const getSegmentName = useMemo(() => {
     const segmentMap = {
@@ -95,21 +107,33 @@ function QuickCapture({
     saveProgress(currentStep, newData)
   }
 
-  // Handle next step
+  // Handle next step with transition
   const handleNext = () => {
-    if (currentStep < STEPS.length - 1) {
-      const nextStep = currentStep + 1
-      setCurrentStep(nextStep)
-      saveProgress(nextStep, capturedData)
+    if (currentStep < STEPS.length - 1 && !isTransitioning) {
+      setIsTransitioning(true)
+      setTimeout(() => {
+        const nextStep = currentStep + 1
+        setCurrentStep(nextStep)
+        saveProgress(nextStep, capturedData)
+        setIsTransitioning(false)
+        setIsEntering(true)
+      }, 200)
     }
   }
 
-  // Handle back
+  // Handle back with transition
   const handleBack = () => {
+    if (isTransitioning) return
+
     if (currentStep > 0) {
-      const prevStep = currentStep - 1
-      setCurrentStep(prevStep)
-      saveProgress(prevStep, capturedData)
+      setIsTransitioning(true)
+      setTimeout(() => {
+        const prevStep = currentStep - 1
+        setCurrentStep(prevStep)
+        saveProgress(prevStep, capturedData)
+        setIsTransitioning(false)
+        setIsEntering(true)
+      }, 200)
     } else if (onBack) {
       onBack()
     }
@@ -194,6 +218,7 @@ function QuickCapture({
       await supabase
         .from('user_stage_progress')
         .update({
+          onboarding_completed: true,
           onboarding_v2_completed: true,
           guidance_emphasis: guidanceEmphasis,
           updated_at: new Date().toISOString()
@@ -311,15 +336,19 @@ function QuickCapture({
         return (
           <div className="summary-step">
             <div className="summary-header">
-              <span className="success-icon">✨</span>
-              <h2>Great job!</h2>
+              <span className="success-icon">🎉</span>
+              <h2>Epic!</h2>
               <p>Here's what we captured about your business</p>
             </div>
 
             <div className="summary-sections">
               {/* Skills summary */}
               <div className="summary-section">
-                <h4>Your Skills ({capturedData.skills.length})</h4>
+                <h4>
+                  <span className="section-icon">🛠️</span>
+                  Your Skills ({capturedData.skills.length})
+                  <span className="checkmark">✓</span>
+                </h4>
                 <div className="summary-chips">
                   {capturedData.skills.map(skill => (
                     <span key={skill.id} className="summary-chip">
@@ -331,7 +360,11 @@ function QuickCapture({
 
               {/* Problems summary */}
               <div className="summary-section">
-                <h4>Problems You Solve ({capturedData.problems.length})</h4>
+                <h4>
+                  <span className="section-icon">🎯</span>
+                  Problems You Solve ({capturedData.problems.length})
+                  <span className="checkmark">✓</span>
+                </h4>
                 <div className="summary-chips">
                   {capturedData.problems.map(problem => (
                     <span key={problem.id} className="summary-chip">
@@ -343,7 +376,11 @@ function QuickCapture({
 
               {/* Personas summary */}
               <div className="summary-section">
-                <h4>Who You Help ({capturedData.personas.length})</h4>
+                <h4>
+                  <span className="section-icon">👥</span>
+                  Who You Help ({capturedData.personas.length})
+                  <span className="checkmark">✓</span>
+                </h4>
                 <div className="summary-chips">
                   {capturedData.personas.map(persona => (
                     <span key={persona.id} className="summary-chip">
@@ -355,7 +392,11 @@ function QuickCapture({
 
               {/* Products summary */}
               <div className="summary-section">
-                <h4>Your Products ({capturedData.products.length})</h4>
+                <h4>
+                  <span className="section-icon">📦</span>
+                  Your Products ({capturedData.products.length})
+                  <span className="checkmark">✓</span>
+                </h4>
                 <div className="products-summary">
                   {capturedData.products.map((product, idx) => (
                     <div key={idx} className="product-summary-card">
@@ -405,7 +446,7 @@ function QuickCapture({
       </div>
 
       {/* Step Content */}
-      <div className="step-content">
+      <div className={`step-content ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
         {renderStep()}
       </div>
     </div>

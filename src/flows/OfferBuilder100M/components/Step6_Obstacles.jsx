@@ -48,11 +48,11 @@ function Step6_Obstacles({ bucket, contextData, initialData, onComplete, setErro
 
   const examples = OBSTACLE_EXAMPLES[bucket] || OBSTACLE_EXAMPLES.wealth
 
-  // Extract objections from validation data
-  const validationObjections = contextData?.validationData?.objections ||
-    contextData?.validationData?.concerns ||
-    contextData?.validationData?.hesitations || []
-  const hasValidationObjections = validationObjections.length > 0
+  // Extract obstacles from validation survey responses
+  const validationData = contextData?.validationData
+  const hasValidationData = validationData?.hasValidationData || false
+  const validationObstacles = validationData?.obstacles || []
+  const validationByType = validationData?.byType || {}
 
   // Extract obstacles from V1 Offer Builder (problem_reasons)
   const v1Data = contextData?.offerBuilderData
@@ -169,38 +169,92 @@ function Step6_Obstacles({ bucket, contextData, initialData, onComplete, setErro
         </div>
       )}
 
-      {/* Validation Objections Panel */}
-      {hasValidationObjections && (
+      {/* Validation Survey Obstacles Panel */}
+      {hasValidationData && validationObstacles.length > 0 && (
         <div className="validation-objections-panel">
           <div className="objections-panel-header">
-            <span className="panel-icon">🚫</span>
-            <span>OBJECTIONS FROM YOUR VALIDATION SURVEYS</span>
+            <span className="panel-icon">📊</span>
+            <span>REAL OBSTACLES FROM YOUR VALIDATION SURVEYS ({validationData.totalResponses} responses)</span>
           </div>
           <div className="objections-panel-content">
-            <p className="objections-intro">
-              Real objections your potential customers mentioned:
-            </p>
-            <div className="objections-list">
-              {validationObjections.slice(0, 5).map((objection, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  className={`objection-chip ${obstacles.includes(typeof objection === 'string' ? objection : objection.text || objection.concern) ? 'added' : ''}`}
-                  onClick={() => {
-                    const text = typeof objection === 'string' ? objection : objection.text || objection.concern
-                    if (!obstacles.includes(text) && obstacles.length < 10) {
-                      setObstacles(prev => [...prev, text])
-                    }
-                  }}
-                  disabled={obstacles.includes(typeof objection === 'string' ? objection : objection.text || objection.concern) || obstacles.length >= 10}
-                >
-                  {obstacles.includes(typeof objection === 'string' ? objection : objection.text || objection.concern) ? '✓ ' : '+ '}
-                  {typeof objection === 'string' ? objection : objection.text || objection.concern}
-                </button>
-              ))}
-            </div>
+            {/* Direct obstacles from Step 3.0 */}
+            {validationByType.directObstacles?.length > 0 && (
+              <div className="validation-section">
+                <p className="section-label">🎯 Direct reasons they gave:</p>
+                <div className="objections-list">
+                  {validationByType.directObstacles.slice(0, 5).map((item, i) => (
+                    <button
+                      key={`direct-${i}`}
+                      type="button"
+                      className={`objection-chip direct ${obstacles.includes(item.text) ? 'added' : ''}`}
+                      onClick={() => {
+                        if (!obstacles.includes(item.text) && obstacles.length < 10) {
+                          setObstacles(prev => [...prev, item.text])
+                        }
+                      }}
+                      disabled={obstacles.includes(item.text) || obstacles.length >= 10}
+                    >
+                      {obstacles.includes(item.text) ? '✓ ' : '+ '}
+                      {item.text}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Internal beliefs from Step 2.0 */}
+            {validationByType.internalBeliefs?.length > 0 && (
+              <div className="validation-section">
+                <p className="section-label">🧠 Internal stories they tell themselves:</p>
+                <div className="objections-list">
+                  {validationByType.internalBeliefs.slice(0, 3).map((item, i) => (
+                    <button
+                      key={`belief-${i}`}
+                      type="button"
+                      className={`objection-chip belief ${obstacles.includes(item.text) ? 'added' : ''}`}
+                      onClick={() => {
+                        if (!obstacles.includes(item.text) && obstacles.length < 10) {
+                          setObstacles(prev => [...prev, item.text])
+                        }
+                      }}
+                      disabled={obstacles.includes(item.text) || obstacles.length >= 10}
+                    >
+                      {obstacles.includes(item.text) ? '✓ ' : '+ '}
+                      "{item.text}"
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Emotional indicators from Step 6.0 */}
+            {validationByType.emotionalIndicators?.length > 0 && (
+              <div className="validation-section">
+                <p className="section-label">💭 Emotional barriers detected:</p>
+                <div className="objections-list">
+                  {validationByType.emotionalIndicators.slice(0, 3).map((item, i) => (
+                    <button
+                      key={`emotion-${i}`}
+                      type="button"
+                      className={`objection-chip emotion ${obstacles.includes(item.text) ? 'added' : ''}`}
+                      onClick={() => {
+                        if (!obstacles.includes(item.text) && obstacles.length < 10) {
+                          setObstacles(prev => [...prev, item.text])
+                        }
+                      }}
+                      disabled={obstacles.includes(item.text) || obstacles.length >= 10}
+                    >
+                      {obstacles.includes(item.text) ? '✓ ' : '+ '}
+                      {item.text}
+                      <span className="emotion-source">({item.emotion?.split(' - ')[0]})</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <p className="objections-tip">
-              💡 Click to add these real objections to your list!
+              💡 These are real responses from your validation surveys - click to add!
             </p>
           </div>
         </div>

@@ -76,7 +76,7 @@
 
 .delivery-selector .type-option.selected {
   background: rgba(147, 51, 234, 0.1);
-  border-color: #9333EA;
+  border-color: #7C3AED;
 }
 
 .delivery-selector .type-option .option-icon {
@@ -135,7 +135,7 @@
 
 .delivery-selector .subtype-option.selected {
   background: rgba(147, 51, 234, 0.1);
-  border-color: #9333EA;
+  border-color: #7C3AED;
 }
 
 /* Shared */

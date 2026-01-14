@@ -140,28 +140,28 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, initialData, onCo
 
         <div className="version-tabs">
           <button
-            className={`tab ${activeTab === 'product' ? 'active' : ''}`}
-            onClick={() => setActiveTab('product')}
-          >
-            📦 Product
-          </button>
-          <button
             className={`tab ${activeTab === 'service' ? 'active' : ''}`}
             onClick={() => setActiveTab('service')}
           >
-            🤝 Service
+            💼 Service
           </button>
           <button
-            className={`tab ${activeTab === 'hybrid' ? 'active' : ''}`}
-            onClick={() => setActiveTab('hybrid')}
+            className={`tab ${activeTab === 'productized' ? 'active' : ''}`}
+            onClick={() => setActiveTab('productized')}
           >
-            🎓 Hybrid
+            📦 Productized
+          </button>
+          <button
+            className={`tab ${activeTab === 'product' ? 'active' : ''}`}
+            onClick={() => setActiveTab('product')}
+          >
+            🛠️ Product
           </button>
         </div>
 
         <div className="analysis-content">
           <div className="analysis-header">
-            <h3>PROOF STACK FOR: {activeTab === 'product' ? '📦 PRODUCT' : activeTab === 'service' ? '🤝 SERVICE' : '🎓 HYBRID'} VERSION</h3>
+            <h3>PROOF STACK FOR: {activeTab === 'service' ? '💼 SERVICE' : activeTab === 'productized' ? '📦 PRODUCTIZED' : '🛠️ PRODUCT'} VERSION</h3>
           </div>
 
           {/* Lead With */}

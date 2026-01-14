@@ -115,6 +115,17 @@
       "subtext": "These become the raw ingredients of your offer. Add at least 3 reasons per section.",
       "sections": [
         {
+          "id": "vehicle_problems",
+          "title": "Vehicle Problems",
+          "description": "What's broken or missing in the solutions they've tried?",
+          "placeholders": [
+            "e.g., 'Previous courses were too generic, not personalized'",
+            "e.g., 'They tried DIY but lacked the right system'",
+            "e.g., 'Other methods were too slow or complicated'"
+          ],
+          "minInputs": 3
+        },
+        {
           "id": "internal_beliefs",
           "title": "Internal Beliefs",
           "description": "What do they believe about themselves that holds them back?",
@@ -126,24 +137,13 @@
           "minInputs": 3
         },
         {
-          "id": "external_blockers",
-          "title": "External Blockers",
-          "description": "What outside factors do they blame?",
+          "id": "external_beliefs",
+          "title": "External Beliefs",
+          "description": "What external factors do they believe are blocking them?",
           "placeholders": [
-            "e.g., 'I can't afford to invest in this'",
             "e.g., 'I don't have enough time'",
-            "e.g., 'My partner/boss/family won't support me'"
-          ],
-          "minInputs": 3
-        },
-        {
-          "id": "motivation_gaps",
-          "title": "Motivation Gaps",
-          "description": "Why aren't they taking action despite knowing better?",
-          "placeholders": [
-            "e.g., 'I'll start when things calm down'",
-            "e.g., 'I need to do more research first'",
-            "e.g., 'It's not urgent enough yet'"
+            "e.g., 'The market is too saturated'",
+            "e.g., 'I can't afford to invest in this'"
           ],
           "minInputs": 3
         }

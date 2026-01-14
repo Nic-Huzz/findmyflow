@@ -8,6 +8,7 @@
  */
 
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import './BottomToolbar.css'
 
 // Main app navigation items
@@ -87,12 +88,30 @@ const HIDDEN_ROUTES = [
   '/product-selection',
   '/funnel-builder',
   '/funnel-calculator',
-  '/persona-selection'
+  '/persona-selection',
+  '/report-card'
 ]
 
 function BottomToolbar() {
   const location = useLocation()
   const navigate = useNavigate()
+  const [isOnboarding, setIsOnboarding] = useState(false)
+
+  // Watch for onboarding-active class on body
+  useEffect(() => {
+    const checkOnboarding = () => {
+      setIsOnboarding(document.body.classList.contains('onboarding-active'))
+    }
+
+    // Check immediately
+    checkOnboarding()
+
+    // Set up MutationObserver to watch for class changes
+    const observer = new MutationObserver(checkOnboarding)
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+
+    return () => observer.disconnect()
+  }, [])
 
   // Check if toolbar should be hidden on this route
   const shouldHide = HIDDEN_ROUTES.some(route => {
@@ -100,7 +119,7 @@ function BottomToolbar() {
     return location.pathname.startsWith(route)
   })
 
-  if (shouldHide) return null
+  if (shouldHide || isOnboarding) return null
 
   // Detect if we're in the CRM section
   const isCRMSection = location.pathname.startsWith('/crm')

@@ -21,6 +21,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
 import { useAuth } from '../../auth/AuthProvider'
 import { BackButton, ProgressDots } from '../../components/MoneyModelShared'
+import { getValidationObstaclesForOfferBuilder } from '../../lib/validationObstacles'
 
 // Step Components
 import Welcome from './components/Welcome'
@@ -88,9 +89,9 @@ function OfferBuilder100M() {
     dreamOutcome: '',
     dreamOutcomeScore: null,
     versions: {
-      product: null,
       service: null,
-      hybrid: null
+      productized: null,
+      product: null
     },
     proofData: null,
     proofAnalysis: null,
@@ -100,9 +101,9 @@ function OfferBuilder100M() {
     easeAnalysis: null,
     obstacles: [],
     bonuses: {
-      product: [],
       service: [],
-      hybrid: []
+      productized: [],
+      product: []
     },
     // For Step 6B state restoration
     bonusSuggestions: null,
@@ -149,7 +150,7 @@ function OfferBuilder100M() {
         }
 
         // Load context from other flows
-        const [skillsRes, problemsRes, personaRes, validationRes, offerV1Res] = await Promise.all([
+        const [skillsRes, problemsRes, personaRes, validationObstacles, offerV1Res] = await Promise.all([
           supabase
             .from('nikigai_clusters')
             .select('cluster_data')
@@ -169,13 +170,8 @@ function OfferBuilder100M() {
             .order('created_at', { ascending: false })
             .limit(1)
             .single(),
-          supabase
-            .from('validation_flows')
-            .select('responses')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single(),
+          // Fetch validation obstacles using the new helper
+          getValidationObstaclesForOfferBuilder(user.id),
           // V1 Offer Builder data (foundation for V2)
           supabase
             .from('offer_builder_assessments')
@@ -190,7 +186,7 @@ function OfferBuilder100M() {
           skills: skillsRes.data?.cluster_data || [],
           problems: problemsRes.data?.cluster_data || [],
           persona: personaRes.data || null,
-          validationData: validationRes.data?.responses || null,
+          validationData: validationObstacles,
           offerBuilderData: offerV1Res.data || null
         })
       } catch (err) {
@@ -215,7 +211,7 @@ function OfferBuilder100M() {
         dream_outcome_score: offerData.dreamOutcomeScore,
         version_product: offerData.versions.product,
         version_service: offerData.versions.service,
-        version_hybrid: offerData.versions.hybrid,
+        version_productized: offerData.versions.productized,
         status: 'in_progress',
         updated_at: new Date().toISOString()
       }
@@ -243,7 +239,7 @@ function OfferBuilder100M() {
         versions: {
           product: savedProgress.version_product,
           service: savedProgress.version_service,
-          hybrid: savedProgress.version_hybrid
+          productized: savedProgress.version_productized
         }
       }))
       setStage(savedProgress.current_step || STAGES.WELCOME)
@@ -529,6 +525,7 @@ function OfferBuilder100M() {
       {stage === STAGES.STEP_7 && (
         <Step7_FinalSelection
           offerData={offerData}
+          contextData={contextData}
           onComplete={(selectedVersion, score) => {
             updateOfferData({
               selectedVersion,

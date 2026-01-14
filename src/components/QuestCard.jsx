@@ -15,6 +15,7 @@ import RecogniseQuestInput from './RecogniseQuestInput'
 import RewireQuestInput, { REWIRE_QUEST_IDS } from './RewireQuestInput'
 import ReconnectQuestInput, { RECONNECT_QUEST_IDS } from './ReconnectQuestInput'
 import ReleaseQuestInput, { RELEASE_QUEST_IDS } from './ReleaseQuestInput'
+import GrandSlamDropdownInput from './GrandSlamDropdownInput'
 
 // Recognise quest IDs that use the enhanced input
 const RECOGNISE_QUEST_IDS = [
@@ -348,6 +349,11 @@ function QuestCard({
             <FlowCompassInput
               quest={quest}
               onComplete={(quest, data) => onComplete(quest, data)}
+            />
+          ) : quest.inputType === 'grand_slam_dropdown' ? (
+            <GrandSlamDropdownInput
+              quest={quest}
+              onComplete={(quest, data, e) => onComplete(quest, data, e)}
             />
           ) : quest.inputType === 'dropdown' ? (
             <>

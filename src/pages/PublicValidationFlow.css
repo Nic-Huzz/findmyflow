@@ -1,19 +1,18 @@
 /**
  * PublicValidationFlow.css - Public Validation Survey Styles
  *
- * Matches Money Model flow styling:
- * - Purple gradient background
- * - Gold/yellow accent color
- * - Consistent typography and spacing
+ * Matches OnboardingV2 styling:
+ * - Dark gradient background
+ * - Purple accent color
+ * - Progress dots
+ * - Clean option buttons
  */
-
-@import '../styles/flow-base.css';
 
 /* ============ MAIN CONTAINER ============ */
 
 .public-validation-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1a 100%);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -21,22 +20,31 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
-/* ============ PROGRESS BAR ============ */
+/* ============ PROGRESS DOTS ============ */
 
-.validation-progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  z-index: 100;
+.validation-progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 0 16px;
 }
 
-.validation-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #ffdd27, #f59e0b);
-  transition: width 0.3s ease;
+.validation-progress-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.validation-progress-dots .dot.active {
+  width: 24px;
+  border-radius: 4px;
+  background: #7C3AED;
+}
+
+.validation-progress-dots .dot.completed {
+  background: rgba(147, 51, 234, 0.5);
 }
 
 /* ============ MAIN CONTENT CONTAINER ============ */
@@ -45,12 +53,11 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  max-width: 600px;
+  max-width: 480px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px 20px;
-  padding-top: 60px;
-  min-height: 100vh;
+  padding: 0 24px 24px;
+  min-height: calc(100vh - 60px);
   box-sizing: border-box;
 }
 
@@ -60,22 +67,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
 }
 
 .validation-logo {
-  font-size: 18px;
-  font-weight: 700;
-  color: white;
-  opacity: 0.9;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .validation-step-counter {
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
 }
 
 /* ============ CONTENT AREA ============ */
@@ -84,7 +88,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   animation: validationFadeIn 0.3s ease;
 }
 
@@ -103,16 +106,23 @@
 
 .validation-prompt {
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 700;
   color: white;
-  line-height: 1.6;
-  margin-bottom: 32px;
+  line-height: 1.3;
+  margin-bottom: 8px;
   text-align: center;
 }
 
 .validation-prompt strong {
-  color: #ffdd27;
-  font-weight: 600;
+  color: #a78bfa;
+  font-weight: 700;
+}
+
+.validation-subtext {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 32px;
+  text-align: center;
 }
 
 /* ============ INPUT SECTION ============ */
@@ -134,19 +144,22 @@
   width: 100%;
   padding: 18px 20px;
   background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 500;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 600;
   color: white;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .validation-option-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 221, 39, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(147, 51, 234, 0.5);
   transform: translateY(-2px);
 }
 
@@ -155,9 +168,15 @@
 }
 
 .validation-option-btn.selected {
-  background: rgba(255, 221, 39, 0.15);
-  border-color: #ffdd27;
-  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.2);
+  background: rgba(147, 51, 234, 0.15);
+  border-color: #7C3AED;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+.validation-option-btn .option-description {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* ============ TEXT INPUT ============ */
@@ -167,13 +186,14 @@
   width: 100%;
   padding: 16px;
   background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
   font-size: 16px;
   font-family: inherit;
   color: white;
   transition: all 0.2s ease;
   resize: vertical;
+  box-sizing: border-box;
 }
 
 .validation-textarea::placeholder,
@@ -184,7 +204,7 @@
 .validation-textarea:focus,
 .validation-input:focus {
   outline: none;
-  border-color: rgba(255, 221, 39, 0.6);
+  border-color: rgba(147, 51, 234, 0.5);
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -210,20 +230,20 @@
 }
 
 .add-list-item-btn {
-  background: linear-gradient(135deg, #ffdd27, #f59e0b);
-  color: #1a1a2e;
+  background: #7C3AED;
+  color: white;
   border: none;
   border-radius: 12px;
   padding: 0 24px;
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .add-list-item-btn:hover:not(:disabled) {
+  background: #6d28d9;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
 }
 
 .add-list-item-btn:disabled {
@@ -243,15 +263,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   font-size: 15px;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .remove-list-item-btn {
-  background: rgba(239, 68, 68, 0.8);
-  color: white;
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
   border: none;
   border-radius: 6px;
   width: 28px;
@@ -266,7 +287,7 @@
 }
 
 .remove-list-item-btn:hover {
-  background: #ef4444;
+  background: rgba(239, 68, 68, 0.4);
   transform: scale(1.1);
 }
 
@@ -287,22 +308,22 @@
 }
 
 .validation-next-btn {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  background: #7C3AED;
   color: white;
   border: none;
-  border-radius: 12px;
-  padding: 16px 32px;
+  border-radius: 16px;
+  padding: 18px 32px;
   font-size: 17px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
 .validation-next-btn:hover:not(:disabled) {
+  background: #6d28d9;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.3);
 }
 
 .validation-next-btn:disabled {
@@ -316,7 +337,7 @@
 .validation-back-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   font-size: 14px;
   padding: 16px 0 4px 0;
@@ -327,7 +348,7 @@
 }
 
 .validation-back-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: white;
 }
 
 /* ============ FOOTER ============ */
@@ -335,49 +356,37 @@
 .validation-footer {
   text-align: center;
   padding: 24px 0;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
 }
 
 /* ============ LOADING STATE ============ */
 
 .validation-loading {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  gap: 16px;
 }
 
-.typing-indicator {
-  display: flex;
-  gap: 8px;
-}
-
-.typing-indicator span {
-  width: 12px;
-  height: 12px;
+.validation-loading .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #7C3AED;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  animation: validationTyping 1.4s infinite;
+  animation: validationSpin 1s linear infinite;
 }
 
-.typing-indicator span:nth-child(2) {
-  animation-delay: 0.2s;
+@keyframes validationSpin {
+  to { transform: rotate(360deg); }
 }
 
-.typing-indicator span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes validationTyping {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.5;
-  }
-  30% {
-    transform: translateY(-10px);
-    opacity: 1;
-  }
+.validation-loading p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
 }
 
 /* ============ ERROR STATE ============ */
@@ -390,59 +399,76 @@
   min-height: 100vh;
   color: white;
   text-align: center;
-  padding: 20px;
+  padding: 24px;
 }
 
 .validation-error h2 {
-  font-size: 48px;
-  margin-bottom: 16px;
+  font-size: 32px;
+  margin-bottom: 12px;
 }
 
 .validation-error p {
-  font-size: 18px;
-  opacity: 0.85;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
   line-height: 1.6;
+}
+
+/* ============ COMPLETION STATE ============ */
+
+.validation-complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 24px;
+}
+
+.validation-complete .complete-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.validation-complete h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.validation-complete p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  max-width: 320px;
 }
 
 /* ============ MOBILE RESPONSIVE ============ */
 
 @media (max-width: 768px) {
   .validation-container {
-    padding: 16px;
-    padding-top: 50px;
+    padding: 0 20px 20px;
   }
 
   .validation-prompt {
-    font-size: 20px;
-    margin-bottom: 24px;
+    font-size: 22px;
   }
 
   .validation-option-btn {
-    padding: 16px;
-    font-size: 15px;
+    padding: 16px 18px;
+    font-size: 16px;
   }
 
   .validation-next-btn {
-    padding: 14px 24px;
+    padding: 16px 24px;
     font-size: 16px;
-  }
-
-  .validation-logo {
-    font-size: 16px;
-  }
-
-  .validation-step-counter {
-    font-size: 11px;
   }
 }
 
 /* iOS Safe Area Support */
 @supports (padding-top: env(safe-area-inset-top)) {
   .public-validation-page {
-    padding-top: env(safe-area-inset-top);
-  }
-
-  .validation-progress-bar {
     padding-top: env(safe-area-inset-top);
   }
 }

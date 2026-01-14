@@ -83,6 +83,33 @@ Use this checklist to verify all new features before going live with the public 
   - [ ] Primary limiting belief
   - [ ] What needs rewiring
 
+### Warning Signs Section
+- [ ] "Watch For These Patterns" section appears on results page
+- [ ] Warning signs are personalized based on answers (not generic)
+- [ ] Each warning includes:
+  - [ ] Icon and title
+  - [ ] Description of the pattern
+  - [ ] Common triggers list
+  - [ ] Practice recommendation (purple box)
+- [ ] Maximum 4 warnings shown (to avoid overwhelm)
+
+### Warning Signs Test Scenarios
+
+Test these specific answer combinations to verify warnings appear correctly:
+
+| Test Scenario | Answers to Give | Expected Warning |
+|---------------|-----------------|------------------|
+| Self-sabotage | Answer YES to "self-sabotage" test (test 4) | "Self-Sabotage Near Success" |
+| Major visibility gap | Goal: 100,000+ / Edge lands at <10,000 | "Major Visibility Resistance" |
+| Major earning gap | Goal: $1M+ / Edge lands at <$150K | "Major Earning Resistance" |
+| Greed contract | Answer YES to "charge what I'm worth = greedy" | "Pricing Guilt Pattern" |
+| Visibility contract | Answer YES to "visible = judged" | "Visibility Avoidance Pattern" |
+| Unsafe pursuing | Answer NO to "safe to pursue ambition" (test 3) | "Ambition Feels Dangerous" |
+
+- [ ] Test at least 3 scenarios above
+- [ ] Verify correct warnings appear for each
+- [ ] Verify warnings DO NOT appear when conditions aren't met
+
 ### Download Button
 - [ ] "Download Your Results" button visible on results page
 - [ ] Click button - print dialog opens
@@ -93,6 +120,7 @@ Use this checklist to verify all new features before going live with the public 
   - [ ] Primary limiting belief
   - [ ] Active safety contracts
   - [ ] Rewiring section
+  - [ ] **Warning signs section (with triggers + practices)**
   - [ ] Next steps
 
 ### A/B Test CTA

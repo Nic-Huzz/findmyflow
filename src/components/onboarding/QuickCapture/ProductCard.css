@@ -99,8 +99,8 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  background: rgba(147, 51, 234, 0.1);
-  border: 1px solid rgba(147, 51, 234, 0.3);
+  background: rgba(233, 162, 59, 0.15);
+  border: 1px solid rgba(233, 162, 59, 0.3);
   border-radius: 100px;
   font-size: 14px;
   color: white;
@@ -110,7 +110,7 @@
 }
 
 .qc-product-card .type-badge:hover {
-  background: rgba(147, 51, 234, 0.15);
+  background: rgba(233, 162, 59, 0.25);
 }
 
 .qc-product-card .type-badge .change-link {
@@ -144,7 +144,7 @@
 
 .qc-product-card .form-group input:focus {
   outline: none;
-  border-color: #9333EA;
+  border-color: #E9A23B;
 }
 
 .qc-product-card .form-group input::placeholder {
@@ -185,17 +185,27 @@
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .qc-product-card .tier-option:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(147, 51, 234, 0.3);
+  border-color: rgba(233, 162, 59, 0.4);
+  transform: translateY(-2px);
 }
 
 .qc-product-card .tier-option.selected {
-  background: rgba(147, 51, 234, 0.1);
-  border-color: #9333EA;
+  background: rgba(233, 162, 59, 0.15);
+  border-color: #E9A23B;
+  box-shadow: 0 0 25px rgba(233, 162, 59, 0.4), 0 0 50px rgba(233, 162, 59, 0.2);
+  animation: tier-selectBounce 0.4s ease;
+}
+
+@keyframes tier-selectBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.05); }
+  60% { transform: scale(0.98); }
+  100% { transform: scale(1); }
 }
 
 .qc-product-card .tier-icon {
@@ -238,8 +248,8 @@
 }
 
 .qc-product-card .price-type-btn.selected {
-  background: rgba(147, 51, 234, 0.15);
-  border-color: #9333EA;
+  background: rgba(233, 162, 59, 0.15);
+  border-color: #E9A23B;
   color: white;
 }
 
@@ -273,12 +283,13 @@
 /* Step Actions */
 .qc-product-card .step-actions {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
   gap: 12px;
   margin-top: 20px;
 }
 
 .qc-product-card .back-btn {
+  order: 1;
   padding: 12px 20px;
   background: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -295,9 +306,10 @@
 }
 
 .qc-product-card .next-btn {
+  order: 2;
   flex: 1;
   padding: 12px 20px;
-  background: #9333EA;
+  background: #E9A23B;
   border: none;
   border-radius: 10px;
   font-size: 14px;
@@ -308,7 +320,7 @@
 }
 
 .qc-product-card .next-btn:hover:not(:disabled) {
-  background: #7C22CE;
+  background: #D4922F;
 }
 
 .qc-product-card .next-btn:disabled {
@@ -317,9 +329,9 @@
 }
 
 .qc-product-card .next-btn.done {
-  background: #10B981;
+  background: #E9A23B;
 }
 
 .qc-product-card .next-btn.done:hover {
-  background: #059669;
+  background: #D4922F;
 }

@@ -172,7 +172,7 @@ Return ONLY valid JSON:
   }
 }
 
-// Generate 3 offer versions (Product/Service/Hybrid)
+// Generate 3 offer versions (Service/Productized/Product - aligned with wealth ladder)
 async function generateVersions(context: any) {
   const prompt = `Create 3 detailed versions of this offer for comparison.
 
@@ -184,24 +184,25 @@ Target persona: ${JSON.stringify(context.persona || {})}
 Validation data:
 - Price sensitivity/budget: ${context.validationData?.budget || 'Not specified'}
 - Urgency level: ${context.validationData?.urgency || 'Not specified'}
-- Preferred learning style: ${context.validationData?.learningPreference || 'Not specified'}
+- Preferred solution type: ${context.validationData?.solution_category || 'Not specified'}
+- Preferred formats: ${JSON.stringify(context.validationData?.solution_types_service || context.validationData?.solution_types_productized || context.validationData?.solution_types_product || [])}
 
-Create these 3 versions:
+Create these 3 versions (aligned with the wealth ladder):
 
-1. PRODUCT VERSION (scalable, self-serve)
-   - Online course, templates, software, digital products
-   - Lower price, higher volume
-   - Minimal ongoing time from creator
-
-2. SERVICE VERSION (high-touch, done-with-you)
+1. SERVICE VERSION (someone does it for me)
    - Coaching, consulting, done-for-you
    - Higher price, lower volume
    - More personalized, hands-on
 
-3. HYBRID VERSION (group/cohort model)
-   - Group coaching, cohorts, membership
+2. PRODUCTIZED VERSION (a guided process)
+   - Group coaching, cohorts, membership, courses
    - Medium price, medium volume
    - Balance of scalability and personalization
+
+3. PRODUCT VERSION (tools I use myself)
+   - Templates, software, digital downloads
+   - Lower price, higher volume
+   - Minimal ongoing time from creator
 
 For EACH version, generate:
 - name: Catchy name for this delivery format (2-5 words)
@@ -227,9 +228,9 @@ Be realistic and honest. Consider their actual skills when making suggestions.
 Return ONLY valid JSON:
 {
   "versions": {
-    "product": { ... all fields ... },
     "service": { ... all fields ... },
-    "hybrid": { ... all fields ... }
+    "productized": { ... all fields ... },
+    "product": { ... all fields ... }
   }
 }`
 
@@ -256,9 +257,9 @@ Return ONLY valid JSON:
     console.error('Parse error:', e, 'Text:', text.substring(0, 500))
     return {
       versions: {
-        product: null,
         service: null,
-        hybrid: null
+        productized: null,
+        product: null
       }
     }
   }
@@ -277,26 +278,26 @@ Validation data - biggest concern: ${context.validationData?.biggestConcern || '
 Proof elements submitted:
 ${JSON.stringify(context.proofData, null, 2)}
 
-For EACH of the 3 versions (product, service, hybrid):
+For EACH of the 3 versions (service, productized, product):
 1. Rank which proof elements are most relevant
 2. Identify which to "lead with" (most compelling for that delivery type)
 3. Suggest how to present the proof
 4. Identify what's MISSING (gaps in credibility)
 
 Consider:
-- PRODUCT version → Lead with scale proof (helped X people)
 - SERVICE version → Lead with personal transformation (relatability)
-- HYBRID version → Lead with proprietary methodology (unique system)
+- PRODUCTIZED version → Lead with proprietary methodology (unique system)
+- PRODUCT version → Lead with scale proof (helped X people)
 
 Return ONLY valid JSON:
 {
-  "product": {
+  "service": {
     "lead_with": { "type": "string", "text": "the proof text", "why": "explanation" },
     "support_with": [{ "type": "string", "text": "proof text", "why": "explanation" }],
     "proof_score": 1-10
   },
-  "service": { ... same structure ... },
-  "hybrid": { ... same structure ... },
+  "productized": { ... same structure ... },
+  "product": { ... same structure ... },
   "overall_missing": ["video testimonials", "published case studies", etc]
 }`
 
@@ -320,7 +321,7 @@ Return ONLY valid JSON:
   try {
     return JSON.parse(text.replace(/```json\n?|\n?```/g, '').trim())
   } catch {
-    return { product: null, service: null, hybrid: null, overall_missing: [] }
+    return { service: null, productized: null, product: null, overall_missing: [] }
   }
 }
 
@@ -333,7 +334,7 @@ Your method: "${context.yourTime}"
 Bucket: ${context.bucket}
 Dream outcome: ${context.dreamOutcome}
 
-Calculate for EACH version (product, service, hybrid):
+Calculate for EACH version (service, productized, product):
 
 1. speedMultiplier: (e.g., "50x")
 2. adjustedTime: Your method time adjusted for this version
@@ -344,23 +345,23 @@ Calculate for EACH version (product, service, hybrid):
 7. timeDelayScore: 1-10, where 10 = near-instant results
 
 Consider:
+- SERVICE: Done-for-you, so usually fastest
+- PRODUCTIZED: Group accountability speeds things up
 - PRODUCT: Self-paced, so might be slower than promised
-- SERVICE: Done-with-you, so usually faster
-- HYBRID: Group accountability speeds things up
 
 Return ONLY valid JSON:
 {
-  "product": {
+  "service": {
     "speedMultiplier": "50x",
     "adjustedTime": "5-7 hours",
     "quickWin": "First feature deployed in Day 1",
     "fullOutcome": "Location independence in 60-90 days",
     "marketingAngle": "Deploy in 3 hours, not 3 months",
-    "realityCheck": "Self-paced means some will take longer...",
+    "realityCheck": "Done-for-you means fastest results...",
     "timeDelayScore": 9
   },
-  "service": { ... same structure ... },
-  "hybrid": { ... same structure ... }
+  "productized": { ... same structure ... },
+  "product": { ... same structure ... }
 }`
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -383,7 +384,7 @@ Return ONLY valid JSON:
   try {
     return JSON.parse(text.replace(/```json\n?|\n?```/g, '').trim())
   } catch {
-    return { product: null, service: null, hybrid: null }
+    return { service: null, productized: null, product: null }
   }
 }
 
@@ -397,7 +398,7 @@ ${JSON.stringify(context.eliminatedRequirements)}
 Bucket: ${context.bucket}
 Dream outcome: ${context.dreamOutcome}
 
-For EACH version (product, service, hybrid), determine:
+For EACH version (service, productized, product), determine:
 1. topEaseFactors: Top 3-5 "don't needs" most relevant with why
 2. marketingCopy: Marketing copy emphasizing ease (3-4 short lines)
 3. realityCheck: What they still need to do (be honest)
@@ -405,21 +406,21 @@ For EACH version (product, service, hybrid), determine:
 5. effortScore: 1-10, where 10 = nearly effortless
 
 Consider:
-- PRODUCT: Emphasize "no hand-holding needed"
 - SERVICE: Emphasize "we do the work"
-- HYBRID: Emphasize "no going it alone"
+- PRODUCTIZED: Emphasize "no going it alone"
+- PRODUCT: Emphasize "no hand-holding needed"
 
 Return ONLY valid JSON:
 {
-  "product": {
-    "topEaseFactors": [{ "factor": "No coding required", "why": "AI handles it" }],
-    "marketingCopy": "No coding. No hiring. No quitting your job. Just 3 hours.",
-    "realityCheck": "While setup is easy, they still need to...",
-    "stillNeeded": ["Dedicate 3-5 hours", "Make decisions", "Follow the process"],
-    "effortScore": 8
+  "service": {
+    "topEaseFactors": [{ "factor": "No coding required", "why": "We handle it" }],
+    "marketingCopy": "No coding. No hiring. No DIY. We do the work.",
+    "realityCheck": "While we do the work, they still need to...",
+    "stillNeeded": ["Provide input", "Make decisions", "Review deliverables"],
+    "effortScore": 9
   },
-  "service": { ... same structure ... },
-  "hybrid": { ... same structure ... }
+  "productized": { ... same structure ... },
+  "product": { ... same structure ... }
 }`
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -442,7 +443,7 @@ Return ONLY valid JSON:
   try {
     return JSON.parse(text.replace(/```json\n?|\n?```/g, '').trim())
   } catch {
-    return { product: null, service: null, hybrid: null }
+    return { service: null, productized: null, product: null }
   }
 }
 
@@ -456,7 +457,7 @@ Bucket: ${context.bucket}
 Obstacles identified:
 ${context.obstacles.map((o: string, i: number) => `${i+1}. ${o}`).join('\n')}
 
-For EACH version (product, service, hybrid):
+For EACH version (service, productized, product):
 Create 3 bonuses that each remove one obstacle.
 
 For each bonus, generate:
@@ -467,25 +468,25 @@ For each bonus, generate:
 - perceivedValue: Dollar value (number)
 
 Match bonus type to delivery format:
-- PRODUCT bonuses: Templates, checklists, extra modules
 - SERVICE bonuses: Extended support, follow-ups, extras
-- HYBRID bonuses: Community access, extra sessions, recordings
+- PRODUCTIZED bonuses: Community access, extra sessions, recordings
+- PRODUCT bonuses: Templates, checklists, extra modules
 
 Return ONLY valid JSON:
 {
-  "product": [
+  "service": [
     {
-      "name": "30-Minute Pre-Course Strategy Call",
-      "description": "Before starting, hop on a call to create your custom roadmap.",
+      "name": "30-Minute Strategy Follow-Up Call",
+      "description": "30 days after delivery, hop on a call to optimize your results.",
       "obstacleIndex": 1,
-      "reasoning": "They see exactly how it works for their case before starting.",
-      "perceivedValue": 197
+      "reasoning": "They know they'll have ongoing support after the work is done.",
+      "perceivedValue": 297
     },
     { ... bonus 2 ... },
     { ... bonus 3 ... }
   ],
-  "service": [ ... 3 bonuses ... ],
-  "hybrid": [ ... 3 bonuses ... ]
+  "productized": [ ... 3 bonuses ... ],
+  "product": [ ... 3 bonuses ... ]
 }`
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -508,7 +509,7 @@ Return ONLY valid JSON:
   try {
     return JSON.parse(text.replace(/```json\n?|\n?```/g, '').trim())
   } catch {
-    return { product: [], service: [], hybrid: [] }
+    return { service: [], productized: [], product: [] }
   }
 }
 

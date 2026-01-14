@@ -391,13 +391,28 @@ const PublicValidationFlow = () => {
     }
   }
 
+  // Render progress dots
+  const renderProgressDots = () => {
+    if (!flowData) return null
+    const totalSteps = flowData.steps.length
+    return (
+      <div className="validation-progress-dots">
+        {Array.from({ length: totalSteps }).map((_, i) => (
+          <span
+            key={i}
+            className={`dot ${i === currentStepIndex ? 'active' : i < currentStepIndex ? 'completed' : ''}`}
+          />
+        ))}
+      </div>
+    )
+  }
+
   if (loading) {
     return (
       <div className="public-validation-page">
         <div className="validation-loading">
-          <div className="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
+          <div className="loading-spinner" />
+          <p>Loading...</p>
         </div>
       </div>
     )
@@ -425,21 +440,18 @@ const PublicValidationFlow = () => {
   }
 
   const currentStep = flowData.steps[currentStepIndex]
-  const progress = ((currentStepIndex + 1) / flowData.steps.length) * 100
 
   return (
     <div className="public-validation-page">
-      {/* Progress Bar */}
-      <div className="validation-progress-bar">
-        <div className="validation-progress-fill" style={{ width: `${progress}%` }}></div>
-      </div>
+      {/* Progress Dots */}
+      {renderProgressDots()}
 
       {/* Main Content */}
       <div className="validation-container">
         <div className="validation-header">
           <div className="validation-logo">FindMyFlow</div>
           <div className="validation-step-counter">
-            Question {currentStepIndex + 1} of {flowData.steps.length}
+            {currentStepIndex + 1} / {flowData.steps.length}
           </div>
         </div>
 

@@ -52,12 +52,118 @@ const STAGE_GROUPS = [
   { id: 'complete', label: 'Complete', stages: [STAGES.SUMMARY, STAGES.SUCCESS] }
 ]
 
-// Solution type labels for display
+// Solution categories (Part 1 of delivery selection)
+const SOLUTION_CATEGORIES = [
+  {
+    id: 'service',
+    label: 'Service',
+    description: 'I do the work myself',
+    icon: '💼'
+  },
+  {
+    id: 'productized',
+    label: 'Productized',
+    description: 'Packaged programs or courses',
+    icon: '📦'
+  },
+  {
+    id: 'product',
+    label: 'Product',
+    description: 'Something they buy from me',
+    icon: '🛍️'
+  }
+]
+
+// Solution types by category (Part 2 of delivery selection)
+// Matches validation question follow-ups from persona-assessment.json
+const SOLUTION_TYPES_BY_CATEGORY = {
+  service: [
+    {
+      id: 'custom_service',
+      label: 'Custom for each client',
+      description: 'Every engagement is different based on their needs',
+      icon: '🎯'
+    },
+    {
+      id: 'packaged_service',
+      label: 'Same package every time',
+      description: 'Standardized deliverables and process',
+      icon: '📋'
+    },
+    {
+      id: 'hybrid_service',
+      label: 'Mix of both',
+      description: 'Some custom, some packaged',
+      icon: '🔀'
+    }
+  ],
+  productized: [
+    {
+      id: 'automated_group',
+      label: 'Self-paced course',
+      description: 'People go through on their own time',
+      icon: '🎬'
+    },
+    {
+      id: 'live_group',
+      label: 'Live cohort or coaching',
+      description: 'You facilitate live sessions',
+      icon: '👥'
+    },
+    {
+      id: 'managed_service',
+      label: 'Done-for-you packages',
+      description: 'Team delivers standardized work',
+      icon: '⚙️'
+    },
+    {
+      id: 'membership',
+      label: 'Membership or community',
+      description: 'Ongoing access to content/community',
+      icon: '🏠'
+    }
+  ],
+  product: [
+    {
+      id: 'digital_product',
+      label: 'Digital products',
+      description: 'Templates, ebooks, downloads',
+      icon: '📄'
+    },
+    {
+      id: 'software',
+      label: 'Software / SaaS',
+      description: 'Apps, platforms, tools',
+      icon: '💻'
+    },
+    {
+      id: 'physical_product',
+      label: 'Physical products',
+      description: 'Merchandise, equipment, goods',
+      icon: '📦'
+    },
+    {
+      id: 'mixed_products',
+      label: 'Mix of different types',
+      description: 'Multiple product types',
+      icon: '🔀'
+    }
+  ]
+}
+
+// Flat map for labels
 const SOLUTION_LABELS = {
-  one_to_one: '1:1 Service',
-  one_to_many: '1:Many Service',
-  tech_digital: 'Tech/Digital',
-  physical_product: 'Physical Product'
+  custom_service: 'Custom Service',
+  packaged_service: 'Packaged Service',
+  hybrid_service: 'Hybrid Service',
+  automated_group: 'Self-Paced Course',
+  live_group: 'Live Cohort',
+  managed_service: 'Done-For-You',
+  membership: 'Membership',
+  digital_product: 'Digital Product',
+  software: 'Software/SaaS',
+  physical_product: 'Physical Product',
+  mixed_products: 'Mixed Products'
 }
 
 // Lead Magnet types for education
@@ -149,11 +255,11 @@ function OfferBuilderFlow() {
     layer4: ''
   })
 
-  // Multi-section inputs state (for Q7 reasons)
+  // Multi-section inputs state (for Q7 reasons - Hormozi's 3 obstacle types)
   const [sectionInputs, setSectionInputs] = useState({
+    vehicle_problems: ['', '', ''],
     internal_beliefs: ['', '', ''],
-    external_blockers: ['', '', ''],
-    motivation_gaps: ['', '', '']
+    external_beliefs: ['', '', '']
   })
 
   // Problem-based solutions state (for Q8)
@@ -163,10 +269,16 @@ function OfferBuilderFlow() {
   const [currentSolution, setCurrentSolution] = useState({
     problemId: '',
     problemText: '',
+    solutionCategory: '',  // service, productized, or product
     solutionType: '',
     description: '',
-    differentiators: []
+    differentiators: [],
+    alreadyDelivers: null,  // null = not answered, true = yes, false = no
+    existingProductId: null
   })
+
+  // Existing products from Quick Capture / wealth ladder
+  const [existingProducts, setExistingProducts] = useState([])
 
   // Solution categorization state (Core Product / Lead Magnet / Bonus / Skip)
   const [solutionCategories, setSolutionCategories] = useState({})
@@ -218,6 +330,29 @@ function OfferBuilderFlow() {
     }
   }, [user])
 
+  // Load existing products from Quick Capture / wealth ladder
+  useEffect(() => {
+    if (user) {
+      loadExistingProducts()
+    }
+  }, [user])
+
+  const loadExistingProducts = async () => {
+    try {
+      const { data: products, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      setExistingProducts(products || [])
+    } catch (err) {
+      console.error('Error loading existing products:', err)
+      setExistingProducts([])
+    }
+  }
+
   // Check for saved progress on mount
   useEffect(() => {
     if (user) {
@@ -251,7 +386,16 @@ function OfferBuilderFlow() {
       setStage(savedProgressData.stage)
       if (savedProgressData.answers) setAnswers(savedProgressData.answers)
       if (savedProgressData.nicheLayers) setNicheLayers(savedProgressData.nicheLayers)
-      if (savedProgressData.sectionInputs) setSectionInputs(savedProgressData.sectionInputs)
+      if (savedProgressData.sectionInputs) {
+        // Migrate old section format to new Hormozi format if needed
+        const oldData = savedProgressData.sectionInputs
+        const migratedSections = {
+          vehicle_problems: oldData.vehicle_problems || oldData.motivation_gaps || ['', '', ''],
+          internal_beliefs: oldData.internal_beliefs || ['', '', ''],
+          external_beliefs: oldData.external_beliefs || oldData.external_blockers || ['', '', '']
+        }
+        setSectionInputs(migratedSections)
+      }
       if (savedProgressData.problemSolutions) setProblemSolutions(savedProgressData.problemSolutions)
       if (savedProgressData.solutionCategories) setSolutionCategories(savedProgressData.solutionCategories)
       if (savedProgressData.selectedProfile) setSelectedProfile(savedProgressData.selectedProfile)
@@ -332,9 +476,9 @@ function OfferBuilderFlow() {
   const getAllProblems = () => {
     const problems = []
     Object.entries(sectionInputs).forEach(([sectionId, values]) => {
-      const sectionLabel = sectionId === 'internal_beliefs' ? 'Internal Belief'
-        : sectionId === 'external_blockers' ? 'External Blocker'
-        : 'Motivation Gap'
+      const sectionLabel = sectionId === 'vehicle_problems' ? 'Vehicle Problem'
+        : sectionId === 'internal_beliefs' ? 'Internal Belief'
+        : 'External Belief'
       values.forEach((value, index) => {
         if (value.trim()) {
           problems.push({
@@ -424,10 +568,35 @@ function OfferBuilderFlow() {
     setCurrentSolution({
       problemId: '',
       problemText: '',
+      solutionCategory: '',
       solutionType: '',
       description: '',
-      differentiators: []
+      differentiators: [],
+      alreadyDelivers: null,
+      existingProductId: null
     })
+  }
+
+  // Handle selecting an existing product
+  const handleExistingProductSelect = (productId) => {
+    if (productId === 'new') {
+      setCurrentSolution(prev => ({
+        ...prev,
+        existingProductId: null,
+        solutionType: '',
+        description: ''
+      }))
+    } else {
+      const product = existingProducts.find(p => p.id === productId)
+      if (product) {
+        setCurrentSolution(prev => ({
+          ...prev,
+          existingProductId: productId,
+          solutionType: product.product_type || '',
+          description: product.name + (product.description ? ` - ${product.description}` : '')
+        }))
+      }
+    }
   }
 
   // Remove a solution from the list
@@ -519,7 +688,8 @@ function OfferBuilderFlow() {
   // Update a section input value
   const updateSectionInput = (sectionId, index, value) => {
     setSectionInputs(prev => {
-      const newArray = [...prev[sectionId]]
+      const currentArray = prev[sectionId] || ['', '', '']
+      const newArray = [...currentArray]
       newArray[index] = value
       return { ...prev, [sectionId]: newArray }
     })
@@ -529,13 +699,15 @@ function OfferBuilderFlow() {
   const addSectionInput = (sectionId) => {
     setSectionInputs(prev => ({
       ...prev,
-      [sectionId]: [...prev[sectionId], '']
+      [sectionId]: [...(prev[sectionId] || ['', '', '']), '']
     }))
   }
 
   // Check if section has minimum filled inputs
   const sectionHasMinInputs = (sectionId, minCount = 3) => {
-    return sectionInputs[sectionId].filter(v => v.trim().length > 0).length >= minCount
+    const section = sectionInputs[sectionId]
+    if (!section || !Array.isArray(section)) return false
+    return section.filter(v => v.trim().length > 0).length >= minCount
   }
 
   // Check if all sections meet requirements
@@ -808,13 +980,13 @@ function OfferBuilderFlow() {
       <div className="offer-builder-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
         <div className="persona-selector-container">
-          <h2 className="question-text">Who are you building this offer for?</h2>
-          <p className="question-subtext">
-            Select the persona you validated to pre-fill your answers
-          </p>
+          <div className="persona-selector-content">
+            <h2 className="question-text">Who are you building this offer for?</h2>
+            <p className="question-subtext">
+              Select the persona you validated to pre-fill your answers
+            </p>
 
-          {personaProfiles.length > 0 ? (
-            <>
+            {personaProfiles.length > 0 ? (
               <div className="persona-cards">
                 {personaProfiles.map((profile) => (
                   <button
@@ -827,46 +999,53 @@ function OfferBuilderFlow() {
                   </button>
                 ))}
               </div>
-              <button
-                className="primary-button"
-                onClick={() => setStage(STAGES.REVIEW_ANSWERS)}
-                disabled={!selectedProfile}
-                style={{ marginTop: '24px' }}
-              >
-                Continue with Selected Persona
-              </button>
-              <button
-                className="skip-link"
-                onClick={() => {
-                  setSelectedProfile(null)
-                  setAnswers({})
-                  setStage(STAGES.REVIEW_ANSWERS)
-                }}
-              >
-                Skip - Start from scratch
-              </button>
-            </>
-          ) : (
-            <div className="no-personas-message">
-              <p>You haven't validated any personas yet.</p>
-              <p>Complete the Persona Selection flow first to get pre-filled answers, or continue to build from scratch.</p>
-              <button
-                className="primary-button"
-                onClick={() => setStage(STAGES.REVIEW_ANSWERS)}
-                style={{ marginTop: '16px' }}
-              >
-                Build From Scratch
-              </button>
-              <button
-                className="secondary-button"
-                onClick={() => navigate('/persona-selection')}
-                style={{ marginTop: '12px' }}
-              >
-                Go to Persona Selection
-              </button>
-            </div>
-          )}
-          <BackButton onClick={() => setStage(STAGES.WELCOME)} />
+            ) : (
+              <div className="no-personas-message">
+                <p>You haven't validated any personas yet.</p>
+                <p>Complete the Persona Selection flow first to get pre-filled answers, or continue to build from scratch.</p>
+              </div>
+            )}
+          </div>
+
+          <div className="persona-selector-actions">
+            {personaProfiles.length > 0 ? (
+              <>
+                <button
+                  className="primary-button"
+                  onClick={() => setStage(STAGES.REVIEW_ANSWERS)}
+                  disabled={!selectedProfile}
+                >
+                  Continue with Selected Persona
+                </button>
+                <button
+                  className="create-new-button"
+                  onClick={() => {
+                    setSelectedProfile(null)
+                    setAnswers({})
+                    setStage(STAGES.REVIEW_ANSWERS)
+                  }}
+                >
+                  Create New Persona
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className="primary-button"
+                  onClick={() => setStage(STAGES.REVIEW_ANSWERS)}
+                >
+                  Build From Scratch
+                </button>
+                <button
+                  className="secondary-button"
+                  onClick={() => navigate('/persona-selection')}
+                >
+                  Go to Persona Selection
+                </button>
+              </>
+            )}
+            <BackButton onClick={() => setStage(STAGES.WELCOME)} />
+          </div>
         </div>
       </div>
     )
@@ -1191,7 +1370,7 @@ function OfferBuilderFlow() {
                   </div>
 
                   <div className="section-inputs">
-                    {sectionInputs[section.id].map((value, index) => (
+                    {(sectionInputs[section.id] || ['', '', '']).map((value, index) => (
                       <div key={index} className="reason-input-row">
                         <span className="input-number">{index + 1}</span>
                         <input
@@ -1215,7 +1394,7 @@ function OfferBuilderFlow() {
 
                   <div className="section-status">
                     {sectionHasMinInputs(section.id, section.minInputs) ? (
-                      <span className="status-valid">✓ {sectionInputs[section.id].filter(v => v.trim()).length} reasons added</span>
+                      <span className="status-valid">✓ {(sectionInputs[section.id] || []).filter(v => v.trim()).length} reasons added</span>
                     ) : (
                       <span className="status-invalid">Add at least {section.minInputs} reasons</span>
                     )}
@@ -1320,7 +1499,12 @@ function OfferBuilderFlow() {
                     setCurrentSolution(prev => ({
                       ...prev,
                       problemId: e.target.value,
-                      problemText: problem?.text || ''
+                      problemText: problem?.text || '',
+                      alreadyDelivers: null,
+                      existingProductId: null,
+                      solutionCategory: '',
+                      solutionType: '',
+                      description: ''
                     }))
                   }}
                 >
@@ -1333,21 +1517,120 @@ function OfferBuilderFlow() {
                 </select>
               </div>
 
-              {/* Solution type selector */}
+              {/* "Do you already deliver this?" question */}
               {currentSolution.problemId && (
                 <div className="form-field">
-                  <label>What type of solution is this?</label>
-                  <div className="solution-type-options">
-                    {question.solutionTypes.map(type => (
+                  <label>Do you already deliver this solution?</label>
+                  <div className="yes-no-options">
+                    <button
+                      type="button"
+                      className={`yes-no-btn ${currentSolution.alreadyDelivers === true ? 'selected' : ''}`}
+                      onClick={() => setCurrentSolution(prev => ({
+                        ...prev,
+                        alreadyDelivers: true,
+                        existingProductId: null,
+                        solutionCategory: '',
+                        solutionType: '',
+                        description: ''
+                      }))}
+                    >
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      className={`yes-no-btn ${currentSolution.alreadyDelivers === false ? 'selected' : ''}`}
+                      onClick={() => setCurrentSolution(prev => ({
+                        ...prev,
+                        alreadyDelivers: false,
+                        existingProductId: null,
+                        solutionCategory: '',
+                        solutionType: '',
+                        description: ''
+                      }))}
+                    >
+                      No, this is new
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* If YES - show existing products dropdown */}
+              {currentSolution.alreadyDelivers === true && (
+                <div className="form-field">
+                  <label>Select your existing product</label>
+                  {existingProducts.length > 0 ? (
+                    <select
+                      value={currentSolution.existingProductId || ''}
+                      onChange={(e) => handleExistingProductSelect(e.target.value)}
+                    >
+                      <option value="">Select a product...</option>
+                      {existingProducts.map(product => (
+                        <option key={product.id} value={product.id}>
+                          {product.name} {product.money_model_tier ? `(${product.money_model_tier})` : ''}
+                        </option>
+                      ))}
+                      <option value="new">+ Add as new product</option>
+                    </select>
+                  ) : (
+                    <div className="no-products-message">
+                      <p>No existing products found.</p>
                       <button
-                        key={type.value}
                         type="button"
-                        className={`solution-type-btn ${currentSolution.solutionType === type.value ? 'selected' : ''}`}
+                        className="secondary-button small"
                         onClick={() => setCurrentSolution(prev => ({
                           ...prev,
-                          solutionType: type.value
+                          alreadyDelivers: false
                         }))}
                       >
+                        Add as new
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Solution category selector (Part 1) - show if NO or if YES with new product */}
+              {(currentSolution.alreadyDelivers === false ||
+                (currentSolution.alreadyDelivers === true && currentSolution.existingProductId === null && existingProducts.length > 0)) && (
+                <div className="form-field">
+                  <label>What type of offering is this?</label>
+                  <div className="solution-category-options">
+                    {SOLUTION_CATEGORIES.map(cat => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        className={`solution-category-btn ${currentSolution.solutionCategory === cat.id ? 'selected' : ''}`}
+                        onClick={() => setCurrentSolution(prev => ({
+                          ...prev,
+                          solutionCategory: cat.id,
+                          solutionType: '' // Reset type when category changes
+                        }))}
+                      >
+                        <span className="cat-icon">{cat.icon}</span>
+                        <span className="cat-label">{cat.label}</span>
+                        <span className="cat-desc">{cat.description}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Solution type selector (Part 2) - show after category selected */}
+              {currentSolution.solutionCategory && (
+                <div className="form-field">
+                  <label>How do you deliver this?</label>
+                  <div className="solution-type-options">
+                    {SOLUTION_TYPES_BY_CATEGORY[currentSolution.solutionCategory]?.map(type => (
+                      <button
+                        key={type.id}
+                        type="button"
+                        className={`solution-type-btn ${currentSolution.solutionType === type.id ? 'selected' : ''}`}
+                        onClick={() => setCurrentSolution(prev => ({
+                          ...prev,
+                          solutionType: type.id
+                        }))}
+                      >
+                        <span className="type-icon">{type.icon}</span>
                         <span className="type-label">{type.label}</span>
                         <span className="type-desc">{type.description}</span>
                       </button>
@@ -1356,10 +1639,10 @@ function OfferBuilderFlow() {
                 </div>
               )}
 
-              {/* Solution description */}
-              {currentSolution.solutionType && (
+              {/* Solution description - show if type selected (for new) or product selected (for existing) */}
+              {(currentSolution.solutionType || currentSolution.existingProductId) && (
                 <div className="form-field">
-                  <label>Describe your solution</label>
+                  <label>{currentSolution.existingProductId ? 'Confirm or edit the description' : 'Describe your solution'}</label>
                   <textarea
                     className="solution-input"
                     placeholder="What will you offer? How does it solve their problem?"
@@ -1669,6 +1952,14 @@ function OfferBuilderFlow() {
             {answers.q7_excuses?.sections ? (
               <div className="reasons-summary">
                 <div className="reason-category">
+                  <h4>Vehicle Problems</h4>
+                  <ul>
+                    {answers.q7_excuses.sections.vehicle_problems?.map((r, i) => (
+                      <li key={i}>{r}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="reason-category">
                   <h4>Internal Beliefs</h4>
                   <ul>
                     {answers.q7_excuses.sections.internal_beliefs?.map((r, i) => (
@@ -1677,17 +1968,9 @@ function OfferBuilderFlow() {
                   </ul>
                 </div>
                 <div className="reason-category">
-                  <h4>External Blockers</h4>
+                  <h4>External Beliefs</h4>
                   <ul>
-                    {answers.q7_excuses.sections.external_blockers?.map((r, i) => (
-                      <li key={i}>{r}</li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="reason-category">
-                  <h4>Motivation Gaps</h4>
-                  <ul>
-                    {answers.q7_excuses.sections.motivation_gaps?.map((r, i) => (
+                    {answers.q7_excuses.sections.external_beliefs?.map((r, i) => (
                       <li key={i}>{r}</li>
                     ))}
                   </ul>

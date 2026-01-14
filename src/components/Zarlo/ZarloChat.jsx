@@ -30,7 +30,8 @@ import {
   ACCOUNTABILITY_RESPONSES,
   STANDARD_PROMPTS
 } from '../../lib/zarlo/zarloEngine'
-import { getPageContent, getChallengeTabContent, ROUTING_OPTIONS, SOUTH_MODE, isPublicRoute } from '../../lib/zarlo/zarloPageContent'
+import { getPageContent, getChallengeTabContent, getOnboardingContent, ROUTING_OPTIONS, SOUTH_MODE, isPublicRoute } from '../../lib/zarlo/zarloPageContent'
+import { useOnboarding } from '../../context/OnboardingContext'
 import { trackEvent } from '../../lib/analytics'
 import './Zarlo.css'
 
@@ -138,6 +139,7 @@ function ZarloChat({ onClose, challengeTab = null }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const { onboardingScreen } = useOnboarding()
   const messagesEndRef = useRef(null)
   const initializedRef = useRef(false)
 
@@ -264,7 +266,10 @@ function ZarloChat({ onClose, challengeTab = null }) {
     setShowCommitmentInput(false)
 
     let pageContent
-    if (currentRoute === '/7-day-challenge' && challengeTab) {
+    if (onboardingScreen) {
+      // Use onboarding-specific content when in onboarding flow
+      pageContent = getOnboardingContent(onboardingScreen)
+    } else if (currentRoute === '/7-day-challenge' && challengeTab) {
       pageContent = getChallengeTabContent(challengeTab)
     } else {
       pageContent = getPageContent(currentRoute)

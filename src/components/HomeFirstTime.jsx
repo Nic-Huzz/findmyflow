@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import { useOnboarding } from '../context/OnboardingContext'
 import { essenceProfiles } from '../data/essenceProfiles'
 import { protectiveProfiles } from '../data/protectiveProfiles'
 import {
@@ -45,13 +46,29 @@ const SCREENS = {
   EXISTING_PROJECT: 'existing_project'
 }
 
+// LocalStorage key for onboarding progress
+const ONBOARDING_STORAGE_KEY = 'onboarding_v2_progress'
+
 function HomeFirstTime() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { setOnboardingScreen } = useOnboarding()
 
   const [currentScreen, setCurrentScreen] = useState(SCREENS.ARCHETYPE_REVEAL)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // Transition state for smooth page changes
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isEntering, setIsEntering] = useState(true)
+
+  // Clear entering state after animation
+  useEffect(() => {
+    if (isEntering) {
+      const timer = setTimeout(() => setIsEntering(false), 350)
+      return () => clearTimeout(timer)
+    }
+  }, [isEntering, currentScreen])
 
   // User archetype data
   const [essenceArchetype, setEssenceArchetype] = useState(null)
@@ -74,7 +91,77 @@ function HomeFirstTime() {
   useEffect(() => {
     loadUserData()
     loadPersonaQuestions()
+    loadSavedProgress()
   }, [user])
+
+  // Save progress to localStorage
+  const saveProgress = (screen, data = {}) => {
+    if (!user?.id) return
+    const progress = {
+      screen,
+      employmentStatus: data.employmentStatus ?? employmentStatus,
+      hasSideProject: data.hasSideProject ?? hasSideProject,
+      wealthLadderRung: data.wealthLadderRung ?? wealthLadderRung,
+      primaryGoal: data.primaryGoal ?? primaryGoal,
+      personaAnswers: data.personaAnswers ?? personaAnswers,
+      timestamp: Date.now()
+    }
+    localStorage.setItem(`${ONBOARDING_STORAGE_KEY}_${user.id}`, JSON.stringify(progress))
+  }
+
+  // Load saved progress from localStorage
+  const loadSavedProgress = () => {
+    if (!user?.id) return
+    try {
+      const saved = localStorage.getItem(`${ONBOARDING_STORAGE_KEY}_${user.id}`)
+      if (saved) {
+        const progress = JSON.parse(saved)
+        // Only restore if less than 24 hours old
+        if (Date.now() - progress.timestamp < 24 * 60 * 60 * 1000) {
+          if (progress.employmentStatus) setEmploymentStatus(progress.employmentStatus)
+          if (progress.hasSideProject) setHasSideProject(progress.hasSideProject)
+          if (progress.wealthLadderRung) setWealthLadderRung(progress.wealthLadderRung)
+          if (progress.primaryGoal) setPrimaryGoal(progress.primaryGoal)
+          if (progress.personaAnswers) setPersonaAnswers(progress.personaAnswers)
+          if (progress.screen) setCurrentScreen(progress.screen)
+        } else {
+          // Clear stale progress
+          localStorage.removeItem(`${ONBOARDING_STORAGE_KEY}_${user.id}`)
+        }
+      }
+    } catch (err) {
+      console.error('Error loading saved progress:', err)
+    }
+  }
+
+  // Clear progress from localStorage (call after completion)
+  const clearSavedProgress = () => {
+    if (!user?.id) return
+    localStorage.removeItem(`${ONBOARDING_STORAGE_KEY}_${user.id}`)
+  }
+
+  // Hide bottom toolbar during onboarding
+  useEffect(() => {
+    document.body.classList.add('onboarding-active')
+    return () => {
+      document.body.classList.remove('onboarding-active')
+    }
+  }, [])
+
+  // Update Zarlo context when screen changes
+  useEffect(() => {
+    const screenToZarloMap = {
+      [SCREENS.ARCHETYPE_REVEAL]: 'welcome',
+      [SCREENS.PERSONA_Q1]: 'q1',
+      [SCREENS.PERSONA_Q2]: 'q2',
+      [SCREENS.PERSONA_Q3]: 'q3',
+      [SCREENS.PERSONA_REVEAL]: 'persona_reveal'
+    }
+    setOnboardingScreen(screenToZarloMap[currentScreen] || null)
+
+    // Clear onboarding screen when component unmounts
+    return () => setOnboardingScreen(null)
+  }, [currentScreen, setOnboardingScreen])
 
   const loadUserData = async () => {
     if (!user?.id) return
@@ -129,32 +216,62 @@ function HomeFirstTime() {
     }
   }
 
+  // Helper for smooth screen transitions
+  const transitionToScreen = (nextScreen) => {
+    if (isTransitioning) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setCurrentScreen(nextScreen)
+      setIsTransitioning(false)
+      setIsEntering(true)
+    }, 200)
+  }
+
   // Handle Q1 (Journey Stage) selection
   const handleQ1Selection = (option) => {
-    setEmploymentStatus(option.value)
-    setHasSideProject(
-      option.value === 'employed_building' ||
-      option.value === 'solo_early' ||
-      option.value === 'solo_established'
-    )
-    setPersonaAnswers(prev => ({
-      ...prev,
-      q1_journey: { value: option.value, persona: option.persona, label: option.label }
-    }))
-    setTimeout(() => setCurrentScreen(SCREENS.PERSONA_Q2), 300)
+    // Use data.employment_status if available, otherwise fall back to option.value
+    const empStatus = option.data?.employment_status || option.value
+    const sideProject = option.data?.has_side_project || false
+    const newAnswers = {
+      ...personaAnswers,
+      q1_journey: { value: option.value, persona: option.persona, label: option.label, employment_status: empStatus }
+    }
+
+    setEmploymentStatus(empStatus)
+    setHasSideProject(sideProject)
+    setPersonaAnswers(newAnswers)
+
+    // Save progress to localStorage
+    saveProgress(SCREENS.PERSONA_Q2, {
+      employmentStatus: empStatus,
+      hasSideProject: sideProject,
+      personaAnswers: newAnswers
+    })
+
+    transitionToScreen(SCREENS.PERSONA_Q2)
   }
 
   // Handle Q2 (Wealth Ladder) selection
   const handleQ2Selection = (option) => {
     const ladderValue = option.data?.wealth_ladder || option.value
+    const newAnswers = {
+      ...personaAnswers,
+      q2_created: { value: option.value, persona: option.persona, label: option.label, wealth_ladder: ladderValue }
+    }
+
     setWealthLadderRung(ladderValue)
     // Reset goal when wealth ladder changes (may invalidate previous selection)
     setPrimaryGoal(null)
-    setPersonaAnswers(prev => ({
-      ...prev,
-      q2_created: { value: option.value, persona: option.persona, label: option.label, wealth_ladder: ladderValue }
-    }))
-    setTimeout(() => setCurrentScreen(SCREENS.PERSONA_Q3), 300)
+    setPersonaAnswers(newAnswers)
+
+    // Save progress to localStorage
+    saveProgress(SCREENS.PERSONA_Q3, {
+      wealthLadderRung: ladderValue,
+      primaryGoal: null,
+      personaAnswers: newAnswers
+    })
+
+    transitionToScreen(SCREENS.PERSONA_Q3)
   }
 
   // Handle Q3 (Goal) selection - with validation
@@ -166,8 +283,9 @@ function HomeFirstTime() {
     const emphasis = determineGuidanceEmphasis(wealthLadderRung, option.value)
     setGuidanceEmphasis(emphasis)
 
-    // Derive persona from wealth ladder (V2 approach - persona is derived, not voted)
-    const derivedPersona = derivePersonaFromWealthLadder(wealthLadderRung)
+    // Derive persona from wealth ladder + employment status (V2 approach)
+    // Movement Maker only if self-employed AND has products
+    const derivedPersona = derivePersonaFromWealthLadder(wealthLadderRung, employmentStatus)
 
     setPersonaAnswers(prev => ({
       ...prev,
@@ -181,7 +299,11 @@ function HomeFirstTime() {
 
     // Save all V2 data to database
     saveOnboardingV2Data(derivedPersona, emphasis, option.value)
-    setTimeout(() => setCurrentScreen(SCREENS.PERSONA_REVEAL), 300)
+
+    // Clear localStorage progress since Q1-Q3 is complete
+    clearSavedProgress()
+
+    transitionToScreen(SCREENS.PERSONA_REVEAL)
   }
 
   // Save all V2 onboarding data to database
@@ -198,6 +320,7 @@ function HomeFirstTime() {
           wealth_ladder_rung: wealthLadderRung,
           primary_goal: goal,
           guidance_emphasis: emphasis,
+          onboarding_completed: true,
           onboarding_v2_completed: true,
           // Set initial stage based on wealth ladder
           current_stage: wealthLadderRung === 'pre_ladder' ? null : 1
@@ -238,8 +361,8 @@ function HomeFirstTime() {
 
   // Handle Quick Capture completion
   const handleQuickCaptureComplete = (capturedData) => {
-    // Navigate to report card to see their captured data
-    navigate('/report-card')
+    // Navigate to main profile page after onboarding
+    navigate('/me')
   }
 
   // Loading state
@@ -261,43 +384,52 @@ function HomeFirstTime() {
         justifyContent: 'space-between',
         alignItems: 'center',
         textAlign: 'center',
-        padding: '24px'
+        padding: '24px',
+        position: 'relative',
+        overflow: 'hidden'
       }}>
+        {/* Sparkle particles */}
+        <div className="sparkle-container">
+          <div className="sparkle" />
+          <div className="sparkle" />
+          <div className="sparkle" />
+          <div className="sparkle" />
+          <div className="sparkle" />
+          <div className="sparkle" />
+        </div>
+
+        {/* Pulsing glow rings */}
+        <div className="glow-rings">
+          <div className="glow-ring glow-ring-1" />
+          <div className="glow-ring glow-ring-2" />
+          <div className="glow-ring glow-ring-3" />
+        </div>
+
+        {/* Decorative floating elements */}
+        <span className="welcome-decoration welcome-decoration-1">✨</span>
+        <span className="welcome-decoration welcome-decoration-2">💫</span>
+        <span className="welcome-decoration welcome-decoration-3">🌟</span>
+        <span className="welcome-decoration welcome-decoration-4">⭐</span>
+
+        {/* Golden glow behind content */}
+        <div className="welcome-glow" />
+
         {/* Spacer for top */}
         <div style={{ flex: 1 }} />
 
         {/* Content centered */}
-        <div style={{ maxWidth: '400px' }}>
-          <h1 style={{
-            fontSize: '2rem',
-            fontWeight: 700,
-            marginBottom: '12px',
-            color: 'white'
-          }}>
+        <div className="welcome-content">
+          <h1 className="welcome-greeting animate-text">
             Welcome{userName ? `, ${userName}` : ''}!
           </h1>
-          <p style={{
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: '1.1rem',
-            marginBottom: '40px'
-          }}>
-            Let's get you set up 🙌🏼
+          <p className="welcome-subtitle">
+            Let's get you set up <span className="welcome-wave">👋</span>
           </p>
 
-          <p style={{
-            fontSize: '1.2rem',
-            lineHeight: 1.7,
-            color: 'white',
-            marginBottom: '20px',
-            fontWeight: 500
-          }}>
+          <p className="welcome-main-text">
             To personalise your journey here's three quick questions.
           </p>
-          <p style={{
-            fontSize: '1rem',
-            lineHeight: 1.6,
-            color: 'rgba(255, 255, 255, 0.7)'
-          }}>
+          <p className="welcome-sub-text">
             Your answers will ensure we provide the best support for where you're at.
           </p>
         </div>
@@ -306,12 +438,14 @@ function HomeFirstTime() {
         <div style={{ flex: 1 }} />
 
         {/* Button at bottom */}
-        <div style={{ width: '100%', maxWidth: '400px', paddingBottom: '32px' }}>
+        <div className="welcome-cta-container">
           <button
-            className="primary-button"
-            onClick={() => setCurrentScreen(SCREENS.PERSONA_Q1)}
+            className="welcome-cta-button"
+            onClick={() => transitionToScreen(SCREENS.PERSONA_Q1)}
           >
+            <span className="shimmer-layer" />
             Let's Go
+            <span className="btn-arrow">→</span>
           </button>
         </div>
       </div>
@@ -359,7 +493,7 @@ function HomeFirstTime() {
     }
 
     return (
-      <div className="home-first-time question-screen">
+      <div className={`home-first-time question-screen ${isTransitioning ? 'transitioning' : ''} ${isEntering ? 'entering' : ''}`}>
         <div className="progress-dots">
           {[0, 1, 2].map(i => (
             <span
@@ -431,13 +565,14 @@ function HomeFirstTime() {
                 color: 'rgba(255, 255, 255, 0.5)',
                 fontSize: '14px',
                 marginTop: '24px',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                transition: 'color 0.2s ease'
               }}
-              onClick={() => setCurrentScreen(
+              onClick={() => transitionToScreen(
                 currentScreen === SCREENS.PERSONA_Q2 ? SCREENS.PERSONA_Q1 : SCREENS.PERSONA_Q2
               )}
             >
-              Back
+              ← Back
             </button>
           )}
         </div>

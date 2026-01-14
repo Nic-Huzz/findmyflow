@@ -483,52 +483,145 @@
 │                           FLOW DEPENDENCY HIERARCHY                                  │
 ├─────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                      │
-│  TIER 0: ENTRY                                                                       │
-│  ═══════════════                                                                     │
+│  TIER 0: ONBOARDING V2 (Entry + Path Selection)                                     │
+│  ═══════════════════════════════════════════════                                     │
 │                                                                                      │
-│       ┌─────────────────────┐                                                       │
-│       │    Persona Quiz     │ ◄── Entry point for ALL users                        │
-│       │   (3 questions)     │                                                       │
-│       └──────────┬──────────┘                                                       │
-│                  │                                                                   │
-│                  │ OUTPUTS:                                                          │
-│                  │ • persona_type (Vibe Seeker / Vibe Riser / Movement Maker)       │
-│                  │ • Initial journey guidance                                        │
-│                  │ • Stage recommendations                                           │
-│                  │                                                                   │
-│                  ▼                                                                   │
-│  ┌───────────────────────────────────────────────────────────────────────────────┐  │
-│  │                                                                                │  │
-│  │  TIER 1: DISCOVERY (Who Am I? What Do I Offer?)                               │  │
-│  │  ═══════════════════════════════════════════════                               │  │
-│  │                                                                                │  │
-│  │       ┌──────────────┐      ┌──────────────┐      ┌──────────────┐            │  │
-│  │       │    Skills    │─────►│   Problems   │─────►│   Persona    │            │  │
-│  │       │    Flow      │      │     Flow     │      │     Flow     │            │  │
-│  │       └──────┬───────┘      └──────┬───────┘      └──────┬───────┘            │  │
-│  │              │                     │                     │                     │  │
-│  │              │    "What am I       │    "What problems   │   "Who needs       │  │
-│  │              │     good at?"       │     can I solve?"   │    this help?"     │  │
-│  │              │                     │                     │                     │  │
-│  │              └─────────────────────┼─────────────────────┘                     │  │
-│  │                                    │                                           │  │
-│  │                                    ▼                                           │  │
-│  │                          ┌──────────────────┐                                  │  │
-│  │                          │   Integration    │                                  │  │
-│  │                          │      Flow        │                                  │  │
-│  │                          └────────┬─────────┘                                  │  │
-│  │                                   │                                            │  │
-│  │                                   │ OUTPUTS:                                   │  │
-│  │                                   │ • nikigai_clusters (skills, problems)      │  │
-│  │                                   │ • persona_profiles (ideal customer)        │  │
-│  │                                   │ • nikigai_key_outcomes (opportunities)     │  │
-│  │                                   │                                            │  │
-│  └───────────────────────────────────┼────────────────────────────────────────────┘  │
-│                                      │                                               │
-│                    ┌─────────────────┼─────────────────┐                            │
-│                    │                 │                 │                            │
-│                    ▼                 ▼                 ▼                            │
+│       ┌─────────────────────────────────────────────────────────────────────┐       │
+│       │                    PERSONA ASSESSMENT (Q1-Q3)                        │       │
+│       ├─────────────────────────────────────────────────────────────────────┤       │
+│       │                                                                      │       │
+│       │  Q1: Employment Status                                               │       │
+│       │      → employed_exploring | employed_building | solo_early | solo_est│       │
+│       │                          ↓                                           │       │
+│       │  Q2: Wealth Ladder Position                                          │       │
+│       │      → pre_ladder | service | productized | products                 │       │
+│       │                          ↓                                           │       │
+│       │  Q3: Primary Goal                                                    │       │
+│       │      → discovery | creation | monetization | growth                  │       │
+│       │                                                                      │       │
+│       └──────────────────────────┬──────────────────────────────────────────┘       │
+│                                  │                                                   │
+│                                  │ OUTPUTS:                                          │
+│                                  │ • persona_type (derived from wealth_ladder)       │
+│                                  │ • guidance_emphasis (8 types)                     │
+│                                  │ • starting_stage (0-6 based on ladder/goal)       │
+│                                  │ • onboarding_path (1-4)                           │
+│                                  │                                                   │
+│                                  ▼                                                   │
+│       ┌──────────────────────────┴──────────────────────────┐                       │
+│       │                                                      │                       │
+│       ▼                                                      ▼                       │
+│  ┌─────────────┐                                    ┌─────────────────────┐         │
+│  │   PATH 1    │                                    │    PATHS 2-4        │         │
+│  │ pre_ladder  │                                    │ service/product-    │         │
+│  │             │                                    │ ized/products       │         │
+│  └──────┬──────┘                                    └──────────┬──────────┘         │
+│         │                                                      │                     │
+│         ▼                                                      ▼                     │
+│  ┌─────────────────┐                            ┌──────────────────────────┐        │
+│  │   Flow Finder   │                            │     QUICK CAPTURE        │        │
+│  │ (/nikigai/skills)│                            │     (5-Step Flow)        │        │
+│  │                 │                            ├──────────────────────────┤        │
+│  │ Deep Discovery  │                            │ 1. Skills (wheel picker) │        │
+│  │ or Fast Track   │                            │ 2. Problems (wheel)      │        │
+│  │                 │                            │ 3. Personas (wheel)      │        │
+│  └─────────────────┘                            │ 4. Products (multi-add)  │        │
+│                                                 │ 5. Summary               │        │
+│                                                 └────────────┬─────────────┘        │
+│                                                              │                       │
+│                                                              │ OUTPUTS:              │
+│                                                              │ • nikigai_responses   │
+│                                                              │   (skills/problems/   │
+│                                                              │    personas)          │
+│                                                              │ • products[] with     │
+│                                                              │   money_model_tier    │
+│                                                              │ • Starting stage set  │
+│                                                              │                       │
 └─────────────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                      │
+│  8 GUIDANCE EMPHASIS TYPES (Determined by Q2 + Q3)                                  │
+│  ═════════════════════════════════════════════════                                   │
+│                                                                                      │
+│  ┌─────────────────┬─────────────────┬─────────────────┬─────────────────┐          │
+│  │ deep_discovery  │ fast_track_     │ offer_          │ client_         │          │
+│  │ (Purple)        │ creation (Amber)│ refinement(Blue)│ acquisition     │          │
+│  │ Stages 0-1      │ Stages 0-2      │ Stages 2-3      │ (Emerald) 2-4   │          │
+│  ├─────────────────┼─────────────────┼─────────────────┼─────────────────┤          │
+│  │ suite_building  │ launch_sales    │ pipeline_       │ scale_systems   │          │
+│  │ (Violet)        │ (Red)           │ optimization    │ (Orange)        │          │
+│  │ Stages 3-5      │ Stages 4-6      │ (Cyan) 5-7      │ Stages 1-7      │          │
+│  └─────────────────┴─────────────────┴─────────────────┴─────────────────┘          │
+│                                                                                      │
+│  Each emphasis affects: Quest priorities, Dashboard hero, Zarlo personality         │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Tier 0.5: Quick Capture → Discovery Bridge
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                      │
+│  QUICK CAPTURE ↔ FLOW FINDER RELATIONSHIP                                           │
+│  ════════════════════════════════════════                                            │
+│                                                                                      │
+│  Quick Capture (Paths 2-4)              Flow Finder (Path 1 + Deep Dive)            │
+│  ─────────────────────────              ────────────────────────────────            │
+│  • Fast: 5 steps, wheel pickers         • Deep: AI-guided conversations             │
+│  • Captures existing knowledge          • Discovers hidden skills/patterns          │
+│  • Products pre-defined                 • Products emerge from discovery            │
+│  • Source: 'quick_capture'              • Source: 'flow_finder'                     │
+│                                                                                      │
+│  BOTH write to same tables:                                                         │
+│  ┌─────────────────────────────────────────────────────────────────────────┐       │
+│  │ nikigai_responses (skills, problems, personas)                          │       │
+│  │ products (product suite with money_model_tier)                          │       │
+│  └─────────────────────────────────────────────────────────────────────────┘       │
+│                                                                                      │
+│  Quick Capture users can LATER do Flow Finder for:                                  │
+│  • Deeper skill exploration                                                         │
+│  • Uncover problems they didn't know they solve                                     │
+│  • Refine persona with AI conversation                                              │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Tier 1: Discovery (Deep Dive Path)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                      │
+│  TIER 1: DISCOVERY (Who Am I? What Do I Offer?)                                     │
+│  ═══════════════════════════════════════════════                                     │
+│                                                                                      │
+│       ┌──────────────┐      ┌──────────────┐      ┌──────────────┐                  │
+│       │    Skills    │─────►│   Problems   │─────►│   Persona    │                  │
+│       │    Flow      │      │     Flow     │      │     Flow     │                  │
+│       └──────┬───────┘      └──────┬───────┘      └──────┬───────┘                  │
+│              │                     │                     │                           │
+│              │    "What am I       │    "What problems   │   "Who needs             │
+│              │     good at?"       │     can I solve?"   │    this help?"           │
+│              │                     │                     │                           │
+│              └─────────────────────┼─────────────────────┘                           │
+│                                    │                                                 │
+│                                    ▼                                                 │
+│                          ┌──────────────────┐                                       │
+│                          │   Integration    │                                       │
+│                          │      Flow        │                                       │
+│                          └────────┬─────────┘                                       │
+│                                   │                                                  │
+│                                   │ OUTPUTS:                                         │
+│                                   │ • nikigai_clusters (skills, problems)            │
+│                                   │ • persona_profiles (ideal customer)              │
+│                                   │ • nikigai_key_outcomes (opportunities)           │
+│                                   │                                                  │
+└───────────────────────────────────┼──────────────────────────────────────────────────┘
+                                    │
+                  ┌─────────────────┼─────────────────┐
+                  │                 │                 │
+                  ▼                 ▼                 ▼
 ```
 
 ### Tier 1 → Tier 2 Data Flow
@@ -539,19 +632,37 @@
 │  TIER 2A: OFFER BUILDING (What Do I Sell?)                                          │
 │  ═════════════════════════════════════════                                           │
 │                                                                                      │
-│  FROM DISCOVERY:                                                                     │
+│  FROM ONBOARDING + DISCOVERY:                                                        │
 │  ┌─────────────────────────────────────────────────────────────────────┐            │
+│  │ • wealth_ladder_rung → Default product category                     │            │
+│  │ • products[] from Quick Capture → Pre-populated product suite       │            │
 │  │ • Skills clusters → Inform "What you deliver"                       │            │
 │  │ • Problems solved → Inform "Dream Outcome" descriptions             │            │
 │  │ • Persona profile → Pre-populate "Who this is for"                  │            │
 │  └─────────────────────────────────────────────────────────────────────┘            │
 │                                      │                                               │
-│                                      ▼                                               │
-│                        ┌─────────────────────────┐                                  │
-│                        │   $100M Offer Builder   │                                  │
-│                        │     (8-Step Flow)       │                                  │
-│                        └────────────┬────────────┘                                  │
-│                                     │                                                │
+│         ┌────────────────────────────┴────────────────────────────┐                 │
+│         │                                                         │                 │
+│         ▼                                                         ▼                 │
+│  ┌─────────────────────────┐                      ┌─────────────────────────┐       │
+│  │   $100M Offer Builder   │                      │   GRAND SLAM OFFER V2   │       │
+│  │     (V1: 8-Step Flow)   │─────────────────────►│   (/offer-builder-v2)   │       │
+│  │                         │     REQUIRED         │                         │       │
+│  │  • Dream Outcome        │     PREREQUISITE     │  • Bonuses (min 1)      │       │
+│  │  • Proof Stack          │                      │  • Guarantee            │       │
+│  │  • Speed Advantage      │                      │  • Scarcity             │       │
+│  │  • Ease Factor          │                      │  • Offer Naming         │       │
+│  │  • Obstacles            │                      │                         │       │
+│  └────────────┬────────────┘                      └────────────┬────────────┘       │
+│               │                                                │                     │
+│               │ OUTPUTS:                                       │ OUTPUTS:            │
+│               │ • offer_builder_assessments                    │ • grand_slam_offers │
+│               │ • Grand Slam Score                             │ • Total bonus value │
+│               │ • Core offer definition                        │ • Complete offer    │
+│               │                                                │   package           │
+│               │                                                │                     │
+│               └────────────────────┬───────────────────────────┘                    │
+│                                    │                                                 │
 │              ┌──────────────────────┼──────────────────────┐                        │
 │              │                      │                      │                        │
 │              ▼                      ▼                      ▼                        │
@@ -562,9 +673,9 @@
 │              │                     │                     │                          │
 │              └─────────────────────┼─────────────────────┘                          │
 │                                    │                                                 │
-│                                    │ OUTPUTS:                                        │
+│                                    │ COMBINED OUTPUTS:                               │
 │                                    │ • Grand Slam Score (Dream × Prob × Speed × Ease)│
-│                                    │ • Core Offer definition                         │
+│                                    │ • Core Offer definition + Bonuses + Guarantee   │
 │                                    │ • Pricing strategy                              │
 │                                    │ • Value elements breakdown                      │
 │                                    │ • Proof stack requirements                      │
@@ -820,7 +931,32 @@
 │  SOURCE FLOW              →    RECEIVING FLOW              CONTEXT PROVIDED          │
 │  ───────────────────────────────────────────────────────────────────────────────    │
 │                                                                                      │
-│  Persona Quiz             →    All Flows                   User type, journey stage │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│  ONBOARDING V2 (NEW)                                                                 │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│                                                                                      │
+│  Q1 Employment Status     →    Path Selection              Which onboarding path    │
+│  Q1 Employment Status     →    Quick Capture               has_side_project flag    │
+│                                                                                      │
+│  Q2 Wealth Ladder         →    Path Selection              Path 1-4 routing         │
+│  Q2 Wealth Ladder         →    Quick Capture               Default product category │
+│  Q2 Wealth Ladder         →    Persona Derivation          vibe_seeker/riser/maker  │
+│  Q2 Wealth Ladder         →    Starting Stage              Stage 0-6 assignment     │
+│                                                                                      │
+│  Q3 Primary Goal          →    Guidance Emphasis           8 emphasis types         │
+│  Q3 Primary Goal          →    Quest Priorities            Which quests surface     │
+│  Q3 Primary Goal          →    Zarlo Personality           Coaching style           │
+│  Q3 Primary Goal          →    Dashboard Hero              Focus messaging          │
+│                                                                                      │
+│  Quick Capture            →    nikigai_responses           Skills/Problems/Personas │
+│  Quick Capture            →    products table              Product suite with tiers │
+│  Quick Capture            →    Offer Builder               Pre-populated products   │
+│  Quick Capture            →    Money Model Flows           Products to enhance      │
+│  Quick Capture            →    CRM Sales                   Products for deals       │
+│                                                                                      │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│  DISCOVERY (DEEP DIVE)                                                               │
+│  ══════════════════════════════════════════════════════════════════════════════     │
 │                                                                                      │
 │  Skills Flow              →    Problems Flow               "What you're good at"    │
 │  Skills Flow              →    Offer Builder               Deliverable expertise    │
@@ -837,6 +973,27 @@
 │                                                                                      │
 │  Integration Flow         →    All Business Flows          nikigai_clusters data    │
 │                                                                                      │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│  OFFER BUILDING                                                                      │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│                                                                                      │
+│  Offer Builder V1         →    Grand Slam V2               REQUIRED prerequisite    │
+│  Offer Builder V1         →    Grand Slam V2               Core offer definition    │
+│  Offer Builder V1         →    Grand Slam V2               Dream outcome for naming │
+│                                                                                      │
+│  Grand Slam V2            →    CRM Sales                   Complete offer package   │
+│  Grand Slam V2            →    Content Generator           Bonus/guarantee hooks    │
+│  Grand Slam V2            →    Funnel Builder              Full offer stack         │
+│                                                                                      │
+│  Offer Builder            →    Lead Magnet Selection       Core offer to lead to    │
+│  Offer Builder            →    All Money Model Flows       Price anchoring, value   │
+│  Offer Builder            →    Funnel Builder              Offer stack structure    │
+│  Offer Builder            →    CRM Sales                   Deal values, stages      │
+│                                                                                      │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│  HEALING                                                                             │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│                                                                                      │
 │  Nervous System Flow      →    Healing Compass             Safety contracts, fears  │
 │  Nervous System Flow      →    Archetype Profiles          Essence/Protective type  │
 │  Nervous System Flow      →    7-Day Challenge             Groan recognition        │
@@ -845,10 +1002,9 @@
 │  Healing Compass          →    7-Day Challenge             Rewire/Release targets   │
 │  Healing Compass          →    Content Generator           Authentic themes         │
 │                                                                                      │
-│  Offer Builder            →    Lead Magnet Selection       Core offer to lead to    │
-│  Offer Builder            →    All Money Model Flows       Price anchoring, value   │
-│  Offer Builder            →    Funnel Builder              Offer stack structure    │
-│  Offer Builder            →    CRM Sales                   Deal values, stages      │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│  VALUE LADDER                                                                        │
+│  ══════════════════════════════════════════════════════════════════════════════     │
 │                                                                                      │
 │  Lead Magnet Selection    →    Attraction Offer Flow       Entry point strategy     │
 │  Lead Magnet Selection    →    Funnel Builder              Opt-in step              │
@@ -858,6 +1014,10 @@
 │  Upsell/Downsell/Cont.    →    Leads Strategy              Customer LTV calcs       │
 │  Upsell/Downsell/Cont.    →    Funnel Builder              Post-sale sequence       │
 │  Upsell/Downsell/Cont.    →    Ascension Engine            Value ladder position    │
+│                                                                                      │
+│  ══════════════════════════════════════════════════════════════════════════════     │
+│  EXECUTION                                                                           │
+│  ══════════════════════════════════════════════════════════════════════════════     │
 │                                                                                      │
 │  Leads Strategy           →    Funnel Builder              Traffic sources          │
 │  Leads Strategy           →    CRM Marketing               Task priorities          │
@@ -879,11 +1039,49 @@
 │                         HOW TABLES SHARE CONTEXT                                     │
 ├─────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                      │
+│   ══════════════════════════════════════════════════════════════════════════════    │
+│   ONBOARDING V2 DATA FLOW (NEW)                                                     │
+│   ══════════════════════════════════════════════════════════════════════════════    │
+│                                                                                      │
+│   user_stage_progress ─────────►   Path routing (wealth_ladder_rung)                │
+│     (employment_status,            Starting stage calculation                       │
+│      wealth_ladder_rung,           Guidance emphasis selection                      │
+│      primary_goal,                 Quest prioritization                             │
+│      guidance_emphasis)            Zarlo personality mode                           │
+│                                    Dashboard hero messaging                         │
+│                                                                                      │
+│   products ────────────────────►   offer_builder_assessments (Product suite)        │
+│     (from Quick Capture)           sales_deals (Products for deals)                 │
+│                                    Money Model flows (Products to enhance)          │
+│                                    Funnel Builder (Offer stack)                     │
+│                                                                                      │
+│   ══════════════════════════════════════════════════════════════════════════════    │
+│   DISCOVERY DATA FLOW                                                               │
+│   ══════════════════════════════════════════════════════════════════════════════    │
+│                                                                                      │
 │   nikigai_responses ────┐                                                           │
 │   nikigai_clusters ─────┼───────►  offer_builder_assessments (Dream Outcome text)   │
 │   persona_profiles ─────┘          attraction_offer_assessments (Persona targeting)  │
 │                                    content_history (Topic generation)                │
 │                                    sales_deals (Lead qualification)                  │
+│                                                                                      │
+│   ══════════════════════════════════════════════════════════════════════════════    │
+│   OFFER BUILDING DATA FLOW                                                          │
+│   ══════════════════════════════════════════════════════════════════════════════    │
+│                                                                                      │
+│   offer_builder_assessments ───►   grand_slam_offers (REQUIRED prerequisite)        │
+│                                    upsell_assessments (Price anchoring)             │
+│                                    downsell_assessments (Alternative pricing)        │
+│                                    continuity_assessments (Recurring model)          │
+│                                    funnel_metrics (Revenue projections)              │
+│                                                                                      │
+│   grand_slam_offers ───────────►   sales_deals (Complete offer for deals)           │
+│     (bonuses, guarantee,           content_history (Bonus/guarantee hooks)          │
+│      scarcity, offer_name)         Funnel Builder (Full offer stack)                │
+│                                                                                      │
+│   ══════════════════════════════════════════════════════════════════════════════    │
+│   HEALING DATA FLOW                                                                 │
+│   ══════════════════════════════════════════════════════════════════════════════    │
 │                                                                                      │
 │   nervous_system_responses ────►   lead_flow_profiles (Archetype assignment)        │
 │                                    groan_reflections (Pattern recognition)           │

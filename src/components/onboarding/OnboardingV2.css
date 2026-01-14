@@ -22,7 +22,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #9333EA;
+  border-top-color: #7C3AED;
   border-radius: 50%;
   animation: onboarding-spin 1s linear infinite;
 }
@@ -50,7 +50,7 @@
 .onboarding-v2 .onboarding-progress-dots .dot.active {
   width: 24px;
   border-radius: 4px;
-  background: #9333EA;
+  background: #7C3AED;
 }
 
 .onboarding-v2 .onboarding-progress-dots .dot.completed {
