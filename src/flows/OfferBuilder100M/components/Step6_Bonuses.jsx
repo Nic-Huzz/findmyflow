@@ -1,25 +1,35 @@
 /**
- * Step6_Bonuses - Generate bonuses from obstacles (Step 6B)
+ * Step6_Bonuses - Generate bonuses from obstacles (Step 7B)
  *
  * Features:
- * - AI generates 3 bonuses per version based on obstacles
+ * - AI generates bonuses per version based on obstacles
  * - User can use, customize, or skip each bonus
- * - Tabbed view for all 3 versions
+ * - Tabbed view for selected versions
+ * - Supports multi-version tabs
  */
 
 import { useState, useEffect } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
+import VersionTabs from './VersionTabs'
 
-function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialData, onComplete, setIsLoading, setError }) {
+function Step6_Bonuses({ obstacles, dreamOutcome, bucket, versions, selectedVersionTypes = [], contextData, initialData, onComplete, setIsLoading, setError }) {
+  // Use selectedVersionTypes if provided, fallback to all 3 for backwards compatibility
+  const versionTypes = selectedVersionTypes.length > 0 ? selectedVersionTypes : ['service', 'productized', 'product']
+
   // Restore from initialData if available (skip generation)
   const hasInitialData = initialData?.bonusSuggestions && Object.keys(initialData.bonusSuggestions).length > 0
+
+  // Initialize selectedBonuses based on versionTypes
+  const getInitialSelectedBonuses = () => {
+    if (initialData?.selectedBonuses) return initialData.selectedBonuses
+    const initial = {}
+    versionTypes.forEach(type => { initial[type] = [] })
+    return initial
+  }
+
   const [bonusSuggestions, setBonusSuggestions] = useState(initialData?.bonusSuggestions || null)
-  const [selectedBonuses, setSelectedBonuses] = useState(initialData?.selectedBonuses || {
-    service: [],
-    productized: [],
-    product: []
-  })
-  const [activeTab, setActiveTab] = useState('service')
+  const [selectedBonuses, setSelectedBonuses] = useState(getInitialSelectedBonuses())
+  const [activeTab, setActiveTab] = useState(versionTypes[0])
   const [isGenerating, setIsGenerating] = useState(!hasInitialData)
   const [editingBonus, setEditingBonus] = useState(null)
 
@@ -70,7 +80,9 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
               dreamOutcome,
               bucket,
               // V1 Offer Builder bonus/lead magnet ideas for smarter suggestions
-              offerBuilderV1: v1BonusSuggestions
+              offerBuilderV1: v1BonusSuggestions,
+              // Only generate for selected version types
+              selectedVersionTypes: versionTypes
             }
           }
         })
@@ -78,13 +90,13 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
         if (error) throw error
         setBonusSuggestions(data)
 
-        // Auto-select all bonuses initially
+        // Auto-select all bonuses initially (only for selected versions)
         if (data) {
-          setSelectedBonuses({
-            service: data.service?.map((_, i) => i) || [],
-            productized: data.productized?.map((_, i) => i) || [],
-            product: data.product?.map((_, i) => i) || []
+          const autoSelected = {}
+          versionTypes.forEach(type => {
+            autoSelected[type] = data[type]?.map((_, i) => i) || []
           })
+          setSelectedBonuses(autoSelected)
         }
       } catch (err) {
         console.error('Error generating bonuses:', err)
@@ -129,9 +141,9 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
   // Get final bonuses for completion
   const getFinalBonuses = () => {
     const result = {}
-    for (const version of ['service', 'productized', 'product']) {
-      result[version] = selectedBonuses[version].map(index =>
-        bonusSuggestions[version][index]
+    for (const version of versionTypes) {
+      result[version] = (selectedBonuses[version] || []).map(index =>
+        bonusSuggestions?.[version]?.[index]
       ).filter(Boolean)
     }
     return result
@@ -141,8 +153,8 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
   const handleContinue = () => {
     const finalBonuses = getFinalBonuses()
 
-    // Check each version has at least 1 bonus
-    const hasMinimum = Object.values(finalBonuses).every(arr => arr.length >= 1)
+    // Check each selected version has at least 1 bonus
+    const hasMinimum = versionTypes.every(type => finalBonuses[type]?.length >= 1)
     if (!hasMinimum) {
       setError('Please select at least 1 bonus for each version.')
       return
@@ -161,8 +173,8 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
     return (
       <div className="bonuses-step generating">
         <div className="question-header">
-          <span className="step-label">Step 6 of 8 (Part 2)</span>
-          <h2>Creating bonuses for all 3 versions...</h2>
+          <span className="step-label">Step 7 of 9 (Part 2)</span>
+          <h2>Creating bonuses for {versionTypes.length === 1 ? 'your version' : `${versionTypes.length} versions`}...</h2>
         </div>
 
         <div className="generation-progress">
@@ -176,33 +188,22 @@ function Step6_Bonuses({ obstacles, dreamOutcome, bucket, contextData, initialDa
 
   const versionBonuses = bonusSuggestions?.[activeTab] || []
 
+  // Count selected bonuses per version for tab display
+  const getSelectedCount = (type) => (selectedBonuses[type] || []).length
+
   return (
     <div className="bonuses-step">
       <div className="question-header">
-        <span className="step-label">Step 6 of 8 (Part 2)</span>
-        <h2>Bonuses Created for All 3 Versions</h2>
+        <span className="step-label">Step 7 of 9 (Part 2)</span>
+        <h2>Bonuses Created{versionTypes.length > 1 ? ` for ${versionTypes.length} Versions` : ''}</h2>
       </div>
 
-      <div className="version-tabs">
-        <button
-          className={`tab ${activeTab === 'service' ? 'active' : ''}`}
-          onClick={() => setActiveTab('service')}
-        >
-          💼 Service ({selectedBonuses.service.length})
-        </button>
-        <button
-          className={`tab ${activeTab === 'productized' ? 'active' : ''}`}
-          onClick={() => setActiveTab('productized')}
-        >
-          📦 Productized ({selectedBonuses.productized.length})
-        </button>
-        <button
-          className={`tab ${activeTab === 'product' ? 'active' : ''}`}
-          onClick={() => setActiveTab('product')}
-        >
-          🛠️ Product ({selectedBonuses.product.length})
-        </button>
-      </div>
+      <VersionTabs
+        selectedVersionTypes={versionTypes}
+        activeVersion={activeTab}
+        onVersionChange={setActiveTab}
+        completedVersions={versionTypes.filter(v => getSelectedCount(v) > 0)}
+      />
 
       {/* V1 Offer Foundation Suggestions Panel */}
       {hasV1Suggestions && (

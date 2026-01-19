@@ -405,8 +405,14 @@
 
 .group-success .success-icon {
   font-size: 3rem;
-  display: block;
-  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px auto;
+  background: white;
+  border-radius: 50%;
 }
 
 .group-success h3 {

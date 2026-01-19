@@ -1,0 +1,356 @@
+{
+  "metadata": {
+    "version": "1.1.0",
+    "total_questions": "5-11 (varies based on answers)",
+    "estimated_completion_time_minutes": "2-3",
+    "last_updated": "2026-01-19",
+    "notes": "Business questions (q6-q11) only shown if user is NOT pre_ladder on wealth ladder"
+  },
+  "questions": [
+    {
+      "id": "q1_journey_stage",
+      "question": "Where are you in your business journey?",
+      "subtext": "Be honest - there's no wrong answer",
+      "options": [
+        {
+          "label": "Exploring from my day job",
+          "value": "employed_exploring",
+          "description": "I'm employed, searching for what to build"
+        },
+        {
+          "label": "Building on the side",
+          "value": "employed_building",
+          "description": "I'm employed, growing something alongside my job"
+        },
+        {
+          "label": "Gone solo, finding my footing",
+          "value": "solo_early",
+          "description": "I've left employment, still building momentum"
+        },
+        {
+          "label": "Scaling what I've built",
+          "value": "solo_established",
+          "description": "I'm self-employed with paying clients"
+        }
+      ]
+    },
+    {
+      "id": "q2_wealth_ladder",
+      "question": "What have you created so far?",
+      "subtext": "Think about what you're currently offering or selling",
+      "options": [
+        {
+          "label": "Still discovering",
+          "value": "pre_ladder",
+          "description": "Nothing concrete yet, exploring possibilities"
+        },
+        {
+          "label": "Trading my time",
+          "value": "service",
+          "description": "A service where I work with clients directly"
+        },
+        {
+          "label": "Packaged offerings",
+          "value": "productized",
+          "description": "Courses, programs, or fixed-scope packages"
+        },
+        {
+          "label": "Products people buy",
+          "value": "products",
+          "description": "Digital products, software, or physical goods"
+        }
+      ]
+    },
+    {
+      "id": "q3_primary_goal",
+      "question": "What would help you most right now?",
+      "subtext": "Your biggest priority",
+      "options": [
+        {
+          "label": "Clarity on my path",
+          "value": "discovery",
+          "description": "Finally knowing what I'm meant to build"
+        },
+        {
+          "label": "An offer that resonates",
+          "value": "creation",
+          "description": "Creating something people actually want"
+        },
+        {
+          "label": "Consistent clients",
+          "value": "monetization",
+          "description": "Landing paying customers regularly"
+        },
+        {
+          "label": "Scale and systems",
+          "value": "growth",
+          "description": "Growing what's already working"
+        }
+      ]
+    },
+    {
+      "id": "q4_current_emotion",
+      "question": "What emotion do you feel most about your business progress right now?",
+      "subtext": "Be honest - this helps us understand where you're at",
+      "options": [
+        {
+          "label": "Excited",
+          "value": "excited",
+          "description": "Things are clicking and I'm energized"
+        },
+        {
+          "label": "Hopeful",
+          "value": "hopeful",
+          "description": "I believe it's coming together"
+        },
+        {
+          "label": "Motivated",
+          "value": "motivated",
+          "description": "Ready to take action and make it happen"
+        },
+        {
+          "label": "Frustrated",
+          "value": "frustrated",
+          "description": "I've tried things and they're not working"
+        },
+        {
+          "label": "Overwhelmed",
+          "value": "overwhelmed",
+          "description": "Too many options, don't know where to focus"
+        },
+        {
+          "label": "Lost",
+          "value": "lost",
+          "description": "I don't know what to do next"
+        },
+        {
+          "label": "Stuck",
+          "value": "stuck",
+          "description": "I know what to do but can't seem to move"
+        }
+      ]
+    },
+    {
+      "id": "q5_stuck_duration",
+      "question": "How long have you been feeling this way?",
+      "subtext": "Plateaus are normal - this helps us understand your situation",
+      "conditional": {
+        "field": "q4_current_emotion",
+        "values": ["frustrated", "overwhelmed", "lost", "stuck"]
+      },
+      "options": [
+        {
+          "label": "Just recently",
+          "value": "recent",
+          "description": "This feeling is new"
+        },
+        {
+          "label": "A few months",
+          "value": "few_months",
+          "description": "Been building for a while"
+        },
+        {
+          "label": "6-12 months",
+          "value": "6_12_months",
+          "description": "Been stuck for a while"
+        },
+        {
+          "label": "1-2 years",
+          "value": "1_2_years",
+          "description": "Long-term plateau"
+        },
+        {
+          "label": "2+ years",
+          "value": "2_plus_years",
+          "description": "Significantly stuck"
+        }
+      ]
+    },
+    {
+      "id": "q6_attraction_offer",
+      "question": "Do you have an attraction offer?",
+      "subtext": "A low-friction first purchase that turns strangers into customers",
+      "conditional": {
+        "field": "q2_wealth_ladder",
+        "values": ["service", "productized", "products"]
+      },
+      "options": [
+        {
+          "label": "Yes, and it's converting well",
+          "value": "attraction_working",
+          "description": "My front-end offer brings in new customers consistently"
+        },
+        {
+          "label": "Yes, but not converting",
+          "value": "attraction_not_converting",
+          "description": "I have one but people aren't buying"
+        },
+        {
+          "label": "I have one but it's not clear",
+          "value": "attraction_unclear",
+          "description": "I have something but not positioned as attraction offer"
+        },
+        {
+          "label": "No attraction offer yet",
+          "value": "no_attraction",
+          "description": "I only sell my main/core offer"
+        }
+      ]
+    },
+    {
+      "id": "q7_upsell_offer",
+      "question": "Do you have an upsell?",
+      "subtext": "A higher-value offer for customers who want to go deeper",
+      "conditional": {
+        "field": "q2_wealth_ladder",
+        "values": ["service", "productized", "products"]
+      },
+      "options": [
+        {
+          "label": "Yes, and it's selling well",
+          "value": "upsell_working",
+          "description": "Many customers upgrade to my premium offer"
+        },
+        {
+          "label": "Yes, but few people buy it",
+          "value": "upsell_not_converting",
+          "description": "I have one but conversion is low"
+        },
+        {
+          "label": "I offer it but not systematically",
+          "value": "upsell_ad_hoc",
+          "description": "I sometimes offer more, but not as a defined upsell"
+        },
+        {
+          "label": "No upsell offer yet",
+          "value": "no_upsell",
+          "description": "I don't have a premium tier"
+        }
+      ]
+    },
+    {
+      "id": "q8_downsell_offer",
+      "question": "Do you have a downsell?",
+      "subtext": "A lower-priced option for those who can't afford the main offer",
+      "conditional": {
+        "field": "q2_wealth_ladder",
+        "values": ["service", "productized", "products"]
+      },
+      "options": [
+        {
+          "label": "Yes, and it rescues sales",
+          "value": "downsell_working",
+          "description": "I capture customers who would otherwise say no"
+        },
+        {
+          "label": "Yes, but rarely used",
+          "value": "downsell_rarely_used",
+          "description": "I have one but don't offer it consistently"
+        },
+        {
+          "label": "I sometimes discount on the spot",
+          "value": "downsell_ad_hoc",
+          "description": "I negotiate price but no defined downsell"
+        },
+        {
+          "label": "No downsell offer",
+          "value": "no_downsell",
+          "description": "If they say no to main offer, that's it"
+        }
+      ]
+    },
+    {
+      "id": "q9_continuity_offer",
+      "question": "Do you have a continuity offer?",
+      "subtext": "Membership, subscription, retainer, or ongoing service",
+      "conditional": {
+        "field": "q2_wealth_ladder",
+        "values": ["service", "productized", "products"]
+      },
+      "options": [
+        {
+          "label": "Yes, strong recurring revenue",
+          "value": "continuity_strong",
+          "description": "Subscriptions/retainers are a significant income stream"
+        },
+        {
+          "label": "Yes, but small base",
+          "value": "continuity_small",
+          "description": "I have recurring revenue but it's not the main income"
+        },
+        {
+          "label": "Tried it, didn't work",
+          "value": "continuity_failed",
+          "description": "I launched something recurring but it didn't stick"
+        },
+        {
+          "label": "No recurring offers",
+          "value": "no_continuity",
+          "description": "All my sales are one-time transactions"
+        }
+      ]
+    },
+    {
+      "id": "q10_funnel_tracking",
+      "question": "Do you measure your acquisition funnel conversion rates?",
+      "subtext": "Do you know what % of leads become customers at each stage?",
+      "conditional": {
+        "field": "q2_wealth_ladder",
+        "values": ["service", "productized", "products"]
+      },
+      "options": [
+        {
+          "label": "Yes, I track everything",
+          "value": "tracking_full",
+          "description": "I know my numbers at every stage of the funnel"
+        },
+        {
+          "label": "I track some metrics",
+          "value": "tracking_partial",
+          "description": "I know some conversion rates but not the full picture"
+        },
+        {
+          "label": "Basic tracking only",
+          "value": "tracking_basic",
+          "description": "I know leads in and sales out, not much in between"
+        },
+        {
+          "label": "No funnel tracking",
+          "value": "no_tracking",
+          "description": "I don't measure conversion rates"
+        }
+      ]
+    },
+    {
+      "id": "q11_crm_system",
+      "question": "Do you have a CRM or system to capture and track customer data?",
+      "subtext": "A way to manage leads, customers, and follow-ups",
+      "conditional": {
+        "field": "q2_wealth_ladder",
+        "values": ["service", "productized", "products"]
+      },
+      "options": [
+        {
+          "label": "Yes, fully set up and active",
+          "value": "crm_active",
+          "description": "I use a CRM daily to manage my pipeline"
+        },
+        {
+          "label": "Yes, but not using it well",
+          "value": "crm_underutilized",
+          "description": "I have one but it's not fully set up or used"
+        },
+        {
+          "label": "Spreadsheet or basic tracking",
+          "value": "crm_basic",
+          "description": "I track leads manually in sheets or notes"
+        },
+        {
+          "label": "No system at all",
+          "value": "no_crm",
+          "description": "I don't have a structured way to track customers"
+        }
+      ]
+    }
+  ]
+}

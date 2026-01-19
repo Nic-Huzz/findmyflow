@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import './PublicValidationFlow.css'
@@ -21,6 +21,66 @@ const PublicValidationFlow = () => {
   const [textListAnswers, setTextListAnswers] = useState([])
   const [sessionToken, setSessionToken] = useState(null)
   const [sessionId, setSessionId] = useState(null)
+
+  // New state for enhanced UX features
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState('')
+  const [showSkipDropdown, setShowSkipDropdown] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const [magicLinkEmail, setMagicLinkEmail] = useState('')
+  const [responseSummary, setResponseSummary] = useState([]) // Track responses for completion summary
+  const [savedAnswers, setSavedAnswers] = useState({}) // Store all answers by step ID
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+
+  // Voice recording ref
+  const recognitionRef = useRef(null)
+
+  // localStorage key for this flow
+  const getStorageKey = () => `validation_progress_${shareToken}`
+
+  // Save progress to localStorage
+  const saveProgressLocally = (stepIndex, answers, history, summary) => {
+    try {
+      const progress = {
+        currentStepIndex: stepIndex,
+        savedAnswers: answers,
+        stepHistory: history,
+        responseSummary: summary,
+        lastUpdated: new Date().toISOString()
+      }
+      localStorage.setItem(getStorageKey(), JSON.stringify(progress))
+    } catch (err) {
+      console.error('Error saving progress locally:', err)
+    }
+  }
+
+  // Load progress from localStorage
+  const loadLocalProgress = () => {
+    try {
+      const saved = localStorage.getItem(getStorageKey())
+      if (saved) {
+        const progress = JSON.parse(saved)
+        // Check if progress is less than 7 days old
+        const lastUpdated = new Date(progress.lastUpdated)
+        const daysSinceUpdate = (Date.now() - lastUpdated.getTime()) / (1000 * 60 * 60 * 24)
+        if (daysSinceUpdate < 7 && progress.currentStepIndex > 0) {
+          return progress
+        }
+      }
+    } catch (err) {
+      console.error('Error loading local progress:', err)
+    }
+    return null
+  }
+
+  // Clear local progress
+  const clearLocalProgress = () => {
+    try {
+      localStorage.removeItem(getStorageKey())
+    } catch (err) {
+      console.error('Error clearing local progress:', err)
+    }
+  }
 
   useEffect(() => {
     if (shareToken) {
@@ -63,6 +123,12 @@ const PublicValidationFlow = () => {
         placeholders: mergedPlaceholders
       })
 
+      // Check for saved local progress
+      const localProgress = loadLocalProgress()
+      if (localProgress) {
+        setShowResumePrompt(true)
+      }
+
       // Create or retrieve session
       await initializeSession(flowRecord.id)
 
@@ -93,15 +159,25 @@ const PublicValidationFlow = () => {
       }
     }
 
-    // Create new session
+    // Create new session with analytics data
     const newToken = generateSessionToken()
+
+    // Collect analytics metadata
+    const analyticsData = {
+      user_agent: navigator.userAgent,
+      referrer: document.referrer || null,
+      device_type: /Mobile|Android|iPhone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+      screen_width: window.innerWidth,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    }
 
     const { data: newSession, error: createError } = await supabase
       .from('validation_sessions')
       .insert({
         flow_id: flowId,
         session_token: newToken,
-        started_at: new Date().toISOString()
+        started_at: new Date().toISOString(),
+        metadata: analyticsData
       })
       .select()
       .single()
@@ -119,6 +195,46 @@ const PublicValidationFlow = () => {
   const generateSessionToken = () => {
     return Math.random().toString(36).substring(2, 15) +
            Math.random().toString(36).substring(2, 15)
+  }
+
+  // Resume from saved progress
+  const handleResume = () => {
+    const progress = loadLocalProgress()
+    if (progress) {
+      setCurrentStepIndex(progress.currentStepIndex)
+      setSavedAnswers(progress.savedAnswers || {})
+      setStepHistory(progress.stepHistory || [])
+      setResponseSummary(progress.responseSummary || [])
+      showAutoSaveToast('Progress restored')
+    }
+    setShowResumePrompt(false)
+  }
+
+  // Start fresh (clear saved progress)
+  const handleStartFresh = () => {
+    clearLocalProgress()
+    setShowResumePrompt(false)
+  }
+
+  // Send email notification to creator when survey is completed
+  const sendCompletionNotification = async () => {
+    try {
+      // Call edge function to send email
+      const { error } = await supabase.functions.invoke('validation-completion-notify', {
+        body: {
+          flow_id: flowData.id,
+          session_id: sessionId,
+          flow_name: flowData.flow_name || 'Validation Survey',
+          total_responses: responseSummary.length
+        }
+      })
+      if (error) {
+        console.error('Error sending notification:', error)
+      }
+    } catch (err) {
+      // Silently fail - don't disrupt user experience
+      console.error('Notification error:', err)
+    }
   }
 
   // Replace {{placeholder}} patterns with actual values and convert markdown
@@ -142,6 +258,22 @@ const PublicValidationFlow = () => {
     // Convert newlines to <br/>
     result = result.replace(/\n/g, '<br/>')
     return result
+  }
+
+  // Split prompt into title (first line) and body (rest) for styling
+  const splitPrompt = (text) => {
+    if (!text) return { title: '', body: '' }
+    const withPlaceholders = replacePlaceholders(text)
+    // Split on first double newline or single newline
+    const parts = withPlaceholders.split(/\n\n|\n/)
+    const title = parts[0] || ''
+    const body = parts.slice(1).join('\n')
+    // Format title - just replace markdown
+    const formattedTitle = title.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    // Format body - replace markdown and newlines
+    let formattedBody = body.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    formattedBody = formattedBody.replace(/\n/g, '<br/>')
+    return { title: formattedTitle, body: formattedBody }
   }
 
   // Handle going back to previous step (uses step history)
@@ -172,6 +304,13 @@ const PublicValidationFlow = () => {
 
       if (error) throw error
 
+      // Track response for completion summary
+      setResponseSummary(prev => [...prev, {
+        question: questionText?.substring(0, 60),
+        answer: typeof answerValue === 'string' ? answerValue?.substring(0, 100) : JSON.stringify(answerValue)?.substring(0, 100)
+      }])
+
+      showAutoSaveToast('Progress saved')
       console.log('✅ Response saved:', stepId)
     } catch (err) {
       console.error('Error saving response:', err)
@@ -235,6 +374,10 @@ const PublicValidationFlow = () => {
       }
     }
 
+    // Save answer to local state
+    const newSavedAnswers = { ...savedAnswers, [currentStep.id]: currentAnswer || textListAnswers }
+    setSavedAnswers(newSavedAnswers)
+
     // Handle "complete" as end of flow
     if (nextStepId === 'complete') {
       // Mark session as completed
@@ -246,8 +389,9 @@ const PublicValidationFlow = () => {
         })
         .eq('id', sessionId)
 
-      // Clear session storage
+      // Clear session and local storage
       sessionStorage.removeItem(`validation_session_${shareToken}`)
+      clearLocalProgress()
 
       // Go past the last step to show completion
       setCurrentStepIndex(flowData.steps.length)
@@ -267,23 +411,44 @@ const PublicValidationFlow = () => {
 
     // Check if this is the last step
     if (nextIndex >= flowData.steps.length) {
-      // Mark session as completed
+      // Mark session as completed with analytics
       await supabase
         .from('validation_sessions')
         .update({
           completed_at: new Date().toISOString(),
-          is_completed: true
+          is_completed: true,
+          total_questions: flowData.steps.length,
+          last_step_index: flowData.steps.length
         })
         .eq('id', sessionId)
 
-      // Clear session storage
+      // Send completion notification to creator
+      sendCompletionNotification()
+
+      // Clear session and local storage
       sessionStorage.removeItem(`validation_session_${shareToken}`)
+      clearLocalProgress()
     }
 
     // Move to next step (push current to history for back navigation)
-    setStepHistory(prev => [...prev, currentStepIndex])
+    const newHistory = [...stepHistory, currentStepIndex]
+    setStepHistory(newHistory)
     setCurrentStepIndex(nextIndex)
     setCurrentAnswer('')
+
+    // Update session with current step (for drop-off tracking)
+    await supabase
+      .from('validation_sessions')
+      .update({
+        last_step_index: nextIndex,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', sessionId)
+
+    // Save progress locally (if not completing)
+    if (nextIndex < flowData.steps.length) {
+      saveProgressLocally(nextIndex, newSavedAnswers, newHistory, responseSummary)
+    }
     setTextListAnswers([])
   }
 
@@ -296,6 +461,140 @@ const PublicValidationFlow = () => {
 
   const handleTextListRemove = (index) => {
     setTextListAnswers(textListAnswers.filter((_, i) => i !== index))
+  }
+
+  // Show auto-save toast notification
+  const showAutoSaveToast = (message = 'Progress saved') => {
+    setToastMessage(message)
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), 2000)
+  }
+
+  // Handle skip with reason
+  const handleSkip = async (reason) => {
+    const currentStep = flowData.steps[currentStepIndex]
+
+    // Save skip response
+    await saveResponse(
+      currentStep.id,
+      currentStep.assistant_prompt,
+      'skipped',
+      { skipped: true, reason }
+    )
+
+    showAutoSaveToast('Skipped')
+    setShowSkipDropdown(false)
+
+    // Move to next step
+    setStepHistory(prev => [...prev, currentStepIndex])
+    setCurrentStepIndex(prev => prev + 1)
+    setCurrentAnswer('')
+    setTextListAnswers([])
+  }
+
+  // Voice input handlers
+  const startVoiceRecording = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Voice input is not supported in your browser. Try Chrome or Edge.')
+      return
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    recognitionRef.current = new SpeechRecognition()
+    recognitionRef.current.continuous = true
+    recognitionRef.current.interimResults = true
+
+    recognitionRef.current.onresult = (event) => {
+      let transcript = ''
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript
+      }
+      setCurrentAnswer(prev => prev + transcript)
+    }
+
+    recognitionRef.current.onerror = (event) => {
+      console.error('Speech recognition error:', event.error)
+      setIsRecording(false)
+    }
+
+    recognitionRef.current.onend = () => {
+      setIsRecording(false)
+    }
+
+    recognitionRef.current.start()
+    setIsRecording(true)
+  }
+
+  const stopVoiceRecording = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop()
+    }
+    setIsRecording(false)
+  }
+
+  const toggleVoiceRecording = () => {
+    if (isRecording) {
+      stopVoiceRecording()
+    } else {
+      startVoiceRecording()
+    }
+  }
+
+  // Send magic link for resume
+  const handleMagicLink = async () => {
+    if (!magicLinkEmail || !magicLinkEmail.includes('@')) {
+      alert('Please enter a valid email')
+      return
+    }
+
+    // Save email to session for resume
+    await supabase
+      .from('validation_sessions')
+      .update({
+        respondent_email: magicLinkEmail,
+        resume_token: sessionToken
+      })
+      .eq('id', sessionId)
+
+    showAutoSaveToast('Resume link sent!')
+    setMagicLinkEmail('')
+    // In production, you'd send an actual email here
+  }
+
+  // Get estimated time remaining
+  const getEstimatedTime = () => {
+    if (!flowData) return '~5 min'
+    const remainingSteps = flowData.steps.length - currentStepIndex
+    const minutesPerStep = 0.5 // ~30 seconds per question
+    const minutes = Math.ceil(remainingSteps * minutesPerStep)
+    return `~${minutes} min`
+  }
+
+  // Render progress bar (replaces dots)
+  const renderProgressBar = () => {
+    if (!flowData) return null
+    const totalSteps = flowData.steps.length
+    const progressPercent = ((currentStepIndex) / totalSteps) * 100
+
+    return (
+      <div className="validation-progress-section">
+        <div className="validation-time-badge">
+          <span className="time-icon">⏱️</span>
+          <span>{getEstimatedTime()} left</span>
+        </div>
+        <div className="validation-progress-bar-container">
+          <div className="validation-progress-bar">
+            <div
+              className="validation-progress-fill"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className="validation-progress-text">
+            {currentStepIndex + 1} of {totalSteps} questions
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const renderInput = (inputConfig) => {
@@ -317,16 +616,54 @@ const PublicValidationFlow = () => {
           </div>
         )
 
+      case 'multi_select':
+        // Parse current selections from comma-separated string
+        const selectedOptions = currentAnswer ? currentAnswer.split('|||') : []
+        const toggleOption = (option) => {
+          if (selectedOptions.includes(option)) {
+            // Remove option
+            const newSelections = selectedOptions.filter(o => o !== option)
+            setCurrentAnswer(newSelections.join('|||'))
+          } else {
+            // Add option
+            setCurrentAnswer([...selectedOptions, option].join('|||'))
+          }
+        }
+        return (
+          <div className="validation-options">
+            {inputConfig.options.map(option => (
+              <button
+                key={option}
+                className={`validation-option-btn ${selectedOptions.includes(option) ? 'selected' : ''}`}
+                onClick={() => toggleOption(option)}
+              >
+                <span className="option-checkbox">{selectedOptions.includes(option) ? '✓' : ''}</span>
+                {option}
+              </button>
+            ))}
+          </div>
+        )
+
       case 'free_text':
       case 'text':
         return (
-          <textarea
-            className="validation-textarea"
-            value={currentAnswer}
-            onChange={(e) => setCurrentAnswer(e.target.value)}
-            placeholder={inputConfig.placeholder || 'Type your answer...'}
-            rows={5}
-          />
+          <div className="validation-voice-input-wrapper">
+            <textarea
+              className="validation-textarea with-voice"
+              value={currentAnswer}
+              onChange={(e) => setCurrentAnswer(e.target.value)}
+              placeholder={inputConfig.placeholder || 'Type your answer...'}
+              rows={5}
+            />
+            <button
+              type="button"
+              className={`validation-voice-btn ${isRecording ? 'recording' : ''}`}
+              onClick={toggleVoiceRecording}
+              title={isRecording ? 'Stop recording' : 'Start voice input'}
+            >
+              {isRecording ? '⏹️' : '🎤'}
+            </button>
+          </div>
         )
 
       case 'email':
@@ -391,28 +728,38 @@ const PublicValidationFlow = () => {
     }
   }
 
-  // Render progress dots
-  const renderProgressDots = () => {
-    if (!flowData) return null
-    const totalSteps = flowData.steps.length
-    return (
-      <div className="validation-progress-dots">
-        {Array.from({ length: totalSteps }).map((_, i) => (
-          <span
-            key={i}
-            className={`dot ${i === currentStepIndex ? 'active' : i < currentStepIndex ? 'completed' : ''}`}
-          />
-        ))}
-      </div>
-    )
-  }
-
   if (loading) {
     return (
       <div className="public-validation-page">
         <div className="validation-loading">
           <div className="loading-spinner" />
           <p>Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show resume prompt if there's saved progress
+  if (showResumePrompt) {
+    const progress = loadLocalProgress()
+    const questionsAnswered = progress?.currentStepIndex || 0
+    return (
+      <div className="public-validation-page">
+        <div className="validation-container">
+          <div className="validation-resume-prompt">
+            <div className="resume-icon">📝</div>
+            <h2>Welcome back!</h2>
+            <p>Looks like you were in the middle of this survey.</p>
+            <p className="resume-progress">You answered {questionsAnswered} question{questionsAnswered !== 1 ? 's' : ''}.</p>
+            <div className="resume-buttons">
+              <button className="validation-next-btn" onClick={handleResume}>
+                Continue where I left off
+              </button>
+              <button className="validation-back-btn" onClick={handleStartFresh}>
+                Start fresh
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -430,10 +777,46 @@ const PublicValidationFlow = () => {
   }
 
   if (!flowData || currentStepIndex >= flowData.steps.length) {
+    // Personalized completion screen
     return (
       <div className="public-validation-page">
-        <div className="validation-error">
-          <p>This validation flow has ended.</p>
+        <div className="validation-complete">
+          <div className="complete-icon">🎉</div>
+          <h2>You're amazing. Seriously.</h2>
+          <p className="complete-message">
+            Your honest answers are going to help shape something real.
+            The person who sent you this? They're not building for "the market" — they're building for people like you.
+          </p>
+
+          {responseSummary.length > 0 && (
+            <div className="summary-card">
+              <h3>Your Responses</h3>
+              {responseSummary.slice(0, 3).map((item, idx) => (
+                <div key={idx} className="summary-item">
+                  <div className="summary-label">Q{idx + 1}</div>
+                  <div className="summary-value">{item.answer || '—'}</div>
+                </div>
+              ))}
+              {responseSummary.length > 3 && (
+                <div className="summary-item">
+                  <div className="summary-value" style={{ opacity: 0.6 }}>
+                    + {responseSummary.length - 3} more responses
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* FindMyFlow CTA */}
+          <div className="completion-cta">
+            <p className="cta-intro">Curious what they're using to build this?</p>
+            <p className="cta-description">
+              FindMyFlow helps people discover what they're meant to create — and actually follow through on it.
+            </p>
+            <a href="/" className="cta-button" target="_blank" rel="noopener noreferrer">
+              Check out FindMyFlow →
+            </a>
+          </div>
         </div>
       </div>
     )
@@ -443,8 +826,14 @@ const PublicValidationFlow = () => {
 
   return (
     <div className="public-validation-page">
-      {/* Progress Dots */}
-      {renderProgressDots()}
+      {/* Auto-save Toast */}
+      <div className={`validation-toast ${showToast ? 'show' : ''}`}>
+        <span className="toast-icon">✓</span>
+        <span>{toastMessage}</span>
+      </div>
+
+      {/* Progress Bar with Time Estimate */}
+      {renderProgressBar()}
 
       {/* Main Content */}
       <div className="validation-container">
@@ -455,12 +844,25 @@ const PublicValidationFlow = () => {
           </div>
         </div>
 
-        <div className="validation-content">
-          {/* Question Prompt */}
-          <div
-            className="validation-prompt"
-            dangerouslySetInnerHTML={{ __html: formatPrompt(currentStep.assistant_prompt) }}
-          />
+        <div className="validation-content" key={currentStepIndex}>
+          {/* Question Prompt - Split into title and body for proper styling */}
+          {(() => {
+            const { title, body } = splitPrompt(currentStep.assistant_prompt)
+            return (
+              <>
+                <div
+                  className="validation-prompt"
+                  dangerouslySetInnerHTML={{ __html: title }}
+                />
+                {body && (
+                  <div
+                    className="validation-body-text"
+                    dangerouslySetInnerHTML={{ __html: body }}
+                  />
+                )}
+              </>
+            )
+          })()}
 
           {/* Input Field */}
           <div className="validation-input-section">
@@ -489,7 +891,46 @@ const PublicValidationFlow = () => {
               ← Go Back
             </button>
           )}
+
+          {/* Skip with Reason */}
+          {currentStep.expected_inputs?.length > 0 && currentStepIndex > 0 && (
+            <div className="validation-skip-section">
+              <button
+                className="validation-skip-btn"
+                onClick={() => setShowSkipDropdown(!showSkipDropdown)}
+              >
+                Skip this question
+              </button>
+              {showSkipDropdown && (
+                <div className="validation-skip-dropdown">
+                  <select onChange={(e) => e.target.value && handleSkip(e.target.value)}>
+                    <option value="">Why are you skipping?</option>
+                    <option value="not_applicable">Not applicable to me</option>
+                    <option value="prefer_not_say">Prefer not to say</option>
+                    <option value="need_more_time">Need more time to think</option>
+                    <option value="dont_understand">Don't understand the question</option>
+                  </select>
+                </div>
+              )}
+            </div>
+          )}
         </div>
+
+        {/* Magic Link Section - Show after a few steps */}
+        {currentStepIndex >= 3 && (
+          <div className="validation-magic-link">
+            <p>Need to finish later? Get a magic link to resume.</p>
+            <div className="validation-magic-link-input">
+              <input
+                type="email"
+                value={magicLinkEmail}
+                onChange={(e) => setMagicLinkEmail(e.target.value)}
+                placeholder="your.email@example.com"
+              />
+              <button onClick={handleMagicLink}>Send Link</button>
+            </div>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="validation-footer">

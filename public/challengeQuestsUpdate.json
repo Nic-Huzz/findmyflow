@@ -989,6 +989,21 @@
       "learnMore": "Validation conversations help you understand if your idea solves a real problem people will pay for. Aim for 3 conversations to complete this milestone."
     },
     {
+      "id": "milestone_validation_responses_analysis",
+      "category": "Business",
+      "type": "Validation",
+      "frequency": "anytime",
+      "stage_required": 1,
+      "name": "Analyze Validation Responses",
+      "description": "Review and analyze the responses from your validation surveys. Unlock AI analysis once you have 3+ responses.",
+      "points": 20,
+      "inputType": "validation_responses",
+      "milestone_type": "validation_analysis_complete",
+      "requires_quest": "milestone_validation_form_sent",
+      "counts_toward_graduation": true,
+      "learnMore": "Raw feedback is just data—insights are gold. Once you've collected 3+ validation responses, our AI will analyze patterns across all answers:\n\n• **Pain points**: What problems keep coming up?\n• **Dream outcomes**: What do people really want?\n• **Objections**: What's stopping them from buying?\n• **Pricing signals**: What are they willing to pay?\n• **Language**: Words your audience actually uses\n\nThis analysis becomes the foundation for your offer, messaging, and positioning."
+    },
+    {
       "id": "milestone_lead_magnet_created",
       "category": "Business",
       "type": "Product",

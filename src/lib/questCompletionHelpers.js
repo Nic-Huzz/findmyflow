@@ -428,6 +428,74 @@ export const handleFlowCompassCompletion = async (userId, challengeInstanceId, f
 };
 
 /**
+ * Handle validation responses analysis quest completion
+ * - Creates milestone for validation analysis complete
+ * - Links to the validation_analysis record
+ */
+export const handleValidationAnalysisCompletion = async (userId, analysisData, stageProgress, projectId = null) => {
+  try {
+    const { analysis_id, total_responses, flows_analyzed } = analysisData;
+
+    // Get current stage
+    let currentStage = 'validation';
+    let persona = stageProgress?.persona || 'vibe_riser';
+    if (stageProgress?.current_stage) {
+      currentStage = stageProgress.current_stage;
+    } else {
+      const { data: progress } = await supabase
+        .from('user_stage_progress')
+        .select('current_stage, persona')
+        .eq('user_id', userId)
+        .single();
+
+      if (progress) {
+        currentStage = progress.current_stage;
+        persona = progress.persona;
+      }
+    }
+
+    // Check if milestone already exists
+    const { data: existingMilestone } = await supabase
+      .from('milestone_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('milestone_id', 'validation_analysis_complete')
+      .maybeSingle();
+
+    if (existingMilestone) {
+      return {
+        success: false,
+        error: 'You have already completed validation analysis!',
+        alreadyCompleted: true
+      };
+    }
+
+    // Create milestone completion
+    const { error: milestoneError } = await supabase
+      .from('milestone_completions')
+      .insert({
+        user_id: userId,
+        milestone_id: 'validation_analysis_complete',
+        stage: currentStage,
+        persona: normalizePersona(persona),
+        evidence_text: `Analyzed ${total_responses} responses across ${flows_analyzed} validation flow(s). Analysis ID: ${analysis_id}`,
+        project_id: projectId
+      });
+
+    if (milestoneError) {
+      console.error('Error creating validation analysis milestone:', milestoneError);
+      throw milestoneError;
+    }
+
+    console.log('✅ Validation analysis milestone created');
+    return { success: true, analysisId: analysis_id };
+  } catch (error) {
+    console.error('Error in handleValidationAnalysisCompletion:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
  * Handle groan reflection quest completion
  * - Saves to groan_reflections table
  * - Captures protective archetype, fear type, and flow direction

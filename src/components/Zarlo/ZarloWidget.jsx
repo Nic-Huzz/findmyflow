@@ -50,8 +50,11 @@ function ZarloWidget() {
     setIsOpen(false)
   }
 
+  // Check if on validation page (needs higher positioning)
+  const isValidationPage = location.pathname.startsWith('/v/')
+
   return (
-    <div className="zarlo-widget-container">
+    <div className={`zarlo-widget-container ${isValidationPage ? 'validation-page' : ''}`}>
       {/* Chat panel */}
       {isOpen && (
         <div className="zarlo-chat-wrapper">

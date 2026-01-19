@@ -227,32 +227,103 @@ export async function deleteValidationFlow(flowId) {
  */
 export async function getFlowAnalytics(flowId) {
   try {
-    const sessions = await getFlowResponses(flowId)
+    // Get ALL sessions (including incomplete) for drop-off analysis
+    const { data: allSessions, error: allSessionsError } = await supabase
+      .from('validation_sessions')
+      .select('*')
+      .eq('flow_id', flowId)
+      .order('started_at', { ascending: false })
+
+    if (allSessionsError) throw allSessionsError
+
+    const completedSessions = allSessions.filter(s => s.is_completed)
 
     const analytics = {
-      totalResponses: sessions.length,
-      completionRate: 100, // All sessions returned are completed
+      // Core metrics
+      totalStarted: allSessions.length,
+      totalCompleted: completedSessions.length,
+      completionRate: allSessions.length > 0
+        ? Math.round((completedSessions.length / allSessions.length) * 100)
+        : 0,
       averageTime: 0,
-      responseSummary: {}
+
+      // Device breakdown
+      deviceBreakdown: {
+        mobile: 0,
+        desktop: 0,
+        unknown: 0
+      },
+
+      // Drop-off funnel
+      dropOffFunnel: {},
+
+      // Response aggregations
+      responseSummary: {},
+
+      // Recent activity
+      recentSessions: allSessions.slice(0, 10).map(s => ({
+        id: s.id,
+        started_at: s.started_at,
+        completed_at: s.completed_at,
+        is_completed: s.is_completed,
+        last_step_index: s.last_step_index,
+        device_type: s.metadata?.device_type || 'unknown'
+      }))
     }
+
+    // Calculate device breakdown
+    allSessions.forEach(session => {
+      const deviceType = session.metadata?.device_type || 'unknown'
+      if (analytics.deviceBreakdown[deviceType] !== undefined) {
+        analytics.deviceBreakdown[deviceType]++
+      } else {
+        analytics.deviceBreakdown.unknown++
+      }
+    })
+
+    // Calculate drop-off funnel (where people stopped)
+    allSessions.filter(s => !s.is_completed).forEach(session => {
+      const lastStep = session.last_step_index || 0
+      if (!analytics.dropOffFunnel[lastStep]) {
+        analytics.dropOffFunnel[lastStep] = 0
+      }
+      analytics.dropOffFunnel[lastStep]++
+    })
 
     // Calculate average completion time
     let totalTime = 0
-    sessions.forEach(session => {
+    let timeCount = 0
+    completedSessions.forEach(session => {
       if (session.started_at && session.completed_at) {
         const start = new Date(session.started_at)
         const end = new Date(session.completed_at)
-        totalTime += (end - start) / 1000 / 60 // minutes
+        const minutes = (end - start) / 1000 / 60
+        if (minutes > 0 && minutes < 60) { // Filter outliers
+          totalTime += minutes
+          timeCount++
+        }
       }
     })
-    analytics.averageTime = sessions.length > 0 ? Math.round(totalTime / sessions.length) : 0
+    analytics.averageTime = timeCount > 0 ? Math.round(totalTime / timeCount) : 0
+
+    // Get responses for completed sessions
+    const sessionsWithResponses = await Promise.all(
+      completedSessions.slice(0, 50).map(async (session) => { // Limit for performance
+        const { data: responses } = await supabase
+          .from('validation_responses')
+          .select('*')
+          .eq('session_id', session.id)
+          .order('answered_at', { ascending: true })
+        return { ...session, responses: responses || [] }
+      })
+    )
 
     // Aggregate responses by question
-    sessions.forEach(session => {
+    sessionsWithResponses.forEach(session => {
       session.responses.forEach(response => {
         if (!analytics.responseSummary[response.step_id]) {
           analytics.responseSummary[response.step_id] = {
-            question: response.question_text,
+            question: response.question_text?.substring(0, 100),
             type: response.answer_type,
             answers: []
           }

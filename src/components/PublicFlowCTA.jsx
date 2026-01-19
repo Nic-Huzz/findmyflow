@@ -1,32 +1,52 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { getCtaVariant, trackCtaInterest, trackCtaContinue } from '../lib/abTesting'
+import { trackCtaInterest, trackCtaContinue } from '../lib/abTesting'
 import './PublicFlowCTA.css'
 
 const LANDING_PAGE_URL = 'https://findmyflow.nichuzz.com'
 
+// Wealth ladder stages for roadmap visual
+// Each stage maps to a wealth ladder position
+const WEALTH_LADDER_STAGES = [
+  { level: 1, name: 'Validation', description: 'Validate your offer with real customers', icon: '🎯', wealthLadder: 'pre_ladder' },
+  { level: 2, name: 'Product Creation', description: 'Build your core offer & lead magnet', icon: '🛠️', wealthLadder: 'service' },
+  { level: 3, name: 'Testing', description: 'Test with users, gather feedback', icon: '🧪', wealthLadder: 'service' },
+  { level: 4, name: 'Money Models', description: 'Upsells, downsells & continuity', icon: '💰', wealthLadder: 'productized' },
+  { level: 5, name: 'Campaign', description: 'Lead generation strategy', icon: '📢', wealthLadder: 'productized' },
+  { level: 6, name: 'Launch', description: 'Execute with your leads funnel', icon: '🚀', wealthLadder: 'products' }
+]
+
+// Map wealth ladder position to starting stage
+const WEALTH_LADDER_TO_STAGE = {
+  pre_ladder: 1,
+  service: 2,
+  productized: 4,
+  products: 6
+}
+
+// Interest options for AI tools question
+const AI_INTEREST_OPTIONS = [
+  { value: 'yes', label: "Yes, I'm interested!", icon: '🚀' },
+  { value: 'maybe', label: 'Maybe later', icon: '🤔' },
+  { value: 'no', label: 'No thanks', icon: '👋' }
+]
+
 /**
- * PublicFlowCTA - CTA section for public flows with A/B testing
- * Tests different CTA variants to optimize conversion
+ * PublicFlowCTA - CTA section for public flows
+ * Shows AI interest question, wealth ladder roadmap, and scaling CTA
  *
  * @param {string} email - User's email (captured earlier)
  * @param {string} flowType - Source flow type
  * @param {object} flowResults - Results from the flow (for lead enrichment)
+ * @param {object} answers - User answers from the flow (to determine wealth ladder position)
  */
-export default function PublicFlowCTA({ email, flowType, flowResults }) {
-  const [variant, setVariant] = useState(null)
+export default function PublicFlowCTA({ email, flowType, flowResults, answers = {} }) {
   const [selectedInterest, setSelectedInterest] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
 
   // Get session token
   const sessionToken = sessionStorage.getItem('publicFlowSession') || 'unknown'
-
-  // Get A/B test variant on mount
-  useEffect(() => {
-    const v = getCtaVariant(sessionToken)
-    setVariant(v)
-  }, [sessionToken])
 
   const handleSelect = async (interest) => {
     setSelectedInterest(interest)
@@ -40,76 +60,101 @@ export default function PublicFlowCTA({ email, flowType, flowResults }) {
           email: email,
           source_flow: flowType,
           flow_results: flowResults,
-          ai_tools_interest: interest,
-          ab_variant: variant?.id || 'unknown'
+          ai_tools_interest: interest
         }, {
           onConflict: 'email',
           ignoreDuplicates: false
         })
 
-      // Track A/B conversion
+      // Track conversion
       await trackCtaInterest(sessionToken, email, interest, flowType)
     } catch (err) {
       console.error('Error saving lead:', err)
-      // Continue anyway - don't block the user
     }
 
     setIsSubmitting(false)
     setHasSubmitted(true)
   }
 
-  const handleContinue = async () => {
-    // Track continue click
+  const handleScalingClick = async () => {
     await trackCtaContinue(sessionToken, email, flowType)
     window.location.href = LANDING_PAGE_URL
-  }
-
-  // Show loading state while variant loads
-  if (!variant) {
-    return (
-      <div className="public-cta">
-        <div className="public-cta-content">
-          <div className="cta-loading">Loading...</div>
-        </div>
-      </div>
-    )
   }
 
   return (
     <div className="public-cta">
       <div className="public-cta-content">
-        <h3 className="public-cta-title">{variant.title}</h3>
+        {/* AI Tools Interest Question */}
+        <div className="cta-ai-section">
+          <h3 className="public-cta-title">Want to learn how to build an app with AI to support your clients?</h3>
 
-        {!hasSubmitted ? (
-          <div className="public-cta-options">
-            {variant.interestOptions.map(option => (
-              <button
-                key={option.value}
-                className={`cta-option ${selectedInterest === option.value ? 'selected' : ''}`}
-                onClick={() => handleSelect(option.value)}
-                disabled={isSubmitting}
-              >
-                <span className="cta-option-icon">{option.icon}</span>
-                <span className="cta-option-label">{option.label}</span>
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div className="public-cta-thanks">
-            <p>
-              {selectedInterest === 'yes' && "Awesome! We'll be in touch with resources to help you get started."}
-              {selectedInterest === 'maybe' && "No problem! Feel free to explore when you're ready."}
-              {selectedInterest === 'no' && "Thanks for trying out the flow!"}
-            </p>
-          </div>
-        )}
+          {!hasSubmitted ? (
+            <div className="public-cta-options">
+              {AI_INTEREST_OPTIONS.map(option => (
+                <button
+                  key={option.value}
+                  className={`cta-option ${selectedInterest === option.value ? 'selected' : ''}`}
+                  onClick={() => handleSelect(option.value)}
+                  disabled={isSubmitting}
+                >
+                  <span className="cta-option-icon">{option.icon}</span>
+                  <span className="cta-option-label">{option.label}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="public-cta-thanks">
+              <p>
+                {selectedInterest === 'yes' && "Awesome! We'll be in touch with resources to help you get started."}
+                {selectedInterest === 'maybe' && "No problem! Feel free to explore when you're ready."}
+                {selectedInterest === 'no' && "Thanks for trying out the flow!"}
+              </p>
+            </div>
+          )}
+        </div>
 
-        <button
-          className="public-cta-continue"
-          onClick={handleContinue}
-          disabled={!hasSubmitted && !selectedInterest}
-        >
-          {variant.continueButton}
+        {/* Wealth Ladder Roadmap */}
+        <div className="cta-roadmap-section">
+          <h4 className="roadmap-title">Your Scaling Roadmap</h4>
+          <p className="roadmap-subtitle">The 6 stages to building a profitable business</p>
+
+          <div className="roadmap-ladder">
+            {WEALTH_LADDER_STAGES.map((stage, index) => {
+              // Determine user's current stage from wealth ladder answer
+              const userWealthLadder = answers?.q2_wealth_ladder?.value
+              const userCurrentStage = userWealthLadder ? WEALTH_LADDER_TO_STAGE[userWealthLadder] : null
+              const isCurrentStage = userCurrentStage === stage.level
+              const isCompletedStage = userCurrentStage && stage.level < userCurrentStage
+              const isFutureStage = userCurrentStage && stage.level > userCurrentStage
+
+              return (
+                <div
+                  key={stage.level}
+                  className={`roadmap-rung ${isCurrentStage ? 'current' : ''} ${isCompletedStage ? 'completed' : ''} ${isFutureStage ? 'future' : ''}`}
+                >
+                  <div className="rung-connector">
+                    {index < WEALTH_LADDER_STAGES.length - 1 && <div className={`connector-line ${isCompletedStage ? 'completed' : ''}`} />}
+                  </div>
+                  <div className={`rung-icon ${isCurrentStage ? 'current' : ''} ${isCompletedStage ? 'completed' : ''}`}>
+                    {isCompletedStage ? '✓' : stage.icon}
+                  </div>
+                  <div className="rung-content">
+                    <span className="rung-level">
+                      Stage {stage.level}
+                      {isCurrentStage && <span className="you-are-here"> ← You are here</span>}
+                    </span>
+                    <span className={`rung-name ${isCurrentStage ? 'current' : ''}`}>{stage.name}</span>
+                    <span className="rung-description">{stage.description}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Scaling Button */}
+        <button className="public-cta-scaling" onClick={handleScalingClick}>
+          Keen to learn more about scaling your business?
         </button>
       </div>
     </div>

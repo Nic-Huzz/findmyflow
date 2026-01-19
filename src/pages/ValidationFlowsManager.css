@@ -1059,3 +1059,139 @@
   font-style: italic;
   margin: 0;
 }
+
+/* ============ ENHANCED ANALYTICS DASHBOARD ============ */
+
+.analytics-dashboard {
+  margin-bottom: 24px;
+}
+
+.analytics-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+  .analytics-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.analytics-stat {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.analytics-stat.highlight {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.analytics-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.analytics-stat.highlight .analytics-value {
+  color: #fbbf24;
+}
+
+.analytics-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.analytics-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.analytics-section h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Device Breakdown */
+.device-breakdown {
+  display: flex;
+  gap: 24px;
+}
+
+.device-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.device-icon {
+  font-size: 20px;
+}
+
+.device-count {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+}
+
+.device-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Drop-off Funnel */
+.dropoff-funnel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dropoff-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dropoff-step {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  width: 32px;
+}
+
+.dropoff-bar-container {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dropoff-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  border-radius: 4px;
+  min-width: 4px;
+}
+
+.dropoff-count {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  width: 60px;
+  text-align: right;
+}

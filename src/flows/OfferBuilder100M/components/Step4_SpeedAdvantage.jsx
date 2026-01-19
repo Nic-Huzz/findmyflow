@@ -1,14 +1,16 @@
 /**
- * Step4_SpeedAdvantage - Calculate speed advantage for all 3 versions
+ * Step4_SpeedAdvantage - Calculate speed advantage for selected versions
  *
  * Features:
  * - Compare traditional vs your approach timeframes
  * - AI calculates speed multiplier and marketing angles
  * - Reality checks for each version type
+ * - Supports multi-version tabs
  */
 
 import { useState } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
+import VersionTabs from './VersionTabs'
 
 const BUCKET_EXAMPLES = {
   wealth: [
@@ -28,12 +30,15 @@ const BUCKET_EXAMPLES = {
   ]
 }
 
-function Step4_SpeedAdvantage({ bucket, dreamOutcome, initialData, onComplete, setIsLoading, setError }) {
+function Step4_SpeedAdvantage({ bucket, dreamOutcome, versions, selectedVersionTypes = [], initialData, onComplete, setIsLoading, setError }) {
   const [traditionalTime, setTraditionalTime] = useState(initialData?.speedData?.traditionalTime || '')
   const [yourTime, setYourTime] = useState(initialData?.speedData?.yourTime || '')
   const [analysis, setAnalysis] = useState(initialData?.speedAnalysis || null)
-  const [activeTab, setActiveTab] = useState('product')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+
+  // Use selectedVersionTypes if provided, fallback to all 3 for backwards compatibility
+  const versionTypes = selectedVersionTypes.length > 0 ? selectedVersionTypes : ['service', 'productized', 'product']
+  const [activeTab, setActiveTab] = useState(versionTypes[0])
 
   const examples = BUCKET_EXAMPLES[bucket] || BUCKET_EXAMPLES.wealth
 
@@ -54,7 +59,8 @@ function Step4_SpeedAdvantage({ bucket, dreamOutcome, initialData, onComplete, s
             bucket,
             dreamOutcome,
             traditionalTime: traditionalTime.trim(),
-            yourTime: yourTime.trim()
+            yourTime: yourTime.trim(),
+            selectedVersionTypes: versionTypes
           }
         }
       })
@@ -72,8 +78,7 @@ function Step4_SpeedAdvantage({ bucket, dreamOutcome, initialData, onComplete, s
   // Continue to next step
   const handleContinue = () => {
     onComplete({
-      traditionalTime,
-      yourTime,
+      speedData: { traditionalTime, yourTime },
       analysis
     })
   }
@@ -85,30 +90,16 @@ function Step4_SpeedAdvantage({ bucket, dreamOutcome, initialData, onComplete, s
     return (
       <div className="speed-advantage-step">
         <div className="question-header">
-          <span className="step-label">Step 4 of 8</span>
+          <span className="step-label">Step 5 of 9</span>
           <h2>Your Speed Advantage</h2>
         </div>
 
-        <div className="version-tabs">
-          <button
-            className={`tab ${activeTab === 'service' ? 'active' : ''}`}
-            onClick={() => setActiveTab('service')}
-          >
-            💼 Service
-          </button>
-          <button
-            className={`tab ${activeTab === 'productized' ? 'active' : ''}`}
-            onClick={() => setActiveTab('productized')}
-          >
-            📦 Productized
-          </button>
-          <button
-            className={`tab ${activeTab === 'product' ? 'active' : ''}`}
-            onClick={() => setActiveTab('product')}
-          >
-            🛠️ Product
-          </button>
-        </div>
+        <VersionTabs
+          selectedVersionTypes={versionTypes}
+          activeVersion={activeTab}
+          onVersionChange={setActiveTab}
+          completedVersions={versionTypes.filter(v => analysis[v])}
+        />
 
         <div className="analysis-content">
           <div className="analysis-header">
@@ -180,7 +171,7 @@ function Step4_SpeedAdvantage({ bucket, dreamOutcome, initialData, onComplete, s
   return (
     <div className="speed-advantage-step">
       <div className="question-header">
-        <span className="step-label">Step 4 of 8</span>
+        <span className="step-label">Step 5 of 9</span>
         <h2>How fast can someone see results?</h2>
       </div>
 

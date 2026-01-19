@@ -16,32 +16,32 @@ export const CTA_VARIANTS = {
   // Variant A: Original (Control)
   control: {
     id: 'control',
-    title: "Want to learn how to build your own tech tools with AI?",
-    continueButton: "Continue to Find My Flow →",
+    title: "Ready to climb the wealth ladder?",
+    continueButton: "See Where I Am on the Ladder →",
     interestOptions: [
-      { value: 'yes', label: "Yes, I'm interested", icon: '🚀' },
+      { value: 'yes', label: "Yes, I want to level up", icon: '🚀' },
       { value: 'maybe', label: 'Maybe later', icon: '🤔' },
-      { value: 'no', label: 'No thanks', icon: '👋' }
+      { value: 'no', label: 'Just exploring', icon: '👋' }
     ]
   },
 
   // Variant B: Urgency + Personal
   urgency: {
     id: 'urgency',
-    title: "Ready to turn your results into action?",
-    continueButton: "Start Building My Business →",
+    title: "Know your gaps. Now let's close them.",
+    continueButton: "Start Climbing the Ladder →",
     interestOptions: [
-      { value: 'yes', label: "Yes, show me how!", icon: '⚡' },
+      { value: 'yes', label: "Yes, let's go!", icon: '⚡' },
       { value: 'maybe', label: 'Not yet', icon: '⏰' },
-      { value: 'no', label: 'Just exploring', icon: '👀' }
+      { value: 'no', label: 'Just browsing', icon: '👀' }
     ]
   },
 
   // Variant C: Value-focused
   value: {
     id: 'value',
-    title: "Get a personalized roadmap to bring this to life",
-    continueButton: "See My Roadmap →",
+    title: "Want help scaling up the wealth ladder?",
+    continueButton: "Show Me My Next Rung →",
     interestOptions: [
       { value: 'yes', label: "Yes, I need this!", icon: '🎯' },
       { value: 'maybe', label: 'Tell me more first', icon: '💭' },

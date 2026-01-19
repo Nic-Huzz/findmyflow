@@ -2,18 +2,19 @@
  * OfferBuilder100M - $100M Offer Builder based on Hormozi framework
  *
  * 8-step flow that creates a "Grand Slam Offer" with 3 parallel versions
- * (Product/Service/Hybrid) for comparison and final selection.
+ * (Service/Productized/Product) for comparison and final selection.
  *
  * Steps:
- * 1A: Bucket Selection (Wealth/Health/Love)
- * 1B: Dream Outcome (bucket-specific, AI validated)
- * 2:  Generate 3 Versions (Product/Service/Hybrid)
- * 3:  Proof Stack Builder (for all 3)
- * 4:  Speed Advantage Calculator (for all 3)
- * 5:  Ease Factor Builder (for all 3)
- * 6:  Obstacles → Bonuses (for all 3)
- * 7:  Final Selection (compare + choose)
- * 8:  Grand Slam Score + Stack Slide
+ * 1A: Offer Selection (choose which V1 offer to build on)
+ * 1B: Summary Review (review V1 foundation data)
+ * 2:  Dream Outcome (bucket-specific, AI validated)
+ * 3:  Generate 3 Versions (Service/Productized/Product)
+ * 4:  Proof Stack Builder (for all 3)
+ * 5:  Speed Advantage Calculator (for all 3)
+ * 6:  Ease Factor Builder (for all 3)
+ * 7:  Obstacles → Bonuses (for all 3)
+ * 8:  Final Selection (compare + choose)
+ * 9:  Grand Slam Score + Stack Slide
  */
 
 import { useState, useEffect } from 'react'
@@ -25,9 +26,10 @@ import { getValidationObstaclesForOfferBuilder } from '../../lib/validationObsta
 
 // Step Components
 import Welcome from './components/Welcome'
-import Step1A_BucketSelection from './components/Step1A_BucketSelection'
-import Step1B_DreamOutcome from './components/Step1B_DreamOutcome'
-import Step2_GenerateVersions from './components/Step2_GenerateVersions'
+import Step1A_OfferSelection from './components/Step1A_OfferSelection'
+import Step1B_SummaryReview from './components/Step1B_SummaryReview'
+import Step2_DreamOutcome from './components/Step1B_DreamOutcome' // Renamed to Step2
+import Step3_VersionSelection from './components/Step3_VersionSelection'
 import Step3_ProofStack from './components/Step3_ProofStack'
 import Step4_SpeedAdvantage from './components/Step4_SpeedAdvantage'
 import Step5_EaseFactor from './components/Step5_EaseFactor'
@@ -43,16 +45,17 @@ import './OfferBuilder100M.css'
 const STAGES = {
   TIME_CHECK: 'time_check',
   WELCOME: 'welcome',
-  STEP_1A: 'step_1a',
-  STEP_1B: 'step_1b',
-  STEP_2: 'step_2',
-  STEP_3: 'step_3',
-  STEP_4: 'step_4',
-  STEP_5: 'step_5',
-  STEP_6A: 'step_6a',
-  STEP_6B: 'step_6b',
-  STEP_7: 'step_7',
-  STEP_8: 'step_8',
+  STEP_1A: 'step_1a',    // Offer Selection
+  STEP_1B: 'step_1b',    // Summary Review
+  STEP_2: 'step_2',      // Dream Outcome
+  STEP_3: 'step_3',      // Generate Versions
+  STEP_4: 'step_4',      // Proof Stack
+  STEP_5: 'step_5',      // Speed Advantage
+  STEP_6: 'step_6',      // Ease Factor
+  STEP_7A: 'step_7a',    // Obstacles
+  STEP_7B: 'step_7b',    // Bonuses
+  STEP_8: 'step_8',      // Final Selection
+  STEP_9: 'step_9',      // Grand Slam Score
   SUCCESS: 'success'
 }
 
@@ -64,10 +67,11 @@ const STEP_NUMBERS = {
   [STAGES.STEP_3]: 3,
   [STAGES.STEP_4]: 4,
   [STAGES.STEP_5]: 5,
-  [STAGES.STEP_6A]: 6,
-  [STAGES.STEP_6B]: 6,
-  [STAGES.STEP_7]: 7,
-  [STAGES.STEP_8]: 8
+  [STAGES.STEP_6]: 6,
+  [STAGES.STEP_7A]: 7,
+  [STAGES.STEP_7B]: 7,
+  [STAGES.STEP_8]: 8,
+  [STAGES.STEP_9]: 9
 }
 
 function OfferBuilder100M() {
@@ -83,44 +87,50 @@ function OfferBuilder100M() {
 
   // Offer creation data (includes all step state for back/forth navigation)
   const [offerData, setOfferData] = useState({
-    bucket: null,
-    bucketConfidence: null,
-    bucketSuggested: false,
+    // V1 Foundation (from Offer Builder)
+    selectedOffer: null,        // Full V1 offer data
+    selectedOfferId: null,      // V1 offer ID for linking
+    bucket: null,               // Derived from V1 problem_area
+    // Dream Outcome
     dreamOutcome: '',
     dreamOutcomeScore: null,
+    // 3 Versions (only selected types will be populated)
     versions: {
       service: null,
       productized: null,
       product: null
     },
+    selectedVersionTypes: [], // Which version types user chose to build
+    // Proof Stack
     proofData: null,
     proofAnalysis: null,
+    // Speed
     speedData: null,
     speedAnalysis: null,
+    // Ease
     easeData: null,
     easeAnalysis: null,
+    // Obstacles & Bonuses
     obstacles: [],
     bonuses: {
       service: [],
       productized: [],
       product: []
     },
-    // For Step 6B state restoration
     bonusSuggestions: null,
     selectedBonuses: null,
+    // Final Selection
     selectedVersion: null,
     grandSlamScore: null,
     stackSlide: null
   })
 
-  // Context data from other flows
+  // Context data from other flows (supplementary data, not the V1 offer itself)
   const [contextData, setContextData] = useState({
     skills: [],
     problems: [],
     persona: null,
-    validationData: null,
-    // V1 Offer Builder data (foundation)
-    offerBuilderData: null
+    validationData: null
   })
 
   // Resume prompt state
@@ -149,8 +159,9 @@ function OfferBuilder100M() {
           setShowResumePrompt(true)
         }
 
-        // Load context from other flows
-        const [skillsRes, problemsRes, personaRes, validationObstacles, offerV1Res] = await Promise.all([
+        // Load supplementary context from other flows
+        // Note: V1 offer selection is handled by Step1A_OfferSelection
+        const [skillsRes, problemsRes, personaRes, validationObstacles] = await Promise.all([
           supabase
             .from('nikigai_clusters')
             .select('cluster_data')
@@ -171,23 +182,14 @@ function OfferBuilder100M() {
             .limit(1)
             .single(),
           // Fetch validation obstacles using the new helper
-          getValidationObstaclesForOfferBuilder(user.id),
-          // V1 Offer Builder data (foundation for V2)
-          supabase
-            .from('offer_builder_assessments')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single()
+          getValidationObstaclesForOfferBuilder(user.id)
         ])
 
         setContextData({
           skills: skillsRes.data?.cluster_data || [],
           problems: problemsRes.data?.cluster_data || [],
           persona: personaRes.data || null,
-          validationData: validationObstacles,
-          offerBuilderData: offerV1Res.data || null
+          validationData: validationObstacles
         })
       } catch (err) {
         console.error('Error loading context data:', err)
@@ -270,10 +272,11 @@ function OfferBuilder100M() {
       STAGES.STEP_3,
       STAGES.STEP_4,
       STAGES.STEP_5,
-      STAGES.STEP_6A,
-      STAGES.STEP_6B,
-      STAGES.STEP_7,
-      STAGES.STEP_8
+      STAGES.STEP_6,
+      STAGES.STEP_7A,
+      STAGES.STEP_7B,
+      STAGES.STEP_8,
+      STAGES.STEP_9
     ]
     const currentIndex = stageOrder.indexOf(stage)
     if (currentIndex > 0) {
@@ -283,7 +286,7 @@ function OfferBuilder100M() {
 
   // Get current step number for progress
   const currentStep = STEP_NUMBERS[stage] || 0
-  const totalSteps = 8
+  const totalSteps = 9
 
   // Show resume prompt
   if (showResumePrompt && savedProgress) {
@@ -374,14 +377,14 @@ function OfferBuilder100M() {
         />
       )}
 
+      {/* Step 1A: Offer Selection */}
       {stage === STAGES.STEP_1A && (
-        <Step1A_BucketSelection
-          contextData={contextData}
-          onSelect={(bucket, confidence, suggested) => {
+        <Step1A_OfferSelection
+          onSelect={(selectedOffer, bucket) => {
             updateOfferData({
-              bucket,
-              bucketConfidence: confidence,
-              bucketSuggested: suggested
+              selectedOffer,
+              selectedOfferId: selectedOffer.id,
+              bucket
             })
             goToStage(STAGES.STEP_1B)
           }}
@@ -390,27 +393,27 @@ function OfferBuilder100M() {
         />
       )}
 
+      {/* Step 1B: Summary Review */}
       {stage === STAGES.STEP_1B && (
-        <Step1B_DreamOutcome
+        <Step1B_SummaryReview
+          selectedOffer={offerData.selectedOffer}
           bucket={offerData.bucket}
-          contextData={contextData}
-          initialData={{ dreamOutcome: offerData.dreamOutcome }}
-          onComplete={(dreamOutcome, score) => {
-            updateOfferData({ dreamOutcome, dreamOutcomeScore: score })
-            goToStage(STAGES.STEP_2)
-          }}
-          setIsLoading={setIsLoading}
-          setError={setError}
+          onConfirm={() => goToStage(STAGES.STEP_2)}
+          onBack={() => goToStage(STAGES.STEP_1A)}
         />
       )}
 
+      {/* Step 2: Dream Outcome */}
       {stage === STAGES.STEP_2 && (
-        <Step2_GenerateVersions
+        <Step2_DreamOutcome
           bucket={offerData.bucket}
-          dreamOutcome={offerData.dreamOutcome}
-          contextData={contextData}
-          onComplete={(versions) => {
-            updateOfferData({ versions })
+          contextData={{
+            ...contextData,
+            offerBuilderData: offerData.selectedOffer // Pass V1 data for context
+          }}
+          initialData={{ dreamOutcome: offerData.dreamOutcome }}
+          onComplete={(dreamOutcome, score) => {
+            updateOfferData({ dreamOutcome, dreamOutcomeScore: score })
             goToStage(STAGES.STEP_3)
           }}
           setIsLoading={setIsLoading}
@@ -418,11 +421,35 @@ function OfferBuilder100M() {
         />
       )}
 
+      {/* Step 3: Version Selection & Generation */}
       {stage === STAGES.STEP_3 && (
+        <Step3_VersionSelection
+          bucket={offerData.bucket}
+          dreamOutcome={offerData.dreamOutcome}
+          contextData={{
+            ...contextData,
+            offerBuilderData: offerData.selectedOffer
+          }}
+          onComplete={(versions, selectedTypes) => {
+            updateOfferData({ versions, selectedVersionTypes: selectedTypes })
+            goToStage(STAGES.STEP_4)
+          }}
+          setIsLoading={setIsLoading}
+          setError={setError}
+        />
+      )}
+
+      {/* Step 4: Proof Stack */}
+      {stage === STAGES.STEP_4 && (
         <Step3_ProofStack
           dreamOutcome={offerData.dreamOutcome}
           bucket={offerData.bucket}
-          contextData={contextData}
+          versions={offerData.versions}
+          selectedVersionTypes={offerData.selectedVersionTypes}
+          contextData={{
+            ...contextData,
+            offerBuilderData: offerData.selectedOffer
+          }}
           initialData={{
             proofData: offerData.proofData,
             proofAnalysis: offerData.proofAnalysis
@@ -432,29 +459,6 @@ function OfferBuilder100M() {
               proofData: proofResult.proofData,
               proofAnalysis: proofResult.analysis
             })
-            goToStage(STAGES.STEP_4)
-          }}
-          setIsLoading={setIsLoading}
-          setError={setError}
-        />
-      )}
-
-      {stage === STAGES.STEP_4 && (
-        <Step4_SpeedAdvantage
-          bucket={offerData.bucket}
-          dreamOutcome={offerData.dreamOutcome}
-          initialData={{
-            speedData: offerData.speedData,
-            speedAnalysis: offerData.speedAnalysis
-          }}
-          onComplete={(speedResult) => {
-            updateOfferData({
-              speedData: {
-                traditionalTime: speedResult.traditionalTime,
-                yourTime: speedResult.yourTime
-              },
-              speedAnalysis: speedResult.analysis
-            })
             goToStage(STAGES.STEP_5)
           }}
           setIsLoading={setIsLoading}
@@ -462,49 +466,83 @@ function OfferBuilder100M() {
         />
       )}
 
+      {/* Step 5: Speed Advantage */}
       {stage === STAGES.STEP_5 && (
-        <Step5_EaseFactor
+        <Step4_SpeedAdvantage
           bucket={offerData.bucket}
           dreamOutcome={offerData.dreamOutcome}
+          versions={offerData.versions}
+          selectedVersionTypes={offerData.selectedVersionTypes}
           initialData={{
-            easeData: offerData.easeData,
-            easeAnalysis: offerData.easeAnalysis
+            speedData: offerData.speedData,
+            speedAnalysis: offerData.speedAnalysis
           }}
-          onComplete={(easeResult) => {
+          onComplete={(speedResult) => {
             updateOfferData({
-              easeData: {
-                eliminatedRequirements: easeResult.eliminatedRequirements,
-                selectedOptions: easeResult.selectedOptions,
-                customOptions: easeResult.customOptions
-              },
-              easeAnalysis: easeResult.analysis
+              speedData: speedResult.speedData,
+              speedAnalysis: speedResult.analysis
             })
-            goToStage(STAGES.STEP_6A)
+            goToStage(STAGES.STEP_6)
           }}
           setIsLoading={setIsLoading}
           setError={setError}
         />
       )}
 
-      {stage === STAGES.STEP_6A && (
+      {/* Step 6: Ease Factor */}
+      {stage === STAGES.STEP_6 && (
+        <Step5_EaseFactor
+          bucket={offerData.bucket}
+          dreamOutcome={offerData.dreamOutcome}
+          versions={offerData.versions}
+          selectedVersionTypes={offerData.selectedVersionTypes}
+          initialData={{
+            easeData: offerData.easeData,
+            easeAnalysis: offerData.easeAnalysis
+          }}
+          onComplete={(easeResult) => {
+            updateOfferData({
+              easeData: easeResult.easeData,
+              easeAnalysis: easeResult.analysis
+            })
+            goToStage(STAGES.STEP_7A)
+          }}
+          setIsLoading={setIsLoading}
+          setError={setError}
+        />
+      )}
+
+      {/* Step 7A: Obstacles */}
+      {stage === STAGES.STEP_7A && (
         <Step6_Obstacles
           bucket={offerData.bucket}
-          contextData={contextData}
+          versions={offerData.versions}
+          selectedVersionTypes={offerData.selectedVersionTypes}
+          contextData={{
+            ...contextData,
+            offerBuilderData: offerData.selectedOffer
+          }}
           initialData={{ obstacles: offerData.obstacles }}
           onComplete={(obstacles) => {
             updateOfferData({ obstacles })
-            goToStage(STAGES.STEP_6B)
+            goToStage(STAGES.STEP_7B)
           }}
           setError={setError}
         />
       )}
 
-      {stage === STAGES.STEP_6B && (
+      {/* Step 7B: Bonuses */}
+      {stage === STAGES.STEP_7B && (
         <Step6_Bonuses
           obstacles={offerData.obstacles}
           dreamOutcome={offerData.dreamOutcome}
           bucket={offerData.bucket}
-          contextData={contextData}
+          versions={offerData.versions}
+          selectedVersionTypes={offerData.selectedVersionTypes}
+          contextData={{
+            ...contextData,
+            offerBuilderData: offerData.selectedOffer
+          }}
           initialData={{
             bonusSuggestions: offerData.bonusSuggestions,
             selectedBonuses: offerData.selectedBonuses
@@ -515,29 +553,34 @@ function OfferBuilder100M() {
               bonusSuggestions: result.bonusSuggestions,
               selectedBonuses: result.selectedBonuses
             })
-            goToStage(STAGES.STEP_7)
+            goToStage(STAGES.STEP_8)
           }}
           setIsLoading={setIsLoading}
           setError={setError}
         />
       )}
 
-      {stage === STAGES.STEP_7 && (
+      {/* Step 8: Final Selection */}
+      {stage === STAGES.STEP_8 && (
         <Step7_FinalSelection
           offerData={offerData}
-          contextData={contextData}
+          contextData={{
+            ...contextData,
+            offerBuilderData: offerData.selectedOffer
+          }}
           onComplete={(selectedVersion, score) => {
             updateOfferData({
               selectedVersion,
               grandSlamScore: score
             })
-            goToStage(STAGES.STEP_8)
+            goToStage(STAGES.STEP_9)
           }}
           setError={setError}
         />
       )}
 
-      {stage === STAGES.STEP_8 && (
+      {/* Step 9: Grand Slam Score */}
+      {stage === STAGES.STEP_9 && (
         <Step8_GrandSlam
           offerData={offerData}
           selectedVersion={offerData.selectedVersion}

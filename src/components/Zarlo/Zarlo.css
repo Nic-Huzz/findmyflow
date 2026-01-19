@@ -46,6 +46,17 @@
   }
 }
 
+/* Higher positioning on validation pages to avoid overlapping nav buttons */
+.zarlo-widget-container.validation-page {
+  bottom: 240px;
+}
+
+@media (max-width: 480px) {
+  .zarlo-widget-container.validation-page {
+    bottom: 280px;
+  }
+}
+
 .zarlo-fab {
   width: 56px;
   height: 56px;

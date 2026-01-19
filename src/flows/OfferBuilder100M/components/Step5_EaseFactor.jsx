@@ -1,14 +1,16 @@
 /**
- * Step5_EaseFactor - Build ease factors for all 3 versions
+ * Step5_EaseFactor - Build ease factors for selected versions
  *
  * Features:
  * - Multi-select checklist of "don't needs"
  * - Custom additions allowed
  * - AI analyzes relevance per version
+ * - Supports multi-version tabs
  */
 
 import { useState } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
+import VersionTabs from './VersionTabs'
 
 const EASE_OPTIONS = [
   { id: 'no_tech_skills', label: 'No technical skills required' },
@@ -25,14 +27,17 @@ const EASE_OPTIONS = [
   { id: 'no_equipment', label: 'No special equipment needed' }
 ]
 
-function Step5_EaseFactor({ bucket, dreamOutcome, initialData, onComplete, setIsLoading, setError }) {
+function Step5_EaseFactor({ bucket, dreamOutcome, versions, selectedVersionTypes = [], initialData, onComplete, setIsLoading, setError }) {
   // Restore from initialData if available
   const [selectedOptions, setSelectedOptions] = useState(initialData?.easeData?.selectedOptions || [])
   const [customOptions, setCustomOptions] = useState(initialData?.easeData?.customOptions || [])
   const [newCustom, setNewCustom] = useState('')
   const [analysis, setAnalysis] = useState(initialData?.easeAnalysis || null)
-  const [activeTab, setActiveTab] = useState('product')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+
+  // Use selectedVersionTypes if provided, fallback to all 3 for backwards compatibility
+  const versionTypes = selectedVersionTypes.length > 0 ? selectedVersionTypes : ['service', 'productized', 'product']
+  const [activeTab, setActiveTab] = useState(versionTypes[0])
 
   // Toggle option selection
   const toggleOption = (id) => {
@@ -85,7 +90,8 @@ function Step5_EaseFactor({ bucket, dreamOutcome, initialData, onComplete, setIs
           context: {
             bucket,
             dreamOutcome,
-            eliminatedRequirements: allSelected
+            eliminatedRequirements: allSelected,
+            selectedVersionTypes: versionTypes
           }
         }
       })
@@ -103,10 +109,11 @@ function Step5_EaseFactor({ bucket, dreamOutcome, initialData, onComplete, setIs
   // Continue to next step
   const handleContinue = () => {
     onComplete({
-      eliminatedRequirements: getAllSelectedLabels(),
-      // Include raw selections for restoration when navigating back
-      selectedOptions,
-      customOptions,
+      easeData: {
+        eliminatedRequirements: getAllSelectedLabels(),
+        selectedOptions,
+        customOptions
+      },
       analysis
     })
   }
@@ -118,30 +125,16 @@ function Step5_EaseFactor({ bucket, dreamOutcome, initialData, onComplete, setIs
     return (
       <div className="ease-factor-step">
         <div className="question-header">
-          <span className="step-label">Step 5 of 8</span>
+          <span className="step-label">Step 6 of 9</span>
           <h2>Ease Factor: What You DON'T Need</h2>
         </div>
 
-        <div className="version-tabs">
-          <button
-            className={`tab ${activeTab === 'service' ? 'active' : ''}`}
-            onClick={() => setActiveTab('service')}
-          >
-            💼 Service
-          </button>
-          <button
-            className={`tab ${activeTab === 'productized' ? 'active' : ''}`}
-            onClick={() => setActiveTab('productized')}
-          >
-            📦 Productized
-          </button>
-          <button
-            className={`tab ${activeTab === 'product' ? 'active' : ''}`}
-            onClick={() => setActiveTab('product')}
-          >
-            🛠️ Product
-          </button>
-        </div>
+        <VersionTabs
+          selectedVersionTypes={versionTypes}
+          activeVersion={activeTab}
+          onVersionChange={setActiveTab}
+          completedVersions={versionTypes.filter(v => analysis[v])}
+        />
 
         <div className="analysis-content">
           <div className="analysis-header">
@@ -200,7 +193,7 @@ function Step5_EaseFactor({ bucket, dreamOutcome, initialData, onComplete, setIs
   return (
     <div className="ease-factor-step">
       <div className="question-header">
-        <span className="step-label">Step 5 of 8</span>
+        <span className="step-label">Step 6 of 9</span>
         <h2>What do they NOT have to do?</h2>
       </div>
 

@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 
 // Static imports - Core infrastructure and frequently accessed pages
 import PersonaAssessment from './PersonaAssessment'
@@ -43,6 +43,7 @@ const ProductSelectionFlow = lazy(() => import('./flows/ProductSelectionFlow'))
 const FunnelBuilderFlow = lazy(() => import('./flows/FunnelBuilderFlow'))
 const FunnelCalculator = lazy(() => import('./flows/FunnelCalculator'))
 const GrandSlamOfferFlow = lazy(() => import('./flows/GrandSlamOfferFlow'))
+const GrandSlamMatrix = lazy(() => import('./flows/GrandSlamMatrix'))
 const PersonaSelectionFlow = lazy(() => import('./flows/PersonaSelectionFlow'))
 
 // Lazy-loaded flows - FlowFinder
@@ -58,6 +59,7 @@ const NervousSystemFlow = lazy(() => import('./flows/NervousSystemFlow'))
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
 const PublicMoneyModelFlow = lazy(() => import('./flows/PublicMoneyModelFlow'))
 const PublicNervousSystemFlow = lazy(() => import('./flows/PublicNervousSystemFlow'))
+const PublicOfferAuditFlow = lazy(() => import('./flows/PublicOfferAuditFlow'))
 
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazy(() => import('./flows/BusinessBaselineFlow'))
@@ -127,6 +129,24 @@ import './pages/crm/AscensionEngine.css'
 import './pages/crm/ObjectionPatterns.css'
 import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
+
+// Conditionally render widgets (hide on some public routes)
+function ConditionalZarlo() {
+  const location = useLocation()
+  // Hide Zarlo on /try/ routes only (keep on /v/ validation routes as sales agent)
+  const isTryRoute = location.pathname.startsWith('/try/')
+
+  if (isTryRoute) return null
+  return <ZarloWidget />
+}
+
+function ConditionalBottomToolbar() {
+  const location = useLocation()
+  const isPublicRoute = location.pathname.startsWith('/v/') || location.pathname.startsWith('/try/')
+
+  if (isPublicRoute) return null
+  return <BottomToolbar />
+}
 
 function AppRouter() {
   return (
@@ -230,6 +250,7 @@ function AppRouter() {
             {/* Public Lead Magnet Flows - No Auth Required */}
             <Route path="/try/offer/:flowType" element={<PublicMoneyModelFlow />} />
             <Route path="/try/nervous-system" element={<PublicNervousSystemFlow />} />
+            <Route path="/try/offer-audit" element={<PublicOfferAuditFlow />} />
 
             <Route path="/me" element={
               <AuthGate>
@@ -330,6 +351,13 @@ function AppRouter() {
             <Route path="/funnel-calculator" element={
               <AuthGate>
                 <FunnelCalculator />
+              </AuthGate>
+            } />
+
+            {/* Grand Slam Matrix - Solution to Tier Assignment */}
+            <Route path="/grand-slam-matrix" element={
+              <AuthGate>
+                <GrandSlamMatrix />
               </AuthGate>
             } />
 
@@ -454,8 +482,8 @@ function AppRouter() {
             } />
             </Routes>
           </Suspense>
-          <BottomToolbar />
-          <ZarloWidget />
+          <ConditionalBottomToolbar />
+          <ConditionalZarlo />
         </Router>
         </OnboardingProvider>
       </AuthProvider>

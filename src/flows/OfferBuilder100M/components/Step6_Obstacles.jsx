@@ -42,7 +42,7 @@ const OBSTACLE_EXAMPLES = {
   ]
 }
 
-function Step6_Obstacles({ bucket, contextData, initialData, onComplete, setError }) {
+function Step6_Obstacles({ bucket, versions, selectedVersionTypes = [], contextData, initialData, onComplete, setError }) {
   const [obstacles, setObstacles] = useState(initialData?.obstacles || [])
   const [newObstacle, setNewObstacle] = useState('')
 
@@ -122,7 +122,7 @@ function Step6_Obstacles({ bucket, contextData, initialData, onComplete, setErro
   return (
     <div className="obstacles-step">
       <div className="question-header">
-        <span className="step-label">Step 6 of 8 (Part 1)</span>
+        <span className="step-label">Step 7 of 9 (Part 1)</span>
         <h2>Before we build your bonuses, let's identify obstacles</h2>
       </div>
 

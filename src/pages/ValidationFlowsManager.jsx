@@ -613,15 +613,70 @@ const ValidationFlowsManager = () => {
 
             {/* Analytics Summary */}
             {analytics && (
-              <div className="analytics-summary">
-                <div className="analytics-stat">
-                  <div className="analytics-value">{analytics.totalResponses}</div>
-                  <div className="analytics-label">Total Responses</div>
+              <div className="analytics-dashboard">
+                {/* Core Metrics */}
+                <div className="analytics-summary">
+                  <div className="analytics-stat">
+                    <div className="analytics-value">{analytics.totalStarted || analytics.totalResponses || 0}</div>
+                    <div className="analytics-label">Started</div>
+                  </div>
+                  <div className="analytics-stat highlight">
+                    <div className="analytics-value">{analytics.totalCompleted || analytics.totalResponses || 0}</div>
+                    <div className="analytics-label">Completed</div>
+                  </div>
+                  <div className="analytics-stat">
+                    <div className="analytics-value">{analytics.completionRate || 0}%</div>
+                    <div className="analytics-label">Completion Rate</div>
+                  </div>
+                  <div className="analytics-stat">
+                    <div className="analytics-value">{analytics.averageTime || 0} min</div>
+                    <div className="analytics-label">Avg. Time</div>
+                  </div>
                 </div>
-                <div className="analytics-stat">
-                  <div className="analytics-value">{analytics.averageTime} min</div>
-                  <div className="analytics-label">Avg. Completion Time</div>
-                </div>
+
+                {/* Device Breakdown */}
+                {analytics.deviceBreakdown && (analytics.deviceBreakdown.mobile > 0 || analytics.deviceBreakdown.desktop > 0) && (
+                  <div className="analytics-section">
+                    <h4>Device Breakdown</h4>
+                    <div className="device-breakdown">
+                      <div className="device-stat">
+                        <span className="device-icon">📱</span>
+                        <span className="device-count">{analytics.deviceBreakdown.mobile || 0}</span>
+                        <span className="device-label">Mobile</span>
+                      </div>
+                      <div className="device-stat">
+                        <span className="device-icon">💻</span>
+                        <span className="device-count">{analytics.deviceBreakdown.desktop || 0}</span>
+                        <span className="device-label">Desktop</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Drop-off Funnel */}
+                {analytics.dropOffFunnel && Object.keys(analytics.dropOffFunnel).length > 0 && (
+                  <div className="analytics-section">
+                    <h4>Drop-off Points</h4>
+                    <div className="dropoff-funnel">
+                      {Object.entries(analytics.dropOffFunnel)
+                        .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+                        .map(([step, count]) => (
+                          <div key={step} className="dropoff-item">
+                            <span className="dropoff-step">Q{parseInt(step) + 1}</span>
+                            <div className="dropoff-bar-container">
+                              <div
+                                className="dropoff-bar"
+                                style={{
+                                  width: `${Math.min(100, (count / (analytics.totalStarted - analytics.totalCompleted)) * 100)}%`
+                                }}
+                              />
+                            </div>
+                            <span className="dropoff-count">{count} left</span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

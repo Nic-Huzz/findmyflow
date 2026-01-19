@@ -15,6 +15,7 @@ import {
   handleMilestoneCompletion,
   handleFlowCompassCompletion,
   handleGroanReflectionCompletion,
+  handleValidationAnalysisCompletion,
   handleStreakUpdate,
   getUserStageProgress
 } from '../lib/questCompletionHelpers'
@@ -1552,6 +1553,7 @@ export function useChallengeData() {
     handleMilestoneCompletion,
     handleFlowCompassCompletion,
     handleGroanReflectionCompletion,
+    handleValidationAnalysisCompletion,
     handleStreakUpdate,
     checkAndGraduateProject
   }

@@ -1,20 +1,25 @@
 /**
- * Step7_FinalSelection - Compare all 3 versions and choose one
+ * Step7_FinalSelection - Compare versions and choose one
  *
  * Features:
- * - Side-by-side comparison of Service/Productized/Product (aligned with wealth ladder)
+ * - Side-by-side comparison of selected versions
  * - Shows all accumulated data (proof, speed, ease, bonuses)
  * - Calculates preliminary Grand Slam Score for each
  * - User selects their preferred version
+ * - Auto-selects if only one version was built
  */
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) {
-  const [selectedVersion, setSelectedVersion] = useState(null)
-  const [viewMode, setViewMode] = useState('cards') // 'cards' or 'table'
+  const { versions, selectedVersionTypes = [], proofAnalysis, speedAnalysis, easeAnalysis, bonuses, dreamOutcome, bucket } = offerData
 
-  const { versions, proofAnalysis, speedAnalysis, easeAnalysis, bonuses, dreamOutcome, bucket } = offerData
+  // Use selectedVersionTypes if provided, fallback to all 3 for backwards compatibility
+  const versionTypes = selectedVersionTypes.length > 0 ? selectedVersionTypes : ['service', 'productized', 'product']
+
+  // Auto-select if only one version
+  const [selectedVersion, setSelectedVersion] = useState(versionTypes.length === 1 ? versionTypes[0] : null)
+  const [viewMode, setViewMode] = useState('cards') // 'cards' or 'table'
 
   // Extract customer solution preferences from validation data
   const customerPreferences = contextData?.validationData?.solutionPreferences
@@ -59,12 +64,13 @@ function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) 
       }
     }
 
-    return {
-      service: calculateScore('service'),
-      productized: calculateScore('productized'),
-      product: calculateScore('product')
-    }
-  }, [versions, proofAnalysis, speedAnalysis, easeAnalysis, bonuses])
+    // Only calculate scores for selected version types
+    const result = {}
+    versionTypes.forEach(type => {
+      result[type] = calculateScore(type)
+    })
+    return result
+  }, [versions, proofAnalysis, speedAnalysis, easeAnalysis, bonuses, versionTypes])
 
   // Get letter grade from score
   function getGrade(score) {
@@ -76,18 +82,23 @@ function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) 
     return { letter: 'D', color: '#ef4444', label: 'Needs Work' }
   }
 
-  // Get recommendation
+  // Get recommendation (only from selected versions)
   const recommendation = useMemo(() => {
-    const serviceScore = scores.service?.total || 0
-    const productizedScore = scores.productized?.total || 0
-    const productScore = scores.product?.total || 0
+    if (versionTypes.length === 1) return versionTypes[0]
 
-    const max = Math.max(serviceScore, productizedScore, productScore)
+    let maxScore = 0
+    let recommended = versionTypes[0]
 
-    if (max === serviceScore) return 'service'
-    if (max === productizedScore) return 'productized'
-    return 'product'
-  }, [scores])
+    versionTypes.forEach(type => {
+      const score = scores[type]?.total || 0
+      if (score > maxScore) {
+        maxScore = score
+        recommended = type
+      }
+    })
+
+    return recommended
+  }, [scores, versionTypes])
 
   // Handle selection
   const handleSelect = (version) => {
@@ -109,40 +120,50 @@ function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) 
     product: { icon: '🛠️', name: 'Product', desc: 'Tools I use myself' }
   }
 
+  // Single version mode - simplified UI
+  const isSingleVersion = versionTypes.length === 1
+
   return (
     <div className="final-selection-step">
       <div className="question-header">
-        <span className="step-label">Step 7 of 8</span>
-        <h2>Choose Your Grand Slam Offer</h2>
+        <span className="step-label">Step 8 of 9</span>
+        <h2>{isSingleVersion ? 'Your Grand Slam Offer Summary' : 'Choose Your Grand Slam Offer'}</h2>
       </div>
 
       <p className="question-subtitle">
-        Compare all 3 versions with their complete data. Select the one that fits your goals.
+        {isSingleVersion
+          ? 'Review your complete offer data before generating your Grand Slam.'
+          : `Compare ${versionTypes.length} versions with their complete data. Select the one that fits your goals.`
+        }
       </p>
 
-      {/* View toggle */}
-      <div className="view-toggle">
-        <button
-          className={viewMode === 'cards' ? 'active' : ''}
-          onClick={() => setViewMode('cards')}
-        >
-          Card View
-        </button>
-        <button
-          className={viewMode === 'table' ? 'active' : ''}
-          onClick={() => setViewMode('table')}
-        >
-          Table View
-        </button>
-      </div>
+      {/* View toggle - hide for single version */}
+      {!isSingleVersion && (
+        <div className="view-toggle">
+          <button
+            className={viewMode === 'cards' ? 'active' : ''}
+            onClick={() => setViewMode('cards')}
+          >
+            Card View
+          </button>
+          <button
+            className={viewMode === 'table' ? 'active' : ''}
+            onClick={() => setViewMode('table')}
+          >
+            Table View
+          </button>
+        </div>
+      )}
 
-      {/* AI Recommendation */}
-      <div className="ai-recommendation">
-        <span className="rec-icon">🤖</span>
-        <span>AI Recommends: </span>
-        <strong>{versionLabels[recommendation].icon} {versionLabels[recommendation].name}</strong>
-        <span className="rec-score">Score: {scores[recommendation]?.total}</span>
-      </div>
+      {/* AI Recommendation - hide for single version */}
+      {!isSingleVersion && (
+        <div className="ai-recommendation">
+          <span className="rec-icon">🤖</span>
+          <span>AI Recommends: </span>
+          <strong>{versionLabels[recommendation].icon} {versionLabels[recommendation].name}</strong>
+          <span className="rec-score">Score: {scores[recommendation]?.total}</span>
+        </div>
+      )}
 
       {/* Customer Preferences from Validation Surveys */}
       {hasCustomerPreferences && (
@@ -159,11 +180,11 @@ function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) 
             </span>
           </div>
 
-          {/* Vote breakdown */}
+          {/* Vote breakdown - only show selected versions */}
           <div className="preferences-breakdown">
-            {['service', 'productized', 'product'].map(version => {
-              const count = customerPreferences.breakdown[version]
-              const percentage = Math.round((count / customerPreferences.totalVotes) * 100)
+            {versionTypes.map(version => {
+              const count = customerPreferences.breakdown[version] || 0
+              const percentage = customerPreferences.totalVotes > 0 ? Math.round((count / customerPreferences.totalVotes) * 100) : 0
               const isWinner = version === customerPreferences.recommendedVersion
               return (
                 <div key={version} className={`breakdown-bar ${isWinner ? 'winner' : ''}`}>
@@ -195,8 +216,8 @@ function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) 
 
       {/* Card View */}
       {viewMode === 'cards' && (
-        <div className="version-cards">
-          {['service', 'productized', 'product'].map((version) => {
+        <div className={`version-cards ${isSingleVersion ? 'single' : ''}`}>
+          {versionTypes.map((version) => {
             const versionData = versions?.[version]
             const score = scores[version]
             const label = versionLabels[version]
@@ -290,87 +311,80 @@ function Step7_FinalSelection({ offerData, contextData, onComplete, setError }) 
         </div>
       )}
 
-      {/* Table View */}
-      {viewMode === 'table' && (
+      {/* Table View - only show for multiple versions */}
+      {viewMode === 'table' && !isSingleVersion && (
         <div className="comparison-table-container">
           <table className="comparison-table">
             <thead>
               <tr>
                 <th>Metric</th>
-                <th
-                  className={selectedVersion === 'service' ? 'selected' : ''}
-                  onClick={() => handleSelect('service')}
-                >
-                  {versionLabels.service.icon} Service
-                </th>
-                <th
-                  className={selectedVersion === 'productized' ? 'selected' : ''}
-                  onClick={() => handleSelect('productized')}
-                >
-                  {versionLabels.productized.icon} Productized
-                </th>
-                <th
-                  className={selectedVersion === 'product' ? 'selected' : ''}
-                  onClick={() => handleSelect('product')}
-                >
-                  {versionLabels.product.icon} Product
-                </th>
+                {versionTypes.map(version => (
+                  <th
+                    key={version}
+                    className={selectedVersion === version ? 'selected' : ''}
+                    onClick={() => handleSelect(version)}
+                  >
+                    {versionLabels[version].icon} {versionLabels[version].name}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
               <tr className="score-row">
                 <td>Grand Slam Score</td>
-                <td style={{ color: scores.service?.grade.color }}>{scores.service?.total} ({scores.service?.grade.letter})</td>
-                <td style={{ color: scores.productized?.grade.color }}>{scores.productized?.total} ({scores.productized?.grade.letter})</td>
-                <td style={{ color: scores.product?.grade.color }}>{scores.product?.total} ({scores.product?.grade.letter})</td>
+                {versionTypes.map(version => (
+                  <td key={version} style={{ color: scores[version]?.grade.color }}>
+                    {scores[version]?.total} ({scores[version]?.grade.letter})
+                  </td>
+                ))}
               </tr>
               <tr>
                 <td>Price</td>
-                <td>${versions?.service?.suggestedPrice?.toLocaleString()}</td>
-                <td>${versions?.productized?.suggestedPrice?.toLocaleString()}</td>
-                <td>${versions?.product?.suggestedPrice?.toLocaleString()}</td>
+                {versionTypes.map(version => (
+                  <td key={version}>${versions?.[version]?.suggestedPrice?.toLocaleString()}</td>
+                ))}
               </tr>
               <tr>
                 <td>Proof Score</td>
-                <td>{scores.service?.proofScore}/10</td>
-                <td>{scores.productized?.proofScore}/10</td>
-                <td>{scores.product?.proofScore}/10</td>
+                {versionTypes.map(version => (
+                  <td key={version}>{scores[version]?.proofScore}/10</td>
+                ))}
               </tr>
               <tr>
                 <td>Speed Score</td>
-                <td>{scores.service?.speedScore}/10</td>
-                <td>{scores.productized?.speedScore}/10</td>
-                <td>{scores.product?.speedScore}/10</td>
+                {versionTypes.map(version => (
+                  <td key={version}>{scores[version]?.speedScore}/10</td>
+                ))}
               </tr>
               <tr>
                 <td>Ease Score</td>
-                <td>{scores.service?.easeScore}/10</td>
-                <td>{scores.productized?.easeScore}/10</td>
-                <td>{scores.product?.easeScore}/10</td>
+                {versionTypes.map(version => (
+                  <td key={version}>{scores[version]?.easeScore}/10</td>
+                ))}
               </tr>
               <tr>
                 <td>Bonus Value</td>
-                <td>${scores.service?.bonusValue?.toLocaleString()}</td>
-                <td>${scores.productized?.bonusValue?.toLocaleString()}</td>
-                <td>${scores.product?.bonusValue?.toLocaleString()}</td>
+                {versionTypes.map(version => (
+                  <td key={version}>${scores[version]?.bonusValue?.toLocaleString()}</td>
+                ))}
               </tr>
               <tr>
                 <td>Month 3 Revenue</td>
-                <td>${versions?.service?.revenue?.month3?.toLocaleString()}</td>
-                <td>${versions?.productized?.revenue?.month3?.toLocaleString()}</td>
-                <td>${versions?.product?.revenue?.month3?.toLocaleString()}</td>
+                {versionTypes.map(version => (
+                  <td key={version}>${versions?.[version]?.revenue?.month3?.toLocaleString()}</td>
+                ))}
               </tr>
               <tr>
                 <td>Setup Timeline</td>
-                <td>{versions?.service?.investment?.setupTimeline}</td>
-                <td>{versions?.productized?.investment?.setupTimeline}</td>
-                <td>{versions?.product?.investment?.setupTimeline}</td>
+                {versionTypes.map(version => (
+                  <td key={version}>{versions?.[version]?.investment?.setupTimeline}</td>
+                ))}
               </tr>
               <tr>
                 <td>Max Customers/Mo</td>
-                <td>{versions?.service?.maxCustomersPerMonth}</td>
-                <td>{versions?.productized?.maxCustomersPerMonth}</td>
-                <td>{versions?.product?.maxCustomersPerMonth}</td>
+                {versionTypes.map(version => (
+                  <td key={version}>{versions?.[version]?.maxCustomersPerMonth}</td>
+                ))}
               </tr>
             </tbody>
           </table>

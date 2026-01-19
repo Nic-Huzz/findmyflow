@@ -108,6 +108,173 @@
   box-shadow: none;
 }
 
+/* AI Section */
+.cta-ai-section {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Roadmap Section */
+.cta-roadmap-section {
+  margin-bottom: 32px;
+}
+
+.roadmap-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 8px;
+}
+
+.roadmap-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 24px;
+}
+
+.roadmap-ladder {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  text-align: left;
+}
+
+.roadmap-rung {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  padding: 12px 0;
+}
+
+.rung-connector {
+  position: relative;
+  width: 24px;
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.connector-line {
+  position: absolute;
+  top: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: calc(100% + 12px);
+  background: linear-gradient(180deg, rgba(251, 191, 36, 0.4), rgba(251, 191, 36, 0.1));
+}
+
+.rung-icon {
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.rung-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.rung-level {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(251, 191, 36, 0.7);
+}
+
+.rung-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.rung-description {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+}
+
+/* Roadmap States */
+.roadmap-rung.current {
+  background: rgba(251, 191, 36, 0.15);
+  border-radius: 12px;
+  margin: 4px -12px;
+  padding: 12px 12px;
+}
+
+.roadmap-rung.completed {
+  opacity: 0.6;
+}
+
+.roadmap-rung.future {
+  opacity: 0.5;
+}
+
+.rung-icon.current {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
+}
+
+.rung-icon.completed {
+  background: rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  font-size: 16px;
+}
+
+.rung-name.current {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.connector-line.completed {
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.6), rgba(16, 185, 129, 0.2));
+}
+
+.you-are-here {
+  color: #fbbf24;
+  font-weight: 600;
+  font-size: 11px;
+  margin-left: 8px;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Scaling Button */
+.public-cta-scaling {
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  color: #1a1a2e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.public-cta-scaling:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
 /* Mobile responsive */
 @media (max-width: 480px) {
   .public-cta {
@@ -127,6 +294,33 @@
   }
 
   .public-cta-continue {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+
+  .roadmap-title {
+    font-size: 16px;
+  }
+
+  .roadmap-subtitle {
+    font-size: 13px;
+  }
+
+  .rung-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+
+  .rung-name {
+    font-size: 14px;
+  }
+
+  .rung-description {
+    font-size: 11px;
+  }
+
+  .public-cta-scaling {
     padding: 14px 20px;
     font-size: 15px;
   }

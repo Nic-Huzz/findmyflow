@@ -1,14 +1,16 @@
 /**
- * Step3_ProofStack - Build credibility stack for all 3 versions
+ * Step3_ProofStack - Build credibility stack for selected versions
  *
  * Features:
  * - Multi-select with details for 6 proof types
  * - AI analysis ranks proof for each version
- * - Tabbed view showing recommendations per version
+ * - Tabbed view showing recommendations per version (if multiple)
+ * - Apply to All support for shared proof data
  */
 
 import { useState } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
+import VersionTabs from './VersionTabs'
 
 const PROOF_TYPES = [
   {
@@ -49,11 +51,15 @@ const PROOF_TYPES = [
   }
 ]
 
-function Step3_ProofStack({ dreamOutcome, bucket, contextData, initialData, onComplete, setIsLoading, setError }) {
+function Step3_ProofStack({ dreamOutcome, bucket, versions, selectedVersionTypes = [], contextData, initialData, onComplete, setIsLoading, setError }) {
   const [proofData, setProofData] = useState(initialData?.proofData || {})
   const [analysis, setAnalysis] = useState(initialData?.proofAnalysis || null)
-  const [activeTab, setActiveTab] = useState('product')
+  // Default to first selected version type
+  const [activeTab, setActiveTab] = useState(selectedVersionTypes[0] || 'service')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+
+  // Use selectedVersionTypes if provided, fallback to all 3 for backwards compatibility
+  const versionTypes = selectedVersionTypes.length > 0 ? selectedVersionTypes : ['service', 'productized', 'product']
 
   // Toggle proof type selection
   const toggleProof = (id) => {
@@ -104,7 +110,9 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, initialData, onCo
             validationData: contextData.validationData,
             proofData,
             // V1 sunk cost data for contrast messaging in proof stack
-            sunkCost: v1SunkCost
+            sunkCost: v1SunkCost,
+            // Only analyze selected version types
+            selectedVersionTypes: versionTypes
           }
         }
       })
@@ -134,30 +142,16 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, initialData, onCo
     return (
       <div className="proof-stack-step">
         <div className="question-header">
-          <span className="step-label">Step 3 of 8</span>
+          <span className="step-label">Step 4 of 9</span>
           <h2>Your Proof Stack Analysis</h2>
         </div>
 
-        <div className="version-tabs">
-          <button
-            className={`tab ${activeTab === 'service' ? 'active' : ''}`}
-            onClick={() => setActiveTab('service')}
-          >
-            💼 Service
-          </button>
-          <button
-            className={`tab ${activeTab === 'productized' ? 'active' : ''}`}
-            onClick={() => setActiveTab('productized')}
-          >
-            📦 Productized
-          </button>
-          <button
-            className={`tab ${activeTab === 'product' ? 'active' : ''}`}
-            onClick={() => setActiveTab('product')}
-          >
-            🛠️ Product
-          </button>
-        </div>
+        <VersionTabs
+          selectedVersionTypes={versionTypes}
+          activeVersion={activeTab}
+          onVersionChange={setActiveTab}
+          completedVersions={versionTypes.filter(v => analysis[v])}
+        />
 
         <div className="analysis-content">
           <div className="analysis-header">
@@ -226,13 +220,13 @@ function Step3_ProofStack({ dreamOutcome, bucket, contextData, initialData, onCo
   return (
     <div className="proof-stack-step">
       <div className="question-header">
-        <span className="step-label">Step 3 of 8</span>
+        <span className="step-label">Step 4 of 9</span>
         <h2>Why should they believe you can deliver?</h2>
       </div>
 
       <p className="question-subtitle">
-        Let's build your credibility stack. You'll answer these questions ONCE,
-        then we'll customize the proof for each of your 3 versions.
+        Let's build your credibility stack. You'll answer these questions ONCE
+        {versionTypes.length > 1 ? ', then we\'ll customize the proof for each of your versions.' : '.'}
       </p>
 
       {/* Validation Testimonials Panel */}

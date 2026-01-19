@@ -129,6 +129,7 @@ function Challenge() {
     handleMilestoneCompletion,
     handleFlowCompassCompletion,
     handleGroanReflectionCompletion,
+    handleValidationAnalysisCompletion,
     handleStreakUpdate,
     checkAndGraduateProject
   } = useChallengeData()
@@ -324,6 +325,28 @@ function Challenge() {
           alert(`Error logging flow: ${result.error}`)
           return
         }
+      }
+
+      // Handle validation_responses quests (AI analysis)
+      if (quest.inputType === 'validation_responses') {
+        const result = await handleValidationAnalysisCompletion(
+          user.id,
+          specialData,
+          stageProgress,
+          selectedProject?.id
+        )
+
+        if (!result.success) {
+          if (result.alreadyCompleted) {
+            alert('You have already completed validation analysis!')
+            return
+          } else {
+            alert(`Error saving validation analysis: ${result.error}`)
+            return
+          }
+        }
+
+        await loadStageProgress()
       }
 
       // Handle groan type quests

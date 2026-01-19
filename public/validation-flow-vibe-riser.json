@@ -14,7 +14,7 @@
     {
       "id": "0.0",
       "step_order_index": 1,
-      "assistant_prompt": "Hey! Got 5 minutes?\n\nSomeone's building something to help people like you, and your honest thoughts will literally shape what they create.\n\nNo sales pitch. No BS. Just real questions from a real human trying to make something actually useful.",
+      "assistant_prompt": "Hey! Got 5 minutes?\n\nSomeone's building something to help people like you, and your honest thoughts will help shape what they create.\n\n\nNo sales pitch. Just real questions from a real human trying to make something actually useful.",
       "expected_inputs": [],
       "button_text": "Yeah, let's do it",
       "next_step_rules": [
@@ -26,7 +26,7 @@
     {
       "id": "0.1",
       "step_order_index": 2,
-      "assistant_prompt": "Here's what they're exploring:\n\n**The problem:**\n{{problemArea}}\n\n**The idea:**\n{{solutionConcept}}\n\nSound like something you'd want to exist?",
+      "assistant_prompt": "Here's what they're exploring:\n\n\n**The problem:**\n{{problemArea}}\n\n\n\n**The idea:**\n{{solutionConcept}}\n\n\nSound like something you'd want to exist?",
       "expected_inputs": [],
       "button_text": "Yep, tell me more",
       "next_step_rules": [
@@ -102,7 +102,7 @@
     {
       "id": "2.0",
       "step_order_index": 6,
-      "assistant_prompt": "Now for the uncomfortable bit...\n\nWhat's the story you tell yourself about why you haven't figured this out yet?\n\nYou know - that voice in your head when it's 2am and you can't sleep.",
+      "assistant_prompt": "Now for the uncomfortable bit...\n\nWhat's the story you tell yourself about why you haven't figured this out yet?\n\nYou know - that voice in your head in moments you're full of doubt.",
       "expected_inputs": [
         {
           "type": "free_text",

@@ -1,0 +1,899 @@
+/* PublicOfferAuditFlow.css - Offer Audit Assessment Flow */
+/* Based on AttractionOfferFlow.css styling */
+
+.offer-audit-flow {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  position: relative;
+}
+
+/* ============ PROGRESS INDICATORS ============ */
+
+.offer-audit-flow .progress-container {
+  position: relative;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.offer-audit-flow .progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.offer-audit-flow .progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.offer-audit-flow .progress-dot.completed {
+  background: #ffdd27;
+}
+
+.offer-audit-flow .progress-dot.active {
+  background: #ffdd27;
+  box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
+  transform: scale(1.2);
+}
+
+.offer-audit-flow .section-progress {
+  width: 100%;
+  max-width: 300px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.offer-audit-flow .section-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ffdd27, #f59e0b);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ============ WELCOME SCREEN ============ */
+
+.offer-audit-flow .welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+  animation: offerAuditFadeInGeneral 0.5s ease;
+  margin: 0 auto;
+  padding: 40px 0;
+  min-height: calc(100vh - 80px);
+}
+
+.offer-audit-flow .welcome-container > .primary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.offer-audit-flow .welcome-container > .secondary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin: 4px auto 0 !important;
+}
+
+.offer-audit-flow .go-back-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-top: 16px;
+  transition: color 0.2s ease;
+}
+
+.offer-audit-flow .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.offer-audit-flow .welcome-content {
+  margin-bottom: 32px;
+}
+
+.offer-audit-flow .welcome-greeting {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 32px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.offer-audit-flow .welcome-message {
+  text-align: center;
+}
+
+.offer-audit-flow .welcome-message p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+}
+
+.offer-audit-flow .welcome-message strong {
+  color: white;
+}
+
+.offer-audit-flow .welcome-message p.explainer-text {
+  font-size: 18px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+}
+
+.offer-audit-flow .welcome-message p.explainer-highlight {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #fbbf24;
+  font-weight: 600;
+  margin: 24px 0 8px;
+}
+
+/* Audit Checklist for Welcome Page */
+.offer-audit-flow .audit-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 24px 0 32px;
+  text-align: left;
+}
+
+.offer-audit-flow .checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.offer-audit-flow .checklist-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.offer-audit-flow .checklist-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.offer-audit-flow .checklist-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.offer-audit-flow .checklist-text strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+}
+
+.offer-audit-flow .checklist-text span {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+.offer-audit-flow .welcome-note {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  margin: 0 0 8px;
+}
+
+.offer-audit-flow .time-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.offer-audit-flow .primary-button.glow-button {
+  animation: offerAuditGlow 2s ease-in-out infinite;
+}
+
+@keyframes offerAuditGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(255, 221, 39, 0.5);
+  }
+}
+
+/* ============ QUESTION SCREENS ============ */
+
+.offer-audit-flow .question-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  animation: offerAuditFadeInGeneral 0.3s ease;
+}
+
+.offer-audit-flow .question-number {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 16px;
+}
+
+.offer-audit-flow .question-text {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.offer-audit-flow .question-subtext {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 32px;
+  max-width: 500px;
+}
+
+.offer-audit-flow .options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.offer-audit-flow .option-card {
+  width: 100%;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.offer-audit-flow .option-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(147, 51, 234, 0.5);
+  transform: translateY(-2px);
+}
+
+.offer-audit-flow .option-card:active {
+  transform: translateY(0);
+}
+
+.offer-audit-flow .option-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 6px;
+}
+
+.offer-audit-flow .option-description {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============ CALCULATING SCREEN ============ */
+
+.offer-audit-flow .calculating-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 450px;
+  text-align: center;
+  animation: offerAuditFadeInGeneral 0.5s ease;
+}
+
+.offer-audit-flow .calculating-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 32px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.offer-audit-flow .calculating-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.offer-audit-flow .calculating-step {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.offer-audit-flow .calculating-step.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============ REVEAL SCREEN ============ */
+
+.offer-audit-flow .reveal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+  animation: offerAuditFadeIn 0.5s ease;
+  padding-bottom: 40px;
+}
+
+@keyframes offerAuditFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.offer-audit-flow .reveal-badge {
+  display: inline-block;
+  padding: 8px 24px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1a1a2e;
+}
+
+/* Audit Wheel */
+.offer-audit-flow .audit-wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.offer-audit-flow .audit-wheel-container svg {
+  margin-bottom: 24px;
+}
+
+.offer-audit-flow .audit-wheel-legend {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.offer-audit-flow .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: opacity 0.2s ease;
+}
+
+.offer-audit-flow .legend-item.na {
+  opacity: 0.5;
+}
+
+.offer-audit-flow .legend-icon {
+  font-size: 24px;
+}
+
+.offer-audit-flow .legend-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.offer-audit-flow .legend-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+}
+
+.offer-audit-flow .legend-level {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.offer-audit-flow .reveal-score {
+  font-size: 72px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.offer-audit-flow .reveal-score-label {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 32px;
+}
+
+.offer-audit-flow .score-interpretation {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.offer-audit-flow .score-description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin: 0 0 32px;
+}
+
+/* Score breakdown section */
+.offer-audit-flow .score-breakdown {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.offer-audit-flow .breakdown-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: white;
+}
+
+.offer-audit-flow .breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-audit-flow .breakdown-item:last-child {
+  border-bottom: none;
+}
+
+.offer-audit-flow .breakdown-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.offer-audit-flow .breakdown-value {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.offer-audit-flow .breakdown-value.good {
+  color: #10b981;
+}
+
+.offer-audit-flow .breakdown-value.warning {
+  color: #f59e0b;
+}
+
+.offer-audit-flow .breakdown-value.missing {
+  color: #ef4444;
+}
+
+/* Gaps section */
+.offer-audit-flow .gaps-section {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.offer-audit-flow .gaps-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: #fca5a5;
+}
+
+.offer-audit-flow .gap-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-audit-flow .gap-item:last-child {
+  border-bottom: none;
+}
+
+.offer-audit-flow .gap-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.offer-audit-flow .gap-content {
+  flex: 1;
+}
+
+.offer-audit-flow .gap-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 4px;
+}
+
+.offer-audit-flow .gap-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Strengths section */
+.offer-audit-flow .strengths-section {
+  width: 100%;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.offer-audit-flow .strengths-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: #6ee7b7;
+}
+
+.offer-audit-flow .strength-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-audit-flow .strength-item:last-child {
+  border-bottom: none;
+}
+
+/* Discovery section (pre-ladder users) */
+.offer-audit-flow .discovery-section {
+  width: 100%;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.offer-audit-flow .discovery-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  color: #c4b5fd;
+}
+
+.offer-audit-flow .discovery-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.offer-audit-flow .discovery-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-audit-flow .discovery-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.offer-audit-flow .discovery-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.offer-audit-flow .discovery-content {
+  flex: 1;
+}
+
+.offer-audit-flow .discovery-content h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 6px;
+}
+
+.offer-audit-flow .discovery-content p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Help section */
+.offer-audit-flow .help-section {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.2), rgba(147, 51, 234, 0.15));
+  border: 1px solid rgba(147, 51, 234, 0.4);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.offer-audit-flow .help-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #c4b5fd;
+}
+
+.offer-audit-flow .help-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 20px;
+}
+
+.offer-audit-flow .help-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-audit-flow .help-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.offer-audit-flow .help-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(147, 51, 234, 0.3);
+  border-radius: 10px;
+}
+
+.offer-audit-flow .help-content {
+  flex: 1;
+}
+
+.offer-audit-flow .help-feature {
+  font-size: 15px;
+  font-weight: 700;
+  color: #e9d5ff;
+  margin: 0 0 4px;
+}
+
+.offer-audit-flow .help-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============ BUTTONS ============ */
+
+.offer-audit-flow .primary-button {
+  width: auto;
+  max-width: 280px;
+  padding: 14px 32px !important;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: center;
+}
+
+.offer-audit-flow .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.offer-audit-flow .primary-button:active {
+  transform: translateY(0);
+}
+
+.offer-audit-flow .primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.offer-audit-flow .secondary-button {
+  width: 100%;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-audit-flow .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============ LOADING STATE ============ */
+
+.offer-audit-flow .loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.offer-audit-flow .typing-indicator {
+  display: flex;
+  gap: 8px;
+}
+
+.offer-audit-flow .typing-indicator span {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: offerAuditTyping 1.4s infinite;
+}
+
+.offer-audit-flow .typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.offer-audit-flow .typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes offerAuditTyping {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes offerAuditFadeInGeneral {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+
+@media (max-width: 480px) {
+  .offer-audit-flow {
+    padding: 16px;
+  }
+
+  .offer-audit-flow .welcome-greeting {
+    font-size: 28px;
+  }
+
+  .offer-audit-flow .welcome-message p {
+    font-size: 15px;
+  }
+
+  .offer-audit-flow .question-text {
+    font-size: 24px;
+  }
+
+  .offer-audit-flow .reveal-score {
+    font-size: 56px;
+  }
+
+  .offer-audit-flow .score-breakdown,
+  .offer-audit-flow .gaps-section,
+  .offer-audit-flow .strengths-section {
+    padding: 20px;
+  }
+
+  .offer-audit-flow .option-label {
+    font-size: 16px;
+  }
+
+  .offer-audit-flow .option-description {
+    font-size: 13px;
+  }
+
+  .offer-audit-flow .audit-wheel-legend {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .offer-audit-flow .legend-item {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* iOS Safe Area Support */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .offer-audit-flow {
+    padding-top: calc(20px + env(safe-area-inset-top));
+  }
+
+  .offer-audit-flow .progress-container {
+    padding-top: calc(16px + env(safe-area-inset-top));
+  }
+}
