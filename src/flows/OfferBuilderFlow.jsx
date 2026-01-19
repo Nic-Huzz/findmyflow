@@ -25,6 +25,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { getValidationObstaclesForOfferBuilder } from '../lib/validationObstacles'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import './OfferBuilderFlow.css'
 
@@ -36,9 +37,6 @@ const STAGES = {
   Q6: 'q6',
   Q7: 'q7',
   Q8: 'q8',
-  LM_EDUCATION: 'lm_education',
-  BONUS_EDUCATION: 'bonus_education',
-  CATEGORIZATION: 'categorization',
   SUMMARY: 'summary',
   SUCCESS: 'success'
 }
@@ -48,7 +46,6 @@ const STAGE_GROUPS = [
   { id: 'review', label: 'Review', stages: [STAGES.REVIEW_ANSWERS] },
   { id: 'niche', label: 'Niche', stages: [STAGES.Q6, STAGES.Q7] },
   { id: 'solutions', label: 'Solutions', stages: [STAGES.Q8] },
-  { id: 'categorize', label: 'Categorize', stages: [STAGES.LM_EDUCATION, STAGES.BONUS_EDUCATION, STAGES.CATEGORIZATION] },
   { id: 'complete', label: 'Complete', stages: [STAGES.SUMMARY, STAGES.SUCCESS] }
 ]
 
@@ -166,27 +163,6 @@ const SOLUTION_LABELS = {
   mixed_products: 'Mixed Products'
 }
 
-// Lead Magnet types for education
-const LEAD_MAGNET_TYPES = {
-  reveal_problem: {
-    name: 'Reveal the Problem',
-    icon: '🔍',
-    description: 'Help them realize they have a problem they didn\'t know about (quiz, assessment, calculator)',
-    bestFor: ['tech_digital', 'one_to_many']
-  },
-  free_trial: {
-    name: 'Free Trial',
-    icon: '🎯',
-    description: 'Let them experience your solution before buying (free session, sample, demo)',
-    bestFor: ['one_to_one', 'one_to_many', 'tech_digital']
-  },
-  free_step_1: {
-    name: 'Free Step 1',
-    icon: '🪜',
-    description: 'Give them the first step of your process for free (template, guide, mini-course)',
-    bestFor: ['one_to_many', 'tech_digital', 'physical_product']
-  }
-}
 
 // Map validation profile fields to our question IDs
 const mapProfileToAnswers = (profile) => {
@@ -280,15 +256,20 @@ function OfferBuilderFlow() {
   // Existing products from Quick Capture / wealth ladder
   const [existingProducts, setExistingProducts] = useState([])
 
-  // Solution categorization state (Core Product / Lead Magnet / Bonus / Skip)
-  const [solutionCategories, setSolutionCategories] = useState({})
-
-  // Selected lead magnet type
-  const [selectedLeadMagnetType, setSelectedLeadMagnetType] = useState(null)
 
   // Persona selector state
   const [personaProfiles, setPersonaProfiles] = useState([])
   const [selectedProfile, setSelectedProfile] = useState(null)
+
+  // Flow Finder skill clusters (for Q8 suggestions)
+  const [skillClusters, setSkillClusters] = useState([])
+
+  // AI-powered skill recommendations (from Haiku edge function)
+  const [aiRecommendations, setAiRecommendations] = useState(null)
+  const [recommendationsLoading, setRecommendationsLoading] = useState(false)
+
+  // Validation survey data (obstacles and solution preferences)
+  const [validationData, setValidationData] = useState(null)
 
   // Auto-save state
   const [showResumePrompt, setShowResumePrompt] = useState(false)
@@ -299,10 +280,7 @@ function OfferBuilderFlow() {
   const flowStages = [
     STAGES.Q6,
     STAGES.Q7,
-    STAGES.Q8,
-    STAGES.LM_EDUCATION,
-    STAGES.BONUS_EDUCATION,
-    STAGES.CATEGORIZATION
+    STAGES.Q8
   ]
 
   // Question stages only (for question number display)
@@ -329,6 +307,250 @@ function OfferBuilderFlow() {
       loadPersonaProfiles()
     }
   }, [user])
+
+  // Load validation survey data (obstacles and solution preferences)
+  useEffect(() => {
+    if (user) {
+      loadValidationData()
+    }
+  }, [user])
+
+  // Load Flow Finder skill clusters for Q8 suggestions
+  useEffect(() => {
+    if (user) {
+      loadSkillClusters()
+    }
+  }, [user])
+
+  const loadSkillClusters = async () => {
+    try {
+      const { data: clusters, error } = await supabase
+        .from('nikigai_clusters')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('cluster_type', 'skills')
+        .eq('cluster_stage', 'final')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      console.log('Loaded skill clusters:', clusters)
+      setSkillClusters(clusters || [])
+    } catch (err) {
+      console.error('Error loading skill clusters:', err)
+      setSkillClusters([])
+    }
+  }
+
+  // Fetch AI recommendations from Haiku edge function
+  const fetchAIRecommendations = async (clusters, problemText = '') => {
+    if (!user || !clusters?.length || recommendationsLoading) return
+
+    setRecommendationsLoading(true)
+    try {
+      const response = await supabase.functions.invoke('skill-recommendations', {
+        body: {
+          userId: user.id,
+          problemText: problemText, // Pass the selected problem for targeted recommendations
+          skillClusters: clusters.map(c => ({
+            id: c.id,
+            cluster_label: c.cluster_label,
+            items: c.items,
+            proficiency: c.proficiency
+          }))
+        }
+      })
+
+      if (response.error) throw response.error
+      console.log('AI Recommendations:', response.data)
+      setAiRecommendations(response.data)
+    } catch (err) {
+      console.error('Error fetching AI recommendations:', err)
+      // Fall back to rule-based recommendations (already implemented in getDeliveryFormatSuggestions)
+      setAiRecommendations(null)
+    } finally {
+      setRecommendationsLoading(false)
+    }
+  }
+
+  // Get delivery format suggestions based on skill cluster
+  // Uses AI recommendations if available, otherwise falls back to rule-based logic
+  const getDeliveryFormatSuggestions = (cluster) => {
+    // Check if we have AI recommendation for this skill
+    if (aiRecommendations?.recommendations) {
+      const aiRec = aiRecommendations.recommendations.find(r => r.skillId === cluster.id)
+      if (aiRec) {
+        const suggestions = []
+        const icons = { service: '💼', productized: '📦', product: '🛍️' }
+
+        // Primary recommendation
+        if (aiRec.primaryFormat) {
+          suggestions.push({
+            category: aiRec.primaryFormat.category,
+            type: aiRec.primaryFormat.type,
+            icon: icons[aiRec.primaryFormat.category] || '📦',
+            label: aiRec.primaryFormat.label,
+            reason: aiRec.reasoning || `AI-recommended based on your profile`,
+            isAI: true
+          })
+        }
+
+        // Secondary recommendation
+        if (aiRec.secondaryFormat) {
+          suggestions.push({
+            category: aiRec.secondaryFormat.category,
+            type: aiRec.secondaryFormat.type,
+            icon: icons[aiRec.secondaryFormat.category] || '📦',
+            label: aiRec.secondaryFormat.label,
+            reason: 'Alternative option',
+            isAI: true
+          })
+        }
+
+        if (suggestions.length > 0) return suggestions
+      }
+    }
+
+    // Fall back to rule-based logic
+    const label = cluster?.cluster_label?.toLowerCase() || ''
+    const proficiency = cluster?.proficiency || 'establishing'
+
+    // Map skill archetypes to delivery formats
+    const suggestions = []
+
+    // Guide-type skills → Service (Facilitating, Coaching, Nurturing, Connecting)
+    if (label.includes('facilitat') || label.includes('coach') || label.includes('nurtur') || label.includes('connect') || label.includes('influenc')) {
+      suggestions.push({
+        category: 'service',
+        type: proficiency === 'mastering' ? 'custom_service' : 'packaged_service',
+        icon: '💼',
+        label: proficiency === 'mastering' ? 'Custom Service' : 'Packaged Service',
+        reason: `Your ${cluster.cluster_label} skills shine in personal delivery`
+      })
+      suggestions.push({
+        category: 'productized',
+        type: 'live_group',
+        icon: '📦',
+        label: 'Live Cohort',
+        reason: 'Scale your guidance to groups'
+      })
+    }
+
+    // Maker-type skills → Products (Building, Creating, Designing, Expressing)
+    if (label.includes('build') || label.includes('creat') || label.includes('design') || label.includes('express')) {
+      suggestions.push({
+        category: 'product',
+        type: 'digital_product',
+        icon: '🛍️',
+        label: 'Digital Product',
+        reason: `Turn your ${cluster.cluster_label} output into templates/tools`
+      })
+      if (proficiency === 'mastering') {
+        suggestions.push({
+          category: 'productized',
+          type: 'automated_group',
+          icon: '📦',
+          label: 'Self-Paced Course',
+          reason: 'Teach your mastered process'
+        })
+      }
+    }
+
+    // Analyst-type skills → Service/Productized (Researching, Analyzing, Strategizing, Organizing)
+    if (label.includes('research') || label.includes('learn') || label.includes('analyz') || label.includes('strateg') || label.includes('organiz')) {
+      suggestions.push({
+        category: 'service',
+        type: 'packaged_service',
+        icon: '💼',
+        label: 'Packaged Service',
+        reason: `Deliver your ${cluster.cluster_label} as a structured engagement`
+      })
+      suggestions.push({
+        category: 'product',
+        type: 'digital_product',
+        icon: '🛍️',
+        label: 'Templates/Frameworks',
+        reason: 'Package your analytical process'
+      })
+    }
+
+    // Communicator-type skills → Productized/Products (Expressing, Communicating)
+    if (label.includes('communicat') || label.includes('writing') || label.includes('speaking')) {
+      suggestions.push({
+        category: 'productized',
+        type: 'automated_group',
+        icon: '📦',
+        label: 'Online Course',
+        reason: 'Teach your communication methods'
+      })
+      suggestions.push({
+        category: 'product',
+        type: 'digital_product',
+        icon: '🛍️',
+        label: 'Content Templates',
+        reason: 'Package your communication frameworks'
+      })
+    }
+
+    // If no specific match, provide generic suggestions based on proficiency
+    if (suggestions.length === 0) {
+      if (proficiency === 'mastering') {
+        suggestions.push({
+          category: 'service',
+          type: 'custom_service',
+          icon: '💼',
+          label: 'Premium Service',
+          reason: `Leverage your mastery in ${cluster.cluster_label}`
+        })
+      } else {
+        suggestions.push({
+          category: 'productized',
+          type: 'live_group',
+          icon: '📦',
+          label: 'Group Program',
+          reason: `Share your ${cluster.cluster_label} journey with others`
+        })
+      }
+    }
+
+    return suggestions.slice(0, 2) // Return top 2 suggestions
+  }
+
+  // Pre-fill solution from skill suggestion
+  const prefillSolutionFromSkill = (cluster, suggestion) => {
+    setCurrentSolution(prev => ({
+      ...prev,
+      solutionCategory: suggestion.category,
+      solutionType: suggestion.type
+      // Don't prefill description - let user think about what the solution needs to do
+    }))
+    // Close the skills panel after selection
+    setSkillsPanelOpen(false)
+  }
+
+  // Skills panel collapsed state - default OPEN since it's contextually relevant
+  const [skillsPanelOpen, setSkillsPanelOpen] = useState(true)
+
+  // Handle skills panel toggle - fetch AI recommendations on first open
+  const handleSkillsPanelToggle = () => {
+    const willOpen = !skillsPanelOpen
+    setSkillsPanelOpen(willOpen)
+
+    // Fetch AI recommendations when opening (if not already loaded)
+    // Pass the selected problem for more targeted recommendations
+    if (willOpen && skillClusters.length > 0 && !aiRecommendations && !recommendationsLoading) {
+      fetchAIRecommendations(skillClusters, currentSolution.problemText)
+    }
+  }
+
+  const loadValidationData = async () => {
+    try {
+      const data = await getValidationObstaclesForOfferBuilder(user.id)
+      setValidationData(data)
+    } catch (err) {
+      console.error('Error loading validation data:', err)
+      setValidationData(null)
+    }
+  }
 
   // Load existing products from Quick Capture / wealth ladder
   useEffect(() => {
@@ -374,11 +596,10 @@ function OfferBuilderFlow() {
       nicheLayers,
       sectionInputs,
       problemSolutions,
-      solutionCategories,
       selectedProfile
     }
     saveProgress(progressData)
-  }, [stage, answers, nicheLayers, sectionInputs, problemSolutions, solutionCategories, selectedProfile, user, saveProgress])
+  }, [stage, answers, nicheLayers, sectionInputs, problemSolutions, selectedProfile, user, saveProgress])
 
   // Resume saved progress
   const handleResumeProgress = useCallback(() => {
@@ -397,7 +618,6 @@ function OfferBuilderFlow() {
         setSectionInputs(migratedSections)
       }
       if (savedProgressData.problemSolutions) setProblemSolutions(savedProgressData.problemSolutions)
-      if (savedProgressData.solutionCategories) setSolutionCategories(savedProgressData.solutionCategories)
       if (savedProgressData.selectedProfile) setSelectedProfile(savedProgressData.selectedProfile)
     }
     setShowResumePrompt(false)
@@ -499,43 +719,6 @@ function OfferBuilderFlow() {
       .map((sol, index) => ({ ...sol, id: `solution_${index}` }))
   }
 
-  // Get solutions by category
-  const getSolutionsByCategory = (category) => {
-    return problemSolutions.filter((sol, index) => {
-      const solId = `solution_${index}`
-      return solutionCategories[solId] === category && sol.description.trim()
-    }).map((sol, index) => ({ ...sol, id: `solution_${index}` }))
-  }
-
-  // Get recommended lead magnet type based on categorized solutions
-  const getLeadMagnetRecommendation = () => {
-    const leadMagnetSolutions = getSolutionsByCategory('lead_magnet')
-    if (leadMagnetSolutions.length === 0) return null
-
-    // Score each lead magnet type based on solution types
-    const scores = { reveal_problem: 0, free_trial: 0, free_step_1: 0 }
-    leadMagnetSolutions.forEach(sol => {
-      if (sol.solutionType === 'tech_digital') scores.reveal_problem += 2
-      if (sol.solutionType === 'one_to_one') scores.free_trial += 2
-      if (sol.solutionType === 'one_to_many') scores.free_step_1 += 2
-      if (sol.solutionType === 'physical_product') scores.free_step_1 += 1
-    })
-
-    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1])
-    return sorted[0][0]
-  }
-
-  // Check if categorization is valid (all filled solutions must be categorized)
-  const isCategorizationValid = () => {
-    const filledSolutions = getFilledSolutions()
-    return filledSolutions.length > 0 && filledSolutions.every(sol => solutionCategories[sol.id] !== null)
-  }
-
-  // Check if at least one lead magnet is selected
-  const hasLeadMagnet = () => {
-    return Object.values(solutionCategories).includes('lead_magnet')
-  }
-
   // Handle niche layers submission
   const handleNicheLayersSubmit = (questionId) => {
     // At least layer 4 should be filled (the most specific)
@@ -608,13 +791,6 @@ function OfferBuilderFlow() {
   const handleProblemSolutionsSubmit = (questionId) => {
     if (problemSolutions.length === 0) return
 
-    // Initialize categorization for all solutions
-    const initialCategories = {}
-    problemSolutions.forEach((_, index) => {
-      initialCategories[`solution_${index}`] = null
-    })
-    setSolutionCategories(initialCategories)
-
     const newAnswers = {
       ...answers,
       [questionId]: {
@@ -623,7 +799,8 @@ function OfferBuilderFlow() {
       }
     }
     setAnswers(newAnswers)
-    advanceToNext()
+    // Go straight to summary (tier assignment happens in Grand Slam Matrix)
+    setStage(STAGES.SUMMARY)
   }
 
   // Toggle differentiator for current solution
@@ -773,10 +950,9 @@ function OfferBuilderFlow() {
       })
       console.log('IDs match:', user.id === authData?.user?.id)
 
-      // Prepare responses with solution categories
+      // Prepare responses (solutions without tier assignment - that happens in Grand Slam Matrix)
       const fullResponses = {
-        ...answers,
-        solution_categories: solutionCategories
+        ...answers
       }
 
       console.log('Attempting insert to offer_builder_assessments...')
@@ -1353,6 +1529,36 @@ function OfferBuilderFlow() {
     // MULTI-SECTION INPUTS QUESTION (for Q7 reasons)
     if (question.type === 'multi_section_inputs') {
       const isValid = allSectionsValid(question.sections)
+
+      // Helper to add validation obstacle to appropriate section
+      const addValidationObstacle = (text, type) => {
+        // Map validation type to section
+        let sectionId = 'vehicle_problems'
+        if (type === 'internal_belief') sectionId = 'internal_beliefs'
+        else if (type === 'emotional_indicator') sectionId = 'external_beliefs'
+        else if (type === 'inverse_need') sectionId = 'external_beliefs'
+
+        const currentSection = sectionInputs[sectionId] || ['', '', '']
+        // Find first empty slot or add new
+        const emptyIndex = currentSection.findIndex(v => !v.trim())
+        if (emptyIndex !== -1) {
+          updateSectionInput(sectionId, emptyIndex, text)
+        } else if (currentSection.length < 8) {
+          // Add new slot with the value
+          setSectionInputs(prev => ({
+            ...prev,
+            [sectionId]: [...prev[sectionId], text]
+          }))
+        }
+      }
+
+      // Check if an obstacle is already in the sections
+      const isObstacleAdded = (text) => {
+        return Object.values(sectionInputs).some(section =>
+          section.some(v => v.trim().toLowerCase() === text.trim().toLowerCase())
+        )
+      }
+
       return (
         <div className="offer-builder-flow">
           <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
@@ -1360,6 +1566,84 @@ function OfferBuilderFlow() {
             <div className="question-number">{getCurrentQuestionDisplay()}</div>
             <h2 className="question-text">{question.question}</h2>
             {question.subtext && <p className="question-subtext">{question.subtext}</p>}
+
+            {/* Validation Survey Obstacles Panel */}
+            {validationData?.hasValidationData && validationData?.obstacles?.length > 0 && (
+              <div className="validation-objections-panel">
+                <div className="objections-panel-header">
+                  <span className="panel-icon">📊</span>
+                  <span>REAL OBSTACLES FROM VALIDATION SURVEYS ({validationData.totalResponses} responses)</span>
+                </div>
+                <div className="objections-panel-content">
+                  {/* Direct obstacles */}
+                  {validationData.byType?.directObstacles?.length > 0 && (
+                    <div className="validation-section">
+                      <p className="section-label">🎯 Direct reasons they gave:</p>
+                      <div className="objections-list">
+                        {validationData.byType.directObstacles.slice(0, 5).map((item, i) => (
+                          <button
+                            key={`direct-${i}`}
+                            type="button"
+                            className={`objection-chip direct ${isObstacleAdded(item.text) ? 'added' : ''}`}
+                            onClick={() => addValidationObstacle(item.text, item.type)}
+                            disabled={isObstacleAdded(item.text)}
+                          >
+                            {isObstacleAdded(item.text) ? '✓ ' : '+ '}
+                            {item.text}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Internal beliefs */}
+                  {validationData.byType?.internalBeliefs?.length > 0 && (
+                    <div className="validation-section">
+                      <p className="section-label">🧠 Internal stories they tell themselves:</p>
+                      <div className="objections-list">
+                        {validationData.byType.internalBeliefs.slice(0, 3).map((item, i) => (
+                          <button
+                            key={`belief-${i}`}
+                            type="button"
+                            className={`objection-chip belief ${isObstacleAdded(item.text) ? 'added' : ''}`}
+                            onClick={() => addValidationObstacle(item.text, item.type)}
+                            disabled={isObstacleAdded(item.text)}
+                          >
+                            {isObstacleAdded(item.text) ? '✓ ' : '+ '}
+                            "{item.text}"
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Emotional indicators */}
+                  {validationData.byType?.emotionalIndicators?.length > 0 && (
+                    <div className="validation-section">
+                      <p className="section-label">💭 Emotional barriers detected:</p>
+                      <div className="objections-list">
+                        {validationData.byType.emotionalIndicators.slice(0, 3).map((item, i) => (
+                          <button
+                            key={`emotion-${i}`}
+                            type="button"
+                            className={`objection-chip emotion ${isObstacleAdded(item.text) ? 'added' : ''}`}
+                            onClick={() => addValidationObstacle(item.text, item.type)}
+                            disabled={isObstacleAdded(item.text)}
+                          >
+                            {isObstacleAdded(item.text) ? '✓ ' : '+ '}
+                            {item.text}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="objections-tip">
+                    💡 These are real responses from your validation surveys - click to add!
+                  </p>
+                </div>
+              </div>
+            )}
 
             <div className="sections-wrapper">
               {question.sections.map((section) => (
@@ -1437,23 +1721,151 @@ function OfferBuilderFlow() {
             <h2 className="question-text">{question.question}</h2>
             {question.subtext && <p className="question-subtext">{question.subtext}</p>}
 
-            {/* Goals tracker */}
-            <div className="solutions-goals">
-              <div className={`goal-item ${problemSolutions.length >= targetSolutions ? 'achieved' : ''}`}>
-                <span className="goal-icon">{problemSolutions.length >= targetSolutions ? '✓' : '○'}</span>
-                <span className="goal-text">
-                  {problemSolutions.length}/{targetSolutions} solutions
-                  {problemSolutions.length < targetSolutions && ' (aim for 5)'}
-                </span>
-              </div>
-              <div className={`goal-item ${problemsCovered >= totalProblems ? 'achieved' : ''}`}>
-                <span className="goal-icon">{problemsCovered >= totalProblems ? '✓' : '○'}</span>
-                <span className="goal-text">
-                  {problemsCovered}/{totalProblems} problems covered
-                  {problemsCovered < totalProblems && ' (best to cover all)'}
-                </span>
-              </div>
-            </div>
+            {/* Unified Customer Intelligence Box */}
+            {(() => {
+              // Use real data if available, otherwise show dummy data for testing
+              const hasRealData = validationData?.hasValidationData
+              const hasRealPrefs = validationData?.solutionPreferences?.hasPreferences
+
+              const displayData = hasRealData ? {
+                totalResponses: validationData.totalResponses,
+                dreamOutcome: validationData.insights?.dreamOutcomes?.[0]?.text,
+                painLevel: validationData.insights?.painLevel?.average,
+                budget: validationData.insights?.budgets?.aggregated?.[0]?.text,
+                hellYesFactors: validationData.insights?.hellYesFactors?.slice(0, 3).map(f => f.text)
+              } : {
+                // DUMMY DATA FOR TESTING - Remove when done
+                totalResponses: 12,
+                dreamOutcome: "Finally feel confident showing up online and attracting dream clients",
+                painLevel: 7.5,
+                budget: "$500 - $2,000",
+                hellYesFactors: ["Proven step-by-step system", "Personal feedback & support", "Results within 30 days"]
+              }
+
+              const prefsData = hasRealPrefs ? validationData.solutionPreferences : {
+                // DUMMY DATA FOR TESTING
+                hasPreferences: true,
+                recommendedVersion: 'productized',
+                breakdown: { service: 3, productized: 7, product: 2 },
+                totalVotes: 12,
+                specificTypes: {
+                  service: [],
+                  productized: [{ text: 'Live cohort', count: 4 }, { text: 'Self-paced course', count: 3 }],
+                  product: []
+                }
+              }
+
+              const hasDreamOutcome = displayData.dreamOutcome
+              const hasPainLevel = displayData.painLevel
+              const hasBudget = displayData.budget
+              const hasHellYes = displayData.hellYesFactors?.length > 0
+              const hasSolutionPref = prefsData?.hasPreferences
+
+              // Only show if we have some data
+              if (!hasDreamOutcome && !hasPainLevel && !hasBudget && !hasHellYes && !hasSolutionPref) return null
+
+              const prefIcons = { service: '💼', productized: '📦', product: '🛍️' }
+              const prefLabels = { service: 'Service', productized: 'Productized', product: 'Product' }
+
+              return (
+                <div className="customer-intelligence-box">
+                  {/* Header */}
+                  <div className="ci-header">
+                    <div className="ci-header-left">
+                      <span className="ci-icon">🧠</span>
+                      <span className="ci-title">CUSTOMER INTELLIGENCE</span>
+                    </div>
+                    <span className="ci-count">
+                      {(hasRealData || hasRealPrefs) ? `${displayData.totalResponses} responses` : 'demo data'}
+                    </span>
+                  </div>
+
+                  {/* Dream Outcome - Hero */}
+                  {hasDreamOutcome && (
+                    <div className="ci-dream">
+                      <span className="ci-label">🎯 What they want</span>
+                      <p className="ci-dream-text">"{displayData.dreamOutcome}"</p>
+                    </div>
+                  )}
+
+                  {/* Stats Row */}
+                  <div className="ci-stats-row">
+                    {hasPainLevel && (
+                      <div className="ci-stat">
+                        <span className="ci-stat-label">🔥 Pain</span>
+                        <span className={`ci-stat-value ${displayData.painLevel >= 7 ? 'high' : displayData.painLevel >= 4 ? 'medium' : 'low'}`}>
+                          {displayData.painLevel}/10
+                        </span>
+                      </div>
+                    )}
+                    {hasBudget && (
+                      <div className="ci-stat">
+                        <span className="ci-stat-label">💰 Budget</span>
+                        <span className="ci-stat-value">{displayData.budget}</span>
+                      </div>
+                    )}
+                    {hasSolutionPref && (
+                      <div className="ci-stat winner">
+                        <span className="ci-stat-label">👑 Winner</span>
+                        <span className="ci-stat-value gold">
+                          {prefIcons[prefsData.recommendedVersion]} {prefLabels[prefsData.recommendedVersion]}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Solution Preference Bars */}
+                  {hasSolutionPref && (
+                    <div className="ci-bars">
+                      {['service', 'productized', 'product'].map(version => {
+                        const count = prefsData.breakdown[version] || 0
+                        const pct = prefsData.totalVotes > 0 ? Math.round((count / prefsData.totalVotes) * 100) : 0
+                        const isWinner = version === prefsData.recommendedVersion
+                        return (
+                          <div key={version} className={`ci-bar ${isWinner ? 'winner' : ''}`}>
+                            <div className="ci-bar-info">
+                              <span className="ci-bar-label">{prefIcons[version]} {prefLabels[version]}</span>
+                              <span className="ci-bar-pct">{pct}%</span>
+                            </div>
+                            <div className="ci-bar-track">
+                              <div className="ci-bar-fill" style={{ width: `${pct}%` }} />
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  {/* Bottom: Hell Yes + Specific Types */}
+                  {(hasHellYes || (hasSolutionPref && prefsData.specificTypes[prefsData.recommendedVersion]?.length > 0)) && (
+                    <div className="ci-bottom">
+                      {hasHellYes && (
+                        <div className="ci-section">
+                          <span className="ci-label">✨ They'll say YES if</span>
+                          <div className="ci-chips">
+                            {displayData.hellYesFactors.map((factor, i) => (
+                              <span key={i} className="ci-chip purple">{factor}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {hasSolutionPref && prefsData.specificTypes[prefsData.recommendedVersion]?.length > 0 && (
+                        <div className="ci-section">
+                          <span className="ci-label">📋 They specifically want</span>
+                          <div className="ci-chips">
+                            {prefsData.specificTypes[prefsData.recommendedVersion].slice(0, 3).map((type, i) => (
+                              <span key={i} className="ci-chip gold">
+                                {type.text}{type.count > 1 && <span className="ci-chip-count"> ×{type.count}</span>}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
 
             {/* Added solutions list */}
             {problemSolutions.length > 0 && (
@@ -1487,7 +1899,18 @@ function OfferBuilderFlow() {
 
             {/* Add new solution form */}
             <div className="add-solution-form">
-              <h4>{problemSolutions.length === 0 ? 'Add a Solution' : 'Add Another Solution'}</h4>
+              <div className="form-header">
+                <h4>{problemSolutions.length === 0 ? 'Add a Solution' : 'Add Another Solution'}</h4>
+                <div className="progress-row">
+                  <span className={`progress-item ${problemSolutions.length >= targetSolutions ? 'achieved' : ''}`}>
+                    {problemSolutions.length >= targetSolutions ? '✓' : '○'} {problemSolutions.length}/{targetSolutions}
+                  </span>
+                  <span className="progress-divider">•</span>
+                  <span className={`progress-item ${problemsCovered >= totalProblems ? 'achieved' : ''}`}>
+                    {problemsCovered >= totalProblems ? '✓' : '○'} {problemsCovered}/{totalProblems} problems
+                  </span>
+                </div>
+              </div>
 
               {/* Problem dropdown */}
               <div className="form-field">
@@ -1506,6 +1929,9 @@ function OfferBuilderFlow() {
                       solutionType: '',
                       description: ''
                     }))
+                    // Reset AI recommendations when problem changes (will refetch with new problem)
+                    setAiRecommendations(null)
+                    setSkillsPanelOpen(false)
                   }}
                 >
                   <option value="">Select a problem...</option>
@@ -1539,14 +1965,20 @@ function OfferBuilderFlow() {
                     <button
                       type="button"
                       className={`yes-no-btn ${currentSolution.alreadyDelivers === false ? 'selected' : ''}`}
-                      onClick={() => setCurrentSolution(prev => ({
-                        ...prev,
-                        alreadyDelivers: false,
-                        existingProductId: null,
-                        solutionCategory: '',
-                        solutionType: '',
-                        description: ''
-                      }))}
+                      onClick={() => {
+                        setCurrentSolution(prev => ({
+                          ...prev,
+                          alreadyDelivers: false,
+                          existingProductId: null,
+                          solutionCategory: '',
+                          solutionType: '',
+                          description: ''
+                        }))
+                        // Auto-fetch AI recommendations when "No, this is new" is clicked
+                        if (skillClusters.length > 0 && !aiRecommendations && !recommendationsLoading) {
+                          fetchAIRecommendations(skillClusters, currentSolution.problemText)
+                        }
+                      }}
                     >
                       No, this is new
                     </button>
@@ -1585,6 +2017,111 @@ function OfferBuilderFlow() {
                         Add as new
                       </button>
                     </div>
+                  )}
+                </div>
+              )}
+
+              {/* Flow Finder Skills Panel - Show when "No, this is new" is selected */}
+              {currentSolution.alreadyDelivers === false && skillClusters.length > 0 && (
+                <div className={`skills-suggestions-panel ${skillsPanelOpen ? 'open' : 'collapsed'}`}>
+                  <div className="skills-panel-header-row">
+                    <button
+                      type="button"
+                      className="skills-panel-toggle"
+                      onClick={handleSkillsPanelToggle}
+                    >
+                      <div className="skills-panel-header">
+                        <span className="panel-icon">💡</span>
+                        <span>SUGGESTIONS FROM YOUR SKILLS</span>
+                      </div>
+                      <span className="toggle-arrow">{skillsPanelOpen ? '▲' : '▼'}</span>
+                    </button>
+                    {skillsPanelOpen && (
+                      <button
+                        type="button"
+                        className="skip-suggestions-btn"
+                        onClick={() => setSkillsPanelOpen(false)}
+                      >
+                        Skip
+                      </button>
+                    )}
+                  </div>
+
+                  {skillsPanelOpen && (
+                    <>
+                      {/* Show AI context if available */}
+                      {aiRecommendations?.context && (
+                        <div className="ai-context-info">
+                          <span className="ai-badge">AI-Powered</span>
+                          <span className="context-item">
+                            Your level: <strong>{aiRecommendations.context.wealthLadder?.replace(/_/g, ' ') || 'Unknown'}</strong>
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Loading state */}
+                      {recommendationsLoading && (
+                        <div className="recommendations-loading">
+                          <div className="typing-indicator small">
+                            <span></span><span></span><span></span>
+                          </div>
+                          <span className="loading-text">Analyzing your profile...</span>
+                        </div>
+                      )}
+
+                      {/* Show top 3 skills, sorted by relevance if available */}
+                      <div className="skills-suggestions-list">
+                        {skillClusters.slice(0, 3).map((cluster, idx) => {
+                          const suggestions = getDeliveryFormatSuggestions(cluster)
+                          if (suggestions.length === 0) return null
+
+                          // Get relevance score for this skill (from AI recommendations)
+                          const aiRec = aiRecommendations?.recommendations?.find(r => r.skillId === cluster.id)
+                          const relevanceScore = aiRec?.relevanceScore || 0
+                          const isHighlyRelevant = relevanceScore >= 7
+
+                          return (
+                            <div key={idx} className={`skill-suggestion-card ${isHighlyRelevant ? 'high-relevance' : ''}`}>
+                              <div className="skill-header">
+                                <strong>{cluster.cluster_label}</strong>
+                                {relevanceScore > 0 && (
+                                  <span className={`relevance-indicator ${isHighlyRelevant ? 'high' : relevanceScore >= 5 ? 'medium' : 'low'}`}>
+                                    {isHighlyRelevant ? '●●●' : relevanceScore >= 5 ? '●●○' : '●○○'}
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Equal-sized suggestion buttons */}
+                              <div className="delivery-suggestions">
+                                {suggestions.map((suggestion, i) => (
+                                  <button
+                                    key={i}
+                                    type="button"
+                                    className={`use-suggestion-btn ${suggestion.isAI && isHighlyRelevant ? 'ai-powered' : ''}`}
+                                    onClick={() => prefillSolutionFromSkill(cluster, suggestion)}
+                                  >
+                                    <span className="suggestion-icon">{suggestion.icon}</span>
+                                    <span className="suggestion-label">
+                                      {suggestion.label}
+                                      {suggestion.isAI && i === 0 && isHighlyRelevant && (
+                                        <span className="recommended-tag">Recommended</span>
+                                      )}
+                                    </span>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+
+                      {/* Show more link if there are more skills */}
+                      {skillClusters.length > 3 && (
+                        <p className="more-skills-hint">
+                          + {skillClusters.length - 3} more skills available
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -1642,10 +2179,17 @@ function OfferBuilderFlow() {
               {/* Solution description - show if type selected (for new) or product selected (for existing) */}
               {(currentSolution.solutionType || currentSolution.existingProductId) && (
                 <div className="form-field">
-                  <label>{currentSolution.existingProductId ? 'Confirm or edit the description' : 'Describe your solution'}</label>
+                  <label>
+                    {currentSolution.existingProductId
+                      ? 'Confirm or edit the description'
+                      : currentSolution.problemText
+                        ? `To solve "${currentSolution.problemText.length > 40 ? currentSolution.problemText.substring(0, 40) + '...' : currentSolution.problemText}", what does the solution need to do?`
+                        : 'What does the solution need to do?'
+                    }
+                  </label>
                   <textarea
                     className="solution-input"
-                    placeholder="What will you offer? How does it solve their problem?"
+                    placeholder="e.g. Help them see their blind spots, give them a proven framework, hold them accountable..."
                     value={currentSolution.description}
                     onChange={(e) => setCurrentSolution(prev => ({
                       ...prev,
@@ -1659,7 +2203,7 @@ function OfferBuilderFlow() {
               {/* Differentiators */}
               {currentSolution.description.trim() && (
                 <div className="form-field">
-                  <label>What makes it better? (optional)</label>
+                  <label>What makes your solution better than competitors? (optional)</label>
                   <div className="differentiator-chips">
                     {question.differentiators.map(diff => (
                       <button
@@ -1699,207 +2243,6 @@ function OfferBuilderFlow() {
         </div>
       )
     }
-  }
-
-  // LEAD MAGNET EDUCATION STAGE
-  if (stage === STAGES.LM_EDUCATION) {
-    return (
-      <div className="offer-builder-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="education-container">
-          <h1 className="welcome-greeting">Lead Magnets</h1>
-          <div className="education-content">
-            <p className="education-intro">
-              <strong>After your attraction offer hooks them, what free value can you give in exchange for their email?</strong>
-            </p>
-            <p>
-              A <strong>lead magnet</strong> is the value exchange — something free that proves you can help, given to people who express interest in your attraction offer.
-            </p>
-
-            <div className="lm-types-grid">
-              {Object.entries(LEAD_MAGNET_TYPES).map(([id, type]) => (
-                <div key={id} className="lm-type-card">
-                  <span className="lm-type-icon">{type.icon}</span>
-                  <h3>{type.name}</h3>
-                  <p>{type.description}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="education-callout">
-              <p><strong>The Funnel Flow:</strong></p>
-              <ul>
-                <li><strong>Attraction Offer</strong> — The hook that grabs attention</li>
-                <li><strong>Lead Magnet</strong> — Free value they get for expressing interest</li>
-                <li><strong>Nurture</strong> — Build trust over time</li>
-                <li><strong>Core Product</strong> — What they pay for</li>
-              </ul>
-            </div>
-
-            <div className="education-callout">
-              <p><strong>Next:</strong> You'll categorize each solution as either:</p>
-              <ul>
-                <li><strong>Core Product</strong> — What they pay for</li>
-                <li><strong>Lead Magnet</strong> — Free value for expressing interest</li>
-                <li><strong>Bonus</strong> — Added value with core purchase</li>
-                <li><strong>Skip</strong> — Not pursuing this one</li>
-              </ul>
-            </div>
-          </div>
-
-          <button
-            className="primary-button"
-            onClick={() => advanceToNext()}
-            style={{ marginTop: '24px' }}
-          >
-            Continue
-          </button>
-          <BackButton onClick={() => goBack(stage)} />
-        </div>
-      </div>
-    )
-  }
-
-  // BONUS EDUCATION STAGE
-  if (stage === STAGES.BONUS_EDUCATION) {
-    return (
-      <div className="offer-builder-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="education-container">
-          <h1 className="welcome-greeting">Bonuses</h1>
-          <div className="education-content">
-            <p className="education-intro">
-              <strong>Bonuses increase perceived value without increasing your workload.</strong>
-            </p>
-            <p>
-              They're "value stacks" that make your offer feel like a no-brainer. The best bonuses solve secondary problems or remove friction.
-            </p>
-
-            <div className="bonus-types-grid">
-              <div className="bonus-type-card">
-                <span className="bonus-type-icon">📋</span>
-                <h3>Templates & Checklists</h3>
-                <p>Pre-built tools that save them time and reduce friction</p>
-              </div>
-              <div className="bonus-type-card">
-                <span className="bonus-type-icon">👥</span>
-                <h3>Community Access</h3>
-                <p>Connection with peers on the same journey</p>
-              </div>
-              <div className="bonus-type-card">
-                <span className="bonus-type-icon">📞</span>
-                <h3>1:1 Call</h3>
-                <p>Personal support or strategy session as a bonus</p>
-              </div>
-              <div className="bonus-type-card">
-                <span className="bonus-type-icon">🎁</span>
-                <h3>Extra Resources</h3>
-                <p>Recordings, guides, or tools that complement the core</p>
-              </div>
-            </div>
-
-            <div className="education-callout">
-              <p><strong>Pro tip:</strong> Bonuses work best when they address objections or fears:</p>
-              <ul>
-                <li>"What if I get stuck?" → Add support calls</li>
-                <li>"What if it doesn't work for me?" → Add done-for-you templates</li>
-                <li>"What if I feel alone?" → Add community access</li>
-              </ul>
-            </div>
-          </div>
-
-          <button
-            className="primary-button"
-            onClick={() => advanceToNext()}
-            style={{ marginTop: '24px' }}
-          >
-            Categorize My Solutions
-          </button>
-          <BackButton onClick={() => goBack(stage)} />
-        </div>
-      </div>
-    )
-  }
-
-  // SOLUTION CATEGORIZATION STAGE
-  if (stage === STAGES.CATEGORIZATION) {
-    const filledSolutions = getFilledSolutions()
-
-    return (
-      <div className="offer-builder-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="categorization-container">
-          <h2 className="question-text">Categorize Your Solutions</h2>
-          <p className="question-subtext">
-            Assign each solution to its role in your offer stack
-          </p>
-
-          <div className="categorization-cards">
-            {filledSolutions.map((solution) => (
-              <div key={solution.id} className="categorization-card">
-                <div className="cat-card-header">
-                  <span className="solution-type-badge">{SOLUTION_LABELS[solution.solutionType]}</span>
-                  <p className="solution-problem-ref">Solves: {solution.problemText}</p>
-                  <p className="cat-card-description">{solution.description}</p>
-                  {solution.differentiators?.length > 0 && (
-                    <div className="cat-card-diffs">
-                      {solution.differentiators.map(d => (
-                        <span key={d} className="mini-chip">{d}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="cat-options">
-                  {[
-                    { value: 'core_product', label: 'Core Product', icon: '💰', hint: 'What they pay for' },
-                    { value: 'lead_magnet', label: 'Lead Magnet', icon: '🎁', hint: 'Free for expressing interest' },
-                    { value: 'bonus', label: 'Bonus', icon: '✨', hint: 'Added value with purchase' },
-                    { value: 'skip', label: 'Skip', icon: '⏭️', hint: 'Not pursuing' }
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      className={`cat-option-btn ${solutionCategories[solution.id] === option.value ? 'selected' : ''}`}
-                      onClick={() => setSolutionCategories(prev => ({
-                        ...prev,
-                        [solution.id]: option.value
-                      }))}
-                    >
-                      <span className="cat-icon">{option.icon}</span>
-                      <span>{option.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {!hasLeadMagnet() && isCategorizationValid() && (
-            <p className="warning-text">
-              Tip: Consider making at least one solution a Lead Magnet — something free you can give people who express interest in your attraction offer
-            </p>
-          )}
-
-          <button
-            className="primary-button"
-            onClick={() => advanceToNext()}
-            disabled={!isCategorizationValid()}
-            style={{ marginTop: '24px' }}
-          >
-            Continue
-          </button>
-
-          <button
-            className="add-more-solutions-btn"
-            onClick={() => setStage(STAGES.Q8)}
-          >
-            + Add More Solutions
-          </button>
-
-          <BackButton onClick={() => goBack(stage)} />
-        </div>
-      </div>
-    )
   }
 
   // SUMMARY STAGE
@@ -1982,51 +2325,30 @@ function OfferBuilderFlow() {
           </div>
 
           <div className="summary-section">
-            <h3>Your Offer Stack</h3>
-            <div className="offer-stack-summary">
-              {/* Core Products */}
-              {getSolutionsByCategory('core_product').length > 0 && (
-                <div className="stack-category">
-                  <h4>💰 Core Product</h4>
-                  {getSolutionsByCategory('core_product').map((sol) => (
-                    <div key={sol.id} className="stack-solution">
-                      <span className="sol-type">{SOLUTION_LABELS[sol.solutionType]}</span>
-                      <p>{sol.description}</p>
-                    </div>
-                  ))}
+            <h3>Your Solutions ({problemSolutions.length})</h3>
+            <p className="summary-subtext" style={{ marginBottom: '16px', color: 'rgba(255,255,255,0.6)' }}>
+              These solutions will be assigned to offer tiers in the Grand Slam Matrix
+            </p>
+            <div className="solutions-summary">
+              {problemSolutions.map((sol, index) => (
+                <div key={index} className="stack-solution">
+                  <div className="solution-format-badge">
+                    {sol.solutionCategory === 'service' && '💼'}
+                    {sol.solutionCategory === 'productized' && '📦'}
+                    {sol.solutionCategory === 'product' && '🛍️'}
+                    <span className="sol-type">{SOLUTION_LABELS[sol.solutionType]}</span>
+                  </div>
+                  <p className="solution-problem-ref" style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                    Solves: {sol.problemText}
+                  </p>
+                  <p>{sol.description}</p>
                 </div>
-              )}
-
-              {/* Lead Magnets */}
-              {getSolutionsByCategory('lead_magnet').length > 0 && (
-                <div className="stack-category">
-                  <h4>🎁 Lead Magnet</h4>
-                  {getSolutionsByCategory('lead_magnet').map((sol) => (
-                    <div key={sol.id} className="stack-solution">
-                      <span className="sol-type">{SOLUTION_LABELS[sol.solutionType]}</span>
-                      <p>{sol.description}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Bonuses */}
-              {getSolutionsByCategory('bonus').length > 0 && (
-                <div className="stack-category">
-                  <h4>✨ Bonuses</h4>
-                  {getSolutionsByCategory('bonus').map((sol) => (
-                    <div key={sol.id} className="stack-solution">
-                      <span className="sol-type">{SOLUTION_LABELS[sol.solutionType]}</span>
-                      <p>{sol.description}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              ))}
             </div>
           </div>
 
           <div className="summary-callout">
-            <p><strong>Next steps:</strong> Complete the Product Selection and Lead Magnet Selection flows to finalize your offer details.</p>
+            <p><strong>Next step:</strong> Complete the Money Model flows, then use the Grand Slam Matrix to assign these solutions to your offer tiers (Core, Upsell, Downsell, etc.)</p>
           </div>
 
           {error && <p className="error-message">{error}</p>}
@@ -2050,49 +2372,43 @@ function OfferBuilderFlow() {
   // SUCCESS STAGE
   if (stage === STAGES.SUCCESS) {
     const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'there'
-    const hasProducts = getSolutionsByCategory('core_product').length > 0
-    const hasLeadMagnets = getSolutionsByCategory('lead_magnet').length > 0
 
     return (
       <div className="offer-builder-flow">
         <div className="success-container">
           <div className="success-icon">✓</div>
-          <h2>Offer Categorized, {userName}!</h2>
-          <p style={{ marginBottom: '8px' }}>You've mapped out your offer stack. Now let's finalize the details.</p>
+          <h2>Solutions Captured, {userName}!</h2>
+          <p style={{ marginBottom: '8px' }}>You've captured {problemSolutions.length} solution{problemSolutions.length !== 1 ? 's' : ''}. Next, define your offer strategies.</p>
           <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+25 points earned!</p>
 
           <div className="next-steps-container">
             <h3>Next Steps</h3>
-            <p className="next-steps-intro">Complete these flows to finalize your offer:</p>
+            <p className="next-steps-intro">Complete Money Models, then build your Grand Slam:</p>
 
             <div className="next-flow-cards">
-              {hasProducts && (
-                <button
-                  className="next-flow-card"
-                  onClick={() => navigate('/product-selection')}
-                >
-                  <span className="flow-icon">💰</span>
-                  <div className="flow-info">
-                    <h4>Product Selection</h4>
-                    <p>Define your core product details (+30 pts)</p>
-                  </div>
-                  <span className="flow-arrow">→</span>
-                </button>
-              )}
+              <button
+                className="next-flow-card"
+                onClick={() => navigate('/attraction-offer')}
+              >
+                <span className="flow-icon">🎯</span>
+                <div className="flow-info">
+                  <h4>Money Model Flows</h4>
+                  <p>Define strategies for each offer tier</p>
+                </div>
+                <span className="flow-arrow">→</span>
+              </button>
 
-              {hasLeadMagnets && (
-                <button
-                  className="next-flow-card"
-                  onClick={() => navigate('/lead-magnet-selection')}
-                >
-                  <span className="flow-icon">🎁</span>
-                  <div className="flow-info">
-                    <h4>Lead Magnet Selection</h4>
-                    <p>Choose your lead magnet strategy (+30 pts)</p>
-                  </div>
-                  <span className="flow-arrow">→</span>
-                </button>
-              )}
+              <button
+                className="next-flow-card"
+                onClick={() => navigate('/grand-slam-matrix')}
+              >
+                <span className="flow-icon">🏆</span>
+                <div className="flow-info">
+                  <h4>Grand Slam Matrix</h4>
+                  <p>Assign solutions to offer tiers</p>
+                </div>
+                <span className="flow-arrow">→</span>
+              </button>
             </div>
           </div>
 

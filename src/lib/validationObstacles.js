@@ -99,7 +99,12 @@ export function extractObstaclesFromValidation(sessions) {
         productized: [],
         product: []
       }
-    }
+    },
+    // Additional validation insights for Offer Builder
+    dreamOutcomes: [],        // From step 1.0 - what they want to achieve
+    hellYesFactors: [],       // From step 7.0 - what would make them say yes
+    painLevels: [],           // From step 9.0 - how painful the problem is
+    budgets: []               // From step 10.0 - what they'd pay
   }
 
   if (!sessions?.length) {
@@ -114,6 +119,18 @@ export function extractObstaclesFromValidation(sessions) {
       if (!value) return
 
       switch (stepId) {
+        case '1.0':
+          // Dream outcome - what they want to achieve
+          if (typeof value === 'string' && value.trim()) {
+            obstacles.dreamOutcomes.push({
+              text: value.trim(),
+              source: 'validation',
+              type: 'dream_outcome',
+              sessionId: session.id
+            })
+          }
+          break
+
         case '2.0':
           // Mental story - internal beliefs
           if (typeof value === 'string' && value.trim()) {
@@ -227,6 +244,38 @@ export function extractObstaclesFromValidation(sessions) {
               text: value.trim(),
               source: 'validation',
               type: 'inverse_need',
+              sessionId: session.id
+            })
+            // Also store as hellYesFactors for the insights panel
+            obstacles.hellYesFactors.push({
+              text: value.trim(),
+              source: 'validation',
+              type: 'hell_yes_factor',
+              sessionId: session.id
+            })
+          }
+          break
+
+        case '9.0':
+          // Pain level - how painful the problem is (1-10 scale)
+          if (value) {
+            obstacles.painLevels.push({
+              value: typeof value === 'number' ? value : parseInt(value, 10) || 0,
+              text: String(value),
+              source: 'validation',
+              type: 'pain_level',
+              sessionId: session.id
+            })
+          }
+          break
+
+        case '10.0':
+          // Budget - what they'd pay to solve this
+          if (typeof value === 'string' && value.trim()) {
+            obstacles.budgets.push({
+              text: value.trim(),
+              source: 'validation',
+              type: 'budget',
               sessionId: session.id
             })
           }
@@ -361,6 +410,20 @@ export async function getValidationObstaclesForOfferBuilder(userId) {
   const ranked = rankObstacles(obstacles)
   const solutionAnalysis = analyzeSolutionPreferences(obstacles.solutionPreferences)
 
+  // Calculate average pain level
+  const painLevelAvg = obstacles.painLevels.length > 0
+    ? Math.round(obstacles.painLevels.reduce((sum, p) => sum + p.value, 0) / obstacles.painLevels.length * 10) / 10
+    : null
+
+  // Aggregate budgets by frequency
+  const budgetCounts = {}
+  obstacles.budgets.forEach(b => {
+    budgetCounts[b.text] = (budgetCounts[b.text] || 0) + 1
+  })
+  const aggregatedBudgets = Object.entries(budgetCounts)
+    .map(([text, count]) => ({ text, count }))
+    .sort((a, b) => b.count - a.count)
+
   return {
     hasValidationData: sessions.length > 0,
     totalResponses: sessions.length,
@@ -372,6 +435,19 @@ export async function getValidationObstaclesForOfferBuilder(userId) {
       internalBeliefs: obstacles.internalBeliefs,
       emotionalIndicators: obstacles.emotionalIndicators,
       inverseNeeds: obstacles.inverseNeeds
+    },
+    // Additional insights for Offer Builder
+    insights: {
+      dreamOutcomes: obstacles.dreamOutcomes,
+      hellYesFactors: obstacles.hellYesFactors,
+      painLevel: {
+        average: painLevelAvg,
+        responses: obstacles.painLevels
+      },
+      budgets: {
+        aggregated: aggregatedBudgets,
+        raw: obstacles.budgets
+      }
     }
   }
 }

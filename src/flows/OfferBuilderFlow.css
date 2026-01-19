@@ -32,10 +32,10 @@
 .offer-builder-flow .welcome-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch; /* Changed from center - allows buttons to stretch full width */
   flex: 1;
   max-width: 600px;
-  text-align: center;
+  text-align: center; /* Text stays centered */
   animation: fadeIn 0.5s ease;
   padding-top: 40px;
 }
@@ -206,20 +206,13 @@
 
 /* Push buttons to bottom of welcome screen */
 .offer-builder-flow .welcome-container > .primary-button {
-  display: block;
-  width: 100%;
-  max-width: none;
-  padding: 14px 32px;
-  margin-top: auto !important;
-  margin-bottom: 0 !important;
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
 .offer-builder-flow .welcome-container > .secondary-button {
-  display: block;
-  width: 100%;
-  max-width: none;
-  padding: 14px 32px;
-  margin: 12px auto 0 !important;
+  margin-top: 12px;
+  margin-bottom: 0;
 }
 
 /* ============ RESUME PROMPT ============ */
@@ -1825,36 +1818,43 @@
   max-width: 700px;
 }
 
-.offer-builder-flow .solutions-goals {
+/* Form header with compact progress */
+.offer-builder-flow .form-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 14px 20px;
-  margin-top: 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.offer-builder-flow .goal-item {
+.offer-builder-flow .form-header h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.offer-builder-flow .progress-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.offer-builder-flow .goal-item.achieved {
-  color: #10B981;
+.offer-builder-flow .progress-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.offer-builder-flow .goal-icon {
-  font-size: 16px;
+.offer-builder-flow .progress-item.achieved {
+  color: #fbbf24;
 }
 
-.offer-builder-flow .goal-item.achieved .goal-icon {
-  color: #10B981;
+.offer-builder-flow .progress-divider {
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .offer-builder-flow .added-solutions-list {
@@ -2207,5 +2207,843 @@
 @supports (padding-top: env(safe-area-inset-top)) {
   .offer-builder-flow {
     padding-top: calc(20px + env(safe-area-inset-top));
+  }
+}
+
+/* ============ VALIDATION OBJECTIONS PANEL (Q7) ============ */
+
+.offer-builder-flow .validation-objections-panel {
+  width: 100%;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.offer-builder-flow .objections-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(16, 185, 129, 0.1);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+.offer-builder-flow .panel-icon {
+  font-size: 18px;
+}
+
+.offer-builder-flow .objections-panel-content {
+  padding: 16px;
+}
+
+.offer-builder-flow .validation-section {
+  margin-bottom: 16px;
+}
+
+.offer-builder-flow .validation-section:last-child {
+  margin-bottom: 0;
+}
+
+.offer-builder-flow .section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 10px;
+}
+
+.offer-builder-flow .objections-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.offer-builder-flow .objection-chip {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.offer-builder-flow .objection-chip:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.offer-builder-flow .objection-chip.direct {
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.offer-builder-flow .objection-chip.belief {
+  border-color: rgba(147, 51, 234, 0.3);
+  font-style: italic;
+}
+
+.offer-builder-flow .objection-chip.emotion {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.offer-builder-flow .objection-chip.added {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  color: #10B981;
+}
+
+.offer-builder-flow .objection-chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.offer-builder-flow .objections-tip {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 16px 0 0;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ============ CUSTOMER INTELLIGENCE BOX (Unified) ============ */
+
+.offer-builder-flow .customer-intelligence-box {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.06) 0%, rgba(94, 23, 235, 0.06) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+/* Header */
+.offer-builder-flow .ci-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.offer-builder-flow .ci-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.offer-builder-flow .ci-icon {
+  font-size: 16px;
+}
+
+.offer-builder-flow .ci-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #fbbf24;
+  text-transform: uppercase;
+}
+
+.offer-builder-flow .ci-count {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px 8px;
+  border-radius: 100px;
+}
+
+/* Dream Outcome - Hero */
+.offer-builder-flow .ci-dream {
+  background: rgba(147, 51, 234, 0.12);
+  border: 1px solid rgba(147, 51, 234, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.offer-builder-flow .ci-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.offer-builder-flow .ci-dream-text {
+  font-size: 13px;
+  font-weight: 500;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Stats Row */
+.offer-builder-flow .ci-stats-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.offer-builder-flow .ci-stat {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.offer-builder-flow .ci-stat.winner {
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+.offer-builder-flow .ci-stat-label {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.offer-builder-flow .ci-stat-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.offer-builder-flow .ci-stat-value.high { color: #ef4444; }
+.offer-builder-flow .ci-stat-value.medium { color: #fbbf24; }
+.offer-builder-flow .ci-stat-value.low { color: #10b981; }
+.offer-builder-flow .ci-stat-value.gold { color: #fbbf24; }
+
+/* Solution Preference Bars */
+.offer-builder-flow .ci-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.offer-builder-flow .ci-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.offer-builder-flow .ci-bar-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.offer-builder-flow .ci-bar-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-flow .ci-bar.winner .ci-bar-label {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.offer-builder-flow .ci-bar-pct {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-flow .ci-bar.winner .ci-bar-pct {
+  color: #fbbf24;
+}
+
+.offer-builder-flow .ci-bar-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.offer-builder-flow .ci-bar-fill {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 100px;
+  transition: width 0.3s ease;
+}
+
+.offer-builder-flow .ci-bar.winner .ci-bar-fill {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+/* Bottom Section */
+.offer-builder-flow .ci-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.offer-builder-flow .ci-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.offer-builder-flow .ci-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.offer-builder-flow .ci-chip {
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.offer-builder-flow .ci-chip.purple {
+  background: rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(147, 51, 234, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.offer-builder-flow .ci-chip.gold {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.offer-builder-flow .ci-chip-count {
+  opacity: 0.7;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .offer-builder-flow .ci-stats-row {
+    flex-wrap: wrap;
+  }
+
+  .offer-builder-flow .ci-stat {
+    flex: 1 1 30%;
+    min-width: 80px;
+  }
+
+  .offer-builder-flow .ci-stat-value {
+    font-size: 12px;
+  }
+
+  .offer-builder-flow .ci-bar-label {
+    font-size: 10px;
+  }
+
+  .offer-builder-flow .ci-chip {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .offer-builder-flow .objection-chip {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .offer-builder-flow .preferences-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .offer-builder-flow .bar-label {
+    min-width: 85px;
+    font-size: 12px;
+  }
+}
+
+/* ============ FLOW FINDER SKILLS SUGGESTIONS PANEL ============ */
+
+.offer-builder-flow .skills-suggestions-panel {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+}
+
+.offer-builder-flow .skills-suggestions-panel.collapsed {
+  padding: 0;
+}
+
+.offer-builder-flow .skills-suggestions-panel.open {
+  padding: 0 16px 16px;
+}
+
+.offer-builder-flow .skills-panel-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 12px;
+}
+
+.offer-builder-flow .skills-panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.offer-builder-flow .skills-panel-toggle:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.offer-builder-flow .skip-suggestions-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .skip-suggestions-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.offer-builder-flow .toggle-arrow {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+.offer-builder-flow .skills-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fbbf24;
+}
+
+.offer-builder-flow .skills-panel-header .panel-icon {
+  font-size: 16px;
+}
+
+.offer-builder-flow .skills-intro {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px;
+}
+
+.offer-builder-flow .skills-suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-builder-flow .skill-suggestion-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 14px;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .skill-suggestion-card.high-relevance {
+  background: rgba(251, 191, 36, 0.08);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.offer-builder-flow .skill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.offer-builder-flow .skill-header strong {
+  font-size: 15px;
+  color: white;
+}
+
+.offer-builder-flow .relevance-indicator {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.offer-builder-flow .relevance-indicator.high {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.offer-builder-flow .relevance-indicator.medium {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-flow .relevance-indicator.low {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Primary suggestion - large and prominent */
+.offer-builder-flow .primary-suggestion-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  margin-bottom: 8px;
+}
+
+.offer-builder-flow .primary-suggestion-btn:hover {
+  background: rgba(251, 191, 36, 0.25);
+  border-color: rgba(251, 191, 36, 0.5);
+  transform: translateX(4px);
+}
+
+.offer-builder-flow .primary-suggestion-btn.ai-powered {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.offer-builder-flow .primary-suggestion-btn .suggestion-icon {
+  font-size: 24px;
+}
+
+.offer-builder-flow .primary-suggestion-btn .suggestion-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.offer-builder-flow .primary-suggestion-btn .suggestion-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.offer-builder-flow .primary-suggestion-btn .suggestion-reason {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-builder-flow .primary-suggestion-btn .use-arrow {
+  font-size: 18px;
+  color: #fbbf24;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.offer-builder-flow .primary-suggestion-btn:hover .use-arrow {
+  opacity: 1;
+}
+
+/* Secondary suggestion - smaller */
+.offer-builder-flow .secondary-suggestion-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-flow .secondary-suggestion-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.offer-builder-flow .secondary-suggestion-btn .suggestion-icon {
+  font-size: 14px;
+}
+
+.offer-builder-flow .secondary-suggestion-btn .suggestion-label {
+  font-size: 12px;
+}
+
+/* More skills hint */
+.offer-builder-flow .more-skills-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+  margin: 12px 0 0;
+}
+
+/* Loading text */
+.offer-builder-flow .recommendations-loading .loading-text {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: 12px;
+}
+
+/* Legacy skill header (keeping for backwards compat) */
+.offer-builder-flow .skill-header.legacy {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.offer-builder-flow .skill-header strong {
+  font-size: 14px;
+  color: white;
+}
+
+.offer-builder-flow .proficiency-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+}
+
+.offer-builder-flow .skill-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.offer-builder-flow .skill-example {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.offer-builder-flow .delivery-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.offer-builder-flow .use-suggestion-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 140px;
+}
+
+.offer-builder-flow .use-suggestion-btn:hover {
+  background: rgba(251, 191, 36, 0.25);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.offer-builder-flow .use-suggestion-btn .suggestion-icon {
+  font-size: 18px;
+}
+
+.offer-builder-flow .use-suggestion-btn .suggestion-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.offer-builder-flow .use-suggestion-btn .suggestion-reason {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* AI-Powered Recommendations */
+.offer-builder-flow .ai-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  margin-right: 8px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 4px;
+  color: #1a1a2e;
+}
+
+.offer-builder-flow .ai-context-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 8px;
+}
+
+.offer-builder-flow .ai-context-info .context-item {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.offer-builder-flow .ai-context-info .context-item strong {
+  color: #fbbf24;
+}
+
+.offer-builder-flow .confidence-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.offer-builder-flow .confidence-badge.high {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.offer-builder-flow .confidence-badge.medium {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.offer-builder-flow .confidence-badge.low {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
+
+.offer-builder-flow .recommendations-loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.offer-builder-flow .typing-indicator.small span {
+  width: 6px;
+  height: 6px;
+}
+
+.offer-builder-flow .use-suggestion-btn.ai-powered {
+  background: rgba(251, 191, 36, 0.2);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.offer-builder-flow .use-suggestion-btn.ai-powered:hover {
+  background: rgba(251, 191, 36, 0.3);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.offer-builder-flow .recommended-tag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  margin-left: 6px;
+  background: rgba(251, 191, 36, 0.3);
+  border-radius: 4px;
+  color: #fbbf24;
+}
+
+.offer-builder-flow .problem-context-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 8px;
+}
+
+.offer-builder-flow .problem-context-info .problem-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-builder-flow .problem-context-info .problem-text {
+  font-size: 13px;
+  color: #c4b5fd;
+  font-style: italic;
+}
+
+/* ============ SOLUTIONS SUMMARY (NO TIERS) ============ */
+
+.offer-builder-flow .solutions-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-builder-flow .solutions-summary .stack-solution {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: left;
+}
+
+.offer-builder-flow .solution-format-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 480px) {
+  .offer-builder-flow .skill-suggestion-card {
+    padding: 10px;
+  }
+
+  .offer-builder-flow .delivery-suggestions {
+    flex-direction: column;
+  }
+
+  .offer-builder-flow .use-suggestion-btn {
+    min-width: auto;
+    width: 100%;
   }
 }
