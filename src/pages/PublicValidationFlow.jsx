@@ -27,7 +27,6 @@ const PublicValidationFlow = () => {
   const [toastMessage, setToastMessage] = useState('')
   const [showSkipDropdown, setShowSkipDropdown] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
-  const [magicLinkEmail, setMagicLinkEmail] = useState('')
   const [responseSummary, setResponseSummary] = useState([]) // Track responses for completion summary
   const [savedAnswers, setSavedAnswers] = useState({}) // Store all answers by step ID
   const [showResumePrompt, setShowResumePrompt] = useState(false)
@@ -597,26 +596,6 @@ const PublicValidationFlow = () => {
     }
   }
 
-  // Send magic link for resume
-  const handleMagicLink = async () => {
-    if (!magicLinkEmail || !magicLinkEmail.includes('@')) {
-      alert('Please enter a valid email')
-      return
-    }
-
-    // Save email to session for resume
-    await supabase
-      .from('validation_sessions')
-      .update({
-        respondent_email: magicLinkEmail,
-        resume_token: sessionToken
-      })
-      .eq('id', sessionId)
-
-    showAutoSaveToast('Resume link sent!')
-    setMagicLinkEmail('')
-    // In production, you'd send an actual email here
-  }
 
   // Get estimated time remaining
   const getEstimatedTime = () => {
@@ -1003,22 +982,6 @@ const PublicValidationFlow = () => {
             </div>
           )}
         </div>
-
-        {/* Magic Link Section - Show after a few steps */}
-        {currentStepIndex >= 3 && (
-          <div className="validation-magic-link">
-            <p>Need to finish later? Get a magic link to resume.</p>
-            <div className="validation-magic-link-input">
-              <input
-                type="email"
-                value={magicLinkEmail}
-                onChange={(e) => setMagicLinkEmail(e.target.value)}
-                placeholder="your.email@example.com"
-              />
-              <button onClick={handleMagicLink}>Send Link</button>
-            </div>
-          </div>
-        )}
 
         {/* Footer */}
         <div className="validation-footer">
