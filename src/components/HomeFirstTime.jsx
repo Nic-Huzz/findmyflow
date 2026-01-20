@@ -314,9 +314,11 @@ function HomeFirstTime() {
     if (!user?.id) return
 
     try {
-      await supabase
+      // Use upsert to handle both new and existing users
+      const { error } = await supabase
         .from('user_stage_progress')
-        .update({
+        .upsert({
+          user_id: user.id,
           persona: persona,
           employment_status: employmentStatus,
           has_side_project: hasSideProject,
@@ -327,8 +329,15 @@ function HomeFirstTime() {
           onboarding_v2_completed: true,
           // Set initial stage based on wealth ladder
           current_stage: wealthLadderRung === 'pre_ladder' ? null : 1
+        }, {
+          onConflict: 'user_id'
         })
-        .eq('user_id', user.id)
+
+      if (error) {
+        console.error('Error saving V2 onboarding data:', error)
+      } else {
+        console.log('V2 onboarding data saved successfully')
+      }
     } catch (err) {
       console.error('Error saving V2 onboarding data:', err)
     }
