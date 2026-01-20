@@ -540,7 +540,7 @@ const checkProjectMilestones = async (userId, projectId, milestonesRequired = []
  * Check if stage-specific groan challenge is completed within current challenge
  * @param {string} userId - User ID
  * @param {string} projectId - Project ID
- * @param {number} stageNumber - Current stage number (1-6)
+ * @param {number} stageNumber - Current stage number (1-7)
  * @param {string} challengeInstanceId - Current challenge instance ID
  */
 const checkStageGroanChallenge = async (userId, projectId, stageNumber, challengeInstanceId) => {
@@ -650,8 +650,8 @@ export const checkProjectGraduationEligibility = async (userId, projectId, chall
     // All checks must pass
     const eligible = Object.values(checks).every(check => check === true);
 
-    // Calculate next stage (max is 6, stage 7 is "coming soon")
-    const nextStage = currentStage < 6 ? currentStage + 1 : null;
+    // Calculate next stage (max is 7 Launch, stage 8 Tracking is always accessible)
+    const nextStage = currentStage < 7 ? currentStage + 1 : null;
 
     return {
       eligible,
@@ -682,17 +682,17 @@ export const checkProjectGraduationEligibility = async (userId, projectId, chall
  *
  * @param {string} userId - User ID
  * @param {string} projectId - Project ID
- * @param {number} fromStage - Current stage (1-6)
- * @param {number} toStage - Next stage (2-7, or null if at max)
+ * @param {number} fromStage - Current stage (1-7)
+ * @param {number} toStage - Next stage (2-8, or null if at max)
  */
 export const graduateProject = async (userId, projectId, fromStage, toStage) => {
   try {
-    if (!toStage || toStage > 6) {
-      // At max stage (6), stay at current stage
-      // Stage 7 is "coming soon" - projects repeat the cycle
+    if (!toStage || toStage > 7) {
+      // At max stage (7 = Launch), stay at current stage
+      // Stage 8 (Tracking) is always accessible, not part of progression
       return {
         graduated: false,
-        message: 'Project is at maximum stage. Stage 7 coming soon!',
+        message: 'Project is at maximum stage (Launch). Use Tracking to monitor your funnel!',
         current_stage: fromStage
       };
     }

@@ -118,13 +118,14 @@ function getNextBestAction(userContext) {
   }
 
   // Priority 4: Continue based on stage
-  if (currentStage && currentStage < 6) {
+  if (currentStage && currentStage < 7) {
     const stageActions = {
       1: { label: 'Continue validation', route: '/7-day-challenge?tab=quests' },
       2: { label: 'Build your offer', route: '/offer-builder' },
       3: { label: 'Test with users', route: '/7-day-challenge?tab=quests' },
       4: { label: 'Design money models', route: '/7-day-challenge?tab=quests' },
-      5: { label: 'Create your campaign', route: '/funnel-builder' }
+      5: { label: 'Build Grand Slam offer', route: '/offer-builder-v2' },
+      6: { label: 'Create your campaign', route: '/funnel-builder' }
     }
     return {
       message: null, // No special message, just show the action

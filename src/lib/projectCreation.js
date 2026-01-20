@@ -249,7 +249,7 @@ export const getOrCreateActiveProject = async (userId) => {
  * @param {Array} projectData.milestoneMoments - Major milestone moments
  * @param {Array} projectData.resistantMoments - Major resistant/challenging moments
  * @param {string} projectData.currentFeeling - Current feeling about the project
- * @param {number} projectData.startingStage - Stage to start at (1-6)
+ * @param {number} projectData.startingStage - Stage to start at (1-7)
  * @returns {Promise<{success: boolean, projectId?: string, error?: string}>}
  */
 export const createExistingProject = async (userId, projectData) => {

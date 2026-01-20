@@ -798,7 +798,7 @@ const Profile = () => {
 
               <div className="progress-stat-item">
                 <span className="progress-stat-icon">🎯</span>
-                <span className="progress-stat-value">{primaryProject.current_stage || 1}/6</span>
+                <span className="progress-stat-value">{primaryProject.current_stage || 1}/7</span>
                 <span className="progress-stat-label">Stage</span>
               </div>
             </div>

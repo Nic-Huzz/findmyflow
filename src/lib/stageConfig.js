@@ -1,8 +1,10 @@
 /**
  * Stage Configuration for Project-Based Progression
  *
- * This replaces the persona-based stage system with a universal 6-stage
- * progression that applies to all projects.
+ * Universal 9-stage system:
+ * - Stage 0: Flow Finder (always accessible)
+ * - Stages 1-7: Progressive stages (Validation → Product → Testing → Money Models → Offer Creation → Campaign → Launch)
+ * - Stage 8: Tracking (always accessible)
  *
  * Created: 2024-12-20
  * See: docs/2024-12-20-major-refactor-plan.md
@@ -18,9 +20,10 @@ export const STAGES = {
   PRODUCT_CREATION: 2,
   TESTING: 3,
   MONEY_MODELS: 4,
-  CAMPAIGN_CREATION: 5,
-  LAUNCH: 6,
-  TRACKING: 7
+  OFFER_CREATION: 5,
+  CAMPAIGN_CREATION: 6,
+  LAUNCH: 7,
+  TRACKING: 8
 }
 
 export const STAGE_CONFIG = {
@@ -63,15 +66,12 @@ export const STAGE_CONFIG = {
     id: 2,
     name: 'Product Creation',
     shortName: 'Product',
-    description: 'Build your Grand Slam offer with bonuses, guarantee, and scarcity',
+    description: 'Build your core product, lead magnet, and value proposition',
     icon: '🛠️',
     color: '#8b5cf6', // violet
-    requiredFlows: ['100m_offer', 'offer_builder_v2', 'lead_magnet_selection', 'product_selection'],
+    requiredFlows: ['100m_offer', 'lead_magnet_selection', 'product_selection'],
     milestones: [
-      'lead_magnet_created',
-      'grand_slam_bonuses_created',
-      'grand_slam_guarantee_created',
-      'grand_slam_scarcity_created'
+      'lead_magnet_created'
     ],
     groanChallenge: {
       id: 'groan_stage_2_creation',
@@ -132,8 +132,31 @@ export const STAGE_CONFIG = {
     upsellPrompt: null,
     externalLink: null
   },
-  [STAGES.CAMPAIGN_CREATION]: {
+  [STAGES.OFFER_CREATION]: {
     id: 5,
+    name: 'Offer Creation',
+    shortName: 'Grand Slam',
+    description: 'Build your irresistible Grand Slam offer with bonuses, guarantee, and scarcity',
+    icon: '🎯',
+    color: '#ec4899', // pink
+    requiredFlows: ['offer_builder_v2'],
+    milestones: [
+      'grand_slam_bonuses_created',
+      'grand_slam_guarantee_created',
+      'grand_slam_scarcity_created'
+    ],
+    groanChallenge: {
+      id: 'groan_stage_5_offer',
+      name: 'Offer Groan',
+      fear: 'Fear of making your offer too good / giving away too much',
+      description: 'Add one more bonus or strengthen your guarantee beyond what feels comfortable. Your essence knows abundance attracts abundance, but your body fears you\'re giving away your value.'
+    },
+    tabLabel: 'Offer Creation',
+    upsellPrompt: null,
+    externalLink: null
+  },
+  [STAGES.CAMPAIGN_CREATION]: {
+    id: 6,
     name: 'Campaign Creation',
     shortName: 'Campaign',
     description: 'Create your lead generation strategy and marketing assets',
@@ -142,7 +165,7 @@ export const STAGE_CONFIG = {
     requiredFlows: ['leads_strategy'],
     milestones: ['launch_sequence_planned'],
     groanChallenge: {
-      id: 'groan_stage_5_campaign',
+      id: 'groan_stage_6_campaign',
       name: 'Campaign Groan',
       fear: 'Fear of public visibility',
       description: 'Put yourself out there publicly in a way that feels exposing - a video, a post, an interview. Let the world see the real you, not the polished version.'
@@ -155,7 +178,7 @@ export const STAGE_CONFIG = {
     }
   },
   [STAGES.LAUNCH]: {
-    id: 6,
+    id: 7,
     name: 'Launch',
     shortName: 'Launch',
     description: 'Execute your launch with your leads funnel',
@@ -164,7 +187,7 @@ export const STAGE_CONFIG = {
     requiredFlows: [],
     milestones: ['acquisition_offer_launched', 'first_10_signups', 'post_launch_review'],
     groanChallenge: {
-      id: 'groan_stage_6_launch',
+      id: 'groan_stage_7_launch',
       name: 'Launch Groan',
       fear: 'Fear of failure after going "all in"',
       description: 'Make a bold, public commitment to your launch with a specific date. Announce it to your audience. No backing out, no moving the goalposts.'
@@ -177,7 +200,7 @@ export const STAGE_CONFIG = {
     }
   },
   [STAGES.TRACKING]: {
-    id: 7,
+    id: 8,
     name: 'Tracking',
     shortName: 'Tracking',
     description: 'Track your funnel metrics and optimize conversions',
@@ -254,7 +277,7 @@ export function getStageShortName(stageNumber) {
 
 /**
  * Get next stage number
- * Note: TRACKING (7) is always accessible but not part of normal progression
+ * Note: TRACKING (8) is always accessible but not part of normal progression
  */
 export function getNextStage(currentStage) {
   if (currentStage >= STAGES.LAUNCH) return null // TRACKING is not part of normal progression
@@ -361,7 +384,7 @@ export function getStageProgress(stageNumber, completedFlows, completedMilestone
  * Determine starting stage based on user's existing progress
  * Used in onboarding for users with existing projects
  * @param {string} progressDescription - User's answer about their progress
- * @returns {number} Stage number 1-6
+ * @returns {number} Stage number 1-7
  */
 export function determineStartingStage(progressDescription) {
   const stageMap = {
@@ -369,6 +392,7 @@ export function determineStartingStage(progressDescription) {
     'validated_no_product': STAGES.PRODUCT_CREATION,
     'have_product_not_tested': STAGES.TESTING,
     'have_product_with_customers': STAGES.MONEY_MODELS,
+    'have_money_models_need_grand_slam': STAGES.OFFER_CREATION,
     'multiple_offers_ready_to_scale': STAGES.CAMPAIGN_CREATION,
     'ready_to_launch_campaign': STAGES.LAUNCH
   }
@@ -391,6 +415,9 @@ export const LEGACY_STAGE_MAPPING = {
   'validation': STAGES.VALIDATION,
   'creation': STAGES.PRODUCT_CREATION,
   'testing': STAGES.TESTING,
+  'money_models': STAGES.MONEY_MODELS,
+  'offer_creation': STAGES.OFFER_CREATION,
+  'campaign': STAGES.CAMPAIGN_CREATION,
   'launch': STAGES.LAUNCH,
 
   // Movement Maker

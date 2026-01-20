@@ -42,7 +42,8 @@ const STAGE_OPTIONS = [
   { value: 'validated_no_product', label: 'Validated but no full product', stage: STAGES.PRODUCT_CREATION },
   { value: 'have_product_not_tested', label: 'Have product, not tested broadly', stage: STAGES.TESTING },
   { value: 'have_product_with_customers', label: 'Have product with paying customers', stage: STAGES.MONEY_MODELS },
-  { value: 'multiple_offers_ready_to_scale', label: 'Multiple offers, ready to scale marketing', stage: STAGES.CAMPAIGN_CREATION },
+  { value: 'have_money_models_need_grand_slam', label: 'Have money models, need Grand Slam offer', stage: STAGES.OFFER_CREATION },
+  { value: 'multiple_offers_ready_to_scale', label: 'Grand Slam offer ready, need marketing', stage: STAGES.CAMPAIGN_CREATION },
   { value: 'ready_to_launch_campaign', label: 'Ready to launch major campaign', stage: STAGES.LAUNCH }
 ]
 

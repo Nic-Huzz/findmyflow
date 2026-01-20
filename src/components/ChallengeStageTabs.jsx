@@ -1,13 +1,14 @@
 /**
  * ChallengeStageTabs.jsx
  *
- * Displays the 7 universal stage tabs for the 7-day challenge.
+ * Displays the 9 universal stage tabs for the 7-day challenge.
  * Stage 0 (Flow Finder) is user-level and always accessible.
- * Stages 1-6 are project-level.
+ * Stages 1-7 are project-level progression stages.
+ * Stage 8 (Tracking) is always accessible.
  *
  * Features:
- * - All 7 stages always visible (0 = Flow Finder, 1-6 = project stages)
- * - Flow Finder (stage 0) always accessible regardless of project stage
+ * - All 9 stages always visible (0 = Flow Finder, 1-7 = project stages, 8 = Tracking)
+ * - Flow Finder (stage 0) and Tracking (stage 8) always accessible regardless of project stage
  * - Current stage highlighted
  * - Completed stages shown with checkmark
  * - Future stages grayed out but visible
@@ -97,7 +98,7 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
         })}
       </div>
 
-      {/* Progress Indicator - only for project stages (1-6) */}
+      {/* Progress Indicator - only for project stages (1-7) */}
       <div className="progress-line">
         <div
           className="progress-fill"

@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 
 // Static imports - Core infrastructure and frequently accessed pages
+import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
 import Profile from './Profile'
 import Challenge from './Challenge'
@@ -60,6 +61,7 @@ const NervousSystemFlow = lazy(() => import('./flows/NervousSystemFlow'))
 const PublicMoneyModelFlow = lazy(() => import('./flows/PublicMoneyModelFlow'))
 const PublicNervousSystemFlow = lazy(() => import('./flows/PublicNervousSystemFlow'))
 const PublicOfferAuditFlow = lazy(() => import('./flows/PublicOfferAuditFlow'))
+const CareerClarityQuiz = lazy(() => import('./flows/CareerClarityQuiz'))
 
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazy(() => import('./flows/BusinessBaselineFlow'))
@@ -102,6 +104,7 @@ const ValidationFlowsManager = lazy(() => import('./pages/ValidationFlowsManager
 const VoiceOfCustomerPage = lazy(() => import('./pages/VoiceOfCustomerPage'))
 const WheelDemo = lazy(() => import('./pages/WheelDemo'))
 const WeeklyPlanningFlow = lazy(() => import('./components/WeeklyPlanningFlow'))
+const BrandToneDemo = lazy(() => import('./pages/BrandToneDemo'))
 import './App.css'
 import './PersonaAssessment.css'
 import './flows/AttractionOfferFlow.css'
@@ -128,23 +131,31 @@ import './flows/CompetitorSnapshotFlow.css'
 import './pages/crm/AutonomousSetup.css'
 import './pages/crm/AscensionEngine.css'
 import './pages/crm/ObjectionPatterns.css'
+import './pages/BrandToneDemo.css'
 import './pages/VoiceOfCustomerPage.css'
 import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
+import './pages/LandingPage.css'
+import './flows/CareerClarityQuiz.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
   const location = useLocation()
-  // Hide Zarlo on /try/ routes only (keep on /v/ validation routes as sales agent)
+  // Hide Zarlo on /try/ routes, landing page, and career clarity quiz
   const isTryRoute = location.pathname.startsWith('/try/')
+  const isLandingPage = location.pathname === '/'
+  const isCareerClarity = location.pathname === '/career-clarity'
 
-  if (isTryRoute) return null
+  if (isTryRoute || isLandingPage || isCareerClarity) return null
   return <ZarloWidget />
 }
 
 function ConditionalBottomToolbar() {
   const location = useLocation()
-  const isPublicRoute = location.pathname.startsWith('/v/') || location.pathname.startsWith('/try/')
+  const isPublicRoute = location.pathname.startsWith('/v/') ||
+                        location.pathname.startsWith('/try/') ||
+                        location.pathname === '/' ||
+                        location.pathname === '/career-clarity'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -158,9 +169,15 @@ function AppRouter() {
         <Router>
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
-              {/* Homepage - Persona Assessment */}
-              <Route path="/" element={<PersonaAssessment />} />
+              {/* Landing Page - Public */}
+              <Route path="/" element={<LandingPage />} />
+
+              {/* Signup/Onboarding */}
+              <Route path="/get-started" element={<PersonaAssessment />} />
               <Route path="/log-in" element={<PersonaAssessment />} />
+
+              {/* Career Clarity Quiz - Public */}
+              <Route path="/career-clarity" element={<CareerClarityQuiz />} />
 
             {/* Attraction Offer Assessment - In-App Challenge */}
             <Route path="/attraction-offer" element={
@@ -197,7 +214,7 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Funnel Builder - Stage 5 Campaign */}
+            {/* Funnel Builder - Stage 6 Campaign */}
             <Route path="/funnel-builder" element={
               <AuthGate>
                 <FunnelBuilderFlow />
@@ -245,6 +262,7 @@ function AppRouter() {
             {/* FlowMap Style Mockups - For Review */}
             <Route path="/flow-mockups" element={<FlowMapMockups />} />
             <Route path="/wheel-demo" element={<WheelDemo />} />
+            <Route path="/brand-tone-demo" element={<BrandToneDemo />} />
 
             {/* Public Validation Flow - No Auth Required */}
             <Route path="/v/:shareToken" element={<PublicValidationFlow />} />
@@ -356,7 +374,7 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Funnel Calculator - Stage 7 Tracking */}
+            {/* Funnel Calculator - Stage 8 Tracking */}
             <Route path="/funnel-calculator" element={
               <AuthGate>
                 <FunnelCalculator />

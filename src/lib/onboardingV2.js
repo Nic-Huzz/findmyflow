@@ -52,7 +52,7 @@ export function determineOnboardingPath(wealthLadder, goal) {
     return {
       path: 3,
       emphasis: goal === 'monetization' ? 'launch_sales' : 'suite_building',
-      startingStage: goal === 'monetization' ? 5 : 4,
+      startingStage: goal === 'monetization' ? 6 : 4,
       nextFlow: 'quick_capture',
       nextFlowLabel: 'Quick Capture',
       description: 'Capture your existing offerings',
@@ -65,7 +65,7 @@ export function determineOnboardingPath(wealthLadder, goal) {
     return {
       path: 4,
       emphasis: goal === 'growth' ? 'scale_systems' : 'pipeline_optimization',
-      startingStage: 6,
+      startingStage: 7,
       nextFlow: 'quick_capture',
       nextFlowLabel: 'Quick Capture',
       description: 'Capture your product suite',
@@ -253,7 +253,7 @@ export const EMPHASIS_CONFIG = {
     id: 'launch_sales',
     label: 'Launch & Sales',
     description: 'Execute campaigns and close deals',
-    unlockedStages: [4, 5, 6],
+    unlockedStages: [5, 6, 7],
     questPriority: ['core_four', 'funnel_builder', 'launch_sequence', 'first_10_signups'],
     dashboardHero: 'campaign_progress',
     heroTitle: 'Launch Your Campaign',
@@ -267,7 +267,7 @@ export const EMPHASIS_CONFIG = {
     id: 'pipeline_optimization',
     label: 'Pipeline Optimization',
     description: 'Optimize your funnel and improve conversions',
-    unlockedStages: [5, 6, 7],
+    unlockedStages: [6, 7, 8],
     questPriority: ['funnel_calculator', 'weekly_update', 'crm_optimization', 'bottleneck_analysis'],
     dashboardHero: 'funnel_metrics',
     heroTitle: 'Optimize Your Pipeline',
@@ -281,7 +281,7 @@ export const EMPHASIS_CONFIG = {
     id: 'scale_systems',
     label: 'Scale & Systems',
     description: 'Build systems to scale what\'s already working',
-    unlockedStages: [1, 2, 3, 4, 5, 6, 7], // Full access
+    unlockedStages: [1, 2, 3, 4, 5, 6, 7, 8], // Full access
     questPriority: ['funnel_baseline', 'bottleneck_analysis', 'systems_review', 'team_building'],
     dashboardHero: 'revenue_dashboard',
     heroTitle: 'Scale Your Business',
@@ -431,21 +431,21 @@ const EMPHASIS_PROGRESSION = {
     nextEmphasis: 'suite_building',
     condition: 'stage_complete'
   },
-  // Suite Building → Launch Sales (when suite is complete)
+  // Suite Building → Launch Sales (when Offer Creation is complete)
   suite_building: {
     triggerStage: 5,
     nextEmphasis: 'launch_sales',
     condition: 'stage_complete'
   },
-  // Launch Sales → Pipeline Optimization (after launch)
+  // Launch Sales → Pipeline Optimization (after Launch)
   launch_sales: {
-    triggerStage: 6,
+    triggerStage: 7,
     nextEmphasis: 'pipeline_optimization',
     condition: 'stage_complete'
   },
-  // Pipeline Optimization → Scale Systems (when funnel is optimized)
+  // Pipeline Optimization → Scale Systems (when Tracking is established)
   pipeline_optimization: {
-    triggerStage: 7,
+    triggerStage: 8,
     nextEmphasis: 'scale_systems',
     condition: 'stage_complete'
   },
@@ -507,7 +507,7 @@ export function checkEmphasisProgression(currentEmphasis, fromStage, toStage) {
 /**
  * Get emphasis recommendation based on current stage
  * Useful for suggesting emphasis changes to users
- * @param {number} currentStage - Current stage (1-7)
+ * @param {number} currentStage - Current stage (1-8)
  * @param {string} wealthLadder - Current wealth ladder position
  * @returns {string} Recommended emphasis
  */

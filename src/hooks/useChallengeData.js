@@ -1015,7 +1015,7 @@ export function useChallengeData() {
 
     const completedStages = []
 
-    for (let stageNum = 1; stageNum <= 6; stageNum++) {
+    for (let stageNum = 1; stageNum <= 7; stageNum++) {
       const stageQuests = challengeData.quests.filter(q => q.stage_required === stageNum)
 
       if (stageQuests.length === 0) continue
