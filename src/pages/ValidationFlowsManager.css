@@ -224,12 +224,38 @@
   margin-bottom: 16px;
 }
 
+.dashboard-container .title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .dashboard-container .card-title-section h3 {
   font-size: 16px;
   font-weight: 600;
   color: #1e293b;
-  margin: 0 0 4px 0;
+  margin: 0;
   line-height: 1.3;
+}
+
+.dashboard-container .flow-type-tag {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dashboard-container .flow-type-tag.validation {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.dashboard-container .flow-type-tag.testing {
+  background: #fef3c7;
+  color: #d97706;
 }
 
 .dashboard-container .card-description {
@@ -1216,16 +1242,15 @@
     flex: 1;
   }
 
-  /* Filter chips scroll on mobile */
+  /* Filter chips wrap on mobile */
   .dashboard-container .filter-chips {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
   .dashboard-container .filter-chip {
-    flex-shrink: 0;
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }
 

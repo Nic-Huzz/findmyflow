@@ -66,7 +66,7 @@ const ValidationFlowsManager = () => {
   const [activeAnalyticsTab, setActiveAnalyticsTab] = useState('overview') // overview | deep-dive
   const [openMenuId, setOpenMenuId] = useState(null) // For flow card dropdown menu
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterStatus, setFilterStatus] = useState('all') // all | active | inactive | has_responses
+  const [filterStatus, setFilterStatus] = useState('all') // all | active | has_responses | validation | testing
 
   // Taxonomy data for dropdowns
   const [useCustomProblem, setUseCustomProblem] = useState(false)
@@ -614,6 +614,8 @@ const ValidationFlowsManager = () => {
     if (filterStatus === 'active' && !flow.is_active) return false
     if (filterStatus === 'inactive' && flow.is_active) return false
     if (filterStatus === 'has_responses' && (flow.response_count || 0) === 0) return false
+    if (filterStatus === 'validation' && flow.stage !== 'validation') return false
+    if (filterStatus === 'testing' && flow.stage !== 'testing') return false
     return true
   })
 
@@ -744,6 +746,18 @@ const ValidationFlowsManager = () => {
                 Active
               </button>
               <button
+                className={`filter-chip ${filterStatus === 'validation' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('validation')}
+              >
+                Validation
+              </button>
+              <button
+                className={`filter-chip ${filterStatus === 'testing' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('testing')}
+              >
+                Testing
+              </button>
+              <button
                 className={`filter-chip ${filterStatus === 'has_responses' ? 'active' : ''}`}
                 onClick={() => setFilterStatus('has_responses')}
               >
@@ -787,7 +801,14 @@ const ValidationFlowsManager = () => {
                   <div className="card-content">
                     <div className="card-top">
                       <div className="card-title-section">
-                        <h3>{flow.flow_name}</h3>
+                        <div className="title-row">
+                          <h3>{flow.flow_name}</h3>
+                          {flow.stage && (
+                            <span className={`flow-type-tag ${flow.stage}`}>
+                              {flow.stage === 'validation' ? 'Validation' : 'Testing'}
+                            </span>
+                          )}
+                        </div>
                         <p className="card-description">{flow.flow_description}</p>
                       </div>
                       <div className={`status-badge ${flow.is_active ? 'active' : 'inactive'}`}>
