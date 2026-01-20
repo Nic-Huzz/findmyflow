@@ -182,12 +182,14 @@
     {
       "id": "10.0",
       "step_order_index": 10,
-      "assistant_prompt": "What's your email address?\n\n(So we can send you updates and thank you for your feedback)",
+      "assistant_prompt": "Last thing - where should we send updates?\n\n(We'll thank you for your feedback and keep you posted on improvements)",
       "expected_inputs": [
         {
-          "type": "email",
+          "type": "name_email",
+          "name_placeholder": "Your name (optional)",
+          "email_placeholder": "your.email@example.com",
           "required": true,
-          "placeholder": "your.email@example.com"
+          "validation": "email"
         }
       ],
       "store_as": "testing.email",

@@ -334,6 +334,18 @@
   min-height: 140px;
 }
 
+/* ============ NAME + EMAIL ============ */
+
+.validation-name-email {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.validation-name-email .validation-input {
+  width: 100%;
+}
+
 /* ============ TEXT LIST ============ */
 
 .validation-text-list {
@@ -978,13 +990,47 @@
   color: white;
   font-weight: 600;
   font-size: 15px;
-  padding: 12px 24px;
+  padding: 14px 24px;
   border-radius: 10px;
   text-decoration: none;
   transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  line-height: 1.5;
 }
 
-.completion-cta .cta-button:hover {
+.completion-cta .cta-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.completion-cta .cta-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Launch Notify Success */
+.completion-cta .launch-notify-success {
+  padding: 20px;
+  background: rgba(107, 203, 119, 0.15);
+  border: 1px solid rgba(107, 203, 119, 0.3);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.completion-cta .launch-notify-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.completion-cta .launch-notify-success p {
+  margin: 0;
+  font-size: 15px;
+  color: #6BCB77;
+  line-height: 1.5;
+  font-weight: 500;
+  max-width: none;
 }

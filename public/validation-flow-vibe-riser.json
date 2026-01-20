@@ -418,16 +418,17 @@
     {
       "id": "11.0",
       "step_order_index": 19,
-      "assistant_prompt": "Last thing - drop your email?\n\nWe'll share what we learn from this research. And if we build something based on what you said, you'll be first to know.\n\n(No spam, pinky promise.)",
+      "assistant_prompt": "Last thing - where should we send the insights?\n\nWe'll share what we learn from this research. And if we build something based on what you said, you'll be first to know.\n\n(No spam, pinky promise.)",
       "expected_inputs": [
         {
-          "type": "email",
-          "placeholder": "your.email@example.com",
+          "type": "name_email",
+          "name_placeholder": "Your name (optional)",
+          "email_placeholder": "your.email@example.com",
           "required": true,
           "validation": "email"
         }
       ],
-      "store_as": "validation.respondent_email",
+      "store_as": "validation.respondent_info",
       "next_step_rules": [
         {
           "on_success": "12.0"

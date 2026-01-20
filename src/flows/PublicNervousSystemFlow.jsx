@@ -279,11 +279,15 @@ export default function PublicNervousSystemFlow() {
   }
 
   // Handle email submission and proceed to AI reflection
-  const handleEmailSubmit = (submittedEmail) => {
+  const handleEmailSubmit = (submittedEmail, submittedName) => {
     setEmail(submittedEmail)
     setShowEmailGate(false)
     // Track email capture
     trackEmailCaptured('nervous_system')
+    // Store name in session for later use
+    if (submittedName) {
+      sessionStorage.setItem('publicFlowName', submittedName)
+    }
     setCurrentScreen('mirror-intro')
   }
 

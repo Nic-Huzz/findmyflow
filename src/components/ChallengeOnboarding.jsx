@@ -4,7 +4,10 @@
  * Handles the initial welcome screen and group selection screen.
  */
 
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+const STORY_SEEN_KEY = 'hasSeenChallengeWelcomeStory'
 
 function ChallengeOnboarding({
   screen, // 'welcome' | 'group-selection'
@@ -17,6 +20,13 @@ function ChallengeOnboarding({
   onBack // Optional callback to go back
 }) {
   const navigate = useNavigate()
+  const [hasSeenStory, setHasSeenStory] = useState(false)
+
+  // Check if user has seen the welcome story before
+  useEffect(() => {
+    const seen = localStorage.getItem(STORY_SEEN_KEY)
+    setHasSeenStory(!!seen)
+  }, [])
 
   const handleBack = () => {
     if (onBack) {
@@ -24,6 +34,17 @@ function ChallengeOnboarding({
     } else {
       navigate('/me')
     }
+  }
+
+  // Mark story as seen and continue to challenge
+  const handleStartChallenge = () => {
+    localStorage.setItem(STORY_SEEN_KEY, 'true')
+    onStartChallenge()
+  }
+
+  // Skip directly to group selection (for returning users)
+  const handleSkip = () => {
+    onStartChallenge()
   }
 
   if (screen === 'welcome') {
@@ -83,9 +104,15 @@ function ChallengeOnboarding({
               </div>
             </div>
 
-            <button className="start-challenge-btn" onClick={onStartChallenge}>
+            <button className="start-challenge-btn" onClick={handleStartChallenge}>
               Start My 7-Day Journey
             </button>
+
+            {hasSeenStory && (
+              <button className="skip-story-btn" onClick={handleSkip}>
+                Skip intro — I've read this before
+              </button>
+            )}
           </div>
         </div>
       </div>

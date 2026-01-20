@@ -540,7 +540,7 @@ function OfferBuilderFlow() {
 
   // Skills panel collapsed state - default OPEN since it's contextually relevant
   const [skillsPanelOpen, setSkillsPanelOpen] = useState(true)
-  const [showFitExplainer, setShowFitExplainer] = useState(false)
+  const [showFitExplainer, setShowFitExplainer] = useState(null) // Track which category idx has explainer open
 
   // Handle skills panel toggle - fetch AI recommendations on first open
   const handleSkillsPanelToggle = () => {
@@ -2099,16 +2099,16 @@ function OfferBuilderFlow() {
                                 {relevanceScore > 0 && (
                                   <span
                                     className={`relevance-indicator clickable ${isHighlyRelevant ? 'high' : relevanceScore >= 5 ? 'medium' : 'low'}`}
-                                    onClick={(e) => { e.stopPropagation(); setShowFitExplainer(!showFitExplainer) }}
+                                    onClick={(e) => { e.stopPropagation(); setShowFitExplainer(showFitExplainer === idx ? null : idx) }}
                                   >
                                     <span className="relevance-label">Fit</span>
                                     {isHighlyRelevant ? '●●●' : relevanceScore >= 5 ? '●●○' : '●○○'}
                                   </span>
                                 )}
                               </div>
-                              {showFitExplainer && idx === 0 && (
+                              {showFitExplainer === idx && (
                                 <div className="fit-explainer-popup">
-                                  <button className="fit-explainer-close" onClick={() => setShowFitExplainer(false)}>×</button>
+                                  <button className="fit-explainer-close" onClick={() => setShowFitExplainer(null)}>×</button>
                                   <h5>Skill Fit Score</h5>
                                   <p>AI analyses how well each skill matches the problem you selected.</p>
                                   <div className="fit-legend">

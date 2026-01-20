@@ -3,8 +3,6 @@ import { supabase } from '../lib/supabaseClient'
 import { trackCtaInterest, trackCtaContinue } from '../lib/abTesting'
 import './PublicFlowCTA.css'
 
-const LANDING_PAGE_URL = 'https://findmyflow.nichuzz.com'
-
 // Wealth ladder stages for roadmap visual
 // Each stage maps to a wealth ladder position
 const WEALTH_LADDER_STAGES = [
@@ -33,7 +31,7 @@ const AI_INTEREST_OPTIONS = [
 
 /**
  * PublicFlowCTA - CTA section for public flows
- * Shows AI interest question, wealth ladder roadmap, and scaling CTA
+ * Shows AI interest question, wealth ladder roadmap, and launch notification CTA
  *
  * @param {string} email - User's email (captured earlier)
  * @param {string} flowType - Source flow type
@@ -44,6 +42,8 @@ export default function PublicFlowCTA({ email, flowType, flowResults, answers = 
   const [selectedInterest, setSelectedInterest] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [launchNotifySubmitting, setLaunchNotifySubmitting] = useState(false)
+  const [launchNotifySubmitted, setLaunchNotifySubmitted] = useState(false)
 
   // Get session token
   const sessionToken = sessionStorage.getItem('publicFlowSession') || 'unknown'
@@ -76,9 +76,31 @@ export default function PublicFlowCTA({ email, flowType, flowResults, answers = 
     setHasSubmitted(true)
   }
 
-  const handleScalingClick = async () => {
-    await trackCtaContinue(sessionToken, email, flowType)
-    window.location.href = LANDING_PAGE_URL
+  const handleLaunchNotify = async () => {
+    setLaunchNotifySubmitting(true)
+
+    try {
+      // Update public_leads with launch notification interest
+      await supabase
+        .from('public_leads')
+        .upsert({
+          email: email,
+          source_flow: flowType,
+          launch_notify: true,
+          launch_notify_at: new Date().toISOString()
+        }, {
+          onConflict: 'email',
+          ignoreDuplicates: false
+        })
+
+      // Track conversion
+      await trackCtaContinue(sessionToken, email, flowType)
+    } catch (err) {
+      console.error('Error saving launch notification interest:', err)
+    }
+
+    setLaunchNotifySubmitting(false)
+    setLaunchNotifySubmitted(true)
   }
 
   return (
@@ -152,10 +174,21 @@ export default function PublicFlowCTA({ email, flowType, flowResults, answers = 
           </div>
         </div>
 
-        {/* Scaling Button */}
-        <button className="public-cta-scaling" onClick={handleScalingClick}>
-          Keen to learn more about scaling your business?
-        </button>
+        {/* Launch Notification Button */}
+        {!launchNotifySubmitted ? (
+          <button
+            className="public-cta-scaling"
+            onClick={handleLaunchNotify}
+            disabled={launchNotifySubmitting}
+          >
+            {launchNotifySubmitting ? 'Saving...' : 'Keen to learn more about scaling your business and be notified when Find My Flow launches?'}
+          </button>
+        ) : (
+          <div className="launch-notify-success">
+            <span className="launch-notify-icon">🎉</span>
+            <p>You're on the list! We'll let you know when Find My Flow is ready.</p>
+          </div>
+        )}
       </div>
     </div>
   )

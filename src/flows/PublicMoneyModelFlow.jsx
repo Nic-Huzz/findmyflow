@@ -167,7 +167,7 @@ export default function PublicMoneyModelFlow() {
   }
 
   // Handle email submission - calculate and show results
-  const handleEmailSubmit = async (submittedEmail) => {
+  const handleEmailSubmit = async (submittedEmail, submittedName) => {
     setEmail(submittedEmail)
     setShowEmailGate(false)
     setStage(STAGES.CALCULATING)
@@ -189,6 +189,10 @@ export default function PublicMoneyModelFlow() {
         answers,
         topOffer
       )
+      // Add name to personalization tokens
+      if (submittedName) {
+        personalizationTokens.name = submittedName
+      }
 
       // Save to database
       try {
@@ -196,6 +200,7 @@ export default function PublicMoneyModelFlow() {
         await supabase.from('public_offer_assessments').insert({
           session_token: sessionToken,
           flow_type: config.flowType,
+          respondent_name: submittedName,
           respondent_email: submittedEmail,
           responses: answers,
           recommended_offer_id: topOffer?.offer?.id,
@@ -214,6 +219,7 @@ export default function PublicMoneyModelFlow() {
         // Update public_leads with personalization tokens
         await supabase.from('public_leads').upsert({
           email: submittedEmail,
+          name: submittedName,
           source_flow: config.flowType,
           personalization_tokens: personalizationTokens,
           flow_results: {
@@ -229,6 +235,7 @@ export default function PublicMoneyModelFlow() {
         await supabase.functions.invoke('enroll-email-sequence', {
           body: {
             email: submittedEmail,
+            name: submittedName,
             sequence_type: 'money_model',
             personalization_tokens: personalizationTokens
           }

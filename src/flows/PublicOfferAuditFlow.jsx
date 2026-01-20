@@ -587,6 +587,7 @@ export default function PublicOfferAuditFlow() {
 
   // Email gate state
   const [email, setEmail] = useState(null)
+  const [name, setName] = useState(null)
   const [showEmailGate, setShowEmailGate] = useState(false)
 
   // Load questions JSON
@@ -692,8 +693,9 @@ export default function PublicOfferAuditFlow() {
   }
 
   // Handle email submission
-  const handleEmailSubmit = async (submittedEmail) => {
+  const handleEmailSubmit = async (submittedEmail, submittedName) => {
     setEmail(submittedEmail)
+    setName(submittedName)
     setShowEmailGate(false)
     setStage(STAGES.CALCULATING)
 
@@ -716,6 +718,7 @@ export default function PublicOfferAuditFlow() {
       try {
         await supabase.from('public_offer_audits').insert({
           session_token: sessionToken,
+          respondent_name: submittedName,
           respondent_email: submittedEmail,
           responses: answers,
           score: results.score,
@@ -727,8 +730,10 @@ export default function PublicOfferAuditFlow() {
         // Save to public_leads
         await supabase.from('public_leads').upsert({
           email: submittedEmail,
+          name: submittedName,
           source_flow: 'offer_audit',
           personalization_tokens: {
+            name: submittedName,
             score: results.score,
             top_gap: results.gaps[0]?.title || null,
             wealth_ladder: answers.q2_wealth_ladder?.value || null,
@@ -752,8 +757,10 @@ export default function PublicOfferAuditFlow() {
         await supabase.functions.invoke('enroll-email-sequence', {
           body: {
             email: submittedEmail,
+            name: submittedName,
             sequence_type: 'offer_audit',
             personalization_tokens: {
+              name: submittedName,
               score: results.score,
               top_gap: results.gaps[0]?.title || null,
               wealth_ladder: answers.q2_wealth_ladder?.value || null,

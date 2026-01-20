@@ -1252,7 +1252,7 @@ const ValidationFlowsManager = () => {
                   >
                     <h3>Validation Stage</h3>
                     <p>Customer discovery questions - validate the problem and solution before building</p>
-                    <span className="question-count">13 questions</span>
+                    <span className="question-count">22 questions</span>
                   </div>
 
                   <div
@@ -1261,7 +1261,7 @@ const ValidationFlowsManager = () => {
                   >
                     <h3>Testing Stage</h3>
                     <p>Product feedback questions - gather insights from beta testers</p>
-                    <span className="question-count">10 questions</span>
+                    <span className="question-count">11 questions</span>
                   </div>
                 </div>
 

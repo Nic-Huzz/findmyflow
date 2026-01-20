@@ -31,6 +31,9 @@ const PublicValidationFlow = () => {
   const [responseSummary, setResponseSummary] = useState([]) // Track responses for completion summary
   const [savedAnswers, setSavedAnswers] = useState({}) // Store all answers by step ID
   const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [nameInput, setNameInput] = useState('') // For name_email combined input
+  const [launchNotifySubmitting, setLaunchNotifySubmitting] = useState(false)
+  const [launchNotifySubmitted, setLaunchNotifySubmitted] = useState(false)
 
   // Voice recording ref
   const recognitionRef = useRef(null)
@@ -237,6 +240,41 @@ const PublicValidationFlow = () => {
     }
   }
 
+  // Handle launch notification signup
+  const handleLaunchNotify = async () => {
+    setLaunchNotifySubmitting(true)
+
+    try {
+      // Get email from session if available
+      const { data: session } = await supabase
+        .from('validation_sessions')
+        .select('respondent_email, respondent_name')
+        .eq('id', sessionId)
+        .single()
+
+      if (session?.respondent_email) {
+        // Save to public_leads with launch notification interest
+        await supabase
+          .from('public_leads')
+          .upsert({
+            email: session.respondent_email,
+            name: session.respondent_name || null,
+            source_flow: 'validation_survey',
+            launch_notify: true,
+            launch_notify_at: new Date().toISOString()
+          }, {
+            onConflict: 'email',
+            ignoreDuplicates: false
+          })
+      }
+    } catch (err) {
+      console.error('Error saving launch notification interest:', err)
+    }
+
+    setLaunchNotifySubmitting(false)
+    setLaunchNotifySubmitted(true)
+  }
+
   // Replace {{placeholder}} patterns with actual values and convert markdown
   const replacePlaceholders = (text) => {
     if (!text || !flowData?.placeholders) return text
@@ -283,6 +321,7 @@ const PublicValidationFlow = () => {
       setStepHistory(prev => prev.slice(0, -1))
       setCurrentStepIndex(previousIndex)
       setCurrentAnswer('')
+      setNameInput('')
       setTextListAnswers([])
     }
   }
@@ -341,6 +380,21 @@ const PublicValidationFlow = () => {
           .from('validation_sessions')
           .update({ respondent_email: currentAnswer })
           .eq('id', sessionId)
+      } else if (expectedInput.type === 'name_email') {
+        if (!currentAnswer || !currentAnswer.includes('@')) {
+          alert('Please enter a valid email address')
+          return
+        }
+        // Update session with name and email
+        await supabase
+          .from('validation_sessions')
+          .update({
+            respondent_name: nameInput.trim() || null,
+            respondent_email: currentAnswer
+          })
+          .eq('id', sessionId)
+        // Store combined answer
+        answerValue = { name: nameInput.trim(), email: currentAnswer }
       } else if (!currentAnswer && expectedInput.type !== 'single_select') {
         alert('Please provide an answer before continuing')
         return
@@ -396,6 +450,7 @@ const PublicValidationFlow = () => {
       // Go past the last step to show completion
       setCurrentStepIndex(flowData.steps.length)
       setCurrentAnswer('')
+      setNameInput('')
       setTextListAnswers([])
       return
     }
@@ -435,6 +490,7 @@ const PublicValidationFlow = () => {
     setStepHistory(newHistory)
     setCurrentStepIndex(nextIndex)
     setCurrentAnswer('')
+    setNameInput('')
 
     // Update session with current step (for drop-off tracking)
     await supabase
@@ -489,6 +545,7 @@ const PublicValidationFlow = () => {
     setStepHistory(prev => [...prev, currentStepIndex])
     setCurrentStepIndex(prev => prev + 1)
     setCurrentAnswer('')
+    setNameInput('')
     setTextListAnswers([])
   }
 
@@ -566,7 +623,7 @@ const PublicValidationFlow = () => {
     if (!flowData) return '~5 min'
     const remainingSteps = flowData.steps.length - currentStepIndex
     const minutesPerStep = 0.5 // ~30 seconds per question
-    const minutes = Math.ceil(remainingSteps * minutesPerStep)
+    const minutes = Math.min(Math.ceil(remainingSteps * minutesPerStep), 10) // Cap at 10 min
     return `~${minutes} min`
   }
 
@@ -675,6 +732,26 @@ const PublicValidationFlow = () => {
             onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={inputConfig.placeholder || 'your.email@example.com'}
           />
+        )
+
+      case 'name_email':
+        return (
+          <div className="validation-name-email">
+            <input
+              type="text"
+              className="validation-input"
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              placeholder={inputConfig.name_placeholder || 'Your name (optional)'}
+            />
+            <input
+              type="email"
+              className="validation-input"
+              value={currentAnswer}
+              onChange={(e) => setCurrentAnswer(e.target.value)}
+              placeholder={inputConfig.email_placeholder || 'your.email@example.com'}
+            />
+          </div>
         )
 
       case 'text_list':
@@ -811,11 +888,22 @@ const PublicValidationFlow = () => {
           <div className="completion-cta">
             <p className="cta-intro">Curious what they're using to build this?</p>
             <p className="cta-description">
-              FindMyFlow helps people discover what they're meant to create — and actually follow through on it.
+              Find My Flow helps people discover what they're meant to create — and actually follow through on it.
             </p>
-            <a href="/" className="cta-button" target="_blank" rel="noopener noreferrer">
-              Check out FindMyFlow →
-            </a>
+            {!launchNotifySubmitted ? (
+              <button
+                className="cta-button"
+                onClick={handleLaunchNotify}
+                disabled={launchNotifySubmitting}
+              >
+                {launchNotifySubmitting ? 'Saving...' : 'Keen to learn more about scaling your business and be notified when Find My Flow launches?'}
+              </button>
+            ) : (
+              <div className="launch-notify-success">
+                <span className="launch-notify-icon">🎉</span>
+                <p>You're on the list! We'll let you know when Find My Flow is ready.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
