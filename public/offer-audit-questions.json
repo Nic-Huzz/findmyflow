@@ -1,9 +1,9 @@
 {
   "metadata": {
-    "version": "1.1.0",
-    "total_questions": "5-11 (varies based on answers)",
+    "version": "1.2.0",
+    "total_questions": "6-13 (varies based on answers)",
     "estimated_completion_time_minutes": "2-3",
-    "last_updated": "2026-01-19",
+    "last_updated": "2026-01-20",
     "notes": "Business questions (q6-q11) only shown if user is NOT pre_ladder on wealth ladder"
   },
   "questions": [
@@ -58,6 +58,64 @@
           "label": "Products people buy",
           "value": "products",
           "description": "Digital products, software, or physical goods"
+        }
+      ]
+    },
+    {
+      "id": "q2b_work_energy",
+      "question": "How much does your current work light you up?",
+      "subtext": "Think about the work you do day-to-day",
+      "options": [
+        {
+          "label": "It energises me",
+          "value": "energised",
+          "description": "I genuinely love what I do and it gives me energy"
+        },
+        {
+          "label": "Some parts light me up",
+          "value": "partial_energy",
+          "description": "Certain aspects are great, others drain me"
+        },
+        {
+          "label": "Mostly doing what's necessary",
+          "value": "necessity",
+          "description": "I'm focused on outcomes more than enjoyment"
+        },
+        {
+          "label": "Still searching for my spark",
+          "value": "searching",
+          "description": "I haven't found what truly lights me up yet"
+        }
+      ]
+    },
+    {
+      "id": "q2c_paid_alignment",
+      "question": "Are you being paid well for doing what lights you up?",
+      "subtext": "The goal is alignment between passion and income",
+      "conditional": {
+        "field": "q2b_work_energy",
+        "values": ["energised", "partial_energy", "necessity"]
+      },
+      "options": [
+        {
+          "label": "Yes, great alignment",
+          "value": "well_aligned",
+          "description": "I'm well paid for work I genuinely enjoy"
+        },
+        {
+          "label": "Paid, but want more alignment",
+          "value": "some_alignment",
+          "description": "Making money but not always from my best work"
+        },
+        {
+          "label": "Paid for stuff that drains me",
+          "value": "misaligned",
+          "description": "My income comes from work I don't enjoy"
+        },
+        {
+          "label": "Not making money yet",
+          "value": "not_monetised",
+          "description": "Still figuring out the monetisation piece"
         }
       ]
     },

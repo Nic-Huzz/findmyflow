@@ -14,7 +14,7 @@
     {
       "id": "0.0",
       "step_order_index": 1,
-      "assistant_prompt": "Hey! Got 5 minutes?\n\nSomeone's building something to help people like you, and your honest thoughts will help shape what they create.\n\n\nNo sales pitch. Just real questions from a real human trying to make something actually useful.",
+      "assistant_prompt": "Hey, got 10 mins?\n\nSomeone's building something to help people like you, and your honest thoughts will help shape what they create.\n\nNo sales pitch. Just real questions from a real human trying to make something actually useful.",
       "expected_inputs": [],
       "button_text": "Yeah, let's do it",
       "next_step_rules": [

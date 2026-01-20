@@ -46,14 +46,14 @@
   }
 }
 
-/* Higher positioning on validation pages to avoid overlapping nav buttons */
+/* Position on validation pages - bottom right corner, above footer */
 .zarlo-widget-container.validation-page {
-  bottom: 240px;
+  bottom: 100px;
 }
 
 @media (max-width: 480px) {
   .zarlo-widget-container.validation-page {
-    bottom: 280px;
+    bottom: 120px;
   }
 }
 

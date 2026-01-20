@@ -209,3 +209,77 @@ export const sendNotification = async (userId, { title, body, url, tag }) => {
     return { success: false, error: error.message }
   }
 }
+
+// Check and send validation progress notification
+// Call this when validation responses are received
+export const checkValidationProgressNotification = async (userId, totalResponses, requiredResponses = 3) => {
+  const responsesNeeded = requiredResponses - totalResponses
+
+  // Only notify when 1 or 2 responses away from unlocking
+  if (responsesNeeded <= 0 || responsesNeeded > 2) {
+    return { sent: false, reason: 'Not in notification range' }
+  }
+
+  // Check if we've already notified for this milestone
+  const notificationKey = `validation_progress_${userId}_${totalResponses}`
+  const alreadyNotified = localStorage.getItem(notificationKey)
+
+  if (alreadyNotified) {
+    return { sent: false, reason: 'Already notified for this milestone' }
+  }
+
+  // Determine message based on responses needed
+  let title, body
+  if (responsesNeeded === 1) {
+    title = '1 more response to unlock AI analysis!'
+    body = 'You\'re so close! Get one more validation response to unlock powerful AI insights.'
+  } else if (responsesNeeded === 2) {
+    title = '2 responses away from AI insights'
+    body = 'Your validation survey is gaining traction. 2 more responses unlocks AI analysis.'
+  }
+
+  try {
+    // Try local notification first (instant)
+    if (Notification.permission === 'granted') {
+      await showLocalNotification(title, {
+        body,
+        tag: 'validation-progress',
+        data: { url: '/7-day-challenge' }
+      })
+    }
+
+    // Mark as notified
+    localStorage.setItem(notificationKey, Date.now().toString())
+
+    return { sent: true, responsesNeeded }
+  } catch (error) {
+    console.error('Error sending validation progress notification:', error)
+    return { sent: false, error: error.message }
+  }
+}
+
+// Notify when AI analysis is ready/unlocked
+export const sendAnalysisUnlockedNotification = async (userId) => {
+  const notificationKey = `validation_analysis_unlocked_${userId}`
+  const alreadyNotified = localStorage.getItem(notificationKey)
+
+  if (alreadyNotified) {
+    return { sent: false, reason: 'Already notified' }
+  }
+
+  try {
+    if (Notification.permission === 'granted') {
+      await showLocalNotification('AI Analysis Unlocked!', {
+        body: 'You have 3+ validation responses. Tap to discover what your audience really wants.',
+        tag: 'validation-unlocked',
+        data: { url: '/7-day-challenge' }
+      })
+    }
+
+    localStorage.setItem(notificationKey, Date.now().toString())
+    return { sent: true }
+  } catch (error) {
+    console.error('Error sending analysis unlocked notification:', error)
+    return { sent: false, error: error.message }
+  }
+}

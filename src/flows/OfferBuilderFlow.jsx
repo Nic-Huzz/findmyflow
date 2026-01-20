@@ -350,13 +350,24 @@ function OfferBuilderFlow() {
       const response = await supabase.functions.invoke('skill-recommendations', {
         body: {
           userId: user.id,
-          problemText: problemText, // Pass the selected problem for targeted recommendations
+          problemText: problemText,
           skillClusters: clusters.map(c => ({
             id: c.id,
             cluster_label: c.cluster_label,
             items: c.items,
             proficiency: c.proficiency
-          }))
+          })),
+          // Additional context for better recommendations
+          nicheLayers: nicheLayers,
+          previousAnswers: {
+            painLevel: answers.q1_pain_level?.value,
+            problemArea: answers.q2_problem_area?.value,
+            spendingCapacity: answers.q3_spending_capacity?.value,
+            sunkCost: answers.q4_sunk_cost?.value,
+            emotion: answers.q5_emotion?.value,
+            persona: answers.selected_persona,
+            problem: answers.selected_problem
+          }
         }
       })
 
@@ -529,6 +540,7 @@ function OfferBuilderFlow() {
 
   // Skills panel collapsed state - default OPEN since it's contextually relevant
   const [skillsPanelOpen, setSkillsPanelOpen] = useState(true)
+  const [showFitExplainer, setShowFitExplainer] = useState(false)
 
   // Handle skills panel toggle - fetch AI recommendations on first open
   const handleSkillsPanelToggle = () => {
@@ -2085,11 +2097,27 @@ function OfferBuilderFlow() {
                               <div className="skill-header">
                                 <strong>{cluster.cluster_label}</strong>
                                 {relevanceScore > 0 && (
-                                  <span className={`relevance-indicator ${isHighlyRelevant ? 'high' : relevanceScore >= 5 ? 'medium' : 'low'}`}>
+                                  <span
+                                    className={`relevance-indicator clickable ${isHighlyRelevant ? 'high' : relevanceScore >= 5 ? 'medium' : 'low'}`}
+                                    onClick={(e) => { e.stopPropagation(); setShowFitExplainer(!showFitExplainer) }}
+                                  >
+                                    <span className="relevance-label">Fit</span>
                                     {isHighlyRelevant ? '●●●' : relevanceScore >= 5 ? '●●○' : '●○○'}
                                   </span>
                                 )}
                               </div>
+                              {showFitExplainer && idx === 0 && (
+                                <div className="fit-explainer-popup">
+                                  <button className="fit-explainer-close" onClick={() => setShowFitExplainer(false)}>×</button>
+                                  <h5>Skill Fit Score</h5>
+                                  <p>AI analyses how well each skill matches the problem you selected.</p>
+                                  <div className="fit-legend">
+                                    <span><span className="dot high">●●●</span> Strong fit</span>
+                                    <span><span className="dot medium">●●○</span> Good fit</span>
+                                    <span><span className="dot low">●○○</span> Possible fit</span>
+                                  </div>
+                                </div>
+                              )}
 
                               {/* Equal-sized suggestion buttons */}
                               <div className="delivery-suggestions">

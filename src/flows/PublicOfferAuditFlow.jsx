@@ -120,6 +120,22 @@ const GAP_DEFINITIONS = {
     icon: '💾',
     title: 'No CRM System',
     description: 'Without a system to track customers, leads fall through the cracks.'
+  },
+  // Alignment gaps
+  misaligned: {
+    icon: '😓',
+    title: 'Passion-Income Misalignment',
+    description: 'You\'re being paid for work that drains you. Time to realign what you offer with what lights you up.'
+  },
+  necessity: {
+    icon: '⚡',
+    title: 'Running on Duty, Not Energy',
+    description: 'You\'re doing what\'s necessary but not what energises you. There\'s an opportunity to shift toward more fulfilling work.'
+  },
+  searching: {
+    icon: '🔍',
+    title: 'Still Finding Your Spark',
+    description: 'You haven\'t found what truly lights you up yet. Discovery is the first step to building something meaningful.'
   }
 }
 
@@ -129,6 +145,11 @@ const CATEGORY_CONFIG = {
     name: 'Journey Clarity',
     icon: '🧭',
     color: '#8B5CF6' // Purple
+  },
+  alignment: {
+    name: 'Alignment',
+    icon: '✨',
+    color: '#EC4899' // Pink
   },
   offerStack: {
     name: 'Offer Stack',
@@ -156,6 +177,7 @@ function calculateCategoryLevels(answers) {
 
   const levels = {
     journey: 1,
+    alignment: 1,
     offerStack: null, // null = N/A for pre-ladder
     systems: isPreLadder ? null : 1 // Also N/A for pre-ladder
   }
@@ -176,6 +198,33 @@ function calculateCategoryLevels(answers) {
   } else {
     levels.journey = 1
   }
+
+  // Alignment - based on work energy and paid alignment
+  const workEnergy = answers.q2b_work_energy?.value
+  const paidAlignment = answers.q2c_paid_alignment?.value
+
+  // Calculate alignment score
+  let alignmentScore = 0
+
+  // Work energy scoring
+  if (workEnergy === 'energised') alignmentScore += 3
+  else if (workEnergy === 'partial_energy') alignmentScore += 2
+  else if (workEnergy === 'necessity') alignmentScore += 1
+  else if (workEnergy === 'searching') alignmentScore += 0
+
+  // Paid alignment scoring (if answered)
+  if (paidAlignment === 'well_aligned') alignmentScore += 3
+  else if (paidAlignment === 'some_alignment') alignmentScore += 2
+  else if (paidAlignment === 'misaligned') alignmentScore += 1
+  else if (paidAlignment === 'not_monetised') alignmentScore += 1
+
+  // Calculate level (max 6 points if both answered, max 3 if only work_energy)
+  const maxScore = paidAlignment ? 6 : 3
+  const alignmentRatio = alignmentScore / maxScore
+
+  if (alignmentRatio >= 0.8) levels.alignment = 3
+  else if (alignmentRatio >= 0.5) levels.alignment = 2
+  else levels.alignment = 1
 
   // Offer Stack - only for non-pre-ladder users
   if (wealthLadder && !isPreLadder) {
@@ -248,6 +297,7 @@ function calculateCategoryLevels(answers) {
 function AuditWheel({ categoryLevels }) {
   const categories = [
     { key: 'journey', ...CATEGORY_CONFIG.journey, level: categoryLevels.journey },
+    { key: 'alignment', ...CATEGORY_CONFIG.alignment, level: categoryLevels.alignment },
     { key: 'offerStack', ...CATEGORY_CONFIG.offerStack, level: categoryLevels.offerStack },
     { key: 'systems', ...CATEGORY_CONFIG.systems, level: categoryLevels.systems }
   ]
@@ -256,10 +306,11 @@ function AuditWheel({ categoryLevels }) {
   const center = size / 2
   const maxRadius = 120
   const ringWidth = 35
-  const gapAngle = 8 // degrees between segments
+  const gapAngle = 6 // degrees between segments
 
   // Calculate segment paths
-  const segmentAngle = (360 - (gapAngle * 3)) / 3
+  const numCategories = categories.length
+  const segmentAngle = (360 - (gapAngle * numCategories)) / numCategories
 
   const polarToCartesian = (cx, cy, radius, angleInDegrees) => {
     const angleInRadians = (angleInDegrees - 90) * Math.PI / 180
@@ -436,6 +487,32 @@ const GAP_TO_HELP = {
     feature: 'CRM Optimization',
     description: 'Get more from your CRM with templates, automations, and best practices.',
     icon: '⚙️'
+  },
+  // Alignment help
+  misaligned: {
+    feature: 'Realignment Journey',
+    description: 'Discover what truly lights you up and build offers around your natural strengths instead of draining work.',
+    icon: '🔄'
+  },
+  necessity: {
+    feature: 'Energy Audit',
+    description: 'Identify which parts of your work energise you vs drain you, and restructure your offers accordingly.',
+    icon: '⚡'
+  },
+  searching: {
+    feature: 'Flow Finder Discovery',
+    description: 'Our AI-guided flow helps you identify the skills, problems, and personas that align with your natural strengths.',
+    icon: '🔍'
+  },
+  some_alignment: {
+    feature: 'Offer Refinement',
+    description: 'Shift more of your income toward work that lights you up by refining your offer stack.',
+    icon: '✨'
+  },
+  not_monetised: {
+    feature: 'Monetisation Strategy',
+    description: 'Turn what you love doing into income with a clear path from passion to paying customers.',
+    icon: '💡'
   }
 }
 
@@ -470,6 +547,17 @@ const STRENGTH_DEFINITIONS = {
     icon: '✅',
     title: 'Active CRM Usage',
     description: 'You\'re systematically managing your customer relationships.'
+  },
+  // Alignment strengths
+  energised: {
+    icon: '✨',
+    title: 'Work That Energises You',
+    description: 'You genuinely love what you do - this is the foundation for sustainable success.'
+  },
+  well_aligned: {
+    icon: '💰',
+    title: 'Passion-Income Alignment',
+    description: 'You\'re being well paid for work you enjoy. This is the goal!'
   }
 }
 
@@ -495,7 +583,7 @@ export default function PublicOfferAuditFlow() {
   const [gaps, setGaps] = useState([])
   const [strengths, setStrengths] = useState([])
   const [helpItems, setHelpItems] = useState([])
-  const [categoryLevels, setCategoryLevels] = useState({ journey: 1, offerStack: null, systems: 1 })
+  const [categoryLevels, setCategoryLevels] = useState({ journey: 1, alignment: 1, offerStack: null, systems: 1 })
 
   // Email gate state
   const [email, setEmail] = useState(null)
@@ -644,6 +732,8 @@ export default function PublicOfferAuditFlow() {
             score: results.score,
             top_gap: results.gaps[0]?.title || null,
             wealth_ladder: answers.q2_wealth_ladder?.value || null,
+            work_energy: answers.q2b_work_energy?.value || null,
+            paid_alignment: answers.q2c_paid_alignment?.value || null,
             emotion: answers.q4_current_emotion?.value || null,
             category_levels: levels
           },
@@ -666,7 +756,9 @@ export default function PublicOfferAuditFlow() {
             personalization_tokens: {
               score: results.score,
               top_gap: results.gaps[0]?.title || null,
-              wealth_ladder: answers.q2_wealth_ladder?.value || null
+              wealth_ladder: answers.q2_wealth_ladder?.value || null,
+              work_energy: answers.q2b_work_energy?.value || null,
+              paid_alignment: answers.q2c_paid_alignment?.value || null
             }
           }
         })
@@ -718,6 +810,7 @@ export default function PublicOfferAuditFlow() {
     const generateWheelHtml = () => {
       const categories = [
         { name: 'Journey Clarity', icon: '🧭', color: '#8B5CF6', level: categoryLevels.journey },
+        { name: 'Alignment', icon: '✨', color: '#EC4899', level: categoryLevels.alignment },
         { name: 'Offer Stack', icon: '📦', color: '#F59E0B', level: categoryLevels.offerStack },
         { name: 'Systems', icon: '📊', color: '#10B981', level: categoryLevels.systems }
       ]
@@ -853,7 +946,10 @@ export default function PublicOfferAuditFlow() {
             <p><span className="time-icon">⏱️</span></p>
             <p><strong>This takes about 2-3 minutes</strong></p>
             <p className="explainer-text">
-              Most businesses leave money on the table because they're missing key pieces of their <strong>offer stack</strong> — the strategic combination of products at different price points that maximizes customer value.
+              The key to <strong>monetising your mission for location + financial independence</strong> is creating a business model that maximises how much you're paid for doing stuff that lights you up.
+            </p>
+            <p className="explainer-text">
+              This means building an <strong>offer stack</strong> — a strategic combination of products at different price points that maximises customer value while playing to your strengths.
             </p>
             <p className="explainer-highlight">
               This quick audit will reveal where you are on your journey, which pieces you have in place, and where to focus next.

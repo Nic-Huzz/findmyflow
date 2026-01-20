@@ -1,6 +1,7 @@
 /**
  * ValidationResponsesInput.css
  * Styles for the validation responses tracking and AI analysis quest input
+ * Includes sentiment badges, analysis history, and export functionality
  */
 
 .validation-responses-input {
@@ -116,6 +117,53 @@
 .vri-marker.filled {
   background: linear-gradient(135deg, #00d4ff, #7c3aed);
   color: #fff;
+}
+
+/* Preview Quotes Section */
+.vri-preview-section {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.vri-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.vri-preview-icon {
+  font-size: 1.25rem;
+}
+
+.vri-preview-quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vri-preview-quote {
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 3px solid #7c3aed;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  border-radius: 0 8px 8px 0;
+  color: #ccc;
+  font-style: italic;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.vri-preview-cta {
+  text-align: center;
+  color: #f59e0b;
+  font-size: 0.85rem;
+  margin: 1rem 0 0 0;
+  font-weight: 500;
 }
 
 /* Empty State */
@@ -326,6 +374,65 @@
   margin-top: 0.75rem;
 }
 
+/* Re-analyze Section */
+.vri-reanalyze-section {
+  text-align: center;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.vri-reanalyze-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.vri-new-responses-badge {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.vri-reanalyze-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.vri-reanalyze-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(34, 197, 94, 0.4);
+}
+
+.vri-reanalyze-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.vri-reanalyze-note {
+  color: #888;
+  font-size: 0.75rem;
+  margin-top: 0.75rem;
+}
+
 /* Analysis Report */
 .vri-report {
   background: rgba(255, 255, 255, 0.03);
@@ -341,9 +448,17 @@
   padding: 1rem 1.25rem;
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
-.vri-report-header h4 {
+.vri-report-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.vri-report-title h4 {
   margin: 0;
   font-size: 1rem;
   color: #fff;
@@ -352,8 +467,49 @@
   gap: 0.5rem;
 }
 
-.vri-report-header h4::before {
+.vri-report-title h4::before {
   content: '🤖';
+}
+
+.vri-analysis-version {
+  background: rgba(0, 212, 255, 0.2);
+  color: #00d4ff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.vri-analysis-date {
+  color: #888;
+  font-size: 0.75rem;
+}
+
+.vri-report-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vri-history-btn,
+.vri-export-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #ccc;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.vri-history-btn:hover,
+.vri-export-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
 }
 
 .vri-toggle-report {
@@ -371,6 +527,170 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
+/* History Dropdown */
+.vri-history-dropdown {
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem;
+}
+
+.vri-history-title {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  padding: 0 0.5rem;
+}
+
+.vri-history-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-align: left;
+}
+
+.vri-history-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.vri-history-item.active {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.vri-history-number {
+  color: #00d4ff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.vri-history-meta {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+/* Badge Legend */
+.vri-badge-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.75rem;
+}
+
+.vri-legend-title {
+  color: #888;
+  font-weight: 500;
+}
+
+.vri-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #aaa;
+}
+
+/* Badge Styles */
+.vri-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.vri-badge-opportunity {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.vri-badge-gold {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.vri-badge-pattern {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+/* Badged List Items */
+.vri-badged-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.vri-badged-item.has-badge {
+  padding-left: 0;
+}
+
+.vri-badged-item.badge-opportunity {
+  border-left: 2px solid #ef4444;
+  padding-left: 0.75rem;
+  margin-left: -0.75rem;
+}
+
+.vri-badged-item.badge-gold {
+  border-left: 2px solid #f59e0b;
+  padding-left: 0.75rem;
+  margin-left: -0.75rem;
+}
+
+.vri-badged-item.badge-pattern {
+  border-left: 2px solid #3b82f6;
+  padding-left: 0.75rem;
+  margin-left: -0.75rem;
+}
+
+.vri-item-text {
+  flex: 1;
+  color: #ccc;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.vri-copy-btn {
+  background: transparent;
+  border: none;
+  color: #666;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  opacity: 0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.vri-badged-item:hover .vri-copy-btn {
+  opacity: 1;
+}
+
+.vri-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #00d4ff;
+}
+
+.vri-copy-btn.copied {
+  color: #22c55e;
+  opacity: 1;
+}
+
+/* Report Content */
 .vri-report-content {
   padding: 1.25rem;
 }
@@ -389,11 +709,21 @@
   margin: 0 0 0.75rem 0;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vri-click-hint {
+  font-size: 0.7rem;
+  color: #666;
+  font-weight: normal;
 }
 
 .vri-report-section ul {
   margin: 0;
   padding-left: 1.25rem;
+  list-style: none;
 }
 
 .vri-report-section li {
@@ -408,6 +738,29 @@
   font-size: 0.9rem;
   line-height: 1.6;
   margin: 0;
+}
+
+.vri-pricing-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.vri-pricing-text.has-badge {
+  padding-left: 0.75rem;
+  border-left: 2px solid transparent;
+}
+
+.vri-pricing-text.badge-opportunity {
+  border-left-color: #ef4444;
+}
+
+.vri-pricing-text.badge-gold {
+  border-left-color: #f59e0b;
+}
+
+.vri-pricing-text.badge-pattern {
+  border-left-color: #3b82f6;
 }
 
 .vri-summary-section {
@@ -430,6 +783,64 @@
   padding: 0.35rem 0.75rem;
   border-radius: 16px;
   font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
+}
+
+.vri-language-tag:hover {
+  background: rgba(124, 58, 237, 0.3);
+  transform: translateY(-1px);
+}
+
+.vri-language-tag.badge-gold {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.vri-language-tag.badge-opportunity {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.vri-language-tag.badge-pattern {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.vri-tag-badge {
+  font-size: 0.75rem;
+}
+
+.vri-copied-indicator {
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #22c55e;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  animation: vri-fade-in 0.2s ease;
+}
+
+@keyframes vri-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 /* Question Analysis */
@@ -503,7 +914,387 @@
   box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
 }
 
-/* Responsive */
+/* =============================================
+   VALIDATION SCORE GAUGE
+   ============================================= */
+
+.vri-validation-score {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin: 0 1.25rem 1rem;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.vri-score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.vri-score-header h5 {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.vri-confidence {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  text-transform: capitalize;
+}
+
+.vri-confidence-low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.vri-confidence-medium { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+.vri-confidence-high { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+
+.vri-score-gauge {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.vri-gauge-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.vri-gauge-circle svg {
+  width: 100%;
+  height: 100%;
+}
+
+.vri-gauge-fill {
+  transition: stroke-dasharray 0.8s ease;
+}
+
+.vri-gauge-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.vri-score-components {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.vri-score-component {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.vri-component-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.vri-component-name {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.vri-component-value {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.vri-component-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.vri-component-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.vri-component-reason {
+  font-size: 0.7rem;
+  color: #888;
+  line-height: 1.4;
+}
+
+.vri-score-recommendation {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #ccc;
+  border-left: 3px solid #00d4ff;
+}
+
+/* =============================================
+   TABS NAVIGATION
+   ============================================= */
+
+.vri-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.vri-tab {
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.vri-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ccc;
+}
+
+.vri-tab.active {
+  background: rgba(0, 212, 255, 0.1);
+  color: #00d4ff;
+}
+
+.vri-tab-link {
+  color: #7c3aed;
+}
+
+.vri-tab-link:hover {
+  color: #a78bfa;
+}
+
+.vri-no-data {
+  color: #888;
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+/* =============================================
+   SEGMENTATION
+   ============================================= */
+
+.vri-segmentation {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.vri-segment-card {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border-left: 4px solid;
+  padding: 1rem;
+}
+
+.vri-segment-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.vri-segment-icon {
+  font-size: 1.5rem;
+}
+
+.vri-segment-label {
+  font-weight: 600;
+  color: #fff;
+  flex: 1;
+}
+
+.vri-segment-count {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.vri-segment-section {
+  margin-bottom: 0.75rem;
+}
+
+.vri-segment-section:last-child {
+  margin-bottom: 0;
+}
+
+.vri-segment-title {
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.vri-segment-section ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.vri-segment-section li {
+  font-size: 0.85rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 0.25rem;
+}
+
+.vri-segment-section p {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =============================================
+   SUGGESTED ACTIONS
+   ============================================= */
+
+.vri-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.vri-action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.vri-action-priority {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.vri-action-item {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+}
+
+.vri-action-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.vri-action-category {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: capitalize;
+}
+
+.vri-action-text {
+  font-size: 0.9rem;
+  color: #fff;
+  line-height: 1.5;
+}
+
+.vri-action-source {
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* =============================================
+   COMPETITOR ANALYSIS
+   ============================================= */
+
+.vri-competitors {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.vri-comp-section {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.vri-comp-section h6 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.vri-comp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.vri-comp-tag {
+  background: rgba(124, 58, 237, 0.2);
+  color: #a78bfa;
+  padding: 0.35rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+}
+
+.vri-comp-section ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.vri-comp-section li {
+  font-size: 0.85rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 0.35rem;
+}
+
+.vri-gap-item {
+  color: #22c55e !important;
+}
+
+.vri-positioning {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.vri-positioning p {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
 @media (max-width: 480px) {
   .vri-count-number {
     font-size: 2.5rem;
@@ -518,5 +1309,44 @@
   .vri-flow-count {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .vri-report-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vri-report-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .vri-badge-legend {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .vri-history-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .vri-score-components {
+    grid-template-columns: 1fr;
+  }
+
+  .vri-tabs {
+    padding: 0.5rem;
+  }
+
+  .vri-tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .vri-validation-score {
+    margin: 0 0.75rem 1rem;
   }
 }

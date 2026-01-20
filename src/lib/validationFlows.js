@@ -223,20 +223,83 @@ export async function deleteValidationFlow(flowId) {
 /**
  * Get response summary/analytics for a flow
  * @param {string} flowId
+ * @param {string} timePeriod - 'all' | '7days' | '30days'
  * @returns {Promise<Object>}
  */
-export async function getFlowAnalytics(flowId) {
+export async function getFlowAnalytics(flowId, timePeriod = 'all') {
   try {
+    // Calculate date filter based on time period
+    let dateFilter = null
+    const now = new Date()
+    if (timePeriod === '7days') {
+      dateFilter = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString()
+    } else if (timePeriod === '30days') {
+      dateFilter = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString()
+    }
+
     // Get ALL sessions (including incomplete) for drop-off analysis
-    const { data: allSessions, error: allSessionsError } = await supabase
+    let sessionsQuery = supabase
       .from('validation_sessions')
       .select('*')
       .eq('flow_id', flowId)
       .order('started_at', { ascending: false })
 
+    if (dateFilter) {
+      sessionsQuery = sessionsQuery.gte('started_at', dateFilter)
+    }
+
+    const { data: allSessions, error: allSessionsError } = await sessionsQuery
+
     if (allSessionsError) throw allSessionsError
 
     const completedSessions = allSessions.filter(s => s.is_completed)
+
+    // Calculate previous period for trends
+    let previousPeriodData = null
+    if (timePeriod !== 'all') {
+      const periodMs = timePeriod === '7days' ? 7 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000
+      const previousStart = new Date(now.getTime() - 2 * periodMs).toISOString()
+      const previousEnd = dateFilter
+
+      const { data: prevSessions } = await supabase
+        .from('validation_sessions')
+        .select('*')
+        .eq('flow_id', flowId)
+        .gte('started_at', previousStart)
+        .lt('started_at', previousEnd)
+
+      if (prevSessions && prevSessions.length > 0) {
+        const prevCompleted = prevSessions.filter(s => s.is_completed)
+        previousPeriodData = {
+          totalStarted: prevSessions.length,
+          totalCompleted: prevCompleted.length,
+          completionRate: prevSessions.length > 0
+            ? Math.round((prevCompleted.length / prevSessions.length) * 100)
+            : 0
+        }
+      }
+    }
+
+    // Calculate daily data for sparklines (last 7 days)
+    const dailyData = []
+    for (let i = 6; i >= 0; i--) {
+      const dayStart = new Date(now)
+      dayStart.setDate(dayStart.getDate() - i)
+      dayStart.setHours(0, 0, 0, 0)
+      const dayEnd = new Date(dayStart)
+      dayEnd.setDate(dayEnd.getDate() + 1)
+
+      const dayCompleted = allSessions.filter(s => {
+        if (!s.is_completed || !s.completed_at) return false
+        const completedDate = new Date(s.completed_at)
+        return completedDate >= dayStart && completedDate < dayEnd
+      }).length
+
+      dailyData.push({
+        date: dayStart.toISOString().split('T')[0],
+        completed: dayCompleted
+      })
+    }
 
     const analytics = {
       // Core metrics
@@ -246,6 +309,18 @@ export async function getFlowAnalytics(flowId) {
         ? Math.round((completedSessions.length / allSessions.length) * 100)
         : 0,
       averageTime: 0,
+
+      // Trend data (compared to previous period)
+      trends: previousPeriodData ? {
+        startedChange: allSessions.length - previousPeriodData.totalStarted,
+        completedChange: completedSessions.length - previousPeriodData.totalCompleted,
+        rateChange: (allSessions.length > 0
+          ? Math.round((completedSessions.length / allSessions.length) * 100)
+          : 0) - previousPeriodData.completionRate
+      } : null,
+
+      // Sparkline data (last 7 days)
+      sparklineData: dailyData,
 
       // Device breakdown
       deviceBreakdown: {

@@ -11,6 +11,15 @@ import {
   getFlowAnalytics
 } from '../lib/validationFlows'
 import { PROBLEM_SEGMENTS, PERSONA_SEGMENTS } from '../lib/wheelTaxonomy'
+import {
+  ResponseTimeline,
+  FunnelVisualization,
+  GeographicBreakdown,
+  QuestionBreakdown,
+  AnswerClustering,
+  SentimentIndicators,
+  PDFReportGenerator
+} from '../components/AdvancedAnalytics'
 import './ValidationFlowsManager.css'
 import '../Profile.css'
 
@@ -49,6 +58,15 @@ const ValidationFlowsManager = () => {
   const [editSaving, setEditSaving] = useState(false)
   const [aiSummary, setAiSummary] = useState(null)
   const [aiSummaryLoading, setAiSummaryLoading] = useState(false)
+  const [timePeriod, setTimePeriod] = useState('all')
+  const [analyticsLoading, setAnalyticsLoading] = useState(false)
+  const [animatedValues, setAnimatedValues] = useState({})
+  const [showQuestionBreakdown, setShowQuestionBreakdown] = useState(false)
+  const [allSessions, setAllSessions] = useState([])
+  const [activeAnalyticsTab, setActiveAnalyticsTab] = useState('overview') // overview | deep-dive
+  const [openMenuId, setOpenMenuId] = useState(null) // For flow card dropdown menu
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filterStatus, setFilterStatus] = useState('all') // all | active | inactive | has_responses
 
   // Taxonomy data for dropdowns
   const [useCustomProblem, setUseCustomProblem] = useState(false)
@@ -72,6 +90,17 @@ const ValidationFlowsManager = () => {
       loadFlows()
     }
   }, [user])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (openMenuId && !e.target.closest('.more-options-container')) {
+        setOpenMenuId(null)
+      }
+    }
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [openMenuId])
 
   const loadFlows = async () => {
     setLoading(true)
@@ -144,10 +173,142 @@ const ValidationFlowsManager = () => {
   const handleViewResponses = async (flow) => {
     setSelectedFlow(flow)
     setAiSummary(null) // Clear previous AI summary
+    setAnalyticsLoading(true)
+    setActiveAnalyticsTab('overview')
     const data = await getFlowResponses(flow.id)
-    const analyticsData = await getFlowAnalytics(flow.id)
+    const analyticsData = await getFlowAnalytics(flow.id, timePeriod)
     setResponses(data)
     setAnalytics(analyticsData)
+    // Store sessions for geographic and timeline data
+    setAllSessions(analyticsData?.recentSessions || [])
+    setAnalyticsLoading(false)
+    // Trigger animation for values
+    animateValues(analyticsData)
+  }
+
+  const refreshAnalytics = async () => {
+    if (!selectedFlow) return
+    setAnalyticsLoading(true)
+    const analyticsData = await getFlowAnalytics(selectedFlow.id, timePeriod)
+    setAnalytics(analyticsData)
+    setAnalyticsLoading(false)
+    animateValues(analyticsData)
+  }
+
+  const handleTimePeriodChange = async (period) => {
+    setTimePeriod(period)
+    if (selectedFlow) {
+      setAnalyticsLoading(true)
+      const analyticsData = await getFlowAnalytics(selectedFlow.id, period)
+      setAnalytics(analyticsData)
+      setAnalyticsLoading(false)
+      animateValues(analyticsData)
+    }
+  }
+
+  // Animate numeric values counting up
+  const animateValues = (data) => {
+    if (!data) return
+    setAnimatedValues({ started: 0, completed: 0, rate: 0, time: 0 })
+    const duration = 800
+    const steps = 30
+    const interval = duration / steps
+    let step = 0
+
+    const timer = setInterval(() => {
+      step++
+      const progress = step / steps
+      const easeOut = 1 - Math.pow(1 - progress, 3)
+      setAnimatedValues({
+        started: Math.round(data.totalStarted * easeOut),
+        completed: Math.round(data.totalCompleted * easeOut),
+        rate: Math.round(data.completionRate * easeOut),
+        time: Math.round(data.averageTime * easeOut)
+      })
+      if (step >= steps) clearInterval(timer)
+    }, interval)
+  }
+
+  // Get color based on completion rate
+  const getCompletionRateColor = (rate) => {
+    if (rate >= 70) return 'good'
+    if (rate >= 40) return 'moderate'
+    return 'poor'
+  }
+
+  // Render mini sparkline
+  const renderSparkline = (data) => {
+    if (!data || data.length === 0) return null
+    const max = Math.max(...data.map(d => d.completed), 1)
+    const width = 60
+    const height = 20
+    const points = data.map((d, i) => {
+      const x = (i / (data.length - 1)) * width
+      const y = height - (d.completed / max) * height
+      return `${x},${y}`
+    }).join(' ')
+
+    return (
+      <svg className="sparkline" width={width} height={height}>
+        <polyline
+          points={points}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    )
+  }
+
+  // Render trend indicator
+  const renderTrendIndicator = (change) => {
+    if (change === null || change === undefined) return null
+    if (change > 0) return <span className="trend-indicator up">↑{change}</span>
+    if (change < 0) return <span className="trend-indicator down">↓{Math.abs(change)}</span>
+    return <span className="trend-indicator neutral">—</span>
+  }
+
+  // Render progress ring
+  const renderProgressRing = (percentage) => {
+    const size = 80
+    const strokeWidth = 8
+    const radius = (size - strokeWidth) / 2
+    const circumference = radius * 2 * Math.PI
+    const offset = circumference - (percentage / 100) * circumference
+    const colorClass = getCompletionRateColor(percentage)
+
+    return (
+      <div className={`progress-ring-container ${colorClass}`}>
+        <svg width={size} height={size} className="progress-ring">
+          <circle
+            className="progress-ring-bg"
+            strokeWidth={strokeWidth}
+            fill="transparent"
+            r={radius}
+            cx={size / 2}
+            cy={size / 2}
+          />
+          <circle
+            className="progress-ring-fill"
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            fill="transparent"
+            r={radius}
+            cx={size / 2}
+            cy={size / 2}
+            style={{
+              strokeDasharray: circumference,
+              strokeDashoffset: offset,
+              transform: 'rotate(-90deg)',
+              transformOrigin: '50% 50%'
+            }}
+          />
+        </svg>
+        <div className="progress-ring-value">{percentage}%</div>
+      </div>
+    )
   }
 
   const handleToggleStatus = async (flowId, currentStatus) => {
@@ -440,6 +601,39 @@ const ValidationFlowsManager = () => {
     return email.substring(0, 2).toUpperCase()
   }
 
+  // Filter flows based on search and status
+  const filteredFlows = flows.filter(flow => {
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      const matchesName = flow.flow_name?.toLowerCase().includes(query)
+      const matchesDesc = flow.flow_description?.toLowerCase().includes(query)
+      if (!matchesName && !matchesDesc) return false
+    }
+    // Status filter
+    if (filterStatus === 'active' && !flow.is_active) return false
+    if (filterStatus === 'inactive' && flow.is_active) return false
+    if (filterStatus === 'has_responses' && (flow.response_count || 0) === 0) return false
+    return true
+  })
+
+  // Get time ago string
+  const getTimeAgo = (dateString) => {
+    if (!dateString) return null
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now - date
+    const diffMins = Math.floor(diffMs / 60000)
+    const diffHours = Math.floor(diffMs / 3600000)
+    const diffDays = Math.floor(diffMs / 86400000)
+
+    if (diffMins < 1) return 'Just now'
+    if (diffMins < 60) return `${diffMins}m ago`
+    if (diffHours < 24) return `${diffHours}h ago`
+    if (diffDays < 7) return `${diffDays}d ago`
+    return date.toLocaleDateString()
+  }
+
   if (loading) {
     return (
       <div className="dashboard-container">
@@ -516,81 +710,182 @@ const ValidationFlowsManager = () => {
       <div className="manager-content">
         {/* Flows List */}
         <div className="flows-list">
-          <h2>Your Flows</h2>
-          {flows.length === 0 ? (
-            <div className="empty-state">
-              <p>No validation flows yet. Create one to get started!</p>
+          <div className="flows-list-header">
+            <h2>Your Flows</h2>
+            <span className="flow-count">{flows.length} total</span>
+          </div>
+
+          {/* Search & Filter Bar */}
+          <div className="search-filter-bar">
+            <div className="search-input-wrapper">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                placeholder="Search flows..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+              {searchQuery && (
+                <button className="clear-search" onClick={() => setSearchQuery('')}>×</button>
+              )}
             </div>
-          ) : (
-            flows.map(flow => (
-              <div key={flow.id} className="flow-card">
-                <div className="flow-card-header">
-                  <div>
-                    <h3>{flow.flow_name}</h3>
-                    <p>{flow.flow_description}</p>
-                  </div>
-                  <div className={`flow-status ${flow.is_active ? 'active' : 'inactive'}`}>
-                    {flow.is_active ? 'Active' : 'Inactive'}
-                  </div>
-                </div>
+            <div className="filter-chips">
+              <button
+                className={`filter-chip ${filterStatus === 'all' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('all')}
+              >
+                All
+              </button>
+              <button
+                className={`filter-chip ${filterStatus === 'active' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('active')}
+              >
+                Active
+              </button>
+              <button
+                className={`filter-chip ${filterStatus === 'has_responses' ? 'active' : ''}`}
+                onClick={() => setFilterStatus('has_responses')}
+              >
+                Has Responses
+              </button>
+            </div>
+          </div>
 
-                <div className="flow-card-stats">
-                  <div className="stat">
-                    <span className="stat-value">{flow.response_count}</span>
-                    <span className="stat-label">Responses</span>
-                  </div>
-                  <div className="stat">
-                    <span className="stat-value">{new Date(flow.created_at).toLocaleDateString()}</span>
-                    <span className="stat-label">Created</span>
-                  </div>
+          {flows.length === 0 ? (
+            <div className="empty-state-v2">
+              <div className="empty-illustration">
+                <div className="empty-icon-circle">
+                  <span>📋</span>
                 </div>
-
-                <div className="flow-card-actions">
-                  <button
-                    className="copy-link-btn"
-                    onClick={() => copyShareLink(flow.share_token)}
-                  >
-                    {copiedToken === flow.share_token ? '✓ Copied!' : '📋 Copy Link'}
-                  </button>
-                  <button
-                    className="qr-btn"
-                    onClick={() => setQrCodeFlow(flow)}
-                  >
-                    📱 QR Code
-                  </button>
-                  <button
-                    className="preview-btn"
-                    onClick={() => handlePreviewFlow(flow)}
-                  >
-                    👁️ Preview
-                  </button>
-                  <button
-                    className="view-responses-btn"
-                    onClick={() => handleViewResponses(flow)}
-                  >
-                    View Responses
-                  </button>
-                  <button
-                    className="edit-btn"
-                    onClick={() => handleEditFlow(flow)}
-                  >
-                    ✏️ Edit
-                  </button>
-                  <button
-                    className="toggle-status-btn"
-                    onClick={() => handleToggleStatus(flow.id, flow.is_active)}
-                  >
-                    {flow.is_active ? 'Deactivate' : 'Activate'}
-                  </button>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(flow.id)}
-                  >
-                    Delete
-                  </button>
+                <div className="empty-decorations">
+                  <span className="decoration d1"></span>
+                  <span className="decoration d2"></span>
+                  <span className="decoration d3"></span>
                 </div>
               </div>
-            ))
+              <h3>Create your first validation flow</h3>
+              <p>Validation flows help you collect feedback from potential customers before building your product.</p>
+              <button className="empty-cta-btn" onClick={() => setShowCreateModal(true)}>
+                + Create Validation Flow
+              </button>
+            </div>
+          ) : filteredFlows.length === 0 ? (
+            <div className="no-results">
+              <span className="no-results-icon">🔍</span>
+              <p>No flows match your search</p>
+              <button className="clear-filters-btn" onClick={() => { setSearchQuery(''); setFilterStatus('all'); }}>
+                Clear filters
+              </button>
+            </div>
+          ) : (
+            <div className="flows-grid">
+              {filteredFlows.map(flow => (
+                <div key={flow.id} className={`flow-card-v2 ${!flow.is_active ? 'inactive' : ''}`}>
+                  <div className="card-accent"></div>
+
+                  <div className="card-content">
+                    <div className="card-top">
+                      <div className="card-title-section">
+                        <h3>{flow.flow_name}</h3>
+                        <p className="card-description">{flow.flow_description}</p>
+                      </div>
+                      <div className={`status-badge ${flow.is_active ? 'active' : 'inactive'}`}>
+                        <span className="status-dot"></span>
+                        {flow.is_active ? 'Live' : 'Paused'}
+                      </div>
+                    </div>
+
+                    <div className="card-stats">
+                      <div className="stat-item">
+                        <span className="stat-number">{flow.response_count || 0}</span>
+                        <span className="stat-label">responses</span>
+                      </div>
+                      <div className="stat-divider"></div>
+                      <div className="stat-item">
+                        <span className="stat-date">{new Date(flow.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                        <span className="stat-label">created</span>
+                      </div>
+                    </div>
+
+                    <div className="card-actions">
+                      {/* Primary Action */}
+                      <button
+                        className="btn-primary"
+                        onClick={() => handleViewResponses(flow)}
+                      >
+                        View Responses
+                      </button>
+
+                      {/* Icon Actions */}
+                      <div className="icon-actions">
+                        <button
+                          className="icon-btn"
+                          onClick={() => copyShareLink(flow.share_token)}
+                          title="Copy share link"
+                        >
+                          {copiedToken === flow.share_token ? '✓' : '🔗'}
+                        </button>
+                        <button
+                          className="icon-btn"
+                          onClick={() => setQrCodeFlow(flow)}
+                          title="QR Code"
+                        >
+                          📱
+                        </button>
+                        <button
+                          className="icon-btn"
+                          onClick={() => handlePreviewFlow(flow)}
+                          title="Preview"
+                        >
+                          👁️
+                        </button>
+                        <button
+                          className="icon-btn"
+                          onClick={() => handleEditFlow(flow)}
+                          title="Edit"
+                        >
+                          ✏️
+                        </button>
+
+                        {/* More Options */}
+                        <div className="more-options-container">
+                          <button
+                            className="icon-btn"
+                            onClick={() => setOpenMenuId(openMenuId === flow.id ? null : flow.id)}
+                            title="More"
+                          >
+                            ⋯
+                          </button>
+                          {openMenuId === flow.id && (
+                            <div className="dropdown-menu">
+                              <button
+                                className="dropdown-item"
+                                onClick={() => {
+                                  handleToggleStatus(flow.id, flow.is_active)
+                                  setOpenMenuId(null)
+                                }}
+                              >
+                                {flow.is_active ? '⏸️ Pause' : '▶️ Resume'}
+                              </button>
+                              <button
+                                className="dropdown-item danger"
+                                onClick={() => {
+                                  handleDelete(flow.id)
+                                  setOpenMenuId(null)
+                                }}
+                              >
+                                🗑️ Delete
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
 
@@ -611,74 +906,222 @@ const ValidationFlowsManager = () => {
               </div>
             </div>
 
-            {/* Analytics Summary */}
-            {analytics && (
-              <div className="analytics-dashboard">
-                {/* Core Metrics */}
-                <div className="analytics-summary">
-                  <div className="analytics-stat">
-                    <div className="analytics-value">{analytics.totalStarted || analytics.totalResponses || 0}</div>
-                    <div className="analytics-label">Started</div>
-                  </div>
-                  <div className="analytics-stat highlight">
-                    <div className="analytics-value">{analytics.totalCompleted || analytics.totalResponses || 0}</div>
-                    <div className="analytics-label">Completed</div>
-                  </div>
-                  <div className="analytics-stat">
-                    <div className="analytics-value">{analytics.completionRate || 0}%</div>
-                    <div className="analytics-label">Completion Rate</div>
-                  </div>
-                  <div className="analytics-stat">
-                    <div className="analytics-value">{analytics.averageTime || 0} min</div>
-                    <div className="analytics-label">Avg. Time</div>
-                  </div>
+            {/* Enhanced Analytics Dashboard */}
+            <div className="analytics-dashboard enhanced">
+              {/* Time Period Selector + Refresh */}
+              <div className="analytics-controls">
+                <div className="time-period-tabs">
+                  <button
+                    className={`period-tab ${timePeriod === '7days' ? 'active' : ''}`}
+                    onClick={() => handleTimePeriodChange('7days')}
+                  >
+                    Last 7 days
+                  </button>
+                  <button
+                    className={`period-tab ${timePeriod === '30days' ? 'active' : ''}`}
+                    onClick={() => handleTimePeriodChange('30days')}
+                  >
+                    Last 30 days
+                  </button>
+                  <button
+                    className={`period-tab ${timePeriod === 'all' ? 'active' : ''}`}
+                    onClick={() => handleTimePeriodChange('all')}
+                  >
+                    All time
+                  </button>
                 </div>
-
-                {/* Device Breakdown */}
-                {analytics.deviceBreakdown && (analytics.deviceBreakdown.mobile > 0 || analytics.deviceBreakdown.desktop > 0) && (
-                  <div className="analytics-section">
-                    <h4>Device Breakdown</h4>
-                    <div className="device-breakdown">
-                      <div className="device-stat">
-                        <span className="device-icon">📱</span>
-                        <span className="device-count">{analytics.deviceBreakdown.mobile || 0}</span>
-                        <span className="device-label">Mobile</span>
-                      </div>
-                      <div className="device-stat">
-                        <span className="device-icon">💻</span>
-                        <span className="device-count">{analytics.deviceBreakdown.desktop || 0}</span>
-                        <span className="device-label">Desktop</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Drop-off Funnel */}
-                {analytics.dropOffFunnel && Object.keys(analytics.dropOffFunnel).length > 0 && (
-                  <div className="analytics-section">
-                    <h4>Drop-off Points</h4>
-                    <div className="dropoff-funnel">
-                      {Object.entries(analytics.dropOffFunnel)
-                        .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
-                        .map(([step, count]) => (
-                          <div key={step} className="dropoff-item">
-                            <span className="dropoff-step">Q{parseInt(step) + 1}</span>
-                            <div className="dropoff-bar-container">
-                              <div
-                                className="dropoff-bar"
-                                style={{
-                                  width: `${Math.min(100, (count / (analytics.totalStarted - analytics.totalCompleted)) * 100)}%`
-                                }}
-                              />
-                            </div>
-                            <span className="dropoff-count">{count} left</span>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                )}
+                <button
+                  className={`refresh-btn ${analyticsLoading ? 'loading' : ''}`}
+                  onClick={refreshAnalytics}
+                  disabled={analyticsLoading}
+                  title="Refresh analytics"
+                >
+                  {analyticsLoading ? (
+                    <span className="refresh-spinner"></span>
+                  ) : (
+                    '↻'
+                  )}
+                </button>
               </div>
-            )}
+
+              {/* Analytics Content */}
+              {analyticsLoading && !analytics ? (
+                <div className="analytics-loading">
+                  <div className="spinner"></div>
+                  <p>Loading analytics...</p>
+                </div>
+              ) : analytics && (analytics.totalStarted > 0 || analytics.totalCompleted > 0) ? (
+                <>
+                  {/* Core Metrics */}
+                  <div className="analytics-summary">
+                    <div className="analytics-stat" title="Total number of people who started the survey">
+                      <div className="stat-header">
+                        <div className="analytics-value animate-value">
+                          {animatedValues.started ?? analytics.totalStarted ?? 0}
+                        </div>
+                        {analytics.trends && renderTrendIndicator(analytics.trends.startedChange)}
+                      </div>
+                      <div className="analytics-label">Started</div>
+                      {analytics.sparklineData && (
+                        <div className="sparkline-container">
+                          {renderSparkline(analytics.sparklineData)}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="analytics-stat highlight" title="Number of people who completed all questions">
+                      <div className="stat-header">
+                        <div className="analytics-value animate-value">
+                          {animatedValues.completed ?? analytics.totalCompleted ?? 0}
+                        </div>
+                        {analytics.trends && renderTrendIndicator(analytics.trends.completedChange)}
+                      </div>
+                      <div className="analytics-label">Completed</div>
+                    </div>
+
+                    <div className={`analytics-stat completion-rate ${getCompletionRateColor(analytics.completionRate || 0)}`} title="Percentage of starters who completed the survey. Green: 70%+, Yellow: 40-70%, Red: below 40%">
+                      {renderProgressRing(animatedValues.rate ?? analytics.completionRate ?? 0)}
+                      <div className="analytics-label">Completion Rate</div>
+                      {analytics.trends && renderTrendIndicator(analytics.trends.rateChange)}
+                    </div>
+
+                    <div className="analytics-stat" title="Average time to complete the survey">
+                      <div className="analytics-value animate-value">
+                        {animatedValues.time ?? analytics.averageTime ?? 0} <span className="unit">min</span>
+                      </div>
+                      <div className="analytics-label">Avg. Time</div>
+                    </div>
+                  </div>
+
+                  {/* Device Breakdown */}
+                  {analytics.deviceBreakdown && (analytics.deviceBreakdown.mobile > 0 || analytics.deviceBreakdown.desktop > 0) && (
+                    <div className="analytics-section">
+                      <h4>Device Breakdown</h4>
+                      <div className="device-breakdown">
+                        <div className="device-stat">
+                          <span className="device-icon">📱</span>
+                          <span className="device-count">{analytics.deviceBreakdown.mobile || 0}</span>
+                          <span className="device-label">Mobile</span>
+                        </div>
+                        <div className="device-stat">
+                          <span className="device-icon">💻</span>
+                          <span className="device-count">{analytics.deviceBreakdown.desktop || 0}</span>
+                          <span className="device-label">Desktop</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Drop-off Funnel */}
+                  {analytics.dropOffFunnel && Object.keys(analytics.dropOffFunnel).length > 0 && (
+                    <div className="analytics-section">
+                      <h4>Drop-off Points</h4>
+                      <div className="dropoff-funnel">
+                        {Object.entries(analytics.dropOffFunnel)
+                          .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+                          .map(([step, count]) => (
+                            <div key={step} className="dropoff-item animate-bar">
+                              <span className="dropoff-step">Q{parseInt(step) + 1}</span>
+                              <div className="dropoff-bar-container">
+                                <div
+                                  className="dropoff-bar"
+                                  style={{
+                                    width: `${Math.min(100, (count / Math.max(1, analytics.totalStarted - analytics.totalCompleted)) * 100)}%`
+                                  }}
+                                />
+                              </div>
+                              <span className="dropoff-count">{count} left</span>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Analytics Tab Switcher */}
+                  <div className="analytics-tab-switcher">
+                    <button
+                      className={`analytics-tab ${activeAnalyticsTab === 'overview' ? 'active' : ''}`}
+                      onClick={() => setActiveAnalyticsTab('overview')}
+                    >
+                      Overview
+                    </button>
+                    <button
+                      className={`analytics-tab ${activeAnalyticsTab === 'deep-dive' ? 'active' : ''}`}
+                      onClick={() => setActiveAnalyticsTab('deep-dive')}
+                    >
+                      Deep Dive
+                    </button>
+                    <div className="tab-actions">
+                      <button
+                        className="question-breakdown-btn"
+                        onClick={() => setShowQuestionBreakdown(true)}
+                      >
+                        View All Answers
+                      </button>
+                      <PDFReportGenerator
+                        flow={selectedFlow}
+                        analytics={analytics}
+                        responses={responses}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Overview Tab Content */}
+                  {activeAnalyticsTab === 'overview' && (
+                    <div className="analytics-overview-content">
+                      {/* Response Timeline Chart */}
+                      <ResponseTimeline
+                        data={allSessions}
+                        period={timePeriod}
+                      />
+
+                      {/* Funnel Visualization */}
+                      <FunnelVisualization
+                        analytics={analytics}
+                        questions={responses?.[0]?.responses?.map(r => r.question_text) || []}
+                      />
+
+                      {/* Geographic Breakdown */}
+                      <GeographicBreakdown sessions={allSessions} />
+                    </div>
+                  )}
+
+                  {/* Deep Dive Tab Content */}
+                  {activeAnalyticsTab === 'deep-dive' && (
+                    <div className="analytics-deep-dive-content">
+                      {/* Sentiment Analysis */}
+                      <SentimentIndicators responses={responses} />
+
+                      {/* Answer Clustering */}
+                      <AnswerClustering
+                        responses={responses}
+                        flowId={selectedFlow?.id}
+                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                /* Enhanced Empty State */
+                <div className="analytics-empty-state">
+                  <div className="empty-illustration">
+                    <span className="empty-icon">📊</span>
+                    <div className="empty-decoration">
+                      <span className="dot"></span>
+                      <span className="dot"></span>
+                      <span className="dot"></span>
+                    </div>
+                  </div>
+                  <h3>No responses yet</h3>
+                  <p>Share your validation flow to start collecting feedback. Once people respond, you'll see detailed analytics here.</p>
+                  <button
+                    className="share-cta-btn"
+                    onClick={() => copyShareLink(selectedFlow.share_token)}
+                  >
+                    {copiedToken === selectedFlow.share_token ? '✓ Link Copied!' : '📋 Copy Share Link'}
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* AI Summary Section */}
             <div className="ai-summary-section">
@@ -1096,6 +1539,18 @@ const ValidationFlowsManager = () => {
                   {editSaving ? 'Saving...' : 'Save Changes'}
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Question Breakdown Modal */}
+        {showQuestionBreakdown && (
+          <div className="modal-overlay" onClick={() => setShowQuestionBreakdown(false)}>
+            <div onClick={(e) => e.stopPropagation()}>
+              <QuestionBreakdown
+                responses={responses}
+                onClose={() => setShowQuestionBreakdown(false)}
+              />
             </div>
           </div>
         )}

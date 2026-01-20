@@ -99,6 +99,7 @@ const FlowReportCard = lazy(() => import('./pages/FlowReportCard'))
 const FlowCompassPage = lazy(() => import('./pages/FlowCompassPage'))
 const FlowMapMockups = lazy(() => import('./components/FlowMapMockups'))
 const ValidationFlowsManager = lazy(() => import('./pages/ValidationFlowsManager'))
+const VoiceOfCustomerPage = lazy(() => import('./pages/VoiceOfCustomerPage'))
 const WheelDemo = lazy(() => import('./pages/WheelDemo'))
 const WeeklyPlanningFlow = lazy(() => import('./components/WeeklyPlanningFlow'))
 import './App.css'
@@ -127,6 +128,7 @@ import './flows/CompetitorSnapshotFlow.css'
 import './pages/crm/AutonomousSetup.css'
 import './pages/crm/AscensionEngine.css'
 import './pages/crm/ObjectionPatterns.css'
+import './pages/VoiceOfCustomerPage.css'
 import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
 
@@ -344,6 +346,13 @@ function AppRouter() {
             <Route path="/validation-flows" element={
               <AuthGate>
                 <ValidationFlowsManager />
+              </AuthGate>
+            } />
+
+            {/* Voice of Customer Database */}
+            <Route path="/voice-of-customer" element={
+              <AuthGate>
+                <VoiceOfCustomerPage />
               </AuthGate>
             } />
 
