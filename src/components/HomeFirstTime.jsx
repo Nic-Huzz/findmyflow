@@ -54,7 +54,7 @@ function HomeFirstTime() {
   const { user } = useAuth()
   const { setOnboardingScreen } = useOnboarding()
 
-  const [currentScreen, setCurrentScreen] = useState(SCREENS.ARCHETYPE_REVEAL)
+  const [currentScreen, setCurrentScreen] = useState(SCREENS.PERSONA_Q1)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -123,7 +123,10 @@ function HomeFirstTime() {
           if (progress.wealthLadderRung) setWealthLadderRung(progress.wealthLadderRung)
           if (progress.primaryGoal) setPrimaryGoal(progress.primaryGoal)
           if (progress.personaAnswers) setPersonaAnswers(progress.personaAnswers)
-          if (progress.screen) setCurrentScreen(progress.screen)
+          // Restore screen (but skip ARCHETYPE_REVEAL - go to Q1 instead)
+          if (progress.screen && progress.screen !== SCREENS.ARCHETYPE_REVEAL) {
+            setCurrentScreen(progress.screen)
+          }
         } else {
           // Clear stale progress
           localStorage.removeItem(`${ONBOARDING_STORAGE_KEY}_${user.id}`)

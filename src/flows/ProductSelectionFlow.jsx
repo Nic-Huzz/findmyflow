@@ -4,13 +4,15 @@
  * Follows OfferBuilderFlow to finalize core product details.
  * Loads solutions categorized as 'core_product' from the Offer Builder.
  *
- * Uses Hormozi's Value Equation for each product:
- * Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort)
+ * For each core product solution, asks 5 questions:
+ * 1a. How does this solve the problem? (mechanism)
+ * 1b. What features will you include? (feature → benefit pairs)
+ * 2. Dream Outcome - How big is the transformation?
+ * 3. Time Delay - How long until they see results?
+ * 4. Perceived Likelihood - How can you prove it works?
  *
- * For each core product solution, asks 3 questions:
- * 1. Dream Outcome - How big is the transformation?
- * 2. Time Delay - How long until they see results?
- * 3. Perceived Likelihood - How can you prove it works?
+ * Uses Hormozi's Value Equation:
+ * Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort)
  */
 
 import { useState, useEffect } from 'react'
@@ -24,14 +26,17 @@ import './ProductSelectionFlow.css'
 const STAGES = {
   LOADING: 'loading',
   WELCOME: 'welcome',
-  QUESTIONS: 'questions',
+  MECHANISM: 'mechanism',      // 1a: How does this solve the problem?
+  FEATURES: 'features',        // 1b: Feature → Benefit pairs
+  QUESTIONS: 'questions',      // Value Equation questions
   SUMMARY: 'summary',
   SUCCESS: 'success'
 }
 
 const STAGE_GROUPS = [
   { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME] },
-  { id: 'questions', label: 'Value Equation', stages: [STAGES.QUESTIONS] },
+  { id: 'define', label: 'Define', stages: [STAGES.MECHANISM, STAGES.FEATURES] },
+  { id: 'value', label: 'Value', stages: [STAGES.QUESTIONS] },
   { id: 'summary', label: 'Summary', stages: [STAGES.SUMMARY] },
   { id: 'complete', label: 'Complete', stages: [STAGES.SUCCESS] }
 ]
@@ -339,6 +344,14 @@ function ProductSelectionFlow() {
   const [aiIdeas, setAiIdeas] = useState({}) // { productId: { loading, ideas, error } }
   const [nicheLayers, setNicheLayers] = useState(null) // From offer builder for AI context
 
+  // New: Product specification state
+  // { solutionId: { mechanism: '', featureBenefits: [{ feature: '', benefit: '' }] } }
+  const [productSpecs, setProductSpecs] = useState({})
+  const [currentMechanism, setCurrentMechanism] = useState('')
+  const [currentFeatureBenefits, setCurrentFeatureBenefits] = useState([
+    { feature: '', benefit: '' }
+  ])
+
   // Load core product solutions from the most recent offer builder assessment
   useEffect(() => {
     if (user) {
@@ -389,10 +402,13 @@ function ProductSelectionFlow() {
 
         // Initialize answers for each product
         const initialAnswers = {}
+        const initialSpecs = {}
         products.forEach(prod => {
           initialAnswers[prod.id] = { dream_outcome: null, time_delay: null, perceived_likelihood: null }
+          initialSpecs[prod.id] = { mechanism: '', featureBenefits: [] }
         })
         setAnswers(initialAnswers)
+        setProductSpecs(initialSpecs)
 
         if (products.length === 0) {
           setError('No core products found. Complete the Offer Builder first.')
@@ -536,7 +552,64 @@ function ProductSelectionFlow() {
     }
   }
 
-  // Handle option selection
+  // Handle mechanism submission (1a)
+  const handleMechanismSubmit = () => {
+    if (!currentMechanism.trim()) return
+
+    const currentProduct = coreProducts[currentProductIndex]
+    setProductSpecs(prev => ({
+      ...prev,
+      [currentProduct.id]: {
+        ...prev[currentProduct.id],
+        mechanism: currentMechanism.trim()
+      }
+    }))
+
+    // Move to features stage
+    setCurrentFeatureBenefits([{ feature: '', benefit: '' }])
+    setStage(STAGES.FEATURES)
+  }
+
+  // Handle feature-benefit updates
+  const updateFeatureBenefit = (index, field, value) => {
+    setCurrentFeatureBenefits(prev => {
+      const updated = [...prev]
+      updated[index] = { ...updated[index], [field]: value }
+      return updated
+    })
+  }
+
+  const addFeatureBenefitRow = () => {
+    setCurrentFeatureBenefits(prev => [...prev, { feature: '', benefit: '' }])
+  }
+
+  const removeFeatureBenefitRow = (index) => {
+    if (currentFeatureBenefits.length <= 1) return
+    setCurrentFeatureBenefits(prev => prev.filter((_, i) => i !== index))
+  }
+
+  // Handle features submission (1b)
+  const handleFeaturesSubmit = () => {
+    const validFeatures = currentFeatureBenefits.filter(
+      fb => fb.feature.trim() && fb.benefit.trim()
+    )
+    if (validFeatures.length === 0) return
+
+    const currentProduct = coreProducts[currentProductIndex]
+    setProductSpecs(prev => ({
+      ...prev,
+      [currentProduct.id]: {
+        ...prev[currentProduct.id],
+        featureBenefits: validFeatures
+      }
+    }))
+
+    // Move to Value Equation questions
+    setCurrentQuestionIndex(0)
+    setStage(STAGES.QUESTIONS)
+  }
+
+  // Handle option selection (Value Equation questions)
   const handleOptionSelect = (option) => {
     const currentProduct = coreProducts[currentProductIndex]
     const currentQuestion = VALUE_QUESTIONS[currentQuestionIndex]
@@ -553,24 +626,51 @@ function ProductSelectionFlow() {
     if (currentQuestionIndex < VALUE_QUESTIONS.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1)
     } else if (currentProductIndex < coreProducts.length - 1) {
-      // Move to next product
+      // Move to next product - start with mechanism stage
       setCurrentProductIndex(prev => prev + 1)
       setCurrentQuestionIndex(0)
+      // Reset current inputs for next product
+      const nextProduct = coreProducts[currentProductIndex + 1]
+      setCurrentMechanism(productSpecs[nextProduct?.id]?.mechanism || '')
+      setCurrentFeatureBenefits(
+        productSpecs[nextProduct?.id]?.featureBenefits?.length > 0
+          ? productSpecs[nextProduct.id].featureBenefits
+          : [{ feature: '', benefit: '' }]
+      )
+      setStage(STAGES.MECHANISM)
     } else {
       // All done - go to summary
       setStage(STAGES.SUMMARY)
     }
   }
 
-  // Go back in questions
+  // Go back in flow
   const goBackInQuestions = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(prev => prev - 1)
-    } else if (currentProductIndex > 0) {
-      setCurrentProductIndex(prev => prev - 1)
-      setCurrentQuestionIndex(VALUE_QUESTIONS.length - 1)
-    } else {
-      setStage(STAGES.WELCOME)
+    if (stage === STAGES.QUESTIONS) {
+      if (currentQuestionIndex > 0) {
+        setCurrentQuestionIndex(prev => prev - 1)
+      } else {
+        // Go back to features
+        setStage(STAGES.FEATURES)
+      }
+    } else if (stage === STAGES.FEATURES) {
+      setStage(STAGES.MECHANISM)
+    } else if (stage === STAGES.MECHANISM) {
+      if (currentProductIndex > 0) {
+        // Go to previous product's last question
+        setCurrentProductIndex(prev => prev - 1)
+        setCurrentQuestionIndex(VALUE_QUESTIONS.length - 1)
+        const prevProduct = coreProducts[currentProductIndex - 1]
+        setCurrentMechanism(productSpecs[prevProduct?.id]?.mechanism || '')
+        setCurrentFeatureBenefits(
+          productSpecs[prevProduct?.id]?.featureBenefits?.length > 0
+            ? productSpecs[prevProduct.id].featureBenefits
+            : [{ feature: '', benefit: '' }]
+        )
+        setStage(STAGES.QUESTIONS)
+      } else {
+        setStage(STAGES.WELCOME)
+      }
     }
   }
 
@@ -596,10 +696,14 @@ function ProductSelectionFlow() {
       }
 
       if (assessment) {
-        // Calculate scores for each product
+        // Calculate scores for each product (including specs)
         const productScores = {}
         coreProducts.forEach(prod => {
           productScores[prod.id] = {
+            // Product specification (new)
+            mechanism: productSpecs[prod.id]?.mechanism || '',
+            featureBenefits: productSpecs[prod.id]?.featureBenefits || [],
+            // Value equation answers
             answers: answers[prod.id],
             valueScore: calculateValueScore(prod.id)
           }
@@ -700,10 +804,15 @@ function ProductSelectionFlow() {
 
                 <button
                   className="primary-button glow-button"
-                  onClick={() => setStage(STAGES.QUESTIONS)}
+                  onClick={() => {
+                    // Reset inputs for first product
+                    setCurrentMechanism('')
+                    setCurrentFeatureBenefits([{ feature: '', benefit: '' }])
+                    setStage(STAGES.MECHANISM)
+                  }}
                   style={{ marginTop: '24px' }}
                 >
-                  Evaluate Products
+                  Define Products
                 </button>
               </>
             )}
@@ -720,7 +829,142 @@ function ProductSelectionFlow() {
     )
   }
 
-  // QUESTIONS STAGE
+  // MECHANISM STAGE (1a)
+  if (stage === STAGES.MECHANISM) {
+    const currentProduct = coreProducts[currentProductIndex]
+    const isValid = currentMechanism.trim().length >= 20
+
+    return (
+      <div className="product-selection-flow">
+        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
+        <div className="question-container mechanism-container">
+          <div className="product-context">
+            <span className="product-badge">Product {currentProductIndex + 1} of {coreProducts.length}</span>
+            <h3 className="product-name">{currentProduct.label}</h3>
+            <p className="product-problem">Solving: {currentProduct.problemText}</p>
+          </div>
+
+          <div className="question-content">
+            <h2 className="question-text">How does this solve their problem?</h2>
+            <p className="question-subtext">
+              Explain the approach or mechanism — what makes this solution work for them?
+            </p>
+
+            <textarea
+              className="mechanism-input"
+              placeholder="E.g., &quot;Through weekly accountability sessions and a proven 8-step framework, they get consistent feedback and structure to stay on track, even when motivation drops...&quot;"
+              value={currentMechanism}
+              onChange={(e) => setCurrentMechanism(e.target.value)}
+              rows={5}
+            />
+            <div className="char-hint">
+              {currentMechanism.length} characters {currentMechanism.length < 20 && '(minimum 20)'}
+            </div>
+          </div>
+
+          <button
+            className="primary-button"
+            onClick={handleMechanismSubmit}
+            disabled={!isValid}
+            style={{ marginTop: '24px' }}
+          >
+            Continue
+          </button>
+          <BackButton onClick={goBackInQuestions} />
+        </div>
+      </div>
+    )
+  }
+
+  // FEATURES STAGE (1b)
+  if (stage === STAGES.FEATURES) {
+    const currentProduct = coreProducts[currentProductIndex]
+    const validCount = currentFeatureBenefits.filter(
+      fb => fb.feature.trim() && fb.benefit.trim()
+    ).length
+    const isValid = validCount >= 2
+
+    return (
+      <div className="product-selection-flow">
+        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
+        <div className="question-container features-container">
+          <div className="product-context">
+            <span className="product-badge">Product {currentProductIndex + 1} of {coreProducts.length}</span>
+            <h3 className="product-name">{currentProduct.label}</h3>
+          </div>
+
+          <div className="question-content">
+            <h2 className="question-text">What will you include?</h2>
+            <p className="question-subtext">
+              List each feature and the specific benefit it provides to solve their problem.
+            </p>
+
+            <div className="feature-benefit-table">
+              <div className="table-header">
+                <span className="header-feature">What's included</span>
+                <span className="header-arrow">→</span>
+                <span className="header-benefit">How it helps them</span>
+              </div>
+
+              {currentFeatureBenefits.map((fb, index) => (
+                <div key={index} className="feature-benefit-row">
+                  <input
+                    type="text"
+                    className="feature-input"
+                    placeholder="e.g., Weekly group call"
+                    value={fb.feature}
+                    onChange={(e) => updateFeatureBenefit(index, 'feature', e.target.value)}
+                  />
+                  <span className="row-arrow">→</span>
+                  <input
+                    type="text"
+                    className="benefit-input"
+                    placeholder="e.g., Stay accountable and get unstuck"
+                    value={fb.benefit}
+                    onChange={(e) => updateFeatureBenefit(index, 'benefit', e.target.value)}
+                  />
+                  {currentFeatureBenefits.length > 1 && (
+                    <button
+                      type="button"
+                      className="remove-row-btn"
+                      onClick={() => removeFeatureBenefitRow(index)}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+              ))}
+
+              <button
+                type="button"
+                className="add-row-btn"
+                onClick={addFeatureBenefitRow}
+              >
+                + Add another feature
+              </button>
+            </div>
+
+            <div className="feature-count">
+              {validCount} feature{validCount !== 1 ? 's' : ''} added
+              {validCount < 2 && ' (minimum 2)'}
+            </div>
+          </div>
+
+          <button
+            className="primary-button"
+            onClick={handleFeaturesSubmit}
+            disabled={!isValid}
+            style={{ marginTop: '24px' }}
+          >
+            Continue to Value Assessment
+          </button>
+          <BackButton onClick={goBackInQuestions} />
+        </div>
+      </div>
+    )
+  }
+
+  // QUESTIONS STAGE (Value Equation)
   if (stage === STAGES.QUESTIONS) {
     const currentProduct = coreProducts[currentProductIndex]
     const currentQuestion = VALUE_QUESTIONS[currentQuestionIndex]
@@ -869,6 +1113,30 @@ function ProductSelectionFlow() {
                       <span className="expand-icon">{isExpanded ? '▼' : '▶'}</span>
                     </div>
                   </div>
+
+                  {/* PRODUCT SPECIFICATION - How it solves & what's included */}
+                  {productSpecs[product.id]?.mechanism && (
+                    <div className="product-spec-section">
+                      <div className="spec-mechanism">
+                        <h5>How it solves their problem:</h5>
+                        <p>{productSpecs[product.id].mechanism}</p>
+                      </div>
+                      {productSpecs[product.id]?.featureBenefits?.length > 0 && (
+                        <div className="spec-features">
+                          <h5>What's included:</h5>
+                          <ul className="feature-benefit-list">
+                            {productSpecs[product.id].featureBenefits.map((fb, i) => (
+                              <li key={i}>
+                                <span className="fb-feature">{fb.feature}</span>
+                                <span className="fb-arrow">→</span>
+                                <span className="fb-benefit">{fb.benefit}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* ALWAYS VISIBLE: Score breakdown */}
                   <div className="score-breakdown">
@@ -1087,8 +1355,8 @@ function ProductSelectionFlow() {
       <div className="product-selection-flow">
         <div className="success-container">
           <div className="success-icon">💰</div>
-          <h2>Products Evaluated, {userName}!</h2>
-          <p>You've scored {coreProducts.length} core product{coreProducts.length !== 1 ? 's' : ''} using the Value Equation.</p>
+          <h2>Products Defined, {userName}!</h2>
+          <p>You've defined {coreProducts.length} core product{coreProducts.length !== 1 ? 's' : ''} with mechanisms and features.</p>
           <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+30 points earned!</p>
 
           <div className="avg-score-display">
@@ -1097,10 +1365,27 @@ function ProductSelectionFlow() {
             <span className="avg-level" style={{ color: avgLevel.color }}>{avgLevel.label}</span>
           </div>
 
+          <div className="next-steps-section">
+            <h3>Next Step</h3>
+            <p className="next-steps-intro">Package your products into an irresistible offer:</p>
+
+            <button
+              className="next-flow-card recommended"
+              onClick={() => navigate('/offer-builder-v2')}
+            >
+              <span className="flow-icon">🏆</span>
+              <div className="flow-info">
+                <h4>Grand Slam Offer</h4>
+                <p>Add bonuses, guarantees, scarcity & pricing</p>
+              </div>
+              <span className="flow-arrow">→</span>
+            </button>
+          </div>
+
           <button
-            className="primary-button"
+            className="secondary-button"
             onClick={() => navigate('/7-day-challenge')}
-            style={{ marginTop: '24px' }}
+            style={{ marginTop: '16px' }}
           >
             Back to Challenge
           </button>

@@ -336,12 +336,32 @@ function GrandSlamOfferFlow() {
   }
 
   // Get core products from existing offer
+  // Includes ProductSelection data (mechanism, features, value scores) if available
   const getCoreProducts = () => {
     if (!existingOffer?.responses?.solution_categories) return []
     const solutions = existingOffer.responses.q8_problem_solutions?.solutions || []
-    return solutions.filter((_, idx) =>
-      existingOffer.responses.solution_categories[`solution_${idx}`] === 'core_product'
-    )
+    const productSelections = existingOffer.responses?.product_selections || {}
+
+    return solutions
+      .map((solution, idx) => {
+        const solutionId = `solution_${idx}`
+        const isCore = existingOffer.responses.solution_categories[solutionId] === 'core_product'
+        if (!isCore) return null
+
+        // Merge ProductSelection data if available
+        const selectionData = productSelections[solutionId] || {}
+
+        return {
+          ...solution,
+          id: solutionId,
+          // ProductSelection enhancements
+          mechanism: selectionData.mechanism || null,
+          featureBenefits: selectionData.featureBenefits || [],
+          valueScore: selectionData.valueScore || null,
+          hasProductDefinition: !!selectionData.mechanism
+        }
+      })
+      .filter(Boolean)
   }
 
   // RENDER
@@ -460,9 +480,44 @@ function GrandSlamOfferFlow() {
               <div className="core-products-list">
                 <h4>Core Product(s)</h4>
                 {coreProducts.map((product, idx) => (
-                  <div key={idx} className="foundation-card">
-                    <span className="product-type-badge">{product.solutionType}</span>
-                    <p>{product.description}</p>
+                  <div key={idx} className={`foundation-card ${product.hasProductDefinition ? 'has-definition' : ''}`}>
+                    <div className="foundation-header">
+                      <span className="product-type-badge">{product.solutionType}</span>
+                      {product.valueScore && (
+                        <span className="value-score-badge">Score: {product.valueScore}</span>
+                      )}
+                    </div>
+                    <p className="product-description">{product.description}</p>
+
+                    {/* Show ProductSelection data if available */}
+                    {product.hasProductDefinition && (
+                      <div className="product-definition">
+                        <div className="definition-mechanism">
+                          <span className="definition-label">How it solves their problem:</span>
+                          <p>{product.mechanism}</p>
+                        </div>
+                        {product.featureBenefits?.length > 0 && (
+                          <div className="definition-features">
+                            <span className="definition-label">What's included:</span>
+                            <ul>
+                              {product.featureBenefits.slice(0, 3).map((fb, i) => (
+                                <li key={i}>
+                                  <strong>{fb.feature}</strong> → {fb.benefit}
+                                </li>
+                              ))}
+                              {product.featureBenefits.length > 3 && (
+                                <li className="more-features">+{product.featureBenefits.length - 3} more</li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {!product.hasProductDefinition && (
+                      <p className="no-definition-hint">
+                        💡 Complete <a href="/product-selection">Product Definition</a> to add more detail
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

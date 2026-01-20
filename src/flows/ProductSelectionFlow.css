@@ -1159,3 +1159,378 @@
     padding-top: calc(80px + env(safe-area-inset-top));
   }
 }
+
+/* ============ SUCCESS SCREEN NAVIGATION ============ */
+
+.product-selection-flow .next-steps-section {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 24px;
+  text-align: left;
+}
+
+.product-selection-flow .next-steps-section h3 {
+  font-size: 16px;
+  margin: 0 0 8px 0;
+  color: white;
+}
+
+.product-selection-flow .next-steps-intro {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px 0;
+}
+
+.product-selection-flow .next-flow-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  text-align: left;
+}
+
+.product-selection-flow .next-flow-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateX(4px);
+}
+
+.product-selection-flow .next-flow-card.recommended {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.product-selection-flow .next-flow-card.recommended:hover {
+  background: rgba(251, 191, 36, 0.25);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.product-selection-flow .next-flow-card .flow-icon {
+  font-size: 28px;
+}
+
+.product-selection-flow .next-flow-card .flow-info {
+  flex: 1;
+}
+
+.product-selection-flow .next-flow-card .flow-info h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.product-selection-flow .next-flow-card .flow-info p {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.product-selection-flow .next-flow-card .flow-arrow {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+}
+
+.product-selection-flow .next-flow-card:hover .flow-arrow {
+  color: #fbbf24;
+  transform: translateX(4px);
+}
+
+/* ============ PRODUCT SPEC IN SUMMARY ============ */
+
+.product-selection-flow .product-spec-section {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  margin: 12px 0;
+  border-left: 3px solid rgba(251, 191, 36, 0.5);
+}
+
+.product-selection-flow .spec-mechanism h5,
+.product-selection-flow .spec-features h5 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 8px 0;
+}
+
+.product-selection-flow .spec-mechanism p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.product-selection-flow .spec-features {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.product-selection-flow .feature-benefit-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.product-selection-flow .feature-benefit-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.product-selection-flow .feature-benefit-list li:last-child {
+  border-bottom: none;
+}
+
+.product-selection-flow .fb-feature {
+  color: white;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.product-selection-flow .fb-arrow {
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+.product-selection-flow .fb-benefit {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ============ MECHANISM STAGE (1a) ============ */
+
+.product-selection-flow .mechanism-container {
+  max-width: 600px;
+}
+
+.product-selection-flow .product-name {
+  margin: 8px 0 4px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.product-selection-flow .product-problem {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+.product-selection-flow .mechanism-input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 15px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 120px;
+  box-sizing: border-box;
+}
+
+.product-selection-flow .mechanism-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.product-selection-flow .mechanism-input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.product-selection-flow .char-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 8px;
+  text-align: right;
+}
+
+/* ============ FEATURES STAGE (1b) ============ */
+
+.product-selection-flow .features-container {
+  max-width: 700px;
+}
+
+.product-selection-flow .feature-benefit-table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.product-selection-flow .table-header {
+  display: grid;
+  grid-template-columns: 1fr 30px 1fr;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px 8px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-selection-flow .header-feature,
+.product-selection-flow .header-benefit {
+  text-align: left;
+}
+
+.product-selection-flow .header-arrow {
+  text-align: center;
+  color: #fbbf24;
+}
+
+.product-selection-flow .feature-benefit-row {
+  display: grid;
+  grid-template-columns: 1fr 30px 1fr 32px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.product-selection-flow .feature-benefit-row:last-of-type {
+  border-bottom: none;
+}
+
+.product-selection-flow .feature-input,
+.product-selection-flow .benefit-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.product-selection-flow .feature-input::placeholder,
+.product-selection-flow .benefit-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+.product-selection-flow .feature-input:focus,
+.product-selection-flow .benefit-input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.product-selection-flow .row-arrow {
+  text-align: center;
+  color: #fbbf24;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.product-selection-flow .remove-row-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 100, 100, 0.2);
+  color: rgba(255, 100, 100, 0.8);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-selection-flow .remove-row-btn:hover {
+  background: rgba(255, 100, 100, 0.4);
+  color: white;
+}
+
+.product-selection-flow .add-row-btn {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.product-selection-flow .add-row-btn:hover {
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.product-selection-flow .feature-count {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* ============ MOBILE RESPONSIVE FOR NEW STAGES ============ */
+
+@media (max-width: 600px) {
+  .product-selection-flow .table-header {
+    display: none;
+  }
+
+  .product-selection-flow .feature-benefit-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 0;
+    position: relative;
+  }
+
+  .product-selection-flow .feature-input,
+  .product-selection-flow .benefit-input {
+    width: 100%;
+  }
+
+  .product-selection-flow .feature-input::placeholder {
+    content: "Feature...";
+  }
+
+  .product-selection-flow .benefit-input::placeholder {
+    content: "Benefit...";
+  }
+
+  .product-selection-flow .row-arrow {
+    display: none;
+  }
+
+  .product-selection-flow .remove-row-btn {
+    position: absolute;
+    top: 12px;
+    right: 0;
+  }
+
+  .product-selection-flow .benefit-input {
+    padding-left: 24px;
+  }
+
+  .product-selection-flow .benefit-input::before {
+    content: "→";
+    position: absolute;
+    left: 8px;
+    color: #fbbf24;
+  }
+}

@@ -178,13 +178,47 @@
       "store_as": "validation.money_invested",
       "next_step_rules": [
         {
+          "on_success": "4.2"
+        }
+      ]
+    },
+    {
+      "id": "4.2",
+      "step_order_index": 10,
+      "assistant_prompt": "What other solutions have you tried?\n\nApps, courses, coaches, books, YouTube rabbit holes... anything you've used to tackle **{{problemArea}}**.",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "I've tried..."
+        }
+      ],
+      "store_as": "validation.competitor_solutions",
+      "next_step_rules": [
+        {
+          "on_success": "4.3"
+        }
+      ]
+    },
+    {
+      "id": "4.3",
+      "step_order_index": 11,
+      "assistant_prompt": "And what didn't work about them?\n\nWhat was missing, frustrating, or just not quite right?",
+      "expected_inputs": [
+        {
+          "type": "free_text",
+          "placeholder": "The problem was..."
+        }
+      ],
+      "store_as": "validation.competitor_gaps",
+      "next_step_rules": [
+        {
           "on_success": "5.0"
         }
       ]
     },
     {
       "id": "5.0",
-      "step_order_index": 10,
+      "step_order_index": 12,
       "assistant_prompt": "If the ideal solution for **{{problemArea}}** existed, how would you prefer to receive it?",
       "expected_inputs": [
         {
@@ -214,7 +248,7 @@
     },
     {
       "id": "5.1a",
-      "step_order_index": 11,
+      "step_order_index": 13,
       "assistant_prompt": "What type of service appeals to you most?\n\n(Select all that apply)",
       "expected_inputs": [
         {
@@ -234,7 +268,7 @@
     },
     {
       "id": "5.1b",
-      "step_order_index": 11,
+      "step_order_index": 13,
       "assistant_prompt": "What type of guided process appeals to you most?\n\n(Select all that apply)",
       "expected_inputs": [
         {
@@ -256,7 +290,7 @@
     },
     {
       "id": "5.1c",
-      "step_order_index": 11,
+      "step_order_index": 13,
       "assistant_prompt": "What type of tools would help you most?\n\n(Select all that apply)",
       "expected_inputs": [
         {
@@ -277,7 +311,7 @@
     },
     {
       "id": "6.0",
-      "step_order_index": 12,
+      "step_order_index": 14,
       "assistant_prompt": "When you think about **{{problemArea}}** right now...\n\nWhat's the dominant emotion? (No judgment - just notice.)",
       "expected_inputs": [
         {
@@ -303,7 +337,7 @@
     },
     {
       "id": "7.0",
-      "step_order_index": 13,
+      "step_order_index": 15,
       "assistant_prompt": "What would make you go \"SHUT UP AND TAKE MY MONEY\"?\n\nThinking about **{{solutionConcept}}** - what specific things would make you say yes instantly?",
       "expected_inputs": [
         {
@@ -320,7 +354,7 @@
     },
     {
       "id": "8.0",
-      "step_order_index": 14,
+      "step_order_index": 16,
       "assistant_prompt": "Have you talked to anyone about this?\n\nFriends, colleagues, that one person who always listens to your existential crises...",
       "expected_inputs": [
         {
@@ -342,7 +376,7 @@
     },
     {
       "id": "9.0",
-      "step_order_index": 15,
+      "step_order_index": 17,
       "assistant_prompt": "Scale of 1-10:\n\nHow much is **{{problemArea}}** actually affecting your life?\n\n(1 = meh, mild annoyance... 10 = seriously messing with my happiness)",
       "expected_inputs": [
         {
@@ -359,7 +393,7 @@
     },
     {
       "id": "10.0",
-      "step_order_index": 16,
+      "step_order_index": 18,
       "assistant_prompt": "If the right solution showed up tomorrow - what could you realistically invest?\n\n(Be honest with yourself here, not what you think sounds good.)",
       "expected_inputs": [
         {
@@ -383,7 +417,7 @@
     },
     {
       "id": "11.0",
-      "step_order_index": 17,
+      "step_order_index": 19,
       "assistant_prompt": "Last thing - drop your email?\n\nWe'll share what we learn from this research. And if we build something based on what you said, you'll be first to know.\n\n(No spam, pinky promise.)",
       "expected_inputs": [
         {
@@ -402,7 +436,7 @@
     },
     {
       "id": "12.0",
-      "step_order_index": 18,
+      "step_order_index": 20,
       "assistant_prompt": "You're a legend. Seriously.\n\nYour answers are going straight into making something that actually helps people with **{{problemArea}}**.\n\nKeep an eye on your inbox - good things coming.",
       "expected_inputs": [
         {
@@ -419,8 +453,8 @@
     }
   ],
   "metadata": {
-    "total_questions": 14,
-    "estimated_time_minutes": 5,
+    "total_questions": 18,
+    "estimated_time_minutes": 6,
     "public_shareable": true,
     "requires_auth": false,
     "collect_email": true,

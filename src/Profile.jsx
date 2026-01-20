@@ -450,8 +450,8 @@ const Profile = () => {
   }
 
   // Check if user needs to complete onboarding (first-time experience)
-  // Show HomeFirstTime if onboarding_completed is false
-  if (stageProgress && stageProgress.onboarding_completed === false) {
+  // Show HomeFirstTime if onboarding not completed (or stageProgress doesn't exist yet)
+  if (!stageProgress || stageProgress.onboarding_completed === false) {
     return <HomeFirstTime />
   }
 

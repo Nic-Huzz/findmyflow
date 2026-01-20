@@ -2411,29 +2411,42 @@ function OfferBuilderFlow() {
 
           <div className="next-steps-container">
             <h3>Next Steps</h3>
-            <p className="next-steps-intro">Complete Money Models, then build your Grand Slam:</p>
+            <p className="next-steps-intro">Define your products, then build your Grand Slam offer:</p>
 
             <div className="next-flow-cards">
               <button
-                className="next-flow-card"
-                onClick={() => navigate('/attraction-offer')}
+                className="next-flow-card recommended"
+                onClick={() => navigate('/product-selection')}
               >
-                <span className="flow-icon">🎯</span>
+                <span className="flow-icon">💎</span>
                 <div className="flow-info">
-                  <h4>Money Model Flows</h4>
-                  <p>Define strategies for each offer tier</p>
+                  <h4>Product Definition</h4>
+                  <p>Define how each product solves the problem</p>
+                  <span className="recommended-badge">Recommended Next</span>
                 </div>
                 <span className="flow-arrow">→</span>
               </button>
 
               <button
                 className="next-flow-card"
-                onClick={() => navigate('/grand-slam-matrix')}
+                onClick={() => navigate('/offer-builder-v2')}
               >
                 <span className="flow-icon">🏆</span>
                 <div className="flow-info">
+                  <h4>Grand Slam Offer</h4>
+                  <p>Package with bonuses, guarantees & pricing</p>
+                </div>
+                <span className="flow-arrow">→</span>
+              </button>
+
+              <button
+                className="next-flow-card secondary"
+                onClick={() => navigate('/grand-slam-matrix')}
+              >
+                <span className="flow-icon">📊</span>
+                <div className="flow-info">
                   <h4>Grand Slam Matrix</h4>
-                  <p>Assign solutions to offer tiers</p>
+                  <p>View all solutions by offer tier</p>
                 </div>
                 <span className="flow-arrow">→</span>
               </button>
