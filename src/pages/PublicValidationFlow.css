@@ -1034,3 +1034,295 @@
   font-weight: 500;
   max-width: none;
 }
+
+/* ============ ENHANCED MOTION ============ */
+
+/* Better easing for smoother animations */
+.validation-content {
+  animation: validationSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Staggered body text animation */
+.validation-content .validation-body-text {
+  animation: validationFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+/* Staggered option button animations */
+.validation-options .validation-option-btn:nth-child(1) {
+  animation: optionSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+.validation-options .validation-option-btn:nth-child(2) {
+  animation: optionSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+.validation-options .validation-option-btn:nth-child(3) {
+  animation: optionSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+.validation-options .validation-option-btn:nth-child(4) {
+  animation: optionSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+.validation-options .validation-option-btn:nth-child(5) {
+  animation: optionSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+@keyframes optionSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Enhanced option button hover with glow */
+.validation-option-btn {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.validation-option-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.validation-option-btn.selected {
+  animation: optionSelect 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.25);
+}
+
+@keyframes optionSelect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Progress bar glow pulse */
+.validation-progress-fill {
+  position: relative;
+  animation: progressGlow 2s ease-in-out infinite;
+}
+
+@keyframes progressGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 221, 39, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 221, 39, 0.6), 0 0 30px rgba(255, 221, 39, 0.3);
+  }
+}
+
+/* Progress bar trailing dot */
+.validation-progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background: #fbbf24;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 221, 39, 0.8);
+}
+
+/* Enhanced input focus glow */
+.validation-textarea:focus,
+.validation-input:focus {
+  animation: inputFocusGlow 0.3s ease forwards;
+  box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.15);
+}
+
+@keyframes inputFocusGlow {
+  from {
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+  }
+  to {
+    box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.15);
+  }
+}
+
+/* Text list item entrance */
+.text-list-item {
+  animation: listItemSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes listItemSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced completion animations */
+.validation-complete h2 {
+  animation: completionTitle 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+.validation-complete .complete-message {
+  animation: validationFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+.validation-complete .summary-card {
+  animation: cardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+}
+
+.completion-cta {
+  animation: cardReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+}
+
+@keyframes completionTitle {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced celebrate bounce with rotation */
+@keyframes celebrateBounce {
+  0% {
+    transform: scale(0) rotate(-15deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(5deg);
+  }
+  70% {
+    transform: scale(0.95) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+/* Resume prompt animations */
+.validation-resume-prompt .resume-icon {
+  animation: resumeIconBounce 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+.validation-resume-prompt h2 {
+  animation: validationFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+.validation-resume-prompt p {
+  animation: validationFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.validation-resume-prompt .resume-buttons {
+  animation: validationFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+@keyframes resumeIconBounce {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Toast slide up animation enhancement */
+.validation-toast {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.validation-toast.show {
+  animation: toastBounce 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes toastBounce {
+  0% {
+    transform: translateX(-50%) translateY(30px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Button press effect */
+.validation-next-btn:active:not(:disabled),
+.add-list-item-btn:active:not(:disabled),
+.cta-button:active:not(:disabled) {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* Magic link section entrance */
+.validation-magic-link {
+  animation: validationFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+/* ============ REDUCED MOTION ============ */
+
+@media (prefers-reduced-motion: reduce) {
+  .validation-content,
+  .validation-content .validation-prompt,
+  .validation-content .validation-body-text,
+  .validation-content .validation-input-section,
+  .validation-options .validation-option-btn,
+  .validation-complete,
+  .validation-complete .complete-icon,
+  .validation-complete h2,
+  .validation-complete .complete-message,
+  .validation-complete .summary-card,
+  .completion-cta,
+  .validation-toast,
+  .validation-resume-prompt .resume-icon,
+  .validation-resume-prompt h2,
+  .validation-resume-prompt p,
+  .validation-resume-prompt .resume-buttons,
+  .validation-magic-link,
+  .text-list-item {
+    animation: none !important;
+  }
+
+  .validation-progress-fill,
+  .validation-option-btn,
+  .validation-next-btn,
+  .validation-voice-btn,
+  .validation-textarea,
+  .validation-input,
+  .add-list-item-btn,
+  .cta-button {
+    transition: none !important;
+  }
+
+  .validation-progress-fill::after {
+    display: none;
+  }
+}

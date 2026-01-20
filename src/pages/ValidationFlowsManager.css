@@ -2226,3 +2226,392 @@
     width: 100%;
   }
 }
+
+/* ============ ENHANCED MOTION & PREMIUM POLISH ============ */
+
+/* Page entrance animation */
+@keyframes pageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-container .manager-header {
+  animation: pageSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard-container .manager-content {
+  animation: pageSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+/* Staggered flow card entrance */
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dashboard-container .flow-card-v2 {
+  animation: cardSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-container .flow-card-v2:nth-child(1) { animation-delay: 0.05s; }
+.dashboard-container .flow-card-v2:nth-child(2) { animation-delay: 0.1s; }
+.dashboard-container .flow-card-v2:nth-child(3) { animation-delay: 0.15s; }
+.dashboard-container .flow-card-v2:nth-child(4) { animation-delay: 0.2s; }
+.dashboard-container .flow-card-v2:nth-child(5) { animation-delay: 0.25s; }
+.dashboard-container .flow-card-v2:nth-child(6) { animation-delay: 0.3s; }
+
+/* Enhanced card hover with glow */
+.dashboard-container .flow-card-v2:hover {
+  border-color: rgba(94, 23, 235, 0.3);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    0 0 0 3px rgba(94, 23, 235, 0.08);
+  transform: translateY(-4px);
+}
+
+/* Active card accent pulse */
+@keyframes accentPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.dashboard-container .flow-card-v2:not(.inactive) .card-accent {
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  animation: accentPulse 2s ease-in-out infinite;
+}
+
+/* Enhanced button interactions */
+.dashboard-container .create-flow-btn,
+.dashboard-container .btn-primary,
+.dashboard-container .action-btn.primary,
+.dashboard-container .empty-cta-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Button shimmer effect */
+.dashboard-container .create-flow-btn::before,
+.dashboard-container .empty-cta-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.dashboard-container .create-flow-btn:hover::before,
+.dashboard-container .empty-cta-btn:hover::before {
+  left: 100%;
+}
+
+/* Button press effect */
+.dashboard-container .create-flow-btn:active,
+.dashboard-container .btn-primary:active,
+.dashboard-container .action-btn:active {
+  transform: scale(0.97) translateY(0);
+  transition: transform 0.1s ease;
+}
+
+/* Enhanced icon button hover */
+.dashboard-container .icon-btn {
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard-container .icon-btn:hover {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border-color: rgba(94, 23, 235, 0.3);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+}
+
+/* Filter chip enhanced interactions */
+.dashboard-container .filter-chip {
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard-container .filter-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-container .filter-chip.active {
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.2);
+}
+
+/* Search input focus glow */
+@keyframes focusGlow {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1); }
+  50% { box-shadow: 0 0 0 6px rgba(94, 23, 235, 0.15); }
+}
+
+.dashboard-container .search-input:focus {
+  animation: focusGlow 2s ease-in-out infinite;
+}
+
+/* Modal entrance enhancement */
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.dashboard-container .modal-overlay {
+  animation: overlayFadeIn 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.dashboard-container .modal-content,
+.dashboard-container .preview-modal,
+.dashboard-container .qr-modal {
+  animation: modalSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Flow type card selection animation */
+.dashboard-container .flow-type-card {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard-container .flow-type-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.12);
+}
+
+.dashboard-container .flow-type-card.selected {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.25);
+}
+
+/* Stats counter animation */
+@keyframes numberPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.dashboard-container .stat-number {
+  transition: color 0.3s ease;
+}
+
+.dashboard-container .flow-card-v2:hover .stat-number {
+  color: #5e17eb;
+  animation: numberPop 0.3s ease;
+}
+
+/* Status badge pulse for active flows */
+@keyframes statusPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(5, 150, 105, 0);
+  }
+}
+
+.dashboard-container .status-badge.active {
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+/* Response card entrance in viewer */
+@keyframes responseSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.dashboard-container .response-card {
+  animation: responseSlideIn 0.3s ease both;
+}
+
+.dashboard-container .response-card:nth-child(1) { animation-delay: 0.05s; }
+.dashboard-container .response-card:nth-child(2) { animation-delay: 0.1s; }
+.dashboard-container .response-card:nth-child(3) { animation-delay: 0.15s; }
+.dashboard-container .response-card:nth-child(4) { animation-delay: 0.2s; }
+.dashboard-container .response-card:nth-child(5) { animation-delay: 0.25s; }
+
+/* QR code container glow */
+@keyframes qrGlow {
+  0%, 100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+  50% { box-shadow: 0 4px 20px rgba(94, 23, 235, 0.2); }
+}
+
+.dashboard-container .qr-code-container {
+  animation: qrGlow 3s ease-in-out infinite;
+}
+
+/* Empty state floating animation */
+.dashboard-container .empty-icon-circle {
+  animation: float 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.dashboard-container .empty-state-v2:hover .empty-icon-circle {
+  transform: scale(1.05);
+}
+
+/* Export button gold shimmer */
+.dashboard-container .export-btn,
+.dashboard-container .download-qr-btn,
+.dashboard-container .generate-summary-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-container .export-btn::after,
+.dashboard-container .download-qr-btn::after,
+.dashboard-container .generate-summary-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  transition: transform 0.6s ease;
+}
+
+.dashboard-container .export-btn:hover::after,
+.dashboard-container .download-qr-btn:hover::after,
+.dashboard-container .generate-summary-btn:hover::after {
+  transform: rotate(45deg) translate(50%, 50%);
+}
+
+/* Dropdown menu polish */
+.dashboard-container .dropdown-menu {
+  animation: dropdown-appear 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard-container .dropdown-item {
+  transition: all 0.15s ease;
+}
+
+.dashboard-container .dropdown-item:hover {
+  padding-left: 20px;
+}
+
+/* Preview step number animation */
+@keyframes stepBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.dashboard-container .preview-step:hover .preview-step-number {
+  animation: stepBounce 0.4s ease;
+}
+
+/* AI Summary section glow */
+@keyframes aiGlow {
+  0%, 100% { border-color: #fef08a; }
+  50% { border-color: #fbbf24; }
+}
+
+.dashboard-container .ai-summary-section {
+  animation: aiGlow 4s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.dashboard-container .ai-summary-section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.15);
+}
+
+/* Analytics dashboard entrance */
+.analytics-dashboard {
+  animation: pageSlideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+/* Analytics stat hover enhancement */
+.analytics-stat {
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.analytics-stat:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Flows list panel polish */
+.dashboard-container .flows-list {
+  transition: all 0.3s ease;
+}
+
+.dashboard-container .flows-list:hover {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-container .manager-header,
+  .dashboard-container .manager-content,
+  .dashboard-container .flow-card-v2,
+  .dashboard-container .response-card,
+  .dashboard-container .modal-content,
+  .dashboard-container .preview-modal,
+  .dashboard-container .qr-modal,
+  .analytics-dashboard {
+    animation: none;
+  }
+
+  .dashboard-container .flow-card-v2:not(.inactive) .card-accent,
+  .dashboard-container .status-badge.active,
+  .dashboard-container .qr-code-container,
+  .dashboard-container .ai-summary-section,
+  .dashboard-container .empty-icon-circle,
+  .dashboard-container .search-input:focus {
+    animation: none;
+  }
+
+  .dashboard-container .create-flow-btn:hover,
+  .dashboard-container .btn-primary:hover,
+  .dashboard-container .action-btn:hover,
+  .dashboard-container .icon-btn:hover,
+  .dashboard-container .filter-chip:hover,
+  .dashboard-container .flow-card-v2:hover,
+  .dashboard-container .flow-type-card:hover,
+  .dashboard-container .analytics-stat:hover {
+    transform: none;
+  }
+}
