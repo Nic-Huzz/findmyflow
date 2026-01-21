@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  padding-top: 80px;
+  padding-top: 60px;
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   position: relative;
@@ -24,7 +24,12 @@
   z-index: 10;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
+}
+
+.offer-stack-flow .progress-container.no-back-button {
+  justify-content: center;
 }
 
 /* ============ EXPLAINER CONTAINER ============ */
@@ -243,11 +248,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
   width: 100%;
   max-width: 600px;
   animation: osbFadeIn 0.3s ease;
-  padding-top: 40px;
+  padding-top: 10px;
 }
 
 .offer-stack-flow .section-header {
@@ -585,7 +589,7 @@
 .offer-stack-flow .bonus-value {
   font-size: 14px;
   font-weight: 600;
-  color: #10B981;
+  color: #fbbf24;
 }
 
 .offer-stack-flow .bonus-value-input {
@@ -606,7 +610,7 @@
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
-  color: #10B981;
+  color: #fbbf24;
   font-size: 14px;
   font-weight: 600;
   text-align: right;
@@ -667,7 +671,7 @@
 }
 
 .offer-stack-flow .bonus-total strong {
-  color: #10B981;
+  color: #fbbf24;
 }
 
 .offer-stack-flow .bonus-ideas,
@@ -850,8 +854,35 @@
 }
 
 .offer-stack-flow .scarcity-checkbox {
-  font-size: 20px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.offer-stack-flow .scarcity-checkbox.checked {
+  background: #fbbf24;
+  border-color: #fbbf24;
+}
+
+.offer-stack-flow .scarcity-checkbox .checkmark {
+  color: #1a1a2e;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.offer-stack-flow .scarcity-option.none-option {
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+.offer-stack-flow .scarcity-option.none-option.selected {
+  opacity: 1;
 }
 
 .offer-stack-flow .scarcity-icon {
@@ -929,17 +960,31 @@
   font-family: monospace;
 }
 
+.offer-stack-flow .formula-intro {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.offer-stack-flow .formula-note {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 10px;
+  font-style: italic;
+}
+
 /* ============ SUMMARY CONTAINER ============ */
 
 .offer-stack-flow .summary-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
   width: 100%;
   max-width: 600px;
   animation: osbFadeIn 0.5s ease;
-  padding-top: 40px;
+  padding-top: 10px;
 }
 
 .offer-stack-flow .summary-header {
@@ -1037,7 +1082,7 @@
 }
 
 .offer-stack-flow .bonus-val {
-  color: #10B981;
+  color: #fbbf24;
   font-weight: 600;
 }
 

@@ -21,7 +21,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
-import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import { ProgressDots } from '../components/MoneyModelShared'
 import './OfferStackBuilderFlow.css'
 
 const STAGES = {
@@ -117,7 +117,8 @@ const GUARANTEE_TYPES = [
   { id: 'conditional', name: 'Conditional', description: 'Refund if they follow the process', icon: '📋', example: 'If you do X, Y, Z and don\'t get results, we\'ll refund you' },
   { id: 'anti_guarantee', name: 'Anti-Guarantee', description: 'No refunds - creates commitment', icon: '🔒', example: 'All sales final - for serious buyers only' },
   { id: 'results', name: 'Results-Based', description: 'Guarantee specific outcomes', icon: '🎯', example: 'Get X result or your money back' },
-  { id: 'extended', name: 'Extended Period', description: 'Longer than usual refund window', icon: '📅', example: '90-day or 1-year guarantee' }
+  { id: 'extended', name: 'Extended Period', description: 'Longer than usual refund window', icon: '📅', example: '90-day or 1-year guarantee' },
+  { id: 'none', name: 'None of the above', description: 'I\'ll decide on a guarantee later', icon: '⏭️', isNone: true }
 ]
 
 // Scarcity/Urgency types
@@ -126,7 +127,8 @@ const SCARCITY_TYPES = [
   { id: 'limited_spots', name: 'Limited Spots', description: 'Cap on number of customers', icon: '👥', example: 'Only 20 spots available' },
   { id: 'bonus_expires', name: 'Bonus Expires', description: 'Extra value disappears', icon: '🎁', example: 'Free bonus only for first 50' },
   { id: 'price_increase', name: 'Price Increase', description: 'Price goes up soon', icon: '💰', example: 'Price doubles next month' },
-  { id: 'seasonal', name: 'Seasonal', description: 'Only available certain times', icon: '📆', example: 'Only open twice per year' }
+  { id: 'seasonal', name: 'Seasonal', description: 'Only available certain times', icon: '📆', example: 'Only open twice per year' },
+  { id: 'none', name: 'None of the above', description: 'I\'ll add urgency later', icon: '⏭️', isNone: true }
 ]
 
 function OfferStackBuilderFlow() {
@@ -346,9 +348,18 @@ function OfferStackBuilderFlow() {
 
   // Scarcity handlers
   const toggleScarcity = (id) => {
-    setSelectedScarcity(prev =>
-      prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
-    )
+    if (id === 'none') {
+      // If selecting "none", clear all others and just select none
+      setSelectedScarcity(prev => prev.includes('none') ? [] : ['none'])
+    } else {
+      // If selecting something else, remove "none" if present
+      setSelectedScarcity(prev => {
+        const withoutNone = prev.filter(s => s !== 'none')
+        return withoutNone.includes(id)
+          ? withoutNone.filter(s => s !== id)
+          : [...withoutNone, id]
+      })
+    }
   }
 
   // Calculate total bonus value
@@ -459,10 +470,9 @@ function OfferStackBuilderFlow() {
 
   return (
     <div className="offer-stack-flow flow-base">
-      {/* Progress indicator */}
-      {stage !== STAGES.WELCOME && stage !== STAGES.SUCCESS && stage !== STAGES.BONUSES && (
-        <div className="progress-container">
-          <BackButton onClick={goBack} />
+      {/* Progress indicator - no back button, go-back is at bottom of each stage */}
+      {stage !== STAGES.WELCOME && stage !== STAGES.SUCCESS && (
+        <div className="progress-container no-back-button">
           <ProgressDots current={getCurrentStep()} total={STAGE_ORDER.length - 1} />
         </div>
       )}
@@ -895,11 +905,11 @@ function OfferStackBuilderFlow() {
             {SCARCITY_TYPES.map((scarcity) => (
               <button
                 key={scarcity.id}
-                className={`scarcity-option ${selectedScarcity.includes(scarcity.id) ? 'selected' : ''}`}
+                className={`scarcity-option ${selectedScarcity.includes(scarcity.id) ? 'selected' : ''} ${scarcity.isNone ? 'none-option' : ''}`}
                 onClick={() => toggleScarcity(scarcity.id)}
               >
-                <span className="scarcity-checkbox">
-                  {selectedScarcity.includes(scarcity.id) ? '☑️' : '☐'}
+                <span className={`scarcity-checkbox ${selectedScarcity.includes(scarcity.id) ? 'checked' : ''}`}>
+                  {selectedScarcity.includes(scarcity.id) && <span className="checkmark">✓</span>}
                 </span>
                 <span className="scarcity-icon">{scarcity.icon}</span>
                 <div className="scarcity-content">
@@ -910,7 +920,7 @@ function OfferStackBuilderFlow() {
             ))}
           </div>
 
-          {selectedScarcity.length > 0 && (
+          {selectedScarcity.length > 0 && !selectedScarcity.includes('none') && (
             <div className="scarcity-details-input">
               <label>Describe your scarcity/urgency:</label>
               <textarea
@@ -921,10 +931,6 @@ function OfferStackBuilderFlow() {
               />
             </div>
           )}
-
-          <div className="selection-status">
-            {selectedScarcity.length} scarcity element(s) selected
-          </div>
 
           <button className="primary-button" onClick={goNext}>
             Continue to Naming →
@@ -969,13 +975,15 @@ function OfferStackBuilderFlow() {
           </div>
 
           <div className="naming-tips">
-            <p className="tips-header">💡 Naming formulas:</p>
+            <p className="tips-header">💡 Hormozi Naming Formula:</p>
+            <p className="formula-intro">[Result] + [Timeframe] + [Container Word]</p>
             <div className="tip-examples">
-              <div className="tip-example">"The [Timeframe] [Outcome] System"</div>
-              <div className="tip-example">"[Number] Steps to [Desired Result]"</div>
-              <div className="tip-example">"The [Unique Method] Method"</div>
-              <div className="tip-example">"[Outcome] Accelerator/Blueprint"</div>
+              <div className="tip-example">"6-Week Lean Body Program"</div>
+              <div className="tip-example">"The 21-Day Close Rate Accelerator"</div>
+              <div className="tip-example">"90-Day Revenue System"</div>
+              <div className="tip-example">"The 5-Figure Launch Blueprint"</div>
             </div>
+            <p className="formula-note">Container words: System, Program, Blueprint, Accelerator, Method, Framework, Academy</p>
           </div>
 
           <button
