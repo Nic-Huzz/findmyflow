@@ -1,24 +1,25 @@
 /**
- * GrandSlamOfferFlow.jsx - Grand Slam Offer Builder V2 (+35 pts)
+ * GrandSlamOfferFlow.jsx - Grand Slam Offer Evaluation
  *
- * Stage 2 (Product Creation) flow for building a complete Grand Slam Offer
- * using Alex Hormozi's $100M Offers framework.
+ * Stage 5 (Grand Slam) flow for evaluating product success potential
+ * using Alex Hormozi's $100M Offers Value Equation.
  *
- * Prerequisites: Offer Builder V1 (flow_100m_offer)
+ * Value Equation: Dream Outcome × Perceived Likelihood / Time Delay × Effort & Sacrifice
+ *
+ * Question answered: "If I launched this product, how successful will I be?"
  *
  * Flow:
- * 1. Load existing offer from V1
- * 2. Design Bonuses (value stacking)
- * 3. Create Guarantee (risk reversal)
- * 4. Define Scarcity/Urgency
- * 5. Name Your Offer
- * 6. Summary & Complete
+ * 1. Select product from Product Builder
+ * 2. Proof Stack - Can I prove I can deliver? (Perceived Likelihood)
+ * 3. Speed Advantage - How fast can they get results? (Time Delay)
+ * 4. Ease Factor - How easy is it for them? (Effort & Sacrifice)
+ * 5. Grand Slam Score - Success prediction output
  *
  * Created: January 2026
  */
 
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
@@ -29,139 +30,119 @@ import './GrandSlamOfferFlow.css'
 const STAGES = {
   LOADING: 'loading',
   WELCOME: 'welcome',
-  REVIEW_OFFER: 'review_offer',
-  BONUSES: 'bonuses',
-  GUARANTEE: 'guarantee',
-  SCARCITY: 'scarcity',
-  NAMING: 'naming',
-  SUMMARY: 'summary',
+  PRODUCT_SELECT: 'product_select',
+  PROOF_STACK: 'proof_stack',
+  SPEED: 'speed',
+  EASE: 'ease',
+  SCORE: 'score',
   SUCCESS: 'success'
 }
 
-const STAGE_GROUPS = [
-  { id: 'welcome', label: 'Welcome', stages: [STAGES.LOADING, STAGES.WELCOME, STAGES.REVIEW_OFFER] },
-  { id: 'bonuses', label: 'Bonuses', stages: [STAGES.BONUSES] },
-  { id: 'guarantee', label: 'Guarantee', stages: [STAGES.GUARANTEE] },
-  { id: 'scarcity', label: 'Scarcity', stages: [STAGES.SCARCITY] },
-  { id: 'naming', label: 'Naming', stages: [STAGES.NAMING] },
-  { id: 'complete', label: 'Complete', stages: [STAGES.SUMMARY, STAGES.SUCCESS] }
+const STAGE_ORDER = [
+  STAGES.WELCOME,
+  STAGES.PRODUCT_SELECT,
+  STAGES.PROOF_STACK,
+  STAGES.SPEED,
+  STAGES.EASE,
+  STAGES.SCORE
 ]
 
-// Guarantee types with descriptions
-const GUARANTEE_TYPES = [
+// Proof types for credibility stack
+const PROOF_TYPES = [
   {
-    id: 'unconditional',
-    name: 'Unconditional',
-    icon: '🛡️',
-    description: 'No questions asked refund within X days',
-    example: '"30-day money-back guarantee, no questions asked"',
-    risk: 'Higher refund risk, maximum trust building'
+    id: 'personal',
+    label: "I've done this myself (personal transformation)",
+    placeholder: "I went from X to Y in Z timeframe...",
+    example: "I went from corporate burnout to location independence in 18 months"
   },
   {
-    id: 'conditional',
-    name: 'Conditional',
-    icon: '📋',
-    description: 'Refund if they complete requirements and don\'t get results',
-    example: '"Complete all modules, implement the system, if you don\'t see results in 90 days, full refund"',
-    risk: 'Lower refund risk, still builds trust'
+    id: 'caseStudies',
+    label: "I've helped others achieve this (case studies)",
+    placeholder: "I've helped X people achieve Y...",
+    example: "I've helped 47 non-technical founders deploy their products"
   },
   {
-    id: 'performance',
-    name: 'Performance',
-    icon: '🎯',
-    description: 'Outcome-based guarantee tied to specific results',
-    example: '"If you don\'t get X result, I\'ll work with you until you do"',
-    risk: 'Can create ongoing commitment, shows extreme confidence'
+    id: 'credentials',
+    label: "I have credentials or certifications",
+    placeholder: "Certified X, Trained in Y...",
+    example: "altMBA graduate, Certified NLP Practitioner"
   },
   {
-    id: 'anti_guarantee',
-    name: 'Anti-Guarantee',
-    icon: '🔥',
-    description: 'All sales final - for high-demand, proven offers',
-    example: '"Due to the nature of digital products, all sales are final"',
-    risk: 'Only works with high trust/demand, can reduce conversions'
+    id: 'experience',
+    label: "I have years of experience in this field",
+    placeholder: "X years doing Y...",
+    example: "15 years as a senior software engineer"
+  },
+  {
+    id: 'methodology',
+    label: "I have a proprietary methodology or framework",
+    placeholder: "The XYZ Framework: how it works...",
+    example: "The LEGO Castle Methodology: Breaking complex apps into simple building blocks"
+  },
+  {
+    id: 'data',
+    label: "I have data or research backing this approach",
+    placeholder: "Studies show...",
+    example: "MIT study showing AI-assisted development reduces time-to-launch by 87%"
+  },
+  {
+    id: 'none',
+    label: "None of the above",
+    placeholder: null,
+    example: null,
+    isNone: true
   }
 ]
 
-// Scarcity types
-const SCARCITY_TYPES = [
-  {
-    id: 'cohort',
-    name: 'Cohort-Based',
-    icon: '👥',
-    description: 'Limited spots per cohort or batch',
-    example: 'Only 20 spots available per cohort'
-  },
-  {
-    id: 'time',
-    name: 'Time-Based',
-    icon: '⏰',
-    description: 'Enrollment windows or launch periods',
-    example: 'Doors close Friday at midnight'
-  },
-  {
-    id: 'bonus',
-    name: 'Bonus-Based',
-    icon: '🎁',
-    description: 'Bonuses expire after deadline',
-    example: 'First 10 buyers get a 1:1 strategy call'
-  },
-  {
-    id: 'price',
-    name: 'Price-Based',
-    icon: '💰',
-    description: 'Early-bird or founding member pricing',
-    example: 'Founding member price: $497 (regular $997)'
-  },
-  {
-    id: 'inventory',
-    name: 'Inventory',
-    icon: '📦',
-    description: 'Physical inventory or capacity limits',
-    example: 'Only 50 units available this quarter'
-  }
+// Ease factor options
+const EASE_OPTIONS = [
+  { id: 'no_tech_skills', label: 'No technical skills required' },
+  { id: 'no_expensive_tools', label: 'No expensive tools to buy' },
+  { id: 'no_hire_employees', label: 'No need to hire employees' },
+  { id: 'no_quit_job', label: "No need to quit their job first" },
+  { id: 'no_large_investment', label: 'No large upfront investment' },
+  { id: 'no_months_learning', label: 'No months/years of learning' },
+  { id: 'no_complex_setup', label: 'No complex setup process' },
+  { id: 'no_experience', label: 'No prior experience necessary' },
+  { id: 'no_equipment', label: 'No special equipment needed' },
+  { id: 'no_travel', label: 'No travel or relocation required' },
+  { id: 'none', label: 'None of the above', isNone: true }
 ]
 
 function GrandSlamOfferFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [existingOffer, setExistingOffer] = useState(null)
+  const [productData, setProductData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState(null)
 
-  // Grand Slam elements
-  const [bonuses, setBonuses] = useState([])
-  const [currentBonus, setCurrentBonus] = useState({
-    name: '',
-    description: '',
-    value: '',
-    problemSolved: ''
-  })
-  const [guarantee, setGuarantee] = useState({
-    type: '',
-    details: '',
-    duration: ''
-  })
-  const [scarcity, setScarcity] = useState({
-    type: '',
-    details: '',
-    deadline: ''
-  })
-  const [offerName, setOfferName] = useState('')
-  const [offerTagline, setOfferTagline] = useState('')
+  // Product selection
+  const [availableProducts, setAvailableProducts] = useState([])
+  const [selectedProduct, setSelectedProduct] = useState(null)
+  const [evaluatedProducts, setEvaluatedProducts] = useState([]) // Track which products have been evaluated
+  const [chosenMainProduct, setChosenMainProduct] = useState(null) // The product user chooses to proceed with
+
+  // Evaluation data
+  const [proofData, setProofData] = useState({})
+  const [speedData, setSpeedData] = useState({ traditional: '', yours: '' })
+  const [easeData, setEaseData] = useState([])
+  const [customEase, setCustomEase] = useState([])
+  const [grandSlamScore, setGrandSlamScore] = useState(null)
 
   // Auto-save
   const [showResumePrompt, setShowResumePrompt] = useState(false)
   const [savedProgressData, setSavedProgressData] = useState(null)
-  const { saveProgress, loadProgress, clearProgress } = useAutoSave('grand-slam-offer', user?.id)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave('grand-slam-offer-v2', user?.id)
 
-  // Load existing offer from V1 on mount
+  // Load existing offer and product data
   useEffect(() => {
     if (user) {
-      loadExistingOffer()
+      loadExistingData()
     }
   }, [user])
 
@@ -181,19 +162,18 @@ function GrandSlamOfferFlow() {
     if (!user || stage === STAGES.LOADING || stage === STAGES.SUCCESS) return
     const progressData = {
       stage,
-      bonuses,
-      guarantee,
-      scarcity,
-      offerName,
-      offerTagline
+      proofData,
+      speedData,
+      easeData,
+      customEase
     }
     saveProgress(progressData)
-  }, [stage, bonuses, guarantee, scarcity, offerName, offerTagline, user, saveProgress])
+  }, [stage, proofData, speedData, easeData, customEase, user, saveProgress])
 
-  const loadExistingOffer = async () => {
+  const loadExistingData = async () => {
     try {
       // Load most recent offer builder assessment
-      const { data, error } = await supabase
+      const { data: offerData, error: offerError } = await supabase
         .from('offer_builder_assessments')
         .select('*')
         .eq('user_id', user.id)
@@ -201,18 +181,56 @@ function GrandSlamOfferFlow() {
         .limit(1)
         .single()
 
-      if (error && error.code !== 'PGRST116') throw error
+      if (offerError && offerError.code !== 'PGRST116') throw offerError
 
-      if (data) {
-        setExistingOffer(data)
+      // Load product selection data
+      const { data: product, error: productError } = await supabase
+        .from('product_selection_assessments')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (productError && productError.code !== 'PGRST116') {
+        // Product selection is optional
+        console.log('No product selection found')
+      }
+
+      // Load previously evaluated products
+      const { data: existingEvaluations } = await supabase
+        .from('grand_slam_offers')
+        .select('evaluated_product_ids')
+        .eq('user_id', user.id)
+        .single()
+
+      if (existingEvaluations?.evaluated_product_ids) {
+        setEvaluatedProducts(existingEvaluations.evaluated_product_ids)
+      }
+
+      if (offerData) {
+        setExistingOffer(offerData)
+        setProductData(product || null)
+
+        // Extract products from offer builder responses
+        const solutions = offerData.responses?.q8_solutions?.solutions || []
+        const products = solutions.map((sol, index) => ({
+          id: `solution_${index}`,
+          name: sol.description?.substring(0, 50) || `Product ${index + 1}`,
+          fullDescription: sol.description,
+          problemText: sol.problemText,
+          solutionType: sol.solutionType,
+          solutionCategory: sol.solutionCategory
+        }))
+        setAvailableProducts(products)
+
         setStage(STAGES.WELCOME)
       } else {
-        // No V1 offer found
-        setError('Please complete Offer Builder V1 first')
+        setError('Please complete Product Builder first')
         setStage(STAGES.WELCOME)
       }
     } catch (err) {
-      console.error('Error loading existing offer:', err)
+      console.error('Error loading data:', err)
       setError('Failed to load your offer data')
     } finally {
       setIsLoading(false)
@@ -222,11 +240,10 @@ function GrandSlamOfferFlow() {
   const handleResumeProgress = useCallback(() => {
     if (savedProgressData) {
       setStage(savedProgressData.stage)
-      if (savedProgressData.bonuses) setBonuses(savedProgressData.bonuses)
-      if (savedProgressData.guarantee) setGuarantee(savedProgressData.guarantee)
-      if (savedProgressData.scarcity) setScarcity(savedProgressData.scarcity)
-      if (savedProgressData.offerName) setOfferName(savedProgressData.offerName)
-      if (savedProgressData.offerTagline) setOfferTagline(savedProgressData.offerTagline)
+      if (savedProgressData.proofData) setProofData(savedProgressData.proofData)
+      if (savedProgressData.speedData) setSpeedData(savedProgressData.speedData)
+      if (savedProgressData.easeData) setEaseData(savedProgressData.easeData)
+      if (savedProgressData.customEase) setCustomEase(savedProgressData.customEase)
     }
     setShowResumePrompt(false)
   }, [savedProgressData])
@@ -237,144 +254,217 @@ function GrandSlamOfferFlow() {
     setSavedProgressData(null)
   }, [clearProgress])
 
-  // Add bonus to list
-  const addBonus = () => {
-    if (!currentBonus.name.trim() || !currentBonus.description.trim()) return
-    setBonuses(prev => [...prev, { ...currentBonus, id: Date.now() }])
-    setCurrentBonus({ name: '', description: '', value: '', problemSolved: '' })
+  // Navigation
+  const goBack = () => {
+    const currentIndex = STAGE_ORDER.indexOf(stage)
+    if (currentIndex > 0) {
+      setStage(STAGE_ORDER[currentIndex - 1])
+    }
   }
 
-  // Remove bonus
-  const removeBonus = (id) => {
-    setBonuses(prev => prev.filter(b => b.id !== id))
+  const goNext = () => {
+    const currentIndex = STAGE_ORDER.indexOf(stage)
+    if (currentIndex < STAGE_ORDER.length - 1) {
+      setStage(STAGE_ORDER[currentIndex + 1])
+    }
   }
 
-  // Calculate total bonus value
-  const getTotalBonusValue = () => {
-    return bonuses.reduce((sum, b) => sum + (parseInt(b.value) || 0), 0)
+  // Get current step number
+  const getCurrentStep = () => {
+    const index = STAGE_ORDER.indexOf(stage)
+    return index >= 0 ? index : 0
   }
 
-  // Save results
-  const handleSaveResults = async () => {
-    if (isSaving || !user) return
-    setIsSaving(true)
-    setError(null)
-
-    try {
-      const grandSlamData = {
-        user_id: user.id,
-        offer_builder_id: existingOffer?.id,
-        offer_name: offerName,
-        offer_tagline: offerTagline,
-        bonuses: bonuses,
-        guarantee: guarantee,
-        scarcity: scarcity,
-        total_bonus_value: getTotalBonusValue(),
-        created_at: new Date().toISOString()
+  // Proof Stack handlers
+  const toggleProof = (id) => {
+    setProofData(prev => {
+      // If selecting "none", clear all other selections
+      if (id === 'none') {
+        if (prev.none !== undefined) {
+          return {} // Deselect none
+        }
+        return { none: true } // Select only none
       }
 
-      // Save to grand_slam_offers table (or create if doesn't exist)
+      // If selecting something else and "none" was selected, remove "none"
+      const { none: _, ...withoutNone } = prev
+
+      if (prev[id] !== undefined) {
+        const { [id]: removed, ...rest } = withoutNone
+        return rest
+      }
+      return { ...withoutNone, [id]: '' }
+    })
+  }
+
+  const updateProofDetail = (id, value) => {
+    setProofData(prev => ({ ...prev, [id]: value }))
+  }
+
+  // Ease handlers
+  const toggleEase = (id) => {
+    setEaseData(prev => {
+      // If selecting "none", clear all other selections
+      if (id === 'none') {
+        if (prev.includes('none')) {
+          return [] // Deselect none
+        }
+        setCustomEase([]) // Clear custom ease too
+        return ['none'] // Select only none
+      }
+
+      // If selecting something else and "none" was selected, remove "none"
+      const withoutNone = prev.filter(x => x !== 'none')
+
+      if (prev.includes(id)) {
+        return withoutNone.filter(x => x !== id)
+      }
+      return [...withoutNone, id]
+    })
+  }
+
+  const addCustomEase = (text) => {
+    if (text.trim() && !customEase.includes(text.trim())) {
+      setCustomEase(prev => [...prev, text.trim()])
+    }
+  }
+
+  // Calculate Grand Slam Score
+  const calculateScore = async () => {
+    setIsLoading(true)
+    try {
+      // Calculate scores based on inputs (Value Equation: Dream Outcome × Perceived Likelihood / Time Delay × Effort)
+      const proofCount = Object.keys(proofData).filter(k => proofData[k]?.length > 20).length
+      const proofScore = Math.min(10, proofCount * 2) // 0-10 (Perceived Likelihood)
+
+      // Speed score based on comparison (Time Delay - lower is better)
+      let speedScore = 5 // Default
+      if (speedData.traditional && speedData.yours) {
+        // If they have both filled, give bonus for articulating the difference
+        speedScore = 7
+      }
+
+      // Ease score based on selections (Effort & Sacrifice - lower is better)
+      const totalEase = easeData.length + customEase.length
+      const easeScore = Math.min(10, totalEase) // 0-10
+
+      // Calculate total (out of 100) - 3 components, ~33 points each
+      const total = Math.round(
+        (proofScore * 3.33) + // ~33 points max (Perceived Likelihood)
+        (speedScore * 3.33) + // ~33 points max (Time Delay)
+        (easeScore * 3.33)    // ~33 points max (Effort & Sacrifice)
+      )
+
+      const grade = total >= 80 ? { letter: 'A', label: 'Grand Slam Ready', color: '#10B981' }
+        : total >= 60 ? { letter: 'B', label: 'Strong Foundation', color: '#3B82F6' }
+        : total >= 40 ? { letter: 'C', label: 'Needs Work', color: '#F59E0B' }
+        : { letter: 'D', label: 'Early Stage', color: '#EF4444' }
+
+      setGrandSlamScore({
+        total,
+        grade,
+        proofScore,
+        speedScore,
+        easeScore
+      })
+
+      setStage(STAGES.SCORE)
+    } catch (err) {
+      console.error('Error calculating score:', err)
+      setError('Failed to calculate score')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Save and complete
+  const handleComplete = async () => {
+    setIsSaving(true)
+    try {
+      // Update evaluated products list
+      const newEvaluatedProducts = [...evaluatedProducts]
+      if (selectedProduct && !newEvaluatedProducts.includes(selectedProduct.id)) {
+        newEvaluatedProducts.push(selectedProduct.id)
+      }
+
+      // Save to database
       const { error: saveError } = await supabase
         .from('grand_slam_offers')
-        .insert(grandSlamData)
+        .upsert({
+          user_id: user.id,
+          offer_builder_id: existingOffer?.id,
+          selected_product_id: selectedProduct?.id,
+          selected_product_name: selectedProduct?.name,
+          selected_product_data: selectedProduct,
+          evaluated_product_ids: newEvaluatedProducts,
+          proof_data: proofData,
+          speed_data: speedData,
+          ease_data: { selected: easeData, custom: customEase },
+          grand_slam_score: grandSlamScore?.total,
+          score_breakdown: grandSlamScore,
+          status: 'completed',
+          completed_at: new Date().toISOString()
+        }, { onConflict: 'user_id' })
 
-      if (saveError) {
-        // Table might not exist, save to offer_builder_assessments metadata
-        await supabase
-          .from('offer_builder_assessments')
-          .update({
-            grand_slam_data: grandSlamData
-          })
-          .eq('id', existingOffer?.id)
-      }
+      if (saveError) throw saveError
 
-      // Track flow completion
-      await supabase.from('flow_sessions').insert({
-        user_id: user.id,
-        flow_type: 'offer_builder_v2',
-        flow_version: 'grand-slam-v1',
-        status: 'completed',
-        last_step_id: 'complete'
-      })
+      // Update local state
+      setEvaluatedProducts(newEvaluatedProducts)
+
+      // Auto-select as main product (user can change on SUCCESS screen)
+      setChosenMainProduct(selectedProduct)
 
       // Complete quest
-      await completeFlowQuest({
-        userId: user.id,
-        flowId: 'offer_builder_v2',
-        pointsEarned: 35
+      await completeFlowQuest(user.id, 'flow_grand_slam_offer', null, {
+        score: grandSlamScore?.total,
+        grade: grandSlamScore?.grade?.letter,
+        productName: selectedProduct?.name
       })
-
-      // Create milestone
-      try {
-        const { data: projectData } = await supabase
-          .from('user_projects')
-          .select('id, current_stage')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single()
-
-        await supabase.from('milestone_completions').insert({
-          user_id: user.id,
-          project_id: projectData?.id,
-          milestone_id: 'grand_slam_offer_created',
-          stage: projectData?.current_stage || 2,
-          evidence_text: `Created Grand Slam offer: ${offerName} with ${bonuses.length} bonuses`
-        })
-      } catch (milestoneError) {
-        console.warn('Milestone creation failed:', milestoneError)
-      }
 
       clearProgress()
       setStage(STAGES.SUCCESS)
     } catch (err) {
+      console.error('Error saving:', err)
       setError('Failed to save. Please try again.')
-      console.error('Save error:', err)
     } finally {
       setIsSaving(false)
     }
   }
 
-  // Get core products from existing offer
-  // Includes ProductSelection data (mechanism, features, value scores) if available
-  const getCoreProducts = () => {
-    if (!existingOffer?.responses?.solution_categories) return []
-    const solutions = existingOffer.responses.q8_problem_solutions?.solutions || []
-    const productSelections = existingOffer.responses?.product_selections || {}
-
-    return solutions
-      .map((solution, idx) => {
-        const solutionId = `solution_${idx}`
-        const isCore = existingOffer.responses.solution_categories[solutionId] === 'core_product'
-        if (!isCore) return null
-
-        // Merge ProductSelection data if available
-        const selectionData = productSelections[solutionId] || {}
-
-        return {
-          ...solution,
-          id: solutionId,
-          // ProductSelection enhancements
-          mechanism: selectionData.mechanism || null,
-          featureBenefits: selectionData.featureBenefits || [],
-          valueScore: selectionData.valueScore || null,
-          hasProductDefinition: !!selectionData.mechanism
-        }
-      })
-      .filter(Boolean)
+  // Start evaluation for another product
+  const handleEvaluateAnother = () => {
+    // Reset evaluation state but keep product list and evaluated products
+    setSelectedProduct(null)
+    setProofData({})
+    setSpeedData({ traditional: '', yours: '' })
+    setEaseData([])
+    setCustomEase([])
+    setGrandSlamScore(null)
+    setShowResumePrompt(false) // Prevent resume prompt from showing
+    setSavedProgressData(null)
+    clearProgress()
+    setStage(STAGES.PRODUCT_SELECT)
   }
 
-  // RENDER
+  // Get unevaluated products
+  const getUnevaluatedProducts = () => {
+    return availableProducts.filter(p => !evaluatedProducts.includes(p.id))
+  }
+
+  // Get dream outcome from offer data
+  const getDreamOutcome = () => {
+    return existingOffer?.responses?.q1_dream_outcome ||
+           existingOffer?.dream_outcome ||
+           productData?.dream_outcome ||
+           'their desired outcome'
+  }
 
   // Loading state
   if (stage === STAGES.LOADING) {
     return (
-      <div className="grand-slam-flow">
+      <div className="grand-slam-flow flow-base">
         <div className="loading-state">
-          <div className="typing-indicator">
-            <span></span><span></span><span></span>
-          </div>
-          <p>Loading your offer...</p>
+          <div className="spinner"></div>
         </div>
       </div>
     )
@@ -383,573 +473,487 @@ function GrandSlamOfferFlow() {
   // Resume prompt
   if (showResumePrompt && savedProgressData) {
     return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
+      <div className="grand-slam-flow flow-base">
         <div className="welcome-container">
-          <h1 className="welcome-greeting">Welcome Back!</h1>
           <div className="resume-prompt">
-            <p className="resume-icon">💾</p>
-            <p><strong>You have saved progress</strong></p>
-            <p className="resume-stage">
-              You were on: <strong>{savedProgressData.stage?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</strong>
+            <div className="time-icon">⏱️</div>
+            <h2 className="resume-title">Welcome back!</h2>
+            <p className="resume-info">You have progress saved from a previous session.</p>
+            <div className="resume-actions">
+              <button className="primary-button" onClick={handleResumeProgress}>
+                Continue Where I Left Off
+              </button>
+              <button className="secondary-button" onClick={handleStartFresh}>
+                Start Fresh
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="grand-slam-flow flow-base">
+      {/* Progress indicator */}
+      {stage !== STAGES.WELCOME && stage !== STAGES.SUCCESS && stage !== STAGES.SCORE && (
+        <div className="progress-container">
+          <BackButton onClick={goBack} />
+          <ProgressDots current={getCurrentStep()} total={STAGE_ORDER.length - 1} />
+        </div>
+      )}
+
+      {/* Error display */}
+      {error && (
+        <div className="error-banner">
+          {error}
+          <button onClick={() => setError(null)}>×</button>
+        </div>
+      )}
+
+      {/* WELCOME */}
+      {stage === STAGES.WELCOME && (
+        <div className="welcome-container">
+          <div className="welcome-content">
+            <div className="time-icon">🎯</div>
+            <h1 className="welcome-greeting">Grand Slam Evaluation</h1>
+            <div className="welcome-message">
+              <p>
+                Let's evaluate your offer using Alex Hormozi's
+                <strong> Value Equation</strong> to predict success.
+              </p>
+              <p>
+                We'll assess 3 key dimensions:
+              </p>
+              <div className="evaluation-preview">
+                <div className="eval-item">✅ Proof Stack (Can you prove you deliver?)</div>
+                <div className="eval-item">⚡ Speed Advantage (How fast do they get results?)</div>
+                <div className="eval-item">🎯 Ease Factor (What do they NOT need to do?)</div>
+              </div>
+              <p className="time-estimate">⏱️ Takes about 10-15 minutes</p>
+            </div>
+          </div>
+          {!existingOffer ? (
+            <button className="primary-button" onClick={() => navigate('/offer-builder')}>
+              Complete Product Builder First
+            </button>
+          ) : availableProducts.length === 0 ? (
+            <button className="primary-button" onClick={() => navigate('/offer-builder')}>
+              Add Products in Product Builder First
+            </button>
+          ) : (
+            <button className="primary-button glow-button" onClick={() => setStage(STAGES.PRODUCT_SELECT)}>
+              Start Evaluation →
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* PRODUCT SELECT */}
+      {stage === STAGES.PRODUCT_SELECT && (
+        <div className="question-container">
+          <div className="question-header">
+            <h2 className="question-text">Which product are you evaluating?</h2>
+            <p className="question-subtext">
+              Select the product from your Product Builder that you want to evaluate.
             </p>
           </div>
-          <button className="primary-button glow-button" onClick={handleResumeProgress}>
-            Continue Where I Left Off
-          </button>
-          <button className="secondary-button" onClick={handleStartFresh} style={{ marginTop: '12px' }}>
-            Start Fresh
-          </button>
-        </div>
-      </div>
-    )
-  }
 
-  // WELCOME
-  if (stage === STAGES.WELCOME) {
-    if (!existingOffer) {
-      return (
-        <div className="grand-slam-flow">
-          <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-          <div className="welcome-container">
-            <h1 className="welcome-greeting">Grand Slam Offer Builder</h1>
-            <div className="welcome-message">
-              <p className="error-notice">You need to complete Offer Builder V1 first.</p>
-              <p>V1 helps you categorize your solutions into Core Products, Lead Magnets, and Bonuses.</p>
-              <p>Then V2 (this flow) helps you design the full Grand Slam package.</p>
-            </div>
-            <button className="primary-button" onClick={() => navigate('/offer-builder')}>
-              Go to Offer Builder V1
-            </button>
-            <button className="secondary-button" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: '12px' }}>
-              Back to Challenge
-            </button>
-          </div>
-        </div>
-      )
-    }
-
-    return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="welcome-container">
-          <h1 className="welcome-greeting">Grand Slam Offer Builder</h1>
-          <div className="welcome-message animated-text">
-            <p><strong>Time to make your offer irresistible.</strong></p>
-            <p>You've categorized your solutions. Now let's add the elements that make people feel <em>stupid</em> saying no:</p>
-            <div className="grand-slam-elements">
-              <div className="gs-element">
-                <span className="gs-icon">🎁</span>
-                <span>Stack valuable bonuses</span>
-              </div>
-              <div className="gs-element">
-                <span className="gs-icon">🛡️</span>
-                <span>Create risk reversal</span>
-              </div>
-              <div className="gs-element">
-                <span className="gs-icon">⏰</span>
-                <span>Add ethical scarcity</span>
-              </div>
-              <div className="gs-element">
-                <span className="gs-icon">✨</span>
-                <span>Name it memorably</span>
-              </div>
-            </div>
-          </div>
-          <button className="primary-button glow-button" onClick={() => setStage(STAGES.REVIEW_OFFER)}>
-            Let's Build This
-          </button>
-          <p className="attribution-text">Based on Alex Hormozi's $100M Offers framework</p>
-        </div>
-      </div>
-    )
-  }
-
-  // REVIEW OFFER
-  if (stage === STAGES.REVIEW_OFFER) {
-    const coreProducts = getCoreProducts()
-    return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="review-container">
-          <h2 className="question-text">Your Core Offer Foundation</h2>
-          <p className="question-subtext">Here's what we're building on from V1</p>
-
-          <div className="offer-foundation">
-            {coreProducts.length > 0 ? (
-              <div className="core-products-list">
-                <h4>Core Product(s)</h4>
-                {coreProducts.map((product, idx) => (
-                  <div key={idx} className={`foundation-card ${product.hasProductDefinition ? 'has-definition' : ''}`}>
-                    <div className="foundation-header">
-                      <span className="product-type-badge">{product.solutionType}</span>
-                      {product.valueScore && (
-                        <span className="value-score-badge">Score: {product.valueScore}</span>
-                      )}
-                    </div>
-                    <p className="product-description">{product.description}</p>
-
-                    {/* Show ProductSelection data if available */}
-                    {product.hasProductDefinition && (
-                      <div className="product-definition">
-                        <div className="definition-mechanism">
-                          <span className="definition-label">How it solves their problem:</span>
-                          <p>{product.mechanism}</p>
-                        </div>
-                        {product.featureBenefits?.length > 0 && (
-                          <div className="definition-features">
-                            <span className="definition-label">What's included:</span>
-                            <ul>
-                              {product.featureBenefits.slice(0, 3).map((fb, i) => (
-                                <li key={i}>
-                                  <strong>{fb.feature}</strong> → {fb.benefit}
-                                </li>
-                              ))}
-                              {product.featureBenefits.length > 3 && (
-                                <li className="more-features">+{product.featureBenefits.length - 3} more</li>
-                              )}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
+          <div className="product-options">
+            {availableProducts.map((product) => {
+              const isEvaluated = evaluatedProducts.includes(product.id)
+              return (
+                <button
+                  key={product.id}
+                  className={`product-option ${selectedProduct?.id === product.id ? 'selected' : ''} ${isEvaluated ? 'evaluated' : ''}`}
+                  onClick={() => setSelectedProduct(product)}
+                >
+                  <div className="product-option-content">
+                    <span className="product-name">{product.name}</span>
+                    {product.solutionType && (
+                      <span className="product-type">
+                        {product.solutionType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
+                      </span>
                     )}
-                    {!product.hasProductDefinition && (
-                      <p className="no-definition-hint">
-                        💡 Complete <a href="/product-selection">Product Definition</a> to add more detail
-                      </p>
+                    {product.problemText && (
+                      <span className="product-problem">Solves: {product.problemText.substring(0, 60)}...</span>
                     )}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="foundation-card">
-                <p>Your core offer from V1 categorization</p>
-              </div>
-            )}
-
-            <div className="niche-summary">
-              <h4>Your Niche</h4>
-              <p>{existingOffer.niche_definition || existingOffer.responses?.q6_niche_layers?.value || 'Not defined'}</p>
-            </div>
-          </div>
-
-          <button className="primary-button" onClick={() => setStage(STAGES.BONUSES)}>
-            Continue to Bonuses
-          </button>
-          <BackButton onClick={() => setStage(STAGES.WELCOME)} />
-        </div>
-      </div>
-    )
-  }
-
-  // BONUSES
-  if (stage === STAGES.BONUSES) {
-    const totalValue = getTotalBonusValue()
-    const isValid = bonuses.length >= 1
-
-    return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="bonuses-container">
-          <h2 className="question-text">Design Your Bonuses</h2>
-          <p className="question-subtext">
-            Great bonuses address obstacles your customer faces AFTER buying. Aim for 10x the price in perceived value.
-          </p>
-
-          {/* Value tracker */}
-          <div className="value-tracker">
-            <span className="value-label">Total Bonus Value:</span>
-            <span className="value-amount">${totalValue.toLocaleString()}</span>
-            {bonuses.length > 0 && (
-              <span className="value-count">({bonuses.length} bonus{bonuses.length !== 1 ? 'es' : ''})</span>
-            )}
-          </div>
-
-          {/* Added bonuses */}
-          {bonuses.length > 0 && (
-            <div className="bonuses-list">
-              {bonuses.map((bonus) => (
-                <div key={bonus.id} className="bonus-card">
-                  <div className="bonus-header">
-                    <h4>{bonus.name}</h4>
-                    <span className="bonus-value">${parseInt(bonus.value || 0).toLocaleString()} value</span>
-                  </div>
-                  <p className="bonus-desc">{bonus.description}</p>
-                  {bonus.problemSolved && (
-                    <p className="bonus-problem">Solves: {bonus.problemSolved}</p>
+                  {isEvaluated && (
+                    <span className="evaluated-badge">✓ Evaluated</span>
                   )}
-                  <button className="remove-bonus-btn" onClick={() => removeBonus(bonus.id)}>
-                    Remove
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Add bonus form */}
-          <div className="add-bonus-form">
-            <h4>{bonuses.length === 0 ? 'Add a Bonus' : 'Add Another Bonus'}</h4>
-
-            <div className="form-field">
-              <label>Bonus Name</label>
-              <input
-                type="text"
-                placeholder="e.g., Quick-Start Implementation Guide"
-                value={currentBonus.name}
-                onChange={(e) => setCurrentBonus(prev => ({ ...prev, name: e.target.value }))}
-              />
-            </div>
-
-            <div className="form-field">
-              <label>What is it?</label>
-              <textarea
-                placeholder="Describe what they get and why it's valuable"
-                value={currentBonus.description}
-                onChange={(e) => setCurrentBonus(prev => ({ ...prev, description: e.target.value }))}
-                rows={3}
-              />
-            </div>
-
-            <div className="form-row">
-              <div className="form-field half">
-                <label>Perceived Value ($)</label>
-                <input
-                  type="number"
-                  placeholder="497"
-                  value={currentBonus.value}
-                  onChange={(e) => setCurrentBonus(prev => ({ ...prev, value: e.target.value }))}
-                />
-              </div>
-              <div className="form-field half">
-                <label>What obstacle does it solve?</label>
-                <input
-                  type="text"
-                  placeholder="e.g., Getting started quickly"
-                  value={currentBonus.problemSolved}
-                  onChange={(e) => setCurrentBonus(prev => ({ ...prev, problemSolved: e.target.value }))}
-                />
-              </div>
-            </div>
-
-            <button
-              className="add-btn"
-              onClick={addBonus}
-              disabled={!currentBonus.name.trim() || !currentBonus.description.trim()}
-            >
-              + Add Bonus
-            </button>
+                </button>
+              )
+            })}
           </div>
 
-          <div className="bonus-tips">
-            <h4>Bonus Ideas</h4>
-            <ul>
-              <li><strong>Templates/Swipe Files</strong> - Reduce effort and time</li>
-              <li><strong>Community Access</strong> - Connection and accountability</li>
-              <li><strong>Quick-Start Guide</strong> - Faster implementation</li>
-              <li><strong>Bonus Training</strong> - Address specific challenges</li>
-              <li><strong>1:1 Call</strong> - Personalized support (high perceived value)</li>
-            </ul>
-          </div>
-
-          <button
-            className="primary-button"
-            onClick={() => setStage(STAGES.GUARANTEE)}
-            disabled={!isValid}
-          >
-            Continue ({bonuses.length} bonus{bonuses.length !== 1 ? 'es' : ''})
-          </button>
-          <BackButton onClick={() => setStage(STAGES.REVIEW_OFFER)} />
-        </div>
-      </div>
-    )
-  }
-
-  // GUARANTEE
-  if (stage === STAGES.GUARANTEE) {
-    const isValid = guarantee.type && guarantee.details.trim()
-
-    return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="guarantee-container">
-          <h2 className="question-text">Create Your Guarantee</h2>
-          <p className="question-subtext">
-            A guarantee transfers risk from the buyer to you. The stronger the guarantee, the more confident your prospect feels.
-          </p>
-
-          <div className="guarantee-types">
-            {GUARANTEE_TYPES.map((type) => (
-              <button
-                key={type.id}
-                className={`guarantee-type-card ${guarantee.type === type.id ? 'selected' : ''}`}
-                onClick={() => setGuarantee(prev => ({ ...prev, type: type.id }))}
-              >
-                <span className="type-icon">{type.icon}</span>
-                <h4>{type.name}</h4>
-                <p className="type-desc">{type.description}</p>
-                <p className="type-example">"{type.example}"</p>
-                <p className="type-risk">{type.risk}</p>
-              </button>
-            ))}
-          </div>
-
-          {guarantee.type && (
-            <div className="guarantee-details">
-              <div className="form-field">
-                <label>Your Specific Guarantee</label>
-                <textarea
-                  placeholder="Write out your guarantee exactly as you'd present it to customers..."
-                  value={guarantee.details}
-                  onChange={(e) => setGuarantee(prev => ({ ...prev, details: e.target.value }))}
-                  rows={4}
-                />
-              </div>
-
-              {(guarantee.type === 'unconditional' || guarantee.type === 'conditional') && (
-                <div className="form-field">
-                  <label>Duration (optional)</label>
-                  <input
-                    type="text"
-                    placeholder="e.g., 30 days, 90 days, 1 year"
-                    value={guarantee.duration}
-                    onChange={(e) => setGuarantee(prev => ({ ...prev, duration: e.target.value }))}
-                  />
-                </div>
-              )}
+          {evaluatedProducts.length > 0 && (
+            <div className="evaluated-info">
+              <span>✓ {evaluatedProducts.length} product{evaluatedProducts.length > 1 ? 's' : ''} already evaluated</span>
             </div>
           )}
 
           <button
             className="primary-button"
-            onClick={() => setStage(STAGES.SCARCITY)}
-            disabled={!isValid}
+            onClick={goNext}
+            disabled={!selectedProduct}
           >
-            Continue
+            Evaluate This Product →
           </button>
-          <BackButton onClick={() => setStage(STAGES.BONUSES)} />
-        </div>
-      </div>
-    )
-  }
-
-  // SCARCITY
-  if (stage === STAGES.SCARCITY) {
-    const isValid = scarcity.type && scarcity.details.trim()
-
-    return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="scarcity-container">
-          <h2 className="question-text">Define Scarcity & Urgency</h2>
-          <p className="question-subtext">
-            Scarcity gives prospects a reason to act NOW. <strong>Only use scarcity that's real</strong> - fake scarcity destroys trust.
-          </p>
-
-          <div className="scarcity-types">
-            {SCARCITY_TYPES.map((type) => (
-              <button
-                key={type.id}
-                className={`scarcity-type-card ${scarcity.type === type.id ? 'selected' : ''}`}
-                onClick={() => setScarcity(prev => ({ ...prev, type: type.id }))}
-              >
-                <span className="type-icon">{type.icon}</span>
-                <h4>{type.name}</h4>
-                <p className="type-desc">{type.description}</p>
-                <p className="type-example">{type.example}</p>
-              </button>
-            ))}
-          </div>
-
-          {scarcity.type && (
-            <div className="scarcity-details">
-              <div className="form-field">
-                <label>Your Specific Scarcity/Urgency</label>
-                <textarea
-                  placeholder="Describe your scarcity element in detail..."
-                  value={scarcity.details}
-                  onChange={(e) => setScarcity(prev => ({ ...prev, details: e.target.value }))}
-                  rows={3}
-                />
-              </div>
-
-              {(scarcity.type === 'time' || scarcity.type === 'bonus') && (
-                <div className="form-field">
-                  <label>Deadline (if applicable)</label>
-                  <input
-                    type="text"
-                    placeholder="e.g., Friday at midnight, First 10 buyers"
-                    value={scarcity.deadline}
-                    onChange={(e) => setScarcity(prev => ({ ...prev, deadline: e.target.value }))}
-                  />
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="scarcity-warning">
-            <p><strong>Remember:</strong> Only use scarcity that's actually true. If you can serve unlimited customers, create real constraints (cohort sizes, personal bandwidth, etc.)</p>
-          </div>
-
-          <button
-            className="primary-button"
-            onClick={() => setStage(STAGES.NAMING)}
-            disabled={!isValid}
-          >
-            Continue
+          <button className="go-back-link" onClick={goBack}>
+            ← Go Back
           </button>
-          <BackButton onClick={() => setStage(STAGES.GUARANTEE)} />
         </div>
-      </div>
-    )
-  }
+      )}
 
-  // NAMING
-  if (stage === STAGES.NAMING) {
-    const isValid = offerName.trim().length > 0
-
-    return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="naming-container">
-          <h2 className="question-text">Name Your Offer</h2>
-          <p className="question-subtext">
-            A great name is memorable, specific, and hints at the transformation.
-          </p>
-
-          <div className="naming-form">
-            <div className="form-field">
-              <label>Offer Name</label>
-              <input
-                type="text"
-                placeholder="e.g., The 90-Day Revenue Accelerator"
-                value={offerName}
-                onChange={(e) => setOfferName(e.target.value)}
-                className="offer-name-input"
-              />
-            </div>
-
-            <div className="form-field">
-              <label>Tagline (optional)</label>
-              <input
-                type="text"
-                placeholder="e.g., From stuck to $10K/month in 90 days or less"
-                value={offerTagline}
-                onChange={(e) => setOfferTagline(e.target.value)}
-              />
-            </div>
+      {/* PROOF STACK */}
+      {stage === STAGES.PROOF_STACK && (
+        <div className="question-container">
+          <div className="question-header">
+            <span className="question-number">Step 1 of 3</span>
+            <h2 className="question-text">Why should they believe you can deliver?</h2>
+            <p className="question-subtext">
+              Build your credibility stack. Select all that apply and provide details.
+            </p>
           </div>
 
-          <div className="naming-tips">
-            <h4>Naming Formulas</h4>
-            <ul>
-              <li><strong>The [Timeframe] [Outcome]</strong> - "The 30-Day Launch System"</li>
-              <li><strong>[Adjective] [Noun] [Method]</strong> - "The Rapid Revenue Blueprint"</li>
-              <li><strong>[Number] [Outcome] [System/Method]</strong> - "The 6-Figure Coaching Formula"</li>
-              <li><strong>The [Specific Niche] [Transformation]</strong> - "The Burnt-Out Executive's Freedom Path"</li>
-            </ul>
-          </div>
+          <div className="proof-options">
+            {PROOF_TYPES.map(proof => (
+              <div key={proof.id} className={`proof-option ${proofData[proof.id] !== undefined ? 'selected' : ''} ${proof.isNone ? 'none-option' : ''}`}>
+                <button
+                  type="button"
+                  className="proof-toggle"
+                  onClick={() => toggleProof(proof.id)}
+                >
+                  <span className={`proof-checkbox ${proofData[proof.id] !== undefined ? 'checked' : ''}`}>
+                    {proofData[proof.id] !== undefined && <span className="checkmark">✓</span>}
+                  </span>
+                  <span className="proof-label">{proof.label}</span>
+                </button>
 
-          <button
-            className="primary-button"
-            onClick={() => setStage(STAGES.SUMMARY)}
-            disabled={!isValid}
-          >
-            Review My Grand Slam Offer
-          </button>
-          <BackButton onClick={() => setStage(STAGES.SCARCITY)} />
-        </div>
-      </div>
-    )
-  }
-
-  // SUMMARY
-  if (stage === STAGES.SUMMARY) {
-    const totalBonusValue = getTotalBonusValue()
-    const selectedGuarantee = GUARANTEE_TYPES.find(g => g.id === guarantee.type)
-    const selectedScarcity = SCARCITY_TYPES.find(s => s.id === scarcity.type)
-
-    return (
-      <div className="grand-slam-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="summary-container">
-          <h1 className="welcome-greeting">{offerName || 'Your Grand Slam Offer'}</h1>
-          {offerTagline && <p className="offer-tagline">{offerTagline}</p>}
-
-          <div className="grand-slam-summary">
-            {/* Bonuses */}
-            <div className="summary-section">
-              <h3>🎁 Bonuses (${totalBonusValue.toLocaleString()} value)</h3>
-              <div className="summary-bonuses">
-                {bonuses.map((bonus) => (
-                  <div key={bonus.id} className="summary-bonus">
-                    <strong>{bonus.name}</strong> - ${parseInt(bonus.value || 0).toLocaleString()} value
-                    <p>{bonus.description}</p>
+                {proofData[proof.id] !== undefined && !proof.isNone && (
+                  <div className="proof-detail">
+                    <textarea
+                      value={proofData[proof.id]}
+                      onChange={(e) => updateProofDetail(proof.id, e.target.value)}
+                      placeholder={proof.placeholder}
+                      rows={3}
+                    />
+                    <p className="proof-example">
+                      <em>Example:</em> "{proof.example}"
+                    </p>
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-
-            {/* Guarantee */}
-            <div className="summary-section">
-              <h3>{selectedGuarantee?.icon} Guarantee: {selectedGuarantee?.name}</h3>
-              <p>{guarantee.details}</p>
-              {guarantee.duration && <p className="meta">Duration: {guarantee.duration}</p>}
-            </div>
-
-            {/* Scarcity */}
-            <div className="summary-section">
-              <h3>{selectedScarcity?.icon} Scarcity: {selectedScarcity?.name}</h3>
-              <p>{scarcity.details}</p>
-              {scarcity.deadline && <p className="meta">Deadline: {scarcity.deadline}</p>}
-            </div>
+            ))}
           </div>
 
-          {error && <p className="error-message">{error}</p>}
+          <div className="selection-status">
+            {Object.keys(proofData).length} selected · Min 1 required
+          </div>
 
           <button
-            className="primary-button glow-button"
-            onClick={handleSaveResults}
-            disabled={isSaving}
+            className="primary-button"
+            onClick={goNext}
+            disabled={Object.keys(proofData).length < 1}
           >
-            {isSaving ? 'Saving...' : 'Complete Grand Slam Offer (+35 pts)'}
+            Continue →
           </button>
-          <BackButton onClick={() => setStage(STAGES.NAMING)} />
+          <button className="go-back-link" onClick={goBack}>
+            ← Go Back
+          </button>
         </div>
-      </div>
-    )
-  }
+      )}
 
-  // SUCCESS
-  if (stage === STAGES.SUCCESS) {
-    return (
-      <div className="grand-slam-flow">
+      {/* SPEED ADVANTAGE */}
+      {stage === STAGES.SPEED && (
+        <div className="question-container">
+          <div className="question-header">
+            <span className="question-number">Step 2 of 3</span>
+            <h2 className="question-text">How fast can they see results?</h2>
+            <p className="question-subtext">
+              Speed is a massive differentiator. Compare traditional vs your approach.
+            </p>
+          </div>
+
+          <div className="speed-inputs">
+            <div className="input-group">
+              <label>Traditional approach takes:</label>
+              <input
+                type="text"
+                value={speedData.traditional}
+                onChange={(e) => setSpeedData(prev => ({ ...prev, traditional: e.target.value }))}
+                placeholder="e.g., 6 months to learn coding"
+              />
+            </div>
+
+            <div className="vs-divider">VS</div>
+
+            <div className="input-group">
+              <label>Your approach takes:</label>
+              <input
+                type="text"
+                value={speedData.yours}
+                onChange={(e) => setSpeedData(prev => ({ ...prev, yours: e.target.value }))}
+                placeholder="e.g., 3 hours to deploy"
+              />
+            </div>
+          </div>
+
+          <div className="speed-examples">
+            <p className="example-header">💡 Examples:</p>
+            <div className="example-item">"12 months to transform body" → "90 days visible change"</div>
+            <div className="example-item">"2 years to save $10K" → "30 days to first $1K"</div>
+          </div>
+
+          <button
+            className="primary-button"
+            onClick={goNext}
+            disabled={!speedData.traditional || !speedData.yours}
+          >
+            Continue →
+          </button>
+          <button className="go-back-link" onClick={goBack}>
+            ← Go Back
+          </button>
+        </div>
+      )}
+
+      {/* EASE FACTOR */}
+      {stage === STAGES.EASE && (
+        <div className="question-container">
+          <div className="question-header">
+            <span className="question-number">Step 3 of 3</span>
+            <h2 className="question-text">What do they NOT have to do?</h2>
+            <p className="question-subtext">
+              Tell people what they don't need. Select all that apply.
+            </p>
+          </div>
+
+          <div className="ease-options">
+            {EASE_OPTIONS.map(option => (
+              <button
+                key={option.id}
+                type="button"
+                className={`ease-option ${easeData.includes(option.id) ? 'selected' : ''} ${option.isNone ? 'none-option' : ''}`}
+                onClick={() => toggleEase(option.id)}
+              >
+                <span className={`ease-checkbox ${easeData.includes(option.id) ? 'checked' : ''}`}>
+                  {easeData.includes(option.id) && <span className="checkmark">✓</span>}
+                </span>
+                <span>{option.label}</span>
+              </button>
+            ))}
+
+            {customEase.map((custom, i) => (
+              <div key={`custom-${i}`} className="ease-option selected custom">
+                <span className="ease-checkbox checked">
+                  <span className="checkmark">✓</span>
+                </span>
+                <span>{custom}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="add-custom-ease">
+            <input
+              type="text"
+              placeholder="Add custom: They don't need to..."
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  addCustomEase(e.target.value)
+                  e.target.value = ''
+                }
+              }}
+            />
+          </div>
+
+          <div className="selection-status">
+            {easeData.length + customEase.length} selected · Min 1 required
+          </div>
+
+          <button
+            className="primary-button"
+            onClick={calculateScore}
+            disabled={easeData.length + customEase.length < 1 || isLoading}
+          >
+            {isLoading ? 'Calculating...' : 'Calculate Grand Slam Score →'}
+          </button>
+          <button className="go-back-link" onClick={goBack}>
+            ← Go Back
+          </button>
+        </div>
+      )}
+
+      {/* SCORE */}
+      {stage === STAGES.SCORE && grandSlamScore && (
+        <div className="score-container">
+          <div className="score-header">
+            <h2>Your Grand Slam Score</h2>
+          </div>
+
+          <div className="score-display" style={{ borderColor: grandSlamScore.grade.color }}>
+            <div className="score-circle" style={{ background: `${grandSlamScore.grade.color}22` }}>
+              <span className="score-number" style={{ color: grandSlamScore.grade.color }}>
+                {grandSlamScore.total}
+              </span>
+              <span className="score-max">/100</span>
+            </div>
+            <div className="grade-badge" style={{ background: grandSlamScore.grade.color }}>
+              {grandSlamScore.grade.letter}
+            </div>
+            <div className="grade-label">{grandSlamScore.grade.label}</div>
+          </div>
+
+          <div className="score-breakdown">
+            <h3>Value Equation Breakdown</h3>
+            <div className="breakdown-item">
+              <span className="breakdown-label">Proof Stack (Perceived Likelihood)</span>
+              <span className="breakdown-value">{grandSlamScore.proofScore}/10</span>
+            </div>
+            <div className="breakdown-item">
+              <span className="breakdown-label">Speed Advantage (Time Delay)</span>
+              <span className="breakdown-value">{grandSlamScore.speedScore}/10</span>
+            </div>
+            <div className="breakdown-item">
+              <span className="breakdown-label">Ease Factor (Effort & Sacrifice)</span>
+              <span className="breakdown-value">{grandSlamScore.easeScore}/10</span>
+            </div>
+          </div>
+
+          <div className="value-equation">
+            <div className="equation-visual">
+              <div className="equation-numerator">
+                <span>Dream Outcome × Perceived Likelihood</span>
+              </div>
+              <div className="equation-divider">―――――――――――――――――――</div>
+              <div className="equation-denominator">
+                <span>Time Delay × Effort & Sacrifice</span>
+              </div>
+            </div>
+          </div>
+
+          {availableProducts.length > 1 && (
+            <div className="evaluate-another-section">
+              <label className="evaluate-another-label">Evaluate another product:</label>
+              <select
+                className="product-select"
+                value=""
+                onChange={(e) => {
+                  if (e.target.value) {
+                    const product = availableProducts.find(p => p.id === e.target.value)
+                    if (product) {
+                      setSelectedProduct(product)
+                      setProofData({})
+                      setSpeedData({ traditional: '', yours: '' })
+                      setEaseData([])
+                      setCustomEase([])
+                      setGrandSlamScore(null)
+                      setShowResumePrompt(false)
+                      setSavedProgressData(null)
+                      clearProgress()
+                      setStage(STAGES.PROOF_STACK)
+                    }
+                  }
+                }}
+              >
+                <option value="">Select a product...</option>
+                {availableProducts
+                  .filter(p => p.id !== selectedProduct?.id)
+                  .map(product => (
+                    <option key={product.id} value={product.id}>
+                      {product.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          )}
+
+          <button
+            className="primary-button"
+            onClick={handleComplete}
+            disabled={isSaving}
+            style={{ marginTop: '1rem' }}
+          >
+            {isSaving ? 'Saving...' : 'Complete & Continue →'}
+          </button>
+
+          <button className="go-back-link" onClick={goBack}>
+            ← Go Back
+          </button>
+        </div>
+      )}
+
+      {/* SUCCESS */}
+      {stage === STAGES.SUCCESS && (
         <div className="success-container">
-          <div className="success-icon">🏆</div>
-          <h2>Grand Slam Offer Complete!</h2>
-          <p>You've built an offer so good people feel silly saying no.</p>
-          <p className="points-earned">+35 points earned!</p>
+          <div className="success-icon">✓</div>
+          <h2>Evaluation Complete!</h2>
+          {selectedProduct && (
+            <p className="success-product-name">"{selectedProduct.name}"</p>
+          )}
+          <p>Your Grand Slam Score: {grandSlamScore?.total}/100</p>
 
-          <div className="grand-slam-recap">
-            <h3>{offerName}</h3>
-            <p>{bonuses.length} bonuses worth ${getTotalBonusValue().toLocaleString()}</p>
-            <p>{GUARANTEE_TYPES.find(g => g.id === guarantee.type)?.name} guarantee</p>
-            <p>{SCARCITY_TYPES.find(s => s.id === scarcity.type)?.name} scarcity</p>
+          {/* Choose Main Product Section */}
+          <div className="choose-main-product">
+            <h3>Which product will you build your offer around?</h3>
+            <p className="choose-subtext">This will be your core offer for the Offer Stack Builder.</p>
+
+            <div className="main-product-options">
+              {availableProducts.map((product) => {
+                const isEvaluated = evaluatedProducts.includes(product.id)
+                const isChosen = chosenMainProduct?.id === product.id
+                return (
+                  <button
+                    key={product.id}
+                    className={`main-product-option ${isChosen ? 'chosen' : ''} ${!isEvaluated ? 'not-evaluated' : ''}`}
+                    onClick={() => setChosenMainProduct(product)}
+                    disabled={!isEvaluated}
+                  >
+                    <span className="product-name">{product.name}</span>
+                    {isEvaluated ? (
+                      <span className="evaluated-status">✓ Evaluated</span>
+                    ) : (
+                      <span className="not-evaluated-status">Not evaluated</span>
+                    )}
+                    {isChosen && <span className="chosen-badge">★ Main Product</span>}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
-          <div className="next-actions">
-            <button className="primary-button" onClick={() => navigate('/7-day-challenge')}>
-              Back to Challenge
-            </button>
-            <button className="secondary-button" onClick={() => navigate('/product-selection')} style={{ marginTop: '12px' }}>
-              Continue to Product Selection
-            </button>
-          </div>
+          <button
+            className="primary-button"
+            onClick={async () => {
+              // Save the chosen main product to Supabase
+              if (chosenMainProduct) {
+                await supabase
+                  .from('grand_slam_offers')
+                  .update({
+                    chosen_product_id: chosenMainProduct.id,
+                    chosen_product_name: chosenMainProduct.name,
+                    chosen_product_data: chosenMainProduct
+                  })
+                  .eq('user_id', user.id)
+              }
+              navigate('/offer-stack-builder')
+            }}
+            disabled={!chosenMainProduct}
+          >
+            Build Offer Stack →
+          </button>
+
+          <button
+            className="go-back-link"
+            onClick={() => navigate('/7-day-challenge')}
+          >
+            Back to Challenge
+          </button>
         </div>
-      </div>
-    )
-  }
-
-  return null
+      )}
+    </div>
+  )
 }
 
 export default GrandSlamOfferFlow

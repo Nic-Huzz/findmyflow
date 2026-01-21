@@ -1,0 +1,1446 @@
+/* OfferStackBuilderFlow.css - Offer Stack Builder styling */
+
+.offer-stack-flow {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  padding-top: 80px;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  position: relative;
+}
+
+/* ============ PROGRESS CONTAINER ============ */
+
+.offer-stack-flow .progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 20px;
+  background: transparent;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============ EXPLAINER CONTAINER ============ */
+
+.offer-stack-flow .explainer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  flex: 1;
+  animation: osbFadeIn 0.5s ease;
+}
+
+.offer-stack-flow .explainer-content {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.offer-stack-flow .explainer-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.offer-stack-flow .explainer-content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.offer-stack-flow .explainer-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.offer-stack-flow .explainer-card.highlight {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.offer-stack-flow .explainer-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.offer-stack-flow .explainer-card .card-icon {
+  font-size: 1.5rem;
+}
+
+.offer-stack-flow .explainer-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.offer-stack-flow .explainer-card p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.offer-stack-flow .explainer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.offer-stack-flow .explainer-list li {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 6px 0;
+  padding-left: 20px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.offer-stack-flow .explainer-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #10b981;
+}
+
+.offer-stack-flow .explainer-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.offer-stack-flow .explainer-tip .tip-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .explainer-tip p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============ WELCOME CONTAINER ============ */
+
+.offer-stack-flow .welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+  animation: osbFadeIn 0.5s ease;
+}
+
+.offer-stack-flow .welcome-content {
+  margin-bottom: 32px;
+}
+
+.offer-stack-flow .time-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.offer-stack-flow .welcome-greeting {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.offer-stack-flow .welcome-message {
+  text-align: center;
+}
+
+.offer-stack-flow .welcome-message p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+}
+
+.offer-stack-flow .welcome-message strong {
+  color: white;
+}
+
+.offer-stack-flow .stack-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.offer-stack-flow .stack-item {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.offer-stack-flow .time-estimate {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 16px !important;
+}
+
+/* ============ RESUME PROMPT ============ */
+
+.offer-stack-flow .resume-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 400px;
+}
+
+.offer-stack-flow .resume-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 16px 0 8px;
+}
+
+.offer-stack-flow .resume-info {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .resume-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* ============ QUESTION CONTAINER ============ */
+
+.offer-stack-flow .question-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  animation: osbFadeIn 0.3s ease;
+  padding-top: 40px;
+}
+
+.offer-stack-flow .section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.offer-stack-flow .section-icon {
+  font-size: 32px;
+}
+
+.offer-stack-flow .section-header h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.offer-stack-flow .question-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .question-number {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 12px;
+}
+
+.offer-stack-flow .question-text {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.offer-stack-flow .question-subtext {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 24px;
+  max-width: 500px;
+  text-align: center;
+}
+
+/* ============ OPTIONS LIST ============ */
+
+.offer-stack-flow .options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .option-card {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.offer-stack-flow .option-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(147, 51, 234, 0.5);
+  transform: translateY(-2px);
+}
+
+.offer-stack-flow .option-card.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.offer-stack-flow .option-label {
+  font-size: 17px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.offer-stack-flow .option-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============ LEAD MAGNET INTRO ============ */
+
+.offer-stack-flow .intro-content {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .intro-main {
+  font-size: 18px;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.offer-stack-flow .intro-sub {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .intro-next {
+  font-size: 14px;
+  color: rgba(251, 191, 36, 0.9);
+  font-style: italic;
+}
+
+.offer-stack-flow .lm-types-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin: 24px 0;
+}
+
+.offer-stack-flow .lm-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.offer-stack-flow .lm-preview-card .preview-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .lm-preview-card .preview-content h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 2px;
+}
+
+.offer-stack-flow .lm-preview-card .preview-content p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ============ LEAD MAGNET TYPE OPTIONS ============ */
+
+.offer-stack-flow .lm-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .lm-type-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.offer-stack-flow .lm-type-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.offer-stack-flow .lm-type-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.offer-stack-flow .lm-type-option.recommended {
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.offer-stack-flow .lm-opt-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .lm-opt-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.offer-stack-flow .lm-opt-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.offer-stack-flow .lm-opt-examples {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-stack-flow .rec-badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 100px;
+  color: #10B981;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .lm-idea-input {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .lm-idea-input label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.offer-stack-flow .lm-idea-input textarea {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.offer-stack-flow .lm-idea-input textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.offer-stack-flow .lm-idea-input textarea:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+/* ============ BONUSES ============ */
+
+.offer-stack-flow .bonus-input-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.offer-stack-flow .bonus-input-row input {
+  flex: 1;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.offer-stack-flow .bonus-input-row input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.offer-stack-flow .bonus-input-row input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.offer-stack-flow .add-btn {
+  padding: 12px 20px;
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 10px;
+  color: #fbbf24;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-stack-flow .add-btn:hover:not(:disabled) {
+  background: rgba(251, 191, 36, 0.3);
+}
+
+.offer-stack-flow .add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.offer-stack-flow .bonuses-list {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.offer-stack-flow .empty-state {
+  text-align: center;
+  padding: 20px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+}
+
+.offer-stack-flow .bonus-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.offer-stack-flow .bonus-name {
+  flex: 1;
+  font-size: 15px;
+  color: white;
+}
+
+.offer-stack-flow .bonus-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #10B981;
+}
+
+.offer-stack-flow .bonus-value-input {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .bonus-value-input .dollar-sign {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offer-stack-flow .bonus-value-input input {
+  width: 70px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #10B981;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.offer-stack-flow .bonus-value-input input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 400;
+}
+
+.offer-stack-flow .bonus-value-input input:focus {
+  outline: none;
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.offer-stack-flow .remove-bonus-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .remove-bonus-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+}
+
+.offer-stack-flow .bonus-item button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-stack-flow .bonus-item button:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+}
+
+.offer-stack-flow .bonus-total {
+  text-align: center;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 16px;
+}
+
+.offer-stack-flow .bonus-total strong {
+  color: #10B981;
+}
+
+.offer-stack-flow .bonus-ideas,
+.offer-stack-flow .naming-tips {
+  width: 100%;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.offer-stack-flow .ideas-header,
+.offer-stack-flow .tips-header {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+}
+
+.offer-stack-flow .idea-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.offer-stack-flow .idea-chip {
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-stack-flow .idea-chip:hover {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: #fbbf24;
+}
+
+.offer-stack-flow .selection-status {
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 24px;
+}
+
+/* ============ GUARANTEE OPTIONS ============ */
+
+.offer-stack-flow .guarantee-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .guarantee-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.offer-stack-flow .guarantee-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.offer-stack-flow .guarantee-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.offer-stack-flow .guarantee-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.offer-stack-flow .guarantee-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.offer-stack-flow .guarantee-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.offer-stack-flow .guarantee-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-stack-flow .guarantee-example {
+  font-size: 12px;
+  color: rgba(251, 191, 36, 0.8);
+  font-style: italic;
+}
+
+.offer-stack-flow .guarantee-details-input,
+.offer-stack-flow .scarcity-details-input {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .guarantee-details-input label,
+.offer-stack-flow .scarcity-details-input label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.offer-stack-flow .guarantee-details-input textarea,
+.offer-stack-flow .scarcity-details-input textarea {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.offer-stack-flow .guarantee-details-input textarea::placeholder,
+.offer-stack-flow .scarcity-details-input textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.offer-stack-flow .guarantee-details-input textarea:focus,
+.offer-stack-flow .scarcity-details-input textarea:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+/* ============ SCARCITY OPTIONS ============ */
+
+.offer-stack-flow .scarcity-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .scarcity-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.offer-stack-flow .scarcity-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.offer-stack-flow .scarcity-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.offer-stack-flow .scarcity-checkbox {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .scarcity-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.offer-stack-flow .scarcity-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.offer-stack-flow .scarcity-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+}
+
+.offer-stack-flow .scarcity-desc {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============ NAMING INPUTS ============ */
+
+.offer-stack-flow .naming-inputs {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .input-group {
+  margin-bottom: 16px;
+}
+
+.offer-stack-flow .input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+}
+
+.offer-stack-flow .input-group input {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+}
+
+.offer-stack-flow .input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.offer-stack-flow .input-group input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.offer-stack-flow .tip-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.offer-stack-flow .tip-example {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: monospace;
+}
+
+/* ============ SUMMARY CONTAINER ============ */
+
+.offer-stack-flow .summary-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  animation: osbFadeIn 0.5s ease;
+  padding-top: 40px;
+}
+
+.offer-stack-flow .summary-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .summary-header h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.offer-stack-flow .offer-stack-display {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.offer-stack-flow .stack-section {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-stack-flow .stack-section:last-child {
+  border-bottom: none;
+}
+
+.offer-stack-flow .offer-name-section {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+  text-align: center;
+  padding: 24px 20px;
+}
+
+.offer-stack-flow .offer-display-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: white;
+}
+
+.offer-stack-flow .offer-tagline {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  font-style: italic;
+}
+
+.offer-stack-flow .section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 8px;
+}
+
+.offer-stack-flow .label-icon {
+  font-size: 16px;
+}
+
+.offer-stack-flow .section-content {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.offer-stack-flow .section-content strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.offer-stack-flow .section-content p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 4px 0 0;
+}
+
+.offer-stack-flow .bonuses-display {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.offer-stack-flow .bonus-display-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.offer-stack-flow .bonus-val {
+  color: #10B981;
+  font-weight: 600;
+}
+
+.offer-stack-flow .scarcity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.offer-stack-flow .scarcity-tag {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  font-size: 13px;
+}
+
+/* ============ SUCCESS CONTAINER ============ */
+
+.offer-stack-flow .success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  animation: osbFadeIn 0.5s ease;
+  max-width: 500px;
+}
+
+.offer-stack-flow .success-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-radius: 50%;
+  font-size: 40px;
+  color: white;
+  margin-bottom: 20px;
+  animation: osbScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.offer-stack-flow .success-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.offer-stack-flow .success-offer-name {
+  font-size: 20px;
+  color: #fbbf24;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.offer-stack-flow .success-message {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 24px;
+}
+
+.offer-stack-flow .success-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.offer-stack-flow .stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.offer-stack-flow .stat-icon {
+  font-size: 20px;
+}
+
+/* ============ BUTTONS ============ */
+
+.offer-stack-flow .primary-button {
+  width: 100%;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.offer-stack-flow .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.offer-stack-flow .primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.offer-stack-flow .primary-button.glow-button {
+  animation: osbGlow 2s ease-in-out infinite;
+}
+
+.offer-stack-flow .secondary-button {
+  width: 100%;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-stack-flow .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.offer-stack-flow .go-back-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-top: 12px;
+  transition: color 0.2s ease;
+}
+
+.offer-stack-flow .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ============ ERROR BANNER ============ */
+
+.offer-stack-flow .error-banner {
+  position: fixed;
+  top: 80px;
+  left: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.9);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  animation: osbFadeIn 0.3s ease;
+}
+
+.offer-stack-flow .error-banner button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 12px;
+}
+
+/* ============ LOADING STATE ============ */
+
+.offer-stack-flow .loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.offer-stack-flow .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  animation: osbSpin 1s linear infinite;
+}
+
+/* ============ ANIMATIONS ============ */
+
+@keyframes osbFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes osbScaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes osbGlow {
+  0%, 100% {
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(251, 191, 36, 0.5);
+  }
+}
+
+@keyframes osbSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 480px) {
+  .offer-stack-flow {
+    padding: 16px;
+    padding-top: 70px;
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
+  }
+
+  .offer-stack-flow .welcome-greeting {
+    font-size: 26px;
+  }
+
+  .offer-stack-flow .question-text,
+  .offer-stack-flow .section-header h2 {
+    font-size: 22px;
+  }
+
+  .offer-stack-flow .bonus-input-row {
+    flex-direction: column;
+  }
+
+  .offer-stack-flow .bonus-input-row input {
+    width: 100%;
+  }
+
+  .offer-stack-flow .offer-display-name {
+    font-size: 20px;
+  }
+}
+
+/* ============ PRODUCT BUILDER SOLUTIONS ============ */
+
+.offer-stack-flow .product-builder-solutions {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.offer-stack-flow .solutions-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.75rem;
+}
+
+.offer-stack-flow .solutions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.offer-stack-flow .solution-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.offer-stack-flow .solution-option:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.offer-stack-flow .solution-option.selected {
+  border-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+}
+
+.offer-stack-flow .solution-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.offer-stack-flow .solution-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.offer-stack-flow .solution-checkbox.checked {
+  background: #fbbf24;
+  border-color: #fbbf24;
+}
+
+.offer-stack-flow .solution-checkbox .checkmark {
+  color: #1a1a2e;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.offer-stack-flow .solution-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.offer-stack-flow .solution-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: white;
+}
+
+.offer-stack-flow .solution-type {
+  font-size: 12px;
+  color: #fbbf24;
+  text-transform: capitalize;
+}
+
+.offer-stack-flow .solution-problem {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Custom Bonus Section */
+.offer-stack-flow .custom-bonus-section {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-stack-flow .custom-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.75rem;
+}
+
+/* Selected Bonuses */
+.offer-stack-flow .selected-bonuses {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.offer-stack-flow .selected-header {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.75rem;
+}
+
+.offer-stack-flow .bonus-item.from-pb {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.offer-stack-flow .pb-badge {
+  font-size: 10px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+/* iOS Safe Area Support */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .offer-stack-flow {
+    padding-top: calc(80px + env(safe-area-inset-top));
+  }
+}
