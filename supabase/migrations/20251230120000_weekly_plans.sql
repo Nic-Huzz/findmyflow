@@ -24,18 +24,22 @@ CREATE TABLE IF NOT EXISTS weekly_plans (
 ALTER TABLE weekly_plans ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
+DO $$ BEGIN
 CREATE POLICY "Users can view their own weekly plans"
   ON weekly_plans FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert their own weekly plans"
   ON weekly_plans FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update their own weekly plans"
   ON weekly_plans FOR UPDATE
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete their own weekly plans"
   ON weekly_plans FOR DELETE
   USING (auth.uid() = user_id);

@@ -36,6 +36,7 @@ CREATE INDEX IF NOT EXISTS idx_validation_analysis_created ON validation_analysi
 ALTER TABLE validation_analysis ENABLE ROW LEVEL SECURITY;
 
 -- Users can view their own analyses
+DO $$ BEGIN
 CREATE POLICY "Users can view their own validation analyses"
   ON validation_analysis
   FOR SELECT
@@ -43,6 +44,7 @@ CREATE POLICY "Users can view their own validation analyses"
   USING (auth.uid() = user_id);
 
 -- Users can insert their own analyses (via Edge Function with service role)
+DO $$ BEGIN
 CREATE POLICY "Users can insert their own validation analyses"
   ON validation_analysis
   FOR INSERT
@@ -50,12 +52,15 @@ CREATE POLICY "Users can insert their own validation analyses"
   WITH CHECK (auth.uid() = user_id);
 
 -- Service role can do everything (for Edge Functions)
+DO $$ BEGIN
 CREATE POLICY "Service role has full access to validation_analysis"
   ON validation_analysis
   FOR ALL
   TO service_role
   USING (true)
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Grant permissions
 GRANT SELECT, INSERT ON validation_analysis TO authenticated;

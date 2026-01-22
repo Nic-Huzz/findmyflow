@@ -741,6 +741,249 @@
 }
 
 
+/* ============================================================
+   TONE 4: PLAYFUL WARMTH 🌟 (The Merged Style)
+   Premium foundation + playful touches on interactions
+   ============================================================ */
+
+.tone-playful-warmth {
+  background: linear-gradient(180deg, #faf5ff 0%, #fef7ed 100%);
+  color: #1a1a2e;
+}
+
+.tone-playful-warmth .brand-demo-header h1 {
+  background: linear-gradient(
+    90deg,
+    #5e17eb 0%,
+    #7c3aed 25%,
+    #a855f7 50%,
+    #7c3aed 75%,
+    #5e17eb 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: playfulWarmthShimmer 4s ease-in-out infinite;
+}
+
+@keyframes playfulWarmthShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.tone-playful-warmth .tone-tab {
+  background: white;
+  color: #5e17eb;
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tone-playful-warmth .tone-tab.active {
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.35);
+  animation: playfulWarmthBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes playfulWarmthBounce {
+  0% { transform: scale(0.95); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.tone-playful-warmth .tone-tab:hover:not(.active) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+  border-color: rgba(94, 23, 235, 0.3);
+}
+
+.tone-playful-warmth .demo-welcome {
+  animation: playfulWarmthFadeIn 0.7s ease-out;
+}
+
+@keyframes playfulWarmthFadeIn {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.tone-playful-warmth .demo-subtitle {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #44403c;
+}
+
+/* Stat Cards - Warm base with playful hover */
+.tone-playful-warmth .demo-stat-card {
+  background: white;
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.06);
+  animation: playfulWarmthFadeIn 0.7s ease-out both;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tone-playful-warmth .demo-stat-card:nth-child(1) { animation-delay: 0.1s; }
+.tone-playful-warmth .demo-stat-card:nth-child(2) { animation-delay: 0.2s; }
+
+.tone-playful-warmth .demo-stat-card.purple {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.04) 0%, white 100%);
+}
+
+.tone-playful-warmth .demo-stat-card.gold {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.04) 0%, white 100%);
+}
+
+.tone-playful-warmth .demo-stat-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(94, 23, 235, 0.15);
+  border-color: rgba(94, 23, 235, 0.25);
+}
+
+/* Icons - gentle breathing at rest */
+.tone-playful-warmth .demo-stat-icon {
+  animation: playfulWarmthBreathing 3s ease-in-out infinite;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes playfulWarmthBreathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* Icons pop on card hover */
+.tone-playful-warmth .demo-stat-card:hover .demo-stat-icon {
+  animation: none;
+  transform: scale(1.15);
+}
+
+/* Streak Items */
+.tone-playful-warmth .demo-streak-item {
+  background: white;
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  animation: playfulWarmthFadeIn 0.7s ease-out both;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tone-playful-warmth .demo-streak-item:nth-child(1) { animation-delay: 0.15s; }
+.tone-playful-warmth .demo-streak-item:nth-child(2) { animation-delay: 0.25s; }
+
+.tone-playful-warmth .demo-streak-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(94, 23, 235, 0.12);
+  border-color: rgba(94, 23, 235, 0.2);
+}
+
+.tone-playful-warmth .demo-streak-emoji {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tone-playful-warmth .demo-streak-item:hover .demo-streak-emoji {
+  transform: scale(1.2);
+}
+
+/* CTA Button - Spring bounce on hover, satisfying press */
+.tone-playful-warmth .demo-cta-button {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Subtle glow pulse when idle */
+.tone-playful-warmth .demo-cta-button {
+  animation: playfulWarmthGlow 3s ease-in-out infinite;
+}
+
+@keyframes playfulWarmthGlow {
+  0%, 100% { box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3); }
+  50% { box-shadow: 0 6px 24px rgba(94, 23, 235, 0.4); }
+}
+
+.tone-playful-warmth .demo-cta-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  animation: none;
+  box-shadow: 0 10px 28px rgba(94, 23, 235, 0.4);
+}
+
+.tone-playful-warmth .demo-cta-button:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* Secondary Button */
+.tone-playful-warmth .demo-secondary-button {
+  background: transparent;
+  color: #5e17eb;
+  border: 2px solid rgba(94, 23, 235, 0.2);
+  border-radius: 14px;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tone-playful-warmth .demo-secondary-button:hover {
+  background: rgba(94, 23, 235, 0.05);
+  border-color: #5e17eb;
+  transform: translateY(-2px);
+}
+
+.tone-playful-warmth .demo-secondary-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Progress Strip */
+.tone-playful-warmth .demo-progress-strip {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.25);
+}
+
+.tone-playful-warmth .demo-progress-stat {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tone-playful-warmth .demo-progress-stat:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* Toast - Celebratory but warm */
+.tone-playful-warmth .demo-toast {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+  animation: playfulWarmthToast 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes playfulWarmthToast {
+  0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tone-playful-warmth .demo-section-title {
+  color: #5e17eb;
+  font-weight: 700;
+}
+
+/* Characteristics box styling */
+.tone-playful-warmth .demo-characteristics {
+  background: rgba(94, 23, 235, 0.04);
+  border: 1px solid rgba(94, 23, 235, 0.1);
+}
+
+.tone-playful-warmth .demo-characteristics li {
+  border-color: rgba(94, 23, 235, 0.08);
+}
+
+
 /* ============ RESPONSIVE ============ */
 
 @media (max-width: 768px) {

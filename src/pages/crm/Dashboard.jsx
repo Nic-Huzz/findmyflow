@@ -112,7 +112,7 @@ export default function Dashboard() {
       <div className="crm-dashboard">
         <div className="crm-loading">
           <div className="crm-spinner"></div>
-          <p>Loading command center...</p>
+          <p>Getting things ready...</p>
         </div>
       </div>
     )
@@ -127,9 +127,9 @@ export default function Dashboard() {
             currentProject={currentProject}
             onProjectChange={setCurrentProject}
           />
-          <h1>Command Center</h1>
+          <h1>Your HQ</h1>
         </div>
-        <p className="crm-subtitle">Your marketing & sales HQ</p>
+        <p className="crm-subtitle">Marketing & sales at a glance</p>
       </header>
 
       {/* Stats Cards Row */}
@@ -390,8 +390,8 @@ export default function Dashboard() {
             <div className="ai-setup-content">
               <div className="ai-setup-icon">🤖</div>
               <div className="ai-setup-text">
-                <h3>Setup Your Autonomous AI</h3>
-                <p>Answer 8 questions to unlock AI that runs your business</p>
+                <h3>Let's Set Up Your AI</h3>
+                <p>Answer 8 questions to unlock AI that works for you</p>
               </div>
             </div>
             <div className="ai-setup-cta">
@@ -557,12 +557,12 @@ export default function Dashboard() {
             ) : (
               <div className="impl-empty-prompt">
                 <span className="impl-empty-icon">📋</span>
-                <p>No active implementations</p>
+                <p>Nothing in progress yet</p>
                 <button
                   className="impl-start-btn"
                   onClick={() => navigate('/money-model-guide')}
                 >
-                  Start Your First
+                  Let's Start One
                 </button>
               </div>
             )}

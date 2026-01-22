@@ -24,7 +24,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
-import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import { ProgressDots } from '../components/MoneyModelShared'
 import './GrandSlamOfferFlow.css'
 
 const STAGES = {
@@ -197,15 +197,26 @@ function GrandSlamOfferFlow() {
         console.log('No product selection found')
       }
 
-      // Load previously evaluated products
+      // Load previously evaluated products and check for prior completion
       const { data: existingEvaluations } = await supabase
         .from('grand_slam_offers')
-        .select('evaluated_product_ids')
+        .select('evaluated_product_ids, status, grand_slam_score')
         .eq('user_id', user.id)
         .single()
 
       if (existingEvaluations?.evaluated_product_ids) {
         setEvaluatedProducts(existingEvaluations.evaluated_product_ids)
+      }
+
+      // If previously completed, ensure quest is registered (fixes missing quest completions)
+      if (existingEvaluations?.status === 'completed') {
+        console.log('🔄 Grand Slam: Found prior completion, auto-registering quest...')
+        const autoResult = await completeFlowQuest({
+          userId: user.id,
+          flowId: 'grand_slam_offer',
+          pointsEarned: 30
+        })
+        console.log('🔄 Grand Slam auto-register result:', autoResult)
       }
 
       if (offerData) {
@@ -415,11 +426,12 @@ function GrandSlamOfferFlow() {
       setChosenMainProduct(selectedProduct)
 
       // Complete quest
-      await completeFlowQuest(user.id, 'flow_grand_slam_offer', null, {
-        score: grandSlamScore?.total,
-        grade: grandSlamScore?.grade?.letter,
-        productName: selectedProduct?.name
+      const questResult = await completeFlowQuest({
+        userId: user.id,
+        flowId: 'grand_slam_offer',
+        pointsEarned: 30
       })
+      console.log('🎯 Grand Slam quest completion result:', questResult)
 
       clearProgress()
       setStage(STAGES.SUCCESS)
@@ -498,7 +510,6 @@ function GrandSlamOfferFlow() {
       {/* Progress indicator */}
       {stage !== STAGES.WELCOME && stage !== STAGES.SUCCESS && stage !== STAGES.SCORE && (
         <div className="progress-container">
-          <BackButton onClick={goBack} />
           <ProgressDots current={getCurrentStep()} total={STAGE_ORDER.length - 1} />
         </div>
       )}
@@ -948,7 +959,7 @@ function GrandSlamOfferFlow() {
             className="go-back-link"
             onClick={() => navigate('/7-day-challenge')}
           >
-            Back to Challenge
+            Return to Challenge
           </button>
         </div>
       )}

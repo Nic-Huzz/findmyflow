@@ -23,16 +23,19 @@ CREATE INDEX IF NOT EXISTS idx_voice_feedback_created ON voice_feedback(created_
 ALTER TABLE voice_feedback ENABLE ROW LEVEL SECURITY;
 
 -- Users can only see their own feedback
+DO $$ BEGIN
 CREATE POLICY "Users can view own voice feedback"
   ON voice_feedback FOR SELECT
   USING (auth.uid() = user_id);
 
 -- Users can insert their own feedback
+DO $$ BEGIN
 CREATE POLICY "Users can insert own voice feedback"
   ON voice_feedback FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- Users can delete their own feedback
+DO $$ BEGIN
 CREATE POLICY "Users can delete own voice feedback"
   ON voice_feedback FOR DELETE
   USING (auth.uid() = user_id);

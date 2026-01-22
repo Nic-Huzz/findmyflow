@@ -41,6 +41,7 @@ CREATE INDEX IF NOT EXISTS idx_coach_analytics_created ON coach_analytics(create
 ALTER TABLE coach_analytics ENABLE ROW LEVEL SECURITY;
 
 -- Users can view their own analytics
+DO $$ BEGIN
 CREATE POLICY "Users can view their own coach analytics"
   ON coach_analytics
   FOR SELECT
@@ -48,6 +49,7 @@ CREATE POLICY "Users can view their own coach analytics"
   USING (auth.uid() = user_id);
 
 -- Users can create their own analytics events
+DO $$ BEGIN
 CREATE POLICY "Users can create their own coach analytics"
   ON coach_analytics
   FOR INSERT

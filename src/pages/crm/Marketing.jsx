@@ -358,7 +358,7 @@ export default function Marketing() {
       <div className="crm-marketing">
         <div className="crm-loading">
           <div className="crm-spinner"></div>
-          <p>Loading quests...</p>
+          <p>Loading your quests...</p>
         </div>
       </div>
     )
@@ -462,7 +462,7 @@ export default function Marketing() {
       <div className="tasks-list">
         {dayTasks.length === 0 ? (
           <div className="empty-day">
-            <p>No tasks for {selectedDay}</p>
+            <p>{selectedDay}'s clear — nice!</p>
           </div>
         ) : (
           dayTasks.map(task => (

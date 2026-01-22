@@ -33,21 +33,27 @@ ALTER TABLE sales_scripts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE script_usage_log ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies - Scripts are public read, usage logs are user-specific
+DO $$ BEGIN
 CREATE POLICY "Scripts are viewable by all authenticated users"
   ON sales_scripts FOR SELECT
   TO authenticated
   USING (is_active = true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own script usage"
   ON script_usage_log FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own script usage"
   ON script_usage_log FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own script usage"
   ON script_usage_log FOR UPDATE
   TO authenticated

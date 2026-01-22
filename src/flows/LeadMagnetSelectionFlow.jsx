@@ -1,22 +1,22 @@
 /**
  * LeadMagnetSelectionFlow - Lead Magnet Selection (+30 pts)
  *
- * Follows OfferBuilderFlow to finalize lead magnet details.
- * Loads solutions categorized as 'lead_magnet' from the Offer Builder.
+ * Helps users choose ONE lead magnet type for their entire offer.
  *
- * For each lead magnet solution, asks 3 questions:
- * 1. Where is your prospect in their journey?
- * 2. What's the #1 barrier stopping them?
- * 3. What would convince them you can help?
+ * Flow:
+ * 1. Welcome - Explain we're choosing ONE lead magnet
+ * 2. Questions - 3 questions about their target customer
+ * 3. Recommendation - Show recommended type, let them choose
+ * 4. Success - Confirmation
  *
- * Then recommends a lead magnet type:
+ * Lead Magnet Types:
  * - Reveal the Problem (quiz, assessment, calculator)
  * - Free Trial (free session, sample, demo)
  * - Free Step 1 (template, guide, mini-course)
  */
 
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
@@ -26,6 +26,9 @@ import './LeadMagnetSelectionFlow.css'
 const STAGES = {
   LOADING: 'loading',
   WELCOME: 'welcome',
+  EDUCATION_1: 'education_1',
+  EDUCATION_2: 'education_2',
+  EDUCATION_3: 'education_3',
   QUESTIONS: 'questions',
   RECOMMENDATION: 'recommendation',
   SUCCESS: 'success'
@@ -33,28 +36,56 @@ const STAGES = {
 
 const STAGE_GROUPS = [
   { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME] },
+  { id: 'learn', label: 'Learn', stages: [STAGES.EDUCATION_1, STAGES.EDUCATION_2, STAGES.EDUCATION_3] },
   { id: 'questions', label: 'Questions', stages: [STAGES.QUESTIONS] },
   { id: 'select', label: 'Select', stages: [STAGES.RECOMMENDATION] },
   { id: 'complete', label: 'Complete', stages: [STAGES.SUCCESS] }
 ]
 
-// Solution type labels
-const SOLUTION_LABELS = {
-  one_to_one: '1:1 Service',
-  one_to_many: '1:Many Service',
-  tech_digital: 'Tech/Digital',
-  physical_product: 'Physical Product'
-}
+// Education slides content
+const EDUCATION_SLIDES = [
+  {
+    stage: 'education_1',
+    title: 'What\'s a Lead Magnet?',
+    icon: '🎁',
+    mainText: 'A lead magnet is a complete solution to a narrow problem.',
+    subText: 'It\'s the free thing you give away before your paid thing so you get more people to buy.',
+    visual: 'gift', // For potential future illustration
+    highlight: 'Think of it as "The Perfect Gift" for your future customers.'
+  },
+  {
+    stage: 'education_2',
+    title: 'Why Use a Lead Magnet?',
+    icon: '📈',
+    funnelSteps: [
+      { label: 'Many People', sublabel: 'Low Trust', icon: '👥' },
+      { label: 'Lead Magnet', sublabel: 'FREE "Mini Offer"', icon: '🎁' },
+      { label: 'Fewer People', sublabel: 'High Trust', icon: '🤝' },
+      { label: 'Core Offer', sublabel: 'Paid', icon: '💰' },
+      { label: 'Sales', sublabel: 'Customers', icon: '✅' }
+    ],
+    highlight: 'A lead magnet builds trust BEFORE you ask for the sale.'
+  },
+  {
+    stage: 'education_3',
+    title: 'The Perfect Lead Magnet',
+    icon: '✨',
+    formula: [
+      'Complete solution to a narrow problem',
+      '+',
+      'Reveals the next problem your core offer solves'
+    ],
+    highlight: 'Next, I\'ll ask 3 questions to recommend the best type for YOUR audience.'
+  }
+]
 
-// Lead Magnet types with detailed info and category-based suggestions
+// Lead Magnet types with detailed info
 const LEAD_MAGNET_TYPES = {
   reveal_problem: {
     name: 'Reveal the Problem',
     icon: '🔍',
     shortDesc: 'Quiz, assessment, calculator, audit',
     description: 'Help them realize they have a problem they didn\'t know about',
-    examples: 'Quiz, assessment, calculator, audit',
-    bestFor: ['unaware', 'confused'],
     whyItWorks: 'Your prospects don\'t yet know they have a problem. By creating a diagnostic tool, you help them discover their pain points - and position yourself as the expert who can solve them.',
     whenToUse: [
       'Prospects are unaware they have a problem',
@@ -66,160 +97,95 @@ const LEAD_MAGNET_TYPES = {
       'Build a scoring system that reveals their problem',
       'Show personalized results with your solution'
     ],
-    suggestionsByType: {
-      one_to_one: [
-        '"Are You Ready?" Assessment - 10 questions to reveal gaps in their approach',
-        'Free Audit - Review their current situation and identify 3 blind spots',
-        'Scorecard - Rate themselves on key areas, reveal where they\'re falling behind'
-      ],
-      group_program: [
-        'Community Fit Quiz - Help them discover if group learning is right for them',
-        'Readiness Assessment - Reveal what stage they\'re at and what they need',
-        'Gap Analysis Tool - Show them what\'s missing from their current approach'
-      ],
-      digital_product: [
-        'Self-Assessment Quiz - Diagnose their problem and recommend your solution',
-        'Calculator Tool - Help them quantify their problem (cost, time, impact)',
-        'Audit Checklist - Walk through key areas, reveal what needs attention'
-      ],
-      tech_digital: [
-        'ROI Calculator - Show them the hidden costs of not using your solution',
-        'Tech Stack Audit - Reveal inefficiencies in their current setup',
-        'Compatibility Quiz - Help them discover if your tool fits their needs'
-      ],
-      physical_product: [
-        'Product Finder Quiz - Help them discover which product fits their needs',
-        'Problem Diagnosis Tool - Reveal the root cause of their issue',
-        'Comparison Calculator - Show how your solution stacks up'
-      ]
-    }
+    examples: [
+      '"Are You Ready?" Assessment - reveals gaps in their approach',
+      'Free Audit - review their situation and identify blind spots',
+      'Scorecard - rate themselves on key areas',
+      'Calculator - quantify their problem (cost, time, impact)'
+    ]
   },
   free_trial: {
     name: 'Free Trial',
-    icon: '🎯',
-    shortDesc: 'Free session, sample, demo, trial period',
+    icon: '🎁',
+    shortDesc: 'Free session, sample, demo access',
     description: 'Let them experience your solution before buying',
-    examples: 'Free session, sample, demo, trial period',
-    bestFor: ['comparison', 'skeptical'],
-    whyItWorks: 'Your prospects are skeptical or comparing options. By letting them experience your solution first-hand, you eliminate risk and prove your value before they commit.',
+    whyItWorks: 'When prospects are skeptical, the best way to convince them is to let them try. A free trial removes risk and builds trust through direct experience.',
     whenToUse: [
-      'Prospects are comparing multiple solutions',
-      'They\'re skeptical and need proof',
-      'Your solution is best experienced, not explained'
+      'They\'re comparing options',
+      'They\'re skeptical if it will work for them',
+      'They need proof before committing',
+      'They\'re ready to buy but need final validation'
     ],
     actionSteps: [
-      'Define what "free" means (time-limited, feature-limited, etc.)',
-      'Create a wow moment in the trial experience',
-      'Build a clear upgrade path from trial to paid'
+      'Define what "free" looks like (time-limited, feature-limited, etc.)',
+      'Create an onboarding sequence that delivers a quick win',
+      'Build in a natural upgrade path'
     ],
-    suggestionsByType: {
-      one_to_one: [
-        'Free Discovery Call - 15-30 min session to experience your approach',
-        'Mini Session - Solve one small problem to demonstrate your value',
-        'Strategy Audit - Free review with actionable recommendations'
-      ],
-      group_program: [
-        'Free Workshop - Live session covering one key topic from your program',
-        'Guest Pass - Invite them to sit in on one community call',
-        'Challenge Week - 5-7 days of content to experience your teaching style'
-      ],
-      digital_product: [
-        'Free Module - Give access to the first section of your course',
-        'Sample Content - Key templates or resources from your product',
-        '7-Day Trial - Full access for a limited time'
-      ],
-      tech_digital: [
-        'Free Tier - Limited features, unlimited time',
-        '14-Day Trial - Full access, then convert to paid',
-        'Demo Account - Pre-populated with sample data to explore'
-      ],
-      physical_product: [
-        'Free Sample - Send a small version or trial size',
-        'Try Before You Buy - Use it for 30 days, return if not satisfied',
-        'Starter Kit - Entry-level version at no cost'
-      ]
-    }
+    examples: [
+      'Free Strategy Session - give them a real taste of working with you',
+      'Sample Chapter/Module - preview your course content',
+      'Demo Access - let them use a limited version',
+      'Trial Period - full access for limited time'
+    ]
   },
   free_step_1: {
     name: 'Free Step 1',
-    icon: '🪜',
-    shortDesc: 'Template, guide, mini-course, checklist',
+    icon: '📋',
+    shortDesc: 'Template, guide, checklist, mini-course',
     description: 'Give them the first step of your process for free',
-    examples: 'Template, guide, mini-course, checklist',
-    bestFor: ['aware', 'overwhelmed'],
-    whyItWorks: 'Your prospects know they have a problem but feel overwhelmed. By giving them a quick win with Step 1, you build trust and show them your full solution is the natural next step.',
+    whyItWorks: 'When prospects are overwhelmed, they need someone to simplify. Give them Step 1 of your proven process - they\'ll want you to guide them through the rest.',
     whenToUse: [
-      'Prospects are aware but overwhelmed',
-      'They want a quick win to build momentum',
-      'Your solution has clear, sequential steps'
+      'They know the problem but feel overwhelmed',
+      'They need a quick win to build confidence',
+      'They want to start but don\'t know how',
+      'They need the first step made easy'
     ],
     actionSteps: [
-      'Identify the first step of your process',
-      'Package it as a standalone deliverable',
-      'Make Step 2+ the natural paid continuation'
+      'Document the first step of your process',
+      'Create a template or guide they can use immediately',
+      'Show them what Step 2-5 looks like (your paid offer)'
     ],
-    suggestionsByType: {
-      one_to_one: [
-        'Quick-Start Guide - The first steps they can take on their own',
-        'Self-Assessment Template - Framework to clarify their situation',
-        'Action Plan Template - Map out their next moves'
-      ],
-      group_program: [
-        'Foundations Mini-Course - 3-5 lessons covering the basics',
-        'Getting Started Guide - Everything they need before joining',
-        'Pre-Work Workbook - Prepare them for the full program'
-      ],
-      digital_product: [
-        'Chapter 1 / Module 1 - First section of your product',
-        'Starter Template Pack - Core templates to get going',
-        'Quick-Win Checklist - Immediate actions for fast results'
-      ],
-      tech_digital: [
-        'Setup Guide - Get started with basic configuration',
-        'Quick-Start Tutorial - Master the essentials in 15 minutes',
-        'Starter Templates - Pre-built configs to skip the learning curve'
-      ],
-      physical_product: [
-        'Getting Started Guide - How to use your product effectively',
-        'Quick Results Protocol - Fastest way to see benefits',
-        'Setup Checklist - Everything they need to get going'
-      ]
-    }
+    examples: [
+      'Quick-Start Template - the first tool they need',
+      'Step-by-Step Guide - exactly how to begin',
+      'Checklist - ensure they don\'t miss anything',
+      'Mini-Course - teach them the foundation'
+    ]
   }
 }
 
-// Questions to ask per solution
+// Questions about their target customer
 const LM_QUESTIONS = [
   {
     id: 'journey',
-    question: 'Where is your prospect in their journey?',
+    question: 'Where is your ideal customer in their journey?',
     subtext: 'Understanding their awareness level helps choose the right lead magnet',
     options: [
-      { value: 'unaware', label: 'Unaware', description: 'Don\'t know they have a problem' },
-      { value: 'aware', label: 'Problem-Aware', description: 'Know the problem, not the solution' },
-      { value: 'comparison', label: 'Comparing Options', description: 'Looking at different solutions' },
-      { value: 'ready', label: 'Ready to Buy', description: 'Just need the right offer' }
+      { value: 'unaware', label: 'Unaware', description: 'They don\'t know they have a problem yet' },
+      { value: 'aware', label: 'Problem-Aware', description: 'They know the problem, seeking solutions' },
+      { value: 'comparison', label: 'Comparing Options', description: 'They\'re looking at different solutions' },
+      { value: 'ready', label: 'Ready to Buy', description: 'They just need the right offer' }
     ]
   },
   {
     id: 'barrier',
-    question: 'What\'s the #1 barrier stopping them?',
-    subtext: 'The lead magnet should address this directly',
+    question: 'What\'s the #1 barrier stopping them from buying?',
+    subtext: 'Your lead magnet should address this directly',
     options: [
-      { value: 'confused', label: 'Confused', description: 'Don\'t know what they need' },
-      { value: 'skeptical', label: 'Skeptical', description: 'Don\'t believe it will work' },
+      { value: 'confused', label: 'Confused', description: 'They don\'t know what they need' },
+      { value: 'skeptical', label: 'Skeptical', description: 'They don\'t believe it will work for them' },
       { value: 'overwhelmed', label: 'Overwhelmed', description: 'Too many options or steps' },
-      { value: 'unsure_fit', label: 'Unsure of Fit', description: 'Don\'t know if it\'s right for them' }
+      { value: 'unsure_fit', label: 'Unsure of Fit', description: 'They don\'t know if it\'s right for them' }
     ]
   },
   {
     id: 'conviction',
-    question: 'What would convince them you can help?',
+    question: 'What would convince them you\'re the right choice?',
     subtext: 'This determines how to structure your lead magnet',
     options: [
       { value: 'quick_win', label: 'A Quick Win', description: 'Show results fast' },
-      { value: 'personalized', label: 'Personalized Insight', description: 'Make it about them' },
-      { value: 'proof', label: 'Proof It Works', description: 'Show evidence and results' },
+      { value: 'personalized', label: 'Personalized Insight', description: 'Make it about them specifically' },
+      { value: 'proof', label: 'Proof It Works', description: 'Show evidence and real results' },
       { value: 'first_step', label: 'The First Step', description: 'Make it easy to start' }
     ]
   }
@@ -227,27 +193,27 @@ const LM_QUESTIONS = [
 
 function LeadMagnetSelectionFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const showResults = searchParams.get('results') === 'true'
 
   const [stage, setStage] = useState(STAGES.LOADING)
-  const [leadMagnetSolutions, setLeadMagnetSolutions] = useState([])
-  const [currentSolutionIndex, setCurrentSolutionIndex] = useState(0)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-  const [answers, setAnswers] = useState({}) // { solutionId: { journey: '', barrier: '', conviction: '' } }
-  const [selectedTypes, setSelectedTypes] = useState({}) // { solutionId: 'reveal_problem' | 'free_trial' | 'free_step_1' }
+  const [answers, setAnswers] = useState({ journey: null, barrier: null, conviction: null })
+  const [selectedType, setSelectedType] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [aiIdeas, setAiIdeas] = useState({}) // { solutionId: { loading: bool, ideas: [], error: string } }
-  const [nicheLayers, setNicheLayers] = useState(null) // From offer builder for context
+  const [nicheLayers, setNicheLayers] = useState(null)
+  const [aiIdeas, setAiIdeas] = useState({ loading: false, ideas: [], error: null })
 
-  // Load lead magnet solutions from the most recent offer builder assessment
+  // Load context from offer builder
   useEffect(() => {
     if (user) {
-      loadLeadMagnetSolutions()
+      loadOfferContext()
     }
   }, [user])
 
-  const loadLeadMagnetSolutions = async () => {
+  const loadOfferContext = async () => {
     try {
       const { data: assessment, error } = await supabase
         .from('offer_builder_assessments')
@@ -259,115 +225,84 @@ function LeadMagnetSelectionFlow() {
 
       if (error) throw error
 
-      // No assessment found - user needs to complete Offer Builder first
       if (!assessment) {
         setError('No offer data found. Complete the Offer Builder first.')
         setStage(STAGES.WELCOME)
         return
       }
 
-      if (assessment?.responses?.q8_solutions?.solutions) {
-        // Get solutions and their categories
-        const solutions = assessment.responses.q8_solutions.solutions
-        const categories = assessment.responses.solution_categories || {}
+      // Store niche layers for AI context
+      if (assessment.responses?.q6_niche_layers?.layers) {
+        setNicheLayers(assessment.responses.q6_niche_layers.layers)
+      }
 
-        // Store niche layers for AI context
-        if (assessment.responses.q1_niche?.layers) {
-          setNicheLayers(assessment.responses.q1_niche.layers)
-        }
+      // Check for View Results mode - load existing selection
+      if (showResults && assessment.responses?.lead_magnet_selection) {
+        const saved = assessment.responses.lead_magnet_selection
+        if (saved.answers) setAnswers(saved.answers)
+        if (saved.selectedType) setSelectedType(saved.selectedType)
+        setStage(STAGES.RECOMMENDATION)
+        return
+      }
 
-        // Filter to only lead magnet solutions
-        // Categories use "solution_X" keys while solutions array uses numeric indices
-        // Each solution has solutionType field (one_to_one, tech_digital, etc.)
-        const lmSolutions = Object.entries(solutions)
-          .filter(([id]) => categories[`solution_${id}`] === 'lead_magnet')
-          .map(([id, data]) => ({
-            id: `solution_${id}`,
-            ...data,
-            // Use solutionType for the label, not the numeric id
-            label: SOLUTION_LABELS[data.solutionType] || data.solutionType
-          }))
-
-        setLeadMagnetSolutions(lmSolutions)
-
-        // Initialize answers for each solution
-        const initialAnswers = {}
-        lmSolutions.forEach(sol => {
-          initialAnswers[sol.id] = { journey: null, barrier: null, conviction: null }
-        })
-        setAnswers(initialAnswers)
-
-        if (lmSolutions.length === 0) {
-          setError('No lead magnets found. Complete the Offer Builder first.')
-        }
+      // Check for existing selection (resume)
+      if (assessment.responses?.lead_magnet_selection?.selectedType) {
+        const saved = assessment.responses.lead_magnet_selection
+        setAnswers(saved.answers || { journey: null, barrier: null, conviction: null })
+        setSelectedType(saved.selectedType)
       }
 
       setStage(STAGES.WELCOME)
     } catch (err) {
-      console.error('Error loading solutions:', err)
-      setError('Failed to load solutions. Complete the Offer Builder first.')
+      console.error('Error loading context:', err)
+      setError('Failed to load data. Complete the Offer Builder first.')
       setStage(STAGES.WELCOME)
     }
   }
 
   // Get recommendation based on answers
-  const getRecommendation = (solutionId) => {
-    const ans = answers[solutionId]
-    if (!ans) return 'free_step_1'
+  const getRecommendation = () => {
+    if (!answers.journey || !answers.barrier || !answers.conviction) return 'free_step_1'
 
-    // Score each type based on answers
     const scores = { reveal_problem: 0, free_trial: 0, free_step_1: 0 }
 
     // Journey-based scoring
-    if (ans.journey === 'unaware') scores.reveal_problem += 3
-    if (ans.journey === 'aware') scores.free_step_1 += 2
-    if (ans.journey === 'comparison') scores.free_trial += 3
-    if (ans.journey === 'ready') scores.free_trial += 2
+    if (answers.journey === 'unaware') scores.reveal_problem += 3
+    if (answers.journey === 'aware') scores.free_step_1 += 2
+    if (answers.journey === 'comparison') scores.free_trial += 3
+    if (answers.journey === 'ready') scores.free_trial += 2
 
     // Barrier-based scoring
-    if (ans.barrier === 'confused') scores.reveal_problem += 2
-    if (ans.barrier === 'skeptical') scores.free_trial += 3
-    if (ans.barrier === 'overwhelmed') scores.free_step_1 += 3
-    if (ans.barrier === 'unsure_fit') scores.reveal_problem += 2
+    if (answers.barrier === 'confused') scores.reveal_problem += 2
+    if (answers.barrier === 'skeptical') scores.free_trial += 3
+    if (answers.barrier === 'overwhelmed') scores.free_step_1 += 3
+    if (answers.barrier === 'unsure_fit') scores.reveal_problem += 2
 
     // Conviction-based scoring
-    if (ans.conviction === 'quick_win') scores.free_step_1 += 2
-    if (ans.conviction === 'personalized') scores.reveal_problem += 3
-    if (ans.conviction === 'proof') scores.free_trial += 3
-    if (ans.conviction === 'first_step') scores.free_step_1 += 3
+    if (answers.conviction === 'quick_win') scores.free_step_1 += 2
+    if (answers.conviction === 'personalized') scores.reveal_problem += 3
+    if (answers.conviction === 'proof') scores.free_trial += 3
+    if (answers.conviction === 'first_step') scores.free_step_1 += 3
 
-    // Return highest scored
     const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1])
     return sorted[0][0]
   }
 
   // Handle option selection
   const handleOptionSelect = (option) => {
-    const currentSolution = leadMagnetSolutions[currentSolutionIndex]
     const currentQuestion = LM_QUESTIONS[currentQuestionIndex]
 
     setAnswers(prev => ({
       ...prev,
-      [currentSolution.id]: {
-        ...prev[currentSolution.id],
-        [currentQuestion.id]: option.value
-      }
+      [currentQuestion.id]: option.value
     }))
 
-    // Move to next question or next solution
     if (currentQuestionIndex < LM_QUESTIONS.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1)
-    } else if (currentSolutionIndex < leadMagnetSolutions.length - 1) {
-      // Move to next solution
-      setCurrentSolutionIndex(prev => prev + 1)
-      setCurrentQuestionIndex(0)
     } else {
-      // All done - calculate recommendations and go to selection
-      const recs = {}
-      leadMagnetSolutions.forEach(sol => {
-        recs[sol.id] = getRecommendation(sol.id)
-      })
-      setSelectedTypes(recs)
+      // All questions answered - get recommendation
+      const recommended = getRecommendation()
+      setSelectedType(recommended)
       setStage(STAGES.RECOMMENDATION)
     }
   }
@@ -376,23 +311,19 @@ function LeadMagnetSelectionFlow() {
   const goBackInQuestions = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(prev => prev - 1)
-    } else if (currentSolutionIndex > 0) {
-      setCurrentSolutionIndex(prev => prev - 1)
-      setCurrentQuestionIndex(LM_QUESTIONS.length - 1)
     } else {
-      setStage(STAGES.WELCOME)
+      setStage(STAGES.EDUCATION_3)
     }
   }
 
   // Save results
   const handleSaveResults = async () => {
-    if (isLoading || !user) return
+    if (isLoading || !user || !selectedType) return
 
     setIsLoading(true)
     setError(null)
 
     try {
-      // Update the offer_builder_assessment with lead magnet types
       const { data: assessment } = await supabase
         .from('offer_builder_assessments')
         .select('id, responses')
@@ -405,21 +336,20 @@ function LeadMagnetSelectionFlow() {
         throw new Error('No offer data found')
       }
 
-      if (assessment) {
-        await supabase
-          .from('offer_builder_assessments')
-          .update({
-            responses: {
-              ...assessment.responses,
-              lead_magnet_selections: {
-                answers,
-                types: selectedTypes
-              }
-            },
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', assessment.id)
-      }
+      await supabase
+        .from('offer_builder_assessments')
+        .update({
+          responses: {
+            ...assessment.responses,
+            lead_magnet_selection: {
+              answers,
+              selectedType,
+              typeDetails: LEAD_MAGNET_TYPES[selectedType]
+            }
+          },
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', assessment.id)
 
       // Complete challenge quest
       try {
@@ -441,20 +371,27 @@ function LeadMagnetSelectionFlow() {
     }
   }
 
-  // Generate AI personalized ideas for a solution
-  const generateAiIdeas = async (solution) => {
-    const solutionId = solution.id
-    const leadMagnetType = selectedTypes[solutionId]
+  // Generate AI personalized ideas
+  const generateAiIdeas = async () => {
+    if (!selectedType) return
 
-    if (!leadMagnetType) return
-
-    // Set loading state for this solution
-    setAiIdeas(prev => ({
-      ...prev,
-      [solutionId]: { loading: true, ideas: [], error: null }
-    }))
+    setAiIdeas({ loading: true, ideas: [], error: null })
 
     try {
+      // Load offer builder data for more context
+      const { data: assessment } = await supabase
+        .from('offer_builder_assessments')
+        .select('responses')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      // Get solution and problem context from offer builder
+      const solutions = assessment?.responses?.q8_solutions?.solutions || []
+      const firstSolution = solutions[0] || {}
+      const problemText = assessment?.responses?.q7_obstacles?.sections?.flat()?.join(', ') || ''
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/lead-magnet-ideas`,
         {
@@ -464,10 +401,10 @@ function LeadMagnetSelectionFlow() {
             'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
           },
           body: JSON.stringify({
-            solutionType: solution.solutionType,
-            solutionDescription: solution.description,
-            leadMagnetType: leadMagnetType,
-            problemText: solution.problemText,
+            solutionType: firstSolution.type || 'digital_product',
+            solutionDescription: firstSolution.description || '',
+            leadMagnetType: selectedType,
+            problemText: problemText,
             niche: nicheLayers?.layer4 || nicheLayers?.layer3 || null
           })
         }
@@ -479,22 +416,15 @@ function LeadMagnetSelectionFlow() {
         throw new Error(data.error || 'Failed to generate ideas')
       }
 
-      setAiIdeas(prev => ({
-        ...prev,
-        [solutionId]: { loading: false, ideas: data.ideas || [], error: null }
-      }))
+      setAiIdeas({ loading: false, ideas: data.ideas || [], error: null })
     } catch (err) {
       console.error('AI ideas error:', err)
-      setAiIdeas(prev => ({
-        ...prev,
-        [solutionId]: { loading: false, ideas: [], error: err.message }
-      }))
+      setAiIdeas({ loading: false, ideas: [], error: err.message })
     }
   }
 
   // ============ RENDER ============
 
-  // Loading state
   if (stage === STAGES.LOADING) {
     return (
       <div className="lm-selection-flow">
@@ -528,17 +458,17 @@ function LeadMagnetSelectionFlow() {
               </>
             ) : (
               <>
-                <p><strong>Let's finalize your lead magnets.</strong></p>
-                <p>You have {leadMagnetSolutions.length} solution{leadMagnetSolutions.length !== 1 ? 's' : ''} marked as lead magnets.</p>
-                <p>For each one, I'll ask 3 quick questions to recommend the best lead magnet type.</p>
+                <p><strong>Let's choose your ONE lead magnet.</strong></p>
+                <p>The best businesses have ONE killer lead magnet that attracts the right people and positions them as the solution.</p>
+                <p>I'll ask 3 quick questions about your ideal customer, then recommend the perfect lead magnet type for your offer.</p>
 
-                <div className="solutions-preview">
-                  {leadMagnetSolutions.map((sol, idx) => (
-                    <div key={sol.id} className="solution-preview-card">
-                      <span className="preview-number">{idx + 1}</span>
+                <div className="lm-types-preview">
+                  {Object.entries(LEAD_MAGNET_TYPES).map(([typeId, type]) => (
+                    <div key={typeId} className="lm-preview-card">
+                      <span className="preview-icon">{type.icon}</span>
                       <div className="preview-content">
-                        <h4>{sol.label}</h4>
-                        <p>{sol.description}</p>
+                        <h4>{type.name}</h4>
+                        <p>{type.shortDesc}</p>
                       </div>
                     </div>
                   ))}
@@ -546,10 +476,10 @@ function LeadMagnetSelectionFlow() {
 
                 <button
                   className="primary-button glow-button"
-                  onClick={() => setStage(STAGES.QUESTIONS)}
+                  onClick={() => setStage(STAGES.EDUCATION_1)}
                   style={{ marginTop: '24px' }}
                 >
-                  Start Selection
+                  Learn About Lead Magnets
                 </button>
               </>
             )}
@@ -566,24 +496,88 @@ function LeadMagnetSelectionFlow() {
     )
   }
 
+  // EDUCATION STAGES
+  if (stage === STAGES.EDUCATION_1 || stage === STAGES.EDUCATION_2 || stage === STAGES.EDUCATION_3) {
+    const slideIndex = stage === STAGES.EDUCATION_1 ? 0 : stage === STAGES.EDUCATION_2 ? 1 : 2
+    const slide = EDUCATION_SLIDES[slideIndex]
+    const nextStage = stage === STAGES.EDUCATION_1 ? STAGES.EDUCATION_2
+      : stage === STAGES.EDUCATION_2 ? STAGES.EDUCATION_3
+      : STAGES.QUESTIONS
+    const prevStage = stage === STAGES.EDUCATION_1 ? STAGES.WELCOME
+      : stage === STAGES.EDUCATION_2 ? STAGES.EDUCATION_1
+      : STAGES.EDUCATION_2
+
+    return (
+      <div className="lm-selection-flow">
+        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
+        <div className="education-container">
+          <div className="edu-icon">{slide.icon}</div>
+          <h2 className="edu-title">{slide.title}</h2>
+
+          {/* Slide 1: Definition style */}
+          {slide.mainText && (
+            <div className="edu-definition">
+              <p className="edu-main-text">{slide.mainText}</p>
+              {slide.subText && <p className="edu-sub-text">{slide.subText}</p>}
+            </div>
+          )}
+
+          {/* Slide 2: Funnel visualization */}
+          {slide.funnelSteps && (
+            <div className="edu-funnel">
+              {slide.funnelSteps.map((step, i) => (
+                <div key={i} className="funnel-step">
+                  <span className="funnel-icon">{step.icon}</span>
+                  <span className="funnel-label">{step.label}</span>
+                  <span className="funnel-sublabel">{step.sublabel}</span>
+                  {i < slide.funnelSteps.length - 1 && <span className="funnel-arrow">→</span>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Slide 3: Formula style */}
+          {slide.formula && (
+            <div className="edu-formula">
+              {slide.formula.map((line, i) => (
+                <p key={i} className={line === '+' ? 'formula-plus' : 'formula-line'}>{line}</p>
+              ))}
+            </div>
+          )}
+
+          {slide.highlight && (
+            <div className="edu-highlight">
+              <p>{slide.highlight}</p>
+            </div>
+          )}
+
+          <button
+            className="primary-button"
+            onClick={() => setStage(nextStage)}
+          >
+            {stage === STAGES.EDUCATION_3 ? 'Start Questions' : 'Continue'}
+          </button>
+          <button
+            className="go-back-link"
+            onClick={() => setStage(prevStage)}
+          >
+            ← Go Back
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   // QUESTIONS STAGE
   if (stage === STAGES.QUESTIONS) {
-    const currentSolution = leadMagnetSolutions[currentSolutionIndex]
     const currentQuestion = LM_QUESTIONS[currentQuestionIndex]
-    const totalQuestions = leadMagnetSolutions.length * LM_QUESTIONS.length
-    const currentProgress = (currentSolutionIndex * LM_QUESTIONS.length) + currentQuestionIndex + 1
 
     return (
       <div className="lm-selection-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
         <div className="question-container">
-          <div className="solution-context">
-            <span className="solution-badge">{currentSolution.label}</span>
-            <p className="solution-desc">{currentSolution.description}</p>
-          </div>
-
           <div className="question-progress">
-            Question {currentProgress} of {totalQuestions}
+            Question {currentQuestionIndex + 1} of {LM_QUESTIONS.length}
           </div>
 
           <h2 className="question-text">{currentQuestion.question}</h2>
@@ -593,7 +587,7 @@ function LeadMagnetSelectionFlow() {
             {currentQuestion.options.map((option) => (
               <button
                 key={option.value}
-                className="option-card"
+                className={`option-card ${answers[currentQuestion.id] === option.value ? 'selected' : ''}`}
                 onClick={() => handleOptionSelect(option)}
               >
                 <div className="option-label">{option.label}</div>
@@ -610,148 +604,140 @@ function LeadMagnetSelectionFlow() {
 
   // RECOMMENDATION STAGE
   if (stage === STAGES.RECOMMENDATION) {
+    const recommended = getRecommendation()
+    const currentType = LEAD_MAGNET_TYPES[selectedType]
+
     return (
       <div className="lm-selection-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
         <div className="recommendation-container">
-          <h2 className="question-text">Your Lead Magnet Types</h2>
+          <h2 className="question-text">Your Lead Magnet Type</h2>
           <p className="question-subtext">
-            Based on your answers, here are my recommendations
+            Based on your answers, here's my recommendation
           </p>
 
-          <div className="recommendations-list">
-            {leadMagnetSolutions.map((solution) => {
-              const recommended = getRecommendation(solution.id)
-              const selected = selectedTypes[solution.id] || recommended
-              const selectedType = LEAD_MAGNET_TYPES[selected]
+          <div className="lm-type-options">
+            {Object.entries(LEAD_MAGNET_TYPES).map(([typeId, type]) => (
+              <button
+                key={typeId}
+                className={`lm-type-option ${selectedType === typeId ? 'selected' : ''} ${typeId === recommended ? 'recommended' : ''}`}
+                onClick={() => setSelectedType(typeId)}
+              >
+                <span className="lm-opt-icon">{type.icon}</span>
+                <div className="lm-opt-content">
+                  <span className="lm-opt-name">{type.name}</span>
+                  <span className="lm-opt-examples">{type.shortDesc}</span>
+                </div>
+                {typeId === recommended && <span className="rec-badge">Recommended</span>}
+              </button>
+            ))}
+          </div>
 
-              return (
-                <div key={solution.id} className="recommendation-card">
-                  <div className="rec-card-header">
-                    <h3>{solution.description || solution.label}</h3>
-                  </div>
+          {/* Detailed info for selected type */}
+          {currentType && (
+            <div className="lm-details-grid">
+              {/* Why + When row */}
+              <div className="lm-detail-card lm-why-card">
+                <div className="detail-card-icon">💡</div>
+                <div className="detail-card-content">
+                  <h4>Why This Works</h4>
+                  <p>{currentType.whyItWorks}</p>
+                </div>
+              </div>
 
-                  <div className="lm-type-options">
-                    {Object.entries(LEAD_MAGNET_TYPES).map(([typeId, type]) => (
-                      <button
-                        key={typeId}
-                        className={`lm-type-option ${selected === typeId ? 'selected' : ''} ${typeId === recommended ? 'recommended' : ''}`}
-                        onClick={() => setSelectedTypes(prev => ({ ...prev, [solution.id]: typeId }))}
-                      >
-                        <span className="lm-opt-icon">{type.icon}</span>
-                        <div className="lm-opt-content">
-                          <span className="lm-opt-name">{type.name}</span>
-                          <span className="lm-opt-examples">{type.shortDesc}</span>
-                        </div>
-                        {typeId === recommended && <span className="rec-badge">Recommended</span>}
-                      </button>
+              <div className="lm-detail-card lm-when-card">
+                <div className="detail-card-icon">🎯</div>
+                <div className="detail-card-content">
+                  <h4>Best When</h4>
+                  <ul>
+                    {currentType.whenToUse.map((item, i) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Action Steps - full width */}
+              <div className="lm-detail-card lm-action-card">
+                <div className="detail-card-icon">⚡</div>
+                <div className="detail-card-content">
+                  <h4>Action Steps</h4>
+                  <div className="action-steps-row">
+                    {currentType.actionSteps.map((step, i) => (
+                      <div key={i} className="action-step">
+                        <span className="step-number">{i + 1}</span>
+                        <span className="step-text">{step}</span>
+                      </div>
                     ))}
                   </div>
-
-                  {/* Detailed info for selected type */}
-                  {selectedType && (
-                    <div className="lm-type-details">
-                      <div className="lm-why-section">
-                        <h4>Why This Works</h4>
-                        <p>{selectedType.whyItWorks}</p>
-                      </div>
-
-                      <div className="lm-when-section">
-                        <h4>Best When</h4>
-                        <ul>
-                          {selectedType.whenToUse.map((item, i) => (
-                            <li key={i}>{item}</li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="lm-action-section">
-                        <h4>Action Steps</h4>
-                        <ol>
-                          {selectedType.actionSteps.map((step, i) => (
-                            <li key={i}>{step}</li>
-                          ))}
-                        </ol>
-                      </div>
-
-                      {/* Category-based suggestions */}
-                      {solution.solutionType && selectedType.suggestionsByType?.[solution.solutionType] && (
-                        <div className="lm-suggestions-section">
-                          <h4>💡 Ideas for Your {solution.label}</h4>
-                          <ul className="suggestion-list">
-                            {selectedType.suggestionsByType[solution.solutionType].map((suggestion, i) => (
-                              <li key={i}>{suggestion}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-
-                      {/* AI personalization section */}
-                      <div className="lm-ai-section">
-                        {aiIdeas[solution.id]?.loading ? (
-                          <div className="ai-loading">
-                            <div className="typing-indicator">
-                              <span></span><span></span><span></span>
-                            </div>
-                            <p>Generating personalized ideas...</p>
-                          </div>
-                        ) : aiIdeas[solution.id]?.ideas?.length > 0 ? (
-                          <div className="ai-ideas-results">
-                            <h4>✨ Personalized Ideas</h4>
-                            <div className="ai-ideas-list">
-                              {aiIdeas[solution.id].ideas.map((idea, i) => (
-                                <div key={i} className="ai-idea-card">
-                                  <div className="idea-header">
-                                    <span className="idea-format">{idea.format}</span>
-                                    <h5>{idea.title}</h5>
-                                  </div>
-                                  <p className="idea-description">{idea.description}</p>
-                                  <p className="idea-hook">"{idea.hook}"</p>
-                                </div>
-                              ))}
-                            </div>
-                            <button
-                              className="ai-refresh-button"
-                              onClick={() => generateAiIdeas(solution)}
-                            >
-                              🔄 Generate New Ideas
-                            </button>
-                          </div>
-                        ) : (
-                          <>
-                            {aiIdeas[solution.id]?.error && (
-                              <p className="ai-error">{aiIdeas[solution.id].error}</p>
-                            )}
-                            <button
-                              className="ai-ideas-button"
-                              onClick={() => generateAiIdeas(solution)}
-                            >
-                              ✨ Get Personalized Ideas
-                            </button>
-                            <p className="ai-hint">Get AI-generated suggestions tailored to your specific offer</p>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </div>
-              )
-            })}
-          </div>
+              </div>
+
+              {/* Examples - pill tags */}
+              <div className="lm-detail-card lm-examples-card">
+                <div className="detail-card-icon">📝</div>
+                <div className="detail-card-content">
+                  <h4>Examples</h4>
+                  <div className="examples-list">
+                    {currentType.examples.map((example, i) => (
+                      <div key={i} className="example-item">{example}</div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* AI personalization */}
+              <div className="lm-detail-card lm-ai-card">
+                {aiIdeas.loading ? (
+                  <div className="ai-loading">
+                    <div className="typing-indicator">
+                      <span></span><span></span><span></span>
+                    </div>
+                    <p>Generating personalized ideas...</p>
+                  </div>
+                ) : aiIdeas.ideas?.length > 0 ? (
+                  <div className="ai-ideas-results">
+                    <h4>✨ Personalized Ideas</h4>
+                    <div className="ai-ideas-list">
+                      {aiIdeas.ideas.map((idea, i) => (
+                        <div key={i} className="ai-idea-card">
+                          {idea.format && <span className="idea-format">{idea.format}</span>}
+                          <h5>{idea.title}</h5>
+                          {idea.description && <p className="idea-description">{idea.description}</p>}
+                          {idea.hook && <p className="idea-hook">"{idea.hook}"</p>}
+                        </div>
+                      ))}
+                    </div>
+                    <button className="ai-refresh-button" onClick={generateAiIdeas}>
+                      🔄 Generate New Ideas
+                    </button>
+                  </div>
+                ) : (
+                  <button className="ai-ideas-button" onClick={generateAiIdeas}>
+                    <span className="ai-btn-icon">✨</span>
+                    <span className="ai-btn-text">
+                      <strong>Get Personalized Ideas</strong>
+                      <small>AI suggestions for your niche</small>
+                    </span>
+                  </button>
+                )}
+                {aiIdeas.error && <p className="ai-error">{aiIdeas.error}</p>}
+              </div>
+            </div>
+          )}
 
           {error && <p className="error-message">{error}</p>}
 
           <button
             className="primary-button"
             onClick={handleSaveResults}
-            disabled={isLoading || Object.keys(selectedTypes).length !== leadMagnetSolutions.length}
+            disabled={isLoading || !selectedType}
             style={{ marginTop: '24px' }}
           >
             {isLoading ? 'Saving...' : 'Save & Complete (+30 pts)'}
           </button>
 
           <BackButton onClick={() => {
-            setCurrentSolutionIndex(leadMagnetSolutions.length - 1)
             setCurrentQuestionIndex(LM_QUESTIONS.length - 1)
             setStage(STAGES.QUESTIONS)
           }} />
@@ -763,31 +749,33 @@ function LeadMagnetSelectionFlow() {
   // SUCCESS STAGE
   if (stage === STAGES.SUCCESS) {
     const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'there'
+    const finalType = LEAD_MAGNET_TYPES[selectedType]
 
     return (
       <div className="lm-selection-flow">
         <div className="success-container">
-          <div className="success-icon">🎁</div>
-          <h2>Lead Magnets Selected, {userName}!</h2>
-          <p>You've defined your lead magnet strategy for {leadMagnetSolutions.length} solution{leadMagnetSolutions.length !== 1 ? 's' : ''}.</p>
+          <div className="success-icon">{finalType?.icon || '🎁'}</div>
+          <h2>Lead Magnet Selected, {userName}!</h2>
+          <p>You've chosen your lead magnet strategy.</p>
           <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+30 points earned!</p>
 
-          <div className="summary-cards">
-            {leadMagnetSolutions.map((sol) => (
-              <div key={sol.id} className="summary-card">
-                <span className="summary-icon">{LEAD_MAGNET_TYPES[selectedTypes[sol.id]]?.icon}</span>
-                <div>
-                  <h4>{sol.label}</h4>
-                  <p>{LEAD_MAGNET_TYPES[selectedTypes[sol.id]]?.name}</p>
-                </div>
-              </div>
-            ))}
+          <div className="summary-card-single">
+            <span className="summary-icon">{finalType?.icon}</span>
+            <div>
+              <h4>{finalType?.name}</h4>
+              <p>{finalType?.shortDesc}</p>
+            </div>
           </div>
 
+          <p className="next-step-hint">
+            Next: In Money Models, you'll decide how to position this lead magnet as your Attraction Offer.
+          </p>
+        </div>
+
+        <div className="success-footer">
           <button
             className="primary-button"
             onClick={() => navigate('/7-day-challenge')}
-            style={{ marginTop: '24px' }}
           >
             Back to Challenge
           </button>

@@ -90,8 +90,8 @@ export const STAGE_CONFIG = {
     description: 'Test your product with real users and gather feedback',
     icon: '🎯',
     color: '#f59e0b', // amber
-    requiredFlows: [],
-    milestones: ['offer_tested_with_3', 'testing_complete', 'feedback_responses_3', 'improvements_identified'],
+    requiredFlows: ['mvp_readiness', 'feedback_analysis'],
+    milestones: ['feedback_form_sent'],
     groanChallenge: {
       id: 'groan_stage_3_testing',
       name: 'Testing Groan',

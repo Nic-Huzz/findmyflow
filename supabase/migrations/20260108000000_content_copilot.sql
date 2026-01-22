@@ -51,19 +51,23 @@ CREATE INDEX idx_content_strategies_user ON content_strategies(user_id);
 -- RLS Policies
 ALTER TABLE content_strategies ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own strategy"
   ON content_strategies FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own strategy"
   ON content_strategies FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own strategy"
   ON content_strategies FOR UPDATE
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own strategy"
   ON content_strategies FOR DELETE
   USING (auth.uid() = user_id);
@@ -107,6 +111,7 @@ CREATE INDEX IF NOT EXISTS idx_content_history_task ON content_history(task_id);
 -- The INSERT policy was missing WITH CHECK
 
 DROP POLICY IF EXISTS "Users can insert own marketing tasks" ON marketing_tasks;
+DO $$ BEGIN
 CREATE POLICY "Users can insert own marketing tasks"
   ON marketing_tasks FOR INSERT
   WITH CHECK (auth.uid() = user_id);

@@ -7,15 +7,19 @@ DROP POLICY IF EXISTS "Users can insert own stage progress" ON public.user_stage
 DROP POLICY IF EXISTS "Users can update own stage progress" ON public.user_stage_progress;
 DROP POLICY IF EXISTS "Users can delete own stage progress" ON public.user_stage_progress;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own stage progress" ON public.user_stage_progress
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own stage progress" ON public.user_stage_progress
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own stage progress" ON public.user_stage_progress
   FOR UPDATE USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own stage progress" ON public.user_stage_progress
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -26,15 +30,19 @@ DROP POLICY IF EXISTS "Users can insert own conversation logs" ON public.convers
 DROP POLICY IF EXISTS "Users can update own conversation logs" ON public.conversation_logs;
 DROP POLICY IF EXISTS "Users can delete own conversation logs" ON public.conversation_logs;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own conversation logs" ON public.conversation_logs
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own conversation logs" ON public.conversation_logs
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own conversation logs" ON public.conversation_logs
   FOR UPDATE USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own conversation logs" ON public.conversation_logs
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -45,14 +53,18 @@ DROP POLICY IF EXISTS "Users can insert own milestones" ON public.milestone_comp
 DROP POLICY IF EXISTS "Users can update own milestones" ON public.milestone_completions;
 DROP POLICY IF EXISTS "Users can delete own milestones" ON public.milestone_completions;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own milestones" ON public.milestone_completions
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own milestones" ON public.milestone_completions
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own milestones" ON public.milestone_completions
   FOR UPDATE USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own milestones" ON public.milestone_completions
   FOR DELETE USING (auth.uid() = user_id);

@@ -42,9 +42,15 @@ CREATE INDEX IF NOT EXISTS idx_public_offer_audits_score ON public_offer_audits(
 ALTER TABLE public_offer_audits ENABLE ROW LEVEL SECURITY;
 
 -- Anyone can insert (it's a lead capture)
+DO $$ BEGIN
 CREATE POLICY "Anyone can insert public offer audits" ON public_offer_audits
   FOR INSERT WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Anyone can read (for session-based retrieval)
+DO $$ BEGIN
 CREATE POLICY "Anyone can read public offer audits" ON public_offer_audits
   FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;

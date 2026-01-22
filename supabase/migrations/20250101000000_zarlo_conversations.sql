@@ -35,16 +35,19 @@ CREATE INDEX IF NOT EXISTS idx_zarlo_last_interaction ON zarlo_conversations(las
 -- RLS Policy
 ALTER TABLE zarlo_conversations ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own Zarlo data"
   ON zarlo_conversations
   FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own Zarlo data"
   ON zarlo_conversations
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own Zarlo data"
   ON zarlo_conversations
   FOR UPDATE

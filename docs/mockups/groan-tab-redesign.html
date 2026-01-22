@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Challenge Tab Redesign - Groan Integration</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      background: #f8f9fa;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+      color: white;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .change-project {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Stage Selector */
+    .stage-selector {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .stage-selector::-webkit-scrollbar {
+      display: none;
+    }
+
+    .stage-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      min-width: 80px;
+      transition: all 0.2s;
+    }
+
+    .stage-btn.active {
+      background: #e6a23c;
+      box-shadow: 0 4px 12px rgba(230, 162, 60, 0.4);
+    }
+
+    .stage-btn.completed {
+      border: 2px dashed rgba(72, 199, 142, 0.6);
+    }
+
+    .stage-btn .emoji {
+      font-size: 24px;
+    }
+
+    .stage-btn .label {
+      font-size: 10px;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, #48c78e 0%, #48c78e 60%, #e6a23c 60%, #e6a23c 100%);
+      margin-top: 12px;
+    }
+
+    /* Main Tabs */
+    .main-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 16px 20px;
+      background: white;
+      border-bottom: 1px solid #eee;
+    }
+
+    .main-tab {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #f0f0f0;
+      color: #666;
+    }
+
+    .main-tab.active {
+      background: #667eea;
+      color: white;
+    }
+
+    /* Content Area */
+    .content {
+      padding: 0 20px 20px;
+      background: #f8f9fa;
+    }
+
+    /* Sub-tabs (Business/Groan toggle) */
+    .sub-tabs {
+      display: flex;
+      background: #e8e8e8;
+      border-radius: 12px;
+      padding: 4px;
+      margin: 16px 0;
+    }
+
+    .sub-tab {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+      color: #666;
+    }
+
+    .sub-tab.active {
+      background: white;
+      color: #333;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Stage indicator */
+    .stage-indicator {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stage-indicator .emoji {
+      font-size: 28px;
+    }
+
+    .stage-indicator .info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .stage-indicator .info p {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* Quest Cards */
+    .quest-card {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .quest-card.groan {
+      border-left: 4px solid #e6a23c;
+    }
+
+    .quest-card.essence {
+      border-left: 4px solid #48c78e;
+    }
+
+    .quest-card.protective {
+      border-left: 4px solid #f14668;
+    }
+
+    .quest-card.reconnect {
+      border-left: 4px solid #3298dc;
+    }
+
+    .quest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .quest-type {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin-bottom: 4px;
+    }
+
+    .quest-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .quest-points {
+      background: #f0f0f0;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+    }
+
+    .quest-description {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .quest-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 13px;
+      resize: none;
+      font-family: inherit;
+    }
+
+    .quest-input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .quest-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-right: 8px;
+    }
+
+    .badge-daily {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .badge-anytime {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    /* Vulnerability Trifecta indicator */
+    .vulnerability-indicator {
+      background: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .vulnerability-indicator .icon {
+      font-size: 20px;
+    }
+
+    .vulnerability-indicator .text {
+      font-size: 12px;
+      color: #795548;
+    }
+
+    .vulnerability-indicator .text strong {
+      display: block;
+      font-size: 13px;
+      color: #5d4037;
+      margin-bottom: 2px;
+    }
+
+    /* Section header */
+    .section-header {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      margin: 20px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Reconnect grid */
+    .reconnect-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .reconnect-item {
+      background: white;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .reconnect-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .reconnect-item .emoji {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .reconnect-item .name {
+      font-size: 12px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .reconnect-item .points {
+      font-size: 11px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    /* Hidden sections */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Toggle info */
+    .toggle-info {
+      text-align: center;
+      padding: 8px;
+      font-size: 11px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header with Stage Selector -->
+    <div class="header">
+      <div class="header-top">
+        <h1>Find My Flow App</h1>
+        <button class="change-project">Change Project</button>
+      </div>
+
+      <div class="stage-selector">
+        <button class="stage-btn completed">
+          <span class="emoji">🔍</span>
+          <span class="label">Validation</span>
+        </button>
+        <button class="stage-btn completed">
+          <span class="emoji">🛠️</span>
+          <span class="label">Product</span>
+        </button>
+        <button class="stage-btn completed">
+          <span class="emoji">🎯</span>
+          <span class="label">Testing</span>
+        </button>
+        <button class="stage-btn completed">
+          <span class="emoji">💰</span>
+          <span class="label">Money</span>
+        </button>
+        <button class="stage-btn active">
+          <span class="emoji">📣</span>
+          <span class="label">Campaign</span>
+        </button>
+        <button class="stage-btn">
+          <span class="emoji">🚀</span>
+          <span class="label">Launch</span>
+        </button>
+        <button class="stage-btn">
+          <span class="emoji">📊</span>
+          <span class="label">Tracking</span>
+        </button>
+      </div>
+
+      <div class="progress-bar"></div>
+    </div>
+
+    <!-- Main Tabs (Groans removed, merged into Business) -->
+    <div class="main-tabs">
+      <button class="main-tab active" onclick="switchMainTab('business')">Business</button>
+      <button class="main-tab" onclick="switchMainTab('healing')">Healing</button>
+      <button class="main-tab" onclick="switchMainTab('tracker')">Tracker</button>
+      <button class="main-tab" onclick="switchMainTab('bonus')">Bonus</button>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+
+      <!-- BUSINESS TAB -->
+      <div id="business-tab" class="tab-content active">
+
+        <!-- Sub-tabs: Tasks vs Groans -->
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchSubTab('tasks')">Tasks</button>
+          <button class="sub-tab" onclick="switchSubTab('groans')">Groans</button>
+        </div>
+
+        <!-- TASKS SUB-TAB -->
+        <div id="tasks-content" class="tab-content active">
+          <div class="stage-indicator">
+            <span class="emoji">📣</span>
+            <div class="info">
+              <h3>Stage 5: Campaign Creation</h3>
+              <p>Build your lead generation strategy</p>
+            </div>
+          </div>
+
+          <div class="quest-card">
+            <div class="quest-header">
+              <div>
+                <div class="quest-type">Campaign</div>
+                <div class="quest-title">Core Four Strategy</div>
+              </div>
+              <span class="quest-points">+20 pts</span>
+            </div>
+            <p class="quest-description">Discover the best lead generation strategy for your business</p>
+          </div>
+
+          <div class="quest-card">
+            <div class="quest-header">
+              <div>
+                <div class="quest-type">Campaign</div>
+                <div class="quest-title">Funnel Builder</div>
+              </div>
+              <span class="quest-points">+35 pts</span>
+            </div>
+            <p class="quest-description">Design your complete lead generation funnel</p>
+          </div>
+
+          <div class="quest-card">
+            <div class="quest-header">
+              <div>
+                <div class="quest-type">Milestone</div>
+                <div class="quest-title">Content Creation Plan</div>
+              </div>
+              <span class="quest-points">+15 pts</span>
+            </div>
+            <p class="quest-description">Map out your first 7 pieces of content</p>
+          </div>
+        </div>
+
+        <!-- GROANS SUB-TAB -->
+        <div id="groans-content" class="tab-content">
+          <div class="stage-indicator">
+            <span class="emoji">📣</span>
+            <div class="info">
+              <h3>Stage 5: Campaign Creation</h3>
+              <p>Facing your fear of visibility</p>
+            </div>
+          </div>
+
+          <!-- Vulnerability Trifecta -->
+          <div class="vulnerability-indicator">
+            <span class="icon">⚡</span>
+            <div class="text">
+              <strong>Core Fear: Fear of Failure</strong>
+              "What if no one signs up? What if I put myself out there and it flops?"
+            </div>
+          </div>
+
+          <!-- Essence Voice Quest -->
+          <div class="quest-card essence">
+            <div class="quest-header">
+              <div>
+                <span class="quest-badge badge-daily">Daily</span>
+                <div class="quest-type">Essence Voice</div>
+                <div class="quest-title">Where did you stack value from abundance today?</div>
+              </div>
+              <span class="quest-points">+5 pts</span>
+            </div>
+            <p class="quest-description">Celebrate a moment where you showed up generously, trusting that giving value attracts more.</p>
+            <textarea class="quest-input" rows="2" placeholder="I added an extra bonus to my offer because..."></textarea>
+          </div>
+
+          <!-- Protective Voice Quest -->
+          <div class="quest-card protective">
+            <div class="quest-header">
+              <div>
+                <span class="quest-badge badge-daily">Daily</span>
+                <div class="quest-type">Protective Voice</div>
+                <div class="quest-title">What scarcity mindset held you back today?</div>
+              </div>
+              <span class="quest-points">+5 pts</span>
+            </div>
+            <p class="quest-description">Recognize where fear of "giving too much" or "not getting enough back" stopped you.</p>
+            <textarea class="quest-input" rows="2" placeholder="I held back from sharing because..."></textarea>
+          </div>
+
+          <!-- Main Groan Challenge -->
+          <div class="quest-card groan">
+            <div class="quest-header">
+              <div>
+                <span class="quest-badge badge-anytime">Groan</span>
+                <div class="quest-type">Stage 5 Challenge</div>
+                <div class="quest-title">Put yourself out there publicly</div>
+              </div>
+              <span class="quest-points">+15 pts</span>
+            </div>
+            <p class="quest-description">Share something vulnerable—a video, a post, an interview. Let the world see the real you, not the polished version.</p>
+            <textarea class="quest-input" rows="2" placeholder="What did you share? What felt exposing about it?"></textarea>
+          </div>
+
+          <!-- Reconnect Section -->
+          <div class="section-header">Reconnect Practices</div>
+          <p class="toggle-info">Build resilience to face your fears</p>
+
+          <div class="reconnect-grid">
+            <div class="reconnect-item">
+              <div class="emoji">🧘</div>
+              <div class="name">Meditation</div>
+              <div class="points">+5 pts</div>
+            </div>
+            <div class="reconnect-item">
+              <div class="emoji">🌬️</div>
+              <div class="name">Breathwork</div>
+              <div class="points">+5 pts</div>
+            </div>
+            <div class="reconnect-item">
+              <div class="emoji">💃</div>
+              <div class="name">Rise & Vibe</div>
+              <div class="points">+3 pts</div>
+            </div>
+            <div class="reconnect-item">
+              <div class="emoji">🙏</div>
+              <div class="name">Prayer</div>
+              <div class="points">+4 pts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEALING TAB -->
+      <div id="healing-tab" class="tab-content">
+        <div class="sub-tabs">
+          <button class="sub-tab active">Daily</button>
+          <button class="sub-tab">Weekly</button>
+        </div>
+        <div class="quest-card">
+          <div class="quest-header">
+            <div>
+              <div class="quest-type">Recognise</div>
+              <div class="quest-title">Positive Frequency</div>
+            </div>
+            <span class="quest-points">+3 pts</span>
+          </div>
+          <p class="quest-description">What's a moment where you were challenged but reacted from a place of love?</p>
+        </div>
+      </div>
+
+      <!-- TRACKER TAB -->
+      <div id="tracker-tab" class="tab-content">
+        <div class="quest-card">
+          <div class="quest-header">
+            <div>
+              <div class="quest-type">Daily</div>
+              <div class="quest-title">Daily Flow Update</div>
+            </div>
+            <span class="quest-points">+4 pts</span>
+          </div>
+          <p class="quest-description">Log how things flowed for you today using the Flow Compass</p>
+        </div>
+      </div>
+
+      <!-- BONUS TAB -->
+      <div id="bonus-tab" class="tab-content">
+        <div class="quest-card">
+          <div class="quest-header">
+            <div>
+              <div class="quest-type">Anytime</div>
+              <div class="quest-title">Tell a Friend</div>
+            </div>
+            <span class="quest-points">+5 pts</span>
+          </div>
+          <p class="quest-description">Share this 7-day challenge with someone who you think would love to join.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function switchMainTab(tabName) {
+      // Update main tab buttons
+      document.querySelectorAll('.main-tab').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Show correct content
+      document.querySelectorAll('.content > .tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(tabName + '-tab').classList.add('active');
+    }
+
+    function switchSubTab(subTabName) {
+      // Update sub-tab buttons
+      const container = event.target.closest('.tab-content');
+      container.querySelectorAll('.sub-tab').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // Show correct sub-content
+      if (subTabName === 'tasks') {
+        document.getElementById('tasks-content').classList.add('active');
+        document.getElementById('groans-content').classList.remove('active');
+      } else {
+        document.getElementById('tasks-content').classList.remove('active');
+        document.getElementById('groans-content').classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>

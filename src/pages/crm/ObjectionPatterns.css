@@ -2,6 +2,9 @@
  * Objection Patterns Dashboard Styles
  * All classes scoped under .objection-patterns to prevent leakage
  */
+@import '../../styles/crm-base.css';
+/*
+ */
 
 .objection-patterns {
   padding: 1.5rem;

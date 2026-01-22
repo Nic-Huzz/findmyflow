@@ -1,8 +1,10 @@
-/* Smart Alerts Styles */
+/* Smart Alerts Styles - Playful Warmth Dark Theme */
+@import '../../styles/crm-base.css';
+
 .smart-alerts {
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: var(--crm-bg-dark);
   color: white;
 }
 

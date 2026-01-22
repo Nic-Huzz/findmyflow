@@ -41,18 +41,22 @@ CREATE INDEX IF NOT EXISTS idx_marketing_tasks_user_date ON marketing_tasks(user
 -- RLS for marketing_tasks
 ALTER TABLE marketing_tasks ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own marketing tasks"
   ON marketing_tasks FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own marketing tasks"
   ON marketing_tasks FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own marketing tasks"
   ON marketing_tasks FOR UPDATE
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own marketing tasks"
   ON marketing_tasks FOR DELETE
   USING (auth.uid() = user_id);
@@ -101,18 +105,22 @@ CREATE INDEX IF NOT EXISTS idx_sales_deals_user_status ON sales_deals(user_id, s
 -- RLS for sales_deals
 ALTER TABLE sales_deals ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own sales deals"
   ON sales_deals FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own sales deals"
   ON sales_deals FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own sales deals"
   ON sales_deals FOR UPDATE
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own sales deals"
   ON sales_deals FOR DELETE
   USING (auth.uid() = user_id);
@@ -145,14 +153,17 @@ CREATE TABLE IF NOT EXISTS user_crm_stats (
 -- RLS for user_crm_stats
 ALTER TABLE user_crm_stats ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own CRM stats"
   ON user_crm_stats FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own CRM stats"
   ON user_crm_stats FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own CRM stats"
   ON user_crm_stats FOR UPDATE
   USING (auth.uid() = user_id);

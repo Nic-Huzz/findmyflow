@@ -43,9 +43,13 @@ const LeadMagnetSelectionFlow = lazy(() => import('./flows/LeadMagnetSelectionFl
 const ProductSelectionFlow = lazy(() => import('./flows/ProductSelectionFlow'))
 const FunnelBuilderFlow = lazy(() => import('./flows/FunnelBuilderFlow'))
 const FunnelCalculator = lazy(() => import('./flows/FunnelCalculator'))
+const MVPReadinessFlow = lazy(() => import('./flows/MVPReadinessFlow'))
+const FeedbackAnalysisFlow = lazy(() => import('./flows/FeedbackAnalysisFlow'))
 const GrandSlamOfferFlow = lazy(() => import('./flows/GrandSlamOfferFlow'))
+const OfferStackBuilderFlow = lazy(() => import('./flows/OfferStackBuilderFlow'))
 const GrandSlamMatrix = lazy(() => import('./flows/GrandSlamMatrix'))
 const PersonaSelectionFlow = lazy(() => import('./flows/PersonaSelectionFlow'))
+const LaunchReadinessFlow = lazy(() => import('./flows/LaunchReadinessFlow'))
 
 // Lazy-loaded flows - FlowFinder
 const FlowFinderSkills = lazy(() => import('./flows/FlowFinderSkills'))
@@ -124,7 +128,11 @@ import './flows/LeadMagnetSelectionFlow.css'
 import './flows/ProductSelectionFlow.css'
 import './flows/FunnelBuilderFlow.css'
 import './flows/FunnelCalculator.css'
+import './flows/MVPReadinessFlow.css'
+import './flows/FeedbackAnalysisFlow.css'
 import './flows/GrandSlamOfferFlow.css'
+import './flows/OfferStackBuilderFlow.css'
+import './flows/LaunchReadinessFlow.css'
 import './flows/BusinessBaselineFlow.css'
 import './flows/CustomerSegmentsFlow.css'
 import './flows/CompetitorSnapshotFlow.css'
@@ -155,7 +163,8 @@ function ConditionalBottomToolbar() {
   const isPublicRoute = location.pathname.startsWith('/v/') ||
                         location.pathname.startsWith('/try/') ||
                         location.pathname === '/' ||
-                        location.pathname === '/career-clarity'
+                        location.pathname === '/career-clarity' ||
+                        location.pathname === '/launch-readiness'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -221,6 +230,13 @@ function AppRouter() {
               </AuthGate>
             } />
 
+            {/* Launch Readiness Check - Stage 6 Campaign */}
+            <Route path="/launch-readiness" element={
+              <AuthGate>
+                <LaunchReadinessFlow />
+              </AuthGate>
+            } />
+
             {/* $100M Offer Builder - Product Creation Stage */}
             <Route path="/offer-builder" element={
               <AuthGate>
@@ -228,10 +244,17 @@ function AppRouter() {
               </AuthGate>
             } />
 
-            {/* Grand Slam Offer Builder V2 - Bonuses, Guarantee, Scarcity */}
+            {/* Grand Slam Offer - Evaluation Flow (Proof, Speed, Ease, Obstacles, Score) */}
             <Route path="/offer-builder-v2" element={
               <AuthGate>
                 <GrandSlamOfferFlow />
+              </AuthGate>
+            } />
+
+            {/* Offer Stack Builder - Packaging Flow (Lead Magnet, Bonuses, Guarantee, Scarcity, Naming) */}
+            <Route path="/offer-stack-builder" element={
+              <AuthGate>
+                <OfferStackBuilderFlow />
               </AuthGate>
             } />
 
@@ -246,6 +269,20 @@ function AppRouter() {
             <Route path="/product-selection" element={
               <AuthGate>
                 <ProductSelectionFlow />
+              </AuthGate>
+            } />
+
+            {/* MVP Readiness - Stage 3 Testing */}
+            <Route path="/mvp-readiness" element={
+              <AuthGate>
+                <MVPReadinessFlow />
+              </AuthGate>
+            } />
+
+            {/* Feedback Analysis - Stage 3 Testing */}
+            <Route path="/feedback-analysis" element={
+              <AuthGate>
+                <FeedbackAnalysisFlow />
               </AuthGate>
             } />
 

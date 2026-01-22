@@ -96,6 +96,33 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
     }
   }, [user, loadProgress])
 
+  // Check for prior completion and auto-register quest (fixes missing quest completions)
+  useEffect(() => {
+    if (user && config.dbTable && config.challengeFlowId) {
+      const checkPriorCompletion = async () => {
+        try {
+          const { data: existingAssessment } = await supabase
+            .from(config.dbTable)
+            .select('id')
+            .eq('user_id', user.id)
+            .limit(1)
+            .maybeSingle()
+
+          if (existingAssessment) {
+            await completeFlowQuest({
+              userId: user.id,
+              flowId: config.challengeFlowId,
+              pointsEarned: config.pointsEarned
+            })
+          }
+        } catch (err) {
+          // Silent fail - just trying to ensure quest is registered
+        }
+      }
+      checkPriorCompletion()
+    }
+  }, [user, config.dbTable, config.challengeFlowId, config.pointsEarned])
+
   // Auto-save progress on state changes
   useEffect(() => {
     if (!user || stage === STAGES.TIME_CHECK || stage === STAGES.SUCCESS || stage === STAGES.CALCULATING) return

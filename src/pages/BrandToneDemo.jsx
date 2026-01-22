@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './BrandToneDemo.css'
 
 const BrandToneDemo = () => {
-  const [activeTone, setActiveTone] = useState('playful')
+  const [activeTone, setActiveTone] = useState('playful-warmth')
 
   return (
     <div className={`brand-demo-page tone-${activeTone}`}>
@@ -11,6 +11,12 @@ const BrandToneDemo = () => {
         <p>Click each tab to see how FindMyFlow could feel</p>
 
         <div className="tone-tabs">
+          <button
+            className={`tone-tab ${activeTone === 'playful-warmth' ? 'active' : ''}`}
+            onClick={() => setActiveTone('playful-warmth')}
+          >
+            🌟 Playful Warmth
+          </button>
           <button
             className={`tone-tab ${activeTone === 'playful' ? 'active' : ''}`}
             onClick={() => setActiveTone('playful')}
@@ -37,6 +43,7 @@ const BrandToneDemo = () => {
         <div className="demo-section">
           <h2 className="demo-welcome">Welcome Back, Nic</h2>
           <p className="demo-subtitle">
+            {activeTone === 'playful-warmth' && "Ready to make some magic happen? 💫"}
             {activeTone === 'playful' && "Let's crush some goals today! 🚀"}
             {activeTone === 'premium' && "Your journey continues."}
             {activeTone === 'warm' && "We're glad you're here. How are you feeling today?"}
@@ -85,11 +92,13 @@ const BrandToneDemo = () => {
         <div className="demo-section">
           <h3 className="demo-section-title">Call to Action</h3>
           <button className="demo-cta-button">
+            {activeTone === 'playful-warmth' && "Let's Do This 💪"}
             {activeTone === 'playful' && "🎯 Let's Go!"}
             {activeTone === 'premium' && "Continue Challenge"}
             {activeTone === 'warm' && "Ready When You Are"}
           </button>
           <button className="demo-secondary-button">
+            {activeTone === 'playful-warmth' && "Explore Your Wins"}
             {activeTone === 'playful' && "📚 Check Library"}
             {activeTone === 'premium' && "View Library"}
             {activeTone === 'warm' && "Explore at your pace"}
@@ -127,6 +136,7 @@ const BrandToneDemo = () => {
         <div className="demo-section">
           <h3 className="demo-section-title">Success Feedback</h3>
           <div className="demo-toast">
+            {activeTone === 'playful-warmth' && "You did it! That took courage 💪"}
             {activeTone === 'playful' && "🎉 Quest completed! +50 points!"}
             {activeTone === 'premium' && "Quest completed successfully."}
             {activeTone === 'warm' && "Well done! You're making great progress."}
@@ -136,6 +146,16 @@ const BrandToneDemo = () => {
         {/* Characteristics */}
         <div className="demo-characteristics">
           <h3>Characteristics of this tone:</h3>
+          {activeTone === 'playful-warmth' && (
+            <ul>
+              <li><strong>Motion:</strong> Spring bounce for wins, gentle breathing for rest — energy when celebrating, calm when reflecting</li>
+              <li><strong>Colors:</strong> Warm purple/gold palette with vibrant accents for achievements</li>
+              <li><strong>Copy:</strong> Encouraging with personality — uses emojis for celebration, acknowledges feelings during challenges</li>
+              <li><strong>Feedback:</strong> Celebrates effort AND results — "That took courage" alongside "You did it!"</li>
+              <li><strong>Hovers:</strong> Satisfying spring bounce, warm glows, icons float playfully</li>
+              <li><strong>Vibe:</strong> A supportive friend who celebrates your wins enthusiastically</li>
+            </ul>
+          )}
           {activeTone === 'playful' && (
             <ul>
               <li><strong>Motion:</strong> Bouncy, springy animations with overshoot</li>

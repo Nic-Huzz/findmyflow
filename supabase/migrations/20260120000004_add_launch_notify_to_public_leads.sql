@@ -18,7 +18,10 @@ END $$;
 
 -- Add update policy for public_leads (to support upsert)
 DROP POLICY IF EXISTS "Anyone can update public leads" ON public_leads;
+DO $$ BEGIN
 CREATE POLICY "Anyone can update public leads" ON public_leads FOR UPDATE USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Index on launch_notify for filtering interested leads
 CREATE INDEX IF NOT EXISTS idx_public_leads_launch_notify ON public_leads(launch_notify) WHERE launch_notify = true;

@@ -58,6 +58,7 @@ CREATE TRIGGER trigger_offer_builder_updated_at
 ALTER TABLE offer_builder_assessments ENABLE ROW LEVEL SECURITY;
 
 -- Authenticated users can create assessments
+DO $$ BEGIN
 CREATE POLICY "Authenticated users can create offer builder assessments"
   ON offer_builder_assessments
   FOR INSERT
@@ -65,6 +66,7 @@ CREATE POLICY "Authenticated users can create offer builder assessments"
   WITH CHECK (auth.uid() = user_id);
 
 -- Users can view their own assessments
+DO $$ BEGIN
 CREATE POLICY "Users can view their own offer builder assessments"
   ON offer_builder_assessments
   FOR SELECT
@@ -72,6 +74,7 @@ CREATE POLICY "Users can view their own offer builder assessments"
   USING (auth.uid() = user_id);
 
 -- Users can update their own assessments
+DO $$ BEGIN
 CREATE POLICY "Users can update their own offer builder assessments"
   ON offer_builder_assessments
   FOR UPDATE

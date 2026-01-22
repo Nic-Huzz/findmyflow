@@ -52,18 +52,22 @@ CREATE INDEX IF NOT EXISTS idx_funnel_metrics_mode ON funnel_metrics(mode);
 ALTER TABLE funnel_metrics ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policy: Users can only access their own funnel metrics
+DO $$ BEGIN
 CREATE POLICY "Users can view own funnel metrics"
   ON funnel_metrics FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own funnel metrics"
   ON funnel_metrics FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own funnel metrics"
   ON funnel_metrics FOR UPDATE
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own funnel metrics"
   ON funnel_metrics FOR DELETE
   USING (auth.uid() = user_id);

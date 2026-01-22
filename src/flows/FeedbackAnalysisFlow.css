@@ -1,0 +1,582 @@
+/* FeedbackAnalysisFlow.css - Analyze Testing Feedback for Stage 3 */
+/* Based on Money Model flow patterns */
+
+.feedback-analysis-flow {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  position: relative;
+}
+
+/* ============ LOADING STATE ============ */
+
+.feedback-analysis-flow .loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.feedback-analysis-flow .typing-indicator {
+  display: flex;
+  gap: 8px;
+}
+
+.feedback-analysis-flow .typing-indicator span {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: faTyping 1.4s infinite;
+}
+
+.feedback-analysis-flow .typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.feedback-analysis-flow .typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes faTyping {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes faFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============ NOT READY STATE ============ */
+
+.feedback-analysis-flow .not-ready-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  max-width: 500px;
+  animation: faFadeIn 0.5s ease;
+}
+
+.feedback-analysis-flow .not-ready-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+}
+
+.feedback-analysis-flow .not-ready-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.feedback-analysis-flow .not-ready-message {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.feedback-analysis-flow .not-ready-action {
+  width: 100%;
+}
+
+.feedback-analysis-flow .not-ready-action p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 16px;
+}
+
+/* ============ WELCOME CONTAINER ============ */
+
+.feedback-analysis-flow .welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+  animation: faFadeIn 0.5s ease;
+  padding-bottom: 40px;
+}
+
+.feedback-analysis-flow .welcome-greeting {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feedback-analysis-flow .welcome-message {
+  margin-bottom: 32px;
+}
+
+.feedback-analysis-flow .welcome-message p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Flow Selector */
+.feedback-analysis-flow .flow-selector {
+  width: 100%;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.feedback-analysis-flow .flow-selector label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 12px;
+}
+
+.feedback-analysis-flow .flow-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feedback-analysis-flow .flow-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.feedback-analysis-flow .flow-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.feedback-analysis-flow .flow-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+}
+
+.feedback-analysis-flow .flow-name {
+  font-weight: 600;
+}
+
+.feedback-analysis-flow .flow-count {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ============ ANALYSIS CONTAINER ============ */
+
+.feedback-analysis-flow .analysis-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  max-width: 700px;
+  animation: faFadeIn 0.5s ease;
+}
+
+.feedback-analysis-flow .section-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.feedback-analysis-flow .section-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin: 0 0 24px;
+  max-width: 500px;
+}
+
+/* AI Loading */
+.feedback-analysis-flow .ai-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px;
+}
+
+.feedback-analysis-flow .ai-loading p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* AI Analysis Card */
+.feedback-analysis-flow .ai-analysis-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.feedback-analysis-flow .analysis-overview {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.feedback-analysis-flow .analysis-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.feedback-analysis-flow .analysis-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feedback-analysis-flow .analysis-section h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 12px;
+}
+
+.feedback-analysis-flow .analysis-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.feedback-analysis-flow .analysis-section li {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============ REFLECTION CONTAINER ============ */
+
+.feedback-analysis-flow .reflection-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  animation: faFadeIn 0.5s ease;
+}
+
+.feedback-analysis-flow .learning-inputs,
+.feedback-analysis-flow .change-inputs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.feedback-analysis-flow .learning-input-row,
+.feedback-analysis-flow .change-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feedback-analysis-flow .input-number {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #9333EA, #7C3AED);
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.feedback-analysis-flow .learning-input,
+.feedback-analysis-flow .change-input {
+  flex: 1;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 15px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.feedback-analysis-flow .learning-input::placeholder,
+.feedback-analysis-flow .change-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.feedback-analysis-flow .learning-input:focus,
+.feedback-analysis-flow .change-input:focus {
+  outline: none;
+  border-color: rgba(147, 51, 234, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.feedback-analysis-flow .add-more-btn {
+  background: none;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.feedback-analysis-flow .add-more-btn:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============ SUMMARY CONTAINER ============ */
+
+.feedback-analysis-flow .summary-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+  animation: faFadeIn 0.5s ease;
+  padding-bottom: 40px;
+}
+
+.feedback-analysis-flow .summary-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.feedback-analysis-flow .summary-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.feedback-analysis-flow .summary-section {
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feedback-analysis-flow .summary-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.feedback-analysis-flow .summary-section:first-child {
+  padding-top: 0;
+}
+
+.feedback-analysis-flow .summary-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 8px;
+}
+
+.feedback-analysis-flow .summary-value {
+  font-size: 16px;
+  color: white;
+}
+
+.feedback-analysis-flow .summary-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.feedback-analysis-flow .summary-list li {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============ SUCCESS CONTAINER ============ */
+
+.feedback-analysis-flow .success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  animation: faFadeIn 0.5s ease;
+}
+
+.feedback-analysis-flow .success-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-radius: 50%;
+  font-size: 48px;
+  margin-bottom: 24px;
+  animation: faScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes faScaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.feedback-analysis-flow .success-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.feedback-analysis-flow .success-container p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 8px;
+}
+
+.feedback-analysis-flow .success-reminder {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+  max-width: 400px;
+}
+
+.feedback-analysis-flow .success-reminder p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ============ BUTTONS ============ */
+
+.feedback-analysis-flow .primary-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feedback-analysis-flow .primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.feedback-analysis-flow .primary-button:active {
+  transform: translateY(0);
+}
+
+.feedback-analysis-flow .primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.feedback-analysis-flow .secondary-button {
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+}
+
+.feedback-analysis-flow .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============ ERROR MESSAGE ============ */
+
+.feedback-analysis-flow .error-message {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin: 12px 0;
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+
+@media (max-width: 480px) {
+  .feedback-analysis-flow {
+    padding: 16px;
+  }
+
+  .feedback-analysis-flow .welcome-greeting,
+  .feedback-analysis-flow .section-title,
+  .feedback-analysis-flow .summary-title {
+    font-size: 24px;
+  }
+
+  .feedback-analysis-flow .ai-analysis-card,
+  .feedback-analysis-flow .summary-card {
+    padding: 20px;
+  }
+}
+
+/* iOS Safe Area Support */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .feedback-analysis-flow {
+    padding-top: calc(20px + env(safe-area-inset-top));
+  }
+}

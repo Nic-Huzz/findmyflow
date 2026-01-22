@@ -2,6 +2,9 @@
  * Daily Priorities Component Styles
  * "Here's what to do today" widget
  */
+@import '../../styles/crm-base.css';
+/*
+ */
 
 .daily-priorities {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
@@ -213,13 +216,22 @@
   border-radius: 8px;
   padding: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    background var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    box-shadow var(--crm-duration-normal, 0.25s) var(--crm-ease, ease);
   border-left: 3px solid transparent;
 }
 
 .daily-priorities .dp-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px) scale(1.01);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.daily-priorities .dp-item:active {
+  transform: translateX(2px) scale(0.99);
+  transition: transform 0.1s ease;
 }
 
 /* Item type borders */
@@ -381,14 +393,22 @@
   color: rgba(255, 255, 255, 0.8);
   font-size: 0.7rem;
   cursor: pointer;
-  transition: all 0.15s;
+  transition:
+    transform var(--crm-duration-fast, 0.15s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    background var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    color var(--crm-duration-fast, 0.15s) var(--crm-ease, ease);
   white-space: nowrap;
 }
 
 .daily-priorities .dp-quick-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
-  transform: translateY(-1px);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.daily-priorities .dp-quick-btn:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
 }
 
 .daily-priorities .dp-quick-btn.log {
@@ -448,12 +468,22 @@
   cursor: pointer;
   font-size: 0.8rem;
   font-weight: 500;
-  transition: all 0.2s;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    background var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    box-shadow var(--crm-duration-normal, 0.25s) var(--crm-ease, ease);
   margin-top: 0.5rem;
 }
 
 .daily-priorities .dp-view-all:hover {
   background: rgba(139, 92, 246, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.daily-priorities .dp-view-all:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 /* Ascension Section */

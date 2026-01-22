@@ -98,6 +98,9 @@ export function useChallengeData() {
   const [showWeeklyPlanning, setShowWeeklyPlanning] = useState(false)
   const [isSunday, setIsSunday] = useState(false)
 
+  // Validation Response Counts (for response_counter quests)
+  const [validationResponseCounts, setValidationResponseCounts] = useState({})
+
   // Sync activeCategory with URL params when they change
   useEffect(() => {
     const params = new URLSearchParams(location.search)
@@ -604,6 +607,57 @@ export function useChallengeData() {
     }
   }
 
+  // Load validation response counts by stage (for response_counter quests)
+  const loadValidationResponseCounts = async () => {
+    if (!user?.id) return
+
+    try {
+      // Get all validation flows created by this user
+      const { data: flows, error: flowsError } = await supabase
+        .from('validation_flows')
+        .select('id, stage')
+        .eq('creator_user_id', user.id)
+
+      if (flowsError) {
+        console.error('Error loading validation flows:', flowsError)
+        return
+      }
+
+      if (!flows || flows.length === 0) {
+        setValidationResponseCounts({})
+        return
+      }
+
+      const flowIds = flows.map(f => f.id)
+
+      // Get completed session counts for each flow
+      const { data: sessions, error: sessionsError } = await supabase
+        .from('validation_sessions')
+        .select('flow_id')
+        .in('flow_id', flowIds)
+        .eq('is_completed', true)
+
+      if (sessionsError) {
+        console.error('Error loading validation sessions:', sessionsError)
+        return
+      }
+
+      // Count sessions by stage
+      const counts = {}
+      sessions?.forEach(session => {
+        const flow = flows.find(f => f.id === session.flow_id)
+        if (flow?.stage) {
+          counts[flow.stage] = (counts[flow.stage] || 0) + 1
+        }
+      })
+
+      setValidationResponseCounts(counts)
+    } catch (error) {
+      console.error('Error in loadValidationResponseCounts:', error)
+      setValidationResponseCounts({})
+    }
+  }
+
   // ============================================
   // Challenge/Group Management
   // ============================================
@@ -926,6 +980,9 @@ export function useChallengeData() {
 
     return challengeData.quests
       .filter(quest => {
+        // Skip archived quests
+        if (quest.archived) return false
+
         if (quest.category !== category) return false
 
         if (quest.persona_specific && userPersonaNormalized) {
@@ -1016,7 +1073,7 @@ export function useChallengeData() {
     const completedStages = []
 
     for (let stageNum = 1; stageNum <= 7; stageNum++) {
-      const stageQuests = challengeData.quests.filter(q => q.stage_required === stageNum)
+      const stageQuests = challengeData.quests.filter(q => q.stage_required === stageNum && !q.archived)
 
       if (stageQuests.length === 0) continue
 
@@ -1333,6 +1390,7 @@ export function useChallengeData() {
       checkFlowFinderComplete()
       loadStageProgress()
       loadWeeklyPlan()
+      loadValidationResponseCounts()
     }
   }, [user])
 
@@ -1482,6 +1540,10 @@ export function useChallengeData() {
     healingCompassComplete,
     pastParallelStory,
     flowFinderComplete,
+
+    // Validation Response Counts (for response_counter quests)
+    validationResponseCounts,
+    loadValidationResponseCounts,
 
     // Project-Based
     selectedProject,

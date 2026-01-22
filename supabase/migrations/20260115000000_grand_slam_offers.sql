@@ -26,14 +26,17 @@ CREATE TABLE IF NOT EXISTS grand_slam_offers (
 ALTER TABLE grand_slam_offers ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
+DO $$ BEGIN
 CREATE POLICY "Users can read own grand slam offers"
   ON grand_slam_offers FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own grand slam offers"
   ON grand_slam_offers FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own grand slam offers"
   ON grand_slam_offers FOR UPDATE
   USING (auth.uid() = user_id);

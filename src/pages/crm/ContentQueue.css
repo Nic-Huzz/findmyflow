@@ -1,6 +1,7 @@
 /**
- * ContentQueue Page Styles
+ * ContentQueue Page Styles - Playful Warmth Theme
  */
+@import '../../styles/crm-base.css';
 
 .cq-page {
   min-height: 100vh;

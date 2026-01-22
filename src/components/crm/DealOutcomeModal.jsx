@@ -126,10 +126,10 @@ export default function DealOutcomeModal({
       <div className="deal-outcome-modal" onClick={e => e.stopPropagation()}>
         <div className={`outcome-header ${outcome}`}>
           <span className="outcome-icon">{isWin ? '🎉' : '📊'}</span>
-          <h3>{isWin ? 'Deal Won!' : 'Capture the Learning'}</h3>
+          <h3>{isWin ? 'You closed it! 💪' : 'Capture the Learning'}</h3>
           <p className="outcome-subtitle">
             {isWin
-              ? 'What made them say yes? This helps your AI coach improve.'
+              ? 'Amazing work! Quick question — what made them say yes?'
               : 'Understanding why helps you win more. Quick analysis:'}
           </p>
         </div>
@@ -315,7 +315,7 @@ export default function DealOutcomeModal({
         </form>
 
         <p className="ai-note">
-          This data trains your AI to give better recommendations
+          {isWin ? 'Your wins teach the AI to help you close more deals' : 'This data helps your AI give better recommendations'}
         </p>
       </div>
     </div>

@@ -1,4 +1,6 @@
-/* LTV Calculator Styles */
+/* LTV Calculator Styles - Playful Warmth Theme */
+@import '../../styles/crm-base.css';
+
 .ltv-calculator {
   min-height: 100vh;
   padding: 24px;

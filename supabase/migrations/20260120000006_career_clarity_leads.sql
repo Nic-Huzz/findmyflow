@@ -34,20 +34,29 @@ CREATE INDEX IF NOT EXISTS idx_career_clarity_leads_path ON career_clarity_leads
 ALTER TABLE career_clarity_leads ENABLE ROW LEVEL SECURITY;
 
 -- Allow anonymous inserts (public quiz)
+DO $$ BEGIN
 CREATE POLICY "Allow anonymous inserts" ON career_clarity_leads
   FOR INSERT
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Allow updates to own session (for adding email after completion)
+DO $$ BEGIN
 CREATE POLICY "Allow updates by session" ON career_clarity_leads
   FOR UPDATE
   USING (true)
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Allow reading own session results
+DO $$ BEGIN
 CREATE POLICY "Allow reading by session" ON career_clarity_leads
   FOR SELECT
   USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Trigger for updated_at
 CREATE OR REPLACE FUNCTION update_career_clarity_leads_updated_at()

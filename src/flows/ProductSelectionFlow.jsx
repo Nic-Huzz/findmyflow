@@ -1,10 +1,10 @@
 /**
  * ProductSelectionFlow - Product Selection (+30 pts)
  *
- * Follows OfferBuilderFlow to finalize core product details.
- * Loads solutions categorized as 'core_product' from the Offer Builder.
+ * Follows OfferBuilderFlow to define product details using the Value Equation.
+ * Loads all solutions from the Offer Builder.
  *
- * For each core product solution, asks 5 questions:
+ * For each solution, asks 5 questions:
  * 1a. How does this solve the problem? (mechanism)
  * 1b. What features will you include? (feature → benefit pairs)
  * 2. Dream Outcome - How big is the transformation?
@@ -15,11 +15,12 @@
  * Value = (Dream Outcome × Perceived Likelihood) / (Time Delay × Effort)
  */
 
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useCallback } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useAutoSave } from '../hooks/useAutoSave'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import './ProductSelectionFlow.css'
 
@@ -29,6 +30,7 @@ const STAGES = {
   MECHANISM: 'mechanism',      // 1a: How does this solve the problem?
   FEATURES: 'features',        // 1b: Feature → Benefit pairs
   QUESTIONS: 'questions',      // Value Equation questions
+  PRODUCT_TRANSITION: 'product_transition', // Transition between products
   SUMMARY: 'summary',
   SUCCESS: 'success'
 }
@@ -41,14 +43,26 @@ const STAGE_GROUPS = [
   { id: 'complete', label: 'Complete', stages: [STAGES.SUCCESS] }
 ]
 
-// Solution type labels
+// Solution type labels - matches OfferBuilderFlow
 const SOLUTION_LABELS = {
+  // Services
   one_to_one: '1:1 Service',
   one_to_many: '1:Many Service',
+  custom_service: 'Custom Service',
+  packaged_service: 'Packaged Service',
+  hybrid_service: 'Hybrid Service',
+  // Productized
   group_program: 'Group Program',
+  automated_group: 'Self-Paced Course',
+  live_group: 'Live Cohort',
+  managed_service: 'Done-For-You',
+  membership: 'Membership',
+  // Products
   digital_product: 'Digital Product',
   tech_digital: 'Tech/Digital',
-  physical_product: 'Physical Product'
+  software: 'Software/SaaS',
+  physical_product: 'Physical Product',
+  mixed_products: 'Mixed Products'
 }
 
 // Value level insights - detailed info for each score range
@@ -173,125 +187,6 @@ const DIMENSION_IMPROVEMENTS = {
   }
 }
 
-// Category-based offer enhancement suggestions
-const OFFER_ENHANCEMENTS = {
-  one_to_one: {
-    bonuses: [
-      'VIP messaging access between sessions',
-      'Personalized action plan document',
-      'Recording of each session for review',
-      'Emergency "hotline" for urgent questions'
-    ],
-    guarantees: [
-      'If you don\'t see [specific result] in [timeframe], I\'ll work with you until you do',
-      'Full refund if you complete the program and don\'t get [outcome]',
-      'Double your investment back if [measurable result] doesn\'t happen'
-    ],
-    pricingStrategies: [
-      'Premium positioning ($2K-10K+) - fewer clients, bigger transformations',
-      'Productized service - fixed scope, fixed price, clear deliverable',
-      'Results-based pricing - charge based on outcome value'
-    ],
-    deliveryTweaks: [
-      'Add async video feedback between sessions',
-      'Create a private client portal with resources',
-      'Include done-for-you templates/tools'
-    ]
-  },
-  group_program: {
-    bonuses: [
-      'Private community access (lifetime or extended)',
-      '1:1 hot seat or Q&A session',
-      'Implementation workshop recordings',
-      'Guest expert sessions'
-    ],
-    guarantees: [
-      'Complete the program or get next cohort free',
-      'Show your work - refund if you don\'t see results',
-      'Upgrade to 1:1 at a discount if group isn\'t right fit'
-    ],
-    pricingStrategies: [
-      'Cohort-based with limited spots (creates urgency)',
-      'Tiered access (Basic, Premium, VIP)',
-      'Payment plans with "pay in full" bonus'
-    ],
-    deliveryTweaks: [
-      'Add accountability partners/pods',
-      'Weekly implementation challenges with prizes',
-      'Office hours between main sessions'
-    ]
-  },
-  digital_product: {
-    bonuses: [
-      'Templates and swipe files',
-      'Bonus mini-course on related topic',
-      'Private podcast/audio version',
-      'Quarterly updates included'
-    ],
-    guarantees: [
-      '30-day no questions asked refund',
-      'Double your money back if you don\'t [outcome]',
-      'Keep the bonuses even if you refund'
-    ],
-    pricingStrategies: [
-      'Anchor to value of outcome, not content length',
-      'Bundle with coaching call for premium tier',
-      'Early bird + fast action bonuses'
-    ],
-    deliveryTweaks: [
-      'Drip content to prevent overwhelm',
-      'Add progress tracking/gamification',
-      'Include implementation checklists'
-    ]
-  },
-  tech_digital: {
-    bonuses: [
-      'White-glove onboarding/setup',
-      'Priority support queue',
-      'Early access to new features',
-      'API access or integrations'
-    ],
-    guarantees: [
-      '14-day free trial, no credit card',
-      'Cancel anytime, no questions',
-      'Migration assistance from competitor'
-    ],
-    pricingStrategies: [
-      'Freemium with clear upgrade path',
-      'Usage-based pricing (scales with success)',
-      'Annual discount (improves retention)'
-    ],
-    deliveryTweaks: [
-      'In-app onboarding wizard',
-      'Tooltips and contextual help',
-      'Template library to reduce time-to-value'
-    ]
-  },
-  physical_product: {
-    bonuses: [
-      'Digital companion guide/course',
-      'Extended warranty or guarantee',
-      'Exclusive colorway or limited edition',
-      'Bundle with complementary product'
-    ],
-    guarantees: [
-      'Free returns within 30 days',
-      'Lifetime replacement warranty',
-      'Try before you buy program'
-    ],
-    pricingStrategies: [
-      'Premium positioning with story/craft emphasis',
-      'Subscribe & save discount',
-      'Bundle discounts for multiple items'
-    ],
-    deliveryTweaks: [
-      'Unboxing experience that delights',
-      'Quick start guide included',
-      'QR code to video tutorial'
-    ]
-  }
-}
-
 // Value Equation questions per product
 const VALUE_QUESTIONS = [
   {
@@ -319,7 +214,8 @@ const VALUE_QUESTIONS = [
   {
     id: 'perceived_likelihood',
     question: 'How can you prove it works?',
-    subtext: 'The more proof, the higher the perceived likelihood of success',
+    subtext: 'Select all that apply — the more proof, the higher the perceived likelihood of success',
+    multiSelect: true,
     options: [
       { value: 'case_studies', label: 'Case Studies', description: 'Detailed success stories with numbers', score: 10 },
       { value: 'testimonials', label: 'Testimonials', description: 'Happy customer quotes and reviews', score: 7 },
@@ -331,7 +227,9 @@ const VALUE_QUESTIONS = [
 
 function ProductSelectionFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const showResults = searchParams.get('results') === 'true'
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [coreProducts, setCoreProducts] = useState([])
@@ -341,8 +239,6 @@ function ProductSelectionFlow() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [expandedProduct, setExpandedProduct] = useState(null) // Track which product card is expanded
-  const [aiIdeas, setAiIdeas] = useState({}) // { productId: { loading, ideas, error } }
-  const [nicheLayers, setNicheLayers] = useState(null) // From offer builder for AI context
 
   // New: Product specification state
   // { solutionId: { mechanism: '', featureBenefits: [{ feature: '', benefit: '' }] } }
@@ -352,14 +248,97 @@ function ProductSelectionFlow() {
     { feature: '', benefit: '' }
   ])
 
-  // Load core product solutions from the most recent offer builder assessment
+  // Auto-save state
+  const [showResumePrompt, setShowResumePrompt] = useState(false)
+  const [savedProgressData, setSavedProgressData] = useState(null)
+  const { saveProgress, loadProgress, clearProgress } = useAutoSave('product-selection', user?.id)
+
+  // Load all solutions from the most recent offer builder assessment
   useEffect(() => {
     if (user) {
-      loadCoreProducts()
+      loadProducts()
     }
   }, [user])
 
-  const loadCoreProducts = async () => {
+  // Check for prior completion and auto-register quest (fixes missing quest completions)
+  useEffect(() => {
+    if (user) {
+      const checkPriorCompletion = async () => {
+        try {
+          const { data: assessment } = await supabase
+            .from('offer_builder_assessments')
+            .select('responses')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+
+          // If product_selections exists in responses, flow was completed
+          if (assessment?.responses?.product_selections && Object.keys(assessment.responses.product_selections).length > 0) {
+            await completeFlowQuest({
+              userId: user.id,
+              flowId: 'product_selection',
+              pointsEarned: 30
+            })
+          }
+        } catch (err) {
+          // Silent fail - just trying to ensure quest is registered
+        }
+      }
+      checkPriorCompletion()
+    }
+  }, [user])
+
+  // Check for saved progress after products load
+  useEffect(() => {
+    if (user && coreProducts.length > 0 && stage === STAGES.WELCOME) {
+      const saved = loadProgress()
+      if (saved && saved.stage && saved.stage !== STAGES.LOADING && saved.stage !== STAGES.SUCCESS && saved.stage !== STAGES.WELCOME) {
+        setSavedProgressData(saved)
+        setShowResumePrompt(true)
+      }
+    }
+  }, [user, coreProducts, stage, loadProgress])
+
+  // Auto-save on state changes
+  useEffect(() => {
+    if (!user || stage === STAGES.LOADING || stage === STAGES.SUCCESS || stage === STAGES.WELCOME) return
+    if (coreProducts.length === 0) return
+
+    const progressData = {
+      stage,
+      currentProductIndex,
+      currentQuestionIndex,
+      answers,
+      productSpecs,
+      currentMechanism,
+      currentFeatureBenefits
+    }
+    saveProgress(progressData)
+  }, [stage, currentProductIndex, currentQuestionIndex, answers, productSpecs, currentMechanism, currentFeatureBenefits, user, coreProducts, saveProgress])
+
+  // Handle resume progress
+  const handleResumeProgress = useCallback(() => {
+    if (savedProgressData) {
+      setStage(savedProgressData.stage)
+      if (savedProgressData.currentProductIndex !== undefined) setCurrentProductIndex(savedProgressData.currentProductIndex)
+      if (savedProgressData.currentQuestionIndex !== undefined) setCurrentQuestionIndex(savedProgressData.currentQuestionIndex)
+      if (savedProgressData.answers) setAnswers(savedProgressData.answers)
+      if (savedProgressData.productSpecs) setProductSpecs(savedProgressData.productSpecs)
+      if (savedProgressData.currentMechanism) setCurrentMechanism(savedProgressData.currentMechanism)
+      if (savedProgressData.currentFeatureBenefits) setCurrentFeatureBenefits(savedProgressData.currentFeatureBenefits)
+    }
+    setShowResumePrompt(false)
+  }, [savedProgressData])
+
+  // Handle start fresh
+  const handleStartFresh = useCallback(() => {
+    clearProgress()
+    setShowResumePrompt(false)
+    setSavedProgressData(null)
+  }, [clearProgress])
+
+  const loadProducts = async () => {
     try {
       const { data: assessment, error } = await supabase
         .from('offer_builder_assessments')
@@ -378,27 +357,45 @@ function ProductSelectionFlow() {
       }
 
       if (assessment?.responses?.q8_solutions?.solutions) {
-        // Get solutions and their categories
+        // Get all solutions from Offer Builder
         const solutions = assessment.responses.q8_solutions.solutions
-        const categories = assessment.responses.solution_categories || {}
 
-        // Store niche layers for AI context
-        if (assessment.responses.q1_niche?.layers) {
-          setNicheLayers(assessment.responses.q1_niche.layers)
-        }
-
-        // Filter to only core product solutions
-        // Categories use "solution_X" keys while solutions array uses numeric indices
-        const products = Object.entries(solutions)
-          .filter(([id]) => categories[`solution_${id}`] === 'core_product')
-          .map(([id, data]) => ({
-            id: `solution_${id}`,
+        // Map all solutions (array or object) to products
+        const solutionsArray = Array.isArray(solutions) ? solutions : Object.values(solutions)
+        const products = solutionsArray
+          .filter(data => data && data.description) // Only include solutions with content
+          .map((data, idx) => ({
+            id: `solution_${idx}`,
             ...data,
-            // Use solutionType for the label, not the numeric id
-            label: SOLUTION_LABELS[data.solutionType] || data.solutionType
+            label: SOLUTION_LABELS[data.solutionType] || data.solutionType || 'Product'
           }))
 
         setCoreProducts(products)
+
+        // Check if we have existing product_selections data (for View Results)
+        const existingSelections = assessment.responses?.product_selections
+        if (showResults && existingSelections && Object.keys(existingSelections).length > 0) {
+          // Load existing answers and specs from saved data
+          const loadedAnswers = {}
+          const loadedSpecs = {}
+          products.forEach(prod => {
+            const savedData = existingSelections[prod.id]
+            if (savedData) {
+              loadedAnswers[prod.id] = savedData.answers || { dream_outcome: null, time_delay: null, perceived_likelihood: null }
+              loadedSpecs[prod.id] = {
+                mechanism: savedData.mechanism || '',
+                featureBenefits: savedData.featureBenefits || []
+              }
+            } else {
+              loadedAnswers[prod.id] = { dream_outcome: null, time_delay: null, perceived_likelihood: null }
+              loadedSpecs[prod.id] = { mechanism: '', featureBenefits: [] }
+            }
+          })
+          setAnswers(loadedAnswers)
+          setProductSpecs(loadedSpecs)
+          setStage(STAGES.SUMMARY)
+          return
+        }
 
         // Initialize answers for each product
         const initialAnswers = {}
@@ -411,8 +408,10 @@ function ProductSelectionFlow() {
         setProductSpecs(initialSpecs)
 
         if (products.length === 0) {
-          setError('No core products found. Complete the Offer Builder first.')
+          setError('No products found. Complete the Offer Builder first.')
         }
+      } else {
+        setError('No products found. Complete the Offer Builder first.')
       }
 
       setStage(STAGES.WELCOME)
@@ -423,26 +422,39 @@ function ProductSelectionFlow() {
     }
   }
 
-  // Calculate value score for a product
+  // Calculate value score for a product (0-100 scale)
+  // Weighted average: Dream (40%) + Likelihood (35%) + Time (25%)
   const calculateValueScore = (productId) => {
     const ans = answers[productId]
     if (!ans) return 0
 
     const dreamOutcome = VALUE_QUESTIONS[0].options.find(o => o.value === ans.dream_outcome)?.score || 0
     const timeDelay = VALUE_QUESTIONS[1].options.find(o => o.value === ans.time_delay)?.score || 0
-    const likelihood = VALUE_QUESTIONS[2].options.find(o => o.value === ans.perceived_likelihood)?.score || 0
 
-    // Simplified value equation: (Dream × Likelihood) / Time
-    // Higher is better
-    const value = (dreamOutcome * likelihood) / (11 - timeDelay) // Invert time so higher = better
-    return Math.round(value * 10)
+    // perceived_likelihood is now multi-select (array) - take highest score among selections
+    let likelihood = 0
+    if (Array.isArray(ans.perceived_likelihood)) {
+      const scores = ans.perceived_likelihood.map(v =>
+        VALUE_QUESTIONS[2].options.find(o => o.value === v)?.score || 0
+      )
+      likelihood = scores.length > 0 ? Math.max(...scores) : 0
+    } else {
+      // Backwards compatibility for single value
+      likelihood = VALUE_QUESTIONS[2].options.find(o => o.value === ans.perceived_likelihood)?.score || 0
+    }
+
+    // Weighted average formula (0-100 scale)
+    // Dream outcome: 40% weight, Likelihood: 35% weight, Time: 25% weight
+    const score = (dreamOutcome * 4) + (likelihood * 3.5) + (timeDelay * 2.5)
+    return Math.round(score)
   }
 
-  // Get value level with full insights
+  // Get value level with full insights (adjusted for 0-100 scale)
+  // Score range is ~41-100, so thresholds adjusted accordingly
   const getValueLevel = (score) => {
-    if (score >= 80) return { ...VALUE_LEVEL_INSIGHTS.exceptional, key: 'exceptional' }
-    if (score >= 60) return { ...VALUE_LEVEL_INSIGHTS.strong, key: 'strong' }
-    if (score >= 40) return { ...VALUE_LEVEL_INSIGHTS.moderate, key: 'moderate' }
+    if (score >= 90) return { ...VALUE_LEVEL_INSIGHTS.exceptional, key: 'exceptional' }
+    if (score >= 75) return { ...VALUE_LEVEL_INSIGHTS.strong, key: 'strong' }
+    if (score >= 55) return { ...VALUE_LEVEL_INSIGHTS.moderate, key: 'moderate' }
     return { ...VALUE_LEVEL_INSIGHTS.needsWork, key: 'needsWork' }
   }
 
@@ -502,54 +514,6 @@ function ProductSelectionFlow() {
     }
 
     return { recommended, others, reason }
-  }
-
-  // Generate AI positioning ideas for a product
-  const generateAiIdeas = async (product) => {
-    const productId = product.id
-
-    setAiIdeas(prev => ({
-      ...prev,
-      [productId]: { loading: true, ideas: null, error: null }
-    }))
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/product-positioning`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            solutionType: product.solutionType,
-            solutionDescription: product.description,
-            problemText: product.problemText,
-            valueAnswers: answers[product.id],
-            valueScore: calculateValueScore(product.id),
-            niche: nicheLayers?.layer4 || nicheLayers?.layer3 || null
-          })
-        }
-      )
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate ideas')
-      }
-
-      setAiIdeas(prev => ({
-        ...prev,
-        [productId]: { loading: false, ideas: data, error: null }
-      }))
-    } catch (err) {
-      console.error('AI ideas error:', err)
-      setAiIdeas(prev => ({
-        ...prev,
-        [productId]: { loading: false, ideas: null, error: err.message }
-      }))
-    }
   }
 
   // Handle mechanism submission (1a)
@@ -614,6 +578,27 @@ function ProductSelectionFlow() {
     const currentProduct = coreProducts[currentProductIndex]
     const currentQuestion = VALUE_QUESTIONS[currentQuestionIndex]
 
+    // Multi-select: toggle selection
+    if (currentQuestion.multiSelect) {
+      setAnswers(prev => {
+        const currentSelections = prev[currentProduct.id]?.[currentQuestion.id] || []
+        const isSelected = currentSelections.includes(option.value)
+        const newSelections = isSelected
+          ? currentSelections.filter(v => v !== option.value)
+          : [...currentSelections, option.value]
+
+        return {
+          ...prev,
+          [currentProduct.id]: {
+            ...prev[currentProduct.id],
+            [currentQuestion.id]: newSelections
+          }
+        }
+      })
+      return // Don't auto-advance for multi-select
+    }
+
+    // Single select: save and advance
     setAnswers(prev => ({
       ...prev,
       [currentProduct.id]: {
@@ -622,26 +607,36 @@ function ProductSelectionFlow() {
       }
     }))
 
-    // Move to next question or next product
+    advanceToNextQuestion()
+  }
+
+  // Advance to next question or product
+  const advanceToNextQuestion = () => {
     if (currentQuestionIndex < VALUE_QUESTIONS.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1)
     } else if (currentProductIndex < coreProducts.length - 1) {
-      // Move to next product - start with mechanism stage
-      setCurrentProductIndex(prev => prev + 1)
-      setCurrentQuestionIndex(0)
-      // Reset current inputs for next product
-      const nextProduct = coreProducts[currentProductIndex + 1]
-      setCurrentMechanism(productSpecs[nextProduct?.id]?.mechanism || '')
-      setCurrentFeatureBenefits(
-        productSpecs[nextProduct?.id]?.featureBenefits?.length > 0
-          ? productSpecs[nextProduct.id].featureBenefits
-          : [{ feature: '', benefit: '' }]
-      )
-      setStage(STAGES.MECHANISM)
+      // Show transition screen before moving to next product
+      setStage(STAGES.PRODUCT_TRANSITION)
     } else {
       // All done - go to summary
       setStage(STAGES.SUMMARY)
     }
+  }
+
+  // Start next product from transition screen
+  const startNextProduct = () => {
+    const nextIndex = currentProductIndex + 1
+    setCurrentProductIndex(nextIndex)
+    setCurrentQuestionIndex(0)
+    // Reset current inputs for next product
+    const nextProduct = coreProducts[nextIndex]
+    setCurrentMechanism(productSpecs[nextProduct?.id]?.mechanism || '')
+    setCurrentFeatureBenefits(
+      productSpecs[nextProduct?.id]?.featureBenefits?.length > 0
+        ? productSpecs[nextProduct.id].featureBenefits
+        : [{ feature: '', benefit: '' }]
+    )
+    setStage(STAGES.MECHANISM)
   }
 
   // Go back in flow
@@ -732,6 +727,7 @@ function ProductSelectionFlow() {
         console.warn('Quest completion failed:', questError)
       }
 
+      clearProgress()
       setStage(STAGES.SUCCESS)
     } catch (err) {
       setError('Failed to save. Please try again.')
@@ -751,6 +747,37 @@ function ProductSelectionFlow() {
           <div className="typing-indicator">
             <span></span><span></span><span></span>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Resume prompt
+  if (showResumePrompt && savedProgressData) {
+    const stageLabel = savedProgressData.stage?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+    return (
+      <div className="product-selection-flow">
+        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={STAGES.WELCOME} />
+        <div className="welcome-container">
+          <h1 className="welcome-greeting">Welcome Back!</h1>
+          <div className="resume-prompt">
+            <p className="resume-icon">💾</p>
+            <p><strong>You have saved progress</strong></p>
+            <p className="resume-stage">
+              You were on: <strong>{stageLabel}</strong>
+            </p>
+            {savedProgressData.currentProductIndex !== undefined && coreProducts.length > 0 && (
+              <p className="resume-detail">
+                Product {savedProgressData.currentProductIndex + 1} of {coreProducts.length}
+              </p>
+            )}
+          </div>
+          <button className="primary-button glow-button" onClick={handleResumeProgress}>
+            Continue Where I Left Off
+          </button>
+          <button className="secondary-button" onClick={handleStartFresh} style={{ marginTop: '12px' }}>
+            Start Fresh
+          </button>
         </div>
       </div>
     )
@@ -778,8 +805,8 @@ function ProductSelectionFlow() {
             ) : (
               <>
                 <p><strong>Let's maximize your product value.</strong></p>
-                <p>You have {coreProducts.length} core product{coreProducts.length !== 1 ? 's' : ''} to evaluate.</p>
-                <p>For each one, I'll ask 3 questions based on Hormozi's Value Equation.</p>
+                <p>You have {coreProducts.length} product{coreProducts.length !== 1 ? 's' : ''} to define.</p>
+                <p>For each one, we'll define how it works and assess its value.</p>
 
                 <div className="value-equation-preview">
                   <h4>The Value Equation</h4>
@@ -971,13 +998,20 @@ function ProductSelectionFlow() {
     const totalQuestions = coreProducts.length * VALUE_QUESTIONS.length
     const currentProgress = (currentProductIndex * VALUE_QUESTIONS.length) + currentQuestionIndex + 1
 
+    // Get current selections for multi-select
+    const currentSelections = currentQuestion.multiSelect
+      ? (answers[currentProduct.id]?.[currentQuestion.id] || [])
+      : null
+
     return (
       <div className="product-selection-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
         <div className="question-container">
           <div className="product-context">
             <span className="product-badge">{currentProduct.label}</span>
-            <p className="product-desc">{currentProduct.description}</p>
+            {currentProduct.problemText && (
+              <p className="product-problem">Solving: {currentProduct.problemText}</p>
+            )}
           </div>
 
           <div className="question-progress">
@@ -988,19 +1022,92 @@ function ProductSelectionFlow() {
           <p className="question-subtext">{currentQuestion.subtext}</p>
 
           <div className="options-list">
-            {currentQuestion.options.map((option) => (
-              <button
-                key={option.value}
-                className="option-card"
-                onClick={() => handleOptionSelect(option)}
-              >
-                <div className="option-label">{option.label}</div>
-                <div className="option-description">{option.description}</div>
-              </button>
-            ))}
+            {currentQuestion.options.map((option) => {
+              const isSelected = currentQuestion.multiSelect && currentSelections.includes(option.value)
+              return (
+                <button
+                  key={option.value}
+                  className={`option-card ${isSelected ? 'selected' : ''}`}
+                  onClick={() => handleOptionSelect(option)}
+                >
+                  {currentQuestion.multiSelect && (
+                    <span className="option-checkbox">{isSelected ? '✓' : ''}</span>
+                  )}
+                  <div className="option-content">
+                    <div className="option-label">{option.label}</div>
+                    <div className="option-description">{option.description}</div>
+                  </div>
+                </button>
+              )
+            })}
           </div>
 
+          {currentQuestion.multiSelect && (
+            <button
+              className="primary-button"
+              onClick={advanceToNextQuestion}
+              disabled={currentSelections.length === 0}
+              style={{ marginTop: '24px' }}
+            >
+              Continue
+            </button>
+          )}
+
           <BackButton onClick={goBackInQuestions} />
+        </div>
+      </div>
+    )
+  }
+
+  // PRODUCT TRANSITION STAGE
+  if (stage === STAGES.PRODUCT_TRANSITION) {
+    const completedProduct = coreProducts[currentProductIndex]
+    const nextProduct = coreProducts[currentProductIndex + 1]
+    const completedScore = calculateValueScore(completedProduct.id)
+    const completedLevel = getValueLevel(completedScore)
+
+    return (
+      <div className="product-selection-flow">
+        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
+        <div className="transition-container">
+          <div className="transition-completed">
+            <span className="completed-icon">✓</span>
+            <h3>Product {currentProductIndex + 1} Complete!</h3>
+            <div className="completed-product-card">
+              <span className="product-badge">{completedProduct.label}</span>
+              <div className="completed-score">
+                <span className="score-value" style={{ color: completedLevel.color }}>{completedScore}</span>
+                <span className="score-label">Value Score</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="transition-divider">
+            <span className="divider-line"></span>
+            <span className="divider-text">Up Next</span>
+            <span className="divider-line"></span>
+          </div>
+
+          <div className="transition-next">
+            <div className="next-product-card">
+              <span className="next-badge">Product {currentProductIndex + 2} of {coreProducts.length}</span>
+              <h2 className="next-product-name">{nextProduct.label}</h2>
+              {nextProduct.problemText && (
+                <p className="next-product-problem">Solving: {nextProduct.problemText}</p>
+              )}
+            </div>
+          </div>
+
+          <button
+            className="primary-button glow-button"
+            onClick={startNextProduct}
+          >
+            Define {nextProduct.label}
+          </button>
+          <BackButton onClick={() => {
+            setCurrentQuestionIndex(VALUE_QUESTIONS.length - 1)
+            setStage(STAGES.QUESTIONS)
+          }} />
         </div>
       </div>
     )
@@ -1045,7 +1152,6 @@ function ProductSelectionFlow() {
                   <span>Product</span>
                   <span>Value</span>
                   <span>Speed</span>
-                  <span>Effort</span>
                 </div>
                 {coreProducts.map(product => {
                   const score = calculateValueScore(product.id)
@@ -1066,19 +1172,12 @@ function ProductSelectionFlow() {
                         {ans?.time_delay === 'weeks' && '🚶'}
                         {ans?.time_delay === 'months' && '🐢'}
                       </span>
-                      <span className="comparison-effort">
-                        {product.solutionType === 'one_to_one' && '💚'}
-                        {product.solutionType === 'digital_product' && '💚'}
-                        {product.solutionType === 'group_program' && '💛'}
-                        {product.solutionType === 'tech_digital' && '🧡'}
-                        {product.solutionType === 'physical_product' && '❤️'}
-                      </span>
                     </div>
                   )
                 })}
               </div>
               <p className="comparison-legend">
-                Speed: ⚡ Immediate → 🐢 Months | Effort: 💚 Low → ❤️ High
+                Speed: ⚡ Immediate → 🐢 Months
               </p>
             </div>
           )}
@@ -1090,15 +1189,10 @@ function ProductSelectionFlow() {
               const level = getValueLevel(score)
               const ans = answers[product.id]
               const isExpanded = expandedProduct === product.id
-              const enhancements = OFFER_ENHANCEMENTS[product.solutionType] || OFFER_ENHANCEMENTS.digital_product
-              const aiData = aiIdeas[product.id]
 
               return (
                 <div key={product.id} className={`score-card ${isExpanded ? 'expanded' : ''}`}>
-                  <div
-                    className="score-header clickable"
-                    onClick={() => setExpandedProduct(isExpanded ? null : product.id)}
-                  >
+                  <div className="score-header">
                     <div className="header-left">
                       <span className="level-icon">{level.icon}</span>
                       <div>
@@ -1110,7 +1204,6 @@ function ProductSelectionFlow() {
                       <div className="score-badge" style={{ backgroundColor: `${level.color}20`, color: level.color }}>
                         {score} - {level.label}
                       </div>
-                      <span className="expand-icon">{isExpanded ? '▼' : '▶'}</span>
                     </div>
                   </div>
 
@@ -1141,14 +1234,29 @@ function ProductSelectionFlow() {
                   {/* ALWAYS VISIBLE: Score breakdown */}
                   <div className="score-breakdown">
                     {['dream_outcome', 'time_delay', 'perceived_likelihood'].map((dim, idx) => {
-                      const dimData = DIMENSION_IMPROVEMENTS[dim]?.[ans[dim]]
                       const question = VALUE_QUESTIONS[idx]
-                      const selectedOption = question.options.find(o => o.value === ans[dim])
+                      const answerValue = ans[dim]
+
+                      // Handle multi-select (array) for perceived_likelihood
+                      let displayLabel = ''
+                      let dimData = null
+                      if (Array.isArray(answerValue)) {
+                        const labels = answerValue.map(v =>
+                          question.options.find(o => o.value === v)?.label
+                        ).filter(Boolean)
+                        displayLabel = labels.join(', ')
+                        // Use first selection for status indicator
+                        dimData = DIMENSION_IMPROVEMENTS[dim]?.[answerValue[0]]
+                      } else {
+                        const selectedOption = question.options.find(o => o.value === answerValue)
+                        displayLabel = selectedOption?.label || ''
+                        dimData = DIMENSION_IMPROVEMENTS[dim]?.[answerValue]
+                      }
 
                       return (
                         <div key={dim} className={`breakdown-item ${dimData?.status || ''}`}>
                           <span className="breakdown-label">{question.question.replace('?', ':')}</span>
-                          <span className="breakdown-value">{selectedOption?.label}</span>
+                          <span className="breakdown-value">{displayLabel}</span>
                           {dimData && (
                             <span className={`status-indicator ${dimData.status}`}>
                               {dimData.status === 'excellent' && '✓'}
@@ -1161,6 +1269,15 @@ function ProductSelectionFlow() {
                       )
                     })}
                   </div>
+
+                  {/* Learn more toggle */}
+                  <button
+                    className="learn-more-btn"
+                    onClick={() => setExpandedProduct(isExpanded ? null : product.id)}
+                  >
+                    <span>{isExpanded ? 'Hide details' : 'Learn more'}</span>
+                    <span className="learn-more-icon">{isExpanded ? '▲' : '▼'}</span>
+                  </button>
 
                   {/* EXPANDED CONTENT */}
                   {isExpanded && (
@@ -1184,7 +1301,10 @@ function ProductSelectionFlow() {
                       <div className="dimension-tips-section">
                         <h4>🎯 Dimension Analysis</h4>
                         {['dream_outcome', 'time_delay', 'perceived_likelihood'].map((dim, idx) => {
-                          const dimData = DIMENSION_IMPROVEMENTS[dim]?.[ans[dim]]
+                          const answerValue = ans[dim]
+                          // For multi-select, use first selection for tips
+                          const lookupValue = Array.isArray(answerValue) ? answerValue[0] : answerValue
+                          const dimData = DIMENSION_IMPROVEMENTS[dim]?.[lookupValue]
                           if (!dimData) return null
 
                           return (
@@ -1201,120 +1321,6 @@ function ProductSelectionFlow() {
                         })}
                       </div>
 
-                      {/* Category-based Offer Enhancements */}
-                      <div className="enhancements-section">
-                        <h4>🚀 Offer Enhancement Ideas</h4>
-
-                        <div className="enhancement-category">
-                          <h5>💎 Bonus Ideas</h5>
-                          <ul>
-                            {enhancements.bonuses.slice(0, 3).map((bonus, i) => (
-                              <li key={i}>{bonus}</li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="enhancement-category">
-                          <h5>🛡️ Guarantee Options</h5>
-                          <ul>
-                            {enhancements.guarantees.slice(0, 2).map((g, i) => (
-                              <li key={i}>{g}</li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="enhancement-category">
-                          <h5>💰 Pricing Strategies</h5>
-                          <ul>
-                            {enhancements.pricingStrategies.slice(0, 2).map((p, i) => (
-                              <li key={i}>{p}</li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="enhancement-category">
-                          <h5>⚡ Delivery Tweaks</h5>
-                          <ul>
-                            {enhancements.deliveryTweaks.slice(0, 2).map((d, i) => (
-                              <li key={i}>{d}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-
-                      {/* AI Positioning Section */}
-                      <div className="ai-section">
-                        {aiData?.loading ? (
-                          <div className="ai-loading">
-                            <div className="typing-indicator">
-                              <span></span><span></span><span></span>
-                            </div>
-                            <p>Generating personalized positioning...</p>
-                          </div>
-                        ) : aiData?.ideas ? (
-                          <div className="ai-results">
-                            <h4>✨ AI-Generated Positioning</h4>
-
-                            {aiData.ideas.positioningStatements && (
-                              <div className="ai-positioning">
-                                <h5>Positioning Statements</h5>
-                                {aiData.ideas.positioningStatements.map((stmt, i) => (
-                                  <p key={i} className="positioning-stmt">"{stmt}"</p>
-                                ))}
-                              </div>
-                            )}
-
-                            {aiData.ideas.bonusIdeas && (
-                              <div className="ai-bonuses">
-                                <h5>Custom Bonus Ideas</h5>
-                                <ul>
-                                  {aiData.ideas.bonusIdeas.map((b, i) => (
-                                    <li key={i}>{b}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {aiData.ideas.mvpSuggestion && (
-                              <div className="ai-mvp">
-                                <h5>7-Day MVP</h5>
-                                <p>{aiData.ideas.mvpSuggestion}</p>
-                              </div>
-                            )}
-
-                            {aiData.ideas.objectionHandlers && (
-                              <div className="ai-objections">
-                                <h5>Objection Handlers</h5>
-                                <ul>
-                                  {aiData.ideas.objectionHandlers.map((obj, i) => (
-                                    <li key={i}><strong>{obj.objection}:</strong> {obj.response}</li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            <button
-                              className="ai-refresh-btn"
-                              onClick={() => generateAiIdeas(product)}
-                            >
-                              🔄 Regenerate
-                            </button>
-                          </div>
-                        ) : (
-                          <>
-                            {aiData?.error && (
-                              <p className="ai-error">{aiData.error}</p>
-                            )}
-                            <button
-                              className="ai-generate-btn"
-                              onClick={() => generateAiIdeas(product)}
-                            >
-                              ✨ Get AI Positioning & Ideas
-                            </button>
-                            <p className="ai-hint">Generate personalized positioning statements, bonus ideas, and MVP suggestions</p>
-                          </>
-                        )}
-                      </div>
                     </div>
                   )}
                 </div>
@@ -1356,7 +1362,7 @@ function ProductSelectionFlow() {
         <div className="success-container">
           <div className="success-icon">💰</div>
           <h2>Products Defined, {userName}!</h2>
-          <p>You've defined {coreProducts.length} core product{coreProducts.length !== 1 ? 's' : ''} with mechanisms and features.</p>
+          <p>You've defined {coreProducts.length} product{coreProducts.length !== 1 ? 's' : ''} with mechanisms and features.</p>
           <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+30 points earned!</p>
 
           <div className="avg-score-display">
@@ -1364,28 +1370,12 @@ function ProductSelectionFlow() {
             <span className="avg-score" style={{ color: avgLevel.color }}>{avgScore}</span>
             <span className="avg-level" style={{ color: avgLevel.color }}>{avgLevel.label}</span>
           </div>
+        </div>
 
-          <div className="next-steps-section">
-            <h3>Next Step</h3>
-            <p className="next-steps-intro">Package your products into an irresistible offer:</p>
-
-            <button
-              className="next-flow-card recommended"
-              onClick={() => navigate('/offer-builder-v2')}
-            >
-              <span className="flow-icon">🏆</span>
-              <div className="flow-info">
-                <h4>Grand Slam Offer</h4>
-                <p>Add bonuses, guarantees, scarcity & pricing</p>
-              </div>
-              <span className="flow-arrow">→</span>
-            </button>
-          </div>
-
+        <div className="success-footer">
           <button
-            className="secondary-button"
+            className="primary-button"
             onClick={() => navigate('/7-day-challenge')}
-            style={{ marginTop: '16px' }}
           >
             Back to Challenge
           </button>

@@ -101,14 +101,17 @@ ON marketing_metrics(user_id, period_type, period_start DESC);
 -- RLS policies
 ALTER TABLE marketing_metrics ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own marketing metrics"
   ON marketing_metrics FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own marketing metrics"
   ON marketing_metrics FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own marketing metrics"
   ON marketing_metrics FOR UPDATE
   USING (auth.uid() = user_id);
@@ -158,10 +161,12 @@ ON user_benchmark_snapshots(user_id, snapshot_date DESC);
 -- RLS policies
 ALTER TABLE user_benchmark_snapshots ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own benchmark snapshots"
   ON user_benchmark_snapshots FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own benchmark snapshots"
   ON user_benchmark_snapshots FOR INSERT
   WITH CHECK (auth.uid() = user_id);

@@ -24,7 +24,10 @@ BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM pg_policies WHERE tablename = 'public_offer_audits' AND policyname = 'Anyone can insert public offer audits'
   ) THEN
-    CREATE POLICY "Anyone can insert public offer audits" ON public_offer_audits FOR INSERT WITH CHECK (true);
+    DO $$ BEGIN
+CREATE POLICY "Anyone can insert public offer audits" ON public_offer_audits FOR INSERT WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
   END IF;
 END $$;
 
@@ -33,7 +36,10 @@ BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM pg_policies WHERE tablename = 'public_offer_audits' AND policyname = 'Anyone can read public offer audits'
   ) THEN
-    CREATE POLICY "Anyone can read public offer audits" ON public_offer_audits FOR SELECT USING (true);
+    DO $$ BEGIN
+CREATE POLICY "Anyone can read public offer audits" ON public_offer_audits FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
   END IF;
 END $$;
 

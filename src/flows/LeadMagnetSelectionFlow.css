@@ -523,267 +523,615 @@
   }
 }
 
-/* ============ TYPE DETAILS SECTION ============ */
+/* ============ TYPE DETAILS GRID ============ */
 
-.lm-selection-flow .lm-type-details {
-  margin-top: 20px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  border-left: 3px solid #fbbf24;
-  animation: lmFadeIn 0.3s ease;
+.lm-selection-flow .lm-details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+  width: 100%;
+  animation: lmFadeIn 0.4s ease;
 }
 
-.lm-selection-flow .lm-type-details h4 {
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #fbbf24;
-  margin: 0 0 10px;
+.lm-selection-flow .lm-detail-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  transition: all 0.2s ease;
 }
 
-.lm-selection-flow .lm-type-details p {
-  font-size: 14px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0;
+.lm-selection-flow .lm-detail-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
-.lm-selection-flow .lm-why-section,
-.lm-selection-flow .lm-when-section,
-.lm-selection-flow .lm-action-section {
-  margin-bottom: 20px;
-}
-
-.lm-selection-flow .lm-type-details ul,
-.lm-selection-flow .lm-type-details ol {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.lm-selection-flow .lm-type-details li {
-  font-size: 14px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 6px;
-}
-
-.lm-selection-flow .lm-action-section ol {
-  counter-reset: step;
-  list-style: none;
-  padding-left: 0;
-}
-
-.lm-selection-flow .lm-action-section li {
-  position: relative;
-  padding-left: 32px;
-  counter-increment: step;
-}
-
-.lm-selection-flow .lm-action-section li::before {
-  content: counter(step);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 22px;
-  height: 22px;
-  background: rgba(251, 191, 36, 0.2);
-  border-radius: 50%;
+.lm-selection-flow .detail-card-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  background: rgba(251, 191, 36, 0.12);
+  border-radius: 10px;
+}
+
+.lm-selection-flow .detail-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.lm-selection-flow .detail-card-content h4 {
+  font-size: 11px;
   font-weight: 700;
-  color: #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: rgba(251, 191, 36, 0.9);
+  margin: 0 0 8px;
 }
 
-/* ============ SUGGESTIONS SECTION ============ */
-
-.lm-selection-flow .lm-suggestions-section {
-  margin-top: 20px;
-  padding: 20px;
-  background: rgba(16, 185, 129, 0.08);
-  border-radius: 12px;
-  border-left: 3px solid #10B981;
-}
-
-.lm-selection-flow .lm-suggestions-section h4 {
+.lm-selection-flow .detail-card-content p {
   font-size: 14px;
-  font-weight: 700;
-  color: #10B981;
-  margin: 0 0 12px;
-  text-transform: none;
-  letter-spacing: 0;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
 }
 
-.lm-selection-flow .suggestion-list {
+.lm-selection-flow .detail-card-content ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.lm-selection-flow .suggestion-list li {
-  position: relative;
-  padding: 10px 12px 10px 32px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  margin-bottom: 8px;
-  font-size: 14px;
+.lm-selection-flow .detail-card-content li {
+  font-size: 13px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.8);
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 4px;
 }
 
-.lm-selection-flow .suggestion-list li:last-child {
-  margin-bottom: 0;
-}
-
-.lm-selection-flow .suggestion-list li::before {
+.lm-selection-flow .detail-card-content li::before {
   content: '→';
   position: absolute;
-  left: 12px;
-  top: 10px;
-  color: #10B981;
+  left: 0;
+  color: rgba(251, 191, 36, 0.7);
+  font-size: 11px;
+}
+
+/* Action Steps - horizontal flow */
+.lm-selection-flow .action-steps-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lm-selection-flow .action-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.lm-selection-flow .step-number {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 6px;
+  font-size: 12px;
   font-weight: 700;
+  color: #1a1a2e;
+  flex-shrink: 0;
 }
 
-/* ============ AI IDEAS SECTION ============ */
-
-.lm-selection-flow .lm-ai-section {
-  margin-top: 20px;
-  padding: 16px;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(79, 70, 229, 0.15));
-  border-radius: 12px;
-  border: 1px dashed rgba(147, 51, 234, 0.4);
-  text-align: center;
+.lm-selection-flow .step-text {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.85);
+  padding-top: 2px;
 }
 
-.lm-selection-flow .ai-ideas-button {
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #9333EA, #4F46E5);
+/* Examples - clean list */
+.lm-selection-flow .examples-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lm-selection-flow .example-item {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border-left: 2px solid rgba(251, 191, 36, 0.4);
+}
+
+/* AI Card */
+.lm-selection-flow .lm-ai-card {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.15), rgba(99, 102, 241, 0.15));
+  border-color: rgba(147, 51, 234, 0.25);
+  padding: 0;
+  overflow: hidden;
+}
+
+.lm-selection-flow .lm-ai-card .ai-ideas-button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 18px;
+  background: transparent;
   border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.lm-selection-flow .lm-ai-card .ai-ideas-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.lm-selection-flow .ai-btn-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(147, 51, 234, 0.2);
   border-radius: 10px;
-  font-size: 15px;
+}
+
+.lm-selection-flow .ai-btn-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lm-selection-flow .ai-btn-text strong {
+  font-size: 14px;
   font-weight: 600;
   color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
 }
 
-.lm-selection-flow .ai-ideas-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(147, 51, 234, 0.4);
-}
-
-.lm-selection-flow .ai-hint {
+.lm-selection-flow .ai-btn-text small {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
-  margin: 10px 0 0;
 }
 
-.lm-selection-flow .ai-loading {
+.lm-selection-flow .lm-ai-card .ai-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 24px;
   gap: 12px;
-  padding: 20px;
 }
 
-.lm-selection-flow .ai-loading p {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+.lm-selection-flow .lm-ai-card .ai-loading p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
 }
 
-.lm-selection-flow .ai-error {
-  font-size: 13px;
-  color: #ff6b6b;
-  margin: 0 0 12px;
+.lm-selection-flow .lm-ai-card .ai-ideas-results {
+  padding: 16px 18px;
 }
 
-.lm-selection-flow .ai-ideas-results h4 {
-  font-size: 16px;
-  font-weight: 700;
+.lm-selection-flow .lm-ai-card .ai-ideas-results h4 {
+  font-size: 14px;
+  font-weight: 600;
   color: #a78bfa;
-  margin: 0 0 16px;
-  text-align: center;
+  margin: 0 0 14px;
 }
 
-.lm-selection-flow .ai-ideas-list {
+.lm-selection-flow .lm-ai-card .ai-ideas-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.lm-selection-flow .ai-idea-card {
+.lm-selection-flow .lm-ai-card .ai-idea-card {
+  padding: 12px 14px;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(147, 51, 234, 0.3);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 10px;
 }
 
-.lm-selection-flow .idea-header {
-  margin-bottom: 10px;
-}
-
-.lm-selection-flow .idea-format {
+.lm-selection-flow .lm-ai-card .idea-format {
   display: inline-block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #a78bfa;
   background: rgba(167, 139, 250, 0.15);
-  padding: 4px 10px;
-  border-radius: 100px;
-  margin-bottom: 8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 6px;
 }
 
-.lm-selection-flow .idea-header h5 {
-  font-size: 15px;
-  font-weight: 700;
+.lm-selection-flow .lm-ai-card .ai-idea-card h5 {
+  font-size: 14px;
+  font-weight: 600;
   color: white;
-  margin: 0;
-  line-height: 1.4;
+  margin: 0 0 6px;
 }
 
-.lm-selection-flow .idea-description {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  line-height: 1.6;
-  margin: 0 0 12px;
-}
-
-.lm-selection-flow .idea-hook {
+.lm-selection-flow .lm-ai-card .idea-description {
   font-size: 13px;
-  font-style: italic;
-  color: rgba(251, 191, 36, 0.9);
-  margin: 0;
-  padding: 10px 14px;
-  background: rgba(251, 191, 36, 0.1);
-  border-radius: 8px;
-  border-left: 3px solid rgba(251, 191, 36, 0.5);
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0 0 8px;
+  line-height: 1.5;
 }
 
-.lm-selection-flow .ai-refresh-button {
+.lm-selection-flow .lm-ai-card .idea-hook {
+  font-size: 12px;
+  font-style: italic;
+  color: rgba(251, 191, 36, 0.85);
+  margin: 0;
+  padding: 8px 10px;
+  background: rgba(251, 191, 36, 0.08);
+  border-radius: 6px;
+}
+
+.lm-selection-flow .lm-ai-card .ai-refresh-button {
   display: block;
-  margin: 16px auto 0;
-  padding: 10px 20px;
-  background: transparent;
-  border: 1px solid rgba(147, 51, 234, 0.4);
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.lm-selection-flow .ai-refresh-button:hover {
-  background: rgba(147, 51, 234, 0.1);
-  border-color: rgba(147, 51, 234, 0.6);
+.lm-selection-flow .lm-ai-card .ai-refresh-button:hover {
+  background: rgba(255, 255, 255, 0.1);
   color: white;
 }
+
+.lm-selection-flow .lm-ai-card .ai-error {
+  font-size: 12px;
+  color: #ff6b6b;
+  padding: 8px 18px;
+  margin: 0;
+}
+
+
+/* ============ EDUCATION SLIDES ============ */
+
+.lm-selection-flow .education-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
+  animation: lmFadeIn 0.5s ease;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+/* Push buttons to bottom of education screen */
+.lm-selection-flow .education-container > .primary-button {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  padding: 14px 32px;
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.lm-selection-flow .education-container > .go-back-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-top: 16px;
+  transition: color 0.2s ease;
+}
+
+.lm-selection-flow .education-container > .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.lm-selection-flow .edu-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: lmScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lm-selection-flow .edu-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  color: white;
+}
+
+.lm-selection-flow .edu-content {
+  margin-bottom: 24px;
+}
+
+.lm-selection-flow .edu-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 16px;
+}
+
+.lm-selection-flow .edu-content p:last-child {
+  margin-bottom: 0;
+}
+
+.lm-selection-flow .edu-types-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.lm-selection-flow .edu-type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.lm-selection-flow .edu-type-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.lm-selection-flow .edu-type-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 4px;
+}
+
+.lm-selection-flow .edu-type-desc {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 8px;
+}
+
+.lm-selection-flow .edu-type-when {
+  font-size: 13px;
+  color: #fbbf24;
+  font-style: italic;
+  margin: 0;
+}
+
+.lm-selection-flow .edu-highlight {
+  padding: 16px 20px;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.lm-selection-flow .edu-highlight p {
+  font-size: 15px;
+  font-weight: 500;
+  color: #fbbf24;
+  margin: 0;
+}
+
+/* Education Slide 1: Definition Style */
+.lm-selection-flow .edu-definition {
+  margin-bottom: 24px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.lm-selection-flow .edu-main-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+
+.lm-selection-flow .edu-sub-text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Education Slide 2: Funnel Visualization */
+.lm-selection-flow .edu-funnel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lm-selection-flow .funnel-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  min-width: 90px;
+  position: relative;
+}
+
+.lm-selection-flow .funnel-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.lm-selection-flow .funnel-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+}
+
+.lm-selection-flow .funnel-sublabel {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+.lm-selection-flow .funnel-arrow {
+  font-size: 20px;
+  color: #fbbf24;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* Education Slide 3: Formula Style */
+.lm-selection-flow .edu-formula {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 24px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+  border-radius: 16px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.lm-selection-flow .formula-line {
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
+  margin: 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.lm-selection-flow .formula-plus {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 4px 0;
+}
+
+/* Welcome Screen: Lead Magnet Types Preview */
+.lm-selection-flow .lm-types-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.lm-selection-flow .lm-preview-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.lm-selection-flow .lm-preview-card .preview-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.lm-selection-flow .lm-preview-card .preview-content h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 2px;
+}
+
+.lm-selection-flow .lm-preview-card .preview-content p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* Single summary card for success page */
+.lm-selection-flow .summary-card-single {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  text-align: left;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.lm-selection-flow .summary-card-single .summary-icon {
+  font-size: 40px;
+}
+
+.lm-selection-flow .summary-card-single h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 4px;
+}
+
+.lm-selection-flow .summary-card-single p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.lm-selection-flow .next-step-hint {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 24px;
+  font-style: italic;
+}
+
+.lm-selection-flow .success-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  padding-bottom: 40px;
+  display: flex;
+  justify-content: center;
+}
+
 
 /* ============ RESPONSIVE ============ */
 
@@ -809,11 +1157,67 @@
   .lm-selection-flow .lm-opt-icon {
     font-size: 22px;
   }
+
+  /* Education slides responsive */
+  .lm-selection-flow .edu-main-text {
+    font-size: 18px;
+  }
+
+  .lm-selection-flow .edu-sub-text {
+    font-size: 14px;
+  }
+
+  /* Funnel: Stack vertically on mobile */
+  .lm-selection-flow .edu-funnel {
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+  }
+
+  .lm-selection-flow .funnel-step {
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    min-width: unset;
+  }
+
+  .lm-selection-flow .funnel-icon {
+    font-size: 22px;
+    margin-bottom: 0;
+  }
+
+  .lm-selection-flow .funnel-label {
+    text-align: left;
+  }
+
+  .lm-selection-flow .funnel-sublabel {
+    text-align: left;
+    margin-left: auto;
+  }
+
+  .lm-selection-flow .funnel-arrow {
+    display: none;
+  }
+
+  /* Formula responsive */
+  .lm-selection-flow .formula-line {
+    font-size: 14px;
+  }
+
+  .lm-selection-flow .formula-plus {
+    font-size: 20px;
+  }
 }
 
 /* iOS Safe Area Support */
 @supports (padding-top: env(safe-area-inset-top)) {
   .lm-selection-flow {
     padding-top: calc(80px + env(safe-area-inset-top));
+  }
+
+  .lm-selection-flow .success-footer {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
   }
 }

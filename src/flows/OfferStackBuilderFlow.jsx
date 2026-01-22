@@ -147,7 +147,9 @@ function OfferStackBuilderFlow() {
   const [lmQuestionIndex, setLmQuestionIndex] = useState(0)
   const [lmAnswers, setLmAnswers] = useState({})
   const [selectedLeadMagnet, setSelectedLeadMagnet] = useState(null)
+  const [selectedLeadMagnetProduct, setSelectedLeadMagnetProduct] = useState(null) // Product Builder selection
   const [leadMagnetIdea, setLeadMagnetIdea] = useState('')
+  const [useCustomLeadMagnet, setUseCustomLeadMagnet] = useState(false)
 
   // Bonuses state
   const [bonuses, setBonuses] = useState([])
@@ -195,6 +197,8 @@ function OfferStackBuilderFlow() {
       stage,
       lmAnswers,
       selectedLeadMagnet,
+      selectedLeadMagnetProduct,
+      useCustomLeadMagnet,
       leadMagnetIdea,
       bonuses,
       selectedGuarantee,
@@ -205,7 +209,7 @@ function OfferStackBuilderFlow() {
       tagline
     }
     saveProgress(progressData)
-  }, [stage, lmAnswers, selectedLeadMagnet, leadMagnetIdea, bonuses, selectedGuarantee, guaranteeDetails, selectedScarcity, scarcityDetails, offerName, tagline, user, saveProgress])
+  }, [stage, lmAnswers, selectedLeadMagnet, selectedLeadMagnetProduct, useCustomLeadMagnet, leadMagnetIdea, bonuses, selectedGuarantee, guaranteeDetails, selectedScarcity, scarcityDetails, offerName, tagline, user, saveProgress])
 
   const loadExistingData = async () => {
     try {
@@ -235,6 +239,24 @@ function OfferStackBuilderFlow() {
         console.log('No Offer Builder data found')
       }
 
+      // Check if Offer Stack Builder was previously completed
+      const { data: existingBuild } = await supabase
+        .from('offer_stack_builds')
+        .select('status')
+        .eq('user_id', user.id)
+        .single()
+
+      // If previously completed, ensure quest is registered (fixes missing quest completions)
+      if (existingBuild?.status === 'completed') {
+        console.log('🔄 Offer Stack: Found prior completion, auto-registering quest...')
+        const autoResult = await completeFlowQuest({
+          userId: user.id,
+          flowId: 'offer_stack_builder',
+          pointsEarned: 35
+        })
+        console.log('🔄 Offer Stack auto-register result:', autoResult)
+      }
+
       setGrandSlamData(grandSlam || null)
       setOfferBuilderData(offerData || null)
       setStage(STAGES.WELCOME)
@@ -251,6 +273,8 @@ function OfferStackBuilderFlow() {
       setStage(savedProgressData.stage)
       if (savedProgressData.lmAnswers) setLmAnswers(savedProgressData.lmAnswers)
       if (savedProgressData.selectedLeadMagnet) setSelectedLeadMagnet(savedProgressData.selectedLeadMagnet)
+      if (savedProgressData.selectedLeadMagnetProduct) setSelectedLeadMagnetProduct(savedProgressData.selectedLeadMagnetProduct)
+      if (savedProgressData.useCustomLeadMagnet) setUseCustomLeadMagnet(savedProgressData.useCustomLeadMagnet)
       if (savedProgressData.leadMagnetIdea) setLeadMagnetIdea(savedProgressData.leadMagnetIdea)
       if (savedProgressData.bonuses) setBonuses(savedProgressData.bonuses)
       if (savedProgressData.selectedGuarantee) setSelectedGuarantee(savedProgressData.selectedGuarantee)
@@ -375,7 +399,9 @@ function OfferStackBuilderFlow() {
         leadMagnet: {
           type: selectedLeadMagnet,
           details: LEAD_MAGNET_TYPES[selectedLeadMagnet],
-          idea: leadMagnetIdea,
+          product: selectedLeadMagnetProduct,
+          idea: selectedLeadMagnetProduct ? selectedLeadMagnetProduct.name : leadMagnetIdea,
+          customIdea: useCustomLeadMagnet ? leadMagnetIdea : null,
           answers: lmAnswers
         },
         bonuses: bonuses,
@@ -395,6 +421,13 @@ function OfferStackBuilderFlow() {
       }
 
       // Save to database
+      console.log('💾 Saving Offer Stack with:', {
+        lead_magnet_type: selectedLeadMagnet,
+        lead_magnet_idea: selectedLeadMagnetProduct ? selectedLeadMagnetProduct.name : leadMagnetIdea,
+        lead_magnet_product: selectedLeadMagnetProduct,
+        status: 'completed'
+      })
+
       const { error: saveError } = await supabase
         .from('offer_stack_builds')
         .upsert({
@@ -402,7 +435,8 @@ function OfferStackBuilderFlow() {
           grand_slam_offer_id: grandSlamData?.id,
           offer_builder_id: offerBuilderData?.id,
           lead_magnet_type: selectedLeadMagnet,
-          lead_magnet_idea: leadMagnetIdea,
+          lead_magnet_idea: selectedLeadMagnetProduct ? selectedLeadMagnetProduct.name : leadMagnetIdea,
+          lead_magnet_product: selectedLeadMagnetProduct,
           bonuses: bonuses,
           guarantee_type: selectedGuarantee,
           guarantee_details: guaranteeDetails,
@@ -415,14 +449,20 @@ function OfferStackBuilderFlow() {
           completed_at: new Date().toISOString()
         }, { onConflict: 'user_id' })
 
-      if (saveError) throw saveError
+      if (saveError) {
+        console.error('❌ Save error:', saveError)
+        throw saveError
+      }
+
+      console.log('✅ Offer Stack saved to database successfully')
 
       // Complete quest
-      await completeFlowQuest(user.id, 'flow_offer_stack_builder', null, {
-        offerName: offerName,
-        leadMagnetType: selectedLeadMagnet,
-        bonusCount: bonuses.length
+      const questResult = await completeFlowQuest({
+        userId: user.id,
+        flowId: 'offer_stack_builder',
+        pointsEarned: 35
       })
+      console.log('🎯 Offer Stack quest completion result:', questResult)
 
       clearProgress()
       setStage(STAGES.SUCCESS)
@@ -599,7 +639,13 @@ function OfferStackBuilderFlow() {
               <button
                 key={typeId}
                 className={`lm-type-option ${selectedLeadMagnet === typeId ? 'selected' : ''} ${typeId === getLeadMagnetRecommendation() ? 'recommended' : ''}`}
-                onClick={() => setSelectedLeadMagnet(typeId)}
+                onClick={() => {
+                  setSelectedLeadMagnet(typeId)
+                  // Reset product selection when changing type
+                  setSelectedLeadMagnetProduct(null)
+                  setUseCustomLeadMagnet(false)
+                  setLeadMagnetIdea('')
+                }}
               >
                 <span className="lm-opt-icon">{type.icon}</span>
                 <div className="lm-opt-content">
@@ -613,7 +659,80 @@ function OfferStackBuilderFlow() {
             ))}
           </div>
 
-          {selectedLeadMagnet && (
+          {/* Product Builder Solutions for Lead Magnet */}
+          {selectedLeadMagnet && offerBuilderData?.responses?.q8_solutions?.solutions?.length > 0 && (
+            <div className="lm-product-selection">
+              <p className="solutions-header">📦 Select from your Product Builder solutions:</p>
+              <div className="solutions-list">
+                {offerBuilderData.responses.q8_solutions.solutions.map((sol, index) => {
+                  const solutionId = `lm_solution_${index}`
+                  const isSelected = selectedLeadMagnetProduct?.id === solutionId
+                  const chosenProductId = grandSlamData?.chosen_product_id
+                  const isMainProduct = chosenProductId === `solution_${index}`
+
+                  // Note: We show ALL solutions for lead magnet selection
+                  // Users can turn any solution (even their main product) into a lead magnet version
+
+                  return (
+                    <button
+                      key={solutionId}
+                      type="button"
+                      className={`solution-option ${isSelected ? 'selected' : ''}`}
+                      onClick={() => {
+                        if (isSelected) {
+                          setSelectedLeadMagnetProduct(null)
+                        } else {
+                          setSelectedLeadMagnetProduct({
+                            id: solutionId,
+                            name: sol.description?.substring(0, 50) || `Solution ${index + 1}`,
+                            fullDescription: sol.description,
+                            solutionType: sol.solutionType,
+                            problemText: sol.problemText
+                          })
+                          setUseCustomLeadMagnet(false)
+                          setLeadMagnetIdea('')
+                        }
+                      }}
+                    >
+                      <span className={`solution-checkbox ${isSelected ? 'checked' : ''}`}>
+                        {isSelected && <span className="checkmark">✓</span>}
+                      </span>
+                      <div className="solution-content">
+                        <span className="solution-name">{sol.description?.substring(0, 50) || `Solution ${index + 1}`}</span>
+                        {isMainProduct && <span className="main-product-badge">Core Product</span>}
+                        {sol.solutionType && (
+                          <span className="solution-type">
+                            {sol.solutionType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Create Custom Option */}
+              <button
+                type="button"
+                className={`solution-option create-custom ${useCustomLeadMagnet ? 'selected' : ''}`}
+                onClick={() => {
+                  setUseCustomLeadMagnet(true)
+                  setSelectedLeadMagnetProduct(null)
+                }}
+              >
+                <span className={`solution-checkbox ${useCustomLeadMagnet ? 'checked' : ''}`}>
+                  {useCustomLeadMagnet && <span className="checkmark">✓</span>}
+                </span>
+                <div className="solution-content">
+                  <span className="solution-name">✨ Create something new</span>
+                  <span className="solution-type">Describe your own lead magnet idea</span>
+                </div>
+              </button>
+            </div>
+          )}
+
+          {/* Custom Lead Magnet Input */}
+          {selectedLeadMagnet && (useCustomLeadMagnet || !offerBuilderData?.responses?.q8_solutions?.solutions?.length) && (
             <div className="lm-idea-input">
               <label>Describe your lead magnet idea:</label>
               <textarea
@@ -628,7 +747,7 @@ function OfferStackBuilderFlow() {
           <button
             className="primary-button"
             onClick={goNext}
-            disabled={!selectedLeadMagnet}
+            disabled={!selectedLeadMagnet || (!selectedLeadMagnetProduct && !useCustomLeadMagnet && offerBuilderData?.responses?.q8_solutions?.solutions?.length > 0)}
           >
             Continue to Bonuses →
           </button>

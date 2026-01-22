@@ -73,29 +73,49 @@ ALTER TABLE public_offer_assessments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public_nervous_system_responses ENABLE ROW LEVEL SECURITY;
 
 -- flow_feedback: Users can read/write their own, public can insert with session_token
+DO $$ BEGIN
 CREATE POLICY "Users can read own feedback" ON flow_feedback
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own feedback" ON flow_feedback
   FOR INSERT WITH CHECK (auth.uid() = user_id OR user_id IS NULL);
 
+DO $$ BEGIN
 CREATE POLICY "Public can insert feedback with session_token" ON flow_feedback
   FOR INSERT WITH CHECK (user_id IS NULL AND session_token IS NOT NULL);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- public_leads: Anyone can insert (it's a lead capture)
+DO $$ BEGIN
 CREATE POLICY "Anyone can insert public leads" ON public_leads
   FOR INSERT WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- public_offer_assessments: Anyone can insert and read their own by session
+DO $$ BEGIN
 CREATE POLICY "Anyone can insert public assessments" ON public_offer_assessments
   FOR INSERT WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Anyone can read by session token" ON public_offer_assessments
   FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- public_nervous_system_responses: Anyone can insert and read their own by session
+DO $$ BEGIN
 CREATE POLICY "Anyone can insert public NS responses" ON public_nervous_system_responses
   FOR INSERT WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Anyone can read public NS by session" ON public_nervous_system_responses
   FOR SELECT USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;

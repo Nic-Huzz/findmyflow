@@ -88,7 +88,7 @@ export default function Analytics() {
       <div className="crm-analytics">
         <div className="crm-loading">
           <div className="crm-spinner"></div>
-          <p>Generating report card...</p>
+          <p>Crunching your numbers...</p>
         </div>
       </div>
     )

@@ -35,6 +35,23 @@
   gap: 20px;
 }
 
+/* Center nav buttons */
+.funnel-builder-flow .nav-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 24px auto 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.funnel-builder-flow .nav-buttons .primary-button,
+.funnel-builder-flow .nav-buttons .secondary-button {
+  width: 100%;
+  max-width: 300px;
+}
+
 /* ============ PREREQUISITES ============ */
 
 .funnel-builder-flow .fb-prerequisites {

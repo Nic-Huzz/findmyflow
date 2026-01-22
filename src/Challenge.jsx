@@ -85,6 +85,8 @@ function Challenge() {
     healingCompassComplete,
     pastParallelStory,
     flowFinderComplete,
+    validationResponseCounts,
+    loadValidationResponseCounts,
     selectedProject,
     setSelectedProject,
     activeStageTab,
@@ -1275,6 +1277,7 @@ function Challenge() {
                     justCompleted={justCompletedQuestId === quest.id}
                     isPlanned={isQuestPlanned(quest.id)}
                     plannedDay={getPlannedDay(quest.id)}
+                    validationResponseCounts={validationResponseCounts}
                   />
                 )
               })}

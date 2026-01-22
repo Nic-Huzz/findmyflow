@@ -191,7 +191,7 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
       {step === 1 && (
         <div className="groan-step">
           <div className="step-header">
-            <span className="step-icon">😬</span>
+            <span className="step-icon">🙌🏼</span>
             <h4>What about this challenge felt like a groan?</h4>
           </div>
           <p className="step-description">

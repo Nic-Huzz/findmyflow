@@ -7,8 +7,11 @@ CREATE TABLE IF NOT EXISTS funnel_plans (
   project_id UUID REFERENCES user_projects(id) ON DELETE SET NULL,
 
   -- Strategy selections
-  core_strategy TEXT NOT NULL,
+  core_strategy TEXT,
+  attraction_offer TEXT,
   lead_magnet_type TEXT,
+  lead_magnet_role TEXT,
+  funnel_pattern TEXT,
 
   -- Funnel steps
   delivery_method TEXT,
@@ -30,22 +33,34 @@ CREATE TABLE IF NOT EXISTS funnel_plans (
 -- Enable RLS
 ALTER TABLE funnel_plans ENABLE ROW LEVEL SECURITY;
 
--- Users can only access their own funnel plans
-CREATE POLICY "Users can view own funnel plans"
-  ON funnel_plans FOR SELECT
-  USING (auth.uid() = user_id);
+-- Users can only access their own funnel plans (idempotent)
+DO $$ BEGIN
+  CREATE POLICY "Users can view own funnel plans"
+    ON funnel_plans FOR SELECT
+    USING (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE POLICY "Users can insert own funnel plans"
-  ON funnel_plans FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can insert own funnel plans"
+    ON funnel_plans FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE POLICY "Users can update own funnel plans"
-  ON funnel_plans FOR UPDATE
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can update own funnel plans"
+    ON funnel_plans FOR UPDATE
+    USING (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
-CREATE POLICY "Users can delete own funnel plans"
-  ON funnel_plans FOR DELETE
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can delete own funnel plans"
+    ON funnel_plans FOR DELETE
+    USING (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Create index for faster lookups
-CREATE INDEX idx_funnel_plans_user_id ON funnel_plans(user_id);
+CREATE INDEX IF NOT EXISTS idx_funnel_plans_user_id ON funnel_plans(user_id);

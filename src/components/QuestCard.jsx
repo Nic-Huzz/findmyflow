@@ -17,6 +17,7 @@ import ReconnectQuestInput, { RECONNECT_QUEST_IDS } from './ReconnectQuestInput'
 import ReleaseQuestInput, { RELEASE_QUEST_IDS } from './ReleaseQuestInput'
 import GrandSlamDropdownInput from './GrandSlamDropdownInput'
 import ValidationResponsesInput from './ValidationResponsesInput'
+import ResponseCounterInput from './ResponseCounterInput'
 
 // Recognise quest IDs that use the enhanced input
 const RECOGNISE_QUEST_IDS = [
@@ -62,7 +63,9 @@ function QuestCard({
   justCompleted = false,
   // For weekly plan highlighting
   isPlanned = false,
-  plannedDay = null
+  plannedDay = null,
+  // For response counter quests
+  validationResponseCounts = {}
 }) {
   const cardClasses = [
     'quest-card',
@@ -360,6 +363,12 @@ function QuestCard({
             <ValidationResponsesInput
               quest={quest}
               onComplete={(quest, data) => onComplete(quest, data)}
+            />
+          ) : quest.inputType === 'response_counter' ? (
+            <ResponseCounterInput
+              quest={quest}
+              responseCount={validationResponseCounts[quest.flow_stage] || 0}
+              onComplete={(quest, data, e) => onComplete(quest, data, e)}
             />
           ) : quest.inputType === 'dropdown' ? (
             <>

@@ -120,9 +120,13 @@ DROP POLICY IF EXISTS "Users can insert own products" ON products;
 DROP POLICY IF EXISTS "Users can update own products" ON products;
 DROP POLICY IF EXISTS "Users can delete own products" ON products;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own products" ON products FOR SELECT USING (auth.uid() = user_id);
+DO $$ BEGIN
 CREATE POLICY "Users can insert own products" ON products FOR INSERT WITH CHECK (auth.uid() = user_id);
+DO $$ BEGIN
 CREATE POLICY "Users can update own products" ON products FOR UPDATE USING (auth.uid() = user_id);
+DO $$ BEGIN
 CREATE POLICY "Users can delete own products" ON products FOR DELETE USING (auth.uid() = user_id);
 
 -- Auto-update timestamp trigger

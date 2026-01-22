@@ -1,0 +1,124 @@
+/* ResponseCounterInput.css - Live response counter for validation/feedback forms */
+
+.response-counter-input {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Progress Section */
+.response-counter-input .response-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.response-counter-input .response-counter-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  justify-content: center;
+}
+
+.response-counter-input .response-count {
+  font-size: 32px;
+  font-weight: 700;
+  color: #5e17eb;
+}
+
+.response-counter-input .response-separator {
+  font-size: 24px;
+  color: #999;
+}
+
+.response-counter-input .response-target {
+  font-size: 24px;
+  font-weight: 600;
+  color: #666;
+}
+
+.response-counter-input .response-label {
+  font-size: 14px;
+  color: #666;
+  margin-left: 8px;
+}
+
+/* Progress Bar */
+.response-counter-input .response-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(94, 23, 235, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.response-counter-input .response-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #7c3aed);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* Points/Hint Text */
+.response-counter-input .response-points-earned {
+  font-size: 13px;
+  color: #10B981;
+  text-align: center;
+  font-weight: 500;
+}
+
+.response-counter-input .response-hint {
+  font-size: 13px;
+  color: #888;
+  text-align: center;
+}
+
+/* Action Link */
+.response-counter-input .response-action-link {
+  display: block;
+  padding: 12px 20px;
+  background: rgba(94, 23, 235, 0.08);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+  border-radius: 10px;
+  color: #5e17eb;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.response-counter-input .response-action-link:hover {
+  background: rgba(94, 23, 235, 0.12);
+  border-color: rgba(94, 23, 235, 0.4);
+}
+
+/* Complete Button */
+.response-counter-input .quest-complete-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.response-counter-input .quest-complete-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+/* Animation for count changes */
+@keyframes rcPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.response-counter-input .response-count.updated {
+  animation: rcPulse 0.3s ease;
+}

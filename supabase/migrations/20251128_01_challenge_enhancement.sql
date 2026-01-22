@@ -86,20 +86,26 @@ DROP POLICY IF EXISTS "Users can manage own conversation logs" ON public.convers
 DROP POLICY IF EXISTS "Users can manage own milestones" ON public.milestone_completions;
 
 -- Create RLS policies
+DO $$ BEGIN
 CREATE POLICY "Users can view own stage progress" ON public.user_stage_progress
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own stage progress" ON public.user_stage_progress
   FOR ALL USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own graduations" ON public.stage_graduations
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own graduations" ON public.stage_graduations
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage own conversation logs" ON public.conversation_logs
   FOR ALL USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage own milestones" ON public.milestone_completions
   FOR ALL USING (auth.uid() = user_id);

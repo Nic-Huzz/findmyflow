@@ -20,18 +20,22 @@ CREATE TABLE IF NOT EXISTS competence_wheels (
 ALTER TABLE competence_wheels ENABLE ROW LEVEL SECURITY;
 
 -- Users can only see their own wheels
+DO $$ BEGIN
 CREATE POLICY "Users can view own wheels"
   ON competence_wheels FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own wheels"
   ON competence_wheels FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own wheels"
   ON competence_wheels FOR UPDATE
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own wheels"
   ON competence_wheels FOR DELETE
   USING (auth.uid() = user_id);
@@ -67,6 +71,7 @@ CREATE TABLE IF NOT EXISTS wheel_segments (
 ALTER TABLE wheel_segments ENABLE ROW LEVEL SECURITY;
 
 -- Users can manage segments through wheel ownership
+DO $$ BEGIN
 CREATE POLICY "Users can view segments of own wheels"
   ON wheel_segments FOR SELECT
   USING (
@@ -77,6 +82,7 @@ CREATE POLICY "Users can view segments of own wheels"
     )
   );
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert segments to own wheels"
   ON wheel_segments FOR INSERT
   WITH CHECK (
@@ -87,6 +93,7 @@ CREATE POLICY "Users can insert segments to own wheels"
     )
   );
 
+DO $$ BEGIN
 CREATE POLICY "Users can update segments of own wheels"
   ON wheel_segments FOR UPDATE
   USING (
@@ -97,6 +104,7 @@ CREATE POLICY "Users can update segments of own wheels"
     )
   );
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete segments from own wheels"
   ON wheel_segments FOR DELETE
   USING (
@@ -125,6 +133,7 @@ CREATE TABLE IF NOT EXISTS segment_responses (
 ALTER TABLE segment_responses ENABLE ROW LEVEL SECURITY;
 
 -- Users can manage segment responses through segment ownership
+DO $$ BEGIN
 CREATE POLICY "Users can view segment responses through wheel ownership"
   ON segment_responses FOR SELECT
   USING (
@@ -136,6 +145,7 @@ CREATE POLICY "Users can view segment responses through wheel ownership"
     )
   );
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert segment responses"
   ON segment_responses FOR INSERT
   WITH CHECK (
@@ -147,6 +157,7 @@ CREATE POLICY "Users can insert segment responses"
     )
   );
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete segment responses"
   ON segment_responses FOR DELETE
   USING (
@@ -172,6 +183,7 @@ CREATE TABLE IF NOT EXISTS wheel_snapshots (
 -- Enable RLS
 ALTER TABLE wheel_snapshots ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view snapshots of own wheels"
   ON wheel_snapshots FOR SELECT
   USING (
@@ -182,6 +194,7 @@ CREATE POLICY "Users can view snapshots of own wheels"
     )
   );
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert snapshots to own wheels"
   ON wheel_snapshots FOR INSERT
   WITH CHECK (
@@ -228,18 +241,22 @@ CREATE TABLE IF NOT EXISTS product_blueprints (
 -- Enable RLS
 ALTER TABLE product_blueprints ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own blueprints"
   ON product_blueprints FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own blueprints"
   ON product_blueprints FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own blueprints"
   ON product_blueprints FOR UPDATE
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own blueprints"
   ON product_blueprints FOR DELETE
   USING (auth.uid() = user_id);

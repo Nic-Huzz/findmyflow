@@ -1,9 +1,11 @@
-/* CRM Marketing Quest Board Styles */
+/* CRM Marketing Quest Board Styles - Playful Warmth Dark Theme */
+@import '../../styles/crm-base.css';
+
 .crm-marketing {
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: white;
+  background: var(--crm-bg-dark);
+  color: var(--crm-text-light);
   overflow-x: hidden;
 }
 
@@ -17,12 +19,8 @@
 }
 
 .crm-marketing .crm-spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #8b5cf6;
-  border-radius: 50%;
-  animation: crm-spin 1s linear infinite;
+  border-color: rgba(255, 255, 255, 0.1);
+  border-top-color: var(--crm-purple-light);
 }
 
 /* Header */

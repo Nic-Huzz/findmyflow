@@ -43,24 +43,36 @@ CREATE INDEX IF NOT EXISTS idx_implementations_status ON offer_implementations(u
 ALTER TABLE offer_implementations ENABLE ROW LEVEL SECURITY;
 
 -- Users can view their own implementations
-CREATE POLICY "Users can view own implementations"
-  ON offer_implementations FOR SELECT
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can view own implementations"
+    ON offer_implementations FOR SELECT
+    USING (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Users can insert their own implementations
-CREATE POLICY "Users can insert own implementations"
-  ON offer_implementations FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can insert own implementations"
+    ON offer_implementations FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Users can update their own implementations
-CREATE POLICY "Users can update own implementations"
-  ON offer_implementations FOR UPDATE
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can update own implementations"
+    ON offer_implementations FOR UPDATE
+    USING (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Users can delete their own implementations
-CREATE POLICY "Users can delete own implementations"
-  ON offer_implementations FOR DELETE
-  USING (auth.uid() = user_id);
+DO $$ BEGIN
+  CREATE POLICY "Users can delete own implementations"
+    ON offer_implementations FOR DELETE
+    USING (auth.uid() = user_id);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- ============================================
 -- Trigger for updated_at
@@ -73,6 +85,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_offer_implementations_updated_at ON offer_implementations;
 CREATE TRIGGER trigger_offer_implementations_updated_at
   BEFORE UPDATE ON offer_implementations
   FOR EACH ROW

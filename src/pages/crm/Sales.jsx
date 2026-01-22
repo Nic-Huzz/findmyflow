@@ -313,7 +313,7 @@ export default function Sales() {
       <div className="crm-sales">
         <div className="crm-loading">
           <div className="crm-spinner"></div>
-          <p>Loading pipeline...</p>
+          <p>Pulling up your deals...</p>
         </div>
       </div>
     )
@@ -400,7 +400,7 @@ export default function Sales() {
               })}
               {(dealsByStage[stage] || []).length === 0 && (
                 <div className="empty-column">
-                  <p>No deals</p>
+                  <p>No deals yet</p>
                 </div>
               )}
             </div>
@@ -578,17 +578,17 @@ export default function Sales() {
         <div className="modal-overlay" onClick={dismissUnscoredPrompt}>
           <div className="deal-modal unscored-modal" onClick={e => e.stopPropagation()}>
             <div className="unscored-icon">📊</div>
-            <h3>Score Your Leads</h3>
+            <h3>Let's Score Your Leads</h3>
             <p>
               You have <strong>{unscoredDeals.length}</strong> deal{unscoredDeals.length !== 1 ? 's' : ''} without
-              lead scores. Scoring helps you prioritize the hottest leads.
+              lead scores. Scoring helps you focus on the hottest opportunities.
             </p>
             <div className="modal-actions">
               <button className="cancel-btn" onClick={dismissUnscoredPrompt}>
                 Skip for now
               </button>
               <button className="save-btn" onClick={startScoringDeals}>
-                Start Scoring
+                Let's Do It
               </button>
             </div>
           </div>

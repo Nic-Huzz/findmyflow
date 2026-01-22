@@ -43,21 +43,25 @@ ALTER TABLE persona_profiles ENABLE ROW LEVEL SECURITY;
 
 -- Users can view their own profiles
 DROP POLICY IF EXISTS "Users can view own persona profiles" ON persona_profiles;
+DO $$ BEGIN
 CREATE POLICY "Users can view own persona profiles" ON persona_profiles
   FOR SELECT USING (auth.uid() = user_id);
 
 -- Users can insert their own profiles
 DROP POLICY IF EXISTS "Users can insert own persona profiles" ON persona_profiles;
+DO $$ BEGIN
 CREATE POLICY "Users can insert own persona profiles" ON persona_profiles
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- Users can update their own profiles
 DROP POLICY IF EXISTS "Users can update own persona profiles" ON persona_profiles;
+DO $$ BEGIN
 CREATE POLICY "Users can update own persona profiles" ON persona_profiles
   FOR UPDATE USING (auth.uid() = user_id);
 
 -- Users can delete their own profiles
 DROP POLICY IF EXISTS "Users can delete own persona profiles" ON persona_profiles;
+DO $$ BEGIN
 CREATE POLICY "Users can delete own persona profiles" ON persona_profiles
   FOR DELETE USING (auth.uid() = user_id);
 

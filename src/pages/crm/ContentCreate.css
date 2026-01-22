@@ -1,4 +1,5 @@
 /* ContentCreate.css - Triggered Content Generation Page */
+@import '../../styles/crm-base.css';
 
 .content-create {
   min-height: 100vh;

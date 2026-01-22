@@ -1,9 +1,11 @@
-/* CRM Dashboard Styles - Light Theme */
+/* CRM Dashboard Styles - Playful Warmth Theme */
+@import '../../styles/crm-base.css';
+
 .crm-dashboard {
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
-  color: #495057;
+  background: var(--crm-bg-primary);
+  color: var(--crm-text-primary);
 }
 
 .crm-dashboard .crm-loading {
@@ -15,18 +17,7 @@
   gap: 16px;
 }
 
-.crm-dashboard .crm-spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid #e9ecef;
-  border-top-color: #5e17eb;
-  border-radius: 50%;
-  animation: crm-spin 1s linear infinite;
-}
-
-@keyframes crm-spin {
-  to { transform: rotate(360deg); }
-}
+/* Spinner styles now in crm-base.css */
 
 .crm-header {
   text-align: center;
@@ -73,14 +64,14 @@
 }
 
 .crm-stat-card {
-  background: #ffffff;
-  border: 1px solid #dee2e6;
+  background: var(--crm-bg-card);
+  border: 1px solid var(--crm-border);
   border-radius: 16px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* Shadows and transitions handled by crm-base.css */
 }
 
 .crm-stat-card .stat-icon {
@@ -130,21 +121,21 @@
   height: 100%;
   background: linear-gradient(90deg, #5e17eb, #7c3aed);
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.5s var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
 
 .revenue-fill {
   height: 100%;
   background: linear-gradient(90deg, #10b981, #34d399);
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.5s var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
 
 .weekly-fill {
   height: 100%;
   background: linear-gradient(90deg, #ffdd27, #fbbf24);
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.5s var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
 
 .level-text,
@@ -155,12 +146,12 @@
 
 /* Section Styling */
 .crm-section {
-  background: #ffffff;
-  border: 1px solid #dee2e6;
+  background: var(--crm-bg-card);
+  border: 1px solid var(--crm-border);
   border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  /* Shadows and transitions handled by crm-base.css */
 }
 
 .crm-section h2 {
@@ -204,14 +195,22 @@
   background: linear-gradient(135deg, #1a1a2e 0%, #2d1f4e 100%);
   border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    box-shadow var(--crm-duration-normal, 0.25s) var(--crm-ease, ease),
+    border-color var(--crm-duration-fast, 0.15s) var(--crm-ease, ease);
   border: 1px solid rgba(94, 23, 235, 0.3);
 }
 
 .ai-setup-banner:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.25);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 28px rgba(94, 23, 235, 0.3);
   border-color: #5e17eb;
+}
+
+.ai-setup-banner:active {
+  transform: translateY(-2px) scale(0.99);
+  transition: transform 0.1s ease;
 }
 
 .ai-setup-content {
@@ -492,12 +491,19 @@
   border: none;
   border-radius: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    box-shadow var(--crm-duration-normal, 0.25s) var(--crm-ease, ease);
 }
 
 .action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.action-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 .marketing-btn {
@@ -594,15 +600,24 @@
   border: 1px solid #dee2e6;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    background var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    border-color var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    box-shadow var(--crm-duration-normal, 0.25s) var(--crm-ease, ease);
   text-align: left;
 }
 
 .tool-btn:hover {
   background: #ffffff;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: #5e17eb;
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.1);
+  box-shadow: 0 6px 16px rgba(94, 23, 235, 0.15);
+}
+
+.tool-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 .tool-icon {
@@ -832,12 +847,19 @@
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    box-shadow var(--crm-duration-normal, 0.25s) var(--crm-ease, ease);
 }
 
 .impl-continue-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(94, 23, 235, 0.35);
+}
+
+.impl-continue-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 .impl-empty-prompt {

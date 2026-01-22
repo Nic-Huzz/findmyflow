@@ -2,6 +2,9 @@
  * Content History Page Styles
  * Namespace: ch-
  */
+@import '../../styles/crm-base.css';
+/*
+ */
 
 .ch-container {
   min-height: 100vh;

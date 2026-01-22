@@ -168,7 +168,7 @@ export default function DailyPriorities({ userId }) {
           <span className="dp-icon">&#10003;</span>
           <h3>You're All Caught Up!</h3>
         </div>
-        <p className="dp-message">No urgent actions needed. Keep building your pipeline!</p>
+        <p className="dp-message">Nothing urgent — nice work! Keep the momentum going.</p>
         <button className="dp-action-btn" onClick={() => navigate('/crm/sales')}>
           View Pipeline
         </button>

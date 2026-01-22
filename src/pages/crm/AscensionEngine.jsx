@@ -477,8 +477,8 @@ function RetentionView({ stats, customers, onChurn }) {
         <h3>Continuity Customers</h3>
         {customers.length === 0 ? (
           <div className="no-customers">
-            <p>No continuity customers yet.</p>
-            <p className="hint">When you mark deals as continuity/subscription, they'll appear here.</p>
+            <p>No continuity customers yet</p>
+            <p className="hint">When you close a subscription deal, they'll show up here.</p>
           </div>
         ) : (
           <div className="continuity-customers">

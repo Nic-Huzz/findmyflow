@@ -2,6 +2,9 @@
  * Performance Dashboard Styles
  * Namespace: pd-
  */
+@import '../../styles/crm-base.css';
+/*
+ */
 
 .pd-container {
   min-height: 100vh;

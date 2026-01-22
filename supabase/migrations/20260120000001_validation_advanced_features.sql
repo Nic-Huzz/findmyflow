@@ -121,30 +121,36 @@ CREATE INDEX IF NOT EXISTS idx_voc_intensity ON voice_of_customer(intensity DESC
 -- RLS Policies
 ALTER TABLE voice_of_customer ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view their own VoC entries"
   ON voice_of_customer
   FOR SELECT
   TO authenticated
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert their own VoC entries"
   ON voice_of_customer
   FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update their own VoC entries"
   ON voice_of_customer
   FOR UPDATE
   TO authenticated
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Service role has full access to VoC"
   ON voice_of_customer
   FOR ALL
   TO service_role
   USING (true)
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Grant permissions
 GRANT SELECT, INSERT, UPDATE ON voice_of_customer TO authenticated;

@@ -20,7 +20,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
@@ -212,7 +212,9 @@ const mapProblemAreaLabel = (value) => {
 
 function OfferBuilderFlow() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const showResults = searchParams.get('results') === 'true'
 
   const [stage, setStage] = useState(STAGES.TIME_CHECK)
   const [questionsData, setQuestionsData] = useState(null)
@@ -305,6 +307,33 @@ function OfferBuilderFlow() {
   useEffect(() => {
     if (user) {
       loadPersonaProfiles()
+    }
+  }, [user])
+
+  // Check for prior completion and auto-register quest (fixes missing quest completions)
+  useEffect(() => {
+    if (user) {
+      const checkPriorCompletion = async () => {
+        try {
+          const { data: existingAssessment } = await supabase
+            .from('offer_builder_assessments')
+            .select('id')
+            .eq('user_id', user.id)
+            .limit(1)
+            .maybeSingle()
+
+          if (existingAssessment) {
+            await completeFlowQuest({
+              userId: user.id,
+              flowId: '100m_offer',
+              pointsEarned: 25
+            })
+          }
+        } catch (err) {
+          // Silent fail - just trying to ensure quest is registered
+        }
+      }
+      checkPriorCompletion()
     }
   }, [user])
 
@@ -587,16 +616,57 @@ function OfferBuilderFlow() {
     }
   }
 
-  // Check for saved progress on mount
+  // Check for View Results mode - load from database and go to summary
   useEffect(() => {
-    if (user) {
+    if (user && showResults) {
+      const loadResultsData = async () => {
+        try {
+          const { data: assessment } = await supabase
+            .from('offer_builder_assessments')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+
+          if (assessment?.responses) {
+            // Load saved data from assessment
+            if (assessment.responses.q6_niche_layers?.layers) {
+              setNicheLayers(assessment.responses.q6_niche_layers.layers)
+            }
+            if (assessment.responses.q7_obstacles?.sections) {
+              setSectionInputs(assessment.responses.q7_obstacles.sections)
+            }
+            if (assessment.responses.q8_solutions?.solutions) {
+              setProblemSolutions(assessment.responses.q8_solutions.solutions)
+            }
+            setStage(STAGES.SUMMARY)
+
+            // Ensure quest is registered (fixes missing quest completions)
+            await completeFlowQuest({
+              userId: user.id,
+              flowId: '100m_offer',
+              pointsEarned: 25
+            })
+          }
+        } catch (err) {
+          console.error('Error loading results:', err)
+        }
+      }
+      loadResultsData()
+    }
+  }, [user, showResults])
+
+  // Check for saved progress on mount (skip if showing results)
+  useEffect(() => {
+    if (user && !showResults) {
       const saved = loadProgress()
       if (saved && saved.stage && saved.stage !== STAGES.TIME_CHECK && saved.stage !== STAGES.SUCCESS) {
         setSavedProgressData(saved)
         setShowResumePrompt(true)
       }
     }
-  }, [user, loadProgress])
+  }, [user, showResults, loadProgress])
 
   // Auto-save progress on state changes (only after passing time check)
   useEffect(() => {

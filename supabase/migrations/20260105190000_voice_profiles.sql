@@ -52,19 +52,23 @@ BEGIN
   DROP POLICY IF EXISTS "Users can delete own voice profile" ON voice_profiles;
 END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own voice profile"
   ON voice_profiles FOR SELECT
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own voice profile"
   ON voice_profiles FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own voice profile"
   ON voice_profiles FOR UPDATE
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own voice profile"
   ON voice_profiles FOR DELETE
   USING (auth.uid() = user_id);

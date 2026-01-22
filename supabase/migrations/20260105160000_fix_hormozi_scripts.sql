@@ -16,10 +16,13 @@ END $$;
 DROP POLICY IF EXISTS "Scripts are viewable by all authenticated users" ON sales_scripts;
 
 -- Recreate the policy now that is_active exists
+DO $$ BEGIN
 CREATE POLICY "Scripts are viewable by all authenticated users"
   ON sales_scripts FOR SELECT
   TO authenticated
   USING (is_active = true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Make sure all existing scripts are active
 UPDATE sales_scripts SET is_active = true WHERE is_active IS NULL;

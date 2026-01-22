@@ -1,4 +1,6 @@
-/* CAC Tracker Styles */
+/* CAC Tracker Styles - Playful Warmth Theme */
+@import '../../styles/crm-base.css';
+
 .cac-tracker {
   min-height: 100vh;
   padding: 24px;

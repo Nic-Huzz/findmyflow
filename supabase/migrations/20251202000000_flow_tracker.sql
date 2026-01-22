@@ -143,15 +143,19 @@ DROP POLICY IF EXISTS "Users can insert own projects" ON public.user_projects;
 DROP POLICY IF EXISTS "Users can update own projects" ON public.user_projects;
 DROP POLICY IF EXISTS "Users can delete own projects" ON public.user_projects;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own projects" ON public.user_projects
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own projects" ON public.user_projects
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own projects" ON public.user_projects
   FOR UPDATE USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own projects" ON public.user_projects
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -161,27 +165,33 @@ DROP POLICY IF EXISTS "Users can insert own flow entries" ON public.flow_entries
 DROP POLICY IF EXISTS "Users can update own flow entries" ON public.flow_entries;
 DROP POLICY IF EXISTS "Users can delete own flow entries" ON public.flow_entries;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own flow entries" ON public.flow_entries
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own flow entries" ON public.flow_entries
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own flow entries" ON public.flow_entries
   FOR UPDATE USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can delete own flow entries" ON public.flow_entries
   FOR DELETE USING (auth.uid() = user_id);
 
 -- flow_patterns policies (read-only for users, written by Edge Function)
 DROP POLICY IF EXISTS "Users can view own patterns" ON public.flow_patterns;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own patterns" ON public.flow_patterns
   FOR SELECT USING (auth.uid() = user_id);
 
 -- flow_entry_tags policies (read-only for users, written by Edge Function)
 DROP POLICY IF EXISTS "Users can view own tags" ON public.flow_entry_tags;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view own tags" ON public.flow_entry_tags
   FOR SELECT USING (
     flow_entry_id IN (SELECT id FROM public.flow_entries WHERE user_id = auth.uid())

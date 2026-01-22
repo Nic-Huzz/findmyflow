@@ -523,48 +523,61 @@ ALTER TABLE crm_stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE generated_content ENABLE ROW LEVEL SECURITY;
 
 -- offer_creations
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own offer_creations" ON offer_creations
   FOR ALL USING (auth.uid() = user_id);
 
 -- products
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own products" ON products
   FOR ALL USING (auth.uid() = user_id);
 
 -- deals
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own deals" ON deals
   FOR ALL USING (auth.uid() = user_id);
 
 -- marketing_tasks
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own marketing_tasks" ON marketing_tasks
   FOR ALL USING (auth.uid() = user_id);
 
 -- script_usage_log
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own script_usage" ON script_usage_log
   FOR ALL USING (auth.uid() = user_id);
 
 -- follow_up_reminders
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own reminders" ON follow_up_reminders
   FOR ALL USING (auth.uid() = user_id);
 
 -- ltv_models
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own ltv_models" ON ltv_models
   FOR ALL USING (auth.uid() = user_id);
 
 -- marketing_spend
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own marketing_spend" ON marketing_spend
   FOR ALL USING (auth.uid() = user_id);
 
 -- crm_stats
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own crm_stats" ON crm_stats
   FOR ALL USING (auth.uid() = user_id);
 
 -- generated_content
+DO $$ BEGIN
 CREATE POLICY "Users can CRUD own generated_content" ON generated_content
   FOR ALL USING (auth.uid() = user_id);
 
 -- sales_scripts is public (read-only for all authenticated users)
+DO $$ BEGIN
 CREATE POLICY "Authenticated users can read scripts" ON sales_scripts
   FOR SELECT TO authenticated USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- ============================================
 -- GRANT PERMISSIONS

@@ -458,10 +458,26 @@ Always use: `transition: all 0.3s ease;`
 
 ---
 
-## Brand Voice Notes
+## Brand Voice: Playful Warmth
 
-- Clean, modern, approachable
-- Professional but not corporate
-- Empowering and supportive
-- Focus on transformation and clarity
-- Use of metaphors around "flow", "compass", "journey"
+**"A supportive friend who celebrates your wins enthusiastically."**
+
+The full voice guide is in [BRAND_VOICE.md](./BRAND_VOICE.md), but here's the quick summary:
+
+| Context | Tone | Emojis? |
+|---------|------|---------|
+| Default/Navigation | Warm, inviting | Sparingly |
+| Celebrations & Wins | Playful, energetic | Yes |
+| Errors & Setbacks | Grounded, helpful | No |
+
+### Motion Reinforces Voice
+- **Resting**: Gentle breathing animations (`ease-in-out`)
+- **Interactions**: Spring bounce (`cubic-bezier(0.34, 1.56, 0.64, 1)`)
+- **Celebrations**: Pop with overshoot
+
+### Key Phrases
+- "Let's..." (partnership)
+- "Your journey..." (ownership)
+- "Ready to...?" (invitation)
+
+See [BRAND_VOICE.md](./BRAND_VOICE.md) for complete guidelines on copy, emoji usage, and tone by context.

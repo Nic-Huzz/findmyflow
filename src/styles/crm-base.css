@@ -1,0 +1,1105 @@
+/**
+ * CRM Base Styles - Playful Warmth Design System
+ *
+ * Import this file at the top of each CRM page's CSS:
+ * @import '../../styles/crm-base.css';
+ *
+ * Provides:
+ * - Spring animations and transitions
+ * - Warm color palette
+ * - Enhanced hover states
+ * - Button feedback
+ * - Icon animations
+ * - Loading states
+ * - Consistent shadows and borders
+ *
+ * SCOPING: Uses explicit class list to prevent style leaks to non-CRM components.
+ */
+
+/* ============ CSS VARIABLES ============ */
+:root {
+  /* Playful Warmth Spring Easing */
+  --crm-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --crm-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Warm Background Colors - Light Theme */
+  --crm-bg-primary: linear-gradient(135deg, #faf8ff 0%, #f5f3ff 100%);
+  --crm-bg-card: #ffffff;
+  --crm-bg-card-hover: #ffffff;
+  --crm-bg-input: #faf8ff;
+
+  /* Dark Theme Backgrounds */
+  --crm-bg-dark: linear-gradient(135deg, #1a1a2e 0%, #2d1f4e 100%);
+  --crm-bg-card-dark: rgba(255, 255, 255, 0.06);
+  --crm-bg-card-dark-hover: rgba(255, 255, 255, 0.1);
+  --crm-bg-input-dark: rgba(255, 255, 255, 0.08);
+
+  /* Border Colors */
+  --crm-border: rgba(94, 23, 235, 0.08);
+  --crm-border-hover: rgba(94, 23, 235, 0.25);
+  --crm-border-focus: #5e17eb;
+  --crm-border-dark: rgba(255, 255, 255, 0.1);
+  --crm-border-dark-hover: rgba(255, 255, 255, 0.2);
+
+  /* Shadow Levels */
+  --crm-shadow-sm: 0 2px 8px rgba(94, 23, 235, 0.04);
+  --crm-shadow-md: 0 4px 16px rgba(94, 23, 235, 0.08);
+  --crm-shadow-lg: 0 8px 24px rgba(94, 23, 235, 0.12);
+  --crm-shadow-xl: 0 12px 32px rgba(94, 23, 235, 0.16);
+  --crm-shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+  /* Brand Colors */
+  --crm-purple: #5e17eb;
+  --crm-purple-light: #7c3aed;
+  --crm-purple-soft: rgba(94, 23, 235, 0.1);
+  --crm-gold: #f59e0b;
+  --crm-gold-light: #fbbf24;
+  --crm-green: #10b981;
+  --crm-green-light: #34d399;
+
+  /* Text Colors */
+  --crm-text-primary: #1a1a2e;
+  --crm-text-secondary: #6b7280;
+  --crm-text-muted: #9ca3af;
+  --crm-text-light: #ffffff;
+  --crm-text-light-secondary: rgba(255, 255, 255, 0.7);
+
+  /* Timing */
+  --crm-duration-fast: 0.15s;
+  --crm-duration-normal: 0.25s;
+  --crm-duration-slow: 0.35s;
+}
+
+/* ============ KEYFRAME ANIMATIONS ============ */
+
+/* Icon float animation */
+@keyframes crmIconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Gentle breathing for idle elements */
+@keyframes crmBreathing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+/* Stat number pop */
+@keyframes crmStatPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1.05); }
+}
+
+/* Success pulse */
+@keyframes crmSuccessPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  50% { box-shadow: 0 0 20px 4px rgba(16, 185, 129, 0.2); }
+}
+
+/* Badge glow */
+@keyframes crmBadgeGlow {
+  0%, 100% { box-shadow: var(--crm-shadow-sm); }
+  50% { box-shadow: var(--crm-shadow-md), 0 0 20px 2px rgba(94, 23, 235, 0.15); }
+}
+
+/* Spinner with pulse */
+@keyframes crmSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes crmSpinnerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Toast slide in */
+@keyframes crmToastSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Fade in up */
+@keyframes crmFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal slide up - more dramatic */
+@keyframes crmSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Gear/settings rotation */
+@keyframes crmGearSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(90deg); }
+}
+
+/* Arrow bounce for "see more" links */
+@keyframes crmArrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+/* Shimmer for skeleton loading (ready for future use) */
+@keyframes crmShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Expand/collapse content */
+@keyframes crmExpandDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
+  }
+}
+
+/* Subtle pulse for attention */
+@keyframes crmAttentionPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+/* ============ CRM SCOPE DEFINITION ============ */
+
+/**
+ * Explicit CRM container classes - prevents style leaks.
+ * When adding a new CRM page, add its main class to this list.
+ */
+
+/* Base spring variable for all CRM containers */
+.crm-dashboard,
+.crm-sales,
+.crm-marketing,
+.crm-analytics,
+.crm-onboarding,
+.smart-alerts,
+.ascension-engine,
+.implementation-tracker,
+.cq-page,
+.content-create,
+.ch-page,
+.pd-page,
+.gal-page,
+.objection-patterns,
+.autonomous-setup,
+.ptuf-calculator,
+.ltv-calculator,
+.cac-tracker,
+.sales-scripts,
+.daily-priorities,
+.deal-outcome-modal,
+.intelligence-widget,
+.bottom-toolbar.crm-toolbar {
+  --spring: var(--crm-spring);
+}
+
+/* ============ CARD STYLES ============ */
+
+/* Base card with warm styling - explicit CRM classes only */
+.crm-card,
+.crm-stat-card,
+.crm-section {
+  background: var(--crm-bg-card);
+  border: 1px solid var(--crm-border);
+  border-radius: 16px;
+  box-shadow: var(--crm-shadow-sm);
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    box-shadow var(--crm-duration-normal) var(--crm-ease),
+    border-color var(--crm-duration-normal) var(--crm-ease);
+}
+
+/* Card hover - spring bounce */
+.crm-card:hover,
+.crm-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--crm-shadow-lg);
+  border-color: var(--crm-border-hover);
+}
+
+/* Clickable cards get more bounce */
+.crm-card[role="button"]:hover,
+.crm-card.clickable:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* ============ BUTTON STYLES ============ */
+
+/* Primary button - purple gradient with spring */
+.crm-primary-btn {
+  background: linear-gradient(135deg, var(--crm-purple) 0%, var(--crm-purple-light) 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    box-shadow var(--crm-duration-normal) var(--crm-ease);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.25);
+}
+
+.crm-primary-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.35);
+}
+
+.crm-primary-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* Secondary button */
+.crm-secondary-btn {
+  background: var(--crm-bg-card);
+  color: var(--crm-text-primary);
+  border: 1px solid var(--crm-border);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    background var(--crm-duration-fast) var(--crm-ease),
+    border-color var(--crm-duration-fast) var(--crm-ease);
+}
+
+.crm-secondary-btn:hover {
+  transform: translateY(-2px);
+  background: var(--crm-purple-soft);
+  border-color: var(--crm-border-hover);
+}
+
+.crm-secondary-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* ============ SCOPED DESCENDANT STYLES ============ */
+
+/**
+ * These styles apply to descendants within CRM pages.
+ * Using :is() for maintainability - add new CRM pages to the list.
+ */
+
+/* Action buttons (quick actions grid) */
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .action-btn {
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    box-shadow var(--crm-duration-normal) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .action-btn:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--crm-shadow-lg);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .action-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* Tool buttons */
+:is(.crm-dashboard, .crm-sales) .tool-btn {
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    background var(--crm-duration-fast) var(--crm-ease),
+    border-color var(--crm-duration-fast) var(--crm-ease),
+    box-shadow var(--crm-duration-normal) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales) .tool-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--crm-shadow-md);
+}
+
+/* ============ ICON ANIMATIONS ============ */
+
+/* Icons float on card hover */
+.crm-stat-card .stat-icon,
+:is(.crm-dashboard, .crm-sales) .action-btn .action-icon,
+:is(.crm-dashboard, .crm-sales) .tool-btn .tool-icon {
+  transition: transform var(--crm-duration-normal) var(--crm-spring);
+}
+
+.crm-stat-card:hover .stat-icon,
+:is(.crm-dashboard, .crm-sales) .action-btn:hover .action-icon {
+  animation: crmIconFloat 1.2s ease-in-out infinite;
+}
+
+:is(.crm-dashboard, .crm-sales) .tool-btn:hover .tool-icon {
+  transform: scale(1.1);
+}
+
+/* ============ STAT VALUE ANIMATIONS ============ */
+
+/* Stat values pop on hover */
+.crm-stat-card .stat-value {
+  transition: transform var(--crm-duration-normal) var(--crm-spring);
+}
+
+.crm-stat-card:hover .stat-value {
+  transform: scale(1.05);
+}
+
+/* ============ LOADING STATES ============ */
+
+/* Spinner with brand color and pulse */
+.crm-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--crm-purple-soft);
+  border-top-color: var(--crm-purple);
+  border-radius: 50%;
+  animation: crmSpin 1s linear infinite, crmSpinnerPulse 2s ease-in-out infinite;
+}
+
+/* Loading container */
+.crm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  animation: crmFadeInUp 0.5s ease-out;
+}
+
+.crm-loading p {
+  color: var(--crm-text-secondary);
+  font-size: 0.9375rem;
+}
+
+/* ============ INPUT STYLES ============ */
+
+/* Scoped to specific CRM page containers */
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .crm-onboarding, .deal-outcome-modal) input,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .crm-onboarding, .deal-outcome-modal) select,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .crm-onboarding, .deal-outcome-modal) textarea {
+  background: var(--crm-bg-input);
+  border: 1px solid var(--crm-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  color: var(--crm-text-primary);
+  transition:
+    border-color var(--crm-duration-fast) var(--crm-ease),
+    box-shadow var(--crm-duration-fast) var(--crm-ease),
+    background var(--crm-duration-fast) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .crm-onboarding, .deal-outcome-modal) input:focus,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .crm-onboarding, .deal-outcome-modal) select:focus,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .crm-onboarding, .deal-outcome-modal) textarea:focus {
+  outline: none;
+  border-color: var(--crm-border-focus);
+  background: var(--crm-bg-card);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+}
+
+/* ============ PROGRESS BARS ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-analytics) .level-fill,
+:is(.crm-dashboard, .crm-sales, .crm-analytics) .impl-progress-fill,
+:is(.crm-dashboard, .crm-sales, .crm-analytics) .progress-fill,
+:is(.crm-dashboard, .crm-sales, .crm-analytics) .progress-bar-fill {
+  transition: width 0.5s var(--crm-spring);
+}
+
+/* ============ BADGES & TAGS ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .badge,
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .tag {
+  transition:
+    transform var(--crm-duration-fast) var(--crm-spring),
+    box-shadow var(--crm-duration-fast) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .badge:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .tag:hover {
+  transform: scale(1.05);
+}
+
+/* Notification badge pulse */
+:is(.crm-dashboard, .crm-sales) .action-badge {
+  animation: crmBadgeGlow 2s ease-in-out infinite;
+}
+
+/* ============ SUCCESS STATES ============ */
+
+/* Won deal / success card glow */
+:is(.crm-sales, .deal-outcome-modal) .success-card,
+:is(.crm-sales, .deal-outcome-modal) .won-card {
+  animation: crmSuccessPulse 2s ease-in-out 3;
+}
+
+/* ============ TOAST NOTIFICATIONS ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .toast,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .notification {
+  animation: crmToastSlide 0.4s var(--crm-spring);
+}
+
+/* ============ MODAL OVERLAYS ============ */
+
+.deal-outcome-modal,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .modal {
+  animation: crmSlideUp 0.35s var(--crm-spring);
+}
+
+/* Modal backdrop */
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .modal-overlay {
+  backdrop-filter: blur(4px);
+  transition: opacity var(--crm-duration-normal) var(--crm-ease);
+}
+
+/* ============ SETTINGS & GEAR ICONS ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .settings-btn,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .settings-icon,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) [class*="settings"] button {
+  transition: transform var(--crm-duration-normal) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .settings-btn:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .settings-icon:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) [class*="settings"] button:hover {
+  transform: rotate(90deg);
+}
+
+/* ============ ARROW & "SEE MORE" LINKS ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .section-link,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .see-all-link,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition:
+    color var(--crm-duration-fast) var(--crm-ease),
+    gap var(--crm-duration-normal) var(--crm-spring);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .section-link:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .see-all-link:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .view-all-btn:hover {
+  gap: 8px;
+}
+
+/* Arrow icons in links */
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .arrow-icon,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) [class*="-arrow"] {
+  transition: transform var(--crm-duration-normal) var(--crm-spring);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) a:hover .arrow-icon,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) button:hover .arrow-icon,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) a:hover [class*="-arrow"],
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) button:hover [class*="-arrow"] {
+  transform: translateX(4px);
+}
+
+/* ============ PIPELINE STAGES ============ */
+
+:is(.crm-dashboard, .crm-sales) .pipeline-stage {
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    box-shadow var(--crm-duration-normal) var(--crm-ease),
+    background var(--crm-duration-fast) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales) .pipeline-stage:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--crm-shadow-md);
+}
+
+:is(.crm-dashboard, .crm-sales) .pipeline-stage .stage-count {
+  transition: transform var(--crm-duration-normal) var(--crm-spring);
+}
+
+:is(.crm-dashboard, .crm-sales) .pipeline-stage:hover .stage-count {
+  transform: scale(1.1);
+}
+
+/* ============ GENERIC BUTTON ACTIVE STATES ============ */
+
+/* Apply press feedback to common button patterns in CRM */
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .smart-alerts, .ascension-engine) button:not(:disabled):active,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics, .smart-alerts, .ascension-engine) .btn:not(:disabled):active {
+  transform: scale(0.97);
+  transition: transform 0.1s ease;
+}
+
+/* Continue/CTA buttons */
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .continue-btn,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .cta-btn,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .impl-continue-btn {
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    box-shadow var(--crm-duration-normal) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .continue-btn:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .cta-btn:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .impl-continue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(94, 23, 235, 0.25);
+}
+
+/* ============ EXPANDABLE CONTENT ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .expandable-content,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .collapsible-content {
+  animation: crmExpandDown 0.3s var(--crm-ease);
+  overflow: hidden;
+}
+
+/* Toggle icons for expand/collapse */
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .expand-icon,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .collapse-icon,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .toggle-icon {
+  transition: transform var(--crm-duration-normal) var(--crm-spring);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .expanded .expand-icon,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .expanded .toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* ============ SKELETON LOADING (CSS-ready) ============ */
+
+/* Base skeleton shimmer - apply .crm-skeleton to any element */
+.crm-skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e8e8e8 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: crmShimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* Dark theme skeleton */
+.crm-skeleton-dark {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: crmShimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ============ LIST ITEM INTERACTIONS ============ */
+
+:is(.crm-sales, .crm-marketing) .deal-row,
+:is(.crm-sales, .crm-marketing) .lead-row,
+:is(.crm-sales, .crm-marketing) .list-item {
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    background var(--crm-duration-fast) var(--crm-ease),
+    box-shadow var(--crm-duration-normal) var(--crm-ease);
+}
+
+:is(.crm-sales, .crm-marketing) .deal-row:hover,
+:is(.crm-sales, .crm-marketing) .lead-row:hover,
+:is(.crm-sales, .crm-marketing) .list-item:hover {
+  transform: translateX(4px);
+  background: rgba(94, 23, 235, 0.02);
+}
+
+/* ============ RECOMMENDATION CARDS ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .rec-banner-card,
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .recommendation-card {
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    background var(--crm-duration-fast) var(--crm-ease),
+    border-color var(--crm-duration-fast) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .rec-banner-card:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing) .recommendation-card:hover {
+  transform: translateY(-2px);
+}
+
+/* ============ FILTER CHIPS ============ */
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .filter-chip,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .filter-btn,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .stage-filter {
+  transition:
+    transform var(--crm-duration-fast) var(--crm-spring),
+    background var(--crm-duration-fast) var(--crm-ease),
+    border-color var(--crm-duration-fast) var(--crm-ease),
+    color var(--crm-duration-fast) var(--crm-ease);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .filter-chip:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .filter-btn:hover,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .stage-filter:hover {
+  transform: translateY(-2px);
+}
+
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .filter-chip.active,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .filter-btn.active,
+:is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .stage-filter.active {
+  transform: scale(1.02);
+}
+
+/* ============ GLASS-MORPHIC HERO SECTION ============ */
+/* Inspired by Challenge portal's hero stats */
+
+.crm-hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    background var(--crm-duration-fast) var(--crm-ease);
+}
+
+.crm-hero-stats:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.crm-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.crm-hero-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.crm-hero-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.crm-hero-divider {
+  width: 2px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+}
+
+/* ============ GOLD CELEBRATION ACCENTS ============ */
+/* For won deals, achievements, and milestones */
+
+.crm-gold-accent {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.2));
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  color: #fbbf24;
+}
+
+.crm-gold-glow {
+  box-shadow: 0 4px 16px rgba(255, 221, 39, 0.3);
+}
+
+/* Won deal card styling */
+:is(.crm-sales, .deal-outcome-modal) .deal-card.won,
+:is(.crm-sales, .deal-outcome-modal) .won-highlight {
+  background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+  border-color: #ffdd27;
+  box-shadow: 0 4px 16px rgba(255, 221, 39, 0.25);
+}
+
+/* Gold badge (like Challenge rank badge) */
+.crm-gold-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.2));
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fbbf24;
+  cursor: pointer;
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    background var(--crm-duration-fast) var(--crm-ease);
+}
+
+.crm-gold-badge:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.4), rgba(245, 158, 11, 0.3));
+  transform: scale(1.05);
+}
+
+/* ============ CELEBRATION ANIMATIONS ============ */
+/* Quest completion, deal won, milestone achieved */
+
+/* Points flying up animation */
+@keyframes crmPointsFlyUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -100%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -200%) scale(1);
+  }
+}
+
+.crm-points-fly-up {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--crm-purple);
+  text-shadow: 0 2px 8px rgba(94, 23, 235, 0.3);
+  animation: crmPointsFlyUp 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Checkmark pop animation */
+@keyframes crmCheckmarkPop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.crm-checkmark-pop {
+  display: inline-block;
+  color: var(--crm-green);
+  font-weight: bold;
+  margin-right: 6px;
+  animation: crmCheckmarkPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Completion pulse (card just completed) */
+@keyframes crmCompletePulse {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.02); box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3); }
+  100% { transform: scale(1); }
+}
+
+.crm-just-completed {
+  animation: crmCompletePulse 0.6s ease-out;
+  position: relative;
+  overflow: visible;
+}
+
+/* Confetti burst container */
+.crm-confetti-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Individual confetti pieces */
+@keyframes crmConfettiBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translate(
+        calc(cos(var(--angle)) * var(--distance)),
+        calc(sin(var(--angle)) * var(--distance) - 20px)
+      )
+      rotate(720deg)
+      scale(0.5);
+  }
+}
+
+.crm-confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  animation: crmConfettiBurst 0.8s ease-out forwards;
+}
+
+/* Confetti color variants */
+.crm-confetti-purple { background: var(--crm-purple); }
+.crm-confetti-gold { background: #ffdd27; }
+.crm-confetti-green { background: var(--crm-green); }
+.crm-confetti-blue { background: #3b82f6; }
+
+/* Confetti trajectory variants */
+.crm-confetti-0 { --angle: -60deg; --distance: 60px; animation-delay: 0ms; }
+.crm-confetti-1 { --angle: -30deg; --distance: 70px; animation-delay: 20ms; }
+.crm-confetti-2 { --angle: 0deg; --distance: 65px; animation-delay: 40ms; }
+.crm-confetti-3 { --angle: 30deg; --distance: 70px; animation-delay: 60ms; }
+.crm-confetti-4 { --angle: 60deg; --distance: 60px; animation-delay: 80ms; }
+.crm-confetti-5 { --angle: 90deg; --distance: 50px; animation-delay: 100ms; }
+
+/* ============ STREAK & MILESTONE EFFECTS ============ */
+/* Inspired by Challenge streak flames */
+
+@keyframes crmFlameFlicker {
+  0% { transform: scale(1) rotate(-3deg); }
+  100% { transform: scale(1.1) rotate(3deg); }
+}
+
+@keyframes crmFlameGlow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 100, 0, 0.6)); }
+  50% { filter: drop-shadow(0 0 8px rgba(255, 150, 0, 0.8)); }
+}
+
+.crm-streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.crm-streak-flame {
+  display: inline-block;
+  font-size: 1.1rem;
+  animation: crmFlameFlicker 0.5s ease-in-out infinite alternate;
+}
+
+.crm-streak-flame.hot {
+  font-size: 1.3rem;
+  animation: crmFlameFlicker 0.3s ease-in-out infinite alternate, crmFlameGlow 1s ease-in-out infinite;
+}
+
+/* ============ SKELETON LOADING COMPONENTS ============ */
+/* Full skeleton loading states like Challenge */
+
+.crm-skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.crm-skeleton-title {
+  width: 180px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.crm-skeleton-points {
+  width: 80px;
+  height: 36px;
+  border-radius: 20px;
+}
+
+.crm-skeleton-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.crm-skeleton-tab {
+  width: 70px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.crm-skeleton-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.crm-skeleton-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.crm-skeleton-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.crm-skeleton-card-title {
+  width: 140px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.crm-skeleton-card-badge {
+  width: 60px;
+  height: 28px;
+  border-radius: 14px;
+}
+
+.crm-skeleton-card-desc {
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.crm-skeleton-card-desc.short {
+  width: 60%;
+}
+
+/* Apply shimmer to all skeleton elements */
+.crm-skeleton-title,
+.crm-skeleton-points,
+.crm-skeleton-tab,
+.crm-skeleton-card-title,
+.crm-skeleton-card-badge,
+.crm-skeleton-card-desc {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: crmShimmer 1.5s infinite;
+}
+
+/* ============ LEADERBOARD STYLES ============ */
+/* For future CRM leaderboard/rankings */
+
+.crm-leaderboard-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition:
+    transform var(--crm-duration-normal) var(--crm-spring),
+    box-shadow var(--crm-duration-normal) var(--crm-ease);
+  border: 2px solid transparent;
+}
+
+.crm-leaderboard-entry:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.crm-leaderboard-entry.current-user {
+  background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+  border-color: #ffdd27;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+}
+
+.crm-leaderboard-rank {
+  font-size: 1.5rem;
+  font-weight: 700;
+  min-width: 50px;
+  text-align: center;
+  color: var(--crm-purple);
+}
+
+/* Trophy icons for top 3 */
+.crm-leaderboard-entry:nth-child(1) .crm-leaderboard-rank,
+.crm-leaderboard-entry:nth-child(2) .crm-leaderboard-rank,
+.crm-leaderboard-entry:nth-child(3) .crm-leaderboard-rank {
+  font-size: 2rem;
+}
+
+/* ============ REDUCED MOTION ============ */
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-card,
+  .crm-stat-card,
+  .crm-primary-btn,
+  .crm-secondary-btn,
+  .crm-spinner,
+  .crm-skeleton,
+  .crm-skeleton-dark,
+  .crm-skeleton-title,
+  .crm-skeleton-points,
+  .crm-skeleton-tab,
+  .crm-skeleton-card-title,
+  .crm-skeleton-card-badge,
+  .crm-skeleton-card-desc,
+  .crm-points-fly-up,
+  .crm-checkmark-pop,
+  .crm-just-completed,
+  .crm-confetti,
+  .crm-streak-flame,
+  .crm-hero-stats {
+    animation: none;
+    transition: none;
+  }
+
+  /* Keep essential functional animations */
+  .crm-spinner {
+    animation: crmSpin 1s linear infinite;
+  }
+
+  /* Remove hover transforms */
+  :is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .action-btn:hover,
+  :is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .tool-btn:hover,
+  :is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .pipeline-stage:hover,
+  :is(.crm-dashboard, .crm-sales, .crm-marketing, .crm-analytics) .filter-chip:hover,
+  .crm-hero-stats:hover,
+  .crm-gold-badge:hover {
+    transform: none;
+  }
+}

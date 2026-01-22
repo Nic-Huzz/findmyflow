@@ -42,21 +42,27 @@ CREATE INDEX IF NOT EXISTS idx_recommendations_pending ON recommendations(user_i
 -- RLS
 ALTER TABLE recommendations ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Users can view their own recommendations"
   ON recommendations FOR SELECT TO authenticated
   USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update their own recommendations"
   ON recommendations FOR UPDATE TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
 -- Service role can insert (for Edge Function)
+DO $$ BEGIN
 CREATE POLICY "Service can insert recommendations"
   ON recommendations FOR INSERT TO service_role
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Also allow authenticated users to have recommendations inserted for them
+DO $$ BEGIN
 CREATE POLICY "Users can have recommendations created"
   ON recommendations FOR INSERT TO authenticated
   WITH CHECK (auth.uid() = user_id);

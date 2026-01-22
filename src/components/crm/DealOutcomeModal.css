@@ -1,12 +1,15 @@
-/* DealOutcomeModal Styles */
+/* DealOutcomeModal Styles - Playful Warmth Theme */
+@import '../../styles/crm-base.css';
+
 .deal-outcome-modal {
-  background: #ffffff;
+  background: var(--crm-bg-card);
   border-radius: 16px;
   width: 90%;
   max-width: 480px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: crmSlideUp 0.35s var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
 
 .outcome-header {
@@ -95,18 +98,28 @@
   border: 2px solid #e9ecef;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    border-color var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    background var(--crm-duration-fast, 0.15s) var(--crm-ease, ease);
   text-align: left;
 }
 
 .reason-btn:hover {
   border-color: #5e17eb;
   background: #f1f3f4;
+  transform: translateY(-2px);
+}
+
+.reason-btn:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 .reason-btn.selected {
   border-color: #5e17eb;
   background: rgba(94, 23, 235, 0.1);
+  transform: scale(1.02);
 }
 
 .reason-label {
@@ -136,17 +149,28 @@
   font-size: 0.813rem;
   color: #495057;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    transform var(--crm-duration-fast, 0.15s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    background var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    border-color var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
+    color var(--crm-duration-fast, 0.15s) var(--crm-ease, ease);
 }
 
 .chip-btn:hover {
   background: #e9ecef;
+  transform: translateY(-2px);
+}
+
+.chip-btn:active {
+  transform: scale(0.95);
+  transition: transform 0.1s ease;
 }
 
 .chip-btn.selected {
   background: #5e17eb;
   border-color: #5e17eb;
   color: white;
+  transform: scale(1.05);
 }
 
 /* Form Inputs */
@@ -216,7 +240,9 @@
   font-weight: 600;
   color: white;
   cursor: pointer;
-  transition: all 0.2s;
+  transition:
+    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1)),
+    box-shadow var(--crm-duration-normal, 0.25s) var(--crm-ease, ease);
 }
 
 .deal-outcome-modal .save-btn.won {
@@ -228,8 +254,13 @@
 }
 
 .deal-outcome-modal .save-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.deal-outcome-modal .save-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: transform 0.1s ease;
 }
 
 .deal-outcome-modal .save-btn:disabled {

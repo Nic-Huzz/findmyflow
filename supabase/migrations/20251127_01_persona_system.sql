@@ -137,29 +137,39 @@ ALTER TABLE user_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE stage_graduations ENABLE ROW LEVEL SECURITY;
 
 -- Persona assessments policies
+DO $$ BEGIN
 CREATE POLICY "Users can view own assessments" ON persona_assessments
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Anyone can insert assessments" ON persona_assessments
   FOR INSERT WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own assessments" ON persona_assessments
   FOR UPDATE USING (auth.uid() = user_id);
 
 -- User profiles policies
+DO $$ BEGIN
 CREATE POLICY "Users can view own profile" ON user_profiles
   FOR SELECT USING (auth.uid() = id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own profile" ON user_profiles
   FOR INSERT WITH CHECK (auth.uid() = id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can update own profile" ON user_profiles
   FOR UPDATE USING (auth.uid() = id);
 
 -- Stage graduations policies
+DO $$ BEGIN
 CREATE POLICY "Users can view own graduations" ON stage_graduations
   FOR SELECT USING (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can insert own graduations" ON stage_graduations
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 

@@ -31,21 +31,25 @@ CREATE INDEX IF NOT EXISTS idx_content_history_batch ON content_history(batch_id
 ALTER TABLE content_history ENABLE ROW LEVEL SECURITY;
 
 -- Users can only see their own content
+DO $$ BEGIN
 CREATE POLICY "Users can view own content history"
   ON content_history FOR SELECT
   USING (auth.uid() = user_id);
 
 -- Users can insert their own content
+DO $$ BEGIN
 CREATE POLICY "Users can insert own content"
   ON content_history FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- Users can update their own content
+DO $$ BEGIN
 CREATE POLICY "Users can update own content"
   ON content_history FOR UPDATE
   USING (auth.uid() = user_id);
 
 -- Users can delete their own content
+DO $$ BEGIN
 CREATE POLICY "Users can delete own content"
   ON content_history FOR DELETE
   USING (auth.uid() = user_id);

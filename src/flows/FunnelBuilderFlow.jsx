@@ -193,6 +193,33 @@ function FunnelBuilderFlow() {
     loadPrerequisites()
   }, [user])
 
+  // Check for prior completion and auto-register quest (fixes missing quest completions)
+  useEffect(() => {
+    if (user) {
+      const checkPriorCompletion = async () => {
+        try {
+          const { data: existingPlan } = await supabase
+            .from('funnel_plans')
+            .select('id')
+            .eq('user_id', user.id)
+            .limit(1)
+            .maybeSingle()
+
+          if (existingPlan) {
+            await completeFlowQuest({
+              userId: user.id,
+              flowId: 'funnel_builder',
+              pointsEarned: 35
+            })
+          }
+        } catch (err) {
+          // Silent fail - just trying to ensure quest is registered
+        }
+      }
+      checkPriorCompletion()
+    }
+  }, [user])
+
   async function loadPrerequisites() {
     if (!user) return
 
@@ -227,20 +254,23 @@ function FunnelBuilderFlow() {
 
       console.log('📊 Attraction offer data:', attractionData)
 
-      // Load Lead Magnet selection from offer_builder_assessments (LeadMagnetSelectionFlow)
-      const { data: offerData, error: offerError } = await supabase
-        .from('offer_builder_assessments')
-        .select('responses')
+      // Load Lead Magnet selection from offer_stack_builds (Offer Stack Builder)
+      const { data: offerStackData, error: offerStackError } = await supabase
+        .from('offer_stack_builds')
+        .select('lead_magnet_product, lead_magnet_type, lead_magnet_idea, status')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle()
 
-      if (offerError) {
-        console.error('Error loading offer builder assessment:', offerError)
+      if (offerStackError) {
+        console.error('Error loading offer stack build:', offerStackError)
       }
 
-      console.log('📊 Lead magnet data from offer builder:', offerData?.responses?.lead_magnet_selections)
+      console.log('📊 Offer Stack Builder data:', offerStackData)
+      console.log('📊 Offer Stack status:', offerStackData?.status)
+      console.log('📊 Lead magnet type:', offerStackData?.lead_magnet_type)
+      console.log('📊 Lead magnet idea:', offerStackData?.lead_magnet_idea)
 
       // Set Core Four strategy
       if (leadsData?.recommended_strategy_id) {
@@ -277,13 +307,27 @@ function FunnelBuilderFlow() {
         }
       }
 
-      // Set Lead Magnet type from LeadMagnetSelectionFlow (stored in offer_builder_assessments)
-      if (offerData?.responses?.lead_magnet_selections?.types) {
-        const selectedTypes = Object.values(offerData.responses.lead_magnet_selections.types)
-        if (selectedTypes.length > 0) {
-          setLeadMagnetType(selectedTypes[0])
-          setLeadMagnetDetails(offerData.responses.lead_magnet_selections)
-        }
+      // Set Lead Magnet type from Offer Stack Builder
+      // Check if Offer Stack is completed (status = 'completed')
+      const offerStackComplete = offerStackData?.status === 'completed'
+
+      if (offerStackData?.lead_magnet_type) {
+        setLeadMagnetType(offerStackData.lead_magnet_type)
+        // Set details including the selected product
+        setLeadMagnetDetails({
+          type: offerStackData.lead_magnet_type,
+          product: offerStackData.lead_magnet_product,
+          idea: offerStackData.lead_magnet_idea
+        })
+      } else if (offerStackComplete) {
+        // Offer Stack completed but no lead magnet type - use a placeholder
+        // This allows the flow to proceed even if lead magnet wasn't selected
+        setLeadMagnetType('offer_stack_complete')
+        setLeadMagnetDetails({
+          type: null,
+          product: offerStackData.lead_magnet_product,
+          idea: offerStackData.lead_magnet_idea
+        })
       }
 
       // Move to prerequisites check
@@ -364,11 +408,10 @@ function FunnelBuilderFlow() {
       if (saveError) throw saveError
 
       // Complete quest
-      await completeFlowQuest(user.id, 'funnel_builder', {
-        core_strategy: coreStrategy,
-        attraction_offer: attractionOffer,
-        lead_magnet_type: leadMagnetType,
-        funnel_data: funnelData
+      await completeFlowQuest({
+        userId: user.id,
+        flowId: 'funnel_builder',
+        pointsEarned: 35
       })
 
       setStage(STAGES.SUCCESS)
@@ -444,15 +487,17 @@ function FunnelBuilderFlow() {
             <div className={`fb-prereq-item ${hasMagnet ? 'complete' : 'incomplete'}`}>
               <div className="fb-prereq-icon">{hasMagnet ? '✓' : '3'}</div>
               <div className="fb-prereq-content">
-                <h3>Lead Magnet Type</h3>
+                <h3>Offer Stack Builder</h3>
                 {hasMagnet ? (
-                  <p className="fb-prereq-value">{magnetDetails?.name}</p>
+                  <p className="fb-prereq-value">
+                    🧲 Lead Magnet: {leadMagnetDetails?.product?.name || leadMagnetDetails?.idea || magnetDetails?.name || 'Selected'}
+                  </p>
                 ) : (
-                  <p>Choose your value exchange for email capture</p>
+                  <p>Build your offer stack with lead magnet</p>
                 )}
               </div>
               {!hasMagnet && (
-                <Link to="/lead-magnet-selection" className="fb-prereq-link">Complete →</Link>
+                <Link to="/offer-stack-builder" className="fb-prereq-link">Complete →</Link>
               )}
             </div>
           </div>

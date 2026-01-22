@@ -81,53 +81,80 @@ ON ab_test_assignments (test_name, variant, assigned_at);
 ALTER TABLE email_sequence_enrollments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE email_sequence_emails ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Allow public insert on email_sequence_enrollments"
   ON email_sequence_enrollments FOR INSERT
   TO anon, authenticated
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Allow public insert on email_sequence_emails"
   ON email_sequence_emails FOR INSERT
   TO anon, authenticated
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Service role can do everything (for edge functions)
+DO $$ BEGIN
 CREATE POLICY "Service role full access enrollments"
   ON email_sequence_enrollments FOR ALL
   TO service_role
   USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Service role full access emails"
   ON email_sequence_emails FOR ALL
   TO service_role
   USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- A/B tests - public insert and select own assignments
 ALTER TABLE ab_test_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ab_test_conversions ENABLE ROW LEVEL SECURITY;
 
+DO $$ BEGIN
 CREATE POLICY "Allow public insert on ab_test_assignments"
   ON ab_test_assignments FOR INSERT
   TO anon, authenticated
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Allow public select own ab_test_assignments"
   ON ab_test_assignments FOR SELECT
   TO anon, authenticated
   USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Allow public insert on ab_test_conversions"
   ON ab_test_conversions FOR INSERT
   TO anon, authenticated
   WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- Service role full access
+DO $$ BEGIN
 CREATE POLICY "Service role full access ab_assignments"
   ON ab_test_assignments FOR ALL
   TO service_role
   USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
+DO $$ BEGIN
 CREATE POLICY "Service role full access ab_conversions"
   ON ab_test_conversions FOR ALL
   TO service_role
   USING (true);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;

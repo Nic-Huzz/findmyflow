@@ -61,6 +61,7 @@ CREATE TRIGGER trigger_generated_assets_updated_at
 ALTER TABLE generated_assets ENABLE ROW LEVEL SECURITY;
 
 -- Users can only see their own assets
+DO $$ BEGIN
 CREATE POLICY "Users can view their own generated assets"
   ON generated_assets
   FOR SELECT
@@ -68,6 +69,7 @@ CREATE POLICY "Users can view their own generated assets"
   USING (auth.uid() = user_id);
 
 -- Users can create their own assets
+DO $$ BEGIN
 CREATE POLICY "Users can create their own generated assets"
   ON generated_assets
   FOR INSERT
@@ -75,6 +77,7 @@ CREATE POLICY "Users can create their own generated assets"
   WITH CHECK (auth.uid() = user_id);
 
 -- Users can update their own assets
+DO $$ BEGIN
 CREATE POLICY "Users can update their own generated assets"
   ON generated_assets
   FOR UPDATE
@@ -83,6 +86,7 @@ CREATE POLICY "Users can update their own generated assets"
   WITH CHECK (auth.uid() = user_id);
 
 -- Users can delete their own assets
+DO $$ BEGIN
 CREATE POLICY "Users can delete their own generated assets"
   ON generated_assets
   FOR DELETE

@@ -1,7 +1,8 @@
 /**
- * GrandSlamDropdownInput - Dropdown input populated from Grand Slam Offer data
+ * GrandSlamDropdownInput - Dropdown input populated from Offer Stack data
  *
- * Shows bonuses, guarantee, or scarcity options from user's completed Grand Slam Offer
+ * Shows bonuses, guarantee, or scarcity options from user's completed Offer Stack Builder.
+ * Falls back to legacy grand_slam_offers and offer_builder_assessments tables.
  */
 
 import { useState, useEffect } from 'react'
@@ -12,7 +13,9 @@ const GUARANTEE_LABELS = {
   unconditional: 'Unconditional (no questions asked)',
   conditional: 'Conditional (if X then refund)',
   performance: 'Performance (outcome-based)',
-  anti_guarantee: 'Anti-Guarantee (all sales final)'
+  anti_guarantee: 'Anti-Guarantee (all sales final)',
+  results: 'Results-Based (guarantee specific outcomes)',
+  extended: 'Extended Period (longer refund window)'
 }
 
 const SCARCITY_LABELS = {
@@ -20,7 +23,12 @@ const SCARCITY_LABELS = {
   time: 'Time-based (deadline)',
   bonus: 'Bonus-based (expiring bonuses)',
   price: 'Price-based (early bird)',
-  inventory: 'Inventory (limited supply)'
+  inventory: 'Inventory (limited supply)',
+  limited_time: 'Limited Time (deadline)',
+  limited_spots: 'Limited Spots (capacity)',
+  bonus_expires: 'Bonus Expires',
+  price_increase: 'Price Increase',
+  seasonal: 'Seasonal Availability'
 }
 
 function GrandSlamDropdownInput({ quest, onComplete }) {
@@ -30,7 +38,7 @@ function GrandSlamDropdownInput({ quest, onComplete }) {
   const [selectedValue, setSelectedValue] = useState('')
   const [error, setError] = useState(null)
 
-  // Load Grand Slam Offer data
+  // Load Offer Stack or Grand Slam Offer data
   useEffect(() => {
     const loadGrandSlamData = async () => {
       if (!user) return
@@ -38,7 +46,35 @@ function GrandSlamDropdownInput({ quest, onComplete }) {
       try {
         setLoading(true)
 
-        // First try the dedicated grand_slam_offers table
+        // First try the offer_stack_builds table (new flow)
+        const { data: offerStack, error: osError } = await supabase
+          .from('offer_stack_builds')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('status', 'completed')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (offerStack && !osError) {
+          // Transform to expected format
+          setGrandSlamData({
+            bonuses: offerStack.bonuses || [],
+            guarantee: {
+              type: offerStack.guarantee_type,
+              terms: offerStack.guarantee_details
+            },
+            scarcity: {
+              type: offerStack.scarcity_types?.[0] || null,
+              types: offerStack.scarcity_types || [],
+              details: offerStack.scarcity_details?.custom || null
+            }
+          })
+          setLoading(false)
+          return
+        }
+
+        // Fallback: try the grand_slam_offers table (legacy)
         const { data: grandSlamOffer, error: gsError } = await supabase
           .from('grand_slam_offers')
           .select('*')
@@ -66,10 +102,10 @@ function GrandSlamDropdownInput({ quest, onComplete }) {
         if (assessment?.grand_slam_data && !assessError) {
           setGrandSlamData(assessment.grand_slam_data)
         } else {
-          setError('Complete the Grand Slam Offer Builder first')
+          setError('Complete the Offer Stack Builder first')
         }
       } catch (err) {
-        console.error('Error loading Grand Slam data:', err)
+        console.error('Error loading offer data:', err)
         setError('Failed to load offer data')
       } finally {
         setLoading(false)
@@ -108,6 +144,15 @@ function GrandSlamDropdownInput({ quest, onComplete }) {
 
     if (dataSource === 'scarcity') {
       const scarcity = grandSlamData.scarcity || {}
+      // Handle array format from new flow
+      if (scarcity.types && Array.isArray(scarcity.types)) {
+        return scarcity.types.map(type => ({
+          value: type,
+          label: SCARCITY_LABELS[type] || type,
+          details: scarcity.details || null
+        }))
+      }
+      // Handle single type format from legacy flow
       if (scarcity.type) {
         return [{
           value: scarcity.type,
@@ -140,7 +185,7 @@ function GrandSlamDropdownInput({ quest, onComplete }) {
   if (loading) {
     return (
       <div className="grand-slam-dropdown-input">
-        <div className="loading-state">Loading your Grand Slam Offer data...</div>
+        <div className="loading-state">Loading your Offer Stack data...</div>
       </div>
     )
   }
@@ -150,9 +195,9 @@ function GrandSlamDropdownInput({ quest, onComplete }) {
       <div className="grand-slam-dropdown-input">
         <div className="locked-message">
           <span className="lock-icon">🔒</span>
-          <p>{error || 'Complete the Grand Slam Offer Builder first'}</p>
-          <a href="/offer-builder-v2" className="unlock-link">
-            Go to Grand Slam Offer Builder
+          <p>{error || 'Complete the Offer Stack Builder first'}</p>
+          <a href="/offer-stack-builder" className="unlock-link">
+            Go to Offer Stack Builder
           </a>
         </div>
       </div>
@@ -163,9 +208,9 @@ function GrandSlamDropdownInput({ quest, onComplete }) {
     return (
       <div className="grand-slam-dropdown-input">
         <div className="no-data-message">
-          <p>No {quest.data_source} found in your Grand Slam Offer.</p>
-          <a href="/offer-builder-v2" className="unlock-link">
-            Update your Grand Slam Offer
+          <p>No {quest.data_source} found in your Offer Stack.</p>
+          <a href="/offer-stack-builder" className="unlock-link">
+            Update your Offer Stack
           </a>
         </div>
       </div>

@@ -99,21 +99,25 @@ CREATE INDEX idx_groan_reflections_created ON groan_reflections(user_id, created
 ALTER TABLE groan_reflections ENABLE ROW LEVEL SECURITY;
 
 -- Users can only see their own reflections
+DO $$ BEGIN
 CREATE POLICY "Users can view own groan reflections"
   ON groan_reflections FOR SELECT
   USING (auth.uid() = user_id);
 
 -- Users can insert their own reflections
+DO $$ BEGIN
 CREATE POLICY "Users can insert own groan reflections"
   ON groan_reflections FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- Users can update their own reflections
+DO $$ BEGIN
 CREATE POLICY "Users can update own groan reflections"
   ON groan_reflections FOR UPDATE
   USING (auth.uid() = user_id);
 
 -- Users can delete their own reflections
+DO $$ BEGIN
 CREATE POLICY "Users can delete own groan reflections"
   ON groan_reflections FOR DELETE
   USING (auth.uid() = user_id);

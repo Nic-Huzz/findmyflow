@@ -1,7 +1,8 @@
 /**
  * ImplementationTracker Styles
- * Light theme matching CRM Dashboard
+ * Playful Warmth Light Theme
  */
+@import '../../styles/crm-base.css';
 
 .implementation-tracker {
   min-height: 100vh;

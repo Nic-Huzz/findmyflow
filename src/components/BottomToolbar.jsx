@@ -84,12 +84,16 @@ const HIDDEN_ROUTES = [
   '/continuity-offer',
   '/leads-strategy',
   '/offer-builder',
+  '/offer-builder-v2', // Grand Slam Offer evaluation flow
+  '/offer-stack-builder', // Offer Stack Builder packaging flow
   '/lead-magnet-selection',
   '/product-selection',
   '/funnel-builder',
   '/funnel-calculator',
   '/persona-selection',
-  '/report-card'
+  '/report-card',
+  '/mvp-readiness',
+  '/feedback-analysis'
 ]
 
 function BottomToolbar() {

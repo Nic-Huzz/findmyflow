@@ -197,36 +197,43 @@ ALTER TABLE ab_tests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE autonomous_setup_progress ENABLE ROW LEVEL SECURITY;
 
 -- Users can only access their own data
+DO $$ BEGIN
 CREATE POLICY "Users can manage their own business profile"
   ON business_profiles FOR ALL TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage their own competitor analysis"
   ON competitor_analysis FOR ALL TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage their own customer segments"
   ON customer_segments FOR ALL TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage their own funnel actuals"
   ON funnel_actuals FOR ALL TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage their own deal outcomes"
   ON deal_outcomes FOR ALL TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage their own ab tests"
   ON ab_tests FOR ALL TO authenticated
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
+DO $$ BEGIN
 CREATE POLICY "Users can manage their own setup progress"
   ON autonomous_setup_progress FOR ALL TO authenticated
   USING (auth.uid() = user_id)
