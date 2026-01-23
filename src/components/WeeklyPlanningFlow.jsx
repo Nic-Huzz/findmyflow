@@ -22,6 +22,16 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { trackWeeklyPlanCompleted } from '../lib/analytics'
+import {
+  GROAN_VISIBILITY_LAYERS,
+  GROAN_SOURCE_TYPES
+} from '../lib/stageConfig'
+import {
+  fetchFlowFinderData,
+  hasCompletedFlowFinder,
+  createGroanChallenge
+} from '../lib/crm'
+import GroanChallengeCard from './GroanChallengeCard'
 import './WeeklyPlanningFlow.css'
 
 // Week types with descriptions
@@ -93,14 +103,8 @@ const FEAR_TYPES = [
   { id: 'might_fail', label: 'Might Fail', icon: '💥' }
 ]
 
-// Visibility layers (5 layers)
-const VISIBILITY_LAYERS = [
-  { id: 'screen', label: 'SCREEN', icon: '📱', desc: 'Behind a screen - social media, emails, messages. Safe distance from real interaction.' },
-  { id: 'live', label: 'LIVE', icon: '⚡', desc: 'Face-to-face or live video. Real-time visibility with immediate feedback.' },
-  { id: 'tribe', label: 'TRIBE', icon: '👥', desc: 'Your inner circle - friends, family, colleagues. People whose opinion matters most.' },
-  { id: 'money', label: 'MONEY', icon: '💰', desc: 'Asking for money or selling. Where your worth gets a price tag.' },
-  { id: 'heart', label: 'HEART', icon: '💗', desc: 'Deep vulnerability - sharing your true self, dreams, or fears. Maximum exposure.' }
-]
+// Visibility layers - now using the 5-layer system from stageConfig
+// (GROAN_VISIBILITY_LAYERS is imported from stageConfig.js)
 
 // Groan storytelling slides (Nic's story)
 const GROAN_SLIDES = [
@@ -157,6 +161,16 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   const [groanDay, setGroanDay] = useState(existingPlan?.weekly_groan_day || null)
   const [groanFears, setGroanFears] = useState(existingPlan?.weekly_groan_fears || [])
   const [groanLayer, setGroanLayer] = useState(existingPlan?.weekly_groan_layer || null)
+
+  // New Groan Matrix state
+  const [flowFinderData, setFlowFinderData] = useState(null)
+  const [flowFinderComplete, setFlowFinderComplete] = useState(null)
+  const [selectedSourceType, setSelectedSourceType] = useState('skill')
+  const [selectedSourceItem, setSelectedSourceItem] = useState(null)
+  const [selectedVisibilityLayer, setSelectedVisibilityLayer] = useState(null)
+  const [generatedChallenge, setGeneratedChallenge] = useState(existingPlan?.groan_challenge_id ? null : null)
+  const [generatingChallenge, setGeneratingChallenge] = useState(false)
+  const [showCustomGroan, setShowCustomGroan] = useState(false)
   const [healingPriority, setHealingPriority] = useState(existingPlan?.big_release_practice ? true : false)
   const [bigReleasePractice, setBigReleasePractice] = useState(existingPlan?.big_release_practice || null)
   const [bigReleaseDay, setBigReleaseDay] = useState(existingPlan?.big_release_day || null)
@@ -167,12 +181,23 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
 
-  // Check foundation flows on mount
+  // Check foundation flows and load Flow Finder data on mount
   useEffect(() => {
     if (user) {
       checkFoundationFlows()
+      loadFlowFinderData()
     }
   }, [user])
+
+  const loadFlowFinderData = async () => {
+    const { completed, missing } = await hasCompletedFlowFinder(user.id)
+    setFlowFinderComplete(completed)
+
+    if (completed) {
+      const { data } = await fetchFlowFinderData(user.id)
+      setFlowFinderData(data)
+    }
+  }
 
   const checkFoundationFlows = async () => {
     try {
@@ -330,20 +355,32 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       return morningRoutine.length > 0 // Morning routine
     }
 
-    // Step 3: Morning routine (if foundation shown) OR Groan carousel (if no foundation)
+    // Step 3: Morning routine (if foundation shown) OR Groan (if no foundation)
     if (step === 3) {
       if (showFoundationStep) return morningRoutine.length > 0
-      // Groan step
-      if (groanSlide < GROAN_SLIDES.length - 1) return true
-      return groanDescription.trim().length > 0 && groanDay !== null && groanFears.length > 0 && groanLayer !== null
+      // Groan step - either generated challenge with day, or custom groan
+      if (!flowFinderComplete) {
+        if (groanSlide < GROAN_SLIDES.length - 1) return true
+        return groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null
+      }
+      // Matrix-based: need generated challenge + day, OR custom groan
+      if (generatedChallenge && groanDay !== null) return true
+      if (showCustomGroan && groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null) return true
+      return false
     }
 
     // Step 4: Groan (if foundation shown) OR Conditionals (if no foundation)
     if (step === 4) {
       if (showFoundationStep) {
-        // Groan step
-        if (groanSlide < GROAN_SLIDES.length - 1) return true
-        return groanDescription.trim().length > 0 && groanDay !== null && groanFears.length > 0 && groanLayer !== null
+        // Groan step - either generated challenge with day, or custom groan
+        if (!flowFinderComplete) {
+          if (groanSlide < GROAN_SLIDES.length - 1) return true
+          return groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null
+        }
+        // Matrix-based: need generated challenge + day, OR custom groan
+        if (generatedChallenge && groanDay !== null) return true
+        if (showCustomGroan && groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null) return true
+        return false
       }
       return true // Conditionals - all optional
     }
@@ -410,11 +447,12 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
         week_type: weekType,
         group_id: groupData?.id || null, // Store group selection
         morning_routine: morningRoutine,
-        weekly_groan_description: groanDescription.trim() || null,
+        weekly_groan_description: generatedChallenge?.description || groanDescription.trim() || null,
         weekly_groan_day: groanDay,
         weekly_groan_fears: groanFears,
-        weekly_groan_layer: groanLayer,
+        weekly_groan_layer: generatedChallenge?.visibility_layer || groanLayer,
         weekly_groan_completed: false,
+        groan_challenge_id: generatedChallenge?.id || null, // Link to generated challenge
         big_release_practice: healingPriority ? bigReleasePractice : null,
         big_release_day: healingPriority ? bigReleaseDay : null,
         three_percent_improvement: delivering ? threePercentImprovement.trim() : null,
@@ -742,116 +780,375 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     setGroanSlide(idx)
   }
 
-  // Render Step 4: Weekly Groan Carousel
+  // Generate a challenge from matrix selection
+  const handleGenerateChallenge = async () => {
+    if (!selectedSourceItem || !selectedVisibilityLayer) return
+
+    setGeneratingChallenge(true)
+
+    try {
+      // Call the edge function to generate a challenge
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/groan-challenge-generator`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            sourceType: selectedSourceType,
+            sourceLabel: selectedSourceItem.cluster_label,
+            sourceInsight: selectedSourceItem.insight,
+            visibilityLayer: selectedVisibilityLayer
+          })
+        }
+      )
+
+      const challengeData = await response.json()
+
+      if (challengeData.error) {
+        console.error('Challenge generation error:', challengeData.error)
+        return
+      }
+
+      // Create the challenge in the database
+      const { data: savedChallenge } = await createGroanChallenge({
+        userId: user.id,
+        title: challengeData.title,
+        description: challengeData.description,
+        visibilityLayer: selectedVisibilityLayer,
+        sourceType: selectedSourceType,
+        sourceId: selectedSourceItem.id,
+        sourceLabel: selectedSourceItem.cluster_label,
+        scaryScore: challengeData.scaryScore,
+        wahooScore: challengeData.wahooScore,
+        generationPrompt: JSON.stringify({
+          sourceType: selectedSourceType,
+          sourceLabel: selectedSourceItem.cluster_label,
+          visibilityLayer: selectedVisibilityLayer
+        })
+      })
+
+      setGeneratedChallenge({
+        ...challengeData,
+        id: savedChallenge?.id,
+        status: 'generated',
+        visibility_layer: selectedVisibilityLayer,
+        source_type: selectedSourceType,
+        source_label: selectedSourceItem.cluster_label,
+        scary_score: challengeData.scaryScore,
+        wahoo_score: challengeData.wahooScore,
+        completion_criteria: challengeData.completionCriteria,
+        why_this_matters: challengeData.whyThisMatters,
+        alternative_version: challengeData.alternativeVersion,
+        essence_zone: (challengeData.scaryScore >= 7 && challengeData.wahooScore >= 7) ? 'essence' : 'growth',
+        essence_insight: (challengeData.scaryScore >= 7 && challengeData.wahooScore >= 7)
+          ? 'High fear + high excitement = Essence Zone. This is who you really are trying to emerge.'
+          : null
+      })
+
+      // Also set the groan description for backwards compatibility
+      setGroanDescription(challengeData.description)
+      setGroanLayer(selectedVisibilityLayer)
+    } catch (err) {
+      console.error('Error generating challenge:', err)
+    } finally {
+      setGeneratingChallenge(false)
+    }
+  }
+
+  // Get current source items for the selected type
+  const getCurrentSourceItems = () => {
+    if (!flowFinderData) return []
+    switch (selectedSourceType) {
+      case 'skill': return flowFinderData.skills || []
+      case 'problem': return flowFinderData.problems || []
+      case 'persona': return flowFinderData.personas || []
+      default: return []
+    }
+  }
+
+  // Render Step 4: Weekly Groan Matrix Selection
   const renderGroanCarousel = () => {
     const currentSlide = GROAN_SLIDES[groanSlide]
     const isLastSlide = groanSlide === GROAN_SLIDES.length - 1
+    const sourceItems = getCurrentSourceItems()
 
-
-    return (
-      <div className="planning-step groan-step">
-        {/* Slide content */}
-        <div
-          className="groan-carousel"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
+    // If Flow Finder not complete, show the old story carousel + custom input
+    if (!flowFinderComplete) {
+      return (
+        <div className="planning-step groan-step">
+          {/* Slide content */}
           <div
-            key={groanSlide}
-            className={`groan-slide ${slideDirection ? `slide-${slideDirection}` : ''}`}
+            className="groan-carousel"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            {currentSlide.title && <h2>{currentSlide.title}</h2>}
-            <p className="groan-content">{currentSlide.content}</p>
-          </div>
-
-          {/* Swipe hint (only on first few slides) */}
-          {groanSlide < 2 && (
-            <div className="swipe-hint">
-              <span>← Swipe to continue →</span>
-            </div>
-          )}
-
-          {/* Slide dots */}
-          <div className="carousel-dots">
-            {GROAN_SLIDES.map((_, idx) => (
-              <button
-                key={idx}
-                className={`carousel-dot ${groanSlide === idx ? 'active' : ''}`}
-                onClick={() => goToSlide(idx)}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Groan input (only on last slide) */}
-        {isLastSlide && (
-          <div className="groan-input-section">
-            <label className="groan-label">What's YOUR groan this week?</label>
-            <textarea
-              className="groan-textarea"
-              value={groanDescription}
-              onChange={(e) => setGroanDescription(e.target.value)}
-              placeholder="What visibility action will you take that terrifies you?"
-              rows={3}
-            />
-
-            <label className="groan-label">Which day?</label>
-            <div className="day-picker">
-              {DAYS.map(day => (
-                <button
-                  key={day.id}
-                  className={`day-btn ${groanDay === day.id ? 'selected' : ''}`}
-                  onClick={() => setGroanDay(day.id)}
-                >
-                  {day.label}
-                </button>
-              ))}
+            <div
+              key={groanSlide}
+              className={`groan-slide ${slideDirection ? `slide-${slideDirection}` : ''}`}
+            >
+              {currentSlide.title && <h2>{currentSlide.title}</h2>}
+              <p className="groan-content">{currentSlide.content}</p>
             </div>
 
-            <label className="groan-label">What fear did it trigger? (select all)</label>
-            <div className="fear-picker">
-              {FEAR_TYPES.map(fear => (
-                <button
-                  key={fear.id}
-                  className={`fear-btn ${groanFears.includes(fear.id) ? 'selected' : ''}`}
-                  onClick={() => {
-                    setGroanFears(prev =>
-                      prev.includes(fear.id)
-                        ? prev.filter(f => f !== fear.id)
-                        : [...prev, fear.id]
-                    )
-                  }}
-                >
-                  <span className="fear-icon">{fear.icon}</span>
-                  <span className="fear-label">{fear.label}</span>
-                </button>
-              ))}
-            </div>
-
-            <label className="groan-label">What layer were you in?</label>
-            <div className="layer-picker">
-              {VISIBILITY_LAYERS.map(layer => (
-                <button
-                  key={layer.id}
-                  className={`layer-btn ${groanLayer === layer.id ? 'selected' : ''}`}
-                  onClick={() => setGroanLayer(layer.id)}
-                >
-                  <span className="layer-icon">{layer.icon}</span>
-                  <span className="layer-label">{layer.label}</span>
-                </button>
-              ))}
-            </div>
-            {groanLayer && (
-              <div className="layer-explainer">
-                <span className="layer-explainer-icon">
-                  {VISIBILITY_LAYERS.find(l => l.id === groanLayer)?.icon}
-                </span>
-                <span className="layer-explainer-text">
-                  {VISIBILITY_LAYERS.find(l => l.id === groanLayer)?.desc}
-                </span>
+            {/* Swipe hint (only on first few slides) */}
+            {groanSlide < 2 && (
+              <div className="swipe-hint">
+                <span>Swipe to continue</span>
               </div>
             )}
+
+            {/* Slide dots */}
+            <div className="carousel-dots">
+              {GROAN_SLIDES.map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`carousel-dot ${groanSlide === idx ? 'active' : ''}`}
+                  onClick={() => goToSlide(idx)}
+                />
+              ))}
+            </div>
           </div>
+
+          {/* Groan input (only on last slide) */}
+          {isLastSlide && (
+            <div className="groan-input-section">
+              <label className="groan-label">What's YOUR groan this week?</label>
+              <textarea
+                className="groan-textarea"
+                value={groanDescription}
+                onChange={(e) => setGroanDescription(e.target.value)}
+                placeholder="What visibility action will you take that terrifies you?"
+                rows={3}
+              />
+
+              <label className="groan-label">Which day?</label>
+              <div className="day-picker">
+                {DAYS.map(day => (
+                  <button
+                    key={day.id}
+                    className={`day-btn ${groanDay === day.id ? 'selected' : ''}`}
+                    onClick={() => setGroanDay(day.id)}
+                  >
+                    {day.label}
+                  </button>
+                ))}
+              </div>
+
+              <label className="groan-label">What layer are you pushing into?</label>
+              <div className="layer-picker">
+                {GROAN_VISIBILITY_LAYERS.map(layer => (
+                  <button
+                    key={layer.id}
+                    className={`layer-btn ${groanLayer === layer.id ? 'selected' : ''}`}
+                    onClick={() => setGroanLayer(layer.id)}
+                  >
+                    <span className="layer-icon">{layer.icon}</span>
+                    <span className="layer-label">{layer.label}</span>
+                  </button>
+                ))}
+              </div>
+              {groanLayer && (
+                <div className="layer-explainer">
+                  <span className="layer-explainer-icon">
+                    {GROAN_VISIBILITY_LAYERS.find(l => l.id === groanLayer)?.icon}
+                  </span>
+                  <span className="layer-explainer-text">
+                    {GROAN_VISIBILITY_LAYERS.find(l => l.id === groanLayer)?.description}
+                  </span>
+                </div>
+              )}
+
+              <div className="flow-finder-prompt">
+                <p>Want personalized challenges based on your unique skills?</p>
+                <button
+                  className="flow-finder-btn"
+                  onClick={() => navigate('/nikigai/skills')}
+                >
+                  Complete Flow Finder
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    // Flow Finder complete - show mini-matrix
+    return (
+      <div className="planning-step groan-step groan-matrix-step">
+        <h2>Choose Your Courage Challenge</h2>
+        <p className="step-subtitle">
+          Pick a skill, problem, or persona + a visibility layer to push into
+        </p>
+
+        {/* If challenge already generated, show it */}
+        {generatedChallenge ? (
+          <div className="generated-challenge-section">
+            <GroanChallengeCard
+              challenge={generatedChallenge}
+              showSource={true}
+              showAlternative={true}
+              compact={false}
+            />
+
+            <div className="challenge-actions">
+              <button
+                className="regenerate-btn"
+                onClick={() => {
+                  setGeneratedChallenge(null)
+                  setSelectedSourceItem(null)
+                  setSelectedVisibilityLayer(null)
+                }}
+              >
+                Choose Different Challenge
+              </button>
+
+              <label className="groan-label" style={{ marginTop: '1rem' }}>Which day will you do this?</label>
+              <div className="day-picker">
+                {DAYS.map(day => (
+                  <button
+                    key={day.id}
+                    className={`day-btn ${groanDay === day.id ? 'selected' : ''}`}
+                    onClick={() => setGroanDay(day.id)}
+                  >
+                    {day.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Source type tabs */}
+            <div className="matrix-source-tabs">
+              {[
+                { id: 'skill', label: 'Skills', icon: '🎯' },
+                { id: 'problem', label: 'Problems', icon: '🔧' },
+                { id: 'persona', label: 'Personas', icon: '👥' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  className={`matrix-source-tab ${selectedSourceType === tab.id ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedSourceType(tab.id)
+                    setSelectedSourceItem(null)
+                  }}
+                >
+                  {tab.icon} {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Source items */}
+            <div className="matrix-source-items">
+              <label className="groan-label">Select your {selectedSourceType}:</label>
+              <div className="source-item-list">
+                {sourceItems.slice(0, 5).map(item => (
+                  <button
+                    key={item.id}
+                    className={`source-item-btn ${selectedSourceItem?.id === item.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedSourceItem(item)}
+                  >
+                    {item.cluster_label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Visibility layers */}
+            {selectedSourceItem && (
+              <div className="matrix-visibility-layers">
+                <label className="groan-label">Push into which layer?</label>
+                <div className="visibility-layer-grid">
+                  {GROAN_VISIBILITY_LAYERS.map(layer => (
+                    <button
+                      key={layer.id}
+                      className={`visibility-layer-btn ${selectedVisibilityLayer === layer.id ? 'selected' : ''}`}
+                      style={{
+                        '--layer-color': layer.color,
+                        borderColor: selectedVisibilityLayer === layer.id ? layer.color : undefined
+                      }}
+                      onClick={() => setSelectedVisibilityLayer(layer.id)}
+                    >
+                      <span className="layer-icon">{layer.icon}</span>
+                      <span className="layer-label">{layer.label}</span>
+                      <span className="layer-fear">{layer.fear}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Generate button */}
+            {selectedSourceItem && selectedVisibilityLayer && (
+              <button
+                className="generate-challenge-btn"
+                onClick={handleGenerateChallenge}
+                disabled={generatingChallenge}
+              >
+                {generatingChallenge ? (
+                  <>
+                    <span className="generating-spinner" />
+                    Generating your challenge...
+                  </>
+                ) : (
+                  <>✨ Generate My Challenge</>
+                )}
+              </button>
+            )}
+
+            {/* Custom groan fallback */}
+            <div className="custom-groan-toggle">
+              <button
+                className="toggle-custom-btn"
+                onClick={() => setShowCustomGroan(!showCustomGroan)}
+              >
+                {showCustomGroan ? 'Use Matrix Selection' : 'Or write your own groan'}
+              </button>
+            </div>
+
+            {showCustomGroan && (
+              <div className="groan-input-section">
+                <textarea
+                  className="groan-textarea"
+                  value={groanDescription}
+                  onChange={(e) => setGroanDescription(e.target.value)}
+                  placeholder="What visibility action will you take that terrifies you?"
+                  rows={3}
+                />
+
+                <label className="groan-label">Which day?</label>
+                <div className="day-picker">
+                  {DAYS.map(day => (
+                    <button
+                      key={day.id}
+                      className={`day-btn ${groanDay === day.id ? 'selected' : ''}`}
+                      onClick={() => setGroanDay(day.id)}
+                    >
+                      {day.label}
+                    </button>
+                  ))}
+                </div>
+
+                <label className="groan-label">What layer?</label>
+                <div className="layer-picker">
+                  {GROAN_VISIBILITY_LAYERS.map(layer => (
+                    <button
+                      key={layer.id}
+                      className={`layer-btn ${groanLayer === layer.id ? 'selected' : ''}`}
+                      onClick={() => setGroanLayer(layer.id)}
+                    >
+                      <span className="layer-icon">{layer.icon}</span>
+                      <span className="layer-label">{layer.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     )

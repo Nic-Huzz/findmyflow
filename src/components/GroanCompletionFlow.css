@@ -1,0 +1,453 @@
+/* GroanCompletionFlow.css - Challenge completion modal/flow */
+
+.groan-completion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.groan-completion-modal {
+  background: var(--bg-secondary, #1a1a2e);
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.groan-completion-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.groan-completion-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.groan-completion-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #fff);
+  margin-bottom: 0.25rem;
+}
+
+.groan-completion-subtitle {
+  color: var(--text-secondary, #9ca3af);
+  font-size: 0.9375rem;
+}
+
+.groan-completion-body {
+  padding: 1.5rem;
+}
+
+/* Step indicator */
+.groan-completion-steps {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.groan-completion-step {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.groan-completion-step.active {
+  background: var(--brand-purple, #5e17eb);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.groan-completion-step.completed {
+  background: #10b981;
+}
+
+/* Form sections */
+.groan-completion-section {
+  margin-bottom: 1.5rem;
+}
+
+.groan-completion-section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary, #fff);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Emotional check-in */
+.groan-emotional-checkin {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.groan-score-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.groan-score-input label {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #9ca3af);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.groan-score-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+}
+
+.groan-score-slider.scary {
+  background: linear-gradient(to right, #fecaca, #f87171);
+}
+
+.groan-score-slider.wahoo {
+  background: linear-gradient(to right, #a7f3d0, #34d399);
+}
+
+.groan-score-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.groan-score-display {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+}
+
+.groan-score-current {
+  font-weight: 700;
+}
+
+.groan-score-current.scary {
+  color: #f87171;
+}
+
+.groan-score-current.wahoo {
+  color: #34d399;
+}
+
+/* Reflection textarea */
+.groan-reflection-textarea {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: var(--text-primary, #fff);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.groan-reflection-textarea:focus {
+  outline: none;
+  border-color: var(--brand-purple, #5e17eb);
+}
+
+.groan-reflection-textarea::placeholder {
+  color: var(--text-muted, #6b7280);
+}
+
+.groan-reflection-prompts {
+  margin-top: 0.5rem;
+}
+
+.groan-reflection-prompt {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted, #6b7280);
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.groan-reflection-prompt:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary, #9ca3af);
+}
+
+/* Proof collection */
+.groan-proof-options {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.groan-proof-option {
+  flex: 1;
+  min-width: 100px;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.groan-proof-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--brand-purple, #5e17eb);
+}
+
+.groan-proof-option.active {
+  border-style: solid;
+  border-color: var(--brand-purple, #5e17eb);
+  background: rgba(94, 23, 235, 0.1);
+}
+
+.groan-proof-option-icon {
+  font-size: 1.5rem;
+}
+
+.groan-proof-option-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #9ca3af);
+}
+
+.groan-proof-input {
+  margin-top: 0.75rem;
+}
+
+.groan-proof-text-input,
+.groan-proof-link-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: var(--text-primary, #fff);
+  font-size: 0.9375rem;
+}
+
+.groan-proof-text-input:focus,
+.groan-proof-link-input:focus {
+  outline: none;
+  border-color: var(--brand-purple, #5e17eb);
+}
+
+.groan-proof-file-input {
+  display: none;
+}
+
+.groan-proof-file-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.groan-proof-file-label:hover {
+  border-color: var(--brand-purple, #5e17eb);
+  background: rgba(94, 23, 235, 0.05);
+}
+
+.groan-proof-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* Essence zone insight display */
+.groan-completion-insight {
+  background: rgba(236, 72, 153, 0.1);
+  border-left: 3px solid #ec4899;
+  padding: 1rem;
+  border-radius: 0 0.5rem 0.5rem 0;
+  margin-bottom: 1rem;
+}
+
+.groan-completion-insight-icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.groan-completion-insight-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary, #9ca3af);
+  line-height: 1.6;
+}
+
+/* Navigation buttons */
+.groan-completion-nav {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.groan-completion-nav-btn {
+  flex: 1;
+  padding: 0.875rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.groan-completion-nav-btn.back {
+  background: transparent;
+  color: var(--text-secondary, #9ca3af);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.groan-completion-nav-btn.back:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.groan-completion-nav-btn.next {
+  background: var(--brand-purple, #5e17eb);
+  color: #fff;
+  border: none;
+}
+
+.groan-completion-nav-btn.next:hover {
+  background: var(--brand-purple-dark, #4c12c9);
+}
+
+.groan-completion-nav-btn.complete {
+  background: #10b981;
+  color: #fff;
+  border: none;
+}
+
+.groan-completion-nav-btn.complete:hover {
+  background: #059669;
+}
+
+.groan-completion-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Success celebration */
+.groan-completion-success {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.groan-completion-success-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.groan-completion-success-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #fff);
+  margin-bottom: 0.5rem;
+}
+
+.groan-completion-success-message {
+  color: var(--text-secondary, #9ca3af);
+  margin-bottom: 1.5rem;
+}
+
+.groan-completion-success-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.groan-completion-success-stat {
+  text-align: center;
+}
+
+.groan-completion-success-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #fff);
+}
+
+.groan-completion-success-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted, #6b7280);
+  text-transform: uppercase;
+}
+
+/* Contract evidence */
+.groan-contract-section {
+  background: rgba(139, 92, 246, 0.1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.groan-contract-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8b5cf6;
+  margin-bottom: 0.5rem;
+}
+
+.groan-contract-belief {
+  font-size: 0.9375rem;
+  color: var(--text-primary, #fff);
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid #8b5cf6;
+}
+
+.groan-contract-evidence-input {
+  width: 100%;
+  min-height: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: var(--text-primary, #fff);
+  font-size: 0.875rem;
+  resize: vertical;
+}
+
+.groan-contract-evidence-input::placeholder {
+  color: var(--text-muted, #6b7280);
+}

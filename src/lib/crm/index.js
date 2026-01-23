@@ -131,3 +131,90 @@ export {
   getRetentionStats,
   processDealForAscension,
 } from './ascensionService'
+
+// Funnel Sync (CRM ↔ funnel_metrics bidirectional sync)
+export {
+  syncCRMToFunnel,
+  getMergedFunnelMetrics,
+  getFunnelComparison,
+  getLastSyncTime,
+  forceCRMSync,
+} from './funnelSyncService'
+
+// Challenge Data Service (connects challenges to CRM)
+export {
+  // Offer & Product Data
+  fetchOfferStackData,
+  fetchGrandSlamData,
+  fetchValidationAnalysis,
+  fetchLaunchReadiness,
+  fetchProductSelections,
+  fetchLeadMagnetAssessment,
+  // Testing Data
+  fetchMVPReadiness,
+  fetchFeedbackAnalysis,
+  fetchConversationLogs,
+  // Psychological Data
+  fetchPsychologicalProfile,
+  // Funnel Trends
+  getFunnelTrends,
+  analyzeFunnelTrends,
+  // Completeness Checking
+  getChallengeCompleteness,
+  calculateCRMReadiness,
+  // Aggregated Data
+  fetchAllChallengeData,
+  // MVP Testers Sync
+  syncMVPTestersToContacts,
+  getUnsyncedTesters,
+} from './challengeDataService'
+
+// Tone Adapter (Psychological Prompt Personalization)
+export {
+  wrapPromptWithTone,
+  getToneWord,
+  adaptTextToTone,
+  generateTonedFeedback,
+  buildToneContext,
+  getToneInfo,
+} from './toneAdapter'
+
+// Groan Challenge Service (Matrix System)
+export {
+  // Challenge CRUD
+  fetchGroanChallenges,
+  fetchGroanChallenge,
+  createGroanChallenge,
+  acceptGroanChallenge,
+  completeGroanChallenge,
+  skipGroanChallenge,
+  updateChallengeScores,
+  // Proof Collection
+  addGroanProof,
+  fetchGroanProof,
+  deleteGroanProof,
+  uploadProofScreenshot,
+  // Contract Evidence
+  addContractEvidence,
+  fetchContractEvidence,
+  getContractProgress,
+  // Outcomes (48hr follow-up)
+  recordGroanOutcome,
+  getChallengesNeedingFollowUp,
+  // Streaks
+  fetchGroanStreak,
+  getStreakWithProgress,
+  // User Preferences
+  fetchGroanPreferences,
+  updateGroanPreferences,
+  // Analytics
+  getProtectivePatterns,
+  getRevenueByLayer,
+  getEssenceZoneStats,
+  getGroanStats,
+  // Matrix Data
+  fetchFlowFinderData,
+  getMatrixCellChallenges,
+  getCurrentWeekChallenge,
+  hasCompletedFlowFinder,
+} from './groanChallengeService'

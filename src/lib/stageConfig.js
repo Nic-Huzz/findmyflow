@@ -16,6 +16,7 @@
 
 export const STAGES = {
   FLOW_FINDER: 0,
+  GROANS: 0.5,
   VALIDATION: 1,
   PRODUCT_CREATION: 2,
   TESTING: 3,
@@ -43,6 +44,23 @@ export const STAGE_CONFIG = {
     isUserLevel: true, // Key flag: this stage is user-level, not project-level
     alwaysAccessible: true // Can be accessed from any project stage
   },
+  [STAGES.GROANS]: {
+    id: 0.5,
+    name: 'Groans',
+    shortName: 'Groans',
+    description: 'Challenges that push you past your comfort zone to grow',
+    icon: '😬',
+    color: '#ec4899', // pink
+    requiredFlows: [],
+    milestones: [],
+    groanChallenge: null,
+    tabLabel: 'Groans',
+    upsellPrompt: null,
+    externalLink: null,
+    isUserLevel: true,
+    alwaysAccessible: true, // Can be accessed from any project stage
+    isGroansStage: true // Flag to identify this as the Groans stage for quest filtering
+  },
   [STAGES.VALIDATION]: {
     id: 1,
     name: 'Validation',
@@ -57,6 +75,11 @@ export const STAGE_CONFIG = {
       name: 'Validation Groan',
       fear: 'Fear of rejection when asking for feedback',
       description: 'Reach out to someone and ask for honest feedback on your idea, even though you fear they might reject it or say it\'s not good enough.'
+    },
+    voicePrompts: {
+      essenceAction: 'share your idea boldly',
+      protectiveBlock: 'stop you from asking for feedback',
+      stageGroan: 'Ask 1 person for honest feedback'
     },
     tabLabel: 'Validation',
     upsellPrompt: null,
@@ -79,6 +102,11 @@ export const STAGE_CONFIG = {
       fear: 'Fear of imperfection / shipping before it\'s ready',
       description: 'Ship something (a page, a product, content) before you feel it\'s 100% ready. Your essence knows it\'s good enough, but your body fears judgment.'
     },
+    voicePrompts: {
+      essenceAction: 'create without waiting for permission',
+      protectiveBlock: 'keep you from shipping',
+      stageGroan: 'Ship something before it feels ready'
+    },
     tabLabel: 'Product Creation',
     upsellPrompt: 'Want help building faster? Try buildwithAI',
     externalLink: null
@@ -97,6 +125,11 @@ export const STAGE_CONFIG = {
       name: 'Testing Groan',
       fear: 'Fear of hearing negative feedback',
       description: 'Ask a tester to be brutally honest about what\'s NOT working. Sit with the discomfort of criticism without defending or explaining.'
+    },
+    voicePrompts: {
+      essenceAction: 'receive feedback with confidence',
+      protectiveBlock: 'make you defensive about criticism',
+      stageGroan: 'Ask for brutal honesty without defending'
     },
     tabLabel: 'Testing',
     upsellPrompt: null,
@@ -128,6 +161,11 @@ export const STAGE_CONFIG = {
       fear: 'Fear of charging money / being "salesy"',
       description: 'Tell someone your price confidently without apologizing, discounting, or over-explaining. Own your value even when it feels uncomfortable.'
     },
+    voicePrompts: {
+      essenceAction: 'own your value today',
+      protectiveBlock: 'make you discount or over-explain',
+      stageGroan: 'State your price without apologizing'
+    },
     tabLabel: 'Money Models',
     upsellPrompt: null,
     externalLink: null
@@ -151,6 +189,11 @@ export const STAGE_CONFIG = {
       fear: 'Fear of making your offer too good / giving away too much',
       description: 'Add one more bonus or strengthen your guarantee beyond what feels comfortable. Your essence knows abundance attracts abundance, but your body fears you\'re giving away your value.'
     },
+    voicePrompts: {
+      essenceAction: 'stack value from abundance',
+      protectiveBlock: 'hold you back from adding more value',
+      stageGroan: 'Add a bonus that feels like too much'
+    },
     tabLabel: 'Offer Creation',
     upsellPrompt: null,
     externalLink: null
@@ -170,6 +213,11 @@ export const STAGE_CONFIG = {
       fear: 'Fear of public visibility',
       description: 'Put yourself out there publicly in a way that feels exposing - a video, a post, an interview. Let the world see the real you, not the polished version.'
     },
+    voicePrompts: {
+      essenceAction: 'show up publicly today',
+      protectiveBlock: 'hold you back from being seen',
+      stageGroan: 'Put yourself out there publicly'
+    },
     tabLabel: 'Campaign Creation',
     upsellPrompt: null,
     externalLink: {
@@ -185,12 +233,17 @@ export const STAGE_CONFIG = {
     icon: '🚀',
     color: '#E9A23B', // gold
     requiredFlows: [],
-    milestones: ['acquisition_offer_launched', 'first_10_signups', 'post_launch_review'],
+    milestones: ['acquisition_offer_launched', 'post_launch_review'],
     groanChallenge: {
       id: 'groan_stage_7_launch',
       name: 'Launch Groan',
       fear: 'Fear of failure after going "all in"',
       description: 'Make a bold, public commitment to your launch with a specific date. Announce it to your audience. No backing out, no moving the goalposts.'
+    },
+    voicePrompts: {
+      essenceAction: 'commit boldly despite uncertainty',
+      protectiveBlock: 'delay your commitment',
+      stageGroan: 'Announce a launch date publicly'
     },
     tabLabel: 'Launch',
     upsellPrompt: null,
@@ -209,6 +262,11 @@ export const STAGE_CONFIG = {
     requiredFlows: [],
     milestones: [],
     groanChallenge: null, // No groan for Tracking
+    voicePrompts: {
+      essenceAction: 'face your results with curiosity',
+      protectiveBlock: 'avoid looking at the data',
+      stageGroan: 'Review your numbers without judgment'
+    },
     tabLabel: 'Tracking',
     upsellPrompt: null,
     externalLink: {
@@ -217,6 +275,239 @@ export const STAGE_CONFIG = {
     },
     alwaysAccessible: true // Can be accessed at any stage
   }
+}
+
+// =============================================================================
+// GROAN VISIBILITY LAYERS (for Matrix System)
+// =============================================================================
+
+/**
+ * The 5 visibility layers represent different types of fear/exposure
+ * Used in the Groan Matrix to generate personalized challenges
+ *
+ * Matrix structure:
+ * - Rows: Skills, Problems, Personas (from Flow Finder)
+ * - Columns: These 5 visibility layers
+ *
+ * Each cell generates AI-powered challenges based on the combination
+ */
+export const GROAN_VISIBILITY_LAYERS = [
+  {
+    id: 'screen',
+    label: 'SCREEN',
+    icon: '📱',
+    color: '#3b82f6', // blue
+    fear: 'Being seen online',
+    description: 'Behind a screen - sharing content, posting, creating online presence',
+    examples: [
+      'Post about your expertise on social media',
+      'Share a behind-the-scenes moment',
+      'Publish content without editing 10 times'
+    ],
+    difficulty: 1
+  },
+  {
+    id: 'live',
+    label: 'LIVE',
+    icon: '⚡',
+    color: '#f59e0b', // amber
+    fear: 'Real-time judgment',
+    description: 'Face-to-face or live video - real-time interaction without editing',
+    examples: [
+      'Go live on social media',
+      'Host a virtual workshop',
+      'Have a discovery call with a stranger'
+    ],
+    difficulty: 2
+  },
+  {
+    id: 'money',
+    label: 'MONEY',
+    icon: '💰',
+    color: '#10b981', // emerald
+    fear: '"Am I worth it?"',
+    description: 'Asking for money - pricing, selling, stating your value',
+    examples: [
+      'Quote your full price without discounting',
+      'Follow up on an unpaid invoice',
+      'Pitch your premium offer'
+    ],
+    difficulty: 3
+  },
+  {
+    id: 'vulnerable',
+    label: 'VULNERABLE',
+    icon: '💗',
+    color: '#ec4899', // pink
+    fear: 'Rejected for real self',
+    description: 'Deep vulnerability - sharing authentic struggles, imperfections, real story',
+    examples: [
+      'Share a failure publicly',
+      'Ask for help from your community',
+      'Admit you don\'t have all the answers'
+    ],
+    difficulty: 4
+  },
+  {
+    id: 'authority',
+    label: 'AUTHORITY',
+    icon: '👑',
+    color: '#8b5cf6', // violet
+    fear: 'Imposter syndrome',
+    description: 'Claiming expertise - positioning as leader, expert, authority in your space',
+    examples: [
+      'Write "I\'m an expert in..." on your profile',
+      'Correct someone in your field publicly',
+      'Pitch yourself to speak at an event'
+    ],
+    difficulty: 5
+  }
+]
+
+/**
+ * Get visibility layer by ID
+ */
+export function getVisibilityLayer(layerId) {
+  return GROAN_VISIBILITY_LAYERS.find(layer => layer.id === layerId) || null
+}
+
+/**
+ * Get visibility layer display info
+ */
+export function getVisibilityLayerDisplay(layerId) {
+  const layer = getVisibilityLayer(layerId)
+  if (!layer) return null
+  return {
+    icon: layer.icon,
+    label: layer.label,
+    color: layer.color,
+    fear: layer.fear
+  }
+}
+
+/**
+ * Get all visibility layers sorted by difficulty
+ */
+export function getVisibilityLayersByDifficulty() {
+  return [...GROAN_VISIBILITY_LAYERS].sort((a, b) => a.difficulty - b.difficulty)
+}
+
+/**
+ * Calculate "Essence Zone" based on scary + wahoo scores
+ * High fear + High excitement = This IS your essence (trauma around expressing true self)
+ *
+ * @param {number} scaryScore - 1-10 how scary
+ * @param {number} wahooScore - 1-10 how exciting
+ * @returns {{ zone: string, insight: string, isEssenceZone: boolean }}
+ */
+export function calculateEssenceZone(scaryScore, wahooScore) {
+  const highScary = scaryScore >= 7
+  const highWahoo = wahooScore >= 7
+  const lowScary = scaryScore <= 3
+  const lowWahoo = wahooScore <= 3
+
+  if (highScary && highWahoo) {
+    return {
+      zone: 'essence',
+      insight: 'This is your essence zone - high fear + high excitement means this is who you really are. The fear is trauma around expressing your true self.',
+      isEssenceZone: true,
+      color: '#ec4899' // pink
+    }
+  }
+
+  if (highScary && lowWahoo) {
+    return {
+      zone: 'protective',
+      insight: 'High fear but low excitement - this might be your protective voice speaking. Consider if this is truly aligned with your essence.',
+      isEssenceZone: false,
+      color: '#6b7280' // gray
+    }
+  }
+
+  if (lowScary && highWahoo) {
+    return {
+      zone: 'comfort',
+      insight: 'Low fear and high excitement - this is your comfort zone. Great for building momentum, but growth happens at the edges.',
+      isEssenceZone: false,
+      color: '#10b981' // emerald
+    }
+  }
+
+  if (lowScary && lowWahoo) {
+    return {
+      zone: 'neutral',
+      insight: 'Low engagement both ways - this might not be aligned with your core purpose. Consider exploring other directions.',
+      isEssenceZone: false,
+      color: '#9ca3af' // lighter gray
+    }
+  }
+
+  // Medium scores
+  return {
+    zone: 'growth',
+    insight: 'Moderate fear and excitement - a healthy growth challenge. Push through and see what emerges.',
+    isEssenceZone: false,
+    color: '#f59e0b' // amber
+  }
+}
+
+/**
+ * Source types for groan challenges
+ * Determines where the challenge data came from
+ */
+export const GROAN_SOURCE_TYPES = {
+  SKILL: 'skill',
+  PROBLEM: 'problem',
+  PERSONA: 'persona',
+  MANUAL: 'manual' // User-created custom groan
+}
+
+/**
+ * Groan challenge statuses
+ */
+export const GROAN_CHALLENGE_STATUS = {
+  GENERATED: 'generated', // AI created but not started
+  ACCEPTED: 'accepted',   // User accepted the challenge
+  COMPLETED: 'completed', // User marked as done
+  SKIPPED: 'skipped'      // User skipped with feedback
+}
+
+/**
+ * Skip reasons for protective pattern detection
+ */
+export const GROAN_SKIP_REASONS = {
+  TOO_SCARY: 'too_scary',
+  NOT_RELEVANT: 'not_relevant',
+  ALREADY_DO_THIS: 'already_do_this',
+  DONT_UNDERSTAND: 'dont_understand',
+  OTHER: 'other'
+}
+
+/**
+ * Streak badge thresholds (weeks)
+ */
+export const GROAN_STREAK_BADGES = [
+  { weeks: 4, badge: 'Courage Starter', icon: '🌱', description: '4 weeks of facing fears' },
+  { weeks: 12, badge: 'Fear Fighter', icon: '⚔️', description: '3 months of growth' },
+  { weeks: 26, badge: 'Comfort Zone Crusher', icon: '💪', description: 'Half a year of courage' },
+  { weeks: 52, badge: 'Essence Embodied', icon: '👑', description: 'A full year living authentically' }
+]
+
+/**
+ * Get badge earned for a streak count
+ */
+export function getStreakBadge(streakWeeks) {
+  const earned = GROAN_STREAK_BADGES
+    .filter(b => streakWeeks >= b.weeks)
+    .sort((a, b) => b.weeks - a.weeks)
+  return earned[0] || null
+}
+
+/**
+ * Get next badge milestone
+ */
+export function getNextStreakBadge(streakWeeks) {
+  return GROAN_STREAK_BADGES.find(b => b.weeks > streakWeeks) || null
 }
 
 // =============================================================================
@@ -346,6 +637,34 @@ export function getGroanChallengeId(stageNumber) {
 }
 
 /**
+ * Get voice prompts for a stage
+ * Used for stage-specific Essence/Protective voice quests
+ */
+export function getVoicePrompts(stageNumber) {
+  const config = STAGE_CONFIG[stageNumber]
+  return config?.voicePrompts || null
+}
+
+/**
+ * Generate personalized voice quest question
+ * @param {number} stageNumber - The stage number
+ * @param {string} voiceType - 'essence' or 'protective'
+ * @param {string} archetypeName - The user's archetype name (e.g., "Radiant Rebel")
+ * @returns {string} The personalized question
+ */
+export function generateVoiceQuestion(stageNumber, voiceType, archetypeName) {
+  const prompts = getVoicePrompts(stageNumber)
+  if (!prompts) return null
+
+  if (voiceType === 'essence') {
+    return `How did your ${archetypeName} ${prompts.essenceAction} today?`
+  } else if (voiceType === 'protective') {
+    return `How did your ${archetypeName} ${prompts.protectiveBlock} today?`
+  }
+  return null
+}
+
+/**
  * Check if all required flows are completed for a stage
  * @param {number} stageNumber - The stage to check
  * @param {string[]} completedFlows - Array of completed flow IDs
@@ -441,6 +760,19 @@ export default {
   STAGES,
   STAGE_CONFIG,
   FLOW_FINDER_CONFIG,
+  // Groan Matrix exports
+  GROAN_VISIBILITY_LAYERS,
+  GROAN_SOURCE_TYPES,
+  GROAN_CHALLENGE_STATUS,
+  GROAN_SKIP_REASONS,
+  GROAN_STREAK_BADGES,
+  getVisibilityLayer,
+  getVisibilityLayerDisplay,
+  getVisibilityLayersByDifficulty,
+  calculateEssenceZone,
+  getStreakBadge,
+  getNextStreakBadge,
+  // Stage helpers
   getStageConfig,
   getStageDisplayName,
   getStageShortName,
@@ -453,6 +785,8 @@ export default {
   getRequiredMilestones,
   getGroanChallenge,
   getGroanChallengeId,
+  getVoicePrompts,
+  generateVoiceQuestion,
   areStageFlowsComplete,
   getStageProgress,
   determineStartingStage,
