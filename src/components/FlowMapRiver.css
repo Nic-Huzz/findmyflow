@@ -25,10 +25,10 @@
   border: 3px solid rgba(255, 255, 255, 0.1);
   border-top-color: var(--purple, #5e17eb);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: fmr-spin 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes fmr-spin {
   to { transform: rotate(360deg); }
 }
 

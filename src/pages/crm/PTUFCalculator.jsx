@@ -2,13 +2,25 @@
  * PTUF Calculator - Price To Unit Formula
  * Based on Alex Hormozi's $100M Offers pricing framework
  * Helps calculate optimal pricing based on desired income and capacity
+ *
+ * Pre-populates from challenge data:
+ * - launch_readiness_assessments → core offer price
+ * - continuity_assessments → continuity price
+ * - funnel_metrics → actual conversion rates
  */
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthProvider'
+import { fetchLaunchReadiness, getFunnelTrends } from '../../lib/crm'
+import { supabase } from '../../lib/supabaseClient'
 import './PTUFCalculator.css'
 
 export default function PTUFCalculator() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  const [loadingDefaults, setLoadingDefaults] = useState(true)
+  const [dataSource, setDataSource] = useState(null)
 
   // Income Goals
   const [annualGoal, setAnnualGoal] = useState(100000)
@@ -27,6 +39,69 @@ export default function PTUFCalculator() {
   // Conversion Rates
   const [leadToSale, setLeadToSale] = useState(5)
   const [showToLead, setShowToLead] = useState(20)
+
+  // Pre-populate from challenge data
+  useEffect(() => {
+    if (!user) {
+      setLoadingDefaults(false)
+      return
+    }
+
+    async function loadDefaults() {
+      try {
+        const sources = []
+
+        const [launchReadiness, continuityData, funnelTrends] = await Promise.all([
+          fetchLaunchReadiness(user.id),
+          supabase
+            .from('continuity_assessments')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+          getFunnelTrends(user.id, 1)
+        ])
+
+        // Core offer from launch readiness
+        if (launchReadiness?.pricing_data?.coreOfferPrice) {
+          setCoreOfferPrice(launchReadiness.pricing_data.coreOfferPrice)
+          sources.push('Launch Readiness')
+        }
+
+        // Continuity from continuity assessment
+        if (continuityData?.data?.monthly_price) {
+          setContinuityPrice(continuityData.data.monthly_price)
+          sources.push('Continuity Flow')
+        }
+        if (continuityData?.data?.avg_retention_months) {
+          setContinuityMonths(continuityData.data.avg_retention_months)
+        }
+
+        // Conversion rates from funnel metrics
+        if (funnelTrends && funnelTrends.length > 0) {
+          const latest = funnelTrends[0]
+          if (latest.rates) {
+            const nurtureToCore = parseFloat(latest.rates.nurtureToCore)
+            if (nurtureToCore > 0) {
+              setLeadToSale(Math.round(nurtureToCore))
+              sources.push('Funnel Baseline')
+            }
+          }
+        }
+
+        if (sources.length > 0) {
+          setDataSource(sources.join(', '))
+        }
+      } catch (err) {
+        console.error('Error loading PTUF defaults:', err)
+      } finally {
+        setLoadingDefaults(false)
+      }
+    }
+
+    loadDefaults()
+  }, [user])
 
   const calculations = useMemo(() => {
     // Basic capacity
@@ -86,6 +161,14 @@ export default function PTUFCalculator() {
           <h1>PTUF Calculator</h1>
           <p>Price To Unit Formula - Find Your Magic Number</p>
         </div>
+        {loadingDefaults && (
+          <div className="data-source-badge loading">Loading...</div>
+        )}
+        {!loadingDefaults && dataSource && (
+          <div className="data-source-badge">
+            From: {dataSource}
+          </div>
+        )}
       </header>
 
       <div className="ptuf-grid">

@@ -14,6 +14,9 @@ import {
   compareWeeks,
   getWeekRange,
   fetchPlatformBreakdown,
+  getMergedFunnelMetrics,
+  getLastSyncTime,
+  forceCRMSync,
 } from '../../lib/crm'
 import './Analytics.css'
 
@@ -28,6 +31,9 @@ export default function Analytics() {
   const [userStats, setUserStats] = useState(null)
   const [topContent, setTopContent] = useState([])
   const [platformBreakdown, setPlatformBreakdown] = useState(null)
+  const [funnelMetrics, setFunnelMetrics] = useState(null)
+  const [lastSyncTime, setLastSyncTime] = useState(null)
+  const [syncing, setSyncing] = useState(false)
 
   const weekRange = useMemo(() => getWeekRange(weekOffset), [weekOffset])
 
@@ -40,13 +46,15 @@ export default function Analytics() {
   async function loadAnalytics() {
     setLoading(true)
     try {
-      const [marketing, lastMarketing, sales, stats, top, platforms] = await Promise.all([
+      const [marketing, lastMarketing, sales, stats, top, platforms, funnel, syncTime] = await Promise.all([
         fetchWeeklyMarketingStats(user.id, weekOffset),
         fetchWeeklyMarketingStats(user.id, weekOffset - 1),
         fetchWeeklySalesStats(user.id, weekOffset),
         fetchUserStats(user.id),
         fetchTopContent(user.id, 5),
         fetchPlatformBreakdown(user.id, weekOffset),
+        getMergedFunnelMetrics(user.id, weekOffset),
+        getLastSyncTime(user.id),
       ])
 
       if (marketing.data) setMarketingStats(marketing.data)
@@ -55,10 +63,24 @@ export default function Analytics() {
       if (stats.data) setUserStats(stats.data)
       if (top.data) setTopContent(top.data)
       if (platforms.data) setPlatformBreakdown(platforms.data)
+      if (funnel.data) setFunnelMetrics(funnel.data)
+      if (syncTime) setLastSyncTime(syncTime)
     } catch (err) {
       console.error('Error loading analytics:', err)
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleForceSync() {
+    setSyncing(true)
+    try {
+      await forceCRMSync(user.id)
+      await loadAnalytics()
+    } catch (err) {
+      console.error('Error forcing sync:', err)
+    } finally {
+      setSyncing(false)
     }
   }
 
@@ -81,6 +103,22 @@ export default function Analytics() {
     if (value > 0) return 'positive'
     if (value < 0) return 'negative'
     return ''
+  }
+
+  function formatSyncTime(timestamp) {
+    if (!timestamp) return 'Never'
+    const date = new Date(timestamp)
+    const now = new Date()
+    const diffMs = now - date
+    const diffMins = Math.floor(diffMs / (1000 * 60))
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    if (diffMins < 1) return 'Just now'
+    if (diffMins < 60) return `${diffMins}m ago`
+    if (diffHours < 24) return `${diffHours}h ago`
+    if (diffDays === 1) return 'Yesterday'
+    return `${diffDays}d ago`
   }
 
   if (loading) {
@@ -253,6 +291,85 @@ export default function Analytics() {
               <span className="stat-label">Pipeline</span>
             </div>
           </div>
+        </section>
+      )}
+
+      {/* Funnel Metrics */}
+      {funnelMetrics && (
+        <section className="analytics-section">
+          <div className="section-header-row">
+            <h2>Funnel Metrics</h2>
+            <div className="sync-info">
+              <span className="sync-time">Synced: {formatSyncTime(lastSyncTime)}</span>
+              <button
+                className="sync-btn"
+                onClick={handleForceSync}
+                disabled={syncing}
+              >
+                {syncing ? '↻' : '⟳'} Sync
+              </button>
+            </div>
+          </div>
+          <div className="funnel-visual">
+            <div className="funnel-stage">
+              <div className="funnel-bar" style={{ width: '100%' }}>
+                <span className="funnel-label">Awareness</span>
+                <span className="funnel-value">{funnelMetrics.awareness || 0}</span>
+              </div>
+            </div>
+            <div className="funnel-stage">
+              <div className="funnel-bar" style={{ width: '85%' }}>
+                <span className="funnel-label">Attraction</span>
+                <span className="funnel-value">{funnelMetrics.attraction || 0}</span>
+              </div>
+            </div>
+            <div className="funnel-stage">
+              <div className="funnel-bar" style={{ width: '70%' }}>
+                <span className="funnel-label">Lead Magnet</span>
+                <span className="funnel-value">{funnelMetrics.leadmagnet || 0}</span>
+              </div>
+            </div>
+            <div className="funnel-stage">
+              <div className="funnel-bar" style={{ width: '55%' }}>
+                <span className="funnel-label">Nurture</span>
+                <span className="funnel-value">{funnelMetrics.nurture || 0}</span>
+              </div>
+            </div>
+            <div className="funnel-stage">
+              <div className="funnel-bar highlight" style={{ width: '40%' }}>
+                <span className="funnel-label">Core Sales</span>
+                <span className="funnel-value">{funnelMetrics.core || 0}</span>
+              </div>
+            </div>
+          </div>
+          <div className="funnel-extras">
+            <div className="funnel-extra">
+              <span className="extra-label">Upsells</span>
+              <span className="extra-value">{funnelMetrics.upsell || 0}</span>
+            </div>
+            <div className="funnel-extra">
+              <span className="extra-label">Downsells</span>
+              <span className="extra-value">{funnelMetrics.downsell || 0}</span>
+            </div>
+            <div className="funnel-extra">
+              <span className="extra-label">Continuity</span>
+              <span className="extra-value">{funnelMetrics.continuity || 0}</span>
+            </div>
+            <div className="funnel-extra highlight">
+              <span className="extra-label">Revenue</span>
+              <span className="extra-value">${(funnelMetrics.total_revenue || 0).toLocaleString()}</span>
+            </div>
+          </div>
+          {funnelMetrics.sources && (
+            <div className="funnel-sources">
+              {funnelMetrics.sources.manual && (
+                <span className="source-badge manual">Manual entry</span>
+              )}
+              {funnelMetrics.sources.crm && (
+                <span className="source-badge crm">CRM sync</span>
+              )}
+            </div>
+          )}
         </section>
       )}
 

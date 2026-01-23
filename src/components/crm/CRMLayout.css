@@ -1,0 +1,14 @@
+/**
+ * CRMLayout CSS - Wrapper styles for CRM pages
+ */
+
+.crm-layout {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Ensure nudge doesn't interfere with page content */
+.crm-layout > *:not(.coach-nudge) {
+  position: relative;
+  z-index: 1;
+}

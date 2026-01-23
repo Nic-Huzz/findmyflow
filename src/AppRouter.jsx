@@ -13,6 +13,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
 import { OnboardingProvider } from './context/OnboardingContext'
+import { CRMLayout } from './components/crm'
 
 // Loading component for Suspense fallback
 function LoadingSpinner() {
@@ -43,6 +44,7 @@ const LeadMagnetSelectionFlow = lazy(() => import('./flows/LeadMagnetSelectionFl
 const ProductSelectionFlow = lazy(() => import('./flows/ProductSelectionFlow'))
 const FunnelBuilderFlow = lazy(() => import('./flows/FunnelBuilderFlow'))
 const FunnelCalculator = lazy(() => import('./flows/FunnelCalculator'))
+const FunnelBaselineFlow = lazy(() => import('./flows/FunnelBaselineFlow'))
 const MVPReadinessFlow = lazy(() => import('./flows/MVPReadinessFlow'))
 const FeedbackAnalysisFlow = lazy(() => import('./flows/FeedbackAnalysisFlow'))
 const GrandSlamOfferFlow = lazy(() => import('./flows/GrandSlamOfferFlow'))
@@ -78,6 +80,7 @@ const Dashboard = lazy(() => import('./pages/crm/Dashboard'))
 const Marketing = lazy(() => import('./pages/crm/Marketing'))
 const Sales = lazy(() => import('./pages/crm/Sales'))
 const Analytics = lazy(() => import('./pages/crm/Analytics'))
+const Execute = lazy(() => import('./pages/crm/Execute'))
 const ContentHistory = lazy(() => import('./pages/crm/ContentHistory'))
 const ContentQueue = lazy(() => import('./pages/crm/ContentQueue'))
 const PerformanceDashboard = lazy(() => import('./pages/crm/PerformanceDashboard'))
@@ -128,6 +131,7 @@ import './flows/LeadMagnetSelectionFlow.css'
 import './flows/ProductSelectionFlow.css'
 import './flows/FunnelBuilderFlow.css'
 import './flows/FunnelCalculator.css'
+import './flows/FunnelBaselineFlow.css'
 import './flows/MVPReadinessFlow.css'
 import './flows/FeedbackAnalysisFlow.css'
 import './flows/GrandSlamOfferFlow.css'
@@ -139,6 +143,7 @@ import './flows/CompetitorSnapshotFlow.css'
 import './pages/crm/AutonomousSetup.css'
 import './pages/crm/AscensionEngine.css'
 import './pages/crm/ObjectionPatterns.css'
+import './pages/crm/Execute.css'
 import './pages/BrandToneDemo.css'
 import './pages/VoiceOfCustomerPage.css'
 import './components/BottomToolbar.css'
@@ -164,7 +169,8 @@ function ConditionalBottomToolbar() {
                         location.pathname.startsWith('/try/') ||
                         location.pathname === '/' ||
                         location.pathname === '/career-clarity' ||
-                        location.pathname === '/launch-readiness'
+                        location.pathname === '/launch-readiness' ||
+                        location.pathname === '/funnel-baseline'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -418,6 +424,13 @@ function AppRouter() {
               </AuthGate>
             } />
 
+            {/* Funnel Baseline - Weekly Tracking Quest */}
+            <Route path="/funnel-baseline" element={
+              <AuthGate>
+                <FunnelBaselineFlow />
+              </AuthGate>
+            } />
+
             {/* Grand Slam Matrix - Solution to Tier Assignment */}
             <Route path="/grand-slam-matrix" element={
               <AuthGate>
@@ -428,22 +441,27 @@ function AppRouter() {
             {/* CRM Tower - Command Center */}
             <Route path="/crm" element={
               <AuthGate>
-                <Dashboard />
+                <CRMLayout><Dashboard /></CRMLayout>
               </AuthGate>
             } />
             <Route path="/crm/marketing" element={
               <AuthGate>
-                <Marketing />
+                <CRMLayout><Marketing /></CRMLayout>
               </AuthGate>
             } />
             <Route path="/crm/sales" element={
               <AuthGate>
-                <Sales />
+                <CRMLayout><Sales /></CRMLayout>
               </AuthGate>
             } />
             <Route path="/crm/analytics" element={
               <AuthGate>
-                <Analytics />
+                <CRMLayout><Analytics /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/execute" element={
+              <AuthGate>
+                <CRMLayout><Execute /></CRMLayout>
               </AuthGate>
             } />
             <Route path="/crm/content-history" element={

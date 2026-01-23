@@ -885,11 +885,58 @@
   font-size: 16px;
   font-weight: 600;
   color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .dashboard-container .response-date {
   font-size: 14px;
   color: #6c757d;
+}
+
+/* Include incomplete toggle */
+.dashboard-container .include-incomplete-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+  padding: 6px 12px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.dashboard-container .include-incomplete-toggle:hover {
+  background: #e2e8f0;
+}
+
+.dashboard-container .include-incomplete-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #5e17eb;
+  cursor: pointer;
+}
+
+/* Incomplete response styles */
+.dashboard-container .response-card.incomplete {
+  background: #fffbeb;
+  border: 1px dashed #fbbf24;
+}
+
+.dashboard-container .incomplete-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .dashboard-container .response-answers {
@@ -1306,11 +1353,11 @@
   border: 3px solid #dee2e6;
   border-top-color: #5e17eb;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: vfm-spin 0.8s linear infinite;
   margin-bottom: 12px;
 }
 
-@keyframes spin {
+@keyframes vfm-spin {
   to { transform: rotate(360deg); }
 }
 
@@ -1586,7 +1633,7 @@
   border: 3px solid #fef08a;
   border-top-color: #f59e0b;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: vfm-spin 0.8s linear infinite;
   margin-bottom: 12px;
 }
 
@@ -1857,7 +1904,7 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: vfm-spin 0.8s linear infinite;
 }
 
 /* Analytics Loading */

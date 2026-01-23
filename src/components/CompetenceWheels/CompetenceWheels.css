@@ -452,10 +452,10 @@
   border: 3px solid #333;
   border-top-color: #6BCB77;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: cw-spin 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes cw-spin {
   to {
     transform: rotate(360deg);
   }

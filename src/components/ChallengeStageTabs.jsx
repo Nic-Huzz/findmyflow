@@ -39,7 +39,9 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
   const getTabState = (stageId, stageConfig) => {
     // Flow Finder (stage 0) - user-level, always accessible
     if (stageConfig?.alwaysAccessible) {
-      if (flowFinderComplete) return 'completed'
+      // Flow Finder uses its own completion status
+      if (stageId === 0 && flowFinderComplete) return 'completed'
+      // Tracking (stage 8) and other always-accessible stages are always available
       return 'available'
     }
     // Regular project stages

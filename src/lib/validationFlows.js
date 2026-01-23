@@ -138,17 +138,24 @@ export async function getValidationFlowByToken(shareToken) {
 /**
  * Get all responses for a validation flow
  * @param {string} flowId
+ * @param {boolean} includeIncomplete - Include sessions that haven't been marked complete
  * @returns {Promise<Array>}
  */
-export async function getFlowResponses(flowId) {
+export async function getFlowResponses(flowId, includeIncomplete = false) {
   try {
-    // Get all sessions for this flow
-    const { data: sessions, error: sessionsError } = await supabase
+    // Get sessions for this flow
+    let query = supabase
       .from('validation_sessions')
       .select('*')
       .eq('flow_id', flowId)
-      .eq('is_completed', true)
-      .order('completed_at', { ascending: false })
+
+    if (!includeIncomplete) {
+      query = query.eq('is_completed', true)
+    }
+
+    // Order by most recent activity
+    const { data: sessions, error: sessionsError } = await query
+      .order('started_at', { ascending: false })
 
     if (sessionsError) throw sessionsError
 

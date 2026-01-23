@@ -1100,3 +1100,187 @@
 │                                                                                      │
 └─────────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Challenge → CRM Data Integration Layer (NEW)
+
+> Added January 2025: The `challengeDataService.js` bridges the gap between challenge completions and CRM functionality.
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        CHALLENGE → CRM DATA LAYER                                    │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ╔═══════════════════════════════════════════════════════════════════════════════╗  │
+│  ║                     challengeDataService.js                                    ║  │
+│  ║                     (src/lib/crm/challengeDataService.js)                      ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════════════╝  │
+│                                         │                                            │
+│         ┌───────────────────────────────┼───────────────────────────────┐           │
+│         │                               │                               │           │
+│         ▼                               ▼                               ▼           │
+│  ┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐       │
+│  │  OFFER DATA     │         │  TESTING DATA   │         │ PSYCHOLOGICAL   │       │
+│  │  FETCHERS       │         │  FETCHERS       │         │ DATA FETCHERS   │       │
+│  ├─────────────────┤         ├─────────────────┤         ├─────────────────┤       │
+│  │• fetchOfferStack│         │• fetchMVP       │         │• fetchPsycholog-│       │
+│  │  Data           │         │  Readiness      │         │  icalProfile    │       │
+│  │• fetchGrandSlam │         │• fetchFeedback  │         │• groan patterns │       │
+│  │  Data           │         │  Analysis       │         │• nervous system │       │
+│  │• fetchValidation│         │• fetchConvers-  │         │                 │       │
+│  │  Analysis       │         │  ationLogs      │         │                 │       │
+│  │• fetchLaunch    │         │                 │         │                 │       │
+│  │  Readiness      │         │                 │         │                 │       │
+│  │• fetchProduct   │         │                 │         │                 │       │
+│  │  Selections     │         │                 │         │                 │       │
+│  └────────┬────────┘         └────────┬────────┘         └────────┬────────┘       │
+│           │                           │                           │                 │
+│           └───────────────────────────┼───────────────────────────┘                 │
+│                                       │                                              │
+│                                       ▼                                              │
+│  ┌─────────────────────────────────────────────────────────────────────────────┐    │
+│  │                          AGGREGATION LAYER                                   │    │
+│  ├─────────────────────────────────────────────────────────────────────────────┤    │
+│  │                                                                              │    │
+│  │  fetchAllChallengeData()           getChallengeCompleteness()               │    │
+│  │  calculateCRMReadiness()           getFunnelTrends() + analyzeFunnelTrends()│    │
+│  │                                                                              │    │
+│  └─────────────────────────────────────────────────────────────────────────────┘    │
+│                                       │                                              │
+│           ┌───────────────────────────┼───────────────────────────┐                 │
+│           │                           │                           │                 │
+│           ▼                           ▼                           ▼                 │
+│  ┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐           │
+│  │ PROMPT CONTEXT  │       │ CALCULATOR      │       │ SMART ALERTS    │           │
+│  │ (Copy Gen)      │       │ PRE-POPULATION  │       │ (Recommendations)│           │
+│  ├─────────────────┤       ├─────────────────┤       ├─────────────────┤           │
+│  │ Sales pages     │       │ LTV Calculator  │       │ Funnel drops    │           │
+│  │ Email sequences │       │ CAC Tracker     │       │ Missing data    │           │
+│  │ Landing pages   │       │ PTUF Calculator │       │ Price vs ceiling│           │
+│  │ Outreach scripts│       │ Ascension Engine│       │ Completion gates│           │
+│  └─────────────────┘       └─────────────────┘       └─────────────────┘           │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Data Connection Status
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                     CHALLENGE → CRM CONNECTION STATUS                                │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ✅ CONNECTED (via existing services: contentContext.js, businessProfile.js)        │
+│  ───────────────────────────────────────────────────────────────────────────────    │
+│  • nikigai_clusters → Content Generator                                              │
+│  • validation_responses → Content Generator                                          │
+│  • offer_builder_assessments → Content Generator                                     │
+│  • voice_profiles → Content Generator                                                │
+│  • All Money Model assessments → businessProfile                                     │
+│  • sales_deals ↔ funnel_metrics (bidirectional via funnelSyncService)               │
+│                                                                                      │
+│  🆕 NOW CONNECTED (via challengeDataService.js)                                     │
+│  ───────────────────────────────────────────────────────────────────────────────    │
+│  • offer_stack_builds → Prompt generators (bonuses, guarantee, scarcity)            │
+│  • grand_slam_offers → Prompt generators (proof, speed, ease)                       │
+│  • validation_analysis → Prompt generators (pain language, objections)              │
+│  • launch_readiness_assessments → Launch Mode (pricing, audience, proof)            │
+│  • product_selections → Product copy (value equation)                               │
+│  • mvp_readiness_assessments → CRM contacts (testers as warm leads)                 │
+│  • groan_reflections → Prompt tone personalization                                   │
+│  • nervous_system_responses → Pricing confidence alerts                             │
+│  • funnel_metrics (weekly) → Trends + week-over-week analysis                       │
+│                                                                                      │
+│  ⚠️ STILL NEEDS IMPLEMENTATION                                                       │
+│  ───────────────────────────────────────────────────────────────────────────────    │
+│  • Prompt Generators (sales page, landing page, email, outreach)                    │
+│  • Calculator Pre-Population (LTV ← pricing, CAC ← channels)                        │
+│  • MVP Testers → CRM Contacts sync                                                   │
+│  • Objection Patterns ↔ Validation comparison                                        │
+│  • Price vs Earning Ceiling alert                                                    │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Funnel Baseline Flow (Weekly Tracker)
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                        FUNNEL BASELINE → CRM FLOW                                    │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│    /funnel-baseline (Weekly Quest - +15 pts)                                        │
+│                     │                                                                │
+│    ┌────────────────┴────────────────┐                                              │
+│    │ 1. Traffic Source               │ social_organic | paid | seo | email | ref   │
+│    │ 2. Top of Funnel                │ awareness + attraction                       │
+│    │ 3. Middle of Funnel             │ leadmagnet + nurture                         │
+│    │ 4. Bottom of Funnel             │ core + upsell + downsell + continuity        │
+│    │ 5. Results                      │ Visual funnel + week comparison              │
+│    └────────────────┬────────────────┘                                              │
+│                     │                                                                │
+│                     ▼                                                                │
+│    funnel_metrics (source='quest', mode='actual')                                   │
+│                     │                                                                │
+│    ┌────────────────┼────────────────┬────────────────┬────────────────┐            │
+│    ▼                ▼                ▼                ▼                ▼            │
+│ Analytics      CAC Tracker      LTV Validator    Smart Alerts    Forecasting       │
+│ (trends)       (channel attr)   (proj vs actual) (drop detect)   (project rev)     │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Gap Analysis Summary
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              ARCHITECTURE GAPS                                       │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  🔴 HIGH PRIORITY                                                                    │
+│  ─────────────────                                                                   │
+│  1. PROMPT GENERATORS NOT BUILT                                                      │
+│     Data available via fetchAllChallengeData() but no generators use it             │
+│     NEEDED: Sales page, landing page, email sequence, outreach generators           │
+│                                                                                      │
+│  2. CALCULATOR PRE-POPULATION NOT WIRED                                              │
+│     Functions exist but calculators don't call them on mount                         │
+│     NEEDED: useEffect in LTV/CAC/PTUF to load defaults                              │
+│                                                                                      │
+│  3. MVP TESTERS → CRM CONTACTS SYNC                                                  │
+│     Testers are warm leads but aren't created as contacts                           │
+│     NEEDED: Sync function creating contacts with source='mvp_tester'                │
+│                                                                                      │
+│  🟡 MEDIUM PRIORITY                                                                  │
+│  ─────────────────                                                                   │
+│  4. PSYCHOLOGICAL TONE ADJUSTMENT                                                    │
+│     recommendedTone not used in prompts                                              │
+│                                                                                      │
+│  5. OBJECTION PATTERNS ↔ VALIDATION COMPARISON                                       │
+│     Expected vs actual objections not cross-referenced                               │
+│                                                                                      │
+│  6. PRICE VS EARNING CEILING ALERT                                                   │
+│     Could warn when price > psychological earning ceiling                            │
+│                                                                                      │
+│  7. ASCENSION ENGINE ← VALUE LADDER STRUCTURE                                        │
+│     offer_stack_builds not used for ladder visualization                             │
+│                                                                                      │
+│  🟢 LOW PRIORITY                                                                     │
+│  ─────────────────                                                                   │
+│  8. Conversation logs → Objection extraction                                         │
+│  9. Weekly plan → CRM task sync                                                      │
+│  10. Product value equation → Sales copy                                             │
+│                                                                                      │
+│  RECOMMENDED BUILD ORDER:                                                            │
+│  ────────────────────────                                                            │
+│  Phase 1: Prompt Generators (biggest unlock)                                         │
+│  Phase 2: Calculator Pre-Population (UX improvement)                                 │
+│  Phase 3: MVP Testers Sync (capture warm leads)                                      │
+│  Phase 4: Psychological Personalization                                              │
+│  Phase 5: Cross-Reference Features                                                   │
+│                                                                                      │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```

@@ -67,6 +67,7 @@ const ValidationFlowsManager = () => {
   const [openMenuId, setOpenMenuId] = useState(null) // For flow card dropdown menu
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStatus, setFilterStatus] = useState('all') // all | active | has_responses | validation | testing
+  const [includeIncomplete, setIncludeIncomplete] = useState(true) // Show incomplete responses by default
 
   // Taxonomy data for dropdowns
   const [useCustomProblem, setUseCustomProblem] = useState(false)
@@ -175,7 +176,7 @@ const ValidationFlowsManager = () => {
     setAiSummary(null) // Clear previous AI summary
     setAnalyticsLoading(true)
     setActiveAnalyticsTab('overview')
-    const data = await getFlowResponses(flow.id)
+    const data = await getFlowResponses(flow.id, includeIncomplete)
     const analyticsData = await getFlowAnalytics(flow.id, timePeriod)
     setResponses(data)
     setAnalytics(analyticsData)
@@ -184,6 +185,17 @@ const ValidationFlowsManager = () => {
     setAnalyticsLoading(false)
     // Trigger animation for values
     animateValues(analyticsData)
+  }
+
+  // Refresh responses when includeIncomplete changes
+  const handleIncludeIncompleteChange = async (value) => {
+    setIncludeIncomplete(value)
+    if (selectedFlow) {
+      setAnalyticsLoading(true)
+      const data = await getFlowResponses(selectedFlow.id, value)
+      setResponses(data)
+      setAnalyticsLoading(false)
+    }
   }
 
   const refreshAnalytics = async () => {
@@ -916,6 +928,14 @@ const ValidationFlowsManager = () => {
             <div className="responses-header">
               <h2>{selectedFlow.flow_name} - Responses</h2>
               <div className="responses-header-actions">
+                <label className="include-incomplete-toggle" title="Show responses from people who started but didn't finish">
+                  <input
+                    type="checkbox"
+                    checked={includeIncomplete}
+                    onChange={(e) => handleIncludeIncompleteChange(e.target.checked)}
+                  />
+                  <span>Include in-progress</span>
+                </label>
                 <button
                   className="export-btn"
                   onClick={exportToCSV}
@@ -1207,11 +1227,18 @@ const ValidationFlowsManager = () => {
                 <div className="empty-state">No responses yet</div>
               ) : (
                 responses.map(session => (
-                  <div key={session.id} className="response-card">
+                  <div key={session.id} className={`response-card ${!session.is_completed ? 'incomplete' : ''}`}>
                     <div className="response-header">
-                      <div className="response-email">{session.respondent_email || 'Anonymous'}</div>
+                      <div className="response-email">
+                        {session.respondent_email || 'Anonymous'}
+                        {!session.is_completed && (
+                          <span className="incomplete-badge" title="This person started but hasn't finished the survey">In Progress</span>
+                        )}
+                      </div>
                       <div className="response-date">
-                        {new Date(session.completed_at).toLocaleDateString()}
+                        {session.completed_at
+                          ? new Date(session.completed_at).toLocaleDateString()
+                          : `Started ${new Date(session.started_at).toLocaleDateString()}`}
                       </div>
                     </div>
 

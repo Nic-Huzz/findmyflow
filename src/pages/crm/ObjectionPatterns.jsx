@@ -2,10 +2,12 @@
  * Objection Pattern Dashboard
  * Visualizes win/loss reasons captured from DealOutcomeModal
  * Helps identify patterns and improve close rates
+ * Now includes Expected vs Actual comparison from validation data
  */
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../auth/AuthProvider'
 import { fetchDealOutcomes, getDealOutcomeStats } from '../../lib/crm/dealService'
+import { fetchValidationAnalysis } from '../../lib/crm/challengeDataService'
 import './ObjectionPatterns.css'
 
 const LOSS_REASON_LABELS = {
@@ -31,7 +33,8 @@ export default function ObjectionPatterns() {
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState(null)
   const [outcomes, setOutcomes] = useState([])
-  const [activeTab, setActiveTab] = useState('overview') // 'overview', 'losses', 'wins'
+  const [validationData, setValidationData] = useState(null)
+  const [activeTab, setActiveTab] = useState('overview') // 'overview', 'losses', 'wins', 'comparison'
 
   useEffect(() => {
     if (user?.id) {
@@ -42,13 +45,15 @@ export default function ObjectionPatterns() {
   async function loadData() {
     setLoading(true)
     try {
-      const [statsResult, outcomesResult] = await Promise.all([
+      const [statsResult, outcomesResult, validationResult] = await Promise.all([
         getDealOutcomeStats(user.id),
         fetchDealOutcomes(user.id, { limit: 50 }),
+        fetchValidationAnalysis(user.id),
       ])
 
       setStats(statsResult)
       setOutcomes(outcomesResult.data || [])
+      setValidationData(validationResult)
     } catch (err) {
       console.error('Error loading objection data:', err)
     } finally {
@@ -133,6 +138,12 @@ export default function ObjectionPatterns() {
             >
               Win Analysis ({wins.length})
             </button>
+            <button
+              className={`op-tab ${activeTab === 'comparison' ? 'active' : ''}`}
+              onClick={() => setActiveTab('comparison')}
+            >
+              Expected vs Actual
+            </button>
           </nav>
 
           {/* Tab Content */}
@@ -145,6 +156,13 @@ export default function ObjectionPatterns() {
             )}
             {activeTab === 'wins' && (
               <WinAnalysisView wins={wins} stats={stats} />
+            )}
+            {activeTab === 'comparison' && (
+              <ComparisonView
+                validationData={validationData}
+                losses={losses}
+                stats={stats}
+              />
             )}
           </div>
         </>
@@ -425,6 +443,262 @@ function WinAnalysisView({ wins, stats }) {
                   <cite>— {win.deals?.contact_name}</cite>
                 </blockquote>
               ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ============================================
+// COMPARISON VIEW - Expected vs Actual Objections
+// ============================================
+function ComparisonView({ validationData, losses, stats }) {
+  // Get expected objections from validation analysis
+  const expectedObjections = validationData?.objections || []
+
+  // Get actual objections from deal outcomes
+  const actualObjections = {}
+  losses.forEach(loss => {
+    const reason = loss.primary_reason
+    if (reason) {
+      if (!actualObjections[reason]) {
+        actualObjections[reason] = { count: 0, notes: [] }
+      }
+      actualObjections[reason].count++
+      if (loss.notes) {
+        actualObjections[reason].notes.push(loss.notes)
+      }
+    }
+  })
+
+  // Categorize: Expected & Encountered, Expected but Not Encountered, Unexpected (Actual only)
+  const expectedEncountered = []
+  const expectedNotEncountered = []
+  const unexpected = []
+
+  // Map expected objections to actual loss reasons
+  const objectionMapping = {
+    price: ['price', 'too expensive', 'budget', 'cost'],
+    timing: ['timing', 'not now', 'later', 'busy'],
+    trust: ['trust', 'skeptical', 'proof', 'credibility'],
+    fit: ['fit', 'not right', 'wrong', 'different'],
+    competitor: ['competitor', 'alternative', 'other option'],
+  }
+
+  // Check each expected objection
+  expectedObjections.forEach(expected => {
+    const normalizedExpected = expected.toLowerCase()
+
+    // Try to match with actual reasons
+    let matched = false
+    for (const [reasonKey, keywords] of Object.entries(objectionMapping)) {
+      if (keywords.some(kw => normalizedExpected.includes(kw)) && actualObjections[reasonKey]) {
+        expectedEncountered.push({
+          expected,
+          actual: reasonKey,
+          count: actualObjections[reasonKey].count,
+          notes: actualObjections[reasonKey].notes,
+        })
+        matched = true
+        break
+      }
+    }
+
+    if (!matched) {
+      // Check for direct text matches in notes
+      const foundInNotes = losses.some(loss =>
+        loss.notes?.toLowerCase().includes(normalizedExpected.slice(0, 15))
+      )
+
+      if (foundInNotes) {
+        expectedEncountered.push({
+          expected,
+          actual: 'other',
+          count: 1,
+          notes: [],
+        })
+      } else {
+        expectedNotEncountered.push(expected)
+      }
+    }
+  })
+
+  // Find unexpected objections (actual but not in expected)
+  const expectedReasons = new Set(expectedEncountered.map(e => e.actual))
+  Object.entries(actualObjections).forEach(([reason, data]) => {
+    if (!expectedReasons.has(reason)) {
+      unexpected.push({
+        reason,
+        label: LOSS_REASON_LABELS[reason] || reason,
+        count: data.count,
+        notes: data.notes,
+      })
+    }
+  })
+
+  // No validation data
+  if (!validationData) {
+    return (
+      <div className="comparison-view">
+        <div className="comparison-empty">
+          <span className="empty-icon">📋</span>
+          <h3>No Validation Data</h3>
+          <p>Complete the Validation Analysis challenge to see expected objections here.</p>
+          <p className="hint">This helps you compare what you anticipated vs. what actually happened.</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="comparison-view">
+      <div className="comparison-intro">
+        <p>
+          Compare objections you anticipated during validation with what actually happened in sales conversations.
+        </p>
+      </div>
+
+      <div className="comparison-grid">
+        {/* Expected & Encountered */}
+        <div className="comparison-section encountered">
+          <div className="section-header">
+            <span className="section-icon">✅</span>
+            <h3>Predicted & Encountered</h3>
+            <span className="section-count">{expectedEncountered.length}</span>
+          </div>
+          {expectedEncountered.length === 0 ? (
+            <p className="no-data">None of your predicted objections have been encountered yet.</p>
+          ) : (
+            <div className="comparison-items">
+              {expectedEncountered.map((item, index) => (
+                <div key={index} className="comparison-item match">
+                  <div className="item-header">
+                    <span className="expected-text">"{item.expected}"</span>
+                    <span className="match-badge">× {item.count}</span>
+                  </div>
+                  <span className="actual-label">
+                    Matched: {LOSS_REASON_LABELS[item.actual] || item.actual}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          {expectedEncountered.length > 0 && (
+            <div className="section-insight success">
+              <span className="insight-icon">💡</span>
+              <span>Good prediction! Your validation research identified real objections.</span>
+            </div>
+          )}
+        </div>
+
+        {/* Expected but Not Encountered */}
+        <div className="comparison-section not-encountered">
+          <div className="section-header">
+            <span className="section-icon">🔮</span>
+            <h3>Predicted but Not Seen</h3>
+            <span className="section-count">{expectedNotEncountered.length}</span>
+          </div>
+          {expectedNotEncountered.length === 0 ? (
+            <p className="no-data">All your predicted objections have been encountered.</p>
+          ) : (
+            <div className="comparison-items">
+              {expectedNotEncountered.map((objection, index) => (
+                <div key={index} className="comparison-item pending">
+                  <span className="expected-text">"{objection}"</span>
+                  <span className="status-text">Not encountered yet</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {expectedNotEncountered.length > 0 && (
+            <div className="section-insight info">
+              <span className="insight-icon">📝</span>
+              <span>
+                {losses.length < 5
+                  ? 'Too early to tell — need more sales data.'
+                  : 'These might be edge cases or your positioning has preemptively addressed them.'}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Unexpected Objections */}
+        <div className="comparison-section unexpected">
+          <div className="section-header">
+            <span className="section-icon">⚠️</span>
+            <h3>Surprise Objections</h3>
+            <span className="section-count">{unexpected.length}</span>
+          </div>
+          {unexpected.length === 0 ? (
+            <p className="no-data">No unexpected objections so far!</p>
+          ) : (
+            <div className="comparison-items">
+              {unexpected.map((item, index) => (
+                <div key={index} className="comparison-item surprise">
+                  <div className="item-header">
+                    <span className="reason-label">{item.label}</span>
+                    <span className="match-badge alert">× {item.count}</span>
+                  </div>
+                  {item.notes.length > 0 && (
+                    <div className="notes-preview">
+                      "{item.notes[0].slice(0, 100)}{item.notes[0].length > 100 ? '...' : ''}"
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {unexpected.length > 0 && (
+            <div className="section-insight warning">
+              <span className="insight-icon">🎯</span>
+              <span>
+                These objections weren't in your validation research. Consider adding them to your
+                sales prep and objection handling.
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Action Summary */}
+      {(expectedEncountered.length > 0 || unexpected.length > 0) && (
+        <div className="comparison-actions">
+          <h3>Recommended Actions</h3>
+          <div className="action-list">
+            {unexpected.length > 0 && (
+              <div className="action-item">
+                <span className="action-icon">📚</span>
+                <div className="action-content">
+                  <span className="action-title">Update your objection playbook</span>
+                  <span className="action-detail">
+                    Add responses for: {unexpected.map(u => u.label).join(', ')}
+                  </span>
+                </div>
+              </div>
+            )}
+            {expectedEncountered.length > 0 && (
+              <div className="action-item">
+                <span className="action-icon">✅</span>
+                <div className="action-content">
+                  <span className="action-title">Your research was accurate</span>
+                  <span className="action-detail">
+                    Keep preparing for: {expectedEncountered.map(e => `"${e.expected}"`).slice(0, 3).join(', ')}
+                  </span>
+                </div>
+              </div>
+            )}
+            {expectedNotEncountered.length > 3 && losses.length >= 5 && (
+              <div className="action-item">
+                <span className="action-icon">🔄</span>
+                <div className="action-content">
+                  <span className="action-title">Re-evaluate validation assumptions</span>
+                  <span className="action-detail">
+                    Some predicted objections haven't appeared — your messaging may be stronger than expected.
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -22,6 +22,7 @@ import {
   saveDealOutcome,
   updateCurrentMonthActuals,
   scheduleMeeting,
+  syncCRMToFunnel,
 } from '../../lib/crm'
 import { LeadScoreSliders, LeadScoreBadge, ScriptsModal, ScreenshotUpload, DealOutcomeModal } from '../../components/crm'
 import './Sales.css'
@@ -123,6 +124,11 @@ export default function Sales() {
         source: 'Manual',
         notes: '',
       })
+
+      // Sync to funnel_metrics
+      syncCRMToFunnel(user.id).catch(err => {
+        console.error('Error syncing CRM to funnel metrics:', err)
+      })
     }
   }
 
@@ -186,6 +192,11 @@ export default function Sales() {
       updateCurrentMonthActuals(user.id).catch(err => {
         console.error('Error updating funnel actuals:', err)
       })
+
+      // Sync to funnel_metrics for weekly tracking
+      syncCRMToFunnel(user.id).catch(err => {
+        console.error('Error syncing CRM to funnel metrics:', err)
+      })
     }
     setSelectedDeal(null)
   }
@@ -216,6 +227,11 @@ export default function Sales() {
         ...prev,
         [deal.status]: (prev[deal.status] || []).filter(d => d.id !== deal.id),
       }))
+
+      // Sync to funnel_metrics
+      syncCRMToFunnel(user.id).catch(err => {
+        console.error('Error syncing CRM to funnel metrics:', err)
+      })
     }
     setSelectedDeal(null)
   }
@@ -300,6 +316,11 @@ export default function Sales() {
         ...prev,
         [dealData.status]: [result.data, ...(prev[dealData.status] || [])],
       }))
+
+      // Sync to funnel_metrics
+      syncCRMToFunnel(user.id).catch(err => {
+        console.error('Error syncing CRM to funnel metrics:', err)
+      })
     }
 
     setShowScreenshotUpload(false)

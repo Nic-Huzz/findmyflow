@@ -920,6 +920,115 @@
   margin-top: 0.5rem;
 }
 
+/* Value Ladder Completeness Banner */
+.ascension-engine .ladder-completeness-banner {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(251, 191, 36, 0.05) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ascension-engine .completeness-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.ascension-engine .completeness-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.ascension-engine .completeness-text {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Rung Details & Custom Data */
+.ascension-engine .ladder-rung.has-data .rung-bar {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ascension-engine .rung-type {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  display: block;
+  margin-top: 0.125rem;
+}
+
+.ascension-engine .rung-price {
+  font-size: 0.75rem;
+  color: #10b981;
+  font-weight: 600;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.ascension-engine .rung-details {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: 0.5rem;
+  background: #1a1a2e;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 0.75rem;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.ascension-engine .ladder-rung:hover .rung-details {
+  opacity: 1;
+  visibility: visible;
+}
+
+.ascension-engine .rung-details p {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ascension-engine .detail-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.4rem;
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 4px;
+  color: #a78bfa;
+  margin-right: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Empty Hint */
+.ascension-engine .ae-empty-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.ascension-engine .ae-empty-hint .hint-icon {
+  font-size: 1.5rem;
+}
+
+.ascension-engine .ae-empty-hint p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .ascension-engine .value-ladder-view {

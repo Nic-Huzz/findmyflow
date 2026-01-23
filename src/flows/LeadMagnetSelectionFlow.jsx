@@ -21,6 +21,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LeadMagnetSelectionFlow.css'
 
 const STAGES = {
@@ -770,6 +771,8 @@ function LeadMagnetSelectionFlow() {
           <p className="next-step-hint">
             Next: In Money Models, you'll decide how to position this lead magnet as your Attraction Offer.
           </p>
+
+          <FlowFeedback flowType="lead_magnet_selection" userId={user?.id} />
         </div>
 
         <div className="success-footer">

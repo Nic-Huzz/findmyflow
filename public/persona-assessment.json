@@ -33,7 +33,7 @@
         },
         {
           "label": "Gone solo, finding my footing",
-          "value": "solo_early",
+          "value": "self_employed_early",
           "description": "I've left employment, still building momentum",
           "persona": "vibe_riser",
           "data": {
@@ -43,7 +43,7 @@
         },
         {
           "label": "Scaling what I do",
-          "value": "solo_established",
+          "value": "self_employed_established",
           "description": "I'm self-employed with paying clients",
           "persona": "movement_maker",
           "data": {

@@ -118,8 +118,8 @@ function OnboardingV2({ userId, onComplete, initialData = null }) {
     setEmploymentStatus(option.value)
     setHasSideProject(
       option.value === 'employed_building' ||
-      option.value === 'solo_early' ||
-      option.value === 'solo_established'
+      option.value === 'self_employed_early' ||
+      option.value === 'self_employed_established'
     )
     setTimeout(() => setCurrentStep(STEPS.Q2_WEALTH_LADDER), 300)
   }

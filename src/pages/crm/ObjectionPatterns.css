@@ -508,6 +508,266 @@
   font-size: 0.875rem;
 }
 
+/* Comparison View - Expected vs Actual */
+.objection-patterns .comparison-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.objection-patterns .comparison-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+.objection-patterns .comparison-empty .empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.objection-patterns .comparison-empty h3 {
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+}
+
+.objection-patterns .comparison-empty p {
+  color: #9ca3af;
+  margin: 0;
+}
+
+.objection-patterns .comparison-empty .hint {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.objection-patterns .comparison-intro {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.objection-patterns .comparison-intro p {
+  margin: 0;
+  color: #e5e7eb;
+}
+
+.objection-patterns .comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.objection-patterns .comparison-section {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.objection-patterns .comparison-section.encountered {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.objection-patterns .comparison-section.not-encountered {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.objection-patterns .comparison-section.unexpected {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.objection-patterns .section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.objection-patterns .section-icon {
+  font-size: 1.25rem;
+}
+
+.objection-patterns .section-header h3 {
+  flex: 1;
+  color: #fff;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.objection-patterns .section-count {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.objection-patterns .comparison-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.objection-patterns .comparison-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.objection-patterns .comparison-item.match {
+  border-left: 3px solid #10b981;
+}
+
+.objection-patterns .comparison-item.pending {
+  border-left: 3px solid #3b82f6;
+}
+
+.objection-patterns .comparison-item.surprise {
+  border-left: 3px solid #f59e0b;
+}
+
+.objection-patterns .item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.objection-patterns .expected-text {
+  color: #e5e7eb;
+  font-size: 0.9rem;
+}
+
+.objection-patterns .match-badge {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.objection-patterns .match-badge.alert {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.objection-patterns .actual-label {
+  color: #10b981;
+  font-size: 0.8rem;
+}
+
+.objection-patterns .status-text {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.objection-patterns .notes-preview {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-style: italic;
+  padding-top: 0.25rem;
+}
+
+.objection-patterns .section-insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  margin-top: auto;
+}
+
+.objection-patterns .section-insight.success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.objection-patterns .section-insight.info {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+}
+
+.objection-patterns .section-insight.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+}
+
+.objection-patterns .section-insight .insight-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.objection-patterns .comparison-section .no-data {
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* Comparison Actions */
+.objection-patterns .comparison-actions {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.objection-patterns .comparison-actions h3 {
+  color: #fff;
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+}
+
+.objection-patterns .action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.objection-patterns .action-item {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.objection-patterns .action-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.objection-patterns .action-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.objection-patterns .action-title {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.objection-patterns .action-detail {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .objection-patterns {
@@ -528,5 +788,9 @@
 
   .objection-patterns .op-tabs {
     flex-wrap: wrap;
+  }
+
+  .objection-patterns .comparison-grid {
+    grid-template-columns: 1fr;
   }
 }

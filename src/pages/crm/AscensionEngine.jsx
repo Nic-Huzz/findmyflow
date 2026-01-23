@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../../auth/AuthProvider'
 import {
   VALUE_LADDER_RUNGS,
+  fetchUserValueLadder,
   fetchCustomerAscensions,
   getValueLadderStats,
   fetchAscensionTriggers,
@@ -33,6 +34,10 @@ export default function AscensionEngine() {
   const [continuityCustomers, setContinuityCustomers] = useState([])
   const [retentionStats, setRetentionStats] = useState(null)
 
+  // Custom value ladder from challenge data
+  const [userLadder, setUserLadder] = useState(null)
+  const [ladderCompleteness, setLadderCompleteness] = useState(0)
+
   // UI states
   const [selectedCustomer, setSelectedCustomer] = useState(null)
   const [editingTrigger, setEditingTrigger] = useState(null)
@@ -46,13 +51,14 @@ export default function AscensionEngine() {
   async function loadData() {
     setLoading(true)
     try {
-      const [statsResult, customersResult, triggersResult, tasksResult, continuityResult, retentionResult] = await Promise.all([
+      const [statsResult, customersResult, triggersResult, tasksResult, continuityResult, retentionResult, ladderResult] = await Promise.all([
         getValueLadderStats(user.id),
         fetchCustomerAscensions(user.id, { limit: 50 }),
         fetchAscensionTriggers(user.id),
         fetchPendingAscensionTasks(user.id),
         fetchContinuityCustomers(user.id),
         getRetentionStats(user.id),
+        fetchUserValueLadder(user.id),
       ])
 
       setLadderStats(statsResult)
@@ -61,6 +67,8 @@ export default function AscensionEngine() {
       setAscensionTasks(tasksResult.data || [])
       setContinuityCustomers(continuityResult.data || [])
       setRetentionStats(retentionResult)
+      setUserLadder(ladderResult.ladder)
+      setLadderCompleteness(ladderResult.completeness)
 
       // Create default triggers if none exist
       if (triggersResult.data?.length === 0) {
@@ -188,7 +196,12 @@ export default function AscensionEngine() {
       {/* Tab Content */}
       <div className="ae-content">
         {activeTab === 'ladder' && (
-          <ValueLadderView stats={ladderStats} customers={customers} />
+          <ValueLadderView
+            stats={ladderStats}
+            customers={customers}
+            userLadder={userLadder}
+            completeness={ladderCompleteness}
+          />
         )}
 
         {activeTab === 'customers' && (
@@ -196,6 +209,7 @@ export default function AscensionEngine() {
             customers={customers}
             selectedCustomer={selectedCustomer}
             onSelectCustomer={setSelectedCustomer}
+            ladder={userLadder || VALUE_LADDER_RUNGS}
           />
         )}
 
@@ -223,43 +237,79 @@ export default function AscensionEngine() {
 // ============================================
 // VALUE LADDER VIEW
 // ============================================
-function ValueLadderView({ stats, customers }) {
-  if (!stats) {
-    return (
-      <div className="ae-empty-state">
-        <span className="empty-icon">📊</span>
-        <h3>No Customer Data Yet</h3>
-        <p>When you close deals, customers will appear on your value ladder.</p>
-      </div>
-    )
-  }
+function ValueLadderView({ stats, customers, userLadder, completeness }) {
+  // Use custom ladder if available, otherwise default
+  const ladder = userLadder || VALUE_LADDER_RUNGS
 
   return (
     <div className="value-ladder-view">
+      {/* Ladder Completeness Banner */}
+      {completeness < 100 && (
+        <div className="ladder-completeness-banner">
+          <div className="completeness-bar">
+            <div className="completeness-fill" style={{ width: `${completeness}%` }}></div>
+          </div>
+          <span className="completeness-text">
+            Value Ladder {completeness}% defined
+            {completeness < 50 && ' — Complete Offer Stack Builder to see your offers here'}
+          </span>
+        </div>
+      )}
+
       <div className="ladder-visual">
         <h3 className="ladder-title">Your Value Ladder</h3>
         <div className="ladder-rungs">
-          {[...VALUE_LADDER_RUNGS].reverse().map((rung, index) => {
-            const rungStats = stats.byRung[rung.id] || { count: 0, totalValue: 0 }
-            const prevRung = VALUE_LADDER_RUNGS[VALUE_LADDER_RUNGS.length - index]
-            const ascensionRate = prevRung
-              ? stats.ascensionRates[`${prevRung.id}_to_${rung.id}`]
+          {[...ladder].reverse().map((rung, index) => {
+            const rungStats = stats?.byRung?.[rung.id] || { count: 0, totalValue: 0 }
+            const prevRung = ladder[ladder.length - index]
+            const ascensionRate = prevRung && stats
+              ? stats.ascensionRates?.[`${prevRung.id}_to_${rung.id}`]
               : null
+            const hasCustomData = rung.customLabel || rung.price > 0
 
             return (
               <div
                 key={rung.id}
-                className={`ladder-rung ${rung.id}`}
+                className={`ladder-rung ${rung.id} ${hasCustomData ? 'has-data' : ''}`}
                 style={{ '--rung-color': rung.color }}
               >
-                <div className="rung-bar" style={{ width: `${Math.max(20, (rungStats.count / (stats.totalCustomers || 1)) * 100)}%` }}>
+                <div className="rung-bar" style={{
+                  width: stats?.totalCustomers
+                    ? `${Math.max(20, (rungStats.count / stats.totalCustomers) * 100)}%`
+                    : '60%'
+                }}>
                   <span className="rung-icon">{rung.icon}</span>
                   <div className="rung-info">
-                    <span className="rung-label">{rung.label}</span>
-                    <span className="rung-count">{rungStats.count} customer{rungStats.count !== 1 ? 's' : ''}</span>
+                    <span className="rung-label">
+                      {rung.customLabel || rung.label}
+                    </span>
+                    {rung.customLabel && (
+                      <span className="rung-type">{rung.label}</span>
+                    )}
+                    {rung.price > 0 && (
+                      <span className="rung-price">
+                        ${rung.price.toLocaleString()}{rung.isRecurring ? '/mo' : ''}
+                      </span>
+                    )}
+                    {stats && (
+                      <span className="rung-count">
+                        {rungStats.count} customer{rungStats.count !== 1 ? 's' : ''}
+                      </span>
+                    )}
                   </div>
-                  <span className="rung-value">${rungStats.totalValue.toLocaleString()}</span>
+                  {stats && (
+                    <span className="rung-value">${rungStats.totalValue.toLocaleString()}</span>
+                  )}
                 </div>
+                {/* Offer details tooltip */}
+                {hasCustomData && (
+                  <div className="rung-details">
+                    {rung.description && <p>{rung.description}</p>}
+                    {rung.guarantee && <span className="detail-badge">🛡️ {rung.guarantee}</span>}
+                    {rung.bonuses > 0 && <span className="detail-badge">🎁 {rung.bonuses} bonuses</span>}
+                    {rung.magnetType && <span className="detail-badge">📋 {rung.magnetType}</span>}
+                  </div>
+                )}
                 {ascensionRate !== null && ascensionRate > 0 && (
                   <div className="ascension-rate">
                     <span className="rate-arrow">↑</span>
@@ -272,31 +322,39 @@ function ValueLadderView({ stats, customers }) {
         </div>
       </div>
 
-      <div className="ladder-metrics">
-        <div className="metric-card">
-          <span className="metric-icon">💰</span>
-          <div className="metric-content">
-            <span className="metric-value">${stats.totalLTV.toLocaleString()}</span>
-            <span className="metric-label">Total Customer Value</span>
+      {/* Metrics - only show if we have stats */}
+      {stats ? (
+        <div className="ladder-metrics">
+          <div className="metric-card">
+            <span className="metric-icon">💰</span>
+            <div className="metric-content">
+              <span className="metric-value">${stats.totalLTV.toLocaleString()}</span>
+              <span className="metric-label">Total Customer Value</span>
+            </div>
+          </div>
+          <div className="metric-card">
+            <span className="metric-icon">👥</span>
+            <div className="metric-content">
+              <span className="metric-value">{stats.totalCustomers}</span>
+              <span className="metric-label">Total Customers</span>
+            </div>
+          </div>
+          <div className="metric-card">
+            <span className="metric-icon">📈</span>
+            <div className="metric-content">
+              <span className="metric-value">
+                ${stats.totalCustomers > 0 ? Math.round(stats.totalLTV / stats.totalCustomers).toLocaleString() : 0}
+              </span>
+              <span className="metric-label">Avg. Customer Value</span>
+            </div>
           </div>
         </div>
-        <div className="metric-card">
-          <span className="metric-icon">👥</span>
-          <div className="metric-content">
-            <span className="metric-value">{stats.totalCustomers}</span>
-            <span className="metric-label">Total Customers</span>
-          </div>
+      ) : (
+        <div className="ae-empty-hint">
+          <span className="hint-icon">💡</span>
+          <p>Close deals to see customer data on your value ladder</p>
         </div>
-        <div className="metric-card">
-          <span className="metric-icon">📈</span>
-          <div className="metric-content">
-            <span className="metric-value">
-              ${stats.totalCustomers > 0 ? Math.round(stats.totalLTV / stats.totalCustomers).toLocaleString() : 0}
-            </span>
-            <span className="metric-label">Avg. Customer Value</span>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   )
 }
@@ -304,12 +362,14 @@ function ValueLadderView({ stats, customers }) {
 // ============================================
 // CUSTOMERS VIEW
 // ============================================
-function CustomersView({ customers, selectedCustomer, onSelectCustomer }) {
+function CustomersView({ customers, selectedCustomer, onSelectCustomer, ladder }) {
   const [filter, setFilter] = useState('all')
 
   const filteredCustomers = filter === 'all'
     ? customers
     : customers.filter(c => c.current_rung === filter)
+
+  const getRung = (rungId) => ladder.find(r => r.id === rungId) || { label: rungId, color: '#6b7280' }
 
   return (
     <div className="customers-view">
@@ -320,7 +380,7 @@ function CustomersView({ customers, selectedCustomer, onSelectCustomer }) {
         >
           All ({customers.length})
         </button>
-        {VALUE_LADDER_RUNGS.map(rung => {
+        {ladder.map(rung => {
           const count = customers.filter(c => c.current_rung === rung.id).length
           if (count === 0) return null
           return (
@@ -330,7 +390,7 @@ function CustomersView({ customers, selectedCustomer, onSelectCustomer }) {
               onClick={() => setFilter(rung.id)}
               style={{ '--filter-color': rung.color }}
             >
-              {rung.icon} {rung.label} ({count})
+              {rung.icon} {rung.customLabel || rung.label} ({count})
             </button>
           )
         })}
@@ -338,42 +398,46 @@ function CustomersView({ customers, selectedCustomer, onSelectCustomer }) {
 
       <div className="customers-grid">
         <div className="customers-list">
-          {filteredCustomers.map(customer => (
-            <div
-              key={customer.id}
-              className={`customer-card ${selectedCustomer?.id === customer.id ? 'selected' : ''}`}
-              onClick={() => onSelectCustomer(customer)}
-            >
-              <div className="customer-main">
-                <span className="customer-name">{customer.customer_name}</span>
-                <span className="customer-ltv">${customer.lifetime_value?.toLocaleString() || 0}</span>
+          {filteredCustomers.map(customer => {
+            const rung = getRung(customer.current_rung)
+            return (
+              <div
+                key={customer.id}
+                className={`customer-card ${selectedCustomer?.id === customer.id ? 'selected' : ''}`}
+                onClick={() => onSelectCustomer(customer)}
+              >
+                <div className="customer-main">
+                  <span className="customer-name">{customer.customer_name}</span>
+                  <span className="customer-ltv">${customer.lifetime_value?.toLocaleString() || 0}</span>
+                </div>
+                <div className="customer-meta">
+                  <span className="customer-rung" style={{ background: rung.color }}>
+                    {rung.customLabel || rung.label}
+                  </span>
+                  <span className="customer-purchases">
+                    {customer.total_purchases || 0} purchase{customer.total_purchases !== 1 ? 's' : ''}
+                  </span>
+                </div>
               </div>
-              <div className="customer-meta">
-                <span
-                  className="customer-rung"
-                  style={{ background: VALUE_LADDER_RUNGS.find(r => r.id === customer.current_rung)?.color }}
-                >
-                  {VALUE_LADDER_RUNGS.find(r => r.id === customer.current_rung)?.label || customer.current_rung}
-                </span>
-                <span className="customer-purchases">{customer.total_purchases || 0} purchase{customer.total_purchases !== 1 ? 's' : ''}</span>
-              </div>
-            </div>
-          ))}
+            )
+          })}
           {filteredCustomers.length === 0 && (
             <div className="no-customers">No customers in this category</div>
           )}
         </div>
 
         {selectedCustomer && (
-          <CustomerJourney customer={selectedCustomer} onClose={() => onSelectCustomer(null)} />
+          <CustomerJourney customer={selectedCustomer} onClose={() => onSelectCustomer(null)} ladder={ladder} />
         )}
       </div>
     </div>
   )
 }
 
-function CustomerJourney({ customer, onClose }) {
+function CustomerJourney({ customer, onClose, ladder }) {
   const history = customer.ascension_history || []
+
+  const getRung = (rungId) => ladder.find(r => r.id === rungId) || { label: rungId, color: '#6b7280' }
 
   return (
     <div className="customer-journey">
@@ -399,16 +463,19 @@ function CustomerJourney({ customer, onClose }) {
           <p className="no-history">No journey history yet</p>
         ) : (
           <div className="timeline-events">
-            {history.map((event, index) => (
-              <div key={index} className="timeline-event">
-                <span className="event-dot" style={{ background: VALUE_LADDER_RUNGS.find(r => r.id === event.rung)?.color }}></span>
-                <div className="event-content">
-                  <span className="event-rung">{VALUE_LADDER_RUNGS.find(r => r.id === event.rung)?.label || event.rung}</span>
-                  <span className="event-value">${event.value?.toLocaleString() || 0}</span>
-                  <span className="event-date">{new Date(event.date).toLocaleDateString()}</span>
+            {history.map((event, index) => {
+              const rung = getRung(event.rung)
+              return (
+                <div key={index} className="timeline-event">
+                  <span className="event-dot" style={{ background: rung.color }}></span>
+                  <div className="event-content">
+                    <span className="event-rung">{rung.customLabel || rung.label}</span>
+                    <span className="event-value">${event.value?.toLocaleString() || 0}</span>
+                    <span className="event-date">{new Date(event.date).toLocaleDateString()}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>

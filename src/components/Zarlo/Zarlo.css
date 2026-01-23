@@ -224,6 +224,53 @@
   color: var(--zarlo-text);
 }
 
+.zarlo-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.zarlo-voice-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--zarlo-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.zarlo-voice-toggle:hover {
+  background: var(--zarlo-border);
+  color: var(--zarlo-text);
+}
+
+.zarlo-voice-toggle.active {
+  background: var(--zarlo-primary);
+  color: white;
+}
+
+.zarlo-voice-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.zarlo-typing {
+  color: var(--zarlo-text-muted);
+  font-style: italic;
+  animation: zarlo-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes zarlo-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
 /* ============================================
    MESSAGES
    ============================================ */

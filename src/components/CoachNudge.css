@@ -1,0 +1,153 @@
+/* src/components/CoachNudge.css */
+
+.coach-nudge {
+  position: fixed;
+  bottom: 100px;
+  left: 20px;
+  transform: translateX(0) translateY(20px);
+  opacity: 0;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.95) 0%, rgba(60, 15, 150, 0.95) 100%);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 360px;
+  width: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.coach-nudge.visible {
+  transform: translateX(0) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nudge-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.nudge-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.nudge-message {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: white;
+}
+
+.nudge-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nudge-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nudge-btn.primary {
+  background: var(--gold, #ffdd27);
+  color: #1a1a1a;
+}
+
+.nudge-btn.primary:hover {
+  background: #ffe55c;
+  transform: translateY(-1px);
+}
+
+.nudge-btn.dismiss {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.nudge-btn.dismiss:hover {
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+.nudge-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.nudge-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .coach-nudge {
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+    transform: translateX(0) translateY(20px);
+    width: auto;
+  }
+
+  .coach-nudge.visible {
+    transform: translateX(0) translateY(0);
+  }
+
+  .nudge-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+
+  .nudge-message {
+    font-size: 13px;
+  }
+
+  .nudge-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Animation for entrance */
+@keyframes nudgeSlideIn {
+  from {
+    transform: translateX(0) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+}

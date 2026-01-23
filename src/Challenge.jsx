@@ -20,6 +20,7 @@ import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage } from './lib/stageConfig'
+import { generateVoiceQuestsForStage } from './lib/voiceQuestConfig'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -93,6 +94,11 @@ function Challenge() {
     setActiveStageTab,
     projectStage,
     setProjectStage,
+    businessSubTab,
+    setBusinessSubTab,
+    healingSubTab,
+    setHealingSubTab,
+    userArchetypes,
     weeklyPlan,
     showWeeklyPlanning,
     setShowWeeklyPlanning,
@@ -662,45 +668,76 @@ function Challenge() {
     }
   }
 
+  // Determine the current viewing stage (needed for Business filtering)
+  const viewingStage = activeStageTab !== undefined ? activeStageTab : (
+    selectedProject?.current_stage ||
+    (typeof stageProgress?.current_stage === 'number'
+      ? stageProgress.current_stage
+      : convertLegacyStage(stageProgress?.current_stage))
+  )
+
+  // Check if we're viewing the Groans stage (0.5) in Business tab
+  const isGroansStage = activeCategory === 'Business' && viewingStage === 0.5
+
   // Filter quests by the active category tab (exclude archived quests)
-  let filteredQuests = challengeData?.quests?.filter(q => q.category === activeCategory && !q.archived) || []
+  // Special case: When viewing Groans stage in Business, pull from 'Groans' category
+  let filteredQuests = challengeData?.quests?.filter(q => {
+    if (q.archived) return false
+    if (isGroansStage) {
+      return q.category === 'Groans'
+    }
+    return q.category === activeCategory
+  }) || []
 
   // Filter by persona and stage for Business quests
   if (activeCategory === 'Business') {
     const userPersonaNormalized = normalizePersona(userData?.persona)
 
+    // Handle sub-tabs: Tasks vs Voices
+    // Note: Groans stage only has Tasks, no Voices sub-tab
+    if (businessSubTab === 'voices' && !isGroansStage) {
+      // Generate voice quests for the current stage
+      filteredQuests = generateVoiceQuestsForStage(viewingStage, userArchetypes)
+    } else {
+      // Tasks sub-tab: filter regular business quests
+      // For Groans stage, show all non-archived Groans quests
+      if (!isGroansStage) {
+        filteredQuests = filteredQuests.filter(quest => {
+          // Exclude stage groan quests - they now appear in Voices sub-tab
+          if (quest.type === 'groan' || quest.id?.startsWith('groan_stage')) {
+            return false
+          }
+
+          if (quest.persona_specific && userPersonaNormalized) {
+            const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
+            if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
+              return false
+            }
+          }
+
+          // Check stage_required - use !== undefined since stage 0 is valid
+          // Use Number() to ensure both sides are numbers for proper comparison
+          if (quest.stage_required !== undefined && quest.stage_required !== null) {
+            if (Number(quest.stage_required) !== Number(viewingStage)) {
+              return false
+            }
+          }
+
+          return true
+        })
+      }
+    }
+  }
+
+  // Filter Healing quests by sub-tab (daily/weekly)
+  if (activeCategory === 'Healing') {
     filteredQuests = filteredQuests.filter(quest => {
-      if (quest.persona_specific && userPersonaNormalized) {
-        const normalizedQuestPersonas = quest.persona_specific.map(p => normalizePersona(p))
-        if (!normalizedQuestPersonas.includes(userPersonaNormalized)) {
-          return false
-        }
+      if (healingSubTab === 'daily') {
+        return quest.frequency === 'daily'
+      } else if (healingSubTab === 'weekly') {
+        return quest.frequency === 'weekly'
       }
-
-      // Check stage_required - use !== undefined since stage 0 is valid
-      if (quest.stage_required !== undefined && quest.stage_required !== null) {
-        const viewingStage = activeStageTab !== undefined ? activeStageTab : (
-          selectedProject?.current_stage ||
-          (typeof stageProgress?.current_stage === 'number'
-            ? stageProgress.current_stage
-            : convertLegacyStage(stageProgress?.current_stage))
-        )
-
-        if (quest.stage_required !== viewingStage) {
-          return false
-        }
-      }
-
       return true
-    })
-
-    // Sort Business quests: put groan challenges last
-    filteredQuests.sort((a, b) => {
-      const aIsGroan = a.type === 'groan' || a.id?.startsWith('groan_stage')
-      const bIsGroan = b.type === 'groan' || b.id?.startsWith('groan_stage')
-      if (aIsGroan && !bIsGroan) return 1
-      if (!aIsGroan && bIsGroan) return -1
-      return 0
     })
   }
 
@@ -892,6 +929,23 @@ function Challenge() {
                 onTabChange={setActiveStageTab}
                 flowFinderComplete={flowFinderComplete}
               />
+              {/* Sub-tabs: Tasks | Voices - hidden for Groans stage */}
+              {activeStageTab !== 0.5 && (
+                <div className="business-sub-tabs">
+                  <button
+                    className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
+                    onClick={() => setBusinessSubTab('tasks')}
+                  >
+                    Tasks
+                  </button>
+                  <button
+                    className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
+                    onClick={() => setBusinessSubTab('voices')}
+                  >
+                    Voices
+                  </button>
+                </div>
+              )}
             </>
           ) : (
             <div className="no-project-prompt">
@@ -904,6 +958,26 @@ function Challenge() {
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Sub-tabs for Healing: Daily | Weekly */}
+      {activeCategory === 'Healing' && (
+        <div className="healing-sub-tabs-wrapper">
+          <div className="healing-sub-tabs">
+            <button
+              className={`sub-tab ${healingSubTab === 'daily' ? 'active' : ''}`}
+              onClick={() => setHealingSubTab('daily')}
+            >
+              Daily
+            </button>
+            <button
+              className={`sub-tab ${healingSubTab === 'weekly' ? 'active' : ''}`}
+              onClick={() => setHealingSubTab('weekly')}
+            >
+              Weekly
+            </button>
+          </div>
         </div>
       )}
 

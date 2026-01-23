@@ -28,6 +28,15 @@ const RECOGNISE_QUEST_IDS = [
   'recognise_trigger_pattern'
 ]
 
+// Helper to check if quest is a voice quest (stage-specific essence/protective)
+// Excludes stage groan quests which should go to GroanReflectionInput
+const isVoiceQuest = (questId) => {
+  if (!questId?.startsWith('voice_stage_')) return false
+  // Stage groan quests should NOT be handled by RecogniseQuestInput
+  if (questId.endsWith('_stage_groan')) return false
+  return true
+}
+
 function QuestCard({
   quest,
   completed,
@@ -239,7 +248,7 @@ function QuestCard({
             <Link to={quest.flow_route} className="quest-flow-btn">
               Start {quest.name}
             </Link>
-          ) : RECOGNISE_QUEST_IDS.includes(quest.id) ? (
+          ) : RECOGNISE_QUEST_IDS.includes(quest.id) || isVoiceQuest(quest.id) ? (
             <RecogniseQuestInput
               quest={quest}
               onComplete={(quest, data) => onComplete(quest, data)}
@@ -339,6 +348,44 @@ function QuestCard({
                 Complete Quest
               </button>
             </>
+          ) : quest.inputType === 'multi_select' ? (
+            <>
+              {quest.selectOptions && (
+                <div className="quest-multi-select">
+                  <span className="quest-select-label">{quest.selectLabel || 'Select all that apply:'}</span>
+                  <div className="quest-select-options">
+                    {quest.selectOptions.map(option => {
+                      const currentSelections = Array.isArray(questInput) ? questInput : []
+                      const isSelected = currentSelections.includes(option.value)
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          className={`quest-select-option ${isSelected ? 'selected' : ''}`}
+                          onClick={() => {
+                            const newSelections = isSelected
+                              ? currentSelections.filter(v => v !== option.value)
+                              : [...currentSelections, option.value]
+                            onInputChange(quest.id, newSelections)
+                          }}
+                        >
+                          <span className="option-icon">{option.icon}</span>
+                          <span className="option-label">{option.label}</span>
+                          {isSelected && <span className="option-check">✓</span>}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
+              <button
+                className="quest-complete-btn"
+                onClick={(e) => onComplete(quest, null, e)}
+                disabled={!Array.isArray(questInput) || questInput.length === 0}
+              >
+                Complete Quest
+              </button>
+            </>
           ) : quest.inputType === 'conversation_log' ? (
             <ConversationLogInput
               quest={quest}
@@ -370,6 +417,34 @@ function QuestCard({
               responseCount={validationResponseCounts[quest.flow_stage] || 0}
               onComplete={(quest, data, e) => onComplete(quest, data, e)}
             />
+          ) : quest.inputType === 'progress_dropdown' ? (
+            <>
+              <select
+                className="quest-dropdown progress-dropdown"
+                value={questInput || 'not_started'}
+                onChange={(e) => onInputChange(quest.id, e.target.value)}
+              >
+                {quest.options?.map(opt => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              {(questInput === 'completed_crm' || questInput === 'completed_other') && (
+                <button
+                  className="quest-complete-btn"
+                  onClick={(e) => onComplete(quest, { progress: questInput }, e)}
+                >
+                  Complete Quest
+                </button>
+              )}
+              {questInput === 'in_progress' && (
+                <div className="quest-progress-note">
+                  <span className="progress-indicator">🔄</span>
+                  <span>In Progress - Keep going!</span>
+                </div>
+              )}
+            </>
           ) : quest.inputType === 'dropdown' ? (
             <>
               <select

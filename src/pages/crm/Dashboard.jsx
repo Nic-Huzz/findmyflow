@@ -454,6 +454,13 @@ export default function Dashboard() {
         <h2>Quick Actions</h2>
         <div className="quick-actions">
           <button
+            className="action-btn execute-btn"
+            onClick={() => navigate('/crm/execute')}
+          >
+            <span className="action-icon">🎯</span>
+            <span className="action-text">Execute</span>
+          </button>
+          <button
             className="action-btn marketing-btn"
             onClick={() => navigate('/crm/marketing')}
           >

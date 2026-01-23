@@ -939,6 +939,151 @@ if (earningCeiling < launchReadiness.pricingData.coreOfferPrice) {
 
 ---
 
+### Funnel Baseline (Weekly Tracker) → CRM Analytics
+
+**Route:** `/funnel-baseline`
+**Table:** `funnel_metrics`
+**Frequency:** Weekly
+
+This flow captures week-by-week funnel performance data:
+
+| Data Point | Field | CRM Use |
+|------------|-------|---------|
+| Traffic Source | `custom_rates.traffic_source` | CAC Tracker channel attribution |
+| Awareness | `awareness` | Top-of-funnel reach |
+| Attraction | `attraction` | Engagement rate |
+| Lead Magnet | `leadmagnet` | Opt-in rate |
+| Nurture | `nurture` | Email engagement |
+| Core Sales | `core` | Primary conversion |
+| Upsell | `upsell` | Upsell rate validation |
+| Downsell | `downsell` | Downsell rate validation |
+| Continuity | `continuity` | Subscription tracking |
+| Week Start | `week_start` | Time-series analysis |
+| Is Baseline | `is_baseline` | First entry marker |
+| Focus Next Week | `custom_rates.focus_next_week` | Coaching/task generation |
+
+**Existing CRM Connection:**
+- Calls `syncCRMToFunnel(user.id)` after save → bidirectional sync with CRM data
+
+**CRM Components This Feeds:**
+
+| CRM Component | How It Uses Funnel Baseline Data |
+|---------------|----------------------------------|
+| **Analytics Dashboard** | Week-over-week trends, conversion charts |
+| **CAC Tracker** | Channel attribution from `traffic_source` |
+| **LTV Calculator** | Validate projections vs actual sales |
+| **Smart Alerts** | Detect conversion rate drops ("Lead magnet down 20%") |
+| **Funnel Calculator** | Pre-populate with latest actual data |
+| **Pipeline Forecasting** | Use conversion rates to project future revenue |
+
+**Calculated Metrics (derived):**
+
+| Metric | Calculation | CRM Use |
+|--------|-------------|---------|
+| Awareness → Attraction Rate | `attraction / awareness * 100` | Content effectiveness |
+| Attraction → Lead Magnet Rate | `leadmagnet / attraction * 100` | Lead capture effectiveness |
+| Lead Magnet → Nurture Rate | `nurture / leadmagnet * 100` | Email engagement |
+| Nurture → Core Rate | `core / nurture * 100` | Sales conversion |
+| Overall Funnel Rate | `core / awareness * 100` | End-to-end efficiency |
+| Upsell Take Rate | `upsell / core * 100` | Upsell validation |
+| Continuity Rate | `continuity / core * 100` | Subscription conversion |
+
+**Week-over-Week Comparisons:**
+
+| Comparison | CRM Use |
+|------------|---------|
+| This week vs last week | Progress indicators |
+| This week vs baseline | Growth from start |
+| Conversion rate trends | Identify improving/declining stages |
+| Channel performance over time | Optimize marketing spend |
+
+**Smart Alert Triggers:**
+
+| Condition | Alert |
+|-----------|-------|
+| Lead magnet rate drops >20% | "Your lead magnet conversion dropped - review your landing page" |
+| Core conversion drops >15% | "Sales are down - check your nurture sequence or pricing" |
+| Upsell rate below 10% | "Consider improving your upsell offer or timing" |
+| No baseline after 7 days | "Set your funnel baseline to start tracking" |
+| No update for 2+ weeks | "Update your funnel numbers to track progress" |
+
+**Implementation - Connect to CRM:**
+
+```javascript
+// In funnelActualsService.js or new service
+export async function getFunnelTrends(userId, weeks = 4) {
+  const { data } = await supabase
+    .from('funnel_metrics')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('mode', 'actual')
+    .order('week_start', { ascending: false })
+    .limit(weeks)
+
+  return data?.map(week => ({
+    weekStart: week.week_start,
+    trafficSource: week.custom_rates?.traffic_source,
+    totals: {
+      awareness: week.awareness,
+      attraction: week.attraction,
+      leadmagnet: week.leadmagnet,
+      nurture: week.nurture,
+      core: week.core,
+      upsell: week.upsell,
+      downsell: week.downsell,
+      continuity: week.continuity
+    },
+    rates: {
+      awarenessToAttraction: week.awareness ? (week.attraction / week.awareness * 100).toFixed(1) : 0,
+      attractionToLead: week.attraction ? (week.leadmagnet / week.attraction * 100).toFixed(1) : 0,
+      leadToNurture: week.leadmagnet ? (week.nurture / week.leadmagnet * 100).toFixed(1) : 0,
+      nurtureToCore: week.nurture ? (week.core / week.nurture * 100).toFixed(1) : 0,
+      overall: week.awareness ? (week.core / week.awareness * 100).toFixed(2) : 0
+    },
+    focus: week.custom_rates?.focus_next_week
+  }))
+}
+
+// Generate alerts based on trends
+export function analyzeFunnelTrends(trends) {
+  if (!trends || trends.length < 2) return []
+
+  const alerts = []
+  const [current, previous] = trends
+
+  // Check each conversion rate
+  const rateChecks = [
+    { key: 'awarenessToAttraction', label: 'engagement', threshold: 20 },
+    { key: 'attractionToLead', label: 'lead capture', threshold: 20 },
+    { key: 'leadToNurture', label: 'nurture engagement', threshold: 15 },
+    { key: 'nurtureToCore', label: 'sales conversion', threshold: 15 }
+  ]
+
+  for (const check of rateChecks) {
+    const currentRate = parseFloat(current.rates[check.key])
+    const previousRate = parseFloat(previous.rates[check.key])
+
+    if (previousRate > 0) {
+      const change = ((currentRate - previousRate) / previousRate) * 100
+
+      if (change < -check.threshold) {
+        alerts.push({
+          type: 'funnel_drop',
+          severity: 'high',
+          metric: check.label,
+          change: change.toFixed(0),
+          message: `Your ${check.label} rate dropped ${Math.abs(change).toFixed(0)}% this week`
+        })
+      }
+    }
+  }
+
+  return alerts
+}
+```
+
+---
+
 ## IMPLEMENTATION: New challengeDataService.js
 
 ```javascript

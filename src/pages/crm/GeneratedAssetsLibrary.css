@@ -126,10 +126,10 @@
   border: 4px solid rgba(255, 255, 255, 0.1);
   border-top-color: #5e17eb;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: gal-spin 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes gal-spin {
   to { transform: rotate(360deg); }
 }
 

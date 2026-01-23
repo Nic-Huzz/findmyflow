@@ -214,14 +214,14 @@ export const PAGE_CONTENT = {
     ],
     faq: {
       which_quest: `If you're brand new, just pick one that calls to you. Seriously — don't overthink it. The most important thing is completing something, not picking the "perfect" thing.\n\nIf you've been here a while, check your summary to see which categories you've been avoiding. That avoidance? Probably where your growth edge is hiding.`,
-      different_tabs: `**Groans** — Visibility challenges that make you go "ugh." Recognise patterns, Rewire beliefs, Reconnect to your body.\n\n**Healing** — Release practices for stuck emotions. Daily micro-releases, emotion processing, and deeper weekly practices.\n\n**Flow Finder** — Discovery flows to understand yourself better. Skills, problems, persona.\n\n**Tracker** — Log your daily energy (North/East/South/West) to spot patterns over time.`
+      different_tabs: `**Business** — Stage-based quests to build your business. Each stage has Tasks and Voices sub-tabs. The Groans stage contains visibility challenges that push you past your comfort zone.\n\n**Healing** — Daily and weekly practices for emotional processing. Reconnect practices (meditation, breathwork, prayer) and Release practices for stuck emotions.\n\n**Tracker** — Log your daily energy (North/East/South/West) to spot patterns over time.\n\n**Bonus** — Extra activities and feedback opportunities.`
     }
   },
 
   // Tab-specific content (same route, different context)
   'challenge_groans': {
-    pageId: 'groans_tab',
-    pageName: 'Groans',
+    pageId: 'groans_stage',
+    pageName: 'Groans Stage',
     whatIsThis: `Groans are the things that make you go "ughhhh" — stuff you KNOW you can do, but your body is absolutely not thrilled about. Posting that thing. Sending that message. Raising your prices. You know the ones.`,
     whyMatters: `Here's the magic: every time you groan AND do it anyway, your nervous system learns something new. "Oh wait... we didn't die? Interesting."\n\nThat's literally how we expand. Groan by groan, your comfort zone gets bigger. It's like strength training for your visibility muscles.`,
     contextualPrompts: [
@@ -244,7 +244,7 @@ export const PAGE_CONTENT = {
       { id: 'deep_release', label: 'Do I have to do the deep release every week?' }
     ],
     faq: {
-      release_recognise: `**Recognise** (in Groans) is noticing patterns — observing what protective voice showed up, what fear was triggered. It's cognitive.\n\n**Release** (in Healing) is moving energy through your body — breathwork, shaking, crying, movement. It's somatic.\n\nYou can recognise a pattern without releasing the emotion. And you can release emotion without fully understanding where it came from. Both are valuable. They work together.`,
+      release_recognise: `**Recognise** (in the Groans stage under Business) is noticing patterns — observing what protective voice showed up, what fear was triggered. It's cognitive.\n\n**Release** (in Healing) is moving energy through your body — breathwork, shaking, crying, movement. It's somatic.\n\nYou can recognise a pattern without releasing the emotion. And you can release emotion without fully understanding where it came from. Both are valuable. They work together.`,
       deep_release: `Nope, totally optional. The Big Release (45+ minutes of intensive practice) is powerful stuff, but it's not required.\n\nIf you're drawn to it, try it. If it feels like too much right now, stick with the daily 90-second releases. They add up more than you'd think.\n\nListen to your body. Some weeks want intensity. Others want gentleness. Both are valid.`
     }
   },

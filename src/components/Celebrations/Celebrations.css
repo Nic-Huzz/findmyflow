@@ -1,0 +1,212 @@
+/* src/components/Celebrations/Celebrations.css */
+
+/* Floating Points Animation */
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px) scale(1.2);
+  }
+}
+
+.floating-points-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1100;
+}
+
+.floating-points {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--purple, #5e17eb);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: floatUp 1.5s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Micro Toast */
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}
+
+.micro-toast {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--purple, #5e17eb) 0%, #7c3aed 100%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(94, 23, 235, 0.4);
+  z-index: 1200;
+  animation: toastSlideIn 0.3s ease forwards;
+}
+
+.micro-toast.exiting {
+  animation: toastSlideOut 0.3s ease forwards;
+}
+
+/* Checkmark Burst */
+@keyframes checkBurst {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.task-checkbox.completing {
+  animation: checkBurst 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Streak Fire Glow */
+@keyframes fireGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px #f97316);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px #f97316);
+  }
+}
+
+.streak-badge.milestone {
+  animation: fireGlow 1s ease-in-out 3;
+}
+
+/* Level Up Modal Overlay */
+.level-up-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1300;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.level-up-modal {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 24px;
+  padding: 40px;
+  text-align: center;
+  max-width: 320px;
+  width: calc(100% - 32px);
+  animation: levelUpPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes levelUpPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.level-up-modal .level-badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold, #ffdd27) 0%, #f59e0b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 36px;
+}
+
+.level-up-modal h2 {
+  margin: 0 0 8px;
+  color: white;
+  font-size: 28px;
+}
+
+.level-up-modal .level-number {
+  color: var(--gold, #ffdd27);
+  font-size: 48px;
+  font-weight: 700;
+  margin: 8px 0 16px;
+}
+
+.level-up-modal p {
+  margin: 0 0 24px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+}
+
+.level-up-modal button {
+  background: var(--gold, #ffdd27);
+  color: #1a1a1a;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 100px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.level-up-modal button:hover {
+  transform: scale(1.05);
+}
+
+/* Haptic feedback indicator (for accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  .floating-points,
+  .micro-toast,
+  .level-up-modal,
+  .task-checkbox.completing,
+  .streak-badge.milestone {
+    animation: none;
+  }
+
+  .micro-toast {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  .level-up-modal {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

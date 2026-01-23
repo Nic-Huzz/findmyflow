@@ -188,6 +188,52 @@ Questions dynamically insert the user's chosen archetypes:
 | 4 | Flow direction (N/E/S/W) |
 | 5 | Reflection summary + optional notes |
 
+---
+
+## UI Layout
+
+### Business Tab Layout
+```
+┌─────────────────────────────────────────────┐
+│  MAIN TABS                                  │
+│  Business | Groans | Healing | Tracker | +  │
+└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│  STAGE TABS (unchanged position)            │
+│  1 | 2 | 3 | 4 | 5 | 6 | 7                  │
+├─────────────────────────────────────────────┤
+│  SUB-TABS (new - BELOW stage tabs)          │
+│  Tasks | Voices                             │
+└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│  QUEST CARDS                                │
+└─────────────────────────────────────────────┘
+```
+
+### Healing Tab Layout
+```
+┌─────────────────────────────────────────────┐
+│  MAIN TABS                                  │
+│  Business | Groans | Healing | Tracker | +  │
+└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│  SUB-TABS (new)                             │
+│  Daily | Weekly                             │
+└─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│  QUEST CARDS                                │
+└─────────────────────────────────────────────┘
+```
+
+### Styling Notes
+- Sub-tabs use same styling as existing stage tabs
+- Reuse `.stage-tabs-wrapper` background/border pattern
+- Same purple accent colors (#5e17eb, #8b5cf6)
+- Same card shadows and border-radius
+- Header, main tabs, stage tabs, quest cards all unchanged
+
+---
+
 ### Example UI: Stage 1 Validation - Essence Voice
 
 ```

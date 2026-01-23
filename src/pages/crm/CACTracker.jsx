@@ -1,10 +1,27 @@
 /**
  * CAC Tracker - Customer Acquisition Cost Calculator
  * Tracks marketing spend and calculates cost per customer
+ *
+ * Pre-populates from challenge data:
+ * - LTV Calculator data → for LTV:CAC ratio
+ * - leads_assessments (Core Four) → highlights recommended channel
  */
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthProvider'
+import { supabase } from '../../lib/supabaseClient'
 import './CACTracker.css'
+
+// Map Core Four strategy choices to channel IDs
+const CORE_FOUR_CHANNEL_MAP = {
+  'warm_outreach': 'referral',
+  'cold_outreach': 'email',
+  'content': 'content',
+  'paid_ads': 'paid_social',
+  'organic_social': 'organic',
+  'seo': 'content',
+  'partnerships': 'partnerships',
+}
 
 const CHANNELS = [
   { id: 'organic', name: 'Organic (Social)', icon: '📱', color: '#10b981' },
@@ -19,6 +36,12 @@ const CHANNELS = [
 
 export default function CACTracker() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  const [loadingDefaults, setLoadingDefaults] = useState(true)
+  const [focusedChannel, setFocusedChannel] = useState(null) // From Core Four
+  const [dataSource, setDataSource] = useState(null)
+
   const [timeframe, setTimeframe] = useState('month')
   const [channelData, setChannelData] = useState(
     CHANNELS.reduce((acc, ch) => ({
@@ -27,6 +50,63 @@ export default function CACTracker() {
     }), {})
   )
   const [ltv, setLtv] = useState(1500) // Average LTV for ratio calculation
+
+  // Pre-populate from challenge data
+  useEffect(() => {
+    if (!user) {
+      setLoadingDefaults(false)
+      return
+    }
+
+    async function loadDefaults() {
+      try {
+        const sources = []
+
+        // Fetch Core Four strategy and LTV data
+        const [leadsStrategy, ltvModel] = await Promise.all([
+          supabase
+            .from('leads_assessments')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+          supabase
+            .from('ltv_models')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+        ])
+
+        // Set focused channel from Core Four
+        if (leadsStrategy?.data?.chosen_strategy) {
+          const channelId = CORE_FOUR_CHANNEL_MAP[leadsStrategy.data.chosen_strategy]
+          if (channelId) {
+            setFocusedChannel(channelId)
+            sources.push('Core Four Strategy')
+          }
+        }
+
+        // Set LTV from saved model
+        if (ltvModel?.data?.ltv_per_customer) {
+          setLtv(Math.round(ltvModel.data.ltv_per_customer))
+          sources.push('LTV Calculator')
+        }
+
+        if (sources.length > 0) {
+          setDataSource(sources.join(', '))
+        }
+      } catch (err) {
+        console.error('Error loading CAC defaults:', err)
+      } finally {
+        setLoadingDefaults(false)
+      }
+    }
+
+    loadDefaults()
+  }, [user])
 
   // Calculate totals and metrics
   const calculations = useMemo(() => {
@@ -104,6 +184,14 @@ export default function CACTracker() {
           <h1>CAC Tracker</h1>
           <p>Customer Acquisition Cost by Channel</p>
         </div>
+        {loadingDefaults && (
+          <div className="data-source-badge loading">Loading...</div>
+        )}
+        {!loadingDefaults && dataSource && (
+          <div className="data-source-badge">
+            From: {dataSource}
+          </div>
+        )}
         <div className="timeframe-toggle">
           <button
             className={timeframe === 'month' ? 'active' : ''}
@@ -168,10 +256,17 @@ export default function CACTracker() {
         <h2>Channel Breakdown</h2>
         <div className="channels-grid">
           {CHANNELS.map(channel => (
-            <div key={channel.id} className="channel-card" style={{ '--channel-color': channel.color }}>
+            <div
+              key={channel.id}
+              className={`channel-card ${focusedChannel === channel.id ? 'focused' : ''}`}
+              style={{ '--channel-color': channel.color }}
+            >
               <div className="channel-header">
                 <span className="channel-icon">{channel.icon}</span>
                 <span className="channel-name">{channel.name}</span>
+                {focusedChannel === channel.id && (
+                  <span className="focus-badge">Core Four Focus</span>
+                )}
               </div>
               <div className="channel-inputs">
                 <div className="input-group">

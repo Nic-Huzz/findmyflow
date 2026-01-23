@@ -10,6 +10,7 @@ import {
   JOURNEY_STAGES,
   PROBLEMS_PROFICIENCY_RINGS
 } from '../lib/wheelTaxonomy'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './PersonaSelectionFlow.css'
 
 // Flow stages
@@ -780,10 +781,13 @@ function PersonaSelectionFlow() {
 
           {error && <p className="error-message">{error}</p>}
 
+          <FlowFeedback flowType="persona_selection" userId={user?.id} />
+
           <button
             className="primary-button"
             onClick={saveResults}
             disabled={!selectedProfileId || isLoading}
+            style={{ marginTop: '24px' }}
           >
             {isLoading ? 'Saving...' : 'Save Results'}
           </button>

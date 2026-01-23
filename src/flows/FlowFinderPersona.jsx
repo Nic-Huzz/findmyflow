@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { JOURNEY_STAGES } from '../lib/wheelTaxonomy'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './FlowFinder.css'
 
 export default function FlowFinderPersona() {
@@ -603,7 +604,9 @@ export default function FlowFinderPersona() {
           <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's bring it all together and find your unique opportunity.</p>
         </div>
 
-        <Link to="/nikigai/integration" className="primary-button">
+        <FlowFeedback flowType="nikigai_persona" userId={user?.id} />
+
+        <Link to="/nikigai/integration" className="primary-button" style={{ marginTop: '24px', display: 'block', textDecoration: 'none', textAlign: 'center' }}>
           Continue to Connecting the Dots
         </Link>
         <Link

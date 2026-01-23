@@ -18,7 +18,8 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
-import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import { ProgressDots } from '../components/MoneyModelShared'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './LaunchReadinessFlow.css'
 
 const STAGES = {
@@ -123,6 +124,19 @@ function LaunchReadinessFlow() {
 
   const [launchApproach, setLaunchApproach] = useState('')
   const [launchNotes, setLaunchNotes] = useState('')
+
+  // Offer names from Money Model flows
+  const [upsellOfferName, setUpsellOfferName] = useState('')
+  const [downsellOfferName, setDownsellOfferName] = useState('')
+
+  // Campaign progress from quest completions
+  const [campaignProgress, setCampaignProgress] = useState({
+    launch_sequence: { status: 'not_started', label: 'Launch Sequence' },
+    content_plan: { status: 'not_started', label: 'Content Creation Plan' },
+    lead_capture: { status: 'not_started', label: 'Lead Capture Setup' },
+    nurture_sequence: { status: 'not_started', label: 'Nurture Sequence' },
+    crm_setup: { status: 'not_started', label: 'CRM & Tracking Setup' }
+  })
 
   // Load existing data on mount
   useEffect(() => {
@@ -237,47 +251,30 @@ function LaunchReadinessFlow() {
         setOfferName(offerStackData.offer_name)
       }
 
-      // Load Upsell assessment for upsell pricing
+      // Load Upsell assessment - get the recommended offer name (not price)
       const { data: upsellData } = await supabase
         .from('upsell_assessments')
-        .select('responses')
+        .select('recommended_offer_name, recommended_offer_id')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle()
 
-      if (upsellData?.responses) {
-        // Try to find price in responses
-        const responses = upsellData.responses
-        if (responses.price) {
-          upsellPrice = responses.price
-        } else if (responses.upsell_price) {
-          upsellPrice = responses.upsell_price
-        } else if (responses.q_price) {
-          upsellPrice = responses.q_price
-        }
-      }
-
-      // Load Downsell assessment for downsell pricing
+      // Load Downsell assessment - get the recommended offer name (not price)
       const { data: downsellData } = await supabase
         .from('downsell_assessments')
-        .select('responses')
+        .select('recommended_offer_name, recommended_offer_id')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle()
 
-      if (downsellData?.responses) {
-        // Try to find price in responses
-        const responses = downsellData.responses
-        if (responses.price) {
-          downsellPrice = responses.price
-        } else if (responses.downsell_price) {
-          downsellPrice = responses.downsell_price
-        } else if (responses.q_price) {
-          downsellPrice = responses.q_price
-        }
-      }
+      // Store the offer names for display in pricing section
+      setUpsellOfferName(upsellData?.recommended_offer_name || '')
+      setDownsellOfferName(downsellData?.recommended_offer_name || '')
+
+      console.log('📊 Upsell offer:', upsellData?.recommended_offer_name)
+      console.log('📊 Downsell offer:', downsellData?.recommended_offer_name)
 
       // Set pricing data if we found any
       if (corePrice || upsellPrice || downsellPrice) {
@@ -291,6 +288,43 @@ function LaunchReadinessFlow() {
       }
 
       console.log('📊 Launch Readiness - Loaded pricing:', { corePrice, upsellPrice, downsellPrice })
+
+      // Load campaign quest completions
+      const questIds = [
+        'milestone_launch_sequence',
+        'milestone_content_plan',
+        'milestone_lead_capture',
+        'milestone_nurture_sequence',
+        'milestone_crm_setup'
+      ]
+
+      // Fetch all user's quest completions and filter in JS (simpler than complex OR query)
+      const { data: allCompletions, error: questError } = await supabase
+        .from('quest_completions')
+        .select('quest_id, response_text')
+        .eq('user_id', user.id)
+
+      const questCompletions = allCompletions?.filter(c => questIds.includes(c.quest_id)) || []
+      console.log('📊 Quest completions:', questCompletions)
+
+      if (questCompletions && questCompletions.length > 0) {
+        const progressMap = { ...campaignProgress }
+
+        questCompletions.forEach(completion => {
+          const questKey = completion.quest_id.replace('milestone_', '')
+          if (progressMap[questKey]) {
+            // Determine status from response_text (the selected dropdown value)
+            const responseValue = completion.response_text || 'completed_other'
+            progressMap[questKey] = {
+              ...progressMap[questKey],
+              status: responseValue.includes('completed') ? responseValue : 'completed_other'
+            }
+          }
+        })
+
+        setCampaignProgress(progressMap)
+        console.log('📊 Launch Readiness - Loaded campaign progress:', progressMap)
+      }
 
       setStage(STAGES.WELCOME)
     } catch (err) {
@@ -410,21 +444,28 @@ function LaunchReadinessFlow() {
         created_at: new Date().toISOString()
       }
 
-      const { error: saveError } = await supabase
+      console.log('💾 Saving Launch Readiness assessment:', assessmentData)
+
+      const { data: savedData, error: saveError } = await supabase
         .from('launch_readiness_assessments')
         .insert(assessmentData)
+        .select()
 
       if (saveError) {
-        console.error('Save error:', saveError)
+        console.error('❌ Save error:', saveError)
         // Table might not exist, continue anyway
+      } else {
+        console.log('✅ Launch Readiness saved:', savedData)
       }
 
       // Complete quest
-      await completeFlowQuest({
+      console.log('🎯 Completing launch_readiness quest...')
+      const questResult = await completeFlowQuest({
         userId: user.id,
         flowId: 'launch_readiness',
         pointsEarned: 25
       })
+      console.log('🎯 Quest completion result:', questResult)
 
       setStage(STAGES.SUCCESS)
     } catch (err) {
@@ -530,7 +571,6 @@ function LaunchReadinessFlow() {
   if (stage === STAGES.SALES_INFRASTRUCTURE) {
     return (
       <div className="launch-readiness-flow">
-        <BackButton onClick={() => setStage(STAGES.WELCOME)} />
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
 
         <div className="lr-section">
@@ -640,29 +680,38 @@ function LaunchReadinessFlow() {
   }
 
   if (stage === STAGES.PRICING_CHECK) {
+    // Calculate potential revenue per sale
+    const corePrice = parseFloat(pricingData.coreOfferPrice) || 0
+    const upsellPrice = parseFloat(pricingData.upsellPrice) || 0
+    const downsellPrice = parseFloat(pricingData.downsellPrice) || 0
+    const maxRevenue = corePrice + upsellPrice
+    const minRevenue = downsellPrice > 0 ? downsellPrice : corePrice
+    const avgRevenue = corePrice > 0 ? Math.round((maxRevenue + minRevenue + corePrice) / 3) : 0
+
     return (
       <div className="launch-readiness-flow">
-        <BackButton onClick={() => setStage(STAGES.SALES_INFRASTRUCTURE)} />
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
 
         <div className="lr-section">
-          <h2>Pricing Check</h2>
-          <p className="lr-subtitle">Confirm your offer pricing</p>
+          <h2>Your Pricing Stack</h2>
+          <p className="lr-subtitle">Review and confirm your offer prices</p>
 
-          {existingPricing && (
-            <div className="lr-info-box">
-              <strong>We found pricing from your Money Models:</strong>
-              <p>Review and confirm below.</p>
-            </div>
-          )}
-
-          <div className="lr-pricing-grid">
-            <div className="lr-pricing-item main">
-              <label>Core Offer Price</label>
-              <div className="lr-price-input">
-                <span className="lr-currency">$</span>
+          {/* Visual Pricing Stack */}
+          <div className="lr-pricing-stack">
+            {/* Core Offer - Main Card */}
+            <div className="lr-stack-card core">
+              <div className="lr-stack-header">
+                <span className="lr-stack-icon">💎</span>
+                <div className="lr-stack-title">
+                  <h3>Core Offer</h3>
+                  <span className="lr-stack-subtitle">Your main product</span>
+                </div>
+              </div>
+              <div className="lr-stack-price-row">
+                <span className="lr-currency-large">$</span>
                 <input
                   type="number"
+                  className="lr-stack-price-input"
                   value={pricingData.coreOfferPrice}
                   onChange={(e) => setPricingData(prev => ({ ...prev, coreOfferPrice: e.target.value }))}
                   placeholder="997"
@@ -670,43 +719,87 @@ function LaunchReadinessFlow() {
               </div>
             </div>
 
-            <div className="lr-pricing-item">
-              <label>Upsell Price (optional)</label>
-              <div className="lr-price-input">
-                <span className="lr-currency">$</span>
+            {/* Upsell Card */}
+            <div className={`lr-stack-card upsell ${upsellPrice > 0 ? 'active' : ''}`}>
+              <div className="lr-stack-header">
+                <span className="lr-stack-icon">📈</span>
+                <div className="lr-stack-title">
+                  <h3>Upsell</h3>
+                  <span className="lr-stack-subtitle">Premium add-on</span>
+                </div>
+                {upsellOfferName && (
+                  <span className="lr-strategy-tag upsell">{upsellOfferName}</span>
+                )}
+              </div>
+              <div className="lr-stack-price-row">
+                <span className="lr-currency-large">$</span>
                 <input
                   type="number"
+                  className="lr-stack-price-input"
                   value={pricingData.upsellPrice}
                   onChange={(e) => setPricingData(prev => ({ ...prev, upsellPrice: e.target.value }))}
                   placeholder="297"
                 />
               </div>
+              <p className="lr-stack-hint">Offered after core purchase</p>
             </div>
 
-            <div className="lr-pricing-item">
-              <label>Downsell Price (optional)</label>
-              <div className="lr-price-input">
-                <span className="lr-currency">$</span>
+            {/* Downsell Card */}
+            <div className={`lr-stack-card downsell ${downsellPrice > 0 ? 'active' : ''}`}>
+              <div className="lr-stack-header">
+                <span className="lr-stack-icon">🎯</span>
+                <div className="lr-stack-title">
+                  <h3>Downsell</h3>
+                  <span className="lr-stack-subtitle">Entry-level option</span>
+                </div>
+                {downsellOfferName && (
+                  <span className="lr-strategy-tag downsell">{downsellOfferName}</span>
+                )}
+              </div>
+              <div className="lr-stack-price-row">
+                <span className="lr-currency-large">$</span>
                 <input
                   type="number"
+                  className="lr-stack-price-input"
                   value={pricingData.downsellPrice}
                   onChange={(e) => setPricingData(prev => ({ ...prev, downsellPrice: e.target.value }))}
                   placeholder="47"
                 />
               </div>
+              <p className="lr-stack-hint">Offered if core is declined</p>
             </div>
           </div>
 
-          <div className="lr-confirm-box">
-            <label className="lr-checkbox-label">
-              <input
-                type="checkbox"
-                checked={pricingData.confirmed}
-                onChange={(e) => setPricingData(prev => ({ ...prev, confirmed: e.target.checked }))}
-              />
-              <span>I confirm this pricing is final for launch</span>
-            </label>
-          </div>
+          {/* Revenue Calculator */}
+          {corePrice > 0 && (
+            <div className="lr-revenue-calc">
+              <h4>Potential Revenue Per Customer</h4>
+              <div className="lr-revenue-scenarios">
+                <div className="lr-scenario">
+                  <span className="lr-scenario-label">Core Only</span>
+                  <span className="lr-scenario-value">${corePrice.toLocaleString()}</span>
+                </div>
+                {upsellPrice > 0 && (
+                  <div className="lr-scenario max">
+                    <span className="lr-scenario-label">Core + Upsell</span>
+                    <span className="lr-scenario-value">${maxRevenue.toLocaleString()}</span>
+                  </div>
+                )}
+                {downsellPrice > 0 && (
+                  <div className="lr-scenario min">
+                    <span className="lr-scenario-label">Downsell Only</span>
+                    <span className="lr-scenario-value">${downsellPrice.toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+              {(upsellPrice > 0 || downsellPrice > 0) && (
+                <div className="lr-avg-revenue">
+                  <span>Average customer value:</span>
+                  <strong>${avgRevenue.toLocaleString()}</strong>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="nav-buttons">
             <button className="secondary-button" onClick={() => setStage(STAGES.SALES_INFRASTRUCTURE)}>Back</button>
@@ -728,7 +821,6 @@ function LaunchReadinessFlow() {
 
     return (
       <div className="launch-readiness-flow">
-        <BackButton onClick={() => setStage(STAGES.PRICING_CHECK)} />
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
 
         <div className="lr-section">
@@ -743,7 +835,7 @@ function LaunchReadinessFlow() {
                   onClick={() => handleProofToggle(proof.id)}
                 >
                   <span className="lr-proof-check">
-                    {proofData.types[proof.id]?.selected ? '✓' : '○'}
+                    {proofData.types[proof.id]?.selected && <span className="checkmark">✓</span>}
                   </span>
                   <span className="lr-proof-icon">{proof.icon}</span>
                   <span className="lr-proof-label">{proof.label}</span>
@@ -792,7 +884,6 @@ function LaunchReadinessFlow() {
 
     return (
       <div className="launch-readiness-flow">
-        <BackButton onClick={() => setStage(STAGES.SOCIAL_PROOF)} />
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
 
         <div className="lr-section">
@@ -910,7 +1001,6 @@ function LaunchReadinessFlow() {
 
     return (
       <div className="launch-readiness-flow">
-        <BackButton onClick={() => setStage(STAGES.AUDIENCE_SIZE)} />
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
 
         <div className="lr-section">
@@ -975,7 +1065,6 @@ function LaunchReadinessFlow() {
 
     return (
       <div className="launch-readiness-flow">
-        <BackButton onClick={() => setStage(STAGES.LAUNCH_APPROACH)} />
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
 
         <div className="lr-results">
@@ -1020,6 +1109,30 @@ function LaunchReadinessFlow() {
               </ul>
             </div>
           )}
+
+          {/* Campaign Progress Tracker */}
+          <div className="lr-campaign-progress">
+            <h3>📋 Campaign Setup Progress</h3>
+            <div className="lr-progress-items">
+              {Object.entries(campaignProgress).map(([key, item]) => {
+                const statusIcon = item.status.includes('completed') ? '✅' :
+                                   item.status === 'in_progress' ? '🔄' : '⬜'
+                const statusLabel = item.status === 'completed_crm' ? 'Done in CRM' :
+                                    item.status === 'completed_other' ? 'Completed' :
+                                    item.status === 'in_progress' ? 'In Progress' : 'Not Started'
+                return (
+                  <div key={key} className={`lr-progress-item ${item.status}`}>
+                    <span className="lr-progress-icon">{statusIcon}</span>
+                    <span className="lr-progress-label">{item.label}</span>
+                    <span className="lr-progress-status">{statusLabel}</span>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="lr-progress-hint">
+              Update progress on the 7-Day Challenge page
+            </p>
+          </div>
 
           {error && <p className="error-message">{error}</p>}
 
@@ -1068,7 +1181,9 @@ function LaunchReadinessFlow() {
             </div>
           )}
 
-          <button className="primary-button" onClick={() => navigate('/7-day-challenge')}>
+          <FlowFeedback flowType="launch_readiness" userId={user?.id} />
+
+          <button className="primary-button" onClick={() => navigate('/7-day-challenge')} style={{ marginTop: '24px' }}>
             Back to Challenge
           </button>
         </div>

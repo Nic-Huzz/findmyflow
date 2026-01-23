@@ -18,6 +18,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './FunnelBuilderFlow.css'
 
 const STAGES = {
@@ -980,9 +981,12 @@ function FunnelBuilderFlow() {
             </ul>
           </div>
 
+          <FlowFeedback flowType="funnel_builder" userId={user?.id} />
+
           <button
             className="primary-button"
             onClick={() => navigate('/7-day-challenge')}
+            style={{ marginTop: '24px' }}
           >
             Back to Challenge
           </button>

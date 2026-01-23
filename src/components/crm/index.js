@@ -1,4 +1,5 @@
 // CRM Components barrel export
+export { default as CRMLayout } from './CRMLayout'
 export { default as LeadScoreSliders } from './LeadScoreSliders'
 export { default as LeadScoreBadge } from './LeadScoreBadge'
 export { default as ScriptsModal } from './ScriptsModal'

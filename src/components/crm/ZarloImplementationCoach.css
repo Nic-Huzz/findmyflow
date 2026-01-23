@@ -147,10 +147,10 @@
   border: 4px solid #e9ecef;
   border-top-color: #5e17eb;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: zic-spin 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes zic-spin {
   to { transform: rotate(360deg); }
 }
 

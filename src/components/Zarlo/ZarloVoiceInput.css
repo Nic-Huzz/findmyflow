@@ -1,0 +1,198 @@
+/* src/components/Zarlo/ZarloVoiceInput.css */
+
+.zarlo-voice-input {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.voice-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.voice-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--purple, #5e17eb);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.voice-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.voice-btn:active,
+.voice-btn.listening {
+  transform: scale(0.95);
+  background: #c93b3b;
+  box-shadow: 0 0 0 4px rgba(201, 59, 59, 0.3);
+}
+
+.voice-btn.processing {
+  background: var(--gold, #ffdd27);
+  color: #1a1a1a;
+  cursor: wait;
+}
+
+.voice-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.voice-icon {
+  line-height: 1;
+}
+
+.voice-icon.recording {
+  color: white;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.voice-icon.processing {
+  animation: dots 1.4s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+.voice-status {
+  flex: 1;
+  min-width: 0;
+}
+
+.voice-status .transcript {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-primary, #ffffff);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  word-wrap: break-word;
+}
+
+.voice-status .hint {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.voice-status .hint.listening {
+  color: #c93b3b;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.voice-status .hint.processing {
+  color: var(--gold, #ffdd27);
+}
+
+.help-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.help-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.voice-error {
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(201, 59, 59, 0.2);
+  border-radius: 8px;
+  color: #ff6b6b;
+  font-size: 13px;
+}
+
+.voice-help {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.voice-help h4 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.voice-help ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.voice-help li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.voice-help .command {
+  font-size: 13px;
+  color: var(--text-primary, #ffffff);
+  font-weight: 500;
+}
+
+.voice-help .example {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.voice-unsupported {
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(255, 221, 39, 0.1);
+  border-radius: 8px;
+  color: var(--gold, #ffdd27);
+  font-size: 13px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  .voice-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .voice-help li {
+    flex-direction: column;
+  }
+}

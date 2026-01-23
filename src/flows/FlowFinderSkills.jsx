@@ -6,6 +6,7 @@ import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { GradientWheel } from '../components/CompetenceWheels'
 import { SKILLS_SEGMENTS, PROFICIENCY_RINGS } from '../lib/wheelTaxonomy'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './FlowFinder.css'
 
 export default function FlowFinderSkills() {
@@ -1244,7 +1245,9 @@ export default function FlowFinderSkills() {
             <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's discover the problems you're passionate about solving.</p>
           </div>
 
-          <Link to="/nikigai/problems" className="primary-button">
+          <FlowFeedback flowType="nikigai_skills" userId={user?.id} />
+
+          <Link to="/nikigai/problems" className="primary-button" style={{ marginTop: '24px', display: 'block', textDecoration: 'none', textAlign: 'center' }}>
             Continue to Problems Discovery
           </Link>
           <Link

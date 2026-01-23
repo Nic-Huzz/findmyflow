@@ -123,71 +123,190 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Ancient Wisdom Section */}
-      <section className="landing-wisdom">
+      {/* The Matrix Exchange Section */}
+      <section className="landing-matrix-exchange">
         <div className="landing-container">
-          <h2 className="section-heading">The Ancient Names for This Truth</h2>
-          <p className="section-subheading">
-            Every wisdom tradition has a word for the path only you can walk
-          </p>
+          <h2 className="matrix-exchange-heading">
+            The "matrix" isn't a conspiracy.
+            <br />
+            It's just an optimization that forgot about you.
+          </h2>
 
-          <div className="wisdom-table">
-            <div className="wisdom-row wisdom-header">
-              <span className="wisdom-tradition">Tradition</span>
-              <span className="wisdom-concept">Concept</span>
-              <span className="wisdom-meaning">Core Meaning</span>
+          <div className="exchange-card">
+            <div className="exchange-section exchange-give">
+              <h3 className="exchange-label">You give</h3>
+              <p className="exchange-text">
+                Time. Energy. Your most productive hours. Often doing work that drains rather than energizes.
+              </p>
             </div>
-            <div className="wisdom-row">
-              <span className="wisdom-tradition">Hindu</span>
-              <span className="wisdom-concept">Svadharma</span>
-              <span className="wisdom-meaning">"One's own duty" — the path only you can walk</span>
+
+            <div className="exchange-divider">
+              <span className="exchange-arrow">&#8596;</span>
             </div>
-            <div className="wisdom-row">
-              <span className="wisdom-tradition">Taoist</span>
-              <span className="wisdom-concept">Te</span>
-              <span className="wisdom-meaning">Your natural virtue expressing through action</span>
-            </div>
-            <div className="wisdom-row">
-              <span className="wisdom-tradition">Japanese</span>
-              <span className="wisdom-concept">Ikigai</span>
-              <span className="wisdom-meaning">Where love, skill, need, and payment intersect</span>
-            </div>
-            <div className="wisdom-row">
-              <span className="wisdom-tradition">Jewish</span>
-              <span className="wisdom-concept">Tikkun</span>
-              <span className="wisdom-meaning">The fragment of reality only your soul can repair</span>
-            </div>
-            <div className="wisdom-row">
-              <span className="wisdom-tradition">Christian</span>
-              <span className="wisdom-concept">Vocation</span>
-              <span className="wisdom-meaning">The work God designed you for</span>
-            </div>
-            <div className="wisdom-row">
-              <span className="wisdom-tradition">Buddhist</span>
-              <span className="wisdom-concept">Right Livelihood</span>
-              <span className="wisdom-meaning">Work that serves awakening</span>
+
+            <div className="exchange-section exchange-receive">
+              <h3 className="exchange-label">You receive</h3>
+              <p className="exchange-text">
+                A salary. Enough to cover basic needs. A sense of "safety" — as long as you don't stop.
+              </p>
             </div>
           </div>
 
-          <div className="wisdom-why">
-            <h3 className="wisdom-why-heading">Why This Matters</h3>
-            <div className="wisdom-points">
-              <div className="wisdom-point">
-                <span className="wisdom-point-title">The universe made exactly one of you</span>
-                <span className="wisdom-point-text">If you don't walk your path, it goes unwalked</span>
-              </div>
-              <div className="wisdom-point">
-                <span className="wisdom-point-title">Misalignment IS suffering</span>
-                <span className="wisdom-point-text">The Sunday dread, the depletion, the fraudulent feeling</span>
-              </div>
-              <div className="wisdom-point">
-                <span className="wisdom-point-title">Alignment IS abundance</span>
-                <span className="wisdom-point-text">Energy that renews, motivation that's intrinsic</span>
-              </div>
-              <div className="wisdom-point">
-                <span className="wisdom-point-title">Your flow serves the whole</span>
-                <span className="wisdom-point-text">You're not self-indulging — you're filling a you-shaped hole in reality</span>
-              </div>
+          <p className="matrix-exchange-tagline">
+            The leverage point isn't quitting. It's building an alternate source of safety.
+          </p>
+        </div>
+      </section>
+
+      {/* Channel Explosion Section */}
+      <section className="landing-channel-explosion">
+        <div className="landing-container">
+          <h2 className="channel-heading">We're living through a channel explosion</h2>
+          <div className="channel-subheading">
+            <p>30 years ago: 2 TV channels. Today: thousands.</p>
+            <p>The same thing is about to happen to software — and the economy.</p>
+          </div>
+
+          <div className="economy-cards">
+            <div className="economy-card economy-card-old">
+              <h3 className="economy-title">The Old Economy</h3>
+              <p className="economy-date">1995 — 2020</p>
+              <p className="economy-number">2-5</p>
+              <p className="economy-text">
+                Providers of everything. Massive horizontal tools serving millions with 60% fit.
+                High barriers to entry. You needed capital or years of skill-building to compete.
+              </p>
+            </div>
+
+            <div className="economy-card economy-card-new">
+              <h3 className="economy-title">The Emerging Economy</h3>
+              <p className="economy-date">2024 →</p>
+              <p className="economy-number">1000s</p>
+              <p className="economy-text">
+                Vertical, niche products. Built by people who deeply understand specific problems.
+                Serving thousands with 95% fit. AI collapsed the build-cost barrier. Anyone with insight can ship.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Portfolio Career Section */}
+      <section className="landing-portfolio-career">
+        <div className="landing-container">
+          <div className="portfolio-top">
+            <h2 className="portfolio-heading">The Portfolio Career</h2>
+            <p className="portfolio-description">
+              The future isn't "job vs. entrepreneur." It's assembling your unique configuration of
+              income streams that create safety while honoring your flow.
+            </p>
+
+            <div className="portfolio-pills">
+              <span className="portfolio-pill"><span className="pill-dot"></span>Consulting</span>
+              <span className="portfolio-pill"><span className="pill-dot"></span>Micro-SaaS</span>
+              <span className="portfolio-pill"><span className="pill-dot"></span>Digital Products</span>
+              <span className="portfolio-pill"><span className="pill-dot"></span>Coaching</span>
+              <span className="portfolio-pill"><span className="pill-dot"></span>Content</span>
+              <span className="portfolio-pill"><span className="pill-dot"></span>Part-time Role</span>
+            </div>
+          </div>
+
+          <div className="portfolio-formula">
+            <div className="formula-equation">
+              <span className="formula-term">Your natural interests</span>
+              <span className="formula-operator">+</span>
+              <span className="formula-term">energy patterns</span>
+              <span className="formula-operator">+</span>
+              <span className="formula-term">creative expression</span>
+            </div>
+            <span className="formula-equals">=</span>
+            <p className="formula-result">A business model that feels like play</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Different Cultures Section */}
+      <section className="landing-cultures">
+        <div className="landing-container">
+          <h2 className="cultures-heading">Different cultures. Same discovery.</h2>
+          <p className="cultures-subheading">
+            Across millennia, wisdom traditions converged on a single insight.
+          </p>
+
+          <div className="cultures-cards">
+            <div className="culture-card">
+              <p className="culture-tradition">Sanskrit</p>
+              <h3 className="culture-term">Svadharma</h3>
+              <p className="culture-translation">"One's own duty"</p>
+              <p className="culture-description">
+                Better to imperfectly follow your own path than to perfectly follow someone else's.
+                The cosmos operates through differentiation — everything has its essential nature.
+              </p>
+            </div>
+
+            <div className="culture-card">
+              <p className="culture-tradition">Taoist</p>
+              <h3 className="culture-term">Te</h3>
+              <p className="culture-translation">"Inherent power"</p>
+              <p className="culture-description">
+                Your individual expression of the Tao. You don't create it through effort — you uncover it
+                by removing obstructions. Water doesn't struggle to flow downhill.
+              </p>
+            </div>
+
+            <div className="culture-card">
+              <p className="culture-tradition">Japanese</p>
+              <h3 className="culture-term">Ikigai</h3>
+              <p className="culture-translation">"Reason for being"</p>
+              <p className="culture-description">
+                Emerges at the intersection of what you love and what others need. Not found through
+                navel-gazing, but through engagement with community needs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Moonshot Section */}
+      <section className="landing-moonshot">
+        <div className="landing-container">
+          <div className="moonshot-label">The Moonshot</div>
+          <h2 className="moonshot-heading">
+            A recognised alternative to the traditional career path
+          </h2>
+
+          <div className="moonshot-content">
+            <div className="moonshot-vision">
+              <p className="moonshot-vision-text">
+                What if there was a path as credible as university — but designed for people
+                who learn by doing, not by sitting in lectures? A place that helps you discover
+                your unique contribution to the world, not just credentials for someone else's checklist.
+              </p>
+            </div>
+
+            <div className="moonshot-why">
+              <h3 className="moonshot-why-label">Why this matters to me</h3>
+              <blockquote className="moonshot-quote">
+                <p>
+                  I walked the traditional path. Did everything "right." Got the grades, the degree,
+                  the job. And I felt completely lost and unfulfilled.
+                </p>
+                <p>
+                  It took years to unlearn what I was told success looked like — and even longer
+                  to discover what actually lights me up.
+                </p>
+                <p className="moonshot-quote-emphasis">
+                  I don't want anyone else to waste those years feeling like something's wrong with them,
+                  when the truth is: the system just wasn't built for how they think.
+                </p>
+              </blockquote>
+            </div>
+
+            <div className="moonshot-mission">
+              <p>
+                <strong>Find My Flow</strong> is my contribution to building that alternative.
+                Not a shortcut — a different path entirely. One that honours who you actually are.
+              </p>
             </div>
           </div>
         </div>
@@ -660,6 +779,73 @@ const LandingPage = () => {
               <div className="community-icon">🎉</div>
               <h3>Milestone Celebrations</h3>
               <p>Every stage completion, every first sale, every breakthrough — we celebrate with you.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Positioning Matrix Section */}
+      <section className="landing-positioning">
+        <div className="landing-container">
+          <h2 className="section-heading">Where We Fit</h2>
+          <p className="section-subheading">
+            The only platform combining therapeutic depth with business building
+          </p>
+
+          <div className="positioning-matrix">
+            {/* Y-axis labels */}
+            <div className="matrix-y-axis">
+              <span className="axis-label axis-top">THERAPEUTIC DEPTH</span>
+              <span className="axis-label axis-bottom">SURFACE LEVEL</span>
+            </div>
+
+            {/* Matrix grid */}
+            <div className="matrix-grid">
+              {/* Vertical axis arrow */}
+              <div className="matrix-axis-vertical">
+                <span className="axis-arrow">&#8593;</span>
+                <div className="axis-line"></div>
+                <span className="axis-arrow">&#8595;</span>
+              </div>
+
+              {/* Horizontal axis arrow */}
+              <div className="matrix-axis-horizontal">
+                <span className="axis-arrow">&#8592;</span>
+                <div className="axis-line"></div>
+                <span className="axis-arrow">&#8594;</span>
+              </div>
+
+              {/* X-axis labels */}
+              <span className="x-label x-left">INNER FOCUS</span>
+              <span className="x-label x-right">OUTER FOCUS</span>
+
+              {/* Quadrant: Top-Left (Therapy Apps) */}
+              <div className="matrix-quadrant quadrant-top-left">
+                <span className="quadrant-title">Therapy Apps</span>
+                <span className="quadrant-subtitle">(BetterHelp)</span>
+              </div>
+
+              {/* Quadrant: Top-Right (FindMyFlow) - highlighted */}
+              <div className="matrix-quadrant quadrant-top-right quadrant-highlight">
+                <span className="quadrant-star">&#9733;</span>
+                <span className="quadrant-title">FindMyFlow</span>
+                <span className="quadrant-subtitle">(Healing + Flow + Business)</span>
+              </div>
+
+              {/* Quadrant: Bottom-Left (Wellness) */}
+              <div className="matrix-quadrant quadrant-bottom-left">
+                <span className="quadrant-title">Mindvalley</span>
+                <span className="quadrant-title">Headspace/Calm</span>
+              </div>
+
+              {/* Quadrant: Bottom-Right (Performance) */}
+              <div className="matrix-quadrant quadrant-bottom-right">
+                <span className="quadrant-title">BetterUp/CoachHub</span>
+                <span className="quadrant-subtitle">(Performance)</span>
+                <div className="quadrant-spacer"></div>
+                <span className="quadrant-title">Sparketype</span>
+                <span className="quadrant-subtitle">(Assessment only)</span>
+              </div>
             </div>
           </div>
         </div>

@@ -23,11 +23,11 @@
   border: 3px solid rgba(99, 102, 241, 0.3);
   border-top-color: #6366f1;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: cd-spin 1s linear infinite;
   margin: 0 auto 12px;
 }
 
-@keyframes spin {
+@keyframes cd-spin {
   to { transform: rotate(360deg); }
 }
 

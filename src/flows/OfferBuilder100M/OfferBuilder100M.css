@@ -1928,7 +1928,7 @@
   border: 3px solid rgba(255, 255, 255, 0.1);
   border-top-color: #fbbf24;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: ob-spin 1s linear infinite;
 }
 
 .offer-builder-100m .spinner-inline {
@@ -1938,11 +1938,11 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: ob-spin 1s linear infinite;
   margin-right: 8px;
 }
 
-@keyframes spin {
+@keyframes ob-spin {
   to { transform: rotate(360deg); }
 }
 

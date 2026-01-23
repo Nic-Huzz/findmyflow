@@ -22,7 +22,8 @@ import {
 import { checkStreakBreak } from '../lib/streakTracking'
 import { initializeUserStageProgress, checkAndGraduateProject } from '../lib/graduationChecker'
 import { normalizePersona } from '../data/personaProfiles'
-import { convertLegacyStage } from '../lib/stageConfig'
+import { convertLegacyStage, STAGE_CONFIG } from '../lib/stageConfig'
+import { generateVoiceQuestsForStage } from '../lib/voiceQuestConfig'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
@@ -93,6 +94,13 @@ export function useChallengeData() {
   const [activeStageTab, setActiveStageTab] = useState(1)
   const [projectStage, setProjectStage] = useState(1)
 
+  // Sub-Tab State (for Business and Healing tabs)
+  const [businessSubTab, setBusinessSubTab] = useState('tasks') // 'tasks' | 'voices'
+  const [healingSubTab, setHealingSubTab] = useState('daily') // 'daily' | 'weekly'
+
+  // User Archetypes (for personalized voice quests)
+  const [userArchetypes, setUserArchetypes] = useState({ essence: null, protective: null })
+
   // Weekly Planning State
   const [weeklyPlan, setWeeklyPlan] = useState(null)
   const [showWeeklyPlanning, setShowWeeklyPlanning] = useState(false)
@@ -111,7 +119,7 @@ export function useChallengeData() {
   }, [location.search])
 
   // Constants
-  const categories = ['Business', 'Groans', 'Healing', 'Tracker', 'Bonus']
+  const categories = ['Business', 'Healing', 'Tracker', 'Bonus']
   const BONUS_PERCENTAGE = 5
 
   // ============================================
@@ -150,7 +158,21 @@ export function useChallengeData() {
       }
 
       if (!progressData) {
-        setShowOnboarding(true)
+        // Check if user has any previous challenges (returning user)
+        const { data: anyPrevious } = await supabase
+          .from('challenge_progress')
+          .select('id')
+          .eq('user_id', user.id)
+          .limit(1)
+          .maybeSingle()
+
+        if (anyPrevious) {
+          // Returning user - skip onboarding, go straight to project selector
+          setShowProjectSelector(true)
+        } else {
+          // First-time user - show full onboarding
+          setShowOnboarding(true)
+        }
         setLoading(false)
         return
       }
@@ -259,6 +281,11 @@ export function useChallengeData() {
 
       if (!error && data && data.length > 0) {
         setUserData(data[0])
+        // Extract archetypes for voice quests
+        setUserArchetypes({
+          essence: data[0].essence_archetype || 'Essence',
+          protective: data[0].protective_archetype || 'Protective Voice'
+        })
       }
     } catch (error) {
       console.error('Error loading user data:', error)
@@ -992,13 +1019,18 @@ export function useChallengeData() {
           }
         }
 
-        if (quest.stage_required) {
+        if (quest.stage_required !== undefined && quest.stage_required !== null) {
           const currentStageNum = selectedProject?.current_stage ||
             (typeof stageProgress?.current_stage === 'number'
               ? stageProgress.current_stage
               : convertLegacyStage(stageProgress?.current_stage))
 
-          if (quest.stage_required !== currentStageNum) {
+          // Check if this quest's stage is always accessible (like Flow Finder stage 0 or Tracking stage 8)
+          const stageConfig = STAGE_CONFIG[quest.stage_required]
+          const isAlwaysAccessible = stageConfig?.alwaysAccessible
+
+          // Include quests if stage matches current OR stage is always accessible
+          if (!isAlwaysAccessible && Number(quest.stage_required) !== Number(currentStageNum)) {
             return false
           }
         }
@@ -1552,6 +1584,15 @@ export function useChallengeData() {
     setActiveStageTab,
     projectStage,
     setProjectStage,
+
+    // Sub-Tabs (Business and Healing)
+    businessSubTab,
+    setBusinessSubTab,
+    healingSubTab,
+    setHealingSubTab,
+
+    // User Archetypes (for personalized voice quests)
+    userArchetypes,
 
     // Weekly Planning
     weeklyPlan,

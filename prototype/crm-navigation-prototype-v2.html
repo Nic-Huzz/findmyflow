@@ -1,0 +1,2198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FindMyFlow CRM v2 - Execute System</title>
+  <style>
+    /* ========================================
+       CSS Variables from Design Guide
+       ======================================== */
+    :root {
+      /* Colors */
+      --purple: #5e17eb;
+      --purple-light: #7c3aed;
+      --purple-dark: #4a0ea8;
+      --gold: #ffdd27;
+      --gold-dark: #f59e0b;
+      --white: #ffffff;
+      --warm-gray: #f8f9fa;
+      --soft-gray: #e9ecef;
+      --text-gray: #495057;
+      --border-gray: #dee2e6;
+      --dark: #212529;
+
+      /* Status Colors */
+      --success: #22c55e;
+      --success-light: #dcfce7;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --error: #ef4444;
+      --error-light: #fee2e2;
+      --info: #3b82f6;
+      --info-light: #dbeafe;
+
+      /* Shadows */
+      --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+      --shadow-button: 0 4px 12px rgba(94, 23, 235, 0.3);
+      --shadow-nav: 0 2px 12px rgba(0, 0, 0, 0.1);
+
+      /* Border Radius */
+      --radius-sm: 12px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+
+      /* Spacing */
+      --nav-height: 64px;
+      --mobile-nav-height: 72px;
+    }
+
+    /* ========================================
+       Reset & Base
+       ======================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: var(--warm-gray);
+      color: var(--text-gray);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ========================================
+       Desktop Navigation
+       ======================================== */
+    .desktop-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: var(--white);
+      border-bottom: 1px solid var(--border-gray);
+      box-shadow: var(--shadow-nav);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--purple);
+      margin-right: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo span {
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-items {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .nav-item {
+      position: relative;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 0.9375rem;
+      color: var(--text-gray);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+    }
+
+    .nav-item:hover {
+      background: var(--warm-gray);
+      color: var(--dark);
+    }
+
+    .nav-item.active {
+      background: rgba(94, 23, 235, 0.1);
+      color: var(--purple);
+    }
+
+    .nav-item .arrow {
+      font-size: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-item.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Dropdown */
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      border: 1px solid var(--border-gray);
+      min-width: 220px;
+      padding: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.2s ease;
+    }
+
+    .nav-item.open .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+      background: var(--warm-gray);
+      color: var(--dark);
+    }
+
+    .dropdown-item.active {
+      background: rgba(94, 23, 235, 0.1);
+      color: var(--purple);
+    }
+
+    .dropdown-item .icon {
+      font-size: 1.25rem;
+      width: 28px;
+      text-align: center;
+    }
+
+    .dropdown-item .label {
+      font-weight: 500;
+    }
+
+    .dropdown-item .badge {
+      margin-left: auto;
+      background: var(--purple);
+      color: white;
+      font-size: 0.6875rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--border-gray);
+      margin: 8px 0;
+    }
+
+    /* Points display in nav */
+    .nav-points {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      margin-right: 16px;
+      padding: 8px 16px;
+      background: linear-gradient(135deg, rgba(94, 23, 235, 0.1), rgba(124, 58, 237, 0.1));
+      border-radius: 100px;
+      font-weight: 600;
+      color: var(--purple);
+    }
+
+    .nav-points .streak {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-left: 12px;
+      border-left: 1px solid rgba(94, 23, 235, 0.2);
+      margin-left: 4px;
+    }
+
+    /* Execute button (primary CTA) */
+    .nav-execute {
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-button);
+      transition: all 0.2s ease;
+    }
+
+    .nav-execute:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+    }
+
+    /* ========================================
+       Mobile Navigation
+       ======================================== */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--mobile-nav-height);
+      background: var(--white);
+      border-top: 1px solid var(--border-gray);
+      box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      padding: 8px 16px;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .mobile-nav-items {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+    }
+
+    .mobile-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-gray);
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      background: none;
+      border: none;
+      min-width: 64px;
+    }
+
+    .mobile-nav-item:hover,
+    .mobile-nav-item.active {
+      color: var(--purple);
+    }
+
+    .mobile-nav-item.active {
+      background: rgba(94, 23, 235, 0.1);
+    }
+
+    .mobile-nav-item .icon {
+      font-size: 1.5rem;
+    }
+
+    .mobile-nav-item .label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .mobile-nav-item.execute-btn {
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      color: white;
+    }
+
+    .mobile-nav-item.execute-btn.active {
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      color: white;
+    }
+
+    /* Mobile Header */
+    .mobile-header {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border-gray);
+      z-index: 1000;
+      padding: 0 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-header-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .mobile-header-back {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--purple);
+      cursor: pointer;
+      padding: 8px;
+      margin: -8px;
+    }
+
+    .mobile-header-points {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--purple);
+    }
+
+    /* ========================================
+       Main Content Area
+       ======================================== */
+    .main-content {
+      padding-top: var(--nav-height);
+      min-height: 100vh;
+    }
+
+    .page {
+      display: none;
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+      color: var(--text-gray);
+      font-size: 1rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: var(--text-gray);
+      margin-bottom: 8px;
+    }
+
+    .breadcrumb a {
+      color: var(--purple);
+      text-decoration: none;
+    }
+
+    /* ========================================
+       Section Cards
+       ======================================== */
+    .section-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-gray);
+      margin-bottom: 20px;
+    }
+
+    .section-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .section-card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    /* ========================================
+       Execute Tab Specific Styles
+       ======================================== */
+
+    /* Week Planning Modal */
+    .week-planning {
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      color: white;
+      margin-bottom: 24px;
+    }
+
+    .week-planning h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .week-planning p {
+      opacity: 0.9;
+      margin-bottom: 24px;
+    }
+
+    /* Project Phase Selector */
+    .project-phases {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .project-phase-row {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .project-phase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .project-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .project-business {
+      font-size: 0.8125rem;
+      opacity: 0.7;
+    }
+
+    .phase-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .phase-chip {
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: transparent;
+      color: white;
+    }
+
+    .phase-chip:hover {
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .phase-chip.selected {
+      background: white;
+      color: var(--purple);
+      border-color: white;
+    }
+
+    .phase-chip.build { }
+    .phase-chip.launch { }
+    .phase-chip.deliver { }
+    .phase-chip.recap { }
+
+    /* Task Menu */
+    .task-menu {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-top: 12px;
+    }
+
+    .task-menu-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+
+    .task-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .task-option:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .task-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--gold);
+    }
+
+    .task-option-label {
+      flex: 1;
+      font-size: 0.9375rem;
+    }
+
+    .task-option-points {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    /* System Execution View */
+    .system-health {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .funnel-stage-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      border: 1px solid var(--border-gray);
+    }
+
+    .funnel-stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .funnel-stage-name {
+      font-weight: 700;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .funnel-stage-rate {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .funnel-stage-rate.up {
+      color: var(--success);
+    }
+
+    .funnel-stage-rate.down {
+      color: var(--error);
+    }
+
+    .funnel-stage-rate.same {
+      color: var(--text-gray);
+    }
+
+    .funnel-stage-change {
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .funnel-stage-bar {
+      height: 8px;
+      background: var(--soft-gray);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .funnel-stage-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .funnel-stage-tasks {
+      font-size: 0.875rem;
+      color: var(--text-gray);
+    }
+
+    .improve-btn {
+      margin-top: 12px;
+      width: 100%;
+      padding: 10px;
+      background: var(--warm-gray);
+      border: 1px solid var(--border-gray);
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-gray);
+    }
+
+    .improve-btn:hover {
+      background: rgba(94, 23, 235, 0.1);
+      border-color: var(--purple);
+      color: var(--purple);
+    }
+
+    /* Today's Tasks */
+    .todays-tasks {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-gray);
+      margin-bottom: 20px;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--warm-gray);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .task-item:hover {
+      background: var(--soft-gray);
+    }
+
+    .task-item.completed {
+      opacity: 0.6;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+    }
+
+    .task-checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border-gray);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .task-item.completed .task-checkbox {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-text {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .task-meta {
+      font-size: 0.8125rem;
+      color: var(--text-gray);
+      display: flex;
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    .task-phase-badge {
+      font-size: 0.6875rem;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-weight: 600;
+    }
+
+    .task-phase-badge.build {
+      background: var(--info-light);
+      color: var(--info);
+    }
+
+    .task-phase-badge.launch {
+      background: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .task-phase-badge.deliver {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .task-phase-badge.recap {
+      background: rgba(94, 23, 235, 0.1);
+      color: var(--purple);
+    }
+
+    .task-points {
+      font-weight: 600;
+      color: var(--purple);
+      font-size: 0.875rem;
+    }
+
+    /* Progress Ring */
+    .progress-ring-container {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(94, 23, 235, 0.05), rgba(124, 58, 237, 0.1));
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+
+    .progress-ring {
+      width: 80px;
+      height: 80px;
+      position: relative;
+    }
+
+    .progress-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .progress-ring circle {
+      fill: none;
+      stroke-width: 8;
+    }
+
+    .progress-ring .bg {
+      stroke: var(--soft-gray);
+    }
+
+    .progress-ring .progress {
+      stroke: var(--purple);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+
+    .progress-ring-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .progress-stats {
+      flex: 1;
+    }
+
+    .progress-stats h3 {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .progress-stats p {
+      color: var(--text-gray);
+      font-size: 0.9375rem;
+    }
+
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, var(--gold), #ffc107);
+      color: var(--dark);
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-top: 8px;
+    }
+
+    /* Improvement Modal */
+    .improvement-modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 2px solid var(--purple);
+      margin-bottom: 20px;
+    }
+
+    .improvement-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .improvement-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .improvement-baseline {
+      text-align: right;
+    }
+
+    .improvement-baseline-label {
+      font-size: 0.75rem;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .improvement-baseline-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .improvement-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .improvement-category {
+      margin-bottom: 16px;
+    }
+
+    .improvement-category-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-gray);
+      margin-bottom: 8px;
+    }
+
+    .improvement-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--warm-gray);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+    }
+
+    .improvement-option:hover {
+      border-color: var(--purple);
+    }
+
+    .improvement-option.selected {
+      background: rgba(94, 23, 235, 0.1);
+      border-color: var(--purple);
+    }
+
+    .improvement-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--purple);
+    }
+
+    .improvement-option-content {
+      flex: 1;
+    }
+
+    .improvement-option-label {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .improvement-option-desc {
+      font-size: 0.8125rem;
+      color: var(--text-gray);
+    }
+
+    .improvement-option-points {
+      font-weight: 700;
+      color: var(--purple);
+    }
+
+    /* Calibration Mode */
+    .calibration-banner {
+      background: linear-gradient(135deg, var(--gold), #ffc107);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      color: var(--dark);
+      margin-bottom: 24px;
+    }
+
+    .calibration-banner h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .calibration-progress {
+      display: flex;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .calibration-day {
+      flex: 1;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    .calibration-day.complete {
+      background: var(--dark);
+    }
+
+    .calibration-day.current {
+      background: var(--purple);
+    }
+
+    .calibration-input {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .calibration-input-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--soft-gray);
+    }
+
+    .calibration-input-row:last-child {
+      border-bottom: none;
+    }
+
+    .calibration-input-label {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .calibration-input-field {
+      width: 100px;
+      padding: 8px 12px;
+      border: 2px solid var(--border-gray);
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .calibration-input-field:focus {
+      outline: none;
+      border-color: var(--purple);
+    }
+
+    /* Leaderboard */
+    .leaderboard {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-gray);
+    }
+
+    .leaderboard-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--warm-gray);
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+
+    .leaderboard-tab {
+      flex: 1;
+      padding: 8px 16px;
+      border: none;
+      background: none;
+      border-radius: 8px;
+      font-weight: 500;
+      color: var(--text-gray);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .leaderboard-tab.active {
+      background: var(--white);
+      color: var(--purple);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--warm-gray);
+      border-radius: var(--radius-sm);
+    }
+
+    .leaderboard-item.you {
+      background: rgba(94, 23, 235, 0.1);
+      border: 2px solid var(--purple);
+    }
+
+    .leaderboard-rank {
+      font-size: 1.25rem;
+      width: 32px;
+      text-align: center;
+    }
+
+    .leaderboard-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    .leaderboard-name {
+      flex: 1;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .leaderboard-score {
+      font-weight: 700;
+      color: var(--purple);
+    }
+
+    /* ========================================
+       Tower Cards (for landing pages)
+       ======================================== */
+    .tower-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .tower-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border-gray);
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .tower-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+      border-color: var(--purple);
+    }
+
+    .tower-card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .tower-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .tower-card-description {
+      color: var(--text-gray);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ========================================
+       Monthly Retro
+       ======================================== */
+    .retro-card {
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      color: white;
+      margin-bottom: 24px;
+    }
+
+    .retro-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+
+    .retro-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .retro-period {
+      opacity: 0.8;
+      font-size: 0.9375rem;
+    }
+
+    .retro-highlight {
+      background: rgba(255, 221, 39, 0.2);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .retro-highlight-value {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .retro-highlight-label {
+      opacity: 0.8;
+      font-size: 0.875rem;
+    }
+
+    .retro-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .retro-stat {
+      text-align: center;
+    }
+
+    .retro-stat-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .retro-stat-label {
+      opacity: 0.8;
+      font-size: 0.8125rem;
+    }
+
+    .retro-stat-change {
+      font-size: 0.8125rem;
+      margin-top: 4px;
+    }
+
+    .retro-stat-change.up {
+      color: var(--gold);
+    }
+
+    /* ========================================
+       Responsive
+       ======================================== */
+    @media (max-width: 768px) {
+      .desktop-nav {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: block;
+      }
+
+      .mobile-header {
+        display: flex;
+      }
+
+      .main-content {
+        padding-top: 56px;
+        padding-bottom: calc(var(--mobile-nav-height) + 16px);
+      }
+
+      .page {
+        padding: 16px;
+      }
+
+      .page-title {
+        font-size: 1.5rem;
+      }
+
+      .system-health {
+        grid-template-columns: 1fr;
+      }
+
+      .tower-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .progress-ring-container {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* ========================================
+       View Toggle (prototype only)
+       ======================================== */
+    .view-toggle {
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: var(--radius-sm);
+      padding: 8px;
+      display: flex;
+      gap: 4px;
+      z-index: 999;
+      box-shadow: var(--shadow-card);
+    }
+
+    .view-toggle button {
+      padding: 8px 16px;
+      border: none;
+      background: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-gray);
+    }
+
+    .view-toggle button.active {
+      background: var(--purple);
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .view-toggle {
+        top: auto;
+        bottom: calc(var(--mobile-nav-height) + 16px);
+        right: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- View Toggle (Prototype Only) -->
+  <div class="view-toggle">
+    <button class="active" onclick="setView('desktop')">Desktop</button>
+    <button onclick="setView('mobile')">Mobile</button>
+  </div>
+
+  <!-- Desktop Navigation -->
+  <nav class="desktop-nav" id="desktopNav">
+    <div class="nav-logo">
+      <span>FindMyFlow</span> CRM
+    </div>
+
+    <div class="nav-items">
+      <!-- Home -->
+      <button class="nav-item" onclick="showPage('dashboard')">
+        <span>Home</span>
+      </button>
+
+      <!-- Attract Dropdown -->
+      <button class="nav-item" onclick="toggleDropdown(this)">
+        <span>Attract</span>
+        <span class="arrow">▼</span>
+        <div class="nav-dropdown">
+          <div class="dropdown-item" onclick="showPage('attract'); event.stopPropagation();">
+            <span class="icon">🎯</span>
+            <span class="label">Overview</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item" onclick="showPage('content'); event.stopPropagation();">
+            <span class="icon">📝</span>
+            <span class="label">Content</span>
+          </div>
+          <div class="dropdown-item" onclick="showPage('pages'); event.stopPropagation();">
+            <span class="icon">🌐</span>
+            <span class="label">Pages</span>
+          </div>
+          <div class="dropdown-item" onclick="showPage('outreach'); event.stopPropagation();">
+            <span class="icon">📧</span>
+            <span class="label">Outreach</span>
+          </div>
+        </div>
+      </button>
+
+      <!-- Nurture Dropdown -->
+      <button class="nav-item" onclick="toggleDropdown(this)">
+        <span>Nurture</span>
+        <span class="arrow">▼</span>
+        <div class="nav-dropdown">
+          <div class="dropdown-item" onclick="showPage('nurture'); event.stopPropagation();">
+            <span class="icon">💜</span>
+            <span class="label">Overview</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item" onclick="showPage('contacts'); event.stopPropagation();">
+            <span class="icon">👥</span>
+            <span class="label">Contacts</span>
+          </div>
+          <div class="dropdown-item" onclick="showPage('email'); event.stopPropagation();">
+            <span class="icon">✉️</span>
+            <span class="label">Email Sequences</span>
+          </div>
+          <div class="dropdown-item" onclick="showPage('pipeline'); event.stopPropagation();">
+            <span class="icon">📊</span>
+            <span class="label">Pipeline</span>
+          </div>
+        </div>
+      </button>
+
+      <!-- Tools Dropdown -->
+      <button class="nav-item" onclick="toggleDropdown(this)">
+        <span>Tools</span>
+        <span class="arrow">▼</span>
+        <div class="nav-dropdown">
+          <div class="dropdown-item" onclick="showPage('tools'); event.stopPropagation();">
+            <span class="icon">🧰</span>
+            <span class="label">All Tools</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item" onclick="showPage('analytics'); event.stopPropagation();">
+            <span class="icon">📈</span>
+            <span class="label">Analytics</span>
+          </div>
+          <div class="dropdown-item" onclick="showPage('calculators'); event.stopPropagation();">
+            <span class="icon">🧮</span>
+            <span class="label">Calculators</span>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Points Display -->
+    <div class="nav-points">
+      <span>1,847 pts</span>
+      <span class="streak">🔥 12</span>
+    </div>
+
+    <!-- Execute Button -->
+    <button class="nav-execute" onclick="showPage('execute')">
+      ⚡ Execute
+    </button>
+  </nav>
+
+  <!-- Mobile Header -->
+  <header class="mobile-header" id="mobileHeader">
+    <button class="mobile-header-back" onclick="goBack()">←</button>
+    <span class="mobile-header-title" id="mobileTitle">Execute</span>
+    <span class="mobile-header-points">1,847 pts</span>
+  </header>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav-items">
+      <button class="mobile-nav-item" onclick="showPage('dashboard')">
+        <span class="icon">🏠</span>
+        <span class="label">Home</span>
+      </button>
+      <button class="mobile-nav-item" onclick="showPage('attract')">
+        <span class="icon">🎯</span>
+        <span class="label">Attract</span>
+      </button>
+      <button class="mobile-nav-item execute-btn active" onclick="showPage('execute')">
+        <span class="icon">⚡</span>
+        <span class="label">Execute</span>
+      </button>
+      <button class="mobile-nav-item" onclick="showPage('nurture')">
+        <span class="icon">💜</span>
+        <span class="label">Nurture</span>
+      </button>
+      <button class="mobile-nav-item" onclick="showPage('tools')">
+        <span class="icon">🧰</span>
+        <span class="label">Tools</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Execute Page (Main Focus) -->
+    <div class="page active" id="page-execute">
+      <div class="page-header">
+        <h1 class="page-title">⚡ Execute</h1>
+        <p class="page-subtitle">Your system runs the game. You run the system.</p>
+      </div>
+
+      <!-- Week Planning (shown at start of week) -->
+      <div class="week-planning" id="weekPlanning">
+        <h2>🗓️ Plan Your Week</h2>
+        <p>What's active this week? Select phases for each project.</p>
+
+        <div class="project-phases">
+          <!-- Project 1 -->
+          <div class="project-phase-row">
+            <div class="project-phase-header">
+              <div>
+                <div class="project-name">Cohort 4</div>
+                <div class="project-business">Clarity Program</div>
+              </div>
+            </div>
+            <div class="phase-chips">
+              <button class="phase-chip build" onclick="togglePhase(this)">🔨 Build</button>
+              <button class="phase-chip launch selected" onclick="togglePhase(this)">🚀 Launch</button>
+              <button class="phase-chip deliver" onclick="togglePhase(this)">🎯 Deliver</button>
+              <button class="phase-chip recap" onclick="togglePhase(this)">📊 Recap</button>
+            </div>
+
+            <!-- Task Menu (appears when phase selected) -->
+            <div class="task-menu">
+              <div class="task-menu-title">Launch Tasks</div>
+              <div class="task-option">
+                <input type="checkbox" checked>
+                <span class="task-option-label">Transformation story post</span>
+                <span class="task-option-points">+15 pts</span>
+              </div>
+              <div class="task-option">
+                <input type="checkbox" checked>
+                <span class="task-option-label">Urgency/scarcity post</span>
+                <span class="task-option-points">+15 pts</span>
+              </div>
+              <div class="task-option">
+                <input type="checkbox" checked>
+                <span class="task-option-label">Send launch emails</span>
+                <span class="task-option-points">+20 pts</span>
+              </div>
+              <div class="task-option">
+                <input type="checkbox">
+                <span class="task-option-label">Follow up warm leads (5)</span>
+                <span class="task-option-points">+25 pts</span>
+              </div>
+              <div class="task-option">
+                <input type="checkbox">
+                <span class="task-option-label">Social proof post</span>
+                <span class="task-option-points">+15 pts</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="project-phase-row">
+            <div class="project-phase-header">
+              <div>
+                <div class="project-name">Sarah M.</div>
+                <div class="project-business">1:1 Coaching</div>
+              </div>
+            </div>
+            <div class="phase-chips">
+              <button class="phase-chip build" onclick="togglePhase(this)">🔨 Build</button>
+              <button class="phase-chip launch" onclick="togglePhase(this)">🚀 Launch</button>
+              <button class="phase-chip deliver selected" onclick="togglePhase(this)">🎯 Deliver</button>
+              <button class="phase-chip recap" onclick="togglePhase(this)">📊 Recap</button>
+            </div>
+
+            <div class="task-menu">
+              <div class="task-menu-title">Deliver Tasks</div>
+              <div class="task-option">
+                <input type="checkbox" checked>
+                <span class="task-option-label">Document client win</span>
+                <span class="task-option-points">+20 pts</span>
+              </div>
+              <div class="task-option">
+                <input type="checkbox">
+                <span class="task-option-label">Process/methodology post</span>
+                <span class="task-option-points">+15 pts</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button style="width: 100%; margin-top: 24px; padding: 16px; background: white; color: var(--purple); border: none; border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem; cursor: pointer;" onclick="document.getElementById('weekPlanning').style.display='none'">
+          Confirm Week Plan (7 tasks) →
+        </button>
+      </div>
+
+      <!-- Progress Ring -->
+      <div class="progress-ring-container">
+        <div class="progress-ring">
+          <svg width="80" height="80">
+            <circle class="bg" cx="40" cy="40" r="34"></circle>
+            <circle class="progress" cx="40" cy="40" r="34"
+                    stroke-dasharray="213.6"
+                    stroke-dashoffset="42.72"></circle>
+          </svg>
+          <span class="progress-ring-text">80%</span>
+        </div>
+        <div class="progress-stats">
+          <h3>This Week's Execution</h3>
+          <p>12 of 15 tasks completed</p>
+          <div class="streak-badge">🔥 12 day streak</div>
+        </div>
+      </div>
+
+      <!-- Today's Tasks -->
+      <div class="todays-tasks">
+        <div class="section-card-header">
+          <h3 class="section-card-title">Today's Tasks</h3>
+          <span style="font-size: 0.875rem; color: var(--text-gray);">Wed, Jan 22</span>
+        </div>
+
+        <div class="task-list">
+          <div class="task-item completed" onclick="this.classList.toggle('completed')">
+            <div class="task-checkbox">✓</div>
+            <div class="task-content">
+              <div class="task-text">Post morning content</div>
+              <div class="task-meta">
+                <span class="task-phase-badge launch">LAUNCH</span>
+                <span>Cohort 4</span>
+              </div>
+            </div>
+            <span class="task-points">+15</span>
+          </div>
+
+          <div class="task-item" onclick="this.classList.toggle('completed')">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-text">Send Day 3 launch email</div>
+              <div class="task-meta">
+                <span class="task-phase-badge launch">LAUNCH</span>
+                <span>Cohort 4</span>
+              </div>
+            </div>
+            <span class="task-points">+20</span>
+          </div>
+
+          <div class="task-item" onclick="this.classList.toggle('completed')">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-text">Document Sarah's first win</div>
+              <div class="task-meta">
+                <span class="task-phase-badge deliver">DELIVER</span>
+                <span>Sarah M.</span>
+              </div>
+            </div>
+            <span class="task-points">+20</span>
+          </div>
+
+          <div class="task-item" onclick="this.classList.toggle('completed')">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-text">Follow up with warm leads</div>
+              <div class="task-meta">
+                <span class="task-phase-badge launch">LAUNCH</span>
+                <span>Cohort 4</span>
+              </div>
+            </div>
+            <span class="task-points">+25</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Funnel Health -->
+      <div class="section-card">
+        <div class="section-card-header">
+          <h3 class="section-card-title">📊 Funnel Health</h3>
+          <span style="font-size: 0.875rem; color: var(--text-gray);">vs. last month</span>
+        </div>
+
+        <div class="system-health">
+          <div class="funnel-stage-card">
+            <div class="funnel-stage-header">
+              <span class="funnel-stage-name">👁️ Awareness → Attraction</span>
+              <div>
+                <span class="funnel-stage-rate up">28.1%</span>
+                <div class="funnel-stage-change" style="color: var(--success);">↑ +1.6%</div>
+              </div>
+            </div>
+            <div class="funnel-stage-bar">
+              <div class="funnel-stage-fill" style="width: 70%; background: var(--success);"></div>
+            </div>
+            <div class="funnel-stage-tasks">3/4 tasks this week</div>
+            <button class="improve-btn" onclick="showPage('improve')">+ Improve This</button>
+          </div>
+
+          <div class="funnel-stage-card" style="border-color: var(--warning);">
+            <div class="funnel-stage-header">
+              <span class="funnel-stage-name">✨ Attraction → Capture</span>
+              <div>
+                <span class="funnel-stage-rate down">14.6%</span>
+                <div class="funnel-stage-change" style="color: var(--error);">↓ -2.1%</div>
+              </div>
+            </div>
+            <div class="funnel-stage-bar">
+              <div class="funnel-stage-fill" style="width: 40%; background: var(--warning);"></div>
+            </div>
+            <div class="funnel-stage-tasks">⚠️ Needs attention</div>
+            <button class="improve-btn" onclick="showPage('improve')" style="background: rgba(245, 158, 11, 0.1); border-color: var(--warning); color: var(--warning);">+ Improve This</button>
+          </div>
+
+          <div class="funnel-stage-card">
+            <div class="funnel-stage-header">
+              <span class="funnel-stage-name">🎯 Nurture → Convert</span>
+              <div>
+                <span class="funnel-stage-rate up">8.9%</span>
+                <div class="funnel-stage-change" style="color: var(--success);">↑ +1.4%</div>
+              </div>
+            </div>
+            <div class="funnel-stage-bar">
+              <div class="funnel-stage-fill" style="width: 65%; background: var(--success);"></div>
+            </div>
+            <div class="funnel-stage-tasks">2/3 tasks this week</div>
+            <button class="improve-btn" onclick="showPage('improve')">+ Improve This</button>
+          </div>
+
+          <div class="funnel-stage-card">
+            <div class="funnel-stage-header">
+              <span class="funnel-stage-name">⭐ Deliver → Ascend</span>
+              <div>
+                <span class="funnel-stage-rate same">23%</span>
+                <div class="funnel-stage-change" style="color: var(--text-gray);">= same</div>
+              </div>
+            </div>
+            <div class="funnel-stage-bar">
+              <div class="funnel-stage-fill" style="width: 55%; background: var(--info);"></div>
+            </div>
+            <div class="funnel-stage-tasks">1/2 tasks this week</div>
+            <button class="improve-btn" onclick="showPage('improve')">+ Improve This</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard Preview -->
+      <div class="leaderboard">
+        <div class="section-card-header">
+          <h3 class="section-card-title">🏆 Your Pod: "The Builders"</h3>
+          <span style="font-size: 0.875rem; color: var(--purple); cursor: pointer;">See Full Leaderboard →</span>
+        </div>
+
+        <div class="leaderboard-tabs">
+          <button class="leaderboard-tab active">This Week</button>
+          <button class="leaderboard-tab">This Month</button>
+        </div>
+
+        <div class="leaderboard-list">
+          <div class="leaderboard-item">
+            <span class="leaderboard-rank">🥇</span>
+            <div class="leaderboard-avatar">SM</div>
+            <span class="leaderboard-name">Sarah M.</span>
+            <span class="leaderboard-score">98%</span>
+          </div>
+          <div class="leaderboard-item">
+            <span class="leaderboard-rank">🥈</span>
+            <div class="leaderboard-avatar">JK</div>
+            <span class="leaderboard-name">James K.</span>
+            <span class="leaderboard-score">94%</span>
+          </div>
+          <div class="leaderboard-item you">
+            <span class="leaderboard-rank">🥉</span>
+            <div class="leaderboard-avatar">You</div>
+            <span class="leaderboard-name">You</span>
+            <span class="leaderboard-score">80%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Improve Page -->
+    <div class="page" id="page-improve">
+      <div class="page-header">
+        <div class="breadcrumb">
+          <a href="#" onclick="showPage('execute'); return false;">Execute</a>
+          <span>→</span>
+          <span>Improve Funnel</span>
+        </div>
+        <h1 class="page-title">🔧 Improve: Attraction → Capture</h1>
+        <p class="page-subtitle">Your capture rate dropped 2.1% this month. Let's fix it.</p>
+      </div>
+
+      <div class="improvement-modal">
+        <div class="improvement-header">
+          <div>
+            <div class="improvement-title">Select an Improvement</div>
+            <p style="color: var(--text-gray); font-size: 0.9375rem; margin-top: 4px;">Points for trying. Bonus if it works.</p>
+          </div>
+          <div class="improvement-baseline">
+            <div class="improvement-baseline-label">Current Rate</div>
+            <div class="improvement-baseline-value">14.6%</div>
+          </div>
+        </div>
+
+        <div class="improvement-options">
+          <div class="improvement-category">
+            <div class="improvement-category-title">Lead Magnet</div>
+            <div class="improvement-option" onclick="this.classList.toggle('selected')">
+              <input type="checkbox">
+              <div class="improvement-option-content">
+                <div class="improvement-option-label">Create new lead magnet</div>
+                <div class="improvement-option-desc">Replace or add a new lead magnet to test</div>
+              </div>
+              <span class="improvement-option-points">+50 pts</span>
+            </div>
+            <div class="improvement-option selected" onclick="this.classList.toggle('selected')">
+              <input type="checkbox" checked>
+              <div class="improvement-option-content">
+                <div class="improvement-option-label">Update existing lead magnet</div>
+                <div class="improvement-option-desc">Refresh content, design, or positioning</div>
+              </div>
+              <span class="improvement-option-points">+30 pts</span>
+            </div>
+          </div>
+
+          <div class="improvement-category">
+            <div class="improvement-category-title">Landing Page</div>
+            <div class="improvement-option" onclick="this.classList.toggle('selected')">
+              <input type="checkbox">
+              <div class="improvement-option-content">
+                <div class="improvement-option-label">Rewrite headline</div>
+                <div class="improvement-option-desc">Test a new headline with clearer value prop</div>
+              </div>
+              <span class="improvement-option-points">+30 pts</span>
+            </div>
+            <div class="improvement-option" onclick="this.classList.toggle('selected')">
+              <input type="checkbox">
+              <div class="improvement-option-content">
+                <div class="improvement-option-label">Add social proof</div>
+                <div class="improvement-option-desc">Add testimonials, logos, or results</div>
+              </div>
+              <span class="improvement-option-points">+25 pts</span>
+            </div>
+            <div class="improvement-option" onclick="this.classList.toggle('selected')">
+              <input type="checkbox">
+              <div class="improvement-option-content">
+                <div class="improvement-option-label">Simplify form</div>
+                <div class="improvement-option-desc">Reduce fields to just email</div>
+              </div>
+              <span class="improvement-option-points">+20 pts</span>
+            </div>
+          </div>
+
+          <div class="improvement-category">
+            <div class="improvement-category-title">Content CTAs</div>
+            <div class="improvement-option" onclick="this.classList.toggle('selected')">
+              <input type="checkbox">
+              <div class="improvement-option-content">
+                <div class="improvement-option-label">Stronger CTAs in posts</div>
+                <div class="improvement-option-desc">More direct calls-to-action</div>
+              </div>
+              <span class="improvement-option-points">+15 pts</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px; padding: 16px; background: var(--warm-gray); border-radius: var(--radius-sm);">
+          <label style="font-weight: 500; color: var(--dark); display: block; margin-bottom: 8px;">Notes (optional)</label>
+          <textarea style="width: 100%; padding: 12px; border: 1px solid var(--border-gray); border-radius: var(--radius-sm); min-height: 80px; font-family: inherit; resize: vertical;" placeholder="What specifically are you changing?"></textarea>
+        </div>
+
+        <button style="width: 100%; margin-top: 16px; padding: 16px; background: linear-gradient(135deg, var(--purple), var(--purple-light)); color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem; cursor: pointer;">
+          Start Improvement (+30 pts) →
+        </button>
+
+        <p style="text-align: center; margin-top: 12px; font-size: 0.875rem; color: var(--text-gray);">
+          We'll measure your capture rate again after 50 new visitors.<br>
+          If it improves → <strong>+100 bonus points!</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- Calibration Mode Page -->
+    <div class="page" id="page-calibration">
+      <div class="page-header">
+        <h1 class="page-title">🎯 Calibration Week</h1>
+        <p class="page-subtitle">Let's establish your baseline. No pressure to improve yet.</p>
+      </div>
+
+      <div class="calibration-banner">
+        <h2>Day 3 of 7</h2>
+        <p>Log your numbers daily this week. Just capture where you're starting.</p>
+
+        <div class="calibration-progress">
+          <div class="calibration-day complete"></div>
+          <div class="calibration-day complete"></div>
+          <div class="calibration-day current"></div>
+          <div class="calibration-day"></div>
+          <div class="calibration-day"></div>
+          <div class="calibration-day"></div>
+          <div class="calibration-day"></div>
+        </div>
+
+        <div class="calibration-input">
+          <div class="calibration-input-row">
+            <span class="calibration-input-label">Content posted today</span>
+            <input type="number" class="calibration-input-field" placeholder="0" value="2">
+          </div>
+          <div class="calibration-input-row">
+            <span class="calibration-input-label">Reach/impressions</span>
+            <input type="number" class="calibration-input-field" placeholder="0" value="1200">
+          </div>
+          <div class="calibration-input-row">
+            <span class="calibration-input-label">Engagements (likes, comments)</span>
+            <input type="number" class="calibration-input-field" placeholder="0" value="87">
+          </div>
+          <div class="calibration-input-row">
+            <span class="calibration-input-label">New leads captured</span>
+            <input type="number" class="calibration-input-field" placeholder="0" value="3">
+          </div>
+          <div class="calibration-input-row">
+            <span class="calibration-input-label">Sales conversations</span>
+            <input type="number" class="calibration-input-field" placeholder="0" value="1">
+          </div>
+          <div class="calibration-input-row">
+            <span class="calibration-input-label">Deals closed</span>
+            <input type="number" class="calibration-input-field" placeholder="0" value="0">
+          </div>
+        </div>
+
+        <button style="width: 100%; margin-top: 16px; padding: 14px; background: var(--dark); color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer;">
+          Save Today's Numbers (+10 pts)
+        </button>
+      </div>
+    </div>
+
+    <!-- Monthly Retro Page -->
+    <div class="page" id="page-retro">
+      <div class="page-header">
+        <h1 class="page-title">📊 January 2026 Retro</h1>
+        <p class="page-subtitle">Your month in review</p>
+      </div>
+
+      <div class="retro-card">
+        <div class="retro-header">
+          <div>
+            <div class="retro-title">Month Complete!</div>
+            <div class="retro-period">January 1-31, 2026</div>
+          </div>
+          <div class="retro-highlight">
+            <div class="retro-highlight-value">+62%</div>
+            <div class="retro-highlight-label">Revenue Growth</div>
+          </div>
+        </div>
+
+        <div class="retro-stats">
+          <div class="retro-stat">
+            <div class="retro-stat-value">82%</div>
+            <div class="retro-stat-label">Execution Rate</div>
+            <div class="retro-stat-change up">↑ from 71%</div>
+          </div>
+          <div class="retro-stat">
+            <div class="retro-stat-value">4</div>
+            <div class="retro-stat-label">Improvements Tried</div>
+            <div class="retro-stat-change up">3 worked!</div>
+          </div>
+          <div class="retro-stat">
+            <div class="retro-stat-value">485</div>
+            <div class="retro-stat-label">Points Earned</div>
+            <div class="retro-stat-change up">↑ from 412</div>
+          </div>
+          <div class="retro-stat">
+            <div class="retro-stat-value">$6,800</div>
+            <div class="retro-stat-label">Revenue</div>
+            <div class="retro-stat-change up">↑ from $4,200</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-card-header">
+          <h3 class="section-card-title">Conversion Rate Changes</h3>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--success-light); border-radius: var(--radius-sm);">
+            <span style="font-weight: 500;">Attraction → Capture</span>
+            <span style="font-weight: 700; color: var(--success);">14.6% → 19.2% ↑</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--success-light); border-radius: var(--radius-sm);">
+            <span style="font-weight: 500;">Awareness → Attraction</span>
+            <span style="font-weight: 700; color: var(--success);">26.5% → 28.1% ↑</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--success-light); border-radius: var(--radius-sm);">
+            <span style="font-weight: 500;">Nurture → Convert</span>
+            <span style="font-weight: 700; color: var(--success);">7.5% → 8.9% ↑</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--error-light); border-radius: var(--radius-sm);">
+            <span style="font-weight: 500;">Capture → Nurture</span>
+            <span style="font-weight: 700; color: var(--error);">54.0% → 52.8% ↓</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 20px;">
+        <button style="flex: 1; padding: 16px; background: linear-gradient(135deg, var(--purple), var(--purple-light)); color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; cursor: pointer;">
+          Share Retro 🎉
+        </button>
+        <button style="flex: 1; padding: 16px; background: var(--white); color: var(--purple); border: 2px solid var(--purple); border-radius: var(--radius-sm); font-weight: 700; cursor: pointer;">
+          Set February Goals →
+        </button>
+      </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div class="page" id="page-dashboard">
+      <div class="page-header">
+        <h1 class="page-title">Your HQ</h1>
+        <p class="page-subtitle">Marketing & sales at a glance</p>
+      </div>
+
+      <div class="section-card" style="background: linear-gradient(135deg, rgba(94, 23, 235, 0.05), rgba(124, 58, 237, 0.1)); border-color: var(--purple);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 style="font-weight: 700; color: var(--dark);">⚡ Today's Execution</h3>
+            <p style="color: var(--text-gray);">4 tasks remaining</p>
+          </div>
+          <button style="background: var(--purple); color: white; border: none; padding: 10px 20px; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600;" onclick="showPage('execute')">
+            Open Execute →
+          </button>
+        </div>
+      </div>
+
+      <div class="tower-grid">
+        <div class="tower-card" onclick="showPage('attract')">
+          <div class="tower-card-icon">🎯</div>
+          <h3 class="tower-card-title">Attract</h3>
+          <p class="tower-card-description">Content, pages, and outreach to bring in new leads.</p>
+        </div>
+        <div class="tower-card" onclick="showPage('nurture')">
+          <div class="tower-card-icon">💜</div>
+          <h3 class="tower-card-title">Nurture</h3>
+          <p class="tower-card-description">Contacts, emails, and pipeline to convert leads.</p>
+        </div>
+        <div class="tower-card" onclick="showPage('tools')">
+          <div class="tower-card-icon">🧰</div>
+          <h3 class="tower-card-title">Tools</h3>
+          <p class="tower-card-description">Analytics, calculators, and scripts.</p>
+        </div>
+        <div class="tower-card" onclick="showPage('retro')">
+          <div class="tower-card-icon">📊</div>
+          <h3 class="tower-card-title">Monthly Retro</h3>
+          <p class="tower-card-description">Review your progress and celebrate wins.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder pages -->
+    <div class="page" id="page-attract">
+      <div class="page-header">
+        <h1 class="page-title">🎯 Attract</h1>
+        <p class="page-subtitle">Bring new leads into your world</p>
+      </div>
+      <div class="tower-grid">
+        <div class="tower-card" onclick="showPage('content')">
+          <div class="tower-card-icon">📝</div>
+          <h3 class="tower-card-title">Content</h3>
+          <p class="tower-card-description">Create and schedule content</p>
+        </div>
+        <div class="tower-card">
+          <div class="tower-card-icon">🌐</div>
+          <h3 class="tower-card-title">Pages</h3>
+          <p class="tower-card-description">Landing and sales pages</p>
+        </div>
+        <div class="tower-card">
+          <div class="tower-card-icon">📧</div>
+          <h3 class="tower-card-title">Outreach</h3>
+          <p class="tower-card-description">Cold and warm outreach</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-nurture">
+      <div class="page-header">
+        <h1 class="page-title">💜 Nurture</h1>
+        <p class="page-subtitle">Build relationships with your leads</p>
+      </div>
+      <div class="tower-grid">
+        <div class="tower-card">
+          <div class="tower-card-icon">👥</div>
+          <h3 class="tower-card-title">Contacts</h3>
+          <p class="tower-card-description">Manage your leads</p>
+        </div>
+        <div class="tower-card">
+          <div class="tower-card-icon">✉️</div>
+          <h3 class="tower-card-title">Email Sequences</h3>
+          <p class="tower-card-description">Automated nurture flows</p>
+        </div>
+        <div class="tower-card">
+          <div class="tower-card-icon">📊</div>
+          <h3 class="tower-card-title">Pipeline</h3>
+          <p class="tower-card-description">Track deals to close</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-tools">
+      <div class="page-header">
+        <h1 class="page-title">🧰 Tools</h1>
+        <p class="page-subtitle">Calculators, scripts, and analytics</p>
+      </div>
+      <div class="tower-grid">
+        <div class="tower-card">
+          <div class="tower-card-icon">📈</div>
+          <h3 class="tower-card-title">Analytics</h3>
+          <p class="tower-card-description">Report cards and trends</p>
+        </div>
+        <div class="tower-card">
+          <div class="tower-card-icon">🧮</div>
+          <h3 class="tower-card-title">Calculators</h3>
+          <p class="tower-card-description">PTUF, LTV, CAC</p>
+        </div>
+        <div class="tower-card">
+          <div class="tower-card-icon">📜</div>
+          <h3 class="tower-card-title">Sales Scripts</h3>
+          <p class="tower-card-description">Hormozi frameworks</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-content">
+      <div class="page-header">
+        <h1 class="page-title">📝 Content</h1>
+        <p class="page-subtitle">Create and manage your content</p>
+      </div>
+      <div class="section-card">
+        <p style="color: var(--text-gray); text-align: center; padding: 40px;">Content generator will pre-load based on your active project phases...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let currentPage = 'execute';
+    let pageHistory = ['execute'];
+
+    const pageTitles = {
+      'execute': 'Execute',
+      'dashboard': 'Your HQ',
+      'attract': 'Attract',
+      'nurture': 'Nurture',
+      'tools': 'Tools',
+      'content': 'Content',
+      'improve': 'Improve Funnel',
+      'calibration': 'Calibration',
+      'retro': 'Monthly Retro'
+    };
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+      const page = document.getElementById('page-' + pageId);
+      if (page) {
+        page.classList.add('active');
+        currentPage = pageId;
+
+        if (pageHistory[pageHistory.length - 1] !== pageId) {
+          pageHistory.push(pageId);
+        }
+
+        document.getElementById('mobileTitle').textContent = pageTitles[pageId] || pageId;
+        updateNavActiveStates(pageId);
+
+        document.querySelectorAll('.nav-item.open').forEach(item => {
+          item.classList.remove('open');
+        });
+      }
+    }
+
+    function updateNavActiveStates(pageId) {
+      document.querySelectorAll('.mobile-nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      if (pageId === 'dashboard') {
+        document.querySelector('.mobile-nav-item:nth-child(1)')?.classList.add('active');
+      } else if (['attract', 'content', 'pages', 'outreach'].includes(pageId)) {
+        document.querySelector('.mobile-nav-item:nth-child(2)')?.classList.add('active');
+      } else if (['execute', 'improve', 'calibration'].includes(pageId)) {
+        document.querySelector('.mobile-nav-item:nth-child(3)')?.classList.add('active');
+      } else if (['nurture', 'contacts', 'email', 'pipeline'].includes(pageId)) {
+        document.querySelector('.mobile-nav-item:nth-child(4)')?.classList.add('active');
+      } else if (['tools', 'analytics', 'calculators', 'retro'].includes(pageId)) {
+        document.querySelector('.mobile-nav-item:nth-child(5)')?.classList.add('active');
+      }
+    }
+
+    function toggleDropdown(element) {
+      document.querySelectorAll('.nav-item.open').forEach(item => {
+        if (item !== element) item.classList.remove('open');
+      });
+      element.classList.toggle('open');
+    }
+
+    function togglePhase(element) {
+      element.classList.toggle('selected');
+    }
+
+    function goBack() {
+      if (pageHistory.length > 1) {
+        pageHistory.pop();
+        const previousPage = pageHistory[pageHistory.length - 1];
+        showPage(previousPage);
+        pageHistory.pop();
+      }
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-item')) {
+        document.querySelectorAll('.nav-item.open').forEach(item => {
+          item.classList.remove('open');
+        });
+      }
+    });
+
+    function setView(view) {
+      const buttons = document.querySelectorAll('.view-toggle button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (view === 'mobile') {
+        document.body.style.maxWidth = '390px';
+        document.body.style.margin = '0 auto';
+        document.body.style.boxShadow = '0 0 40px rgba(0,0,0,0.1)';
+        document.getElementById('desktopNav').style.display = 'none';
+        document.getElementById('mobileNav').style.display = 'block';
+        document.getElementById('mobileHeader').style.display = 'flex';
+        document.querySelector('.main-content').style.paddingTop = '56px';
+        document.querySelector('.main-content').style.paddingBottom = 'calc(72px + 16px)';
+      } else {
+        document.body.style.maxWidth = '';
+        document.body.style.margin = '';
+        document.body.style.boxShadow = '';
+        document.getElementById('desktopNav').style.display = 'flex';
+        document.getElementById('mobileNav').style.display = 'none';
+        document.getElementById('mobileHeader').style.display = 'none';
+        document.querySelector('.main-content').style.paddingTop = '64px';
+        document.querySelector('.main-content').style.paddingBottom = '';
+      }
+    }
+  </script>
+</body>
+</html>

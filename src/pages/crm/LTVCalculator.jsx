@@ -1,13 +1,33 @@
 /**
  * LTV Calculator - Lifetime Value Calculator
  * Calculates customer lifetime value with multiple revenue streams
+ *
+ * Pre-populates from challenge data:
+ * - offer_stack_builds → attraction offer price
+ * - launch_readiness_assessments → core offer price
+ * - upsell_assessments → upsell price
+ * - downsell_assessments → downsell price
+ * - continuity_assessments → continuity price
+ * - funnel_metrics → actual conversion rates
  */
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthProvider'
+import {
+  fetchOfferStackData,
+  fetchLaunchReadiness,
+  getFunnelTrends
+} from '../../lib/crm'
+import { supabase } from '../../lib/supabaseClient'
 import './LTVCalculator.css'
 
 export default function LTVCalculator() {
   const navigate = useNavigate()
+  const { user } = useAuth()
+
+  // Loading state for pre-population
+  const [loadingDefaults, setLoadingDefaults] = useState(true)
+  const [dataSource, setDataSource] = useState(null) // Track where data came from
 
   // Initial Sale
   const [attractionOffer, setAttractionOffer] = useState(47)
@@ -30,6 +50,83 @@ export default function LTVCalculator() {
   // Referrals
   const [referralRate, setReferralRate] = useState(10)
   const [referralsPerCustomer, setReferralsPerCustomer] = useState(0.5)
+
+  // Pre-populate from challenge data on mount
+  useEffect(() => {
+    if (!user) {
+      setLoadingDefaults(false)
+      return
+    }
+
+    async function loadDefaults() {
+      try {
+        const sources = []
+
+        // Fetch all relevant challenge data in parallel
+        const [offerStack, launchReadiness, funnelTrends, upsellData, downsellData, continuityData] = await Promise.all([
+          fetchOfferStackData(user.id),
+          fetchLaunchReadiness(user.id),
+          getFunnelTrends(user.id, 1),
+          supabase.from('upsell_assessments').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+          supabase.from('downsell_assessments').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+          supabase.from('continuity_assessments').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle()
+        ])
+
+        // Attraction offer from offer stack
+        if (offerStack?.attraction_offer_price) {
+          setAttractionOffer(offerStack.attraction_offer_price)
+          sources.push('Offer Stack')
+        }
+
+        // Core offer from launch readiness
+        if (launchReadiness?.pricing_data?.coreOfferPrice) {
+          setCoreOffer(launchReadiness.pricing_data.coreOfferPrice)
+          sources.push('Launch Readiness')
+        }
+
+        // Upsell from upsell assessment
+        if (upsellData?.data?.pricing) {
+          setUpsellPrice(upsellData.data.pricing)
+          sources.push('Upsell Flow')
+        }
+
+        // Downsell from downsell assessment
+        if (downsellData?.data?.pricing) {
+          setDownsellPrice(downsellData.data.pricing)
+          sources.push('Downsell Flow')
+        }
+
+        // Continuity from continuity assessment
+        if (continuityData?.data?.monthly_price) {
+          setContinuityPrice(continuityData.data.monthly_price)
+          sources.push('Continuity Flow')
+        }
+
+        // Conversion rates from funnel metrics (if available)
+        if (funnelTrends && funnelTrends.length > 0) {
+          const latest = funnelTrends[0]
+          if (latest.rates) {
+            // Use actual conversion rates if we have them
+            const nurtureToCore = parseFloat(latest.rates.nurtureToCore)
+            if (nurtureToCore > 0) {
+              setCoreConversion(Math.round(nurtureToCore))
+              sources.push('Funnel Baseline')
+            }
+          }
+        }
+
+        if (sources.length > 0) {
+          setDataSource(sources.join(', '))
+        }
+      } catch (err) {
+        console.error('Error loading LTV defaults:', err)
+      } finally {
+        setLoadingDefaults(false)
+      }
+    }
+
+    loadDefaults()
+  }, [user])
 
   const calculations = useMemo(() => {
     // Front-end value (per 100 customers at attraction offer)
@@ -94,6 +191,18 @@ export default function LTVCalculator() {
           <p>Customer Lifetime Value Analysis</p>
         </div>
       </header>
+
+      {loadingDefaults && (
+        <div className="data-source-banner loading">
+          Loading your offer data...
+        </div>
+      )}
+
+      {!loadingDefaults && dataSource && (
+        <div className="data-source-banner">
+          Pre-populated from: {dataSource}
+        </div>
+      )}
 
       <div className="ltv-grid">
         {/* Front-End Offers */}

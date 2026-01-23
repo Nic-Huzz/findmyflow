@@ -22,6 +22,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './ProductSelectionFlow.css'
 
 const STAGES = {
@@ -1370,6 +1371,8 @@ function ProductSelectionFlow() {
             <span className="avg-score" style={{ color: avgLevel.color }}>{avgScore}</span>
             <span className="avg-level" style={{ color: avgLevel.color }}>{avgLevel.label}</span>
           </div>
+
+          <FlowFeedback flowType="product_selection" userId={user?.id} />
         </div>
 
         <div className="success-footer">

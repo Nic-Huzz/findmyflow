@@ -1366,7 +1366,7 @@ export default function NervousSystemFlow() {
         userId={user?.id}
       />
 
-      <button className="ns-hc-primary-button" onClick={() => navigate('/healing-compass')}>
+      <button className="ns-hc-primary-button" onClick={() => navigate('/healing-compass')} style={{ marginTop: '24px' }}>
         Proceed to Healing Compass
       </button>
       <button className="ns-hc-secondary-button" onClick={() => navigate('/7-day-challenge')}>

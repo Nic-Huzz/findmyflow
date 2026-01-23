@@ -10,7 +10,9 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What were you doing?",
-      "learnMore": "Tracking when your essence shows up helps you identify how aligned your work is with your essence.\n\nYou're training your awareness so you can show-up from this place more often."
+      "learnMore": "Tracking when your essence shows up helps you identify how aligned your work is with your essence.\n\nYou're training your awareness so you can show-up from this place more often.",
+      "archived": true,
+      "archived_reason": "Replaced by dynamic stage-specific Essence Voice quests in Voices sub-tab - Jan 2025"
     },
     {
       "id": "recognise_protective_observe",
@@ -22,7 +24,9 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What was the situation? What caused it to arise?",
-      "learnMore": "Your protective voice is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future."
+      "learnMore": "Your protective voice is a coping mechanism you developed to keep yourself safe from rejection, failure, or pain.\n\nRecognising when it activates is the first step to changing how we show up in the future.",
+      "archived": true,
+      "archived_reason": "Replaced by dynamic stage-specific Protective Voice quests in Voices sub-tab - Jan 2025"
     },
     {
       "id": "recognise_nonfiction_content",
@@ -69,7 +73,7 @@
     },
     {
       "id": "rewire_dopamine_diet",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Rewire",
       "frequency": "weekly",
       "name": "Dopamine Diet Change",
@@ -81,7 +85,7 @@
     },
     {
       "id": "rewire_future_successful_you",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Rewire",
       "frequency": "daily",
       "name": "Future Successful You",
@@ -99,16 +103,18 @@
       "description": "What's a moment where your protective voice was impacting how you showed up but you shifted and showed up in your essence?",
       "points": 7,
       "inputType": "text",
-      "placeholder": "How did you shift from protective to essence?"
+      "placeholder": "How did you shift from protective to essence?",
+      "archived": true,
+      "archived_reason": "Superseded by stage-specific Voice quests - Jan 2025"
     },
     {
       "id": "rewire_hell_yea",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Rewire",
-      "frequency": "daily",
+      "frequency": "weekly",
       "name": "Make It A Hell Yea",
       "description": "What event this week flowed into your life that was an immediate \"hell yea\" or what event wasn't a hell yea but you turned into one by changing something about it?",
-      "points": 5,
+      "points": 10,
       "inputType": "text",
       "placeholder": "What event this week was a Hell Yea for you?",
       "learnMore": "What's the difference between an A-grade actor and a C-grade actor who started with the same talent? One said yes to any opportunity and found themselves too busy to say yes to the \"hell yea\" ones when they did come and one said yes to only \"Hell Yea\" opportunities which led to more hell yeas.\n\nBy bringing awareness to what a \"hell yea\" is for you also shows what you're interested in and what you want to be doing."
@@ -136,11 +142,13 @@
       "points": 20,
       "inputType": "text",
       "placeholder": "What did you do and how did it go?",
-      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play\u2014even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway."
+      "learnMore": "Your essence wants to express itself fully, but your protective voice has been blocking it to keep you safe. This quest is about giving your essence permission to play\u2014even if it feels scary. Examples: singing in public, sharing your art, dancing freely, speaking your truth, trying something new without being 'good' at it. The fear is the doorway.",
+      "archived": true,
+      "archived_reason": "Superseded by stage-specific Stage Groan quests in Voices sub-tab - Jan 2025"
     },
     {
       "id": "reconnect_morning_meditation",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Meditation",
@@ -150,7 +158,7 @@
     },
     {
       "id": "reconnect_morning_dance",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Rise & Vibe Dance",
@@ -160,7 +168,7 @@
     },
     {
       "id": "reconnect_morning_breathwork",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Breathwork",
@@ -170,7 +178,7 @@
     },
     {
       "id": "reconnect_self_identified",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Self-Identified Activity",
@@ -181,7 +189,7 @@
     },
     {
       "id": "reconnect_daily_prayer",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Reconnect",
       "frequency": "daily",
       "name": "Daily Prayer",
@@ -193,7 +201,7 @@
     },
     {
       "id": "reconnect_weekly_task",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Reconnect",
       "frequency": "weekly",
       "name": "Weekly Self-Identified Task",
@@ -204,7 +212,7 @@
     },
     {
       "id": "reconnect_remove_negative",
-      "category": "Groans",
+      "category": "Healing",
       "type": "Reconnect",
       "frequency": "weekly",
       "name": "Environment Hygiene",
@@ -226,6 +234,8 @@
       "milestone_type": "groan_challenge_completed",
       "placeholder": "What groan task did you complete?",
       "counts_toward_graduation": false,
+      "archived": true,
+      "archived_reason": "Superseded by stage-specific groans in Business tab and Stage Groan in Voices sub-tab - Jan 2025",
       "learnMore": "A 'groan' is something that you know you can do but terrifies you often due to a fear of judgement. These are tasks that accelerate your growth most.\n\nThe groan indicates you're at an edge. Groan tasks might include: recording a video, asking for feedback, learning a new tool, or practicing a skill publicly before you feel 'ready.'"
     },
     {
@@ -607,6 +617,27 @@
       "learnMore": "Launching your attraction offer is the key to scaling. This milestone counts toward your stage graduation."
     },
     {
+      "id": "daily_implementation",
+      "category": "Business",
+      "type": "Launch",
+      "frequency": "daily",
+      "stage_required": 7,
+      "name": "Daily Implementation",
+      "description": "What Core Four activities did you do today?",
+      "points": 4,
+      "inputType": "multi_select",
+      "maxPerDay": 1,
+      "selectLabel": "Select all that apply:",
+      "selectOptions": [
+        { "value": "warm_outreach", "label": "Warm Outreach", "icon": "🤝" },
+        { "value": "content", "label": "Content", "icon": "📝" },
+        { "value": "ads", "label": "Paid Ads", "icon": "📣" },
+        { "value": "cold_outreach", "label": "Cold Outreach", "icon": "📧" }
+      ],
+      "counts_toward_graduation": true,
+      "learnMore": "The Core Four are the only ways to let people know about your offer:\n\n🤝 **Warm Outreach** - Reaching out to people who already know you\n📝 **Content** - Creating free value that attracts your audience\n📣 **Paid Ads** - Paying to reach new audiences\n📧 **Cold Outreach** - Reaching out to people who don't know you yet\n\nConsistent daily action on at least one of these is the key to successful launch."
+    },
+    {
       "id": "milestone_first_10_signups",
       "category": "Business",
       "type": "Launch",
@@ -618,8 +649,10 @@
       "inputType": "text",
       "milestone_type": "first_10_signups",
       "placeholder": "How did you get your first 10? What did you learn? What surprised you?",
-      "counts_toward_graduation": true,
-      "learnMore": "Your first 10 customers are the hardest—and the most important.\n\nThey validate that:\n• Your offer solves a real problem\n• People will pay for your solution\n• Your funnel works\n\nDocument how you got them. This becomes your playbook for the next 100.\n\nCompleting this milestone is a major achievement. You're no longer 'planning to launch'—you've launched."
+      "counts_toward_graduation": false,
+      "learnMore": "Your first 10 customers are the hardest—and the most important.\n\nThey validate that:\n• Your offer solves a real problem\n• People will pay for your solution\n• Your funnel works\n\nDocument how you got them. This becomes your playbook for the next 100.\n\nCompleting this milestone is a major achievement. You're no longer 'planning to launch'—you've launched.",
+      "archived": true,
+      "archive_reason": "Moved to Tracking stage - Launch stage focuses on executing the launch, not measuring results"
     },
     {
       "id": "milestone_post_launch_review",
@@ -681,7 +714,9 @@
       "milestone_type": "sales_copy_created",
       "placeholder": "Paste your sales page copy or share the link to your live sales page",
       "counts_toward_graduation": false,
-      "learnMore": "Your sales copy is the difference between a browser and a buyer.\n\n**Essential elements:**\n• **Headline** - Captures attention and speaks to their desired outcome\n• **Hook** - 1-2 sentences that make them keep reading\n• **Problem** - Clearly articulate the pain they experience\n• **Solution** - How your offer solves it uniquely\n• **Social Proof** - Testimonials, results, case studies\n• **Objections** - Preemptively address their hesitations\n• **Call-to-Action** - Clear next step (CTA should be repeated 3+ times)\n• **Urgency** - Why they should act now\n\n**Pro tips:**\n• Use the exact words from your validation interviews\n• Benefits > Features (what it does FOR them, not what it IS)\n• Make the CTA button specific ('Start My Transformation' vs 'Submit')\n• Break up text with bullets and short paragraphs"
+      "learnMore": "Your sales copy is the difference between a browser and a buyer.\n\n**Essential elements:**\n• **Headline** - Captures attention and speaks to their desired outcome\n• **Hook** - 1-2 sentences that make them keep reading\n• **Problem** - Clearly articulate the pain they experience\n• **Solution** - How your offer solves it uniquely\n• **Social Proof** - Testimonials, results, case studies\n• **Objections** - Preemptively address their hesitations\n• **Call-to-Action** - Clear next step (CTA should be repeated 3+ times)\n• **Urgency** - Why they should act now\n\n**Pro tips:**\n• Use the exact words from your validation interviews\n• Benefits > Features (what it does FOR them, not what it IS)\n• Make the CTA button specific ('Start My Transformation' vs 'Submit')\n• Break up text with bullets and short paragraphs",
+      "archived": true,
+      "archive_reason": "Redundant - Landing Page challenge in Campaign stage covers this"
     },
     {
       "id": "flow_100m_offer",
@@ -837,13 +872,16 @@
       "name": "Launch Sequence",
       "description": "Plan your 7-day launch sequence: what happens each day from Day -3 to Day +3",
       "points": 15,
-      "inputType": "dropdown",
+      "inputType": "progress_dropdown",
       "milestone_type": "launch_sequence_planned",
-      "placeholder": "Where did you create your launch sequence?",
+      "placeholder": "What's your progress?",
       "options": [
-        { "value": "findmyflow_crm", "label": "FindMyFlow CRM" },
-        { "value": "other", "label": "Other" }
+        { "value": "not_started", "label": "Not Started" },
+        { "value": "in_progress", "label": "In Progress" },
+        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
+        { "value": "completed_other", "label": "Completed Elsewhere" }
       ],
+      "tracks_progress": true,
       "counts_toward_graduation": true,
       "learnMore": "A launch isn't one moment—it's a sequence that builds anticipation and urgency.\n\nSimple 7-day launch structure:\n• Day -3: Teaser / Coming Soon\n• Day -1: Final countdown / Last chance to prepare\n• Day 0: LAUNCH - Main announcement\n• Day +1: Social proof / First results\n• Day +2: FAQ / Objection handling\n• Day +3: Urgency / Bonus deadline\n• Day +7: Final call / Doors closing\n\nPlan the sequence, then execute daily.\n\n💡 Our CRM includes launch planning tools to help you execute.",
       "upsell_type": "crm",
@@ -858,13 +896,16 @@
       "name": "Content Creation Plan",
       "description": "Map out your first 7 pieces of content based on your Core Four strategy",
       "points": 15,
-      "inputType": "dropdown",
+      "inputType": "progress_dropdown",
       "milestone_type": "content_plan_created",
-      "placeholder": "Where did you create your content plan?",
+      "placeholder": "What's your progress?",
       "options": [
-        { "value": "findmyflow_crm", "label": "FindMyFlow CRM" },
-        { "value": "other", "label": "Other" }
+        { "value": "not_started", "label": "Not Started" },
+        { "value": "in_progress", "label": "In Progress" },
+        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
+        { "value": "completed_other", "label": "Completed Elsewhere" }
       ],
+      "tracks_progress": true,
       "counts_toward_graduation": true,
       "learnMore": "Your Core Four strategy needs fuel. Whether you chose Warm Outreach, Cold Outreach, Content, or Ads—you need a content plan.\n\nMap out 7 pieces that:\n• Address your audience's pain points\n• Demonstrate your expertise\n• Lead naturally to your lead magnet\n\nThis is your campaign engine.\n\n💡 Our CRM includes content planning tools to help you stay consistent.",
       "upsell_type": "crm",
@@ -879,13 +920,16 @@
       "name": "Lead Capture Setup",
       "description": "Create your landing page or lead capture mechanism for your lead magnet",
       "points": 20,
-      "inputType": "dropdown",
+      "inputType": "progress_dropdown",
       "milestone_type": "lead_capture_live",
-      "placeholder": "Where did you set up your lead capture?",
+      "placeholder": "What's your progress?",
       "options": [
-        { "value": "findmyflow_crm", "label": "FindMyFlow CRM" },
-        { "value": "other", "label": "Other" }
+        { "value": "not_started", "label": "Not Started" },
+        { "value": "in_progress", "label": "In Progress" },
+        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
+        { "value": "completed_other", "label": "Completed Elsewhere" }
       ],
+      "tracks_progress": true,
       "counts_toward_graduation": true,
       "learnMore": "Your funnel needs a front door. This is where strangers become leads.\n\nYour lead capture should:\n• Clearly communicate the value of your lead magnet\n• Make it dead simple to opt in\n• Deliver your lead magnet instantly\n\n💡 Need help? We offer done-for-you landing pages that convert.",
       "upsell_type": "landing_page",
@@ -900,13 +944,16 @@
       "name": "Nurture Sequence",
       "description": "Write your 5-email (or 5-message) nurture sequence that builds trust after lead capture",
       "points": 20,
-      "inputType": "dropdown",
+      "inputType": "progress_dropdown",
       "milestone_type": "nurture_sequence_created",
-      "placeholder": "Where did you create your nurture sequence?",
+      "placeholder": "What's your progress?",
       "options": [
-        { "value": "findmyflow_crm", "label": "FindMyFlow CRM" },
-        { "value": "other", "label": "Other" }
+        { "value": "not_started", "label": "Not Started" },
+        { "value": "in_progress", "label": "In Progress" },
+        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
+        { "value": "completed_other", "label": "Completed Elsewhere" }
       ],
+      "tracks_progress": true,
       "counts_toward_graduation": true,
       "learnMore": "Most people need 7+ touchpoints before buying. Your nurture sequence bridges the gap between 'interested stranger' and 'ready buyer.'\n\nA simple 5-part structure:\n1. Welcome + Quick Win\n2. Your Story / Why You Care\n3. Case Study / Proof\n4. Common Mistake / Objection Buster\n5. Invitation to Next Step\n\n💡 Our CRM includes nurture sequence templates and automated follow-ups.",
       "upsell_type": "crm",
@@ -921,13 +968,16 @@
       "name": "CRM & Tracking Setup",
       "description": "Set up a system to track your leads and know where each person is in your funnel",
       "points": 15,
-      "inputType": "dropdown",
+      "inputType": "progress_dropdown",
       "milestone_type": "crm_tracking_live",
-      "placeholder": "Where are you tracking your leads?",
+      "placeholder": "What's your progress?",
       "options": [
-        { "value": "findmyflow_crm", "label": "FindMyFlow CRM" },
-        { "value": "other", "label": "Other" }
+        { "value": "not_started", "label": "Not Started" },
+        { "value": "in_progress", "label": "In Progress" },
+        { "value": "completed_crm", "label": "Completed in FindMyFlow CRM" },
+        { "value": "completed_other", "label": "Completed Elsewhere" }
       ],
+      "tracks_progress": true,
       "counts_toward_graduation": true,
       "learnMore": "You can't improve what you don't measure. A simple CRM helps you:\n• Know who's in your funnel\n• Track where they are (lead → nurtured → customer)\n• Follow up at the right time\n• See what's working\n\n💡 Our built-in Leads Tracker can help you manage this.",
       "upsell_type": "crm",
@@ -1505,21 +1555,6 @@
       "archived_reason": "Redundant with MVP Readiness flow - Dec 2024"
     },
     {
-      "id": "daily_implementation",
-      "category": "Business",
-      "type": "Launch",
-      "frequency": "daily",
-      "stage_required": 7,
-      "name": "Daily Implementation",
-      "description": "What action did you take today to implement your launch strategy?",
-      "points": 4,
-      "inputType": "text",
-      "maxPerDay": 1,
-      "placeholder": "What did you do today to move your launch forward?",
-      "counts_toward_graduation": true,
-      "learnMore": "Consistent daily action is the key to successful launch. Track your implementation streak to build momentum."
-    },
-    {
       "id": "flow_funnel_calculator",
       "category": "Business",
       "type": "Tracking",
@@ -1535,34 +1570,19 @@
       "learnMore": "The Funnel Calculator helps you track and optimize your customer journey from awareness to continuity.\n\nUse it in two modes:\n• **Actual Mode**: Track real numbers from your campaigns\n• **Planner Mode**: Project outcomes using industry-average conversion rates\n\nKey metrics tracked:\n• Awareness → Attraction Offer (5% avg)\n• Attraction → Lead Magnet (25% avg)\n• Lead Magnet → Nurture (40% avg)\n• Nurture → Core Sale (5% avg)\n• Core → Upsell/Downsell/Continuity\n\nUnderstanding your funnel helps you identify where to focus optimization efforts."
     },
     {
-      "id": "milestone_funnel_baseline",
-      "category": "Business",
-      "type": "Tracking",
-      "frequency": "anytime",
-      "stage_required": 8,
-      "name": "Establish Funnel Baseline",
-      "description": "Enter your first set of funnel metrics to establish a baseline for tracking",
-      "points": 10,
-      "inputType": "text",
-      "milestone_type": "funnel_baseline_set",
-      "placeholder": "What are your current numbers? (e.g., 1000 reached, 50 engaged, 12 leads, 2 sales)",
-      "counts_toward_graduation": false,
-      "learnMore": "Before you can optimize, you need to know where you're starting.\n\nEnter your current funnel numbers—even if they're small. This becomes your baseline.\n\nFrom here, every improvement is measurable.\n\nNo numbers yet? Use Planner Mode in the Funnel Calculator to set goals and see what's possible."
-    },
-    {
-      "id": "milestone_weekly_funnel_update",
+      "id": "flow_funnel_baseline",
       "category": "Business",
       "type": "Tracking",
       "frequency": "weekly",
       "stage_required": 8,
       "name": "Weekly Funnel Update",
-      "description": "Update your funnel metrics and note any changes from last week",
-      "points": 8,
-      "inputType": "text",
-      "milestone_type": "weekly_funnel_update",
-      "placeholder": "What changed this week? Any conversion rate improvements?",
+      "description": "Track your funnel metrics and see week-over-week changes",
+      "points": 15,
+      "inputType": "flow",
+      "flow_id": "funnel_baseline",
+      "flow_route": "/funnel-baseline",
       "counts_toward_graduation": false,
-      "learnMore": "Weekly tracking is the rhythm of growth.\n\nEach week, update your Funnel Calculator and note:\n• What changed since last week?\n• Which stage improved/declined?\n• What action caused the change?\n\nConsistency here compounds. After 12 weeks, you'll have invaluable data about what actually moves the needle in your business."
+      "learnMore": "Weekly tracking is the rhythm of growth.\n\n**What you'll track:**\n• Traffic source (where leads come from)\n• Top of funnel (awareness, attraction)\n• Middle of funnel (leads, nurture)\n• Bottom of funnel (sales, upsells, continuity)\n\n**Why weekly?**\nConsistent measurement lets you:\n• Spot trends early\n• Know what's actually working\n• Make data-driven decisions\n\nAfter 12 weeks, you'll have invaluable data about what moves the needle in your business.\n\n**CRM Integration**: Data syncs with your CRM Analytics dashboard."
     },
     {
       "id": "bonus_feedback",

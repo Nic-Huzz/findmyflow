@@ -6,6 +6,7 @@ import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { GradientWheel } from '../components/CompetenceWheels'
 import { PROBLEM_SEGMENTS, PROBLEMS_PROFICIENCY_RINGS } from '../lib/wheelTaxonomy'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './FlowFinder.css'
 
 export default function FlowFinderProblems() {
@@ -1292,7 +1293,9 @@ export default function FlowFinderProblems() {
         <p style={{ marginTop: '24px' }}><strong>Next up:</strong> Let's discover who you're most qualified to serve.</p>
       </div>
 
-      <Link to="/nikigai/persona" className="primary-button">
+      <FlowFeedback flowType="nikigai_problems" userId={user?.id} />
+
+      <Link to="/nikigai/persona" className="primary-button" style={{ marginTop: '24px', display: 'block', textDecoration: 'none', textAlign: 'center' }}>
         Continue to Persona Discovery
       </Link>
       <Link

@@ -54,7 +54,7 @@
   border: 1px solid rgba(233, 162, 59, 0.3);
   border-radius: 12px;
   padding: 12px 16px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.9);
 }
@@ -96,7 +96,11 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  padding-bottom: 40px;
   width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .launch-readiness-flow .lr-section h2 {
@@ -335,11 +339,12 @@
   accent-color: #E9A23B;
 }
 
-/* Social Proof */
+/* Social Proof - Matching GrandSlamOfferFlow pattern */
 .launch-readiness-flow .lr-proof-list {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
@@ -352,8 +357,8 @@
 }
 
 .launch-readiness-flow .lr-proof-item.selected {
-  background: rgba(233, 162, 59, 0.1);
-  border-color: rgba(233, 162, 59, 0.3);
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
 }
 
 .launch-readiness-flow .lr-proof-toggle {
@@ -361,26 +366,42 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 16px;
   background: none;
   border: none;
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   text-align: left;
   cursor: pointer;
 }
 
 .launch-readiness-flow .lr-proof-check {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.4);
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
 .launch-readiness-flow .lr-proof-item.selected .lr-proof-check {
-  color: #E9A23B;
+  background: #fbbf24;
+  border-color: #fbbf24;
+}
+
+.launch-readiness-flow .lr-proof-check .checkmark {
+  color: #1a1a2e;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .launch-readiness-flow .lr-proof-icon {
-  font-size: 18px;
+  font-size: 20px;
+  flex-shrink: 0;
 }
 
 .launch-readiness-flow .lr-proof-label {
@@ -800,13 +821,19 @@
 
 .launch-readiness-flow .nav-buttons {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: auto;
+  padding-top: 24px;
 }
 
-.launch-readiness-flow .nav-buttons .secondary-button,
 .launch-readiness-flow .nav-buttons .primary-button {
-  flex: 1;
+  order: 1;
+}
+
+.launch-readiness-flow .nav-buttons .secondary-button {
+  order: 2;
 }
 
 /* Mobile Responsive */
@@ -831,10 +858,6 @@
     flex-direction: column;
   }
 
-  .launch-readiness-flow .nav-buttons {
-    flex-direction: column;
-  }
-
   .launch-readiness-flow .lr-score-circle {
     width: 100px;
     height: 100px;
@@ -842,5 +865,356 @@
 
   .launch-readiness-flow .lr-score-number {
     font-size: 36px;
+  }
+}
+
+/* Campaign Progress Tracker */
+.launch-readiness-flow .lr-campaign-progress {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 24px 0;
+}
+
+.launch-readiness-flow .lr-campaign-progress h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.launch-readiness-flow .lr-progress-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.launch-readiness-flow .lr-progress-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border-left: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+.launch-readiness-flow .lr-progress-item.completed_crm,
+.launch-readiness-flow .lr-progress-item.completed_other {
+  border-left-color: #10B981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.launch-readiness-flow .lr-progress-item.in_progress {
+  border-left-color: #FBBF24;
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.launch-readiness-flow .lr-progress-item.not_started {
+  border-left-color: rgba(255, 255, 255, 0.2);
+}
+
+.launch-readiness-flow .lr-progress-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.launch-readiness-flow .lr-progress-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.launch-readiness-flow .lr-progress-status {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.launch-readiness-flow .lr-progress-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+/* Offer Hint in Pricing */
+.launch-readiness-flow .lr-offer-hint {
+  margin-bottom: 8px;
+}
+
+/* Offer badge variant for pricing section */
+.launch-readiness-flow .lr-pricing-item .lr-offer-badge {
+  display: inline-block;
+  font-size: 12px;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+  margin: 16px 0 0;
+}
+
+/* ==========================================
+   PRICING STACK - Enhanced UI (v2)
+   ========================================== */
+
+.launch-readiness-flow .lr-pricing-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.launch-readiness-flow .lr-stack-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px 18px;
+  transition: all 0.2s ease;
+}
+
+.launch-readiness-flow .lr-stack-card.core {
+  background: linear-gradient(135deg, rgba(233, 162, 59, 0.15) 0%, rgba(233, 162, 59, 0.05) 100%);
+  border-color: rgba(233, 162, 59, 0.4);
+}
+
+.launch-readiness-flow .lr-stack-card.upsell {
+  opacity: 0.7;
+}
+
+.launch-readiness-flow .lr-stack-card.upsell.active {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.12) 0%, rgba(255, 221, 39, 0.04) 100%);
+  border-color: rgba(255, 221, 39, 0.35);
+}
+
+.launch-readiness-flow .lr-stack-card.downsell {
+  opacity: 0.7;
+}
+
+.launch-readiness-flow .lr-stack-card.downsell.active {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.04) 100%);
+  border-color: rgba(139, 92, 246, 0.35);
+}
+
+.launch-readiness-flow .lr-stack-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.launch-readiness-flow .lr-stack-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.launch-readiness-flow .lr-stack-title {
+  flex: 1;
+}
+
+.launch-readiness-flow .lr-stack-title h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.launch-readiness-flow .lr-stack-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.launch-readiness-flow .lr-strategy-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.launch-readiness-flow .lr-strategy-tag.upsell {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.launch-readiness-flow .lr-strategy-tag.downsell {
+  background: rgba(139, 92, 246, 0.2);
+  color: #A78BFA;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.launch-readiness-flow .lr-stack-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.launch-readiness-flow .lr-currency-large {
+  font-size: 22px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.launch-readiness-flow .lr-stack-price-input {
+  flex: 1;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  text-align: right;
+  transition: border-color 0.2s ease;
+  max-width: calc(100% - 40px);
+}
+
+.launch-readiness-flow .lr-stack-price-input:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+.launch-readiness-flow .lr-stack-price-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+  font-weight: 400;
+}
+
+.launch-readiness-flow .lr-stack-hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 6px 0 0;
+  text-align: right;
+}
+
+/* Revenue Calculator */
+.launch-readiness-flow .lr-revenue-calc {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.launch-readiness-flow .lr-revenue-calc h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.launch-readiness-flow .lr-revenue-scenarios {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.launch-readiness-flow .lr-scenario {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.launch-readiness-flow .lr-scenario.max {
+  background: rgba(255, 221, 39, 0.1);
+  border-color: rgba(255, 221, 39, 0.25);
+}
+
+.launch-readiness-flow .lr-scenario.min {
+  background: rgba(124, 58, 237, 0.15);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.launch-readiness-flow .lr-scenario-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.launch-readiness-flow .lr-scenario-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+}
+
+.launch-readiness-flow .lr-scenario.max .lr-scenario-value {
+  color: #ffdd27;
+}
+
+.launch-readiness-flow .lr-scenario.min .lr-scenario-value {
+  color: #c4b5fd;
+}
+
+.launch-readiness-flow .lr-avg-revenue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255, 221, 39, 0.1);
+  border: 1px solid rgba(255, 221, 39, 0.3);
+  border-radius: 10px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.launch-readiness-flow .lr-avg-revenue strong {
+  color: #ffdd27;
+  font-size: 18px;
+}
+
+/* Mobile Responsive - Pricing Stack */
+@media (max-width: 600px) {
+  .launch-readiness-flow .lr-stack-card {
+    padding: 16px;
+  }
+
+  .launch-readiness-flow .lr-stack-icon {
+    font-size: 24px;
+  }
+
+  .launch-readiness-flow .lr-stack-title h3 {
+    font-size: 16px;
+  }
+
+  .launch-readiness-flow .lr-currency-large {
+    font-size: 22px;
+  }
+
+  .launch-readiness-flow .lr-stack-price-input {
+    font-size: 22px;
+    padding: 10px 12px;
+  }
+
+  .launch-readiness-flow .lr-strategy-tag {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .launch-readiness-flow .lr-revenue-scenarios {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .launch-readiness-flow .lr-scenario {
+    flex-direction: row;
+    justify-content: space-between;
   }
 }

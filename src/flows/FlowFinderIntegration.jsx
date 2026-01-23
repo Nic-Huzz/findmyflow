@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { STAGES } from '../lib/stageConfig'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './FlowFinder.css'
 
 // ClusterSlider component (extracted from NikigaiTest.jsx)
@@ -708,7 +709,9 @@ export default function FlowFinderIntegration() {
           <p>Your unique combination has been saved to your profile. You can now use this to guide your opportunities, content, and impact.</p>
         </div>
 
-        <Link to="/me" className="primary-button" style={{ textDecoration: 'none', display: 'block', textAlign: 'center' }}>
+        <FlowFeedback flowType="nikigai_integration" userId={user?.id} />
+
+        <Link to="/me" className="primary-button" style={{ marginTop: '24px', textDecoration: 'none', display: 'block', textAlign: 'center' }}>
           Return to /me page
         </Link>
       </div>

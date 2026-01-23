@@ -16,6 +16,8 @@ import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
+import { syncMVPTestersToContacts } from '../lib/crm'
 import './MVPReadinessFlow.css'
 
 const STAGES = {
@@ -79,6 +81,9 @@ function MVPReadinessFlow() {
   const [hasTesters, setHasTesters] = useState(null) // true/false
   const [testers, setTesters] = useState(['', '', '', '', ''])
   const [accessPlan, setAccessPlan] = useState('')
+
+  // CRM sync result
+  const [testersSyncResult, setTestersSyncResult] = useState(null)
 
   // Auto-save
   const [showResumePrompt, setShowResumePrompt] = useState(false)
@@ -296,6 +301,16 @@ function MVPReadinessFlow() {
         })
       } catch (e) {
         console.warn('Quest completion failed:', e)
+      }
+
+      // Sync testers to CRM contacts (if they entered testers)
+      if (hasTesters && testers.some(t => t.trim())) {
+        try {
+          const syncResult = await syncMVPTestersToContacts(user.id)
+          setTestersSyncResult(syncResult)
+        } catch (e) {
+          console.warn('CRM sync failed:', e)
+        }
       }
 
       clearProgress()
@@ -842,6 +857,17 @@ function MVPReadinessFlow() {
               If it is, people will pay. If not, you'll know exactly what to fix.
             </p>
           </div>
+
+          {testersSyncResult && testersSyncResult.created > 0 && (
+            <div className="crm-sync-notice">
+              <span className="sync-icon">📋</span>
+              <span>
+                {testersSyncResult.created} tester{testersSyncResult.created === 1 ? '' : 's'} added to your CRM contacts
+              </span>
+            </div>
+          )}
+
+          <FlowFeedback flowType="mvp_readiness" userId={user?.id} />
 
           <button
             className="primary-button"

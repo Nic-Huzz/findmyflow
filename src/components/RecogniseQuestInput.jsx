@@ -100,7 +100,17 @@ const STEP_CONFIGS = {
   recognise_essence_observe: { totalSteps: 3, stepTitles: ['Business Area', 'Situation', 'Review'] },
   recognise_negative_frequency: { totalSteps: 3, stepTitles: ['Frequency', 'Details', 'Review'] },
   recognise_positive_frequency: { totalSteps: 3, stepTitles: ['Frequency', 'Details', 'Review'] },
-  recognise_trigger_pattern: { totalSteps: 3, stepTitles: ['Trigger Type', 'Details', 'Review'] }
+  recognise_trigger_pattern: { totalSteps: 3, stepTitles: ['Trigger Type', 'Details', 'Review'] },
+  // Stage-specific voice quests (simplified flows)
+  voice_essence: { totalSteps: 2, stepTitles: ['Reflect', 'Review'] },
+  voice_protective: { totalSteps: 3, stepTitles: ['Fears', 'Situation', 'Review'] }
+}
+
+// Helper to get config key for voice quests
+const getConfigKey = (quest) => {
+  if (quest.voiceType === 'essence') return 'voice_essence'
+  if (quest.voiceType === 'protective') return 'voice_protective'
+  return quest.id
 }
 
 // Initial form data
@@ -132,10 +142,33 @@ function RecogniseQuestInput({ quest, onComplete }) {
   })
   const [showOtherVoices, setShowOtherVoices] = useState(false)
 
-  const config = STEP_CONFIGS[quest.id] || { totalSteps: 3, stepTitles: ['Input', 'Details', 'Review'] }
+  // Use voice-specific config or quest.id config
+  const configKey = getConfigKey(quest)
+  const config = STEP_CONFIGS[configKey] || { totalSteps: 3, stepTitles: ['Input', 'Details', 'Review'] }
+
+  // Check if this is a stage-specific voice quest
+  const isVoiceQuest = quest.voiceType === 'essence' || quest.voiceType === 'protective'
 
   // Validation function
   const validateStep = useCallback((currentStep, data) => {
+    // Stage-specific essence voice quest
+    if (quest.voiceType === 'essence') {
+      switch (currentStep) {
+        case 1: return data.situation.trim().length >= 10 && data.alignment !== null
+        case 2: return true
+        default: return false
+      }
+    }
+    // Stage-specific protective voice quest
+    if (quest.voiceType === 'protective') {
+      switch (currentStep) {
+        case 1: return data.fears_triggered.length > 0
+        case 2: return data.situation.trim().length >= 10 && data.intensity !== null
+        case 3: return true
+        default: return false
+      }
+    }
+    // Original quest types
     if (quest.id === 'recognise_protective_observe') {
       switch (currentStep) {
         case 1: return data.protective_voice && data.business_area !== null
@@ -167,10 +200,34 @@ function RecogniseQuestInput({ quest, onComplete }) {
       }
     }
     return false
-  }, [quest.id])
+  }, [quest.id, quest.voiceType])
 
   // Build response data for submission
   const buildResponseData = useCallback((data) => {
+    // Stage-specific essence voice quest
+    if (quest.voiceType === 'essence') {
+      return {
+        quest_type: 'voice_essence',
+        stage: quest.stage_required,
+        essence_archetype: quest.archetypeName || userArchetypes.essence,
+        alignment: data.alignment,
+        situation: data.situation,
+        stage_action: quest.stageAction
+      }
+    }
+    // Stage-specific protective voice quest
+    if (quest.voiceType === 'protective') {
+      return {
+        quest_type: 'voice_protective',
+        stage: quest.stage_required,
+        protective_archetype: quest.archetypeName || userArchetypes.protective,
+        fears_triggered: data.fears_triggered,
+        intensity: data.intensity,
+        situation: data.situation,
+        stage_block: quest.stageBlock
+      }
+    }
+    // Original quest types
     if (quest.id === 'recognise_protective_observe') {
       return {
         protective_voice: data.protective_voice,
@@ -204,7 +261,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
       }
     }
     return data
-  }, [quest.id, userArchetypes.essence])
+  }, [quest.id, quest.voiceType, quest.stage_required, quest.archetypeName, quest.stageAction, quest.stageBlock, userArchetypes.essence, userArchetypes.protective])
 
   const {
     step,
@@ -1046,6 +1103,237 @@ function RecogniseQuestInput({ quest, onComplete }) {
               </div>
               <div className="summary-item">
                 <span className="summary-label">Pattern:</span>
+                <span className="summary-value">{formData.situation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ STAGE-SPECIFIC ESSENCE VOICE QUEST ============
+  if (quest.voiceType === 'essence') {
+    return (
+      <div className="recognise-input stepped voice-quest">
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
+
+        {/* Step 1: Reflect on Essence showing up */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="stage-context-card">
+              <span className="stage-icon">{quest.icon}</span>
+              <span className="stage-name">Stage {quest.stage_required}</span>
+            </div>
+            <div className="voice-archetype-card essence">
+              <span className="archetype-icon">✨</span>
+              <span className="archetype-name">{quest.archetypeName}</span>
+            </div>
+            <div className="step-header">
+              <h4>{quest.description}</h4>
+            </div>
+            <textarea
+              className="recognise-textarea"
+              placeholder="Describe how your essence showed up today..."
+              value={formData.situation}
+              onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.situation.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.situation.trim().length}/10 characters minimum
+            </p>
+
+            <div className="step-subsection">
+              <label className="recognise-label">How aligned did you feel?</label>
+              <div className="intensity-slider">
+                <span className="intensity-end">😐</span>
+                <div className="intensity-buttons">
+                  {[1, 2, 3, 4, 5].map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn ${formData.alignment === level ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, alignment: level }))}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <span className="intensity-end">✨</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Summary */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Essence:</span>
+                <span className="summary-value">✨ {quest.archetypeName}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Alignment:</span>
+                <span className="summary-value">{formData.alignment}/5</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Reflection:</span>
+                <span className="summary-value">{formData.situation}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="step-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>← Back</button>
+          )}
+          {step < totalSteps ? (
+            <button className="nav-btn next" onClick={handleNext} disabled={!canContinue()}>
+              Continue →
+            </button>
+          ) : (
+            <button className="nav-btn complete" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            </button>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // ============ STAGE-SPECIFIC PROTECTIVE VOICE QUEST ============
+  if (quest.voiceType === 'protective') {
+    return (
+      <div className="recognise-input stepped voice-quest">
+        <StepProgress
+          currentStep={step}
+          totalSteps={totalSteps}
+          stepTitle={config.stepTitles[step - 1]}
+        />
+
+        {/* Step 1: Select Fears */}
+        {step === 1 && (
+          <div className="step-content">
+            <div className="stage-context-card">
+              <span className="stage-icon">{quest.icon}</span>
+              <span className="stage-name">Stage {quest.stage_required}</span>
+            </div>
+            <div className="voice-archetype-card protective">
+              <span className="archetype-icon">🛡️</span>
+              <span className="archetype-name">{quest.archetypeName}</span>
+            </div>
+            <div className="step-header">
+              <h4>{quest.description}</h4>
+            </div>
+            <p className="step-description">Which fears came up?</p>
+            <div className="fear-trifecta">
+              {FEAR_TRIFECTA.map(fear => (
+                <button
+                  key={fear.id}
+                  type="button"
+                  className={`fear-btn ${formData.fears_triggered.includes(fear.id) ? 'selected' : ''}`}
+                  onClick={() => handleFearToggle(fear.id)}
+                >
+                  <span className="fear-icon">{fear.icon}</span>
+                  <span className="fear-label">{fear.label}</span>
+                  <span className="fear-desc">{fear.description}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Describe situation */}
+        {step === 2 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">📝</span>
+              <h4>Describe the situation</h4>
+            </div>
+            <textarea
+              className="recognise-textarea"
+              placeholder="What happened? How did your protective voice show up?"
+              value={formData.situation}
+              onChange={(e) => setFormData(prev => ({ ...prev, situation: e.target.value }))}
+              rows={4}
+            />
+            <p className={`char-hint ${formData.situation.trim().length >= 10 ? 'met' : ''}`}>
+              {formData.situation.trim().length}/10 characters minimum
+            </p>
+
+            <div className="step-subsection">
+              <label className="recognise-label">How intense was it?</label>
+              <div className="intensity-slider">
+                <span className="intensity-end">😌</span>
+                <div className="intensity-buttons">
+                  {[1, 2, 3, 4, 5].map(level => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn ${formData.intensity === level ? 'selected' : ''}`}
+                      onClick={() => setFormData(prev => ({ ...prev, intensity: level }))}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+                <span className="intensity-end">😰</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Summary */}
+        {step === 3 && (
+          <div className="step-content">
+            <div className="step-header">
+              <span className="step-icon">✅</span>
+              <h4>Review your reflection</h4>
+            </div>
+            <div className="selection-summary">
+              <div className="summary-item">
+                <span className="summary-label">Voice:</span>
+                <span className="summary-value">🛡️ {quest.archetypeName}</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Fears:</span>
+                <span className="summary-value">
+                  {formData.fears_triggered.map(id => getFear(id)?.label).join(', ')}
+                </span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Intensity:</span>
+                <span className="summary-value">{formData.intensity}/5</span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Situation:</span>
                 <span className="summary-value">{formData.situation}</span>
               </div>
             </div>

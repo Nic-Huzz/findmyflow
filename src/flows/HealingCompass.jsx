@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
+import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
 import './NervousSystemHealingCompass.css'
 import './FlowFinder.css'
 
@@ -608,9 +609,12 @@ export default function HealingCompass() {
         <p>Amazing! You have two options to remove this emotional splinter:</p>
       </div>
 
+      <FlowFeedback flowType="healing_compass" userId={user?.id} />
+
       <button
         className="ns-hc-primary-button"
         onClick={() => saveAndComplete('continue_challenge')}
+        style={{ marginTop: '24px' }}
       >
         Continue 7-Day Challenge
       </button>

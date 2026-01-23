@@ -5,7 +5,7 @@
  */
 import { supabase } from '../supabaseClient'
 
-// Value ladder rungs in order
+// Default value ladder rungs (used when no custom data)
 export const VALUE_LADDER_RUNGS = [
   { id: 'lead', label: 'Lead', color: '#6b7280', icon: '👤' },
   { id: 'attraction', label: 'Attraction Offer', color: '#3b82f6', icon: '🎁' },
@@ -14,6 +14,167 @@ export const VALUE_LADDER_RUNGS = [
   { id: 'downsell', label: 'Downsell', color: '#f59e0b', icon: '💰' },
   { id: 'continuity', label: 'Continuity', color: '#ec4899', icon: '🔄' },
 ]
+
+/**
+ * Fetch user's custom value ladder from challenge data
+ * Pulls from: offer_stack_builds, launch_readiness, money model assessments
+ */
+export async function fetchUserValueLadder(userId) {
+  try {
+    // Fetch all relevant challenge data in parallel
+    const [offerStackResult, launchResult, upsellResult, downsellResult, continuityResult, leadMagnetResult] = await Promise.all([
+      supabase
+        .from('offer_stack_builds')
+        .select('*')
+        .eq('user_id', userId)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('launch_readiness_assessments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('upsell_assessments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('downsell_assessments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('continuity_assessments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('lead_magnet_assessments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+    ])
+
+    const offerStack = offerStackResult.data
+    const launchReadiness = launchResult.data
+    const upsell = upsellResult.data
+    const downsell = downsellResult.data
+    const continuity = continuityResult.data
+    const leadMagnet = leadMagnetResult.data
+
+    // Build custom value ladder from user's data
+    const customLadder = [
+      // Lead (always first)
+      {
+        id: 'lead',
+        label: 'Lead',
+        customLabel: null,
+        color: '#6b7280',
+        icon: '👤',
+        price: 0,
+        description: 'Captured leads'
+      },
+      // Lead Magnet / Attraction
+      {
+        id: 'attraction',
+        label: 'Attraction Offer',
+        customLabel: offerStack?.lead_magnet_idea || leadMagnet?.magnet_name || null,
+        color: '#3b82f6',
+        icon: '🎁',
+        price: offerStack?.attraction_offer_price || 0,
+        magnetType: offerStack?.lead_magnet_type || leadMagnet?.magnet_type,
+        description: offerStack?.lead_magnet_idea || 'Free/low-cost entry offer'
+      },
+      // Core Offer
+      {
+        id: 'core',
+        label: 'Core Offer',
+        customLabel: offerStack?.offer_name || null,
+        color: '#10b981',
+        icon: '💎',
+        price: launchReadiness?.pricing_data?.coreOfferPrice || 0,
+        guarantee: offerStack?.guarantee_type,
+        bonuses: offerStack?.bonuses?.length || 0,
+        description: offerStack?.tagline || 'Main product/service'
+      },
+      // Upsell
+      {
+        id: 'upsell',
+        label: 'Upsell',
+        customLabel: upsell?.offer_name || null,
+        color: '#8b5cf6',
+        icon: '🚀',
+        price: upsell?.pricing || 0,
+        description: upsell?.offer_description || 'Premium upgrade'
+      },
+      // Downsell
+      {
+        id: 'downsell',
+        label: 'Downsell',
+        customLabel: downsell?.offer_name || null,
+        color: '#f59e0b',
+        icon: '💰',
+        price: downsell?.pricing || 0,
+        description: downsell?.offer_description || 'Alternative for non-buyers'
+      },
+      // Continuity
+      {
+        id: 'continuity',
+        label: 'Continuity',
+        customLabel: continuity?.program_name || null,
+        color: '#ec4899',
+        icon: '🔄',
+        price: continuity?.monthly_price || 0,
+        isRecurring: true,
+        description: continuity?.program_description || 'Recurring subscription'
+      }
+    ]
+
+    // Calculate completeness
+    const filledRungs = customLadder.filter(r =>
+      r.id === 'lead' || r.customLabel || r.price > 0
+    ).length
+    const completeness = Math.round((filledRungs / customLadder.length) * 100)
+
+    return {
+      ladder: customLadder,
+      completeness,
+      hasOfferStack: !!offerStack,
+      hasPricing: !!(launchReadiness?.pricing_data?.coreOfferPrice),
+      hasMoneyModels: !!(upsell || downsell || continuity),
+      sources: {
+        offerStack: !!offerStack,
+        launchReadiness: !!launchReadiness,
+        upsell: !!upsell,
+        downsell: !!downsell,
+        continuity: !!continuity,
+        leadMagnet: !!leadMagnet
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching user value ladder:', err)
+    return {
+      ladder: VALUE_LADDER_RUNGS,
+      completeness: 0,
+      hasOfferStack: false,
+      hasPricing: false,
+      hasMoneyModels: false,
+      sources: {}
+    }
+  }
+}
 
 // Map deal offer_category to value ladder rung
 export function mapOfferToRung(offerCategory) {

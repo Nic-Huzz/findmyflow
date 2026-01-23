@@ -42,6 +42,12 @@ const MAIN_NAV_ITEMS = [
 // CRM section navigation items
 const CRM_NAV_ITEMS = [
   {
+    id: 'execute',
+    label: 'Execute',
+    icon: '🎯',
+    path: '/crm/execute'
+  },
+  {
     id: 'sales',
     label: 'Sales',
     icon: '💰',
@@ -61,8 +67,8 @@ const CRM_NAV_ITEMS = [
   },
   {
     id: 'portal',
-    label: 'Portal',
-    icon: '🔙',
+    label: 'Back',
+    icon: '←',
     path: '/7-day-challenge',
     isReturn: true // Special flag for return button styling
   }

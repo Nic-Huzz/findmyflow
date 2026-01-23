@@ -537,3 +537,167 @@
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* Funnel Metrics Section */
+.crm-analytics .section-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.crm-analytics .section-header-row h2 {
+  margin: 0;
+}
+
+.crm-analytics .sync-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.crm-analytics .sync-time {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.crm-analytics .sync-btn {
+  background: rgba(6, 182, 212, 0.2);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #06b6d4;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.crm-analytics .sync-btn:hover:not(:disabled) {
+  background: rgba(6, 182, 212, 0.3);
+}
+
+.crm-analytics .sync-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Funnel Visual */
+.crm-analytics .funnel-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.crm-analytics .funnel-stage {
+  display: flex;
+  justify-content: center;
+}
+
+.crm-analytics .funnel-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, rgba(6, 182, 212, 0.3), rgba(139, 92, 246, 0.3));
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.crm-analytics .funnel-bar.highlight {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.4), rgba(6, 182, 212, 0.4));
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.crm-analytics .funnel-label {
+  font-size: 0.875rem;
+  color: white;
+  font-weight: 500;
+}
+
+.crm-analytics .funnel-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #06b6d4;
+}
+
+.crm-analytics .funnel-bar.highlight .funnel-value {
+  color: #10b981;
+}
+
+/* Funnel Extras (Upsells, Downsells, etc) */
+.crm-analytics .funnel-extras {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.crm-analytics .funnel-extra {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.crm-analytics .funnel-extra.highlight {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.crm-analytics .extra-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.crm-analytics .extra-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.crm-analytics .funnel-extra.highlight .extra-value {
+  color: #10b981;
+}
+
+/* Funnel Sources */
+.crm-analytics .funnel-sources {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.crm-analytics .source-badge {
+  font-size: 0.625rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.crm-analytics .source-badge.manual {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.crm-analytics .source-badge.crm {
+  background: rgba(6, 182, 212, 0.2);
+  color: #22d3ee;
+}
+
+/* Responsive funnel */
+@media (max-width: 640px) {
+  .crm-analytics .funnel-extras {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .crm-analytics .section-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
