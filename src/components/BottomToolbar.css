@@ -1,46 +1,59 @@
 /**
  * BottomToolbar.css
- * Fixed bottom navigation styles - Playful Warmth Theme
+ * Fixed bottom navigation - Clean White Theme (matches CRM prototype)
  */
-@import '../styles/crm-base.css';
+
+/* CSS Variables for toolbar */
+:root {
+  --toolbar-bg: #ffffff;
+  --toolbar-border: #dee2e6;
+  --toolbar-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  --toolbar-text: #495057;
+  --toolbar-text-hover: #212529;
+  --toolbar-active: #5e17eb;
+  --toolbar-active-bg: rgba(94, 23, 235, 0.1);
+  --toolbar-height: 72px;
+  --toolbar-radius: 12px;
+}
 
 .bottom-toolbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: calc(60px + env(safe-area-inset-bottom, 0px));
-  background: #ffffff;
-  border-top: 1px solid #e5e7eb;
+  height: calc(var(--toolbar-height) + env(safe-area-inset-bottom, 0px));
+  background: var(--toolbar-bg);
+  border-top: 1px solid var(--toolbar-border);
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
-  padding-top: 8px;
+  padding: 8px 16px;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
   z-index: 1000;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--toolbar-shadow);
 }
 
 .toolbar-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  gap: 2px;
-  flex: 1;
-  padding: 0;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 12px;
+  min-width: 64px;
   background: transparent;
   border: none;
+  border-radius: var(--toolbar-radius);
   cursor: pointer;
-  color: #6b7280;
-  transition:
-    color var(--crm-duration-fast, 0.15s) var(--crm-ease, ease),
-    transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+  color: var(--toolbar-text);
+  font-family: inherit;
+  transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .toolbar-item:hover {
-  color: #7c3aed;
-  transform: translateY(-2px);
+  color: var(--toolbar-text-hover);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .toolbar-item:active {
@@ -49,142 +62,121 @@
 }
 
 .toolbar-item.active {
-  color: #7c3aed;
-}
-
-.toolbar-item.active .toolbar-icon {
-  transform: scale(1.1);
+  color: var(--toolbar-active);
+  background: var(--toolbar-active-bg);
 }
 
 .toolbar-icon {
   font-size: 1.5rem;
   line-height: 1;
-  transition: transform var(--crm-duration-normal, 0.25s) var(--crm-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
 }
 
 .toolbar-label {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
-/* Active indicator line */
+/* Remove the top indicator line - use background highlight instead */
 .toolbar-item.active::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 24px;
-  height: 3px;
-  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-  border-radius: 0 0 3px 3px;
-}
-
-.toolbar-item {
-  position: relative;
+  display: none;
 }
 
 /* Ensure content doesn't get hidden behind toolbar */
-/* Add this to pages that use the toolbar */
 .has-bottom-toolbar {
-  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0));
+  padding-bottom: calc(var(--toolbar-height) + env(safe-area-inset-bottom, 0));
 }
 
-/* CRM Section Toolbar Styles - Playful Warmth */
+/* CRM Section Toolbar - Same white styling */
 .bottom-toolbar.crm-toolbar {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f5ff 100%);
-  border-top-color: var(--crm-border, #e9e5f5);
-  box-shadow: 0 -4px 16px rgba(94, 23, 235, 0.06);
+  background: var(--toolbar-bg);
+  border-top: 1px solid var(--toolbar-border);
+  box-shadow: var(--toolbar-shadow);
 }
 
 .crm-toolbar .toolbar-item {
-  color: var(--crm-text-secondary, #6b7280);
+  color: var(--toolbar-text);
 }
 
 .crm-toolbar .toolbar-item:hover {
-  color: var(--crm-purple, #5e17eb);
-  transform: translateY(-3px);
-}
-
-.crm-toolbar .toolbar-item:active {
-  transform: scale(0.92);
+  color: var(--toolbar-active);
+  background: rgba(94, 23, 235, 0.05);
 }
 
 .crm-toolbar .toolbar-item.active {
-  color: var(--crm-purple, #5e17eb);
+  color: var(--toolbar-active);
+  background: var(--toolbar-active-bg);
 }
 
-.crm-toolbar .toolbar-item.active .toolbar-icon {
-  transform: scale(1.15);
-  animation: crmIconFloat 2s ease-in-out infinite;
+/* Launch button - Gold pill styling */
+.crm-toolbar .toolbar-item.launch-item {
+  background: linear-gradient(135deg, #ffdd27, #ffc107);
+  color: #212529;
+  border-radius: 20px;
+  padding: 8px 16px;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
 }
 
-.crm-toolbar .toolbar-item.active::after {
-  background: linear-gradient(135deg, var(--crm-purple, #5e17eb) 0%, var(--crm-purple-light, #7c3aed) 100%);
+.crm-toolbar .toolbar-item.launch-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 221, 39, 0.4);
+  background: linear-gradient(135deg, #ffdd27, #ffc107);
+  color: #212529;
+}
+
+.crm-toolbar .toolbar-item.launch-item:active {
+  transform: scale(0.96);
+}
+
+.crm-toolbar .toolbar-item.launch-item.active {
+  color: #212529;
+  background: linear-gradient(135deg, #ffdd27, #ffc107);
+}
+
+.crm-toolbar .toolbar-item.launch-item .toolbar-label {
+  font-weight: 700;
 }
 
 /* Return/Portal button styling */
 .crm-toolbar .toolbar-item.return-item {
-  color: var(--crm-purple, #5e17eb);
-  opacity: 0.85;
+  color: var(--toolbar-active);
 }
 
 .crm-toolbar .toolbar-item.return-item:hover {
-  opacity: 1;
-  transform: translateY(-3px) scale(1.05);
+  background: var(--toolbar-active-bg);
 }
 
-.crm-toolbar .toolbar-item.return-item .toolbar-icon {
-  font-size: 1.3rem;
+/* Main app toolbar - Same white styling */
+.bottom-toolbar.main-toolbar {
+  background: var(--toolbar-bg);
+  border-top: 1px solid var(--toolbar-border);
+  box-shadow: var(--toolbar-shadow);
 }
 
-/* Dark mode support (optional, for future) */
-@media (prefers-color-scheme: dark) {
-  .bottom-toolbar {
-    background: #1f2937;
-    border-top-color: #374151;
+.main-toolbar .toolbar-item {
+  color: var(--toolbar-text);
+}
+
+.main-toolbar .toolbar-item:hover {
+  color: var(--toolbar-active);
+  background: rgba(94, 23, 235, 0.05);
+}
+
+.main-toolbar .toolbar-item.active {
+  color: var(--toolbar-active);
+  background: var(--toolbar-active-bg);
+}
+
+/* Responsive: mobile adjustments */
+@media (max-width: 480px) {
+  :root {
+    --toolbar-height: 64px;
   }
 
   .toolbar-item {
-    color: #9ca3af;
-  }
-
-  .toolbar-item:hover,
-  .toolbar-item.active {
-    color: #a78bfa;
-  }
-
-  .toolbar-item.active::after {
-    background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
-  }
-
-  /* CRM toolbar dark mode */
-  .bottom-toolbar.crm-toolbar {
-    background: linear-gradient(180deg, #1f2937 0%, #1a1625 100%);
-    border-top-color: var(--crm-border-dark, #2d2640);
-    box-shadow: var(--crm-shadow-dark, 0 -4px 20px rgba(0, 0, 0, 0.3));
-  }
-
-  .crm-toolbar .toolbar-item.return-item {
-    color: #a78bfa;
-  }
-
-  .crm-toolbar .toolbar-item:hover {
-    color: #a78bfa;
-  }
-
-  .crm-toolbar .toolbar-item.active {
-    color: #a78bfa;
-  }
-}
-
-/* Responsive: larger touch targets on mobile */
-@media (max-width: 480px) {
-  .bottom-toolbar {
-    height: calc(56px + env(safe-area-inset-bottom, 0px));
-    padding-top: 6px;
+    padding: 6px 8px;
+    min-width: 56px;
   }
 
   .toolbar-icon {
@@ -192,13 +184,14 @@
   }
 
   .toolbar-label {
-    font-size: 0.5rem;
-    letter-spacing: 0.3px;
+    font-size: 0.5625rem;
+    letter-spacing: 0.2px;
   }
 
   /* Tighter spacing for 5 items on CRM toolbar */
   .crm-toolbar .toolbar-item {
-    padding: 0 2px;
+    padding: 6px 6px;
+    min-width: 52px;
   }
 }
 
@@ -208,3 +201,5 @@
     display: none;
   }
 }
+
+/* NO dark mode override - keep toolbar white always */

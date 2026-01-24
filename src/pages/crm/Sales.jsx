@@ -334,7 +334,7 @@ export default function Sales() {
       <div className="crm-sales">
         <div className="crm-loading">
           <div className="crm-spinner"></div>
-          <p>Pulling up your deals...</p>
+          <p>Loading your deals...</p>
         </div>
       </div>
     )
@@ -342,28 +342,53 @@ export default function Sales() {
 
   return (
     <div className="crm-sales">
-      <header className="sales-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
+      {/* Top Toolbar */}
+      <div className="sales-toolbar">
+        <button className="back-btn" onClick={() => navigate('/crm/nurture')}>
+          ←
         </button>
-        <div className="header-content">
-          <h1>Sales Pipeline</h1>
-          <div className="header-stats">
-            <span className="stat-item">
-              💰 ${stats.currentRevenue.toLocaleString()} this month
-            </span>
-            <span className="stat-item">
-              📊 ${stats.pipelineValue.toLocaleString()} in pipeline
-            </span>
+        <h2 className="toolbar-title">Sales Pipeline</h2>
+      </div>
+
+      {/* Header */}
+      <header className="sales-header">
+        <div className="sales-breadcrumb">
+          <button onClick={() => navigate('/crm')}>Home</button>
+          <span>→</span>
+          <button onClick={() => navigate('/crm/nurture')}>Nurture</button>
+          <span>→</span>
+          <span>Sales</span>
+        </div>
+        <h1>💼 Sales Pipeline</h1>
+        <p className="sales-subtitle">Track deals from lead to close</p>
+      </header>
+
+      {/* Stats Card */}
+      <div className="sales-stats-card">
+        <div className="stats-row">
+          <div className="stat-item">
+            <span className="stat-value">${stats.currentRevenue.toLocaleString()}</span>
+            <span className="stat-label">This Month</span>
+          </div>
+          <div className="stat-divider"></div>
+          <div className="stat-item">
+            <span className="stat-value">${stats.pipelineValue.toLocaleString()}</span>
+            <span className="stat-label">In Pipeline</span>
           </div>
         </div>
-        <button className="screenshot-btn" onClick={() => setShowScreenshotUpload(true)}>
-          📸 From Screenshot
-        </button>
-        <button className="add-btn" onClick={() => setShowAddModal(true)}>
-          + Add Deal
-        </button>
-      </header>
+      </div>
+
+      {/* Actions Card */}
+      <div className="sales-actions-card">
+        <div className="actions-row">
+          <button className="screenshot-btn" onClick={() => setShowScreenshotUpload(true)}>
+            📸 Screenshot
+          </button>
+          <button className="add-btn" onClick={() => setShowAddModal(true)}>
+            + Add Deal
+          </button>
+        </div>
+      </div>
 
       {/* Pipeline Columns */}
       <div className="pipeline-grid">

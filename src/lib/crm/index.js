@@ -52,8 +52,12 @@ export {
 // Analytics & Reporting
 export {
   getWeekRange,
+  getMonthRange,
   fetchWeeklyMarketingStats,
   fetchWeeklySalesStats,
+  fetchMonthlyMarketingStats,
+  fetchMonthlySalesStats,
+  fetchMonthlyPlatformBreakdown,
   calculateGrade,
   calculateWeeklyGrade,
   fetchTopContent,
@@ -179,6 +183,13 @@ export {
   getToneInfo,
 } from './toneAdapter'
 
+// Tower Stats (Live stats for tower cards)
+export {
+  getAttractStats,
+  getNurtureStats,
+  getToolsStats,
+} from './towerStats'
+
 // Groan Challenge Service (Matrix System)
 export {
   // Challenge CRUD
@@ -217,4 +228,8 @@ export {
   getMatrixCellChallenges,
   getCurrentWeekChallenge,
   hasCompletedFlowFinder,
+  // Skill × Problem Matrix
+  createSkillProblemChallenge,
+  getSkillProblemCellChallenge,
+  getAllSkillProblemChallenges,
 } from './groanChallengeService'

@@ -844,3 +844,147 @@ export async function hasCompletedFlowFinder(userId) {
     error: null
   }
 }
+
+// =============================================================================
+// SKILL × PROBLEM MATRIX
+// =============================================================================
+
+/**
+ * Create a Skill × Problem challenge
+ * Stores both skill and problem cluster IDs for matrix lookup
+ * @param {object} challengeData
+ * @returns {Promise<{data: object, error: Error}>}
+ */
+export async function createSkillProblemChallenge(challengeData) {
+  const {
+    userId,
+    title,
+    description,
+    skillId,
+    skillLabel,
+    problemId,
+    problemLabel,
+    personaId = null,
+    personaLabel = null,
+    scaryScore = 5,
+    wahooScore = 5,
+    generationPrompt = null
+  } = challengeData
+
+  // Calculate essence zone
+  const essenceZone = calculateEssenceZone(scaryScore, wahooScore)
+
+  // Combine labels for source_label field
+  const combinedLabel = personaLabel
+    ? `${skillLabel} × ${problemLabel} (for ${personaLabel})`
+    : `${skillLabel} × ${problemLabel}`
+
+  const { data, error } = await supabase
+    .from('groan_challenges')
+    .insert({
+      user_id: userId,
+      title,
+      description,
+      // Use 'skill_x_problem' as source_type for this matrix type
+      source_type: 'skill_x_problem',
+      source_id: skillId, // Primary source is skill
+      source_label: combinedLabel,
+      // New columns for Skill × Problem matrix
+      skill_cluster_id: skillId,
+      problem_cluster_id: problemId,
+      persona_cluster_id: personaId,
+      // Scores
+      scary_score: scaryScore,
+      wahoo_score: wahooScore,
+      essence_zone: essenceZone.zone,
+      essence_insight: essenceZone.insight,
+      generation_prompt: generationPrompt,
+      status: GROAN_CHALLENGE_STATUS.GENERATED
+    })
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Error creating skill × problem challenge:', error)
+    return { data: null, error }
+  }
+
+  return { data, error: null }
+}
+
+/**
+ * Get challenge for a specific Skill × Problem cell
+ * @param {string} userId
+ * @param {string} skillId - Skill cluster ID
+ * @param {string} problemId - Problem cluster ID
+ * @param {string|null} personaId - Optional persona filter
+ * @returns {Promise<{data: object|null, error: Error}>}
+ */
+export async function getSkillProblemCellChallenge(userId, skillId, problemId, personaId = null) {
+  let query = supabase
+    .from('groan_challenges')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('skill_cluster_id', skillId)
+    .eq('problem_cluster_id', problemId)
+    .order('created_at', { ascending: false })
+
+  if (personaId) {
+    query = query.eq('persona_cluster_id', personaId)
+  } else {
+    query = query.is('persona_cluster_id', null)
+  }
+
+  const { data, error } = await query
+
+  if (error) {
+    console.error('Error fetching skill × problem cell challenge:', error)
+    return { data: null, error }
+  }
+
+  // Return most relevant challenge (prioritize: accepted > generated > completed)
+  if (!data || data.length === 0) return { data: null, error: null }
+
+  const accepted = data.find(c => c.status === 'accepted')
+  if (accepted) return { data: accepted, error: null }
+
+  const generated = data.find(c => c.status === 'generated')
+  if (generated) return { data: generated, error: null }
+
+  // Return most recently completed
+  const completed = data
+    .filter(c => c.status === 'completed')
+    .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at))
+
+  return { data: completed[0] || null, error: null }
+}
+
+/**
+ * Get all Skill × Problem challenges for a user
+ * Useful for populating the entire matrix at once
+ * @param {string} userId
+ * @param {string|null} personaId - Optional persona filter
+ * @returns {Promise<{data: Array, error: Error}>}
+ */
+export async function getAllSkillProblemChallenges(userId, personaId = null) {
+  let query = supabase
+    .from('groan_challenges')
+    .select('*')
+    .eq('user_id', userId)
+    .not('skill_cluster_id', 'is', null)
+    .not('problem_cluster_id', 'is', null)
+    .order('created_at', { ascending: false })
+
+  if (personaId) {
+    query = query.eq('persona_cluster_id', personaId)
+  }
+
+  const { data, error } = await query
+
+  if (error) {
+    console.error('Error fetching all skill × problem challenges:', error)
+    return { data: null, error }
+  }
+
+  return { data: data || [], error: null }
+}

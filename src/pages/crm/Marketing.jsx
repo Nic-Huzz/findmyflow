@@ -366,70 +366,84 @@ export default function Marketing() {
 
   return (
     <div className="crm-marketing">
-      <header className="marketing-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
+      {/* Top Toolbar */}
+      <div className="marketing-toolbar">
+        <button className="back-btn" onClick={() => navigate('/crm/attract')}>
+          ←
         </button>
-        <div className="header-content">
-          <h1>Marketing Quests</h1>
-          <div className="header-actions">
-            <div className="week-nav">
-              <button
-                className="week-nav-btn"
-                onClick={() => handleWeekChange(-1)}
-                disabled={weekOffset <= -4}
-              >
-                ←
-              </button>
-              <span className="week-label">
-                {weekInfo.label}
-                {weekInfo.isCurrentWeek && <span className="current-week-badge">This Week</span>}
-              </span>
-              <button
-                className="week-nav-btn"
-                onClick={() => handleWeekChange(1)}
-                disabled={weekOffset >= 0}
-              >
-                →
-              </button>
-            </div>
-            <div className="crm-header-actions">
-              <button
-                className="strategy-btn"
-                onClick={() => setShowStrategyFlow(true)}
-                title="Edit your content strategy"
-              >
-                ⚙️ Strategy
-              </button>
-              <button
-                className="performance-btn"
-                onClick={() => navigate('/crm/performance')}
-                title="View performance analytics"
-              >
-                📊 Analytics
-              </button>
-              <button
-                className="story-bank-btn"
-                onClick={() => setShowStoryBank(true)}
-                title="Manage your Story Bank"
-              >
-                📚 Stories
-              </button>
-              <button
-                className="queue-btn"
-                onClick={() => navigate('/crm/content-queue')}
-                title="Review pending content"
-              >
-                📬 Queue
-              </button>
-              <ContentGenerator
-                userId={user?.id}
-                projectId={null}
-              />
-            </div>
-          </div>
+        <h2 className="toolbar-title">Content</h2>
+      </div>
+
+      {/* Header */}
+      <header className="marketing-header">
+        <div className="marketing-breadcrumb">
+          <button onClick={() => navigate('/crm')}>Home</button>
+          <span>→</span>
+          <button onClick={() => navigate('/crm/attract')}>Attract</button>
+          <span>→</span>
+          <span>Content</span>
         </div>
+        <h1>📝 Content Quests</h1>
+        <p className="marketing-subtitle">Weekly marketing tasks with AI-powered content generation</p>
       </header>
+
+      {/* Action Buttons Card */}
+      <div className="marketing-actions-card">
+        <div className="marketing-actions-grid">
+          <button
+            className="strategy-btn"
+            onClick={() => setShowStrategyFlow(true)}
+          >
+            ⚙️ Strategy
+          </button>
+          <button
+            className="performance-btn"
+            onClick={() => navigate('/crm/performance')}
+          >
+            📊 Analytics
+          </button>
+          <button
+            className="story-bank-btn"
+            onClick={() => setShowStoryBank(true)}
+          >
+            📚 Stories
+          </button>
+          <button
+            className="queue-btn"
+            onClick={() => navigate('/crm/content-queue')}
+          >
+            📬 Queue
+          </button>
+        </div>
+        <ContentGenerator
+          userId={user?.id}
+          projectId={null}
+        />
+      </div>
+
+      {/* Week Navigation */}
+      <div className="week-nav-card">
+        <div className="week-nav">
+          <button
+            className="week-nav-btn"
+            onClick={() => handleWeekChange(-1)}
+            disabled={weekOffset <= -4}
+          >
+            ←
+          </button>
+          <span className="week-label">
+            {weekInfo.label}
+            {weekInfo.isCurrentWeek && <span className="current-week-badge">This Week</span>}
+          </span>
+          <button
+            className="week-nav-btn"
+            onClick={() => handleWeekChange(1)}
+            disabled={weekOffset >= 0}
+          >
+            →
+          </button>
+        </div>
+      </div>
 
       {/* Week Progress */}
       <div className="week-progress">

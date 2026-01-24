@@ -1,12 +1,29 @@
 /**
  * Story Bank Component Styles
+ * Light Theme - Following Design Guide
  */
+@import '../../styles/crm-base.css';
+
+.story-bank {
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --gold: #ffdd27;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
 
 .story-bank {
   min-height: 100vh;
-  background: #1a1a2e;
-  color: white;
+  background: var(--warm-gray);
+  color: var(--text-primary);
   padding: 24px;
+  padding-bottom: 120px;
 }
 
 /* Header */
@@ -20,38 +37,46 @@
 .story-bank .sb-header-content h2 {
   margin: 0 0 4px;
   font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .story-bank .sb-header-content p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-size: 0.9rem;
 }
 
 .story-bank .sb-close-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   font-size: 1.5rem;
   cursor: pointer;
   padding: 4px 8px;
 }
 
 .story-bank .sb-close-btn:hover {
-  color: white;
+  color: var(--text-primary);
 }
 
 .story-bank .sb-back-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   cursor: pointer;
-  padding: 8px 0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
 }
 
 .story-bank .sb-back-btn:hover {
-  color: white;
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 /* Stats Bar */
@@ -60,27 +85,29 @@
   align-items: center;
   gap: 24px;
   padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   margin-bottom: 20px;
+  box-shadow: var(--shadow-card);
 }
 
 .story-bank .sb-stat-total {
   display: flex;
   flex-direction: column;
   padding-right: 24px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--border-color);
 }
 
 .story-bank .sb-stat-num {
   font-size: 2rem;
   font-weight: 700;
-  color: #00d4aa;
+  color: var(--purple);
 }
 
 .story-bank .sb-stat-label {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .story-bank .sb-stat-categories {
@@ -101,6 +128,7 @@
 .story-bank .sb-stat-count {
   font-size: 0.9rem;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 /* Category Filter */
@@ -110,37 +138,37 @@
   gap: 8px;
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .story-bank .sb-filter-btn {
   padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 20px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .story-bank .sb-filter-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .story-bank .sb-filter-btn.active {
-  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border-color: transparent;
-  color: #1a1a2e;
+  color: #ffffff;
   font-weight: 600;
 }
 
 /* Gap Analysis Alert */
 .story-bank .sb-gap-alert {
   padding: 16px;
-  background: rgba(251, 191, 36, 0.1);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+  background: rgba(255, 221, 39, 0.1);
+  border: 1px solid rgba(255, 221, 39, 0.3);
   border-radius: 12px;
   margin-bottom: 16px;
 }
@@ -150,7 +178,7 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
-  color: #fbbf24;
+  color: #b8860b;
 }
 
 .story-bank .sb-gap-icon {
@@ -160,7 +188,7 @@
 .story-bank .sb-gap-alert p {
   margin: 0 0 12px;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
 }
 
 .story-bank .sb-gap-list {
@@ -174,22 +202,22 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: white;
+  color: var(--text-primary);
   font-size: 0.85rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .story-bank .sb-gap-item:hover {
-  background: rgba(0, 212, 170, 0.1);
-  border-color: rgba(0, 212, 170, 0.3);
+  background: rgba(94, 23, 235, 0.05);
+  border-color: rgba(94, 23, 235, 0.3);
 }
 
 .story-bank .sb-gap-add {
-  color: #00d4aa;
+  color: var(--purple);
   font-weight: 600;
   font-size: 0.8rem;
 }
@@ -205,10 +233,10 @@
 .story-bank .sb-add-btn {
   flex: 1;
   padding: 16px;
-  background: rgba(0, 212, 170, 0.1);
-  border: 2px dashed rgba(0, 212, 170, 0.3);
+  background: rgba(94, 23, 235, 0.05);
+  border: 2px dashed rgba(94, 23, 235, 0.3);
   border-radius: 12px;
-  color: #00d4aa;
+  color: var(--purple);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -216,18 +244,18 @@
 }
 
 .story-bank .sb-add-btn:hover {
-  background: rgba(0, 212, 170, 0.2);
-  border-color: rgba(0, 212, 170, 0.5);
+  background: rgba(94, 23, 235, 0.1);
+  border-color: rgba(94, 23, 235, 0.5);
 }
 
 /* Interview Button */
 .story-bank .sb-interview-btn {
   flex: 1;
   padding: 16px;
-  background: rgba(139, 92, 246, 0.1);
-  border: 2px dashed rgba(139, 92, 246, 0.3);
+  background: rgba(124, 58, 237, 0.05);
+  border: 2px dashed rgba(124, 58, 237, 0.3);
   border-radius: 12px;
-  color: #a78bfa;
+  color: var(--purple-light);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -235,18 +263,18 @@
 }
 
 .story-bank .sb-interview-btn:hover {
-  background: rgba(139, 92, 246, 0.2);
-  border-color: rgba(139, 92, 246, 0.5);
+  background: rgba(124, 58, 237, 0.1);
+  border-color: rgba(124, 58, 237, 0.5);
 }
 
 /* Mine Stories Button */
 .story-bank .sb-mine-btn {
   flex: 1;
   padding: 16px;
-  background: rgba(251, 191, 36, 0.1);
-  border: 2px dashed rgba(251, 191, 36, 0.3);
+  background: rgba(255, 221, 39, 0.1);
+  border: 2px dashed rgba(255, 221, 39, 0.4);
   border-radius: 12px;
-  color: #fbbf24;
+  color: #b8860b;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -254,8 +282,8 @@
 }
 
 .story-bank .sb-mine-btn:hover {
-  background: rgba(251, 191, 36, 0.2);
-  border-color: rgba(251, 191, 36, 0.5);
+  background: rgba(255, 221, 39, 0.2);
+  border-color: rgba(255, 221, 39, 0.6);
 }
 
 /* Stories List */
@@ -268,14 +296,15 @@
 .story-bank .sb-loading {
   text-align: center;
   padding: 40px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 /* Empty State */
 .story-bank .sb-empty {
   text-align: center;
   padding: 60px 20px;
-  background: rgba(255, 255, 255, 0.02);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
 }
 
@@ -286,20 +315,20 @@
 
 .story-bank .sb-empty h3 {
   margin: 0 0 8px;
-  color: white;
+  color: var(--text-primary);
 }
 
 .story-bank .sb-empty p {
   margin: 0 0 20px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .story-bank .sb-empty-add {
   padding: 12px 24px;
-  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border: none;
   border-radius: 8px;
-  color: #1a1a2e;
+  color: #ffffff;
   font-weight: 600;
   cursor: pointer;
 }
@@ -307,15 +336,15 @@
 /* Story Card */
 .story-bank .sb-story-card {
   padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
+  box-shadow: var(--shadow-card);
   transition: all 0.2s ease;
 }
 
 .story-bank .sb-story-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .story-bank .sb-story-header {
@@ -327,25 +356,26 @@
 
 .story-bank .sb-story-category {
   padding: 4px 10px;
-  background: rgba(0, 212, 170, 0.15);
+  background: rgba(94, 23, 235, 0.1);
   border-radius: 4px;
   font-size: 0.8rem;
-  color: #00d4aa;
+  color: var(--purple);
 }
 
 .story-bank .sb-story-title {
   font-weight: 600;
   flex: 1;
+  color: var(--text-primary);
 }
 
 .story-bank .sb-story-uses {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
 }
 
 .story-bank .sb-story-content {
   margin: 0 0 16px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   line-height: 1.6;
   white-space: pre-wrap;
 }
@@ -357,24 +387,24 @@
 
 .story-bank .sb-action-btn {
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .story-bank .sb-action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .story-bank .sb-action-btn.delete:hover {
-  background: rgba(255, 107, 107, 0.1);
-  border-color: rgba(255, 107, 107, 0.3);
-  color: #ff6b6b;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #dc2626;
 }
 
 /* Form Styles */
@@ -394,16 +424,16 @@
 .story-bank .sb-form-group label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
 }
 
 .story-bank .sb-form-group input,
 .story-bank .sb-form-group textarea {
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: white;
+  color: var(--text-primary);
   font-size: 1rem;
   font-family: inherit;
 }
@@ -411,8 +441,8 @@
 .story-bank .sb-form-group input:focus,
 .story-bank .sb-form-group textarea:focus {
   outline: none;
-  border-color: #00d4aa;
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
 }
 
 .story-bank .sb-form-group textarea {
@@ -423,7 +453,7 @@
 
 .story-bank .sb-char-count {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   text-align: right;
 }
 
@@ -440,23 +470,23 @@
   align-items: center;
   gap: 4px;
   padding: 12px 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .story-bank .sb-category-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  border-color: var(--purple);
+  color: var(--text-primary);
 }
 
 .story-bank .sb-category-btn.active {
-  background: rgba(0, 212, 170, 0.15);
-  border-color: #00d4aa;
-  color: white;
+  background: rgba(94, 23, 235, 0.1);
+  border-color: var(--purple);
+  color: var(--text-primary);
 }
 
 .story-bank .sb-cat-icon {
@@ -471,8 +501,8 @@
 /* Prompt Box */
 .story-bank .sb-prompt {
   padding: 16px;
-  background: rgba(0, 212, 170, 0.08);
-  border: 1px solid rgba(0, 212, 170, 0.2);
+  background: rgba(94, 23, 235, 0.05);
+  border: 1px solid rgba(94, 23, 235, 0.2);
   border-radius: 10px;
 }
 
@@ -481,32 +511,32 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 8px;
-  color: #00d4aa;
+  color: var(--purple);
 }
 
 .story-bank .sb-prompt-text {
   margin: 0 0 12px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .story-bank .sb-prompt-example {
   padding: 12px;
-  background: rgba(0, 0, 0, 0.2);
+  background: #ffffff;
   border-radius: 8px;
 }
 
 .story-bank .sb-example-label {
   display: block;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   margin-bottom: 4px;
 }
 
 .story-bank .sb-prompt-example p {
   margin: 0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-style: italic;
   line-height: 1.5;
 }
@@ -516,7 +546,7 @@
   display: flex;
   gap: 8px;
   padding: 4px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--soft-gray);
   border-radius: 10px;
   width: fit-content;
 }
@@ -530,19 +560,20 @@
   border: none;
   border-radius: 8px;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .story-bank .sb-toggle-btn:hover:not(.active) {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.8);
+  background: #ffffff;
+  color: var(--text-secondary);
 }
 
 .story-bank .sb-toggle-btn.active {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: #ffffff;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-card);
 }
 
 /* Form Actions */
@@ -550,33 +581,33 @@
   display: flex;
   gap: 12px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
 }
 
 .story-bank .sb-cancel-btn {
   flex: 1;
   padding: 14px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .story-bank .sb-cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .story-bank .sb-save-btn {
   flex: 1;
   padding: 14px;
-  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border: none;
   border-radius: 8px;
-  color: #1a1a2e;
+  color: #ffffff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -585,7 +616,7 @@
 
 .story-bank .sb-save-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+  box-shadow: 0 4px 15px rgba(94, 23, 235, 0.3);
 }
 
 .story-bank .sb-save-btn:disabled {
@@ -606,10 +637,10 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  background: rgba(139, 92, 246, 0.15);
+  background: rgba(94, 23, 235, 0.1);
   border-radius: 20px;
   font-size: 0.9rem;
-  color: #a78bfa;
+  color: var(--purple);
   margin-bottom: 20px;
 }
 
@@ -619,7 +650,7 @@
 
 .story-bank .sb-progress-bar {
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--soft-gray);
   border-radius: 3px;
   overflow: hidden;
   margin-bottom: 8px;
@@ -627,14 +658,14 @@
 
 .story-bank .sb-progress-fill {
   height: 100%;
-  background: linear-gradient(135deg, #00d4aa, #00a8cc);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border-radius: 3px;
   transition: width 0.3s ease;
 }
 
 .story-bank .sb-progress-text {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .story-bank .sb-interview-question {
@@ -644,14 +675,14 @@
 .story-bank .sb-interview-question h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin: 0 0 12px;
   line-height: 1.4;
 }
 
 .story-bank .sb-interview-hint {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   margin: 0;
   font-style: italic;
 }
@@ -659,10 +690,10 @@
 .story-bank .sb-interview-input {
   width: 100%;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  color: white;
+  color: var(--text-primary);
   font-size: 1rem;
   font-family: inherit;
   resize: vertical;
@@ -673,12 +704,12 @@
 
 .story-bank .sb-interview-input:focus {
   outline: none;
-  border-color: #8b5cf6;
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
 }
 
 .story-bank .sb-interview-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
 }
 
 .story-bank .sb-interview-nav {
@@ -691,17 +722,17 @@
   flex: 1;
   padding: 14px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .story-bank .sb-nav-back:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .story-bank .sb-nav-back:disabled {
@@ -712,10 +743,10 @@
 .story-bank .sb-nav-next {
   flex: 2;
   padding: 14px;
-  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border: none;
   border-radius: 10px;
-  color: white;
+  color: #ffffff;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -724,7 +755,7 @@
 
 .story-bank .sb-nav-next:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 15px rgba(94, 23, 235, 0.4);
 }
 
 .story-bank .sb-nav-next:disabled {
@@ -740,18 +771,23 @@
   margin-top: 12px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   font-size: 0.85rem;
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .story-bank .sb-skip-btn:hover {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 /* Mobile */
 @media (max-width: 600px) {
+  .story-bank {
+    padding: 16px;
+    padding-bottom: 120px;
+  }
+
   .story-bank .sb-stats {
     flex-direction: column;
     align-items: flex-start;
@@ -759,7 +795,7 @@
 
   .story-bank .sb-stat-total {
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
     padding-right: 0;
     padding-bottom: 12px;
     margin-bottom: 12px;

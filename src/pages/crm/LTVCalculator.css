@@ -1,11 +1,27 @@
-/* LTV Calculator Styles - Playful Warmth Theme */
+/* LTV Calculator Styles - Light Theme Following Design Guide */
 @import '../../styles/crm-base.css';
+
+/* CSS Variables */
+.ltv-calculator {
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --gold: #ffdd27;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
 
 .ltv-calculator {
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: white;
+  padding-bottom: 120px;
+  background: var(--warm-gray);
+  color: var(--text-primary);
 }
 
 .ltv-header {
@@ -15,28 +31,35 @@
   margin-bottom: 24px;
 }
 
-.back-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
+.ltv-calculator .back-btn {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.ltv-calculator .back-btn:hover {
+  background: var(--soft-gray);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .ltv-header .header-content h1 {
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0 0 4px 0;
-  background: linear-gradient(135deg, #10b981, #34d399);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .ltv-header .header-content p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   margin: 0;
   font-size: 0.875rem;
 }
@@ -49,380 +72,228 @@
   margin-bottom: 24px;
 }
 
-.ltv-section {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Input Cards */
+.ltv-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 20px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
 }
 
-.ltv-section h2 {
+.ltv-card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.ltv-card h3 {
   font-size: 1rem;
   font-weight: 600;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
-  color: white;
-}
-
-.offer-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-/* Input Groups */
-.input-group {
-  margin-bottom: 0;
-}
-
-.input-group label {
-  display: block;
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 6px;
-}
-
-.input-group input {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 10px;
-  color: white;
-  font-size: 0.875rem;
-}
-
-.input-group input:focus {
-  outline: none;
-  border-color: #10b981;
-}
-
-.input-with-prefix,
-.input-with-suffix {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
+  gap: 8px;
 }
 
-.input-with-prefix span,
-.input-with-suffix span {
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.75rem;
-}
-
-.input-with-prefix input,
-.input-with-suffix input {
-  border: none;
-  background: transparent;
-  border-radius: 0;
-  padding: 10px;
-}
-
-/* Section Total */
-.section-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  border-radius: 10px;
-  margin-top: 16px;
-}
-
-.section-total span {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.section-total strong {
-  font-size: 1.125rem;
-  color: #10b981;
-}
-
-/* LTV Summary */
-.ltv-summary {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 24px;
-}
-
-.ltv-summary h2 {
+.ltv-card h3 span {
   font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 20px 0;
-  color: white;
 }
 
-/* Summary Cards */
-.summary-cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.summary-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.summary-card.primary {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(52, 211, 153, 0.1));
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.summary-label {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.summary-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-}
-
-.summary-card.primary .summary-value {
-  font-size: 2rem;
-  color: #10b981;
-}
-
-/* Waterfall Chart */
-.waterfall-chart {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.waterfall-chart h3 {
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin: 0 0 20px 0;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.waterfall-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 8px;
-  height: 280px;
-  padding-top: 30px;
-}
-
-.waterfall-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
-  position: relative;
-}
-
-.waterfall-value {
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 8px;
-  white-space: nowrap;
-}
-
-.waterfall-bar-container {
-  flex: 1;
-  width: 100%;
-  max-width: 60px;
-  position: relative;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px 6px 0 0;
-}
-
-.waterfall-bar {
-  position: absolute;
-  width: 100%;
-  border-radius: 4px;
-  transition: all 0.4s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.waterfall-connector {
-  position: absolute;
-  left: -12px;
-  width: 12px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.waterfall-label {
-  font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 8px;
-  text-align: center;
-}
-
-.waterfall-running-total {
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.4);
-  margin-top: 4px;
-}
-
-/* Total Column */
-.total-column .waterfall-bar-container {
-  background: rgba(16, 185, 129, 0.1);
-}
-
-.total-bar {
-  background: linear-gradient(180deg, #10b981 0%, #059669 100%) !important;
-}
-
-.total-value {
-  color: #10b981 !important;
-  font-size: 0.85rem !important;
-}
-
-.total-column .waterfall-label {
-  color: #10b981;
-  font-weight: 600;
-}
-
-.total-column .waterfall-running-total {
-  color: rgba(16, 185, 129, 0.6);
-}
-
-/* Revenue Breakdown */
-.revenue-breakdown {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  padding: 20px;
-}
-
-.revenue-breakdown h3 {
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin: 0 0 16px 0;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.breakdown-bars {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.ltv-input-group {
   margin-bottom: 16px;
 }
 
-.breakdown-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.ltv-input-group:last-child {
+  margin-bottom: 0;
 }
 
-.breakdown-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-}
-
-.breakdown-label span:first-child {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.breakdown-label span:last-child {
-  color: white;
+.ltv-input-group label {
+  display: block;
+  font-size: 0.8rem;
   font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
 }
 
-.breakdown-bar {
-  height: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  overflow: hidden;
+.ltv-input-group input,
+.ltv-input-group select {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-family: inherit;
 }
 
-.bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  transition: width 0.3s ease;
+.ltv-input-group input:focus,
+.ltv-input-group select:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
 }
 
-.bar-fill.attraction { background: #6366f1; }
-.bar-fill.core { background: #8b5cf6; }
-.bar-fill.upsell { background: #10b981; }
-.bar-fill.downsell { background: #f59e0b; }
-.bar-fill.continuity { background: #06b6d4; }
-
-/* Total Row */
-.total-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.ltv-input-group .input-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
 }
 
-.total-row span {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
+/* Results Card */
+.ltv-results {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
 }
 
-.total-row strong {
+.ltv-results h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 20px 0;
+}
+
+.ltv-result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.ltv-result-item {
+  text-align: center;
+  padding: 16px;
+  background: var(--warm-gray);
+  border-radius: 12px;
+}
+
+.ltv-result-value {
   font-size: 1.5rem;
-  color: #10b981;
+  font-weight: 700;
+  color: var(--purple);
+  margin-bottom: 4px;
+}
+
+.ltv-result-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Highlight Result */
+.ltv-result-highlight {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.1), rgba(124, 58, 237, 0.05));
+  border: 2px solid var(--purple);
+  grid-column: 1 / -1;
+  padding: 20px;
+}
+
+.ltv-result-highlight .ltv-result-value {
+  font-size: 2rem;
+  color: var(--purple);
+}
+
+/* Comparison */
+.ltv-comparison {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+}
+
+.ltv-vs {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.ltv-metric {
+  text-align: center;
+  padding: 16px;
+  background: var(--warm-gray);
+  border-radius: 12px;
+}
+
+.ltv-metric-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ltv-metric.good .ltv-metric-value {
+  color: #059669;
+}
+
+.ltv-metric.warning .ltv-metric-value {
+  color: #d97706;
+}
+
+.ltv-metric.bad .ltv-metric-value {
+  color: #dc2626;
+}
+
+.ltv-metric-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Info Box */
+.ltv-info {
+  background: rgba(94, 23, 235, 0.05);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.ltv-info h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--purple);
+  margin: 0 0 8px 0;
+}
+
+.ltv-info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .summary-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
   .ltv-calculator {
     padding: 16px;
+    padding-bottom: 120px;
   }
 
   .ltv-header {
     flex-direction: column;
   }
 
-  .offer-row {
+  .ltv-grid {
     grid-template-columns: 1fr;
   }
 
-  .summary-cards {
+  .ltv-result-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ltv-comparison {
     grid-template-columns: 1fr;
+    text-align: center;
   }
 
-  .waterfall-container {
-    height: 220px;
-    gap: 4px;
-  }
-
-  .waterfall-bar-container {
-    max-width: 40px;
-  }
-
-  .waterfall-value {
-    font-size: 0.6rem;
-  }
-
-  .waterfall-label {
-    font-size: 0.6rem;
-  }
-
-  .waterfall-running-total {
-    font-size: 0.55rem;
+  .ltv-vs {
+    order: 2;
   }
 }

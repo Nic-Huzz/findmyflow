@@ -1,14 +1,31 @@
 /**
  * Nervous System Widget Styles
+ * Light Theme - Following Design Guide
  */
+@import '../../styles/crm-base.css';
 
 .ns-widget {
-  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --gold: #ffdd27;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
+
+.ns-widget {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 24px;
-  color: white;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-card);
 }
 
 .ns-widget-header {
@@ -32,23 +49,27 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 0;
-  color: white;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .ns-expand-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 6px 12px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .ns-expand-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
+  background: var(--soft-gray);
+  color: var(--text-primary);
+  border-color: var(--purple);
 }
 
 /* Loading State */
@@ -60,9 +81,9 @@
 
 .ns-skeleton {
   background: linear-gradient(90deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0.05) 100%
+    var(--soft-gray) 0%,
+    var(--warm-gray) 50%,
+    var(--soft-gray) 100%
   );
   background-size: 200% 100%;
   animation: ns-shimmer 1.5s infinite;
@@ -95,12 +116,12 @@
 
 .ns-empty-state p {
   margin: 0 0 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
 }
 
 .ns-empty-hint {
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: var(--text-muted) !important;
 }
 
 /* Category Breakdown */
@@ -114,6 +135,7 @@
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 8px;
+  background: var(--soft-gray);
 }
 
 .ns-category-fill {
@@ -148,7 +170,7 @@
   align-items: center;
   gap: 6px;
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
 }
 
 .ns-legend-dot {
@@ -170,7 +192,7 @@
   display: flex;
   gap: 12px;
   padding: 14px;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--warm-gray);
   border-radius: 10px;
   margin-bottom: 16px;
   border-left: 3px solid;
@@ -178,14 +200,17 @@
 
 .ns-insight-high {
   border-left-color: #f87171;
+  background: rgba(248, 113, 113, 0.08);
 }
 
 .ns-insight-medium {
   border-left-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.08);
 }
 
 .ns-insight-low {
   border-left-color: #4ade80;
+  background: rgba(74, 222, 128, 0.08);
 }
 
 .ns-insight-icon {
@@ -197,20 +222,20 @@
   margin: 0 0 4px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
 }
 
 .ns-insight-content p {
   margin: 0;
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   line-height: 1.4;
 }
 
 /* Top Resistance */
 .ns-top-resistance {
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(94, 23, 235, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.15);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
@@ -237,13 +262,13 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .ns-resistance-name {
   font-size: 1rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
 }
 
 .ns-resistance-stats {
@@ -260,12 +285,12 @@
 .ns-stat-value {
   font-size: 1rem;
   font-weight: 700;
-  color: white;
+  color: var(--purple);
 }
 
 .ns-stat-label {
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 /* Trend Indicators */
@@ -277,28 +302,28 @@
 }
 
 .ns-trend-improving {
-  background: rgba(34, 197, 94, 0.2);
-  color: #4ade80;
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
 }
 
 .ns-trend-increasing {
-  background: rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
 }
 
 .ns-trend-stable {
-  background: rgba(251, 191, 36, 0.2);
-  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+  color: #d97706;
 }
 
 .ns-trend-neutral {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.6);
+  background: var(--soft-gray);
+  color: var(--text-muted);
 }
 
 /* Expanded View */
 .ns-expanded {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
   padding-top: 16px;
   margin-top: 8px;
 }
@@ -311,7 +336,7 @@
 .ns-pattern-section h4 {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-muted);
   margin: 0 0 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -332,7 +357,7 @@
   align-items: center;
   gap: 10px;
   padding: 10px 12px;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--warm-gray);
   border-radius: 8px;
   border-left: 3px solid #c084fc;
 }
@@ -349,19 +374,19 @@
 .ns-pattern-name {
   flex: 1;
   font-size: 0.875rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 .ns-pattern-count {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   min-width: 30px;
 }
 
 .ns-pattern-intensity {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   min-width: 40px;
   text-align: right;
 }
@@ -377,14 +402,14 @@
   display: flex;
   justify-content: space-between;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
   margin-top: 16px;
 }
 
 .ns-period,
 .ns-total {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 /* Responsive */

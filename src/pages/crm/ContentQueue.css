@@ -1,13 +1,30 @@
 /**
- * ContentQueue Page Styles - Playful Warmth Theme
+ * ContentQueue Page Styles
+ * Light Theme - Following Design Guide
  */
 @import '../../styles/crm-base.css';
 
+/* CSS Variables */
+.cq-page {
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --gold: #ffdd27;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
+
 .cq-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+  background: var(--warm-gray);
   padding: 1rem;
-  padding-bottom: 100px;
+  padding-bottom: 120px;
+  color: var(--text-primary);
 }
 
 .cq-page-header {
@@ -17,15 +34,16 @@
   gap: 1rem;
   padding: 1rem;
   margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
 }
 
 .cq-back-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -34,8 +52,9 @@
 }
 
 .cq-back-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--soft-gray);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .cq-page-title {
@@ -43,13 +62,13 @@
 }
 
 .cq-page-title h1 {
-  color: white;
+  color: var(--text-primary);
   font-size: 1.5rem;
   margin: 0;
 }
 
 .cq-page-title p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-size: 0.875rem;
   margin: 0.25rem 0 0;
 }
@@ -60,9 +79,9 @@
 }
 
 .cq-action-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -71,29 +90,34 @@
 }
 
 .cq-action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--soft-gray);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .cq-action-primary {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
   border: none;
   color: white;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 .cq-action-primary:hover {
-  background: linear-gradient(135deg, #7c7ff2 0%, #9d75f7 100%);
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(94, 23, 235, 0.4);
 }
 
 /* Tabs */
 .cq-tabs {
   display: flex;
   gap: 4px;
-  background: rgba(255, 255, 255, 0.03);
+  background: #ffffff;
   padding: 4px;
   border-radius: 12px;
   margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
 }
 
 .cq-tab {
@@ -106,20 +130,20 @@
   background: transparent;
   border: none;
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .cq-tab:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--warm-gray);
+  color: var(--text-primary);
 }
 
 .cq-tab.active {
-  background: rgba(139, 92, 246, 0.2);
-  color: white;
+  background: rgba(94, 23, 235, 0.1);
+  color: var(--purple);
 }
 
 .cq-tab-icon {
@@ -156,10 +180,17 @@
 }
 
 .cq-item {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 16px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
+}
+
+.cq-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .cq-item.needs-metrics {
@@ -180,14 +211,14 @@
 
 .cq-platform {
   font-size: 0.875rem;
-  color: #8b5cf6;
+  color: var(--purple);
   font-weight: 500;
   text-transform: capitalize;
 }
 
 .cq-date {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .cq-metrics-badge {
@@ -200,16 +231,16 @@
 
 .cq-metrics-done {
   background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
+  color: #059669;
 }
 
 .cq-metrics-pending {
   background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  color: #d97706;
 }
 
 .cq-item-content {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.5;
   margin: 0 0 12px 0;
@@ -220,9 +251,9 @@
   gap: 16px;
   padding: 8px 0;
   margin-bottom: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
   font-size: 0.813rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
 }
 
 .cq-item-actions {
@@ -232,9 +263,9 @@
 }
 
 .cq-btn {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 6px 12px;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -243,34 +274,38 @@
 }
 
 .cq-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--soft-gray);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .cq-btn-posted {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.1);
   border-color: rgba(16, 185, 129, 0.3);
-  color: #10b981;
+  color: #059669;
 }
 
 .cq-btn-posted:hover {
-  background: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.2);
 }
 
 .cq-btn-metrics {
-  background: rgba(139, 92, 246, 0.15);
-  border-color: rgba(139, 92, 246, 0.3);
-  color: #a78bfa;
+  background: rgba(94, 23, 235, 0.1);
+  border-color: rgba(94, 23, 235, 0.3);
+  color: var(--purple);
 }
 
 .cq-btn-metrics:hover {
-  background: rgba(139, 92, 246, 0.25);
+  background: rgba(94, 23, 235, 0.2);
 }
 
 /* Empty & Loading States */
 .cq-empty {
   text-align: center;
   padding: 60px 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
 }
 
 .cq-empty-icon {
@@ -279,13 +314,13 @@
 }
 
 .cq-empty h3 {
-  color: white;
+  color: var(--text-primary);
   font-size: 1.25rem;
   margin: 0 0 8px 0;
 }
 
 .cq-empty p {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   font-size: 0.875rem;
   margin: 0;
 }
@@ -293,7 +328,7 @@
 .cq-loading {
   text-align: center;
   padding: 60px 20px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
 }
 
 /* Toast Notification */
@@ -308,7 +343,7 @@
   font-weight: 500;
   z-index: 3000;
   animation: cq-toast-in 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .cq-toast-success {
@@ -334,6 +369,10 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  .cq-page {
+    padding-bottom: 120px;
+  }
+
   .cq-page-header {
     flex-direction: column;
     align-items: stretch;

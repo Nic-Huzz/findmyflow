@@ -1,11 +1,34 @@
-/* GroanMatrix.css - Full matrix view of courage challenges */
+/* GroanMatrix.css - Courage Challenge Matrix */
+/* Brand-aligned styling with purple/gold design system */
 
+/* ===== CSS Variables ===== */
 .groan-matrix {
-  padding: 1rem;
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --purple-dark: #4a0ea8;
+  --gold: #ffdd27;
+  --gold-dark: #f59e0b;
+  --white: #ffffff;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-gray: #495057;
+  --border-gray: #dee2e6;
+  --dark: #212529;
+
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+  --shadow-button: 0 4px 12px rgba(94, 23, 235, 0.3);
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+
+  padding: 1.5rem;
   max-width: 100%;
   overflow-x: auto;
 }
 
+/* ===== Header ===== */
 .groan-matrix-header {
   display: flex;
   justify-content: space-between;
@@ -18,7 +41,7 @@
 .groan-matrix-title {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-primary, #fff);
+  color: var(--dark);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -30,54 +53,93 @@
   flex-wrap: wrap;
 }
 
-/* Source type tabs (Skills, Problems, Personas) */
+/* ===== Source Type Tabs (Skills, Problems, Personas) ===== */
 .groan-source-tabs {
   display: flex;
-  gap: 0.5rem;
-  padding: 0.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  padding: 4px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border-radius: var(--radius-md);
+  width: fit-content;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .groan-source-tab {
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   background: transparent;
   border: none;
-  border-radius: 0.375rem;
-  color: var(--text-secondary, #9ca3af);
+  border-radius: var(--radius-sm);
+  color: var(--text-gray);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .groan-source-tab:hover {
-  color: var(--text-primary, #fff);
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--purple);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .groan-source-tab.active {
-  background: var(--brand-purple, #5e17eb);
-  color: #fff;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-button);
 }
 
-/* Matrix grid */
+/* ===== Stats Bar ===== */
+.groan-stats-bar {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--soft-gray);
+  box-shadow: var(--shadow-card);
+}
+
+.groan-stat {
+  text-align: center;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.groan-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.groan-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* ===== Matrix Grid ===== */
 .groan-matrix-grid {
   display: grid;
-  gap: 0.5rem;
+  gap: 0.75rem;
   min-width: 700px;
 }
 
-/* Header row with visibility layers */
+/* ===== Header Row (Visibility Layers) ===== */
 .groan-matrix-header-row {
   display: grid;
   grid-template-columns: 180px repeat(5, 1fr);
-  gap: 0.5rem;
+  gap: 0.75rem;
   position: sticky;
   top: 0;
   z-index: 10;
-  background: var(--bg-secondary, #1a1a2e);
-  padding-bottom: 0.5rem;
+  background: var(--white);
+  padding-bottom: 0.75rem;
 }
 
 .groan-header-cell {
@@ -85,50 +147,58 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  padding: 1rem 0.75rem;
+  background: linear-gradient(135deg, var(--warm-gray) 0%, var(--white) 100%);
+  border-radius: var(--radius-md);
   text-align: center;
+  border: 1px solid var(--soft-gray);
+  box-shadow: var(--shadow-card);
 }
 
 .groan-header-cell.corner {
   background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .groan-layer-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.75rem;
+  margin-bottom: 0.375rem;
 }
 
 .groan-layer-label {
   font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary, #9ca3af);
+  font-weight: 700;
+  color: var(--dark);
   letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .groan-layer-fear {
   font-size: 0.65rem;
-  color: var(--text-muted, #6b7280);
+  color: var(--text-gray);
   margin-top: 0.25rem;
+  font-style: italic;
 }
 
-/* Data rows */
+/* ===== Data Rows ===== */
 .groan-matrix-row {
   display: grid;
   grid-template-columns: 180px repeat(5, 1fr);
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .groan-row-label {
   display: flex;
   align-items: center;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--warm-gray) 0%, var(--white) 100%);
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
-  color: var(--text-primary, #fff);
-  font-weight: 500;
+  color: var(--dark);
+  font-weight: 600;
+  border: 1px solid var(--soft-gray);
+  box-shadow: var(--shadow-card);
 }
 
 .groan-row-label-text {
@@ -137,65 +207,70 @@
   white-space: nowrap;
 }
 
-/* Matrix cells */
+/* ===== Matrix Cells ===== */
 .groan-matrix-cell {
   position: relative;
-  min-height: 80px;
-  padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 0.5rem;
-  border: 2px solid transparent;
+  min-height: 100px;
+  padding: 0.75rem;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--soft-gray);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  box-shadow: var(--shadow-card);
 }
 
 .groan-matrix-cell:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--purple);
 }
 
 .groan-matrix-cell.has-challenge {
-  border-color: var(--layer-color, rgba(255, 255, 255, 0.2));
+  border-color: var(--purple-light);
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.03) 0%, rgba(124, 58, 237, 0.05) 100%);
 }
 
 .groan-matrix-cell.completed {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.12) 100%);
+  border-color: #10b981;
 }
 
 .groan-matrix-cell.in-progress {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.08) 0%, rgba(245, 158, 11, 0.12) 100%);
+  border-color: var(--gold-dark);
 }
 
 .groan-matrix-cell.essence-zone {
-  background: rgba(236, 72, 153, 0.15);
-  border-color: rgba(236, 72, 153, 0.4);
-  box-shadow: 0 0 10px rgba(236, 72, 153, 0.2);
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, rgba(236, 72, 153, 0.12) 100%);
+  border-color: #ec4899;
+  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.15);
 }
 
-/* Cell content */
+/* ===== Cell Content ===== */
 .groan-cell-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
-  color: var(--text-muted, #6b7280);
+  gap: 0.375rem;
+  color: var(--text-gray);
 }
 
 .groan-cell-empty-icon {
-  font-size: 1.25rem;
-  opacity: 0.5;
+  font-size: 1.5rem;
+  opacity: 0.4;
+  color: var(--purple);
 }
 
 .groan-cell-empty-text {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
 .groan-cell-challenge {
@@ -204,11 +279,11 @@
 }
 
 .groan-cell-title {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-primary, #fff);
-  line-height: 1.3;
-  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.4;
+  margin-bottom: 0.375rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -220,69 +295,74 @@
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
-  font-size: 0.65rem;
-  color: var(--text-secondary, #9ca3af);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-gray);
 }
 
 .groan-cell-status-icon {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
 }
 
-/* Essence zone indicator */
+/* ===== Essence Zone Badge ===== */
 .groan-essence-badge {
   position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  background: rgba(236, 72, 153, 0.8);
-  color: #fff;
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.25rem;
+  top: 0.375rem;
+  right: 0.375rem;
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  color: var(--white);
+  padding: 0.2rem 0.5rem;
+  border-radius: 100px;
   font-size: 0.6rem;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.3);
 }
 
-/* Scores display */
+/* ===== Scores Display ===== */
 .groan-cell-scores {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-  font-size: 0.65rem;
+  gap: 0.75rem;
+  margin-top: 0.375rem;
+  font-size: 0.7rem;
+  font-weight: 600;
 }
 
 .groan-score {
   display: flex;
   align-items: center;
-  gap: 0.125rem;
+  gap: 0.2rem;
 }
 
 .groan-score.scary {
-  color: #f87171;
+  color: #ef4444;
 }
 
 .groan-score.wahoo {
-  color: #34d399;
+  color: #10b981;
 }
 
-/* Generate button in empty cells */
+/* ===== Generate Button ===== */
 .groan-generate-btn {
-  background: transparent;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 0.375rem;
-  padding: 0.5rem;
-  color: var(--text-muted, #6b7280);
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.625rem 1rem;
+  color: var(--white);
   font-size: 0.75rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   width: 100%;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.2);
 }
 
 .groan-generate-btn:hover {
-  border-color: var(--brand-purple, #5e17eb);
-  color: var(--brand-purple, #5e17eb);
-  background: rgba(94, 23, 235, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button);
 }
 
-/* Loading state */
+/* ===== Loading State ===== */
 .groan-cell-loading {
   display: flex;
   flex-direction: column;
@@ -291,10 +371,10 @@
 }
 
 .groan-loading-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--brand-purple, #5e17eb);
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--soft-gray);
+  border-top-color: var(--purple);
   border-radius: 50%;
   animation: groan-spin 0.8s linear infinite;
 }
@@ -304,56 +384,64 @@
 }
 
 .groan-loading-text {
-  font-size: 0.7rem;
-  color: var(--text-muted, #6b7280);
+  font-size: 0.75rem;
+  color: var(--text-gray);
+  font-weight: 500;
 }
 
-/* Empty state when no Flow Finder data */
+/* ===== Empty State ===== */
 .groan-matrix-empty {
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.03) 0%, rgba(124, 58, 237, 0.05) 100%);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--border-gray);
 }
 
 .groan-matrix-empty-icon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1rem;
 }
 
 .groan-matrix-empty-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary, #fff);
-  margin-bottom: 0.5rem;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 0.75rem;
 }
 
 .groan-matrix-empty-text {
-  color: var(--text-secondary, #9ca3af);
-  margin-bottom: 1.5rem;
+  color: var(--text-gray);
+  margin-bottom: 2rem;
   max-width: 400px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 .groan-matrix-empty-cta {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: var(--brand-purple, #5e17eb);
-  color: #fff;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+  color: var(--white);
   border: none;
-  border-radius: 0.5rem;
-  font-weight: 500;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-button);
 }
 
 .groan-matrix-empty-cta:hover {
-  background: var(--brand-purple-dark, #4c12c9);
-  transform: translateY(-1px);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.35);
 }
 
-/* Filter bar */
+/* ===== Filter Bar ===== */
 .groan-filters {
   display: flex;
   gap: 1rem;
@@ -363,79 +451,350 @@
 
 .groan-filter-label {
   font-size: 0.75rem;
-  color: var(--text-secondary, #9ca3af);
+  color: var(--text-gray);
   margin-right: 0.25rem;
+  font-weight: 500;
 }
 
 .groan-filter-select {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  color: var(--text-primary, #fff);
+  background: var(--warm-gray);
+  border: 1px solid var(--soft-gray);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 1rem;
+  color: var(--dark);
   font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .groan-filter-select:focus {
   outline: none;
-  border-color: var(--brand-purple, #5e17eb);
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
 }
 
-/* Stats bar */
-.groan-stats-bar {
-  display: flex;
-  gap: 1.5rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
+/* ===== Mobile Card Layout (Hidden by default) ===== */
+.groan-matrix-mobile {
+  display: none;
 }
 
-.groan-stat {
-  text-align: center;
-}
-
-.groan-stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary, #fff);
-}
-
-.groan-stat-label {
-  font-size: 0.75rem;
-  color: var(--text-secondary, #9ca3af);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Responsive */
+/* ===== RESPONSIVE - Mobile ===== */
 @media (max-width: 768px) {
+  .groan-matrix {
+    padding: 1rem;
+  }
+
   .groan-matrix-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 1rem;
   }
 
-  .groan-matrix-grid {
-    font-size: 0.85rem;
-  }
-
-  .groan-header-cell {
-    padding: 0.5rem 0.25rem;
-  }
-
-  .groan-layer-icon {
+  .groan-matrix-title {
     font-size: 1.25rem;
   }
 
-  .groan-layer-fear {
+  .groan-source-tabs {
+    width: 100%;
+  }
+
+  .groan-source-tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* Hide grid on mobile */
+  .groan-matrix-grid {
     display: none;
   }
 
-  .groan-matrix-row {
-    grid-template-columns: 140px repeat(5, 1fr);
+  /* Show mobile card layout */
+  .groan-matrix-mobile {
+    display: block;
   }
 
-  .groan-matrix-header-row {
-    grid-template-columns: 140px repeat(5, 1fr);
+  .groan-stats-bar {
+    padding: 1rem;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .groan-stat {
+    min-width: 70px;
+  }
+
+  .groan-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .groan-stat-label {
+    font-size: 0.65rem;
+  }
+
+  .groan-matrix-empty {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .groan-matrix-empty-icon {
+    font-size: 3rem;
+  }
+
+  .groan-matrix-empty-title {
+    font-size: 1.2rem;
+  }
+
+  .groan-matrix-empty-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== Mobile Card Layout Styles ===== */
+.groan-mobile-section {
+  margin-bottom: 2rem;
+}
+
+.groan-mobile-layer-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+  box-shadow: var(--shadow-button);
+}
+
+.groan-mobile-layer-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.groan-mobile-layer-info {
+  flex: 1;
+}
+
+.groan-mobile-layer-label {
+  font-weight: 700;
+  color: var(--white);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.groan-mobile-layer-fear {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-style: italic;
+  margin-top: 0.125rem;
+}
+
+.groan-mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.groan-mobile-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--white);
+  border: 1px solid var(--soft-gray);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.groan-mobile-card:hover {
+  border-color: var(--purple);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.groan-mobile-card.completed {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.06) 0%, rgba(16, 185, 129, 0.1) 100%);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.groan-mobile-card.in-progress {
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.06) 0%, rgba(245, 158, 11, 0.1) 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.groan-mobile-card-source {
+  flex: 1;
+  min-width: 0;
+}
+
+.groan-mobile-card-source-label {
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groan-mobile-card-challenge {
+  font-size: 0.8rem;
+  color: var(--text-gray);
+  margin-top: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.groan-mobile-card-status {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-gray);
+  padding: 0.375rem 0.75rem;
+  background: var(--warm-gray);
+  border-radius: 100px;
+}
+
+.groan-mobile-card-status.completed {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.groan-mobile-card-status.in-progress {
+  color: var(--gold-dark);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.groan-mobile-generate {
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+  color: var(--white);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(94, 23, 235, 0.25);
+}
+
+.groan-mobile-generate:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-button);
+}
+
+/* ===== Persona Filter (Skill × Problem tab) ===== */
+.groan-persona-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.05) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--soft-gray);
+}
+
+.groan-persona-filter .groan-filter-label {
+  font-weight: 600;
+  color: var(--dark);
+  white-space: nowrap;
+}
+
+.groan-persona-filter .groan-filter-select {
+  flex: 1;
+  max-width: 300px;
+  padding: 0.625rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* ===== Skill × Problem Grid ===== */
+.groan-skill-problem-grid {
+  min-width: auto;
+}
+
+.groan-sp-header {
+  background: var(--white);
+}
+
+.groan-sp-header .groan-header-cell.corner {
+  background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
+  border: none;
+  box-shadow: var(--shadow-button);
+}
+
+.groan-corner-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.groan-problem-header {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.12) 100%);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.groan-problem-header .groan-layer-label {
+  font-size: 0.7rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.groan-sp-row {
+  /* Dynamic grid-template-columns set inline */
+}
+
+.groan-sp-row .groan-row-label {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06) 0%, rgba(124, 58, 237, 0.1) 100%);
+  border-color: rgba(94, 23, 235, 0.2);
+}
+
+.groan-sp-cell {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.9) 100%);
+  border-color: var(--soft-gray);
+}
+
+.groan-sp-cell:hover {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+  border-color: var(--purple);
+}
+
+/* ===== Skill × Problem Mobile ===== */
+.groan-sp-mobile .groan-sp-skill-header {
+  background: linear-gradient(135deg, var(--purple) 0%, #7c3aed 100%);
+}
+
+/* ===== Responsive - Skill × Problem ===== */
+@media (max-width: 768px) {
+  .groan-persona-filter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .groan-persona-filter .groan-filter-select {
+    max-width: none;
+  }
+
+  /* Hide skill × problem grid on mobile, show card view */
+  .groan-skill-problem-grid {
+    display: none;
+  }
+
+  .groan-sp-mobile {
+    display: block;
   }
 }

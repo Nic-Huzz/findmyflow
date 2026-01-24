@@ -17,6 +17,8 @@ import FlowMapRiver from './components/FlowMapRiver'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
+import GroanMatrix from './components/GroanMatrix'
+import { createGroanChallenge, createSkillProblemChallenge } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage } from './lib/stageConfig'
@@ -668,6 +670,105 @@ function Challenge() {
     }
   }
 
+  // Handler for generating challenges from the Groan Matrix
+  const handleGenerateChallenge = async (cellData) => {
+    console.log('Generating challenge with data:', cellData)
+
+    try {
+      // Check if this is a Skill × Problem request
+      const isSkillProblem = cellData.sourceType === 'skill_x_problem'
+
+      // Build the request body based on challenge type
+      const requestBody = isSkillProblem
+        ? {
+            sourceType: 'skill_x_problem',
+            skillId: cellData.skillId,
+            skillLabel: cellData.skillLabel,
+            skillInsight: cellData.skillInsight || '',
+            problemId: cellData.problemId,
+            problemLabel: cellData.problemLabel,
+            problemInsight: cellData.problemInsight || '',
+            personaId: cellData.personaId || null,
+            personaLabel: cellData.personaLabel || null,
+            personaInsight: cellData.personaInsight || null
+          }
+        : {
+            sourceType: cellData.sourceType,
+            sourceLabel: cellData.sourceLabel,
+            sourceInsight: cellData.sourceInsight || '',
+            visibilityLayer: cellData.visibilityLayer
+          }
+
+      const { data, error } = await supabase.functions.invoke('groan-challenge-generator', {
+        body: requestBody
+      })
+
+      console.log('Edge function response:', { data, error })
+
+      if (error) {
+        console.error('Edge function error details:', error)
+        throw error
+      }
+
+      if (data?.title) {
+        // Save the generated challenge based on type
+        if (isSkillProblem) {
+          const { error: saveError } = await createSkillProblemChallenge({
+            userId: user.id,
+            title: data.title,
+            description: data.description,
+            skillId: cellData.skillId,
+            skillLabel: cellData.skillLabel,
+            problemId: cellData.problemId,
+            problemLabel: cellData.problemLabel,
+            personaId: cellData.personaId || null,
+            personaLabel: cellData.personaLabel || null,
+            scaryScore: data.scaryScore || 5,
+            wahooScore: data.wahooScore || 5,
+            generationPrompt: data.prompt
+          })
+
+          if (saveError) {
+            console.error('Error saving skill × problem challenge:', saveError)
+          }
+        } else {
+          // Standard challenge save
+          const { error: saveError } = await createGroanChallenge({
+            userId: user.id,
+            title: data.title,
+            description: data.description,
+            visibilityLayer: cellData.visibilityLayer,
+            sourceType: cellData.sourceType,
+            sourceId: cellData.sourceId,
+            sourceLabel: cellData.sourceLabel,
+            scaryScore: data.scaryScore || 5,
+            wahooScore: data.wahooScore || 5,
+            generationPrompt: data.prompt
+          })
+
+          if (saveError) {
+            console.error('Error saving challenge:', saveError)
+          }
+        }
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error generating challenge:', error)
+      alert('Error generating challenge. Please try again.')
+      return null
+    }
+  }
+
+  // Handler for matrix cell clicks
+  const handleMatrixCellClick = (cellData) => {
+    // Navigate to challenge details or show modal
+    if (cellData.challenge) {
+      // Could navigate to challenge detail page or show modal
+      console.log('Challenge clicked:', cellData)
+    }
+  }
+
   // Determine the current viewing stage (needed for Business filtering)
   const viewingStage = activeStageTab !== undefined ? activeStageTab : (
     selectedProject?.current_stage ||
@@ -1098,128 +1199,14 @@ function Challenge() {
           </button>
         </div>
 
-        {/* Quests for current category */}
-        {activeCategory === 'Groans' && displayQuests.length > 0 && (
+        {/* Groans Tab - Courage Matrix */}
+        {activeCategory === 'Groans' && (
           <div className="quest-section">
-            <h2 className="section-title">Groans</h2>
-            <ChallengeFilters
-              activeCategory={activeCategory}
-              activeFrequencyFilter={activeFrequencyFilter}
-              setActiveFrequencyFilter={setActiveFrequencyFilter}
-              activeRTypeFilter={activeRTypeFilter}
-              setActiveRTypeFilter={setActiveRTypeFilter}
+            <GroanMatrix
+              userId={user?.id}
+              onCellClick={handleMatrixCellClick}
+              onGenerateChallenge={handleGenerateChallenge}
             />
-            <div className="quest-search">
-              <input
-                type="text"
-                className="quest-search-input"
-                placeholder="Search challenges..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
-                <button
-                  className="quest-search-clear"
-                  onClick={() => setSearchQuery('')}
-                >
-                  ×
-                </button>
-              )}
-            </div>
-            {['Recognise', 'Rewire', 'Reconnect'].filter(rType =>
-              activeRTypeFilter === 'All' || activeRTypeFilter === rType
-            ).map(rType => {
-              const rTypeQuests = displayQuests
-                .filter(q => q.type === rType)
-                .sort((a, b) => {
-                  // Daily quests first, weekly second
-                  if (a.frequency === 'daily' && b.frequency !== 'daily') return -1
-                  if (a.frequency !== 'daily' && b.frequency === 'daily') return 1
-                  return 0
-                })
-              if (rTypeQuests.length === 0) return null
-
-              // For Reconnect, split into visible (planned or non-morning) and hidden (non-planned morning)
-              const isReconnect = rType === 'Reconnect'
-              const visibleQuests = isReconnect
-                ? rTypeQuests.filter(q =>
-                    !MORNING_RECONNECT_QUEST_IDS.includes(q.id) || isQuestPlanned(q.id)
-                  )
-                : rTypeQuests
-              const hiddenQuests = isReconnect
-                ? rTypeQuests.filter(q =>
-                    MORNING_RECONNECT_QUEST_IDS.includes(q.id) && !isQuestPlanned(q.id)
-                  )
-                : []
-
-              // Don't render section if no visible quests and no hidden quests
-              if (visibleQuests.length === 0 && hiddenQuests.length === 0) return null
-
-              const renderQuestCard = (quest) => {
-                const completed = isQuestCompletedToday(quest.id, quest)
-                const isReleaseDailyChallenge = quest.id === 'release_daily_challenge'
-
-                return (
-                  <QuestCard
-                    key={quest.id}
-                    quest={quest}
-                    completed={completed}
-                    showStreak={quest.frequency === 'daily'}
-                    streak={getDailyStreak(quest.id)}
-                    dayLabels={getDayLabels()}
-                    questInput={questInputs[quest.id]}
-                    onInputChange={handleInputChange}
-                    onComplete={handleQuestComplete}
-                    expandedLearnMore={expandedLearnMore}
-                    onToggleLearnMore={toggleLearnMore}
-                    showLockedTooltip={showLockedTooltip}
-                    onToggleLockedTooltip={(id) => setShowLockedTooltip(showLockedTooltip === id ? null : id)}
-                    renderDescription={renderDescription}
-                    dailyReleaseContent={isReleaseDailyChallenge && getDailyReleaseChallenge() ? renderDailyReleaseChallenge() : null}
-                    completedBadgeText="Completed Today"
-                    navigate={navigate}
-                    specialLockCheck={isReleaseDailyChallenge && !nervousSystemComplete}
-                    specialLockMessage="Complete Nervous System to Unlock"
-                    lockedMessage={'Complete the "Nervous System Calibration" to unlock daily release challenges'}
-                    safetyContracts={safetyContracts}
-                    selectedProject={selectedProject}
-                    progress={progress}
-                    projectStage={projectStage}
-                    justCompleted={justCompletedQuestId === quest.id}
-                    isPlanned={isQuestPlanned(quest.id)}
-                    plannedDay={getPlannedDay(quest.id)}
-                  />
-                )
-              }
-
-              return (
-                <div key={rType} className="quest-subsection">
-                  <h3 className="subsection-title">{rType}</h3>
-                  {visibleQuests.length > 0 && (
-                    <div className="quest-grid">
-                      {visibleQuests.map(renderQuestCard)}
-                    </div>
-                  )}
-                  {/* Hidden section for non-planned morning activities */}
-                  {hiddenQuests.length > 0 && (
-                    <div className="hidden-quests-section">
-                      <button
-                        className="hidden-quests-toggle"
-                        onClick={() => setShowHiddenReconnect(!showHiddenReconnect)}
-                      >
-                        <span className="toggle-icon">{showHiddenReconnect ? '▼' : '▶'}</span>
-                        <span className="toggle-label">Hidden ({hiddenQuests.length})</span>
-                      </button>
-                      {showHiddenReconnect && (
-                        <div className="quest-grid hidden-grid">
-                          {hiddenQuests.map(renderQuestCard)}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
           </div>
         )}
 
@@ -1317,8 +1304,19 @@ function Challenge() {
           </div>
         )}
 
-        {/* Business Quests */}
-        {activeCategory === 'Business' && filteredQuests.length > 0 && (
+        {/* Business Quests - Show GroanMatrix when on Groans stage */}
+        {activeCategory === 'Business' && isGroansStage && (
+          <div className="quest-section">
+            <GroanMatrix
+              userId={user?.id}
+              onCellClick={handleMatrixCellClick}
+              onGenerateChallenge={handleGenerateChallenge}
+            />
+          </div>
+        )}
+
+        {/* Business Quests - Regular stages */}
+        {activeCategory === 'Business' && !isGroansStage && filteredQuests.length > 0 && (
           <div className="quest-section">
             <div className="quest-grid">
               {filteredQuests.map(quest => {

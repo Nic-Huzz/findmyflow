@@ -1,11 +1,28 @@
 /* ContentCreate.css - Triggered Content Generation Page */
+/* Light Theme - Following Design Guide */
 @import '../../styles/crm-base.css';
+
+/* CSS Variables */
+.content-create {
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --gold: #ffdd27;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
 
 .content-create {
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: white;
+  padding-bottom: 120px;
+  background: var(--warm-gray);
+  color: var(--text-primary);
 }
 
 .content-create .cc-header {
@@ -16,32 +33,34 @@
 }
 
 .content-create .back-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.875rem;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .content-create .back-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--soft-gray);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .content-create .header-content h1 {
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0 0 4px 0;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .content-create .header-content p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   margin: 0;
   font-size: 0.875rem;
 }
@@ -54,26 +73,27 @@
 }
 
 .cc-trigger-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
   padding: 20px;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-card);
 }
 
 .cc-trigger-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(59, 130, 246, 0.3);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--purple);
 }
 
 .cc-trigger-card .cc-trigger-category {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #3b82f6;
+  color: var(--purple);
   font-weight: 600;
 }
 
@@ -81,26 +101,26 @@
   font-size: 1rem;
   font-weight: 600;
   margin: 8px 0;
-  color: white;
+  color: var(--text-primary);
 }
 
 .cc-trigger-card p {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   margin: 0 0 12px 0;
   line-height: 1.4;
 }
 
 .cc-trigger-card .cc-trigger-action {
   font-size: 0.75rem;
-  color: #3b82f6;
+  color: var(--purple);
   font-weight: 600;
 }
 
 /* Trigger Banner */
 .cc-trigger-banner {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08), rgba(124, 58, 237, 0.05));
+  border: 1px solid rgba(94, 23, 235, 0.2);
   border-radius: 16px;
   padding: 20px;
   margin-bottom: 24px;
@@ -112,8 +132,8 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   padding: 4px 10px;
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  background: rgba(94, 23, 235, 0.15);
+  color: var(--purple);
   border-radius: 6px;
   font-weight: 600;
   margin-bottom: 8px;
@@ -123,24 +143,24 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0 0 4px 0;
-  color: white;
+  color: var(--text-primary);
 }
 
 .cc-trigger-info p {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   margin: 0;
 }
 
 .cc-trigger-context {
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(94, 23, 235, 0.15);
 }
 
 .cc-trigger-context .context-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   display: block;
   margin-bottom: 8px;
 }
@@ -154,39 +174,42 @@
 .cc-trigger-context .context-chip {
   font-size: 0.75rem;
   padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
 }
 
 /* Instructions Preview */
 .cc-instructions-preview {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 24px;
+  box-shadow: var(--shadow-card);
 }
 
 .cc-instructions-preview h3 {
   font-size: 0.875rem;
   font-weight: 600;
   margin: 0 0 8px 0;
-  color: white;
+  color: var(--text-primary);
 }
 
 .cc-instructions-preview .cc-instructions-hint {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   margin: 0 0 12px 0;
 }
 
 .cc-instructions-preview .cc-instructions-box {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 16px;
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   line-height: 1.6;
   white-space: pre-wrap;
   font-family: inherit;
@@ -208,8 +231,8 @@
 .cc-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #3b82f6;
+  border: 3px solid var(--soft-gray);
+  border-top-color: var(--purple);
   border-radius: 50%;
   animation: cc-spin 1s linear infinite;
 }
@@ -228,10 +251,11 @@
 
 /* Generator Wrapper */
 .cc-generator-wrapper {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 24px;
+  box-shadow: var(--shadow-card);
 }
 
 .cc-generator-embedded {
@@ -240,7 +264,7 @@
 
 /* Inline Generator Styles */
 .cc-inline-generator {
-  color: white;
+  color: var(--text-primary);
 }
 
 .cc-section {
@@ -251,7 +275,7 @@
   font-size: 0.875rem;
   font-weight: 600;
   margin: 0 0 12px 0;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .cc-type-grid {
@@ -265,23 +289,24 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
   font-size: 0.85rem;
 }
 
 .cc-type-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--warm-gray);
+  border-color: var(--purple);
 }
 
 .cc-type-btn.selected {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
-  color: white;
+  background: rgba(94, 23, 235, 0.1);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .cc-type-btn .type-icon {
@@ -299,33 +324,34 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s;
   font-size: 0.8rem;
 }
 
 .cc-platform-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--warm-gray);
+  border-color: var(--purple);
 }
 
 .cc-platform-btn.selected {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: #3b82f6;
-  color: white;
+  background: rgba(94, 23, 235, 0.1);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .cc-instructions-textarea {
   width: 100%;
   min-height: 120px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 14px;
-  color: white;
+  color: var(--text-primary);
   font-size: 0.875rem;
   line-height: 1.5;
   resize: vertical;
@@ -334,7 +360,8 @@
 
 .cc-instructions-textarea:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
 }
 
 .cc-error {
@@ -342,7 +369,7 @@
   border: 1px solid rgba(239, 68, 68, 0.3);
   border-radius: 8px;
   padding: 12px 16px;
-  color: #ef4444;
+  color: #dc2626;
   font-size: 0.85rem;
   margin-bottom: 16px;
 }
@@ -350,22 +377,23 @@
 .cc-generate-btn {
   width: 100%;
   padding: 14px 24px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   color: white;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 .cc-generate-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
 }
 
 .cc-generate-btn:disabled {
@@ -375,10 +403,11 @@
 
 /* Result Display */
 .cc-result {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 20px;
+  box-shadow: var(--shadow-card);
 }
 
 .cc-result-header {
@@ -392,19 +421,20 @@
 .cc-result-header .result-platform {
   font-size: 0.8rem;
   padding: 4px 10px;
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
 }
 
 .cc-content-editable {
   width: 100%;
   min-height: 200px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 16px;
-  color: white;
+  color: var(--text-primary);
   font-size: 0.9rem;
   line-height: 1.6;
   resize: vertical;
@@ -413,18 +443,19 @@
 
 .cc-content-editable:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
 }
 
 .cc-char-counter {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   text-align: right;
   margin-top: 8px;
 }
 
 .cc-char-counter.over-limit {
-  color: #ef4444;
+  color: #dc2626;
 }
 
 .cc-char-counter .limit-warning {
@@ -442,15 +473,15 @@
 
 .cc-refinements .refinement-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   margin-right: 4px;
 }
 
 .refinement-btn {
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
@@ -458,7 +489,8 @@
 }
 
 .refinement-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--warm-gray);
+  border-color: var(--purple);
 }
 
 .refinement-btn:disabled {
@@ -468,7 +500,7 @@
 
 .refining-indicator {
   font-size: 0.75rem;
-  color: #3b82f6;
+  color: var(--purple);
   margin-left: 8px;
 }
 
@@ -490,15 +522,24 @@
 }
 
 .cc-action-btn.copy {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.cc-action-btn.copy:hover {
+  border-color: var(--purple);
 }
 
 .cc-action-btn.regenerate {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.cc-action-btn.regenerate:hover {
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .cc-action-btn.use {
@@ -507,10 +548,20 @@
   color: white;
 }
 
+.cc-action-btn.use:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
 .cc-action-btn.new {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.cc-action-btn.new:hover {
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .cc-action-btn:hover:not(:disabled) {
@@ -526,6 +577,7 @@
 @media (max-width: 768px) {
   .content-create {
     padding: 16px;
+    padding-bottom: 120px;
   }
 
   .cc-trigger-grid {

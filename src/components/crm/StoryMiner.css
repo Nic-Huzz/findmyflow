@@ -1,13 +1,31 @@
 /**
  * StoryMiner Component Styles
+ * Light Theme - Following Design Guide
  * Screenshot-to-Story extraction and Content History mining
  */
+@import '../../styles/crm-base.css';
 
 .story-miner {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --gold: #ffdd27;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
+
+.story-miner {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 24px;
   min-height: 400px;
+  box-shadow: var(--shadow-card);
 }
 
 /* Header */
@@ -22,28 +40,33 @@
 .story-miner .sm-header h2 {
   margin: 0;
   font-size: 1.5rem;
-  color: #fff;
+  font-weight: 700;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .story-miner .sm-header p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   margin: 4px 0 0 0;
   font-size: 0.875rem;
 }
 
 .story-miner .sm-back-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #fff;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.875rem;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .story-miner .sm-back-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .story-miner .sm-close-btn {
@@ -52,7 +75,7 @@
   top: 0;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   font-size: 1.5rem;
   cursor: pointer;
   padding: 4px 8px;
@@ -60,7 +83,7 @@
 }
 
 .story-miner .sm-close-btn:hover {
-  color: #fff;
+  color: var(--text-primary);
 }
 
 /* Source Selection */
@@ -76,17 +99,18 @@
   align-items: center;
   gap: 12px;
   padding: 32px 24px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: var(--warm-gray);
+  border: 2px solid var(--border-color);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .story-miner .sm-source-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(168, 85, 247, 0.5);
+  background: #ffffff;
+  border-color: rgba(94, 23, 235, 0.5);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .story-miner .sm-source-icon {
@@ -96,12 +120,12 @@
 .story-miner .sm-source-name {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .story-miner .sm-source-desc {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   text-align: center;
 }
 
@@ -116,16 +140,16 @@
   align-items: center;
   gap: 12px;
   padding: 48px 24px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  background: var(--warm-gray);
+  border: 2px dashed var(--border-color);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .story-miner .sm-dropzone:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(168, 85, 247, 0.5);
+  background: #ffffff;
+  border-color: rgba(94, 23, 235, 0.5);
 }
 
 .story-miner .sm-dropzone-icon {
@@ -134,13 +158,13 @@
 
 .story-miner .sm-dropzone-text {
   font-size: 1rem;
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .story-miner .sm-dropzone-hint {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 /* Image Preview */
@@ -154,7 +178,7 @@
   width: 100%;
   max-height: 300px;
   object-fit: contain;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--warm-gray);
   border-radius: 12px;
 }
 
@@ -178,7 +202,7 @@
 
 /* Content Mining List */
 .story-miner .sm-instruction {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   margin-bottom: 16px;
   font-size: 0.9375rem;
 }
@@ -196,20 +220,21 @@
   display: flex;
   gap: 12px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .story-miner .sm-content-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
 }
 
 .story-miner .sm-content-item.selected {
-  background: rgba(168, 85, 247, 0.1);
-  border-color: rgba(168, 85, 247, 0.5);
+  background: rgba(94, 23, 235, 0.05);
+  border-color: rgba(94, 23, 235, 0.5);
 }
 
 .story-miner .sm-content-check {
@@ -219,27 +244,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--soft-gray);
   border-radius: 6px;
-  color: #a855f7;
+  color: var(--purple);
   font-weight: 600;
 }
 
 .story-miner .sm-content-item.selected .sm-content-check {
-  background: #a855f7;
+  background: var(--purple);
   color: #fff;
 }
 
 .story-miner .sm-content-text {
   flex: 1;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .story-miner .sm-content-meta {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
@@ -250,7 +275,7 @@
 }
 
 .story-miner .sm-extract-btn {
-  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border: none;
   color: #fff;
   padding: 14px 32px;
@@ -263,7 +288,7 @@
 
 .story-miner .sm-extract-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.3);
+  box-shadow: 0 8px 20px rgba(94, 23, 235, 0.3);
 }
 
 .story-miner .sm-extract-btn:disabled {
@@ -279,8 +304,8 @@
 }
 
 .story-miner .sm-extracted-story {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 20px;
 }
@@ -293,8 +318,8 @@
 }
 
 .story-miner .sm-story-category {
-  background: rgba(168, 85, 247, 0.2);
-  color: #c084fc;
+  background: rgba(94, 23, 235, 0.1);
+  color: var(--purple);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.8125rem;
@@ -302,13 +327,13 @@
 }
 
 .story-miner .sm-story-title {
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 0.9375rem;
 }
 
 .story-miner .sm-story-content {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-size: 0.9375rem;
   line-height: 1.6;
   margin: 0 0 16px 0;
@@ -341,9 +366,9 @@
 }
 
 .story-miner .sm-skip-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 10px 20px;
   border-radius: 8px;
   font-size: 0.875rem;
@@ -352,8 +377,8 @@
 }
 
 .story-miner .sm-skip-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 /* All Saved State */
@@ -371,13 +396,13 @@
 }
 
 .story-miner .sm-all-saved p {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 1.125rem;
   margin: 0;
 }
 
 .story-miner .sm-done-btn {
-  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   border: none;
   color: #fff;
   padding: 12px 32px;
@@ -390,25 +415,26 @@
 
 .story-miner .sm-done-btn:hover {
   transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(94, 23, 235, 0.3);
 }
 
 /* Loading & Error States */
 .story-miner .sm-loading {
   text-align: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   padding: 48px 24px;
 }
 
 .story-miner .sm-empty {
   text-align: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   padding: 48px 24px;
 }
 
 .story-miner .sm-error {
   background: rgba(239, 68, 68, 0.1);
   border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #fca5a5;
+  color: #dc2626;
   padding: 12px 16px;
   border-radius: 8px;
   margin-bottom: 16px;

@@ -213,3 +213,170 @@ WITH CHECK (bucket_id = 'deal-screenshots' AND auth.uid()::text = (storage.folde
 | Deal Search | Medium | High | P3 |
 | Pipeline Analytics | High | High | P4 |
 | Email Integration | Very High | Very High | P4 |
+
+---
+
+## Coming Soon Features (Placeholder Pages Exist)
+
+These features have ComingSoon placeholder pages in the CRM. They're marked as future development due to complexity.
+
+### Referrals (`/crm/referrals`)
+
+**Status**: Coming Soon | **Complexity**: Medium | **Tower**: Nurture
+
+**Two possible implementations:**
+
+#### Option A: Referrals for User's Business (CRM Feature)
+Help users run their own referral programs:
+- Generate unique referral links for customers
+- Track which customers referred new leads
+- Manage reward tiers (e.g., "Refer 3, get X")
+- Integrate with Contacts to show "referred by" attribution
+- Dashboard showing referral performance
+
+#### Option B: Referrals to FindMyFlow (Growth Feature)
+Viral loop for FindMyFlow itself:
+- Users invite friends to FindMyFlow
+- Track sign-ups from referral links
+- Reward tiers for referring users
+
+**Technical Requirements:**
+- Unique link generation (UUID or short codes)
+- Attribution tracking on contact/user creation
+- Referral relationship table
+- Reward tier configuration
+- Notification when referral converts
+
+**Database Schema Needed:**
+```sql
+-- For Option A (User's referral program)
+CREATE TABLE referral_links (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  contact_id UUID REFERENCES crm_contacts,
+  code VARCHAR(12) UNIQUE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  clicks INT DEFAULT 0
+);
+
+CREATE TABLE referral_conversions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  referral_link_id UUID REFERENCES referral_links NOT NULL,
+  referred_contact_id UUID REFERENCES crm_contacts NOT NULL,
+  converted_at TIMESTAMPTZ DEFAULT NOW(),
+  reward_tier VARCHAR(50),
+  reward_given BOOLEAN DEFAULT FALSE
+);
+```
+
+---
+
+### A/B Testing (`/crm/ab-testing`)
+
+**Status**: Coming Soon | **Complexity**: High | **Tower**: Attract
+
+**Purpose**: Test content variants to optimize engagement and conversions.
+
+**Features Needed:**
+- Create content variants (A vs B)
+- Split traffic/audience assignment
+- Track engagement per variant (likes, comments, clicks, conversions)
+- Statistical significance calculations
+- Winner declaration and insights
+
+**Technical Requirements:**
+- Content variant system (duplicate content with variant_id)
+- Audience assignment logic (random or rule-based)
+- Per-variant engagement tracking
+- Statistics service for significance testing
+- Results visualization
+
+**Complexity Notes:**
+- Requires careful data modeling for variants
+- Statistical analysis needs sample size calculations
+- May need integration with content scheduling system
+- Consider: manual A/B (user tracks externally) vs automated
+
+**Simpler Alternative (MVP):**
+- Manual A/B tracking in PerformanceDashboard
+- User creates two pieces of content, tags them as "Test A" and "Test B"
+- Compare engagement in existing analytics
+- No automated splitting, just comparison tools
+
+---
+
+### Automations (`/crm/automations`)
+
+**Status**: Coming Soon | **Complexity**: High | **Tower**: Tools
+
+**Purpose**: Trigger automated actions based on CRM events.
+
+**Example Automations:**
+- When deal moves to "Proposal" → Create follow-up task
+- When contact is tagged "Hot Lead" → Send welcome email sequence
+- When deal is won → Trigger upsell campaign after 7 days
+- When contact hasn't engaged in 30 days → Send re-engagement email
+
+**Technical Requirements:**
+- **Trigger System**: Detect events (deal stage change, contact created, tag added, time elapsed)
+- **Action Execution**: Perform actions (create task, send email, update field, notify)
+- **Scheduling**: Delayed actions, recurring checks
+- **Backend Infrastructure**:
+  - Supabase Edge Functions for event handlers
+  - Database triggers or polling for event detection
+  - Queue system for reliable execution
+  - Cron jobs for time-based triggers
+
+**Database Schema Needed:**
+```sql
+CREATE TABLE automations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  enabled BOOLEAN DEFAULT TRUE,
+  trigger_type VARCHAR(50) NOT NULL, -- 'deal_stage_change', 'contact_created', 'time_elapsed', etc.
+  trigger_config JSONB NOT NULL, -- { "from_stage": "lead", "to_stage": "proposal" }
+  action_type VARCHAR(50) NOT NULL, -- 'create_task', 'send_email', 'update_field', etc.
+  action_config JSONB NOT NULL, -- { "task_title": "Follow up", "due_days": 3 }
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE automation_executions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  automation_id UUID REFERENCES automations NOT NULL,
+  triggered_at TIMESTAMPTZ DEFAULT NOW(),
+  status VARCHAR(20) DEFAULT 'pending', -- 'pending', 'success', 'failed'
+  error_message TEXT,
+  context JSONB -- { "deal_id": "...", "contact_id": "..." }
+);
+```
+
+**Complexity Notes:**
+- Requires significant backend infrastructure
+- Need reliable execution (retries, error handling)
+- User needs visual automation builder (if/then UI)
+- Consider starting with pre-built "recipes" vs custom builder
+
+**Simpler Alternative (Current):**
+- Manual task creation in Execute page
+- Smart Alerts for stale deals and follow-ups
+- Ascension triggers for upsell reminders
+
+---
+
+## Updated Prioritization Matrix
+
+| Feature | Effort | Impact | Status |
+|---------|--------|--------|--------|
+| AI Screenshot Capture | High | Very High | P1 |
+| Keyboard Shortcuts | Low | Medium | P2 |
+| Error Toasts | Low | High | P2 |
+| Optimistic Updates | Medium | High | P2 |
+| Script Favorites | Medium | Medium | P3 |
+| Mobile Swipe | High | High | P3 |
+| Deal Search | Medium | High | P3 |
+| Pipeline Analytics | High | High | P4 |
+| Email Integration | Very High | Very High | P4 |
+| **Referrals** | Medium | Medium | Coming Soon |
+| **A/B Testing** | High | Medium | Coming Soon |
+| **Automations** | Very High | High | Coming Soon |

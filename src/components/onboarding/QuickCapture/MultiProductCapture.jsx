@@ -12,10 +12,13 @@
  * Created: Jan 2026
  */
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import ProductCard from './ProductCard'
 import { CATEGORY_OPTIONS } from './DeliverySelector'
 import './MultiProductCapture.css'
+
+// Storage key for products
+const PRODUCTS_STORAGE_KEY = 'quick_capture_products'
 
 // Map wealth ladder to default category
 const WEALTH_LADDER_TO_CATEGORY = {
@@ -41,15 +44,47 @@ const createEmptyProduct = (index, defaultCategory = null) => ({
 function MultiProductCapture({
   wealthLadder,
   onComplete,
-  onBack
+  onBack,
+  userId
 }) {
   // Default category based on wealth ladder
   const defaultCategory = WEALTH_LADDER_TO_CATEGORY[wealthLadder] || null
 
+  // Load saved products from localStorage or create default
+  const loadSavedProducts = () => {
+    if (userId) {
+      const saved = localStorage.getItem(`${PRODUCTS_STORAGE_KEY}_${userId}`)
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved)
+          if (parsed.products && parsed.products.length > 0) {
+            return parsed.products
+          }
+        } catch (e) {
+          console.error('Error loading saved products:', e)
+        }
+      }
+    }
+    return [createEmptyProduct(0, defaultCategory)]
+  }
+
   // Products state
-  const [products, setProducts] = useState([
-    createEmptyProduct(0, defaultCategory)
-  ])
+  const [products, setProducts] = useState(loadSavedProducts)
+
+  // Save products to localStorage whenever they change
+  const saveProductsToStorage = useCallback((productsData) => {
+    if (userId) {
+      localStorage.setItem(
+        `${PRODUCTS_STORAGE_KEY}_${userId}`,
+        JSON.stringify({ products: productsData, timestamp: Date.now() })
+      )
+    }
+  }, [userId])
+
+  // Save whenever products change
+  useEffect(() => {
+    saveProductsToStorage(products)
+  }, [products, saveProductsToStorage])
 
   // Get completed products count
   const completedCount = products.filter(p => p.step === 'complete').length
@@ -82,6 +117,10 @@ function MultiProductCapture({
   const handleComplete = () => {
     // Filter to only completed products
     const completedProducts = products.filter(p => p.step === 'complete')
+    // Clear localStorage on successful completion
+    if (userId) {
+      localStorage.removeItem(`${PRODUCTS_STORAGE_KEY}_${userId}`)
+    }
     onComplete(completedProducts)
   }
 

@@ -49,7 +49,7 @@ export const STAGE_CONFIG = {
     name: 'Groans',
     shortName: 'Groans',
     description: 'Challenges that push you past your comfort zone to grow',
-    icon: '😬',
+    icon: '🙌🏼',
     color: '#ec4899', // pink
     requiredFlows: [],
     milestones: [],

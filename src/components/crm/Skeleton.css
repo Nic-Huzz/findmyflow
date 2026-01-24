@@ -1,0 +1,165 @@
+/**
+ * Skeleton Loader Styles
+ */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-card,
+.skeleton-stat-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+}
+
+/* Shimmer effect base */
+.skeleton-icon,
+.skeleton-icon-sm,
+.skeleton-title,
+.skeleton-title-lg,
+.skeleton-text,
+.skeleton-subtitle,
+.skeleton-value,
+.skeleton-label,
+.skeleton-stat,
+.skeleton-breadcrumb,
+.skeleton-section-title {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+/* Icon */
+.skeleton-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.skeleton-icon-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* Title */
+.skeleton-title {
+  width: 60%;
+  height: 18px;
+  margin-bottom: 8px;
+}
+
+.skeleton-title-lg {
+  width: 40%;
+  height: 28px;
+  margin-bottom: 8px;
+}
+
+/* Text */
+.skeleton-text {
+  width: 90%;
+  height: 14px;
+}
+
+.skeleton-subtitle {
+  width: 50%;
+  height: 16px;
+}
+
+/* Stats */
+.skeleton-value {
+  width: 70%;
+  height: 24px;
+  margin-bottom: 6px;
+}
+
+.skeleton-label {
+  width: 50%;
+  height: 12px;
+}
+
+.skeleton-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
+}
+
+.skeleton-stat {
+  width: 60px;
+  height: 32px;
+}
+
+/* Breadcrumb */
+.skeleton-breadcrumb {
+  width: 100px;
+  height: 14px;
+  margin-bottom: 12px;
+}
+
+.skeleton-section-title {
+  width: 120px;
+  height: 20px;
+  margin-bottom: 16px;
+}
+
+/* Dashboard Layout */
+.skeleton-dashboard {
+  padding: 24px 20px;
+}
+
+.skeleton-header {
+  margin-bottom: 24px;
+}
+
+.skeleton-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.skeleton-section {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+}
+
+.skeleton-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.skeleton-actions-grid .skeleton-card {
+  padding: 16px;
+  border: 1px solid #e9ecef;
+  box-shadow: none;
+}
+
+/* Tower Layout */
+.skeleton-tower {
+  padding: 24px 20px;
+}
+
+.skeleton-tower-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .skeleton-tower-grid,
+  .skeleton-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

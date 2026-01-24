@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 
 // Static imports - Core infrastructure and frequently accessed pages
 import LandingPage from './pages/LandingPage'
@@ -80,7 +80,12 @@ const Dashboard = lazy(() => import('./pages/crm/Dashboard'))
 const Marketing = lazy(() => import('./pages/crm/Marketing'))
 const Sales = lazy(() => import('./pages/crm/Sales'))
 const Analytics = lazy(() => import('./pages/crm/Analytics'))
+const Reports = lazy(() => import('./pages/crm/Reports'))
+const Calculators = lazy(() => import('./pages/crm/Calculators'))
 const Execute = lazy(() => import('./pages/crm/Execute'))
+const Attract = lazy(() => import('./pages/crm/Attract'))
+const Nurture = lazy(() => import('./pages/crm/Nurture'))
+const Tools = lazy(() => import('./pages/crm/Tools'))
 const ContentHistory = lazy(() => import('./pages/crm/ContentHistory'))
 const ContentQueue = lazy(() => import('./pages/crm/ContentQueue'))
 const PerformanceDashboard = lazy(() => import('./pages/crm/PerformanceDashboard'))
@@ -95,6 +100,10 @@ const SmartAlerts = lazy(() => import('./pages/crm/SmartAlerts'))
 const ContentCreate = lazy(() => import('./pages/crm/ContentCreate'))
 const AscensionEngine = lazy(() => import('./pages/crm/AscensionEngine'))
 const ObjectionPatterns = lazy(() => import('./pages/crm/ObjectionPatterns'))
+const Pages = lazy(() => import('./pages/crm/Pages'))
+const Contacts = lazy(() => import('./pages/crm/Contacts'))
+const EmailSequences = lazy(() => import('./pages/crm/EmailSequences'))
+const WarmOutreach = lazy(() => import('./pages/crm/WarmOutreach'))
 
 // Lazy-loaded pages - Other
 const MoneyModelGuide = lazy(() => import('./MoneyModelGuide'))
@@ -111,6 +120,7 @@ const ValidationFlowsManager = lazy(() => import('./pages/ValidationFlowsManager
 const VoiceOfCustomerPage = lazy(() => import('./pages/VoiceOfCustomerPage'))
 const WheelDemo = lazy(() => import('./pages/WheelDemo'))
 const WeeklyPlanningFlow = lazy(() => import('./components/WeeklyPlanningFlow'))
+const GroanMatrix = lazy(() => import('./components/GroanMatrix'))
 const BrandToneDemo = lazy(() => import('./pages/BrandToneDemo'))
 import './App.css'
 import './PersonaAssessment.css'
@@ -143,11 +153,20 @@ import './flows/CompetitorSnapshotFlow.css'
 import './pages/crm/AutonomousSetup.css'
 import './pages/crm/AscensionEngine.css'
 import './pages/crm/ObjectionPatterns.css'
+import './pages/crm/Contacts.css'
+import './pages/crm/EmailSequences.css'
+import './pages/crm/WarmOutreach.css'
 import './pages/crm/Execute.css'
+import './pages/crm/Attract.css'
+import './pages/crm/Nurture.css'
+import './pages/crm/Tools.css'
+import './pages/crm/Reports.css'
+import './pages/crm/Calculators.css'
 import './pages/BrandToneDemo.css'
 import './pages/VoiceOfCustomerPage.css'
 import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
+import './components/GroanMatrix.css'
 import './pages/LandingPage.css'
 import './flows/CareerClarityQuiz.css'
 
@@ -340,6 +359,11 @@ function AppRouter() {
                 <WeeklyPlanningFlow />
               </AuthGate>
             } />
+            <Route path="/groan-matrix" element={
+              <AuthGate>
+                <GroanMatrix />
+              </AuthGate>
+            } />
             <Route path="/archetypes" element={
               <AuthGate>
                 <ArchetypeSelection />
@@ -454,16 +478,62 @@ function AppRouter() {
                 <CRMLayout><Sales /></CRMLayout>
               </AuthGate>
             } />
-            <Route path="/crm/analytics" element={
+            {/* Reports - Replaces Analytics with enhanced features */}
+            <Route path="/crm/reports" element={
               <AuthGate>
-                <CRMLayout><Analytics /></CRMLayout>
+                <CRMLayout><Reports /></CRMLayout>
               </AuthGate>
             } />
+            {/* Redirect old analytics route to reports */}
+            <Route path="/crm/analytics" element={<Navigate to="/crm/reports" replace />} />
             <Route path="/crm/execute" element={
               <AuthGate>
                 <CRMLayout><Execute /></CRMLayout>
               </AuthGate>
             } />
+
+            {/* CRM Tower Landing Pages */}
+            <Route path="/crm/attract" element={
+              <AuthGate>
+                <CRMLayout><Attract /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/pages" element={
+              <AuthGate>
+                <CRMLayout><Pages /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/nurture" element={
+              <AuthGate>
+                <CRMLayout><Nurture /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/contacts" element={
+              <AuthGate>
+                <CRMLayout><Contacts /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/email-sequences" element={
+              <AuthGate>
+                <CRMLayout><EmailSequences /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/warm-outreach" element={
+              <AuthGate>
+                <CRMLayout><WarmOutreach /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/tools" element={
+              <AuthGate>
+                <CRMLayout><Tools /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/tools/calculators" element={
+              <AuthGate>
+                <CRMLayout><Calculators /></CRMLayout>
+              </AuthGate>
+            } />
+
             <Route path="/crm/content-history" element={
               <AuthGate>
                 <ContentHistory />

@@ -209,13 +209,13 @@ export default function Execute() {
     <div className="execute-page">
       {/* Header */}
       <header className="execute-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="header-content">
-          <h1>Execute</h1>
-          <span className="week-label">Week of {weekDisplay}</span>
+        <div className="breadcrumb">
+          <button onClick={() => navigate('/crm')}>Home</button>
+          <span>→</span>
+          <span>Execute</span>
         </div>
+        <h1>🚀 Execute</h1>
+        <p className="week-label">Week of {weekDisplay}</p>
         {projects.length > 1 && (
           <select
             className="project-select"

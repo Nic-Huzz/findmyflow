@@ -1,0 +1,305 @@
+/**
+ * Coming Soon - Clean Modern Theme
+ * White background with purple accents
+ * Matches Pages, Marketing, and Sales styling
+ */
+
+/* Container */
+.coming-soon-container {
+  min-height: 100vh;
+  background: #fff !important;
+  padding: 1rem;
+  padding-bottom: 120px;
+  color: #1a1a1a;
+}
+
+/* Top Toolbar */
+.coming-soon-toolbar {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin: -1rem -1rem 1rem -1rem;
+  z-index: 10;
+}
+
+.cs-back-btn {
+  position: absolute;
+  left: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+}
+
+.cs-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Header */
+.coming-soon-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.cs-breadcrumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+
+.cs-breadcrumb button {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}
+
+.cs-breadcrumb button:hover {
+  text-decoration: underline;
+}
+
+.cs-separator {
+  color: #9ca3af;
+}
+
+.cs-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+}
+
+.cs-subtitle {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Main Card */
+.coming-soon-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-left: 4px solid #5e17eb;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Icon Container with Animation */
+.cs-icon-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.cs-icon {
+  font-size: 4rem;
+  display: block;
+  position: relative;
+  z-index: 1;
+  animation: cs-float 3s ease-in-out infinite;
+}
+
+.cs-icon-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  border: 3px solid #e5e7eb;
+  border-radius: 50%;
+  animation: cs-pulse 2s ease-in-out infinite;
+}
+
+@keyframes cs-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes cs-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.3;
+  }
+}
+
+.cs-headline {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+}
+
+.cs-message {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 1.5rem 0;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Features List */
+.cs-features {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.cs-features h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.cs-feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cs-feature-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  color: #374151;
+}
+
+.cs-check {
+  color: #10b981;
+  font-weight: 600;
+}
+
+/* Notify Section */
+.cs-notify {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.cs-notify-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 0.75rem 0;
+}
+
+.cs-notify-btn {
+  background: rgba(94, 23, 235, 0.08);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+  color: #5e17eb;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cs-notify-btn:hover {
+  background: rgba(94, 23, 235, 0.12);
+}
+
+/* Actions Card */
+.coming-soon-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.cs-action-btn {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  padding: 0.875rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cs-action-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.cs-action-btn.cs-action-primary {
+  background: #5e17eb;
+  border: none;
+  color: #fff;
+}
+
+.cs-action-btn.cs-action-primary:hover {
+  background: #4a0ea8;
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+  .coming-soon-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .coming-soon-card {
+    padding: 3rem 2rem;
+  }
+
+  .cs-icon {
+    font-size: 5rem;
+  }
+
+  .cs-icon-ring {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cs-icon {
+    animation: none;
+  }
+
+  .cs-icon-ring {
+    animation: none;
+  }
+
+  .cs-action-btn,
+  .cs-notify-btn {
+    transition: none;
+  }
+}

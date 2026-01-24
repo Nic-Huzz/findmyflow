@@ -111,6 +111,66 @@ The wahooScore (1-10) represents how exciting/energizing this could be.
 High scary + high wahoo = essence zone (this IS their authentic self trying to emerge).
 `
 
+// Prompt for Skill × Problem matrix challenges
+const SKILL_PROBLEM_PROMPT = `
+You are a courage coach helping someone grow past their comfort zone through personalized challenges.
+
+Your task: Generate ONE specific, actionable challenge that combines a user's SKILL with a PROBLEM they can solve.
+
+CONTEXT:
+- Skill: "{{skillLabel}}"
+  {{#if skillInsight}}Insight: "{{skillInsight}}"{{/if}}
+- Problem: "{{problemLabel}}"
+  {{#if problemInsight}}Insight: "{{problemInsight}}"{{/if}}
+{{#if personaLabel}}
+- Target Audience: "{{personaLabel}}"
+  {{#if personaInsight}}Insight: "{{personaInsight}}"{{/if}}
+{{/if}}
+
+{{archetypeContext}}
+
+CHALLENGE REQUIREMENTS:
+1. Create a challenge that demonstrates using "{{skillLabel}}" to help someone with "{{problemLabel}}"
+2. Be SPECIFIC - not generic advice, but a concrete action they can take THIS WEEK
+3. The challenge should make them VISIBLE in some way (posting, reaching out, offering help)
+4. Push them just past comfort without being overwhelming
+5. Be completable in a single action (not an ongoing commitment)
+6. Include a clear "done" state - they'll know when they've completed it
+{{#if personaLabel}}
+7. Tailor the challenge specifically for reaching "{{personaLabel}}"
+{{/if}}
+
+GOOD CHALLENGES:
+- "Create a quick tip post showing how [skill] solves [problem] and share it in 2 communities where [persona] hangs out"
+- "Record a 2-minute Loom video explaining your approach to [problem] using [skill], and send it to 3 people who might benefit"
+- "Write a case study format post: 'How I used [skill] to help someone with [problem]' - even if hypothetical, make it specific"
+
+BAD CHALLENGES:
+- "Be more helpful online" (too vague)
+- "Build an audience" (ongoing, not one action)
+- "Share your expertise" (not specific enough)
+
+TONE:
+- Direct and encouraging, not preachy
+- Frame it as an exciting opportunity to help people with their real skill
+- Focus on the value they can provide, not just visibility
+
+Return ONLY valid JSON (no markdown):
+{
+  "title": "Short, punchy title (3-6 words)",
+  "description": "2-3 sentences explaining the specific challenge",
+  "scaryScore": 7,
+  "wahooScore": 8,
+  "completionCriteria": "What counts as 'done'",
+  "whyThisMatters": "Brief connection to their growth edge",
+  "alternativeVersion": "Slightly easier version if this feels too much"
+}
+
+The scaryScore (1-10) represents how fear-inducing this typically is.
+The wahooScore (1-10) represents how exciting/energizing this could be.
+High scary + high wahoo = essence zone (this IS their authentic self trying to emerge).
+`
+
 serve(async (req) => {
   // Handle CORS
   if (req.method === 'OPTIONS') {
@@ -123,6 +183,23 @@ serve(async (req) => {
   }
 
   try {
+    // Check API key first
+    if (!ANTHROPIC_API_KEY) {
+      console.error('ANTHROPIC_API_KEY is not set')
+      return new Response(
+        JSON.stringify({ error: 'API key not configured' }),
+        {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        }
+      )
+    }
+
+    const requestBody = await req.json()
+
     const {
       sourceType,
       sourceLabel,
@@ -132,36 +209,73 @@ serve(async (req) => {
       protectiveArchetype,
       useArchetypeLanguage = false,
       previousChallengesTitles = [],
-      skipFeedback = null
-    } = await req.json()
+      skipFeedback = null,
+      // Skill × Problem matrix fields
+      skillId,
+      skillLabel,
+      skillInsight,
+      problemId,
+      problemLabel,
+      problemInsight,
+      personaId,
+      personaLabel,
+      personaInsight
+    } = requestBody
 
-    // Validate required fields
-    if (!sourceType || !sourceLabel || !visibilityLayer) {
-      return new Response(
-        JSON.stringify({ error: 'Missing required fields: sourceType, sourceLabel, visibilityLayer' }),
-        {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        }
-      )
-    }
+    // Check if this is a Skill × Problem matrix request
+    const isSkillProblemRequest = sourceType === 'skill_x_problem' || (skillLabel && problemLabel)
 
-    // Get visibility layer details
-    const layer = VISIBILITY_LAYERS[visibilityLayer as keyof typeof VISIBILITY_LAYERS]
-    if (!layer) {
-      return new Response(
-        JSON.stringify({ error: `Invalid visibility layer: ${visibilityLayer}` }),
-        {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+    console.log('Received request:', {
+      sourceType,
+      sourceLabel,
+      visibilityLayer,
+      isSkillProblemRequest,
+      skillLabel,
+      problemLabel
+    })
+
+    // Validate required fields based on request type
+    if (isSkillProblemRequest) {
+      if (!skillLabel || !problemLabel) {
+        return new Response(
+          JSON.stringify({ error: 'Missing required fields for Skill × Problem: skillLabel, problemLabel' }),
+          {
+            status: 400,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            }
           }
-        }
-      )
+        )
+      }
+    } else {
+      if (!sourceType || !sourceLabel || !visibilityLayer) {
+        return new Response(
+          JSON.stringify({ error: 'Missing required fields: sourceType, sourceLabel, visibilityLayer' }),
+          {
+            status: 400,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            }
+          }
+        )
+      }
+
+      // Get visibility layer details (only needed for standard requests)
+      const layer = VISIBILITY_LAYERS[visibilityLayer as keyof typeof VISIBILITY_LAYERS]
+      if (!layer) {
+        return new Response(
+          JSON.stringify({ error: `Invalid visibility layer: ${visibilityLayer}` }),
+          {
+            status: 400,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            }
+          }
+        )
+      }
     }
 
     // Build archetype context if enabled
@@ -189,24 +303,54 @@ serve(async (req) => {
       skipContext = `\n\nPREVIOUS SKIP FEEDBACK: The user skipped a similar challenge because: "${skipFeedback}". Adjust accordingly.\n`
     }
 
-    // Build the prompt
-    const prompt = CHALLENGE_GENERATION_PROMPT
-      .replace('{{sourceType}}', sourceType)
-      .replace('{{sourceLabel}}', sourceLabel)
-      .replace('{{sourceInsight}}', sourceInsight || 'No additional insight provided')
-      .replace('{{visibilityLayer}}', layer.label)
-      .replace('{{layerDescription}}', layer.description)
-      .replace('{{layerFear}}', layer.fear)
-      .replace('{{archetypeContext}}', archetypeContext)
-      + avoidanceContext
-      + skipContext
+    // Build the prompt based on request type
+    let prompt: string
 
-    console.log('📝 Generating groan challenge for:', {
-      sourceType,
-      sourceLabel,
-      visibilityLayer,
-      useArchetypeLanguage
-    })
+    if (isSkillProblemRequest) {
+      // Skill × Problem matrix prompt
+      prompt = SKILL_PROBLEM_PROMPT
+        .replace('{{skillLabel}}', skillLabel)
+        .replace(/\{\{#if skillInsight\}\}.*?\{\{\/if\}\}/gs,
+          skillInsight ? `Insight: "${skillInsight}"` : '')
+        .replace('{{problemLabel}}', problemLabel)
+        .replace(/\{\{#if problemInsight\}\}.*?\{\{\/if\}\}/gs,
+          problemInsight ? `Insight: "${problemInsight}"` : '')
+        .replace(/\{\{#if personaLabel\}\}[\s\S]*?\{\{\/if\}\}/g,
+          personaLabel
+            ? `- Target Audience: "${personaLabel}"\n  ${personaInsight ? `Insight: "${personaInsight}"` : ''}`
+            : '')
+        .replace('{{archetypeContext}}', archetypeContext)
+        + avoidanceContext
+        + skipContext
+
+      console.log('📝 Generating Skill × Problem challenge for:', {
+        skillLabel,
+        problemLabel,
+        personaLabel,
+        useArchetypeLanguage
+      })
+    } else {
+      // Standard challenge prompt (visibility layer based)
+      const layer = VISIBILITY_LAYERS[visibilityLayer as keyof typeof VISIBILITY_LAYERS]
+
+      prompt = CHALLENGE_GENERATION_PROMPT
+        .replace('{{sourceType}}', sourceType)
+        .replace('{{sourceLabel}}', sourceLabel)
+        .replace('{{sourceInsight}}', sourceInsight || 'No additional insight provided')
+        .replace('{{visibilityLayer}}', layer.label)
+        .replace('{{layerDescription}}', layer.description)
+        .replace('{{layerFear}}', layer.fear)
+        .replace('{{archetypeContext}}', archetypeContext)
+        + avoidanceContext
+        + skipContext
+
+      console.log('📝 Generating groan challenge for:', {
+        sourceType,
+        sourceLabel,
+        visibilityLayer,
+        useArchetypeLanguage
+      })
+    }
 
     // Call Claude API
     const claudeResponse = await fetch('https://api.anthropic.com/v1/messages', {
@@ -250,7 +394,7 @@ serve(async (req) => {
     }
 
     // Ensure proper structure and clamp scores
-    const response = {
+    const response: Record<string, any> = {
       title: result.title || 'Courage Challenge',
       description: result.description || '',
       scaryScore: Math.min(10, Math.max(1, result.scaryScore || 5)),
@@ -258,12 +402,26 @@ serve(async (req) => {
       completionCriteria: result.completionCriteria || 'Complete the action described',
       whyThisMatters: result.whyThisMatters || '',
       alternativeVersion: result.alternativeVersion || null,
-      // Include metadata
-      sourceType,
-      sourceLabel,
-      visibilityLayer,
       generatedAt: new Date().toISOString(),
       model: 'claude-3-5-sonnet-20241022'
+    }
+
+    // Add metadata based on request type
+    if (isSkillProblemRequest) {
+      response.sourceType = 'skill_x_problem'
+      response.skillId = skillId
+      response.skillLabel = skillLabel
+      response.problemId = problemId
+      response.problemLabel = problemLabel
+      response.personaId = personaId || null
+      response.personaLabel = personaLabel || null
+      response.sourceLabel = personaLabel
+        ? `${skillLabel} × ${problemLabel} (for ${personaLabel})`
+        : `${skillLabel} × ${problemLabel}`
+    } else {
+      response.sourceType = sourceType
+      response.sourceLabel = sourceLabel
+      response.visibilityLayer = visibilityLayer
     }
 
     return new Response(

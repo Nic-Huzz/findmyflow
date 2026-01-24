@@ -1,11 +1,27 @@
-/* PTUF Calculator Styles - Playful Warmth Theme */
+/* PTUF Calculator Styles - Light Theme Following Design Guide */
 @import '../../styles/crm-base.css';
+
+/* CSS Variables */
+.ptuf-calculator {
+  --purple: #5e17eb;
+  --purple-light: #7c3aed;
+  --gold: #ffdd27;
+  --warm-gray: #f8f9fa;
+  --soft-gray: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
 
 .ptuf-calculator {
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: white;
+  padding-bottom: 120px;
+  background: var(--warm-gray);
+  color: var(--text-primary);
 }
 
 .ptuf-header {
@@ -16,27 +32,34 @@
 }
 
 .ptuf-calculator .back-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.ptuf-calculator .back-btn:hover {
+  background: var(--soft-gray);
+  border-color: var(--purple);
+  color: var(--purple);
 }
 
 .ptuf-calculator .header-content h1 {
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0 0 4px 0;
-  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .ptuf-header .header-content p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
   margin: 0;
   font-size: 0.875rem;
 }
@@ -49,243 +72,168 @@
   margin-bottom: 24px;
 }
 
-.ptuf-section {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Input Cards */
+.ptuf-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 20px;
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
 }
 
-.ptuf-section h2 {
+.ptuf-card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.ptuf-card h3 {
   font-size: 1rem;
   font-weight: 600;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
-  color: white;
-}
-
-/* Input Groups */
-.ptuf-calculator .input-group {
-  margin-bottom: 16px;
-}
-
-.ptuf-calculator .input-group label {
-  display: block;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 6px;
-}
-
-.ptuf-calculator .input-group input {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 12px;
-  color: white;
-  font-size: 1rem;
-}
-
-.ptuf-calculator .input-group input:focus {
-  outline: none;
-  border-color: #f59e0b;
-}
-
-.ptuf-calculator .input-with-prefix,
-.ptuf-calculator .input-with-suffix {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.ptuf-calculator .input-with-prefix span,
-.ptuf-calculator .input-with-suffix span {
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.875rem;
-}
-
-.ptuf-calculator .input-with-prefix input,
-.ptuf-calculator .input-with-suffix input {
-  border: none;
-  background: transparent;
-  border-radius: 0;
-}
-
-/* Calculated Results */
-.calc-result {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
-  margin-bottom: 8px;
-}
-
-.calc-result span {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.calc-result strong {
-  font-size: 1.125rem;
-  color: white;
-}
-
-.calc-result strong.positive {
-  color: #10b981;
-}
-
-.calc-result strong.warning {
-  color: #f59e0b;
-}
-
-.calc-result.highlight {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.1));
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-/* Results Section */
-.ptuf-results {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 24px;
-}
-
-.ptuf-results h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 20px 0;
-  color: white;
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.result-card {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
   gap: 8px;
 }
 
-.result-label {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+.ptuf-card h3 span {
+  font-size: 1.25rem;
 }
 
-.result-value {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #f59e0b;
+.ptuf-input-group {
+  margin-bottom: 16px;
 }
 
-/* Capacity Indicator */
-.capacity-indicator {
-  margin-bottom: 24px;
+.ptuf-input-group:last-child {
+  margin-bottom: 0;
 }
 
-.capacity-bar {
-  height: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.capacity-fill {
-  height: 100%;
-  border-radius: 8px;
-  transition: width 0.3s ease;
-}
-
-.capacity-indicator.under .capacity-fill {
-  background: linear-gradient(90deg, #10b981, #34d399);
-}
-
-.capacity-indicator.over .capacity-fill {
-  background: linear-gradient(90deg, #ef4444, #f87171);
-}
-
-.capacity-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 0.875rem;
-}
-
-.capacity-info span:first-child {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.warning-text {
-  color: #f59e0b;
+.ptuf-input-group label {
+  display: block;
+  font-size: 0.8rem;
   font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
 }
 
-/* Action Items */
-.action-items h3 {
+.ptuf-input-group input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--warm-gray);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
   font-size: 1rem;
-  margin: 0 0 16px 0;
-  color: white;
+  color: var(--text-primary);
+  font-family: inherit;
 }
 
-.action-grid {
+.ptuf-input-group input:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+}
+
+.ptuf-input-group .input-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Results Card */
+.ptuf-results {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.ptuf-results h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 20px 0;
+}
+
+.ptuf-result-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 16px;
 }
 
-.action-item {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 123, 250, 0.1));
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 12px;
-  padding: 20px;
+.ptuf-result-item {
   text-align: center;
+  padding: 16px;
+  background: var(--warm-gray);
+  border-radius: 12px;
 }
 
-.action-number {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #a78bfa;
-  margin-bottom: 8px;
+.ptuf-result-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--purple);
+  margin-bottom: 4px;
 }
 
-.action-label {
+.ptuf-result-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Highlight Result */
+.ptuf-result-highlight {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.1), rgba(124, 58, 237, 0.05));
+  border: 2px solid var(--purple);
+  grid-column: 1 / -1;
+  padding: 20px;
+}
+
+.ptuf-result-highlight .ptuf-result-value {
+  font-size: 2rem;
+  color: var(--purple);
+}
+
+/* Info Box */
+.ptuf-info {
+  background: rgba(94, 23, 235, 0.05);
+  border: 1px solid rgba(94, 23, 235, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.ptuf-info h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--purple);
+  margin: 0 0 8px 0;
+}
+
+.ptuf-info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .results-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .action-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
   .ptuf-calculator {
     padding: 16px;
+    padding-bottom: 120px;
   }
 
   .ptuf-header {
     flex-direction: column;
+  }
+
+  .ptuf-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ptuf-result-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

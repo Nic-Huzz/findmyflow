@@ -32,7 +32,8 @@ import './GroanMatrix.css'
 const SOURCE_TABS = [
   { id: 'skill', label: 'Skills', icon: '🎯' },
   { id: 'problem', label: 'Problems', icon: '🔧' },
-  { id: 'persona', label: 'Personas', icon: '👥' }
+  { id: 'persona', label: 'Personas', icon: '👥' },
+  { id: 'skill_x_problem', label: 'Skill × Problem', icon: '⚡' }
 ]
 
 function GroanMatrix({
@@ -49,6 +50,7 @@ function GroanMatrix({
   const [loading, setLoading] = useState(true)
   const [loadingCell, setLoadingCell] = useState(null)
   const [flowFinderComplete, setFlowFinderComplete] = useState(true)
+  const [selectedPersona, setSelectedPersona] = useState(null) // For Skill × Problem tab
 
   // Fetch initial data
   useEffect(() => {
@@ -83,13 +85,24 @@ function GroanMatrix({
       .eq('user_id', userId)
 
     // Organize challenges by source+layer key
+    // Also organize skill × problem challenges separately
     const challengeMap = {}
     ;(allChallenges || []).forEach(c => {
+      // Standard matrix key (source × visibility layer)
       const key = `${c.source_type}_${c.source_id}_${c.visibility_layer}`
       if (!challengeMap[key]) {
         challengeMap[key] = []
       }
       challengeMap[key].push(c)
+
+      // Skill × Problem matrix key (if applicable)
+      if (c.skill_cluster_id && c.problem_cluster_id) {
+        const spKey = `skill_x_problem_${c.skill_cluster_id}_${c.problem_cluster_id}${c.persona_cluster_id ? `_${c.persona_cluster_id}` : ''}`
+        if (!challengeMap[spKey]) {
+          challengeMap[spKey] = []
+        }
+        challengeMap[spKey].push(c)
+      }
     })
     setChallenges(challengeMap)
 
@@ -137,6 +150,30 @@ function GroanMatrix({
     return completed[0] || null
   }
 
+  // Get challenges for a Skill × Problem cell
+  const getSkillProblemCellChallenges = (skillId, problemId) => {
+    const key = `skill_x_problem_${skillId}_${problemId}${selectedPersona ? `_${selectedPersona}` : ''}`
+    return challenges[key] || []
+  }
+
+  // Get the active challenge for a Skill × Problem cell
+  const getSkillProblemActiveChallenge = (skillId, problemId) => {
+    const cellChallenges = getSkillProblemCellChallenges(skillId, problemId)
+    if (cellChallenges.length === 0) return null
+
+    // Same prioritization as regular cells
+    const accepted = cellChallenges.find(c => c.status === 'accepted')
+    if (accepted) return accepted
+
+    const generated = cellChallenges.find(c => c.status === 'generated')
+    if (generated) return generated
+
+    const completed = cellChallenges
+      .filter(c => c.status === 'completed')
+      .sort((a, b) => new Date(b.completed_at) - new Date(a.completed_at))
+    return completed[0] || null
+  }
+
   // Handle cell click
   const handleCellClick = (sourceItem, layer) => {
     const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
@@ -165,6 +202,56 @@ function GroanMatrix({
         sourceLabel: sourceItem.cluster_label,
         sourceInsight: sourceItem.insight,
         visibilityLayer: layer.id
+      })
+
+      // Refresh challenges
+      await loadData()
+      setLoadingCell(null)
+    }
+  }
+
+  // Handle Skill × Problem cell click
+  const handleSkillProblemCellClick = (skill, problem) => {
+    const challenge = getSkillProblemActiveChallenge(skill.id, problem.id)
+    const persona = selectedPersona
+      ? (flowFinderData?.personas || []).find(p => p.id === selectedPersona)
+      : null
+
+    if (onCellClick) {
+      onCellClick({
+        sourceType: 'skill_x_problem',
+        skill,
+        problem,
+        persona,
+        challenge,
+        cellChallenges: getSkillProblemCellChallenges(skill.id, problem.id)
+      })
+    }
+  }
+
+  // Handle Skill × Problem generate click
+  const handleSkillProblemGenerateClick = async (e, skill, problem) => {
+    e.stopPropagation()
+
+    if (onGenerateChallenge) {
+      const cellKey = `sp_${skill.id}_${problem.id}`
+      setLoadingCell(cellKey)
+
+      const persona = selectedPersona
+        ? (flowFinderData?.personas || []).find(p => p.id === selectedPersona)
+        : null
+
+      await onGenerateChallenge({
+        sourceType: 'skill_x_problem',
+        skillId: skill.id,
+        skillLabel: skill.cluster_label,
+        skillInsight: skill.insight,
+        problemId: problem.id,
+        problemLabel: problem.cluster_label,
+        problemInsight: problem.insight,
+        personaId: persona?.id || null,
+        personaLabel: persona?.cluster_label || null,
+        personaInsight: persona?.insight || null
       })
 
       // Refresh challenges
@@ -233,6 +320,25 @@ function GroanMatrix({
         </div>
       </div>
 
+      {/* Persona dropdown for Skill × Problem tab */}
+      {activeSourceType === 'skill_x_problem' && flowFinderData?.personas?.length > 0 && (
+        <div className="groan-persona-filter">
+          <label className="groan-filter-label">Filter by Persona:</label>
+          <select
+            className="groan-filter-select"
+            value={selectedPersona || ''}
+            onChange={(e) => setSelectedPersona(e.target.value || null)}
+          >
+            <option value="">All Personas</option>
+            {flowFinderData.personas.map(persona => (
+              <option key={persona.id} value={persona.id}>
+                {persona.cluster_label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {/* Stats bar */}
       {stats && !compact && (
         <div className="groan-stats-bar">
@@ -241,144 +347,469 @@ function GroanMatrix({
             <div className="groan-stat-label">Completed</div>
           </div>
           <div className="groan-stat">
-            <div className="groan-stat-value">{stats.inProgress}</div>
-            <div className="groan-stat-label">In Progress</div>
-          </div>
-          <div className="groan-stat">
-            <div className="groan-stat-value">{stats.completionRate}%</div>
-            <div className="groan-stat-label">Completion Rate</div>
-          </div>
-          <div className="groan-stat">
             <div className="groan-stat-value">{stats.byEssenceZone?.essence?.completed || 0}</div>
             <div className="groan-stat-label">Essence Zones</div>
           </div>
         </div>
       )}
 
-      {/* Matrix grid */}
-      <div className="groan-matrix-grid">
-        {/* Header row with visibility layers */}
-        <div className="groan-matrix-header-row">
-          <div className="groan-header-cell corner" />
-          {GROAN_VISIBILITY_LAYERS.map(layer => (
-            <div
-              key={layer.id}
-              className="groan-header-cell"
-              style={{ '--layer-color': layer.color }}
-            >
-              <span className="groan-layer-icon">{layer.icon}</span>
-              <span className="groan-layer-label">{layer.label}</span>
-              {!compact && (
-                <span className="groan-layer-fear">{layer.fear}</span>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Data rows */}
-        {sourceItems.length === 0 ? (
-          <div className="groan-matrix-empty" style={{ gridColumn: '1 / -1' }}>
-            <p className="groan-matrix-empty-text">
-              No {activeSourceType}s found. Complete the {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} flow in Flow Finder.
-            </p>
-          </div>
-        ) : (
-          sourceItems.map(sourceItem => (
-            <div key={sourceItem.id} className="groan-matrix-row">
-              {/* Row label */}
-              <div className="groan-row-label">
-                <span className="groan-row-label-text" title={sourceItem.cluster_label}>
-                  {sourceItem.cluster_label}
-                </span>
+      {/* Matrix grid - Standard view (Skills/Problems/Personas × Visibility Layers) */}
+      {activeSourceType !== 'skill_x_problem' && (
+        <div className="groan-matrix-grid">
+          {/* Header row with visibility layers */}
+          <div className="groan-matrix-header-row">
+            <div className="groan-header-cell corner" />
+            {GROAN_VISIBILITY_LAYERS.map(layer => (
+              <div
+                key={layer.id}
+                className="groan-header-cell"
+                style={{ '--layer-color': layer.color }}
+              >
+                <span className="groan-layer-icon">{layer.icon}</span>
+                <span className="groan-layer-label">{layer.label}</span>
+                {!compact && (
+                  <span className="groan-layer-fear">{layer.fear}</span>
+                )}
               </div>
+            ))}
+          </div>
 
-              {/* Cells for each visibility layer */}
-              {GROAN_VISIBILITY_LAYERS.map(layer => {
-                const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
-                const isLoading = loadingCell === `${sourceItem.id}_${layer.id}`
-                const isEssenceZone = challenge?.essence_zone === 'essence'
+          {/* Data rows */}
+          {sourceItems.length === 0 ? (
+            <div className="groan-matrix-empty" style={{ gridColumn: '1 / -1' }}>
+              <div className="groan-matrix-empty-icon">🧭</div>
+              <h3 className="groan-matrix-empty-title">Complete Flow Finder</h3>
+              <p className="groan-matrix-empty-text">
+                No {activeSourceType}s found. Complete the {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} flow to unlock personalized challenges.
+              </p>
+              <button
+                className="groan-matrix-empty-cta"
+                onClick={() => navigate(activeSourceType === 'skill' ? '/nikigai/skills' : activeSourceType === 'problem' ? '/nikigai/problems' : '/nikigai/persona')}
+              >
+                Start {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} Flow
+              </button>
+            </div>
+          ) : (
+            sourceItems.map(sourceItem => (
+              <div key={sourceItem.id} className="groan-matrix-row">
+                {/* Row label */}
+                <div className="groan-row-label">
+                  <span className="groan-row-label-text" title={sourceItem.cluster_label}>
+                    {sourceItem.cluster_label}
+                  </span>
+                </div>
 
-                return (
-                  <div
-                    key={layer.id}
-                    className={`groan-matrix-cell ${
-                      challenge ? 'has-challenge' : ''
-                    } ${
-                      challenge?.status === 'completed' ? 'completed' : ''
-                    } ${
-                      challenge?.status === 'accepted' ? 'in-progress' : ''
-                    } ${
-                      isEssenceZone ? 'essence-zone' : ''
-                    }`}
-                    style={{ '--layer-color': layer.color }}
-                    onClick={() => handleCellClick(sourceItem, layer)}
-                  >
-                    {isLoading ? (
-                      <div className="groan-cell-loading">
-                        <div className="groan-loading-spinner" />
-                        <span className="groan-loading-text">Generating...</span>
-                      </div>
-                    ) : challenge ? (
-                      <div className="groan-cell-challenge">
-                        {isEssenceZone && (
-                          <span className="groan-essence-badge">ESSENCE</span>
-                        )}
-                        <div className="groan-cell-title">{challenge.title}</div>
-                        <div className="groan-cell-status">
-                          {challenge.status === 'completed' && (
-                            <>
-                              <span className="groan-cell-status-icon">✓</span>
-                              Done
-                            </>
+                {/* Cells for each visibility layer */}
+                {GROAN_VISIBILITY_LAYERS.map(layer => {
+                  const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
+                  const isLoading = loadingCell === `${sourceItem.id}_${layer.id}`
+                  const isEssenceZone = challenge?.essence_zone === 'essence'
+
+                  return (
+                    <div
+                      key={layer.id}
+                      className={`groan-matrix-cell ${
+                        challenge ? 'has-challenge' : ''
+                      } ${
+                        challenge?.status === 'completed' ? 'completed' : ''
+                      } ${
+                        challenge?.status === 'accepted' ? 'in-progress' : ''
+                      } ${
+                        isEssenceZone ? 'essence-zone' : ''
+                      }`}
+                      style={{ '--layer-color': layer.color }}
+                      onClick={() => handleCellClick(sourceItem, layer)}
+                    >
+                      {isLoading ? (
+                        <div className="groan-cell-loading">
+                          <div className="groan-loading-spinner" />
+                          <span className="groan-loading-text">Generating...</span>
+                        </div>
+                      ) : challenge ? (
+                        <div className="groan-cell-challenge">
+                          {isEssenceZone && (
+                            <span className="groan-essence-badge">ESSENCE</span>
                           )}
-                          {challenge.status === 'accepted' && (
-                            <>
-                              <span className="groan-cell-status-icon">⏳</span>
-                              In Progress
-                            </>
+                          <div className="groan-cell-title">{challenge.title}</div>
+                          <div className="groan-cell-status">
+                            {challenge.status === 'completed' && (
+                              <>
+                                <span className="groan-cell-status-icon">✓</span>
+                                Done
+                              </>
+                            )}
+                            {challenge.status === 'accepted' && (
+                              <>
+                                <span className="groan-cell-status-icon">⏳</span>
+                                In Progress
+                              </>
+                            )}
+                            {challenge.status === 'generated' && (
+                              <>
+                                <span className="groan-cell-status-icon">✨</span>
+                                Ready
+                              </>
+                            )}
+                          </div>
+                          {!compact && challenge.scary_score && challenge.wahoo_score && (
+                            <div className="groan-cell-scores">
+                              <span className="groan-score scary">
+                                😰 {challenge.scary_score}
+                              </span>
+                              <span className="groan-score wahoo">
+                                🎉 {challenge.wahoo_score}
+                              </span>
+                            </div>
                           )}
-                          {challenge.status === 'generated' && (
+                        </div>
+                      ) : (
+                        <div className="groan-cell-empty">
+                          {onGenerateChallenge ? (
+                            <button
+                              className="groan-generate-btn"
+                              onClick={(e) => handleGenerateClick(e, sourceItem, layer)}
+                            >
+                              + Generate
+                            </button>
+                          ) : (
                             <>
-                              <span className="groan-cell-status-icon">✨</span>
-                              Ready
+                              <span className="groan-cell-empty-icon">+</span>
+                              <span className="groan-cell-empty-text">Tap to explore</span>
                             </>
                           )}
                         </div>
-                        {!compact && challenge.scary_score && challenge.wahoo_score && (
-                          <div className="groan-cell-scores">
-                            <span className="groan-score scary">
-                              😰 {challenge.scary_score}
-                            </span>
-                            <span className="groan-score wahoo">
-                              🎉 {challenge.wahoo_score}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="groan-cell-empty">
-                        {onGenerateChallenge ? (
-                          <button
-                            className="groan-generate-btn"
-                            onClick={(e) => handleGenerateClick(e, sourceItem, layer)}
-                          >
-                            + Generate
-                          </button>
-                        ) : (
-                          <>
-                            <span className="groan-cell-empty-icon">+</span>
-                            <span className="groan-cell-empty-text">Tap to explore</span>
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Matrix grid - Skill × Problem view */}
+      {activeSourceType === 'skill_x_problem' && (
+        <div className="groan-matrix-grid groan-skill-problem-grid">
+          {/* Header row with problems as columns */}
+          <div
+            className="groan-matrix-header-row groan-sp-header"
+            style={{
+              gridTemplateColumns: `180px repeat(${(flowFinderData?.problems || []).length}, 1fr)`
+            }}
+          >
+            <div className="groan-header-cell corner">
+              <span className="groan-corner-label">Skills ↓ Problems →</span>
             </div>
-          ))
-        )}
-      </div>
+            {(flowFinderData?.problems || []).map(problem => (
+              <div
+                key={problem.id}
+                className="groan-header-cell groan-problem-header"
+              >
+                <span className="groan-layer-icon">🔧</span>
+                <span className="groan-layer-label" title={problem.cluster_label}>
+                  {problem.cluster_label}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Data rows - skills */}
+          {(!flowFinderData?.skills?.length || !flowFinderData?.problems?.length) ? (
+            <div className="groan-matrix-empty" style={{ gridColumn: '1 / -1' }}>
+              <div className="groan-matrix-empty-icon">⚡</div>
+              <h3 className="groan-matrix-empty-title">Complete Skills & Problems Flows</h3>
+              <p className="groan-matrix-empty-text">
+                The Skill × Problem matrix requires both Skills and Problems from Flow Finder.
+                {!flowFinderData?.skills?.length && ' Complete the Skills flow.'}
+                {!flowFinderData?.problems?.length && ' Complete the Problems flow.'}
+              </p>
+              <button
+                className="groan-matrix-empty-cta"
+                onClick={() => navigate(
+                  !flowFinderData?.skills?.length ? '/nikigai/skills' : '/nikigai/problems'
+                )}
+              >
+                Start {!flowFinderData?.skills?.length ? 'Skills' : 'Problems'} Flow
+              </button>
+            </div>
+          ) : (
+            (flowFinderData?.skills || []).map(skill => (
+              <div
+                key={skill.id}
+                className="groan-matrix-row groan-sp-row"
+                style={{
+                  gridTemplateColumns: `180px repeat(${flowFinderData.problems.length}, 1fr)`
+                }}
+              >
+                {/* Row label - skill */}
+                <div className="groan-row-label">
+                  <span className="groan-row-label-text" title={skill.cluster_label}>
+                    🎯 {skill.cluster_label}
+                  </span>
+                </div>
+
+                {/* Cells for each problem */}
+                {flowFinderData.problems.map(problem => {
+                  const challenge = getSkillProblemActiveChallenge(skill.id, problem.id)
+                  const cellKey = `sp_${skill.id}_${problem.id}`
+                  const isLoading = loadingCell === cellKey
+                  const isEssenceZone = challenge?.essence_zone === 'essence'
+
+                  return (
+                    <div
+                      key={problem.id}
+                      className={`groan-matrix-cell groan-sp-cell ${
+                        challenge ? 'has-challenge' : ''
+                      } ${
+                        challenge?.status === 'completed' ? 'completed' : ''
+                      } ${
+                        challenge?.status === 'accepted' ? 'in-progress' : ''
+                      } ${
+                        isEssenceZone ? 'essence-zone' : ''
+                      }`}
+                      onClick={() => handleSkillProblemCellClick(skill, problem)}
+                    >
+                      {isLoading ? (
+                        <div className="groan-cell-loading">
+                          <div className="groan-loading-spinner" />
+                          <span className="groan-loading-text">Generating...</span>
+                        </div>
+                      ) : challenge ? (
+                        <div className="groan-cell-challenge">
+                          {isEssenceZone && (
+                            <span className="groan-essence-badge">ESSENCE</span>
+                          )}
+                          <div className="groan-cell-title">{challenge.title}</div>
+                          <div className="groan-cell-status">
+                            {challenge.status === 'completed' && (
+                              <>
+                                <span className="groan-cell-status-icon">✓</span>
+                                Done
+                              </>
+                            )}
+                            {challenge.status === 'accepted' && (
+                              <>
+                                <span className="groan-cell-status-icon">⏳</span>
+                                In Progress
+                              </>
+                            )}
+                            {challenge.status === 'generated' && (
+                              <>
+                                <span className="groan-cell-status-icon">✨</span>
+                                Ready
+                              </>
+                            )}
+                          </div>
+                          {!compact && challenge.scary_score && challenge.wahoo_score && (
+                            <div className="groan-cell-scores">
+                              <span className="groan-score scary">
+                                😰 {challenge.scary_score}
+                              </span>
+                              <span className="groan-score wahoo">
+                                🎉 {challenge.wahoo_score}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="groan-cell-empty">
+                          {onGenerateChallenge ? (
+                            <button
+                              className="groan-generate-btn"
+                              onClick={(e) => handleSkillProblemGenerateClick(e, skill, problem)}
+                            >
+                              + Generate
+                            </button>
+                          ) : (
+                            <>
+                              <span className="groan-cell-empty-icon">+</span>
+                              <span className="groan-cell-empty-text">Tap to explore</span>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Mobile layout - card-based view for standard tabs */}
+      {activeSourceType !== 'skill_x_problem' && (
+        <div className="groan-matrix-mobile">
+          {sourceItems.length === 0 ? (
+            <div className="groan-matrix-empty">
+              <div className="groan-matrix-empty-icon">🧭</div>
+              <h3 className="groan-matrix-empty-title">Complete Flow Finder</h3>
+              <p className="groan-matrix-empty-text">
+                No {activeSourceType}s found. Complete the {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} flow to unlock personalized challenges.
+              </p>
+              <button
+                className="groan-matrix-empty-cta"
+                onClick={() => navigate(activeSourceType === 'skill' ? '/nikigai/skills' : activeSourceType === 'problem' ? '/nikigai/problems' : '/nikigai/persona')}
+              >
+                Start {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} Flow
+              </button>
+            </div>
+          ) : (
+            GROAN_VISIBILITY_LAYERS.map(layer => (
+              <div key={layer.id} className="groan-mobile-section">
+                <div className="groan-mobile-layer-header">
+                  <span className="groan-mobile-layer-icon">{layer.icon}</span>
+                  <div className="groan-mobile-layer-info">
+                    <div className="groan-mobile-layer-label">{layer.label}</div>
+                    <div className="groan-mobile-layer-fear">{layer.fear}</div>
+                  </div>
+                </div>
+                <div className="groan-mobile-cards">
+                  {sourceItems.map(sourceItem => {
+                    const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
+                    const isLoading = loadingCell === `${sourceItem.id}_${layer.id}`
+
+                    return (
+                      <div
+                        key={sourceItem.id}
+                        className={`groan-mobile-card ${
+                          challenge?.status === 'completed' ? 'completed' : ''
+                        } ${
+                          challenge?.status === 'accepted' ? 'in-progress' : ''
+                        }`}
+                        onClick={() => handleCellClick(sourceItem, layer)}
+                      >
+                        <div className="groan-mobile-card-source">
+                          <div className="groan-mobile-card-source-label">
+                            {sourceItem.cluster_label}
+                          </div>
+                          {challenge && (
+                            <div className="groan-mobile-card-challenge">
+                              {challenge.title}
+                            </div>
+                          )}
+                        </div>
+                        {isLoading ? (
+                          <div className="groan-loading-spinner" />
+                        ) : challenge ? (
+                          <div className={`groan-mobile-card-status ${challenge.status}`}>
+                            {challenge.status === 'completed' && '✓ Done'}
+                            {challenge.status === 'accepted' && '⏳ Active'}
+                            {challenge.status === 'generated' && '✨ Ready'}
+                          </div>
+                        ) : (
+                          onGenerateChallenge ? (
+                            <button
+                              className="groan-mobile-generate"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleGenerateClick(e, sourceItem, layer)
+                              }}
+                            >
+                              + Generate
+                            </button>
+                          ) : (
+                            <span className="groan-mobile-card-status">+</span>
+                          )
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Mobile layout - Skill × Problem view */}
+      {activeSourceType === 'skill_x_problem' && (
+        <div className="groan-matrix-mobile groan-sp-mobile">
+          {(!flowFinderData?.skills?.length || !flowFinderData?.problems?.length) ? (
+            <div className="groan-matrix-empty">
+              <div className="groan-matrix-empty-icon">⚡</div>
+              <h3 className="groan-matrix-empty-title">Complete Skills & Problems Flows</h3>
+              <p className="groan-matrix-empty-text">
+                The Skill × Problem matrix requires both Skills and Problems from Flow Finder.
+              </p>
+              <button
+                className="groan-matrix-empty-cta"
+                onClick={() => navigate(
+                  !flowFinderData?.skills?.length ? '/nikigai/skills' : '/nikigai/problems'
+                )}
+              >
+                Start {!flowFinderData?.skills?.length ? 'Skills' : 'Problems'} Flow
+              </button>
+            </div>
+          ) : (
+            (flowFinderData?.skills || []).map(skill => (
+              <div key={skill.id} className="groan-mobile-section">
+                <div className="groan-mobile-layer-header groan-sp-skill-header">
+                  <span className="groan-mobile-layer-icon">🎯</span>
+                  <div className="groan-mobile-layer-info">
+                    <div className="groan-mobile-layer-label">{skill.cluster_label}</div>
+                    <div className="groan-mobile-layer-fear">Your Skill</div>
+                  </div>
+                </div>
+                <div className="groan-mobile-cards">
+                  {flowFinderData.problems.map(problem => {
+                    const challenge = getSkillProblemActiveChallenge(skill.id, problem.id)
+                    const cellKey = `sp_${skill.id}_${problem.id}`
+                    const isLoading = loadingCell === cellKey
+
+                    return (
+                      <div
+                        key={problem.id}
+                        className={`groan-mobile-card ${
+                          challenge?.status === 'completed' ? 'completed' : ''
+                        } ${
+                          challenge?.status === 'accepted' ? 'in-progress' : ''
+                        }`}
+                        onClick={() => handleSkillProblemCellClick(skill, problem)}
+                      >
+                        <div className="groan-mobile-card-source">
+                          <div className="groan-mobile-card-source-label">
+                            🔧 {problem.cluster_label}
+                          </div>
+                          {challenge && (
+                            <div className="groan-mobile-card-challenge">
+                              {challenge.title}
+                            </div>
+                          )}
+                        </div>
+                        {isLoading ? (
+                          <div className="groan-loading-spinner" />
+                        ) : challenge ? (
+                          <div className={`groan-mobile-card-status ${challenge.status}`}>
+                            {challenge.status === 'completed' && '✓ Done'}
+                            {challenge.status === 'accepted' && '⏳ Active'}
+                            {challenge.status === 'generated' && '✨ Ready'}
+                          </div>
+                        ) : (
+                          onGenerateChallenge ? (
+                            <button
+                              className="groan-mobile-generate"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                handleSkillProblemGenerateClick(e, skill, problem)
+                              }}
+                            >
+                              + Generate
+                            </button>
+                          ) : (
+                            <span className="groan-mobile-card-status">+</span>
+                          )
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   )
 }

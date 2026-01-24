@@ -87,11 +87,11 @@ export const PRODUCT_TYPES = {
   },
   digital_product: {
     id: 'digital_product',
-    label: 'Digital Product',
-    description: 'Downloads, templates, or software',
-    icon: '📁',
+    label: 'Product',
+    description: 'Something people buy from you',
+    icon: '🛍️',
     category: 'product',
-    examples: ['Templates', 'eBooks', 'Software tools']
+    examples: ['Templates', 'Software', 'Physical goods']
   }
 }
 

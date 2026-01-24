@@ -39,6 +39,24 @@ export function getWeekRange(weekOffset = 0) {
   }
 }
 
+// Get month range
+export function getMonthRange(monthOffset = 0) {
+  const now = new Date()
+  const targetMonth = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1)
+  const startDate = formatDate(targetMonth)
+  const lastDay = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0)
+  const endDate = formatDate(lastDay)
+  const label = targetMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+
+  return {
+    start: targetMonth,
+    end: lastDay,
+    startStr: startDate,
+    endStr: endDate,
+    label,
+  }
+}
+
 // Fetch weekly marketing stats
 export async function fetchWeeklyMarketingStats(userId, weekOffset = 0) {
   const week = getWeekRange(weekOffset)
@@ -144,6 +162,226 @@ export async function fetchWeeklySalesStats(userId, weekOffset = 0) {
       activePipelineCount: activePipeline.length,
       pipelineValue,
       totalDeals: deals.length,
+    },
+    error: null,
+  }
+}
+
+// Fetch monthly marketing stats
+export async function fetchMonthlyMarketingStats(userId, monthOffset = 0) {
+  const month = getMonthRange(monthOffset)
+
+  const { data, error } = await supabase
+    .from('marketing_tasks')
+    .select('*')
+    .eq('user_id', userId)
+    .gte('date', month.startStr)
+    .lte('date', month.endStr)
+
+  if (error) {
+    console.error('Error fetching monthly stats:', error)
+    return { data: null, error }
+  }
+
+  const tasks = data || []
+  const completed = tasks.filter(t => t.completed)
+
+  const totalTasks = tasks.length
+  const completedTasks = completed.length
+  const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
+
+  const pointsEarned = completed.reduce((sum, t) => sum + (t.points_value || 0), 0)
+  const pointsPossible = tasks.reduce((sum, t) => sum + (t.points_value || 0), 0)
+
+  const totalLikes = tasks.reduce((sum, t) => sum + (t.engagement_likes || 0), 0)
+  const totalComments = tasks.reduce((sum, t) => sum + (t.engagement_comments || 0), 0)
+  const totalShares = tasks.reduce((sum, t) => sum + (t.engagement_shares || 0), 0)
+  const totalDMs = tasks.reduce((sum, t) => sum + (t.engagement_dms || 0), 0)
+  const totalEngagement = totalLikes + totalComments + totalShares + totalDMs
+
+  const byPlatform = {}
+  tasks.forEach(t => {
+    if (!byPlatform[t.platform]) {
+      byPlatform[t.platform] = { total: 0, completed: 0 }
+    }
+    byPlatform[t.platform].total++
+    if (t.completed) byPlatform[t.platform].completed++
+  })
+
+  const daysActive = new Set(completed.map(t => t.date)).size
+
+  return {
+    data: {
+      period: month,
+      totalTasks,
+      completedTasks,
+      completionRate,
+      pointsEarned,
+      pointsPossible,
+      totalLikes,
+      totalComments,
+      totalShares,
+      totalDMs,
+      totalEngagement,
+      byPlatform,
+      daysActive,
+      tasks,
+    },
+    error: null,
+  }
+}
+
+// Fetch monthly sales stats
+export async function fetchMonthlySalesStats(userId, monthOffset = 0) {
+  const month = getMonthRange(monthOffset)
+
+  const { data, error } = await supabase
+    .from('sales_deals')
+    .select('*')
+    .eq('user_id', userId)
+
+  if (error) {
+    console.error('Error fetching monthly sales stats:', error)
+    return { data: null, error }
+  }
+
+  const deals = data || []
+
+  const dealsCreatedThisMonth = deals.filter(d => {
+    const created = new Date(d.created_at)
+    return created >= month.start && created <= month.end
+  })
+
+  const dealsWonThisMonth = deals.filter(d => {
+    if (d.status !== 'won') return false
+    const closed = new Date(d.actual_close_date || d.updated_at)
+    return closed >= month.start && closed <= month.end
+  })
+
+  const revenueThisMonth = dealsWonThisMonth.reduce((sum, d) => sum + (d.value || 0), 0)
+
+  const activePipeline = deals.filter(d => !['won', 'lost'].includes(d.status))
+  const pipelineValue = activePipeline.reduce((sum, d) => sum + (d.value || 0), 0)
+
+  return {
+    data: {
+      period: month,
+      dealsCreated: dealsCreatedThisMonth.length,
+      dealsWon: dealsWonThisMonth.length,
+      revenueThisPeriod: revenueThisMonth,
+      activePipelineCount: activePipeline.length,
+      pipelineValue,
+      totalDeals: deals.length,
+    },
+    error: null,
+  }
+}
+
+// Fetch monthly platform breakdown
+export async function fetchMonthlyPlatformBreakdown(userId, monthOffset = 0) {
+  const month = getMonthRange(monthOffset)
+
+  const { data: tasks, error: tasksError } = await supabase
+    .from('marketing_tasks')
+    .select('*')
+    .eq('user_id', userId)
+    .gte('date', month.startStr)
+    .lte('date', month.endStr)
+
+  const { data: deals, error: dealsError } = await supabase
+    .from('sales_deals')
+    .select('*')
+    .eq('user_id', userId)
+
+  if (tasksError || dealsError) {
+    console.error('Error fetching monthly platform breakdown:', tasksError || dealsError)
+    return { data: null, error: tasksError || dealsError }
+  }
+
+  const platformStats = {}
+
+  ;(tasks || []).forEach(task => {
+    const platform = task.platform || 'Other'
+    if (!platformStats[platform]) {
+      platformStats[platform] = {
+        platform,
+        ...PLATFORM_INFO[platform] || PLATFORM_INFO.Other,
+        tasks: 0,
+        completed: 0,
+        likes: 0,
+        comments: 0,
+        shares: 0,
+        dms: 0,
+        totalEngagement: 0,
+        leadsGenerated: 0,
+        dealsWon: 0,
+        revenue: 0,
+      }
+    }
+
+    platformStats[platform].tasks++
+    if (task.completed) platformStats[platform].completed++
+    platformStats[platform].likes += task.engagement_likes || 0
+    platformStats[platform].comments += task.engagement_comments || 0
+    platformStats[platform].shares += task.engagement_shares || 0
+    platformStats[platform].dms += task.engagement_dms || 0
+    platformStats[platform].totalEngagement +=
+      (task.engagement_likes || 0) +
+      (task.engagement_comments || 0) +
+      (task.engagement_shares || 0) +
+      (task.engagement_dms || 0)
+  })
+
+  ;(deals || []).forEach(deal => {
+    const source = deal.lead_source || 'Other'
+    if (!platformStats[source]) {
+      platformStats[source] = {
+        platform: source,
+        ...PLATFORM_INFO[source] || PLATFORM_INFO.Other,
+        tasks: 0,
+        completed: 0,
+        likes: 0,
+        comments: 0,
+        shares: 0,
+        dms: 0,
+        totalEngagement: 0,
+        leadsGenerated: 0,
+        dealsWon: 0,
+        revenue: 0,
+      }
+    }
+
+    const createdAt = new Date(deal.created_at)
+    if (createdAt >= month.start && createdAt <= month.end) {
+      platformStats[source].leadsGenerated++
+    }
+
+    if (deal.status === 'won') {
+      const closedAt = new Date(deal.actual_close_date || deal.updated_at)
+      if (closedAt >= month.start && closedAt <= month.end) {
+        platformStats[source].dealsWon++
+        platformStats[source].revenue += deal.value || 0
+      }
+    }
+  })
+
+  const breakdown = Object.values(platformStats)
+    .sort((a, b) => b.totalEngagement - a.totalEngagement)
+
+  const totals = breakdown.reduce(
+    (acc, p) => ({
+      totalEngagement: acc.totalEngagement + p.totalEngagement,
+      totalLeads: acc.totalLeads + p.leadsGenerated,
+      totalRevenue: acc.totalRevenue + p.revenue,
+    }),
+    { totalEngagement: 0, totalLeads: 0, totalRevenue: 0 }
+  )
+
+  return {
+    data: {
+      period: month,
+      breakdown,
+      totals,
     },
     error: null,
   }

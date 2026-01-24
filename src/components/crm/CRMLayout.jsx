@@ -1,11 +1,15 @@
 /**
  * CRMLayout - Wrapper for all CRM pages
  * Includes CoachNudge (bottom-left) for context-aware micro-coaching
+ * Includes OnboardingTour for first-time users
+ * Includes PageTransition for smooth route changes
  */
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../auth/AuthProvider'
 import { useLocation } from 'react-router-dom'
 import CoachNudge from '../CoachNudge'
+import OnboardingTour, { useCRMOnboarding } from './OnboardingTour'
+import PageTransition from './PageTransition'
 import { checkForNudges, getNudgeActionHandler } from '../../lib/nudgeEngine'
 import './CRMLayout.css'
 
@@ -14,6 +18,7 @@ export default function CRMLayout({ children }) {
   const location = useLocation()
   const [currentNudge, setCurrentNudge] = useState(null)
   const [nudgeLoading, setNudgeLoading] = useState(false)
+  const { showTour, completeTour } = useCRMOnboarding()
 
   // Check for nudges on mount and route change
   useEffect(() => {
@@ -66,9 +71,15 @@ export default function CRMLayout({ children }) {
     ? getNudgeActionHandler(currentNudge.action_type, currentNudge.action_data)
     : null
 
+  // Only show tour on dashboard (home) page
+  const isOnDashboard = location.pathname === '/crm'
+
   return (
     <div className="crm-layout">
-      {children}
+      {/* Page content with transitions */}
+      <PageTransition>
+        {children}
+      </PageTransition>
 
       {/* Coach Nudge - Bottom Left */}
       {currentNudge && (
@@ -78,6 +89,11 @@ export default function CRMLayout({ children }) {
           onDismiss={handleNudgeDismiss}
           onAction={handleNudgeAction}
         />
+      )}
+
+      {/* Onboarding Tour - First-time users on dashboard */}
+      {showTour && isOnDashboard && (
+        <OnboardingTour onComplete={completeTour} />
       )}
     </div>
   )

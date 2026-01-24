@@ -4,10 +4,11 @@
 
 FindMyFlow is a personal development web app that helps burnt-out professionals discover their ideal career path and build a business around their natural strengths. Users complete AI-guided "flows" (interactive questionnaires) to identify their skills, problems they solve, and ideal customer personas. The app is built on the **Nikigai** framework (Nic + Ikigai - the creator's adaptation of the Japanese concept).
 
-**Architecture (Dec 2024 Refactor):**
+**Architecture (Jan 2025):**
 - **Project-Centric**: Users can have multiple projects, each with its own stage progression
 - **Universal 7-Stage System**: All projects follow 6 progression stages + 1 always-accessible tracking stage
-- **Persona at User Level**: Three user personas (Vibe Seeker, Vibe Riser, Movement Maker) determine initial guidance, but stages are project-based
+- **CRM Command Center**: Tower-based marketing & sales hub (Attract, Nurture, Tools) for operational execution
+- **Groan Matrix**: AI-generated courage challenges mapped across skills × visibility layers
 - **Gamified 7-Day Challenges**: Stage-specific quests with groan challenges that push users past comfort zones
 - **Zarlo AI Co-Founder**: Context-aware AI assistant available on every page
 - The Money Model flows are based on Alex Hormozi's $100M Offers framework.
@@ -64,6 +65,22 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   │   ├── ProgressDots.jsx       # Progress indicator
 │   │   │   └── index.js               # Barrel export
 │   │   │
+│   │   ├── crm/                       # CRM system components
+│   │   │   ├── CRMLayout.jsx          # Wrapper with nudge engine + onboarding
+│   │   │   ├── EmptyState.jsx         # Empty state displays
+│   │   │   ├── OnboardingTour.jsx     # First-time CRM user guidance
+│   │   │   ├── PageTransition.jsx     # Smooth route transitions
+│   │   │   ├── PromptGenerator.jsx    # AI prompt generation interface
+│   │   │   ├── PullToRefresh.jsx      # Mobile refresh gesture
+│   │   │   ├── Skeleton.jsx           # Loading placeholders
+│   │   │   └── index.js               # Barrel export (20+ components)
+│   │   │
+│   │   ├── onboarding/QuickCapture/   # Streamlined onboarding
+│   │   │   ├── QuickCapture.jsx       # 5-step business data capture
+│   │   │   ├── MultiProductCapture.jsx # Multi-product support
+│   │   │   └── DeliverySelector.jsx   # Product type selection
+│   │   │
+│   │   ├── GroanMatrix.jsx            # 2D courage challenge matrix
 │   │   ├── QuestCard.jsx              # Unified quest card (317 lines)
 │   │   ├── ChallengeHeader.jsx        # Challenge header with points/settings
 │   │   ├── ChallengeOnboarding.jsx    # Welcome & group selection screens
@@ -109,7 +126,20 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   ├── FlowCompassPage.jsx        # Flow compass tracking page
 │   │   ├── LibraryOfAnswers.jsx       # All discoveries organized
 │   │   ├── ValidationFlowsManager.jsx # Validation survey manager
-│   │   └── PublicValidationFlow.jsx   # Public validation survey
+│   │   ├── PublicValidationFlow.jsx   # Public validation survey
+│   │   │
+│   │   └── crm/                       # CRM tower pages
+│   │       ├── Dashboard.jsx          # CRM command center (HQ)
+│   │       ├── Attract.jsx            # Attract tower hub
+│   │       ├── Nurture.jsx            # Nurture tower hub
+│   │       ├── Tools.jsx              # Tools tower hub
+│   │       ├── Marketing.jsx          # Content creation
+│   │       ├── Pages.jsx              # Landing page tracking
+│   │       ├── Sales.jsx              # Sales pipeline
+│   │       ├── Contacts.jsx           # Contact database
+│   │       ├── EmailSequences.jsx     # Email automation
+│   │       ├── WarmOutreach.jsx       # Warm lead follow-up
+│   │       └── Execute.jsx            # Weekly execution
 │   │
 │   ├── profiles/                      # Profile display components
 │   │   ├── EssenceProfile.jsx         # Essence archetype display
@@ -117,7 +147,8 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │
 │   ├── lib/                           # Utilities and helpers
 │   │   ├── supabaseClient.js          # Database connection
-│   │   ├── stageConfig.js             # Universal 6-stage configuration
+│   │   ├── stageConfig.js             # Universal 7-stage + Groans configuration
+│   │   ├── haptics.js                 # Mobile haptic feedback (vibration API)
 │   │   ├── graduationChecker.js       # Project graduation logic
 │   │   ├── questCompletionHelpers.js  # Quest completion handlers
 │   │   ├── questCompletion.js         # Quest completion utilities
@@ -139,9 +170,15 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   │   ├── nervousSystemTemplates.js
 │   │   │   ├── essenceRevealTemplate.js
 │   │   │   └── protectiveMirrorTemplate.js
-│   │   └── zarlo/                     # Zarlo AI system
-│   │       ├── zarloEngine.js         # Conversation management
-│   │       └── zarloPageContent.js    # Context-aware page content
+│   │   ├── zarlo/                     # Zarlo AI system
+│   │   │   ├── zarloEngine.js         # Conversation management
+│   │   │   └── zarloPageContent.js    # Context-aware page content
+│   │   │
+│   │   └── crm/                       # CRM services & utilities
+│   │       ├── index.js               # Barrel export (20+ services)
+│   │       ├── contentContext.js      # User data aggregation for prompts
+│   │       ├── promptTemplates.js     # AI prompt library for copy generation
+│   │       └── towerStats.js          # Live stats for tower cards
 │   │
 │   ├── data/                          # Static configuration
 │   │   ├── personaProfiles.js         # Persona definitions
@@ -173,6 +210,7 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 │   │   ├── graduation-check/          # Graduation requirements
 │   │   ├── nikigai-conversation/      # AI conversation handler
 │   │   ├── nervous-system-mirror/     # NS AI analysis
+│   │   ├── groan-challenge-generator/ # AI-generated groan challenges
 │   │   ├── scheduled-notifications/   # Cron job for notifications
 │   │   └── ...
 │   └── migrations/                    # Database migrations
@@ -233,6 +271,18 @@ FindMyFlow is a personal development web app that helps burnt-out professionals 
 | `/settings/notifications` | NotificationSettings | Notification prefs |
 | `/feedback` | Feedback | User feedback |
 | `/money-model-guide` | MoneyModelGuide | Educational overview |
+| **CRM Routes** | | |
+| `/crm` | Dashboard | CRM command center (HQ) |
+| `/crm/attract` | Attract | Lead acquisition tower hub |
+| `/crm/nurture` | Nurture | Relationship building tower hub |
+| `/crm/tools` | Tools | Analytics & implementation hub |
+| `/crm/marketing` | Marketing | Content creation |
+| `/crm/pages` | Pages | Landing page tracking |
+| `/crm/sales` | Sales | Sales pipeline & deals |
+| `/crm/contacts` | Contacts | Contact database |
+| `/crm/email-sequences` | EmailSequences | Email automation |
+| `/crm/warm-outreach` | WarmOutreach | Warm lead follow-up |
+| `/crm/execute` | Execute | Weekly task execution |
 
 ---
 
@@ -368,6 +418,82 @@ Spreadsheet-like funnel tracking tool at `/funnel-calculator`.
 - Core → Downsell: 30%
 - Core → Continuity: 15%
 
+### 11. CRM Command Center (Jan 2025)
+Tower-based marketing & sales management system at `/crm`.
+
+**Three Towers:**
+
+| Tower | Focus | Key Pages |
+|-------|-------|-----------|
+| **Attract** | Lead acquisition | Content, Landing Pages, Cold Outreach, Ads |
+| **Nurture** | Relationship building | Contacts, Email Sequences, Pipeline, Warm Outreach |
+| **Tools** | Analytics & execution | Analytics, Calculators, Scripts, Implementations |
+
+**Dashboard Stats:**
+- Total Points (gamification)
+- Current Streak (daily consistency)
+- Monthly Revenue ($)
+- Pipeline Value ($)
+
+**Key Components:**
+- `CRMLayout.jsx` - Wrapper with nudge engine + onboarding tour
+- `PullToRefresh` - Mobile refresh gesture with haptic feedback
+- `PageTransition` - Smooth route transitions
+- `Skeleton` components - Loading placeholders
+- `PromptGenerator` - AI prompt generation interface
+
+**CRM Library Services (`src/lib/crm/index.js`):**
+- Task Management, Deal/Sales Pipeline, Analytics & Reporting
+- Stats & Gamification (LEVELS system), Funnel Actuals
+- Recommendations Engine, Content Triggers, Ascension Engine
+- Tone Adapter (psychological prompt personalization)
+- Tower Stats, Groan Challenge Service
+
+### 12. Groan Matrix (Courage Challenges)
+2D matrix of AI-generated courage challenges at user level.
+
+**Matrix Structure:**
+- **Rows**: User's discovered skills, problems, or personas (from Flow Finder)
+- **Columns**: 5 visibility layers representing fear dimensions
+- **Cells**: AI-generated challenges for each combination
+
+**5 Visibility Layers:**
+
+| Layer | Icon | Fear | Difficulty |
+|-------|------|------|------------|
+| SCREEN | 📱 | Being seen online | 1 |
+| LIVE | ⚡ | Real-time judgment | 2 |
+| MONEY | 💰 | "Am I worth it?" | 3 |
+| VULNERABLE | 💗 | Rejected for real self | 4 |
+| AUTHORITY | 👑 | Imposter syndrome | 5 |
+
+**Essence Zone Scoring:**
+Based on `scary_score` (1-10) + `wahoo_score` (1-10):
+- High scary + High wahoo = "essence zone" (trauma around expressing true self)
+- High scary + Low wahoo = "protective voice speaking"
+- Low scary + High wahoo = "comfort zone"
+- Low scary + Low wahoo = "neutral zone"
+
+**Challenge Workflow:**
+- `generated` → `accepted` → `completed` (with proof) or `skipped` (with reason)
+- Proof types: link, screenshot, text
+- 48hr follow-up outcomes: engagement, conversations, call_booked, sale_made
+
+### 13. QuickCapture Onboarding
+Streamlined 5-step flow for capturing user business data.
+
+**Steps:**
+1. Skills selection (from wheel taxonomy)
+2. Problems selection (from wheel taxonomy)
+3. Personas selection (from wheel taxonomy)
+4. Products capture (category → type → subtype)
+5. Summary/confirmation
+
+**Product Categories:**
+- **Service**: Custom (1:1) or Packaged
+- **Productized**: Live Group, Self-Paced Course, Managed Service
+- **Product**: Digital, Software/App, Physical
+
 ---
 
 ## Architecture Patterns
@@ -482,6 +608,61 @@ localStorage.setItem(`journey_mapping_${userId}_${projectId}`, JSON.stringify({ 
 localStorage.getItem(`journey_mapping_completed_${userId}_${projectId}`)
 ```
 
+### 9. Tower-Based Organization (CRM)
+CRM features grouped into 3 "towers" representing business functions:
+```javascript
+// Each tower has: hub page, quick stats, individual feature pages
+const towers = {
+  attract: { pages: ['marketing', 'pages', 'cold-outreach', 'ads'] },
+  nurture: { pages: ['contacts', 'email-sequences', 'sales', 'warm-outreach'] },
+  tools: { pages: ['analytics', 'calculators', 'scripts', 'execute'] }
+}
+```
+
+### 10. Content Context Normalization
+`contentContext.js` aggregates data from multiple challenge flows:
+```javascript
+import { getContentContext } from './lib/crm/contentContext'
+
+const context = await getContentContext(userId)
+// Returns normalized: persona, offer, validation, proof, launch, voice, products
+```
+
+### 11. Prompt Template Library
+Prompts as templated functions for external AI tools:
+```javascript
+import { generateLandingPagePrompt, checkTemplateReadiness } from './lib/crm/promptTemplates'
+
+// Check if user has required data
+const { ready, missing } = checkTemplateReadiness('landingPage', availableData)
+
+// Generate copy-paste ready prompt
+const prompt = generateLandingPagePrompt(context)
+```
+
+### 12. Pull-to-Refresh Pattern
+All CRM pages support native mobile pull-to-refresh:
+```javascript
+import { PullToRefresh, usePullToRefresh } from './components/crm'
+
+function MyPage() {
+  const { refreshing, onRefresh } = usePullToRefresh(fetchData)
+  return <PullToRefresh onRefresh={onRefresh}>{content}</PullToRefresh>
+}
+```
+
+### 13. Haptic Feedback
+Simple haptic patterns for mobile immersion:
+```javascript
+import { hapticLight, hapticMedium, hapticSuccess, hapticError } from './lib/haptics'
+
+// Usage
+hapticLight()      // 10ms vibration
+hapticMedium()     // 20ms vibration
+hapticSuccess()    // 10ms, 50ms pause, 20ms pattern
+hapticError()      // 50ms, 30ms pause, 50ms pattern
+```
+
 ---
 
 ## Database Schema
@@ -525,6 +706,33 @@ localStorage.getItem(`journey_mapping_completed_${userId}_${projectId}`)
 | `funnel_metrics` | Funnel calculator tracking data |
 | `zarlo_conversations` | Zarlo AI chat history |
 
+### CRM Tables (Jan 2025)
+
+| Table | What it stores |
+|-------|----------------|
+| `crm_pages` | Landing/sales pages with visitors, conversions, generated copy |
+| `crm_contacts` | Contact database with lifecycle stages (lead → customer → evangelist) |
+| `crm_email_sequences` | Email campaign definitions with open/click rates |
+| `crm_email_steps` | Individual emails in sequences with metrics |
+| `crm_warm_leads` | Warm lead tracking with platform, engagement type, priority |
+
+### Groan Matrix Tables (Jan 2025)
+
+| Table | What it stores |
+|-------|----------------|
+| `groan_challenges` | Main challenge data with scary/wahoo scores, visibility layer, source type |
+| `groan_proof` | Proof of challenge completion (link, screenshot, text) |
+| `groan_contract_evidence` | Accountability contracts |
+| `groan_outcomes` | 48hr follow-up results (engagement, conversations, sales) |
+| `groan_streaks` | User streak tracking with badges |
+| `groan_user_preferences` | User opt-in preferences for tracking |
+
+**Groan ENUMs:**
+- `groan_visibility_layer`: screen, live, money, vulnerable, authority
+- `groan_source_type`: skill, problem, persona
+- `groan_challenge_status`: active, completed, skipped
+- `groan_outcome_type`: engagement, conversations, call_booked, sale_made, nothing_yet, unexpected
+
 ---
 
 ## Environment Variables
@@ -547,9 +755,72 @@ SUPABASE_ACCESS_TOKEN      # From Supabase dashboard
 
 ---
 
-## Recent Updates (Dec 2024)
+## Recent Updates
 
-### Dec 30: Stage 7 Tracking, Zarlo AI, Quest UI Overhaul
+### Jan 2025: CRM Command Center & Groan Matrix
+
+**CRM System (Major Addition)**
+- Tower-based marketing & sales hub: Attract, Nurture, Tools
+- Dashboard command center with quick stats and actions
+- New routes: `/crm`, `/crm/attract`, `/crm/nurture`, `/crm/tools`, etc.
+- Pull-to-refresh with haptic feedback on all CRM pages
+- Skeleton loading states for better perceived performance
+- Onboarding tour for first-time CRM users
+- Nudge engine for context-aware micro-coaching
+
+**CRM Pages:**
+- `Marketing.jsx` - Content creation with AI assistance
+- `Pages.jsx` - Landing page tracking with AI copy generation
+- `Sales.jsx` - Sales pipeline with deal stages
+- `Contacts.jsx` - Contact database with lifecycle stages
+- `EmailSequences.jsx` - Email automation builder
+- `WarmOutreach.jsx` - Warm lead follow-up management
+- `Execute.jsx` - Weekly task execution
+
+**CRM Library (`src/lib/crm/`):**
+- `contentContext.js` - Aggregates user data from multiple sources for prompts
+- `promptTemplates.js` - AI prompt library (landing pages, sales pages, email sequences, etc.)
+- `towerStats.js` - Real-time stats for tower card displays
+- `index.js` - Barrel export with 20+ service modules
+
+**Groan Matrix System:**
+- 2D challenge matrix: user skills × 5 visibility layers
+- AI-generated courage challenges with scary/wahoo scoring
+- Essence zone calculation for authentic growth identification
+- Proof collection system (link, screenshot, text)
+- 48hr follow-up outcomes tracking
+- New tables: `groan_challenges`, `groan_proof`, `groan_outcomes`, `groan_streaks`
+
+**QuickCapture Onboarding:**
+- `QuickCapture.jsx` - 5-step business data capture
+- `MultiProductCapture.jsx` - Multi-product support
+- `DeliverySelector.jsx` - Product type selection (Service/Productized/Product)
+
+**New Components:**
+- `PullToRefresh` - Mobile refresh gesture with haptic feedback
+- `PageTransition` - Smooth route transitions
+- `Skeleton` components - Loading placeholders (Card, Stat, Dashboard, Tower)
+- `OnboardingTour` - First-time user guidance
+- `PromptGenerator` - AI prompt generation interface
+- `EmptyState` - Empty state displays
+
+**New Utilities:**
+- `haptics.js` - Mobile vibration API wrappers (light, medium, success, error patterns)
+
+**Database Migrations:**
+- `20260123000000_crm_pages.sql` - CRM pages table
+- `20260123000001_groan_matrix_system_fixed.sql` - Full Groan Matrix schema
+- `20260124000000_nurture_tables.sql` - Contacts, email sequences, warm leads
+
+**Stage Configuration Updates:**
+- Added Groans as Stage 0.5 (always accessible, user-level)
+- `isGroansStage` flag for quest filtering
+
+---
+
+### Dec 2024
+
+#### Dec 30: Stage 7 Tracking, Zarlo AI, Quest UI Overhaul
 **Stage 7: Funnel Calculator**
 - New always-accessible Tracking stage (Stage 7)
 - `FunnelCalculator.jsx` with Actual + Planner modes
@@ -582,7 +853,7 @@ SUPABASE_ACCESS_TOKEN      # From Supabase dashboard
 - `FunnelBuilderFlow` enhanced with offer stack display
 - New routes: `/offer-builder`, `/lead-magnet-selection`, `/product-selection`, `/funnel-builder`, `/funnel-calculator`
 
-### Dec 26-27: Journey Mapping & Flow River Popups
+#### Dec 26-27: Journey Mapping & Flow River Popups
 **New Features:**
 - `SeeYourFlow.jsx` - 5-step journey mapping for first-time users, check-in mode for returning users
 - FlowMapRiver clickable markers with popup details
@@ -595,7 +866,7 @@ SUPABASE_ACCESS_TOKEN      # From Supabase dashboard
 **Documentation:**
 - `docs/session-2024-12-26-journey-mapping.md` - Full session details
 
-### Dec 21: Challenge.jsx Decomposition
+#### Dec 21: Challenge.jsx Decomposition
 Reduced from 3,261 to 1,058 lines (68% reduction):
 - Extracted `useChallengeData.js` hook (1,147 lines)
 - Created `QuestCard.jsx` component (317 lines)
@@ -604,13 +875,13 @@ Reduced from 3,261 to 1,058 lines (68% reduction):
 - Created `ChallengeLeaderboard.jsx` (90 lines)
 - Created `ChallengeFilters.jsx` (86 lines)
 
-### Money Model Consolidation
+#### Money Model Consolidation
 Reduced 6 flows from ~3,572 lines to ~209 lines (94% reduction):
 - Created `MoneyModelFlowBase.jsx` (450 lines)
 - Created `moneyModelConfigs.js` for all configurations
 - Each flow is now a thin wrapper (~35 lines)
 
-### Deleted Unused Components
+#### Deleted Unused Components
 - FlowHistory.jsx
 - FlowInsights.jsx
 - FlowLogModal.jsx

@@ -1,0 +1,235 @@
+/**
+ * Shared Tower Page Styles - Matching Prototype
+ */
+
+/* Page Layout */
+.tower-page {
+  min-height: 100vh;
+  padding: 24px 20px;
+  padding-top: 80px; /* Account for toolbar */
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  background: #f8f9fa;
+}
+
+/* Top Toolbar */
+.tower-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.tower-toolbar-back {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.tower-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tower-toolbar-points {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #5e17eb;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Page Header */
+.tower-header {
+  margin-bottom: 24px;
+}
+
+.tower-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.tower-breadcrumb button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #5e17eb;
+  cursor: pointer;
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.tower-breadcrumb button:hover {
+  text-decoration: underline;
+}
+
+.tower-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #212529;
+  margin: 0 0 4px 0;
+}
+
+.tower-subtitle {
+  color: #495057;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Tower Grid */
+.tower-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Tower Card */
+.tower-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.tower-card:hover:not(.disabled) {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(94, 23, 235, 0.12);
+  border-color: #5e17eb;
+}
+
+.tower-card:active:not(.disabled) {
+  transform: translateY(-2px);
+}
+
+.tower-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tower-card-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.tower-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tower-badge {
+  font-size: 0.625rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.tower-badge.new {
+  background: #5e17eb;
+  color: white;
+}
+
+.tower-badge.soon {
+  background: #e9ecef;
+  color: #6c757d;
+}
+
+.tower-card-description {
+  color: #495057;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Card Stats */
+.tower-card-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
+}
+
+.tower-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.tower-stat-value {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.tower-stat-label {
+  font-size: 0.6875rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .tower-page {
+    padding: 16px;
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .tower-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .tower-title {
+    font-size: 1.5rem;
+  }
+
+  .tower-card {
+    padding: 16px;
+  }
+
+  .tower-card-icon {
+    font-size: 1.75rem;
+    margin-bottom: 8px;
+  }
+
+  .tower-card-title {
+    font-size: 0.9375rem;
+  }
+
+  .tower-card-description {
+    font-size: 0.75rem;
+  }
+}

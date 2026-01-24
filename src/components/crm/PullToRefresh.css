@@ -1,0 +1,103 @@
+/**
+ * Pull to Refresh Styles
+ */
+
+.pull-to-refresh-container {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+}
+
+/* Pull indicator */
+.pull-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 10;
+}
+
+.pull-indicator-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px;
+}
+
+.pull-arrow {
+  font-size: 1.25rem;
+  transition: transform 0.2s ease;
+  color: #5e17eb;
+}
+
+.pull-text {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Spinner when refreshing */
+.pull-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: pullSpin 0.8s linear infinite;
+}
+
+@keyframes pullSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Content area */
+.pull-content {
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+
+.pull-to-refresh-container:not(:active) .pull-content {
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Visual feedback when triggered */
+.pull-indicator.triggered .pull-arrow {
+  color: #22c55e;
+}
+
+.pull-indicator.triggered .pull-text {
+  color: #22c55e;
+}
+
+.pull-indicator.refreshing .pull-indicator-content {
+  animation: pulseRefresh 1s ease-in-out infinite;
+}
+
+@keyframes pulseRefresh {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .pull-spinner {
+    animation: none;
+    border-top-color: #5e17eb;
+    opacity: 0.7;
+  }
+
+  .pull-content {
+    transition: none;
+  }
+
+  .pull-arrow {
+    transition: none;
+  }
+}

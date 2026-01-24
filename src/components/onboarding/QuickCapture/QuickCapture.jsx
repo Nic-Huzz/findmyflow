@@ -147,46 +147,69 @@ function QuickCapture({
     setCurrentStep(currentStep + 1)
   }
 
+  // Helper to save wheel data
+  const saveWheelData = async (wheelType, segments) => {
+    if (!segments || segments.length === 0) return
+
+    // 1. Create or get the wheel
+    const { data: existingWheel } = await supabase
+      .from('competence_wheels')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('wheel_type', wheelType)
+      .is('project_id', null)
+      .maybeSingle()
+
+    let wheelId = existingWheel?.id
+
+    if (!wheelId) {
+      const { data: newWheel, error: createError } = await supabase
+        .from('competence_wheels')
+        .insert({
+          user_id: userId,
+          wheel_type: wheelType
+        })
+        .select('id')
+        .single()
+
+      if (createError) throw createError
+      wheelId = newWheel.id
+    }
+
+    // 2. Save each segment
+    const segmentInserts = segments.map(segment => ({
+      wheel_id: wheelId,
+      segment_id: segment.id,
+      is_lit: true,
+      ring: segment.ring || 'core',
+      confidence: 1.0,
+      response_count: 1
+    }))
+
+    const { error: segmentError } = await supabase
+      .from('wheel_segments')
+      .upsert(segmentInserts, {
+        onConflict: 'wheel_id,segment_id',
+        ignoreDuplicates: false
+      })
+
+    if (segmentError) {
+      console.error('Error saving wheel segments:', segmentError)
+    }
+  }
+
   // Save all data to database
   const saveToDatabase = async () => {
     setIsSaving(true)
     setSaveError(null)
 
     try {
-      // 1. Save skills to nikigai_responses
-      const skillPromises = capturedData.skills.map(skill =>
-        supabase.from('nikigai_responses').insert({
-          user_id: userId,
-          flow_type: 'skills',
-          question_id: 'quick_capture_skill',
-          answer: skill.id,
-          metadata: { ring: skill.ring, source: 'quick_capture' }
-        })
-      )
+      // 1. Save wheel data (skills, problems, personas)
+      await saveWheelData('skills', capturedData.skills)
+      await saveWheelData('problems', capturedData.problems)
+      await saveWheelData('personas', capturedData.personas)
 
-      // 2. Save problems to nikigai_responses
-      const problemPromises = capturedData.problems.map(problem =>
-        supabase.from('nikigai_responses').insert({
-          user_id: userId,
-          flow_type: 'problems',
-          question_id: 'quick_capture_problem',
-          answer: problem.id,
-          metadata: { ring: problem.ring, source: 'quick_capture' }
-        })
-      )
-
-      // 3. Save personas to nikigai_responses
-      const personaPromises = capturedData.personas.map(persona =>
-        supabase.from('nikigai_responses').insert({
-          user_id: userId,
-          flow_type: 'persona',
-          question_id: 'quick_capture_persona',
-          answer: persona.id,
-          metadata: { ring: persona.ring, source: 'quick_capture' }
-        })
-      )
-
-      // 4. Save products to products table
+      // 2. Save products to products table
       const productPromises = capturedData.products.map(product =>
         supabase.from('products').insert({
           user_id: userId,
@@ -206,15 +229,10 @@ function QuickCapture({
         })
       )
 
-      // Execute all saves
-      await Promise.all([
-        ...skillPromises,
-        ...problemPromises,
-        ...personaPromises,
-        ...productPromises
-      ])
+      // Execute product saves
+      await Promise.all(productPromises)
 
-      // 5. Mark quick capture as complete in user_stage_progress
+      // 3. Mark onboarding complete in user_stage_progress
       await supabase
         .from('user_stage_progress')
         .update({
@@ -329,6 +347,7 @@ function QuickCapture({
             wealthLadder={wealthLadder}
             onComplete={handleProductsComplete}
             onBack={handleBack}
+            userId={userId}
           />
         )
 

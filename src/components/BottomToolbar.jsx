@@ -39,38 +39,37 @@ const MAIN_NAV_ITEMS = [
   }
 ]
 
-// CRM section navigation items
+// CRM section navigation items - Tower structure
 const CRM_NAV_ITEMS = [
+  {
+    id: 'home',
+    label: 'Home',
+    icon: '🏠',
+    path: '/crm'
+  },
+  {
+    id: 'attract',
+    label: 'Attract',
+    icon: '🎯',
+    path: '/crm/attract'
+  },
   {
     id: 'execute',
     label: 'Execute',
-    icon: '🎯',
+    icon: '🚀',
     path: '/crm/execute'
   },
   {
-    id: 'sales',
-    label: 'Sales',
-    icon: '💰',
-    path: '/crm/sales'
+    id: 'nurture',
+    label: 'Nurture',
+    icon: '💜',
+    path: '/crm/nurture'
   },
   {
-    id: 'marketing',
-    label: 'Marketing',
-    icon: '📣',
-    path: '/crm/marketing'
-  },
-  {
-    id: 'analytics',
-    label: 'Analytics',
-    icon: '📊',
-    path: '/crm/analytics'
-  },
-  {
-    id: 'portal',
-    label: 'Back',
-    icon: '←',
-    path: '/7-day-challenge',
-    isReturn: true // Special flag for return button styling
+    id: 'tools',
+    label: 'Tools',
+    icon: '🧰',
+    path: '/crm/tools'
   }
 ]
 
@@ -137,15 +136,51 @@ function BottomToolbar() {
   // Select appropriate nav items based on section
   const navItems = isCRMSection ? CRM_NAV_ITEMS : MAIN_NAV_ITEMS
 
-  // Active state check - for CRM, also check if we're on any CRM subpage
+  // Active state check - for CRM towers, highlight parent when on sub-pages
   const isActive = (item) => {
     if (item.isReturn) return false // Return button is never "active"
-    if (isCRMSection && item.path.startsWith('/crm')) {
-      // For CRM items, check exact match or if we're on a CRM tool page
-      // This keeps Sales/Marketing/Analytics highlighted when on their pages
-      return location.pathname === item.path
+
+    const path = location.pathname
+
+    // CRM tower navigation logic
+    if (isCRMSection) {
+      // Home is active only on exact /crm path
+      if (item.id === 'home') return path === '/crm'
+
+      // Attract tower - includes content, pages, cold-outreach, marketing
+      if (item.id === 'attract') {
+        return path === '/crm/attract' ||
+               path.startsWith('/crm/content') ||
+               path.startsWith('/crm/pages') ||
+               path.startsWith('/crm/cold-outreach') ||
+               path.startsWith('/crm/marketing')
+      }
+
+      // Nurture tower - includes contacts, email, pipeline, sales, warm-outreach
+      if (item.id === 'nurture') {
+        return path === '/crm/nurture' ||
+               path.startsWith('/crm/contacts') ||
+               path.startsWith('/crm/email') ||
+               path.startsWith('/crm/pipeline') ||
+               path.startsWith('/crm/sales') ||
+               path.startsWith('/crm/warm-outreach') ||
+               path.startsWith('/crm/ascension')
+      }
+
+      // Tools tower - includes analytics, implementations, calculators, scripts
+      if (item.id === 'tools') {
+        return path === '/crm/tools' ||
+               path.startsWith('/crm/analytics') ||
+               path.startsWith('/crm/implementations') ||
+               path.startsWith('/crm/calculators') ||
+               path.startsWith('/crm/scripts')
+      }
+
+      // Execute - exact match
+      if (item.id === 'execute') return path === '/crm/execute'
     }
-    return location.pathname === item.path
+
+    return path === item.path
   }
 
   return (
@@ -153,7 +188,7 @@ function BottomToolbar() {
       {navItems.map(item => (
         <button
           key={item.id}
-          className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''}`}
+          className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''}`}
           onClick={() => navigate(item.path)}
           aria-label={item.label}
           aria-current={isActive(item) ? 'page' : undefined}
