@@ -67,8 +67,17 @@ const LandingPage = () => {
             we'll help you discover the path that's right for you.
           </p>
 
+          <p className="rightful-heritage">
+            You've already done the hard part — years of experience, skills you've built, problems you've solved.
+            Now it's time to turn that into something that's yours.
+          </p>
+
           <p className="landing-philosophy">
             Learning that feels like play, not homework.
+          </p>
+
+          <p className="hero-win-state">
+            Your first milestone: Get paid for what you already know how to do.
           </p>
 
           <div className="hero-cta-group">
@@ -87,6 +96,7 @@ const LandingPage = () => {
           </div>
 
           <p className="hero-note">Free to start. No credit card required.</p>
+          <p className="hero-protection">Your progress is always saved. Pick up exactly where you left off.</p>
         </div>
       </section>
 
@@ -118,6 +128,10 @@ const LandingPage = () => {
             </p>
             <p className="manifesto-highlight">
               This is education the way it should have been all along.
+            </p>
+            <p className="manifesto-elitism">
+              This isn't for people who want another course or another coach.
+              It's for the ones who've realized the system wasn't built for them.
             </p>
           </div>
         </div>
@@ -188,6 +202,10 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
+
+          <p className="beginners-luck">
+            You're catching this at exactly the right moment — before everyone else realizes the game has changed.
+          </p>
         </div>
       </section>
 
@@ -312,6 +330,106 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Ladder vs River Section */}
+      <section className="landing-ladder-river">
+        <div className="landing-container">
+          <h2 className="section-heading">Two Ways to Build a Life</h2>
+
+          <div className="path-comparison">
+            {/* The Ladder */}
+            <div className="path-option path-ladder">
+              <div className="path-visual">
+                <div className="ladder">
+                  <div className="ladder-rung rung-top">
+                    <span className="rung-label">???</span>
+                    <span className="rung-question">"Is this it?"</span>
+                  </div>
+                  <div className="ladder-rail"></div>
+                  <div className="ladder-rung">
+                    <span className="rung-label">Corner Office</span>
+                  </div>
+                  <div className="ladder-rail"></div>
+                  <div className="ladder-rung">
+                    <span className="rung-label">Promotion</span>
+                  </div>
+                  <div className="ladder-rail"></div>
+                  <div className="ladder-rung">
+                    <span className="rung-label">The "Right" Job</span>
+                  </div>
+                  <div className="ladder-rail"></div>
+                  <div className="ladder-rung">
+                    <span className="rung-label">Degree</span>
+                  </div>
+                  <div className="ladder-rail"></div>
+                  <div className="ladder-rung rung-bottom">
+                    <span className="rung-label">Good Grades</span>
+                    <span className="rung-you">You start here</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="path-details">
+                <h3 className="path-title">The Ladder</h3>
+                <p className="path-orientation"><span className="path-label">Orientation:</span> Future</p>
+                <p className="path-description">"I'll be happy when I reach the next rung."</p>
+                <ul className="path-traits">
+                  <li>Exterior motivations (status, approval, salary)</li>
+                  <li>Someone else defined the rungs</li>
+                  <li>Fulfillment is always <em>above</em> you</li>
+                  <li>Reach the top → "Now what?"</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* The River */}
+            <div className="path-option path-river">
+              <div className="path-visual">
+                <div className="river">
+                  <div className="river-source">
+                    <span className="source-label">You</span>
+                    <span className="source-sub">your essence</span>
+                  </div>
+                  <div className="river-flow">
+                    <div className="tributary tributary-top">
+                      <span>skills</span>
+                    </div>
+                    <div className="river-main">
+                      <div className="flow-wave"></div>
+                      <div className="flow-wave"></div>
+                      <div className="flow-wave"></div>
+                    </div>
+                    <div className="tributary tributary-bottom">
+                      <span>experiences</span>
+                    </div>
+                  </div>
+                  <div className="river-ocean">
+                    <span className="ocean-label">Impact</span>
+                    <span className="ocean-sub">contribution</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="path-details">
+                <h3 className="path-title">The River</h3>
+                <p className="path-orientation"><span className="path-label">Orientation:</span> Present</p>
+                <p className="path-description">"What's alive in me right now?"</p>
+                <ul className="path-traits">
+                  <li>Interior motivations (curiosity, meaning, energy)</li>
+                  <li>Your unique path carves itself</li>
+                  <li>Fulfillment is built into the flow</li>
+                  <li>Impact ripples outward naturally</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div className="path-kicker">
+            <p>The ladder asks: <em>"What will get me there?"</em></p>
+            <p>The river asks: <em>"What's already here?"</em></p>
+          </div>
+        </div>
+      </section>
+
       {/* Founder Story Section */}
       <section className="landing-founder">
         <div className="landing-container">
@@ -343,6 +461,9 @@ const LandingPage = () => {
                 </p>
                 <p className="ear-acronym">
                   As an acronym, that spells <span className="ear-highlight">E.A.R.</span> — coincidence? 🤔
+                </p>
+                <p className="destiny-child">
+                  If you're here, it's not by accident. The universe has a funny way of pointing you toward what you need.
                 </p>
               </div>
 
@@ -416,6 +537,22 @@ const LandingPage = () => {
                 When these four elements align, work stops feeling like work. That's flow.
               </p>
             </div>
+
+            <div className="chain-combo">
+              <span className="combo-element">Your Skills</span>
+              <span className="combo-operator">×</span>
+              <span className="combo-element">Your Problems</span>
+              <span className="combo-operator">×</span>
+              <span className="combo-element">Your People</span>
+              <span className="combo-equals">=</span>
+              <span className="combo-result">An offer only you can make</span>
+            </div>
+
+            <blockquote className="dots-quote">
+              <p>"You can't connect the dots looking forward; you can only connect them looking backwards."</p>
+              <cite>— Steve Jobs</cite>
+              <p className="dots-explanation">We help you see the connections you've been missing.</p>
+            </blockquote>
           </div>
         </div>
       </section>
@@ -428,6 +565,17 @@ const LandingPage = () => {
             A guided journey of discovery — not another course to complete
           </p>
 
+          <div className="creativity-callouts">
+            <div className="creativity-callout blank-fills">
+              <span className="creativity-icon">✍️</span>
+              <p>No blank page syndrome. We ask the questions — you discover the answers.</p>
+            </div>
+            <div className="creativity-callout voluntary-autonomy">
+              <span className="creativity-icon">🧭</span>
+              <p>No rigid curriculum. Start where it makes sense for you. Your journey, your pace.</p>
+            </div>
+          </div>
+
           <div className="steps-grid">
             <div className="step-card">
               <div className="step-number">1</div>
@@ -436,6 +584,7 @@ const LandingPage = () => {
                 Uncover the skills you've been taking for granted. The things that come
                 naturally to you but feel like magic to others.
               </p>
+              <p className="step-outcome">You'll unlock: Your Skills Profile</p>
             </div>
 
             <div className="step-card">
@@ -445,6 +594,7 @@ const LandingPage = () => {
                 Identify the problems you actually enjoy solving — the ones where helping
                 feels like play, not work.
               </p>
+              <p className="step-outcome">You'll unlock: Your Problem Map</p>
             </div>
 
             <div className="step-card">
@@ -454,6 +604,7 @@ const LandingPage = () => {
                 Discover who you're meant to serve. The people whose problems light you up
                 and who value what you bring.
               </p>
+              <p className="step-outcome">You'll unlock: Your Ideal Customer Profile</p>
             </div>
 
             <div className="step-card">
@@ -463,6 +614,59 @@ const LandingPage = () => {
                 Create offers, launch with confidence, and build something meaningful —
                 guided every step of the way.
               </p>
+              <p className="step-outcome">You'll unlock: The $100M Offer Builder</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Milestones Section */}
+      <section className="landing-milestones">
+        <div className="landing-container">
+          <h2 className="section-heading">Your First Wins</h2>
+          <p className="section-subheading">
+            Clear victories you'll hit along the way — not vague promises
+          </p>
+
+          <div className="milestones-timeline">
+            <div className="milestone-item">
+              <div className="milestone-marker">
+                <span className="milestone-week">Week 1</span>
+              </div>
+              <div className="milestone-content">
+                <h3 className="milestone-title">Clarity on your unique skills</h3>
+                <p className="milestone-desc">Finally see what makes you valuable</p>
+              </div>
+            </div>
+
+            <div className="milestone-item">
+              <div className="milestone-marker">
+                <span className="milestone-week">Week 2</span>
+              </div>
+              <div className="milestone-content">
+                <h3 className="milestone-title">Your first validation conversation</h3>
+                <p className="milestone-desc">Real feedback from real people</p>
+              </div>
+            </div>
+
+            <div className="milestone-item">
+              <div className="milestone-marker">
+                <span className="milestone-week">Week 4</span>
+              </div>
+              <div className="milestone-content">
+                <h3 className="milestone-title">Your $100M Offer drafted</h3>
+                <p className="milestone-desc">An offer so good people feel stupid saying no</p>
+              </div>
+            </div>
+
+            <div className="milestone-item milestone-featured">
+              <div className="milestone-marker">
+                <span className="milestone-week">Week 6+</span>
+              </div>
+              <div className="milestone-content">
+                <h3 className="milestone-title">Your first paying customer</h3>
+                <p className="milestone-desc">Proof that your skills have market value</p>
+              </div>
             </div>
           </div>
         </div>
@@ -546,6 +750,15 @@ const LandingPage = () => {
                   <span>Helps you stay focused when you feel lost</span>
                 </li>
               </ul>
+              <p className="instant-feedback-callout">
+                Every answer you give, Zarlo responds in real-time. Watch your offers take shape as you think out loud.
+              </p>
+              <p className="alfred-effect-callout">
+                The more you use it, the smarter it gets. Zarlo learns your voice, your goals, and your patterns.
+              </p>
+              <p className="oracle-effect-callout">
+                Zarlo doesn't just answer questions — it spots patterns you haven't noticed yet.
+              </p>
             </div>
             <div className="zarlo-preview">
               <div className="zarlo-chat-mockup">
@@ -585,7 +798,7 @@ const LandingPage = () => {
               <div className="challenge-feature">
                 <span className="challenge-feature-icon">🎯</span>
                 <h3>Daily Quests</h3>
-                <p>Bite-sized actions that move you forward. Complete quests to earn points and build momentum.</p>
+                <p>Bite-sized actions that move you forward. Earn points that are yours to keep — watch your total grow.</p>
               </div>
               <div className="challenge-feature">
                 <span className="challenge-feature-icon">🔥</span>
@@ -601,6 +814,28 @@ const LandingPage = () => {
                 <span className="challenge-feature-icon">🎖️</span>
                 <h3>Stage Progression</h3>
                 <p>Move through 6 stages from validation to launch. Each stage unlocks new quests and tools.</p>
+              </div>
+            </div>
+
+            <div className="boss-fights-callout">
+              <span className="boss-fights-icon">🐉</span>
+              <div className="boss-fights-content">
+                <h3>Courage Challenges</h3>
+                <p>
+                  Along the way, you'll face visibility fears that once held you back.
+                  Each one you conquer unlocks more of who you really are.
+                </p>
+              </div>
+            </div>
+
+            <div className="monitoring-callout">
+              <span className="monitoring-icon">📊</span>
+              <div className="monitoring-content">
+                <h3>Your Command Center</h3>
+                <p>
+                  Everything at a glance: points earned, stages completed, offers built, revenue tracked.
+                  Your progress, visualized.
+                </p>
               </div>
             </div>
 
@@ -628,6 +863,32 @@ const LandingPage = () => {
           <h2 className="section-heading">Powerful Tools at Your Fingertips</h2>
           <p className="section-subheading">
             From idea to revenue — everything you need in one place
+          </p>
+
+          <div className="unlock-roadmap">
+            <div className="unlock-item">
+              <span className="unlock-stage">Stage 1</span>
+              <span className="unlock-name">Flow Finder</span>
+            </div>
+            <span className="unlock-arrow">→</span>
+            <div className="unlock-item">
+              <span className="unlock-stage">Stage 2</span>
+              <span className="unlock-name">Offer Builder</span>
+            </div>
+            <span className="unlock-arrow">→</span>
+            <div className="unlock-item">
+              <span className="unlock-stage">Stage 4</span>
+              <span className="unlock-name">Funnel Calculator</span>
+            </div>
+            <span className="unlock-arrow">→</span>
+            <div className="unlock-item unlock-item-featured">
+              <span className="unlock-stage">Stage 6</span>
+              <span className="unlock-name">CRM Command Center</span>
+            </div>
+          </div>
+
+          <p className="build-from-scratch">
+            Build <strong>your</strong> offer. Create <strong>your</strong> funnel. Launch <strong>your</strong> business.
           </p>
 
           <div className="tools-grid">
@@ -675,9 +936,20 @@ const LandingPage = () => {
               <div className="tool-icon">📚</div>
               <h3 className="tool-title">Library of Answers</h3>
               <p className="tool-description">
-                All your discoveries organized in one place. Your skills, problems,
-                personas, and insights — always accessible.
+                A growing collection that's uniquely yours. Every skill discovered, every problem
+                identified, every insight captured — organized and always accessible.
               </p>
+            </div>
+          </div>
+
+          <div className="tools-footer-callouts">
+            <div className="tools-callout evergreen-callout">
+              <span className="tools-callout-icon">♾️</span>
+              <p>These aren't one-time exercises. Refine your offers, track new funnels, revisit your flow — the tools grow with you.</p>
+            </div>
+            <div className="tools-callout realtime-callout">
+              <span className="tools-callout-icon">⚡</span>
+              <p>Drag, adjust, iterate. See your business model shift in real-time as you make changes.</p>
             </div>
           </div>
         </div>
@@ -753,6 +1025,19 @@ const LandingPage = () => {
               <span className="proof-label">Core needs we help you meet</span>
             </div>
           </div>
+
+          <p className="conformity-anchor">
+            This week, 847 professionals completed their first Flow Finder quest. Most start with Skills Discovery.
+          </p>
+
+          <p className="humanity-hero">
+            Every person who finds their flow is one less person stuck in work that drains them.
+            You're not just changing your life — you're part of a quiet revolution.
+          </p>
+
+          <p className="last-mile-drive">
+            You're closer than you think. Most members see clarity within their first week.
+          </p>
         </div>
       </section>
 
@@ -766,14 +1051,29 @@ const LandingPage = () => {
 
           <div className="community-features">
             <div className="community-feature">
-              <div className="community-icon">🏆</div>
-              <h3>Weekly Leaderboards</h3>
-              <p>See how you're progressing compared to others. Celebrate wins together and stay motivated.</p>
+              <div className="community-icon">⚔️</div>
+              <h3>Fantasy Team Battles</h3>
+              <p>Join a team and compete against others across categories. Your team's combined points battle for weekly glory.</p>
             </div>
             <div className="community-feature">
-              <div className="community-icon">👥</div>
-              <h3>Challenge Groups</h3>
-              <p>Join a small group tackling the same challenges. Accountability partners who get it.</p>
+              <div className="community-icon">🧙</div>
+              <h3>Learn From Launchers</h3>
+              <p>Connect with members who've already shipped. Get advice from people just a few steps ahead of you.</p>
+            </div>
+            <div className="community-feature">
+              <div className="community-icon">📣</div>
+              <h3>Share Your Wins</h3>
+              <p>Hit a milestone? Share it. Your wins inspire others — and celebrating publicly cements your progress.</p>
+            </div>
+            <div className="community-feature">
+              <div className="community-icon">🎁</div>
+              <h3>Bring Friends, Earn Together</h3>
+              <p>Invite a friend and you both earn bonus points. Success is better shared.</p>
+            </div>
+            <div className="community-feature">
+              <div className="community-icon">☕</div>
+              <h3>Weekly Live Sessions</h3>
+              <p>Drop in every week to share wins, ask questions, and get unstuck together. Real people, real support.</p>
             </div>
             <div className="community-feature">
               <div className="community-icon">🎉</div>
@@ -781,6 +1081,10 @@ const LandingPage = () => {
               <p>Every stage completion, every first sale, every breakthrough — we celebrate with you.</p>
             </div>
           </div>
+
+          <p className="credentials-callout">
+            Complete stages to earn recognition. Your progress is tracked, celebrated, and shareable.
+          </p>
         </div>
       </section>
 
@@ -967,8 +1271,8 @@ const LandingPage = () => {
             <div className="lead-magnet-icon">📬</div>
             <h2 className="lead-magnet-heading">Not ready to dive in yet?</h2>
             <p className="lead-magnet-description">
-              Get the <strong>Flow Finder Starter Kit</strong> — a free guide with the first 3 exercises
-              to start discovering your unique path. Plus weekly insights on building a business around your strengths.
+              Get the <strong>Flow Finder Starter Kit</strong> free — the same exercises our paying members start with.
+              Three guided prompts to start discovering your unique path, plus weekly insights on building a business around your strengths.
             </p>
 
             {!leadSubmitted ? (
@@ -1025,6 +1329,12 @@ const LandingPage = () => {
           </h2>
           <p className="final-cta-subheading">
             Stop grinding. Start discovering. Find your flow.
+          </p>
+          <p className="co-creator">
+            We're still early. Join now and help shape what career development should look like.
+          </p>
+          <p className="founding-member">
+            Early access pricing while we're in beta. Join the founding members before rates increase.
           </p>
           <div className="final-cta-buttons">
             <button
