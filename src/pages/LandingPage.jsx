@@ -100,6 +100,21 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Is This You? Section - North Star Person */}
+      <section className="landing-is-this-you">
+        <div className="landing-container">
+          <h2 className="is-this-you-heading">Is This You?</h2>
+          <p className="north-star-person">
+            Someone who senses there's a more alive version of themselves —
+            but the path there feels either <span className="gold-text">too scary</span> or <span className="gold-text">too boring</span>.
+          </p>
+          <p className="north-star-subtext">
+            You're not broken. You're not lazy. You're just caught between
+            the fear of being seen and the exhaustion of staying invisible.
+          </p>
+        </div>
+      </section>
+
       {/* Manifesto Section */}
       <section className="landing-manifesto">
         <div className="landing-container">
@@ -168,6 +183,55 @@ const LandingPage = () => {
 
           <p className="matrix-exchange-tagline">
             The leverage point isn't quitting. It's building an alternate source of safety.
+          </p>
+        </div>
+      </section>
+
+      {/* Problems We Understand Section */}
+      <section className="landing-problems-we-understand">
+        <div className="landing-container">
+          <h2 className="section-heading">Problems We Understand Because We Lived Them Too</h2>
+          <p className="section-subheading">
+            These aren't just challenges — they're the invisible weight you carry every day
+          </p>
+
+          <div className="problems-grid">
+            <div className="problem-card">
+              <div className="problem-icon">💔</div>
+              <h3>Healing Feels Heavy</h3>
+              <p>Growth work that feels like homework — serious, slow, and joyless.</p>
+            </div>
+            <div className="problem-card">
+              <div className="problem-icon">😶</div>
+              <h3>Hiding Your Real Self</h3>
+              <p>Fear of being truly seen keeps you playing small and staying quiet.</p>
+            </div>
+            <div className="problem-card">
+              <div className="problem-icon">🔥</div>
+              <h3>Chronic Burnout</h3>
+              <p>Trapped in a "matrix" of joyless work that slowly drains your soul.</p>
+            </div>
+            <div className="problem-card">
+              <div className="problem-icon">🤷</div>
+              <h3>Lack of Self-Knowledge</h3>
+              <p>No clarity on what you actually want — or how to get there.</p>
+            </div>
+            <div className="problem-card">
+              <div className="problem-icon">🚫</div>
+              <h3>Can't Monetise Gifts</h3>
+              <p>You have skills and passion, but no system to turn them into income.</p>
+            </div>
+            <div className="problem-card">
+              <div className="problem-icon">😰</div>
+              <h3>Visibility Paralysis</h3>
+              <p>Fear of judgement keeps you invisible — even when you're ready to share.</p>
+            </div>
+          </div>
+
+          <p className="problems-north-star">
+            The North Star Problem: <strong>Healing feels heavy. Self-discovery feels boring.</strong>
+            <br />
+            What if it could feel like play instead?
           </p>
         </div>
       </section>
@@ -282,6 +346,93 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Six Pillars of Fulfillment Section */}
+      <section className="landing-six-pillars">
+        <div className="landing-container">
+          <h2 className="section-heading">The Six Pillars of Fulfillment</h2>
+          <p className="section-subheading">
+            Every human is driven by six core needs. FindMyFlow is designed to meet all of them.
+          </p>
+
+          <div className="pillars-container">
+            <div className="pillars-group pillars-personality">
+              <h3 className="pillars-group-label">Needs of the Personality</h3>
+              <div className="pillars-grid">
+                <div className="pillar-card">
+                  <div className="pillar-icon">🏠</div>
+                  <h4 className="pillar-name">Certainty</h4>
+                  <p className="pillar-need">Security, stability, predictability</p>
+                  <div className="pillar-how">
+                    <span className="pillar-how-label">How we deliver:</span>
+                    <p>Progress always saved. Clear 6-stage system. Guided discovery — no blank page syndrome. Milestones you can see coming.</p>
+                  </div>
+                </div>
+
+                <div className="pillar-card">
+                  <div className="pillar-icon">🎲</div>
+                  <h4 className="pillar-name">Variety</h4>
+                  <p className="pillar-need">Change, stimulation, challenge</p>
+                  <div className="pillar-how">
+                    <span className="pillar-how-label">How we deliver:</span>
+                    <p>Daily quests. Courage Challenges. Fantasy team battles. Different quest types. Unpredictable AI insights from Zarlo.</p>
+                  </div>
+                </div>
+
+                <div className="pillar-card">
+                  <div className="pillar-icon">👑</div>
+                  <h4 className="pillar-name">Significance</h4>
+                  <p className="pillar-need">Feel unique, important, special</p>
+                  <div className="pillar-how">
+                    <span className="pillar-how-label">How we deliver:</span>
+                    <p>"An offer only YOU can make." Your unique combination. Personalized archetypes. Specific Knowledge no one can compete with.</p>
+                  </div>
+                </div>
+
+                <div className="pillar-card">
+                  <div className="pillar-icon">💜</div>
+                  <h4 className="pillar-name">Connection</h4>
+                  <p className="pillar-need">Closeness and belonging</p>
+                  <div className="pillar-how">
+                    <span className="pillar-how-label">How we deliver:</span>
+                    <p>Community features. Team battles. Weekly live sessions. Zarlo as your AI co-founder. Mentorship from those ahead of you.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="pillars-group pillars-spirit">
+              <h3 className="pillars-group-label">Needs of the Spirit</h3>
+              <p className="pillars-spirit-note">Where lasting fulfillment lives</p>
+              <div className="pillars-grid pillars-grid-spirit">
+                <div className="pillar-card pillar-card-spirit">
+                  <div className="pillar-icon">🌱</div>
+                  <h4 className="pillar-name">Growth</h4>
+                  <p className="pillar-need">Expand, develop, improve</p>
+                  <div className="pillar-how">
+                    <span className="pillar-how-label">How we deliver:</span>
+                    <p>Stage progression that unlocks new capabilities. Flow Finder discovery. Nervous System calibration. Courage challenges that expand who you are. Points and leveling that make growth visible.</p>
+                  </div>
+                </div>
+
+                <div className="pillar-card pillar-card-spirit">
+                  <div className="pillar-icon">🌍</div>
+                  <h4 className="pillar-name">Contribution</h4>
+                  <p className="pillar-need">Give beyond ourselves</p>
+                  <div className="pillar-how">
+                    <span className="pillar-how-label">How we deliver:</span>
+                    <p>Monetise your mission — not just making money, but serving others. Every person who finds their flow is one less person stuck. You're building something that helps people escape the matrix.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p className="pillars-kicker">
+            Most platforms optimize for one or two needs. We designed for all six.
+          </p>
         </div>
       </section>
 
@@ -484,6 +635,13 @@ const LandingPage = () => {
                 </div>
               </div>
 
+              <div className="founder-intersection">
+                <p className="intersection-statement">
+                  I help people who feel stuck escape the "matrix" of joyless work and heavy healing —
+                  by building <strong>playful diagnostic tools</strong> and <strong>gamified transformation systems</strong> grounded in real therapeutic science.
+                </p>
+              </div>
+
               <p className="founder-mission">
                 <strong>My north star:</strong> Help you go from idea to monetising your mission —
                 as fast as possible.
@@ -546,6 +704,31 @@ const LandingPage = () => {
               <span className="combo-element">Your People</span>
               <span className="combo-equals">=</span>
               <span className="combo-result">An offer only you can make</span>
+            </div>
+
+            <div className="unique-combination">
+              <h3 className="unique-combo-label">Your Unique Combination</h3>
+              <div className="unique-combo-formula">
+                <div className="combo-layer">
+                  <span className="combo-layer-icon">🎯</span>
+                  <span className="combo-layer-text">Skills you've spent years developing</span>
+                </div>
+                <span className="combo-connector">+</span>
+                <div className="combo-layer">
+                  <span className="combo-layer-icon">💡</span>
+                  <span className="combo-layer-text">Problems that actually light you up</span>
+                </div>
+                <span className="combo-connector">+</span>
+                <div className="combo-layer">
+                  <span className="combo-layer-icon">👥</span>
+                  <span className="combo-layer-text">People you genuinely want to help</span>
+                </div>
+                <span className="combo-equals">=</span>
+                <div className="combo-result-box">
+                  <span className="combo-result-label">Specific Knowledge</span>
+                  <span className="combo-result-desc">The thing no one else can compete with</span>
+                </div>
+              </div>
             </div>
 
             <blockquote className="dots-quote">

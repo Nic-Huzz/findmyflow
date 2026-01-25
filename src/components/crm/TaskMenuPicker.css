@@ -1,0 +1,293 @@
+/* src/components/crm/TaskMenuPicker.css */
+
+.task-menu-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.task-menu-picker .picker-header {
+  text-align: center;
+}
+
+.task-menu-picker .picker-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin: 0 0 8px 0;
+}
+
+.task-menu-picker .last-week-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+  padding: 8px 12px;
+  background: #fef3cd;
+  border-radius: 6px;
+}
+
+/* Task Lists */
+.task-menu-picker .task-lists {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.task-menu-picker .phase-task-list {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+}
+
+.task-menu-picker .phase-list-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin: 0 0 12px 0;
+}
+
+.task-menu-picker .task-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-menu-picker .task-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.task-menu-picker .add-task-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--purple-light, #f0e6ff);
+  color: var(--purple, #5e17eb);
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.task-menu-picker .add-task-btn:hover {
+  background: var(--purple, #5e17eb);
+  color: white;
+}
+
+.task-menu-picker .task-title {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-primary, #212529);
+}
+
+.task-menu-picker .task-count-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.task-menu-picker .remove-task-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.task-menu-picker .remove-task-btn:hover {
+  background: #dc2626;
+  color: white;
+}
+
+.task-menu-picker .task-count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--purple, #5e17eb);
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Custom Task */
+.task-menu-picker .add-custom-btn {
+  padding: 12px;
+  background: none;
+  border: 2px dashed var(--border-color, #e9ecef);
+  border-radius: 8px;
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-menu-picker .add-custom-btn:hover {
+  border-color: var(--purple, #5e17eb);
+  color: var(--purple, #5e17eb);
+}
+
+.task-menu-picker .custom-task-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.task-menu-picker .custom-task-input input {
+  padding: 10px 12px;
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.task-menu-picker .custom-task-input input:focus {
+  outline: none;
+  border-color: var(--purple, #5e17eb);
+}
+
+.task-menu-picker .custom-task-input select {
+  padding: 10px 12px;
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+}
+
+.task-menu-picker .custom-task-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.task-menu-picker .cancel-custom-btn {
+  flex: 1;
+  padding: 8px 12px;
+  background: none;
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 6px;
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.task-menu-picker .save-custom-btn {
+  flex: 1;
+  padding: 8px 12px;
+  background: var(--purple, #5e17eb);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.task-menu-picker .save-custom-btn:disabled {
+  background: var(--border-color, #e9ecef);
+  color: var(--text-tertiary, #adb5bd);
+  cursor: not-allowed;
+}
+
+/* Selected Summary */
+.task-menu-picker .selected-summary {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: var(--purple-light, #f0e6ff);
+  border-radius: 8px;
+}
+
+.task-menu-picker .summary-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6c757d);
+}
+
+.task-menu-picker .summary-count {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--purple, #5e17eb);
+}
+
+/* Actions */
+.task-menu-picker .picker-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.task-menu-picker .back-btn {
+  flex: 1;
+  padding: 14px 24px;
+  background: white;
+  color: var(--text-primary, #212529);
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.task-menu-picker .back-btn:hover {
+  border-color: var(--text-secondary, #6c757d);
+}
+
+.task-menu-picker .continue-btn {
+  flex: 2;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.task-menu-picker .continue-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.task-menu-picker .continue-btn:disabled {
+  background: var(--border-color, #e9ecef);
+  color: var(--text-tertiary, #adb5bd);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .task-menu-picker {
+    padding: 16px;
+  }
+
+  .task-menu-picker .task-lists {
+    max-height: 350px;
+  }
+}

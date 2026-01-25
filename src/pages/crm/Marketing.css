@@ -177,7 +177,8 @@
 .crm-marketing .performance-btn,
 .crm-marketing .queue-btn,
 .crm-marketing .story-bank-btn,
-.crm-marketing .strategy-btn {
+.crm-marketing .strategy-btn,
+.crm-marketing .leads-capture-btn {
   border: none;
   color: white;
   padding: 0.625rem 1rem;
@@ -206,6 +207,11 @@
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
+.crm-marketing .leads-capture-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
 .crm-marketing .strategy-btn {
   background: #fff;
   border: 2px solid var(--border-color);
@@ -226,6 +232,11 @@
 .crm-marketing .story-bank-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.crm-marketing .leads-capture-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
 .crm-marketing .strategy-btn:hover {
@@ -939,6 +950,98 @@
   .crm-marketing .story-bank-modal {
     border-radius: var(--radius-lg);
   }
+}
+
+/* Content Plan Section */
+.crm-marketing .content-plan-section {
+  margin-bottom: 1.5rem;
+}
+
+.crm-marketing .content-plan-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.crm-marketing .content-plan-section .section-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.crm-marketing .edit-plan-btn {
+  background: white;
+  border: 2px solid var(--border-color);
+  color: var(--purple);
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.crm-marketing .edit-plan-btn:hover {
+  background: var(--purple-lighter);
+  border-color: var(--purple);
+}
+
+/* Content Planning Modal */
+.crm-marketing .content-planning-modal-overlay {
+  align-items: flex-start;
+  padding-top: 40px;
+}
+
+.crm-marketing .content-planning-modal {
+  background: var(--warm-gray);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.crm-marketing .modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.crm-marketing .modal-close-btn:hover {
+  background: var(--purple-lighter);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+/* Context in quick generate */
+.crm-marketing .qg-context {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 8px 0 0 0;
+  line-height: 1.5;
+}
+
+/* Hide bottom toolbar when content planning modal is open */
+body:has(.content-planning-modal-overlay) .bottom-toolbar,
+body:has(.content-planning-modal-overlay) .crm-bottom-nav {
+  display: none !important;
 }
 
 /* Reduced motion */

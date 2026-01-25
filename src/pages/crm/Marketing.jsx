@@ -19,7 +19,15 @@ import {
   updateStreak,
 } from '../../lib/crm'
 import { hasContentStrategy, fetchContentStrategy } from '../../lib/contentStrategy'
-import { ContentGenerator, WeeklyPlanningSession, StoryBank } from '../../components/crm'
+import { getCurrentContentPlan, saveGeneratedContent } from '../../lib/crm/contentPlanningService'
+import {
+  ContentGenerator,
+  WeeklyPlanningSession,
+  StoryBank,
+  ContentPlanningFlow,
+  ContentChecklist,
+  LeadsCapture
+} from '../../components/crm'
 import ContentStrategyFlow from '../../flows/ContentStrategyFlow'
 import './Marketing.css'
 
@@ -85,6 +93,10 @@ export default function Marketing() {
   const [showStoryBank, setShowStoryBank] = useState(false)
   const [strategy, setStrategy] = useState(null)
   const [onboardingStage, setOnboardingStage] = useState(ONBOARDING_STAGES.CHECKING)
+  const [showContentPlanning, setShowContentPlanning] = useState(false)
+  const [contentPlan, setContentPlan] = useState(null)
+  const [generatingItem, setGeneratingItem] = useState(null)
+  const [showLeadsCapture, setShowLeadsCapture] = useState(false)
 
   const weekInfo = useMemo(() => getWeekInfo(weekOffset), [weekOffset])
   const todayInfo = useMemo(() => getTodayInfo(), [])
@@ -92,8 +104,19 @@ export default function Marketing() {
   useEffect(() => {
     if (user?.id) {
       checkAndLoadStrategy()
+      loadContentPlan()
     }
   }, [user?.id])
+
+  async function loadContentPlan() {
+    if (!user?.id) return
+    try {
+      const plan = await getCurrentContentPlan(user.id)
+      setContentPlan(plan)
+    } catch (err) {
+      console.error('Error loading content plan:', err)
+    }
+  }
 
   useEffect(() => {
     // Only load tasks after we've checked strategy
@@ -151,6 +174,31 @@ export default function Marketing() {
   function handleWeeklyPlanningSkip() {
     localStorage.setItem('weekly_planning_dismissed', new Date().toISOString())
     setOnboardingStage(ONBOARDING_STAGES.COMPLETE)
+  }
+
+  // Content planning handlers
+  function handleContentPlanComplete(plan) {
+    setContentPlan(plan)
+    setShowContentPlanning(false)
+  }
+
+  function handleGenerateContent(item) {
+    setGeneratingItem(item)
+    // This opens the ContentGenerator modal with the item context pre-filled
+  }
+
+  function handleEditDraft(item) {
+    // Open content generator with draft loaded
+    setGeneratingItem(item)
+  }
+
+  async function handleContentGenerated(generatedContent) {
+    if (generatingItem) {
+      // Save the generated content to the item
+      await saveGeneratedContent(generatingItem.id, generatedContent.content)
+      loadContentPlan() // Refresh the plan
+      setGeneratingItem(null)
+    }
   }
 
   async function loadTasks() {
@@ -409,15 +457,37 @@ export default function Marketing() {
             📚 Stories
           </button>
           <button
-            className="queue-btn"
-            onClick={() => navigate('/crm/content-queue')}
+            className="leads-capture-btn"
+            onClick={() => setShowLeadsCapture(true)}
           >
-            📬 Queue
+            🎯 Leads
           </button>
         </div>
         <ContentGenerator
           userId={user?.id}
           projectId={null}
+        />
+      </div>
+
+      {/* Content Plan Checklist */}
+      <div className="content-plan-section">
+        <div className="section-header">
+          <h3>📋 Weekly Content Plan</h3>
+          {contentPlan && (
+            <button
+              className="edit-plan-btn"
+              onClick={() => setShowContentPlanning(true)}
+            >
+              Edit Plan
+            </button>
+          )}
+        </div>
+        <ContentChecklist
+          plan={contentPlan}
+          onGenerateContent={handleGenerateContent}
+          onEditDraft={handleEditDraft}
+          onRefresh={loadContentPlan}
+          onCreatePlan={() => setShowContentPlanning(true)}
         />
       </div>
 
@@ -614,6 +684,58 @@ export default function Marketing() {
             <StoryBank onClose={() => setShowStoryBank(false)} />
           </div>
         </div>
+      )}
+
+      {/* Content Planning Modal */}
+      {showContentPlanning && (
+        <div className="modal-overlay content-planning-modal-overlay" onClick={() => setShowContentPlanning(false)}>
+          <div className="content-planning-modal" onClick={e => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setShowContentPlanning(false)}>×</button>
+            <ContentPlanningFlow
+              onComplete={handleContentPlanComplete}
+              onClose={() => setShowContentPlanning(false)}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Content Generation Modal (for plan items) */}
+      {generatingItem && (
+        <div className="modal-overlay" onClick={() => setGeneratingItem(null)}>
+          <div className="quick-generate-modal" onClick={e => e.stopPropagation()}>
+            <div className="qg-header">
+              <h3>Generate Content</h3>
+              <button className="qg-close" onClick={() => setGeneratingItem(null)}>×</button>
+            </div>
+            <div className="qg-task-info">
+              <span className="qg-task-type">{generatingItem.icon} {generatingItem.label}</span>
+              {generatingItem.context && (
+                <p className="qg-context">{generatingItem.context}</p>
+              )}
+            </div>
+            <div className="qg-generator">
+              <ContentGenerator
+                userId={user?.id}
+                projectId={null}
+                initialContext={generatingItem.context}
+                initialDraft={generatingItem.generated_content}
+                onContentGenerated={handleContentGenerated}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Leads Capture Modal */}
+      {showLeadsCapture && (
+        <LeadsCapture
+          userId={user?.id}
+          onClose={() => setShowLeadsCapture(false)}
+          onLeadsCaptured={(leads) => {
+            console.log('Leads captured:', leads.length)
+            setShowLeadsCapture(false)
+          }}
+        />
       )}
     </div>
   )

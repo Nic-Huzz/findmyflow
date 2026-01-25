@@ -1,0 +1,174 @@
+/* src/components/crm/PhaseSelector.css */
+
+.phase-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.phase-selector .phase-header {
+  text-align: center;
+}
+
+.phase-selector .phase-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin: 0 0 8px 0;
+}
+
+.phase-selector .phase-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
+/* Phases Grid */
+.phase-selector .phases-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.phase-selector .phase-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px;
+  background: white;
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.phase-selector .phase-card:hover {
+  border-color: var(--phase-color);
+  background: #fafafa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.phase-selector .phase-card.selected {
+  border-color: var(--phase-color);
+  background: color-mix(in srgb, var(--phase-color) 8%, white);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--phase-color) 20%, transparent);
+}
+
+.phase-selector .phase-icon {
+  font-size: 2rem;
+}
+
+.phase-selector .phase-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+}
+
+.phase-selector .phase-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6c757d);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.phase-selector .phase-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--phase-color);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Actions */
+.phase-selector .phase-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.phase-selector .back-btn {
+  flex: 1;
+  padding: 14px 24px;
+  background: white;
+  color: var(--text-primary, #212529);
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.phase-selector .back-btn:hover {
+  border-color: var(--text-secondary, #6c757d);
+}
+
+.phase-selector .continue-btn {
+  flex: 2;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.phase-selector .continue-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.phase-selector .continue-btn:disabled {
+  background: var(--border-color, #e9ecef);
+  color: var(--text-tertiary, #adb5bd);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.phase-selector .selected-count {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 400px) {
+  .phase-selector .phases-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .phase-selector .phase-card {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .phase-selector .phase-icon {
+    font-size: 1.5rem;
+  }
+
+  .phase-selector .phase-desc {
+    text-align: left;
+  }
+}

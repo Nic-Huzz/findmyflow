@@ -1,0 +1,156 @@
+/* src/components/crm/ContentPlanningFlow.css */
+
+.content-planning-flow {
+  min-height: 100%;
+  background: var(--warm-gray, #f8f9fa);
+  padding-bottom: 20px;
+}
+
+/* Progress Steps */
+.content-planning-flow .planning-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 20px 24px 0;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.content-planning-flow .step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: white;
+  color: var(--text-secondary, #6c757d);
+  border: 2px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.content-planning-flow .step-dot.active {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.content-planning-flow .step-dot.completed {
+  background: var(--purple, #5e17eb);
+  color: white;
+  border-color: transparent;
+}
+
+.content-planning-flow .step-line {
+  flex: 1;
+  height: 2px;
+  background: #e9ecef;
+  margin: 0 4px;
+}
+
+/* Loading State */
+.content-planning-flow .planning-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  gap: 16px;
+}
+
+.content-planning-flow .planning-loading p {
+  font-size: 0.95rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
+.content-planning-flow .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e9ecef;
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* No Phases Message */
+.content-planning-flow .no-phases-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+  gap: 12px;
+}
+
+.content-planning-flow .message-emoji {
+  font-size: 3rem;
+}
+
+.content-planning-flow .no-phases-message h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin: 0;
+}
+
+.content-planning-flow .no-phases-message p {
+  font-size: 0.95rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+  max-width: 280px;
+}
+
+.content-planning-flow .close-btn {
+  margin-top: 12px;
+  padding: 12px 24px;
+  background: white;
+  color: var(--text-primary, #212529);
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.content-planning-flow .close-btn:hover {
+  border-color: var(--text-secondary, #6c757d);
+}
+
+/* Saving Overlay */
+.content-planning-flow .saving-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 1000;
+}
+
+.content-planning-flow .saving-overlay p {
+  font-size: 0.95rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
+/* Hide bottom toolbar when flow is open */
+body:has(.content-planning-modal-overlay) .bottom-toolbar,
+body:has(.content-planning-modal-overlay) .crm-bottom-nav {
+  display: none !important;
+}

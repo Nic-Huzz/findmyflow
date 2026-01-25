@@ -34,7 +34,7 @@ export const STAGE_CONFIG = {
     shortName: 'Flow Finder',
     description: 'Discover your unique skills, problems, and personas',
     icon: '🧭',
-    color: '#5e17eb', // brand purple
+    color: '#5e17eb', // brand purple (ombre start)
     requiredFlows: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
     milestones: [],
     groanChallenge: null, // No groan for Flow Finder
@@ -50,7 +50,7 @@ export const STAGE_CONFIG = {
     shortName: 'Groans',
     description: 'Challenges that push you past your comfort zone to grow',
     icon: '🙌🏼',
-    color: '#ec4899', // pink
+    color: '#6d26d7', // purple→gold ombre
     requiredFlows: [],
     milestones: [],
     groanChallenge: null,
@@ -67,7 +67,7 @@ export const STAGE_CONFIG = {
     shortName: 'Validation',
     description: 'Validate your opportunity with real potential customers',
     icon: '🔍',
-    color: '#6366f1', // indigo
+    color: '#7d36c4', // purple→gold ombre
     requiredFlows: ['persona_selection'],
     milestones: ['validation_form_sent', 'validation_responses_3'],
     groanChallenge: {
@@ -91,7 +91,7 @@ export const STAGE_CONFIG = {
     shortName: 'Product',
     description: 'Build your core product, lead magnet, and value proposition',
     icon: '🛠️',
-    color: '#8b5cf6', // violet
+    color: '#8c45b0', // purple→gold ombre
     requiredFlows: ['100m_offer', 'lead_magnet_selection', 'product_selection'],
     milestones: [
       'lead_magnet_created'
@@ -117,7 +117,7 @@ export const STAGE_CONFIG = {
     shortName: 'Testing',
     description: 'Test your product with real users and gather feedback',
     icon: '🎯',
-    color: '#f59e0b', // amber
+    color: '#9c559d', // purple→gold ombre
     requiredFlows: ['mvp_readiness', 'feedback_analysis'],
     milestones: ['feedback_form_sent'],
     groanChallenge: {
@@ -141,7 +141,7 @@ export const STAGE_CONFIG = {
     shortName: 'Money Models',
     description: 'Build your complete product suite with attraction, upsell, downsell, and continuity',
     icon: '💰',
-    color: '#f59e0b', // amber
+    color: '#ab6489', // purple→gold ombre
     requiredFlows: ['attraction_offer', 'upsell_offer', 'downsell_offer', 'continuity_offer'],
     milestones: [
       'decide_acquisition',
@@ -176,7 +176,7 @@ export const STAGE_CONFIG = {
     shortName: 'Grand Slam',
     description: 'Build your irresistible Grand Slam offer with bonuses, guarantee, and scarcity',
     icon: '🎯',
-    color: '#ec4899', // pink
+    color: '#bb7476', // purple→gold ombre
     requiredFlows: ['offer_builder_v2'],
     milestones: [
       'grand_slam_bonuses_created',
@@ -204,7 +204,7 @@ export const STAGE_CONFIG = {
     shortName: 'Campaign',
     description: 'Create your lead generation strategy and marketing assets',
     icon: '📢',
-    color: '#10b981', // emerald
+    color: '#ca8362', // purple→gold ombre
     requiredFlows: ['leads_strategy'],
     milestones: ['launch_sequence_planned'],
     groanChallenge: {
@@ -231,7 +231,7 @@ export const STAGE_CONFIG = {
     shortName: 'Launch',
     description: 'Execute your launch with your leads funnel',
     icon: '🚀',
-    color: '#E9A23B', // gold
+    color: '#da934f', // purple→gold ombre
     requiredFlows: [],
     milestones: ['acquisition_offer_launched', 'post_launch_review'],
     groanChallenge: {
@@ -258,7 +258,7 @@ export const STAGE_CONFIG = {
     shortName: 'Tracking',
     description: 'Track your funnel metrics and optimize conversions',
     icon: '📊',
-    color: '#06b6d4', // cyan
+    color: '#E9A23B', // gold (ombre end - success!)
     requiredFlows: [],
     milestones: [],
     groanChallenge: null, // No groan for Tracking
@@ -464,10 +464,12 @@ export const GROAN_SOURCE_TYPES = {
 
 /**
  * Groan challenge statuses
+ * Note: DB enum has: active, completed, skipped
+ * 'active' covers both generated (new) and accepted (in progress)
  */
 export const GROAN_CHALLENGE_STATUS = {
-  GENERATED: 'generated', // AI created but not started
-  ACCEPTED: 'accepted',   // User accepted the challenge
+  GENERATED: 'active',    // AI created but not started (maps to 'active')
+  ACCEPTED: 'active',     // User accepted the challenge (maps to 'active')
   COMPLETED: 'completed', // User marked as done
   SKIPPED: 'skipped'      // User skipped with feedback
 }
@@ -518,7 +520,7 @@ export const FLOW_FINDER_CONFIG = {
   name: 'Flow Finder',
   description: 'Discover your unique skills, problems, and personas',
   icon: '🧭',
-  color: '#5e17eb', // brand purple
+  color: '#5e17eb', // brand purple (matches stage config)
   flows: [
     { id: 'nikigai_skills', name: 'Skills', route: '/nikigai/skills', points: 40 },
     { id: 'nikigai_problems', name: 'Problems', route: '/nikigai/problems', points: 40 },

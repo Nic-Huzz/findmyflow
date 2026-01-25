@@ -1,0 +1,213 @@
+/* src/components/crm/WeeklyReflection.css */
+
+.weekly-reflection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.weekly-reflection.loading {
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 16px;
+}
+
+.weekly-reflection .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color, #e9ecef);
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Scorecard */
+.weekly-reflection .scorecard {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+}
+
+.weekly-reflection .scorecard-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+  margin: 0 0 16px 0;
+  text-align: center;
+}
+
+.weekly-reflection .scores-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.weekly-reflection .score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.weekly-reflection .score-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary, #6c757d);
+  letter-spacing: 0.5px;
+}
+
+.weekly-reflection .score-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+}
+
+.weekly-reflection .score-value.positive {
+  color: #22c55e;
+}
+
+.weekly-reflection .score-value.negative {
+  color: #ef4444;
+}
+
+.weekly-reflection .score-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--border-color, #e9ecef);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.weekly-reflection .score-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.weekly-reflection .score-fill.execution {
+  background: var(--purple, #5e17eb);
+}
+
+.weekly-reflection .score-fill.conversion {
+  background: #3b82f6;
+}
+
+.weekly-reflection .score-fill.improvement {
+  background: #22c55e;
+}
+
+.weekly-reflection .score-desc {
+  font-size: 0.7rem;
+  color: var(--text-tertiary, #adb5bd);
+}
+
+/* Reflection Section */
+.weekly-reflection .reflection-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weekly-reflection .reflection-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+  line-height: 1.4;
+}
+
+.weekly-reflection .reflection-input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: none;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+}
+
+.weekly-reflection .reflection-input:focus {
+  outline: none;
+  border-color: var(--purple, #5e17eb);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.weekly-reflection .reflection-input::placeholder {
+  color: var(--text-tertiary, #adb5bd);
+}
+
+/* Flow Section */
+.weekly-reflection .flow-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weekly-reflection .section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+  margin: 0;
+}
+
+/* Actions */
+.weekly-reflection .reflection-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.weekly-reflection .continue-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.weekly-reflection .continue-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.weekly-reflection .continue-btn:disabled {
+  background: var(--border-color, #e9ecef);
+  color: var(--text-tertiary, #adb5bd);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .weekly-reflection {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .weekly-reflection .scores-grid {
+    gap: 12px;
+  }
+
+  .weekly-reflection .score-value {
+    font-size: 1.25rem;
+  }
+}

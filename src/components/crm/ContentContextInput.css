@@ -1,0 +1,247 @@
+/* src/components/crm/ContentContextInput.css */
+
+.content-context-input {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Progress Bar */
+.content-context-input .context-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.content-context-input .progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.content-context-input .progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.content-context-input .progress-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6c757d);
+  white-space: nowrap;
+}
+
+/* Current Item Card */
+.content-context-input .current-item-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  border-left: 4px solid var(--phase-color);
+  text-align: center;
+}
+
+.content-context-input .item-phase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: color-mix(in srgb, var(--phase-color) 12%, white);
+  color: var(--phase-color);
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.content-context-input .item-type {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.content-context-input .item-icon {
+  font-size: 2rem;
+}
+
+.content-context-input .item-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+}
+
+/* Context Form */
+.content-context-input .context-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.content-context-input .context-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+}
+
+.content-context-input .context-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
+.content-context-input .context-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s ease;
+}
+
+.content-context-input .context-form textarea:focus {
+  outline: none;
+  border-color: var(--purple, #5e17eb);
+}
+
+.content-context-input .context-form textarea::placeholder {
+  color: #adb5bd;
+}
+
+/* Context Examples */
+.content-context-input .context-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.content-context-input .examples-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary, #6c757d);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.content-context-input .example-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.content-context-input .example-chip {
+  padding: 8px 14px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--text-primary, #212529);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.content-context-input .example-chip:hover {
+  background: color-mix(in srgb, var(--purple, #5e17eb) 10%, white);
+  border-color: var(--purple, #5e17eb);
+  color: var(--purple, #5e17eb);
+}
+
+/* Actions */
+.content-context-input .context-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.content-context-input .back-btn {
+  padding: 14px 20px;
+  background: white;
+  color: var(--text-primary, #212529);
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.content-context-input .back-btn:hover {
+  border-color: var(--text-secondary, #6c757d);
+}
+
+.content-context-input .skip-btn {
+  padding: 14px 20px;
+  background: #f8f9fa;
+  color: var(--text-secondary, #6c757d);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.content-context-input .skip-btn:hover {
+  background: #e9ecef;
+  color: var(--text-primary, #212529);
+}
+
+.content-context-input .next-btn {
+  flex: 1;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.3);
+}
+
+.content-context-input .next-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(94, 23, 235, 0.4);
+}
+
+.content-context-input .next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .content-context-input {
+    padding: 16px;
+  }
+
+  .content-context-input .item-label {
+    font-size: 1.1rem;
+  }
+
+  .content-context-input .context-actions {
+    flex-direction: column;
+  }
+
+  .content-context-input .back-btn,
+  .content-context-input .skip-btn {
+    flex: none;
+    width: 100%;
+  }
+}

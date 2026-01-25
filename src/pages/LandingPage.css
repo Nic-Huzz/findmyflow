@@ -3522,6 +3522,391 @@
   transform: scale(1.03);
 }
 
+/* ============ IS THIS YOU SECTION (North Star Person) ============ */
+
+.landing-page .landing-is-this-you {
+  padding: 5rem 0;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%);
+  text-align: center;
+}
+
+.landing-page .is-this-you-heading {
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.landing-page .north-star-person {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.4;
+  color: white;
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+
+.landing-page .north-star-subtext {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ============ PROBLEMS WE UNDERSTAND SECTION ============ */
+
+.landing-page .landing-problems-we-understand {
+  padding: 6rem 0;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.landing-page .problems-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto 3rem;
+}
+
+@media (max-width: 900px) {
+  .landing-page .problems-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .landing-page .problems-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.landing-page .problem-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.landing-page .problem-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+  border-color: rgba(255, 100, 100, 0.3);
+}
+
+.landing-page .problem-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.landing-page .problem-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem;
+}
+
+.landing-page .problem-card p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.landing-page .problems-north-star {
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 221, 39, 0.1);
+  border: 1px solid rgba(255, 221, 39, 0.2);
+  border-radius: 12px;
+}
+
+.landing-page .problems-north-star strong {
+  color: #ffdd27;
+}
+
+/* ============ SIX PILLARS OF FULFILLMENT ============ */
+
+.landing-page .landing-six-pillars {
+  padding: 6rem 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(94, 23, 235, 0.08) 100%);
+}
+
+.landing-page .pillars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.landing-page .pillars-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.landing-page .pillars-group-label {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.landing-page .pillars-spirit-note {
+  text-align: center;
+  font-size: 0.9375rem;
+  color: #ffdd27;
+  font-style: italic;
+  margin: -0.5rem 0 0.5rem;
+}
+
+.landing-page .pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.landing-page .pillars-grid-spirit {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1000px) {
+  .landing-page .pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .landing-page .pillars-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-page .pillars-grid-spirit {
+    grid-template-columns: 1fr;
+  }
+}
+
+.landing-page .pillar-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.landing-page .pillar-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+}
+
+.landing-page .pillar-card-spirit {
+  background: rgba(255, 221, 39, 0.08);
+  border-color: rgba(255, 221, 39, 0.2);
+}
+
+.landing-page .pillar-card-spirit:hover {
+  background: rgba(255, 221, 39, 0.12);
+  border-color: rgba(255, 221, 39, 0.3);
+}
+
+.landing-page .pillar-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.landing-page .pillar-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.25rem;
+}
+
+.landing-page .pillar-card-spirit .pillar-name {
+  color: #ffdd27;
+}
+
+.landing-page .pillar-need {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 1rem;
+  font-style: italic;
+}
+
+.landing-page .pillar-how {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.landing-page .pillar-card-spirit .pillar-how {
+  border-top-color: rgba(255, 221, 39, 0.2);
+}
+
+.landing-page .pillar-how-label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.landing-page .pillar-how p {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.landing-page .pillars-kicker {
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: white;
+  font-weight: 600;
+  margin: 2.5rem auto 0;
+  max-width: 500px;
+}
+
+/* ============ FOUNDER INTERSECTION ============ */
+
+.landing-page .founder-intersection {
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  background: rgba(255, 221, 39, 0.08);
+  border-left: 4px solid #ffdd27;
+  border-radius: 0 12px 12px 0;
+}
+
+.landing-page .intersection-statement {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.landing-page .intersection-statement strong {
+  color: #ffdd27;
+  font-weight: 700;
+}
+
+/* ============ UNIQUE COMBINATION FORMULA ============ */
+
+.landing-page .unique-combination {
+  margin: 3rem 0;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.landing-page .unique-combo-label {
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1.5rem;
+}
+
+.landing-page .unique-combo-formula {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.landing-page .combo-layer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.landing-page .combo-layer-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.landing-page .combo-layer-text {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.landing-page .combo-connector {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.landing-page .unique-combination .combo-equals {
+  font-size: 2rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0.5rem 0;
+}
+
+.landing-page .combo-result-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.2), rgba(245, 158, 11, 0.15));
+  border: 2px solid rgba(255, 221, 39, 0.4);
+  border-radius: 12px;
+  padding: 1.25rem 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.landing-page .combo-result-label {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffdd27;
+}
+
+.landing-page .combo-result-desc {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 600px) {
+  .landing-page .unique-combination {
+    padding: 1.5rem 1rem;
+  }
+
+  .landing-page .combo-layer {
+    padding: 0.875rem 1rem;
+  }
+
+  .landing-page .combo-layer-text {
+    font-size: 0.875rem;
+  }
+
+  .landing-page .combo-result-box {
+    padding: 1rem 1.5rem;
+  }
+}
+
 /* ============ REDUCED MOTION ============ */
 
 @media (prefers-reduced-motion: reduce) {

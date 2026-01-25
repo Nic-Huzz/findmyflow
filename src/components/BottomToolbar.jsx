@@ -106,17 +106,19 @@ function BottomToolbar() {
   const navigate = useNavigate()
   const [isOnboarding, setIsOnboarding] = useState(false)
 
-  // Watch for onboarding-active class on body
+  // Watch for onboarding-active or project-selector-active class on body
   useEffect(() => {
-    const checkOnboarding = () => {
-      setIsOnboarding(document.body.classList.contains('onboarding-active'))
+    const checkShouldHide = () => {
+      const hasOnboarding = document.body.classList.contains('onboarding-active')
+      const hasProjectSelector = document.body.classList.contains('project-selector-active')
+      setIsOnboarding(hasOnboarding || hasProjectSelector)
     }
 
     // Check immediately
-    checkOnboarding()
+    checkShouldHide()
 
     // Set up MutationObserver to watch for class changes
-    const observer = new MutationObserver(checkOnboarding)
+    const observer = new MutationObserver(checkShouldHide)
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
 
     return () => observer.disconnect()

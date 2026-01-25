@@ -413,6 +413,233 @@ export async function saveContentMetrics(contentId, metrics, screenshotUrl = nul
   }
 }
 
+// ============================================
+// LEADS SCREENSHOT ANALYSIS
+// ============================================
+
+/**
+ * Analyze a leads screenshot using Claude Vision to extract lead information
+ * @param {File} imageFile - The image file to analyze (DMs, comments, etc.)
+ * @param {string} platform - Optional platform hint
+ * @returns {Promise<{leads: array, success: boolean}>}
+ */
+export async function analyzeLeadsScreenshot(imageFile, platform = null) {
+  try {
+    // Compress image to reduce API costs
+    const compressed = await compressImage(imageFile, {
+      maxWidth: 1200,
+      maxHeight: 1200,
+      quality: 0.8,
+      type: 'image/jpeg'
+    })
+
+    // Convert compressed blob to base64
+    const base64 = await fileToBase64(new File([compressed], 'compressed.jpg', { type: 'image/jpeg' }))
+
+    // Call the edge function
+    const { data, error } = await supabase.functions.invoke('analyze-leads-screenshot', {
+      body: {
+        imageBase64: base64,
+        mimeType: 'image/jpeg',
+        platform
+      }
+    })
+
+    if (error) {
+      console.error('Edge function error:', error)
+      return { leads: [], success: false, error: error.message }
+    }
+
+    return data
+  } catch (err) {
+    console.error('Leads screenshot analysis error:', err)
+    return { leads: [], success: false, error: err.message }
+  }
+}
+
+/**
+ * Create contacts from extracted leads
+ * @param {string} userId - User ID
+ * @param {array} leads - Array of lead objects with additional info
+ * @param {string} sourceContentId - Optional content ID that generated these leads
+ * @returns {Promise<{created: array, errors: array}>}
+ */
+export async function createContactsFromLeads(userId, leads, sourceContentId = null) {
+  const created = []
+  const errors = []
+
+  for (const lead of leads) {
+    try {
+      // Map engagement type to CRM source
+      const sourceMap = {
+        dm: 'DM',
+        comment: 'Social Comment',
+        story_reply: 'Story Reply',
+        like: 'Social Engagement',
+        mention: 'Mention',
+        other: 'Social Media'
+      }
+
+      // Map temperature to lifecycle stage
+      const stageMap = {
+        hot: 'qualified',  // Hot leads are already qualified
+        warm: 'lead',      // Warm leads are standard leads
+        cold: 'lead'       // Cold leads start as leads
+      }
+
+      const contactData = {
+        user_id: userId,
+        name: lead.name || lead.handle || 'Unknown',
+        email: lead.email || null,
+        phone: lead.phone || null,
+        lifecycle_stage: stageMap[lead.temperature] || 'lead',
+        source: sourceMap[lead.engagement_type] || 'Social Media',
+        tags: [
+          lead.platform?.toLowerCase(),
+          lead.temperature,
+          sourceContentId ? `content:${sourceContentId}` : null
+        ].filter(Boolean),
+        notes: buildLeadNotes(lead, sourceContentId)
+      }
+
+      const { data, error } = await supabase
+        .from('crm_contacts')
+        .insert(contactData)
+        .select()
+        .single()
+
+      if (error) {
+        console.error('Error creating contact:', error)
+        errors.push({ lead, error: error.message })
+      } else {
+        created.push(data)
+
+        // Also create a warm_leads entry for tracking
+        await supabase
+          .from('crm_warm_leads')
+          .insert({
+            user_id: userId,
+            name: lead.name || lead.handle,
+            platform: lead.platform || 'Instagram',
+            handle: lead.handle,
+            engagement_type: mapEngagementType(lead.engagement_type),
+            status: 'to_contact',
+            notes: lead.message_preview || null
+          })
+      }
+    } catch (err) {
+      console.error('Error processing lead:', err)
+      errors.push({ lead, error: err.message })
+    }
+  }
+
+  return { created, errors }
+}
+
+/**
+ * Build notes string from lead data
+ */
+function buildLeadNotes(lead, sourceContentId) {
+  const parts = []
+
+  if (lead.platform) {
+    parts.push(`Platform: ${lead.platform}`)
+  }
+
+  if (lead.handle) {
+    parts.push(`Handle: ${lead.handle}`)
+  }
+
+  if (lead.engagement_type) {
+    parts.push(`Engagement: ${lead.engagement_type}`)
+  }
+
+  if (lead.message_preview) {
+    parts.push(`Message: "${lead.message_preview}"`)
+  }
+
+  if (lead.temperature) {
+    parts.push(`Temperature: ${lead.temperature}`)
+  }
+
+  if (sourceContentId) {
+    parts.push(`Source Content ID: ${sourceContentId}`)
+  }
+
+  if (lead.notes) {
+    parts.push(`AI Notes: ${lead.notes}`)
+  }
+
+  return parts.join('\n')
+}
+
+/**
+ * Map engagement type to valid database value
+ */
+function mapEngagementType(type) {
+  const validTypes = ['liked_post', 'commented', 'dm', 'email_reply', 'webinar', 'lead_magnet', 'referral']
+
+  const typeMap = {
+    dm: 'dm',
+    comment: 'commented',
+    like: 'liked_post',
+    story_reply: 'dm',
+    mention: 'commented',
+    other: 'liked_post'
+  }
+
+  const mapped = typeMap[type] || 'liked_post'
+  return validTypes.includes(mapped) ? mapped : 'liked_post'
+}
+
+/**
+ * Update content history with leads data
+ * @param {string} contentId - Content history record ID
+ * @param {object} leadsData - Leads data to add to engagement_data
+ * @returns {Promise<boolean>}
+ */
+export async function updateContentWithLeads(contentId, leadsData) {
+  try {
+    // First get existing engagement data
+    const { data: content, error: fetchError } = await supabase
+      .from('content_history')
+      .select('engagement_data')
+      .eq('id', contentId)
+      .single()
+
+    if (fetchError) {
+      console.error('Error fetching content:', fetchError)
+      return false
+    }
+
+    // Merge leads data with existing engagement data
+    const updatedEngagement = {
+      ...content.engagement_data,
+      leads: {
+        total: leadsData.total || 0,
+        by_type: leadsData.by_type || {},
+        contacts_created: leadsData.contacts_created || 0,
+        recorded_at: new Date().toISOString()
+      }
+    }
+
+    const { error } = await supabase
+      .from('content_history')
+      .update({ engagement_data: updatedEngagement })
+      .eq('id', contentId)
+
+    if (error) {
+      console.error('Error updating content with leads:', error)
+      return false
+    }
+
+    return true
+  } catch (err) {
+    console.error('Update content with leads error:', err)
+    return false
+  }
+}
+
 /**
  * Update content strategy with metrics from screenshot analysis
  * Uses rolling average to blend new data with existing

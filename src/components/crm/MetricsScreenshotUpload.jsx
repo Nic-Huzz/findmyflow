@@ -5,6 +5,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { analyzeMetricsScreenshot, uploadMetricsScreenshot, saveContentMetrics, updateStrategyFromScreenshot } from '../../lib/screenshotAnalysis'
+import LeadsCapture from './LeadsCapture'
 import './MetricsScreenshotUpload.css'
 
 const PERFORMANCE_TIERS = {
@@ -24,6 +25,7 @@ export default function MetricsScreenshotUpload({ userId, onClose, onMetricsSave
   const [editedMetrics, setEditedMetrics] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [showLeadsCapture, setShowLeadsCapture] = useState(false)
   const fileInputRef = useRef(null)
 
   // Load user's posted content
@@ -486,6 +488,22 @@ export default function MetricsScreenshotUpload({ userId, onClose, onMetricsSave
             <p className="msu-success-note">
               The more metrics you track, the smarter your content suggestions become.
             </p>
+
+            {/* Leads Capture CTA */}
+            <div className="msu-leads-cta">
+              <div className="msu-leads-cta-icon">🎯</div>
+              <div className="msu-leads-cta-content">
+                <h5>Did this post generate leads?</h5>
+                <p>Upload a screenshot of DMs or comments to capture leads</p>
+              </div>
+              <button
+                className="msu-capture-leads-btn"
+                onClick={() => setShowLeadsCapture(true)}
+              >
+                Capture Leads
+              </button>
+            </div>
+
             <div className="msu-actions">
               <button className="msu-done-btn" onClick={onClose}>
                 Done
@@ -499,6 +517,20 @@ export default function MetricsScreenshotUpload({ userId, onClose, onMetricsSave
               </button>
             </div>
           </div>
+        )}
+
+        {/* Leads Capture Modal */}
+        {showLeadsCapture && (
+          <LeadsCapture
+            userId={userId}
+            contentId={selectedContent?.id}
+            platform={selectedContent?.platform?.toLowerCase()}
+            onClose={() => setShowLeadsCapture(false)}
+            onLeadsCaptured={(leads) => {
+              console.log('Leads captured:', leads)
+              setShowLeadsCapture(false)
+            }}
+          />
         )}
 
         {/* Error State */}

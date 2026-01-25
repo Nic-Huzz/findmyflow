@@ -18,6 +18,8 @@ import {
   MicroToast,
   LevelUpModal,
 } from '../../components/Celebrations'
+import WeeklyPlanningFlow, { useWeeklyPlanningPrompt } from '../../components/crm/WeeklyPlanningFlow'
+import { getCurrentWeekPlan, PHASES as PHASE_DATA } from '../../lib/crm/weeklyPlanningService'
 import './Execute.css'
 
 // Phase configuration
@@ -40,6 +42,11 @@ export default function Execute() {
   const [improvements, setImprovements] = useState([])
   const [showTaskMenu, setShowTaskMenu] = useState(false)
 
+  // Weekly Planning
+  const [showPlanningFlow, setShowPlanningFlow] = useState(false)
+  const [weeklyPlan, setWeeklyPlan] = useState(null)
+  const { shouldShow: shouldShowPlanning, checked: planningChecked } = useWeeklyPlanningPrompt()
+
   const {
     tasks,
     loading,
@@ -61,8 +68,16 @@ export default function Execute() {
       loadProjects()
       loadQuickStats()
       loadImprovements()
+      loadWeeklyPlan()
     }
   }, [user?.id])
+
+  // Auto-show planning flow if needed (Sunday 3pm+ or Monday with no plan)
+  useEffect(() => {
+    if (planningChecked && shouldShowPlanning && !weeklyPlan) {
+      setShowPlanningFlow(true)
+    }
+  }, [planningChecked, shouldShowPlanning, weeklyPlan])
 
   // Load tasks when project changes
   useEffect(() => {
@@ -102,6 +117,17 @@ export default function Execute() {
       .limit(5)
 
     setImprovements(data || [])
+  }
+
+  async function loadWeeklyPlan() {
+    const plan = await getCurrentWeekPlan(user.id)
+    setWeeklyPlan(plan)
+  }
+
+  function handlePlanComplete(plan) {
+    setWeeklyPlan(plan)
+    setShowPlanningFlow(false)
+    loadQuickStats()
   }
 
   // Group tasks by phase
@@ -256,6 +282,35 @@ export default function Execute() {
           </div>
         </div>
       </div>
+
+      {/* Weekly Plan Banner */}
+      {weeklyPlan && (
+        <div className="weekly-plan-banner">
+          <div className="plan-phases">
+            {weeklyPlan.active_phases?.map(phaseId => {
+              const phase = PHASE_DATA[phaseId]
+              return phase ? (
+                <span key={phaseId} className="plan-phase-pill" style={{ '--phase-color': phase.color }}>
+                  {phase.icon} {phase.label}
+                </span>
+              ) : null
+            })}
+          </div>
+          <div className="plan-info">
+            <span>{weeklyPlan.tasks?.reduce((sum, t) => sum + (t.count || 1), 0) || 0} tasks planned</span>
+            <button className="edit-plan-btn" onClick={() => setShowPlanningFlow(true)}>
+              Edit Plan
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Plan Your Week CTA (if no plan) */}
+      {!weeklyPlan && planningChecked && (
+        <button className="plan-week-cta" onClick={() => setShowPlanningFlow(true)}>
+          📋 Plan Your Week →
+        </button>
+      )}
 
       {/* Phase Tabs */}
       <div className="phase-tabs">
@@ -421,6 +476,13 @@ export default function Execute() {
           onClose={closeLevelUp}
         />
       )}
+
+      {/* Weekly Planning Flow */}
+      <WeeklyPlanningFlow
+        isOpen={showPlanningFlow}
+        onClose={() => setShowPlanningFlow(false)}
+        onComplete={handlePlanComplete}
+      />
     </div>
   )
 }

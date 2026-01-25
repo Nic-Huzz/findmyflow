@@ -100,6 +100,82 @@
   color: #6c757d;
 }
 
+/* Weekly Plan Banner */
+.weekly-plan-banner {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.weekly-plan-banner .plan-phases {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.weekly-plan-banner .plan-phase-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: color-mix(in srgb, var(--phase-color, #5e17eb) 12%, white);
+  color: var(--phase-color, #5e17eb);
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.weekly-plan-banner .plan-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weekly-plan-banner .plan-info span {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.weekly-plan-banner .edit-plan-btn {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.weekly-plan-banner .edit-plan-btn:hover {
+  text-decoration: underline;
+}
+
+/* Plan Week CTA */
+.plan-week-cta {
+  width: 100%;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.25);
+}
+
+.plan-week-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(94, 23, 235, 0.35);
+}
+
 /* Phase Tabs */
 .phase-tabs {
   display: flex;

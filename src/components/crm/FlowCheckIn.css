@@ -1,0 +1,148 @@
+/* src/components/crm/FlowCheckIn.css */
+
+.flow-check-in {
+  background: var(--card-bg, #f8f9fa);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.flow-check-in.compact {
+  padding: 16px;
+}
+
+.flow-check-in .flow-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+  margin: 0 0 16px 0;
+}
+
+.flow-check-in .flow-factor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.flow-check-in .flow-factor:last-of-type {
+  margin-bottom: 0;
+}
+
+.flow-check-in .factor-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6c757d);
+  min-width: 80px;
+}
+
+.flow-check-in .factor-options {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.flow-check-in .factor-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.flow-check-in .factor-btn:hover {
+  border-color: var(--purple, #5e17eb);
+  background: #faf8ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.1);
+}
+
+.flow-check-in .factor-btn.selected {
+  border-color: var(--purple, #5e17eb);
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08) 0%, rgba(124, 58, 237, 0.12) 100%);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.15);
+}
+
+.flow-check-in .factor-emoji {
+  font-size: 1.2rem;
+}
+
+.flow-check-in .factor-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary, #212529);
+}
+
+/* Flow Result */
+.flow-check-in .flow-result {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  border-left: 4px solid var(--direction-color, #22c55e);
+}
+
+.flow-check-in .direction-emoji {
+  font-size: 1.5rem;
+}
+
+.flow-check-in .direction-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flow-check-in .direction-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--direction-color, #22c55e);
+  letter-spacing: 0.5px;
+}
+
+.flow-check-in .direction-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6c757d);
+}
+
+/* Compact Mode */
+.flow-check-in.compact .flow-label {
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.flow-check-in.compact .factor-btn {
+  padding: 8px 12px;
+}
+
+.flow-check-in.compact .factor-emoji {
+  font-size: 1rem;
+}
+
+.flow-check-in.compact .factor-text {
+  font-size: 0.85rem;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .flow-check-in .flow-factor {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .flow-check-in .factor-label {
+    min-width: unset;
+  }
+
+  .flow-check-in .factor-options {
+    width: 100%;
+  }
+}

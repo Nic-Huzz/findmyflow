@@ -29,6 +29,22 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
   const [loading, setLoading] = useState(true)
   const [selectedId, setSelectedId] = useState(currentProjectId || null)
 
+  // Add body class to hide bottom toolbar when project selector is shown
+  useEffect(() => {
+    document.body.classList.add('project-selector-active')
+    return () => {
+      document.body.classList.remove('project-selector-active')
+    }
+  }, [])
+
+  // Sync selectedId with currentProjectId when it changes
+  useEffect(() => {
+    if (currentProjectId) {
+      setSelectedId(currentProjectId)
+    }
+  }, [currentProjectId])
+
+  // Load projects on mount and whenever the selector is shown
   useEffect(() => {
     if (user?.id) {
       loadProjects()
@@ -37,7 +53,8 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
 
   const loadProjects = async () => {
     try {
-      const { data, error } = await supabase
+      // Load projects
+      const { data: projectsData, error: projectsError } = await supabase
         .from('user_projects')
         .select('*')
         .eq('user_id', user.id)
@@ -45,14 +62,37 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
         .order('is_primary', { ascending: false })
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (projectsError) throw projectsError
 
-      setProjects(data || [])
+      // Load challenge progress for all projects to get accurate points
+      const { data: challengeData, error: challengeError } = await supabase
+        .from('challenge_progress')
+        .select('project_id, total_points, status')
+        .eq('user_id', user.id)
+        .in('project_id', (projectsData || []).map(p => p.id))
+        .order('challenge_start_date', { ascending: false })
+
+      if (challengeError) {
+        console.error('Error loading challenge progress:', challengeError)
+      }
+
+      // Merge challenge points into projects (use most recent active or completed challenge)
+      const projectsWithPoints = (projectsData || []).map(project => {
+        const challengeProgress = challengeData?.find(c => c.project_id === project.id)
+        return {
+          ...project,
+          // Use challenge points if available, otherwise fall back to project total_points
+          challenge_points: challengeProgress?.total_points || 0,
+          has_active_challenge: challengeProgress?.status === 'active'
+        }
+      })
+
+      setProjects(projectsWithPoints)
 
       // Auto-select primary or first project if none selected
-      if (!selectedId && data && data.length > 0) {
-        const primary = data.find(p => p.is_primary)
-        setSelectedId(primary?.id || data[0].id)
+      if (!selectedId && projectsWithPoints.length > 0) {
+        const primary = projectsWithPoints.find(p => p.is_primary)
+        setSelectedId(primary?.id || projectsWithPoints[0].id)
       }
     } catch (err) {
       console.error('Error loading projects:', err)
@@ -139,7 +179,7 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
                 </div>
 
                 <div className="points-badge">
-                  <span className="points-value">{project.total_points || 0}</span>
+                  <span className="points-value">{project.challenge_points || 0}</span>
                   <span className="points-label">pts</span>
                 </div>
               </div>

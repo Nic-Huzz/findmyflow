@@ -233,3 +233,33 @@ export {
   getSkillProblemCellChallenge,
   getAllSkillProblemChallenges,
 } from './groanChallengeService'
+
+// Weekly Planning Service
+export {
+  getWeekStart,
+  getUpcomingMonday,
+  shouldShowWeeklyPlanning,
+  getPlanningWeekStart,
+  getCurrentWeekPlan,
+  saveWeeklyPlan,
+  hasCurrentWeekPlan,
+  getTaskMenuByPhase,
+  PHASES,
+  calculateExecutionScore,
+  calculateConversionScore,
+  calculateImprovementScore,
+  getWeeklyScores,
+  getLastWeekScores,
+} from './weeklyPlanningService'
+
+// Reflection Service
+export {
+  getFlowDirection,
+  FLOW_DIRECTIONS,
+  getReflectionQuestion,
+  saveReflection,
+  getReflection,
+  getReflectionHistory,
+  getRecentFlowEntries,
+  analyzeFlowPatterns,
+} from './reflectionService'

@@ -1,0 +1,201 @@
+/* src/components/crm/WeeklyPlanningFlow.css */
+
+/* Hide bottom toolbar when modal is open */
+body:has(.weekly-planning-modal-overlay) .bottom-toolbar,
+body:has(.weekly-planning-modal-overlay) .crm-bottom-nav {
+  display: none !important;
+}
+
+/* Modal Overlay */
+.weekly-planning-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal Container */
+.weekly-planning-modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  background: var(--warm-gray, #f8f9fa);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal Header */
+.weekly-planning-modal .modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+  position: relative;
+}
+
+.weekly-planning-modal .close-btn {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary, #6c757d);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.weekly-planning-modal .close-btn:hover {
+  background: var(--card-bg, #f8f9fa);
+  color: var(--text-primary, #212529);
+}
+
+.weekly-planning-modal .modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin: 0;
+}
+
+.weekly-planning-modal .week-label {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6c757d);
+}
+
+/* Step Progress */
+.weekly-planning-modal .step-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: white;
+}
+
+.weekly-planning-modal .step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-color, #e9ecef);
+  transition: all 0.2s ease;
+}
+
+.weekly-planning-modal .step-dot.active {
+  width: 24px;
+  border-radius: 4px;
+  background: var(--purple, #5e17eb);
+}
+
+.weekly-planning-modal .step-dot.complete {
+  background: var(--purple, #5e17eb);
+}
+
+/* Modal Content */
+.weekly-planning-modal .modal-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Override child component padding since modal provides structure */
+.weekly-planning-modal .weekly-reflection,
+.weekly-planning-modal .phase-selector,
+.weekly-planning-modal .task-menu-picker,
+.weekly-planning-modal .week-plan-summary {
+  max-width: none;
+}
+
+/* Saving Overlay */
+.weekly-planning-modal .saving-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 10;
+}
+
+.weekly-planning-modal .saving-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color, #e9ecef);
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.weekly-planning-modal .saving-overlay p {
+  font-size: 0.95rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
+/* Mobile Full Screen */
+@media (max-width: 600px) {
+  .weekly-planning-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .weekly-planning-modal {
+    max-height: 95vh;
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+/* Landscape mobile - ensure modal doesn't overflow */
+@media (max-height: 500px) {
+  .weekly-planning-modal {
+    max-height: 85vh;
+  }
+
+  .weekly-planning-modal .modal-content {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+}

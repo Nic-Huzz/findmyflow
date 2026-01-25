@@ -627,7 +627,61 @@
 .msu-success-note {
   font-size: 13px;
   color: #5e17eb;
-  margin-bottom: 24px !important;
+  margin-bottom: 16px !important;
+}
+
+/* Leads CTA Section */
+.msu-leads-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.msu-leads-cta-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.msu-leads-cta-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.msu-leads-cta-content h5 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #92400e;
+  margin: 0 0 4px 0;
+}
+
+.msu-leads-cta-content p {
+  font-size: 0.8rem;
+  color: #a16207;
+  margin: 0;
+}
+
+.msu-capture-leads-btn {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.msu-capture-leads-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
 }
 
 .msu-done-btn {

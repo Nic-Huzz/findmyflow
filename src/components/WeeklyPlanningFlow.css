@@ -3,23 +3,27 @@
  * Styles for the weekly planning flow component
  */
 
-/* Week type theme variables */
+/* Week type theme variables - Brand purple & gold */
 :root {
-  --week-push-primary: #ef4444;
-  --week-push-secondary: #dc2626;
-  --week-push-bg: linear-gradient(135deg, #7f1d1d 0%, #ef4444 50%, #f87171 100%);
+  /* Push: Deep purple (intense effort) */
+  --week-push-primary: #4a0ea8;
+  --week-push-secondary: #3d0b8a;
+  --week-push-bg: linear-gradient(135deg, #2d0666 0%, #4a0ea8 50%, #5e17eb 100%);
 
-  --week-flow-primary: #3b82f6;
-  --week-flow-secondary: #2563eb;
-  --week-flow-bg: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+  /* Flow: Brand purple (balanced rhythm) */
+  --week-flow-primary: #5e17eb;
+  --week-flow-secondary: #4a0ea8;
+  --week-flow-bg: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
 
-  --week-rest-primary: #8b5cf6;
-  --week-rest-secondary: #7c3aed;
-  --week-rest-bg: linear-gradient(135deg, #4a0ea8 0%, #8b5cf6 50%, #a78bfa 100%);
+  /* Rest: Warm gold (soft recovery) */
+  --week-rest-primary: #f59e0b;
+  --week-rest-secondary: #d97706;
+  --week-rest-bg: linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #fbbf24 100%);
 
-  --week-launch-primary: #f59e0b;
+  /* Launch: Brand gold (achievement) */
+  --week-launch-primary: #E9A23B;
   --week-launch-secondary: #d97706;
-  --week-launch-bg: linear-gradient(135deg, #78350f 0%, #f59e0b 50%, #fbbf24 100%);
+  --week-launch-bg: linear-gradient(135deg, #b45309 0%, #E9A23B 50%, #fcd34d 100%);
 }
 
 .weekly-planning-flow {

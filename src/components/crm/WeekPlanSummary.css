@@ -1,0 +1,196 @@
+/* src/components/crm/WeekPlanSummary.css */
+
+.week-plan-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.week-plan-summary .summary-header {
+  text-align: center;
+}
+
+.week-plan-summary .summary-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.week-plan-summary .summary-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin: 0;
+}
+
+/* Section Labels */
+.week-plan-summary .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary, #6c757d);
+  letter-spacing: 0.5px;
+  margin: 0 0 12px 0;
+}
+
+/* Active Phases */
+.week-plan-summary .active-phases-section {
+  text-align: center;
+}
+
+.week-plan-summary .phase-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.week-plan-summary .phase-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: color-mix(in srgb, var(--phase-color) 12%, white);
+  color: var(--phase-color);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Task Breakdown */
+.week-plan-summary .task-breakdown-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+}
+
+.week-plan-summary .phase-breakdown {
+  margin-bottom: 16px;
+}
+
+.week-plan-summary .phase-breakdown:last-child {
+  margin-bottom: 0;
+}
+
+.week-plan-summary .phase-breakdown-header {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  margin-bottom: 8px;
+}
+
+.week-plan-summary .phase-task-list {
+  margin: 0;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.week-plan-summary .phase-task-list li {
+  font-size: 0.9rem;
+  color: var(--text-primary, #212529);
+  margin-bottom: 4px;
+}
+
+.week-plan-summary .task-multiplier {
+  color: var(--purple, #5e17eb);
+  font-weight: 600;
+}
+
+.week-plan-summary .total-tasks {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 12px 0 0 0;
+}
+
+/* Flow State */
+.week-plan-summary .flow-state-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: white;
+  border-radius: 12px;
+  border-left: 4px solid var(--direction-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  border-left-width: 4px;
+}
+
+.week-plan-summary .flow-emoji {
+  font-size: 1.25rem;
+}
+
+.week-plan-summary .flow-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--direction-color);
+}
+
+.week-plan-summary .flow-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6c757d);
+}
+
+/* Actions */
+.week-plan-summary .summary-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.week-plan-summary .back-btn {
+  flex: 1;
+  padding: 14px 24px;
+  background: white;
+  color: var(--text-primary, #212529);
+  border: 2px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.week-plan-summary .back-btn:hover {
+  border-color: var(--text-secondary, #6c757d);
+}
+
+.week-plan-summary .start-week-btn {
+  flex: 2;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  color: #212529;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(255, 221, 39, 0.4);
+}
+
+.week-plan-summary .start-week-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(255, 221, 39, 0.5);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .week-plan-summary {
+    padding: 16px;
+  }
+
+  .week-plan-summary .summary-emoji {
+    font-size: 2.5rem;
+  }
+
+  .week-plan-summary .summary-title {
+    font-size: 1.25rem;
+  }
+}
