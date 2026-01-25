@@ -8,10 +8,11 @@
 
 import './ChallengeFilters.css'
 
-// Frequency tab config - Daily first as default, then Weekly, then All
+// Frequency tab config - Daily first as default, then Weekly, Deep Dive, then All
 const FREQUENCY_TABS = [
   { id: 'daily', label: 'Daily', icon: '☀️' },
   { id: 'weekly', label: 'Weekly', icon: '📅' },
+  { id: 'deepdive', label: 'Deep Dive', icon: '🌊' },
   { id: 'all', label: 'All', icon: '📋' }
 ]
 
@@ -38,7 +39,8 @@ function ChallengeFilters({
         ))}
       </div>
 
-      {/* R-Type Filter Chips */}
+      {/* R-Type Filter Chips - hide for Deep Dive since all are Recognise */}
+      {activeFrequencyFilter !== 'deepdive' && (
       <div className="rtype-filters">
         <button
           className={`filter-chip ${activeRTypeFilter === 'All' ? 'active' : ''}`}
@@ -84,6 +86,7 @@ function ChallengeFilters({
           </>
         )}
       </div>
+      )}
     </div>
   )
 }

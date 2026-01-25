@@ -18,7 +18,7 @@ import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import GroanMatrix from './components/GroanMatrix'
-import { createGroanChallenge, createSkillProblemChallenge } from './lib/crm'
+import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage } from './lib/stageConfig'
@@ -152,6 +152,13 @@ function Challenge() {
 
   // State for showing hidden (non-planned) reconnect quests
   const [showHiddenReconnect, setShowHiddenReconnect] = useState(false)
+
+  // State for selected groan challenge modal
+  const [selectedGroanChallenge, setSelectedGroanChallenge] = useState(null)
+  const [groanChallengeLoading, setGroanChallengeLoading] = useState(false)
+  const [groanReflectionStep, setGroanReflectionStep] = useState(false)
+  const [groanReflection, setGroanReflection] = useState({ scaryScore: 5, wahooScore: 5, reflection: '' })
+  const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
 
   // Morning reconnect quest IDs that can be hidden if not planned
   const MORNING_RECONNECT_QUEST_IDS = [
@@ -578,12 +585,12 @@ function Challenge() {
 
       setProgress(updatedProgress)
 
-      // Update project points if a project is selected
+      // Update project points to match challenge total (keeps them in sync)
       if (selectedProject?.id) {
         const { error: projectError } = await supabase
           .from('user_projects')
           .update({
-            total_points: (selectedProject.total_points || 0) + quest.points
+            total_points: newTotalPoints
           })
           .eq('id', selectedProject.id)
 
@@ -592,7 +599,7 @@ function Challenge() {
         } else {
           setSelectedProject(prev => ({
             ...prev,
-            total_points: (prev?.total_points || 0) + quest.points
+            total_points: newTotalPoints
           }))
         }
       }
@@ -672,8 +679,6 @@ function Challenge() {
 
   // Handler for generating challenges from the Groan Matrix
   const handleGenerateChallenge = async (cellData) => {
-    console.log('Generating challenge with data:', cellData)
-
     try {
       // Check if this is a Skill × Problem request
       const isSkillProblem = cellData.sourceType === 'skill_x_problem'
@@ -762,11 +767,109 @@ function Challenge() {
 
   // Handler for matrix cell clicks
   const handleMatrixCellClick = (cellData) => {
-    // Navigate to challenge details or show modal
     if (cellData.challenge) {
-      // Could navigate to challenge detail page or show modal
-      console.log('Challenge clicked:', cellData)
+      setSelectedGroanChallenge(cellData.challenge)
     }
+  }
+
+  // Handle accepting a groan challenge
+  const handleAcceptGroanChallenge = async () => {
+    if (!selectedGroanChallenge) return
+    setGroanChallengeLoading(true)
+    try {
+      const { error } = await acceptGroanChallenge(selectedGroanChallenge.id)
+      if (error) throw error
+      // Update local state
+      setSelectedGroanChallenge(prev => ({ ...prev, accepted_at: new Date().toISOString() }))
+    } catch (err) {
+      console.error('Error accepting challenge:', err)
+    } finally {
+      setGroanChallengeLoading(false)
+    }
+  }
+
+  // Handle completing a groan challenge - show reflection step
+  const handleStartCompletion = () => {
+    setGroanReflection({ scaryScore: 5, wahooScore: 5, reflection: '' })
+    setGroanReflectionStep(true)
+  }
+
+  // Handle final completion with reflection data
+  const handleCompleteGroanChallenge = async () => {
+    if (!selectedGroanChallenge) return
+    setGroanChallengeLoading(true)
+    try {
+      const { error } = await completeGroanChallenge(selectedGroanChallenge.id, {
+        reflectionText: groanReflection.reflection,
+        scaryScoreAfter: groanReflection.scaryScore,
+        wahooScoreAfter: groanReflection.wahooScore
+      })
+      if (error) throw error
+      // Trigger confetti
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } })
+      // Reset and close modal, refresh matrix
+      setGroanReflectionStep(false)
+      setSelectedGroanChallenge(null)
+      setGroanMatrixKey(prev => prev + 1)
+    } catch (err) {
+      console.error('Error completing challenge:', err)
+    } finally {
+      setGroanChallengeLoading(false)
+    }
+  }
+
+  // Handle regenerating a challenge (delete and create new)
+  const handleRegenerateChallenge = async () => {
+    if (!selectedGroanChallenge) return
+    setGroanChallengeLoading(true)
+
+    // Store the challenge info before deleting
+    const challenge = selectedGroanChallenge
+    const isSkillProblem = challenge.skill_cluster_id && challenge.problem_cluster_id
+
+    try {
+      // Delete the current challenge
+      await supabase
+        .from('groan_challenges')
+        .delete()
+        .eq('id', challenge.id)
+
+      // Close modal temporarily
+      setSelectedGroanChallenge(null)
+
+      // Generate a new challenge with the same parameters
+      if (isSkillProblem) {
+        await handleGenerateChallenge({
+          sourceType: 'skill_x_problem',
+          skillId: challenge.skill_cluster_id,
+          skillLabel: challenge.source_label?.split(' × ')[0] || 'Skill',
+          problemId: challenge.problem_cluster_id,
+          problemLabel: challenge.source_label?.split(' × ')[1]?.split(' (for ')[0] || 'Problem',
+          personaId: challenge.persona_cluster_id || null,
+          personaLabel: null
+        })
+      } else {
+        await handleGenerateChallenge({
+          sourceType: challenge.source_type,
+          sourceId: challenge.source_id,
+          sourceLabel: challenge.source_label,
+          visibilityLayer: challenge.visibility_layer
+        })
+      }
+
+      // Refresh matrix
+      setGroanMatrixKey(prev => prev + 1)
+    } catch (err) {
+      console.error('Error regenerating challenge:', err)
+    } finally {
+      setGroanChallengeLoading(false)
+    }
+  }
+
+  // Close groan modal and reset state
+  const closeGroanModal = () => {
+    setSelectedGroanChallenge(null)
+    setGroanReflectionStep(false)
   }
 
   // Determine the current viewing stage (needed for Business filtering)
@@ -828,18 +931,6 @@ function Challenge() {
         })
       }
     }
-  }
-
-  // Filter Healing quests by sub-tab (daily/weekly)
-  if (activeCategory === 'Healing') {
-    filteredQuests = filteredQuests.filter(quest => {
-      if (healingSubTab === 'daily') {
-        return quest.frequency === 'daily'
-      } else if (healingSubTab === 'weekly') {
-        return quest.frequency === 'weekly'
-      }
-      return true
-    })
   }
 
   // Apply R-type and frequency filters for Groans and Healing tabs
@@ -1062,25 +1153,6 @@ function Challenge() {
         </div>
       )}
 
-      {/* Sub-tabs for Healing: Daily | Weekly */}
-      {activeCategory === 'Healing' && (
-        <div className="healing-sub-tabs-wrapper">
-          <div className="healing-sub-tabs">
-            <button
-              className={`sub-tab ${healingSubTab === 'daily' ? 'active' : ''}`}
-              onClick={() => setHealingSubTab('daily')}
-            >
-              Daily
-            </button>
-            <button
-              className={`sub-tab ${healingSubTab === 'weekly' ? 'active' : ''}`}
-              onClick={() => setHealingSubTab('weekly')}
-            >
-              Weekly
-            </button>
-          </div>
-        </div>
-      )}
 
       <div className="challenge-content">
         {/* Leaderboard */}
@@ -1203,6 +1275,7 @@ function Challenge() {
         {activeCategory === 'Groans' && (
           <div className="quest-section">
             <GroanMatrix
+              key={groanMatrixKey}
               userId={user?.id}
               onCellClick={handleMatrixCellClick}
               onGenerateChallenge={handleGenerateChallenge}
@@ -1308,6 +1381,7 @@ function Challenge() {
         {activeCategory === 'Business' && isGroansStage && (
           <div className="quest-section">
             <GroanMatrix
+              key={`business-${groanMatrixKey}`}
               userId={user?.id}
               onCellClick={handleMatrixCellClick}
               onGenerateChallenge={handleGenerateChallenge}
@@ -1451,6 +1525,152 @@ function Challenge() {
           </div>
         )}
       </>
+      )}
+
+      {/* Groan Challenge Detail Modal */}
+      {selectedGroanChallenge && (
+        <div className="groan-modal-overlay" onClick={closeGroanModal}>
+          <div className="groan-modal" onClick={e => e.stopPropagation()}>
+            <button className="groan-modal-close" onClick={closeGroanModal}>×</button>
+
+            {!groanReflectionStep ? (
+              <>
+                {/* Challenge Overview */}
+                <div className="groan-modal-header">
+                  {selectedGroanChallenge.visibility_layer && (
+                    <span className="groan-modal-layer">{selectedGroanChallenge.visibility_layer.toUpperCase()}</span>
+                  )}
+                  {selectedGroanChallenge.skill_cluster_id && (
+                    <span className="groan-modal-layer groan-modal-layer-sp">SKILL × PROBLEM</span>
+                  )}
+                  <h2>{selectedGroanChallenge.title}</h2>
+                </div>
+
+                <p className="groan-modal-description">{selectedGroanChallenge.description}</p>
+
+                {selectedGroanChallenge.source_label && (
+                  <div className="groan-modal-source">
+                    <span className="source-icon">🎯</span>
+                    <span className="source-text">{selectedGroanChallenge.source_label}</span>
+                  </div>
+                )}
+
+                <div className="groan-modal-actions">
+                  {/* Not yet accepted - show Accept + Regenerate */}
+                  {!selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed' && (
+                    <>
+                      <button
+                        className="groan-btn groan-btn-accept"
+                        onClick={handleAcceptGroanChallenge}
+                        disabled={groanChallengeLoading}
+                      >
+                        {groanChallengeLoading ? 'Accepting...' : '💪 Accept Challenge'}
+                      </button>
+                      <button
+                        className="groan-btn groan-btn-regenerate"
+                        onClick={handleRegenerateChallenge}
+                        disabled={groanChallengeLoading}
+                      >
+                        {groanChallengeLoading ? '...' : '🔄 Regenerate'}
+                      </button>
+                    </>
+                  )}
+
+                  {/* Accepted - show Complete */}
+                  {selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed' && (
+                    <button
+                      className="groan-btn groan-btn-complete"
+                      onClick={handleStartCompletion}
+                      disabled={groanChallengeLoading}
+                    >
+                      ✅ I Did It!
+                    </button>
+                  )}
+
+                  {/* Completed */}
+                  {selectedGroanChallenge.status === 'completed' && (
+                    <div className="groan-completed-badge">
+                      ✅ Challenge Completed
+                      {selectedGroanChallenge.scary_score_after && (
+                        <div className="groan-completed-scores">
+                          <span>😰 {selectedGroanChallenge.scary_score_after}/10</span>
+                          <span>🎉 {selectedGroanChallenge.wahoo_score_after}/10</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Reflection Step */}
+                <div className="groan-modal-header">
+                  <span className="groan-modal-layer groan-modal-layer-reflection">REFLECTION</span>
+                  <h2>How did it go?</h2>
+                </div>
+
+                <div className="groan-reflection-form">
+                  <div className="groan-slider-group">
+                    <label>
+                      <span className="slider-label">😰 How scary was it?</span>
+                      <span className="slider-value">{groanReflection.scaryScore}/10</span>
+                    </label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="10"
+                      value={groanReflection.scaryScore}
+                      onChange={(e) => setGroanReflection(prev => ({ ...prev, scaryScore: parseInt(e.target.value) }))}
+                      className="groan-slider"
+                    />
+                  </div>
+
+                  <div className="groan-slider-group">
+                    <label>
+                      <span className="slider-label">🎉 How excited/proud do you feel?</span>
+                      <span className="slider-value">{groanReflection.wahooScore}/10</span>
+                    </label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="10"
+                      value={groanReflection.wahooScore}
+                      onChange={(e) => setGroanReflection(prev => ({ ...prev, wahooScore: parseInt(e.target.value) }))}
+                      className="groan-slider"
+                    />
+                  </div>
+
+                  <div className="groan-reflection-text">
+                    <label>Quick reflection (optional)</label>
+                    <textarea
+                      placeholder="What did you learn? How do you feel?"
+                      value={groanReflection.reflection}
+                      onChange={(e) => setGroanReflection(prev => ({ ...prev, reflection: e.target.value }))}
+                      rows={3}
+                    />
+                  </div>
+                </div>
+
+                <div className="groan-modal-actions">
+                  <button
+                    className="groan-btn groan-btn-complete"
+                    onClick={handleCompleteGroanChallenge}
+                    disabled={groanChallengeLoading}
+                  >
+                    {groanChallengeLoading ? 'Saving...' : '🎉 Complete Challenge'}
+                  </button>
+                  <button
+                    className="groan-btn groan-btn-back"
+                    onClick={() => setGroanReflectionStep(false)}
+                    disabled={groanChallengeLoading}
+                  >
+                    ← Back
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       )}
       </div>
     </div>

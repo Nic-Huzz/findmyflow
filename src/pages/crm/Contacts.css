@@ -262,7 +262,7 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.filter-chip {
+.contacts-page .filter-chip {
   flex-shrink: 0;
   padding: 0.625rem 1rem;
   background: var(--white);
@@ -276,12 +276,12 @@
   white-space: nowrap;
 }
 
-.filter-chip:hover {
+.contacts-page .filter-chip:hover {
   border-color: var(--purple);
   color: var(--purple);
 }
 
-.filter-chip.active {
+.contacts-page .filter-chip.active {
   background: linear-gradient(135deg, var(--purple), var(--purple-light));
   border-color: transparent;
   color: var(--white);

@@ -262,9 +262,8 @@ serve(async (req) => {
         )
       }
 
-      // Get visibility layer details (only needed for standard requests)
-      const layer = VISIBILITY_LAYERS[visibilityLayer as keyof typeof VISIBILITY_LAYERS]
-      if (!layer) {
+      // Validate visibility layer exists (only needed for standard requests)
+      if (!VISIBILITY_LAYERS[visibilityLayer as keyof typeof VISIBILITY_LAYERS]) {
         return new Response(
           JSON.stringify({ error: `Invalid visibility layer: ${visibilityLayer}` }),
           {
@@ -361,7 +360,7 @@ serve(async (req) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
+        model: 'claude-3-5-haiku-20241022',
         max_tokens: 512,
         messages: [{
           role: 'user',
@@ -403,7 +402,7 @@ serve(async (req) => {
       whyThisMatters: result.whyThisMatters || '',
       alternativeVersion: result.alternativeVersion || null,
       generatedAt: new Date().toISOString(),
-      model: 'claude-3-5-sonnet-20241022'
+      model: 'claude-3-5-haiku-20241022'
     }
 
     // Add metadata based on request type

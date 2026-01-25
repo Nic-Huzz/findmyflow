@@ -87,9 +87,11 @@
 }
 
 .filter-chip.active {
-  background: #5e17eb;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
   border-color: #5e17eb;
   color: white;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  transform: scale(1.02);
 }
 
 /* Responsive */

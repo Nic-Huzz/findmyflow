@@ -72,7 +72,7 @@
   margin-bottom: 24px;
 }
 
-.filter-chip {
+.implementation-tracker .filter-chip {
   padding: 8px 16px;
   background: #ffffff;
   border: 1px solid #dee2e6;
@@ -83,12 +83,12 @@
   transition: all 0.2s;
 }
 
-.filter-chip:hover {
+.implementation-tracker .filter-chip:hover {
   border-color: #5e17eb;
   color: #5e17eb;
 }
 
-.filter-chip.active {
+.implementation-tracker .filter-chip.active {
   background: #5e17eb;
   border-color: #5e17eb;
   color: white;

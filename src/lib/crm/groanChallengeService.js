@@ -745,13 +745,14 @@ export async function getGroanStats(userId) {
 /**
  * Fetch Flow Finder data for matrix rows
  * Returns skills, problems, and personas from nikigai_clusters
+ * Note: cluster_type values in DB are 'skills', 'problems', 'persona' (mixed singular/plural)
  */
 export async function fetchFlowFinderData(userId) {
   const { data, error } = await supabase
     .from('nikigai_clusters')
     .select('*')
     .eq('user_id', userId)
-    .in('cluster_type', ['skill', 'problem', 'persona'])
+    .in('cluster_type', ['skills', 'problems', 'persona'])
     .order('proficiency', { ascending: false })
 
   if (error) {
@@ -759,10 +760,10 @@ export async function fetchFlowFinderData(userId) {
     return { data: null, error }
   }
 
-  // Organize by type
+  // Organize by type (DB uses 'skills', 'problems', 'persona')
   const organized = {
-    skills: (data || []).filter(c => c.cluster_type === 'skill'),
-    problems: (data || []).filter(c => c.cluster_type === 'problem'),
+    skills: (data || []).filter(c => c.cluster_type === 'skills'),
+    problems: (data || []).filter(c => c.cluster_type === 'problems'),
     personas: (data || []).filter(c => c.cluster_type === 'persona')
   }
 
@@ -821,26 +822,47 @@ export async function getCurrentWeekChallenge(userId) {
 
 /**
  * Check if user has completed Flow Finder (required for personalized challenges)
+ * Checks for actual cluster data rather than just flow_sessions entries
+ * since users may have data from QuickCapture or other sources
  */
 export async function hasCompletedFlowFinder(userId) {
-  const { data, error } = await supabase
-    .from('flow_sessions')
-    .select('flow_type')
+  // Check for actual cluster data (more reliable than flow_sessions)
+  const { data: clusters, error } = await supabase
+    .from('nikigai_clusters')
+    .select('cluster_type')
     .eq('user_id', userId)
-    .in('flow_type', ['nikigai_skills', 'nikigai_problems', 'nikigai_persona'])
+    .in('cluster_type', ['skills', 'problems', 'persona'])
 
   if (error) {
     console.error('Error checking Flow Finder completion:', error)
     return { completed: false, error }
   }
 
-  const completedFlows = new Set((data || []).map(s => s.flow_type))
-  const required = ['nikigai_skills', 'nikigai_problems', 'nikigai_persona']
-  const allComplete = required.every(f => completedFlows.has(f))
+  // Count entries by type
+  const typeCounts = {
+    skills: 0,
+    problems: 0,
+    persona: 0
+  }
+  ;(clusters || []).forEach(c => {
+    if (typeCounts.hasOwnProperty(c.cluster_type)) {
+      typeCounts[c.cluster_type]++
+    }
+  })
+
+  // User needs at least one of each type to use the matrix
+  const hasSkills = typeCounts.skills > 0
+  const hasProblems = typeCounts.problems > 0
+  const hasPersonas = typeCounts.persona > 0
+
+  const missing = []
+  if (!hasSkills) missing.push('skills')
+  if (!hasProblems) missing.push('problems')
+  if (!hasPersonas) missing.push('personas')
 
   return {
-    completed: allComplete,
-    missing: required.filter(f => !completedFlows.has(f)),
+    completed: hasSkills && hasProblems && hasPersonas,
+    missing,
     error: null
   }
 }

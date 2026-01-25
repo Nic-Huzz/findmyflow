@@ -136,12 +136,13 @@ function GroanMatrix({
     const cellChallenges = getCellChallenges(sourceId, layerId)
     if (cellChallenges.length === 0) return null
 
-    // Prioritize: accepted > generated > completed
-    const accepted = cellChallenges.find(c => c.status === 'accepted')
-    if (accepted) return accepted
+    // Prioritize: active (in progress with accepted_at) > active (new) > completed
+    // Note: DB uses 'active' for both generated and accepted states
+    const inProgress = cellChallenges.find(c => c.status === 'active' && c.accepted_at)
+    if (inProgress) return inProgress
 
-    const generated = cellChallenges.find(c => c.status === 'generated')
-    if (generated) return generated
+    const ready = cellChallenges.find(c => c.status === 'active' && !c.accepted_at)
+    if (ready) return ready
 
     // Return most recently completed
     const completed = cellChallenges
@@ -162,11 +163,11 @@ function GroanMatrix({
     if (cellChallenges.length === 0) return null
 
     // Same prioritization as regular cells
-    const accepted = cellChallenges.find(c => c.status === 'accepted')
-    if (accepted) return accepted
+    const inProgress = cellChallenges.find(c => c.status === 'active' && c.accepted_at)
+    if (inProgress) return inProgress
 
-    const generated = cellChallenges.find(c => c.status === 'generated')
-    if (generated) return generated
+    const ready = cellChallenges.find(c => c.status === 'active' && !c.accepted_at)
+    if (ready) return ready
 
     const completed = cellChallenges
       .filter(c => c.status === 'completed')
@@ -413,7 +414,7 @@ function GroanMatrix({
                       } ${
                         challenge?.status === 'completed' ? 'completed' : ''
                       } ${
-                        challenge?.status === 'accepted' ? 'in-progress' : ''
+                        (challenge?.status === 'active' && challenge?.accepted_at) ? 'in-progress' : ''
                       } ${
                         isEssenceZone ? 'essence-zone' : ''
                       }`}
@@ -438,16 +439,16 @@ function GroanMatrix({
                                 Done
                               </>
                             )}
-                            {challenge.status === 'accepted' && (
+                            {challenge.status === 'active' && challenge.accepted_at && (
                               <>
                                 <span className="groan-cell-status-icon">⏳</span>
                                 In Progress
                               </>
                             )}
-                            {challenge.status === 'generated' && (
+                            {challenge.status === 'active' && !challenge.accepted_at && (
                               <>
-                                <span className="groan-cell-status-icon">✨</span>
-                                Ready
+                                <span className="groan-cell-status-icon">👀</span>
+                                View
                               </>
                             )}
                           </div>
@@ -564,7 +565,7 @@ function GroanMatrix({
                       } ${
                         challenge?.status === 'completed' ? 'completed' : ''
                       } ${
-                        challenge?.status === 'accepted' ? 'in-progress' : ''
+                        (challenge?.status === 'active' && challenge?.accepted_at) ? 'in-progress' : ''
                       } ${
                         isEssenceZone ? 'essence-zone' : ''
                       }`}
@@ -588,16 +589,16 @@ function GroanMatrix({
                                 Done
                               </>
                             )}
-                            {challenge.status === 'accepted' && (
+                            {challenge.status === 'active' && challenge.accepted_at && (
                               <>
                                 <span className="groan-cell-status-icon">⏳</span>
                                 In Progress
                               </>
                             )}
-                            {challenge.status === 'generated' && (
+                            {challenge.status === 'active' && !challenge.accepted_at && (
                               <>
-                                <span className="groan-cell-status-icon">✨</span>
-                                Ready
+                                <span className="groan-cell-status-icon">👀</span>
+                                View
                               </>
                             )}
                           </div>
@@ -676,7 +677,7 @@ function GroanMatrix({
                         className={`groan-mobile-card ${
                           challenge?.status === 'completed' ? 'completed' : ''
                         } ${
-                          challenge?.status === 'accepted' ? 'in-progress' : ''
+                          (challenge?.status === 'active' && challenge?.accepted_at) ? 'in-progress' : ''
                         }`}
                         onClick={() => handleCellClick(sourceItem, layer)}
                       >
@@ -695,8 +696,8 @@ function GroanMatrix({
                         ) : challenge ? (
                           <div className={`groan-mobile-card-status ${challenge.status}`}>
                             {challenge.status === 'completed' && '✓ Done'}
-                            {challenge.status === 'accepted' && '⏳ Active'}
-                            {challenge.status === 'generated' && '✨ Ready'}
+                            {challenge.status === 'active' && challenge.accepted_at && '⏳ Active'}
+                            {challenge.status === 'active' && !challenge.accepted_at && '👀 View'}
                           </div>
                         ) : (
                           onGenerateChallenge ? (
@@ -764,7 +765,7 @@ function GroanMatrix({
                         className={`groan-mobile-card ${
                           challenge?.status === 'completed' ? 'completed' : ''
                         } ${
-                          challenge?.status === 'accepted' ? 'in-progress' : ''
+                          (challenge?.status === 'active' && challenge?.accepted_at) ? 'in-progress' : ''
                         }`}
                         onClick={() => handleSkillProblemCellClick(skill, problem)}
                       >
@@ -783,8 +784,8 @@ function GroanMatrix({
                         ) : challenge ? (
                           <div className={`groan-mobile-card-status ${challenge.status}`}>
                             {challenge.status === 'completed' && '✓ Done'}
-                            {challenge.status === 'accepted' && '⏳ Active'}
-                            {challenge.status === 'generated' && '✨ Ready'}
+                            {challenge.status === 'active' && challenge.accepted_at && '⏳ Active'}
+                            {challenge.status === 'active' && !challenge.accepted_at && '👀 View'}
                           </div>
                         ) : (
                           onGenerateChallenge ? (
