@@ -547,8 +547,9 @@ const checkStageGroanChallenge = async (userId, projectId, stageNumber, challeng
   const groanChallengeId = getGroanChallengeId(stageNumber);
 
   if (!groanChallengeId) {
-    console.warn(`No groan challenge defined for stage ${stageNumber}`);
-    return { completed: false, groanChallengeId: null };
+    // Stages without groan requirements (0, 0.5, 8) automatically pass this check
+    console.log(`Stage ${stageNumber} has no groan requirement - auto-passing check`);
+    return { completed: true, groanChallengeId: null };
   }
 
   try {

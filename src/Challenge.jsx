@@ -23,6 +23,7 @@ import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage } from './lib/stageConfig'
 import { generateVoiceQuestsForStage } from './lib/voiceQuestConfig'
+import { getScoringCategory } from './lib/scoringCategories'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -83,6 +84,7 @@ function Challenge() {
     setLeaderboardView,
     userRank,
     currentWeeklyPoints,
+    loadUserScores,
     nervousSystemComplete,
     safetyContracts,
     healingCompassComplete,
@@ -514,7 +516,11 @@ function Challenge() {
       }
 
       // Check for duplicate completions
-      const todayDate = new Date().toISOString().split('T')[0]
+      // Use local date for user's timezone consistency
+      const now = new Date()
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
+
       let duplicateQuery = supabase
         .from('quest_completions')
         .select('id')
@@ -524,8 +530,8 @@ function Challenge() {
 
       if (!quest.milestone_type) {
         duplicateQuery = duplicateQuery
-          .gte('completed_at', `${todayDate}T00:00:00.000Z`)
-          .lte('completed_at', `${todayDate}T23:59:59.999Z`)
+          .gte('completed_at', todayStart.toISOString())
+          .lte('completed_at', todayEnd.toISOString())
       }
 
       const { data: existingCompletion } = await duplicateQuery.maybeSingle()
@@ -546,6 +552,22 @@ function Challenge() {
         console.error('Error completing quest:', completionError)
         alert('Error completing quest. Please try again.')
         return
+      }
+
+      // Update new scoring tables via RPC
+      const scoringCategory = getScoringCategory(quest.category)
+      try {
+        await supabase.rpc('increment_scores', {
+          p_user_id: user.id,
+          p_project_id: null, // User-level scores (not project-specific)
+          p_category: scoringCategory,
+          p_points: quest.points
+        })
+        // Refresh user's scores from new tables
+        await loadUserScores()
+      } catch (scoreError) {
+        console.error('Error updating scores:', scoreError)
+        // Non-fatal - continue with quest completion
       }
 
       await handleStreakUpdate(user.id, progress.challenge_instance_id)

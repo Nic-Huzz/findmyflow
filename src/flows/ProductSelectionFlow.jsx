@@ -261,34 +261,8 @@ function ProductSelectionFlow() {
     }
   }, [user])
 
-  // Check for prior completion and auto-register quest (fixes missing quest completions)
-  useEffect(() => {
-    if (user) {
-      const checkPriorCompletion = async () => {
-        try {
-          const { data: assessment } = await supabase
-            .from('offer_builder_assessments')
-            .select('responses')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .maybeSingle()
-
-          // If product_selections exists in responses, flow was completed
-          if (assessment?.responses?.product_selections && Object.keys(assessment.responses.product_selections).length > 0) {
-            await completeFlowQuest({
-              userId: user.id,
-              flowId: 'product_selection',
-              pointsEarned: 30
-            })
-          }
-        } catch (err) {
-          // Silent fail - just trying to ensure quest is registered
-        }
-      }
-      checkPriorCompletion()
-    }
-  }, [user])
+  // Note: Removed auto-register useEffect that was causing duplicate quest completions
+  // Quest completion now only happens once when flow is completed
 
   // Check for saved progress after products load
   useEffect(() => {

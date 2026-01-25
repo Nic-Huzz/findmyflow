@@ -246,16 +246,8 @@ function OfferStackBuilderFlow() {
         .eq('user_id', user.id)
         .single()
 
-      // If previously completed, ensure quest is registered (fixes missing quest completions)
-      if (existingBuild?.status === 'completed') {
-        console.log('🔄 Offer Stack: Found prior completion, auto-registering quest...')
-        const autoResult = await completeFlowQuest({
-          userId: user.id,
-          flowId: 'offer_stack_builder',
-          pointsEarned: 35
-        })
-        console.log('🔄 Offer Stack auto-register result:', autoResult)
-      }
+      // Note: Removed auto-register logic that was causing duplicate quest completions
+      // Quest completion now only happens once in handleSave when flow is completed
 
       setGrandSlamData(grandSlam || null)
       setOfferBuilderData(offerData || null)

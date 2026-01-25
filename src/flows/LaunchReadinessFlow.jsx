@@ -145,32 +145,8 @@ function LaunchReadinessFlow() {
     }
   }, [user])
 
-  // Check for prior completion and auto-register quest (fixes missing quest completions)
-  useEffect(() => {
-    if (user) {
-      const checkPriorCompletion = async () => {
-        try {
-          const { data: existingAssessment } = await supabase
-            .from('launch_readiness_assessments')
-            .select('id')
-            .eq('user_id', user.id)
-            .limit(1)
-            .maybeSingle()
-
-          if (existingAssessment) {
-            await completeFlowQuest({
-              userId: user.id,
-              flowId: 'launch_readiness',
-              pointsEarned: 25
-            })
-          }
-        } catch (err) {
-          // Silent fail - just trying to ensure quest is registered
-        }
-      }
-      checkPriorCompletion()
-    }
-  }, [user])
+  // Note: Removed auto-register useEffect that was causing duplicate quest completions
+  // Quest completion now only happens once when flow is completed
 
   async function loadExistingData() {
     try {

@@ -24,6 +24,7 @@ import { initializeUserStageProgress, checkAndGraduateProject } from '../lib/gra
 import { normalizePersona } from '../data/personaProfiles'
 import { convertLegacyStage, STAGE_CONFIG } from '../lib/stageConfig'
 import { generateVoiceQuestsForStage } from '../lib/voiceQuestConfig'
+import { getScoringCategory } from '../lib/scoringCategories'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
@@ -81,6 +82,10 @@ export function useChallengeData() {
   const [leaderboard, setLeaderboard] = useState([])
   const [leaderboardView, setLeaderboardView] = useState('weekly')
   const [userRank, setUserRank] = useState(null)
+
+  // New Scoring System State (weekly + lifetime)
+  const [weeklyScores, setWeeklyScores] = useState(null) // { business_score, healing_score, courage_score }
+  const [lifetimeScores, setLifetimeScores] = useState(null) // { lifetime_business_score, etc. }
 
   // Prerequisite State
   const [nervousSystemComplete, setNervousSystemComplete] = useState(false)
@@ -318,6 +323,51 @@ export function useChallengeData() {
     return monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
+  // Load user's scores from new scoring tables
+  const loadUserScores = async () => {
+    if (!user?.id) return
+
+    try {
+      const weekStart = getWeekStart()
+
+      // Load weekly scores for current week
+      const { data: weekly, error: weeklyError } = await supabase
+        .from('challenge_weekly_scores')
+        .select('business_score, healing_score, courage_score')
+        .eq('user_id', user.id)
+        .eq('week_start_date', weekStart)
+        .is('project_id', null) // User-level scores (not project-specific)
+        .maybeSingle()
+
+      if (weeklyError) {
+        console.error('Error loading weekly scores:', weeklyError)
+      } else {
+        setWeeklyScores(weekly || { business_score: 0, healing_score: 0, courage_score: 0 })
+      }
+
+      // Load lifetime scores
+      const { data: lifetime, error: lifetimeError } = await supabase
+        .from('user_lifetime_scores')
+        .select('lifetime_business_score, lifetime_healing_score, lifetime_courage_score, lifetime_total_score')
+        .eq('user_id', user.id)
+        .is('project_id', null) // User-level scores
+        .maybeSingle()
+
+      if (lifetimeError) {
+        console.error('Error loading lifetime scores:', lifetimeError)
+      } else {
+        setLifetimeScores(lifetime || {
+          lifetime_business_score: 0,
+          lifetime_healing_score: 0,
+          lifetime_courage_score: 0,
+          lifetime_total_score: 0
+        })
+      }
+    } catch (error) {
+      console.error('Error in loadUserScores:', error)
+    }
+  }
+
   // Load weekly plan for current week
   const loadWeeklyPlan = async () => {
     if (!user?.id) return
@@ -420,15 +470,7 @@ export function useChallengeData() {
     try {
       if (!user) return
 
-      // Get current calendar week (Monday to Sunday)
-      const now = new Date()
-      const day = now.getDay()
-      const mondayOffset = day === 0 ? -6 : 1 - day // Adjust for Sunday
-      const currentWeekStart = new Date(now)
-      currentWeekStart.setDate(now.getDate() + mondayOffset)
-      currentWeekStart.setHours(0, 0, 0, 0)
-      const currentWeekEnd = new Date(currentWeekStart)
-      currentWeekEnd.setDate(currentWeekStart.getDate() + 7)
+      const weekStart = getWeekStart()
 
       // Get all active challenge participants
       let challengeQuery = supabase
@@ -453,30 +495,28 @@ export function useChallengeData() {
         return
       }
 
-      // For weekly view, calculate points from quest_completions this week
+      const userIds = challengeData.map(entry => entry.user_id)
       let leaderboardData = []
 
       if (leaderboardView === 'weekly') {
-        // Get all quest completions for this week for all active users
-        const userIds = challengeData.map(entry => entry.user_id)
-
-        const { data: weeklyCompletions, error: completionsError } = await supabase
-          .from('quest_completions')
-          .select('user_id, points_earned')
+        // Use new challenge_weekly_scores table for weekly view
+        const { data: weeklyScoresData, error: weeklyError } = await supabase
+          .from('challenge_weekly_scores')
+          .select('user_id, business_score, healing_score, courage_score')
           .in('user_id', userIds)
-          .gte('completed_at', currentWeekStart.toISOString())
-          .lt('completed_at', currentWeekEnd.toISOString())
+          .eq('week_start_date', weekStart)
+          .is('project_id', null) // User-level scores
 
-        if (completionsError) {
-          console.error('Error loading weekly completions:', completionsError)
+        if (weeklyError) {
+          console.error('Error loading weekly scores:', weeklyError)
           return
         }
 
-        // Sum points per user for this week
+        // Build map of user_id to total weekly points
         const weeklyPointsMap = {}
-        if (weeklyCompletions) {
-          weeklyCompletions.forEach(completion => {
-            weeklyPointsMap[completion.user_id] = (weeklyPointsMap[completion.user_id] || 0) + (completion.points_earned || 0)
+        if (weeklyScoresData) {
+          weeklyScoresData.forEach(score => {
+            weeklyPointsMap[score.user_id] = (score.business_score || 0) + (score.healing_score || 0) + (score.courage_score || 0)
           })
         }
 
@@ -489,8 +529,35 @@ export function useChallengeData() {
         // Sort by weekly points
         leaderboardData.sort((a, b) => b.weeklyPoints - a.weeklyPoints)
       } else {
-        // All-time view: sort by total_points
-        leaderboardData = [...challengeData].sort((a, b) => (b.total_points || 0) - (a.total_points || 0))
+        // Use new user_lifetime_scores table for all-time view
+        const { data: lifetimeData, error: lifetimeError } = await supabase
+          .from('user_lifetime_scores')
+          .select('user_id, lifetime_total_score')
+          .in('user_id', userIds)
+          .is('project_id', null) // User-level scores
+
+        if (lifetimeError) {
+          console.error('Error loading lifetime scores:', lifetimeError)
+          return
+        }
+
+        // Build map of user_id to lifetime total
+        const lifetimePointsMap = {}
+        if (lifetimeData) {
+          lifetimeData.forEach(score => {
+            lifetimePointsMap[score.user_id] = score.lifetime_total_score || 0
+          })
+        }
+
+        // Build leaderboard with lifetime points
+        leaderboardData = challengeData.map(entry => ({
+          ...entry,
+          weeklyPoints: 0,
+          allTimePoints: lifetimePointsMap[entry.user_id] || 0
+        }))
+
+        // Sort by all-time points
+        leaderboardData.sort((a, b) => b.allTimePoints - a.allTimePoints)
       }
 
       const sessionIds = leaderboardData.map(entry => entry.session_id).filter(Boolean)
@@ -519,9 +586,9 @@ export function useChallengeData() {
           rank: index + 1,
           userId: entry.user_id,
           name: firstName,
-          totalPoints: leaderboardView === 'weekly' ? entry.weeklyPoints : (entry.total_points || 0),
+          totalPoints: leaderboardView === 'weekly' ? entry.weeklyPoints : entry.allTimePoints,
           weeklyPoints: entry.weeklyPoints || 0,
-          allTimePoints: entry.total_points || 0,
+          allTimePoints: entry.allTimePoints || 0,
           isCurrentUser: entry.user_id === user.id
         }
       })
@@ -939,20 +1006,22 @@ export function useChallengeData() {
   // ============================================
 
   const isQuestCompletedToday = (questId, quest) => {
-    const today = new Date().setHours(0, 0, 0, 0)
-    const weekStart = new Date(getWeekStart() + 'T00:00:00').getTime()
+    // Use local date strings for consistent timezone handling
+    const todayStr = new Date().toLocaleDateString('en-CA') // YYYY-MM-DD format
+    const weekStartStr = getWeekStart() // Already returns YYYY-MM-DD
 
-    // Daily quests: check if completed TODAY only
+    // Daily quests: check if completed TODAY only (local timezone)
     if (quest.frequency === 'daily') {
       return completions.some(c => {
-        const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
-        return c.quest_id === questId && completedDate === today
+        // Convert completion time to local date string
+        const completedDateStr = new Date(c.completed_at).toLocaleDateString('en-CA')
+        return c.quest_id === questId && completedDateStr === todayStr
       })
     } else if (quest.frequency === 'weekly') {
       // Weekly quests: check if completed THIS WEEK (since Monday)
       return completions.some(c => {
-        const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
-        return c.quest_id === questId && completedDate >= weekStart
+        const completedDateStr = new Date(c.completed_at).toLocaleDateString('en-CA')
+        return c.quest_id === questId && completedDateStr >= weekStartStr
       })
     } else {
       // Other quests (one-time, etc.): check completion limits or any completion
@@ -963,9 +1032,10 @@ export function useChallengeData() {
       }
 
       if (quest.maxPerDay) {
+        const todayStr = new Date().toLocaleDateString('en-CA')
         const todayCompletions = questCompletions.filter(c => {
-          const completedDate = new Date(c.completed_at).setHours(0, 0, 0, 0)
-          return completedDate === today
+          const completedDateStr = new Date(c.completed_at).toLocaleDateString('en-CA')
+          return completedDateStr === todayStr
         })
         return todayCompletions.length >= quest.maxPerDay
       }
@@ -1416,6 +1486,7 @@ export function useChallengeData() {
       loadUserProgress()
       loadLeaderboard()
       loadUserData()
+      loadUserScores() // Load from new scoring tables
       checkNervousSystemComplete()
       checkHealingCompassComplete()
       checkFlowFinderComplete()
@@ -1498,9 +1569,16 @@ export function useChallengeData() {
   }, [user, leaderboardView])
 
   // ============================================
-  // Compute current user's weekly points
+  // Compute current user's weekly points (from new scoring tables)
   // ============================================
   const currentWeeklyPoints = (() => {
+    // Use new weekly scores if available
+    if (weeklyScores) {
+      return (weeklyScores.business_score || 0) +
+             (weeklyScores.healing_score || 0) +
+             (weeklyScores.courage_score || 0)
+    }
+    // Fallback to calculating from completions (for backwards compatibility)
     if (!completions || completions.length === 0) return 0
     const weekStart = new Date(getWeekStart() + 'T00:00:00')
     return completions
@@ -1563,6 +1641,11 @@ export function useChallengeData() {
     setLeaderboardView,
     userRank,
     currentWeeklyPoints,
+
+    // New Scoring System
+    weeklyScores,
+    lifetimeScores,
+    loadUserScores,
 
     // Prerequisites
     nervousSystemComplete,

@@ -166,32 +166,8 @@ export default function HealingCompass() {
     }
   }, [user, loadProgress, searchParams])
 
-  // Check for prior completion and auto-register quest (fixes missing quest completions)
-  useEffect(() => {
-    if (user) {
-      const checkPriorCompletion = async () => {
-        try {
-          const { data: existingResponse } = await supabase
-            .from('healing_compass_responses')
-            .select('id')
-            .eq('user_id', user.id)
-            .limit(1)
-            .maybeSingle()
-
-          if (existingResponse) {
-            await completeFlowQuest({
-              userId: user.id,
-              flowId: 'healing_compass',
-              pointsEarned: 20
-            })
-          }
-        } catch (err) {
-          // Silent fail - just trying to ensure quest is registered
-        }
-      }
-      checkPriorCompletion()
-    }
-  }, [user])
+  // Note: Removed auto-register useEffect that was causing duplicate quest completions
+  // Quest completion now only happens once when flow is completed
 
   // Auto-save progress on state changes
   useEffect(() => {

@@ -91,36 +91,8 @@ function FunnelBaselineFlow() {
     }
   }, [user])
 
-  // Auto-register quest on mount
-  useEffect(() => {
-    if (user) {
-      const checkPriorCompletion = async () => {
-        try {
-          // Check if completed this week already
-          const weekStart = getWeekStart()
-          const { data: existingThisWeek } = await supabase
-            .from('funnel_metrics')
-            .select('id')
-            .eq('user_id', user.id)
-            .gte('created_at', weekStart.toISOString())
-            .eq('source', 'quest')
-            .limit(1)
-            .maybeSingle()
-
-          if (existingThisWeek) {
-            await completeFlowQuest({
-              userId: user.id,
-              flowId: 'funnel_baseline',
-              pointsEarned: 15
-            })
-          }
-        } catch (err) {
-          // Silent fail
-        }
-      }
-      checkPriorCompletion()
-    }
-  }, [user])
+  // Note: Removed auto-register useEffect that was causing duplicate quest completions
+  // Quest completion now only happens once when flow is completed
 
   function getWeekStart() {
     const now = new Date()

@@ -208,16 +208,8 @@ function GrandSlamOfferFlow() {
         setEvaluatedProducts(existingEvaluations.evaluated_product_ids)
       }
 
-      // If previously completed, ensure quest is registered (fixes missing quest completions)
-      if (existingEvaluations?.status === 'completed') {
-        console.log('🔄 Grand Slam: Found prior completion, auto-registering quest...')
-        const autoResult = await completeFlowQuest({
-          userId: user.id,
-          flowId: 'grand_slam_offer',
-          pointsEarned: 30
-        })
-        console.log('🔄 Grand Slam auto-register result:', autoResult)
-      }
+      // Note: Removed auto-register logic that was causing duplicate quest completions
+      // Quest completion now only happens once when flow is completed
 
       if (offerData) {
         setExistingOffer(offerData)
