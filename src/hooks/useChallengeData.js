@@ -197,7 +197,6 @@ export function useChallengeData() {
       // Check if streak should be broken
       const streakResult = await checkStreakBreak(user.id, progressData.challenge_instance_id)
       if (streakResult.streak_broken) {
-        console.log('Streak was broken - reset to 0')
         const { data: updatedProgress } = await supabase
           .from('challenge_progress')
           .select('*')
@@ -1487,8 +1486,7 @@ export function useChallengeData() {
       .channel('challenge_progress_changes')
       .on('postgres_changes',
         { event: '*', schema: 'public', table: 'challenge_progress' },
-        (payload) => {
-          console.log('Leaderboard update:', payload)
+        () => {
           loadLeaderboard()
         }
       )

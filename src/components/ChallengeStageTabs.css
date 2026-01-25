@@ -58,9 +58,9 @@
 }
 
 .stage-tab.completed {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.3);
-  color: #10b981;
+  background: rgba(233, 162, 59, 0.1);
+  border-color: rgba(233, 162, 59, 0.3);
+  color: #E9A23B;
 }
 
 .stage-tab.locked {
@@ -115,7 +115,7 @@
   right: -4px;
   width: 18px;
   height: 18px;
-  background: #10b981;
+  background: #E9A23B;
   border-radius: 50%;
   font-size: 0.65rem;
   display: flex;
