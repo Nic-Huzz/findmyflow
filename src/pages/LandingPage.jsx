@@ -5,9 +5,6 @@ import './LandingPage.css';
 const LandingPage = () => {
   const navigate = useNavigate();
   const [expandedFaq, setExpandedFaq] = useState(null);
-  const [leadEmail, setLeadEmail] = useState('');
-  const [leadSubmitted, setLeadSubmitted] = useState(false);
-  const [leadLoading, setLeadLoading] = useState(false);
 
   const faqs = [
     {
@@ -49,35 +46,25 @@ const LandingPage = () => {
       <section className="landing-hero">
         <div className="landing-container">
           <span className="landing-badge">
-            The anti-university for your career reinvention
+            A process to monetise your mission and gain financial + location freedom
           </span>
 
           <h1 className="landing-headline">
-            Turn What You Know Into{' '}
-            <span className="gold-text">Work That Lights You Up</span>
+            I believe there's a <span className="gold-text">flow</span> for your life.
           </h1>
 
-          <p className="landing-tagline">
-            A process to monetise your mission to obtain financial + location independence
+          <p className="hero-vision">
+            A unique path only you can walk — where work feels like play,
+            income meets purpose, and you finally stop trading your best hours
+            for someone else's dream.
           </p>
 
-          <p className="landing-subheadline">
-            For burnt-out professionals ready to escape the grind and do meaningful work.
-            Whether you want to build your own thing or find an impactful career —
-            we'll help you discover the path that's right for you.
+          <p className="hero-bridge">
+            Ancient wisdom knew this. Modern systems forgot it.
           </p>
 
-          <p className="rightful-heritage">
-            You've already done the hard part — years of experience, skills you've built, problems you've solved.
-            Now it's time to turn that into something that's yours.
-          </p>
-
-          <p className="landing-philosophy">
-            Learning that feels like play, not homework.
-          </p>
-
-          <p className="hero-win-state">
-            Your first milestone: Get paid for what you already know how to do.
+          <p className="hero-promise">
+            We help you rediscover yours.
           </p>
 
           <div className="hero-cta-group">
@@ -96,214 +83,6 @@ const LandingPage = () => {
           </div>
 
           <p className="hero-note">Free to start. No credit card required.</p>
-          <p className="hero-protection">Your progress is always saved. Pick up exactly where you left off.</p>
-        </div>
-      </section>
-
-      {/* Is This You? Section - North Star Person */}
-      <section className="landing-is-this-you">
-        <div className="landing-container">
-          <h2 className="is-this-you-heading">Is This You?</h2>
-          <p className="north-star-person">
-            Someone who senses there's a more alive version of themselves —
-            but the path there feels either <span className="gold-text">too scary</span> or <span className="gold-text">too boring</span>.
-          </p>
-          <p className="north-star-subtext">
-            You're not broken. You're not lazy. You're just caught between
-            the fear of being seen and the exhaustion of staying invisible.
-          </p>
-        </div>
-      </section>
-
-      {/* Manifesto Section */}
-      <section className="landing-manifesto">
-        <div className="landing-container">
-          <h2 className="manifesto-heading">
-            School taught you learning was a chore.
-            <span className="gold-text"> We're here to undo that.</span>
-          </h2>
-
-          <div className="manifesto-content">
-            <p>
-              Sit down. Shut up. Memorise this. Get graded. Repeat for 15+ years.
-            </p>
-            <p>
-              No wonder you associate growth with grinding. No wonder "career development"
-              sounds like another item on your endless to-do list.
-            </p>
-            <p>
-              But here's what they never told you: <strong>learning is supposed to feel good.</strong>
-              Discovery is energising. Progress is addictive — when you're chasing something
-              that actually matters to you.
-            </p>
-            <p>
-              Find My Flow isn't another curriculum designed by someone who doesn't know you.
-              It's a guided discovery process that helps you uncover what's already there —
-              your skills, your purpose, your path.
-            </p>
-            <p className="manifesto-highlight">
-              This is education the way it should have been all along.
-            </p>
-            <p className="manifesto-elitism">
-              This isn't for people who want another course or another coach.
-              It's for the ones who've realized the system wasn't built for them.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* The Matrix Exchange Section */}
-      <section className="landing-matrix-exchange">
-        <div className="landing-container">
-          <h2 className="matrix-exchange-heading">
-            The "matrix" isn't a conspiracy.
-            <br />
-            It's just an optimization that forgot about you.
-          </h2>
-
-          <div className="exchange-card">
-            <div className="exchange-section exchange-give">
-              <h3 className="exchange-label">You give</h3>
-              <p className="exchange-text">
-                Time. Energy. Your most productive hours. Often doing work that drains rather than energizes.
-              </p>
-            </div>
-
-            <div className="exchange-divider">
-              <span className="exchange-arrow">&#8596;</span>
-            </div>
-
-            <div className="exchange-section exchange-receive">
-              <h3 className="exchange-label">You receive</h3>
-              <p className="exchange-text">
-                A salary. Enough to cover basic needs. A sense of "safety" — as long as you don't stop.
-              </p>
-            </div>
-          </div>
-
-          <p className="matrix-exchange-tagline">
-            The leverage point isn't quitting. It's building an alternate source of safety.
-          </p>
-        </div>
-      </section>
-
-      {/* Problems We Understand Section */}
-      <section className="landing-problems-we-understand">
-        <div className="landing-container">
-          <h2 className="section-heading">Problems We Understand Because We Lived Them Too</h2>
-          <p className="section-subheading">
-            These aren't just challenges — they're the invisible weight you carry every day
-          </p>
-
-          <div className="problems-grid">
-            <div className="problem-card">
-              <div className="problem-icon">💔</div>
-              <h3>Healing Feels Heavy</h3>
-              <p>Growth work that feels like homework — serious, slow, and joyless.</p>
-            </div>
-            <div className="problem-card">
-              <div className="problem-icon">😶</div>
-              <h3>Hiding Your Real Self</h3>
-              <p>Fear of being truly seen keeps you playing small and staying quiet.</p>
-            </div>
-            <div className="problem-card">
-              <div className="problem-icon">🔥</div>
-              <h3>Chronic Burnout</h3>
-              <p>Trapped in a "matrix" of joyless work that slowly drains your soul.</p>
-            </div>
-            <div className="problem-card">
-              <div className="problem-icon">🤷</div>
-              <h3>Lack of Self-Knowledge</h3>
-              <p>No clarity on what you actually want — or how to get there.</p>
-            </div>
-            <div className="problem-card">
-              <div className="problem-icon">🚫</div>
-              <h3>Can't Monetise Gifts</h3>
-              <p>You have skills and passion, but no system to turn them into income.</p>
-            </div>
-            <div className="problem-card">
-              <div className="problem-icon">😰</div>
-              <h3>Visibility Paralysis</h3>
-              <p>Fear of judgement keeps you invisible — even when you're ready to share.</p>
-            </div>
-          </div>
-
-          <p className="problems-north-star">
-            The North Star Problem: <strong>Healing feels heavy. Self-discovery feels boring.</strong>
-            <br />
-            What if it could feel like play instead?
-          </p>
-        </div>
-      </section>
-
-      {/* Channel Explosion Section */}
-      <section className="landing-channel-explosion">
-        <div className="landing-container">
-          <h2 className="channel-heading">We're living through a channel explosion</h2>
-          <div className="channel-subheading">
-            <p>30 years ago: 2 TV channels. Today: thousands.</p>
-            <p>The same thing is about to happen to software — and the economy.</p>
-          </div>
-
-          <div className="economy-cards">
-            <div className="economy-card economy-card-old">
-              <h3 className="economy-title">The Old Economy</h3>
-              <p className="economy-date">1995 — 2020</p>
-              <p className="economy-number">2-5</p>
-              <p className="economy-text">
-                Providers of everything. Massive horizontal tools serving millions with 60% fit.
-                High barriers to entry. You needed capital or years of skill-building to compete.
-              </p>
-            </div>
-
-            <div className="economy-card economy-card-new">
-              <h3 className="economy-title">The Emerging Economy</h3>
-              <p className="economy-date">2024 →</p>
-              <p className="economy-number">1000s</p>
-              <p className="economy-text">
-                Vertical, niche products. Built by people who deeply understand specific problems.
-                Serving thousands with 95% fit. AI collapsed the build-cost barrier. Anyone with insight can ship.
-              </p>
-            </div>
-          </div>
-
-          <p className="beginners-luck">
-            You're catching this at exactly the right moment — before everyone else realizes the game has changed.
-          </p>
-        </div>
-      </section>
-
-      {/* Portfolio Career Section */}
-      <section className="landing-portfolio-career">
-        <div className="landing-container">
-          <div className="portfolio-top">
-            <h2 className="portfolio-heading">The Portfolio Career</h2>
-            <p className="portfolio-description">
-              The future isn't "job vs. entrepreneur." It's assembling your unique configuration of
-              income streams that create safety while honoring your flow.
-            </p>
-
-            <div className="portfolio-pills">
-              <span className="portfolio-pill"><span className="pill-dot"></span>Consulting</span>
-              <span className="portfolio-pill"><span className="pill-dot"></span>Micro-SaaS</span>
-              <span className="portfolio-pill"><span className="pill-dot"></span>Digital Products</span>
-              <span className="portfolio-pill"><span className="pill-dot"></span>Coaching</span>
-              <span className="portfolio-pill"><span className="pill-dot"></span>Content</span>
-              <span className="portfolio-pill"><span className="pill-dot"></span>Part-time Role</span>
-            </div>
-          </div>
-
-          <div className="portfolio-formula">
-            <div className="formula-equation">
-              <span className="formula-term">Your natural interests</span>
-              <span className="formula-operator">+</span>
-              <span className="formula-term">energy patterns</span>
-              <span className="formula-operator">+</span>
-              <span className="formula-term">creative expression</span>
-            </div>
-            <span className="formula-equals">=</span>
-            <p className="formula-result">A business model that feels like play</p>
-          </div>
         </div>
       </section>
 
@@ -346,238 +125,181 @@ const LandingPage = () => {
               </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Six Pillars of Fulfillment Section */}
-      <section className="landing-six-pillars">
-        <div className="landing-container">
-          <h2 className="section-heading">The Six Pillars of Fulfillment</h2>
-          <p className="section-subheading">
-            Every human is driven by six core needs. FindMyFlow is designed to meet all of them.
-          </p>
-
-          <div className="pillars-container">
-            <div className="pillars-group pillars-personality">
-              <h3 className="pillars-group-label">Needs of the Personality</h3>
-              <div className="pillars-grid">
-                <div className="pillar-card">
-                  <div className="pillar-icon">🏠</div>
-                  <h4 className="pillar-name">Certainty</h4>
-                  <p className="pillar-need">Security, stability, predictability</p>
-                  <div className="pillar-how">
-                    <span className="pillar-how-label">How we deliver:</span>
-                    <p>Progress always saved. Clear 6-stage system. Guided discovery — no blank page syndrome. Milestones you can see coming.</p>
-                  </div>
-                </div>
-
-                <div className="pillar-card">
-                  <div className="pillar-icon">🎲</div>
-                  <h4 className="pillar-name">Variety</h4>
-                  <p className="pillar-need">Change, stimulation, challenge</p>
-                  <div className="pillar-how">
-                    <span className="pillar-how-label">How we deliver:</span>
-                    <p>Daily quests. Courage Challenges. Fantasy team battles. Different quest types. Unpredictable AI insights from Zarlo.</p>
-                  </div>
-                </div>
-
-                <div className="pillar-card">
-                  <div className="pillar-icon">👑</div>
-                  <h4 className="pillar-name">Significance</h4>
-                  <p className="pillar-need">Feel unique, important, special</p>
-                  <div className="pillar-how">
-                    <span className="pillar-how-label">How we deliver:</span>
-                    <p>"An offer only YOU can make." Your unique combination. Personalized archetypes. Specific Knowledge no one can compete with.</p>
-                  </div>
-                </div>
-
-                <div className="pillar-card">
-                  <div className="pillar-icon">💜</div>
-                  <h4 className="pillar-name">Connection</h4>
-                  <p className="pillar-need">Closeness and belonging</p>
-                  <div className="pillar-how">
-                    <span className="pillar-how-label">How we deliver:</span>
-                    <p>Community features. Team battles. Weekly live sessions. Zarlo as your AI co-founder. Mentorship from those ahead of you.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="pillars-group pillars-spirit">
-              <h3 className="pillars-group-label">Needs of the Spirit</h3>
-              <p className="pillars-spirit-note">Where lasting fulfillment lives</p>
-              <div className="pillars-grid pillars-grid-spirit">
-                <div className="pillar-card pillar-card-spirit">
-                  <div className="pillar-icon">🌱</div>
-                  <h4 className="pillar-name">Growth</h4>
-                  <p className="pillar-need">Expand, develop, improve</p>
-                  <div className="pillar-how">
-                    <span className="pillar-how-label">How we deliver:</span>
-                    <p>Stage progression that unlocks new capabilities. Flow Finder discovery. Nervous System calibration. Courage challenges that expand who you are. Points and leveling that make growth visible.</p>
-                  </div>
-                </div>
-
-                <div className="pillar-card pillar-card-spirit">
-                  <div className="pillar-icon">🌍</div>
-                  <h4 className="pillar-name">Contribution</h4>
-                  <p className="pillar-need">Give beyond ourselves</p>
-                  <div className="pillar-how">
-                    <span className="pillar-how-label">How we deliver:</span>
-                    <p>Monetise your mission — not just making money, but serving others. Every person who finds their flow is one less person stuck. You're building something that helps people escape the matrix.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p className="pillars-kicker">
-            Most platforms optimize for one or two needs. We designed for all six.
+          <p className="cultures-question">
+            So how do you find yours?
           </p>
         </div>
       </section>
 
-      {/* Moonshot Section */}
-      <section className="landing-moonshot">
+      {/* Is This You? Section */}
+      <section className="landing-is-this-you">
         <div className="landing-container">
-          <div className="moonshot-label">The Moonshot</div>
-          <h2 className="moonshot-heading">
-            A recognised alternative to the traditional career path
-          </h2>
+          <h2 className="is-this-you-heading">Is This You?</h2>
 
-          <div className="moonshot-content">
-            <div className="moonshot-vision">
-              <p className="moonshot-vision-text">
-                What if there was a path as credible as university — but designed for people
-                who learn by doing, not by sitting in lectures? A place that helps you discover
-                your unique contribution to the world, not just credentials for someone else's checklist.
-              </p>
+          <div className="is-this-you-vision">
+            <p className="vision-intro">Someone who feels like life is supposed to be...</p>
+            <ul className="vision-list">
+              <li>An <strong>adventure</strong>, not about climbing a ladder</li>
+              <li>About <strong>creating impact</strong>, not living for the weekend</li>
+              <li>About <strong>working for purpose</strong>, not a salary</li>
+            </ul>
+          </div>
+
+          <p className="stuck-feeling">
+            Someone who feels stuck, like your essence knows you're capable of more
+            but taking action seems hard or heavy?
+          </p>
+
+          <div className="symptoms-section">
+            <p className="symptoms-intro">You might recognise these symptoms:</p>
+            <div className="symptoms-grid">
+              <div className="symptom-card">
+                <div className="symptom-icon">🧠</div>
+                <h3>Head Full of Ambitions</h3>
+                <p>Big dreams, endless ideas — but no clear path to make them real.</p>
+              </div>
+              <div className="symptom-card">
+                <div className="symptom-icon">😰</div>
+                <h3>Visibility Paralysis</h3>
+                <p>Fear of judgement keeps you invisible — even when you're ready to share.</p>
+              </div>
+              <div className="symptom-card">
+                <div className="symptom-icon">🚫</div>
+                <h3>Can't Monetise Gifts</h3>
+                <p>You have skills and passion, but no system to turn them into income.</p>
+              </div>
+              <div className="symptom-card">
+                <div className="symptom-icon">😶</div>
+                <h3>Hiding Your Real Self</h3>
+                <p>Fear of being truly seen keeps you playing small and staying quiet.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="validation-block">
+            <p className="validation-text">
+              You're not broken. You're not lazy. You're just caught between
+              the fear of uncertainty and the exhaustion of not making progress.
+            </p>
+            <p className="validation-reframe">
+              What if we could make pursuing these ambitions <span className="gold-text">fun</span>?
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* How You Got Here - Single Flowing Narrative */}
+      <section className="landing-how-you-got-here">
+        <div className="landing-container">
+          <h2 className="narrative-heading">Why You Feel This Way</h2>
+
+          <div className="narrative-flow">
+            {/* Chapter 1: School */}
+            <div className="narrative-chapter">
+              <div className="chapter-marker">1</div>
+              <div className="chapter-content">
+                <h3 className="chapter-title">Our Curiosities Are Our Compass</h3>
+                <p className="chapter-subtitle">School failed to nurture them.</p>
+                <p className="chapter-body">
+                  Instead of following what lights us up, we were given a standardised curriculum.
+                  Sit down. Shut up. Memorise this. Get graded. Repeat for 15+ years.
+                </p>
+                <p className="chapter-body">
+                  They trained the curiosity out of us — and made learning feel like a chore.
+                </p>
+              </div>
             </div>
 
-            <div className="moonshot-why">
-              <h3 className="moonshot-why-label">Why this matters to me</h3>
-              <blockquote className="moonshot-quote">
-                <p>
-                  I walked the traditional path. Did everything "right." Got the grades, the degree,
-                  the job. And I felt completely lost and unfulfilled.
+            {/* Chapter 2: The Matrix */}
+            <div className="narrative-chapter">
+              <div className="chapter-marker">2</div>
+              <div className="chapter-content">
+                <h3 className="chapter-title">Then We Entered The Matrix</h3>
+                <p className="chapter-subtitle">A system optimised for safety, not fulfillment.</p>
+                <p className="chapter-body">
+                  A salary ensures we can cover our basic needs. That's the deal.
+                  Trade your time, energy, and most productive hours for security.
                 </p>
-                <p>
-                  It took years to unlearn what I was told success looked like — and even longer
-                  to discover what actually lights me up.
+                <p className="chapter-body">
+                  It's not a conspiracy — it's just an optimisation that forgot about you.
                 </p>
-                <p className="moonshot-quote-emphasis">
-                  I don't want anyone else to waste those years feeling like something's wrong with them,
-                  when the truth is: the system just wasn't built for how they think.
-                </p>
-              </blockquote>
+              </div>
             </div>
 
-            <div className="moonshot-mission">
-              <p>
-                <strong>Find My Flow</strong> is my contribution to building that alternative.
-                Not a shortcut — a different path entirely. One that honours who you actually are.
-              </p>
+            {/* Chapter 3: Achievement vs Fulfillment */}
+            <div className="narrative-chapter">
+              <div className="chapter-marker">3</div>
+              <div className="chapter-content">
+                <h3 className="chapter-title">Achievement vs Fulfillment</h3>
+                <p className="chapter-subtitle">We were taught it's one or the other.</p>
+                <p className="chapter-body">
+                  <strong>Western trap:</strong> Climb the ladder, hit the numbers, feel empty at the top.
+                </p>
+                <p className="chapter-body">
+                  <strong>Eastern trap:</strong> Find inner peace, reject success, struggle to pay rent.
+                </p>
+                <p className="chapter-body chapter-highlight">
+                  Finding your flow is designed to give you both.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 4: The Safe Path */}
+            <div className="narrative-chapter">
+              <div className="chapter-marker">4</div>
+              <div className="chapter-content">
+                <h3 className="chapter-title">There's Many Ways to Build a Life</h3>
+                <p className="chapter-subtitle">The ladder became the default when there were no other options.</p>
+                <p className="chapter-body">
+                  Good grades → Degree → Job → Promotion → Corner Office → "Is this it?"
+                </p>
+                <p className="chapter-body chapter-bridge">
+                  But now there is another way...
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Ladder vs River Section */}
-      <section className="landing-ladder-river">
+      {/* The World Changed Section */}
+      <section className="landing-world-changed">
         <div className="landing-container">
-          <h2 className="section-heading">Two Ways to Build a Life</h2>
+          <h2 className="section-heading">The world changed. The rules are different now.</h2>
 
-          <div className="path-comparison">
-            {/* The Ladder */}
-            <div className="path-option path-ladder">
-              <div className="path-visual">
-                <div className="ladder">
-                  <div className="ladder-rung rung-top">
-                    <span className="rung-label">???</span>
-                    <span className="rung-question">"Is this it?"</span>
-                  </div>
-                  <div className="ladder-rail"></div>
-                  <div className="ladder-rung">
-                    <span className="rung-label">Corner Office</span>
-                  </div>
-                  <div className="ladder-rail"></div>
-                  <div className="ladder-rung">
-                    <span className="rung-label">Promotion</span>
-                  </div>
-                  <div className="ladder-rail"></div>
-                  <div className="ladder-rung">
-                    <span className="rung-label">The "Right" Job</span>
-                  </div>
-                  <div className="ladder-rail"></div>
-                  <div className="ladder-rung">
-                    <span className="rung-label">Degree</span>
-                  </div>
-                  <div className="ladder-rail"></div>
-                  <div className="ladder-rung rung-bottom">
-                    <span className="rung-label">Good Grades</span>
-                    <span className="rung-you">You start here</span>
-                  </div>
-                </div>
-              </div>
+          <div className="world-changed-content">
+            <p className="world-changed-old">
+              For decades, you needed capital, credentials, or years of grinding to compete.
+              The game favored big players with massive reach.
+            </p>
 
-              <div className="path-details">
-                <h3 className="path-title">The Ladder</h3>
-                <p className="path-orientation"><span className="path-label">Orientation:</span> Future</p>
-                <p className="path-description">"I'll be happy when I reach the next rung."</p>
-                <ul className="path-traits">
-                  <li>Exterior motivations (status, approval, salary)</li>
-                  <li>Someone else defined the rungs</li>
-                  <li>Fulfillment is always <em>above</em> you</li>
-                  <li>Reach the top → "Now what?"</li>
-                </ul>
-              </div>
-            </div>
+            <p className="world-changed-shift">Not anymore.</p>
 
-            {/* The River */}
-            <div className="path-option path-river">
-              <div className="path-visual">
-                <div className="river">
-                  <div className="river-source">
-                    <span className="source-label">You</span>
-                    <span className="source-sub">your essence</span>
-                  </div>
-                  <div className="river-flow">
-                    <div className="tributary tributary-top">
-                      <span>skills</span>
-                    </div>
-                    <div className="river-main">
-                      <div className="flow-wave"></div>
-                      <div className="flow-wave"></div>
-                      <div className="flow-wave"></div>
-                    </div>
-                    <div className="tributary tributary-bottom">
-                      <span>experiences</span>
-                    </div>
-                  </div>
-                  <div className="river-ocean">
-                    <span className="ocean-label">Impact</span>
-                    <span className="ocean-sub">contribution</span>
-                  </div>
-                </div>
-              </div>
+            <p className="world-changed-new">
+              AI collapsed the build-cost barrier. Distribution is free. The new economy rewards
+              people who deeply understand specific problems — not generalists serving everyone poorly.
+            </p>
+          </div>
 
-              <div className="path-details">
-                <h3 className="path-title">The River</h3>
-                <p className="path-orientation"><span className="path-label">Orientation:</span> Present</p>
-                <p className="path-description">"What's alive in me right now?"</p>
-                <ul className="path-traits">
-                  <li>Interior motivations (curiosity, meaning, energy)</li>
-                  <li>Your unique path carves itself</li>
-                  <li>Fulfillment is built into the flow</li>
-                  <li>Impact ripples outward naturally</li>
-                </ul>
-              </div>
+          <div className="portfolio-vision">
+            <h3 className="portfolio-heading">The future isn't "job vs. entrepreneur."</h3>
+            <p className="portfolio-description">
+              It's assembling your unique configuration of income streams that create safety while honoring your flow.
+            </p>
+
+            <div className="portfolio-pills">
+              <span className="portfolio-pill">Consulting</span>
+              <span className="portfolio-pill">Digital Products</span>
+              <span className="portfolio-pill">Content</span>
+              <span className="portfolio-pill">Micro-SaaS</span>
+              <span className="portfolio-pill">Part-time Role</span>
             </div>
           </div>
 
-          <div className="path-kicker">
-            <p>The ladder asks: <em>"What will get me there?"</em></p>
-            <p>The river asks: <em>"What's already here?"</em></p>
-          </div>
+          <p className="world-changed-timing">
+            You're catching this at exactly the right moment.
+          </p>
         </div>
       </section>
 
@@ -605,19 +327,6 @@ const LandingPage = () => {
                 skills, experiences, and circumstances.
               </p>
 
-              <div className="founder-ear">
-                <p>
-                  I believe the universe communicates with us every day about what this path is.
-                  The problem? It can't talk directly — so it uses what I call <strong>'Ease and Resistance'</strong>.
-                </p>
-                <p className="ear-acronym">
-                  As an acronym, that spells <span className="ear-highlight">E.A.R.</span> — coincidence? 🤔
-                </p>
-                <p className="destiny-child">
-                  If you're here, it's not by accident. The universe has a funny way of pointing you toward what you need.
-                </p>
-              </div>
-
               <div className="founder-transformation">
                 <div className="transformation-label">My transformation in 12 months:</div>
                 <div className="transformation-journey">
@@ -635,10 +344,153 @@ const LandingPage = () => {
                 </div>
               </div>
 
-              <div className="founder-intersection">
-                <p className="intersection-statement">
-                  I help people who feel stuck escape the "matrix" of joyless work and heavy healing —
-                  by building <strong>playful diagnostic tools</strong> and <strong>gamified transformation systems</strong> grounded in real therapeutic science.
+              <div className="founder-why">
+                <h3 className="founder-why-label">Why I built this</h3>
+
+                <p className="founder-why-critique">
+                  Most business accelerator programs and life path education institutions focus on
+                  <strong> what action to take</strong> — without any consideration about what may be
+                  <strong> stopping the action</strong>.
+                </p>
+
+                <p>
+                  In 2020, I learned a corporate job wasn't for me. Three years later?
+                  I was still in the same job.
+                </p>
+
+                <p>
+                  It wasn't from a lack of clarity.<br />
+                  It wasn't from a lack of education — I'd spent <strong>$30,000</strong> on 52 learning
+                  experiences post-university.<br />
+                  It wasn't from a lack of will.
+                </p>
+
+                <p className="founder-why-emphasis">
+                  It was because I didn't feel safe.
+                </p>
+
+                <p>
+                  I was scared of judgement. Scared of failing. Scared I wasn't good enough.
+                </p>
+
+                <div className="founder-challenge">
+                  <p className="challenge-intro">
+                    So at the beginning of 2023, fed up, I challenged myself to do
+                    <strong> one thing a week that terrified me</strong>.
+                  </p>
+                  <div className="challenge-timeline">
+                    <div className="timeline-item">
+                      <span className="timeline-marker">5 weeks</span>
+                      <span className="timeline-text">Working from Bali</span>
+                    </div>
+                    <div className="timeline-item">
+                      <span className="timeline-marker">3 months</span>
+                      <span className="timeline-text">Quit my job</span>
+                    </div>
+                    <div className="timeline-item">
+                      <span className="timeline-marker">5 months</span>
+                      <span className="timeline-text">Funding my life hosting silent discos on beaches across Thailand and Bali</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="founder-why-insight">
+                  This challenge changed my life. Why?
+                </p>
+
+                <p className="founder-why-quote">
+                  Because we don't rise to the level of our ambitions —
+                  <strong> we fall to the level of what feels safe</strong>.
+                </p>
+
+                <p>
+                  And this challenge changed what felt safe.
+                </p>
+              </div>
+
+              <div className="founder-solution">
+                <p>
+                  <strong>Find My Flow</strong> is designed to change what feels safe to you.
+                </p>
+                <div className="solution-methods">
+                  <div className="method-item">
+                    <span className="method-name">Groans</span>
+                    <span className="method-desc">Actions you know you're capable of, but your body holds fear</span>
+                  </div>
+                  <div className="method-item">
+                    <span className="method-name">Healing</span>
+                    <span className="method-desc">Going to the root of what's causing the fear and removing it</span>
+                  </div>
+                </div>
+                <p className="solution-unique">
+                  It's the only alternate life path education system that merges
+                  <strong> business teaching</strong> with <strong>healing</strong>.
+                </p>
+              </div>
+
+              <div className="founder-credentials">
+                <div className="credentials-header">
+                  <span className="credentials-years">8+ Years</span>
+                  <span className="credentials-title">Building Transformational Programs</span>
+                </div>
+
+                <p className="credentials-claim">
+                  I don't believe there are many humans on the planet with more domain expertise
+                  in the realm of program building.
+                </p>
+
+                <div className="credentials-experience">
+                  <div className="experience-item">
+                    <span className="experience-icon">🚀</span>
+                    <span className="experience-text">
+                      <strong>5 years at Investible (VC)</strong> — building and delivering entrepreneurial programs
+                      from 12-week accelerators to 2-day hackathons and everything in between
+                    </span>
+                  </div>
+                  <div className="experience-item">
+                    <span className="experience-icon">🎯</span>
+                    <span className="experience-text">
+                      <strong>3 years</strong> creating and delivering my own programs
+                    </span>
+                  </div>
+                </div>
+
+                <div className="credentials-training">
+                  <div className="training-label">Completed the world's best programs:</div>
+                  <div className="training-courses">
+                    <div className="course-badge">
+                      <span className="course-name">altMBA</span>
+                      <span className="course-price">$5,000</span>
+                      <span className="course-creator">Seth Godin — the 'Godfather of Marketing'</span>
+                      <span className="course-desc">Learn more in 4 weeks than an MBA teaches in 2 years</span>
+                    </div>
+                    <div className="course-badge">
+                      <span className="course-name">Write of Passage</span>
+                      <span className="course-price">$5,000</span>
+                      <span className="course-creator">David Perell</span>
+                      <span className="course-desc">One of the first 'virtual schools' with a cult following</span>
+                    </div>
+                    <div className="course-badge course-badge-degree">
+                      <span className="course-name">Bachelor of Creative Intelligence</span>
+                      <span className="course-award">🏆 Winner of the 'Oscars of Education'</span>
+                      <span className="course-creator">UTS — World's first transdisciplinary degree</span>
+                      <span className="course-desc">Multi-award winning for its innovative approach to learning</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="credentials-formula">
+                  <span className="formula-intro">My secret?</span>
+                  <span className="formula-name">The Three Pillars</span>
+                  <span className="formula-pillars">Frameworks + Implementation + Community</span>
+                  <span className="formula-desc">
+                    — my unique formula for creating "magic programs" that cause participants
+                    to walk away feeling like they've had one of the most transformational experiences of their life
+                  </span>
+                </div>
+
+                <p className="credentials-kicker">
+                  This is the level of design thinking behind every flow you'll experience.
                 </p>
               </div>
 
@@ -651,82 +503,182 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Positioning Matrix Section */}
+      <section className="landing-positioning">
+        <div className="landing-container">
+          <h2 className="section-heading">Where We Fit</h2>
+          <p className="section-subheading">
+            The only platform combining therapeutic depth with business building
+          </p>
+
+          <div className="positioning-matrix">
+            {/* Y-axis labels */}
+            <div className="matrix-y-axis">
+              <span className="axis-label axis-top">THERAPEUTIC DEPTH</span>
+              <span className="axis-label axis-bottom">SURFACE LEVEL</span>
+            </div>
+
+            {/* Matrix grid */}
+            <div className="matrix-grid">
+              {/* Vertical axis arrow */}
+              <div className="matrix-axis-vertical">
+                <span className="axis-arrow">&#8593;</span>
+                <div className="axis-line"></div>
+                <span className="axis-arrow">&#8595;</span>
+              </div>
+
+              {/* Horizontal axis arrow */}
+              <div className="matrix-axis-horizontal">
+                <span className="axis-arrow">&#8592;</span>
+                <div className="axis-line"></div>
+                <span className="axis-arrow">&#8594;</span>
+              </div>
+
+              {/* X-axis labels */}
+              <span className="x-label x-left">INNER FOCUS</span>
+              <span className="x-label x-right">OUTER FOCUS</span>
+
+              {/* Quadrant: Top-Left (Therapy Apps) */}
+              <div className="matrix-quadrant quadrant-top-left">
+                <span className="quadrant-title">Therapy Apps</span>
+                <span className="quadrant-subtitle">(BetterHelp)</span>
+              </div>
+
+              {/* Quadrant: Top-Right (FindMyFlow) - highlighted */}
+              <div className="matrix-quadrant quadrant-top-right quadrant-highlight">
+                <span className="quadrant-star">&#9733;</span>
+                <span className="quadrant-title">FindMyFlow</span>
+                <span className="quadrant-subtitle">(Healing + Flow + Business)</span>
+              </div>
+
+              {/* Quadrant: Bottom-Left (Wellness) */}
+              <div className="matrix-quadrant quadrant-bottom-left">
+                <span className="quadrant-title">Mindvalley</span>
+                <span className="quadrant-title">Headspace/Calm</span>
+              </div>
+
+              {/* Quadrant: Bottom-Right (Performance) */}
+              <div className="matrix-quadrant quadrant-bottom-right">
+                <span className="quadrant-title">BetterUp/CoachHub</span>
+                <span className="quadrant-subtitle">(Performance)</span>
+                <div className="quadrant-spacer"></div>
+                <span className="quadrant-title">Sparketype</span>
+                <span className="quadrant-subtitle">(Assessment only)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Flow Finder Framework Section */}
       <section className="landing-nikigai">
         <div className="landing-container">
           <h2 className="section-heading">The Flow Finder Framework</h2>
           <p className="section-subheading">
-            Inspired by Ikigai — redesigned for building a business around your strengths
+            Inspired by Ikigai — redesigned for building a business around your passions
           </p>
 
           <div className="nikigai-content">
-            <div className="nikigai-diagram">
-              <div className="nikigai-circle nikigai-skills">
-                <span className="nikigai-label">Your Skills</span>
-                <span className="nikigai-desc">What comes naturally</span>
-              </div>
-              <div className="nikigai-circle nikigai-problems">
-                <span className="nikigai-label">Problems You Solve</span>
-                <span className="nikigai-desc">What energises you</span>
-              </div>
-              <div className="nikigai-circle nikigai-people">
-                <span className="nikigai-label">Your People</span>
-                <span className="nikigai-desc">Who you're meant to serve</span>
-              </div>
-              <div className="nikigai-circle nikigai-payment">
-                <span className="nikigai-label">Market Need</span>
-                <span className="nikigai-desc">What people pay for</span>
-              </div>
-              <div className="nikigai-center">
-                <span className="nikigai-flow">FLOW</span>
+            {/* Level 1: The Core Insight */}
+            <div className="framework-level framework-level-1">
+              <div className="level-marker">1</div>
+              <div className="level-content">
+                <h3 className="level-title">The Core Insight</h3>
+                <p className="level-statement">
+                  A business is simply: <strong>solving a problem</strong>, for <strong>a person</strong>, using <strong>a set of skills</strong>.
+                </p>
+                <p className="level-implication">
+                  The question becomes: which problems, which people, which skills?
+                </p>
               </div>
             </div>
 
-            <div className="nikigai-explanation">
-              <p>
-                Traditional Ikigai asks: <em>"What do you love? What are you good at? What can you be paid for? What does the world need?"</em>
-              </p>
-              <p>
-                <strong>The Flow Finder goes deeper.</strong> It's not just about finding the intersection — it's about
-                discovering the unique combination that only you can offer, based on your specific
-                skills, experiences, and the problems that light you up.
-              </p>
-              <p>
-                When these four elements align, work stops feeling like work. That's flow.
-              </p>
+            {/* Level 2: The Four Questions */}
+            <div className="framework-level framework-level-2">
+              <div className="level-marker">2</div>
+              <div className="level-content">
+                <h3 className="level-title">The Four Questions</h3>
+                <p className="level-intro">We believe the answer is: the ones you're passionate about.</p>
+
+                <div className="four-passions">
+                  <div className="passion-item">
+                    <span className="passion-icon">🎯</span>
+                    <span className="passion-label">Skills</span>
+                    <span className="passion-question">you're passionate about <strong>using</strong></span>
+                  </div>
+                  <div className="passion-item">
+                    <span className="passion-icon">💡</span>
+                    <span className="passion-label">Problems</span>
+                    <span className="passion-question">you're passionate about <strong>solving</strong></span>
+                  </div>
+                  <div className="passion-item">
+                    <span className="passion-icon">👥</span>
+                    <span className="passion-label">People</span>
+                    <span className="passion-question">you're passionate about <strong>serving</strong></span>
+                  </div>
+                  <div className="passion-item passion-item-mission">
+                    <span className="passion-icon">🔥</span>
+                    <span className="passion-label">Mission</span>
+                    <span className="passion-question">you're passionate about <strong>suffering for</strong></span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="chain-combo">
-              <span className="combo-element">Your Skills</span>
-              <span className="combo-operator">×</span>
-              <span className="combo-element">Your Problems</span>
-              <span className="combo-operator">×</span>
-              <span className="combo-element">Your People</span>
-              <span className="combo-equals">=</span>
-              <span className="combo-result">An offer only you can make</span>
+            {/* Level 3: What This Defines */}
+            <div className="framework-level framework-level-3">
+              <div className="level-marker">3</div>
+              <div className="level-content">
+                <h3 className="level-title">What This Defines</h3>
+                <p className="level-intro">Each answer narrows your path:</p>
+
+                <div className="defines-grid">
+                  <div className="defines-item">
+                    <span className="defines-from">Skills</span>
+                    <span className="defines-arrow">→</span>
+                    <span className="defines-to">Your <strong>Role</strong></span>
+                  </div>
+                  <div className="defines-item">
+                    <span className="defines-from">Problems</span>
+                    <span className="defines-arrow">→</span>
+                    <span className="defines-to">Your <strong>Industry</strong></span>
+                  </div>
+                  <div className="defines-item">
+                    <span className="defines-from">People</span>
+                    <span className="defines-arrow">→</span>
+                    <span className="defines-to">Your <strong>Niche</strong></span>
+                  </div>
+                  <div className="defines-item">
+                    <span className="defines-from">Mission</span>
+                    <span className="defines-arrow">→</span>
+                    <span className="defines-to">Your <strong>Company</strong></span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="unique-combination">
-              <h3 className="unique-combo-label">Your Unique Combination</h3>
-              <div className="unique-combo-formula">
-                <div className="combo-layer">
-                  <span className="combo-layer-icon">🎯</span>
-                  <span className="combo-layer-text">Skills you've spent years developing</span>
+            {/* Level 4: The Formula */}
+            <div className="framework-level framework-level-4">
+              <div className="level-marker">4</div>
+              <div className="level-content">
+                <h3 className="level-title">The Formula</h3>
+
+                <div className="formula-chain">
+                  <span className="formula-element">Skills</span>
+                  <span className="formula-operator">×</span>
+                  <span className="formula-element">Problems</span>
+                  <span className="formula-operator">×</span>
+                  <span className="formula-element">People</span>
+                  <span className="formula-operator">×</span>
+                  <span className="formula-element">Mission</span>
                 </div>
-                <span className="combo-connector">+</span>
-                <div className="combo-layer">
-                  <span className="combo-layer-icon">💡</span>
-                  <span className="combo-layer-text">Problems that actually light you up</span>
-                </div>
-                <span className="combo-connector">+</span>
-                <div className="combo-layer">
-                  <span className="combo-layer-icon">👥</span>
-                  <span className="combo-layer-text">People you genuinely want to help</span>
-                </div>
-                <span className="combo-equals">=</span>
-                <div className="combo-result-box">
-                  <span className="combo-result-label">Specific Knowledge</span>
-                  <span className="combo-result-desc">The thing no one else can compete with</span>
+
+                <div className="formula-result">
+                  <span className="formula-equals">=</span>
+                  <div className="result-box">
+                    <span className="result-label">Specific Knowledge</span>
+                    <span className="result-desc">The thing no one else can compete with</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1221,120 +1173,10 @@ const LandingPage = () => {
           <p className="last-mile-drive">
             You're closer than you think. Most members see clarity within their first week.
           </p>
-        </div>
-      </section>
 
-      {/* Community Section */}
-      <section className="landing-community">
-        <div className="landing-container">
-          <h2 className="section-heading">You're Not Doing This Alone</h2>
-          <p className="section-subheading">
-            Join a community of professionals on the same journey
+          <p className="community-callout">
+            You're not alone — connect with others on the same journey.
           </p>
-
-          <div className="community-features">
-            <div className="community-feature">
-              <div className="community-icon">⚔️</div>
-              <h3>Fantasy Team Battles</h3>
-              <p>Join a team and compete against others across categories. Your team's combined points battle for weekly glory.</p>
-            </div>
-            <div className="community-feature">
-              <div className="community-icon">🧙</div>
-              <h3>Learn From Launchers</h3>
-              <p>Connect with members who've already shipped. Get advice from people just a few steps ahead of you.</p>
-            </div>
-            <div className="community-feature">
-              <div className="community-icon">📣</div>
-              <h3>Share Your Wins</h3>
-              <p>Hit a milestone? Share it. Your wins inspire others — and celebrating publicly cements your progress.</p>
-            </div>
-            <div className="community-feature">
-              <div className="community-icon">🎁</div>
-              <h3>Bring Friends, Earn Together</h3>
-              <p>Invite a friend and you both earn bonus points. Success is better shared.</p>
-            </div>
-            <div className="community-feature">
-              <div className="community-icon">☕</div>
-              <h3>Weekly Live Sessions</h3>
-              <p>Drop in every week to share wins, ask questions, and get unstuck together. Real people, real support.</p>
-            </div>
-            <div className="community-feature">
-              <div className="community-icon">🎉</div>
-              <h3>Milestone Celebrations</h3>
-              <p>Every stage completion, every first sale, every breakthrough — we celebrate with you.</p>
-            </div>
-          </div>
-
-          <p className="credentials-callout">
-            Complete stages to earn recognition. Your progress is tracked, celebrated, and shareable.
-          </p>
-        </div>
-      </section>
-
-      {/* Positioning Matrix Section */}
-      <section className="landing-positioning">
-        <div className="landing-container">
-          <h2 className="section-heading">Where We Fit</h2>
-          <p className="section-subheading">
-            The only platform combining therapeutic depth with business building
-          </p>
-
-          <div className="positioning-matrix">
-            {/* Y-axis labels */}
-            <div className="matrix-y-axis">
-              <span className="axis-label axis-top">THERAPEUTIC DEPTH</span>
-              <span className="axis-label axis-bottom">SURFACE LEVEL</span>
-            </div>
-
-            {/* Matrix grid */}
-            <div className="matrix-grid">
-              {/* Vertical axis arrow */}
-              <div className="matrix-axis-vertical">
-                <span className="axis-arrow">&#8593;</span>
-                <div className="axis-line"></div>
-                <span className="axis-arrow">&#8595;</span>
-              </div>
-
-              {/* Horizontal axis arrow */}
-              <div className="matrix-axis-horizontal">
-                <span className="axis-arrow">&#8592;</span>
-                <div className="axis-line"></div>
-                <span className="axis-arrow">&#8594;</span>
-              </div>
-
-              {/* X-axis labels */}
-              <span className="x-label x-left">INNER FOCUS</span>
-              <span className="x-label x-right">OUTER FOCUS</span>
-
-              {/* Quadrant: Top-Left (Therapy Apps) */}
-              <div className="matrix-quadrant quadrant-top-left">
-                <span className="quadrant-title">Therapy Apps</span>
-                <span className="quadrant-subtitle">(BetterHelp)</span>
-              </div>
-
-              {/* Quadrant: Top-Right (FindMyFlow) - highlighted */}
-              <div className="matrix-quadrant quadrant-top-right quadrant-highlight">
-                <span className="quadrant-star">&#9733;</span>
-                <span className="quadrant-title">FindMyFlow</span>
-                <span className="quadrant-subtitle">(Healing + Flow + Business)</span>
-              </div>
-
-              {/* Quadrant: Bottom-Left (Wellness) */}
-              <div className="matrix-quadrant quadrant-bottom-left">
-                <span className="quadrant-title">Mindvalley</span>
-                <span className="quadrant-title">Headspace/Calm</span>
-              </div>
-
-              {/* Quadrant: Bottom-Right (Performance) */}
-              <div className="matrix-quadrant quadrant-bottom-right">
-                <span className="quadrant-title">BetterUp/CoachHub</span>
-                <span className="quadrant-subtitle">(Performance)</span>
-                <div className="quadrant-spacer"></div>
-                <span className="quadrant-title">Sparketype</span>
-                <span className="quadrant-subtitle">(Assessment only)</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -1443,63 +1285,6 @@ const LandingPage = () => {
                 )}
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Email Capture / Lead Magnet Section */}
-      <section className="landing-lead-magnet">
-        <div className="landing-container">
-          <div className="lead-magnet-content">
-            <div className="lead-magnet-icon">📬</div>
-            <h2 className="lead-magnet-heading">Not ready to dive in yet?</h2>
-            <p className="lead-magnet-description">
-              Get the <strong>Flow Finder Starter Kit</strong> free — the same exercises our paying members start with.
-              Three guided prompts to start discovering your unique path, plus weekly insights on building a business around your strengths.
-            </p>
-
-            {!leadSubmitted ? (
-              <form
-                className="lead-magnet-form"
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (!leadEmail || leadLoading) return;
-                  setLeadLoading(true);
-                  // Simple submission - in production, connect to your email service
-                  try {
-                    // Placeholder for email capture
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                    setLeadSubmitted(true);
-                  } catch (err) {
-                    console.error('Email capture error:', err);
-                  }
-                  setLeadLoading(false);
-                }}
-              >
-                <input
-                  type="email"
-                  value={leadEmail}
-                  onChange={(e) => setLeadEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="lead-magnet-input"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="lead-magnet-button"
-                  disabled={leadLoading}
-                >
-                  {leadLoading ? 'Sending...' : 'Send Me the Kit'}
-                </button>
-              </form>
-            ) : (
-              <div className="lead-magnet-success">
-                <span className="success-icon">✓</span>
-                <p>Check your inbox! The Starter Kit is on its way.</p>
-              </div>
-            )}
-
-            <p className="lead-magnet-note">No spam, ever. Unsubscribe anytime.</p>
           </div>
         </div>
       </section>
