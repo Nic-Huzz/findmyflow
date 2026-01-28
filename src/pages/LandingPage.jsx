@@ -678,6 +678,36 @@ const LandingPage = () => {
                   <div className="result-box">
                     <span className="result-label">Specific Knowledge</span>
                     <span className="result-desc">The thing no one else can compete with</span>
+                    <div className="result-wisdom">
+                      <span className="wisdom-word">Your Svadharma</span>
+                      <span className="wisdom-separator">·</span>
+                      <span className="wisdom-word">Your Te</span>
+                      <span className="wisdom-separator">·</span>
+                      <span className="wisdom-word">Your Ikigai</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Archetypes - Moved here */}
+            <div className="framework-archetypes">
+              <h3 className="archetypes-intro">Along the way, you'll discover your inner voices</h3>
+
+              <div className="archetypes-duo">
+                <div className="archetype-mini archetype-essence">
+                  <span className="archetype-icon">✨</span>
+                  <div className="archetype-info">
+                    <span className="archetype-name">Your Essence Voice</span>
+                    <span className="archetype-desc">The original song you were born to share</span>
+                  </div>
+                </div>
+
+                <div className="archetype-mini archetype-protective">
+                  <span className="archetype-icon">🛡️</span>
+                  <div className="archetype-info">
+                    <span className="archetype-name">Your Protective Pattern</span>
+                    <span className="archetype-desc">The armor that's now blocking your gifts</span>
                   </div>
                 </div>
               </div>
@@ -692,401 +722,167 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* How It Works Section - Gamified */}
       <section className="landing-how-it-works">
         <div className="landing-container">
           <h2 className="section-heading">How It Works</h2>
           <p className="section-subheading">
-            A guided journey of discovery — not another course to complete
+            Live your ambitions faster
           </p>
 
-          <div className="creativity-callouts">
-            <div className="creativity-callout blank-fills">
-              <span className="creativity-icon">✍️</span>
-              <p>No blank page syndrome. We ask the questions — you discover the answers.</p>
+          {/* The 4 Stages Visual */}
+          <div className="stages-journey">
+            <div className="stage-node">
+              <span className="stage-icon">🎯</span>
+              <span className="stage-name">Clarity</span>
             </div>
-            <div className="creativity-callout voluntary-autonomy">
-              <span className="creativity-icon">🧭</span>
-              <p>No rigid curriculum. Start where it makes sense for you. Your journey, your pace.</p>
+            <div className="stage-arrow">→</div>
+            <div className="stage-node">
+              <span className="stage-icon">🛠️</span>
+              <span className="stage-name">Build</span>
+            </div>
+            <div className="stage-arrow">→</div>
+            <div className="stage-node">
+              <span className="stage-icon">💰</span>
+              <span className="stage-name">Sell</span>
+            </div>
+            <div className="stage-arrow">→</div>
+            <div className="stage-node">
+              <span className="stage-icon">📈</span>
+              <span className="stage-name">Scale</span>
             </div>
           </div>
 
-          <div className="steps-grid">
-            <div className="step-card">
+          {/* The Process Steps */}
+          <div className="process-steps">
+            <div className="process-step">
               <div className="step-number">1</div>
-              <h3 className="step-title">Discover Your Value</h3>
-              <p className="step-description">
-                Uncover the skills you've been taking for granted. The things that come
-                naturally to you but feel like magic to others.
-              </p>
-              <p className="step-outcome">You'll unlock: Your Skills Profile</p>
+              <div className="step-content">
+                <h3 className="step-title">Take the Stage Finder</h3>
+                <p className="step-description">
+                  Answer a few questions about where you are on your journey.
+                </p>
+                <p className="step-game">
+                  <span className="game-tag">Discover which stage you're actually at</span>
+                </p>
+              </div>
             </div>
 
-            <div className="step-card">
+            <div className="process-step">
               <div className="step-number">2</div>
-              <h3 className="step-title">Find Your Problems</h3>
-              <p className="step-description">
-                Identify the problems you actually enjoy solving — the ones where helping
-                feels like play, not work.
-              </p>
-              <p className="step-outcome">You'll unlock: Your Problem Map</p>
+              <div className="step-content">
+                <h3 className="step-title">Unlock Your Quests</h3>
+                <p className="step-description">
+                  Get placed in Clarity, Build, Sell, or Scale — each with specific missions.
+                </p>
+                <p className="step-game">
+                  <span className="game-tag">No overwhelm — just what you need now</span>
+                </p>
+              </div>
             </div>
 
-            <div className="step-card">
+            <div className="process-step">
               <div className="step-number">3</div>
-              <h3 className="step-title">Meet Your People</h3>
-              <p className="step-description">
-                Discover who you're meant to serve. The people whose problems light you up
-                and who value what you bring.
-              </p>
-              <p className="step-outcome">You'll unlock: Your Ideal Customer Profile</p>
+              <div className="step-content">
+                <h3 className="step-title">Build Your Streak</h3>
+                <p className="step-description">
+                  Complete daily quests. Earn points. Watch momentum compound.
+                </p>
+                <p className="step-game">
+                  <span className="game-tag">Points are yours to keep forever</span>
+                </p>
+              </div>
             </div>
 
-            <div className="step-card">
+            <div className="process-step">
               <div className="step-number">4</div>
-              <h3 className="step-title">Build Your Path</h3>
-              <p className="step-description">
-                Create offers, launch with confidence, and build something meaningful —
-                guided every step of the way.
-              </p>
-              <p className="step-outcome">You'll unlock: The $100M Offer Builder</p>
+              <div className="step-content">
+                <h3 className="step-title">Level Up</h3>
+                <p className="step-description">
+                  Graduate to the next stage. Track your progress visually.
+                </p>
+                <p className="step-game">
+                  <span className="game-tag">Face courage challenges → unlock growth</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Game Elements */}
+          <div className="game-elements">
+            <div className="game-element">
+              <span className="element-icon">🎯</span>
+              <span className="element-name">Daily Quests</span>
+              <span className="element-desc">Bite-sized actions</span>
+            </div>
+            <div className="game-element">
+              <span className="element-icon">⭐</span>
+              <span className="element-name">Points</span>
+              <span className="element-desc">Track progress</span>
+            </div>
+            <div className="game-element">
+              <span className="element-icon">🔥</span>
+              <span className="element-name">Streaks</span>
+              <span className="element-desc">Build consistency</span>
+            </div>
+            <div className="game-element">
+              <span className="element-icon">🐉</span>
+              <span className="element-name">Courage Challenges</span>
+              <span className="element-desc">Face fears</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Milestones Section */}
-      <section className="landing-milestones">
+      {/* First Wins Section - Outcome Focused */}
+      <section className="landing-first-wins">
         <div className="landing-container">
           <h2 className="section-heading">Your First Wins</h2>
           <p className="section-subheading">
-            Clear victories you'll hit along the way — not vague promises
+            Wherever you start, you get unstuck
           </p>
 
-          <div className="milestones-timeline">
-            <div className="milestone-item">
-              <div className="milestone-marker">
-                <span className="milestone-week">Week 1</span>
+          <div className="wins-grid">
+            <div className="win-card">
+              <div className="win-stage">
+                <span className="win-stage-icon">🎯</span>
+                <span className="win-stage-name">Clarity</span>
               </div>
-              <div className="milestone-content">
-                <h3 className="milestone-title">Clarity on your unique skills</h3>
-                <p className="milestone-desc">Finally see what makes you valuable</p>
-              </div>
+              <p className="win-stuck">If you're stuck on direction...</p>
+              <p className="win-outcome">Know exactly what to build and who to serve</p>
             </div>
 
-            <div className="milestone-item">
-              <div className="milestone-marker">
-                <span className="milestone-week">Week 2</span>
+            <div className="win-card">
+              <div className="win-stage">
+                <span className="win-stage-icon">🛠️</span>
+                <span className="win-stage-name">Build</span>
               </div>
-              <div className="milestone-content">
-                <h3 className="milestone-title">Your first validation conversation</h3>
-                <p className="milestone-desc">Real feedback from real people</p>
-              </div>
+              <p className="win-stuck">If you're stuck on your offer...</p>
+              <p className="win-outcome">An offer so good people feel stupid saying no</p>
             </div>
 
-            <div className="milestone-item">
-              <div className="milestone-marker">
-                <span className="milestone-week">Week 4</span>
+            <div className="win-card">
+              <div className="win-stage">
+                <span className="win-stage-icon">💰</span>
+                <span className="win-stage-name">Sell</span>
               </div>
-              <div className="milestone-content">
-                <h3 className="milestone-title">Your $100M Offer drafted</h3>
-                <p className="milestone-desc">An offer so good people feel stupid saying no</p>
-              </div>
+              <p className="win-stuck">If you're stuck on sales...</p>
+              <p className="win-outcome">Your first paying customer</p>
             </div>
 
-            <div className="milestone-item milestone-featured">
-              <div className="milestone-marker">
-                <span className="milestone-week">Week 6+</span>
+            <div className="win-card">
+              <div className="win-stage">
+                <span className="win-stage-icon">📈</span>
+                <span className="win-stage-name">Scale</span>
               </div>
-              <div className="milestone-content">
-                <h3 className="milestone-title">Your first paying customer</h3>
-                <p className="milestone-desc">Proof that your skills have market value</p>
-              </div>
+              <p className="win-stuck">If you're stuck on growth...</p>
+              <p className="win-outcome">Systems that grow without burning you out</p>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Archetypes Preview Section */}
-      <section className="landing-archetypes">
-        <div className="landing-container">
-          <h2 className="section-heading">Discover Your Inner Voices</h2>
-          <p className="section-subheading">
-            Uncover the forces that drive you — and the patterns that hold you back
+          <p className="wins-promise">
+            <strong>Live your ambitions faster.</strong>
           </p>
-
-          <div className="archetypes-grid">
-            <div className="archetype-card archetype-essence">
-              <div className="archetype-icon">✨</div>
-              <h3 className="archetype-title">Your Essence Voice</h3>
-              <p className="archetype-description">
-                The original song you were born to share. The version of you that feels most alive,
-                most authentic, most magnetic. When you show up from this place, impact feels effortless.
-              </p>
-              <div className="archetype-examples">
-                <span className="archetype-tag">The Visionary</span>
-                <span className="archetype-tag">The Healer</span>
-                <span className="archetype-tag">The Creator</span>
-                <span className="archetype-tag">The Guide</span>
-                <span className="archetype-tag">+4 more</span>
-              </div>
-            </div>
-
-            <div className="archetype-card archetype-protective">
-              <div className="archetype-icon">🛡️</div>
-              <h3 className="archetype-title">Your Protective Pattern</h3>
-              <p className="archetype-description">
-                The armor you developed to stay safe from failure, rejection, or judgement.
-                It served you once — but now it's blocking your gifts from reaching the world.
-              </p>
-              <div className="archetype-examples">
-                <span className="archetype-tag">The Perfectionist</span>
-                <span className="archetype-tag">The People Pleaser</span>
-                <span className="archetype-tag">The Controller</span>
-                <span className="archetype-tag">The Ghost</span>
-                <span className="archetype-tag">+1 more</span>
-              </div>
-            </div>
-          </div>
-
-          <p className="archetypes-note">
-            Understanding these patterns is the first step to moving past them.
-          </p>
-        </div>
-      </section>
-
-      {/* Zarlo AI Section */}
-      <section className="landing-zarlo">
-        <div className="landing-container">
-          <div className="zarlo-content">
-            <div className="zarlo-text">
-              <div className="zarlo-badge">AI-Powered</div>
-              <h2 className="zarlo-heading">Meet Zarlo, Your AI Co-Founder</h2>
-              <p className="zarlo-description">
-                Stuck on a decision? Need help refining your offer? Want feedback on your pitch?
-                Zarlo is available on every page — a context-aware AI assistant that knows your
-                journey and can help you move forward.
-              </p>
-              <ul className="zarlo-features">
-                <li>
-                  <span className="zarlo-feature-icon">💬</span>
-                  <span>Real-time guidance tailored to your stage</span>
-                </li>
-                <li>
-                  <span className="zarlo-feature-icon">🧠</span>
-                  <span>Remembers your skills, problems, and persona</span>
-                </li>
-                <li>
-                  <span className="zarlo-feature-icon">⚡</span>
-                  <span>Instant feedback on offers, copy, and strategy</span>
-                </li>
-                <li>
-                  <span className="zarlo-feature-icon">🎯</span>
-                  <span>Helps you stay focused when you feel lost</span>
-                </li>
-              </ul>
-              <p className="instant-feedback-callout">
-                Every answer you give, Zarlo responds in real-time. Watch your offers take shape as you think out loud.
-              </p>
-              <p className="alfred-effect-callout">
-                The more you use it, the smarter it gets. Zarlo learns your voice, your goals, and your patterns.
-              </p>
-              <p className="oracle-effect-callout">
-                Zarlo doesn't just answer questions — it spots patterns you haven't noticed yet.
-              </p>
-            </div>
-            <div className="zarlo-preview">
-              <div className="zarlo-chat-mockup">
-                <div className="zarlo-chat-header">
-                  <span className="zarlo-avatar">🤖</span>
-                  <span className="zarlo-name">Zarlo</span>
-                </div>
-                <div className="zarlo-chat-messages">
-                  <div className="zarlo-message zarlo-message-ai">
-                    Hey! I see you're working on your attraction offer. Want me to help you
-                    refine the value proposition?
-                  </div>
-                  <div className="zarlo-message zarlo-message-user">
-                    Yes! I'm struggling to articulate why someone should choose me.
-                  </div>
-                  <div className="zarlo-message zarlo-message-ai">
-                    Based on your skills in [strategic thinking] and the problems you love solving
-                    around [clarity], here's a angle that might resonate...
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7-Day Challenge Section */}
-      <section className="landing-challenge">
-        <div className="landing-container">
-          <h2 className="section-heading">Gamified Progress</h2>
-          <p className="section-subheading">
-            The 7-Day Challenge turns building your business into an adventure
-          </p>
-
-          <div className="challenge-content">
-            <div className="challenge-features">
-              <div className="challenge-feature">
-                <span className="challenge-feature-icon">🎯</span>
-                <h3>Daily Quests</h3>
-                <p>Bite-sized actions that move you forward. Earn points that are yours to keep — watch your total grow.</p>
-              </div>
-              <div className="challenge-feature">
-                <span className="challenge-feature-icon">🔥</span>
-                <h3>Streak Tracking</h3>
-                <p>Build consistency with daily streaks. The longer your streak, the more you unlock.</p>
-              </div>
-              <div className="challenge-feature">
-                <span className="challenge-feature-icon">🏆</span>
-                <h3>Leaderboards</h3>
-                <p>See how you stack up against others on the same journey. Friendly competition drives action.</p>
-              </div>
-              <div className="challenge-feature">
-                <span className="challenge-feature-icon">🎖️</span>
-                <h3>Stage Progression</h3>
-                <p>Move through 6 stages from validation to launch. Each stage unlocks new quests and tools.</p>
-              </div>
-            </div>
-
-            <div className="boss-fights-callout">
-              <span className="boss-fights-icon">🐉</span>
-              <div className="boss-fights-content">
-                <h3>Courage Challenges</h3>
-                <p>
-                  Along the way, you'll face visibility fears that once held you back.
-                  Each one you conquer unlocks more of who you really are.
-                </p>
-              </div>
-            </div>
-
-            <div className="monitoring-callout">
-              <span className="monitoring-icon">📊</span>
-              <div className="monitoring-content">
-                <h3>Your Command Center</h3>
-                <p>
-                  Everything at a glance: points earned, stages completed, offers built, revenue tracked.
-                  Your progress, visualized.
-                </p>
-              </div>
-            </div>
-
-            <div className="challenge-preview">
-              <div className="challenge-quest-card">
-                <div className="quest-header">
-                  <span className="quest-category">Flow Finder</span>
-                  <span className="quest-points">+50 pts</span>
-                </div>
-                <h4 className="quest-title">Complete the Skills Discovery</h4>
-                <p className="quest-description">Identify 3 skills that come naturally to you</p>
-                <div className="quest-progress">
-                  <div className="quest-progress-bar" style={{ width: '66%' }}></div>
-                </div>
-                <span className="quest-status">2 of 3 complete</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tools Preview Section */}
-      <section className="landing-tools">
-        <div className="landing-container">
-          <h2 className="section-heading">Powerful Tools at Your Fingertips</h2>
-          <p className="section-subheading">
-            From idea to revenue — everything you need in one place
-          </p>
-
-          <div className="unlock-roadmap">
-            <div className="unlock-item">
-              <span className="unlock-stage">Stage 1</span>
-              <span className="unlock-name">Flow Finder</span>
-            </div>
-            <span className="unlock-arrow">→</span>
-            <div className="unlock-item">
-              <span className="unlock-stage">Stage 2</span>
-              <span className="unlock-name">Offer Builder</span>
-            </div>
-            <span className="unlock-arrow">→</span>
-            <div className="unlock-item">
-              <span className="unlock-stage">Stage 4</span>
-              <span className="unlock-name">Funnel Calculator</span>
-            </div>
-            <span className="unlock-arrow">→</span>
-            <div className="unlock-item unlock-item-featured">
-              <span className="unlock-stage">Stage 6</span>
-              <span className="unlock-name">CRM Command Center</span>
-            </div>
-          </div>
-
-          <p className="build-from-scratch">
-            Build <strong>your</strong> offer. Create <strong>your</strong> funnel. Launch <strong>your</strong> business.
-          </p>
-
-          <div className="tools-grid">
-            <div className="tool-card">
-              <div className="tool-icon">💰</div>
-              <h3 className="tool-title">$100M Offer Builder</h3>
-              <p className="tool-description">
-                Create irresistible offers using Alex Hormozi's proven framework.
-                Define your value equation, stack bonuses, and price with confidence.
-              </p>
-            </div>
-            <div className="tool-card">
-              <div className="tool-icon">📊</div>
-              <h3 className="tool-title">Funnel Calculator</h3>
-              <p className="tool-description">
-                Track your entire funnel from awareness to revenue. See exactly where
-                to focus to hit your income goals.
-              </p>
-            </div>
-            <div className="tool-card">
-              <div className="tool-icon">🧲</div>
-              <h3 className="tool-title">Lead Magnet Builder</h3>
-              <p className="tool-description">
-                Create lead magnets that attract your ideal customers. Choose from
-                proven formats and customize for your niche.
-              </p>
-            </div>
-            <div className="tool-card">
-              <div className="tool-icon">✅</div>
-              <h3 className="tool-title">Validation Surveys</h3>
-              <p className="tool-description">
-                Test your ideas with real people before you build. Create shareable
-                surveys and gather actionable feedback.
-              </p>
-            </div>
-            <div className="tool-card">
-              <div className="tool-icon">🧭</div>
-              <h3 className="tool-title">Flow Compass</h3>
-              <p className="tool-description">
-                Track your energy daily using the N/E/S/W system. Understand when
-                you're in flow and when you need to pivot.
-              </p>
-            </div>
-            <div className="tool-card">
-              <div className="tool-icon">📚</div>
-              <h3 className="tool-title">Library of Answers</h3>
-              <p className="tool-description">
-                A growing collection that's uniquely yours. Every skill discovered, every problem
-                identified, every insight captured — organized and always accessible.
-              </p>
-            </div>
-          </div>
-
-          <div className="tools-footer-callouts">
-            <div className="tools-callout evergreen-callout">
-              <span className="tools-callout-icon">♾️</span>
-              <p>These aren't one-time exercises. Refine your offers, track new funnels, revisit your flow — the tools grow with you.</p>
-            </div>
-            <div className="tools-callout realtime-callout">
-              <span className="tools-callout-icon">⚡</span>
-              <p>Drag, adjust, iterate. See your business model shift in real-time as you make changes.</p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -1143,123 +939,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="landing-social-proof">
-        <div className="landing-container">
-          <div className="proof-stats">
-            <div className="proof-stat">
-              <span className="proof-number">2,400+</span>
-              <span className="proof-label">Professionals finding their flow</span>
-            </div>
-            <div className="proof-stat">
-              <span className="proof-number">4 min</span>
-              <span className="proof-label">To career clarity</span>
-            </div>
-            <div className="proof-stat">
-              <span className="proof-number">6</span>
-              <span className="proof-label">Core needs we help you meet</span>
-            </div>
-          </div>
-
-          <p className="conformity-anchor">
-            This week, 847 professionals completed their first Flow Finder quest. Most start with Skills Discovery.
-          </p>
-
-          <p className="humanity-hero">
-            Every person who finds their flow is one less person stuck in work that drains them.
-            You're not just changing your life — you're part of a quiet revolution.
-          </p>
-
-          <p className="last-mile-drive">
-            You're closer than you think. Most members see clarity within their first week.
-          </p>
-
-          <p className="community-callout">
-            You're not alone — connect with others on the same journey.
-          </p>
-        </div>
-      </section>
-
-      {/* Comparison Table Section */}
-      <section className="landing-comparison">
-        <div className="landing-container">
-          <h2 className="section-heading">How We're Different</h2>
-          <p className="section-subheading">
-            Find My Flow vs other approaches to career change
-          </p>
-
-          <div className="comparison-table">
-            <div className="comparison-header">
-              <div className="comparison-cell comparison-label"></div>
-              <div className="comparison-cell comparison-us">Find My Flow</div>
-              <div className="comparison-cell">Career Coach</div>
-              <div className="comparison-cell">Online Course</div>
-              <div className="comparison-cell">Figure It Out</div>
-            </div>
-
-            <div className="comparison-row">
-              <div className="comparison-cell comparison-label">Personalised to you</div>
-              <div className="comparison-cell comparison-us">✓</div>
-              <div className="comparison-cell">✓</div>
-              <div className="comparison-cell">✗</div>
-              <div className="comparison-cell">✓</div>
-            </div>
-
-            <div className="comparison-row">
-              <div className="comparison-cell comparison-label">Guided discovery process</div>
-              <div className="comparison-cell comparison-us">✓</div>
-              <div className="comparison-cell">~</div>
-              <div className="comparison-cell">✗</div>
-              <div className="comparison-cell">✗</div>
-            </div>
-
-            <div className="comparison-row">
-              <div className="comparison-cell comparison-label">AI support 24/7</div>
-              <div className="comparison-cell comparison-us">✓</div>
-              <div className="comparison-cell">✗</div>
-              <div className="comparison-cell">✗</div>
-              <div className="comparison-cell">✗</div>
-            </div>
-
-            <div className="comparison-row">
-              <div className="comparison-cell comparison-label">Gamified progress</div>
-              <div className="comparison-cell comparison-us">✓</div>
-              <div className="comparison-cell">✗</div>
-              <div className="comparison-cell">~</div>
-              <div className="comparison-cell">✗</div>
-            </div>
-
-            <div className="comparison-row">
-              <div className="comparison-cell comparison-label">Business tools included</div>
-              <div className="comparison-cell comparison-us">✓</div>
-              <div className="comparison-cell">✗</div>
-              <div className="comparison-cell">~</div>
-              <div className="comparison-cell">✗</div>
-            </div>
-
-            <div className="comparison-row">
-              <div className="comparison-cell comparison-label">Community support</div>
-              <div className="comparison-cell comparison-us">✓</div>
-              <div className="comparison-cell">~</div>
-              <div className="comparison-cell">~</div>
-              <div className="comparison-cell">✗</div>
-            </div>
-
-            <div className="comparison-row comparison-price">
-              <div className="comparison-cell comparison-label">Typical cost</div>
-              <div className="comparison-cell comparison-us">Free to start</div>
-              <div className="comparison-cell">$2-10k</div>
-              <div className="comparison-cell">$500-2k</div>
-              <div className="comparison-cell">Free*</div>
-            </div>
-          </div>
-
-          <p className="comparison-note">
-            * "Free" to figure it out yourself — but months or years of confusion has its own cost.
-          </p>
-        </div>
-      </section>
-
       {/* FAQ Section */}
       <section className="landing-faq">
         <div className="landing-container">
@@ -1289,20 +968,48 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Why This Matters - Bronnie Ware */}
+      <section className="landing-why-matters">
+        <div className="landing-container">
+          <div className="why-matters-content">
+            <p className="why-matters-intro">
+              Bronnie Ware was a palliative care nurse who spent years caring for patients
+              in the last weeks of their lives.
+            </p>
+
+            <p className="why-matters-study">
+              She asked them about their regrets. The patterns were so consistent,
+              she wrote a book about it.
+            </p>
+
+            <blockquote className="why-matters-quote">
+              <p>The #1 regret of the dying:</p>
+              <p className="regret-text">
+                "I wish I'd had the courage to live a life true to myself,
+                not the life others expected of me."
+              </p>
+              <cite>— Bronnie Ware, <em>The Top Five Regrets of the Dying</em></cite>
+            </blockquote>
+
+            <p className="why-matters-belief">
+              I believe finding your flow is the answer to not having this regret.
+            </p>
+
+            <p className="why-matters-close">
+              Your Svadharma. Your Te. Your Ikigai. It's waiting.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="landing-final-cta">
         <div className="landing-container">
           <h2 className="final-cta-heading">
-            Ready to discover what you're capable of?
+            Ready to find yours?
           </h2>
           <p className="final-cta-subheading">
-            Stop grinding. Start discovering. Find your flow.
-          </p>
-          <p className="co-creator">
-            We're still early. Join now and help shape what career development should look like.
-          </p>
-          <p className="founding-member">
-            Early access pricing while we're in beta. Join the founding members before rates increase.
+            Live a life true to yourself.
           </p>
           <div className="final-cta-buttons">
             <button
