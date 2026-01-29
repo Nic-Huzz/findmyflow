@@ -124,6 +124,7 @@ export async function createContentPlan(userId, items) {
     label: item.label,
     icon: item.icon,
     context: item.context,
+    post_day: item.postDay || null,
     sort_order: index,
     status: 'planned'
   }))
@@ -161,6 +162,7 @@ export async function updateContentPlan(userId, planId, items) {
     label: item.label,
     icon: item.icon,
     context: item.context,
+    post_day: item.postDay || item.post_day || null,
     sort_order: index,
     status: item.status || 'planned',
     generated_content: item.generated_content,

@@ -16,6 +16,7 @@
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
+import { logError } from '../../../lib/errorSupport'
 import {
   SKILLS_SEGMENTS,
   PROBLEM_SEGMENTS,
@@ -52,6 +53,7 @@ function QuickCapture({
   // Saving state
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState(null)
+  const [errorSupport, setErrorSupport] = useState(null)
 
   // Transition state for smooth page changes
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -210,8 +212,8 @@ function QuickCapture({
       await saveWheelData('personas', capturedData.personas)
 
       // 2. Save products to products table
-      const productPromises = capturedData.products.map(product =>
-        supabase.from('products').insert({
+      for (const product of capturedData.products) {
+        const { error: productError } = await supabase.from('products').insert({
           user_id: userId,
           name: product.name,
           description: product.description || null,
@@ -227,10 +229,21 @@ function QuickCapture({
             captured_at: new Date().toISOString()
           }
         })
-      )
 
-      // Execute product saves
-      await Promise.all(productPromises)
+        if (productError) {
+          console.error(`Error saving product "${product.name}":`, productError)
+          // Provide specific error for constraint violations
+          if (productError.code === '23505') {
+            throw new Error(`Product "${product.name}" already exists. Try a different name.`)
+          } else if (productError.code === '23503') {
+            throw new Error(`Invalid product type for "${product.name}". Please go back and re-select.`)
+          }
+          throw new Error(
+            `Failed to save "${product.name}".\n\n` +
+            `Check your internet connection and tap "Complete Setup" to retry.`
+          )
+        }
+      }
 
       // 3. Mark onboarding complete in user_stage_progress
       await supabase
@@ -251,7 +264,23 @@ function QuickCapture({
 
     } catch (error) {
       console.error('Error saving quick capture data:', error)
-      setSaveError('Failed to save. Please try again.')
+
+      // Log error and get support helper
+      const { offerSupport, errorMessage } = await logError({
+        error,
+        component: 'QuickCapture',
+        action: 'save_onboarding_data',
+        userId,
+        metadata: {
+          skillsCount: capturedData.skills.length,
+          problemsCount: capturedData.problems.length,
+          personasCount: capturedData.personas.length,
+          productsCount: capturedData.products.length
+        }
+      })
+
+      setErrorSupport(() => offerSupport)
+      setSaveError(error.message || 'Failed to save. Please try again.')
     } finally {
       setIsSaving(false)
     }
@@ -428,7 +457,18 @@ function QuickCapture({
             </div>
 
             {saveError && (
-              <div className="save-error">{saveError}</div>
+              <div className="save-error">
+                <p>{saveError}</p>
+                {errorSupport && (
+                  <button
+                    className="help-btn"
+                    onClick={errorSupport}
+                    type="button"
+                  >
+                    Get Help via WhatsApp
+                  </button>
+                )}
+              </div>
             )}
 
             <div className="summary-actions">

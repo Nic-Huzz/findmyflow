@@ -159,6 +159,59 @@
   color: var(--purple, #5e17eb);
 }
 
+/* Posting Day Selector */
+.content-context-input .post-day-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.content-context-input .post-day-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+}
+
+.content-context-input .post-day-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.content-context-input .post-day-pill {
+  padding: 8px 12px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6c757d);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 48px;
+  text-align: center;
+}
+
+.content-context-input .post-day-pill:hover {
+  border-color: var(--purple, #5e17eb);
+  color: var(--purple, #5e17eb);
+}
+
+.content-context-input .post-day-pill.selected {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.content-context-input .post-day-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
 /* Actions */
 .content-context-input .context-actions {
   display: flex;
@@ -243,5 +296,15 @@
   .content-context-input .skip-btn {
     flex: none;
     width: 100%;
+  }
+
+  .content-context-input .post-day-pills {
+    justify-content: space-between;
+  }
+
+  .content-context-input .post-day-pill {
+    padding: 8px 10px;
+    min-width: 42px;
+    font-size: 0.8rem;
   }
 }

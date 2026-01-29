@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { sanitizeText } from './lib/sanitize'
+import { syncScoreToLeaderboard } from './lib/scoringCategories'
 
 const Feedback = () => {
   const navigate = useNavigate()
@@ -146,6 +147,15 @@ const Feedback = () => {
                   reflection_text: 'Completed feedback form',
                   challenge_day: null
                 }])
+
+              // Sync to leaderboard (non-blocking)
+              syncScoreToLeaderboard(supabase, {
+                userId: user.id,
+                questCategory: 'Bonus',
+                points: 10,
+                projectId: null,
+                source: 'feedback_bonus'
+              })
 
               console.log('✅ Bonus quest "Feedback Form" auto-completed')
             }

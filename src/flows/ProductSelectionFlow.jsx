@@ -1,5 +1,5 @@
 /**
- * ProductSelectionFlow - Product Selection (+30 pts)
+ * ProductSelectionFlow - Product Selection (+9 pts)
  *
  * Follows OfferBuilderFlow to define product details using the Value Equation.
  * Loads all solutions from the Offer Builder.
@@ -696,7 +696,7 @@ function ProductSelectionFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'product_selection',
-          pointsEarned: 30
+          pointsEarned: 9
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
@@ -1311,7 +1311,7 @@ function ProductSelectionFlow() {
             disabled={isLoading}
             style={{ marginTop: '24px' }}
           >
-            {isLoading ? 'Saving...' : 'Save & Complete (+30 pts)'}
+            {isLoading ? 'Saving...' : 'Save & Complete (+9 pts)'}
           </button>
 
           <BackButton onClick={() => {
@@ -1338,7 +1338,7 @@ function ProductSelectionFlow() {
           <div className="success-icon">💰</div>
           <h2>Products Defined, {userName}!</h2>
           <p>You've defined {coreProducts.length} product{coreProducts.length !== 1 ? 's' : ''} with mechanisms and features.</p>
-          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+30 points earned!</p>
+          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+9 points earned!</p>
 
           <div className="avg-score-display">
             <span className="avg-label">Average Value Score</span>

@@ -16,6 +16,11 @@
   --toolbar-radius: 12px;
 }
 
+/* Hide toolbar when body has hide-toolbar class (e.g., during full-screen flows) */
+body.hide-toolbar .bottom-toolbar {
+  display: none !important;
+}
+
 .bottom-toolbar {
   position: fixed;
   bottom: 0;

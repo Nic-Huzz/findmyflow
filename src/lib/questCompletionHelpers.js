@@ -2,6 +2,7 @@
 import { supabase } from './supabaseClient';
 import { updateStreak } from './streakTracking';
 import { normalizePersona } from '../data/personaProfiles';
+import { syncScoreToLeaderboard } from './scoringCategories';
 
 /**
  * Handle conversation_log quest completion
@@ -353,6 +354,15 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       console.error('Error updating challenge progress:', updateError);
       return { success: false, error: updateError.message };
     }
+
+    // Sync to leaderboard (non-blocking)
+    syncScoreToLeaderboard(supabase, {
+      userId,
+      questCategory: 'Flow Finder',
+      points,
+      projectId: activeChallenge.project_id || null,
+      source: `flow_finder_${flowType}`
+    });
 
     console.log(`✅ Flow Finder quest ${questId} synced with challenge (+${points} pts)`);
     return { success: true, questId, points, newTotalPoints };

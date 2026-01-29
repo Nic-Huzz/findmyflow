@@ -44,9 +44,11 @@ const LeadMagnetSelectionFlow = lazy(() => import('./flows/LeadMagnetSelectionFl
 const ProductSelectionFlow = lazy(() => import('./flows/ProductSelectionFlow'))
 const FunnelBuilderFlow = lazy(() => import('./flows/FunnelBuilderFlow'))
 const FunnelCalculator = lazy(() => import('./flows/FunnelCalculator'))
+const IncomeCalculator = lazy(() => import('./flows/IncomeCalculator'))
 const FunnelBaselineFlow = lazy(() => import('./flows/FunnelBaselineFlow'))
 const MVPReadinessFlow = lazy(() => import('./flows/MVPReadinessFlow'))
 const FeedbackAnalysisFlow = lazy(() => import('./flows/FeedbackAnalysisFlow'))
+const OfferChecklist = lazy(() => import('./pages/OfferChecklist'))
 const GrandSlamOfferFlow = lazy(() => import('./flows/GrandSlamOfferFlow'))
 const OfferStackBuilderFlow = lazy(() => import('./flows/OfferStackBuilderFlow'))
 const GrandSlamMatrix = lazy(() => import('./flows/GrandSlamMatrix'))
@@ -133,7 +135,7 @@ import './flows/PersonaSelectionFlow.css'
 import './MoneyModelGuide.css'
 import './Profile.css'
 import './Auth.css'
-import './HybridEssenceFlow.css'
+// HybridEssenceFlow.css removed - component is archived, was causing style leaks
 import './Challenge.css'
 import './Feedback.css'
 import './flows/FlowFinder.css'
@@ -189,7 +191,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/' ||
                         location.pathname === '/career-clarity' ||
                         location.pathname === '/launch-readiness' ||
-                        location.pathname === '/funnel-baseline'
+                        location.pathname === '/funnel-baseline' ||
+                        location.pathname === '/income-calculator'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -434,11 +437,25 @@ function AppRouter() {
               </AuthGate>
             } />
 
+            {/* Offer Checklist */}
+            <Route path="/offer-checklist/:category" element={
+              <AuthGate>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <OfferChecklist />
+                </Suspense>
+              </AuthGate>
+            } />
+
             {/* Voice of Customer Database */}
             <Route path="/voice-of-customer" element={
               <AuthGate>
                 <VoiceOfCustomerPage />
               </AuthGate>
+            } />
+
+            {/* Income Calculator - Public & Logged-in */}
+            <Route path="/income-calculator" element={
+              <IncomeCalculator />
             } />
 
             {/* Funnel Calculator - Stage 8 Tracking */}

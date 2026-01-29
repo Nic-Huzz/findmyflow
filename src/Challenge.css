@@ -947,7 +947,22 @@
 
 .quest-card.completed {
   background: #f8f9fa;
-  opacity: 0.7;
+}
+
+/* Fade content on completed cards but keep View Results prominent */
+.quest-card.completed .quest-header,
+.quest-card.completed .quest-description,
+.quest-card.completed .quest-input-section,
+.quest-card.completed .quest-completed-btn,
+.quest-card.completed .learn-more-section {
+  opacity: 0.6;
+}
+
+/* Keep View Results button fully visible and prominent */
+.quest-card.completed .view-results-btn {
+  opacity: 1;
+  background: #5e17eb;
+  color: white;
 }
 
 .quest-card.bonus {
@@ -1519,6 +1534,32 @@
 }
 
 .quest-action-btn:active {
+  transform: translateY(0);
+}
+
+/* Checklist link button - for offer checklists (matches Complete Quest style) */
+.quest-checklist-link {
+  display: block;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+.quest-checklist-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.quest-checklist-link:active {
   transform: translateY(0);
 }
 

@@ -1,5 +1,5 @@
 /**
- * OfferBuilderFlow - $100M Offer Builder (+25 pts)
+ * OfferBuilderFlow - $100M Offer Builder (+6 pts)
  *
  * Stage 2 (Product Creation) flow for categorizing solutions using
  * Alex Hormozi's $100M Offers framework.
@@ -15,8 +15,8 @@
  * Categories: Core Product, Lead Magnet, Bonus, Skip
  *
  * Related Flows:
- * - ProductSelectionFlow (+30 pts): Finalize core products with Value Equation
- * - LeadMagnetSelectionFlow (+30 pts): Finalize lead magnets with type selection
+ * - ProductSelectionFlow (+9 pts): Finalize core products with Value Equation
+ * - LeadMagnetSelectionFlow (+8 pts): Finalize lead magnets with type selection
  */
 
 import { useState, useEffect, useCallback } from 'react'
@@ -622,7 +622,7 @@ function OfferBuilderFlow() {
             await completeFlowQuest({
               userId: user.id,
               flowId: '100m_offer',
-              pointsEarned: 25
+              pointsEarned: 6
             })
           }
         } catch (err) {
@@ -1055,7 +1055,7 @@ function OfferBuilderFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: '100m_offer',
-          pointsEarned: 25
+          pointsEarned: 6
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
@@ -2433,7 +2433,7 @@ function OfferBuilderFlow() {
             disabled={isLoading}
             style={{ marginTop: '24px' }}
           >
-            {isLoading ? 'Saving...' : 'Save & Complete Quest (+25 pts)'}
+            {isLoading ? 'Saving...' : 'Save & Complete Quest (+6 pts)'}
           </button>
           <p style={{ marginTop: '12px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>
             Saves your offer and completes this challenge quest
@@ -2453,7 +2453,7 @@ function OfferBuilderFlow() {
           <div className="success-icon">✓</div>
           <h2>Solutions Captured, {userName}!</h2>
           <p style={{ marginBottom: '8px' }}>You've captured {problemSolutions.length} solution{problemSolutions.length !== 1 ? 's' : ''}. Next, define your offer strategies.</p>
-          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+25 points earned!</p>
+          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+6 points earned!</p>
 
           <div className="next-steps-container">
             <h3>Next Steps</h3>

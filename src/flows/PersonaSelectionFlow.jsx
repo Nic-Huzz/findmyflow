@@ -19,7 +19,50 @@ const STAGES = {
   SELECTOR: 'selector',
   CUSTOM_INPUT: 'custom_input',
   QUESTIONS: 'questions',
-  SUCCESS: 'success'
+  SUCCESS: 'success',
+  PRE_ACTION: 'pre_action'
+}
+
+// Visibility layers for 2D pattern recognition
+const VISIBILITY_LAYERS = [
+  { id: 'screen', icon: '📱', label: 'Screen', description: 'Putting myself out there where people can see and judge me' },
+  { id: 'live', icon: '⚡', label: 'Live', description: 'Doing something in real-time where I can\'t edit or take it back' },
+  { id: 'vulnerable', icon: '💗', label: 'Vulnerable', description: 'Showing something unfinished or admitting I need help' },
+  { id: 'money', icon: '💰', label: 'Money', description: 'Asking someone to pay me or stating my price' },
+  { id: 'authority', icon: '👑', label: 'Authority', description: 'Claiming expertise or positioning myself as someone to follow' }
+]
+
+// Protective voices for 2D pattern recognition
+const PROTECTIVE_VOICES = [
+  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'My idea isn\'t ready for feedback yet' },
+  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother anyone' },
+  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control what they\'ll say' },
+  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+]
+
+// Contextual essence messages based on voice + layer
+const getEssenceMessage = (voice, layer) => {
+  const messages = {
+    'perfectionist_screen': 'Your Perfectionist wants the idea to be polished before sharing. But validation IS the polish — real feedback shapes better ideas than isolation ever could.',
+    'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show unfinished work. But asking for feedback isn\'t weakness — it\'s wisdom.',
+    'perfectionist_live': 'Your Perfectionist fears making mistakes in real-time. But conversations aren\'t performances — they\'re discoveries.',
+    'people_pleaser_screen': 'Your People Pleaser worries about being "annoying." But asking for feedback is an invitation, not a burden.',
+    'people_pleaser_vulnerable': 'Your People Pleaser doesn\'t want to impose. But most people feel honored to be asked for their perspective.',
+    'people_pleaser_live': 'Your People Pleaser fears disappointing someone in the moment. But genuine curiosity is always welcome.',
+    'controller_screen': 'Your Controller can\'t predict the response. But the unknown holds possibility, not just danger.',
+    'controller_vulnerable': 'Your Controller wants certainty before sharing. But validation IS how you gain certainty.',
+    'controller_live': 'Your Controller fears conversations you can\'t script. But the best insights come from unscripted moments.',
+    'performer_screen': 'Your Performer wants more credentials first. But you already know enough to ask good questions.',
+    'performer_vulnerable': 'Your Performer feels unqualified to ask. But curiosity doesn\'t require a resume.',
+    'performer_live': 'Your Performer wants to prove expertise first. But listening IS the expertise here.',
+    'ghost_screen': 'Your Ghost wants to stay invisible. But your idea deserves to be seen — and so do you.',
+    'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
+    'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.'
+  }
+
+  const key = `${voice}_${layer}`
+  return messages[key] || 'Your protective pattern is trying to keep you safe. But you don\'t need protection from genuine connection.'
 }
 
 function PersonaSelectionFlow() {
@@ -39,6 +82,12 @@ function PersonaSelectionFlow() {
   const [showGuideModal, setShowGuideModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  // PRE-ACTION state for resistance capture
+  const [preActionFeeling, setPreActionFeeling] = useState(null)
+  const [visibilityLayer, setVisibilityLayer] = useState(null)
+  const [protectiveVoice, setProtectiveVoice] = useState(null)
+  const [preActionStep, setPreActionStep] = useState('feeling') // feeling | layer | voice | essence
 
   // Load Nikigai clusters on mount
   useEffect(() => {
@@ -202,7 +251,7 @@ function PersonaSelectionFlow() {
     }
   }
 
-  // Save results
+  // Save results and transition to PRE-ACTION
   const saveResults = async () => {
     if (!user || !selectedProfileId) return
 
@@ -246,19 +295,74 @@ function PersonaSelectionFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'flow_persona_selection',
-          pointsEarned: 35
+          pointsEarned: 9
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
       }
 
-      navigate('/7-day-challenge')
+      // Transition to PRE-ACTION instead of navigating away
+      setStage(STAGES.PRE_ACTION)
+      setPreActionStep('feeling')
     } catch (err) {
       setError('Failed to save results. Please try again.')
       console.error('Save error:', err)
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // Save PRE-ACTION pattern data and navigate to validation
+  const completePreAction = async () => {
+    try {
+      // Save resistance pattern data if user experienced resistance
+      if (preActionFeeling && preActionFeeling !== 'excited') {
+        await supabase.from('flow_sessions').insert({
+          user_id: user.id,
+          flow_type: 'pre_action_resistance',
+          flow_version: 'v1',
+          status: 'completed',
+          last_step_id: 'pre_action_complete',
+          step_data: {
+            stage: 1,
+            source: 'persona_selection_flow',
+            action_type: 'validate_idea',
+            pre_feeling: preActionFeeling,
+            visibility_layer: visibilityLayer,
+            protective_voice: protectiveVoice,
+            timestamp: new Date().toISOString()
+          }
+        })
+      }
+    } catch (err) {
+      console.warn('Pre-action tracking failed:', err)
+    }
+
+    navigate('/validation-flows')
+  }
+
+  // Handle feeling selection
+  const handleFeelingSelect = (feeling) => {
+    setPreActionFeeling(feeling)
+    if (feeling === 'excited') {
+      // Skip to validation directly
+      completePreAction()
+    } else {
+      // Show 2D capture
+      setPreActionStep('layer')
+    }
+  }
+
+  // Handle layer selection
+  const handleLayerSelect = (layer) => {
+    setVisibilityLayer(layer)
+    setPreActionStep('voice')
+  }
+
+  // Handle voice selection
+  const handleVoiceSelect = (voice) => {
+    setProtectiveVoice(voice)
+    setPreActionStep('essence')
   }
 
   // Get desirability color class
@@ -837,6 +941,169 @@ function PersonaSelectionFlow() {
             </div>
           </div>
         )}
+      </div>
+    )
+  }
+
+  // PRE_ACTION Stage - Validation prompt with resistance capture
+  if (stage === STAGES.PRE_ACTION) {
+    const selectedProfile = allProfiles.find(p => p.id === selectedProfileId)
+
+    return (
+      <div className="persona-selection-flow pre-action-stage">
+        <div className="progress-container">
+          <div className="progress-dots">
+            <div className="progress-dot completed"></div>
+            <div className="progress-dot completed"></div>
+            <div className="progress-dot completed"></div>
+            <div className="progress-dot completed"></div>
+          </div>
+        </div>
+
+        <div className="container">
+          {/* Confirmation Header */}
+          <div className="pre-action-header">
+            <h1 className="page-title">✓ Persona Profile Selected!</h1>
+            <div className="selected-combo-display">
+              <p className="combo-label">Your validated combo:</p>
+              <div className="combo-card">
+                <span className="combo-persona">{selectedProfile?.persona}</span>
+                <span className="combo-divider">×</span>
+                <span className="combo-problem">{selectedProfile?.problem}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="pre-action-divider"></div>
+
+          {/* Next Step Context */}
+          {preActionStep === 'feeling' && (
+            <div className="pre-action-content animate-fade-in">
+              <div className="next-step-intro">
+                <h2 className="next-step-title">📋 Your Next Step: Validate With Real People</h2>
+                <p className="next-step-description">
+                  Before you build anything, you need to confirm this persona + problem resonates with actual potential customers.
+                </p>
+                <p className="next-step-detail">
+                  You'll send a short survey to 3-5 people who fit this profile and ask if this problem is real for them.
+                </p>
+              </div>
+
+              <div className="pre-action-divider"></div>
+
+              <div className="feeling-check">
+                <h3 className="feeling-question">How do you feel about reaching out to validate this?</h3>
+                <div className="feeling-options">
+                  <button
+                    className="feeling-option"
+                    onClick={() => handleFeelingSelect('excited')}
+                  >
+                    <span className="feeling-emoji">😊</span>
+                    <span className="feeling-label">Excited</span>
+                  </button>
+                  <button
+                    className="feeling-option"
+                    onClick={() => handleFeelingSelect('nervous')}
+                  >
+                    <span className="feeling-emoji">😰</span>
+                    <span className="feeling-label">Nervous</span>
+                  </button>
+                  <button
+                    className="feeling-option"
+                    onClick={() => handleFeelingSelect('resistant')}
+                  >
+                    <span className="feeling-emoji">😤</span>
+                    <span className="feeling-label">Resistant</span>
+                  </button>
+                  <button
+                    className="feeling-option"
+                    onClick={() => handleFeelingSelect('numb')}
+                  >
+                    <span className="feeling-emoji">😶</span>
+                    <span className="feeling-label">Numb</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Visibility Layer Selection (WHERE) */}
+          {preActionStep === 'layer' && (
+            <div className="pre-action-content animate-fade-in">
+              <div className="resistance-capture">
+                <h3 className="resistance-question">Where does this resistance show up?</h3>
+                <p className="resistance-subtext">What type of action triggers the feeling?</p>
+                <div className="layer-options">
+                  {VISIBILITY_LAYERS.map(layer => (
+                    <button
+                      key={layer.id}
+                      className="layer-option"
+                      onClick={() => handleLayerSelect(layer.id)}
+                    >
+                      <span className="layer-icon">{layer.icon}</span>
+                      <span className="layer-label">{layer.label}</span>
+                      <span className="layer-description">{layer.description}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Protective Voice Selection (HOW) */}
+          {preActionStep === 'voice' && (
+            <div className="pre-action-content animate-fade-in">
+              <div className="resistance-capture">
+                <h3 className="resistance-question">Which voice is speaking?</h3>
+                <div className="voice-options">
+                  {PROTECTIVE_VOICES.map(voice => (
+                    <button
+                      key={voice.id}
+                      className="voice-option"
+                      onClick={() => handleVoiceSelect(voice.id)}
+                    >
+                      <span className="voice-icon">{voice.icon}</span>
+                      <span className="voice-label">{voice.label}</span>
+                      <span className="voice-description">"{voice.description}"</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Essence Reminder */}
+          {preActionStep === 'essence' && (
+            <div className="pre-action-content animate-fade-in">
+              <div className="essence-reminder">
+                <div className="essence-icon">💫</div>
+                <h3 className="essence-title">Your essence knows you can do this.</h3>
+
+                <div className="pattern-noticed">
+                  <span className="pattern-label">You noticed:</span>
+                  <span className="pattern-combo">
+                    {PROTECTIVE_VOICES.find(v => v.id === protectiveVoice)?.icon}{' '}
+                    {PROTECTIVE_VOICES.find(v => v.id === protectiveVoice)?.label}
+                    {' × '}
+                    {VISIBILITY_LAYERS.find(l => l.id === visibilityLayer)?.icon}{' '}
+                    {VISIBILITY_LAYERS.find(l => l.id === visibilityLayer)?.label}
+                  </span>
+                </div>
+
+                <p className="essence-message">
+                  {getEssenceMessage(protectiveVoice, visibilityLayer)}
+                </p>
+
+                <button
+                  className="primary-button gold-cta"
+                  onClick={completePreAction}
+                >
+                  Start Validating →
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     )
   }

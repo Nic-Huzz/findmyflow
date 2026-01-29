@@ -5,15 +5,18 @@
  * Replaces discrete 7-day challenge starts with auto-rolling weekly rhythm.
  *
  * Flow Screens:
- * 1. Week Type Selection (push/flow/rest/launch)
- * 2. Foundation Check (conditional - if NS/Healing incomplete)
- * 3. Morning Reconnect Builder
- * 4. Weekly Groan Carousel (Nic's story)
- * 5. Conditional Commitments (Healing Priority + 3% Improvement)
- * 6. Group Selection (Solo / Create Group / Join Group)
- * 7. Week Plan Summary
+ * 1. Weekly Review (NEW) - Flow check-in + project review
+ * 2. Week Type Selection (push/flow/rest/launch) + project focus
+ * 3. Recommended Tasks (NEW) - Based on week type
+ * 4. Foundation Check (conditional - if NS/Healing incomplete)
+ * 5. Morning Reconnect Builder
+ * 6. Weekly Groan Carousel (Nic's story)
+ * 7. Conditional Commitments (Healing Priority + 3% Improvement)
+ * 8. Group Selection (Solo / Create Group / Join Group)
+ * 9. Week Plan Summary
  *
  * Created: Dec 2024
+ * Updated: Jan 2025 - Added weekly review and task recommendations
  * See docs/weekly-planning-system-plan.md
  */
 
@@ -24,45 +27,47 @@ import { useAuth } from '../auth/AuthProvider'
 import { trackWeeklyPlanCompleted } from '../lib/analytics'
 import {
   GROAN_VISIBILITY_LAYERS,
-  GROAN_SOURCE_TYPES
+  GROAN_SOURCE_TYPES,
+  STAGE_CONFIG
 } from '../lib/stageConfig'
 import {
   fetchFlowFinderData,
   hasCompletedFlowFinder,
   createGroanChallenge
 } from '../lib/crm'
+import { FLOW_DIRECTIONS, getFlowDirection } from '../lib/crm/reflectionService'
 import GroanChallengeCard from './GroanChallengeCard'
 import './WeeklyPlanningFlow.css'
 
 // Week types with descriptions
 const WEEK_TYPES = [
   {
-    id: 'push',
-    label: 'Push Week',
-    icon: '🔥',
-    description: 'Go all in, stretch your edges',
-    color: '#ef4444'
+    id: 'business',
+    label: 'Business Week',
+    icon: '💼',
+    description: 'Focus on business activities',
+    color: '#f59e0b'
   },
   {
-    id: 'flow',
-    label: 'Flow Week',
-    icon: '🌊',
-    description: 'Balanced, sustainable rhythm',
-    color: '#3b82f6'
+    id: 'healing',
+    label: 'Healing Week',
+    icon: '💗',
+    description: 'Focus on healing activities',
+    color: '#ec4899'
   },
   {
     id: 'rest',
     label: 'Rest Week',
     icon: '🌙',
-    description: 'Lighter load, focus on reconnect',
+    description: 'Minimal activities, recharge',
     color: '#8b5cf6'
   },
   {
-    id: 'launch',
-    label: 'Launch Week',
-    icon: '🎯',
-    description: 'Heavy business focus',
-    color: '#f59e0b'
+    id: 'flow',
+    label: 'Flow Week',
+    icon: '🌊',
+    description: 'Follow what sparks curiosity',
+    color: '#3b82f6'
   }
 ]
 
@@ -130,12 +135,67 @@ const GROAN_SLIDES = [
   }
 ]
 
+// Quest categories for weekly prioritization
+const QUEST_PRIORITIES = [
+  {
+    id: 'groans',
+    label: 'Groans',
+    icon: '😤',
+    description: 'Courage challenges that push your edges',
+    weekTypes: ['business', 'flow']
+  },
+  {
+    id: 'healing',
+    label: 'Healing',
+    icon: '💗',
+    description: 'Inner work and emotional processing',
+    weekTypes: ['healing', 'rest', 'flow']
+  },
+  {
+    id: 'reconnect',
+    label: 'Reconnect',
+    icon: '🧘',
+    description: 'Daily practices to stay grounded',
+    weekTypes: ['healing', 'rest', 'flow']
+  },
+  {
+    id: 'business',
+    label: 'Business',
+    icon: '💼',
+    description: 'Stage-specific business milestones',
+    weekTypes: ['business']
+  },
+  {
+    id: 'flow_finder',
+    label: 'Flow Finder',
+    icon: '🎯',
+    description: 'Discover your skills, problems & personas',
+    weekTypes: ['flow']
+  },
+  {
+    id: 'tracker',
+    label: 'Tracker',
+    icon: '🧭',
+    description: 'Log your flow and track progress',
+    weekTypes: ['business', 'flow']
+  }
+]
+
 function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   const { user } = useAuth()
   const navigate = useNavigate()
 
   // Current step in the flow
   const [step, setStep] = useState(1)
+
+  // Weekly Review state (NEW)
+  const [projects, setProjects] = useState([])
+  const [reviewProjectId, setReviewProjectId] = useState(null) // Project being reviewed
+  const [focusProjectId, setFocusProjectId] = useState(null) // Project focus for the week
+  const [flowState, setFlowState] = useState({ internal: null, external: null })
+  const [lastWeekStats, setLastWeekStats] = useState(null)
+  const [selectedPriorities, setSelectedPriorities] = useState([])
+  const [loadingProjects, setLoadingProjects] = useState(true)
 
   // Group selection state
   const [groupMode, setGroupMode] = useState(null) // 'solo' | 'create' | 'join'
@@ -181,13 +241,96 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
 
+  // Hide bottom toolbar when this component is mounted
+  useEffect(() => {
+    document.body.classList.add('hide-toolbar')
+    return () => {
+      document.body.classList.remove('hide-toolbar')
+    }
+  }, [])
+
   // Check foundation flows and load Flow Finder data on mount
   useEffect(() => {
     if (user) {
       checkFoundationFlows()
       loadFlowFinderData()
+      loadProjects()
+      loadLastWeekStats()
     }
   }, [user])
+
+  // Load user's projects
+  const loadProjects = async () => {
+    setLoadingProjects(true)
+    try {
+      const { data, error } = await supabase
+        .from('user_projects')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('is_primary', { ascending: false })
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      setProjects(data || [])
+
+      // Auto-select primary project for both review and focus
+      const primary = data?.find(p => p.is_primary)
+      if (primary) {
+        setReviewProjectId(primary.id)
+        setFocusProjectId(primary.id)
+      } else if (data?.length > 0) {
+        setReviewProjectId(data[0].id)
+        setFocusProjectId(data[0].id)
+      }
+    } catch (err) {
+      console.error('Error loading projects:', err)
+    } finally {
+      setLoadingProjects(false)
+    }
+  }
+
+  // Load last week's stats for the selected project
+  const loadLastWeekStats = async () => {
+    try {
+      // Get last week's date range (Monday to Sunday)
+      const now = new Date()
+      const dayOfWeek = now.getDay()
+      const daysToLastMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+      const lastMonday = new Date(now)
+      lastMonday.setDate(now.getDate() - daysToLastMonday - 7)
+      const lastSunday = new Date(lastMonday)
+      lastSunday.setDate(lastMonday.getDate() + 6)
+
+      // Get quest completions from last week
+      const { data: completions, error } = await supabase
+        .from('quest_completions')
+        .select('points, category')
+        .eq('user_id', user.id)
+        .gte('completed_at', lastMonday.toISOString())
+        .lte('completed_at', lastSunday.toISOString())
+
+      if (error) throw error
+
+      // Calculate stats
+      const totalPoints = completions?.reduce((sum, c) => sum + (c.points || 0), 0) || 0
+      const questCount = completions?.length || 0
+      const byCategory = completions?.reduce((acc, c) => {
+        acc[c.category] = (acc[c.category] || 0) + 1
+        return acc
+      }, {}) || {}
+
+      setLastWeekStats({
+        totalPoints,
+        questCount,
+        byCategory,
+        weekOf: lastMonday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      })
+    } catch (err) {
+      console.error('Error loading last week stats:', err)
+    }
+  }
 
   const loadFlowFinderData = async () => {
     const { completed, missing } = await hasCompletedFlowFinder(user.id)
@@ -334,9 +477,9 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   }
 
   // Calculate total steps (accounting for conditional foundation step)
-  // Steps: Group(1) + WeekType(2) + Foundation?(3) + Morning(3/4) + Groan(4/5) + Commitments(5/6) + Summary(6/7)
+  // Flow: Review(1) + WeekType(2) + Priorities(3) + Foundation?(4) + Morning(4/5) + Commits(5/6) + Group(6/7) + Summary(7/8)
   const getTotalSteps = () => {
-    return showFoundationStep ? 7 : 6
+    return showFoundationStep ? 8 : 7
   }
 
   // Get actual step number for display (always show from 1)
@@ -346,81 +489,49 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
 
   // Navigation
   const canContinue = () => {
-    // Step 1 is Week Type Selection
-    if (step === 1) return weekType !== null
+    // Step 1: Weekly Review - need flow state selected
+    if (step === 1) return flowState.internal !== null && flowState.external !== null
 
-    // Step 2: Foundation check (if shown) OR Morning routine (if no foundation)
-    if (step === 2) {
+    // Step 2: Week Type Selection - need week type selected
+    if (step === 2) return weekType !== null
+
+    // Step 3: Quest Priorities - optional, can skip
+    if (step === 3) return true
+
+    // Step 4: Foundation check (if shown) OR Morning routine (if no foundation)
+    if (step === 4) {
       if (showFoundationStep) return true // Foundation check - can always skip
       return morningRoutine.length > 0 // Morning routine
     }
 
-    // Step 3: Morning routine (if foundation shown) OR Groan (if no foundation)
-    if (step === 3) {
+    // Step 5: Morning routine (if foundation shown) OR Conditionals (if no foundation)
+    if (step === 5) {
       if (showFoundationStep) return morningRoutine.length > 0
-      // Groan step - either generated challenge with day, or custom groan
-      if (!flowFinderComplete) {
-        if (groanSlide < GROAN_SLIDES.length - 1) return true
-        return groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null
-      }
-      // Matrix-based: need generated challenge + day, OR custom groan
-      if (generatedChallenge && groanDay !== null) return true
-      if (showCustomGroan && groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null) return true
-      return false
-    }
-
-    // Step 4: Groan (if foundation shown) OR Conditionals (if no foundation)
-    if (step === 4) {
-      if (showFoundationStep) {
-        // Groan step - either generated challenge with day, or custom groan
-        if (!flowFinderComplete) {
-          if (groanSlide < GROAN_SLIDES.length - 1) return true
-          return groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null
-        }
-        // Matrix-based: need generated challenge + day, OR custom groan
-        if (generatedChallenge && groanDay !== null) return true
-        if (showCustomGroan && groanDescription.trim().length > 0 && groanDay !== null && groanLayer !== null) return true
-        return false
-      }
       return true // Conditionals - all optional
     }
 
-    // Step 5: Conditionals (if foundation shown) OR Group Selection (if no foundation)
-    if (step === 5) {
+    // Step 6: Conditionals (if foundation shown) OR Group Selection (if no foundation)
+    if (step === 6) {
       if (showFoundationStep) return true // Conditionals - all optional
       return groupMode !== null // Group selection
     }
 
-    // Step 6: Group Selection (if foundation shown) OR Summary (if no foundation)
-    if (step === 6) {
+    // Step 7: Group Selection (if foundation shown) OR Summary (if no foundation)
+    if (step === 7) {
       if (showFoundationStep) return groupMode !== null // Group selection
       return true // Summary
     }
 
-    // Step 7: Summary (if foundation shown)
+    // Step 8: Summary (if foundation shown)
     return true
   }
 
   const handleNext = () => {
-    // Determine if we're on groan step (step 4 with foundation, step 3 without)
-    const isGroanStep = (showFoundationStep && step === 4) || (!showFoundationStep && step === 3)
-
-    if (isGroanStep && groanSlide < GROAN_SLIDES.length - 1) {
-      setSlideDirection('left')
-      setGroanSlide(groanSlide + 1) // Just advance slide
-    } else {
-      setStep(step + 1)
-    }
+    setStep(step + 1)
   }
 
   const handleBack = () => {
-    // Determine if we're on groan step (step 4 with foundation, step 3 without)
-    const isGroanStep = (showFoundationStep && step === 4) || (!showFoundationStep && step === 3)
-
-    if (isGroanStep && groanSlide > 0) {
-      setSlideDirection('right')
-      setGroanSlide(groanSlide - 1)
-    } else {
+    if (step > 1) {
       setStep(step - 1)
     }
   }
@@ -441,18 +552,29 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     try {
       const weekStart = getWeekStart()
 
+      // Get flow direction from reflection
+      const flowDirection = flowState.internal && flowState.external
+        ? getFlowDirection(flowState.internal, flowState.external)
+        : null
+
       const planData = {
         user_id: user.id,
         week_start: weekStart,
         week_type: weekType,
-        group_id: groupData?.id || null, // Store group selection
+        focus_project_id: focusProjectId || null,
+        selected_priorities: selectedPriorities, // Quest categories selected
+        flow_internal: flowState.internal,
+        flow_external: flowState.external,
+        flow_direction: flowDirection,
+        group_id: groupData?.id || null,
         morning_routine: morningRoutine,
-        weekly_groan_description: generatedChallenge?.description || groanDescription.trim() || null,
-        weekly_groan_day: groanDay,
-        weekly_groan_fears: groanFears,
-        weekly_groan_layer: generatedChallenge?.visibility_layer || groanLayer,
+        // Groan fields temporarily disabled - will be set via Groans tab
+        weekly_groan_description: null,
+        weekly_groan_day: null,
+        weekly_groan_fears: [],
+        weekly_groan_layer: null,
         weekly_groan_completed: false,
-        groan_challenge_id: generatedChallenge?.id || null, // Link to generated challenge
+        groan_challenge_id: null,
         big_release_practice: healingPriority ? bigReleasePractice : null,
         big_release_day: healingPriority ? bigReleaseDay : null,
         three_percent_improvement: delivering ? threePercentImprovement.trim() : null,
@@ -505,6 +627,307 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       setError('Failed to save your plan. Please try again.')
       setSaving(false)
     }
+  }
+
+  // Helper to get stage info
+  const getStageInfo = (stageNumber) => {
+    return STAGE_CONFIG[stageNumber] || { name: `Stage ${stageNumber}`, icon: '📍', color: '#5e17eb' }
+  }
+
+  // Get flow direction info
+  const getFlowDirectionInfo = () => {
+    if (!flowState.internal || !flowState.external) return null
+    const direction = getFlowDirection(flowState.internal, flowState.external)
+    return FLOW_DIRECTIONS[direction]
+  }
+
+  // Render Step 1: Weekly Review (NEW)
+  const renderWeeklyReview = () => {
+    const directionInfo = getFlowDirectionInfo()
+    const reviewProject = projects.find(p => p.id === reviewProjectId)
+    const reviewStageInfo = reviewProject ? getStageInfo(reviewProject.current_stage) : null
+
+    // Calculate days since last week's Monday
+    const getDaysSinceWeek = () => {
+      const now = new Date()
+      const dayOfWeek = now.getDay()
+      return dayOfWeek === 0 ? 6 : dayOfWeek - 1
+    }
+
+    return (
+      <div className="planning-step review-step">
+        <h2>Review Last Week</h2>
+        <p className="step-subtitle">Reflect on how things went before planning ahead</p>
+
+        {/* Project Selector Card */}
+        <div className="review-card project-review-card">
+          <div className="review-card-header">
+            <span className="review-card-icon">📁</span>
+            <span className="review-card-title">Project Review</span>
+          </div>
+
+          {projects.length > 1 ? (
+            <div className="project-selector-wrapper">
+              <select
+                value={reviewProjectId || ''}
+                onChange={(e) => setReviewProjectId(e.target.value)}
+                style={{
+                  display: 'block',
+                  position: 'static',
+                  width: '100%',
+                  minHeight: '52px',
+                  padding: '14px 44px 14px 16px',
+                  margin: 0,
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  border: '2px solid rgba(255, 255, 255, 0.25)',
+                  borderRadius: '12px',
+                  color: 'white',
+                  fontSize: '1rem',
+                  fontWeight: '500',
+                  fontFamily: 'inherit',
+                  lineHeight: '1.4',
+                  cursor: 'pointer',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 14px center',
+                  boxSizing: 'border-box'
+                }}
+              >
+                {projects.map(project => {
+                  const stageInfo = getStageInfo(project.current_stage)
+                  return (
+                    <option key={project.id} value={project.id}>
+                      {stageInfo.icon} {project.name} {project.is_primary ? '(Primary)' : ''}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+          ) : reviewProject ? (
+            <div className="single-project-display">
+              <span className="project-icon">{reviewStageInfo?.icon || '📁'}</span>
+              <div className="project-details">
+                <span className="project-name">{reviewProject.name}</span>
+                <span className="project-stage">{reviewStageInfo?.name}</span>
+              </div>
+            </div>
+          ) : (
+            <p className="no-projects">No projects yet</p>
+          )}
+        </div>
+
+        {/* Last Week Stats Card */}
+        <div className="review-card stats-review-card">
+          <div className="review-card-header">
+            <span className="review-card-icon">📊</span>
+            <span className="review-card-title">
+              {lastWeekStats ? `Week of ${lastWeekStats.weekOf}` : 'Last Week'}
+            </span>
+          </div>
+
+          {lastWeekStats ? (
+            <>
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <span className="stat-value">{lastWeekStats.totalPoints}</span>
+                  <span className="stat-label">Points</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">{lastWeekStats.questCount}</span>
+                  <span className="stat-label">Quests</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-value">{getDaysSinceWeek()}</span>
+                  <span className="stat-label">Days Active</span>
+                </div>
+              </div>
+              {Object.keys(lastWeekStats.byCategory).length > 0 && (
+                <div className="category-breakdown">
+                  {Object.entries(lastWeekStats.byCategory).map(([cat, count]) => (
+                    <span key={cat} className="category-chip">
+                      {cat}: {count}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="stats-empty">
+              <span>No activity recorded last week</span>
+            </div>
+          )}
+        </div>
+
+        {/* Flow Check-In Card - matching existing flow capture pattern */}
+        <div className="review-card flow-check-card">
+          <div className="review-card-header">
+            <span className="review-card-icon">🧭</span>
+            <span className="review-card-title">How's your flow right now?</span>
+          </div>
+
+          <div className="flow-factor">
+            <span className="factor-label">Are you feeling excited?</span>
+            <div className="factor-options">
+              <button
+                type="button"
+                className={`factor-btn ${flowState.internal === 'excited' ? 'selected' : ''}`}
+                onClick={() => setFlowState(prev => ({ ...prev, internal: 'excited' }))}
+              >
+                <span className="factor-emoji">🔥</span>
+                <span className="factor-text">Excited</span>
+              </button>
+              <button
+                type="button"
+                className={`factor-btn ${flowState.internal === 'tired' ? 'selected' : ''}`}
+                onClick={() => setFlowState(prev => ({ ...prev, internal: 'tired' }))}
+              >
+                <span className="factor-emoji">😴</span>
+                <span className="factor-text">Tired</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="flow-factor">
+            <span className="factor-label">How is the business flowing?</span>
+            <div className="factor-options">
+              <button
+                type="button"
+                className={`factor-btn ${flowState.external === 'great' ? 'selected' : ''}`}
+                onClick={() => setFlowState(prev => ({ ...prev, external: 'great' }))}
+              >
+                <span className="factor-emoji">✨</span>
+                <span className="factor-text">Great</span>
+              </button>
+              <button
+                type="button"
+                className={`factor-btn ${flowState.external === 'resistance' ? 'selected' : ''}`}
+                onClick={() => setFlowState(prev => ({ ...prev, external: 'resistance' }))}
+              >
+                <span className="factor-emoji">🎋</span>
+                <span className="factor-text">Facing resistance</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Flow Direction Result */}
+          {directionInfo && (
+            <div
+              className="flow-result"
+              style={{ '--direction-color': directionInfo.color }}
+            >
+              <span className="direction-emoji">{directionInfo.emoji}</span>
+              <div className="direction-info">
+                <span className="direction-label">{directionInfo.label.toUpperCase()}</span>
+                <span className="direction-desc">{directionInfo.description}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Toggle priority selection
+  const togglePriority = (priorityId) => {
+    setSelectedPriorities(prev =>
+      prev.includes(priorityId)
+        ? prev.filter(id => id !== priorityId)
+        : [...prev, priorityId]
+    )
+  }
+
+  // Get guidance content based on week type
+  const getWeekGuidance = () => {
+    switch (weekType) {
+      case 'business':
+        return {
+          title: 'Business Week Focus',
+          emoji: '💼',
+          intro: 'This week, focus on visibility and growth activities.',
+          signposts: [
+            { icon: '😤', label: 'Groans', desc: 'Push your edges with courage challenges', tab: 'Groans' },
+            { icon: '💼', label: 'Business Milestones', desc: 'Complete stage-specific business tasks', tab: 'Business' },
+            { icon: '🧭', label: 'Tracker', desc: 'Log your flow to spot patterns', tab: 'Tracker' }
+          ],
+          tip: 'Balance pushing with reconnection. Even on business weeks, 5 mins of morning grounding helps.'
+        }
+      case 'healing':
+        return {
+          title: 'Healing Week Focus',
+          emoji: '💗',
+          intro: 'This week, prioritize inner work and emotional processing.',
+          signposts: [
+            { icon: '💗', label: 'Healing', desc: 'Recognise, Release, and process emotions', tab: 'Healing' },
+            { icon: '🧘', label: 'Reconnect', desc: 'Daily practices to stay grounded', tab: 'Reconnect' },
+            { icon: '🧭', label: 'Tracker', desc: 'Notice how healing affects your flow', tab: 'Tracker' }
+          ],
+          tip: 'Healing weeks build the foundation for sustainable business growth. Honor what emerges.'
+        }
+      case 'rest':
+        return {
+          title: 'Rest Week Focus',
+          emoji: '🌙',
+          intro: 'This week, minimize and recharge. Less is more.',
+          signposts: [
+            { icon: '🧘', label: 'Reconnect', desc: 'Light daily practices only', tab: 'Reconnect' },
+            { icon: '🧭', label: 'Tracker', desc: 'Log your energy without judgment', tab: 'Tracker' }
+          ],
+          tip: 'Rest isn\'t lazy—it\'s strategic. Your nervous system needs recovery to sustain growth.'
+        }
+      case 'flow':
+        return {
+          title: 'Flow Week Focus',
+          emoji: '🌊',
+          intro: 'This week, follow curiosity wherever it leads.',
+          signposts: [
+            { icon: '🎯', label: 'Flow Finder', desc: 'Discover skills, problems & personas', tab: 'Flow Finder' },
+            { icon: '😤', label: 'Groans', desc: 'Courage challenges that excite you', tab: 'Groans' },
+            { icon: '💗', label: 'Healing', desc: 'Process what arises', tab: 'Healing' },
+            { icon: '🧭', label: 'Tracker', desc: 'Track what brings you into flow', tab: 'Tracker' }
+          ],
+          tip: 'Flow weeks are for exploration. No pressure—just follow what lights you up.'
+        }
+      default:
+        return null
+    }
+  }
+
+  // Render Step 3: Guidance Page (signposts based on week type)
+  const renderGuidanceStep = () => {
+    const guidance = getWeekGuidance()
+    if (!guidance) return null
+
+    return (
+      <div className="planning-step guidance-step">
+        <div className="guidance-header">
+          <span className="guidance-emoji">{guidance.emoji}</span>
+          <h2>{guidance.title}</h2>
+        </div>
+        <p className="step-subtitle">{guidance.intro}</p>
+
+        <div className="signpost-list">
+          <h3 className="signpost-heading">Where to focus in the Challenge:</h3>
+          {guidance.signposts.map((signpost, idx) => (
+            <div key={idx} className="signpost-card">
+              <span className="signpost-icon">{signpost.icon}</span>
+              <div className="signpost-content">
+                <span className="signpost-label">{signpost.label}</span>
+                <span className="signpost-desc">{signpost.desc}</span>
+              </div>
+              <span className="signpost-arrow">→</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="guidance-tip">
+          <span className="tip-icon">💡</span>
+          <span className="tip-text">{guidance.tip}</span>
+        </div>
+      </div>
+    )
   }
 
   // Render Step 1: Group Selection
@@ -635,30 +1058,85 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   )
 
   // Render Step 2: Week Type Selection
-  const renderWeekTypeSelection = () => (
-    <div className="planning-step week-type-step">
-      <h2>What kind of week is this?</h2>
-      <p className="step-subtitle">Set your intention for the week ahead</p>
+  const renderWeekTypeSelection = () => {
+    const focusProject = projects.find(p => p.id === focusProjectId)
+    const focusStageInfo = focusProject ? getStageInfo(focusProject.current_stage) : null
 
-      <div className="week-type-grid">
-        {WEEK_TYPES.map(type => (
-          <button
-            key={type.id}
-            className={`week-type-card ${weekType === type.id ? 'selected' : ''}`}
-            onClick={() => setWeekType(type.id)}
-            style={{
-              '--type-color': type.color,
-              borderColor: weekType === type.id ? type.color : undefined
-            }}
-          >
-            <span className="type-icon">{type.icon}</span>
-            <span className="type-label">{type.label}</span>
-            <span className="type-desc">{type.description}</span>
-          </button>
-        ))}
+    return (
+      <div className="planning-step week-type-step">
+        <h2>What kind of week is this?</h2>
+        <p className="step-subtitle">Set your intention for the week ahead</p>
+
+        {/* Project Focus Dropdown */}
+        {projects.length > 0 && (
+          <div className="project-focus-section">
+            <label>Project focus this week:</label>
+            <select
+              className="project-dropdown"
+              value={focusProjectId || ''}
+              onChange={(e) => setFocusProjectId(e.target.value)}
+              style={{
+                display: 'block',
+                position: 'static',
+                width: '100%',
+                minHeight: '52px',
+                padding: '14px 44px 14px 16px',
+                margin: '0 0 8px 0',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                border: '2px solid rgba(255, 255, 255, 0.25)',
+                borderRadius: '12px',
+                color: 'white',
+                fontSize: '1rem',
+                fontWeight: '500',
+                fontFamily: 'inherit',
+                lineHeight: '1.4',
+                cursor: 'pointer',
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+                appearance: 'none',
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 14px center',
+                boxSizing: 'border-box'
+              }}
+            >
+              {projects.map(project => {
+                const stageInfo = getStageInfo(project.current_stage)
+                return (
+                  <option key={project.id} value={project.id}>
+                    {stageInfo.icon} {project.name} - {stageInfo.name}
+                  </option>
+                )
+              })}
+            </select>
+            {focusStageInfo && (
+              <p className="focus-stage-hint">
+                Currently in {focusStageInfo.name}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="week-type-grid">
+          {WEEK_TYPES.map(type => (
+            <button
+              key={type.id}
+              className={`week-type-card ${weekType === type.id ? 'selected' : ''}`}
+              onClick={() => setWeekType(type.id)}
+              style={{
+                '--type-color': type.color,
+                borderColor: weekType === type.id ? type.color : undefined
+              }}
+            >
+              <span className="type-icon">{type.icon}</span>
+              <span className="type-label">{type.label}</span>
+              <span className="type-desc">{type.description}</span>
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   // Render Step 2: Foundation Check (conditional)
   const renderFoundationCheck = () => (
@@ -1082,33 +1560,43 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
               </div>
             )}
 
-            {/* Generate button */}
+            {/* Action buttons - Write Your Own + Generate */}
             {selectedSourceItem && selectedVisibilityLayer && (
-              <button
-                className="generate-challenge-btn"
-                onClick={handleGenerateChallenge}
-                disabled={generatingChallenge}
-              >
-                {generatingChallenge ? (
-                  <>
-                    <span className="generating-spinner" />
-                    Generating your challenge...
-                  </>
-                ) : (
-                  <>✨ Generate My Challenge</>
-                )}
-              </button>
+              <div className="groan-action-buttons">
+                <button
+                  className="write-own-btn"
+                  onClick={() => setShowCustomGroan(true)}
+                >
+                  ✏️ Write Your Own
+                </button>
+                <button
+                  className="generate-challenge-btn"
+                  onClick={handleGenerateChallenge}
+                  disabled={generatingChallenge}
+                >
+                  {generatingChallenge ? (
+                    <>
+                      <span className="generating-spinner" />
+                      Generating your challenge...
+                    </>
+                  ) : (
+                    <>✨ Generate My Challenge</>
+                  )}
+                </button>
+              </div>
             )}
 
-            {/* Custom groan fallback */}
-            <div className="custom-groan-toggle">
-              <button
-                className="toggle-custom-btn"
-                onClick={() => setShowCustomGroan(!showCustomGroan)}
-              >
-                {showCustomGroan ? 'Use Matrix Selection' : 'Or write your own groan'}
-              </button>
-            </div>
+            {/* Show toggle back to matrix when in custom mode */}
+            {showCustomGroan && (
+              <div className="custom-groan-toggle">
+                <button
+                  className="toggle-custom-btn"
+                  onClick={() => setShowCustomGroan(false)}
+                >
+                  ← Back to Matrix Selection
+                </button>
+              </div>
+            )}
 
             {showCustomGroan && (
               <div className="groan-input-section">
@@ -1243,13 +1731,15 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     </div>
   )
 
-  // Render Step 6: Summary
+  // Render Step: Summary
   const renderSummary = () => {
     const selectedType = WEEK_TYPES.find(t => t.id === weekType)
     const selectedRoutines = MORNING_ROUTINES.filter(r => morningRoutine.includes(r.id))
     const selectedRelease = RELEASE_PRACTICES.find(p => p.id === bigReleasePractice)
-    const groanDayLabel = DAYS.find(d => d.id === groanDay)?.label
     const releaseDayLabel = DAYS.find(d => d.id === bigReleaseDay)?.label
+    const focusProject = projects.find(p => p.id === focusProjectId)
+    const focusStageInfo = focusProject ? getStageInfo(focusProject.current_stage) : null
+    const selectedPriorityDetails = QUEST_PRIORITIES.filter(p => selectedPriorities.includes(p.id))
 
     return (
       <div className="planning-step summary-step">
@@ -1266,19 +1756,40 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
             </span>
           </div>
 
+          {/* Project Focus */}
+          {focusProject && (
+            <div className="summary-section">
+              <span className="section-icon">{focusStageInfo?.icon || '📁'}</span>
+              <div className="section-content">
+                <strong>Project Focus</strong>
+                <p>{focusProject.name} - {focusStageInfo?.name}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Selected Priorities */}
+          {selectedPriorityDetails.length > 0 && (
+            <div className="summary-section summary-priorities">
+              <span className="section-icon">🎯</span>
+              <div className="section-content">
+                <strong>Quest Priorities ({selectedPriorityDetails.length})</strong>
+                <div className="summary-priority-chips">
+                  {selectedPriorityDetails.map(priority => (
+                    <span key={priority.id} className="summary-priority-chip">
+                      <span className="chip-icon">{priority.icon}</span>
+                      {priority.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="summary-section">
             <span className="section-icon">🌅</span>
             <div className="section-content">
               <strong>Morning Routine</strong>
               <p>{selectedRoutines.map(r => r.label).join(' + ') || 'None selected'}</p>
-            </div>
-          </div>
-
-          <div className="summary-section">
-            <span className="section-icon">🎯</span>
-            <div className="section-content">
-              <strong>Weekly Groan ({groanDayLabel || 'TBD'})</strong>
-              <p>"{groanDescription || 'Not set'}"</p>
             </div>
           </div>
 
@@ -1309,21 +1820,52 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   }
 
   // Render current step
+  // Flow: 1.Review → 2.WeekType → 3.Guidance → 4.Foundation? → 5.Morning → 6.Commits → 7.Group → 8.Summary
   const renderStep = () => {
     switch (step) {
-      case 1: return renderWeekTypeSelection()
-      case 2: return showFoundationStep ? renderFoundationCheck() : renderMorningRoutine()
-      case 3: return showFoundationStep ? renderMorningRoutine() : renderGroanCarousel()
-      case 4: return showFoundationStep ? renderGroanCarousel() : renderConditionalCommitments()
-      case 5: return showFoundationStep ? renderConditionalCommitments() : renderGroupSelection()
-      case 6: return showFoundationStep ? renderGroupSelection() : renderSummary()
-      case 7: return renderSummary()
+      case 1: return renderWeeklyReview()
+      case 2: return renderWeekTypeSelection()
+      case 3: return renderGuidanceStep()
+      case 4: return showFoundationStep ? renderFoundationCheck() : renderMorningRoutine()
+      case 5: return showFoundationStep ? renderMorningRoutine() : renderConditionalCommitments()
+      case 6: return showFoundationStep ? renderConditionalCommitments() : renderGroupSelection()
+      case 7: return showFoundationStep ? renderGroupSelection() : renderSummary()
+      case 8: return renderSummary()
       default: return null
     }
   }
 
   // Determine if we're on the summary step
-  const isSummaryStep = showFoundationStep ? step === 7 : step === 6
+  const isSummaryStep = showFoundationStep ? step === 8 : step === 7
+
+  // If no projects and done loading, show empty state prompting Flow Finder
+  if (!loadingProjects && projects.length === 0) {
+    return (
+      <div className="weekly-planning-flow">
+        <div className="planning-empty-state">
+          <span className="empty-icon">🎯</span>
+          <h2>Create Your First Project</h2>
+          <p>
+            Before planning your week, let's discover what makes you unique.
+            Complete the Flow Finder to uncover your skills, the problems you solve,
+            and who you're meant to serve.
+          </p>
+          <button
+            className="primary-btn"
+            onClick={() => navigate('/nikigai/skills')}
+          >
+            Start Flow Finder →
+          </button>
+          <button
+            className="secondary-btn"
+            onClick={() => navigate('/me')}
+          >
+            ← Back to Home
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={`weekly-planning-flow ${weekType ? `week-${weekType}` : ''}`}>
@@ -1338,36 +1880,36 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
         <span className="progress-text">Step {step} of {getTotalSteps()}</span>
       </div>
 
-      {/* Step content */}
+      {/* Step content with navigation inside (scrolls together) */}
       <div className="planning-content">
         {renderStep()}
-      </div>
 
-      {/* Navigation */}
-      <div className="planning-navigation">
-        {step > 1 && (
-          <button className="nav-btn back" onClick={handleBack}>
-            ← Back
-          </button>
-        )}
+        {/* Navigation - inside content so it scrolls with the page */}
+        <div className="planning-navigation">
+          {step > 1 && (
+            <button className="nav-btn back" onClick={handleBack}>
+              ← Back
+            </button>
+          )}
 
-        {!isSummaryStep ? (
-          <button
-            className="nav-btn next"
-            onClick={handleNext}
-            disabled={!canContinue()}
-          >
-            {((showFoundationStep && step === 4) || (!showFoundationStep && step === 3)) && groanSlide < GROAN_SLIDES.length - 1 ? 'Next →' : 'Continue →'}
-          </button>
-        ) : (
-          <button
-            className="nav-btn complete"
-            onClick={handleSave}
-            disabled={saving}
-          >
-            {saving ? 'Saving...' : 'Start Week →'}
-          </button>
-        )}
+          {!isSummaryStep ? (
+            <button
+              className="nav-btn next"
+              onClick={handleNext}
+              disabled={!canContinue()}
+            >
+              Continue →
+            </button>
+          ) : (
+            <button
+              className="nav-btn complete"
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? 'Saving...' : 'Start Week →'}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

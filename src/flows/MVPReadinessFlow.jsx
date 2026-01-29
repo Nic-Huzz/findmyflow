@@ -273,7 +273,7 @@ function MVPReadinessFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'mvp_readiness',
-          pointsEarned: 25
+          pointsEarned: 6
         })
       } catch (e) {
         console.warn('Quest completion failed:', e)
@@ -801,7 +801,7 @@ function MVPReadinessFlow() {
                 onClick={handleSaveResults}
                 disabled={isLoading}
               >
-                {isLoading ? 'Saving...' : 'Save & Complete Quest (+25 pts)'}
+                {isLoading ? 'Saving...' : 'Save & Complete Quest (+6 pts)'}
               </button>
               <p style={{ marginTop: '12px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>
                 Saves your testing brief and completes this quest
@@ -824,7 +824,7 @@ function MVPReadinessFlow() {
           <div className="success-icon">✓</div>
           <h2>Ready to Test, {userName}!</h2>
           <p style={{ marginBottom: '8px' }}>Your testing brief is saved.</p>
-          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+25 points earned!</p>
+          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+6 points earned!</p>
 
           <div className="success-reminder">
             <p><strong>Remember:</strong></p>

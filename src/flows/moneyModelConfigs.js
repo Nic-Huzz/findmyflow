@@ -11,6 +11,7 @@
 export const STAGES = {
   WELCOME: 'welcome',
   TIME_CHECK: 'time_check',
+  PRE_ACTION: 'pre_action',
   Q1: 'q1',
   Q2: 'q2',
   Q3: 'q3',
@@ -79,9 +80,15 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'attraction_offer',
     flowVersion: 'attraction-offer-v1',
 
+    // PRE-ACTION config
+    preActionConfig: {
+      question: 'How do you feel about creating your attraction offer?',
+      actionType: 'create_attraction_offer'
+    },
+
     // Quest/Challenge integration - must match JSON flow_id
     challengeFlowId: 'attraction_offer',
-    pointsEarned: 18,
+    pointsEarned: 5,
 
     // Stage configuration
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
@@ -117,8 +124,14 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'upsell_flow',
     flowVersion: 'upsell-v1',
 
+    // PRE-ACTION config
+    preActionConfig: {
+      question: 'How do you feel about creating your upsell offer?',
+      actionType: 'create_upsell_offer'
+    },
+
     challengeFlowId: 'upsell_offer',
-    pointsEarned: 35,
+    pointsEarned: 8,
 
     stageGroups: STAGE_GROUP_TEMPLATES.strategyExecution,
 
@@ -151,8 +164,14 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'downsell_flow',
     flowVersion: 'downsell-v1',
 
+    // PRE-ACTION config
+    preActionConfig: {
+      question: 'How do you feel about creating your downsell offer?',
+      actionType: 'create_downsell_offer'
+    },
+
     challengeFlowId: 'downsell_offer',
-    pointsEarned: 35,
+    pointsEarned: 8,
 
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
 
@@ -185,8 +204,14 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: 'continuity_flow',
     flowVersion: 'continuity-v1',
 
+    // PRE-ACTION config
+    preActionConfig: {
+      question: 'How do you feel about creating your continuity offer?',
+      actionType: 'create_continuity_offer'
+    },
+
     challengeFlowId: 'continuity_offer',
-    pointsEarned: 35,
+    pointsEarned: 8,
 
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
 
@@ -219,6 +244,12 @@ export const MONEY_MODEL_CONFIGS = {
     flowType: '100m_leads',
     flowVersion: 'leads-strategy-v1',
 
+    // PRE-ACTION config
+    preActionConfig: {
+      question: 'How do you feel about implementing your lead generation strategy?',
+      actionType: 'implement_leads_strategy'
+    },
+
     // Database column names (table uses strategy_ prefix)
     dbColumns: {
       recommendedId: 'recommended_strategy_id',
@@ -228,7 +259,7 @@ export const MONEY_MODEL_CONFIGS = {
 
     // For challenge quest completion - must match JSON flow_id
     challengeFlowId: 'leads_strategy',
-    pointsEarned: 20,
+    pointsEarned: 5,
 
     stageGroups: STAGE_GROUP_TEMPLATES.resourcesSkills,
 
@@ -269,7 +300,7 @@ export const MONEY_MODEL_CONFIGS = {
     },
 
     challengeFlowId: 'lead_magnet',
-    pointsEarned: 35,
+    pointsEarned: 8,
 
     stageGroups: STAGE_GROUP_TEMPLATES.resourcesSkills,
 

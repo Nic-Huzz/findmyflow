@@ -1,0 +1,286 @@
+/**
+ * PreActionModal.css - Styles for PRE-ACTION resistance capture modal
+ */
+
+.pre-action-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: preActionFadeIn 0.3s ease;
+}
+
+@keyframes preActionFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pre-action-modal {
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: preActionSlideUp 0.4s ease;
+}
+
+@keyframes preActionSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.pre-action-modal-header {
+  padding: 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pre-action-modal-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.pre-action-modal-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: white;
+}
+
+.pre-action-modal-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+.pre-action-modal-content {
+  padding: 1.5rem;
+}
+
+.pre-action-modal-step h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 1rem;
+  text-align: center;
+}
+
+.pre-action-modal-hint {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.pre-action-modal-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.pre-action-modal-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pre-action-modal-option:hover {
+  transform: translateY(-2px);
+}
+
+.pre-action-modal-option.positive:hover {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.pre-action-modal-option.negative:hover {
+  border-color: #f97316;
+  background: rgba(249, 115, 22, 0.15);
+}
+
+.pre-action-modal-option .option-icon {
+  font-size: 1.75rem;
+}
+
+.pre-action-modal-option .option-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: white;
+}
+
+.pre-action-modal-option .option-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pre-action-modal-skip {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.pre-action-modal-skip:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pre-action-modal-layers,
+.pre-action-modal-voices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pre-action-modal-layer,
+.pre-action-modal-voice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.pre-action-modal-layer:hover,
+.pre-action-modal-voice:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.5);
+  transform: translateX(4px);
+}
+
+.pre-action-modal-layer .layer-icon,
+.pre-action-modal-voice .voice-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.pre-action-modal-layer .layer-text,
+.pre-action-modal-voice .voice-text {
+  flex: 1;
+}
+
+.pre-action-modal-layer .layer-label,
+.pre-action-modal-voice .voice-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.pre-action-modal-layer .layer-desc,
+.pre-action-modal-voice .voice-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.35;
+}
+
+.pre-action-modal-step.essence-step {
+  text-align: center;
+}
+
+.pre-action-modal-step .essence-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.pre-action-modal-step .essence-message {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(249, 115, 22, 0.1));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.pre-action-modal-step .essence-message p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.pre-action-modal-step .essence-affirmation {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.pre-action-modal-step .essence-affirmation p {
+  margin: 0;
+}
+
+.pre-action-modal-proceed {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pre-action-modal-proceed:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+}
+
+@media (max-width: 480px) {
+  .pre-action-modal-options {
+    grid-template-columns: 1fr;
+  }
+
+  .pre-action-modal {
+    border-radius: 16px;
+  }
+
+  .pre-action-modal-header h2 {
+    font-size: 1.2rem;
+  }
+}

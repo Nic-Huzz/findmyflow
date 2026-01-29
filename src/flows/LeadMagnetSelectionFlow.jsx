@@ -1,5 +1,5 @@
 /**
- * LeadMagnetSelectionFlow - Lead Magnet Selection (+30 pts)
+ * LeadMagnetSelectionFlow - Lead Magnet Selection (+8 pts)
  *
  * Helps users choose ONE lead magnet type for their entire offer.
  *
@@ -357,7 +357,7 @@ function LeadMagnetSelectionFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'lead_magnet_selection',
-          pointsEarned: 30
+          pointsEarned: 8
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)
@@ -735,7 +735,7 @@ function LeadMagnetSelectionFlow() {
             disabled={isLoading || !selectedType}
             style={{ marginTop: '24px' }}
           >
-            {isLoading ? 'Saving...' : 'Save & Complete (+30 pts)'}
+            {isLoading ? 'Saving...' : 'Save & Complete (+8 pts)'}
           </button>
 
           <BackButton onClick={() => {
@@ -758,7 +758,7 @@ function LeadMagnetSelectionFlow() {
           <div className="success-icon">{finalType?.icon || '🎁'}</div>
           <h2>Lead Magnet Selected, {userName}!</h2>
           <p>You've chosen your lead magnet strategy.</p>
-          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+30 points earned!</p>
+          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+8 points earned!</p>
 
           <div className="summary-card-single">
             <span className="summary-icon">{finalType?.icon}</span>

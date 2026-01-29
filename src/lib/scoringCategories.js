@@ -107,6 +107,56 @@ export const formatScoresForDisplay = (scores) => {
  */
 export const SCORING_CATEGORY_KEYS = ['business', 'healing', 'courage']
 
+/**
+ * Sync points to the leaderboard scoring system
+ *
+ * This is a NON-BLOCKING helper - failures are logged but don't throw.
+ * Use this whenever points are awarded to ensure they appear on leaderboards.
+ *
+ * @param {object} supabase - Supabase client instance
+ * @param {object} params - Score parameters
+ * @param {string} params.userId - User ID
+ * @param {string} params.questCategory - Quest category (e.g., 'Business', 'Healing', 'Groans')
+ * @param {number} params.points - Points to add
+ * @param {string|null} params.projectId - Optional project ID (null for user-level)
+ * @param {string} params.source - Source for logging (e.g., 'tab_bonus', 'flow_finder')
+ * @returns {Promise<{success: boolean, error?: string}>}
+ */
+export const syncScoreToLeaderboard = async (supabase, {
+  userId,
+  questCategory,
+  points,
+  projectId = null,
+  source = 'unknown'
+}) => {
+  if (!userId || !points || points <= 0) {
+    console.warn(`[syncScore] Invalid params: userId=${userId}, points=${points}`)
+    return { success: false, error: 'Invalid parameters' }
+  }
+
+  const scoringCategory = getScoringCategory(questCategory)
+
+  try {
+    const { data, error } = await supabase.rpc('increment_scores', {
+      p_user_id: userId,
+      p_project_id: projectId,
+      p_category: scoringCategory,
+      p_points: points
+    })
+
+    if (error) {
+      console.error(`[syncScore] RPC error (${source}):`, error)
+      return { success: false, error: error.message }
+    }
+
+    console.log(`[syncScore] ✓ ${points}pts → ${scoringCategory} (${source})`)
+    return { success: true, data }
+  } catch (err) {
+    console.error(`[syncScore] Exception (${source}):`, err)
+    return { success: false, error: err.message }
+  }
+}
+
 export default {
   SCORING_CATEGORIES,
   getScoringCategory,
@@ -114,5 +164,6 @@ export default {
   getCategoryDisplay,
   calculateTotalScore,
   formatScoresForDisplay,
-  SCORING_CATEGORY_KEYS
+  SCORING_CATEGORY_KEYS,
+  syncScoreToLeaderboard
 }

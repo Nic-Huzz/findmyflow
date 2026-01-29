@@ -246,7 +246,7 @@ function FeedbackAnalysisFlow() {
         await completeFlowQuest({
           userId: user.id,
           flowId: 'feedback_analysis',
-          pointsEarned: 25
+          pointsEarned: 6
         })
       } catch (e) {
         console.warn('Quest completion failed:', e)
@@ -618,7 +618,7 @@ function FeedbackAnalysisFlow() {
                 onClick={handleSaveResults}
                 disabled={isLoading}
               >
-                {isLoading ? 'Saving...' : 'Save & Complete (+25 pts)'}
+                {isLoading ? 'Saving...' : 'Save & Complete (+6 pts)'}
               </button>
               <p style={{ marginTop: '12px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.5)' }}>
                 Saves your analysis and completes this quest
@@ -641,7 +641,7 @@ function FeedbackAnalysisFlow() {
           <div className="success-icon">✓</div>
           <h2>Analysis Complete, {userName}!</h2>
           <p style={{ marginBottom: '8px' }}>Your feedback analysis is saved.</p>
-          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+25 points earned!</p>
+          <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+6 points earned!</p>
 
           <div className="success-reminder">
             <p><strong>Now it's time to act:</strong></p>

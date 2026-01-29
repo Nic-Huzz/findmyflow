@@ -1,5 +1,5 @@
 /**
- * FunnelBaselineFlow.jsx - Establish Funnel Baseline (+15 pts)
+ * FunnelBaselineFlow.jsx - Establish Funnel Baseline (+4 pts)
  *
  * Weekly tracking flow that guides users through entering their funnel metrics.
  * Creates a baseline record for week-over-week comparison.
@@ -199,7 +199,7 @@ function FunnelBaselineFlow() {
       await completeFlowQuest({
         userId: user.id,
         flowId: 'funnel_baseline',
-        pointsEarned: 15
+        pointsEarned: 4
       })
 
       // Sync CRM data to keep everything in sync
@@ -704,7 +704,7 @@ function FunnelBaselineFlow() {
         <div className="fb-success">
           <div className="fb-success-icon">📊</div>
           <h1>{isFirstBaseline ? 'Baseline Established!' : 'Funnel Updated!'}</h1>
-          <p className="fb-success-points">+15 points earned</p>
+          <p className="fb-success-points">+4 points earned</p>
 
           <div className="fb-success-summary">
             <p>

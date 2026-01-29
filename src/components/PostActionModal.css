@@ -1,0 +1,162 @@
+/**
+ * PostActionModal.css - Styles for 3% reflection modal
+ */
+
+.post-action-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: postActionFadeIn 0.3s ease;
+}
+
+@keyframes postActionFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.post-action-modal {
+  background: white;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: postActionSlideUp 0.4s ease;
+}
+
+@keyframes postActionSlideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.post-action-header {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: 24px 24px 0 0;
+}
+
+.post-action-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.post-action-header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.post-action-subtitle {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.post-action-content {
+  padding: 1.5rem;
+}
+
+.post-action-question {
+  margin-bottom: 1.25rem;
+}
+
+.post-action-question.insight {
+  margin-bottom: 0;
+}
+
+.post-action-question label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.post-action-question textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+.post-action-question textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.post-action-question textarea::placeholder {
+  color: #9ca3af;
+}
+
+.post-action-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.post-action-actions .skip-btn {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e9ecef;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.post-action-actions .skip-btn:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+}
+
+.post-action-actions .continue-btn,
+.post-action-actions .save-btn {
+  flex: 2;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.post-action-actions .continue-btn:hover,
+.post-action-actions .save-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.post-action-actions .continue-btn:disabled,
+.post-action-actions .save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

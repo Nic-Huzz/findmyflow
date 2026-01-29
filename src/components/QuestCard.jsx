@@ -417,6 +417,10 @@ function QuestCard({
               responseCount={validationResponseCounts[quest.flow_stage] || 0}
               onComplete={(quest, data, e) => onComplete(quest, data, e)}
             />
+          ) : quest.inputType === 'offer_checklist' ? (
+            <Link to={quest.actionLink} className="quest-checklist-link">
+              {quest.actionLinkText || 'Open Checklist'}
+            </Link>
           ) : quest.inputType === 'progress_dropdown' ? (
             <>
               <select

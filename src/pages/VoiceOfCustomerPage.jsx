@@ -114,11 +114,17 @@ function VoiceOfCustomerPage() {
       setCopiedId(id)
       setTimeout(() => setCopiedId(null), 2000)
 
-      // Track usage
+      // Track usage - fetch current value then increment
+      const { data: current } = await supabase
+        .from('voice_of_customer')
+        .select('times_used')
+        .eq('id', id)
+        .single()
+
       await supabase
         .from('voice_of_customer')
         .update({
-          times_used: supabase.rpc('increment', { x: 1 }),
+          times_used: (current?.times_used || 0) + 1,
           last_used_at: new Date().toISOString()
         })
         .eq('id', id)

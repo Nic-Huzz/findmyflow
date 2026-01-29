@@ -22,6 +22,7 @@ export default function ContentPlanSummary({
   const phases = Object.keys(groupedByPhase)
   const totalItems = items.length
   const itemsWithContext = items.filter(i => i.context).length
+  const itemsWithPostDay = items.filter(i => i.postDay).length
 
   return (
     <div className="content-plan-summary">
@@ -70,7 +71,12 @@ export default function ContentPlanSummary({
                     ) : (
                       <p className="item-no-context">No context added</p>
                     )}
-                    <span className="edit-hint">Tap to edit</span>
+                    <div className="item-footer">
+                      {item.postDay && (
+                        <span className="post-day-badge">📅 {item.postDay}</span>
+                      )}
+                      <span className="edit-hint">Tap to edit</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -92,8 +98,8 @@ export default function ContentPlanSummary({
         </div>
         <div className="stat-divider" />
         <div className="stat-item">
-          <span className="stat-value">{phases.length}</span>
-          <span className="stat-label">Phases</span>
+          <span className="stat-value">{itemsWithPostDay}</span>
+          <span className="stat-label">Scheduled</span>
         </div>
       </div>
 

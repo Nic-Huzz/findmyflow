@@ -221,6 +221,17 @@
   color: var(--text-primary, #212529);
 }
 
+.content-checklist .item-day-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--purple, #5e17eb);
+  background: color-mix(in srgb, var(--purple, #5e17eb) 10%, white);
+  padding: 3px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
 .content-checklist .item-context {
   font-size: 0.8rem;
   color: var(--text-secondary, #6c757d);

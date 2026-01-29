@@ -69,6 +69,14 @@ export default function WeeklyPlanningSession({ onComplete, onSkip }) {
   const [inputModes, setInputModes] = useState({}) // taskId -> 'type' | 'speak'
   const [loadingTasks, setLoadingTasks] = useState(false)
 
+  // Hide bottom toolbar during planning flow
+  useEffect(() => {
+    document.body.classList.add('hide-toolbar')
+    return () => {
+      document.body.classList.remove('hide-toolbar')
+    }
+  }, [])
+
   // Load last week's data and current strategy
   useEffect(() => {
     if (user?.id) {

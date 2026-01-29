@@ -30,22 +30,62 @@ import {
   PERSONA_SEGMENTS,
   JOURNEY_STAGES
 } from '../lib/wheelTaxonomy'
+import {
+  PERSONA_DISPLAY,
+  WEALTH_LADDER_DISPLAY,
+  EMPHASIS_CONFIG
+} from '../lib/onboardingV2'
 import './LibraryOfAnswers.css'
+
+// Money model tier display info
+const TIER_DISPLAY = {
+  attraction: { label: 'Attraction', icon: '🧲', color: '#10B981' },
+  core: { label: 'Core', icon: '⭐', color: '#F59E0B' },
+  upsell: { label: 'Upsell', icon: '📈', color: '#8B5CF6' },
+  downsell: { label: 'Downsell', icon: '📉', color: '#6366F1' },
+  continuity: { label: 'Continuity', icon: '🔄', color: '#EC4899' }
+}
+
+// Product type display info
+const PRODUCT_TYPES = {
+  custom_service: { label: '1:1 Service', icon: '👤' },
+  packaged_service: { label: 'Package', icon: '📦' },
+  live_group: { label: 'Live Group', icon: '🎯' },
+  automated_group: { label: 'Course', icon: '📚' },
+  custom_agency: { label: 'Agency', icon: '🏢' },
+  managed_service: { label: 'Managed Service', icon: '⚙️' },
+  digital_product: { label: 'Digital Product', icon: '💾' }
+}
 
 const SECTIONS = {
   FLOW_FINDER: 'flow_finder',
-  MONEY_MODEL: 'money_model',
-  NERVOUS_SYSTEM: 'nervous_system',
-  HEALING_COMPASS: 'healing_compass'
+  BUSINESS: 'business',
+  HEALING: 'healing'
 }
+
+// Stage configuration for Business tab dropdown
+const BUSINESS_STAGES = [
+  { id: 1, name: 'Validation', flows: ['persona_selection'] },
+  { id: 2, name: 'Product Creation', flows: ['100m_offer', 'lead_magnet_selection', 'product_selection'] },
+  { id: 3, name: 'Testing', flows: ['mvp_readiness', 'feedback_analysis'] },
+  { id: 4, name: 'Money Models', flows: ['attraction_offer', 'upsell_offer', 'downsell_offer', 'continuity_offer'] },
+  { id: 5, name: 'Offer Creation', flows: ['offer_builder_v2'] },
+  { id: 6, name: 'Campaign', flows: ['leads_strategy'] },
+  { id: 7, name: 'Launch', flows: [] },
+  { id: 8, name: 'Tracking', flows: ['income_calculator', 'funnel_calculator'] }
+]
 
 function LibraryOfAnswers() {
   const { user } = useAuth()
   const [activeSection, setActiveSection] = useState(SECTIONS.FLOW_FINDER)
+  const [selectedBusinessStage, setSelectedBusinessStage] = useState(4) // Default to Money Models
   const [loading, setLoading] = useState(true)
   const [expandedItem, setExpandedItem] = useState(null)
   const [showCoverageMatrix, setShowCoverageMatrix] = useState(false)
   const [showNicheSharpener, setShowNicheSharpener] = useState(false)
+
+  // User profile data (for hero section)
+  const [userProfile, setUserProfile] = useState(null)
 
   // Project filter
   const [projects, setProjects] = useState([])
@@ -63,6 +103,9 @@ function LibraryOfAnswers() {
   const [downsells, setDownsells] = useState([])
   const [continuity, setContinuity] = useState([])
   const [leadMagnets, setLeadMagnets] = useState([])
+  const [products, setProducts] = useState([])
+  const [grandSlamOffer, setGrandSlamOffer] = useState(null)
+  const [userOfferSelections, setUserOfferSelections] = useState({}) // User's chosen offer types from quests
 
   // Nervous System data
   const [nervousSystemData, setNervousSystemData] = useState(null)
@@ -341,10 +384,11 @@ function LibraryOfAnswers() {
     return newLitCells
   }, [personaClusters])
 
-  // Fetch projects on mount
+  // Fetch projects and user profile on mount
   useEffect(() => {
     if (user?.id) {
       fetchProjects()
+      fetchUserProfile()
     }
   }, [user])
 
@@ -366,6 +410,22 @@ function LibraryOfAnswers() {
     setProjects(data || [])
   }
 
+  const fetchUserProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_stage_progress')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
+      if (!error && data) {
+        setUserProfile(data)
+      }
+    } catch (err) {
+      console.error('Error fetching user profile:', err)
+    }
+  }
+
   const fetchAllData = async () => {
     setLoading(true)
     try {
@@ -373,7 +433,8 @@ function LibraryOfAnswers() {
         fetchFlowFinderData(),
         fetchMoneyModelData(),
         fetchNervousSystemData(),
-        fetchHealingCompassData()
+        fetchHealingCompassData(),
+        fetchProducts()
       ])
     } catch (err) {
       console.error('Error fetching library data:', err)
@@ -423,8 +484,18 @@ function LibraryOfAnswers() {
   }
 
   const fetchMoneyModelData = async () => {
-    // Helper to build query with optional project filter
-    const buildQuery = (table) => {
+    // Helper to build query - NOTE: offer assessment tables don't have project_id
+    // so we fetch all user data regardless of project selection
+    const buildOfferQuery = (table) => {
+      return supabase
+        .from(table)
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+    }
+
+    // Helper for tables that DO have project_id
+    const buildProjectQuery = (table) => {
       let query = supabase
         .from(table)
         .select('*')
@@ -438,12 +509,32 @@ function LibraryOfAnswers() {
     }
 
     // Fetch all offer assessments in parallel
-    const [offersRes, upsellsRes, downsellsRes, continuityRes, leadMagnetsRes] = await Promise.all([
-      buildQuery('attraction_offer_assessments'),
-      buildQuery('upsell_assessments'),
-      buildQuery('downsell_assessments'),
-      buildQuery('continuity_assessments'),
-      buildQuery('lead_magnet_assessments')
+    // Note: offer assessment tables don't have project_id - they're user-level
+    const [offersRes, upsellsRes, downsellsRes, continuityRes, leadMagnetsRes, grandSlamRes, questSelectionsRes] = await Promise.all([
+      buildOfferQuery('attraction_offer_assessments'),
+      buildOfferQuery('upsell_assessments'),
+      buildOfferQuery('downsell_assessments'),
+      buildOfferQuery('continuity_assessments'),
+      buildOfferQuery('lead_magnet_assessments'),
+      supabase
+        .from('grand_slam_offers')
+        .select('chosen_product_id, chosen_product_name, chosen_product_data')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      // Fetch user's offer type selections from 7-day challenge quests
+      supabase
+        .from('quest_completions')
+        .select('quest_id, reflection_text')
+        .eq('user_id', user.id)
+        .in('quest_id', [
+          'milestone_decide_acquisition',
+          'milestone_decide_upsell',
+          'milestone_decide_downsell',
+          'milestone_decide_continuity'
+        ])
+        .order('completed_at', { ascending: false })
     ])
 
     setOffers(offersRes.data || [])
@@ -451,6 +542,49 @@ function LibraryOfAnswers() {
     setDownsells(downsellsRes.data || [])
     setContinuity(continuityRes.data || [])
     setLeadMagnets(leadMagnetsRes.data || [])
+    setGrandSlamOffer(grandSlamRes.data || null)
+
+    // Map quest selections to offer types
+    // reflection_text contains the label (e.g., "Classic Upsell") from dropdown
+    const selections = {}
+    if (questSelectionsRes.data) {
+      questSelectionsRes.data.forEach(q => {
+        if (q.quest_id === 'milestone_decide_acquisition') {
+          selections.attraction = q.reflection_text
+        } else if (q.quest_id === 'milestone_decide_upsell') {
+          selections.upsell = q.reflection_text
+        } else if (q.quest_id === 'milestone_decide_downsell') {
+          selections.downsell = q.reflection_text
+        } else if (q.quest_id === 'milestone_decide_continuity') {
+          selections.continuity = q.reflection_text
+        }
+      })
+    }
+    setUserOfferSelections(selections)
+  }
+
+  const fetchProducts = async () => {
+    try {
+      let query = supabase
+        .from('products')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .order('created_at', { ascending: true })
+
+      if (selectedProjectId !== 'all') {
+        query = query.eq('project_id', selectedProjectId)
+      }
+
+      const { data, error } = await query
+
+      if (!error) {
+        setProducts(data || [])
+      }
+    } catch (err) {
+      // Products table might not exist
+      console.warn('Products fetch error:', err)
+    }
   }
 
   const fetchNervousSystemData = async () => {
@@ -487,30 +621,154 @@ function LibraryOfAnswers() {
     setExpandedItem(expandedItem === id ? null : id)
   }
 
-  // Render cluster card
-  const renderClusterCard = (cluster) => {
-    const isExpanded = expandedItem === cluster.id
+  // Get display data for hero section
+  const persona = userProfile?.persona
+  const wealthLadder = userProfile?.wealth_ladder_rung
+  const emphasis = userProfile?.guidance_emphasis
+
+  const personaInfo = persona ? PERSONA_DISPLAY[persona] : null
+  const ladderInfo = wealthLadder ? WEALTH_LADDER_DISPLAY[wealthLadder] : null
+  const emphasisInfo = emphasis ? EMPHASIS_CONFIG[emphasis] : null
+
+  // Format price for display
+  const formatPrice = (price, priceType) => {
+    if (!price) return 'Price TBD'
+    const formatted = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0
+    }).format(price)
+
+    if (priceType === 'subscription') return `${formatted}/mo`
+    if (priceType === 'per_session') return `${formatted}/session`
+    return formatted
+  }
+
+  // Get product type info
+  const getProductTypeInfo = (productType) => {
+    return PRODUCT_TYPES[productType] || { label: productType, icon: '📦' }
+  }
+
+  // Get tier info
+  const getTierInfo = (tier) => {
+    return TIER_DISPLAY[tier] || { label: tier, icon: '📦', color: '#6B7280' }
+  }
+
+  // Render Hero Section
+  const renderHeroSection = () => {
+    // Only show if we have some profile data
+    if (!personaInfo && !ladderInfo && !emphasisInfo) return null
 
     return (
-      <div key={cluster.id} className={`library-card ${isExpanded ? 'expanded' : ''}`}>
-        <div className="card-header" onClick={() => toggleExpand(cluster.id)}>
-          <h4>{cluster.cluster_label}</h4>
-          <span className="expand-icon">{isExpanded ? '−' : '+'}</span>
-        </div>
-        {isExpanded && (
-          <div className="card-content">
-            <p className="cluster-insight">{cluster.insight || 'No insight generated yet'}</p>
-            {cluster.items && cluster.items.length > 0 && (
-              <div className="cluster-items">
-                <strong>Items:</strong>
-                <ul>
-                  {cluster.items.map((item, idx) => (
-                    <li key={idx}>{typeof item === 'string' ? item : item.text || item.label}</li>
-                  ))}
-                </ul>
+      <section className="library-hero-section">
+        {personaInfo && (
+          <div className="hero-persona-badge">
+            <span className="hero-persona-icon">{personaInfo.icon}</span>
+            <span className="hero-persona-name">{personaInfo.name}</span>
+          </div>
+        )}
+
+        {ladderInfo && (
+          <div className="hero-ladder-position">
+            <span className="hero-ladder-icon">{ladderInfo.icon}</span>
+            <div className="hero-ladder-info">
+              <span className="hero-ladder-label">{ladderInfo.label}</span>
+              <span className="hero-ladder-description">{ladderInfo.description}</span>
+            </div>
+          </div>
+        )}
+
+        {emphasisInfo && (
+          <div className="hero-emphasis-badge">
+            <span className="hero-emphasis-label">Focus: {emphasisInfo.label}</span>
+          </div>
+        )}
+      </section>
+    )
+  }
+
+  // Render Products Section (for Money Model tab)
+  const renderProductsSection = () => {
+    if (products.length === 0) return null
+
+    // Group products by tier
+    const productsByTier = products.reduce((acc, product) => {
+      const tier = product.money_model_tier || 'other'
+      if (!acc[tier]) acc[tier] = []
+      acc[tier].push(product)
+      return acc
+    }, {})
+
+    const tierOrder = ['attraction', 'core', 'upsell', 'downsell', 'continuity', 'other']
+
+    return (
+      <div className="subsection products-subsection">
+        <h3>Product Suite</h3>
+        <div className="products-ladder">
+          {tierOrder.map(tier => {
+            const tierProducts = productsByTier[tier]
+            if (!tierProducts || tierProducts.length === 0) return null
+
+            const tierInfo = getTierInfo(tier)
+
+            return (
+              <div key={tier} className="tier-group">
+                <div
+                  className="tier-header"
+                  style={{ borderLeftColor: tierInfo.color }}
+                >
+                  <span className="tier-icon">{tierInfo.icon}</span>
+                  <span className="tier-label">{tierInfo.label}</span>
+                </div>
+                <div className="tier-products">
+                  {tierProducts.map(product => {
+                    const typeInfo = getProductTypeInfo(product.product_type)
+                    return (
+                      <div key={product.id} className="product-card">
+                        <div className="product-main">
+                          <span className="product-type-icon">{typeInfo.icon}</span>
+                          <div className="product-info">
+                            <span className="product-name">{product.name}</span>
+                            <span className="product-type">{typeInfo.label}</span>
+                          </div>
+                        </div>
+                        <span className="product-price">
+                          {formatPrice(product.price_amount, product.price_type)}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  // Render cluster card (report-card style - always visible)
+  const renderClusterCard = (cluster) => {
+    const items = cluster.items || []
+    const visibleItems = items.slice(0, 3)
+    const remainingCount = items.length - 3
+
+    return (
+      <div key={cluster.id} className="cluster-card-v2">
+        <h4 className="cluster-title">{cluster.cluster_label}</h4>
+        {cluster.insight && (
+          <p className="cluster-insight-v2">{cluster.insight}</p>
+        )}
+        {items.length > 0 && (
+          <div className="cluster-tags">
+            {visibleItems.map((item, idx) => (
+              <span key={idx} className="cluster-tag">
+                {typeof item === 'string' ? item : item.text || item.label}
+              </span>
+            ))}
+            {remainingCount > 0 && (
+              <span className="cluster-tag-more">+{remainingCount} more</span>
             )}
-            <div className="card-date">{formatDate(cluster.created_at)}</div>
           </div>
         )}
       </div>
@@ -713,207 +971,371 @@ function LibraryOfAnswers() {
     </div>
   )
 
-  // Render Money Model section
-  const renderMoneyModel = () => (
-    <div className="library-section">
-      {/* Project Filter - Only for Money Model since it's project-specific */}
-      {projects.length > 0 && (
-        <div className="project-filter">
-          <div className="project-filter-bubbles">
-            <button
-              className={`project-bubble ${selectedProjectId === 'all' ? 'active' : ''}`}
-              onClick={() => setSelectedProjectId('all')}
-            >
-              All Projects
-            </button>
-            {projects.map(project => (
+  // Route mapping for viewing results
+  const OFFER_ROUTES = {
+    attraction: '/attraction-offer',
+    upsell: '/upsell-offer',
+    downsell: '/downsell-offer',
+    continuity: '/continuity-offer',
+    lead_magnet: '/lead-magnet-selection'
+  }
+
+  // Render offer card (new style matching cluster cards)
+  const renderOfferCard = (offer, type = 'attraction') => {
+    const title = offer.offer_name || offer.recommended_offer_name || offer.lead_magnet_name || 'Untitled'
+    const description = offer.dream_outcome || offer.description || ''
+    const offerName = offer.recommended_offer_name // e.g., "Classic Upsell"
+    const confidence = offer.confidence_score
+    const resultsRoute = OFFER_ROUTES[type]
+    const createdAt = offer.created_at
+
+    // Check if user selected this offer type in the 7-day challenge
+    // userSelection stores the label (e.g., "Classic Upsell") from reflection_text
+    const userSelection = userOfferSelections[type]
+    const isChosen = userSelection && offerName && userSelection === offerName
+
+    // Build tags array - confidence, chosen (not date - that goes under title)
+    const tags = []
+    if (confidence) {
+      const confidencePercent = Math.round(confidence * 100)
+      tags.push({ label: `${confidencePercent}% match`, type: 'confidence' })
+    }
+    if (isChosen) {
+      tags.push({ label: 'Chosen', type: 'chosen' })
+    }
+
+    return (
+      <Link
+        key={offer.id}
+        to={`${resultsRoute}?results=true`}
+        className="offer-card-v2 offer-card-link"
+      >
+        <div className="offer-card-content">
+          <h4 className="offer-title">{title}</h4>
+          {createdAt && (
+            <span className="offer-date-subtitle">{formatDate(createdAt)}</span>
+          )}
+          {description && (
+            <p className="offer-description">{description}</p>
+          )}
+          {tags.length > 0 && (
+            <div className="offer-tags">
+              {tags.map((tag, idx) => (
+                <span key={idx} className={`offer-tag offer-tag-${tag.type}`}>
+                  {tag.label}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        <span className="offer-view-icon">→</span>
+      </Link>
+    )
+  }
+
+  // Render stage-specific content for Business tab
+  const renderStageContent = (stageId) => {
+    switch (stageId) {
+      case 1: // Validation
+        return (
+          <div className="subsection">
+            <h3>Persona Selection</h3>
+            <p className="empty-text">
+              Persona validation data appears in Flow Finder → Personas.{' '}
+              <Link to="/persona-selection">Complete Persona Selection</Link>
+            </p>
+          </div>
+        )
+
+      case 2: // Product Creation
+        return (
+          <>
+            {renderProductsSection()}
+            <div className="subsection">
+              <h3>Lead Magnets</h3>
+              {leadMagnets.length === 0 ? (
+                <p className="empty-text">No lead magnets created yet. <Link to="/lead-magnet-selection">Create Lead Magnet</Link></p>
+              ) : (
+                <div className="cards-grid">
+                  {leadMagnets.map(offer => renderOfferCard(offer, 'lead_magnet'))}
+                </div>
+              )}
+            </div>
+          </>
+        )
+
+      case 3: // Testing
+        return (
+          <div className="subsection">
+            <h3>Testing & Feedback</h3>
+            <p className="empty-text">
+              MVP Readiness and Feedback Analysis flows.{' '}
+              <Link to="/7-day-challenge">Complete in 7-Day Challenge</Link>
+            </p>
+          </div>
+        )
+
+      case 4: // Money Models
+        return (
+          <>
+            {/* Attraction Offers */}
+            <div className="subsection">
+              <h3>Attraction Offers</h3>
+              {offers.length === 0 ? (
+                <p className="empty-text">No offers created yet. <Link to="/attraction-offer">Create Offer</Link></p>
+              ) : (
+                <div className="cards-grid">
+                  {offers.map(offer => renderOfferCard(offer, 'attraction'))}
+                </div>
+              )}
+            </div>
+
+            {/* Upsells */}
+            <div className="subsection">
+              <h3>Upsells</h3>
+              {upsells.length === 0 ? (
+                <p className="empty-text">No upsells created yet. <Link to="/upsell-offer">Create Upsell</Link></p>
+              ) : (
+                <div className="cards-grid">
+                  {upsells.map(offer => renderOfferCard(offer, 'upsell'))}
+                </div>
+              )}
+            </div>
+
+            {/* Downsells */}
+            <div className="subsection">
+              <h3>Downsells</h3>
+              {downsells.length === 0 ? (
+                <p className="empty-text">No downsells created yet. <Link to="/downsell-offer">Create Downsell</Link></p>
+              ) : (
+                <div className="cards-grid">
+                  {downsells.map(offer => renderOfferCard(offer, 'downsell'))}
+                </div>
+              )}
+            </div>
+
+            {/* Continuity */}
+            <div className="subsection">
+              <h3>Continuity Offers</h3>
+              {continuity.length === 0 ? (
+                <p className="empty-text">No continuity offers created yet. <Link to="/continuity-offer">Create Continuity</Link></p>
+              ) : (
+                <div className="cards-grid">
+                  {continuity.map(offer => renderOfferCard(offer, 'continuity'))}
+                </div>
+              )}
+            </div>
+          </>
+        )
+
+      case 5: // Offer Creation (Grand Slam)
+        return (
+          <div className="subsection">
+            <h3>Grand Slam Offer</h3>
+            {grandSlamOffer ? (
+              <div className="offer-card-v2">
+                <div className="offer-card-content">
+                  <h4 className="offer-title">{grandSlamOffer.chosen_product_name || 'Your Grand Slam'}</h4>
+                  <p className="offer-description">Your complete offer stack with bonuses, guarantee, and scarcity.</p>
+                </div>
+              </div>
+            ) : (
+              <p className="empty-text">No Grand Slam offer created yet. <Link to="/offer-builder">Build Your Offer</Link></p>
+            )}
+          </div>
+        )
+
+      case 6: // Campaign
+        return (
+          <div className="subsection">
+            <h3>Leads Strategy</h3>
+            <p className="empty-text">
+              Campaign and lead generation strategy.{' '}
+              <Link to="/leads-strategy">Create Leads Strategy</Link>
+            </p>
+          </div>
+        )
+
+      case 7: // Launch
+        return (
+          <div className="subsection">
+            <h3>Launch</h3>
+            <p className="empty-text">
+              Launch stage focuses on milestones rather than flows.{' '}
+              <Link to="/7-day-challenge">Track in 7-Day Challenge</Link>
+            </p>
+          </div>
+        )
+
+      case 8: // Tracking
+        return (
+          <div className="subsection">
+            <h3>Funnel Metrics</h3>
+            <p className="empty-text">
+              Track your funnel performance.{' '}
+              <Link to="/funnel-calculator">Open Funnel Calculator</Link>
+            </p>
+          </div>
+        )
+
+      default:
+        return null
+    }
+  }
+
+  // Render Business section with stage dropdown
+  const renderBusiness = () => {
+    const currentStage = BUSINESS_STAGES.find(s => s.id === selectedBusinessStage)
+
+    return (
+      <div className="library-section">
+        {/* Stage Dropdown */}
+        <div className="stage-selector">
+          <label htmlFor="stage-select">Stage:</label>
+          <select
+            id="stage-select"
+            value={selectedBusinessStage}
+            onChange={(e) => setSelectedBusinessStage(Number(e.target.value))}
+            className="stage-dropdown"
+          >
+            {BUSINESS_STAGES.map(stage => (
+              <option key={stage.id} value={stage.id}>
+                {stage.id}. {stage.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Project Filter */}
+        {projects.length > 0 && (
+          <div className="project-filter">
+            <div className="project-filter-bubbles">
               <button
-                key={project.id}
-                className={`project-bubble ${selectedProjectId === project.id ? 'active' : ''}`}
-                onClick={() => setSelectedProjectId(project.id)}
+                className={`project-bubble ${selectedProjectId === 'all' ? 'active' : ''}`}
+                onClick={() => setSelectedProjectId('all')}
               >
-                {project.name}
+                All Projects
               </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Offers */}
-      <div className="subsection">
-        <h3>Attraction Offers</h3>
-        {offers.length === 0 ? (
-          <p className="empty-text">No offers created yet. <Link to="/attraction-offer">Create Offer</Link></p>
-        ) : (
-          <div className="cards-grid">
-            {offers.map(offer => (
-              <div key={offer.id} className="library-card">
-                <div className="card-header">
-                  <h4>{offer.offer_name || 'Untitled Offer'}</h4>
-                </div>
-                <div className="card-content">
-                  <p>{offer.dream_outcome || offer.description}</p>
-                  <div className="card-date">{formatDate(offer.created_at)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Upsells */}
-      <div className="subsection">
-        <h3>Upsells</h3>
-        {upsells.length === 0 ? (
-          <p className="empty-text">No upsells created yet.</p>
-        ) : (
-          <div className="cards-grid">
-            {upsells.map(item => (
-              <div key={item.id} className="library-card">
-                <div className="card-header">
-                  <h4>{item.offer_name || 'Upsell Offer'}</h4>
-                </div>
-                <div className="card-content">
-                  <p>{item.description}</p>
-                  <div className="card-date">{formatDate(item.created_at)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Downsells */}
-      <div className="subsection">
-        <h3>Downsells</h3>
-        {downsells.length === 0 ? (
-          <p className="empty-text">No downsells created yet.</p>
-        ) : (
-          <div className="cards-grid">
-            {downsells.map(item => (
-              <div key={item.id} className="library-card">
-                <div className="card-header">
-                  <h4>{item.offer_name || 'Downsell Offer'}</h4>
-                </div>
-                <div className="card-content">
-                  <p>{item.description}</p>
-                  <div className="card-date">{formatDate(item.created_at)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Continuity */}
-      <div className="subsection">
-        <h3>Continuity Offers</h3>
-        {continuity.length === 0 ? (
-          <p className="empty-text">No continuity offers created yet.</p>
-        ) : (
-          <div className="cards-grid">
-            {continuity.map(item => (
-              <div key={item.id} className="library-card">
-                <div className="card-header">
-                  <h4>{item.offer_name || 'Continuity Offer'}</h4>
-                </div>
-                <div className="card-content">
-                  <p>{item.description}</p>
-                  <div className="card-date">{formatDate(item.created_at)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Lead Magnets */}
-      <div className="subsection">
-        <h3>Lead Magnets</h3>
-        {leadMagnets.length === 0 ? (
-          <p className="empty-text">No lead magnets created yet.</p>
-        ) : (
-          <div className="cards-grid">
-            {leadMagnets.map(item => (
-              <div key={item.id} className="library-card">
-                <div className="card-header">
-                  <h4>{item.lead_magnet_name || 'Lead Magnet'}</h4>
-                </div>
-                <div className="card-content">
-                  <p>{item.description}</p>
-                  <div className="card-date">{formatDate(item.created_at)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-
-  // Render Nervous System section
-  const renderNervousSystem = () => (
-    <div className="library-section">
-      {!nervousSystemData ? (
-        <div className="empty-section">
-          <p>No nervous system calibration data yet.</p>
-          <Link to="/nervous-system" className="action-link">Complete Nervous System Flow</Link>
-        </div>
-      ) : (
-        <div className="cards-grid">
-          <div className="library-card full-width">
-            <div className="card-header">
-              <h4>Your Nervous System Calibration</h4>
-            </div>
-            <div className="card-content">
-              {nervousSystemData.money_limit && (
-                <div className="data-row">
-                  <strong>Money Limit:</strong> ${nervousSystemData.money_limit}
-                </div>
-              )}
-              {nervousSystemData.visibility_limit && (
-                <div className="data-row">
-                  <strong>Visibility Limit:</strong> {nervousSystemData.visibility_limit}
-                </div>
-              )}
-              {nervousSystemData.archetype && (
-                <div className="data-row">
-                  <strong>Archetype:</strong> {nervousSystemData.archetype}
-                </div>
-              )}
-              <div className="card-date">{formatDate(nervousSystemData.created_at)}</div>
+              {projects.map(project => (
+                <button
+                  key={project.id}
+                  className={`project-bubble ${selectedProjectId === project.id ? 'active' : ''}`}
+                  onClick={() => setSelectedProjectId(project.id)}
+                >
+                  {project.name}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      )}
-    </div>
-  )
+        )}
 
-  // Render Healing Compass section
-  const renderHealingCompass = () => (
-    <div className="library-section">
-      {healingEntries.length === 0 ? (
-        <div className="empty-section">
-          <p>No healing compass entries yet.</p>
-          <Link to="/healing-compass" className="action-link">Start Healing Journey</Link>
-        </div>
-      ) : (
-        <div className="cards-grid">
-          {healingEntries.map(entry => (
-            <div key={entry.id} className="library-card">
-              <div className="card-header">
-                <h4>{entry.title || 'Healing Entry'}</h4>
-              </div>
-              <div className="card-content">
-                <p>{entry.content || entry.reflection}</p>
-                <div className="card-date">{formatDate(entry.created_at)}</div>
-              </div>
+        {/* Stage-specific content */}
+        {renderStageContent(selectedBusinessStage)}
+      </div>
+    )
+  }
+
+  // Render combined Healing section (Nervous System + Healing Compass)
+  const renderHealing = () => {
+    // Count safety contracts (limiting beliefs user said "yes" to)
+    const safetyContractsCount = nervousSystemData?.safety_contracts?.length || 0
+
+    return (
+      <div className="library-section">
+        {/* Nervous System Boundaries */}
+        <div className="subsection">
+          <h3>Nervous System Boundaries</h3>
+          {!nervousSystemData ? (
+            <p className="empty-text">
+              No nervous system calibration data yet.{' '}
+              <Link to="/nervous-system">Complete Nervous System Flow</Link>
+            </p>
+          ) : (
+            <div className="cards-grid">
+              <Link
+                to="/nervous-system?results=true"
+                className="offer-card-v2 offer-card-link"
+              >
+                <div className="offer-card-content">
+                  <h4 className="offer-title">Your Safety Limits</h4>
+                  <p className="offer-description">
+                    {nervousSystemData.nervous_system_income_limit && (
+                      <>Income edge: {nervousSystemData.nervous_system_income_limit}</>
+                    )}
+                    {nervousSystemData.nervous_system_income_limit && nervousSystemData.nervous_system_impact_limit && ' · '}
+                    {nervousSystemData.nervous_system_impact_limit && (
+                      <>Visibility edge: {nervousSystemData.nervous_system_impact_limit}</>
+                    )}
+                  </p>
+                  {nervousSystemData.core_fear && (
+                    <p className="offer-description" style={{ marginTop: '8px', fontStyle: 'italic' }}>
+                      Core fear: {nervousSystemData.core_fear}
+                    </p>
+                  )}
+                  <div className="offer-tags">
+                    {nervousSystemData.archetype && (
+                      <span className="offer-tag offer-tag-confidence">{nervousSystemData.archetype}</span>
+                    )}
+                    {safetyContractsCount > 0 && (
+                      <span className="offer-tag offer-tag-warning">
+                        {safetyContractsCount} limiting belief{safetyContractsCount !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                    <span className="offer-tag offer-tag-date">{formatDate(nervousSystemData.created_at)}</span>
+                  </div>
+                </div>
+                <span className="offer-view-icon">→</span>
+              </Link>
             </div>
-          ))}
+          )}
         </div>
-      )}
-    </div>
-  )
+
+        {/* Healing Compass */}
+        <div className="subsection">
+          <h3>Healing Compass</h3>
+          {healingEntries.length === 0 ? (
+            <p className="empty-text">
+              No healing compass entries yet.{' '}
+              <Link to="/healing-compass">Start Healing Journey</Link>
+            </p>
+          ) : (
+            <div className="cards-grid">
+              {healingEntries.map(entry => (
+                <Link
+                  key={entry.id}
+                  to="/healing-compass?results=true"
+                  className="offer-card-v2 offer-card-link"
+                >
+                  <div className="offer-card-content">
+                    <h4 className="offer-title">
+                      {entry.selected_safety_contract || 'Safety Contract'}
+                    </h4>
+                    {entry.limiting_impact && (
+                      <p className="offer-description">{entry.limiting_impact}</p>
+                    )}
+                    {entry.past_event_emotions && (
+                      <p className="offer-description" style={{ marginTop: '8px', fontStyle: 'italic' }}>
+                        Core emotion: {entry.past_event_emotions}
+                      </p>
+                    )}
+                    <div className="offer-tags">
+                      {entry.challenge_enrollment_consent && (
+                        <span className="offer-tag offer-tag-confidence">
+                          {entry.challenge_enrollment_consent === 'book_session' ? 'Session booked' : 'Enrolled'}
+                        </span>
+                      )}
+                      <span className="offer-tag offer-tag-date">{formatDate(entry.created_at)}</span>
+                    </div>
+                  </div>
+                  <span className="offer-view-icon">→</span>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   if (loading) {
     return (
@@ -932,8 +1354,8 @@ function LibraryOfAnswers() {
         <Link to="/me" className="back-link">← Back</Link>
         <h1>Library of Answers</h1>
         <p>All your discoveries in one place</p>
-
       </header>
+
 
       {/* Section Tabs */}
       <div className="section-tabs">
@@ -944,20 +1366,14 @@ function LibraryOfAnswers() {
           Flow Finder
         </button>
         <button
-          className={`tab ${activeSection === SECTIONS.MONEY_MODEL ? 'active' : ''}`}
-          onClick={() => setActiveSection(SECTIONS.MONEY_MODEL)}
+          className={`tab ${activeSection === SECTIONS.BUSINESS ? 'active' : ''}`}
+          onClick={() => setActiveSection(SECTIONS.BUSINESS)}
         >
-          Money Model
+          Business
         </button>
         <button
-          className={`tab ${activeSection === SECTIONS.NERVOUS_SYSTEM ? 'active' : ''}`}
-          onClick={() => setActiveSection(SECTIONS.NERVOUS_SYSTEM)}
-        >
-          Nervous System
-        </button>
-        <button
-          className={`tab ${activeSection === SECTIONS.HEALING_COMPASS ? 'active' : ''}`}
-          onClick={() => setActiveSection(SECTIONS.HEALING_COMPASS)}
+          className={`tab ${activeSection === SECTIONS.HEALING ? 'active' : ''}`}
+          onClick={() => setActiveSection(SECTIONS.HEALING)}
         >
           Healing
         </button>
@@ -966,9 +1382,8 @@ function LibraryOfAnswers() {
       {/* Content */}
       <div className="library-content">
         {activeSection === SECTIONS.FLOW_FINDER && renderFlowFinder()}
-        {activeSection === SECTIONS.MONEY_MODEL && renderMoneyModel()}
-        {activeSection === SECTIONS.NERVOUS_SYSTEM && renderNervousSystem()}
-        {activeSection === SECTIONS.HEALING_COMPASS && renderHealingCompass()}
+        {activeSection === SECTIONS.BUSINESS && renderBusiness()}
+        {activeSection === SECTIONS.HEALING && renderHealing()}
       </div>
     </div>
   )

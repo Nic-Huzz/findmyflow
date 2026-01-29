@@ -18,6 +18,8 @@ import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
 import GroanMatrix from './components/GroanMatrix'
+import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostActionModal'
+import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
 import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
@@ -157,6 +159,13 @@ function Challenge() {
 
   // State for selected groan challenge modal
   const [selectedGroanChallenge, setSelectedGroanChallenge] = useState(null)
+
+  // State for POST-ACTION modal (3% reflection after completing milestones)
+  const [postActionQuest, setPostActionQuest] = useState(null)
+
+  // State for PRE-ACTION modal (resistance capture before starting milestones)
+  const [preActionQuest, setPreActionQuest] = useState(null)
+  const [preActionPendingData, setPreActionPendingData] = useState(null)
   const [groanChallengeLoading, setGroanChallengeLoading] = useState(false)
   const [groanReflectionStep, setGroanReflectionStep] = useState(false)
   const [groanReflection, setGroanReflection] = useState({ scaryScore: 5, wahooScore: 5, reflection: '' })
@@ -238,6 +247,13 @@ function Challenge() {
   // Main quest completion handler
   const handleQuestComplete = async (quest, specialData = null, event = null) => {
     const inputValue = specialData || questInputs[quest.id]
+
+    // Check for PRE-ACTION milestones - show modal BEFORE completing
+    if (PRE_ACTION_MILESTONE_IDS.includes(quest.id) && !preActionPendingData) {
+      setPreActionQuest(quest)
+      setPreActionPendingData({ quest, specialData, event })
+      return // Wait for modal to complete
+    }
 
     // Validate input based on type
     if (quest.inputType === 'text' && (!inputValue || inputValue.trim() === '')) {
@@ -658,13 +674,17 @@ function Challenge() {
 
       alert(successMessage)
 
-      // Check for tab completion bonus
-      setTimeout(async () => {
-        const tabStatus = getTabCompletionStatus(quest.category)
-        if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
-          await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints)
-        }
-      }, 500)
+      // Trigger POST-ACTION modal for specific milestones (3% reflection)
+      if (POST_ACTION_MILESTONE_IDS.includes(quest.id)) {
+        setPostActionQuest(quest)
+      }
+
+      // Check for tab completion bonus using fresh data (Option A: immediate check)
+      // Pass newCompletions and updatedProgress to avoid React state timing issues
+      const tabStatus = getTabCompletionStatus(quest.category, newCompletions, updatedProgress)
+      if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
+        await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints)
+      }
 
       // Check for project graduation
       if (selectedProject?.id && progress?.challenge_instance_id) {
@@ -1691,6 +1711,38 @@ function Challenge() {
             )}
           </div>
         </div>
+      )}
+
+      {/* PRE-ACTION Modal for resistance capture before starting milestones */}
+      {preActionQuest && (
+        <PreActionModal
+          quest={preActionQuest}
+          userId={user?.id}
+          onProceed={() => {
+            // Clear modal state and proceed with quest completion
+            const pending = preActionPendingData
+            setPreActionQuest(null)
+            setPreActionPendingData(null)
+            if (pending) {
+              // Re-call handleQuestComplete - preActionPendingData being null will skip the modal check
+              handleQuestComplete(pending.quest, pending.specialData, pending.event)
+            }
+          }}
+          onCancel={() => {
+            setPreActionQuest(null)
+            setPreActionPendingData(null)
+          }}
+        />
+      )}
+
+      {/* POST-ACTION Modal for 3% reflection after milestone completion */}
+      {postActionQuest && (
+        <PostActionModal
+          quest={postActionQuest}
+          userId={user?.id}
+          onComplete={() => setPostActionQuest(null)}
+          onSkip={() => setPostActionQuest(null)}
+        />
       )}
       </div>
     </div>

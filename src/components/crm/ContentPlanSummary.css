@@ -143,6 +143,35 @@
   opacity: 1;
 }
 
+/* Item Footer */
+.content-plan-summary .item-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f3f5;
+}
+
+.content-plan-summary .post-day-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--purple, #5e17eb);
+  background: color-mix(in srgb, var(--purple, #5e17eb) 10%, white);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.content-plan-summary .item-footer .edit-hint {
+  position: static;
+  transform: none;
+  opacity: 0.6;
+}
+
+.content-plan-summary .content-item-card:hover .item-footer .edit-hint {
+  opacity: 1;
+}
+
 /* Stats */
 .content-plan-summary .plan-stats {
   display: flex;

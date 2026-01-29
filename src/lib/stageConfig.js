@@ -259,7 +259,7 @@ export const STAGE_CONFIG = {
     description: 'Track your funnel metrics and optimize conversions',
     icon: '📊',
     color: '#E9A23B', // gold (ombre end - success!)
-    requiredFlows: [],
+    requiredFlows: ['income_calculator', 'funnel_calculator'],
     milestones: [],
     groanChallenge: null, // No groan for Tracking
     voicePrompts: {
@@ -522,12 +522,12 @@ export const FLOW_FINDER_CONFIG = {
   icon: '🧭',
   color: '#5e17eb', // brand purple (matches stage config)
   flows: [
-    { id: 'nikigai_skills', name: 'Skills', route: '/nikigai/skills', points: 40 },
-    { id: 'nikigai_problems', name: 'Problems', route: '/nikigai/problems', points: 40 },
-    { id: 'nikigai_persona', name: 'Personas', route: '/nikigai/persona', points: 30 },
-    { id: 'nikigai_integration', name: 'Integration', route: '/nikigai/integration', points: 30 }
+    { id: 'nikigai_skills', name: 'Skills', route: '/nikigai/skills', points: 10 },
+    { id: 'nikigai_problems', name: 'Problems', route: '/nikigai/problems', points: 10 },
+    { id: 'nikigai_persona', name: 'Personas', route: '/nikigai/persona', points: 9 },
+    { id: 'nikigai_integration', name: 'Integration', route: '/nikigai/integration', points: 6 }
   ],
-  totalPoints: 140,
+  totalPoints: 35,
   // Flow Finder is required for:
   // - All Vibe Seekers
   // - Vibe Risers choosing "new opportunity"

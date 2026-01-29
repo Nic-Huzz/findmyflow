@@ -5,6 +5,16 @@ import { useState, useEffect } from 'react'
 import { PHASES } from '../../lib/crm/weeklyPlanningService'
 import './ContentContextInput.css'
 
+const WEEKDAYS = [
+  { id: 'Monday', short: 'Mon' },
+  { id: 'Tuesday', short: 'Tue' },
+  { id: 'Wednesday', short: 'Wed' },
+  { id: 'Thursday', short: 'Thu' },
+  { id: 'Friday', short: 'Fri' },
+  { id: 'Saturday', short: 'Sat' },
+  { id: 'Sunday', short: 'Sun' }
+]
+
 export default function ContentContextInput({
   items = [],
   onChange,
@@ -14,23 +24,34 @@ export default function ContentContextInput({
   const [currentIndex, setCurrentIndex] = useState(0)
   const [localItems, setLocalItems] = useState(items)
   const [currentContext, setCurrentContext] = useState('')
+  const [currentPostDay, setCurrentPostDay] = useState(null)
 
   useEffect(() => {
     setLocalItems(items)
-    // Load context for current item if it exists
+    // Load context and post day for current item if they exist
     if (items[currentIndex]?.context) {
       setCurrentContext(items[currentIndex].context)
     } else {
       setCurrentContext('')
     }
+    if (items[currentIndex]?.postDay) {
+      setCurrentPostDay(items[currentIndex].postDay)
+    } else {
+      setCurrentPostDay(null)
+    }
   }, [items])
 
   useEffect(() => {
-    // When index changes, load context for that item
+    // When index changes, load context and post day for that item
     if (localItems[currentIndex]?.context) {
       setCurrentContext(localItems[currentIndex].context)
     } else {
       setCurrentContext('')
+    }
+    if (localItems[currentIndex]?.postDay) {
+      setCurrentPostDay(localItems[currentIndex].postDay)
+    } else {
+      setCurrentPostDay(null)
     }
   }, [currentIndex, localItems])
 
@@ -39,12 +60,12 @@ export default function ContentContextInput({
   const isLast = currentIndex === localItems.length - 1
   const progress = ((currentIndex + 1) / localItems.length) * 100
 
-  const saveCurrentContext = () => {
+  const saveCurrentItem = () => {
     if (!currentContext.trim()) return false
 
     const updated = localItems.map((item, idx) =>
       idx === currentIndex
-        ? { ...item, context: currentContext.trim() }
+        ? { ...item, context: currentContext.trim(), postDay: currentPostDay }
         : item
     )
     setLocalItems(updated)
@@ -53,12 +74,12 @@ export default function ContentContextInput({
   }
 
   const handleNext = () => {
-    if (!saveCurrentContext()) return
+    if (!saveCurrentItem()) return
 
     if (isLast) {
       onComplete(localItems.map((item, idx) =>
         idx === currentIndex
-          ? { ...item, context: currentContext.trim() }
+          ? { ...item, context: currentContext.trim(), postDay: currentPostDay }
           : item
       ))
     } else {
@@ -67,7 +88,7 @@ export default function ContentContextInput({
   }
 
   const handlePrevious = () => {
-    saveCurrentContext()
+    saveCurrentItem()
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1)
     } else {
@@ -76,10 +97,10 @@ export default function ContentContextInput({
   }
 
   const handleSkip = () => {
-    // Save empty context and move on
+    // Save empty context and move on (keep postDay if set)
     const updated = localItems.map((item, idx) =>
       idx === currentIndex
-        ? { ...item, context: '' }
+        ? { ...item, context: '', postDay: currentPostDay }
         : item
     )
     setLocalItems(updated)
@@ -90,6 +111,7 @@ export default function ContentContextInput({
     } else {
       setCurrentIndex(currentIndex + 1)
       setCurrentContext('')
+      setCurrentPostDay(null)
     }
   }
 
@@ -152,6 +174,27 @@ export default function ContentContextInput({
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Posting Day Selector */}
+      <div className="post-day-section">
+        <label className="post-day-label">
+          Which day will you post this?
+        </label>
+        <div className="post-day-pills">
+          {WEEKDAYS.map(day => (
+            <button
+              key={day.id}
+              className={`post-day-pill ${currentPostDay === day.id ? 'selected' : ''}`}
+              onClick={() => setCurrentPostDay(currentPostDay === day.id ? null : day.id)}
+            >
+              {day.short}
+            </button>
+          ))}
+        </div>
+        {!currentPostDay && (
+          <p className="post-day-hint">Optional - helps track your daily content schedule</p>
+        )}
       </div>
 
       {/* Actions */}

@@ -24,7 +24,8 @@ import { initializeUserStageProgress, checkAndGraduateProject } from '../lib/gra
 import { normalizePersona } from '../data/personaProfiles'
 import { convertLegacyStage, STAGE_CONFIG } from '../lib/stageConfig'
 import { generateVoiceQuestsForStage } from '../lib/voiceQuestConfig'
-import { getScoringCategory } from '../lib/scoringCategories'
+import { getScoringCategory, syncScoreToLeaderboard } from '../lib/scoringCategories'
+import { logError, showErrorWithSupport } from '../lib/errorSupport'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
@@ -789,12 +790,41 @@ export function useChallengeData() {
       setGroupData(groupData)
       setGroupMode('create')
 
-      await supabase
+      const { error: participantError } = await supabase
         .from('challenge_participants')
         .insert([{
           group_id: groupData.id,
           user_id: user.id
         }])
+
+      if (participantError) {
+        console.error('Error adding participant to group:', participantError)
+        // Duplicate entry means already in group - that's OK
+        if (participantError.code === '23505') {
+          console.log('User already in group - continuing')
+        } else {
+          // Log error and offer support
+          const { offerSupport } = await logError({
+            error: participantError,
+            component: 'ChallengeGroup',
+            action: 'create_group_participant',
+            userId: user?.id,
+            userEmail: user?.email,
+            metadata: { groupCode: newCode }
+          })
+
+          const choice = window.confirm(
+            'Group created, but there was an issue adding you as a member.\n\n' +
+            `Your group code is: ${newCode}\n\n` +
+            'Click OK to continue anyway (you can rejoin later with the code)\n' +
+            'Click Cancel to get help via WhatsApp'
+          )
+          if (!choice) {
+            offerSupport()
+            throw participantError
+          }
+        }
+      }
 
       alert(`Group created successfully!\n\nYour group code is: ${newCode}\n\nShare this code with friends to invite them to your challenge group.`)
 
@@ -802,7 +832,23 @@ export function useChallengeData() {
       setShowProjectSelector(true)
     } catch (error) {
       console.error('Error creating group:', error)
-      alert('Error creating group. Please try again.')
+
+      // Log and offer support for general errors
+      const { offerSupport } = await logError({
+        error,
+        component: 'ChallengeGroup',
+        action: 'create_group',
+        userId: user?.id,
+        userEmail: user?.email
+      })
+
+      const getHelp = window.confirm(
+        'Error creating group.\n\n' +
+        'Click OK to try again, or Cancel to get help via WhatsApp.'
+      )
+      if (!getHelp) {
+        offerSupport()
+      }
     }
   }
 
@@ -828,18 +874,67 @@ export function useChallengeData() {
       setGroupCode(groupData.code)
       setGroupMode('join')
 
-      await supabase
+      const { error: participantError } = await supabase
         .from('challenge_participants')
         .insert([{
           group_id: groupData.id,
           user_id: user.id
         }])
 
+      if (participantError) {
+        console.error('Error adding participant to group:', participantError)
+        // Duplicate entry means already in group - that's fine!
+        if (participantError.code === '23505') {
+          alert('You\'re already a member of this group! Continuing to challenge setup...')
+        } else {
+          // Log error and offer support
+          const { offerSupport } = await logError({
+            error: participantError,
+            component: 'ChallengeGroup',
+            action: 'join_group_participant',
+            userId: user?.id,
+            userEmail: user?.email,
+            metadata: { groupCode: groupData.code }
+          })
+
+          const choice = window.confirm(
+            'Unable to join the group right now.\n\n' +
+            'Options:\n' +
+            '• OK = Start a solo challenge instead\n' +
+            '• Cancel = Get help via WhatsApp\n\n' +
+            'You can always join a group later.'
+          )
+          if (choice) {
+            setGroupData(null)
+            setGroupCode('')
+            setGroupMode(null)
+          } else {
+            offerSupport()
+            throw participantError
+          }
+        }
+      }
+
       setShowGroupSelection(false)
       setShowProjectSelector(true)
     } catch (error) {
       console.error('Error joining group:', error)
-      alert('Error joining group. Please try again.')
+
+      const { offerSupport } = await logError({
+        error,
+        component: 'ChallengeGroup',
+        action: 'join_group',
+        userId: user?.id,
+        userEmail: user?.email
+      })
+
+      const retry = window.confirm(
+        'Error joining group.\n\n' +
+        'Click OK to try again, or Cancel to get help via WhatsApp.'
+      )
+      if (!retry) {
+        offerSupport()
+      }
     }
   }
 
@@ -1306,8 +1401,14 @@ export function useChallengeData() {
     }
   }
 
-  const getTabCompletionStatus = (category) => {
-    if (!challengeData || !completions) {
+  // Option A fix: Accept optional fresh data to avoid React state timing issues
+  // When called without overrides, uses React state (for UI display)
+  // When called with overrides, uses fresh DB data (for immediate checks after mutations)
+  const getTabCompletionStatus = (category, overrideCompletions = null, overrideProgress = null) => {
+    const effectiveCompletions = overrideCompletions || completions
+    const effectiveProgress = overrideProgress || progress
+
+    if (!challengeData || !effectiveCompletions) {
       return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
     }
 
@@ -1319,7 +1420,7 @@ export function useChallengeData() {
       return { totalQuests: 0, completedQuests: 0, isComplete: false, bonusPoints: 0, percentage: 0 }
     }
 
-    const completedQuestIds = new Set(completions.map(c => c.quest_id))
+    const completedQuestIds = new Set(effectiveCompletions.map(c => c.quest_id))
     const completedQuests = categoryQuests.filter(q => completedQuestIds.has(q.id)).length
 
     const totalPossiblePoints = categoryQuests.reduce((sum, q) => sum + (q.points || 0), 0)
@@ -1329,7 +1430,7 @@ export function useChallengeData() {
     const percentage = Math.round((completedQuests / totalQuests) * 100)
 
     const bonusKey = `${category.toLowerCase().replace(/\s+/g, '_')}_bonus_awarded`
-    const bonusAwarded = progress?.[bonusKey] || false
+    const bonusAwarded = effectiveProgress?.[bonusKey] || false
 
     return {
       totalQuests,
@@ -1371,6 +1472,15 @@ export function useChallengeData() {
         console.error('Error awarding tab bonus:', error)
         return
       }
+
+      // Sync to leaderboard (non-blocking)
+      syncScoreToLeaderboard(supabase, {
+        userId: user.id,
+        questCategory: category,
+        points: bonusPoints,
+        projectId: null,
+        source: 'tab_bonus'
+      })
 
       setProgress(updatedProgress)
       alert(`Tab Complete! +${bonusPoints} bonus points (${BONUS_PERCENTAGE}% boost)\n\nYou've completed all quests in ${category}!`)

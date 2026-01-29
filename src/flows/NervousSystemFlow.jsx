@@ -534,7 +534,7 @@ export default function NervousSystemFlow() {
       await completeFlowQuest({
         userId: user.id,
         flowId: 'nervous_system',
-        pointsEarned: 25
+        pointsEarned: 6
       })
 
       // Clear auto-saved progress on success

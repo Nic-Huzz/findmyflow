@@ -36,7 +36,59 @@ const STAGES = {
   SCARCITY: 'scarcity',
   NAMING: 'naming',
   SUMMARY: 'summary',
+  PRE_ACTION: 'pre_action',
   SUCCESS: 'success'
+}
+
+// Visibility layers for 2D pattern recognition (WHERE the resistance shows up)
+const VISIBILITY_LAYERS = [
+  { id: 'screen', icon: '📱', label: 'Screen', description: 'Putting myself out there where people can see and judge me' },
+  { id: 'live', icon: '⚡', label: 'Live', description: 'Doing something in real-time where I can\'t edit or take it back' },
+  { id: 'vulnerable', icon: '💗', label: 'Vulnerable', description: 'Showing something unfinished or admitting I need help' },
+  { id: 'money', icon: '💰', label: 'Money', description: 'Asking someone to pay me or stating my price' },
+  { id: 'authority', icon: '👑', label: 'Authority', description: 'Claiming expertise or positioning myself as someone to follow' }
+]
+
+// Protective voices for 2D pattern recognition (HOW the resistance sounds)
+const PROTECTIVE_VOICES = [
+  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
+  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
+  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control how they\'ll respond' },
+  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+]
+
+// Contextual essence messages based on voice + layer
+const getEssenceMessage = (voice, layer) => {
+  const messages = {
+    'perfectionist_screen': 'Your Perfectionist wants the offer to be flawless before sharing. But real feedback from real people shapes better offers than endless polishing.',
+    'perfectionist_live': 'Your Perfectionist fears making mistakes in real-time. But offers evolve through iteration, not isolation.',
+    'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show unfinished work. But testing ideas early prevents building the wrong thing.',
+    'perfectionist_money': 'Your Perfectionist wants the pricing to be perfect. But the market tells you the right price — your guess can\'t.',
+    'perfectionist_authority': 'Your Perfectionist wants more credentials first. But you already know enough to create value.',
+    'people_pleaser_screen': 'Your People Pleaser worries about being "salesy." But your offer helps people — sharing it is generous.',
+    'people_pleaser_live': 'Your People Pleaser fears disappointing someone. But authentic offers attract the right people.',
+    'people_pleaser_vulnerable': 'Your People Pleaser doesn\'t want to impose. But most people appreciate being asked what they need.',
+    'people_pleaser_money': 'Your People Pleaser feels uncomfortable asking for money. But fair exchange benefits everyone.',
+    'people_pleaser_authority': 'Your People Pleaser worries about seeming arrogant. But sharing expertise is service, not ego.',
+    'controller_screen': 'Your Controller can\'t predict the response. But the unknown holds opportunity, not just risk.',
+    'controller_live': 'Your Controller wants to script every outcome. But the best insights come from unscripted moments.',
+    'controller_vulnerable': 'Your Controller wants certainty first. But action creates the certainty you\'re seeking.',
+    'controller_money': 'Your Controller fears rejection. But every "no" brings you closer to the right "yes."',
+    'controller_authority': 'Your Controller wants guaranteed results. But real authority is built through taking action.',
+    'performer_screen': 'Your Performer wants a bigger following first. But every audience starts with one person.',
+    'performer_live': 'Your Performer wants to prove expertise first. But doing the work IS how you build expertise.',
+    'performer_vulnerable': 'Your Performer feels unqualified. But action builds the confidence you\'re waiting for.',
+    'performer_money': 'Your Performer wants more success stories first. But you have to start somewhere.',
+    'performer_authority': 'Your Performer needs more validation. But the validation comes from taking action.',
+    'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen — and so do you.',
+    'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters, even in small conversations.',
+    'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
+    'ghost_money': 'Your Ghost avoids attention. But asking for fair exchange is claiming your worth.',
+    'ghost_authority': 'Your Ghost shrinks from the spotlight. But quiet authority is still authority.'
+  }
+  const key = `${voice}_${layer}`
+  return messages[key] || 'Your protective pattern is trying to keep you safe. But you don\'t need protection from creating value.'
 }
 
 const STAGE_ORDER = [
@@ -172,12 +224,64 @@ function OfferStackBuilderFlow() {
   const [savedProgressData, setSavedProgressData] = useState(null)
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('offer-stack-builder', user?.id)
 
+  // View results mode
+  const [viewingResults, setViewingResults] = useState(false)
+
+  // PRE-ACTION state
+  const [preActionFeeling, setPreActionFeeling] = useState(null)
+  const [visibilityLayer, setVisibilityLayer] = useState(null)
+  const [protectiveVoice, setProtectiveVoice] = useState(null)
+  const [preActionStep, setPreActionStep] = useState('feeling') // feeling | layer | voice | essence
+
   // Load existing data
   useEffect(() => {
     if (user) {
       loadExistingData()
     }
   }, [user])
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      try {
+        const { data: savedData, error } = await supabase
+          .from('offer_stack_builds')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (error || !savedData) {
+          console.log('No saved offer stack results found')
+          return
+        }
+
+        // Restore the saved state
+        if (savedData.lead_magnet_type) setSelectedLeadMagnet(savedData.lead_magnet_type)
+        if (savedData.lead_magnet_idea) setLeadMagnetIdea(savedData.lead_magnet_idea)
+        if (savedData.lead_magnet_product) setSelectedLeadMagnetProduct(savedData.lead_magnet_product)
+        if (savedData.bonuses) setBonuses(savedData.bonuses)
+        if (savedData.guarantee_type) setSelectedGuarantee(savedData.guarantee_type)
+        if (savedData.guarantee_details) setGuaranteeDetails(savedData.guarantee_details)
+        if (savedData.scarcity_types) setSelectedScarcity(savedData.scarcity_types)
+        if (savedData.scarcity_details) setScarcityDetails(savedData.scarcity_details)
+        if (savedData.offer_name) setOfferName(savedData.offer_name)
+        if (savedData.tagline) setTagline(savedData.tagline)
+
+        setViewingResults(true)
+        setStage(STAGES.SUMMARY)
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+
+    if (!isLoading) {
+      loadSavedResults()
+    }
+  }, [searchParams, user, isLoading])
 
   // Check for saved progress
   useEffect(() => {
@@ -383,6 +487,46 @@ function OfferStackBuilderFlow() {
     return bonuses.reduce((sum, b) => sum + (parseInt(b.value) || 0), 0)
   }
 
+  // PRE-ACTION handlers (shown AFTER save, before navigating away)
+  const handleFeelingSelect = (feeling) => {
+    setPreActionFeeling(feeling)
+    if (feeling === 'excited' || feeling === 'ready') {
+      // Skip 2D capture for positive feelings, go straight to success
+      setStage(STAGES.SUCCESS)
+    } else {
+      // Show 2D capture for resistant feelings
+      setPreActionStep('layer')
+    }
+  }
+
+  const handleLayerSelect = (layer) => {
+    setVisibilityLayer(layer)
+    setPreActionStep('voice')
+  }
+
+  const handleVoiceSelect = (voice) => {
+    setProtectiveVoice(voice)
+    setPreActionStep('essence')
+
+    // Save PRE-ACTION data to database
+    if (user) {
+      supabase.from('pre_action_captures').insert({
+        user_id: user.id,
+        action_type: 'implement_offer_stack',
+        flow_type: 'offer_stack_builder',
+        feeling: preActionFeeling,
+        visibility_layer: visibilityLayer,
+        protective_voice: voice
+      }).then(({ error }) => {
+        if (error) console.warn('PRE-ACTION save failed:', error)
+      })
+    }
+  }
+
+  const handleEssenceComplete = () => {
+    setStage(STAGES.SUCCESS)
+  }
+
   // Save and complete
   const handleComplete = async () => {
     setIsSaving(true)
@@ -452,12 +596,14 @@ function OfferStackBuilderFlow() {
       const questResult = await completeFlowQuest({
         userId: user.id,
         flowId: 'offer_stack_builder',
-        pointsEarned: 35
+        pointsEarned: 8
       })
       console.log('🎯 Offer Stack quest completion result:', questResult)
 
       clearProgress()
-      setStage(STAGES.SUCCESS)
+      // Go to PRE-ACTION to capture resistance before success
+      setPreActionStep('feeling')
+      setStage(STAGES.PRE_ACTION)
     } catch (err) {
       console.error('Error saving:', err)
       setError('Failed to save. Please try again.')
@@ -1190,16 +1336,139 @@ function OfferStackBuilderFlow() {
             )}
           </div>
 
-          <button
-            className="primary-button"
-            onClick={handleComplete}
-            disabled={isSaving}
-          >
-            {isSaving ? 'Saving...' : 'Complete & Save Offer Stack →'}
-          </button>
-          <button className="go-back-link" onClick={goBack}>
-            ← Go Back
-          </button>
+          {viewingResults ? (
+            <button
+              className="primary-button"
+              onClick={() => navigate('/7-day-challenge')}
+            >
+              Return to Challenge
+            </button>
+          ) : (
+            <>
+              <button
+                className="primary-button"
+                onClick={handleComplete}
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving...' : 'Complete & Save Offer Stack →'}
+              </button>
+              <button className="go-back-link" onClick={goBack}>
+                ← Go Back
+              </button>
+            </>
+          )}
+        </div>
+      )}
+
+      {/* PRE-ACTION */}
+      {stage === STAGES.PRE_ACTION && (
+        <div className="pre-action-container">
+          <div className="pre-action-header">
+            <div className="success-icon small">✓</div>
+            <h2>Offer Stack Saved!</h2>
+            <p className="pre-action-subtitle">
+              Before you go, let's prepare you for the next step: <strong>implementing your offer stack</strong>
+            </p>
+          </div>
+
+          {preActionStep === 'feeling' && (
+            <div className="pre-action-step">
+              <h3>How do you feel about putting this offer out there?</h3>
+              <div className="pre-action-options">
+                <button
+                  className="pre-action-option positive"
+                  onClick={() => handleFeelingSelect('excited')}
+                >
+                  <span className="option-icon">🔥</span>
+                  <span className="option-label">Excited</span>
+                  <span className="option-desc">Let's do this!</span>
+                </button>
+                <button
+                  className="pre-action-option positive"
+                  onClick={() => handleFeelingSelect('ready')}
+                >
+                  <span className="option-icon">✅</span>
+                  <span className="option-label">Ready</span>
+                  <span className="option-desc">Feeling prepared</span>
+                </button>
+                <button
+                  className="pre-action-option negative"
+                  onClick={() => handleFeelingSelect('nervous')}
+                >
+                  <span className="option-icon">😰</span>
+                  <span className="option-label">Nervous</span>
+                  <span className="option-desc">A bit anxious</span>
+                </button>
+                <button
+                  className="pre-action-option negative"
+                  onClick={() => handleFeelingSelect('resistant')}
+                >
+                  <span className="option-icon">🛑</span>
+                  <span className="option-label">Resistant</span>
+                  <span className="option-desc">Feeling blocked</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'layer' && (
+            <div className="pre-action-step">
+              <h3>What specifically feels hard?</h3>
+              <p className="pre-action-hint">Select where the resistance shows up...</p>
+              <div className="pre-action-layers">
+                {VISIBILITY_LAYERS.map(layer => (
+                  <button
+                    key={layer.id}
+                    className="pre-action-layer"
+                    onClick={() => handleLayerSelect(layer.id)}
+                  >
+                    <span className="layer-icon">{layer.icon}</span>
+                    <span className="layer-label">{layer.label}</span>
+                    <span className="layer-desc">{layer.description}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'voice' && (
+            <div className="pre-action-step">
+              <h3>What's the voice saying?</h3>
+              <p className="pre-action-hint">Choose the one that sounds most familiar...</p>
+              <div className="pre-action-voices">
+                {PROTECTIVE_VOICES.map(voice => (
+                  <button
+                    key={voice.id}
+                    className="pre-action-voice"
+                    onClick={() => handleVoiceSelect(voice.id)}
+                  >
+                    <span className="voice-icon">{voice.icon}</span>
+                    <span className="voice-label">{voice.label}</span>
+                    <span className="voice-desc">{voice.description}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'essence' && (
+            <div className="pre-action-step essence-step">
+              <div className="essence-badge">
+                <span>{PROTECTIVE_VOICES.find(v => v.id === protectiveVoice)?.icon}</span>
+                <span>×</span>
+                <span>{VISIBILITY_LAYERS.find(l => l.id === visibilityLayer)?.icon}</span>
+              </div>
+              <div className="essence-message">
+                <p>{getEssenceMessage(protectiveVoice, visibilityLayer)}</p>
+              </div>
+              <div className="essence-affirmation">
+                <p><strong>Your essence knows:</strong> This offer was built to help people. Sharing it is service.</p>
+              </div>
+              <button className="primary-button" onClick={handleEssenceComplete}>
+                I'm Ready
+              </button>
+            </div>
+          )}
         </div>
       )}
 

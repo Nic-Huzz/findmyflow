@@ -1,5 +1,5 @@
 /**
- * LaunchReadinessFlow.jsx - Launch Readiness Check (+25 pts)
+ * LaunchReadinessFlow.jsx - Launch Readiness Check (+6 pts)
  *
  * Assesses if user is ready to launch by checking:
  * 1. Sales infrastructure (where do people buy?)
@@ -31,7 +31,59 @@ const STAGES = {
   AUDIENCE_SIZE: 'audience_size',
   LAUNCH_APPROACH: 'launch_approach',
   RESULTS: 'results',
+  PRE_ACTION: 'pre_action',
   SUCCESS: 'success'
+}
+
+// Visibility layers for 2D pattern recognition (WHERE the resistance shows up)
+const VISIBILITY_LAYERS = [
+  { id: 'screen', icon: '📱', label: 'Screen', description: 'Putting myself out there where people can see and judge me' },
+  { id: 'live', icon: '⚡', label: 'Live', description: 'Doing something in real-time where I can\'t edit or take it back' },
+  { id: 'vulnerable', icon: '💗', label: 'Vulnerable', description: 'Showing something unfinished or admitting I need help' },
+  { id: 'money', icon: '💰', label: 'Money', description: 'Asking someone to pay me or stating my price' },
+  { id: 'authority', icon: '👑', label: 'Authority', description: 'Claiming expertise or positioning myself as someone to follow' }
+]
+
+// Protective voices for 2D pattern recognition (HOW the resistance sounds)
+const PROTECTIVE_VOICES = [
+  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
+  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
+  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control how they\'ll respond' },
+  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+]
+
+// Contextual essence messages based on voice + layer
+const getEssenceMessage = (voice, layer) => {
+  const messages = {
+    'perfectionist_screen': 'Your Perfectionist wants everything flawless before launch. But real launches teach you more than endless preparation.',
+    'perfectionist_live': 'Your Perfectionist fears making mistakes in real-time. But launches evolve through iteration, not isolation.',
+    'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show something unfinished. But launching early gets you real feedback.',
+    'perfectionist_money': 'Your Perfectionist wants the pricing to be perfect. But the market tells you the right price — your guess can\'t.',
+    'perfectionist_authority': 'Your Perfectionist wants more credentials first. But you already know enough to help people.',
+    'people_pleaser_screen': 'Your People Pleaser worries about being "too promotional." But your offer helps people — sharing it is generous.',
+    'people_pleaser_live': 'Your People Pleaser fears disappointing someone. But authentic launches attract the right people.',
+    'people_pleaser_vulnerable': 'Your People Pleaser doesn\'t want to impose. But most people appreciate knowing about solutions.',
+    'people_pleaser_money': 'Your People Pleaser feels uncomfortable asking for money. But fair exchange benefits everyone.',
+    'people_pleaser_authority': 'Your People Pleaser worries about seeming arrogant. But sharing expertise is service, not ego.',
+    'controller_screen': 'Your Controller can\'t predict the response. But the unknown holds opportunity, not just risk.',
+    'controller_live': 'Your Controller wants to script every outcome. But the best insights come from real launches.',
+    'controller_vulnerable': 'Your Controller wants certainty first. But launching creates the certainty you\'re seeking.',
+    'controller_money': 'Your Controller fears rejection. But every "no" brings you closer to the right "yes."',
+    'controller_authority': 'Your Controller wants guaranteed results. But real authority is built through taking action.',
+    'performer_screen': 'Your Performer wants a bigger audience first. But every launch starts somewhere.',
+    'performer_live': 'Your Performer wants to prove expertise first. But launching IS how you build expertise.',
+    'performer_vulnerable': 'Your Performer feels unqualified. But action builds the confidence you\'re waiting for.',
+    'performer_money': 'Your Performer wants more success stories first. But you have to start somewhere.',
+    'performer_authority': 'Your Performer needs more validation. But the validation comes from launching.',
+    'ghost_screen': 'Your Ghost wants to stay invisible. But your offer deserves to be seen — and so do you.',
+    'ghost_live': 'Your Ghost prefers the safety of silence. But your voice matters.',
+    'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re actually seeking.',
+    'ghost_money': 'Your Ghost avoids attention. But asking for fair exchange is claiming your worth.',
+    'ghost_authority': 'Your Ghost shrinks from the spotlight. But quiet authority is still authority.'
+  }
+  const key = `${voice}_${layer}`
+  return messages[key] || 'Your protective pattern is trying to keep you safe. But you don\'t need protection from helping people.'
 }
 
 const STAGE_GROUPS = [
@@ -124,6 +176,12 @@ function LaunchReadinessFlow() {
 
   const [launchApproach, setLaunchApproach] = useState('')
   const [launchNotes, setLaunchNotes] = useState('')
+
+  // PRE-ACTION state
+  const [preActionFeeling, setPreActionFeeling] = useState(null)
+  const [visibilityLayer, setVisibilityLayer] = useState(null)
+  const [protectiveVoice, setProtectiveVoice] = useState(null)
+  const [preActionStep, setPreActionStep] = useState('feeling') // feeling | layer | voice | essence
 
   // Offer names from Money Model flows
   const [upsellOfferName, setUpsellOfferName] = useState('')
@@ -395,6 +453,43 @@ function LaunchReadinessFlow() {
     return 'public'
   }
 
+  // PRE-ACTION handlers
+  const handleFeelingSelect = (feeling) => {
+    setPreActionFeeling(feeling)
+    if (feeling === 'excited' || feeling === 'ready') {
+      setStage(STAGES.SUCCESS)
+    } else {
+      setPreActionStep('layer')
+    }
+  }
+
+  const handleLayerSelect = (layer) => {
+    setVisibilityLayer(layer)
+    setPreActionStep('voice')
+  }
+
+  const handleVoiceSelect = (voice) => {
+    setProtectiveVoice(voice)
+    setPreActionStep('essence')
+
+    if (user) {
+      supabase.from('pre_action_captures').insert({
+        user_id: user.id,
+        action_type: 'execute_launch',
+        flow_type: 'launch_readiness',
+        feeling: preActionFeeling,
+        visibility_layer: visibilityLayer,
+        protective_voice: voice
+      }).then(({ error }) => {
+        if (error) console.warn('PRE-ACTION save failed:', error)
+      })
+    }
+  }
+
+  const handleEssenceComplete = () => {
+    setStage(STAGES.SUCCESS)
+  }
+
   async function handleSave() {
     if (!user) return
 
@@ -439,11 +534,13 @@ function LaunchReadinessFlow() {
       const questResult = await completeFlowQuest({
         userId: user.id,
         flowId: 'launch_readiness',
-        pointsEarned: 25
+        pointsEarned: 6
       })
       console.log('🎯 Quest completion result:', questResult)
 
-      setStage(STAGES.SUCCESS)
+      // Go to PRE-ACTION to capture resistance before success
+      setPreActionStep('feeling')
+      setStage(STAGES.PRE_ACTION)
     } catch (err) {
       console.error('Error saving:', err)
       setError('Failed to save. Please try again.')
@@ -1119,9 +1216,104 @@ function LaunchReadinessFlow() {
               onClick={handleSave}
               disabled={saving}
             >
-              {saving ? 'Saving...' : 'Complete Check (+25 pts)'}
+              {saving ? 'Saving...' : 'Complete Check (+6 pts)'}
             </button>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (stage === STAGES.PRE_ACTION) {
+    return (
+      <div className="launch-readiness-flow">
+        <div className="pre-action-container">
+          <div className="pre-action-header">
+            <div className="success-icon small">✓</div>
+            <h2>Readiness Check Saved!</h2>
+            <p className="pre-action-subtitle">
+              Before you go, let's prepare you for the next step: <strong>executing your launch</strong>
+            </p>
+          </div>
+
+          {preActionStep === 'feeling' && (
+            <div className="pre-action-step">
+              <h3>How do you feel about launching?</h3>
+              <div className="pre-action-options">
+                <button className="pre-action-option positive" onClick={() => handleFeelingSelect('excited')}>
+                  <span className="option-icon">🔥</span>
+                  <span className="option-label">Excited</span>
+                  <span className="option-desc">Let's do this!</span>
+                </button>
+                <button className="pre-action-option positive" onClick={() => handleFeelingSelect('ready')}>
+                  <span className="option-icon">✅</span>
+                  <span className="option-label">Ready</span>
+                  <span className="option-desc">Feeling prepared</span>
+                </button>
+                <button className="pre-action-option negative" onClick={() => handleFeelingSelect('nervous')}>
+                  <span className="option-icon">😰</span>
+                  <span className="option-label">Nervous</span>
+                  <span className="option-desc">A bit anxious</span>
+                </button>
+                <button className="pre-action-option negative" onClick={() => handleFeelingSelect('resistant')}>
+                  <span className="option-icon">🛑</span>
+                  <span className="option-label">Resistant</span>
+                  <span className="option-desc">Feeling blocked</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'layer' && (
+            <div className="pre-action-step">
+              <h3>What specifically feels hard?</h3>
+              <p className="pre-action-hint">Select where the resistance shows up...</p>
+              <div className="pre-action-layers">
+                {VISIBILITY_LAYERS.map(layer => (
+                  <button key={layer.id} className="pre-action-layer" onClick={() => handleLayerSelect(layer.id)}>
+                    <span className="layer-icon">{layer.icon}</span>
+                    <span className="layer-label">{layer.label}</span>
+                    <span className="layer-desc">{layer.description}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'voice' && (
+            <div className="pre-action-step">
+              <h3>What's the voice saying?</h3>
+              <p className="pre-action-hint">Choose the one that sounds most familiar...</p>
+              <div className="pre-action-voices">
+                {PROTECTIVE_VOICES.map(voice => (
+                  <button key={voice.id} className="pre-action-voice" onClick={() => handleVoiceSelect(voice.id)}>
+                    <span className="voice-icon">{voice.icon}</span>
+                    <span className="voice-label">{voice.label}</span>
+                    <span className="voice-desc">{voice.description}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'essence' && (
+            <div className="pre-action-step essence-step">
+              <div className="essence-badge">
+                <span>{PROTECTIVE_VOICES.find(v => v.id === protectiveVoice)?.icon}</span>
+                <span>×</span>
+                <span>{VISIBILITY_LAYERS.find(l => l.id === visibilityLayer)?.icon}</span>
+              </div>
+              <div className="essence-message">
+                <p>{getEssenceMessage(protectiveVoice, visibilityLayer)}</p>
+              </div>
+              <div className="essence-affirmation">
+                <p><strong>Your essence knows:</strong> You've done the preparation. Now it's time to share.</p>
+              </div>
+              <button className="primary-button" onClick={handleEssenceComplete}>
+                I'm Ready
+              </button>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -1137,7 +1329,7 @@ function LaunchReadinessFlow() {
         <div className="lr-success">
           <div className="lr-success-icon">🎯</div>
           <h1>Readiness Check Complete!</h1>
-          <p className="lr-success-points">+25 points earned</p>
+          <p className="lr-success-points">+6 points earned</p>
 
           <div className="lr-success-summary">
             <div className="lr-success-score" style={{ color: gradeInfo.color }}>

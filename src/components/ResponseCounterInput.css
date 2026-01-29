@@ -122,3 +122,232 @@
 .response-counter-input .response-count.updated {
   animation: rcPulse 0.3s ease;
 }
+
+/* ========================================
+   POST-ACTION MODAL STYLES
+   ======================================== */
+
+.post-action-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000; /* Above bottom toolbar (1000) and Zarlo (9999) */
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.post-action-modal {
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+  position: relative;
+  z-index: 10001;
+  margin-bottom: 20px; /* Extra space above bottom toolbar */
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.post-action-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.post-action-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.post-action-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.post-action-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+/* Divider */
+.post-action-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  margin: 24px 0;
+}
+
+/* Section */
+.post-action-section {
+  margin-bottom: 8px;
+}
+
+.post-action-question {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+/* Feeling Options */
+.post-action-feelings {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.post-action-feeling {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.post-action-feeling:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-2px);
+}
+
+.post-action-feeling.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+}
+
+.post-action-feeling .feeling-emoji {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.post-action-feeling .feeling-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+}
+
+/* Textarea */
+.post-action-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.post-action-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.post-action-textarea:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.post-action-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+/* Complete Button */
+.post-action-complete-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  border: none;
+  border-radius: 12px;
+  color: #212529;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  margin-top: 24px;
+}
+
+.post-action-complete-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.post-action-complete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .post-action-modal {
+    padding: 24px 20px;
+    margin: 10px;
+  }
+
+  .post-action-title {
+    font-size: 20px;
+  }
+
+  .post-action-icon {
+    font-size: 40px;
+  }
+
+  .post-action-feelings {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .post-action-feeling {
+    padding: 12px 10px;
+  }
+
+  .post-action-feeling .feeling-emoji {
+    font-size: 20px;
+  }
+
+  .post-action-feeling .feeling-label {
+    font-size: 11px;
+  }
+}

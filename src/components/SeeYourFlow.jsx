@@ -150,9 +150,9 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
     })
   }, [project?.id])
 
-  // Check if journey mapping has been completed (using localStorage flag)
+  // Check if journey mapping has been completed (localStorage + database fallback)
   useEffect(() => {
-    const checkMappingStatus = () => {
+    const checkMappingStatus = async () => {
       if (!user?.id || !project?.id) {
         setHasCompletedMapping(false)
         return
@@ -166,6 +166,27 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
         console.log('🗺️ Journey mapping already completed for project:', project.id)
         setHasCompletedMapping(true)
         return
+      }
+
+      // Check database for existing journey entries (fallback for cleared localStorage)
+      try {
+        const { data: journeyEntries, error } = await supabase
+          .from('flow_entries')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('project_id', project.id)
+          .like('activity_description', 'Journey:%')
+          .limit(1)
+
+        if (!error && journeyEntries && journeyEntries.length > 0) {
+          console.log('🗺️ Found existing journey entries in database, marking as complete')
+          // Restore localStorage flag for future checks
+          localStorage.setItem(completedKey, 'true')
+          setHasCompletedMapping(true)
+          return
+        }
+      } catch (err) {
+        console.error('Error checking journey entries:', err)
       }
 
       // Check for saved progress

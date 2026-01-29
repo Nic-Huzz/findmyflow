@@ -21,7 +21,6 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
-import { BackButton } from '../components/MoneyModelShared'
 import './FunnelCalculator.css'
 
 // Industry average conversion rates for Planner mode
@@ -259,8 +258,6 @@ function FunnelCalculator() {
 
   return (
     <div className="funnel-calculator flow-base">
-      <BackButton onClick={() => navigate('/7-day-challenge')} />
-
       <div className="fc-header">
         <h1>Funnel Calculator</h1>
         <p className="fc-subtitle">Track your actual metrics or plan with projections</p>
@@ -352,7 +349,7 @@ function FunnelCalculator() {
                 className="fc-stage-bar"
                 style={{
                   '--stage-color': stage.color,
-                  '--stage-width': `${Math.max(20, 100 - (index * 10))}%`
+                  '--stage-width': `${Math.max(60, 100 - (index * 10))}%`
                 }}
               >
                 <div className="fc-stage-icon">{stage.icon}</div>
@@ -497,9 +494,9 @@ function FunnelCalculator() {
         </div>
       )}
 
-      {/* Save Button */}
-      {user && (
-        <div className="fc-actions">
+      {/* Actions */}
+      <div className="fc-actions">
+        {user && (
           <button
             className="primary-button"
             onClick={handleSave}
@@ -507,8 +504,14 @@ function FunnelCalculator() {
           >
             {saving ? 'Saving...' : 'Save Funnel Data'}
           </button>
-        </div>
-      )}
+        )}
+        <button
+          className="fc-back-button"
+          onClick={() => navigate(-1)}
+        >
+          ← Go Back
+        </button>
+      </div>
     </div>
   )
 }

@@ -139,12 +139,54 @@ function GrandSlamOfferFlow() {
   const [savedProgressData, setSavedProgressData] = useState(null)
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('grand-slam-offer-v2', user?.id)
 
+  // View results mode
+  const [viewingResults, setViewingResults] = useState(false)
+
   // Load existing offer and product data
   useEffect(() => {
     if (user) {
       loadExistingData()
     }
   }, [user])
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      try {
+        const { data: savedData, error } = await supabase
+          .from('grand_slam_offers')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (error || !savedData) {
+          console.log('No saved grand slam results found')
+          return
+        }
+
+        // Restore the saved state
+        if (savedData.proof_data) setProofData(savedData.proof_data)
+        if (savedData.speed_data) setSpeedData(savedData.speed_data)
+        if (savedData.ease_data) setEaseData(savedData.ease_data)
+        if (savedData.custom_ease) setCustomEase(savedData.custom_ease)
+        if (savedData.grand_slam_score) setGrandSlamScore(savedData.grand_slam_score)
+        if (savedData.selected_product) setSelectedProduct(savedData.selected_product)
+
+        setViewingResults(true)
+        setStage(STAGES.SCORE)
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+
+    if (!isLoading) {
+      loadSavedResults()
+    }
+  }, [searchParams, user, isLoading])
 
   // Check for saved progress
   useEffect(() => {
@@ -421,7 +463,7 @@ function GrandSlamOfferFlow() {
       const questResult = await completeFlowQuest({
         userId: user.id,
         flowId: 'grand_slam_offer',
-        pointsEarned: 30
+        pointsEarned: 8
       })
       console.log('🎯 Grand Slam quest completion result:', questResult)
 
@@ -872,18 +914,30 @@ function GrandSlamOfferFlow() {
             </div>
           )}
 
-          <button
-            className="primary-button"
-            onClick={handleComplete}
-            disabled={isSaving}
-            style={{ marginTop: '1rem' }}
-          >
-            {isSaving ? 'Saving...' : 'Complete & Continue →'}
-          </button>
+          {viewingResults ? (
+            <button
+              className="primary-button"
+              onClick={() => navigate('/7-day-challenge')}
+              style={{ marginTop: '1rem' }}
+            >
+              Return to Challenge
+            </button>
+          ) : (
+            <>
+              <button
+                className="primary-button"
+                onClick={handleComplete}
+                disabled={isSaving}
+                style={{ marginTop: '1rem' }}
+              >
+                {isSaving ? 'Saving...' : 'Complete & Continue →'}
+              </button>
 
-          <button className="go-back-link" onClick={goBack}>
-            ← Go Back
-          </button>
+              <button className="go-back-link" onClick={goBack}>
+                ← Go Back
+              </button>
+            </>
+          )}
         </div>
       )}
 

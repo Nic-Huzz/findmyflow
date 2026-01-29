@@ -13,6 +13,7 @@ import {
 import { supabase } from '../../lib/supabaseClient'
 import { DashboardSkeleton } from '../../components/crm/Skeleton'
 import PullToRefresh from '../../components/crm/PullToRefresh'
+import DailyActions from '../../components/crm/DailyActions'
 import { hapticLight } from '../../lib/haptics'
 import '../../components/crm/PageTransition.css'
 import './Dashboard.css'
@@ -95,6 +96,11 @@ export default function Dashboard() {
           <span className="hq-stat-label">Pipeline Value</span>
         </div>
       </div>
+
+        {/* Daily Actions */}
+        <section className="hq-section">
+          <DailyActions userId={user?.id} />
+        </section>
 
         {/* Quick Actions - 2 column grid */}
         <section className="hq-section">

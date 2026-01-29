@@ -7,9 +7,14 @@
  * - Points earned per response display
  * - Link to create/manage forms
  * - Auto-completes when target is reached
+ * - POST-ACTION reflection modal on completion
+ *
+ * Test Mode: Add ?testPostAction=true to URL to show test button
  */
 
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './ResponseCounterInput.css'
 
 function ResponseCounterInput({
@@ -17,14 +22,53 @@ function ResponseCounterInput({
   responseCount = 0,
   onComplete
 }) {
+  const [searchParams] = useSearchParams()
+  const testMode = searchParams.get('testPostAction') === 'true'
+
   const target = quest.target_responses || 3
   const pointsPerResponse = quest.points_per_response || 8
   const pointsEarned = Math.min(responseCount, target) * pointsPerResponse
   const isComplete = responseCount >= target
   const progressPercent = Math.min((responseCount / target) * 100, 100)
 
-  // If complete, auto-trigger completion
-  // (This would be handled by useChallengeData, but we show completed state)
+  // POST-ACTION state
+  const [showPostAction, setShowPostAction] = useState(false)
+  const [postFeeling, setPostFeeling] = useState(null)
+  const [threePercent, setThreePercent] = useState('')
+
+  // Handle opening POST-ACTION modal
+  const handleCompleteClick = () => {
+    setShowPostAction(true)
+  }
+
+  // Handle POST-ACTION feeling selection
+  const handleFeelingSelect = (feeling) => {
+    setPostFeeling(feeling)
+  }
+
+  // Handle final completion with POST-ACTION data
+  const handleFinalComplete = (e) => {
+    const postActionData = {
+      responseCount,
+      pointsEarned,
+      post_action: {
+        post_feeling: postFeeling,
+        three_percent_reflection: threePercent.trim() || null,
+        timestamp: new Date().toISOString()
+      }
+    }
+
+    setShowPostAction(false)
+    onComplete(quest, postActionData, e)
+  }
+
+  // Feeling options
+  const feelingOptions = [
+    { id: 'easier_than_expected', emoji: '😌', label: 'Easier than expected' },
+    { id: 'as_expected', emoji: '😐', label: 'As expected' },
+    { id: 'harder_than_expected', emoji: '😰', label: 'Harder than expected' },
+    { id: 'didnt_finish', emoji: '❌', label: 'Didn\'t finish' }
+  ]
 
   return (
     <div className="response-counter-input">
@@ -68,10 +112,85 @@ function ResponseCounterInput({
       {isComplete && (
         <button
           className="quest-complete-btn"
-          onClick={(e) => onComplete(quest, { responseCount, pointsEarned }, e)}
+          onClick={handleCompleteClick}
         >
           Complete Quest (+{quest.points} pts)
         </button>
+      )}
+
+      {/* Test mode button - only shows with ?testPostAction=true */}
+      {testMode && !isComplete && (
+        <button
+          className="quest-complete-btn test-mode-btn"
+          onClick={handleCompleteClick}
+          style={{
+            background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+            marginTop: '8px'
+          }}
+        >
+          🧪 Test POST-ACTION Modal
+        </button>
+      )}
+
+      {/* POST-ACTION Modal - Rendered via Portal to escape stacking context */}
+      {showPostAction && createPortal(
+        <div className="post-action-overlay" onClick={() => setShowPostAction(false)}>
+          <div className="post-action-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="post-action-header">
+              <div className="post-action-icon">✅</div>
+              <h3 className="post-action-title">Validation Complete!</h3>
+              <p className="post-action-subtitle">
+                You collected {responseCount} responses for your validation survey.
+              </p>
+            </div>
+
+            <div className="post-action-divider"></div>
+
+            {/* Feeling Question */}
+            <div className="post-action-section">
+              <h4 className="post-action-question">How was the validation process overall?</h4>
+              <div className="post-action-feelings">
+                {feelingOptions.map(option => (
+                  <button
+                    key={option.id}
+                    className={`post-action-feeling ${postFeeling === option.id ? 'selected' : ''}`}
+                    onClick={() => handleFeelingSelect(option.id)}
+                  >
+                    <span className="feeling-emoji">{option.emoji}</span>
+                    <span className="feeling-label">{option.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="post-action-divider"></div>
+
+            {/* 3% Reflection */}
+            <div className="post-action-section">
+              <h4 className="post-action-question">
+                What would make the validation process 3% better next time?
+              </h4>
+              <textarea
+                className="post-action-textarea"
+                placeholder="e.g., Ask about their budget earlier in the form..."
+                value={threePercent}
+                onChange={(e) => setThreePercent(e.target.value)}
+                rows={3}
+              />
+              <p className="post-action-hint">Optional — your insights compound over time</p>
+            </div>
+
+            {/* Complete Button */}
+            <button
+              className="post-action-complete-btn"
+              onClick={handleFinalComplete}
+              disabled={!postFeeling}
+            >
+              Complete & Earn Points →
+            </button>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   )

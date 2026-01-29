@@ -1,0 +1,302 @@
+/* src/components/crm/DailyActions.css */
+
+.daily-actions {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Header */
+.da-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.da-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+  margin: 0;
+}
+
+.da-day-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.da-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  background: white;
+  color: var(--text-secondary, #6c757d);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.da-nav-btn:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.da-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.da-day-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6c757d);
+  min-width: 90px;
+  text-align: center;
+}
+
+/* Loading */
+.da-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.da-spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e9ecef;
+  border-top-color: var(--purple, #5e17eb);
+  border-radius: 50%;
+  animation: da-spin 0.8s linear infinite;
+}
+
+@keyframes da-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.da-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.da-empty-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.da-empty p {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6c757d);
+  margin: 0;
+}
+
+/* Sections */
+.da-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.da-section {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.da-section.da-attract {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.05) 0%, rgba(124, 58, 237, 0.08) 100%);
+  border: 1px solid rgba(94, 23, 235, 0.15);
+}
+
+.da-section.da-nurture {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(167, 139, 250, 0.08) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+/* Section Header */
+.da-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.da-section-icon {
+  font-size: 1rem;
+}
+
+.da-section-title {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-primary, #212529);
+}
+
+.da-section-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background: var(--purple, #5e17eb);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.da-section.da-nurture .da-section-count {
+  background: #8b5cf6;
+}
+
+/* Items List */
+.da-items {
+  padding: 8px;
+}
+
+.da-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+}
+
+.da-item:last-child {
+  margin-bottom: 0;
+}
+
+.da-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.da-item.stale {
+  border-left: 3px solid #ef4444;
+}
+
+.da-item-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.da-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.da-item-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary, #212529);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.da-handle {
+  font-weight: 400;
+  color: var(--text-secondary, #6c757d);
+  margin-left: 4px;
+}
+
+.da-item-context {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6c757d);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.da-item-status,
+.da-item-meta {
+  flex-shrink: 0;
+}
+
+/* Badges */
+.da-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.da-badge-todo {
+  background: #e9ecef;
+  color: var(--text-secondary, #6c757d);
+}
+
+.da-badge-draft {
+  background: rgba(94, 23, 235, 0.1);
+  color: var(--purple, #5e17eb);
+}
+
+.da-badge-stale {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.da-badge-days {
+  background: #f1f3f5;
+  color: var(--text-secondary, #6c757d);
+}
+
+/* Section Action Button */
+.da-section-action {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--purple, #5e17eb);
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.da-section-action:hover {
+  background: rgba(94, 23, 235, 0.05);
+}
+
+.da-section.da-nurture .da-section-action {
+  color: #8b5cf6;
+}
+
+.da-section.da-nurture .da-section-action:hover {
+  background: rgba(139, 92, 246, 0.05);
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .daily-actions {
+    padding: 16px;
+  }
+
+  .da-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .da-day-nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

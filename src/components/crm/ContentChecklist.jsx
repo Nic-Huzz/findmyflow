@@ -170,6 +170,9 @@ function ContentChecklistItem({
           <div className="item-header">
             <span className="item-icon">{item.icon}</span>
             <span className="item-label">{item.label}</span>
+            {item.post_day && (
+              <span className="item-day-badge">{item.post_day.substring(0, 3)}</span>
+            )}
           </div>
           {item.context && (
             <p className="item-context">{item.context}</p>

@@ -90,7 +90,7 @@ function PortalExplainer({ onClose }) {
               <span className="points-emoji">🎯</span>
               <div>
                 <strong>Complete Quests</strong>
-                <p>Earn 3-30 points per quest</p>
+                <p>Earn 3-9 points per quest</p>
               </div>
             </div>
             <div className="points-item">

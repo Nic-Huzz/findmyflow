@@ -1,5 +1,5 @@
 /**
- * FunnelBuilderFlow - Build Your Lead Generation Funnel (+35 pts)
+ * FunnelBuilderFlow - Build Your Lead Generation Funnel (+8 pts)
  *
  * Integrates:
  * - Core Four strategy selection (from Leads Strategy flow)
@@ -30,7 +30,59 @@ const STAGES = {
   CONVERSION_MECHANISM: 'conversion_mechanism',
   FOLLOW_UP: 'follow_up',
   SUMMARY: 'summary',
+  PRE_ACTION: 'pre_action',
   SUCCESS: 'success'
+}
+
+// Visibility layers for 2D pattern recognition (WHERE the resistance shows up)
+const VISIBILITY_LAYERS = [
+  { id: 'screen', icon: '📱', label: 'Screen', description: 'Putting myself out there where people can see and judge me' },
+  { id: 'live', icon: '⚡', label: 'Live', description: 'Doing something in real-time where I can\'t edit or take it back' },
+  { id: 'vulnerable', icon: '💗', label: 'Vulnerable', description: 'Showing something unfinished or admitting I need help' },
+  { id: 'money', icon: '💰', label: 'Money', description: 'Asking someone to pay me or stating my price' },
+  { id: 'authority', icon: '👑', label: 'Authority', description: 'Claiming expertise or positioning myself as someone to follow' }
+]
+
+// Protective voices for 2D pattern recognition (HOW the resistance sounds)
+const PROTECTIVE_VOICES = [
+  { id: 'perfectionist', icon: '🎭', label: 'Perfectionist', description: 'It needs to be perfect before I can share it' },
+  { id: 'people_pleaser', icon: '🤝', label: 'People Pleaser', description: 'I don\'t want to bother or burden anyone' },
+  { id: 'controller', icon: '🎛️', label: 'Controller', description: 'I can\'t control how they\'ll respond' },
+  { id: 'performer', icon: '🎪', label: 'Performer', description: 'I need to have more figured out first' },
+  { id: 'ghost', icon: '👻', label: 'Ghost', description: 'I\'d rather stay quiet than risk rejection' }
+]
+
+// Contextual essence messages based on voice + layer
+const getEssenceMessage = (voice, layer) => {
+  const messages = {
+    'perfectionist_screen': 'Your Perfectionist wants the funnel perfect before launching. But real data from real people improves funnels faster.',
+    'perfectionist_live': 'Your Perfectionist fears making mistakes live. But funnels evolve through iteration.',
+    'perfectionist_vulnerable': 'Your Perfectionist doesn\'t want to show something unfinished. But launching early gets you real feedback.',
+    'perfectionist_money': 'Your Perfectionist wants the pricing perfect. But the market tells you what works.',
+    'perfectionist_authority': 'Your Perfectionist wants more proof first. But you already know enough to help people.',
+    'people_pleaser_screen': 'Your People Pleaser worries about being "salesy." But your funnel helps people find solutions.',
+    'people_pleaser_live': 'Your People Pleaser fears disappointing someone. But authentic funnels attract the right people.',
+    'people_pleaser_vulnerable': 'Your People Pleaser doesn\'t want to impose. But people are looking for what you offer.',
+    'people_pleaser_money': 'Your People Pleaser feels uncomfortable asking for money. But fair exchange benefits everyone.',
+    'people_pleaser_authority': 'Your People Pleaser worries about seeming arrogant. But sharing expertise is service.',
+    'controller_screen': 'Your Controller can\'t predict the response. But the unknown holds opportunity.',
+    'controller_live': 'Your Controller wants to script every outcome. But real insights come from real traffic.',
+    'controller_vulnerable': 'Your Controller wants certainty first. But launching creates the data you need.',
+    'controller_money': 'Your Controller fears rejection. But every "no" brings you closer to "yes."',
+    'controller_authority': 'Your Controller wants guaranteed results. But authority is built through action.',
+    'performer_screen': 'Your Performer wants a bigger audience first. But every funnel starts somewhere.',
+    'performer_live': 'Your Performer wants to prove expertise first. But running funnels IS building expertise.',
+    'performer_vulnerable': 'Your Performer feels unqualified. But action builds confidence.',
+    'performer_money': 'Your Performer wants more success stories first. But you have to start somewhere.',
+    'performer_authority': 'Your Performer needs more validation. But validation comes from launching.',
+    'ghost_screen': 'Your Ghost wants to stay invisible. But your funnel deserves to be seen.',
+    'ghost_live': 'Your Ghost prefers safety. But your voice matters.',
+    'ghost_vulnerable': 'Your Ghost says it\'s safer to stay hidden. But connection is what you\'re seeking.',
+    'ghost_money': 'Your Ghost avoids attention. But asking for fair exchange is claiming your worth.',
+    'ghost_authority': 'Your Ghost shrinks from the spotlight. But quiet authority is still authority.'
+  }
+  const key = `${voice}_${layer}`
+  return messages[key] || 'Your protective pattern is trying to keep you safe. But you don\'t need protection from helping people.'
 }
 
 const STAGE_GROUPS = [
@@ -188,6 +240,12 @@ function FunnelBuilderFlow() {
 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
+
+  // PRE-ACTION state
+  const [preActionFeeling, setPreActionFeeling] = useState(null)
+  const [visibilityLayer, setVisibilityLayer] = useState(null)
+  const [protectiveVoice, setProtectiveVoice] = useState(null)
+  const [preActionStep, setPreActionStep] = useState('feeling')
 
   // Load prerequisites on mount
   useEffect(() => {
@@ -353,6 +411,43 @@ function FunnelBuilderFlow() {
     }
   }
 
+  // PRE-ACTION handlers
+  const handleFeelingSelect = (feeling) => {
+    setPreActionFeeling(feeling)
+    if (feeling === 'excited' || feeling === 'ready') {
+      setStage(STAGES.SUCCESS)
+    } else {
+      setPreActionStep('layer')
+    }
+  }
+
+  const handleLayerSelect = (layer) => {
+    setVisibilityLayer(layer)
+    setPreActionStep('voice')
+  }
+
+  const handleVoiceSelect = (voice) => {
+    setProtectiveVoice(voice)
+    setPreActionStep('essence')
+
+    if (user) {
+      supabase.from('pre_action_captures').insert({
+        user_id: user.id,
+        action_type: 'build_funnel',
+        flow_type: 'funnel_builder',
+        feeling: preActionFeeling,
+        visibility_layer: visibilityLayer,
+        protective_voice: voice
+      }).then(({ error }) => {
+        if (error) console.warn('PRE-ACTION save failed:', error)
+      })
+    }
+  }
+
+  const handleEssenceComplete = () => {
+    setStage(STAGES.SUCCESS)
+  }
+
   async function handleSave() {
     if (!user) return
 
@@ -388,10 +483,12 @@ function FunnelBuilderFlow() {
       await completeFlowQuest({
         userId: user.id,
         flowId: 'funnel_builder',
-        pointsEarned: 35
+        pointsEarned: 8
       })
 
-      setStage(STAGES.SUCCESS)
+      // Go to PRE-ACTION to capture resistance before success
+      setPreActionStep('feeling')
+      setStage(STAGES.PRE_ACTION)
 
     } catch (err) {
       console.error('Error saving funnel:', err)
@@ -922,6 +1019,102 @@ function FunnelBuilderFlow() {
     )
   }
 
+  // Render PRE-ACTION
+  if (stage === STAGES.PRE_ACTION) {
+    return (
+      <div className="funnel-builder-flow flow-base">
+        <div className="pre-action-container">
+          <div className="pre-action-header">
+            <div className="success-icon small">✓</div>
+            <h2>Funnel Plan Saved!</h2>
+            <p className="pre-action-subtitle">
+              Before you go, let's prepare you for the next step: <strong>building your funnel</strong>
+            </p>
+          </div>
+
+          {preActionStep === 'feeling' && (
+            <div className="pre-action-step">
+              <h3>How do you feel about building this funnel?</h3>
+              <div className="pre-action-options">
+                <button className="pre-action-option positive" onClick={() => handleFeelingSelect('excited')}>
+                  <span className="option-icon">🔥</span>
+                  <span className="option-label">Excited</span>
+                  <span className="option-desc">Let's do this!</span>
+                </button>
+                <button className="pre-action-option positive" onClick={() => handleFeelingSelect('ready')}>
+                  <span className="option-icon">✅</span>
+                  <span className="option-label">Ready</span>
+                  <span className="option-desc">Feeling prepared</span>
+                </button>
+                <button className="pre-action-option negative" onClick={() => handleFeelingSelect('nervous')}>
+                  <span className="option-icon">😰</span>
+                  <span className="option-label">Nervous</span>
+                  <span className="option-desc">A bit anxious</span>
+                </button>
+                <button className="pre-action-option negative" onClick={() => handleFeelingSelect('resistant')}>
+                  <span className="option-icon">🛑</span>
+                  <span className="option-label">Resistant</span>
+                  <span className="option-desc">Feeling blocked</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'layer' && (
+            <div className="pre-action-step">
+              <h3>What specifically feels hard?</h3>
+              <p className="pre-action-hint">Select where the resistance shows up...</p>
+              <div className="pre-action-layers">
+                {VISIBILITY_LAYERS.map(layer => (
+                  <button key={layer.id} className="pre-action-layer" onClick={() => handleLayerSelect(layer.id)}>
+                    <span className="layer-icon">{layer.icon}</span>
+                    <span className="layer-label">{layer.label}</span>
+                    <span className="layer-desc">{layer.description}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'voice' && (
+            <div className="pre-action-step">
+              <h3>What's the voice saying?</h3>
+              <p className="pre-action-hint">Choose the one that sounds most familiar...</p>
+              <div className="pre-action-voices">
+                {PROTECTIVE_VOICES.map(voice => (
+                  <button key={voice.id} className="pre-action-voice" onClick={() => handleVoiceSelect(voice.id)}>
+                    <span className="voice-icon">{voice.icon}</span>
+                    <span className="voice-label">{voice.label}</span>
+                    <span className="voice-desc">{voice.description}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {preActionStep === 'essence' && (
+            <div className="pre-action-step essence-step">
+              <div className="essence-badge">
+                <span>{PROTECTIVE_VOICES.find(v => v.id === protectiveVoice)?.icon}</span>
+                <span>×</span>
+                <span>{VISIBILITY_LAYERS.find(l => l.id === visibilityLayer)?.icon}</span>
+              </div>
+              <div className="essence-message">
+                <p>{getEssenceMessage(protectiveVoice, visibilityLayer)}</p>
+              </div>
+              <div className="essence-affirmation">
+                <p><strong>Your essence knows:</strong> This funnel will help you reach people who need what you offer.</p>
+              </div>
+              <button className="primary-button" onClick={handleEssenceComplete}>
+                I'm Ready
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   // Render Success
   if (stage === STAGES.SUCCESS) {
     return (
@@ -929,7 +1122,7 @@ function FunnelBuilderFlow() {
         <div className="fb-success">
           <div className="fb-success-icon">🎉</div>
           <h1>Funnel Plan Complete!</h1>
-          <p className="fb-success-points">+35 points earned</p>
+          <p className="fb-success-points">+8 points earned</p>
 
           <div className="fb-success-summary">
             <p>You now have a complete lead generation funnel:</p>

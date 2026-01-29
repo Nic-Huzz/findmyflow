@@ -1,0 +1,678 @@
+/**
+ * OfferChecklist.css - Implementation checklist for offer creation
+ * Following FindMyFlow Design Guide
+ */
+
+/* ========================================
+   PAGE LAYOUT
+   ======================================== */
+
+.offer-checklist-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.offer-checklist-page .container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Loading State */
+.offer-checklist-page .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+}
+
+.offer-checklist-page .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.offer-checklist-page .checklist-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-top: 40px;
+}
+
+.offer-checklist-page .page-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 12px;
+  line-height: 1.2;
+  color: white;
+}
+
+.offer-checklist-page .page-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* ========================================
+   OFFER TYPE SELECTION
+   ======================================== */
+
+.offer-checklist-page .offer-type-selection {
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.offer-checklist-page .section-title {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin: 0 0 24px;
+  color: white;
+}
+
+.offer-checklist-page .offer-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* Save Progress Section */
+.offer-checklist-page .save-section {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.offer-checklist-page .save-progress-btn {
+  width: 100%;
+  max-width: 320px;
+  padding: 16px 32px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.offer-checklist-page .save-progress-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+/* Go Back Link */
+.offer-checklist-page .go-back-link {
+  display: block;
+  text-align: center;
+  margin-top: 24px;
+  padding-bottom: 40px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.offer-checklist-page .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.offer-checklist-page .offer-type-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.offer-checklist-page .offer-type-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.5);
+  transform: translateY(-4px);
+}
+
+.offer-checklist-page .offer-type-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.offer-checklist-page .offer-type-name {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+  color: white;
+}
+
+/* ========================================
+   CHECKLIST CONTENT
+   ======================================== */
+
+.offer-checklist-page .checklist-content {
+  animation: fadeInUp 0.4s ease;
+}
+
+/* Offer Header */
+.offer-checklist-page .offer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.offer-checklist-page .offer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.offer-checklist-page .offer-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.offer-checklist-page .offer-name {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.offer-checklist-page .change-type-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-checklist-page .change-type-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Progress Section */
+.offer-checklist-page .progress-section {
+  margin-bottom: 28px;
+}
+
+.offer-checklist-page .progress-text {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.offer-checklist-page .progress-count {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.offer-checklist-page .progress-label {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.offer-checklist-page .progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.offer-checklist-page .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ========================================
+   CHECKLIST ITEMS
+   ======================================== */
+
+.offer-checklist-page .checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.offer-checklist-page .checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offer-checklist-page .checklist-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.offer-checklist-page .checklist-item.completed {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+.offer-checklist-page .checklist-item.completed .item-label {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* Checkbox */
+.offer-checklist-page .item-checkbox {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+.offer-checklist-page .checkbox-unchecked {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.offer-checklist-page .checkbox-checked {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #212529;
+  font-size: 16px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+/* Item Content */
+.offer-checklist-page .item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.offer-checklist-page .item-label {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  line-height: 1.3;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.offer-checklist-page .item-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ========================================
+   COMPLETE SECTION
+   ======================================== */
+
+.offer-checklist-page .complete-section {
+  margin-top: 32px;
+  animation: fadeInUp 0.4s ease;
+}
+
+.offer-checklist-page .complete-quest-btn {
+  width: 100%;
+  padding: 18px 32px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  border: none;
+  border-radius: 14px;
+  color: #212529;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4);
+}
+
+.offer-checklist-page .complete-quest-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(251, 191, 36, 0.5);
+}
+
+.offer-checklist-page .error-message {
+  color: #fca5a5;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+/* ========================================
+   POST-ACTION MODAL
+   ======================================== */
+
+.offer-checklist-page .post-action-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.offer-checklist-page .post-action-modal {
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+  position: relative;
+  z-index: 10001;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.offer-checklist-page .post-action-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.offer-checklist-page .post-action-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.offer-checklist-page .post-action-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.offer-checklist-page .post-action-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.offer-checklist-page .post-action-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  margin: 24px 0;
+}
+
+.offer-checklist-page .post-action-section {
+  margin-bottom: 8px;
+}
+
+.offer-checklist-page .post-action-question {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.offer-checklist-page .post-action-feelings {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.offer-checklist-page .post-action-feeling {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-checklist-page .post-action-feeling:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-2px);
+}
+
+.offer-checklist-page .post-action-feeling.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+}
+
+.offer-checklist-page .post-action-feeling .feeling-emoji {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.offer-checklist-page .post-action-feeling .feeling-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.offer-checklist-page .post-action-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  font-family: inherit;
+  line-height: 1.5;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.offer-checklist-page .post-action-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.offer-checklist-page .post-action-textarea:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.offer-checklist-page .post-action-hint {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 8px 0 0;
+  text-align: center;
+}
+
+.offer-checklist-page .post-action-complete-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  border: none;
+  border-radius: 12px;
+  color: #212529;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+  margin-top: 24px;
+}
+
+.offer-checklist-page .post-action-complete-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.offer-checklist-page .post-action-complete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+/* iOS Safe Area Support */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .offer-checklist-page {
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 480px) {
+  .offer-checklist-page {
+    padding: 16px;
+  }
+
+  .offer-checklist-page .checklist-header {
+    padding-top: 24px;
+  }
+
+  .offer-checklist-page .page-title {
+    font-size: 24px;
+  }
+
+  .offer-checklist-page .offer-type-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .offer-checklist-page .offer-type-card {
+    padding: 20px 12px;
+  }
+
+  .offer-checklist-page .offer-type-icon {
+    font-size: 28px;
+  }
+
+  .offer-checklist-page .offer-type-name {
+    font-size: 13px;
+  }
+
+  .offer-checklist-page .offer-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .offer-checklist-page .offer-name {
+    font-size: 20px;
+  }
+
+  .offer-checklist-page .checklist-item {
+    padding: 16px;
+  }
+
+  .offer-checklist-page .item-checkbox {
+    width: 28px;
+    height: 28px;
+  }
+
+  .offer-checklist-page .item-label {
+    font-size: 15px;
+  }
+
+  .offer-checklist-page .item-description {
+    font-size: 13px;
+  }
+
+  .offer-checklist-page .post-action-modal {
+    padding: 24px 20px;
+    margin: 10px;
+  }
+
+  .offer-checklist-page .post-action-title {
+    font-size: 20px;
+  }
+
+  .offer-checklist-page .post-action-feelings {
+    gap: 8px;
+  }
+
+  .offer-checklist-page .post-action-feeling {
+    padding: 12px 10px;
+  }
+}

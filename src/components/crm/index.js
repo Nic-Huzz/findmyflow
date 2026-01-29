@@ -48,3 +48,6 @@ export { default as ContentChecklist } from './ContentChecklist'
 
 // Leads Capture System
 export { default as LeadsCapture } from './LeadsCapture'
+
+// Dashboard Components
+export { default as DailyActions } from './DailyActions'

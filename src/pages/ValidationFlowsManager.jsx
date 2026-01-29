@@ -58,6 +58,8 @@ const ValidationFlowsManager = () => {
   const [editSaving, setEditSaving] = useState(false)
   const [aiSummary, setAiSummary] = useState(null)
   const [aiSummaryLoading, setAiSummaryLoading] = useState(false)
+  const [validationInsight, setValidationInsight] = useState('')
+  const [insightSaved, setInsightSaved] = useState(false)
   const [timePeriod, setTimePeriod] = useState('all')
   const [analyticsLoading, setAnalyticsLoading] = useState(false)
   const [animatedValues, setAnimatedValues] = useState({})
@@ -557,6 +559,36 @@ const ValidationFlowsManager = () => {
       generateLocalSummary()
     } finally {
       setAiSummaryLoading(false)
+    }
+  }
+
+  // Save validation insight (Touch Point 2 - POST-ACTION)
+  const saveValidationInsight = async () => {
+    if (!validationInsight.trim() || !selectedFlow || !user?.id) return
+
+    try {
+      await supabase.from('flow_sessions').insert({
+        user_id: user.id,
+        flow_type: 'validation_insight',
+        flow_version: 'v1',
+        status: 'completed',
+        last_step_id: 'insight_captured',
+        step_data: {
+          stage: 1,
+          source: 'validation_ai_summary',
+          action_type: 'analyze_validation_responses',
+          key_takeaway: validationInsight.trim(),
+          flow_id: selectedFlow.id,
+          flow_name: selectedFlow.flow_name,
+          responses_analyzed: responses.length,
+          timestamp: new Date().toISOString()
+        }
+      })
+      setInsightSaved(true)
+      // Reset after 3 seconds
+      setTimeout(() => setInsightSaved(false), 3000)
+    } catch (err) {
+      console.warn('Failed to save validation insight:', err)
     }
   }
 
@@ -1213,6 +1245,31 @@ const ValidationFlowsManager = () => {
                       )}
                     </>
                   )}
+
+                  {/* Insight Capture - POST-ACTION Touch Point 2 */}
+                  <div className="insight-capture-section">
+                    <div className="insight-capture-divider"></div>
+                    <h4 className="insight-capture-question">
+                      What's your biggest takeaway from this validation?
+                    </h4>
+                    <textarea
+                      className="insight-capture-textarea"
+                      placeholder="e.g., People care more about speed than price..."
+                      value={validationInsight}
+                      onChange={(e) => setValidationInsight(e.target.value)}
+                      rows={2}
+                    />
+                    <div className="insight-capture-actions">
+                      <span className="insight-capture-hint">Optional — capture insights for future reference</span>
+                      <button
+                        className={`insight-save-btn ${insightSaved ? 'saved' : ''}`}
+                        onClick={saveValidationInsight}
+                        disabled={!validationInsight.trim() || insightSaved}
+                      >
+                        {insightSaved ? '✓ Saved' : 'Save Insight'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
 

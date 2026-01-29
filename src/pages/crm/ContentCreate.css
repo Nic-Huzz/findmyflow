@@ -543,14 +543,14 @@
 }
 
 .cc-action-btn.use {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #E9A23B, #d97706);
   border: none;
   color: white;
 }
 
 .cc-action-btn.use:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
 }
 
 .cc-action-btn.new {

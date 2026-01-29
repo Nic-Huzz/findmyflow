@@ -3,40 +3,116 @@
  * Styles for the weekly planning flow component
  */
 
-/* Week type theme variables - Brand purple & gold */
-:root {
-  /* Push: Deep purple (intense effort) */
-  --week-push-primary: #4a0ea8;
-  --week-push-secondary: #3d0b8a;
-  --week-push-bg: linear-gradient(135deg, #2d0666 0%, #4a0ea8 50%, #5e17eb 100%);
+/* =============================================================================
+ * EMPTY STATE (no projects)
+ * ============================================================================= */
 
-  /* Flow: Brand purple (balanced rhythm) */
+.planning-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  min-height: 60vh;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.planning-empty-state .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+}
+
+.planning-empty-state h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  color: white;
+}
+
+.planning-empty-state p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 32px 0;
+}
+
+.planning-empty-state .primary-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  border: none;
+  border-radius: 14px;
+  color: #1f2937;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(255, 221, 39, 0.3);
+  margin-bottom: 12px;
+}
+
+.planning-empty-state .primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(255, 221, 39, 0.4);
+}
+
+.planning-empty-state .secondary-btn {
+  width: 100%;
+  padding: 14px 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.planning-empty-state .secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* Week type theme variables - All use brand purple, gold for selection */
+:root {
+  /* All week types use the same brand purple background */
+  --week-purple-bg: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+
+  /* Push */
+  --week-push-primary: #5e17eb;
+  --week-push-secondary: #4a0ea8;
+  --week-push-bg: var(--week-purple-bg);
+
+  /* Flow */
   --week-flow-primary: #5e17eb;
   --week-flow-secondary: #4a0ea8;
-  --week-flow-bg: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  --week-flow-bg: var(--week-purple-bg);
 
-  /* Rest: Warm gold (soft recovery) */
-  --week-rest-primary: #f59e0b;
-  --week-rest-secondary: #d97706;
-  --week-rest-bg: linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #fbbf24 100%);
+  /* Rest */
+  --week-rest-primary: #5e17eb;
+  --week-rest-secondary: #4a0ea8;
+  --week-rest-bg: var(--week-purple-bg);
 
-  /* Launch: Brand gold (achievement) */
-  --week-launch-primary: #E9A23B;
-  --week-launch-secondary: #d97706;
-  --week-launch-bg: linear-gradient(135deg, #b45309 0%, #E9A23B 50%, #fcd34d 100%);
+  /* Launch */
+  --week-launch-primary: #5e17eb;
+  --week-launch-secondary: #4a0ea8;
+  --week-launch-bg: var(--week-purple-bg);
 }
 
 .weekly-planning-flow {
-  height: 100vh;
-  height: 100dvh; /* Dynamic viewport for mobile */
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport for mobile */
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0));
   transition: background 0.5s ease;
-  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -84,7 +160,7 @@
   letter-spacing: 1px;
 }
 
-/* Content Area */
+/* Content Area - now includes navigation, scrolls together */
 .planning-content {
   flex: 1;
   display: flex;
@@ -92,8 +168,7 @@
   max-width: 500px;
   margin: 0 auto;
   width: 100%;
-  overflow-y: auto;
-  min-height: 0; /* Required for flex child scrolling */
+  padding-bottom: 20px;
 }
 
 .planning-step {
@@ -148,9 +223,9 @@
 }
 
 .week-type-card.selected {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: var(--type-color, white);
-  box-shadow: 0 0 20px rgba(var(--type-color), 0.3);
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
 }
 
 .type-icon {
@@ -1034,16 +1109,13 @@
   font-size: 0.875rem;
 }
 
-/* Navigation */
+/* Navigation - now inside content, flows with page */
 .planning-navigation {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 24px;
-  max-width: 500px;
+  margin-top: 32px;
   width: 100%;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .weekly-planning-flow .nav-btn {
@@ -1088,7 +1160,7 @@
 @media (max-width: 480px) {
   .weekly-planning-flow {
     padding: 16px;
-    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
   }
 
   .planning-step h2 {
@@ -1256,28 +1328,61 @@
   line-height: 1.2;
 }
 
-/* Generate challenge button */
-.generate-challenge-btn {
+/* Groan action buttons container */
+.groan-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+/* Write your own button */
+.write-own-btn {
   width: 100%;
   padding: 1rem 1.5rem;
-  background: #fbbf24;
-  border: none;
-  border-radius: 0.5rem;
-  color: #1f2937;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: white;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+}
+
+.write-own-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Generate challenge button */
+.generate-challenge-btn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  border: none;
+  border-radius: 12px;
+  color: #1f2937;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
 }
 
 .generate-challenge-btn:hover:not(:disabled) {
-  background: #f59e0b;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #ffc107 0%, #f59e0b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 221, 39, 0.4);
 }
 
 .generate-challenge-btn:disabled {
@@ -1386,5 +1491,990 @@
 
   .visibility-layer-btn .layer-label {
     font-size: 0.55rem;
+  }
+}
+
+/* =============================================================================
+ * WEEKLY REVIEW STEP STYLES
+ * Following design-guide.md: Purple primary, Gold accent, proper shadows
+ * ============================================================================= */
+
+.review-step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Review Card - shared card style for review step */
+.review-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.review-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.review-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.review-card-icon {
+  font-size: 1.25rem;
+}
+
+.review-card-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Project Review Card */
+.project-review-card .project-selector-wrapper select {
+  width: 100%;
+  padding: 14px 40px 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: all 0.3s ease;
+}
+
+.project-review-card .project-selector-wrapper select:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.project-review-card .project-selector-wrapper select:focus {
+  outline: none;
+  border-color: #ffdd27;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(255, 221, 39, 0.15);
+}
+
+.project-review-card .project-selector-wrapper select option {
+  background: #5e17eb;
+  color: white;
+  padding: 12px;
+}
+
+/* Single project display (when only 1 project) */
+.single-project-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 221, 39, 0.08);
+  border: 1px solid rgba(255, 221, 39, 0.2);
+  border-radius: 12px;
+}
+
+.single-project-display .project-icon {
+  font-size: 1.5rem;
+}
+
+.single-project-display .project-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.single-project-display .project-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.single-project-display .project-stage {
+  font-size: 0.8rem;
+  color: #ffdd27;
+  font-weight: 500;
+}
+
+.no-projects {
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Stats Review Card */
+.stats-review-card .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stats-review-card .stat-item {
+  text-align: center;
+  padding: 16px 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.stats-review-card .stat-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.stats-review-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffdd27;
+  display: block;
+  line-height: 1.1;
+}
+
+.stats-review-card .stat-label {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 6px;
+  display: block;
+}
+
+.stats-empty {
+  text-align: center;
+  padding: 24px 16px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* Category breakdown chips in stats */
+.category-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  justify-content: center;
+}
+
+.category-chip {
+  padding: 6px 12px;
+  background: rgba(94, 23, 235, 0.15);
+  border: 1px solid rgba(94, 23, 235, 0.25);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: capitalize;
+}
+
+/* Flow Check Card */
+.flow-check-card .flow-factor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.flow-check-card .flow-factor:last-of-type {
+  margin-bottom: 0;
+}
+
+.flow-check-card .factor-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.flow-check-card .factor-options {
+  display: flex;
+  gap: 12px;
+}
+
+.flow-check-card .factor-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.flow-check-card .factor-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.flow-check-card .factor-btn.selected {
+  background: rgba(255, 221, 39, 0.12);
+  border-color: #ffdd27;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.2);
+}
+
+.flow-check-card .factor-emoji {
+  font-size: 1.75rem;
+}
+
+.flow-check-card .factor-text {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+/* Flow result display */
+.flow-result {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid var(--direction-color, rgba(255, 255, 255, 0.2));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.direction-emoji {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.direction-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.direction-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--direction-color, #ffdd27);
+}
+
+.direction-desc {
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+}
+
+/* Legacy support - flow questions/options */
+.flow-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flow-question {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.flow-question label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.flow-options {
+  display: flex;
+  gap: 10px;
+}
+
+.flow-option-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.flow-option-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.flow-option-btn.selected {
+  background: rgba(255, 221, 39, 0.12);
+  border-color: #ffdd27;
+}
+
+/* Flow direction result - legacy */
+.flow-direction-result {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.direction-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.direction-icon.north { background: rgba(34, 197, 94, 0.25); border: 2px solid rgba(34, 197, 94, 0.4); }
+.direction-icon.east { background: rgba(59, 130, 246, 0.25); border: 2px solid rgba(59, 130, 246, 0.4); }
+.direction-icon.south { background: rgba(239, 68, 68, 0.25); border: 2px solid rgba(239, 68, 68, 0.4); }
+.direction-icon.west { background: rgba(234, 179, 8, 0.25); border: 2px solid rgba(234, 179, 8, 0.4); }
+
+.direction-name {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+/* Stats loading state */
+.stats-loading {
+  text-align: center;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+/* =============================================================================
+ * QUEST PRIORITIES STEP STYLES
+ * Following design-guide.md: Gold accent (#ffdd27), proper shadows and hover
+ * ============================================================================= */
+
+.priorities-step {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.priorities-step h2 {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.priorities-step .step-subtitle {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.priorities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.priority-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+}
+
+.priority-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.priority-card.selected {
+  background: rgba(255, 221, 39, 0.1);
+  border-color: #ffdd27;
+  box-shadow: 0 4px 16px rgba(255, 221, 39, 0.2);
+}
+
+.priority-card.recommended {
+  border-color: rgba(255, 221, 39, 0.3);
+}
+
+.priority-card.recommended:not(.selected):hover {
+  border-color: rgba(255, 221, 39, 0.5);
+}
+
+.priority-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.priority-icon {
+  font-size: 2rem;
+}
+
+.recommended-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffdd27;
+  background: rgba(255, 221, 39, 0.15);
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.priority-label {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: white;
+}
+
+.priority-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.4;
+}
+
+.priority-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+.priority-card.selected .priority-check {
+  color: #ffdd27;
+  text-shadow: 0 0 8px rgba(255, 221, 39, 0.5);
+}
+
+.priorities-hint {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  line-height: 1.5;
+}
+
+/* Summary priorities display */
+.summary-priorities .summary-priority-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.summary-priority-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 221, 39, 0.12);
+  border: 1px solid rgba(255, 221, 39, 0.25);
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffdd27;
+}
+
+.summary-priority-chip .chip-icon {
+  font-size: 1rem;
+}
+
+@media (max-width: 480px) {
+  .priorities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .priority-card {
+    padding: 16px 14px;
+  }
+
+  .priority-icon {
+    font-size: 1.75rem;
+  }
+}
+
+/* =============================================================================
+ * PROJECT FOCUS SECTION (in week type selection)
+ * Following design-guide.md: Proper input styling on dark backgrounds
+ * ============================================================================= */
+
+.project-focus-section {
+  position: relative;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  contain: layout;
+}
+
+.project-focus-section label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 12px;
+}
+
+.project-focus-section label::before {
+  content: '📁';
+  font-size: 1.125rem;
+}
+
+/* Project dropdown wrapper for containment */
+.project-dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+/* Project dropdown - force styles with maximum specificity */
+.weekly-planning-flow .week-type-step .project-focus-section select,
+.weekly-planning-flow .project-focus-section select,
+.weekly-planning-flow .project-focus-section .project-dropdown,
+.weekly-planning-flow select.project-dropdown,
+.project-focus-section select.project-dropdown,
+select.project-dropdown {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 52px !important;
+  padding: 14px 44px 14px 16px !important;
+  margin: 0 0 8px 0 !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 2px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 12px !important;
+  color: white !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  line-height: 1.4 !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  background-size: 16px !important;
+  transition: all 0.3s ease !important;
+  top: unset !important;
+  bottom: unset !important;
+  left: unset !important;
+  right: unset !important;
+  transform: none !important;
+  z-index: 1 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  box-sizing: border-box !important;
+}
+
+.weekly-planning-flow .project-focus-section select:hover,
+.weekly-planning-flow select.project-dropdown:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.weekly-planning-flow .project-focus-section select:focus,
+.weekly-planning-flow select.project-dropdown:focus {
+  outline: none !important;
+  border-color: #ffdd27 !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 0 0 3px rgba(255, 221, 39, 0.2) !important;
+}
+
+.weekly-planning-flow .project-focus-section select option,
+.weekly-planning-flow select.project-dropdown option {
+  background: #5e17eb !important;
+  color: white !important;
+  padding: 12px !important;
+}
+
+.focus-stage-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: #ffdd27;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.focus-stage-hint::before {
+  content: '→';
+  opacity: 0.7;
+}
+
+/* =============================================================================
+ * SUMMARY TASKS DISPLAY
+ * Following design-guide.md: Gold badges, proper spacing
+ * ============================================================================= */
+
+.summary-tasks {
+  margin-top: 12px;
+}
+
+.summary-tasks .section-content strong {
+  margin-bottom: 8px;
+}
+
+.summary-task-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.summary-task-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 221, 39, 0.12);
+  border: 1px solid rgba(255, 221, 39, 0.25);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffdd27;
+}
+
+.summary-task-chip .chip-icon {
+  font-size: 0.875rem;
+}
+
+.summary-focus-project {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.summary-focus-project strong {
+  color: #ffdd27;
+  font-weight: 600;
+}
+
+/* =============================================================================
+ * GUIDANCE STEP STYLES
+ * Signpost-based guidance page based on week type
+ * ============================================================================= */
+
+.guidance-step {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.guidance-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.guidance-emoji {
+  font-size: 3rem;
+  margin-bottom: 4px;
+}
+
+.guidance-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.signpost-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signpost-heading {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 4px 0;
+}
+
+.signpost-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.signpost-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(4px);
+}
+
+.signpost-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+}
+
+.signpost-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.signpost-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.signpost-desc {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.4;
+}
+
+.signpost-arrow {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.signpost-card:hover .signpost-arrow {
+  color: #ffdd27;
+  transform: translateX(4px);
+}
+
+.guidance-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  background: rgba(255, 221, 39, 0.1);
+  border: 1px solid rgba(255, 221, 39, 0.2);
+  border-radius: 14px;
+  margin-top: 8px;
+}
+
+.guidance-tip .tip-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.guidance-tip .tip-text {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .guidance-emoji {
+    font-size: 2.5rem;
+  }
+
+  .guidance-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .signpost-card {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .signpost-icon {
+    font-size: 1.5rem;
+    width: 32px;
+  }
+
+  .signpost-label {
+    font-size: 0.9375rem;
+  }
+
+  .signpost-desc {
+    font-size: 0.75rem;
+  }
+
+  .guidance-tip {
+    padding: 14px 16px;
+    gap: 10px;
+  }
+
+  .guidance-tip .tip-text {
+    font-size: 0.8125rem;
+  }
+}
+
+/* =============================================================================
+ * RESPONSIVE ADJUSTMENTS FOR NEW SECTIONS
+ * ============================================================================= */
+
+@media (max-width: 480px) {
+  .review-step {
+    gap: 12px;
+  }
+
+  .review-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .review-card-header {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+  }
+
+  .stats-review-card .stats-grid {
+    gap: 8px;
+  }
+
+  .stats-review-card .stat-item {
+    padding: 12px 6px;
+    border-radius: 10px;
+  }
+
+  .stats-review-card .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .stats-review-card .stat-label {
+    font-size: 0.65rem;
+  }
+
+  .flow-check-card .factor-options {
+    gap: 10px;
+  }
+
+  .flow-check-card .factor-btn {
+    padding: 14px 12px;
+    border-radius: 14px;
+  }
+
+  .flow-check-card .factor-emoji {
+    font-size: 1.5rem;
+  }
+
+  .flow-check-card .factor-text {
+    font-size: 0.8125rem;
+  }
+
+  .flow-result {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .direction-emoji {
+    font-size: 2rem;
+  }
+
+  .direction-desc {
+    font-size: 0.8125rem;
+  }
+
+  .task-card {
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .task-icon {
+    font-size: 1.25rem;
+    width: 30px;
+  }
+
+  .task-label {
+    font-size: 0.875rem;
+  }
+
+  .task-points {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+
+  .task-check {
+    font-size: 1.25rem;
+  }
+
+  .project-focus-section {
+    padding: 16px;
+    margin-top: 20px;
+  }
+
+  .project-focus-section select {
+    padding: 12px 40px 12px 14px;
+    font-size: 0.9375rem;
+  }
+
+  .direction-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+  }
+
+  .category-chip {
+    padding: 5px 10px;
+    font-size: 0.7rem;
   }
 }

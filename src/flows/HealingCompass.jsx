@@ -247,7 +247,7 @@ export default function HealingCompass() {
       await completeFlowQuest({
         userId: user.id,
         flowId: 'healing_compass',
-        pointsEarned: 20
+        pointsEarned: 5
       })
 
       // Clear auto-saved progress on completion

@@ -405,4 +405,284 @@ if (unscoredDeals.length > 0) {
 
 ---
 
+## New Tasks (Added Jan 27, 2025)
+
+### UX & Clarity Improvements
+
+#### Task 7: Make Headset Upsell Clearer
+**Priority:** MEDIUM
+**Effort:** 0.5 day
+**What:** Improve the in-app headset upsell messaging so users understand the value proposition more clearly.
+
+---
+
+#### Task 8: Groan Matrix Product Type Integration
+**Priority:** MEDIUM
+**Effort:** 1 day
+**What:** Feed product type data into the Groan Matrix so challenges are contextualized to what the user is building/selling.
+
+---
+
+### Lead Magnet & Funnel Flows
+
+#### Task 9: Workshop Lead Magnet Question Flow
+**Priority:** HIGH
+**Effort:** 2-3 days
+**What:** Create an "Is this for you?" question flow for workshop lead magnets that connects into FindMyFlow.
+
+**Flow:**
+```
+Workshop Landing → "Is this for you?" Questions → FindMyFlow Integration → Qualified Lead
+```
+
+---
+
+#### Task 10: Category Pirates → Landing Page Doc
+**Priority:** MEDIUM
+**Effort:** 1 day
+**What:** Feed Category Pirates framework answers into the landing page documentation/copy.
+
+---
+
+#### Task 11: Update Landing Page Positioning
+**Priority:** MEDIUM
+**Effort:** 0.5 day
+**What:** Position as education for 28+ year olds. Key message: "This isn't a uni alternative — it's post-uni education for domain experts."
+
+---
+
+### Zarlo AI Enhancements
+
+#### Task 12: Zarlo "Ask Experts" Section
+**Priority:** HIGH
+**Effort:** 2-3 days
+**What:** Add an "Ask Experts" section to Zarlo that feeds in matrices/frameworks from thought leaders.
+
+**Expert Frameworks to Include:**
+- Tony Robbins (motivation, state management)
+- Alex Hormozi (offers, pricing, sales)
+- Others TBD
+
+**UI:** Users can ask "What would [Expert] say about this?"
+
+---
+
+#### Task 13: Curiosity of the Day
+**Priority:** LOW
+**Effort:** 1 day
+**What:** Daily prompt in Zarlo that sparks curiosity and exploration. Could tie into weekly reflection.
+
+---
+
+#### Task 14: Zarlo Fills Flow Finder After Brain Space
+**Priority:** MEDIUM
+**Effort:** 1-2 days
+**What:** After user creates brain space (journaling/reflection), prompt Flow Finder questions. Zarlo can suggest answers based on what user wrote.
+
+---
+
+### Profile & Self-Discovery
+
+#### Task 15: Play Profile - "What Makes You Tick"
+**Priority:** MEDIUM
+**Effort:** 2-3 days
+**What:** New profile section exploring what energizes the user. Think: play styles, curiosity drivers, flow triggers.
+
+---
+
+#### Task 16: "How Hard Are You to Replace?" Module
+**Priority:** HIGH
+**Effort:** 2 days
+**What:** Interactive module showing users their unique value.
+
+**Core Message:**
+> Being you and creating value through the combination of all your experiences is impossible to replicate. No two people live identical lives. If we can find the value you create from being YOU and delivering what people need, you'll always create value.
+
+**Output:** Unique Value Statement based on user's skills, experiences, and perspectives.
+
+---
+
+#### Task 17: Art = Message + Transformation
+**Priority:** LOW
+**Effort:** 1 day
+**What:** Add concept that "all our work is art." Prompt users: "What is your art? What are you creating?"
+
+Could integrate into Flow Finder or as a reflection prompt.
+
+---
+
+### Healing & Personal Development
+
+#### Task 18: Healing Tech Product (Internal Use)
+**Priority:** MEDIUM
+**Effort:** 3-5 days
+**What:** Create a personal healing product that works for day-to-day use.
+
+**Upsell Structure:**
+1. Business First (primary offer)
+2. CRM Second (upsell)
+
+---
+
+#### Task 19: Add Shadow Work to Healing Flow
+**Priority:** MEDIUM
+**Effort:** 1-2 days
+**What:** Integrate shadow work exercises into the existing Healing Compass flow.
+
+---
+
+#### Task 20: Add Memory Reconsolidation Process
+**Priority:** MEDIUM
+**Effort:** 1-2 days
+**What:** Add memory reconsolidation technique to healing flow. (Send to Victoria for review)
+
+---
+
+#### Task 21: Add Baby Photos Back
+**Priority:** LOW
+**Effort:** 0.5 day
+**What:** Re-add baby photos feature (context needed on where this was).
+
+---
+
+### Gamification & Community
+
+#### Task 22: Building in Public Sport/Fantasy League
+**Priority:** HIGH
+**Effort:** 5+ days
+**What:** Turn building in public into a competitive sport like fantasy leagues.
+
+**Structure:**
+- Teams of 3
+- Head-to-head over 3-week periods
+- Weekly category tracking
+- Sunday calls: 30 mins group, 30 mins team meeting
+
+**Questions to Resolve:**
+- [ ] What are the challenge categories?
+- [ ] How to handle people at different stages?
+- [ ] CRM users only, or open to all?
+
+**Concept:** Sports are just IRL games — gamify the entrepreneurial journey.
+
+---
+
+#### Task 23: Growth Game Funnel Gamification
+**Priority:** MEDIUM
+**Effort:** 2-3 days
+**What:** Gamify the funnel/growth process with points, levels, achievements.
+
+---
+
+#### Task 24: Octalysis Gamification Matrix
+**Priority:** MEDIUM
+**Effort:** 2-3 days
+**What:** Implement Yu-kai Chou's Octalysis framework for deeper gamification.
+
+**8 Core Drives:**
+1. Epic Meaning & Calling
+2. Development & Accomplishment
+3. Empowerment of Creativity
+4. Ownership & Possession
+5. Social Influence & Relatedness
+6. Scarcity & Impatience
+7. Unpredictability & Curiosity
+8. Loss & Avoidance
+
+---
+
+#### Task 25: Feature Voting System
+**Priority:** LOW
+**Effort:** 1-2 days
+**What:** Let users vote on features they want.
+
+**Initial Features to Vote On:**
+- Paid-to-learn marketplace (advanced users mentor newcomers)
+- Healing practitioner marketplace
+- Weekly reflection: "What curiosities did you explore? What work did you do for free?"
+
+---
+
+### Calculators & Business Tools
+
+#### Task 26: Update Funnel Calculator → Business Model Calculator
+**Priority:** MEDIUM
+**Effort:** 2 days
+**What:** Rename/expand funnel calculator to be a full business model calculator.
+
+---
+
+#### Task 27: Groans Stage = Skills × Groan Categories
+**Priority:** MEDIUM
+**Effort:** 1 day
+**What:** Update Groans stage structure to be: Skills × Categories (Live, Money, Vulnerability).
+
+*(Note: Similar to existing Groan Matrix but may need refinement)*
+
+---
+
+### Sales & Messaging
+
+#### Task 28: "Transformation Worth" Sales Framework
+**Priority:** MEDIUM
+**Effort:** 0.5 day
+**What:** Add sales messaging framework.
+
+**Script:**
+> "How much is this transformation worth to you? It took me 5 years and I'm confident you can get there on your own. However, this process is going to make it quicker. How much is a year or two (or 5) worth to you?"
+
+Could go in: Sales Scripts, Offer Builder, or Zarlo coaching.
+
+---
+
+### Business/Team
+
+#### Task 29: Employ Hughie?
+**Priority:** TBD
+**Effort:** TBD
+**What:** Decision needed on bringing Hughie onto the team.
+
+---
+
+#### Task 30: Neural Network → Category Pirates?
+**Priority:** LOW
+**Effort:** TBD
+**What:** Explore renaming/repositioning "Neural Network" concept as "Category Pirates."
+
+---
+
+## Updated Priority Order
+
+### Immediate (V1 Launch)
+1. Lead Scoring
+2. 15 Hormozi Scripts
+3. Scripts Modal
+4. Theme Alignment
+5. Offer Builder Integration
+6. Integration Testing
+
+### High Priority (Post-Launch)
+7. Workshop Lead Magnet Question Flow
+8. Zarlo "Ask Experts" Section
+9. "How Hard Are You to Replace?" Module
+10. Building in Public Fantasy League
+
+### Medium Priority
+11. Groan Matrix Product Type Integration
+12. Category Pirates → Landing Page
+13. Play Profile
+14. Healing Tech Product
+15. Shadow Work + Memory Reconsolidation
+16. Octalysis Gamification
+17. Business Model Calculator
+
+### Lower Priority / Ideas Backlog
+18. Curiosity of the Day
+19. Art = Message + Transformation
+20. Feature Voting System
+21. Neural Network rename
+22. Baby Photos
+
+---
+
 *End of follow-up tasks*

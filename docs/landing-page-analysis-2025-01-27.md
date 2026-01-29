@@ -906,3 +906,213 @@ This is the USP - the same patterns that keep you stuck in healing are the same 
 - Full Business Tab methodology: `docs/business-tab-methodology.md`
 - Full Healing Map framework: `docs/healing-map-framework.md`
 - CRM methodology: `docs/crm-methodology.md`
+
+---
+
+## FOUNDER JOURNEY INSIGHTS: Concepts to Build In (Jan 28, 2025)
+
+Based on `docs/founder-journey-discovery.md` - Nic's 5-year journey compressed into teachable concepts.
+
+### Already Captured (Could Be Emphasized)
+- Flow philosophy / Ease & Resistance (E.A.R.)
+- 3% better iteration (in the Action Loop diagram)
+- "Live your ambitions faster" promise
+
+---
+
+### New Concepts to Build Into Landing Page
+
+#### 1. The Knowledge Trap Stats
+
+> **"42 programs. $30,000 spent. 3 years. Still stuck."**
+
+This is powerful social proof of the *problem*. Shows the founder lived the pain, not just observed it.
+
+**Where to use:** Founder Story section or Manifesto as credibility moment.
+
+**Why it works:** Validates the "another course won't help" objection. Differentiates FMF from course-sellers.
+
+---
+
+#### 2. The Core Insight (USP Statement)
+
+> **"We don't rise to the level of our ambitions. We fall to the level of what we feel safe doing."**
+
+This is THE line that explains why business education alone fails. It's the bridge between Business Tab and Healing Tab.
+
+**Where to use:** Standalone callout after Problems section, or as the thesis statement for "How It Works."
+
+**Why it works:** Instantly reframes the problem. Not "you need more knowledge" but "you need to expand your safety zone."
+
+---
+
+#### 3. The Fear Challenge Results (Concrete Transformation Timeline)
+
+| Timeframe | Achievement |
+|-----------|-------------|
+| Within 4 weeks | Working from Bali |
+| Within 3 months | Quit job |
+| Within 5 months | Self-funding travels in Thailand & Bali |
+
+**Where to use:** Founder Story or Milestones section as "proof this works."
+
+**Why it works:** Concrete, measurable transformation. Not vague promises—specific outcomes with timelines.
+
+**The method:** One terrifying thing per week for a year.
+
+---
+
+#### 4. The Earthquake Metaphor
+
+> **"It was like an earthquake hit every building of understanding that I had and made it crumble."**
+
+The feeling when you realize: followed the path (school → university → internships → job), expected happiness/fulfillment/joy, got none of it.
+
+**Where to use:** "Is This You?" section opening or Problems section.
+
+**Why it works:** Captures the existential crisis feeling better than "burnt out." It's identity-level disruption, not just tiredness.
+
+**The questions that followed:**
+- Who am I?
+- What's my purpose?
+- What am I doing with my life?
+- Why is everyone walking this path if it doesn't deliver what was promised?
+
+---
+
+#### 5. The Fear Hack / Meta-Identity
+
+> **"I didn't fear the scary things because my identity was attached to 'I do scary things.' To NOT do them would break that identity."**
+
+This is the mechanism that makes Groans work:
+- The pain of NOT doing becomes greater than the pain of doing
+- Identity shifts from "I'm scared" to "I do scary things"
+- Now avoiding the challenge is the threat, not doing it
+
+**Where to use:** Explain in "How It Works" or near Groans/gamification explanation.
+
+**Why it works:** Shows the psychology behind why the game mechanics actually create transformation, not just engagement.
+
+**The Vulnerability-Fear-Identity Framework:**
+
+| Why we resist... | Because... |
+|------------------|------------|
+| Things that bring joy | Opening to judgment creates opportunity for pain |
+| Things we identify with | Trying and failing would break that identity |
+| Claiming expertise | Fear of being exposed as imposter |
+
+**The solution:** Identify with the *process*, not the outcome.
+- ❌ "I am a great comedian" (outcome—can be broken)
+- ✅ "I'm learning comedy" (process—can't be broken)
+
+---
+
+#### 6. Process vs. Outcome Identity
+
+> **"Need to identify with the process, not the outcome."**
+
+**Example:**
+- Dream of being a great stand-up comedian
+- Actually doing stand-up and being bad at it breaks that identity
+- Therefore: never try → dream stays intact but unrealized
+
+**The fix:** Attach identity to "I'm someone who tries scary things" not "I'm someone who succeeds at everything."
+
+**Where to use:** Could be explicit teaching in onboarding or woven into Groan challenge framing.
+
+**Gap identified:** This isn't explicitly taught in the app yet—high priority to add.
+
+---
+
+#### 7. Resistance vs. Redirection Test
+
+How to know the difference between "push through" and "pivot":
+
+| Signal | Meaning | Action |
+|--------|---------|--------|
+| Challenge you *enjoy* | Growth edge | Push through |
+| Challenge you *don't enjoy* + things keep going wrong | Redirection | Pivot |
+
+**Where to use:** FAQ section or near Flow Compass explanation.
+
+**Why it works:** Shows nuance. Not just "hustle harder" but "listen to the feedback." Builds trust that this isn't toxic positivity.
+
+**From Nic:** "Resistance is the universe's way of saying there's a better path. Resistance is actually a positive redirection."
+
+---
+
+#### 8. What Actually Worked vs. What Didn't
+
+**What Nic thought he needed:** More knowledge.
+**What he actually needed:** To start taking action—action that terrified him.
+
+**The terrifying factor was vulnerability:**
+- Fear of judgment
+- Fear of not being good enough
+- Fear of failure
+
+**Where to use:** This is the manifesto content. Could strengthen existing section.
+
+---
+
+#### 9. The 18-Month Paralysis
+
+Nic spent ~18 months feeling lost and isolated after the "earthquake."
+
+**What got him out:**
+- Online courses where he could show up as the new person and be seen/accepted
+- Eventually: the fear challenge where he had no choice but to be seen by everyone
+
+**Key insight:** With existing friendships, he became "a bad version of my new-self and a bad imposter of my old-self" because he didn't feel safe showing up as the new person.
+
+**Where to use:** "Is This You?" section—validates the isolation feeling.
+
+**Why it matters for community:** The group game provides a tribe where you can claim new identities and be validated, not judged.
+
+---
+
+#### 10. Money Mindset Shift
+
+**Before:** Rejected money even when people insisted on paying for silent discos.
+**Blocker:** "It didn't feel right to earn money from something I enjoyed so much."
+
+**What shifted it:**
+- Friends/peer pressure
+- Making it a groan challenge
+- Realizing you CAN be paid AND have fun at the same time
+
+**Where to use:** Could address in Problems section or as a specific fear the app helps with.
+
+---
+
+### Key Quotes to Feature
+
+| Quote | Where to Use |
+|-------|--------------|
+| "It was like an earthquake hit every building of understanding that I had and made it crumble." | Is This You? / Hero |
+| "We don't rise to the level of our ambitions. We fall to the level of what we feel safe doing." | Core USP statement |
+| "The fear of the vulnerability is the fear of potential pain. Once you own it, you prove to yourself it's not scary + you gain a tribe who validates that identity." | Explain Groans/community |
+| "The end result is rarely what you planned. Just know the next step, listen to feedback, make it 3% better each time." | How It Works / 3% philosophy |
+| "If you don't take the action, flow can't happen." | Final CTA |
+
+---
+
+### Recommended Implementation Priority
+
+| Addition | Section to Update | Priority | Impact |
+|----------|-------------------|----------|--------|
+| Core insight quote ("fall to level of safety") | New callout after Problems | HIGH | Crystallizes the USP |
+| Knowledge trap stats (42 programs, $30K) | Founder Story | HIGH | Credibility + differentiation |
+| Fear challenge timeline (4 wks → Bali) | Founder Story or Milestones | HIGH | Concrete proof |
+| Earthquake metaphor | Is This You? | MEDIUM | Emotional resonance |
+| Fear Hack / meta-identity explanation | How It Works | MEDIUM | Explains mechanism |
+| Process vs. outcome teaching | How It Works or new section | MEDIUM | Foundational concept |
+| Resistance vs. redirection test | FAQ or Flow Compass | LOW | Builds trust/nuance |
+| Money mindset shift | Problems or Founder Story | LOW | Addresses specific fear |
+
+---
+
+### Related Documentation
+- Founder Journey Discovery: `docs/founder-journey-discovery.md`
+- Business Tab methodology: `docs/business-tab-methodology.md`
+- Healing Map framework: `docs/healing-map-framework.md`
