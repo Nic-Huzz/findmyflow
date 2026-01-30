@@ -22,6 +22,18 @@ const LandingPage = () => {
     {
       q: "Is this just for people who want to start a business?",
       a: "No. Some people discover they need to build their own thing. Others realise they need a different job that actually meets their needs. The Career Clarity Quiz helps you figure out which path is right for you."
+    },
+    {
+      q: "What if I've tried other programs and they didn't work?",
+      a: "Most programs focus on what action to take, without addressing what's stopping you from taking action. We combine business strategy with healing work — so you actually do the things you know you should do. That's the difference."
+    },
+    {
+      q: "Is there a community or am I doing this alone?",
+      a: "You're not alone. You'll be part of a community of people on the same journey — sharing wins, supporting each other through challenges, and building accountability together."
+    },
+    {
+      q: "What's included in the free version?",
+      a: "The Career Clarity Quiz is completely free. You'll get a personalised assessment of where you are, what's missing, and which path is right for you. No credit card required, no strings attached."
     }
   ];
 
@@ -45,8 +57,8 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="landing-hero">
         <div className="landing-container">
-          <span className="landing-badge">
-            A process to monetise your mission and gain financial + location freedom
+          <span className="landing-badge landing-badge-gold">
+            Monetise your mission and gain financial + location independence
           </span>
 
           <h1 className="landing-headline">
@@ -76,13 +88,17 @@ const LandingPage = () => {
             </button>
             <button
               className="hero-cta-secondary"
-              onClick={() => navigate('/career-clarity')}
+              onClick={() => navigate('/try/offer-audit')}
             >
-              Take the Free Quiz
+              <span className="btn-subtext">Free Quiz</span>Find Your Journey Stage
             </button>
           </div>
 
           <p className="hero-note">Free to start. No credit card required.</p>
+
+          <div className="scroll-indicator" onClick={() => document.querySelector('.landing-cultures').scrollIntoView({ behavior: 'smooth' })}>
+            <span className="scroll-arrow">↓</span>
+          </div>
         </div>
       </section>
 
@@ -96,32 +112,35 @@ const LandingPage = () => {
 
           <div className="cultures-cards">
             <div className="culture-card">
-              <p className="culture-tradition">Sanskrit</p>
-              <h3 className="culture-term">Svadharma</h3>
+              <div className="culture-header">
+                <p className="culture-tradition">Sanskrit</p>
+                <h3 className="culture-term">Svadharma</h3>
+              </div>
               <p className="culture-translation">"One's own duty"</p>
               <p className="culture-description">
                 Better to imperfectly follow your own path than to perfectly follow someone else's.
-                The cosmos operates through differentiation — everything has its essential nature.
               </p>
             </div>
 
             <div className="culture-card">
-              <p className="culture-tradition">Taoist</p>
-              <h3 className="culture-term">Te</h3>
+              <div className="culture-header">
+                <p className="culture-tradition">Taoist</p>
+                <h3 className="culture-term">Te</h3>
+              </div>
               <p className="culture-translation">"Inherent power"</p>
               <p className="culture-description">
-                Your individual expression of the Tao. You don't create it through effort — you uncover it
-                by removing obstructions. Water doesn't struggle to flow downhill.
+                Your individual expression of the Tao. You don't create it through effort — you uncover it by removing obstructions.
               </p>
             </div>
 
             <div className="culture-card">
-              <p className="culture-tradition">Japanese</p>
-              <h3 className="culture-term">Ikigai</h3>
+              <div className="culture-header">
+                <p className="culture-tradition">Japanese</p>
+                <h3 className="culture-term">Ikigai</h3>
+              </div>
               <p className="culture-translation">"Reason for being"</p>
               <p className="culture-description">
-                Emerges at the intersection of what you love and what others need. Not found through
-                navel-gazing, but through engagement with community needs.
+                Emerges at the intersection of what you love and what others need.
               </p>
             </div>
           </div>
@@ -129,6 +148,13 @@ const LandingPage = () => {
           <p className="cultures-question">
             So how do you find yours?
           </p>
+
+          <button
+            className="cultures-cta"
+            onClick={() => document.getElementById('flow-finder-framework').scrollIntoView({ behavior: 'smooth' })}
+          >
+            Discover the Framework ↓
+          </button>
         </div>
       </section>
 
@@ -137,8 +163,23 @@ const LandingPage = () => {
         <div className="landing-container">
           <h2 className="is-this-you-heading">Is This You?</h2>
 
+          <div className="earthquake-moment">
+            <p className="earthquake-context">
+              You followed the traditional path: School, university, the job. You did everything "right".
+              But you didn't find happiness, joy, fulfilment like you thought you would.
+            </p>
+            <p className="earthquake-context">
+              You've started to wonder:
+            </p>
+            <ul className="earthquake-questions">
+              <li>"Why does everyone walk this path if it doesn't make you happy?"</li>
+              <li>"Is there another way?"</li>
+              <li>"Am I crazy to think there's more to life than this?"</li>
+            </ul>
+          </div>
+
           <div className="is-this-you-vision">
-            <p className="vision-intro">Someone who feels like life is supposed to be...</p>
+            <p className="vision-intro">Now you sense life is supposed to be...</p>
             <ul className="vision-list">
               <li>An <strong>adventure</strong>, not about climbing a ladder</li>
               <li>About <strong>creating impact</strong>, not living for the weekend</li>
@@ -347,37 +388,28 @@ const LandingPage = () => {
               <div className="founder-why">
                 <h3 className="founder-why-label">Why I built this</h3>
 
-                <p className="founder-why-critique">
-                  Most business accelerator programs and life path education institutions focus on
-                  <strong> what action to take</strong> — without any consideration about what may be
-                  <strong> stopping the action</strong>.
-                </p>
+                <div className="story-chapter">
+                  <p className="chapter-heading">The Realisation</p>
+                  <p>In 2020, I realised a corporate job wasn't for me.</p>
+                  <p>Three years later? I was still in the same job.</p>
+                </div>
 
-                <p>
-                  In 2020, I learned a corporate job wasn't for me. Three years later?
-                  I was still in the same job.
-                </p>
+                <div className="story-chapter">
+                  <p className="chapter-heading">The Confusion</p>
+                  <p>It wasn't from a lack of clarity.</p>
+                  <p>It wasn't from a lack of education — I'd spent <strong>$30,000</strong> on 52 courses.</p>
+                  <p>It wasn't from a lack of will.</p>
+                </div>
 
-                <p>
-                  It wasn't from a lack of clarity.<br />
-                  It wasn't from a lack of education — I'd spent <strong>$30,000</strong> on 52 learning
-                  experiences post-university.<br />
-                  It wasn't from a lack of will.
-                </p>
+                <div className="story-chapter story-chapter-emphasis">
+                  <p className="chapter-heading">The Truth</p>
+                  <p className="chapter-reveal">It was because I didn't feel safe.</p>
+                  <p>Scared of judgement. Scared of failing. Scared I wasn't good enough.</p>
+                </div>
 
-                <p className="founder-why-emphasis">
-                  It was because I didn't feel safe.
-                </p>
-
-                <p>
-                  I was scared of judgement. Scared of failing. Scared I wasn't good enough.
-                </p>
-
-                <div className="founder-challenge">
-                  <p className="challenge-intro">
-                    So at the beginning of 2023, fed up, I challenged myself to do
-                    <strong> one thing a week that terrified me</strong>.
-                  </p>
+                <div className="story-chapter">
+                  <p className="chapter-heading">The Experiment</p>
+                  <p>In 2023, fed up, I challenged myself to do <strong>one thing a week that terrified me</strong>.</p>
                   <div className="challenge-timeline">
                     <div className="timeline-item">
                       <span className="timeline-marker">5 weeks</span>
@@ -389,23 +421,16 @@ const LandingPage = () => {
                     </div>
                     <div className="timeline-item">
                       <span className="timeline-marker">5 months</span>
-                      <span className="timeline-text">Funding my life hosting silent discos on beaches across Thailand and Bali</span>
+                      <span className="timeline-text">Hosting silent discos on beaches across Thailand and Bali</span>
                     </div>
                   </div>
                 </div>
 
-                <p className="founder-why-insight">
-                  This challenge changed my life. Why?
-                </p>
-
-                <p className="founder-why-quote">
-                  Because we don't rise to the level of our ambitions —
-                  <strong> we fall to the level of what feels safe</strong>.
-                </p>
-
-                <p>
-                  And this challenge changed what felt safe.
-                </p>
+                <div className="story-chapter story-chapter-insight">
+                  <p className="chapter-heading">The Insight</p>
+                  <p className="chapter-quote">"We don't rise to the level of our ambitions — we fall to the level of what feels safe."</p>
+                  <p>This challenge changed what felt safe. And that changed everything.</p>
+                </div>
               </div>
 
               <div className="founder-solution">
@@ -455,30 +480,7 @@ const LandingPage = () => {
                   </div>
                 </div>
 
-                <div className="credentials-training">
-                  <div className="training-label">Completed the world's best programs:</div>
-                  <div className="training-courses">
-                    <div className="course-badge">
-                      <span className="course-name">altMBA</span>
-                      <span className="course-price">$5,000</span>
-                      <span className="course-creator">Seth Godin — the 'Godfather of Marketing'</span>
-                      <span className="course-desc">Learn more in 4 weeks than an MBA teaches in 2 years</span>
-                    </div>
-                    <div className="course-badge">
-                      <span className="course-name">Write of Passage</span>
-                      <span className="course-price">$5,000</span>
-                      <span className="course-creator">David Perell</span>
-                      <span className="course-desc">One of the first 'virtual schools' with a cult following</span>
-                    </div>
-                    <div className="course-badge course-badge-degree">
-                      <span className="course-name">Bachelor of Creative Intelligence</span>
-                      <span className="course-award">🏆 Winner of the 'Oscars of Education'</span>
-                      <span className="course-creator">UTS — World's first transdisciplinary degree</span>
-                      <span className="course-desc">Multi-award winning for its innovative approach to learning</span>
-                    </div>
-                  </div>
-                </div>
-
+                
                 <div className="credentials-formula">
                   <span className="formula-intro">My secret?</span>
                   <span className="formula-name">The Three Pillars</span>
@@ -571,7 +573,7 @@ const LandingPage = () => {
       </section>
 
       {/* Flow Finder Framework Section */}
-      <section className="landing-nikigai">
+      <section className="landing-nikigai" id="flow-finder-framework">
         <div className="landing-container">
           <h2 className="section-heading">The Flow Finder Framework</h2>
           <p className="section-subheading">
@@ -625,41 +627,9 @@ const LandingPage = () => {
               </div>
             </div>
 
-            {/* Level 3: What This Defines */}
+            {/* Level 3: The Formula */}
             <div className="framework-level framework-level-3">
               <div className="level-marker">3</div>
-              <div className="level-content">
-                <h3 className="level-title">What This Defines</h3>
-                <p className="level-intro">Each answer narrows your path:</p>
-
-                <div className="defines-grid">
-                  <div className="defines-item">
-                    <span className="defines-from">Skills</span>
-                    <span className="defines-arrow">→</span>
-                    <span className="defines-to">Your <strong>Role</strong></span>
-                  </div>
-                  <div className="defines-item">
-                    <span className="defines-from">Problems</span>
-                    <span className="defines-arrow">→</span>
-                    <span className="defines-to">Your <strong>Industry</strong></span>
-                  </div>
-                  <div className="defines-item">
-                    <span className="defines-from">People</span>
-                    <span className="defines-arrow">→</span>
-                    <span className="defines-to">Your <strong>Niche</strong></span>
-                  </div>
-                  <div className="defines-item">
-                    <span className="defines-from">Mission</span>
-                    <span className="defines-arrow">→</span>
-                    <span className="defines-to">Your <strong>Company</strong></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Level 4: The Formula */}
-            <div className="framework-level framework-level-4">
-              <div className="level-marker">4</div>
               <div className="level-content">
                 <h3 className="level-title">The Formula</h3>
 
@@ -676,8 +646,6 @@ const LandingPage = () => {
                 <div className="formula-result">
                   <span className="formula-equals">=</span>
                   <div className="result-box">
-                    <span className="result-label">Specific Knowledge</span>
-                    <span className="result-desc">The thing no one else can compete with</span>
                     <div className="result-wisdom">
                       <span className="wisdom-word">Your Svadharma</span>
                       <span className="wisdom-separator">·</span>
@@ -685,6 +653,7 @@ const LandingPage = () => {
                       <span className="wisdom-separator">·</span>
                       <span className="wisdom-word">Your Ikigai</span>
                     </div>
+                    <span className="result-desc">The thing no one else can compete with</span>
                   </div>
                 </div>
               </div>
@@ -711,14 +680,16 @@ const LandingPage = () => {
                   </div>
                 </div>
               </div>
+
+              <button
+                className="archetypes-cta"
+                onClick={() => navigate('/get-started')}
+              >
+                Start Your Journey →
+              </button>
             </div>
 
-            <blockquote className="dots-quote">
-              <p>"You can't connect the dots looking forward; you can only connect them looking backwards."</p>
-              <cite>— Steve Jobs</cite>
-              <p className="dots-explanation">We help you see the connections you've been missing.</p>
-            </blockquote>
-          </div>
+                      </div>
         </div>
       </section>
 
@@ -730,31 +701,8 @@ const LandingPage = () => {
             Live your ambitions faster
           </p>
 
-          {/* The 4 Stages Visual */}
-          <div className="stages-journey">
-            <div className="stage-node">
-              <span className="stage-icon">🎯</span>
-              <span className="stage-name">Clarity</span>
-            </div>
-            <div className="stage-arrow">→</div>
-            <div className="stage-node">
-              <span className="stage-icon">🛠️</span>
-              <span className="stage-name">Build</span>
-            </div>
-            <div className="stage-arrow">→</div>
-            <div className="stage-node">
-              <span className="stage-icon">💰</span>
-              <span className="stage-name">Sell</span>
-            </div>
-            <div className="stage-arrow">→</div>
-            <div className="stage-node">
-              <span className="stage-icon">📈</span>
-              <span className="stage-name">Scale</span>
-            </div>
-          </div>
-
           {/* The Process Steps */}
-          <div className="process-steps">
+          <div className="process-steps process-steps-3">
             <div className="process-step">
               <div className="step-number">1</div>
               <div className="step-content">
@@ -762,6 +710,12 @@ const LandingPage = () => {
                 <p className="step-description">
                   Answer a few questions about where you are on your journey.
                 </p>
+                <div className="step-stages">
+                  <span className="mini-stage">🎯 Clarity</span>
+                  <span className="mini-stage">🛠️ Build</span>
+                  <span className="mini-stage">💰 Sell</span>
+                  <span className="mini-stage">📈 Scale</span>
+                </div>
                 <p className="step-game">
                   <span className="game-tag">Discover which stage you're actually at</span>
                 </p>
@@ -773,7 +727,7 @@ const LandingPage = () => {
               <div className="step-content">
                 <h3 className="step-title">Unlock Your Quests</h3>
                 <p className="step-description">
-                  Get placed in Clarity, Build, Sell, or Scale — each with specific missions.
+                  Unlock quests that give you clarity on action + accountability to take action.
                 </p>
                 <p className="step-game">
                   <span className="game-tag">No overwhelm — just what you need now</span>
@@ -786,23 +740,10 @@ const LandingPage = () => {
               <div className="step-content">
                 <h3 className="step-title">Build Your Streak</h3>
                 <p className="step-description">
-                  Complete daily quests. Earn points. Watch momentum compound.
+                  Score points for your project as you build it.
                 </p>
                 <p className="step-game">
                   <span className="game-tag">Points are yours to keep forever</span>
-                </p>
-              </div>
-            </div>
-
-            <div className="process-step">
-              <div className="step-number">4</div>
-              <div className="step-content">
-                <h3 className="step-title">Level Up</h3>
-                <p className="step-description">
-                  Graduate to the next stage. Track your progress visually.
-                </p>
-                <p className="step-game">
-                  <span className="game-tag">Face courage challenges → unlock growth</span>
                 </p>
               </div>
             </div>
@@ -829,6 +770,113 @@ const LandingPage = () => {
               <span className="element-icon">🐉</span>
               <span className="element-name">Courage Challenges</span>
               <span className="element-desc">Face fears</span>
+            </div>
+          </div>
+
+          {/* Method Loop */}
+          <div className="method-loop-section">
+            <h3 className="method-loop-title">The Core Loop</h3>
+            <p className="method-loop-subtitle">Each cycle compounds into progress</p>
+
+            <div className="method-loop-diagram">
+              <svg className="loop-arrows" viewBox="0 0 500 400">
+                <path className="arrow-path" d="M 100 240 Q 120 320 200 340" />
+                <path className="arrow-path" d="M 300 340 Q 380 320 400 240" />
+                <path className="arrow-path" d="M 420 160 Q 400 80 300 60" />
+                <path className="arrow-path" d="M 200 60 Q 100 80 80 160" />
+              </svg>
+
+              <div className="loop-step step-improve">
+                <span className="step-label">3% BETTER</span>
+                <span className="step-question">How improve?</span>
+              </div>
+
+              <div className="loop-step step-do">
+                <span className="start-here">Start here ↓</span>
+                <span className="step-label">DO</span>
+                <span className="step-question">What action?</span>
+              </div>
+
+              <div className="loop-step step-groan">
+                <span className="step-label">GROAN</span>
+                <span className="step-question">Do it anyway</span>
+              </div>
+
+              <div className="loop-step step-block">
+                <span className="step-label">BLOCK</span>
+                <span className="step-question">What voice?</span>
+              </div>
+            </div>
+
+            {/* Compounding Graph */}
+            <div className="compound-graph-section">
+              <h3 className="compound-title">Each Loop Compounds Into Progress</h3>
+              <div className="compound-graph">
+                <div className="graph-axis-y">
+                  <span className="axis-label">PROGRESS</span>
+                </div>
+                <div className="graph-axis-x">
+                  <span className="axis-label">TIME</span>
+                </div>
+                <svg className="compound-svg" viewBox="0 -40 400 280" preserveAspectRatio="xMidYMid meet">
+                  <defs>
+                    <marker id="arrow1" markerWidth="10" markerHeight="8" refX="5" refY="4" orient="auto">
+                      <polygon points="0 0, 10 4, 0 8" fill="#7c3aed" />
+                    </marker>
+                    <marker id="arrow2" markerWidth="10" markerHeight="8" refX="5" refY="4" orient="auto">
+                      <polygon points="0 0, 10 4, 0 8" fill="#a855f7" />
+                    </marker>
+                    <marker id="arrow3" markerWidth="10" markerHeight="8" refX="5" refY="4" orient="auto">
+                      <polygon points="0 0, 10 4, 0 8" fill="#ffdd27" />
+                    </marker>
+                  </defs>
+
+                  {/* Loop 1 - Spiral curl with arrow */}
+                  <path
+                    d="M 20 220
+                       C 20 200, 30 180, 50 170
+                       C 70 160, 75 180, 60 190
+                       C 45 200, 35 185, 50 175
+                       C 65 165, 90 145, 120 120"
+                    fill="none"
+                    stroke="#7c3aed"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    markerEnd="url(#arrow1)"
+                  />
+                  <text x="55" y="155" fill="#7c3aed" fontSize="12" fontWeight="600">Loop 1</text>
+
+                  {/* Loop 2 - Spiral curl with arrow */}
+                  <path
+                    d="M 130 110
+                       C 130 90, 140 70, 160 60
+                       C 180 50, 185 70, 170 80
+                       C 155 90, 145 75, 160 65
+                       C 175 55, 200 40, 240 25"
+                    fill="none"
+                    stroke="#a855f7"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    markerEnd="url(#arrow2)"
+                  />
+                  <text x="165" y="45" fill="#a855f7" fontSize="12" fontWeight="600">Loop 2</text>
+
+                  {/* Loop 3 - Spiral curl with arrow (gold) */}
+                  <path
+                    d="M 250 20
+                       C 250 5, 260 -10, 280 -15
+                       C 300 -20, 305 0, 290 10
+                       C 275 20, 265 5, 280 -5
+                       C 295 -15, 330 -35, 380 -50"
+                    fill="none"
+                    stroke="#ffdd27"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    markerEnd="url(#arrow3)"
+                  />
+                  <text x="280" y="-25" fill="#ffdd27" fontSize="12" fontWeight="600">Loop 3</text>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -876,7 +924,7 @@ const LandingPage = () => {
                 <span className="win-stage-name">Scale</span>
               </div>
               <p className="win-stuck">If you're stuck on growth...</p>
-              <p className="win-outcome">Systems that grow without burning you out</p>
+              <p className="win-outcome">Systems that grow your income</p>
             </div>
           </div>
 
@@ -930,9 +978,9 @@ const LandingPage = () => {
               </ul>
               <button
                 className="path-cta path-cta-secondary"
-                onClick={() => navigate('/career-clarity')}
+                onClick={() => navigate('/try/offer-audit')}
               >
-                Take the Free Quiz →
+                <span className="btn-subtext">Free Quiz</span>Find Your Journey Stage
               </button>
             </div>
           </div>
@@ -972,32 +1020,29 @@ const LandingPage = () => {
       <section className="landing-why-matters">
         <div className="landing-container">
           <div className="why-matters-content">
-            <p className="why-matters-intro">
-              Bronnie Ware was a palliative care nurse who spent years caring for patients
-              in the last weeks of their lives.
-            </p>
-
-            <p className="why-matters-study">
-              She asked them about their regrets. The patterns were so consistent,
-              she wrote a book about it.
-            </p>
+            <div className="why-matters-story">
+              <h3 className="why-matters-heading">The #1 Regret of the Dying</h3>
+              <p className="why-matters-context">
+                Bronnie Ware spent years as a palliative care nurse. She asked patients about their regrets.
+                The answer was so consistent, she wrote a book about it.
+              </p>
+            </div>
 
             <blockquote className="why-matters-quote">
-              <p>The #1 regret of the dying:</p>
               <p className="regret-text">
-                "I wish I'd had the courage to live a life true to myself,
-                not the life others expected of me."
+                "I wish I'd had the courage to live a life true to myself, not the life others expected of me."
               </p>
               <cite>— Bronnie Ware, <em>The Top Five Regrets of the Dying</em></cite>
             </blockquote>
 
-            <p className="why-matters-belief">
-              I believe finding your flow is the answer to not having this regret.
-            </p>
-
-            <p className="why-matters-close">
-              Your Svadharma. Your Te. Your Ikigai. It's waiting.
-            </p>
+            <div className="why-matters-answer">
+              <p className="why-matters-belief">
+                Finding your flow is the answer to not having this regret.
+              </p>
+              <p className="why-matters-close">
+                Your Svadharma. Your Te. Your Ikigai. <strong>It's waiting.</strong>
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -1020,9 +1065,9 @@ const LandingPage = () => {
             </button>
             <button
               className="hero-cta-secondary"
-              onClick={() => navigate('/career-clarity')}
+              onClick={() => navigate('/try/offer-audit')}
             >
-              Take the Free Quiz
+              <span className="btn-subtext">Free Quiz</span>Find Your Journey Stage
             </button>
           </div>
         </div>
