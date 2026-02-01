@@ -131,12 +131,12 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
         <div className="empty-state">
           <span className="empty-icon">📁</span>
           <h3>No Projects Yet</h3>
-          <p>Complete the Flow Finder or create a project to start your 7-day challenge.</p>
+          <p>Complete the Mind Space to create a project and start your 7-day challenge.</p>
           <button
             className="primary-button"
-            onClick={() => navigate('/nikigai/skills')}
+            onClick={() => navigate('/mind-space')}
           >
-            Start Flow Finder
+            Start Mind Space
           </button>
         </div>
       </div>

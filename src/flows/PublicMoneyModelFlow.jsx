@@ -21,6 +21,7 @@ import {
   trackFlowCompleted,
   trackEmailCaptured
 } from '../lib/pixelTracking'
+import { cacheBustUrl } from '../lib/fetchJson'
 
 // Map URL params to config keys
 const FLOW_TYPE_MAP = {
@@ -71,8 +72,8 @@ export default function PublicMoneyModelFlow() {
     const loadData = async () => {
       try {
         const [questionsRes, offersRes] = await Promise.all([
-          fetch(config.questionsPath),
-          fetch(config.offersPath)
+          fetch(cacheBustUrl(config.questionsPath)),
+          fetch(cacheBustUrl(config.offersPath))
         ])
 
         if (!questionsRes.ok || !offersRes.ok) {

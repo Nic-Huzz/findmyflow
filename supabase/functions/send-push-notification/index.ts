@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+import webpush from 'npm:web-push@3.6.7'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -64,11 +65,10 @@ serve(async (req) => {
       )
     }
 
-    // Import web-push library
-    const webpush = await import('https://esm.sh/web-push@3.6.6')
-
-    // Configure web-push
-    webpush.setVapidDetails(vapidEmail, vapidPublicKey, vapidPrivateKey)
+    // Configure web-push (using static import at top of file)
+    // Add mailto: prefix if not present
+    const formattedEmail = vapidEmail.startsWith('mailto:') ? vapidEmail : `mailto:${vapidEmail}`
+    webpush.setVapidDetails(formattedEmail, vapidPublicKey, vapidPrivateKey)
 
     // Prepare notification payload
     const payload = JSON.stringify({

@@ -104,7 +104,7 @@
 .persona-assessment .welcome-container > .primary-button {
   margin-top: 8px;
   max-width: 280px;
-  padding: 12px 28px;
+  padding: 12px 28px !important;
   height: auto !important;
   min-height: 0 !important;
   background: #E9A23B !important;
@@ -113,6 +113,7 @@
   border-radius: 12px;
   flex-shrink: 0;
   flex-grow: 0;
+  line-height: 1.2;
 }
 
 .persona-assessment .welcome-greeting {
@@ -307,11 +308,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   flex: 1;
   max-width: 450px;
   text-align: center;
   animation: fadeIn 0.5s ease;
+  padding-bottom: 40px;
+}
+
+.persona-assessment .intro-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 12px;
 }
 
 .persona-assessment .intro-title {
@@ -350,10 +359,10 @@
 
 /* Intro screen button - fixed size (Essence/Protective intro) */
 .persona-assessment .intro-container > .primary-button {
-  margin-top: 16px;
+  margin-top: auto;
   max-width: 280px;
   width: auto;
-  padding: 14px 32px;
+  padding: 12px 28px !important;
   height: auto !important;
   min-height: 0 !important;
   background: #E9A23B !important;
@@ -363,6 +372,7 @@
   border-radius: 12px;
   flex-shrink: 0;
   flex-grow: 0;
+  line-height: 1.2;
 }
 
 .persona-assessment .intro-container > .primary-button:hover {
@@ -752,7 +762,7 @@
 .persona-assessment .reveal-container > .primary-button {
   max-width: 280px;
   width: auto;
-  padding: 14px 32px;
+  padding: 12px 28px !important;
   height: auto !important;
   min-height: 0 !important;
   background: #E9A23B !important;
@@ -762,6 +772,7 @@
   border-radius: 12px;
   flex-shrink: 0;
   flex-grow: 0;
+  line-height: 1.2;
 }
 
 .persona-assessment .reveal-container > .primary-button:hover {

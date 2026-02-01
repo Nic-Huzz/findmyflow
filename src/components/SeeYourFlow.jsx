@@ -423,22 +423,18 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
 
   // Add highlight card
   const addHighlight = () => {
-    if (journeyData.highlights.length < 3) {
-      setJourneyData(prev => ({
-        ...prev,
-        highlights: [...prev.highlights, { title: '', month: null, reflection: '' }]
-      }))
-    }
+    setJourneyData(prev => ({
+      ...prev,
+      highlights: [...prev.highlights, { title: '', month: null, reflection: '' }]
+    }))
   }
 
   // Add challenge card
   const addChallenge = () => {
-    if (journeyData.challenges.length < 3) {
-      setJourneyData(prev => ({
-        ...prev,
-        challenges: [...prev.challenges, { title: '', month: null, internal: null, reflection: '' }]
-      }))
-    }
+    setJourneyData(prev => ({
+      ...prev,
+      challenges: [...prev.challenges, { title: '', month: null, internal: null, reflection: '' }]
+    }))
   }
 
   // Update highlight
@@ -630,7 +626,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
               {/* Step 3: Highlights */}
               {currentStep === STEPS.HIGHLIGHTS && (
                 <div className="step-content">
-                  <h3 className="step-title">What were your top 3 highlights, moments of magic or serendipity that supported the business?</h3>
+                  <h3 className="step-title">What were your highlights, moments of magic or serendipity that supported the business?</h3>
 
                   <div className="cards-container">
                     {journeyData.highlights.map((highlight, index) => (
@@ -670,11 +666,9 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
                     ))}
                   </div>
 
-                  {journeyData.highlights.length < 3 && (
-                    <button className="add-card-btn" onClick={addHighlight}>
-                      + Add another highlight
-                    </button>
-                  )}
+                  <button className="add-card-btn" onClick={addHighlight}>
+                    + Add another highlight
+                  </button>
 
                   <div className="step-actions">
                     <button className="skip-btn" onClick={handleStepComplete}>
@@ -693,7 +687,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
               {/* Step 4: Challenges */}
               {currentStep === STEPS.CHALLENGES && (
                 <div className="step-content">
-                  <h3 className="step-title">What were your top 3 biggest challenges, curve balls or moments things didn't go to plan?</h3>
+                  <h3 className="step-title">What were your biggest challenges, curve balls or moments things didn't go to plan?</h3>
 
                   <div className="cards-container">
                     {journeyData.challenges.map((challenge, index) => (
@@ -751,11 +745,9 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
                     ))}
                   </div>
 
-                  {journeyData.challenges.length < 3 && (
-                    <button className="add-card-btn" onClick={addChallenge}>
-                      + Add another challenge
-                    </button>
-                  )}
+                  <button className="add-card-btn" onClick={addChallenge}>
+                    + Add another challenge
+                  </button>
 
                   <div className="step-actions">
                     <button className="skip-btn" onClick={handleStepComplete}>

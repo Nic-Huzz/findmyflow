@@ -137,7 +137,7 @@ function CoverageMatrix({ skillsClusters, problemsClusters, personaClusters }) {
   if (!matrixData || skillsClusters.length === 0 || problemsClusters.length === 0) {
     return (
       <div className="coverage-matrix-empty">
-        <p>Complete Flow Finder Skills and Problems flows to see your coverage matrix.</p>
+        <p>Complete the Mind Space to see your coverage matrix.</p>
       </div>
     )
   }

@@ -15,6 +15,7 @@ import { BackButton, ProgressDots, ChecklistDisplay } from '../components/MoneyM
 import { STAGES } from './moneyModelConfigs'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { FlowFeedback } from '../components/FlowFeedback'
+import { cacheBustUrl } from '../lib/fetchJson'
 import '../styles/flow-base.css'
 
 // Visibility layers for 2D pattern recognition (WHERE the resistance shows up)
@@ -172,8 +173,8 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
     const loadData = async () => {
       try {
         const [questionsRes, offersRes] = await Promise.all([
-          fetch(config.questionsPath),
-          fetch(config.offersPath)
+          fetch(cacheBustUrl(config.questionsPath)),
+          fetch(cacheBustUrl(config.offersPath))
         ])
 
         if (!questionsRes.ok || !offersRes.ok) {

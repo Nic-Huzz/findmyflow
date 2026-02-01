@@ -77,6 +77,7 @@ const CRM_NAV_ITEMS = [
 const HIDDEN_ROUTES = [
   '/',
   '/log-in',
+  '/get-started', // Onboarding persona assessment
   '/v/', // Public validation flows
   '/try/', // Public lead magnet flows
   '/weekly-planning', // Full-screen planning flow

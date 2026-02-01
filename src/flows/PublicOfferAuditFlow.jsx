@@ -18,6 +18,7 @@ import {
   trackFlowCompleted,
   trackEmailCaptured
 } from '../lib/pixelTracking'
+import { cacheBustUrl } from '../lib/fetchJson'
 import './PublicOfferAuditFlow.css'
 
 // Stages for the flow
@@ -594,7 +595,7 @@ export default function PublicOfferAuditFlow() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await fetch('/offer-audit-questions.json')
+        const res = await fetch(cacheBustUrl('/offer-audit-questions.json'))
         if (!res.ok) throw new Error('Failed to load assessment data')
         const data = await res.json()
         setQuestionsData(data)

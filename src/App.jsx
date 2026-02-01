@@ -5,6 +5,7 @@ import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import HybridArchetypeFlow from './flows/HybridArchetypeFlow'
 import { sanitizeText } from './lib/sanitize'
+import { cacheBustUrl } from './lib/fetchJson'
 
 // Helper function to convert markdown to HTML for basic formatting
 function formatMarkdown(text) {
@@ -41,7 +42,7 @@ function App() {
   useEffect(() => {
     const loadFlow = async () => {
       try {
-        const response = await fetch('/lead-magnet-slide-flow.json')
+        const response = await fetch(cacheBustUrl('/lead-magnet-slide-flow.json'))
         if (!response.ok) throw new Error('Failed to load flow')
         const data = await response.json()
         

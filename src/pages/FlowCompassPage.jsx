@@ -860,13 +860,13 @@ const FlowCompassPage = () => {
               </div>
               <button
                 className="submit-log-btn"
-                onClick={() => navigate('/nikigai/skills')}
+                onClick={() => navigate('/mind-space')}
                 style={{ width: '100%', background: 'linear-gradient(135deg, #5e17eb, #7c3aed)' }}
               >
-                Complete Flow Finder
+                Complete Mind Space
               </button>
               <p style={{ marginTop: '12px', fontSize: '13px', color: '#999', textAlign: 'center' }}>
-                Completing the Flow Finder will help you discover your ideal project
+                Completing the Mind Space will help you discover your ideal project
               </p>
             </div>
           </div>

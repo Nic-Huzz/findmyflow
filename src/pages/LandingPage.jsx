@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import WaitlistModal from '../components/WaitlistModal';
 import './LandingPage.css';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [expandedFaq, setExpandedFaq] = useState(null);
+  const [showWaitlist, setShowWaitlist] = useState(false);
 
   const faqs = [
     {
@@ -82,13 +84,13 @@ const LandingPage = () => {
           <div className="hero-cta-group">
             <button
               className="hero-cta-primary"
-              onClick={() => navigate('/get-started')}
+              onClick={() => setShowWaitlist(true)}
             >
-              Start Your Journey
+              Join Waiting List
             </button>
             <button
               className="hero-cta-secondary"
-              onClick={() => navigate('/try/offer-audit')}
+              onClick={() => navigate('/try/flow-audit')}
             >
               <span className="btn-subtext">Free Quiz</span>Find Your Journey Stage
             </button>
@@ -683,9 +685,9 @@ const LandingPage = () => {
 
               <button
                 className="archetypes-cta"
-                onClick={() => navigate('/get-started')}
+                onClick={() => setShowWaitlist(true)}
               >
-                Start Your Journey →
+                Join Waiting List →
               </button>
             </div>
 
@@ -956,9 +958,9 @@ const LandingPage = () => {
               </ul>
               <button
                 className="path-cta path-cta-primary"
-                onClick={() => navigate('/get-started')}
+                onClick={() => setShowWaitlist(true)}
               >
-                Start Discovering →
+                Join Waiting List →
               </button>
             </div>
 
@@ -978,7 +980,7 @@ const LandingPage = () => {
               </ul>
               <button
                 className="path-cta path-cta-secondary"
-                onClick={() => navigate('/try/offer-audit')}
+                onClick={() => navigate('/try/flow-audit')}
               >
                 <span className="btn-subtext">Free Quiz</span>Find Your Journey Stage
               </button>
@@ -1059,13 +1061,13 @@ const LandingPage = () => {
           <div className="final-cta-buttons">
             <button
               className="hero-cta-primary"
-              onClick={() => navigate('/get-started')}
+              onClick={() => setShowWaitlist(true)}
             >
-              Start Your Journey
+              Join Waiting List
             </button>
             <button
               className="hero-cta-secondary"
-              onClick={() => navigate('/try/offer-audit')}
+              onClick={() => navigate('/try/flow-audit')}
             >
               <span className="btn-subtext">Free Quiz</span>Find Your Journey Stage
             </button>
@@ -1085,6 +1087,12 @@ const LandingPage = () => {
           </button>
         </div>
       </footer>
+
+      {/* Waitlist Modal */}
+      <WaitlistModal
+        isOpen={showWaitlist}
+        onClose={() => setShowWaitlist(false)}
+      />
     </div>
   );
 };

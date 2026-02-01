@@ -439,23 +439,25 @@ function PersonaAssessment() {
       <div className="persona-assessment">
         {renderProgress()}
         <div className="intro-container">
-          <h2 className="intro-title">Discover Your Essence</h2>
-          <div className="animated-text">
-            <p className="intro-text">
-              On my journey, I discovered something powerful — we all have an <strong>Essence Voice</strong>.
-            </p>
-            <p className="intro-text">
-              It's that original song you were born to share. The version of you that feels most alive, most authentic, most magnetic.
-            </p>
-            <p className="intro-text">
-              When you show up from this place, your impact doesn't feel like work — it feels like flow.
-            </p>
-            <p className="intro-text">
-              There are 8 Essence Voices. One will feel like coming home.
-            </p>
-            <p className="intro-instruction">
-              Swipe right on the ones that resonate. Left on the ones that don't.
-            </p>
+          <div className="intro-content">
+            <h2 className="intro-title">Discover Your Essence</h2>
+            <div className="animated-text">
+              <p className="intro-text">
+                On my journey, I discovered something powerful — we all have an <strong>Essence Voice</strong>.
+              </p>
+              <p className="intro-text">
+                It's that original song you were born to share. The version of you that feels most alive, most authentic, most magnetic.
+              </p>
+              <p className="intro-text">
+                When you show up from this place, your impact doesn't feel like work — it feels like flow.
+              </p>
+              <p className="intro-text">
+                There are 8 Essence Voices. One will feel like coming home.
+              </p>
+              <p className="intro-instruction">
+                Swipe right on the ones that resonate. Left on the ones that don't.
+              </p>
+            </div>
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.ESSENCE_FLOW)}>
             Let's Go

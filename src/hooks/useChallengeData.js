@@ -26,6 +26,7 @@ import { convertLegacyStage, STAGE_CONFIG } from '../lib/stageConfig'
 import { generateVoiceQuestsForStage } from '../lib/voiceQuestConfig'
 import { getScoringCategory, syncScoreToLeaderboard } from '../lib/scoringCategories'
 import { logError, showErrorWithSupport } from '../lib/errorSupport'
+import { cacheBustUrl } from '../lib/fetchJson'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
@@ -58,6 +59,7 @@ export function useChallengeData() {
   const [activeRTypeFilter, setActiveRTypeFilter] = useState('All')
   const [activeFrequencyFilter, setActiveFrequencyFilter] = useState('daily')
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [onboardingScreen, setOnboardingScreen] = useState('install-app') // 'install-app' | 'enable-notifications'
   const [showGroupSelection, setShowGroupSelection] = useState(false)
   const [showProjectSelector, setShowProjectSelector] = useState(false)
   const [showSettingsMenu, setShowSettingsMenu] = useState(false)
@@ -134,11 +136,11 @@ export function useChallengeData() {
 
   const loadChallengeData = async () => {
     try {
-      const response = await fetch('/challengeQuestsUpdate.json')
+      const response = await fetch(cacheBustUrl('/challengeQuestsUpdate.json'))
       const data = await response.json()
       setData(data)
 
-      const releaseChallengesResponse = await fetch('/dailyReleaseChallenges.json')
+      const releaseChallengesResponse = await fetch(cacheBustUrl('/dailyReleaseChallenges.json'))
       const releaseChallengesData = await releaseChallengesResponse.json()
       setDailyReleaseChallenges(releaseChallengesData)
     } catch (error) {
@@ -172,11 +174,32 @@ export function useChallengeData() {
           .limit(1)
           .maybeSingle()
 
+        // Detect if running as installed PWA vs browser
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+                             window.navigator.standalone === true
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+        const isAndroid = /Android/i.test(navigator.userAgent)
+        const isMobile = isIOS || isAndroid
+
         if (anyPrevious) {
-          // Returning user - skip onboarding, go straight to project selector
-          setShowProjectSelector(true)
+          // Returning user - check if they're in browser on mobile (not installed)
+          if (isMobile && !isStandalone) {
+            // Show install-app screen to encourage PWA installation
+            setOnboardingScreen('install-app')
+            setShowOnboarding(true)
+          } else {
+            // Already installed or on desktop - skip to project selector
+            setShowProjectSelector(true)
+          }
         } else {
-          // First-time user - show full onboarding
+          // First-time user - show appropriate onboarding screen
+          if (isMobile && !isStandalone) {
+            // Mobile browser: show install-app screen
+            setOnboardingScreen('install-app')
+          } else {
+            // PWA or desktop: show notifications screen (skip install)
+            setOnboardingScreen('enable-notifications')
+          }
           setShowOnboarding(true)
         }
         setLoading(false)
@@ -763,6 +786,7 @@ export function useChallengeData() {
 
   const handlePlaySolo = () => {
     setGroupMode(null)
+    setShowOnboarding(false)
     setShowGroupSelection(false)
     setShowProjectSelector(true)
   }
@@ -1715,6 +1739,8 @@ export function useChallengeData() {
     setActiveFrequencyFilter,
     showOnboarding,
     setShowOnboarding,
+    onboardingScreen,
+    setOnboardingScreen,
     showGroupSelection,
     setShowGroupSelection,
     showProjectSelector,

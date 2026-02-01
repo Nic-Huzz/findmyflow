@@ -239,7 +239,7 @@ const HybridArchetypeFlow = ({
       color: 'white',
       fontSize: '14px',
       fontStyle: 'italic',
-      marginBottom: '12px',
+      marginBottom: '4px',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
@@ -250,9 +250,8 @@ const HybridArchetypeFlow = ({
       position: 'relative',
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       overflow: 'visible',
-      minHeight: '420px',
     },
     nextCard: {
       position: 'absolute',
@@ -407,6 +406,8 @@ const HybridArchetypeFlow = ({
       gap: '12px',
       padding: '20px',
       overflow: 'auto',
+      height: '100%',
+      justifyContent: 'center',
     },
     battleIntro: {
       textAlign: 'center',
@@ -466,18 +467,15 @@ const HybridArchetypeFlow = ({
       color: 'white',
     },
     gestureHint: {
-      position: 'absolute',
-      bottom: '30%',
-      left: '50%',
-      transform: 'translateX(-50%)',
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
       gap: '8px',
       color: 'rgba(255,255,255,0.8)',
       fontSize: '14px',
       animation: 'gestureHintPulse 1.5s ease-in-out infinite',
-      zIndex: 5,
       pointerEvents: 'none',
+      marginBottom: '4px',
     },
     gestureArrow: {
       fontSize: '24px',
@@ -693,14 +691,15 @@ const HybridArchetypeFlow = ({
           )}
         </div>
 
+        {/* Gesture hint for mobile - first card only */}
+        {isMobile && showGestureHint && currentIndex === 0 && (
+          <div style={styles.gestureHint}>
+            <span>Swipe</span>
+            <span style={styles.gestureArrow}>→</span>
+          </div>
+        )}
+
         <div style={styles.cardContainer}>
-          {/* Gesture hint for mobile - first card only */}
-          {isMobile && showGestureHint && currentIndex === 0 && (
-            <div style={styles.gestureHint}>
-              <span>Swipe</span>
-              <span style={styles.gestureArrow}>→</span>
-            </div>
-          )}
 
           {/* Next card preview */}
           {nextArchetype && (

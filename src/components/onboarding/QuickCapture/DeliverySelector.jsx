@@ -112,9 +112,26 @@ function DeliverySelector({
   showCategorySelector = false,
   defaultCategory = null
 }) {
-  const [step, setStep] = useState(
-    showCategorySelector ? 'category' : 'type'
-  )
+  // Determine initial step - if defaultCategory has only 1 type and it's digital_product, start at subtype
+  const getInitialStep = () => {
+    if (showCategorySelector) return 'category'
+
+    // Check if default category has only one product type
+    if (defaultCategory) {
+      const category = CATEGORY_OPTIONS.find(c => c.id === defaultCategory)
+      if (category?.productTypes.length === 1 && category.productTypes[0] === 'digital_product') {
+        // Auto-select digital_product and show subtypes
+        if (!selectedType) {
+          // Use setTimeout to avoid state update during render
+          setTimeout(() => onTypeSelect('digital_product'), 0)
+        }
+        return 'subtype'
+      }
+    }
+    return 'type'
+  }
+
+  const [step, setStep] = useState(getInitialStep)
 
   // Get available product types for selected category
   const availableTypes = useMemo(() => {
@@ -135,6 +152,19 @@ function DeliverySelector({
   // Handle category selection
   const handleCategorySelect = (categoryId) => {
     onCategorySelect(categoryId)
+
+    // If category has only one product type, auto-select it
+    const category = CATEGORY_OPTIONS.find(c => c.id === categoryId)
+    if (category?.productTypes.length === 1) {
+      const autoType = category.productTypes[0]
+      onTypeSelect(autoType)
+      // If it's digital_product, show subtypes; otherwise move on
+      if (autoType === 'digital_product') {
+        setStep('subtype')
+      }
+      return
+    }
+
     setStep('type')
   }
 

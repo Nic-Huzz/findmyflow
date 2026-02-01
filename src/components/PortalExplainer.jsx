@@ -18,13 +18,8 @@ function PortalExplainer({ onClose }) {
       title: "Quest Tabs 📑",
       content: (
         <>
-          <p>Your quests are organized into 5 tabs, each serving a different purpose:</p>
+          <p>Your quests are organized into tabs, each serving a different purpose:</p>
           <div className="category-grid">
-            <div className="explainer-category">
-              <div className="category-icon">😤</div>
-              <h3>Groans</h3>
-              <p>Tasks your essence knows you're capable of, but your body still has resistance</p>
-            </div>
             <div className="explainer-category">
               <div className="category-icon">💜</div>
               <h3>Healing</h3>

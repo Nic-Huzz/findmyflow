@@ -306,25 +306,20 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       // Get quest completions from last week
       const { data: completions, error } = await supabase
         .from('quest_completions')
-        .select('points, category')
+        .select('id, quest_id')
         .eq('user_id', user.id)
         .gte('completed_at', lastMonday.toISOString())
         .lte('completed_at', lastSunday.toISOString())
 
       if (error) throw error
 
-      // Calculate stats
-      const totalPoints = completions?.reduce((sum, c) => sum + (c.points || 0), 0) || 0
+      // Calculate stats (points not stored in quest_completions, just count)
       const questCount = completions?.length || 0
-      const byCategory = completions?.reduce((acc, c) => {
-        acc[c.category] = (acc[c.category] || 0) + 1
-        return acc
-      }, {}) || {}
+      const totalPoints = questCount * 10 // Estimate 10 points per quest
 
       setLastWeekStats({
         totalPoints,
         questCount,
-        byCategory,
         weekOf: lastMonday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
       })
     } catch (err) {
@@ -744,15 +739,6 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
                   <span className="stat-label">Days Active</span>
                 </div>
               </div>
-              {Object.keys(lastWeekStats.byCategory).length > 0 && (
-                <div className="category-breakdown">
-                  {Object.entries(lastWeekStats.byCategory).map(([cat, count]) => (
-                    <span key={cat} className="category-chip">
-                      {cat}: {count}
-                    </span>
-                  ))}
-                </div>
-              )}
             </>
           ) : (
             <div className="stats-empty">
@@ -1121,8 +1107,8 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
           {WEEK_TYPES.map(type => (
             <button
               key={type.id}
-              className={`week-type-card ${weekType === type.id ? 'selected' : ''}`}
-              onClick={() => setWeekType(type.id)}
+              className={`week-type-card ${weekType === type.id ? 'selected' : ''} ${type.id === 'healing' ? 'disabled' : ''}`}
+              onClick={() => type.id !== 'healing' && setWeekType(type.id)}
               style={{
                 '--type-color': type.color,
                 borderColor: weekType === type.id ? type.color : undefined
@@ -1443,9 +1429,9 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
                 <p>Want personalized challenges based on your unique skills?</p>
                 <button
                   className="flow-finder-btn"
-                  onClick={() => navigate('/nikigai/skills')}
+                  onClick={() => navigate('/mind-space')}
                 >
-                  Complete Flow Finder
+                  Complete Mind Space
                 </button>
               </div>
             </div>
@@ -1838,7 +1824,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   // Determine if we're on the summary step
   const isSummaryStep = showFoundationStep ? step === 8 : step === 7
 
-  // If no projects and done loading, show empty state prompting Flow Finder
+  // If no projects and done loading, show empty state prompting Mind Space
   if (!loadingProjects && projects.length === 0) {
     return (
       <div className="weekly-planning-flow">
@@ -1847,14 +1833,14 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
           <h2>Create Your First Project</h2>
           <p>
             Before planning your week, let's discover what makes you unique.
-            Complete the Flow Finder to uncover your skills, the problems you solve,
+            Complete the Mind Space to uncover your skills, the problems you solve,
             and who you're meant to serve.
           </p>
           <button
             className="primary-btn"
-            onClick={() => navigate('/nikigai/skills')}
+            onClick={() => navigate('/mind-space')}
           >
-            Start Flow Finder →
+            Start Mind Space →
           </button>
           <button
             className="secondary-btn"

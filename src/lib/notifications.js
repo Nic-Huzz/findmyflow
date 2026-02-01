@@ -56,57 +56,74 @@ const urlBase64ToUint8Array = (base64String) => {
 
 // Subscribe to push notifications
 export const subscribeToPushNotifications = async (userId, vapidPublicKey) => {
+  console.log('[Notifications] subscribeToPushNotifications called', { userId, hasVapidKey: !!vapidPublicKey })
+
   try {
     // Get service worker registration
+    console.log('[Notifications] Waiting for service worker ready...')
     const registration = await navigator.serviceWorker.ready
+    console.log('[Notifications] Service worker ready:', registration.scope)
 
     // Check if already subscribed
     let subscription = await registration.pushManager.getSubscription()
+    console.log('[Notifications] Existing subscription:', subscription ? 'yes' : 'no')
 
     if (!subscription) {
       // Create new subscription
+      console.log('[Notifications] Creating new push subscription...')
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
       })
-
-      console.log('Push subscription created:', subscription)
+      console.log('[Notifications] Push subscription created:', subscription.endpoint)
     }
 
     // Save subscription to Supabase
+    console.log('[Notifications] Saving subscription to database...')
     await savePushSubscription(userId, subscription)
+    console.log('[Notifications] Subscription saved successfully')
 
     return subscription
   } catch (error) {
-    console.error('Error subscribing to push notifications:', error)
+    console.error('[Notifications] Error subscribing to push notifications:', error)
     throw error
   }
 }
 
 // Save push subscription to database
 const savePushSubscription = async (userId, subscription) => {
+  const subJson = subscription.toJSON()
+  console.log('[Notifications] Subscription JSON:', {
+    endpoint: subJson.endpoint?.substring(0, 50) + '...',
+    hasP256dh: !!subJson.keys?.p256dh,
+    hasAuth: !!subJson.keys?.auth
+  })
+
   const subscriptionData = {
     user_id: userId,
     endpoint: subscription.endpoint,
     keys: {
-      p256dh: subscription.toJSON().keys.p256dh,
-      auth: subscription.toJSON().keys.auth
+      p256dh: subJson.keys.p256dh,
+      auth: subJson.keys.auth
     },
     created_at: new Date().toISOString()
   }
 
-  const { error } = await supabase
+  console.log('[Notifications] Saving to push_subscriptions table...', { user_id: userId })
+
+  const { data, error } = await supabase
     .from('push_subscriptions')
     .upsert(subscriptionData, {
       onConflict: 'user_id,endpoint'
     })
+    .select()
 
   if (error) {
-    console.error('Error saving push subscription:', error)
+    console.error('[Notifications] Error saving push subscription:', error)
     throw error
   }
 
-  console.log('Push subscription saved to database')
+  console.log('[Notifications] Push subscription saved successfully:', data)
 }
 
 // Unsubscribe from push notifications
@@ -282,4 +299,184 @@ export const sendAnalysisUnlockedNotification = async (userId) => {
     console.error('Error sending analysis unlocked notification:', error)
     return { sent: false, error: error.message }
   }
+}
+
+// Send achievement celebration notification (for level ups, streak milestones, etc)
+export const sendAchievementNotification = async ({ title, body, url = '/7-day-challenge' }) => {
+  try {
+    if (!isNotificationSupported()) {
+      return { sent: false, reason: 'Notifications not supported' }
+    }
+
+    if (Notification.permission !== 'granted') {
+      return { sent: false, reason: 'Notification permission not granted' }
+    }
+
+    await showLocalNotification(title, {
+      body,
+      tag: 'achievement',
+      url,
+      icon: '/icon-192.png'
+    })
+
+    return { sent: true }
+  } catch (error) {
+    console.error('Error sending achievement notification:', error)
+    return { sent: false, error: error.message }
+  }
+}
+
+// Check if user has achievement notifications enabled
+export const checkAchievementNotificationsEnabled = async (userId) => {
+  try {
+    const { supabase } = await import('./supabaseClient')
+    const { data } = await supabase
+      .from('notification_preferences')
+      .select('achievement_celebrations')
+      .eq('user_id', userId)
+      .single()
+
+    return data?.achievement_celebrations ?? true
+  } catch (error) {
+    console.error('Error checking achievement notification preference:', error)
+    return true // Default to enabled
+  }
+}
+
+// Debug function - call from browser console: window.debugNotifications()
+export const debugNotifications = async () => {
+  console.log('=== NOTIFICATION DEBUG ===')
+
+  // 1. Check browser support
+  const supported = isNotificationSupported()
+  console.log('1. Browser Support:', {
+    notifications: 'Notification' in window,
+    serviceWorker: 'serviceWorker' in navigator,
+    pushManager: 'PushManager' in window,
+    overallSupported: supported
+  })
+
+  // 2. Check permission
+  const permission = getNotificationPermission()
+  console.log('2. Permission Status:', permission)
+
+  // 3. Check service worker
+  if ('serviceWorker' in navigator) {
+    const registrations = await navigator.serviceWorker.getRegistrations()
+    console.log('3. Service Worker Registrations:', registrations.length)
+    registrations.forEach((reg, i) => {
+      console.log(`   [${i}] Scope: ${reg.scope}, Active: ${!!reg.active}`)
+    })
+  }
+
+  // 4. Check push subscription
+  if ('serviceWorker' in navigator && 'PushManager' in window) {
+    try {
+      const registration = await navigator.serviceWorker.ready
+      const subscription = await registration.pushManager.getSubscription()
+      console.log('4. Push Subscription:', subscription ? {
+        endpoint: subscription.endpoint.substring(0, 60) + '...',
+        expirationTime: subscription.expirationTime
+      } : 'None')
+    } catch (e) {
+      console.log('4. Push Subscription: Error -', e.message)
+    }
+  }
+
+  // 5. Check VAPID key
+  const vapidKey = import.meta.env.VITE_VAPID_PUBLIC_KEY
+  console.log('5. VAPID Public Key:', vapidKey ? `${vapidKey.substring(0, 20)}...` : 'NOT SET')
+
+  // 6. Check database (need to import supabase)
+  try {
+    const { data: session } = await supabase.auth.getSession()
+    const userId = session?.session?.user?.id
+    console.log('6. Current User ID:', userId || 'Not logged in')
+
+    if (userId) {
+      const { data: subs, error: subsError } = await supabase
+        .from('push_subscriptions')
+        .select('id, endpoint, created_at')
+        .eq('user_id', userId)
+
+      console.log('7. Push Subscriptions in DB:', subsError ? `Error: ${subsError.message}` : (subs?.length || 0))
+      if (subs?.length) {
+        subs.forEach((s, i) => console.log(`   [${i}] ${s.endpoint.substring(0, 50)}...`))
+      }
+
+      const { data: prefs, error: prefsError } = await supabase
+        .from('notification_preferences')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+      console.log('8. Notification Preferences:', prefsError ? `Error: ${prefsError.message}` : prefs)
+    }
+  } catch (e) {
+    console.log('6-8. Database check error:', e.message)
+  }
+
+  console.log('=== END DEBUG ===')
+  console.log('To test a notification: window.testNotification()')
+}
+
+// Test sending a local notification
+export const testNotification = async () => {
+  console.log('[Test] Sending test notification...')
+  try {
+    await showLocalNotification('🔔 Test Notification', {
+      body: 'If you see this, notifications are working!',
+      tag: 'test-' + Date.now()
+    })
+    console.log('[Test] Notification sent successfully!')
+  } catch (error) {
+    console.error('[Test] Failed to send notification:', error)
+  }
+}
+
+// Test push notification from server
+export const testPushNotification = async () => {
+  console.log('[Test] Testing push notification from server...')
+  try {
+    const { data: session } = await supabase.auth.getSession()
+    if (!session?.session) {
+      console.error('[Test] Not logged in')
+      return
+    }
+
+    const userId = session.session.user.id
+    const accessToken = session.session.access_token
+
+    console.log('[Test] Sending push to user:', userId)
+
+    const response = await fetch(
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-push-notification`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          userId,
+          title: '🔔 Server Push Test',
+          body: 'This notification came from the server!',
+          url: '/7-day-challenge'
+        })
+      }
+    )
+
+    const result = await response.json()
+    console.log('[Test] Push result:', result)
+    return result
+  } catch (error) {
+    console.error('[Test] Push test failed:', error)
+  }
+}
+
+// Expose to window for console access
+if (typeof window !== 'undefined') {
+  window.debugNotifications = debugNotifications
+  window.testNotification = testNotification
+  window.testPushNotification = testPushNotification
 }

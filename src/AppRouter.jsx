@@ -60,6 +60,7 @@ const FlowFinderSkills = lazy(() => import('./flows/FlowFinderSkills'))
 const FlowFinderProblems = lazy(() => import('./flows/FlowFinderProblems'))
 const FlowFinderPersona = lazy(() => import('./flows/FlowFinderPersona'))
 const FlowFinderIntegration = lazy(() => import('./flows/FlowFinderIntegration'))
+const MindSpace = lazy(() => import('./flows/MindSpace'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazy(() => import('./flows/HealingCompass'))
@@ -171,6 +172,7 @@ import './components/WeeklyPlanningFlow.css'
 import './components/GroanMatrix.css'
 import './pages/LandingPage.css'
 import './flows/CareerClarityQuiz.css'
+import './flows/MindSpace.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -192,7 +194,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/career-clarity' ||
                         location.pathname === '/launch-readiness' ||
                         location.pathname === '/funnel-baseline' ||
-                        location.pathname === '/income-calculator'
+                        location.pathname === '/income-calculator' ||
+                        location.pathname === '/mind-space'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -335,7 +338,7 @@ function AppRouter() {
             {/* Public Lead Magnet Flows - No Auth Required */}
             <Route path="/try/offer/:flowType" element={<PublicMoneyModelFlow />} />
             <Route path="/try/nervous-system" element={<PublicNervousSystemFlow />} />
-            <Route path="/try/offer-audit" element={<PublicOfferAuditFlow />} />
+            <Route path="/try/flow-audit" element={<PublicOfferAuditFlow />} />
 
             <Route path="/me" element={
               <AuthGate>
@@ -405,6 +408,11 @@ function AppRouter() {
             <Route path="/nikigai/integration" element={
               <AuthGate>
                 <FlowFinderIntegration />
+              </AuthGate>
+            } />
+            <Route path="/mind-space" element={
+              <AuthGate>
+                <MindSpace />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={

@@ -1,43 +1,35 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+import webpush from 'npm:web-push@3.6.7'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// Notification schedule configuration
+// Simplified notification schedule - 3 core times
 // Key is the local time (hour) when notification should be sent
 const NOTIFICATIONS = {
-  7: {
-    title: '🌅 Morning Reconnect',
-    body: 'Remember Your Daily Reconnect Quests To Start Your Day on a High',
+  8: {
+    title: '🌅 Morning Quest Check',
+    body: 'Start your day with intention - check your quests!',
     url: '/7-day-challenge',
-    tag: 'morning-reconnect'
-  },
-  9: {
-    title: '✨ Embrace Your Essence',
-    body: 'Reminder to Embrace Your Essence Today',
-    url: '/archetypes',
-    tag: 'embrace-essence'
+    tag: 'morning-quest',
+    preference: 'quest_reminders'
   },
   12: {
     title: '🎯 Midday Check-In',
-    body: 'How can we make this afternoon a "Hell Yea"?',
+    body: 'How are your quests going? Keep the momentum!',
     url: '/7-day-challenge',
-    tag: 'midday-checkin'
+    tag: 'midday-checkin',
+    preference: 'quest_reminders'
   },
-  17: {
-    title: '📅 Evening Goals',
-    body: 'What weekly quests can we get done this evening?',
+  18: {
+    title: '📝 Evening Reflection',
+    body: 'Time to log your quest progress for the day!',
     url: '/7-day-challenge',
-    tag: 'evening-quests'
-  },
-  20: {
-    title: '📝 Daily Reflection',
-    body: 'Reminder to enter your quests for the day!',
-    url: '/7-day-challenge',
-    tag: 'daily-reflection'
+    tag: 'evening-reflection',
+    preference: 'quest_reminders'
   }
 }
 
@@ -166,11 +158,33 @@ serve(async (req) => {
 
     // Process subscriptions sequentially to handle async checks
     for (const sub of subscriptions) {
-      const prefs = prefsMap.get(sub.user_id)
+      let prefs = prefsMap.get(sub.user_id)
 
-      // Skip if user doesn't have preferences or no notifications enabled
-      if (!prefs || !(prefs.daily_quests || prefs.leaderboard_updates || prefs.group_activity || prefs.artifact_unlocks)) {
-        console.log(`Skipping user ${sub.user_id}: No preferences or notifications disabled`)
+      // If no preferences exist, create default ones
+      if (!prefs) {
+        console.log(`User ${sub.user_id}: No preferences found, creating defaults...`)
+        const { data: newPrefs, error: createError } = await supabaseClient
+          .from('notification_preferences')
+          .upsert({
+            user_id: sub.user_id,
+            quest_reminders: true,
+            achievement_celebrations: true,
+            timezone: 'UTC'
+          }, { onConflict: 'user_id' })
+          .select()
+          .single()
+
+        if (createError) {
+          console.error(`Failed to create preferences for ${sub.user_id}:`, createError)
+          continue
+        }
+        prefs = newPrefs
+        console.log(`Created default preferences for ${sub.user_id}`)
+      }
+
+      // Skip if all notifications disabled
+      if (!(prefs.quest_reminders || prefs.achievement_celebrations)) {
+        console.log(`Skipping user ${sub.user_id}: All notifications disabled`)
         continue
       }
 
@@ -208,12 +222,18 @@ serve(async (req) => {
       const notification = NOTIFICATIONS[userLocalHour]
 
       if (notification) {
-        console.log(`User ${sub.user_id}: Adding notification for hour ${userLocalHour}`)
-        notificationsToSend.push({ subscription: sub, notification })
+        // Check if user has this notification type enabled
+        const prefKey = notification.preference
+        if (prefs[prefKey]) {
+          console.log(`User ${sub.user_id}: Adding notification for hour ${userLocalHour}`)
+          notificationsToSend.push({ subscription: sub, notification })
+        } else {
+          console.log(`User ${sub.user_id}: Skipping notification - ${prefKey} disabled`)
+        }
       }
 
-      // Check for weekly plan notifications at 8am
-      if (userLocalHour === 8) {
+      // Check for weekly plan notifications at 8am (groan day reminder)
+      if (userLocalHour === 8 && prefs.quest_reminders) {
         const weeklyPlan = plansMap.get(sub.user_id)
         if (weeklyPlan) {
           const userDay = getCurrentDayInTimezone(timezone)
@@ -230,115 +250,6 @@ serve(async (req) => {
             }
             notificationsToSend.push({ subscription: sub, notification: groanNotification })
           }
-
-          // Check if today is big release day
-          if (weeklyPlan.big_release_day === userDay && weeklyPlan.big_release_practice) {
-            const releaseNotification = {
-              title: '🌊 Today is Your Release Day!',
-              body: `Time for your ${weeklyPlan.big_release_practice.replace(/_/g, ' ')} practice`,
-              url: '/7-day-challenge?tab=Healing',
-              tag: 'weekly-release-day'
-            }
-            notificationsToSend.push({ subscription: sub, notification: releaseNotification })
-          }
-        }
-      }
-
-      // Check for pending recommendations at 9am (business hours nudge)
-      if (userLocalHour === 9) {
-        const { data: pendingRecs, error: recsError } = await supabaseClient
-          .from('recommendations')
-          .select('id, priority, title')
-          .eq('user_id', sub.user_id)
-          .eq('status', 'pending')
-          .order('priority', { ascending: true })
-          .limit(3)
-
-        if (!recsError && pendingRecs && pendingRecs.length > 0) {
-          const highPriority = pendingRecs.filter(r => r.priority === 'high').length
-          const recNotification = {
-            title: highPriority > 0
-              ? `🤖 ${highPriority} High Priority Insight${highPriority > 1 ? 's' : ''}`
-              : `🤖 ${pendingRecs.length} AI Insight${pendingRecs.length > 1 ? 's' : ''} Waiting`,
-            body: pendingRecs[0].title,
-            url: '/crm/alerts',
-            tag: 'recommendations-nudge'
-          }
-          notificationsToSend.push({ subscription: sub, notification: recNotification })
-        }
-      }
-
-      // Daily Priority Notifications at 8am
-      if (userLocalHour === 8) {
-        // Check for overdue follow-ups
-        const today = new Date().toISOString().split('T')[0]
-        const { data: overdueDeals, error: overdueError } = await supabaseClient
-          .from('deals')
-          .select('id, contact_name, value, next_follow_up_date')
-          .eq('user_id', sub.user_id)
-          .not('status', 'in', '("won","lost")')
-          .lt('next_follow_up_date', today)
-          .limit(5)
-
-        // Check for very stale deals (14+ days no activity)
-        const staleDate = new Date()
-        staleDate.setDate(staleDate.getDate() - 14)
-        const staleDateStr = staleDate.toISOString()
-
-        const { data: staleDeals, error: staleError } = await supabaseClient
-          .from('deals')
-          .select('id, contact_name, value, updated_at')
-          .eq('user_id', sub.user_id)
-          .not('status', 'in', '("won","lost")')
-          .lt('updated_at', staleDateStr)
-          .limit(5)
-
-        const overdueCount = (!overdueError && overdueDeals) ? overdueDeals.length : 0
-        const staleCount = (!staleError && staleDeals) ? staleDeals.length : 0
-        const urgentTotal = overdueCount + staleCount
-
-        if (urgentTotal > 0) {
-          let bodyText = ''
-          if (overdueCount > 0 && staleCount > 0) {
-            bodyText = `${overdueCount} overdue follow-up${overdueCount > 1 ? 's' : ''} & ${staleCount} deal${staleCount > 1 ? 's' : ''} going cold`
-          } else if (overdueCount > 0) {
-            const topDeal = overdueDeals![0]
-            bodyText = `${topDeal.contact_name} follow-up overdue${overdueCount > 1 ? ` (+${overdueCount - 1} more)` : ''}`
-          } else {
-            const topDeal = staleDeals![0]
-            bodyText = `${topDeal.contact_name} needs attention${staleCount > 1 ? ` (+${staleCount - 1} more)` : ''}`
-          }
-
-          const priorityNotification = {
-            title: `📋 ${urgentTotal} Priority Action${urgentTotal > 1 ? 's' : ''} Today`,
-            body: bodyText,
-            url: '/crm',
-            tag: 'daily-priorities-morning'
-          }
-          notificationsToSend.push({ subscription: sub, notification: priorityNotification })
-        }
-      }
-
-      // Afternoon follow-up reminder at 2pm
-      if (userLocalHour === 14) {
-        const today = new Date().toISOString().split('T')[0]
-        const { data: todayFollowUps, error: fuError } = await supabaseClient
-          .from('deals')
-          .select('id, contact_name, value, next_follow_up_date')
-          .eq('user_id', sub.user_id)
-          .not('status', 'in', '("won","lost")')
-          .lte('next_follow_up_date', today)
-          .limit(3)
-
-        if (!fuError && todayFollowUps && todayFollowUps.length > 0) {
-          const topDeal = todayFollowUps[0]
-          const afternoonNotification = {
-            title: `📞 ${todayFollowUps.length} Follow-up${todayFollowUps.length > 1 ? 's' : ''} Remaining`,
-            body: `Don't forget: ${topDeal.contact_name}${todayFollowUps.length > 1 ? ` and ${todayFollowUps.length - 1} more` : ''}`,
-            url: '/crm',
-            tag: 'daily-priorities-afternoon'
-          }
-          notificationsToSend.push({ subscription: sub, notification: afternoonNotification })
         }
       }
     }
@@ -365,12 +276,11 @@ serve(async (req) => {
       )
     }
 
-    // Import web-push library using npm: specifier for better Deno compatibility
-    const webpush = await import('npm:web-push@3.6.7')
-
-    // Configure web-push
-    webpush.default.setVapidDetails(
-      `mailto:${vapidEmail}`,
+    // Configure web-push (using static import at top of file)
+    // Add mailto: prefix if not present
+    const formattedEmail = vapidEmail.startsWith('mailto:') ? vapidEmail : `mailto:${vapidEmail}`
+    webpush.setVapidDetails(
+      formattedEmail,
       vapidPublicKey,
       vapidPrivateKey
     )
@@ -394,7 +304,7 @@ serve(async (req) => {
             keys: subscription.keys
           }
 
-          await webpush.default.sendNotification(pushSubscription, payload)
+          await webpush.sendNotification(pushSubscription, payload)
           return { success: true, endpoint: subscription.endpoint }
         } catch (error: any) {
           console.error('Error sending to subscription:', error)

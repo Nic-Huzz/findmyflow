@@ -449,6 +449,22 @@
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
+.challenge-tab.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.challenge-tab.locked:hover {
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.challenge-tab .lock-icon {
+  font-size: 0.7rem;
+  margin-left: 0.35rem;
+}
+
 /* Stage Tabs Wrapper (for project-based challenges) */
 .stage-tabs-wrapper {
   padding: 1rem 1.5rem;

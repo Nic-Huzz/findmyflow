@@ -633,7 +633,7 @@ function HomeFirstTime() {
             marginBottom: '32px'
           }}>
             As a Vibe Seeker, you're ready to explore what lights you up.
-            The Flow Finder will guide you through discovering your unique skills,
+            The Mind Space will help you discover your unique skills,
             the problems you naturally solve, and who you're meant to help.
           </p>
 
@@ -648,18 +648,18 @@ function HomeFirstTime() {
               color: 'rgba(255, 255, 255, 0.9)',
               margin: 0
             }}>
-              ⏱️ This takes about <strong>5 minutes</strong>
+              ⏱️ This takes about <strong>2 minutes</strong>
             </p>
           </div>
 
           <div className="project-type-options">
             <button
               className="option-card"
-              onClick={() => navigate('/nikigai/skills')}
+              onClick={() => navigate('/mind-space')}
             >
               <span className="option-icon">🚀</span>
-              <span className="option-title">I have 5 minutes now</span>
-              <span className="option-desc">Let's start the Flow Finder</span>
+              <span className="option-title">I have 2 minutes now</span>
+              <span className="option-desc">Let's find your flow</span>
             </button>
 
             <button
@@ -702,7 +702,7 @@ function HomeFirstTime() {
           }}>
             {assignedPersona?.persona === 'movement_maker'
               ? "Even with an established business, discovering new opportunities can unlock your next level of growth."
-              : "Let's discover what lights you up. The Flow Finder will guide you through identifying your unique skills, problems you solve, and who you're meant to help."
+              : "Let's discover what lights you up. The Mind Space will help you identify your unique skills, problems you solve, and who you're meant to help."
             }
           </p>
 
@@ -717,18 +717,18 @@ function HomeFirstTime() {
               color: 'rgba(255, 255, 255, 0.9)',
               margin: 0
             }}>
-              ⏱️ This takes about <strong>5 minutes</strong>
+              ⏱️ This takes about <strong>2 minutes</strong>
             </p>
           </div>
 
           <div className="project-type-options">
             <button
               className="option-card"
-              onClick={() => navigate('/nikigai/skills')}
+              onClick={() => navigate('/mind-space')}
             >
               <span className="option-icon">🚀</span>
-              <span className="option-title">I have 5 minutes now</span>
-              <span className="option-desc">Let's start the Flow Finder</span>
+              <span className="option-title">I have 2 minutes now</span>
+              <span className="option-desc">Let's find your flow</span>
             </button>
 
             <button

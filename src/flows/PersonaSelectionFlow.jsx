@@ -535,15 +535,15 @@ function PersonaSelectionFlow() {
               <div className="combination-card">
                 <div className="no-nikigai-content">
                   <div className="no-nikigai-icon">🧭</div>
-                  <h3 className="no-nikigai-title">Complete Flow Finder First</h3>
+                  <h3 className="no-nikigai-title">Find Your Flow First</h3>
                   <p className="no-nikigai-text">
-                    You haven't completed the Flow Finder process yet. Complete it to discover your unique persona and problem clusters.
+                    You haven't completed the Mind Space yet. Complete it to discover your unique persona and problem clusters.
                   </p>
                   <button
                     className="action-btn action-btn-primary"
-                    onClick={() => navigate('/nikigai/skills')}
+                    onClick={() => navigate('/mind-space')}
                   >
-                    Start Flow Finder Process
+                    Start Mind Space
                   </button>
                 </div>
               </div>

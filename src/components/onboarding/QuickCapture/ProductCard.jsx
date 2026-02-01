@@ -35,6 +35,15 @@ const PRICE_TYPE_OPTIONS = [
   { id: 'subscription', label: 'Subscription', description: 'Recurring' }
 ]
 
+// Product stage options (maps to STAGES in stageConfig.js)
+const STAGE_OPTIONS = [
+  { id: 1, label: "Just an idea", description: "Haven't sold it yet", icon: '💡' },
+  { id: 2, label: "Sold a few times", description: "Proving it works", icon: '🌱' },
+  { id: 4, label: "Getting consistent customers", description: "Building momentum", icon: '📈' },
+  { id: 6, label: "Established", description: "Ready to scale", icon: '🚀' },
+  { id: 7, label: "Scaling & optimizing", description: "Growing fast", icon: '⚡' }
+]
+
 function ProductCard({
   product,
   index,
@@ -291,7 +300,53 @@ function ProductCard({
             Back
           </button>
           <button
+            className="next-btn"
+            onClick={() => setCurrentStep('stage')}
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // STEP: Stage selection
+  if (currentStep === 'stage') {
+    return (
+      <div className="qc-product-card">
+        <div className="product-header">
+          <span className="product-number">Product #{index + 1}: {product.name}</span>
+          {onRemove && (
+            <button className="remove-button" onClick={onRemove}>&times;</button>
+          )}
+        </div>
+
+        <h4 className="step-title">Where is this product at?</h4>
+        <p className="step-subtitle">This helps us show you the right next steps</p>
+
+        <div className="stage-options">
+          {STAGE_OPTIONS.map(stage => (
+            <button
+              key={stage.id}
+              className={`stage-option ${product.stage === stage.id ? 'selected' : ''}`}
+              onClick={() => updateField('stage', stage.id)}
+            >
+              <span className="stage-icon">{stage.icon}</span>
+              <div className="stage-text">
+                <span className="stage-label">{stage.label}</span>
+                <span className="stage-description">{stage.description}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="step-actions">
+          <button className="back-btn" onClick={() => setCurrentStep('pricing')}>
+            Back
+          </button>
+          <button
             className="next-btn done"
+            disabled={!product.stage}
             onClick={() => {
               updateField('step', 'complete')
               setIsExpanded(false)

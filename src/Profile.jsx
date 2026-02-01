@@ -6,6 +6,7 @@ import { essenceProfiles } from './data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/personaProfiles'
 import { hasActiveChallenge } from './lib/questCompletion'
+import { cacheBustUrl } from './lib/fetchJson'
 import { getStageShortName } from './lib/stageConfig'
 import { graduateUser } from './lib/graduationChecker'
 import GraduationModal from './components/GraduationModal'
@@ -28,6 +29,7 @@ const Profile = () => {
   const [challengeDay, setChallengeDay] = useState(0)
   const [questProgress, setQuestProgress] = useState({ dailyDone: 0, dailyTotal: 0, weeklyDone: 0, weeklyTotal: 0 })
   const [stageProgress, setStageProgress] = useState(null)
+  const [stageProgressLoaded, setStageProgressLoaded] = useState(false)
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -224,7 +226,7 @@ const Profile = () => {
           // Fetch quest data and completions to calculate progress
           try {
             const [questsResponse, completionsResponse] = await Promise.all([
-              fetch('/challengeQuestsUpdate.json'),
+              fetch(cacheBustUrl('/challengeQuestsUpdate.json')),
               supabase
                 .from('quest_completions')
                 .select('quest_id, completed_at')
@@ -324,12 +326,15 @@ const Profile = () => {
 
       if (error) {
         console.warn('Error loading stage progress (this is OK if flows not set up yet):', error)
+        setStageProgressLoaded(true)
         return
       }
 
       setStageProgress(data)
+      setStageProgressLoaded(true)
     } catch (err) {
       console.warn('Error loading stage progress:', err)
+      setStageProgressLoaded(true)
     }
   }
 
@@ -449,9 +454,32 @@ const Profile = () => {
     )
   }
 
+  // Wait for stageProgress to load before deciding to show HomeFirstTime
+  // This prevents flashing HomeFirstTime while the data is still loading
+  if (!stageProgressLoaded) {
+    return (
+      <div className="app">
+        <div className="loading" style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+          background: 'linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%)'
+        }}>
+          <div className="loading-spinner">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   // Check if user needs to complete onboarding (first-time experience)
-  // Show HomeFirstTime if onboarding not completed (or stageProgress doesn't exist yet)
-  if (!stageProgress || stageProgress.onboarding_completed === false) {
+  // Show HomeFirstTime if:
+  // 1. No stageProgress exists yet
+  // 2. V2 onboarding not completed (ensures all users go through new flow)
+  // This forces old V1 users to complete the new Q1→Q2→Q3 onboarding
+  if (!stageProgress || stageProgress.onboarding_v2_completed !== true) {
     return <HomeFirstTime />
   }
 

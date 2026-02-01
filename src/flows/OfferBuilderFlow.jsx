@@ -27,6 +27,7 @@ import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { getValidationObstaclesForOfferBuilder } from '../lib/validationObstacles'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import { cacheBustUrl } from '../lib/fetchJson'
 import './OfferBuilderFlow.css'
 
 const STAGES = {
@@ -292,7 +293,7 @@ function OfferBuilderFlow() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await fetch('/100m-offer-builder-questions.json')
+        const res = await fetch(cacheBustUrl('/100m-offer-builder-questions.json'))
         if (!res.ok) throw new Error('Failed to load questions')
         const data = await res.json()
         setQuestionsData(data)

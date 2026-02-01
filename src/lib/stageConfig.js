@@ -46,20 +46,21 @@ export const STAGE_CONFIG = {
   },
   [STAGES.GROANS]: {
     id: 0.5,
-    name: 'Groans',
-    shortName: 'Groans',
+    name: 'Play',
+    shortName: 'Play',
     description: 'Challenges that push you past your comfort zone to grow',
-    icon: '🙌🏼',
+    icon: '🎮',
     color: '#6d26d7', // purple→gold ombre
     requiredFlows: [],
     milestones: [],
     groanChallenge: null,
-    tabLabel: 'Groans',
+    tabLabel: 'Play',
     upsellPrompt: null,
     externalLink: null,
     isUserLevel: true,
-    alwaysAccessible: true, // Can be accessed from any project stage
-    isGroansStage: true // Flag to identify this as the Groans stage for quest filtering
+    alwaysAccessible: true, // Keep true so it renders
+    isGroansStage: true, // Flag to identify this as the Groans stage for quest filtering
+    temporarilyLocked: true // Flag to lock this tab during testing
   },
   [STAGES.VALIDATION]: {
     id: 1,

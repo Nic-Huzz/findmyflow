@@ -26,10 +26,8 @@ function NotificationSettings() {
   })
   const [loading, setLoading] = useState(false)
   const [preferences, setPreferences] = useState({
-    dailyQuests: true,
-    leaderboardUpdates: true,
-    groupActivity: true,
-    artifactUnlocks: true,
+    questReminders: true,
+    achievementCelebrations: true,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone // Auto-detect timezone
   })
 
@@ -50,10 +48,8 @@ function NotificationSettings() {
 
       if (!error && data) {
         setPreferences({
-          dailyQuests: data.daily_quests ?? true,
-          leaderboardUpdates: data.leaderboard_updates ?? true,
-          groupActivity: data.group_activity ?? true,
-          artifactUnlocks: data.artifact_unlocks ?? true,
+          questReminders: data.quest_reminders ?? true,
+          achievementCelebrations: data.achievement_celebrations ?? true,
           timezone: data.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone
         })
       }
@@ -74,18 +70,29 @@ function NotificationSettings() {
   }
 
   const handleEnableNotifications = async () => {
+    console.log('[NotificationSettings] Enabling notifications...')
+    console.log('[NotificationSettings] User ID:', user?.id)
+    console.log('[NotificationSettings] VAPID key exists:', !!VAPID_PUBLIC_KEY)
+
     setLoading(true)
     try {
       // Request permission
+      console.log('[NotificationSettings] Requesting permission...')
       const permission = await requestNotificationPermission()
+      console.log('[NotificationSettings] Permission result:', permission)
 
       if (permission === 'granted') {
         // Subscribe to push notifications
         if (VAPID_PUBLIC_KEY) {
+          console.log('[NotificationSettings] Subscribing to push...')
           await subscribeToPushNotifications(user.id, VAPID_PUBLIC_KEY)
+          console.log('[NotificationSettings] Subscribed successfully')
+        } else {
+          console.warn('[NotificationSettings] No VAPID key - skipping push subscription')
         }
 
         // Show test notification
+        console.log('[NotificationSettings] Showing welcome notification...')
         await showLocalNotification(
           '🎉 Notifications Enabled!',
           {
@@ -100,11 +107,13 @@ function NotificationSettings() {
           permission: 'granted',
           subscribed: true
         }))
+        console.log('[NotificationSettings] Done!')
       } else {
+        console.log('[NotificationSettings] Permission denied')
         alert('Notification permission denied. You can enable it later in your browser settings.')
       }
     } catch (error) {
-      console.error('Error enabling notifications:', error)
+      console.error('[NotificationSettings] Error enabling notifications:', error)
       alert('Error enabling notifications. Please try again.')
     } finally {
       setLoading(false)
@@ -159,10 +168,8 @@ function NotificationSettings() {
         .from('notification_preferences')
         .upsert({
           user_id: user.id,
-          daily_quests: newPreferences.dailyQuests,
-          leaderboard_updates: newPreferences.leaderboardUpdates,
-          group_activity: newPreferences.groupActivity,
-          artifact_unlocks: newPreferences.artifactUnlocks,
+          quest_reminders: newPreferences.questReminders,
+          achievement_celebrations: newPreferences.achievementCelebrations,
           timezone: newPreferences.timezone
         }, {
           onConflict: 'user_id'
@@ -313,7 +320,7 @@ function NotificationSettings() {
                 <label className="timezone-label">
                   <span className="preference-name">🌍 Your Timezone</span>
                   <span className="preference-description">
-                    Notifications will be sent based on your local time (7am, 9am, 12pm, 5pm, 8pm)
+                    Notifications sent at 8am, 12pm & 6pm in your local time
                   </span>
                 </label>
                 <select
@@ -361,13 +368,13 @@ function NotificationSettings() {
               <label className="preference-item">
                 <input
                   type="checkbox"
-                  checked={preferences.dailyQuests}
-                  onChange={() => handlePreferenceChange('dailyQuests')}
+                  checked={preferences.questReminders}
+                  onChange={() => handlePreferenceChange('questReminders')}
                 />
                 <div className="preference-info">
-                  <span className="preference-name">Daily Quest Reminders</span>
+                  <span className="preference-name">Quest Reminders</span>
                   <span className="preference-description">
-                    Get notified when new daily quests unlock
+                    Get morning, midday & evening reminders about your quests
                   </span>
                 </div>
               </label>
@@ -375,41 +382,13 @@ function NotificationSettings() {
               <label className="preference-item">
                 <input
                   type="checkbox"
-                  checked={preferences.leaderboardUpdates}
-                  onChange={() => handlePreferenceChange('leaderboardUpdates')}
+                  checked={preferences.achievementCelebrations}
+                  onChange={() => handlePreferenceChange('achievementCelebrations')}
                 />
                 <div className="preference-info">
-                  <span className="preference-name">Leaderboard Updates</span>
+                  <span className="preference-name">Achievement Celebrations</span>
                   <span className="preference-description">
-                    Get notified about your rank changes
-                  </span>
-                </div>
-              </label>
-
-              <label className="preference-item">
-                <input
-                  type="checkbox"
-                  checked={preferences.groupActivity}
-                  onChange={() => handlePreferenceChange('groupActivity')}
-                />
-                <div className="preference-info">
-                  <span className="preference-name">Group Activity</span>
-                  <span className="preference-description">
-                    Get notified when friends join your group
-                  </span>
-                </div>
-              </label>
-
-              <label className="preference-item">
-                <input
-                  type="checkbox"
-                  checked={preferences.artifactUnlocks}
-                  onChange={() => handlePreferenceChange('artifactUnlocks')}
-                />
-                <div className="preference-info">
-                  <span className="preference-name">Artifact Unlocks</span>
-                  <span className="preference-description">
-                    Get notified when you unlock new artifacts
+                    Get notified when you unlock achievements or level up
                   </span>
                 </div>
               </label>

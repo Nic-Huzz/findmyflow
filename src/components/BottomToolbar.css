@@ -21,6 +21,16 @@ body.hide-toolbar .bottom-toolbar {
   display: none !important;
 }
 
+/* Hide toolbar during onboarding */
+body.onboarding-active .bottom-toolbar {
+  display: none !important;
+}
+
+/* Hide toolbar during project selector */
+body.project-selector-active .bottom-toolbar {
+  display: none !important;
+}
+
 .bottom-toolbar {
   position: fixed;
   bottom: 0;

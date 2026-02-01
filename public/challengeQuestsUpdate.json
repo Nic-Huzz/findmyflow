@@ -1,6 +1,21 @@
 {
   "quests": [
     {
+      "id": "mind_space_extraction",
+      "category": "Business",
+      "type": "Flow Finder",
+      "frequency": "anytime",
+      "stage_required": 0,
+      "name": "Mind Space Extraction",
+      "description": "Extract your skills, problems, and people from AI conversation history",
+      "points": 15,
+      "inputType": "flow",
+      "flow_id": "mind_space",
+      "flow_route": "/mind-space",
+      "learnMore": "If you've had meaningful conversations with ChatGPT, Claude, or another AI about your work, interests, or goals, this tool extracts patterns you might not see yourself.\n\nInstead of answering 45+ minutes of questions, paste your AI's analysis and review what it found. It's like having a mirror held up to your thinking.\n\nThis feeds directly into your Flow Finder data, giving you a head start on understanding your unique skills, the problems you care about, and the people you want to serve.",
+      "isPrimary": true
+    },
+    {
       "id": "recognise_essence_observe",
       "category": "Groans",
       "type": "Recognise",

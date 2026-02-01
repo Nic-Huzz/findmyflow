@@ -11,6 +11,7 @@ import {
 } from '../../lib/crm/weeklyPlanningService'
 import { saveReflection } from '../../lib/crm/reflectionService'
 import WeeklyReflection from './WeeklyReflection'
+import ExecutionReview from './ExecutionReview'
 import PhaseSelector from './PhaseSelector'
 import TaskMenuPicker from './TaskMenuPicker'
 import WeekPlanSummary from './WeekPlanSummary'
@@ -18,6 +19,7 @@ import './WeeklyPlanningFlow.css'
 
 const STEPS = {
   REFLECTION: 'reflection',
+  EXECUTION_REVIEW: 'execution_review',
   PHASES: 'phases',
   TASKS: 'tasks',
   SUMMARY: 'summary'
@@ -53,11 +55,21 @@ export default function WeeklyPlanningFlow({ isOpen, onClose, onComplete }) {
   // Handle reflection complete
   const handleReflectionComplete = (data) => {
     setReflectionData(data)
-    setCurrentStep(STEPS.PHASES)
+    setCurrentStep(STEPS.EXECUTION_REVIEW)
   }
 
   // Handle skip reflection
   const handleSkipReflection = () => {
+    setCurrentStep(STEPS.EXECUTION_REVIEW)
+  }
+
+  // Handle execution review complete
+  const handleExecutionReviewComplete = () => {
+    setCurrentStep(STEPS.PHASES)
+  }
+
+  // Handle skip execution review
+  const handleSkipExecutionReview = () => {
     setCurrentStep(STEPS.PHASES)
   }
 
@@ -101,8 +113,11 @@ export default function WeeklyPlanningFlow({ isOpen, onClose, onComplete }) {
   // Navigation
   const goBack = () => {
     switch (currentStep) {
-      case STEPS.PHASES:
+      case STEPS.EXECUTION_REVIEW:
         setCurrentStep(STEPS.REFLECTION)
+        break
+      case STEPS.PHASES:
+        setCurrentStep(STEPS.EXECUTION_REVIEW)
         break
       case STEPS.TASKS:
         setCurrentStep(STEPS.PHASES)
@@ -127,7 +142,8 @@ export default function WeeklyPlanningFlow({ isOpen, onClose, onComplete }) {
 
         {/* Progress Indicator */}
         <div className="step-progress">
-          <div className={`step-dot ${currentStep === STEPS.REFLECTION ? 'active' : ''} ${[STEPS.PHASES, STEPS.TASKS, STEPS.SUMMARY].includes(currentStep) ? 'complete' : ''}`} />
+          <div className={`step-dot ${currentStep === STEPS.REFLECTION ? 'active' : ''} ${[STEPS.EXECUTION_REVIEW, STEPS.PHASES, STEPS.TASKS, STEPS.SUMMARY].includes(currentStep) ? 'complete' : ''}`} />
+          <div className={`step-dot ${currentStep === STEPS.EXECUTION_REVIEW ? 'active' : ''} ${[STEPS.PHASES, STEPS.TASKS, STEPS.SUMMARY].includes(currentStep) ? 'complete' : ''}`} />
           <div className={`step-dot ${currentStep === STEPS.PHASES ? 'active' : ''} ${[STEPS.TASKS, STEPS.SUMMARY].includes(currentStep) ? 'complete' : ''}`} />
           <div className={`step-dot ${currentStep === STEPS.TASKS ? 'active' : ''} ${currentStep === STEPS.SUMMARY ? 'complete' : ''}`} />
           <div className={`step-dot ${currentStep === STEPS.SUMMARY ? 'active' : ''}`} />
@@ -140,6 +156,14 @@ export default function WeeklyPlanningFlow({ isOpen, onClose, onComplete }) {
               userId={user?.id}
               onComplete={handleReflectionComplete}
               onSkip={handleSkipReflection}
+            />
+          )}
+
+          {currentStep === STEPS.EXECUTION_REVIEW && (
+            <ExecutionReview
+              userId={user?.id}
+              onComplete={handleExecutionReviewComplete}
+              onSkip={handleSkipExecutionReview}
             />
           )}
 

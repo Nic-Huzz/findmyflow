@@ -17,6 +17,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
 import { logError } from '../../../lib/errorSupport'
+import { STAGES } from '../../../lib/stageConfig'
 import {
   SKILLS_SEGMENTS,
   PROBLEM_SEGMENTS,
@@ -76,6 +77,18 @@ function QuickCapture({
     }
     return (type, id) => segmentMap[type]?.[id] || id
   }, [])
+
+  // Helper to get stage label
+  const getStageLabel = (stageId) => {
+    const stageMap = {
+      1: 'Just an idea',
+      2: 'Sold a few times',
+      4: 'Getting customers',
+      6: 'Established',
+      7: 'Scaling'
+    }
+    return stageMap[stageId] || 'Unknown'
+  }
 
   // Load saved progress on mount
   useEffect(() => {
@@ -206,13 +219,28 @@ function QuickCapture({
     setSaveError(null)
 
     try {
+      console.log('Starting save process...', { userId, capturedData })
+
+      // Validate products have required fields
+      for (const product of capturedData.products) {
+        if (!product.productType) {
+          throw new Error(`Product "${product.name}" is missing a product type. Please go back and select one.`)
+        }
+        if (!product.stage) {
+          throw new Error(`Product "${product.name}" is missing a stage. Please go back and select where this product is at.`)
+        }
+      }
+
       // 1. Save wheel data (skills, problems, personas)
+      console.log('Saving wheel data...')
       await saveWheelData('skills', capturedData.skills)
       await saveWheelData('problems', capturedData.problems)
       await saveWheelData('personas', capturedData.personas)
 
       // 2. Save products to products table
+      console.log('Saving products...')
       for (const product of capturedData.products) {
+        console.log('Saving product:', product.name, product)
         const { error: productError } = await supabase.from('products').insert({
           user_id: userId,
           name: product.name,
@@ -245,22 +273,94 @@ function QuickCapture({
         }
       }
 
+      // 2.5 Create projects for all non-pre-ladder users
+      // (pre_ladder users complete Flow Finder which creates their project)
+      if (wealthLadder === 'service' || wealthLadder === 'productized' || wealthLadder === 'products') {
+        console.log('Creating projects for products...')
+
+        // Check if user already has any active projects
+        const { data: existingProjects } = await supabase
+          .from('user_projects')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('status', 'active')
+
+        const hasExistingProjects = existingProjects && existingProjects.length > 0
+
+        // Create a project for each product
+        for (let i = 0; i < capturedData.products.length; i++) {
+          const product = capturedData.products[i]
+          const isFirstProject = !hasExistingProjects && i === 0
+
+          console.log(`Creating project for product: ${product.name}, isPrimary: ${isFirstProject}`)
+
+          const { error: projectError } = await supabase.from('user_projects').insert({
+            user_id: userId,
+            name: product.name,
+            description: product.description || `${product.productType} offering`,
+            source_flow: 'quick_capture',
+            status: 'active',
+            current_stage: product.stage || STAGES.VALIDATION,
+            total_points: 0,
+            is_primary: isFirstProject
+          })
+
+          if (projectError) {
+            console.error(`Error creating project for "${product.name}":`, projectError)
+            // Don't fail the whole onboarding for project creation errors
+            // The user can still proceed and create projects later
+          } else {
+            console.log(`Project created for: ${product.name}`)
+          }
+        }
+      }
+
       // 3. Mark onboarding complete in user_stage_progress
-      await supabase
+      // First check if record exists
+      const { data: existingProgress } = await supabase
         .from('user_stage_progress')
-        .update({
-          onboarding_completed: true,
-          onboarding_v2_completed: true,
-          guidance_emphasis: guidanceEmphasis,
-          updated_at: new Date().toISOString()
-        })
+        .select('id')
         .eq('user_id', userId)
+        .maybeSingle()
+
+      if (existingProgress) {
+        // Update existing record
+        await supabase
+          .from('user_stage_progress')
+          .update({
+            onboarding_completed: true,
+            onboarding_v2_completed: true,
+            guidance_emphasis: guidanceEmphasis,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', userId)
+      } else {
+        // Create new record if it doesn't exist
+        // Map wealth ladder to persona
+        const personaMap = {
+          service: 'vibe_seeker',
+          productized: 'vibe_riser',
+          products: 'movement_maker'
+        }
+        await supabase
+          .from('user_stage_progress')
+          .insert({
+            user_id: userId,
+            persona: personaMap[wealthLadder] || 'vibe_seeker',
+            current_stage: 'validation',
+            onboarding_completed: true,
+            onboarding_v2_completed: true,
+            guidance_emphasis: guidanceEmphasis
+          })
+      }
 
       // Clear localStorage
       localStorage.removeItem(`${STORAGE_KEY}_${userId}`)
 
       // Complete
+      console.log('Save successful! Calling onComplete...')
       onComplete(capturedData)
+      console.log('onComplete called, should navigate to /me')
 
     } catch (error) {
       console.error('Error saving quick capture data:', error)
@@ -449,7 +549,10 @@ function QuickCapture({
                   {capturedData.products.map((product, idx) => (
                     <div key={idx} className="product-summary-card">
                       <span className="product-name">{product.name}</span>
-                      {product.tier && <span className="product-tier">{product.tier}</span>}
+                      <div className="product-tags">
+                        {product.tier && <span className="product-tier">{product.tier}</span>}
+                        {product.stage && <span className="product-stage">{getStageLabel(product.stage)}</span>}
+                      </div>
                     </div>
                   ))}
                 </div>

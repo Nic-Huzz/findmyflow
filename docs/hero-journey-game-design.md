@@ -2,7 +2,30 @@
 
 **Created:** 2025-01-29
 **Status:** Conceptual Framework
-**Purpose:** Transform FindMyFlow from a "discovery platform" into a "hero training program" using superhero origin story narrative with Matrix language and Flow mechanics.
+**Purpose:** Transform FindMyFlow from a "discovery platform" into a "life-as-game training program" using superhero origin story narrative with Matrix language and Flow mechanics.
+
+---
+
+## Finalized Terminology
+
+| Element | Final Name |
+|---------|-----------|
+| The old world | **The Matrix** |
+| The awakening | **The Earthquake** |
+| Their unique gift | **Your Flow** |
+| The blockers | **Protective Voices** |
+| The 5 characters | **Perfectionist, Controller, Ghost, Performer, People Pleaser** |
+| The energy source | **The Flow** |
+| The mentor | **Zarlo** (AI Guide) |
+| Activities | **Quests** |
+| Currency | **XP (Experience Points)** |
+| The resistance feeling | **Groan** (the sound of approaching authentic play) |
+| Courage challenge collection | **Play-List** (activities your essence sees as play) |
+| The space to reclaim play | **The Playground** |
+| The tracks | **Business, Healing, Flow Tracking** (3 tracks) |
+| The community | **Movement Makers** |
+| First client | **First Service** |
+| End state | **Flow Master** |
 
 ---
 
@@ -11,10 +34,10 @@
 FindMyFlow helps burnt-out professionals discover their unique gifts and build meaningful work. The current narrative frames this as "finding your flow through self-discovery."
 
 This document proposes reframing the entire experience as a **Superhero Origin Story** where:
-- Users are **latent heroes** whose powers were suppressed by "The Matrix" (conventional career path)
-- **The Flow** is their unique power source
-- **Protective patterns** become **Inner Nemeses** (villains to defeat)
-- The journey culminates in **mastering your powers to serve others** - not recruiting for FindMyFlow, but discovering YOUR unique contribution to the world
+- Users are **latent heroes** whose Flow was suppressed by "The Matrix" (conventional career path)
+- **The Flow** is their unique gift - the intersection of skills, problems, and people
+- **Protective Voices** are the internal characters that once protected them but now hold them back
+- The journey culminates in **mastering your Flow to serve others** - not recruiting for FindMyFlow, but discovering YOUR unique contribution to the world
 
 ### Why This Works
 
@@ -80,9 +103,9 @@ The final design combines:
 | Element | FindMyFlow Translation |
 |---------|------------------------|
 | **The Matrix** | The corporate world / conventional path that suppresses your gifts |
-| **Your Powers** | Your unique Skills × Problems × People combination |
+| **Your Flow** | Your unique Skills × Problems × People combination |
 | **The Flow** | Your power source - the energy that activates when you're aligned |
-| **The Nemeses** | Your 5 Inner Villains (protective patterns) |
+| **The Protective Voices** | Your 5 Inner Characters (patterns that once protected you) |
 | **Origin Story** | The "earthquake" moment when you realized you were meant for more |
 | **Your Mission** | Discover your unique form of service to the world |
 | **The Training** | FindMyFlow's stages, quests, and challenges |
@@ -111,39 +134,39 @@ The "Return with the Elixir" in Hero's Journey terms means: you've discovered yo
 
 ---
 
-## Part 3: The Five Inner Nemeses
+## Part 3: The Five Protective Voices
 
-Your villains aren't external - they're the parts of you created by the Matrix to keep you small and safe.
+These aren't villains to destroy - they're parts of you created by the Matrix to keep you safe. They're called "Protective Voices" because they once served you. Now they hold you back.
 
-### Nemesis Profiles
+### The Five Characters
 
 #### 1. The Perfectionist
 
 | Attribute | Details |
 |-----------|---------|
-| **Superpower** | Paralysis rays - freezes you before you can act |
-| **Origin** | Developed when mistakes led to shame or punishment |
 | **Their Lie** | "You're not ready yet. One more revision. One more course." |
+| **Origin** | Developed when mistakes led to shame or punishment |
+| **How They "Protect"** | By preventing you from shipping, they prevent you from failing publicly |
 | **Kryptonite** | Shipping something imperfect. "Done beats perfect." |
 | **Signs They're Active** | Endless preparation, moving goalposts, inability to launch |
 
-#### 2. The Chameleon
+#### 2. The People Pleaser
 
 | Attribute | Details |
 |-----------|---------|
-| **Superpower** | Shape-shifting - makes you invisible by becoming what others want |
+| **Their Lie** | "They won't like the real you. Keep everyone happy." |
 | **Origin** | Developed when authenticity led to rejection or judgment |
-| **Their Lie** | "They won't like the real you. Blend in. Adapt." |
-| **Kryptonite** | Showing up as yourself, even if polarizing |
-| **Signs They're Active** | People-pleasing, inability to state opinions, chronic agreement |
+| **How They "Protect"** | By making you agreeable, they prevent conflict and rejection |
+| **Kryptonite** | Showing up as yourself, setting boundaries, saying no |
+| **Signs They're Active** | Chronic agreement, inability to state opinions, fear of disappointing |
 
 #### 3. The Controller
 
 | Attribute | Details |
 |-----------|---------|
-| **Superpower** | Force fields - blocks all uncertainty and unpredictability |
-| **Origin** | Developed when chaos or loss created a need for safety |
 | **Their Lie** | "If you can't control the outcome, don't try." |
+| **Origin** | Developed when chaos or loss created a need for safety |
+| **How They "Protect"** | By avoiding uncertainty, they prevent unexpected pain |
 | **Kryptonite** | Taking action without guaranteed results. Surrendering to flow. |
 | **Signs They're Active** | Over-planning, analysis paralysis, refusing to start without certainty |
 
@@ -151,9 +174,9 @@ Your villains aren't external - they're the parts of you created by the Matrix t
 
 | Attribute | Details |
 |-----------|---------|
-| **Superpower** | Speed multiplication - makes you do more, achieve more, never stop |
-| **Origin** | Developed when worth was tied to output and achievement |
 | **Their Lie** | "Do more. Be more. Then you'll finally be enough." |
+| **Origin** | Developed when worth was tied to output and achievement |
+| **How They "Protect"** | By keeping you busy, they prevent the emptiness of "not enough" |
 | **Kryptonite** | Resting without guilt. Recognizing you're already enough. |
 | **Signs They're Active** | Burnout cycles, inability to celebrate, always raising the bar |
 
@@ -161,25 +184,118 @@ Your villains aren't external - they're the parts of you created by the Matrix t
 
 | Attribute | Details |
 |-----------|---------|
-| **Superpower** | Invisibility - keeps you hidden from the world entirely |
-| **Origin** | Developed when being seen led to pain, criticism, or danger |
 | **Their Lie** | "Visibility is dangerous. Stay small. Don't attract attention." |
+| **Origin** | Developed when being seen led to pain, criticism, or danger |
+| **How They "Protect"** | By keeping you hidden, they prevent judgment and attack |
 | **Kryptonite** | Being seen anyway. Posting, publishing, presenting. |
 | **Signs They're Active** | Hiding work, avoiding promotion, discomfort with any spotlight |
 
-### The Twist: They Were Once Protectors
+### The Key Insight: They Were Once Protectors
 
-These nemeses weren't always villains. They developed to keep you safe in environments that weren't safe for your authentic self.
+These voices developed to keep you safe in environments that weren't safe for your authentic self.
 
 **The Perfectionist** protected you from the shame of failure.
-**The Chameleon** protected you from the pain of rejection.
+**The People Pleaser** protected you from the pain of rejection.
 **The Controller** protected you from the chaos of uncertainty.
 **The Performer** protected you from the fear of worthlessness.
 **The Ghost** protected you from the danger of being seen.
 
-They served you. But now they're preventing you from accessing your true powers.
+They served you. But now they're preventing you from accessing your Flow.
 
-The hero's journey isn't about destroying them - it's about thanking them for their service and showing them they're no longer needed in the same way.
+The journey isn't about destroying them - it's about thanking them for their service and showing them they're no longer needed in the same way.
+
+---
+
+## Part 3.5: The Play-List & Vulnerability Framework
+
+### Why Play Is Scary
+
+Your essence knows what feels like play. These activities light you up, feel alive, are authentically *you*.
+
+But that's exactly why they're terrifying.
+
+**Authenticity = Vulnerability = Potential Pain**
+
+The things we find as "play" are authentic to us - which makes them vulnerable. We've likely been teased, rejected, or hurt when we expressed these authentic parts before. So our Protective Voices learned to block access to play/authenticity to protect us from that pain.
+
+### The Vulnerability Equation
+
+> **Vulnerability = Owning Your Identities**
+
+Why are vulnerable things scary?
+
+- That vulnerable thing brings great joy
+- To open yourself up to judgment creates opportunity for pain
+- Something you don't want to feel
+- Because you want to protect this identity and keep it as something joyful
+
+**The Two Types of Resistance:**
+
+1. **We resist doing things we don't identify with** - because we don't want to be given that identity as it doesn't align with who we are.
+
+2. **We resist doing things we DO identify with** - because we don't want that identity to be broken.
+
+**The Identity Protection Paradox:**
+
+- The comedian who never does comedy to protect the dream of being a great comedian
+- The writer who never publishes to protect the identity of being a great writer
+- The burnt-out professional who never builds the business because *what if I'm not actually good at this thing I love?*
+
+Example: If your dream is to be a great stand-up comedian, actually doing stand-up comedy and being bad at it *breaks that identity*. The pain of a broken identity feels worse than the pain of never trying.
+
+### The Play-List Concept
+
+**The Play-List** = A curated collection of activities your essence *knows* would feel like play.
+
+**The Groan** = The resistance you feel when approaching play. It's the sound of your Protective Voices warning you of potential identity pain.
+
+The groan isn't the activity itself - it's the *resistance* to the play. Your essence says "this would be fun!" while your Protective Voices say "but what if you fail and that beautiful identity breaks?"
+
+### The Playground
+
+**The Playground** is where you reclaim your right to play by taking small risks with your authentic self.
+
+The visibility layers aren't about "scary business tasks" - they're about **levels of owning your identity publicly**:
+
+| Layer | What It Really Is | Identity Claim |
+|-------|-------------------|----------------|
+| **Screen** | Claiming your identity behind a screen | Lowest risk - can hide/delete |
+| **Live** | Claiming your identity in person | Real-time, can't take back |
+| **Money** | Claiming your identity is *worth paying for* | "I'm good enough to charge" |
+| **Vulnerable** | Claiming your identity even when imperfect | "This is me, flaws and all" |
+| **Authority** | Fully owning: "This is who I am" | Complete identity ownership |
+
+Each layer represents a deeper level of saying: *"This is me. This is what I do. This is who I am."*
+
+### Why Owning Your Identity Removes the Fear
+
+The fear of vulnerability is the fear of *potential* pain. Once you own it:
+
+1. **You prove to yourself it's not as scary as feared** - The anticipated pain rarely matches the reality
+2. **You gain a tribe who sees you as that thing** - People who identify you as "the comedian" or "the coach" or "the creator"
+3. **Random opinions lose their power** - When you have a tribe affirming your identity, what strangers think matters less
+4. **You build evidence for the identity** - Each completed Play-List item is proof that this IS who you are
+
+### The Protective Voice Connection
+
+The Protective Voices aren't blocking you from danger - they're blocking you from *play*.
+
+That's actually more tragic and more true for burnt-out professionals:
+- They're not afraid of hard work (they've done plenty)
+- They're afraid of doing the work that's *authentically theirs*
+- Because that work is tied to their deepest identities
+- And those identities feel too precious to risk
+
+**The Play-List is the path back to joy:**
+- It starts with small plays (Screen level)
+- Each completion builds evidence for your identity
+- Your Protective Voices learn that play is safe
+- Eventually, groan → play becomes natural
+- You reclaim your right to be authentically you
+
+### Key Message
+
+> "The things that feel most like play are the things that feel most dangerous - because they're the most *you*."
 
 ---
 
@@ -280,24 +396,24 @@ The Flow Finder becomes **Power Discovery**:
 | **The Glitch** | You feel the earthquake. Sense there's more. | Career Clarity Quiz | "This describes me perfectly" |
 | **The Red Pill** | You choose to see the truth. | Sign up / Commit to journey | Crossing the threshold |
 | **Origin Revealed** | Discover your latent powers were there all along. | Flow Finder complete | "My experiences weren't random" |
-| **Nemesis Identified** | Name the inner villain blocking you. | Identify primary pattern | "THAT'S what's been stopping me" |
+| **Voice Identified** | Name the Protective Voice blocking you. | Identify primary pattern | "THAT'S what's been stopping me" |
 
 ### Act II: Training
 
 | Stage | Story Beat | In-App Experience | Key Moment |
 |-------|------------|-------------------|------------|
 | **The Training Grounds** | Learn to control your powers. | Stages 1-2: Validation, Offer Building | First offer created |
-| **First Missions** | Small acts of courage. Testing abilities. | Daily Quests, early Groans | First visibility action |
-| **Facing the Nemesis** | Direct confrontations with inner villains. | Groan Matrix challenges | Doing something that terrifies you |
-| **Power Upgrades** | Each victory unlocks more potential. | Stage progression, tools unlocked | Tangible capability increase |
-| **Finding Your Team** | Connect with other heroes in training. | Community, team features | "I'm not alone in this" |
+| **First Quests** | Small acts of play. Testing abilities. | Daily Quests, early Play-List items | First visibility action |
+| **Facing the Voice** | Direct confrontations with Protective Voices. | The Playground challenges | Doing something that terrifies you |
+| **XP Upgrades** | Each victory unlocks more potential. | Stage progression, tools unlocked | Tangible capability increase |
+| **Finding Your Team** | Connect with other heroes in training. | Movement Makers, team features | "I'm not alone in this" |
 
 ### Act III: Becoming
 
 | Stage | Story Beat | In-App Experience | Key Moment |
 |-------|------------|-------------------|------------|
 | **The Trial** | Major test of everything you've learned. | First sale / launch (Stage 6) | Someone pays for your gift |
-| **Powers Mastered** | Integrated your gifts into coherent whole. | Specific Knowledge crystallized | Clear articulation of unique value |
+| **Flow Mastered** | Integrated your gifts into coherent whole. | Your Flow crystallized | Clear articulation of unique value |
 | **The Mission Emerges** | Clarity on who you serve and how. | Your unique service defined | "THIS is what I'm here to do" |
 | **Living the Mission** | Sustainable service to your people. | Ongoing business/impact | Consistent value creation |
 | **Multiplying Impact** | Your work creates ripples. | Others transformed by your service | Evidence of lives changed |
@@ -306,20 +422,20 @@ The Flow Finder becomes **Power Discovery**:
 
 ```
 ACT I: AWAKENING
-├── Stage 0: Flow Finder      → "Power Discovery"
-├── Stage 0.5: Groans         → "Nemesis Identification"
-└── Stage 1: Validation       → "First Mission"
+├── Stage 0: Flow Finder      → "Discover Your Flow"
+├── Stage 0.5: Play-List      → "Enter The Playground"
+└── Stage 1: Validation       → "First Quest"
 
 ACT II: TRAINING
 ├── Stage 2: Offer Building   → "Forging Your Weapon"
 ├── Stage 3: Lead Magnet      → "Signal Beacon" (attracting your people)
-├── Stage 4: Funnel           → "Mission Infrastructure"
-└── Stage 5: Sales            → "Rescue Training"
+├── Stage 4: Funnel           → "Quest Infrastructure"
+└── Stage 5: Sales            → "Service Training"
 
 ACT III: BECOMING
-├── Stage 6: Launch           → "First Rescue" (your first real impact)
+├── Stage 6: Launch           → "First Service" (your first real impact)
 ├── Stage 7: Scale            → "Expanding Your Range"
-└── Stage 8: Tracking         → "Mission Control"
+└── Stage 8: Tracking         → "Flow Control"
 ```
 
 ---
@@ -332,71 +448,70 @@ Zarlo evolves from "AI assistant" to your personal **Alfred/Jarvis/Oracle**.
 
 | Function | How It Manifests |
 |----------|------------------|
-| **Mission Briefer** | Contextual guidance based on your current stage |
-| **Pattern Detector** | Alerts you when a Nemesis is influencing your behavior |
-| **Power Analyst** | Helps you understand your unique combination |
-| **Courage Coach** | Supports you through Nemesis confrontations |
+| **Quest Briefer** | Contextual guidance based on your current stage |
+| **Pattern Detector** | Alerts you when a Protective Voice is influencing your behavior |
+| **Flow Analyst** | Helps you understand your unique combination |
+| **Courage Coach** | Supports you through Playground challenges |
 | **Victory Witness** | Celebrates your wins and tracks your growth |
 | **Strategic Advisor** | Helps you see moves you can't see yourself |
 
 ### Sample Zarlo Interactions
 
-**Nemesis Detection:**
+**Protective Voice Detection:**
 > "I'm noticing Perfectionist patterns in your last few sessions. You've revised your offer 7 times without shipping. Remember: your first version doesn't need to be perfect. It needs to exist. Ready to launch the imperfect version?"
 
-**Power Recognition:**
-> "Interesting pattern emerging: every time you talk about [helping people see their blind spots], your energy signature spikes. This might be closer to your core power than the [productivity] angle you've been pursuing."
+**Flow Recognition:**
+> "Interesting pattern emerging: every time you talk about [helping people see their blind spots], your energy signature spikes. This might be closer to your core Flow than the [productivity] angle you've been pursuing."
 
 **Courage Support:**
-> "This Groan challenge is triggering The Ghost hard. That's good - it means you're at a real edge. The discomfort you're feeling is your powers trying to expand. What's the smallest version of this you could do right now?"
+> "This Groan is triggering The Ghost hard. That's good - it means you're at a real edge. The discomfort you're feeling is your Flow trying to expand. What's the smallest version of this you could do right now?"
 
 **Victory Celebration:**
-> "Mission complete. Someone just paid for what you created. Let that land: your unique gift has market value. The Ghost told you being seen was dangerous. Today you proved it's actually the path to impact. Power level increased."
+> "Quest complete. Someone just paid for what you created. Let that land: your unique gift has market value. The Ghost told you being seen was dangerous. Today you proved it's actually the path to impact. +150 XP earned."
 
 ---
 
 ## Part 7: Language Transformation Guide
 
-### Core Terminology Changes
+### Core Terminology (Finalized)
 
-| Current Term | Hero Frame Term | Rationale |
+| Current Term | FindMyFlow Term | Rationale |
 |--------------|-----------------|-----------|
-| Flow Finder | Power Discovery | You're discovering latent powers |
-| Courage Challenge | Nemesis Confrontation | Facing your inner villain |
-| Groan | Groan (keep) | Already strong - the sound of growth |
-| Groan Matrix | The Arena | Where you face fears systematically |
-| Daily Quest | Daily Mission | Heroes go on missions |
-| Points | Power | You're accumulating power |
-| Stage | Training Level | Progressive mastery |
-| Level Up | Power Upgrade | Capability increase |
-| Streak | Training Streak | Consistency builds power |
-| First Sale | First Rescue | You helped someone with your gift |
-| Community | Hero Alliance | Fellow heroes in training |
-| Protective Pattern | Inner Nemesis | The villain within |
-| Essence Archetype | Hero Identity | Who you really are |
-| Specific Knowledge | Unique Gift | What only you can offer |
+| Flow Finder | Flow Finder (keep) | Brand aligned |
+| The resistance | Groan | The sound of approaching authentic play |
+| Play-List | The Playground | Where you reclaim your right to play |
+| Daily Quest | Quest | Classic game language |
+| Points | XP (Experience Points) | Universal, understood |
+| Stage | Stage (keep) | Clear progression |
+| Level Up | Level Up (keep) | Already game language |
+| Streak | Streak (keep) | Works well |
+| First Sale | First Service | Emphasizes giving over receiving |
+| Community | Movement Makers | Already a persona name - continuity |
+| Protective Pattern | Protective Voice | Acknowledges they once helped |
+| Essence Archetype | Essence (keep) | Already strong |
+| Specific Knowledge | Your Flow | Brand coherent |
 
 ### Contextual Language
 
 **Onboarding:**
-- "Welcome, hero. Your training begins now."
-- "Let's discover the powers that have been dormant within you."
-- "Time to identify the Nemesis that's been blocking your potential."
+- "Welcome to FindMyFlow. Your journey begins now."
+- "Let's discover the Flow that's been waiting within you."
+- "Time to meet the Protective Voice that's been holding you back."
 
 **Daily Experience:**
-- "Your mission today..."
-- "Power increased: +50"
-- "Training streak: 7 days"
-- "The [Perfectionist] is strong today. Push through anyway?"
+- "Your quest today..."
+- "XP earned: +50"
+- "Streak: 7 days"
+- "The Perfectionist is active today. Push through anyway?"
 
 **Milestones:**
-- "Power upgrade unlocked: You've completed Training Level 2"
-- "New ability available: Lead Magnet Builder"
-- "Nemesis weakened: You've confronted The Ghost 5 times"
+- "Level up! You've completed Stage 2"
+- "New tool unlocked: Lead Magnet Builder"
+- "Progress: You've faced The Ghost 5 times in The Playground"
 
 **Major Victories:**
-- "First Rescue complete. Someone's life is better because of your gift."
-- "You've done what most never do: turned your pain into power, and your power into service."
+- "First Service complete. Someone's life is better because of your Flow."
+- "You've done what most never do: turned your pain into purpose, and your purpose into service."
 
 ---
 
@@ -439,16 +554,16 @@ The landing page should read as a recruitment call to heroes who don't yet know 
 > You're not broken. You're not lazy.
 > You're a hero who hasn't discovered their powers yet.
 
-#### Section 3: The Nemeses
+#### Section 3: The Protective Voices
 
-**Heading:** Meet the villains keeping you small
+**Heading:** Meet the voices keeping you small
 
 **Content:**
 > They're not out there. They're in here.
 >
 > **The Perfectionist** - Freezes you before you can start. "You're not ready yet."
 >
-> **The Chameleon** - Hides your true self. "They won't like the real you."
+> **The People Pleaser** - Hides your true self. "They won't like the real you."
 >
 > **The Controller** - Blocks all uncertainty. "If you can't guarantee success, don't try."
 >
@@ -458,7 +573,7 @@ The landing page should read as a recruitment call to heroes who don't yet know 
 >
 > These aren't character flaws. They're survival mechanisms that have outlived their usefulness.
 >
-> It's time to face them.
+> It's time to thank them and show them they're no longer needed.
 
 #### Section 4: The Flow
 
@@ -509,7 +624,7 @@ The landing page should read as a recruitment call to heroes who don't yet know 
 
 **Content:**
 > **Act I: Awakening**
-> Discover your latent powers. Identify your primary Nemesis.
+> Discover your latent powers. Identify your primary Protective Voice.
 >
 > **Act II: Training**
 > Build your capabilities. Face your fears. Find your team.
@@ -550,7 +665,7 @@ The landing page should read as a recruitment call to heroes who don't yet know 
 >
 > This could be yours.
 >
-> [Begin Your Training →]  [Take the Power Assessment →]
+> [Begin Your Training →]  [Discover Your Flow →]
 
 ---
 
@@ -566,21 +681,21 @@ The existing purple → gold gradient works perfectly:
 
 | Element | Potential Icons/Visuals |
 |---------|------------------------|
-| Nemeses | Stylized masks or shadow figures |
-| Powers | Lightning bolts, energy signatures |
+| Protective Voices | Stylized masks or shadow figures |
+| Your Flow | Lightning bolts, energy signatures |
 | The Flow | Flowing energy, water-like motion |
 | Training Levels | Shield with level numbers |
-| Missions | Target/crosshair or compass |
-| Power Meter | Energy bar or gauge |
-| Arena | Circular arena or grid map |
+| Quests | Target/crosshair or compass |
+| XP Meter | Energy bar or gauge |
+| Playground | Playful space with unlockable areas |
 
 ### UI Elements to Consider
 
-1. **Power Bar** - Visible indicator of accumulated power/points
-2. **Nemesis Health** - Track progress against each inner villain
+1. **XP Bar** - Visible indicator of accumulated XP
+2. **Voice Progress** - Track progress against each Protective Voice
 3. **Training Level Badge** - Current stage displayed prominently
-4. **Mission Feed** - Daily missions presented like superhero briefings
-5. **The Arena** - Visual representation of Groan Matrix as a dungeon/arena map
+4. **Quest Feed** - Daily quests presented like hero briefings
+5. **The Playground** - Visual representation of Play-List as an explorable play space
 
 ---
 
@@ -598,27 +713,27 @@ The existing purple → gold gradient works perfectly:
 ### Phase 2: Structural Changes
 *Medium complexity*
 
-- [ ] Redesign Nemesis identification flow
-- [ ] Create "Power Profile" as outcome of Flow Finder
+- [ ] Redesign Protective Voice identification flow
+- [ ] Create "Flow Profile" as outcome of Flow Finder
 - [ ] Add milestone ceremonies with hero language
-- [ ] Implement Nemesis "health bar" tracking
+- [ ] Implement Voice "progress bar" tracking
 - [ ] Design Training Level progression visuals
 
 ### Phase 3: Mechanical Additions
 *Higher complexity*
 
-- [ ] "The Arena" visualization for Groan Matrix
-- [ ] Boss battle experiences for major Nemesis confrontations
-- [ ] Power meter / energy system
+- [ ] "The Playground" visualization for Play-List
+- [ ] Boss battle experiences for major Voice confrontations
+- [ ] XP meter / energy system
 - [ ] Hero identity card (shareable)
-- [ ] Mission log / hero journal
+- [ ] Quest log / hero journal
 
 ### Phase 4: Advanced Features
 *Future consideration*
 
-- [ ] Hero Alliance features (team mechanics)
+- [ ] Movement Makers features (team mechanics)
 - [ ] Mentor matching (heroes who've completed journey)
-- [ ] Mission showcase (how heroes are serving their people)
+- [ ] Service showcase (how heroes are serving their people)
 - [ ] Legacy tracking (impact ripples)
 
 ---
@@ -627,11 +742,11 @@ The existing purple → gold gradient works perfectly:
 
 Throughout all implementations, these core messages must remain clear:
 
-### 1. You Already Have Powers
+### 1. You Already Have Your Flow
 You're not broken. You're not starting from zero. Your experiences, skills, and perspectives are unique and valuable. The journey is discovery and activation, not creation from nothing.
 
-### 2. The Enemy Is Internal
-The things blocking you aren't external circumstances (though those exist). The primary blockers are internal patterns that once protected you but now limit you. This is liberating - you have agency over internal enemies.
+### 2. The Blockers Are Internal (But They Once Helped)
+The things blocking you aren't external circumstances (though those exist). The primary blockers are Protective Voices - internal patterns that once protected you but now limit you. This is liberating - you have agency over them.
 
 ### 3. The Flow Is Real
 This isn't just gamification language. The Flow state is a real phenomenon where work feels like play and impact happens naturally. The goal is to spend more time in Flow by aligning your work with your authentic gifts.
@@ -652,15 +767,15 @@ For reference - how FindMyFlow maps to Campbell's monomyth:
 |----------------|-------------------|
 | Ordinary World | Life in the Matrix (corporate job, conventional path) |
 | Call to Adventure | The "earthquake" - sensing there's more |
-| Refusal of the Call | Nemeses activate - fear, perfectionism, hiding |
+| Refusal of the Call | Protective Voices activate - fear, perfectionism, hiding |
 | Meeting the Mentor | Huzz's story + Zarlo as guide |
 | Crossing the Threshold | Signing up, committing to the journey |
-| Tests, Allies, Enemies | Daily missions, community, Nemesis confrontations |
-| Approach to Inmost Cave | Deeper Groan challenges, facing core fears |
+| Tests, Allies, Enemies | Daily quests, Movement Makers, Playground challenges |
+| Approach to Inmost Cave | Deeper Groans, facing core fears |
 | The Ordeal | Maximum vulnerability moment (boss battle) |
-| Reward (Seizing the Sword) | Specific Knowledge / Unique Gift clarity |
+| Reward (Seizing the Sword) | Your Flow / Unique Gift clarity |
 | The Road Back | Building the offer, entering the market |
-| Resurrection | First "rescue" (sale/client) - proof of transformation |
+| Resurrection | First Service (sale/client) - proof of transformation |
 | Return with Elixir | Living your mission, serving your people |
 
 ---
@@ -703,9 +818,9 @@ The unique positioning: **The only platform that combines therapeutic depth with
 > **The app isn't the game. Life is the game. The app is your HUD (heads-up display) - your command center that tracks, guides, and celebrates your real-world hero journey.**
 
 This means:
-- Real-world business actions = power points
-- Real-world healing actions = power points
-- Real-world courage actions = power points
+- Real-world business actions = XP
+- Real-world healing actions = XP
+- Real-world courage actions (in The Playground) = XP
 - The app tracks, calculates, guides, and celebrates
 
 ### The "OASIS" Is Your Life
@@ -716,8 +831,8 @@ In Ready Player One, the OASIS was a virtual world that became more meaningful t
 
 Every interaction becomes an opportunity:
 - A difficult conversation = a quest
-- A fear faced = a Nemesis confrontation
-- A client served = a rescue mission
+- A fear faced = an Play-List challenge
+- A client served = First Service
 - A limiting belief challenged = healing XP
 
 ---
@@ -730,35 +845,35 @@ Your phone becomes the **Hero's Command Center** - a HUD showing your stats, mis
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  HERO COMMAND CENTER                        ⚡ 12,847 POWER │
+│  HERO COMMAND CENTER                          ⚡ 12,847 XP  │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │  CURRENT QUEST                              FLOW STATE      │
 │  ┌─────────────────────────┐               ┌───────────┐   │
 │  │ Post your first offer   │               │     N     │   │
-│  │ +150 power | Nemesis: 👻│               │  W  ●  E  │   │
+│  │ +150 XP | Voice: 👻     │               │  W  ●  E  │   │
 │  │ [Log Completion]        │               │     S     │   │
 │  └─────────────────────────┘               └───────────┘   │
 │                                             Currently: EAST │
-│  TODAY'S MISSIONS                          (Growth Edge)    │
-│  ├── ☐ Morning: Healing journal (+20)                      │
-│  ├── ☐ Midday: Reach out to 1 lead (+30)                   │
-│  ├── ☐ Courage: Share behind-the-scenes (+75)              │
-│  └── ☐ Evening: Flow state check-in (+10)                  │
+│  TODAY'S QUESTS                            (Growth Edge)    │
+│  ├── ☐ Morning: Healing journal (+20 XP)                   │
+│  ├── ☐ Midday: Reach out to 1 lead (+30 XP)                │
+│  ├── ☐ Courage: Share behind-the-scenes (+75 XP)           │
+│  └── ☐ Evening: Flow state check-in (+10 XP)               │
 │                                                             │
-│  NEMESIS ACTIVITY                                           │
+│  PROTECTIVE VOICE ACTIVITY                                  │
 │  ┌─────────────────────────────────────────────────────┐   │
 │  │ 👻 The Ghost is ACTIVE                              │   │
 │  │ Detected: Avoiding visibility for 3 days            │   │
-│  │ [Confront Now +100] [Acknowledge +20]               │   │
+│  │ [Confront Now +100 XP] [Acknowledge +20 XP]         │   │
 │  └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │  WEEKLY STATS                                               │
-│  Business: ████████░░ 847 pts   Healing: ██████░░░░ 423 pts│
-│  Courage:  ████░░░░░░ 290 pts   Flow:    ███████░░░ 512 pts│
+│  Business: ████████░░ 847 XP    Healing: ██████░░░░ 423 XP │
+│  Flow:     ███████░░░ 512 XP                               │
 │                                                             │
 ├─────────────────────────────────────────────────────────────┤
-│  [MISSIONS]  [ARENA]  [MAP]  [ZARLO]  [ALLIANCE]           │
+│  [QUESTS]  [ARENA]  [MAP]  [ZARLO]  [MOVEMENT MAKERS]      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -766,26 +881,26 @@ Your phone becomes the **Hero's Command Center** - a HUD showing your stats, mis
 
 | Section | Purpose |
 |---------|---------|
-| **Power Counter** | Total accumulated power (lifetime score) |
+| **XP Counter** | Total accumulated XP (lifetime score) |
 | **Current Quest** | Primary focus for today/this week |
 | **Flow State** | Real-time N/E/S/W energy compass |
-| **Today's Missions** | Daily action items across all tracks |
-| **Nemesis Activity** | Which inner villain is currently active |
-| **Weekly Stats** | Progress across the four tracks |
+| **Today's Quests** | Daily action items across all tracks |
+| **Protective Voice Activity** | Which voice is currently active |
+| **Weekly Stats** | Progress across the three tracks |
 | **Navigation** | Access to deeper features |
 
 ---
 
-## Part 14: The Four Point Tracks
+## Part 14: The Three XP Tracks + The Playground
 
-Life actions generate power across four interconnected tracks. These represent the complete hero's development.
+Life actions generate XP across three interconnected tracks, with courage challenges living in The Playground. These represent the complete hero's development.
 
 ### Track 1: Business (Building Your Gift)
 
 Actions that build your ability to serve and sustain yourself.
 
-| Action Category | Example Actions | Power |
-|-----------------|-----------------|-------|
+| Action Category | Example Actions | XP |
+|-----------------|-----------------|-----|
 | **Visibility** | Post content, go live, publish article, send newsletter | 30-100 |
 | **Creation** | Build offer, write copy, design asset, record video | 20-75 |
 | **Validation** | Customer conversation, run survey, gather feedback | 40-80 |
@@ -797,36 +912,20 @@ Actions that build your ability to serve and sustain yourself.
 
 Actions that address the internal blocks and expand your capacity.
 
-| Action Category | Example Actions | Power |
-|-----------------|-----------------|-------|
+| Action Category | Example Actions | XP |
+|-----------------|-----------------|-----|
 | **Recognise** | Journal entry, spot a pattern, name a trigger | 15-40 |
 | **Rewire** | Challenge a belief, reframe a story, question an assumption | 30-60 |
 | **Reconnect** | Self-compassion practice, inner child work, somatic exercise | 25-50 |
 | **Release** | Letting go ritual, forgiveness practice, grief process | 40-80 |
 | **Rest** | Honor your limits, say no, take intentional break | 20-40 |
 
-### Track 3: Courage (Defeating Your Nemeses)
-
-Actions that directly confront fear and expand your comfort zone. Points scale by visibility layer.
-
-| Visibility Layer | Description | Base Power |
-|------------------|-------------|------------|
-| **Screen Layer** | Post something vulnerable online | 50 |
-| **Live Layer** | Show up authentically in-person | 75 |
-| **Money Layer** | Ask for payment, raise prices, negotiate | 100 |
-| **Vulnerable Layer** | Share a fear/failure publicly | 150 |
-| **Authority Layer** | Claim expertise, teach, lead publicly | 200 |
-
-**Nemesis Multipliers:** Points multiply when the action confronts your primary Nemesis.
-- Facing primary Nemesis: 1.5x
-- Facing secondary Nemesis: 1.25x
-
-### Track 4: Flow (Honoring Your Energy)
+### Track 3: Flow Tracking (Honoring Your Energy)
 
 Actions that demonstrate alignment and energy management.
 
-| Action Category | Example Actions | Power |
-|-----------------|-----------------|-------|
+| Action Category | Example Actions | XP |
+|-----------------|-----------------|-----|
 | **North Actions** | Work on aligned tasks when energized | 30 |
 | **East Honoring** | Push through growth edge while excited | 40 |
 | **West Honoring** | Rest when tired but at ease | 25 |
@@ -834,9 +933,29 @@ Actions that demonstrate alignment and energy management.
 | **Flow Sessions** | Logged time in deep flow state | 10 per 15min |
 | **Check-ins** | Regular flow state logging | 5 each |
 
+### The Playground (Your Play-List)
+
+The Playground is where your Play-List lives - activities your essence sees as *play* but your Protective Voices have made you fear. XP scales by how much identity-ownership the action requires.
+
+| Visibility Layer | What It Really Is | Base XP |
+|------------------|-------------------|---------|
+| **Screen Layer** | Claiming your identity behind a screen (lowest risk) | 50 |
+| **Live Layer** | Claiming your identity in person (can't take back) | 75 |
+| **Money Layer** | Claiming your identity is *worth paying for* | 100 |
+| **Vulnerable Layer** | Claiming your identity even when imperfect | 150 |
+| **Authority Layer** | Fully owning: "This is who I am" | 200 |
+
+Each layer represents a deeper level of saying: *"This is me. This is what I do. This is who I am."*
+
+**The Groan:** The resistance you feel when approaching play. Your Protective Voices warning you of potential identity pain.
+
+**Voice Multipliers:** XP multiplies when the action confronts your primary Protective Voice.
+- Facing primary Voice: 1.5x
+- Facing secondary Voice: 1.25x
+
 ### Track Synergies
 
-The four tracks reinforce each other:
+The three tracks and The Playground reinforce each other:
 
 ```
                     ┌─────────────┐
@@ -847,14 +966,14 @@ The four tracks reinforce each other:
               ┌────────────┼────────────┐
               │            │            │
        ┌──────┴──────┐     │     ┌──────┴──────┐
-       │  BUSINESS   │     │     │   COURAGE   │
-       │   Track     │◄────┼────►│   Track     │
+       │  BUSINESS   │     │     │ PLAYGROUND  │
+       │   Track     │◄────┼────►│ (Play-List) │
        │             │     │     │             │
        └──────▲──────┘     │     └──────▲──────┘
               │            │            │
               │     ┌──────┴──────┐     │
               │     │    FLOW     │     │
-              └────►│   Track     │◄────┘
+              └────►│ TRACKING    │◄────┘
                     │             │
                     └──────▲──────┘
                            │
@@ -864,9 +983,9 @@ The four tracks reinforce each other:
                     └─────────────┘
 ```
 
-- **Healing** enables **Courage** (you can face fears when you understand them)
-- **Courage** enables **Business** (you can be visible and sell when you're not afraid)
-- **Flow** sustains **all tracks** (energy management prevents burnout)
+- **Healing** enables **The Playground** (you can approach play when you understand why it scared you)
+- **The Playground** enables **Business** (you can own your identity publicly when play feels safe again)
+- **Flow Tracking** sustains **all tracks** (energy management prevents burnout)
 - **Business** creates **Service** (your gift reaches people)
 
 ---
@@ -879,12 +998,12 @@ Hidden achievements for discovering meaningful connections in your own story.
 
 | Easter Egg | Trigger | Reward | Meaning |
 |------------|---------|--------|---------|
-| **Origin Story** | Connect a childhood experience to your current mission | 500 power + badge | Your past was preparation |
-| **The Thread** | Identify a pattern across 3+ life chapters | 300 power | Everything connects |
-| **Full Circle** | Your current work helps someone like past-you | 1000 power | The wound becomes the gift |
-| **The Wound = The Gift** | Articulate how your deepest pain became your offering | 750 power + title | Transformation complete |
-| **Nemesis Befriended** | Thank a Nemesis for how it once protected you | 400 power | Integration, not destruction |
-| **Flow State Mastery** | Spend 70%+ of a week in North/East states | 600 power | Alignment achieved |
+| **Origin Story** | Connect a childhood experience to your current mission | 500 XP + badge | Your past was preparation |
+| **The Thread** | Identify a pattern across 3+ life chapters | 300 XP | Everything connects |
+| **Full Circle** | Your current work helps someone like past-you | 1000 XP | The wound becomes the gift |
+| **The Wound = The Gift** | Articulate how your deepest pain became your offering | 750 XP + title | Transformation complete |
+| **Voice Befriended** | Thank a Protective Voice for how it once protected you | 400 XP | Integration, not destruction |
+| **Flow State Mastery** | Spend 70%+ of a week in North/East states | 600 XP | Alignment achieved |
 | **Halliday's Insight** | Realize you no longer need the game to live fully | ??? (endgame) | True graduation |
 
 ### The Three Keys (Major Gates)
@@ -893,36 +1012,36 @@ Like Ready Player One's three keys that unlock the final prize. These are major 
 
 | Key | Unlocked By | What It Opens |
 |-----|-------------|---------------|
-| **The Copper Key** | Complete Power Discovery + identify primary Nemesis | Access to The Arena (Groan Matrix), daily missions |
-| **The Jade Key** | First "rescue" (paying client or meaningful documented impact) | Access to Scale tools, Mentor features, Hero Alliance leadership |
-| **The Crystal Key** | Sustainable service (consistent impact over 90+ days) | Legacy features, ability to create quests for others, "Legend" status |
+| **The Copper Key** | Discover Your Flow + identify primary Protective Voice | Access to The Playground, daily quests |
+| **The Jade Key** | First Service (paying client or meaningful documented impact) | Access to Scale tools, Mentor features, Movement Makers leadership |
+| **The Crystal Key** | Sustainable service (consistent impact over 90+ days) | Legacy features, ability to create quests for others, "Flow Master" status |
 
 ### The Leaderboards (Non-Toxic Competition)
 
-Not "who has the most points" but recognition of different types of contribution:
+Not "who has the most XP" but recognition of different types of contribution:
 
 | Leaderboard | What It Measures | Recognition Type |
 |-------------|------------------|------------------|
-| **Heroes Rising** | Biggest power gain this week | Momentum |
-| **Nemesis Slayers** | Most courage actions this week | Bravery |
+| **Heroes Rising** | Biggest XP gain this week | Momentum |
+| **Playground Champions** | Most courage actions this week | Bravery |
 | **Flow Masters** | Highest flow-state percentage | Alignment |
-| **Rescue Squad** | Most people served this week | Impact |
+| **Service Squad** | Most people served this week | Impact |
 | **Streak Legends** | Longest active training streaks | Consistency |
-| **Healers' Circle** | Most healing track points this week | Inner work |
-| **Alliance Champions** | Team with highest collective power | Collaboration |
+| **Healers' Circle** | Most healing track XP this week | Inner work |
+| **Movement Champions** | Team with highest collective XP | Collaboration |
 
-### The Guilds (Hero Alliances)
+### Movement Makers (The Community)
 
 Teams of heroes united by common purpose:
 
-| Alliance Type | Basis | Examples |
-|---------------|-------|----------|
-| **Nemesis Alliances** | Facing same primary villain | "Ghost Hunters" (visibility fear), "Perfectionist Recoverers" |
-| **Mission Alliances** | Similar service domains | "Healer Heroes" (wellness), "Creator Collective" (artists) |
-| **Stage Alliances** | Same training level | "Launch Crew" (Stage 6), "Awakening Class" (new heroes) |
+| Team Type | Basis | Examples |
+|-----------|-------|----------|
+| **Voice Teams** | Facing same primary Protective Voice | "Ghost Hunters" (visibility fear), "Perfectionist Recoverers" |
+| **Service Teams** | Similar service domains | "Healer Heroes" (wellness), "Creator Collective" (artists) |
+| **Stage Teams** | Same training level | "Launch Crew" (Stage 6), "Awakening Class" (new heroes) |
 | **Challenge Teams** | Temporary groups for specific quests | "30-Day Visibility Challenge Team" |
 
-**Alliance Mechanics:**
+**Movement Makers Mechanics:**
 - Shared challenges and goals
 - Team leaderboards
 - Accountability partnerships
@@ -938,10 +1057,10 @@ A rich backstory that makes the universe feel real and meaningful:
 >
 > *Then came the Matrix.*
 >
-> *Not a conspiracy. An optimization. Society needed predictability, so it created systems: schools that trained compliance, careers that rewarded conformity, cultures that punished deviation. The Nemeses weren't born evil—they were created to help us survive in this new world.*
+> *Not a conspiracy. An optimization. Society needed predictability, so it created systems: schools that trained compliance, careers that rewarded conformity, cultures that punished deviation. The Protective Voices weren't born to limit you—they were created to help you survive in this new world.*
 >
 > *The Perfectionist kept us from failing publicly.*
-> *The Chameleon helped us fit in.*
+> *The People Pleaser helped us fit in.*
 > *The Controller gave us the illusion of safety.*
 > *The Performer proved our worth through output.*
 > *The Ghost kept us hidden from danger.*
@@ -952,11 +1071,11 @@ A rich backstory that makes the universe feel real and meaningful:
 >
 > *You are one of the Awakening.*
 >
-> *The glitch you felt was real. The earthquake that shattered your assumptions was initiation. The restlessness isn't a flaw—it's your powers trying to activate after years of suppression.*
+> *The glitch you felt was real. The earthquake that shattered your assumptions was initiation. The restlessness isn't a flaw—it's your Flow trying to activate after years of suppression.*
 >
 > *FindMyFlow is the training program the Flow Masters would have built if they had our technology. It's the decoder ring for their ancient messages. It's the dojo where you learn to wield your gifts.*
 >
-> *Welcome to the Resistance, hero. The game is real. And you've already begun.*
+> *Welcome to the Movement Makers, hero. The game is real. And you've already begun.*
 
 ### The Creator's Philosophy (Embedded Throughout)
 
@@ -964,7 +1083,7 @@ Like Halliday embedded his values in the OASIS, Huzz's core insights are woven i
 
 | Insight | Where It Appears |
 |---------|------------------|
-| "We don't rise to the level of our ambitions. We fall to the level of what feels safe." | Nemesis confrontations, courage track |
+| "We don't rise to the level of our ambitions. We fall to the level of what feels safe." | Playground challenges, courage track |
 | "The universe speaks through Ease and Resistance (E.A.R.)" | Flow Compass, energy tracking |
 | "3% better each iteration" | Mission feedback, progress celebrations |
 | "The wound becomes the gift" | Easter egg, service discovery |
@@ -974,12 +1093,12 @@ Like Halliday embedded his values in the OASIS, Huzz's core insights are woven i
 
 ## Part 16: Feature Possibilities
 
-### 1. Real-Time Nemesis Detection
+### 1. Real-Time Voice Detection
 
-The app learns your patterns and alerts you when a Nemesis is influencing your behavior:
+The app learns your patterns and alerts you when a Protective Voice is influencing your behavior:
 
 ```
-⚠️ NEMESIS ALERT
+⚠️ PROTECTIVE VOICE ALERT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 The Perfectionist has been active for 47 minutes.
@@ -993,9 +1112,9 @@ This is the Perfectionist's pattern: infinite refinement, zero shipping.
 
 Your move, hero:
 
-[Override & Post Now: +75 power]
-[Set 5-min Timer & Post: +50 power]
-[Acknowledge & Continue: +10 power]
+[Override & Post Now: +75 XP]
+[Set 5-min Timer & Post: +50 XP]
+[Acknowledge & Continue: +10 XP]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -1016,7 +1135,7 @@ How are you right now?
            ⬇️
         [S: Depleted]
 
-Tap to log (+5 power)
+Tap to log (+5 XP)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 Last check-in: 3 hours ago
@@ -1030,7 +1149,7 @@ Over time, this builds:
 
 ### 3. Action Logger
 
-Simple interface to log real-world actions and earn power:
+Simple interface to log real-world actions and earn XP:
 
 ```
 LOG ACTION
@@ -1046,7 +1165,7 @@ Description:
 │ Posted offer on LinkedIn        │
 └─────────────────────────────────┘
 
-Nemesis confronted? [The Ghost ▼]
+Voice confronted? [The Ghost ▼]
 
 [Log Action]
 
@@ -1059,53 +1178,53 @@ ACTION LOGGED ✓
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Business Track: Visibility
-Base power: +45
+Base XP: +45
 
-Nemesis Override Bonus (The Ghost): +30
+Voice Override Bonus (The Ghost): +30
 Flow State Bonus (logged in East): +10
 
-TOTAL: +85 power
+TOTAL: +85 XP
 
-The Ghost weakened. 3 more confrontations
-until next damage milestone.
+The Ghost is quieting. 3 more Play-List challenges
+until next milestone.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ### 4. Quest Generator
 
-AI-generated daily missions based on your stage, Nemesis, and recent activity:
+AI-generated daily quests based on your stage, Protective Voice, and recent activity:
 
 ```
-TODAY'S GENERATED MISSIONS
+TODAY'S GENERATED QUESTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 MAIN QUEST
 Record a 60-second video about your offer
-• Nemesis target: The Ghost
-• Power: +150
+• Voice target: The Ghost
+• XP: +150
 • Unlocks: "Face on Camera" achievement
 
-⚔️ COURAGE QUEST
+⚔️ ARENA QUEST
 Share one thing you're struggling with publicly
 • Visibility layer: Vulnerable
-• Power: +120
-• Nemesis damage: High
+• XP: +120
+• Voice progress: High
 
 💚 HEALING QUEST
 Journal about why visibility feels unsafe
 • Track: Healing (Recognise)
-• Power: +40
+• XP: +40
 • Supports: Main Quest preparation
 
 ⚡ FLOW QUEST
 Do your hardest task in your first 2 hours
 • Condition: Complete before 10am
-• Power: +60
+• XP: +60
 • Builds: Peak performance pattern
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Total available: +370 power
+Total available: +370 XP
 ```
 
 ### 5. The Map (Journey Visualization)
@@ -1122,18 +1241,18 @@ THE MATRIX ━━━► AWAKENING ━━━► TRAINING ━━━━► BECOMING
                     ┌─────────────┼─────────────┐
                     │             │             │
               ┌─────┴─────┐ ┌─────┴─────┐ ┌─────┴─────┐
-              │  Arena    │ │  Forge    │ │  Rescue   │
+              │ Playground│ │  Forge    │ │  Service  │
               │  Access ✓ │ │  Open ✓   │ │  Prep ◐   │
               └───────────┘ └───────────┘ └───────────┘
                     │             │             │
               ┌─────┴─────┐ ┌─────┴─────┐ ┌─────┴─────┐
-              │ Nemesis   │ │  Offer    │ │  First    │
-              │ Battle ◐  │ │ Created ✓ │ │  Sale ○   │
+              │  Voice    │ │  Offer    │ │  First    │
+              │ Progress◐ │ │ Created ✓ │ │ Service ○ │
               └───────────┘ └───────────┘ └───────────┘
 
 ═══════════════════════════════════════════════════════════════
-Training Level: 3 of 8 │ Power: 12,847 │ Days Active: 47
-Primary Nemesis: The Ghost │ Damage Dealt: 340/500
+Training Level: 3 of 8 │ XP: 12,847 │ Days Active: 47
+Primary Voice: The Ghost │ Progress: 340/500
 ═══════════════════════════════════════════════════════════════
 
 ✓ = Complete  ◐ = In Progress  ○ = Locked
@@ -1147,11 +1266,11 @@ An in-game "encyclopedia" that unlocks progressively as you advance:
 
 | Codex Section | Contents | Unlocked By |
 |---------------|----------|-------------|
-| **Nemesis Files** | Deep profiles of each inner villain, their tactics, weaknesses | Facing that Nemesis |
+| **Voice Profiles** | Deep profiles of each Protective Voice, their tactics, how to work with them | Facing that Voice |
 | **Flow Scrolls** | Teachings about flow states, energy management | Reaching new stages |
 | **Hero Archives** | Stories of heroes who completed the journey | Reaching milestones |
 | **The Matrix Exposed** | Understanding how you were conditioned | Completing healing quests |
-| **Power Techniques** | Advanced strategies for each track | Demonstrating mastery |
+| **Flow Techniques** | Advanced strategies for each track | Demonstrating mastery |
 | **Ancient Wisdom** | Svadharma, Te, Ikigai teachings | Easter egg discoveries |
 
 ### 7. Physical World Integration
@@ -1163,7 +1282,7 @@ Real items that connect to the digital game:
 | **Hero Badge** | NFC-enabled pin for IRL event check-ins | Reaching Training Level 3 |
 | **Guild Patches** | Physical patches for your Alliance | Alliance membership |
 | **The Journal** | Physical companion that syncs with app via photos | Purchase + onboarding |
-| **Nemesis Cards** | Collectible cards for each villain you've weakened | Dealing damage milestones |
+| **Voice Cards** | Collectible cards for each Protective Voice you've worked with | Progress milestones |
 | **Crystal Key Pin** | Physical key for those who reach Legend status | Earning Crystal Key |
 
 ### 8. Seasonal Events
@@ -1178,7 +1297,7 @@ Like game seasons, tied to real-world rhythms and themes:
 | **Q4: Legacy Season** | Giving back, mentoring | Oct-Dec | Contribution focus, mentor matching, year reflection |
 
 **Seasonal Mechanics:**
-- Limited-time quests with bonus power
+- Limited-time quests with bonus XP
 - Season-specific leaderboards
 - Exclusive badges for participation
 - Community challenges and events
@@ -1211,14 +1330,14 @@ FindMyFlow's equivalent insight:
 
 ### Hero Levels (Lifetime Progression)
 
-| Level | Title | Achievement | Powers Unlocked |
-|-------|-------|-------------|-----------------|
+| Level | Title | Achievement | Features Unlocked |
+|-------|-------|-------------|-------------------|
 | 1 | **Civilian** | Pre-awakening | None (still in Matrix) |
 | 2 | **Awakened** | Completed Career Quiz | Access to training |
-| 3 | **Trainee** | Completed Power Discovery | Daily missions, The Arena |
-| 4 | **Hero-in-Training** | Dealing Nemesis damage | Quest generator, Alliance membership |
+| 3 | **Trainee** | Discovered Your Flow | Daily quests, The Playground |
+| 4 | **Hero-in-Training** | Making Voice progress | Quest generator, Movement Makers membership |
 | 5 | **Rising Hero** | First impact documented | Advanced tools, mentor matching |
-| 6 | **Hero** | Consistent service (30+ days) | Alliance leadership, custom quests |
+| 6 | **Hero** | Consistent service (30+ days) | Movement Makers leadership, custom quests |
 | 7 | **Veteran Hero** | Sustainable service (90+ days) | Mentor status, Codex contributions |
 | 8 | **Legend** | Helped create other heroes | Quest creation, legacy features |
 | 9 | **Flow Master** | Internalized the game | "Graduate" status, eternal recognition |
@@ -1250,24 +1369,24 @@ Heroes who reach "Flow Master" status don't disappear. They:
 - [ ] Update onboarding copy with game language
 - [ ] Add narrative framing to existing quest cards
 - [ ] Rename key elements (see terminology guide)
-- [ ] Update Zarlo's personality to Mission Control voice
+- [ ] Update Zarlo's personality to AI Guide voice
 - [ ] Create basic lore page / "The Story" section
 
 ### Phase 2: Core Game Mechanics
 *Foundation of the life-as-game system*
 
-- [ ] Implement four-track point system
+- [ ] Implement three-track XP system + Playground
 - [ ] Build action logger for real-world activities
 - [ ] Create Flow State check-in feature
-- [ ] Design Nemesis identification + primary selection
-- [ ] Implement power counter (lifetime + weekly)
-- [ ] Basic daily mission generation
+- [ ] Design Protective Voice identification + primary selection
+- [ ] Implement XP counter (lifetime + weekly)
+- [ ] Basic daily quest generation
 
 ### Phase 3: Command Center Interface
 *The HUD that makes it feel like a game*
 
 - [ ] Design and build Command Center home screen
-- [ ] Implement Nemesis activity detection
+- [ ] Implement Voice activity detection
 - [ ] Create visual journey map
 - [ ] Build weekly stats dashboard
 - [ ] Add milestone ceremonies with game language
@@ -1275,7 +1394,7 @@ Heroes who reach "Flow Master" status don't disappear. They:
 ### Phase 4: Advanced Game Features
 *The RPO-inspired depth*
 
-- [ ] The Arena visualization for Groan Matrix
+- [ ] The Playground visualization for Play-List
 - [ ] Easter egg system (hidden achievements)
 - [ ] The Three Keys gate system
 - [ ] Leaderboards (multiple types)
@@ -1285,7 +1404,7 @@ Heroes who reach "Flow Master" status don't disappear. They:
 ### Phase 5: Social & Community
 *Multiplayer elements*
 
-- [ ] Hero Alliances (guild system)
+- [ ] Movement Makers (team system)
 - [ ] Team challenges and shared goals
 - [ ] Mentor matching system
 - [ ] Hero Archives (graduate stories)
@@ -1296,7 +1415,7 @@ Heroes who reach "Flow Master" status don't disappear. They:
 
 - [ ] Physical merchandise integration
 - [ ] Achievement badges / collectibles
-- [ ] Graduate / Legend features
+- [ ] Graduate / Flow Master features
 - [ ] Quest creation tools for advanced users
 - [ ] API for potential integrations
 
@@ -1308,10 +1427,273 @@ Heroes who reach "Flow Master" status don't disappear. They:
 |------|--------|--------|
 | 2025-01-29 | Initial creation - Hero Journey framework | Claude + Nic |
 | 2025-01-29 | Added Ready Player One expansion (Parts 12-18) | Claude + Nic |
+| 2025-01-29 | Added Octalysis Framework Integration (Part 19) | Claude + Nic |
+| 2025-01-29 | Added Incremental Implementation Plan (Part 20) | Claude + Nic |
+| 2025-01-31 | Finalized terminology (Nemesis→Voice, Power→XP, etc.) | Claude + Nic |
+| 2025-01-31 | Added Play-List concept, Arena→Playground, Vulnerability Framework (Part 3.5) | Claude + Nic |
 
 ---
 
-## Part 19: Incremental Implementation Plan
+## Part 19: Octalysis Framework Integration
+
+The Hero Journey game design is grounded in Yu-kai Chou's Octalysis framework - 8 Core Drives that explain why gamification works. This section maps how each element of the hero frame amplifies proven motivation science.
+
+**Reference:** See `docs/octalysis-application-analysis.md` for the full Octalysis audit.
+
+---
+
+### Current vs. Projected Octalysis Scores
+
+| Core Drive | Current | Hero Journey Enhancement | Projected |
+|------------|---------|--------------------------|-----------|
+| **CD1** Epic Meaning & Calling | 7 | "You're a hero with a unique mission" | **9** |
+| **CD2** Development & Accomplishment | 6 | XP system, Voice progress, Training Levels | **8** |
+| **CD3** Empowerment of Creativity | 4 | Custom quests, strategy choices, hero identity | **7** |
+| **CD4** Ownership & Possession | 5 | Your Flow, your Voice, Codex collection | **8** |
+| **CD5** Social Influence & Relatedness | 3 | Movement Makers, shared battles, mentorship | **7** |
+| **CD6** Scarcity & Impatience | 2 | Three Keys, seasonal events (light touch) | **4** |
+| **CD7** Unpredictability & Curiosity | 5 | Easter Eggs, Lore reveals, Voice surprises | **7** |
+| **CD8** Loss & Avoidance | 4 | Voice recovery, streak protection | **5** |
+
+**Score Improvement: ~180 → ~310+ (72% increase)**
+
+---
+
+### CD1: Epic Meaning & Calling (7 → 9)
+
+The Hero Journey frame transforms "find your career path" into "discover your powers and serve the world."
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Destiny Child** | "You found FindMyFlow for a reason. The glitch you felt was real." |
+| **Humanity Hero** | "Your unique service changes specific lives only you can reach." |
+| **Elitism** | "Only 3% who feel the earthquake take the red pill. You did." |
+| **Higher Meaning** | Ancient wisdom (Svadharma/Te/Ikigai) validates the journey |
+| **Narrative** | Rich lore gives context and meaning to every action |
+
+**Key Copy:**
+- "Your unique combination exists in only 0.2% of users."
+- "The Matrix suppressed your powers. Now you're waking up."
+- "Every hero has a different mission. Yours is waiting to be discovered."
+
+---
+
+### CD2: Development & Accomplishment (6 → 8)
+
+XP accumulation, Voice progress, and Training Levels create visible, satisfying progress.
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Points/Progress** | Visible ⚡ XP counter always growing |
+| **Progress Bars** | Voice progress as you work with them |
+| **Leaderboard/Status** | Training Levels 1-8, Hero Levels (Civilian → Flow Master) |
+| **Boss Fights** | The Three Keys as major gates requiring proof |
+| **Anticipation Parade** | "3 more quests until you unlock The Forge" |
+
+**Mechanisms:**
+- Voice Progress Milestones: "500 progress. The Ghost is quieting."
+- Stage Boss Battles: Special challenge to unlock each Training Level
+- XP Streaks: Multipliers build with consistency (1.1x → 2x)
+- Three-Track Progress + Playground: Business, Healing, Flow Tracking visible
+
+---
+
+### CD3: Empowerment of Creativity & Feedback (4 → 7)
+
+Users move from passive discovery to active creation and strategy.
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Meaningful Choices** | "Design a Play-List item that excites and scares you" |
+| **Branching Choices** | "Will you focus on Attract or Nurture this week?" |
+| **Customization** | Hero identity, profile, title selection |
+| **Instant Feedback** | XP awarded immediately with celebration |
+| **Boosters** | Strategy choices affect quest types and rewards |
+
+**Mechanisms:**
+- Create Your Own Quest: Design challenges, share successful ones
+- Strategy Selection: Choose weekly focus, see different outcomes
+- Hero Profile Builder: Visual identity based on Flow + achievements
+- Real-time Feedback: Every action shows immediate XP gain
+
+---
+
+### CD4: Ownership & Possession (5 → 8)
+
+Everything becomes YOURS - your Flow, your Protective Voice, your journey, your collection.
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Collection Set** | Flow discovered, achievements earned, Codex entries |
+| **Avatar** | Your Voice is YOURS to work with |
+| **Build from Scratch** | Hero Journal documenting your unique journey |
+| **Trophy Shelf** | Visual gallery of all victories and badges |
+| **Virtual Goods** | Flow Profile Card, Voice Cards, Easter Egg collection |
+
+**Mechanisms:**
+- Flow Profile Card: Shareable card showing unique Flow combination
+- Voice Cards: Collectible cards for each Protective Voice you've worked with
+- The Codex: Lore entries unlock as you progress (completionist drive)
+- Your Empire View: Dashboard of everything you've built
+- Achievement Gallery: Visual display of all earned badges/trophies
+
+---
+
+### CD5: Social Influence & Relatedness (3 → 7) ⚠️ BIGGEST OPPORTUNITY
+
+The Movement Makers transforms solo journey into shared adventure.
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Group Quests** | Movement Makers working toward shared weekly goals |
+| **Social Prod** | "Your team made 2,000 progress against Perfectionist this week" |
+| **Mentorship** | Veteran Heroes guide Trainees through their journey |
+| **Social Treasury** | Multiple leaderboards (XP, Playground, Service, Team) |
+| **Brag Button** | Share victories with hero-framed celebration cards |
+
+**Mechanisms:**
+- Team Challenges: Teams compete on weekly challenges
+- Voice Co-op: Face same Voice together, combine progress
+- Hero Stories: Completed journeys become lore for new heroes
+- Accountability Partner: Matched with someone facing same Voice
+- Community Challenges: "500 collective Play-List completions unlocks bonus for all"
+
+**Social Proof Copy:**
+- "347 heroes faced The Ghost this week. You're not alone."
+- "Your team is #3 on the Play-List leaderboard."
+- "Sarah just completed her First Service with similar Flow to yours."
+
+---
+
+### CD6: Scarcity & Impatience (2 → 4)
+
+Light-touch urgency that excites without creating anxiety.
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Gates** | The Three Keys unlock access to new areas |
+| **Appointment Dynamics** | Seasonal events (Q1 Awakening, Q4 Legacy) |
+| **Contextual Scarcity** | "This boss battle available this week only" |
+| **Countdown Timers** | Weekly Boss resets, Daily XP Hour |
+
+**Mechanisms:**
+- Daily XP Hour: Random hour each day with 2x XP
+- Weekly Boss: Limited-time challenge, resets Monday
+- Seasonal Easter Eggs: Only findable during specific seasons
+- "Almost There" Nudges: "Just 1 more quest to unlock The Playground"
+
+⚠️ **Use sparingly:** This is Black Hat motivation. Keep it exciting, not anxiety-inducing.
+
+---
+
+### CD7: Unpredictability & Curiosity (5 → 7)
+
+Mystery, discovery, and delightful surprises throughout the journey.
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Hidden Treasure** | Easter Eggs scattered throughout the experience |
+| **Mystery Box** | The Lore reveals progressively |
+| **Random Rewards** | Unexpected Voice alerts and XP bonuses |
+| **Rolling Rewards** | Streak multipliers vary (1.5x-3x) |
+| **Oracle Effect** | "Your patterns suggest breakthrough in..." |
+
+**Mechanisms:**
+- Hidden Achievements: "Full Circle" (help someone like past-you)
+- Lore Unlocks: New Codex entries for specific accomplishments
+- Voice Surprise Alerts: Random alerts when pattern detected
+- Mystery XP Boxes: Complete 5 quests → open mystery reward
+- Zarlo Hints: Occasional clues about hidden achievements
+
+---
+
+### CD8: Loss & Avoidance (4 → 5)
+
+Minimal, positively-framed mechanisms to maintain momentum.
+
+| Octalysis Technique | Hero Journey Implementation |
+|---------------------|----------------------------|
+| **Sunk Cost** | "The Ghost is getting louder while you're away" |
+| **Progress Loss** | Streak freeze option (1/month) protects investment |
+| **Status Quo** | "Your team is counting on you this week" |
+
+**Mechanisms:**
+- Voice Recovery: If inactive too long, Voice regains some (not all) presence
+- Streak Freeze: Protect your streak once per month
+- Team Accountability: Movement Makers need your contribution to hit goals
+
+⚠️ **Minimal use:** Always frame positively. "Keep your XP growing" not "Don't lose XP."
+
+---
+
+### Integration Map: Features × Core Drives × Hero Elements
+
+```
+EXISTING FEATURE     CORE DRIVES     HERO JOURNEY ELEMENT
+────────────────────────────────────────────────────────────
+Flow Finder          CD1, CD4        → Discover Your Flow
+Play-List/Groans     CD2, CD3, CD5   → The Playground
+Flow Compass         CD7, CD4        → Flow Tracking
+7-Day Challenge      CD2, CD6        → Training Quests
+Stages               CD2, CD4        → Training Levels
+Zarlo                CD1, CD7        → AI Guide
+Points               CD2, CD4        → XP ⚡
+Streaks              CD2, CD8        → Training Streaks
+Leaderboards         CD5, CD2        → Hero Rankings
+Community (future)   CD5, CD1        → Movement Makers
+CRM                  CD4, CD3        → Quest Infrastructure
+Play-List            CD2, CD5, CD7   → The Playground
+```
+
+---
+
+### Octalysis Balance: Before & After
+
+**Current State:**
+```
+        WHITE HAT (Intrinsic)           BLACK HAT (Extrinsic)
+    ┌───────────────────────┐       ┌───────────────────────┐
+    │ CD1: 7 ████████░░░    │       │ CD6: 2 ██░░░░░░░░░    │
+    │ CD2: 6 ██████░░░░░    │       │ CD7: 5 █████░░░░░░    │
+    │ CD3: 4 ████░░░░░░░    │       │ CD8: 4 ████░░░░░░░    │
+    └───────────────────────┘       └───────────────────────┘
+              CD4: 5 █████░░░░░░
+              CD5: 3 ███░░░░░░░░  ← BIGGEST GAP
+```
+
+**After Hero Journey Implementation:**
+```
+        WHITE HAT (Intrinsic)           BLACK HAT (Extrinsic)
+    ┌───────────────────────┐       ┌───────────────────────┐
+    │ CD1: 9 █████████░░    │       │ CD6: 4 ████░░░░░░░    │
+    │ CD2: 8 ████████░░░    │       │ CD7: 7 ███████░░░░    │
+    │ CD3: 7 ███████░░░░    │       │ CD8: 5 █████░░░░░░    │
+    └───────────────────────┘       └───────────────────────┘
+              CD4: 8 ████████░░░
+              CD5: 7 ███████░░░░  ← ADDRESSED
+```
+
+**Key Insight:** The Hero Journey frame primarily strengthens White Hat (intrinsic, feel-good) motivation while adding just enough Black Hat for excitement. This creates sustainable engagement without manipulation.
+
+---
+
+### Implementation Priority (Octalysis-Informed)
+
+**Phase 1:** Foundation + CD2 (Accomplishment)
+- XP tracking, visible counter, Protective Voice identification
+
+**Phase 2:** CD5 (Social) - Biggest Gap
+- Movement Makers, shared challenges, leaderboards
+
+**Phase 3:** CD1 + CD4 (Meaning + Ownership)
+- The Lore/Codex, Hero Profile, achievement collection
+
+**Phase 4:** CD3 + CD7 (Creativity + Curiosity)
+- Custom quests, Easter Eggs, strategy choices
+
+---
+
+## Part 20: Incremental Implementation Plan
 
 **Philosophy:** Each step is shippable, testable, and builds on the last. Existing functionality never breaks. You can stop at any step and still have value.
 
@@ -1321,46 +1703,46 @@ Heroes who reach "Flow Master" status don't disappear. They:
 
 **Goal:** Set up infrastructure without changing anything visible.
 
-#### Step 0.1: Create the point tracking table
+#### Step 0.1: Create the XP tracking table
 
 ```sql
--- New table to track all point-earning actions
-CREATE TABLE hero_power_log (
+-- New table to track all XP-earning actions
+CREATE TABLE hero_xp_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id),
-  action_type TEXT NOT NULL,           -- 'business', 'healing', 'courage', 'flow'
+  action_type TEXT NOT NULL,           -- 'business', 'healing', 'flow', 'playground'
   action_category TEXT NOT NULL,       -- 'visibility', 'creation', etc.
   action_description TEXT,
-  base_power INTEGER NOT NULL,
+  base_xp INTEGER NOT NULL,
   multiplier DECIMAL DEFAULT 1.0,
-  total_power INTEGER NOT NULL,
-  nemesis_confronted TEXT,             -- which nemesis, if any
+  total_xp INTEGER NOT NULL,
+  voice_confronted TEXT,               -- which protective voice, if any
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Running totals view
-CREATE VIEW hero_power_totals AS
+CREATE VIEW hero_xp_totals AS
 SELECT
   user_id,
-  SUM(total_power) as lifetime_power,
-  SUM(CASE WHEN created_at > NOW() - INTERVAL '7 days' THEN total_power ELSE 0 END) as weekly_power,
-  SUM(CASE WHEN created_at > NOW() - INTERVAL '1 day' THEN total_power ELSE 0 END) as daily_power,
-  SUM(CASE WHEN action_type = 'business' THEN total_power ELSE 0 END) as business_power,
-  SUM(CASE WHEN action_type = 'healing' THEN total_power ELSE 0 END) as healing_power,
-  SUM(CASE WHEN action_type = 'courage' THEN total_power ELSE 0 END) as courage_power,
-  SUM(CASE WHEN action_type = 'flow' THEN total_power ELSE 0 END) as flow_power
-FROM hero_power_log
+  SUM(total_xp) as lifetime_xp,
+  SUM(CASE WHEN created_at > NOW() - INTERVAL '7 days' THEN total_xp ELSE 0 END) as weekly_xp,
+  SUM(CASE WHEN created_at > NOW() - INTERVAL '1 day' THEN total_xp ELSE 0 END) as daily_xp,
+  SUM(CASE WHEN action_type = 'business' THEN total_xp ELSE 0 END) as business_xp,
+  SUM(CASE WHEN action_type = 'healing' THEN total_xp ELSE 0 END) as healing_xp,
+  SUM(CASE WHEN action_type = 'flow' THEN total_xp ELSE 0 END) as flow_xp,
+  SUM(CASE WHEN action_type = 'playground' THEN total_xp ELSE 0 END) as playground_xp
+FROM hero_xp_log
 GROUP BY user_id;
 ```
 
 **Test:** Query works, no user impact.
 
-#### Step 0.2: Create point-awarding utility
+#### Step 0.2: Create XP-awarding utility
 
 ```javascript
-// src/lib/heroPower.js
-export const POWER_VALUES = {
+// src/lib/heroXP.js
+export const XP_VALUES = {
   business: {
     visibility: { base: 45, description: 'Visibility action' },
     creation: { base: 30, description: 'Creation action' },
@@ -1375,7 +1757,7 @@ export const POWER_VALUES = {
     release: { base: 50, description: 'Letting go' },
     rest: { base: 30, description: 'Honoring limits' },
   },
-  courage: {
+  playground: {
     screen: { base: 50, description: 'Screen visibility' },
     live: { base: 75, description: 'Live visibility' },
     money: { base: 100, description: 'Money ask' },
@@ -1391,94 +1773,94 @@ export const POWER_VALUES = {
   }
 }
 
-export async function awardPower(userId, type, category, options = {}) {
-  const config = POWER_VALUES[type]?.[category]
+export async function awardXP(userId, type, category, options = {}) {
+  const config = XP_VALUES[type]?.[category]
   if (!config) return null
 
-  const multiplier = options.nemesisConfronted ? 1.5 : 1.0
-  const totalPower = Math.round(config.base * multiplier)
+  const multiplier = options.voiceConfronted ? 1.5 : 1.0
+  const totalXP = Math.round(config.base * multiplier)
 
   const { data, error } = await supabase
-    .from('hero_power_log')
+    .from('hero_xp_log')
     .insert({
       user_id: userId,
       action_type: type,
       action_category: category,
       action_description: options.description || config.description,
-      base_power: config.base,
+      base_xp: config.base,
       multiplier,
-      total_power: totalPower,
-      nemesis_confronted: options.nemesisConfronted || null,
+      total_xp: totalXP,
+      voice_confronted: options.voiceConfronted || null,
       metadata: options.metadata || {}
     })
     .select()
     .single()
 
-  return { power: totalPower, error }
+  return { xp: totalXP, error }
 }
 ```
 
-**Test:** Can award points programmatically, query totals.
+**Test:** Can award XP programmatically, query totals.
 
 ---
 
-### Phase 1: Silent Point Tracking
+### Phase 1: Silent XP Tracking
 
-**Goal:** Start awarding points for existing actions without showing them yet.
+**Goal:** Start awarding XP for existing actions without showing them yet.
 
-#### Step 1.1: Award points for quest completions
+#### Step 1.1: Award XP for quest completions
 
-Modify quest completion handlers to silently log power.
+Modify quest completion handlers to silently log XP.
 
-#### Step 1.2: Award points for Flow Compass check-ins
+#### Step 1.2: Award XP for Flow Compass check-ins
 
-Modify Flow Compass to award points on each check-in.
+Modify Flow Compass to award XP on each check-in.
 
-#### Step 1.3: Award points for Groan completions
+#### Step 1.3: Award XP for Play-List completions
 
-Map Groan visibility layers to courage track power values.
+Map Play-List visibility layers to Playground XP values.
 
-**Test:** Complete various actions, verify `hero_power_log` table fills up. Users notice nothing different.
+**Test:** Complete various actions, verify `hero_xp_log` table fills up. Users notice nothing different.
 
 ---
 
-### Phase 2: Show the Power (Minimal UI)
+### Phase 2: Show the XP (Minimal UI)
 
-**Goal:** Let users see their power without changing core UX.
+**Goal:** Let users see their XP without changing core UX.
 
-#### Step 2.1: Add power counter to header/profile
+#### Step 2.1: Add XP counter to header/profile
 
-Small, non-intrusive display: `⚡ 12,847`
+Small, non-intrusive display: `⚡ 12,847 XP`
 
-#### Step 2.2: Show power earned on quest completion
+#### Step 2.2: Show XP earned on quest completion
 
-Update success toasts: "Quest completed! +50 ⚡ Power"
+Update success toasts: "Quest completed! +50 XP"
 
 #### Step 2.3: Add simple weekly stats to profile
 
-Four-track breakdown: Business, Healing, Courage, Flow.
+Three-track breakdown + Playground: Business, Healing, Flow Tracking, Playground.
 
-**Test:** Users can see their power. Gather feedback on resonance.
+**Test:** Users can see their XP. Gather feedback on resonance.
 
 ---
 
-### Phase 3: Nemesis Introduction
+### Phase 3: Protective Voice Introduction
 
-**Goal:** Introduce the villain concept without overhauling onboarding.
+**Goal:** Introduce the Protective Voice concept without overhauling onboarding.
 
-#### Step 3.1: Add Nemesis identification question
+#### Step 3.1: Add Voice identification question
 
 Single question at end of existing flow: "Which inner voice sounds most like yours?"
 
-#### Step 3.2: Show Nemesis on profile
+#### Step 3.2: Show Voice on profile
 
-Display their identified Nemesis with the "lie" it tells.
+Display their identified Protective Voice with the "lie" it tells.
 
-#### Step 3.3: Award bonus power for Nemesis confrontation
+#### Step 3.3: Award bonus XP for Voice confrontation
 
-1.5x multiplier when facing actions that target their primary Nemesis.
+1.5x multiplier when facing actions that target their primary Voice.
 
-**Test:** Users identify with their Nemesis. Does it feel true?
+**Test:** Users identify with their Voice. Does it feel true?
 
 ---
 
@@ -1488,15 +1870,15 @@ Display their identified Nemesis with the "lie" it tells.
 
 #### Step 4.1: Update quest card copy
 
-"Complete Skills Discovery" → "Discover Your Powers"
+"Complete Skills Discovery" → "Discover Your Flow"
 
 #### Step 4.2: Update stage names
 
-"Flow Finder" → "Power Discovery" / "Awakening"
+"Flow Finder" → "Discover Your Flow" / "Awakening"
 
 #### Step 4.3: Update Zarlo's voice
 
-From helpful assistant to Mission Control personality.
+From helpful assistant to AI Guide personality.
 
 **Test:** Does the new framing resonate or confuse?
 
@@ -1510,9 +1892,9 @@ From helpful assistant to Mission Control personality.
 
 New `/command-center` route with link from existing home.
 
-#### Step 5.2: Build mission generation
+#### Step 5.2: Build quest generation
 
-Curated daily missions based on stage + recent activity.
+Curated daily quests based on stage + recent activity.
 
 #### Step 5.3: Replace home screen for all users
 
@@ -1522,19 +1904,19 @@ Once validated, make Command Center the default.
 
 ---
 
-### Phase 6: The Arena (Groan Matrix Upgrade)
+### Phase 6: The Playground (Play-List Upgrade)
 
-**Goal:** Make the Groan Matrix feel like a game arena.
+**Goal:** Make the Play-List feel like a Playground.
 
-#### Step 6.1: Visual refresh of Groan Matrix
+#### Step 6.1: Visual refresh of Play-List
 
-Same mechanics, new "arena" visual treatment.
+Same mechanics, new "playground" visual treatment.
 
-#### Step 6.2: Add Nemesis health bar
+#### Step 6.2: Add Voice progress bar
 
-Track cumulative damage dealt to each Nemesis with milestones.
+Track cumulative progress with each Protective Voice with milestones.
 
-**Test:** Does groan completion rate increase?
+**Test:** Does Play-List completion rate increase?
 
 ---
 
@@ -1546,11 +1928,11 @@ Track cumulative damage dealt to each Nemesis with milestones.
 
 Users choose whether to appear on leaderboards.
 
-#### Step 7.2: Hero Alliance (guild) creation
+#### Step 7.2: Movement Makers (team) creation
 
 Simple group feature for accountability and shared challenges.
 
-**Test:** Do alliance members retain better?
+**Test:** Do Movement Makers members retain better?
 
 ---
 
@@ -1561,10 +1943,10 @@ Simple group feature for accountability and shared challenges.
 | 0.1-0.2 | Low | None | Foundation | Now |
 | 1.1-1.3 | Low | None | Data collection | After Phase 0 |
 | 2.1-2.3 | Low | Low | Visible feedback | After Phase 1, need validation |
-| 3.1-3.3 | Medium | Low | Nemesis hook | After Phase 2 gets positive feedback |
+| 3.1-3.3 | Medium | Low | Voice hook | After Phase 2 gets positive feedback |
 | 4.1-4.3 | Low | Medium | Narrative shift | After Phase 3 resonates |
 | 5.1-5.3 | High | Medium | Core experience | After Phase 4, when confident |
-| 6.1-6.2 | Medium | Low | Enhanced groans | After Phase 5 is stable |
+| 6.1-6.2 | Medium | Low | Enhanced Playground | After Phase 5 is stable |
 | 7.1-7.2 | Medium | Medium | Social features | After core is solid |
 
 ---
@@ -1574,12 +1956,12 @@ Simple group feature for accountability and shared challenges.
 | Phase | Key Metric | Target |
 |-------|------------|--------|
 | 0 | Tables created, no errors | Works |
-| 1 | Power logs accumulating | 100+ entries |
-| 2 | Users notice power counter | >50% aware in survey |
-| 3 | Users identify with Nemesis | >70% say "accurate" |
+| 1 | XP logs accumulating | 100+ entries |
+| 2 | Users notice XP counter | >50% aware in survey |
+| 3 | Users identify with Voice | >70% say "accurate" |
 | 4 | Language resonates | Positive feedback, no confusion |
 | 5 | Daily engagement increases | +20% DAU |
-| 6 | Groan completion increases | +30% completion rate |
+| 6 | Play-List completion increases | +30% completion rate |
 | 7 | Retention improves | +15% week-2 retention |
 
 ---
@@ -1595,4 +1977,4 @@ Simple group feature for accountability and shared challenges.
 
 ---
 
-*"The game is real. Life is the arena. And you've already begun."*
+*"The game is real. Life is your playground. And you've already begun to play."*

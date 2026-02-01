@@ -133,10 +133,11 @@
 
 .qc-product-card .form-group input {
   width: 100%;
-  padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
+  padding: 12px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
   font-size: 15px;
   color: white;
   transition: border-color 0.2s ease;
@@ -144,11 +145,21 @@
 
 .qc-product-card .form-group input:focus {
   outline: none;
-  border-color: #E9A23B;
+  background: transparent;
+  border-bottom-color: #E9A23B;
 }
 
 .qc-product-card .form-group input::placeholder {
   color: rgba(255, 255, 255, 0.3);
+}
+
+/* Prevent browser autofill from changing background */
+.qc-product-card .form-group input:-webkit-autofill,
+.qc-product-card .form-group input:-webkit-autofill:hover,
+.qc-product-card .form-group input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  -webkit-text-fill-color: white;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* Step Title */
@@ -257,27 +268,31 @@
 .qc-product-card .price-input-wrapper {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  overflow: hidden;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0;
 }
 
 .qc-product-card .price-input-wrapper .currency {
-  padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 0;
+  padding-right: 8px;
+  background: transparent;
   color: rgba(255, 255, 255, 0.5);
   font-size: 15px;
 }
 
 .qc-product-card .price-input-wrapper input {
   border: none;
+  border-bottom: none;
   background: transparent;
   border-radius: 0;
+  padding: 12px 0;
 }
 
 .qc-product-card .price-input-wrapper input:focus {
   border: none;
+  background: transparent;
 }
 
 /* Step Actions */
@@ -334,4 +349,59 @@
 
 .qc-product-card .next-btn.done:hover {
   background: #D4922F;
+}
+
+/* Stage Options */
+.qc-product-card .stage-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.qc-product-card .stage-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.qc-product-card .stage-option:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(233, 162, 59, 0.4);
+  transform: translateX(4px);
+}
+
+.qc-product-card .stage-option.selected {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: #E9A23B;
+  box-shadow: 0 0 20px rgba(233, 162, 59, 0.3);
+}
+
+.qc-product-card .stage-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.qc-product-card .stage-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qc-product-card .stage-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.qc-product-card .stage-description {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
 }

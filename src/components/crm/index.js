@@ -34,6 +34,7 @@ export { default as PromptGenerator, usePromptGenerator } from './PromptGenerato
 // Weekly Planning System
 export { default as WeeklyPlanningFlow, useWeeklyPlanningPrompt } from './WeeklyPlanningFlow'
 export { default as WeeklyReflection } from './WeeklyReflection'
+export { default as ExecutionReview } from './ExecutionReview'
 export { default as PhaseSelector } from './PhaseSelector'
 export { default as TaskMenuPicker } from './TaskMenuPicker'
 export { default as WeekPlanSummary } from './WeekPlanSummary'

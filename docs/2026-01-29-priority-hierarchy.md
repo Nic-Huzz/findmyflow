@@ -61,9 +61,9 @@ You have:
 ## What's NOT Built (From follow-up-tasks.md)
 
 ### V1 Launch Blockers (Tasks 1-6)
-- [ ] Lead Scoring (PTUF sliders)
-- [ ] 15 Hormozi Scripts in database
-- [ ] Scripts Modal on deal cards
+- [x] Lead Scoring (PTUF sliders) ✅ Built - LeadScoreSliders.jsx
+- [x] 15 Hormozi Scripts in database ✅ Built - scripts lib
+- [x] Scripts Modal on deal cards ✅ Built - ScriptsModal.jsx with smart suggestions
 - [ ] Theme alignment (dark→light?)
 - [ ] Offer Builder v2 route integration
 - [ ] Integration testing
@@ -87,12 +87,13 @@ You have:
 
 | Must Work | Current Status | Action |
 |-----------|----------------|--------|
-| Landing page communicates value | 22 sections, needs trim | ❌ Implement story-driven structure |
+| Landing page communicates value | ✅ Updated 2026-01-30 | Story-driven, method loop, compounding graph |
 | Signup works | ✅ Works | - |
 | Flow Finder completes | ✅ Works | Test with strangers |
+| Mind Space (fast-track) | ✅ Built 2026-01-30 | /mind-space - paste AI conversations |
 | First quest assigned | ✅ Works | - |
 | Zarlo responds helpfully | ✅ Works | - |
-| User knows what to do next | ❓ Unclear | Add clearer CTA after Flow Finder |
+| User knows what to do next | ❓ Unclear | Test with users |
 
 **DONE WHEN:** 5/5 testers complete Flow Finder without asking "what now?"
 
@@ -138,9 +139,9 @@ You have:
 | Must Work | Current Status | Action |
 |-----------|----------------|--------|
 | Content Generator produces usable content | ✅ Works | - |
-| Weekly Planning → actions | ⚠️ Partial | Finish DailyActions integration |
-| Lead tracking works | ⚠️ Basic | Add Lead Scoring (Task 1) |
-| Sales scripts available | ❌ Not built | Build Scripts Modal (Task 3) |
+| Weekly Planning → actions | ✅ Built | DailyActions.jsx shows today's content + leads |
+| Lead tracking works | ✅ Built | LeadScoreSliders.jsx with PTUF scoring |
+| Sales scripts available | ✅ Built | ScriptsModal.jsx with smart objection-based suggestions |
 | User follows up on leads | ❓ Unknown | Test with real user |
 
 **DONE WHEN:** 1 user makes an actual sale using CRM guidance.
@@ -186,13 +187,97 @@ You have:
 ### TIER 3: CRM Polish (Milestone 4)
 **Why:** You mentioned CRM update as priority in your task list.
 
-| Task | Effort | Impact |
-|------|--------|--------|
-| Lead Scoring (PTUF sliders) | 1-2 days | HIGH |
-| DailyActions integration | 1 day | MEDIUM |
-| Scripts database + modal | 1-2 days | MEDIUM |
+| Task | Effort | Impact | Status |
+|------|--------|--------|--------|
+| Lead Scoring (PTUF sliders) | 1-2 days | HIGH | ✅ Built |
+| DailyActions integration | 1 day | MEDIUM | ✅ Built |
+| Scripts database + modal | 1-2 days | MEDIUM | ✅ Built |
+| **Weekly Planning Merge** | | | |
+| ExecutionReview component | Small | HIGH | ✅ Built |
+| Integrate into WeeklyPlanningFlow | Small | HIGH | ✅ Built |
+| **NEW: Business Flywheel System** | | | |
+| Finalize phase checklist items | - | HIGH | 📝 In Review |
+| Database tables (ecosystem_system_progress) | Small | HIGH | ⬜ Not started |
+| Config files (ecosystemConfig.js, ecosystemService.js) | Small | HIGH | ⬜ Not started |
+| BusinessSystems page (Tools tab) | Medium | HIGH | ⬜ Not started |
+| EcosystemStatusWidget (Dashboard) | Small | HIGH | ⬜ Not started |
+| Auto-activation on contact status change | Small | MEDIUM | ⬜ Not started |
+| **NEW: Mindset Stage** | | | |
+| Add 'Mindset' stage to Business tab | Modules to set users up for success | Medium | ⬜ Not started |
+| **NEW: Financial Security Tools** | | | |
+| Runway Calculator | Savings ÷ expenses = weeks of runway | Small | ⬜ Not started |
+| Income Bridge Tracker | Track side income vs job income progress | Medium | ⬜ Not started |
+| **Polish & Integration** | | | |
+| Weekly Plan → DailyActions tighter connection | ? | HIGH | 🔍 To assess |
+| UX polish on existing features | ? | MEDIUM | 🔍 To assess |
+| Missing pieces from user testing | ? | HIGH | 🔍 To assess |
 
-### TIER 4: Game Layer (Milestone 2)
+#### Flywheel System Overview
+
+The Business Flywheel helps users BUILD systems and EXECUTE them consistently:
+
+```
+ATTRACT (Always Running)     NURTURE (Always Running)
+├── Lead magnet              ├── Sales page
+├── Content pillars          ├── Pricing
+├── Posting schedule         ├── Scripts
+├── Platform profiles        ├── Proposal template
+└── Welcome sequence         ├── Funnel
+                             └── Objection responses
+
+DELIVER (Per Client)         RETAIN (Per Client Lifecycle)
+├── Onboarding flow          ├── Testimonial template
+├── Program/curriculum       ├── Referral program
+├── Client portal            ├── Alumni community
+└── Feedback form            └── Re-engagement sequence
+```
+
+**Dashboard shows:** Phase completion % + "Complete setup in Tools →"
+**Tools tab shows:** Full checklist with links to create each item
+**Automatic activation:** DELIVER activates when contact → 'active', RETAIN when → 'completed'
+
+See `income-calculator-and-ecosystem-plan.md` for full details + checklist items to review.
+
+### TIER 4: Healing Tab Updates (Milestone 5)
+**Why:** The unique value prop - NS work → business action. Currently locked for testing.
+
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| Shadow Work Flow | Deep dive into shadow aspects/parts work | Medium | ⬜ Not started |
+| Memory Reconsolidation | Rewiring traumatic memories safely | Medium | ⬜ Not started |
+| Update Healing Compass | Improvements to existing flow | Small | ⬜ Not started |
+| Update Nervous System Flow | Improvements to existing flow | Small | ⬜ Not started |
+| Healing Book Assessment | Track books read + accountability | Small | ⬜ Not started |
+| **NEW: From Founder Journey** | | | |
+| Earthquake Inventory | Healing flow for grief of traditional path ("I was lied to") | Medium | ⬜ Not started |
+| Relationship Audit | Reflection on who supports new vs old you | Small | ⬜ Not started |
+| Purgatory Acknowledgment | One-time card about identity conflict with old relationships | Small | ⬜ Not started |
+
+**Note:** These unlock after Milestone 4 (CRM drives action) - healing tab currently locked for user testing.
+
+---
+
+### TIER 5: Groan & Identity System (Milestone 2 & 5)
+**Why:** Core to the transformation - building "I do scary things" identity. From founder journey insights.
+
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| **Quick Wins** | | | |
+| Pre-challenge reframe | Add "You're becoming someone who..." text to Groan modals | Small | ⬜ Not started |
+| "What flowed today?" capture | Daily/weekly serendipity tracking prompt | Small | ⬜ Not started |
+| **Identity System** | | | |
+| Streak as identity | Reframe streak messaging around "I am someone who does scary things" | Small | ⬜ Not started |
+| Identity declaration ritual | Milestone moment after X completions - make them claim it | Medium | ⬜ Not started |
+| The Comedian Story | Teaching moment - process vs outcome identity (Nic's example) | Small | ⬜ Not started |
+| **Groan Improvements** | | | |
+| Open-ended Groans | Flexible "do something scary today, you decide what" challenges | Medium | ⬜ Not started |
+| Serendipity design | Reduce stage-driven rigidity, allow more flow | Medium | ⬜ Not started |
+
+**Key insight:** "The fear/pain of NOT doing scary things became worse than the pain/fear of DOING the scary thing."
+
+---
+
+### TIER 6: Game Layer (Milestone 2)
 **Why:** Hero Journey doc is beautiful but won't help if core loop doesn't retain.
 
 | Task | Effort | Impact |
@@ -216,8 +301,6 @@ You have:
 - "How hard are you to replace" module → After core works
 
 ### These Can Wait:
-- Shadow work in healing flow
-- Memory reconsolidation
 - Baby photos feature
 - Curiosity of the day
 - Feature voting system
@@ -227,22 +310,35 @@ You have:
 
 ## YOUR ACTION PLAN: This Week
 
-### Day 1-2: Landing Page Story Structure
-- [ ] Implement new section order from landing-page-analysis
-- [ ] Add core insight: "We don't rise to ambitions, we fall to safety level"
-- [ ] Add founder stats: "42 programs, $30k, 3 years, still stuck"
-- [ ] Trim Hero section to 3 elements max
+### ✅ COMPLETED
+- [x] Landing page story structure (method loop, compounding graph)
+- [x] Mind Space fast-track feature
+- [x] Lead Scoring sliders (PTUF)
+- [x] Scripts database + modal
+- [x] DailyActions integration
+- [x] ExecutionReview → WeeklyPlanningFlow merge
+- [x] Tab locking for user testing (Play, Healing, Bonus)
 
-### Day 3: Testing Infrastructure
+### 📝 IN PROGRESS: Flywheel System Planning
+- [ ] Review & finalize phase checklist items (see income-calculator-and-ecosystem-plan.md)
+  - [ ] ATTRACT items confirmed
+  - [ ] NURTURE items confirmed
+  - [ ] DELIVER items confirmed
+  - [ ] RETAIN items confirmed
+- [ ] Decide: required vs optional items per phase
+- [ ] Decide: auto-check from existing flows?
+
+### ⬜ NEXT: Flywheel System Build
+- [ ] Database migration (ecosystem_system_progress table)
+- [ ] Config files (ecosystemConfig.js, ecosystemService.js)
+- [ ] BusinessSystems page in Tools tab
+- [ ] EcosystemStatusWidget on Dashboard
+- [ ] Route + navigation wiring
+
+### ⬜ THEN: User Testing
 - [ ] Create Milestone 1 test script (what to ask, what to observe)
 - [ ] Message 5 testers with clear ask
 - [ ] Set up simple feedback form
-
-### Day 4-5: CRM Quick Wins
-- [ ] Lead Scoring sliders (Task 1 from follow-up)
-- [ ] DailyActions polish if time permits
-
-### Weekend: Run First Tests
 - [ ] Get 3+ testers through Flow Finder
 - [ ] Collect feedback
 - [ ] Identify what actually breaks
@@ -311,8 +407,6 @@ Move exciting-but-premature ideas here instead of building them:
 | Ready Player One UI | Narrative layer, not functionality | After Milestone 2 |
 | Physical badges | Cool but no users | After 100+ active users |
 | Clawdbot | Nice-to-have automation | After Milestone 4 |
-| Shadow work module | Extension, not core | After Milestone 5 |
-| Memory reconsolidation | Extension, not core | After Milestone 5 |
 
 ---
 

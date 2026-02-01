@@ -228,7 +228,7 @@ export const getOrCreateActiveProject = async (userId) => {
     // User has no completed flows, cannot auto-create
     return {
       success: false,
-      error: 'No active project. Complete a discovery flow to create your first project.'
+      error: 'No active project. Complete the Mind Space to create your first project.'
     }
   } catch (err) {
     console.error('❌ Error in getOrCreateActiveProject:', err)

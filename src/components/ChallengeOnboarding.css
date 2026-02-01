@@ -1,0 +1,406 @@
+/**
+ * ChallengeOnboarding.css
+ * Styles for the Challenge onboarding screens
+ */
+
+/* Install Screen, Notifications Screen, Project Selector - Remove white card, match purple gradient style */
+.challenge-container:has(.install-screen),
+.challenge-container:has(.notifications-screen),
+.challenge-container:has(.project-selector) {
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  padding-bottom: 0;
+}
+
+.challenge-onboarding.install-screen .onboarding-content,
+.challenge-onboarding.notifications-screen .onboarding-content {
+  max-width: 480px;
+  background: transparent;
+  box-shadow: none;
+  padding: 2rem 1rem;
+}
+
+.challenge-onboarding.install-screen .onboarding-content h1,
+.challenge-onboarding.notifications-screen .onboarding-content h1 {
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: white;
+  background-clip: unset;
+  color: white;
+}
+
+/* Install Header */
+.install-header,
+.notifications-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.install-icon,
+.notifications-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.install-subtitle,
+.notifications-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+/* Install Instructions */
+.install-instructions {
+  margin-bottom: 24px;
+}
+
+/* Browser Toggle Tabs */
+.browser-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.browser-tab {
+  flex: 1;
+  padding: 12px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.browser-tab:hover {
+  color: white;
+}
+
+.browser-tab.active {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.device-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.instruction-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.step-content strong {
+  color: white;
+}
+
+.step-visual {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  width: fit-content;
+}
+
+.step-visual svg {
+  color: #E9A23B;
+}
+
+.visual-icon {
+  font-size: 24px;
+}
+
+/* Install Tip */
+.install-tip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(233, 162, 59, 0.1);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+}
+
+.tip-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.install-tip p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+/* Install Actions */
+.install-actions,
+.notifications-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.install-actions .start-challenge-btn,
+.notifications-actions .start-challenge-btn {
+  background: linear-gradient(135deg, #E9A23B 0%, #F59E0B 100%);
+  box-shadow: 0 4px 14px rgba(233, 162, 59, 0.4);
+}
+
+.install-actions .start-challenge-btn:hover,
+.notifications-actions .start-challenge-btn:hover {
+  box-shadow: 0 8px 20px rgba(233, 162, 59, 0.5);
+}
+
+.skip-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.skip-btn:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: white;
+}
+
+/* Back Link Button (at bottom of actions) */
+.back-link-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 12px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.back-link-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Hide bottom toolbar on install/notifications screens */
+body.hide-bottom-toolbar .bottom-toolbar {
+  display: none !important;
+}
+
+/* Notification Benefits */
+.notification-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.benefit-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.benefit-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.benefit-content strong {
+  color: white;
+  font-size: 15px;
+}
+
+.benefit-content span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+}
+
+/* Notification Warning */
+.notification-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+}
+
+.warning-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.notification-warning p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Notification Success */
+.notification-success {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+}
+
+.success-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.notification-success p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+}
+
+/* Enable Button */
+.enable-btn {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+}
+
+.enable-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #6d26d7 0%, #8b5cf6 100%);
+}
+
+/* Notifications Note */
+.notifications-note {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 13px;
+  margin-top: 16px;
+}
+
+/* Desktop Instructions */
+.device-instructions.desktop {
+  text-align: center;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.device-instructions.desktop p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .instruction-step {
+    padding: 14px;
+  }
+
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .benefit-item {
+    padding: 12px 14px;
+  }
+
+  .benefit-icon {
+    font-size: 20px;
+  }
+}
+
+/* Onboarding Toast */
+.onboarding-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(233, 162, 59, 0.95) 0%, rgba(245, 158, 11, 0.95) 100%);
+  border-radius: 12px;
+  padding: 14px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  animation: toastSlideIn 0.3s ease-out;
+  max-width: 90%;
+}
+
+.onboarding-toast .toast-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.onboarding-toast p {
+  margin: 0;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

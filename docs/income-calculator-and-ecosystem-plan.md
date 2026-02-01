@@ -633,7 +633,7 @@ Pick ONE:                   Build a SYSTEM:
 │              │             │             │                          │
 │              ▼             ▼             ▼                          │
 │      ┌───────────┐  ┌───────────┐  ┌───────────┐                   │
-│      │  ATTRACT  │  │  CONVERT  │  │  DELIVER  │                   │
+│      │  ATTRACT  │  │  NURTURE  │  │  DELIVER  │                   │
 │      │           │  │           │  │           │                   │
 │      │ Content   │  │ Offers    │  │ Products  │                   │
 │      │ Marketing │  │ Sales     │  │ Services  │                   │
@@ -675,7 +675,7 @@ Pick ONE:                   Build a SYSTEM:
 │     │    │    client sessions            │    │                     │
 │     │    │         ▲                     │    │                     │
 │     │    │         │                     ▼    │                     │
-│     │    │    DELIVER ◄──────────── CONVERT   │                     │
+│     │    │    DELIVER ◄──────────── NURTURE   │                     │
 │     │    │   (Fulfill)    (purchases)  (Sell) │                     │
 │     │    │         │                     ▲    │                     │
 │     │    │         │                     │    │                     │
@@ -713,7 +713,7 @@ Pick ONE:                   Build a SYSTEM:
 │  │ ATTRACT: Simple content from client insights                │   │
 │  │          "I helped a client with X today..."                │   │
 │  │                                                             │   │
-│  │ CONVERT: Direct outreach, referrals                         │   │
+│  │ NURTURE: Direct outreach, referrals                         │   │
 │  │          No fancy funnels needed yet                        │   │
 │  │                                                             │   │
 │  │ 💰 Target: $2-5k/month                                      │   │
@@ -731,7 +731,7 @@ Pick ONE:                   Build a SYSTEM:
 │  │ ATTRACT: Consistent content, maybe podcast/video            │   │
 │  │          Build email list from lead magnet                  │   │
 │  │                                                             │   │
-│  │ CONVERT: Webinar or challenge launch                        │   │
+│  │ NURTURE: Webinar or challenge launch                        │   │
 │  │          Sales page, basic funnel                           │   │
 │  │                                                             │   │
 │  │ RETAIN:  Community space, alumni network                    │   │
@@ -751,7 +751,7 @@ Pick ONE:                   Build a SYSTEM:
 │  │ ATTRACT: Authority content, thought leadership              │   │
 │  │          Podcast, speaking, collaborations                  │   │
 │  │                                                             │   │
-│  │ CONVERT: Evergreen funnels, affiliate partners              │   │
+│  │ NURTURE: Evergreen funnels, affiliate partners              │   │
 │  │          Premium high-ticket for qualified leads            │   │
 │  │                                                             │   │
 │  │ RETAIN:  Membership, continuity, certification              │   │
@@ -778,7 +778,7 @@ Pick ONE:                   Build a SYSTEM:
 ┌─────────────────────────────────────────────────────────────────┐
 │  YOUR ECOSYSTEM STATUS                                          │
 │                                                                 │
-│  ATTRACT        CONVERT        DELIVER         RETAIN           │
+│  ATTRACT        NURTURE        DELIVER         RETAIN           │
 │  ────────       ───────        ───────         ──────           │
 │  ▓▓▓▓░░░░       ▓▓░░░░░░       ▓▓▓▓▓▓▓░       ░░░░░░░░         │
 │  Content        Funnel         1:1 Sessions    Not started      │
@@ -837,7 +837,7 @@ PHASE 1 QUESTS (Foundation)
 │   ├── Post 3x this week
 │   ├── Share 1 client insight (anonymized)
 │   └── Engage with 20 ideal client posts
-└── CONVERT Quests
+└── NURTURE Quests
     ├── Ask 1 happy client for referral
     └── Follow up with 3 warm leads
 ```
@@ -850,7 +850,7 @@ PHASE 1 QUESTS (Foundation)
 Your Ecosystem Progress:
                     Before          After
 ATTRACT             ▓▓░░░░░░       ▓▓▓▓▓░░░
-CONVERT             ▓░░░░░░░       ▓▓▓░░░░░
+NURTURE             ▓░░░░░░░       ▓▓▓░░░░░
 DELIVER             ▓▓▓▓░░░░       ▓▓▓▓▓▓▓░
 RETAIN              ░░░░░░░░       ▓▓░░░░░░
 
@@ -874,7 +874,7 @@ ATTRACT (How you build audience)
 ├── Content themes: Burnout recovery, Nervous system, Boundaries
 └── Platforms: LinkedIn (primary), Podcast (secondary)
 
-CONVERT (How you sell)
+NURTURE (How you sell)
 ├── Offer: 6-week Breathwork Journey
 ├── Price point: $500 comfort, $800 edge
 └── Sales style: Conversation-based, low-pressure
@@ -1153,7 +1153,7 @@ The existing **CRM towers** partially align but don't fully map to the ecosystem
 | Ecosystem | Current CRM | Gap |
 |-----------|-------------|-----|
 | ATTRACT | Attract tower ✓ | Good alignment |
-| CONVERT | Nurture tower (partial) | Sales is buried in Nurture |
+| NURTURE | Nurture tower (partial) | Sales is buried in Nurture |
 | DELIVER | ❌ Missing | No dedicated space for fulfillment/delivery |
 | RETAIN | ❌ Missing | Scattered across features |
 
@@ -1196,7 +1196,7 @@ Start with a hybrid approach that adds the ecosystem mental model without breaki
 ┌─────────────────────────────────────────────────────────────────┐
 │  YOUR ECOSYSTEM STATUS                                          │
 │                                                                 │
-│  ATTRACT        CONVERT        DELIVER         RETAIN           │
+│  ATTRACT        NURTURE        DELIVER         RETAIN           │
 │  ────────       ───────        ───────         ──────           │
 │  ▓▓▓▓░░░░       ▓▓░░░░░░       ▓▓▓▓▓▓▓░       ░░░░░░░░         │
 │  Content        Funnel         1:1 Sessions    Not started      │
@@ -1225,7 +1225,7 @@ ATTRACT (How you build audience)
 ├── Content themes: Burnout recovery, Nervous system, Boundaries
 └── Platforms: LinkedIn (primary), Podcast (secondary)
 
-CONVERT (How you sell)
+NURTURE (How you sell)
 ├── Offer: 6-week Breathwork Journey
 ├── Price point: $500 comfort, $800 edge
 └── Sales style: Conversation-based, low-pressure
@@ -1294,13 +1294,13 @@ This project will feed:
 -- Add ecosystem tracking to projects
 ALTER TABLE user_projects
 ADD COLUMN ecosystem_component TEXT CHECK (
-  ecosystem_component IN ('attract', 'convert', 'deliver', 'retain')
+  ecosystem_component IN ('attract', 'nurture', 'deliver', 'retain')
 );
 
 -- Add ecosystem focus to weekly plans
 ALTER TABLE weekly_plans
 ADD COLUMN ecosystem_focus TEXT CHECK (
-  ecosystem_focus IN ('attract', 'convert', 'deliver', 'retain')
+  ecosystem_focus IN ('attract', 'nurture', 'deliver', 'retain')
 );
 
 -- Track ecosystem health metrics over time
@@ -1309,7 +1309,7 @@ CREATE TABLE ecosystem_snapshots (
   user_id UUID REFERENCES auth.users(id) NOT NULL,
   snapshot_date DATE NOT NULL,
   attract_score NUMERIC(3,2), -- 0.00 to 1.00
-  convert_score NUMERIC(3,2),
+  nurture_score NUMERIC(3,2),
   deliver_score NUMERIC(3,2),
   retain_score NUMERIC(3,2),
   calculated_from JSONB, -- { content_posts: 5, leads: 12, ... }
@@ -1330,8 +1330,8 @@ export async function calculateEcosystemHealth(userId) {
   // - Email list growth
   // - Social engagement
 
-  // CONVERT: Sales activity, funnel health
-  const convertScore = await calculateConvertScore(userId)
+  // NURTURE: Sales activity, funnel health
+  const nurtureScore = await calculateNurtureScore(userId)
   // - Leads in pipeline
   // - Conversion rates
   // - Sales calls booked
@@ -1350,10 +1350,10 @@ export async function calculateEcosystemHealth(userId) {
 
   return {
     attract: attractScore,
-    convert: convertScore,
+    nurture: nurtureScore,
     deliver: deliverScore,
     retain: retainScore,
-    weakest: findWeakest([attractScore, convertScore, deliverScore, retainScore]),
+    weakest: findWeakest([attractScore, nurtureScore, deliverScore, retainScore]),
     suggestion: generateSuggestion(...)
   }
 }
@@ -1372,3 +1372,544 @@ export async function calculateEcosystemHealth(userId) {
 2. **Flywheel visualization** - Should we show the actual flywheel diagram somewhere?
 3. **Zarlo awareness** - Should Zarlo coach based on ecosystem imbalance?
 4. **Stage mapping** - How do stages 1-7 map to ecosystem phases?
+
+---
+
+## Flywheel as Simultaneous Systems (Jan 2026 Update)
+
+> **Key Insight:** The flywheel phases are NOT sequential. They happen simultaneously across different customer lifecycles.
+
+### The Reality of a Running Business
+
+At any given moment, you have people at EVERY stage:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ATTRACT        NURTURE        DELIVER         RETAIN       │
+│  ────────       ───────        ───────         ──────       │
+│  Stranger A     Lead B         Client C        Alumni D     │
+│  Stranger E     Lead F         Client G        Alumni H     │
+│  ...            ...            ...             ...          │
+│                                                             │
+│  All happening NOW, in parallel                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### FindMyFlow's Two Jobs
+
+**Job 1: BUILD THE SYSTEMS** (one-time setup per phase)
+- What infrastructure/assets do you need so this phase can run?
+- Checklist of "things to create"
+- Hold users accountable to CREATE the things needed
+
+**Job 2: EXECUTE THE SYSTEMS** (recurring cadence)
+- Now that the system exists, are you running it?
+- Accountability to do the things at the right rhythm
+- Hold users accountable to DELIVER each phase at relevant cadence
+
+### Phase Independence Matrix
+
+**Critical distinction:** Some phases run regardless of customers, others only activate when you have customers.
+
+| Phase | Type | Cadence | Triggers |
+|-------|------|---------|----------|
+| **ATTRACT** | User-Independent | Weekly rhythm | Always running - you always need new eyeballs |
+| **NURTURE** | User-Independent | Weekly rhythm | Always running - you always need to move leads forward |
+| **DELIVER** | User-Dependent | Per-client | Only when you have active clients (activated when contact status → 'active' or deal → 'won') |
+| **RETAIN** | User-Dependent | Per-client lifecycle | Only when clients complete/graduate (activated when contact status → 'completed' or 'alumni') |
+
+```
+User-Independent Phases (Always Running)
+─────────────────────────────────────────
+ATTRACT: Post content, engage, build list → Every week, no matter what
+NURTURE: Follow up leads, sales calls, proposals → Every week, no matter what
+
+User-Dependent Phases (Activated by Customers)
+──────────────────────────────────────────────
+DELIVER: Onboarding, sessions, check-ins → Only when Client C exists
+RETAIN: Testimonials, referrals, alumni care → Only when Client C completes
+```
+
+### BUILD vs EXECUTE by Phase
+
+| Phase | BUILD (Create Once) | EXECUTE (Recurring) | Cadence |
+|-------|--------------------|--------------------|---------|
+| **ATTRACT** | Content pillars, lead magnet, posting schedule, platform profiles, email welcome sequence | Post 3x/week, engage daily, nurture list weekly | Weekly regardless |
+| **NURTURE** | Sales page, pricing, scripts, proposal template, funnel, objection handling | Follow up leads <24h, sales calls, send proposals | Weekly regardless |
+| **DELIVER** | Onboarding flow, curriculum/program, client portal, session structure, feedback form | Deliver sessions, weekly check-ins, collect feedback | Per active client |
+| **RETAIN** | Testimonial request template, referral program, alumni community, re-engagement sequence | Ask for testimonials, referral prompt after wins, quarterly alumni touch | Per completed client |
+
+### Dashboard Concept
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  YOUR BUSINESS FLYWHEEL                                              │
+│                                                                      │
+│  ═══════════════════════════════════════════════════════════════════│
+│  ALWAYS RUNNING (Weekly Rhythm)                                      │
+│  ═══════════════════════════════════════════════════════════════════│
+│                                                                      │
+│  ATTRACT                              NURTURE                        │
+│  ────────                             ───────                        │
+│  Systems Built: 4/5 ████░            Systems Built: 3/6 ███░░░      │
+│  [View in Tools →]                    [View in Tools →]              │
+│                                                                      │
+│  This Week's Execution:               This Week's Execution:         │
+│  Posts: 2/3 ██░                       Follow-ups: 4/5 ████░          │
+│  Engagements: 12/15                   Sales calls: 1/2               │
+│  List growth: +23                     Proposals: 0/1 ⚠️              │
+│                                                                      │
+│  ═══════════════════════════════════════════════════════════════════│
+│  ACTIVATED BY CUSTOMERS                                              │
+│  ═══════════════════════════════════════════════════════════════════│
+│                                                                      │
+│  DELIVER (3 active clients)           RETAIN (2 completed clients)   │
+│  ───────                              ──────                         │
+│  Systems Built: 2/4 ██░░              Systems Built: 1/4 █░░░        │
+│  ✓ Onboarding flow                    ✓ Testimonial template         │
+│  ✓ Session structure                  ○ Referral program             │
+│  ○ Client portal                      ○ Alumni community             │
+│  ○ Feedback form                      ○ Re-engagement sequence       │
+│                                                                      │
+│  Active Client Tasks:                 Alumni Tasks:                  │
+│  ☐ Session with Client A (Tue)        ☐ Request testimonial - Sam    │
+│  ☐ Check-in with Client B             ☐ Referral ask - completed     │
+│  ☐ Onboard Client C (new!)            ✓ Quarterly touch - Alex       │
+│                                                                      │
+│  ═══════════════════════════════════════════════════════════════════│
+│  💡 SUGGESTION                                                       │
+│  Your RETAIN systems are only 25% built. You have 2 completed        │
+│  clients but no referral program. You're leaving money on the table. │
+│  [Build Referral Program →]                                          │
+│  ═══════════════════════════════════════════════════════════════════│
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Implementation Approach
+
+**Phase 1: Define the BUILD Checklists**
+Each phase needs a defined checklist of "systems to build":
+
+```javascript
+const PHASE_SYSTEMS = {
+  attract: {
+    name: 'ATTRACT',
+    type: 'user-independent',
+    cadence: 'weekly',
+    systems: [
+      { id: 'lead_magnet', label: 'Lead magnet created', linkedFlow: '/lead-magnet-selection' },
+      { id: 'content_pillars', label: 'Content pillars defined', linkedFlow: '/content-planning' },
+      { id: 'posting_schedule', label: 'Posting schedule set', linkedFlow: '/weekly-planning' },
+      { id: 'platform_profiles', label: 'Platform profiles optimized', linkedFlow: null },
+      { id: 'welcome_sequence', label: 'Email welcome sequence', linkedFlow: '/email-sequences' }
+    ]
+  },
+  nurture: {
+    name: 'NURTURE',
+    type: 'user-independent',
+    cadence: 'weekly',
+    systems: [
+      { id: 'sales_page', label: 'Sales/landing page', linkedFlow: '/crm/pages' },
+      { id: 'pricing', label: 'Pricing defined', linkedFlow: '/offer-builder' },
+      { id: 'scripts', label: 'Sales scripts written', linkedFlow: '/crm/sales/scripts' },
+      { id: 'proposal_template', label: 'Proposal template', linkedFlow: null },
+      { id: 'funnel', label: 'Funnel built', linkedFlow: '/funnel-builder' },
+      { id: 'objection_responses', label: 'Objection responses ready', linkedFlow: '/crm/objections' }
+    ]
+  },
+  deliver: {
+    name: 'DELIVER',
+    type: 'user-dependent',
+    cadence: 'per-client',
+    systems: [
+      { id: 'onboarding_flow', label: 'Client onboarding flow', linkedFlow: null },
+      { id: 'program_curriculum', label: 'Program/curriculum defined', linkedFlow: '/offer-builder' },
+      { id: 'client_portal', label: 'Client portal/access', linkedFlow: null },
+      { id: 'feedback_form', label: 'Feedback collection form', linkedFlow: null }
+    ]
+  },
+  retain: {
+    name: 'RETAIN',
+    type: 'user-dependent',
+    cadence: 'per-client-lifecycle',
+    systems: [
+      { id: 'testimonial_template', label: 'Testimonial request template', linkedFlow: null },
+      { id: 'referral_program', label: 'Referral program defined', linkedFlow: null },
+      { id: 'alumni_community', label: 'Alumni community/touchpoint', linkedFlow: null },
+      { id: 'reengagement_sequence', label: 'Re-engagement sequence', linkedFlow: null }
+    ]
+  }
+}
+```
+
+**Phase 2: Track System Completion**
+New table to track which systems are built:
+
+```sql
+CREATE TABLE ecosystem_system_progress (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  phase TEXT NOT NULL CHECK (phase IN ('attract', 'nurture', 'deliver', 'retain')),
+  system_id TEXT NOT NULL,
+  completed BOOLEAN DEFAULT false,
+  completed_at TIMESTAMPTZ,
+  notes TEXT,
+  linked_resource_id UUID, -- Optional link to the actual asset created
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, phase, system_id)
+);
+```
+
+**Phase 3: Execution Tracking**
+- User-independent phases: Track against weekly targets (posts, follow-ups, etc.)
+- User-dependent phases: Track against active clients (sessions delivered, testimonials collected)
+
+```sql
+-- Weekly execution for user-independent phases
+CREATE TABLE ecosystem_weekly_execution (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  week_start DATE NOT NULL,
+  phase TEXT NOT NULL CHECK (phase IN ('attract', 'nurture')),
+  metric_type TEXT NOT NULL, -- 'posts', 'engagements', 'follow_ups', 'sales_calls', etc.
+  target INTEGER,
+  actual INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, week_start, phase, metric_type)
+);
+
+-- Per-client execution for user-dependent phases
+-- (May leverage existing crm_contacts + activity tracking)
+```
+
+**Phase 4: Dashboard Widget**
+- Show all 4 phases
+- Visual split between "Always Running" and "Activated by Customers"
+- System completion progress bars
+- Execution metrics for current week/period
+- Smart suggestions based on gaps
+
+### Decisions Made
+
+1. **Where do BUILD checklists live?**
+   - ✅ **Tools tab** - Full checklist pages for each phase
+   - ✅ **Dashboard widget** - Summary showing completion status + alert when systems incomplete
+   - Pattern: "Your RETAIN systems are 25% complete. [Set up in Tools →]"
+
+2. **What activates DELIVER/RETAIN?**
+   - ✅ **Automatic on status change**
+   - DELIVER activates when: contact status → 'active' OR deal status → 'won'
+   - RETAIN activates when: contact status → 'completed' OR 'alumni'
+
+### Open Questions
+
+1. **How to track execution automatically?**
+   - ATTRACT: Could count content_history posts
+   - NURTURE: Could count lead status changes, logged calls
+   - DELIVER: Need client session tracking
+   - RETAIN: Need testimonial/referral tracking
+
+2. **Cadence customization?**
+   - Default: 3 posts/week for ATTRACT
+   - Should users set their own targets?
+   - Should it adapt based on their capacity (Push/Flow/Rest/Launch weeks)?
+
+3. **Tools tab structure?**
+   - ✅ One combined page with tabs for each phase (ATTRACT, NURTURE, DELIVER, RETAIN)
+   - Each tab shows the checklist for that phase
+   - Links to existing flows where relevant (e.g., "Create lead magnet" → /lead-magnet-selection)
+
+---
+
+## Phase Checklist Items - Review Needed
+
+> **Status:** DRAFT - Needs review before implementation
+> **Action:** Review each phase and confirm/edit items
+
+### ATTRACT - Build Audience & Generate Awareness
+
+**Current Draft (5 items):**
+
+| # | Item | Description | Links To |
+|---|------|-------------|----------|
+| 1 | Lead magnet created | Free resource that captures emails | /lead-magnet-selection |
+| 2 | Content pillars defined | 3-5 core topics you create content about | /crm/content/create |
+| 3 | Posting schedule set | When and where you post content | /crm/marketing |
+| 4 | Platform profiles optimized | Bio, links, and branding consistent | - |
+| 5 | Email welcome sequence | Automated emails for new subscribers | /crm/email-sequences |
+
+**Questions to resolve:**
+
+- [ ] Should "Platform profiles" be split by platform (LinkedIn, IG, etc.) or one checkbox?
+- [ ] Add "Ideal client/audience defined" as prerequisite item?
+- [ ] Add "Podcast/video setup" for content creators?
+- [ ] Any items to remove?
+
+**Notes/Decisions:**
+_[Add your notes here]_
+
+---
+
+### NURTURE - Move Leads Toward Purchase
+
+**Current Draft (6 items):**
+
+| # | Item | Description | Links To |
+|---|------|-------------|----------|
+| 1 | Sales/landing page | Page that explains your offer | /crm/pages |
+| 2 | Pricing defined | Clear pricing for your offers | /offer-builder |
+| 3 | Sales scripts written | What to say in sales conversations | /crm/sales/scripts |
+| 4 | Proposal template | Template for sending quotes/proposals | - |
+| 5 | Funnel built | Journey from lead to customer | /funnel-builder |
+| 6 | Objection responses ready | Answers to common hesitations | /crm/objections |
+
+**Questions to resolve:**
+
+- [ ] Add "CRM/contact tracking set up"? (Or assumed?)
+- [ ] Add "Discovery call structure" as separate from scripts?
+- [ ] Add "Follow-up process" (manual follow-up cadence, not automation)?
+- [ ] Any items to remove?
+
+**Notes/Decisions:**
+_[Add your notes here]_
+
+---
+
+### DELIVER - Fulfill Promises to Clients
+
+**Current Draft (4 items):**
+
+| # | Item | Description | Links To |
+|---|------|-------------|----------|
+| 1 | Client onboarding flow | How you welcome and set up new clients | - |
+| 2 | Program/curriculum defined | What you deliver and in what order | /offer-builder |
+| 3 | Client portal/access | Where clients access materials | - |
+| 4 | Feedback collection form | How you gather client feedback | - |
+
+**Questions to resolve:**
+
+- [ ] Add "Session structure/template" as separate from curriculum?
+- [ ] Add "Boundaries/policies documented" (cancellation, communication, etc.)?
+- [ ] Add "Client check-in cadence" defined?
+- [ ] Add "Scheduling/booking system" for service businesses?
+- [ ] Any items to remove?
+
+**Notes/Decisions:**
+_[Add your notes here]_
+
+---
+
+### RETAIN - Keep Clients & Generate Referrals
+
+**Current Draft (4 items):**
+
+| # | Item | Description | Links To |
+|---|------|-------------|----------|
+| 1 | Testimonial request template | How you ask for testimonials | - |
+| 2 | Referral program defined | How you incentivize referrals | - |
+| 3 | Alumni community/touchpoint | How you stay connected with past clients | - |
+| 4 | Re-engagement sequence | How you bring back past clients | - |
+
+**Questions to resolve:**
+
+- [ ] Add "Case study process" as separate from testimonial template?
+- [ ] Add "Upsell/next offer pathway"? (Or does this belong in NURTURE?)
+- [ ] Add "Client celebration/graduation ritual"?
+- [ ] Any items to remove?
+
+**Notes/Decisions:**
+_[Add your notes here]_
+
+---
+
+### Broader Design Questions
+
+1. **Generic vs Specific:** Should items be generic (works for any business) or have variants for different business types (coaching, courses, services, etc.)?
+
+2. **Minimum Viable:** What's the MINIMUM number of items per phase to be "functional"? Should we mark some as "required" vs "optional"?
+
+3. **Existing Data:** Some of these might already be captured in existing flows (Offer Builder, Lead Magnet Selection). Should completing those flows auto-check these items?
+
+4. **Proof of Completion:** How do we verify an item is "done"? Self-reported checkbox? Link to the created asset? Both?
+
+**Notes/Decisions:**
+_[Add your notes here]_
+
+---
+
+## Build Plan - All Tasks Required
+
+> **Status:** Planning
+> **Purpose:** Complete task list for flywheel system implementation
+
+### Phase 1: Database & Backend
+
+| Task | Description | Dependency | Priority |
+|------|-------------|------------|----------|
+| Create `ecosystem_system_progress` table | Tracks which BUILD items are complete per user | None | HIGH |
+| Create `ecosystem_weekly_execution` table | Tracks EXECUTE metrics for ATTRACT/NURTURE | Table above | MEDIUM |
+| Add `ecosystem_component` to `user_projects` | Tag projects by phase | None | LOW |
+| Add `ecosystem_focus` to `weekly_plans` | Track weekly focus area | None | LOW |
+| Add status triggers for DELIVER/RETAIN | Auto-activate when contact status changes | Contact system | MEDIUM |
+
+**Migration SQL:**
+```sql
+-- ecosystem_system_progress
+CREATE TABLE ecosystem_system_progress (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  phase TEXT NOT NULL CHECK (phase IN ('attract', 'nurture', 'deliver', 'retain')),
+  system_id TEXT NOT NULL,
+  completed BOOLEAN DEFAULT false,
+  completed_at TIMESTAMPTZ,
+  notes TEXT,
+  linked_resource_id UUID,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, phase, system_id)
+);
+
+-- ecosystem_weekly_execution
+CREATE TABLE ecosystem_weekly_execution (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  week_start DATE NOT NULL,
+  phase TEXT NOT NULL CHECK (phase IN ('attract', 'nurture')),
+  metric_type TEXT NOT NULL,
+  target INTEGER,
+  actual INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, week_start, phase, metric_type)
+);
+
+-- RLS policies
+ALTER TABLE ecosystem_system_progress ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ecosystem_weekly_execution ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can manage own progress" ON ecosystem_system_progress
+  FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage own execution" ON ecosystem_weekly_execution
+  FOR ALL USING (auth.uid() = user_id);
+```
+
+---
+
+### Phase 2: Config & Data Files
+
+| Task | Description | Dependency | Priority |
+|------|-------------|------------|----------|
+| Create `ecosystemConfig.js` | Define PHASES, systems, cadences | Checklist finalized | HIGH |
+| Create `ecosystemService.js` | CRUD operations for progress tracking | Database tables | HIGH |
+| Create `ecosystemHealth.js` | Calculate health scores per phase | Service above | MEDIUM |
+
+**File locations:**
+```
+src/lib/crm/
+├── ecosystemConfig.js    # Phase definitions, system items
+├── ecosystemService.js   # Database operations
+└── ecosystemHealth.js    # Health calculation logic
+```
+
+---
+
+### Phase 3: Components
+
+| Task | Description | Dependency | Priority |
+|------|-------------|------------|----------|
+| `BusinessSystemsPage.jsx` | Main page with phase tabs | Config + Service | HIGH |
+| `PhaseChecklist.jsx` | Checklist component for each phase | Config | HIGH |
+| `EcosystemStatusWidget.jsx` | Dashboard summary widget | Health calculations | HIGH |
+| `PhaseProgressBar.jsx` | Visual progress bar component | None | LOW |
+
+**File locations:**
+```
+src/pages/crm/
+└── BusinessSystems.jsx       # Main page (Tools tab)
+
+src/components/crm/
+├── EcosystemStatusWidget.jsx # Dashboard widget
+├── PhaseChecklist.jsx        # Reusable checklist
+└── PhaseProgressBar.jsx      # Progress visualization
+```
+
+---
+
+### Phase 4: Routes & Navigation
+
+| Task | Description | Dependency | Priority |
+|------|-------------|------------|----------|
+| Add `/crm/tools/systems` route | Route to BusinessSystems page | Page created | HIGH |
+| Add to Tools tower navigation | Link in Tools sidebar/menu | Route added | HIGH |
+| Add widget to CRM Dashboard | Embed EcosystemStatusWidget | Widget created | HIGH |
+
+---
+
+### Phase 5: Integrations (Optional Enhancements)
+
+| Task | Description | Dependency | Priority |
+|------|-------------|------------|----------|
+| Auto-check from existing flows | Completing Offer Builder → marks "Pricing defined" | Service layer | LOW |
+| Weekly Planning ecosystem focus | Add focus selector to WeeklyPlanningFlow | Config | LOW |
+| Zarlo ecosystem awareness | Coach based on imbalanced phases | Health calculations | LOW |
+| Execution tracking | Count posts, follow-ups automatically | Content/lead systems | LOW |
+
+---
+
+### Build Order Recommendation
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  RECOMMENDED BUILD SEQUENCE                                      │
+│                                                                  │
+│  1. FINALIZE CHECKLIST ITEMS ← You are here                     │
+│     └─ Review & confirm items for each phase                    │
+│                                                                  │
+│  2. DATABASE                                                     │
+│     └─ Create ecosystem_system_progress table                   │
+│     └─ (Skip execution table for MVP)                           │
+│                                                                  │
+│  3. CONFIG & SERVICE                                             │
+│     └─ ecosystemConfig.js (phase definitions)                   │
+│     └─ ecosystemService.js (CRUD operations)                    │
+│                                                                  │
+│  4. MAIN PAGE                                                    │
+│     └─ BusinessSystems.jsx with phase tabs                      │
+│     └─ Add route + navigation                                   │
+│                                                                  │
+│  5. DASHBOARD WIDGET                                             │
+│     └─ EcosystemStatusWidget.jsx                                │
+│     └─ Add to CRM Dashboard                                     │
+│                                                                  │
+│  6. POLISH & INTEGRATIONS (Post-MVP)                            │
+│     └─ Auto-check from existing flows                           │
+│     └─ Execution tracking                                       │
+│     └─ Weekly planning integration                              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Effort Estimates
+
+| Phase | Tasks | Effort |
+|-------|-------|--------|
+| 1. Database | 2 tables, RLS | Small |
+| 2. Config/Service | 3 files | Small |
+| 3. Components | 3-4 components | Medium |
+| 4. Routes/Nav | 3 integration points | Small |
+| 5. Integrations | Optional enhancements | Variable |
+
+**MVP (Phases 1-4):** Functional checklist tracking + dashboard widget
+
+**Full Version (Phase 5):** Adds automatic tracking and deeper integrations
+
+---
+
+### Dependencies on Decisions
+
+Before building, need answers to:
+
+1. **Checklist items** - What exactly goes in each phase? (See section above)
+2. **Minimum viable** - Required vs optional items?
+3. **Auto-detection** - Should completing existing flows auto-check items?
+4. **Execution tracking** - Include in MVP or defer?

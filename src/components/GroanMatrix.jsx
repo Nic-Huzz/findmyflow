@@ -267,16 +267,16 @@ function GroanMatrix({
       <div className="groan-matrix">
         <div className="groan-matrix-empty">
           <div className="groan-matrix-empty-icon">🧭</div>
-          <h3 className="groan-matrix-empty-title">Complete Flow Finder First</h3>
+          <h3 className="groan-matrix-empty-title">Find Your Flow First</h3>
           <p className="groan-matrix-empty-text">
             To unlock personalized courage challenges, you need to discover your
-            unique skills, problems, and personas through Flow Finder.
+            unique skills, problems, and personas through the Mind Space.
           </p>
           <button
             className="groan-matrix-empty-cta"
-            onClick={() => navigate('/nikigai/skills')}
+            onClick={() => navigate('/mind-space')}
           >
-            Start Flow Finder
+            Start Mind Space
           </button>
         </div>
       </div>
@@ -379,15 +379,15 @@ function GroanMatrix({
           {sourceItems.length === 0 ? (
             <div className="groan-matrix-empty" style={{ gridColumn: '1 / -1' }}>
               <div className="groan-matrix-empty-icon">🧭</div>
-              <h3 className="groan-matrix-empty-title">Complete Flow Finder</h3>
+              <h3 className="groan-matrix-empty-title">Find Your Flow</h3>
               <p className="groan-matrix-empty-text">
-                No {activeSourceType}s found. Complete the {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} flow to unlock personalized challenges.
+                No {activeSourceType}s found. Complete the Mind Space to unlock personalized challenges.
               </p>
               <button
                 className="groan-matrix-empty-cta"
-                onClick={() => navigate(activeSourceType === 'skill' ? '/nikigai/skills' : activeSourceType === 'problem' ? '/nikigai/problems' : '/nikigai/persona')}
+                onClick={() => navigate('/mind-space')}
               >
-                Start {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} Flow
+                Start Mind Space
               </button>
             </div>
           ) : (
@@ -645,15 +645,15 @@ function GroanMatrix({
           {sourceItems.length === 0 ? (
             <div className="groan-matrix-empty">
               <div className="groan-matrix-empty-icon">🧭</div>
-              <h3 className="groan-matrix-empty-title">Complete Flow Finder</h3>
+              <h3 className="groan-matrix-empty-title">Find Your Flow</h3>
               <p className="groan-matrix-empty-text">
-                No {activeSourceType}s found. Complete the {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} flow to unlock personalized challenges.
+                No {activeSourceType}s found. Complete the Mind Space to unlock personalized challenges.
               </p>
               <button
                 className="groan-matrix-empty-cta"
-                onClick={() => navigate(activeSourceType === 'skill' ? '/nikigai/skills' : activeSourceType === 'problem' ? '/nikigai/problems' : '/nikigai/persona')}
+                onClick={() => navigate('/mind-space')}
               >
-                Start {activeSourceType === 'skill' ? 'Skills' : activeSourceType === 'problem' ? 'Problems' : 'Persona'} Flow
+                Start Mind Space
               </button>
             </div>
           ) : (

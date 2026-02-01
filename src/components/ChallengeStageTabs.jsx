@@ -37,6 +37,10 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
   }, [activeTab])
 
   const getTabState = (stageId, stageConfig) => {
+    // Check for temporarily locked stages (used during testing)
+    if (stageConfig?.temporarilyLocked) {
+      return 'locked'
+    }
     // Flow Finder (stage 0) - user-level, always accessible
     if (stageConfig?.alwaysAccessible) {
       // Flow Finder uses its own completion status
@@ -52,6 +56,10 @@ function ChallengeStageTabs({ currentStage, completedStages = [], activeTab, onT
   }
 
   const handleTabClick = (stageId, stageConfig) => {
+    // Check for temporarily locked stages (used during testing)
+    if (stageConfig?.temporarilyLocked) {
+      return // Don't allow clicks on locked stages
+    }
     // Flow Finder is always clickable
     if (stageConfig?.alwaysAccessible) {
       onTabChange(stageId)

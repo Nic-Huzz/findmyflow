@@ -59,6 +59,8 @@ function Challenge() {
     activeFrequencyFilter,
     setActiveFrequencyFilter,
     showOnboarding,
+    onboardingScreen,
+    setOnboardingScreen,
     showGroupSelection,
     showProjectSelector,
     setShowProjectSelector,
@@ -994,14 +996,16 @@ function Challenge() {
   }
 
   // ============================================
-  // Render: Onboarding
+  // Render: Onboarding (welcome, install-app, enable-notifications)
   // ============================================
 
   if (showOnboarding) {
     return (
       <ChallengeOnboarding
-        screen="welcome"
-        onStartChallenge={showGroupSelectionModal}
+        userId={user?.id}
+        screen={onboardingScreen}
+        onScreenChange={setOnboardingScreen}
+        onStartChallenge={handlePlaySolo}
       />
     )
   }
@@ -1013,7 +1017,9 @@ function Challenge() {
   if (showGroupSelection) {
     return (
       <ChallengeOnboarding
+        userId={user?.id}
         screen="group-selection"
+        onScreenChange={setOnboardingScreen}
         onPlaySolo={handlePlaySolo}
         onCreateGroup={handleCreateGroup}
         onJoinGroup={handleJoinGroup}
@@ -1028,6 +1034,8 @@ function Challenge() {
   // ============================================
 
   if (showProjectSelector) {
+    // Hide bottom toolbar during project selection
+    document.body.classList.add('hide-bottom-toolbar')
     return (
       <div className="challenge-container">
         <div className="challenge-onboarding">
@@ -1038,6 +1046,9 @@ function Challenge() {
         </div>
       </div>
     )
+  } else {
+    // Restore bottom toolbar when not on project selection
+    document.body.classList.remove('hide-bottom-toolbar')
   }
 
   // ============================================
@@ -1129,15 +1140,22 @@ function Challenge() {
       />
 
       <div className="challenge-tabs">
-        {categories.map(category => (
-          <button
-            key={category}
-            className={`challenge-tab ${activeCategory === category ? 'active' : ''}`}
-            onClick={() => setActiveCategory(category)}
-          >
-            {category}
-          </button>
-        ))}
+        {categories.map(category => {
+          // Lock Healing and Bonus tabs for testing
+          const isLocked = category === 'Healing' || category === 'Bonus'
+          return (
+            <button
+              key={category}
+              className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
+              onClick={() => !isLocked && setActiveCategory(category)}
+              disabled={isLocked}
+              title={isLocked ? 'Coming soon' : undefined}
+            >
+              {category}
+              {isLocked && <span className="lock-icon">🔒</span>}
+            </button>
+          )
+        })}
       </div>
 
       {/* Stage tabs for Business */}

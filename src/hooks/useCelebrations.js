@@ -7,6 +7,7 @@ import {
   triggerCelebration,
   triggerFireConfetti
 } from '../components/Celebrations'
+import { sendAchievementNotification } from '../lib/notifications'
 
 /**
  * Hook for managing celebration animations
@@ -62,6 +63,12 @@ export function useCelebrations() {
     if (navigator.vibrate) {
       navigator.vibrate([100, 50, 100, 50, 200])
     }
+
+    // Send achievement notification
+    sendAchievementNotification({
+      title: `🎉 Level ${newLevel} Unlocked!`,
+      body: 'Keep up the amazing work on your journey!'
+    })
   }, [])
 
   /**
@@ -79,6 +86,12 @@ export function useCelebrations() {
     if (navigator.vibrate) {
       navigator.vibrate([100, 50, 100])
     }
+
+    // Send achievement notification
+    sendAchievementNotification({
+      title: `🔥 ${days} Day Streak!`,
+      body: `You've completed ${days} days in a row. Amazing consistency!`
+    })
   }, [])
 
   /**

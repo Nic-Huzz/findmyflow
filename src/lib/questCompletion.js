@@ -1,4 +1,5 @@
 import { supabase } from './supabaseClient'
+import { cacheBustUrl } from './fetchJson'
 
 /**
  * Auto-completes a challenge quest when a flow is completed
@@ -60,7 +61,7 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
     console.log('Active challenge found:', activeChallenge.challenge_instance_id)
 
     // 2. Load quest configuration
-    const questsResponse = await fetch('/challengeQuestsUpdate.json')
+    const questsResponse = await fetch(cacheBustUrl('/challengeQuestsUpdate.json'))
     if (!questsResponse.ok) {
       console.error('Failed to fetch quest configuration:', questsResponse.status)
       return { success: false, error: 'Failed to load quest configuration' }
