@@ -242,6 +242,9 @@ const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 ### CRM Tables
 `crm_pages` | `crm_contacts` | `crm_email_sequences` | `crm_email_steps` | `crm_warm_leads`
 
+### Notifications
+`push_subscriptions` (endpoint, keys) | `notification_preferences` (quest_reminders, achievement_celebrations, timezone)
+
 ### Groan Matrix
 `groan_challenges` (scary/wahoo scores, visibility layer) | `groan_proof` | `groan_contract_evidence` | `groan_outcomes` | `groan_streaks` | `groan_user_preferences`
 
@@ -261,6 +264,12 @@ npm run build     # Production build
 npm run db:push   # Apply migrations
 ```
 
+## Recent Updates (Feb 2025)
+
+- **Push Notifications**: Timezone-aware scheduled notifications at 8am/12pm/6pm. See `docs/PUSH_NOTIFICATIONS.md`
+- **Challenge Onboarding**: PWA install instructions + notification enable screens
+- **Mind Space**: New `/mind-space` flow for quick flow discovery
+
 ## Recent Updates (Jan 2025)
 
 - **10-Stage System**: Added Stage 0 (Flow Finder), 0.5 (Groans), 8 (Tracking)
@@ -271,7 +280,10 @@ npm run db:push   # Apply migrations
 - **QuickCapture**: 5-step onboarding for business data
 - **Haptics**: Mobile vibration feedback patterns
 
-See `docs/` for detailed session notes and historical changes.
+## Key Documentation
+
+- `docs/PUSH_NOTIFICATIONS.md` - Push notification system setup, testing, troubleshooting
+- `docs/` - Session notes and historical changes
 
 ## Links
 
