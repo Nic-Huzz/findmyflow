@@ -121,10 +121,10 @@ const Profile = () => {
       // Get groan streak from weekly plans
       const { data: weeklyPlans } = await supabase
         .from('weekly_plans')
-        .select('week_start_date, weekly_groan_completed')
+        .select('week_start, weekly_groan_completed')
         .eq('user_id', user.id)
         .eq('weekly_groan_completed', true)
-        .order('week_start_date', { ascending: false })
+        .order('week_start', { ascending: false })
 
       // Calculate groan streak (consecutive weeks)
       let groanStreak = 0
@@ -137,7 +137,7 @@ const Profile = () => {
         let checkWeek = new Date(currentWeekStart)
 
         for (const plan of weeklyPlans) {
-          const planWeekStart = new Date(plan.week_start_date)
+          const planWeekStart = new Date(plan.week_start)
           planWeekStart.setHours(0, 0, 0, 0)
 
           // Check if this week matches expected week
