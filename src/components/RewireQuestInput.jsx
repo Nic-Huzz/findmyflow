@@ -44,7 +44,7 @@ const VULNERABILITY_LAYERS = [
 // Fear trifecta
 const FEAR_TRIFECTA = [
   { id: 'judgment', label: 'Judged', icon: '👁️', description: 'What will they think?' },
-  { id: 'worthiness', label: 'Not Enough', icon: '🎭', description: 'Who am I to do this?' },
+  { id: 'not_good_enough', label: 'Not Enough', icon: '🎭', description: 'Who am I to do this?' },
   { id: 'failure', label: 'Might Fail', icon: '💥', description: 'What if it doesn\'t work?' }
 ]
 

@@ -17,6 +17,7 @@ import { useAuth } from '../auth/AuthProvider'
 import essenceProfiles from '../data/essenceProfiles'
 import { useSteppedForm } from '../hooks/useSteppedForm'
 import { StepProgress } from './QuestInputShared'
+import { getStageDisplayName } from '../lib/stageConfig'
 import './RecogniseQuestInput.css'
 
 // Protective voice options
@@ -31,7 +32,7 @@ const PROTECTIVE_VOICES = [
 // Vulnerability trifecta (fears)
 const FEAR_TRIFECTA = [
   { id: 'judgment', label: 'Judged', icon: '👁️', description: 'What will they think?' },
-  { id: 'worthiness', label: 'Not Enough', icon: '🎭', description: 'Who am I to do this?' },
+  { id: 'not_good_enough', label: 'Not Enough', icon: '🎭', description: 'Who am I to do this?' },
   { id: 'failure', label: 'Might Fail', icon: '💥', description: 'What if it doesn\'t work?' }
 ]
 
@@ -1143,7 +1144,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
           <div className="step-content">
             <div className="stage-context-card">
               <span className="stage-icon">{quest.icon}</span>
-              <span className="stage-name">Stage {quest.stage_required}</span>
+              <span className="stage-name">{getStageDisplayName(quest.stage_required)}</span>
             </div>
             <div className="voice-archetype-card essence">
               <span className="archetype-icon">✨</span>
@@ -1243,7 +1244,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
           <div className="step-content">
             <div className="stage-context-card">
               <span className="stage-icon">{quest.icon}</span>
-              <span className="stage-name">Stage {quest.stage_required}</span>
+              <span className="stage-name">{getStageDisplayName(quest.stage_required)}</span>
             </div>
             <div className="voice-archetype-card protective">
               <span className="archetype-icon">🛡️</span>

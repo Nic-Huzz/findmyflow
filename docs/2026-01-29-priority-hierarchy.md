@@ -238,6 +238,31 @@ DELIVER (Per Client)         RETAIN (Per Client Lifecycle)
 
 See `income-calculator-and-ecosystem-plan.md` for full details + checklist items to review.
 
+### TIER 3.5: Business Tab Updates (Milestone 1)
+**Why:** Flow Finder is first experience - skills taxonomy and discovery need to resonate.
+
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| **Skills Taxonomy Expansion** | | | |
+| Review taxonomy gaps | Physical/Performing, Hosting, Curating, Protecting | - | ✅ Analyzed |
+| Proposal doc | 4 segments to expand (keep 12 total) | - | ✅ Created |
+| Approve changes | Expressing→Performing, Connecting→Gathering, etc. | - | ⬜ Decision needed |
+| Implement changes | Update wheelTaxonomy.js | Small | ⬜ After approval |
+| **WheelPicker UX Improvement** | | | |
+| Add info step before proficiency | Show "covers" + "example jobs" | Small | ✅ Built |
+| Add exampleJobs to all 12 segments | Help users identify with skills | Small | ✅ Built |
+| **Play List Finder Flow** | | | |
+| Create 4-question flow | Role models, No fear fantasy, Lost in time, Groan zone | Medium | ⬜ Not started |
+| Integrate with Mind Space | Mind Space first → Play List Finder for depth | Small | ⬜ Not started |
+
+**See:** `docs/skills-taxonomy-expansion-proposal.md` for full proposal on 4-segment expansion.
+
+**Play List Finder Questions (Proposed):**
+1. "Who are people whose work or life makes you think 'I'd love to do that'?" (up to 5 with activity)
+2. "If you had zero fear of failure, judgment, or rejection - what would you spend your days doing?"
+3. "What activities make you completely lose track of time?"
+4. "What activities sound fun but make you nervous just thinking about doing them?" (Groan Zone)
+
 ### TIER 4: Healing Tab Updates (Milestone 5)
 **Why:** The unique value prop - NS work → business action. Currently locked for testing.
 

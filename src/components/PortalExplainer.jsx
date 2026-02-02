@@ -20,9 +20,9 @@ function PortalExplainer({ onClose }) {
         <>
           <p>Your quests are organized into tabs, each serving a different purpose:</p>
           <div className="category-grid">
-            <div className="explainer-category">
+            <div className="explainer-category coming-soon">
               <div className="category-icon">💜</div>
-              <h3>Healing</h3>
+              <h3>Healing <span className="coming-soon-badge">Coming Soon</span></h3>
               <p>Processing the micro-traumas creating fear around being yourself</p>
             </div>
             <div className="explainer-category">
@@ -45,10 +45,10 @@ function PortalExplainer({ onClose }) {
       )
     },
     {
-      title: "Groans & Healing 🗺️",
+      title: "Healing 🗺️",
       content: (
         <>
-          <p>Groans and Healing tabs use the R's framework to help you work through resistance:</p>
+          <p>The Healing tab uses the R's framework to help you work through resistance:</p>
           <div className="category-grid">
             <div className="explainer-category">
               <div className="category-icon">🔍</div>
@@ -129,7 +129,7 @@ function PortalExplainer({ onClose }) {
         <>
           <p>You now have everything you need to start your journey!</p>
           <div className="ready-checklist">
-            <div className="checklist-item">✓ Understand the 5 quest tabs</div>
+            <div className="checklist-item">✓ Understand the quest tabs</div>
             <div className="checklist-item">✓ Know the R's framework for growth</div>
             <div className="checklist-item">✓ Ready to earn points and climb the leaderboard</div>
             <div className="checklist-item">✓ Aware of how we protect your privacy</div>

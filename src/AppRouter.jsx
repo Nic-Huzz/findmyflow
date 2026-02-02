@@ -61,6 +61,8 @@ const FlowFinderProblems = lazy(() => import('./flows/FlowFinderProblems'))
 const FlowFinderPersona = lazy(() => import('./flows/FlowFinderPersona'))
 const FlowFinderIntegration = lazy(() => import('./flows/FlowFinderIntegration'))
 const MindSpace = lazy(() => import('./flows/MindSpace'))
+const PlayListFinderFlow = lazy(() => import('./flows/PlayListFinderFlow'))
+const PersonaIdentifierFlow = lazy(() => import('./flows/PersonaIdentifierFlow'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazy(() => import('./flows/HealingCompass'))
@@ -173,6 +175,8 @@ import './components/GroanMatrix.css'
 import './pages/LandingPage.css'
 import './flows/CareerClarityQuiz.css'
 import './flows/MindSpace.css'
+import './flows/PlayListFinderFlow.css'
+import './flows/PersonaIdentifierFlow.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -195,7 +199,9 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/launch-readiness' ||
                         location.pathname === '/funnel-baseline' ||
                         location.pathname === '/income-calculator' ||
-                        location.pathname === '/mind-space'
+                        location.pathname === '/mind-space' ||
+                        location.pathname === '/play-list-finder' ||
+                        location.pathname === '/persona-identifier'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -413,6 +419,16 @@ function AppRouter() {
             <Route path="/mind-space" element={
               <AuthGate>
                 <MindSpace />
+              </AuthGate>
+            } />
+            <Route path="/play-list-finder" element={
+              <AuthGate>
+                <PlayListFinderFlow />
+              </AuthGate>
+            } />
+            <Route path="/persona-identifier" element={
+              <AuthGate>
+                <PersonaIdentifierFlow />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={

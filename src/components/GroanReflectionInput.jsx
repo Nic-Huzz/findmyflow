@@ -202,7 +202,7 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
             className="groan-textarea"
             value={groanTask}
             onChange={(e) => setGroanTask(e.target.value)}
-            placeholder="e.g., Posted about my offer on social media"
+            placeholder="Enter what felt like a groan about this stage here"
             rows={3}
           />
           <div className="char-hint">
@@ -371,7 +371,7 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
             onClick={handleSubmit}
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} pts)`}
+            {isSubmitting ? 'Saving...' : `Complete Quest (+${quest.points} XP)`}
           </button>
         )}
       </div>

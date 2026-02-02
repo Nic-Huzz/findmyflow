@@ -727,8 +727,8 @@
 }
 
 .recognise-input.voice-quest .voice-archetype-card.essence {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, rgba(233, 162, 59, 0.15), rgba(233, 162, 59, 0.05));
+  border: 1px solid rgba(233, 162, 59, 0.4);
 }
 
 .recognise-input.voice-quest .voice-archetype-card.protective {

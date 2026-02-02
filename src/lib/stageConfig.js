@@ -42,7 +42,8 @@ export const STAGE_CONFIG = {
     upsellPrompt: null,
     externalLink: null,
     isUserLevel: true, // Key flag: this stage is user-level, not project-level
-    alwaysAccessible: true // Can be accessed from any project stage
+    alwaysAccessible: true, // Can be accessed from any project stage
+    temporarilyLocked: true // Flag to lock this tab during testing
   },
   [STAGES.GROANS]: {
     id: 0.5,
@@ -78,9 +79,9 @@ export const STAGE_CONFIG = {
       description: 'Reach out to someone and ask for honest feedback on your idea, even though you fear they might reject it or say it\'s not good enough.'
     },
     voicePrompts: {
-      essenceAction: 'share your idea boldly',
-      protectiveBlock: 'stop you from asking for feedback',
-      stageGroan: 'Ask 1 person for honest feedback'
+      essenceAction: 'ask for the validation to be complete',
+      protectiveBlock: 'stop you from sending the validation form today',
+      stageGroan: null
     },
     tabLabel: 'Validation',
     upsellPrompt: null,
@@ -104,9 +105,9 @@ export const STAGE_CONFIG = {
       description: 'Ship something (a page, a product, content) before you feel it\'s 100% ready. Your essence knows it\'s good enough, but your body fears judgment.'
     },
     voicePrompts: {
-      essenceAction: 'create without waiting for permission',
-      protectiveBlock: 'keep you from shipping',
-      stageGroan: 'Ship something before it feels ready'
+      essenceAction: 'show-up in the product creation process',
+      protectiveBlock: 'stop you from making progress with your product process',
+      stageGroan: null
     },
     tabLabel: 'Product Creation',
     upsellPrompt: 'Want help building faster? Try buildwithAI',
@@ -128,9 +129,9 @@ export const STAGE_CONFIG = {
       description: 'Ask a tester to be brutally honest about what\'s NOT working. Sit with the discomfort of criticism without defending or explaining.'
     },
     voicePrompts: {
-      essenceAction: 'receive feedback with confidence',
-      protectiveBlock: 'make you defensive about criticism',
-      stageGroan: 'Ask for brutal honesty without defending'
+      essenceAction: 'show up in the testing process',
+      protectiveBlock: 'show up in the testing process',
+      stageGroan: null
     },
     tabLabel: 'Testing',
     upsellPrompt: null,
@@ -163,9 +164,9 @@ export const STAGE_CONFIG = {
       description: 'Tell someone your price confidently without apologizing, discounting, or over-explaining. Own your value even when it feels uncomfortable.'
     },
     voicePrompts: {
-      essenceAction: 'own your value today',
-      protectiveBlock: 'make you discount or over-explain',
-      stageGroan: 'State your price without apologizing'
+      essenceAction: 'show up in the money model process',
+      protectiveBlock: 'show up in the money model process',
+      stageGroan: null
     },
     tabLabel: 'Money Models',
     upsellPrompt: null,
@@ -191,9 +192,9 @@ export const STAGE_CONFIG = {
       description: 'Add one more bonus or strengthen your guarantee beyond what feels comfortable. Your essence knows abundance attracts abundance, but your body fears you\'re giving away your value.'
     },
     voicePrompts: {
-      essenceAction: 'stack value from abundance',
-      protectiveBlock: 'hold you back from adding more value',
-      stageGroan: 'Add a bonus that feels like too much'
+      essenceAction: 'show up in the offer creation process',
+      protectiveBlock: 'show up in the offer creation process',
+      stageGroan: null
     },
     tabLabel: 'Offer Creation',
     upsellPrompt: null,
@@ -215,9 +216,9 @@ export const STAGE_CONFIG = {
       description: 'Put yourself out there publicly in a way that feels exposing - a video, a post, an interview. Let the world see the real you, not the polished version.'
     },
     voicePrompts: {
-      essenceAction: 'show up publicly today',
-      protectiveBlock: 'hold you back from being seen',
-      stageGroan: 'Put yourself out there publicly'
+      essenceAction: 'show up in the campaign creation process',
+      protectiveBlock: 'show up in the campaign creation process',
+      stageGroan: null
     },
     tabLabel: 'Campaign Creation',
     upsellPrompt: null,

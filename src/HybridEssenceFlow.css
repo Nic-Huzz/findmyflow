@@ -119,13 +119,13 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.text {
+.hybrid-flow .text {
   font-size: 16px;
   line-height: 1.4;
   margin-bottom: 5px;
 }
 
-.timestamp {
+.hybrid-flow .timestamp {
   font-size: 12px;
   opacity: 0.7;
 }

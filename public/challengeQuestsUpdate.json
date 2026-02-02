@@ -8,11 +8,41 @@
       "stage_required": 0,
       "name": "Mind Space Extraction",
       "description": "Extract your skills, problems, and people from AI conversation history",
-      "points": 15,
+      "points": 10,
       "inputType": "flow",
       "flow_id": "mind_space",
       "flow_route": "/mind-space",
       "learnMore": "If you've had meaningful conversations with ChatGPT, Claude, or another AI about your work, interests, or goals, this tool extracts patterns you might not see yourself.\n\nInstead of answering 45+ minutes of questions, paste your AI's analysis and review what it found. It's like having a mirror held up to your thinking.\n\nThis feeds directly into your Flow Finder data, giving you a head start on understanding your unique skills, the problems you care about, and the people you want to serve.",
+      "isPrimary": true
+    },
+    {
+      "id": "play_list_finder",
+      "category": "Business",
+      "type": "Flow Finder",
+      "frequency": "anytime",
+      "stage_required": 0,
+      "name": "Play-List Finder",
+      "description": "Discover your skills through play, role models, and what feels fun",
+      "points": 10,
+      "inputType": "flow",
+      "flow_id": "play_list_finder",
+      "flow_route": "/play-list-finder",
+      "learnMore": "Your 'play-list' is the collection of activities that feel like play to you but look like work to others.\n\nThis flow helps you discover your authentic skills through:\n• Role models who inspire you\n• Activities you'd do with zero fear\n• Secret wishes about what you'd get paid for\n• Things that sound fun but make you nervous (your groan zone)\n\nAI analyzes your answers and recommends skill segments you can confirm or reject. It's a faster, more intuitive way to discover what you're naturally great at.",
+      "isPrimary": true
+    },
+    {
+      "id": "persona_identifier",
+      "category": "Business",
+      "type": "Flow Finder",
+      "frequency": "anytime",
+      "stage_required": 0,
+      "name": "Persona Identifier",
+      "description": "Discover who you're meant to serve through your life chapters",
+      "points": 10,
+      "inputType": "flow",
+      "flow_id": "persona_identifier",
+      "flow_route": "/persona-identifier",
+      "learnMore": "Your life journey reveals who you're meant to serve.\n\nThis flow helps you discover your ideal personas through:\n• Your life chapters and major phases\n• The struggles you've overcome\n• People you've naturally helped\n\nAI analyzes your journey and recommends personas you're positioned to serve. People often help those a few steps behind them on a similar path.",
       "isPrimary": true
     },
     {
@@ -471,7 +501,7 @@
     {
       "id": "flow_finder_skills",
       "category": "Business",
-      "type": "flow",
+      "type": "Flow Finder",
       "frequency": "anytime",
       "name": "Flow Finder: Skills",
       "description": "Discover your unique skills and what you're naturally great at",
@@ -481,12 +511,14 @@
       "flow_route": "/nikigai/skills",
       "stage_required": 0,
       "counts_toward_graduation": false,
-      "learnMore": "This flow helps you identify your natural talents and acquired skills. These form one pillar of your unique opportunities."
+      "learnMore": "This flow helps you identify your natural talents and acquired skills. These form one pillar of your unique opportunities.",
+      "archived": true,
+      "archived_reason": "Replaced by Play-List Finder - Feb 2026"
     },
     {
       "id": "flow_finder_problems",
       "category": "Business",
-      "type": "flow",
+      "type": "Flow Finder",
       "frequency": "anytime",
       "name": "Flow Finder: Problems",
       "description": "Identify the problems you're passionate about solving",
@@ -502,7 +534,7 @@
     {
       "id": "flow_finder_persona",
       "category": "Business",
-      "type": "flow",
+      "type": "Flow Finder",
       "frequency": "anytime",
       "name": "Flow Finder: Personas",
       "description": "Discover who you're meant to serve and support",
@@ -518,7 +550,7 @@
     {
       "id": "flow_finder_integration",
       "category": "Business",
-      "type": "flow",
+      "type": "Flow Finder",
       "frequency": "anytime",
       "name": "Putting It All Together",
       "description": "Integrate your skills, problems, and personas into unique opportunities",

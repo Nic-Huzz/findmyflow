@@ -148,7 +148,7 @@
 
 .progress-fill {
   height: 100%;
-  background: #fbbf24;
+  background: #E9A23B;
   border-radius: 2px;
   transition: width 0.3s ease;
 }
@@ -160,7 +160,7 @@
   letter-spacing: 1px;
 }
 
-/* Content Area - now includes navigation, scrolls together */
+/* Content Area - flex to push nav to bottom */
 .planning-content {
   flex: 1;
   display: flex;
@@ -223,9 +223,9 @@
 }
 
 .week-type-card.selected {
-  background: rgba(251, 191, 36, 0.15);
-  border-color: #fbbf24;
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+  background: rgba(233, 162, 59, 0.15);
+  border-color: #E9A23B;
+  box-shadow: 0 0 20px rgba(233, 162, 59, 0.3);
 }
 
 .type-icon {
@@ -332,12 +332,12 @@
 }
 
 .foundation-btn.primary {
-  background: #fbbf24;
+  background: #E9A23B;
   color: #1f2937;
 }
 
 .foundation-btn.primary:hover {
-  background: #f59e0b;
+  background: #D4922F;
 }
 
 .foundation-btn.secondary {
@@ -450,7 +450,7 @@
 
 .group-code-input:focus {
   outline: none;
-  border-color: #fbbf24;
+  border-color: #E9A23B;
 }
 
 .join-actions {
@@ -479,7 +479,7 @@
 .join-actions .join-btn {
   flex: 1;
   padding: 12px 20px;
-  background: #fbbf24;
+  background: #E9A23B;
   border: none;
   border-radius: 10px;
   color: #1f2937;
@@ -490,7 +490,7 @@
 }
 
 .join-actions .join-btn:hover:not(:disabled) {
-  background: #f59e0b;
+  background: #D4922F;
 }
 
 .join-actions .join-btn:disabled {
@@ -546,7 +546,7 @@
   font-weight: 700;
   font-family: monospace;
   letter-spacing: 4px;
-  color: #fbbf24;
+  color: #E9A23B;
 }
 
 .group-code-display .copy-btn {
@@ -616,8 +616,8 @@
 }
 
 .routine-card.selected {
-  background: rgba(251, 191, 36, 0.2);
-  border-color: #fbbf24;
+  background: rgba(233, 162, 59, 0.2);
+  border-color: #E9A23B;
 }
 
 .routine-icon {
@@ -635,7 +635,7 @@
 }
 
 .routine-card.selected .routine-points {
-  color: #fbbf24;
+  color: #E9A23B;
 }
 
 .week-hint {
@@ -717,7 +717,7 @@
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  background: linear-gradient(135deg, #ffdd27, #D4922F, #d97706);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -770,7 +770,7 @@
 }
 
 .carousel-dot.active {
-  background: #fbbf24;
+  background: #E9A23B;
   transform: scale(1.2);
 }
 
@@ -815,7 +815,7 @@
 
 .weekly-planning-flow .groan-textarea:focus {
   outline: none;
-  border-color: #fbbf24;
+  border-color: #E9A23B;
 }
 
 .day-picker {
@@ -843,9 +843,9 @@
 }
 
 .day-btn.selected {
-  background: rgba(251, 191, 36, 0.2);
-  border-color: #fbbf24;
-  color: #fbbf24;
+  background: rgba(233, 162, 59, 0.2);
+  border-color: #E9A23B;
+  color: #E9A23B;
 }
 
 /* Fear picker (multi-select) */
@@ -1005,8 +1005,8 @@
 }
 
 .toggle-btn.selected {
-  background: rgba(251, 191, 36, 0.2);
-  border-color: #fbbf24;
+  background: rgba(233, 162, 59, 0.2);
+  border-color: #E9A23B;
 }
 
 .commitment-details {
@@ -1059,7 +1059,7 @@
 
 .improvement-textarea:focus {
   outline: none;
-  border-color: #fbbf24;
+  border-color: #E9A23B;
 }
 
 /* Summary Step */
@@ -1133,12 +1133,12 @@
   font-size: 0.875rem;
 }
 
-/* Navigation - now inside content, flows with page */
+/* Navigation - pushed to bottom */
 .planning-navigation {
   display: flex;
-  justify-content: space-between;
   gap: 12px;
-  margin-top: 32px;
+  margin-top: auto;
+  padding-top: 24px;
   width: 100%;
 }
 
@@ -1164,14 +1164,16 @@
 .weekly-planning-flow .nav-btn.next,
 .weekly-planning-flow .nav-btn.complete {
   flex: 1;
-  background: #fbbf24;
-  color: #1f2937;
+  background: #E9A23B;
+  color: white;
+  box-shadow: 0 4px 14px rgba(233, 162, 59, 0.4);
 }
 
 .weekly-planning-flow .nav-btn.next:hover:not(:disabled),
 .weekly-planning-flow .nav-btn.complete:hover:not(:disabled) {
-  background: #f59e0b;
-  transform: translateY(-1px);
+  background: #D4922F;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.5);
 }
 
 .weekly-planning-flow .nav-btn:disabled {
@@ -1296,8 +1298,8 @@
 }
 
 .source-item-btn.selected {
-  background: rgba(251, 191, 36, 0.2);
-  border-color: #fbbf24;
+  background: rgba(233, 162, 59, 0.2);
+  border-color: #E9A23B;
 }
 
 /* Visibility layer grid */
@@ -1404,7 +1406,7 @@
 }
 
 .generate-challenge-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ffc107 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, #ffc107 0%, #D4922F 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 221, 39, 0.4);
 }

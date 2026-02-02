@@ -246,7 +246,7 @@ function GroansSummary({ onBack, progress, completions: passedCompletions }) {
   const totalFears = Object.values(stats.fears).reduce((a, b) => a + b, 0)
   const fearPercentages = {
     judged: totalFears > 0 ? Math.round(((stats.fears['judgment'] || stats.fears['judged'] || 0) / totalFears) * 100) : 0,
-    notEnough: totalFears > 0 ? Math.round(((stats.fears['worthiness'] || stats.fears['not_enough'] || 0) / totalFears) * 100) : 0,
+    notEnough: totalFears > 0 ? Math.round(((stats.fears['not_good_enough'] || stats.fears['worthiness'] || stats.fears['not_enough'] || 0) / totalFears) * 100) : 0,
     mightFail: totalFears > 0 ? Math.round(((stats.fears['failure'] || stats.fears['might_fail'] || 0) / totalFears) * 100) : 0
   }
 

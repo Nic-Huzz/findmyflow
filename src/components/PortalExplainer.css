@@ -143,6 +143,24 @@
   margin: 0;
 }
 
+/* Coming Soon badge */
+.explainer-category.coming-soon {
+  opacity: 0.6;
+}
+
+.coming-soon-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: rgba(94, 23, 235, 0.15);
+  color: #5e17eb;
+  padding: 2px 8px;
+  border-radius: 100px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
 /* Quest Types */
 .quest-types {
   display: grid;

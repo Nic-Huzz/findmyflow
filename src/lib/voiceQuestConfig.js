@@ -113,7 +113,7 @@ export function generateStageGroanQuest(stageNumber, userArchetypes) {
   return {
     id: generateVoiceQuestId(stageNumber, VOICE_QUEST_TYPES.STAGE_GROAN),
     name: `${stageConfig.shortName} Groan`,
-    description: voicePrompts.stageGroan,
+    description: null, // No description - user self-identifies the groan
     category: 'Voices',
     type: 'groan',
     frequency: 'anytime',
@@ -124,7 +124,7 @@ export function generateStageGroanQuest(stageNumber, userArchetypes) {
     stageGroanChallenge: voicePrompts.stageGroan,
     // Include existing groan challenge data if available
     fear: stageConfig.groanChallenge?.fear || null,
-    fullDescription: stageConfig.groanChallenge?.description || voicePrompts.stageGroan
+    fullDescription: stageConfig.groanChallenge?.description || null
   }
 }
 

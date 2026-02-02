@@ -30,6 +30,7 @@ import './WheelPicker.css'
 
 function WheelPicker({ type, max = 3, selected = [], onSelect }) {
   const [pendingSegment, setPendingSegment] = useState(null)
+  const [showInfoModal, setShowInfoModal] = useState(false)
   const [showRingPicker, setShowRingPicker] = useState(false)
 
   // Get segments based on wheel type
@@ -114,10 +115,16 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
       newSelected.splice(existingIndex, 1)
       onSelect(newSelected)
     } else if (selected.length < max) {
-      // Show ring picker for new selection
+      // Show info modal first for new selection
       setPendingSegment(segmentId)
-      setShowRingPicker(true)
+      setShowInfoModal(true)
     }
+  }
+
+  // Handle "This is me" from info modal - proceed to ring picker
+  const handleConfirmSegment = () => {
+    setShowInfoModal(false)
+    setShowRingPicker(true)
   }
 
   // Handle ring selection
@@ -127,7 +134,19 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
     setShowRingPicker(false)
   }
 
-  // Cancel ring picker
+  // Cancel info modal
+  const handleCancelInfo = () => {
+    setPendingSegment(null)
+    setShowInfoModal(false)
+  }
+
+  // Cancel ring picker (go back to info modal)
+  const handleBackToInfo = () => {
+    setShowRingPicker(false)
+    setShowInfoModal(true)
+  }
+
+  // Cancel completely from ring picker
   const handleCancelRing = () => {
     setPendingSegment(null)
     setShowRingPicker(false)
@@ -136,7 +155,56 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
   // Get segment data
   const getSegment = (id) => segments.find(s => s.id === id)
 
-  // Ring picker modal
+  // Info modal - shows covers + example jobs before proficiency
+  if (showInfoModal && pendingSegment) {
+    const segment = getSegment(pendingSegment)
+    return (
+      <div className="wheel-picker">
+        <div className="ring-picker-overlay" onClick={handleCancelInfo}>
+          <div className="ring-picker-modal segment-info-modal" onClick={e => e.stopPropagation()}>
+            <div className="ring-picker-header">
+              <span className="segment-icon">{segment?.icon}</span>
+              <h3>{segment?.displayName}</h3>
+              <p className="segment-tagline">{segment?.tagline}</p>
+            </div>
+
+            <div className="segment-info-content">
+              <div className="info-section">
+                <h4>This covers:</h4>
+                <div className="keyword-tags">
+                  {segment?.keywords?.map((keyword, idx) => (
+                    <span key={idx} className="keyword-tag">{keyword}</span>
+                  ))}
+                </div>
+              </div>
+
+              {segment?.exampleJobs && segment.exampleJobs.length > 0 && (
+                <div className="info-section">
+                  <h4>Example roles:</h4>
+                  <div className="example-jobs">
+                    {segment.exampleJobs.map((job, idx) => (
+                      <span key={idx} className="job-tag">{job}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="info-modal-actions">
+              <button className="confirm-button" onClick={handleConfirmSegment}>
+                This is me
+              </button>
+              <button className="cancel-button" onClick={handleCancelInfo}>
+                Not quite
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Ring picker modal - proficiency selection
   if (showRingPicker && pendingSegment) {
     const segment = getSegment(pendingSegment)
     return (
@@ -164,9 +232,14 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
               ))}
             </div>
 
-            <button className="cancel-button" onClick={handleCancelRing}>
-              Cancel
-            </button>
+            <div className="ring-modal-actions">
+              <button className="back-button" onClick={handleBackToInfo}>
+                ← Back
+              </button>
+              <button className="cancel-button" onClick={handleCancelRing}>
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>

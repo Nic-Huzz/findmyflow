@@ -1,0 +1,1082 @@
+/**
+ * PlayListFinderFlow.css
+ * Styles for the Play List Finder discovery flow
+ * Matches Money Model flow styling
+ */
+
+.play-list-finder-flow {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  position: relative;
+}
+
+/* ============ PROGRESS INDICATORS ============ */
+
+.play-list-finder-flow .progress-container {
+  position: relative;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.play-list-finder-flow .progress-dots {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.play-list-finder-flow .progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.play-list-finder-flow .progress-dot.completed {
+  background: #ffdd27;
+}
+
+.play-list-finder-flow .progress-dot.active {
+  background: #ffdd27;
+  box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
+  transform: scale(1.2);
+}
+
+/* ============ FLOW CONTAINER ============ */
+
+.play-list-finder-flow .flow-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.play-list-finder-flow .flow-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  animation: plfFadeIn 0.4s ease-out;
+}
+
+@keyframes plfFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============ INTRO / WELCOME SCREEN ============ */
+
+.play-list-finder-flow .intro-screen {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.play-list-finder-flow .flow-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  animation: plfBounce 0.6s ease-out;
+}
+
+@keyframes plfBounce {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.play-list-finder-flow h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.play-list-finder-flow .flow-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 32px;
+  line-height: 1.8;
+}
+
+.play-list-finder-flow .intro-points {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.play-list-finder-flow .intro-point {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  animation: plfSlideIn 0.4s ease-out backwards;
+  text-align: left;
+}
+
+.play-list-finder-flow .intro-point:nth-child(1) { animation-delay: 0.1s; }
+.play-list-finder-flow .intro-point:nth-child(2) { animation-delay: 0.15s; }
+.play-list-finder-flow .intro-point:nth-child(3) { animation-delay: 0.2s; }
+.play-list-finder-flow .intro-point:nth-child(4) { animation-delay: 0.25s; }
+
+@keyframes plfSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.play-list-finder-flow .point-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.play-list-finder-flow .intro-point span:last-child {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Intro screen button - don't stretch, push to bottom */
+.play-list-finder-flow .intro-screen .primary-button {
+  flex: none;
+  width: 100%;
+  max-width: 280px;
+  margin-top: auto;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+/* ============ QUESTION SCREENS ============ */
+
+.play-list-finder-flow .question-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.play-list-finder-flow .question-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.play-list-finder-flow .question-number {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 16px;
+}
+
+.play-list-finder-flow h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.play-list-finder-flow .question-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============ ROLE MODELS FORM ============ */
+
+.play-list-finder-flow .role-models-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.play-list-finder-flow .role-model-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  animation: plfSlideIn 0.3s ease-out backwards;
+}
+
+.play-list-finder-flow .role-model-input {
+  flex: 1;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 16px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.play-list-finder-flow .role-model-input:focus {
+  outline: none;
+  border-color: rgba(147, 51, 234, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.play-list-finder-flow .role-model-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.play-list-finder-flow .person-input {
+  flex: 0.4;
+}
+
+.play-list-finder-flow .activity-input {
+  flex: 0.6;
+}
+
+.play-list-finder-flow .remove-row-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ff6b6b;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.play-list-finder-flow .remove-row-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+.play-list-finder-flow .add-row-btn {
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-list-finder-flow .add-row-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* ============ MULTI-INPUT LIST ============ */
+
+.play-list-finder-flow .multi-input-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.play-list-finder-flow .multi-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: plfSlideIn 0.3s ease-out backwards;
+}
+
+.play-list-finder-flow .multi-input-row:nth-child(1) { animation-delay: 0.05s; }
+.play-list-finder-flow .multi-input-row:nth-child(2) { animation-delay: 0.1s; }
+.play-list-finder-flow .multi-input-row:nth-child(3) { animation-delay: 0.15s; }
+
+.play-list-finder-flow .input-number {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #9333EA, #7C3AED);
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.play-list-finder-flow .multi-input {
+  flex: 1;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 16px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.play-list-finder-flow .multi-input:focus {
+  outline: none;
+  border-color: rgba(147, 51, 234, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.play-list-finder-flow .multi-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============ EXAMPLE HINT ============ */
+
+.play-list-finder-flow .example-hint {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.play-list-finder-flow .example-hint strong {
+  color: white;
+}
+
+/* ============ NAV BUTTONS ============ */
+
+.play-list-finder-flow .nav-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.play-list-finder-flow .primary-button {
+  flex: 1;
+  padding: 14px 32px;
+  background: #E9A23B;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.play-list-finder-flow .primary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+.play-list-finder-flow .primary-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.play-list-finder-flow .secondary-button {
+  padding: 14px 28px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-list-finder-flow .secondary-button:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ============ ANALYZING SCREEN ============ */
+
+.play-list-finder-flow .analyzing-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+}
+
+.play-list-finder-flow .analyzing-animation {
+  margin-bottom: 32px;
+}
+
+.play-list-finder-flow .analyzing-screen .spinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #ffdd27;
+  border-radius: 50%;
+  animation: plfSpin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes plfSpin {
+  to { transform: rotate(360deg); }
+}
+
+.play-list-finder-flow .analyzing-screen h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  background: linear-gradient(135deg, #ffdd27, #f59e0b, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.play-list-finder-flow .analyzing-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 16px;
+}
+
+/* ============ RECOMMENDATIONS SCREEN ============ */
+
+.play-list-finder-flow .recommendations-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+  padding-bottom: 24px;
+}
+
+.play-list-finder-flow .recommendations-section h3,
+.play-list-finder-flow .confirmed-section h3,
+.play-list-finder-flow .rejected-section h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 16px;
+}
+
+.play-list-finder-flow .recommendation-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.play-list-finder-flow .recommendation-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  animation: plfSlideIn 0.3s ease-out backwards;
+}
+
+.play-list-finder-flow .rec-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.play-list-finder-flow .rec-icon {
+  font-size: 36px;
+}
+
+.play-list-finder-flow .rec-title {
+  flex: 1;
+}
+
+.play-list-finder-flow .rec-title h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 6px;
+}
+
+.play-list-finder-flow .confidence-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.play-list-finder-flow .confidence-badge.high {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22C55E;
+}
+
+.play-list-finder-flow .confidence-badge.medium {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.play-list-finder-flow .confidence-badge.low {
+  background: rgba(156, 163, 175, 0.2);
+  color: #9CA3AF;
+}
+
+.play-list-finder-flow .rec-tagline {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  margin: 0 0 12px;
+}
+
+.play-list-finder-flow .rec-reason {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin: 0 0 12px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.play-list-finder-flow .rec-evidence {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: capitalize;
+  margin-bottom: 16px;
+}
+
+.play-list-finder-flow .rec-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.play-list-finder-flow .confirm-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #22C55E, #16A34A);
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.play-list-finder-flow .confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.play-list-finder-flow .reject-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.play-list-finder-flow .reject-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ff6b6b;
+}
+
+/* ============ CONFIRMED/REJECTED CHIPS ============ */
+
+.play-list-finder-flow .confirmed-section,
+.play-list-finder-flow .rejected-section {
+  margin-bottom: 24px;
+}
+
+.play-list-finder-flow .confirmed-chips,
+.play-list-finder-flow .rejected-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.play-list-finder-flow .confirmed-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 100px;
+  animation: plfChipIn 0.3s ease-out;
+}
+
+.play-list-finder-flow .rejected-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(107, 114, 128, 0.15);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  border-radius: 100px;
+  opacity: 0.6;
+  animation: plfChipIn 0.3s ease-out;
+}
+
+@keyframes plfChipIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.play-list-finder-flow .chip-icon {
+  font-size: 18px;
+}
+
+.play-list-finder-flow .chip-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.play-list-finder-flow .undo-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.play-list-finder-flow .undo-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* ============ SAVE SECTION ============ */
+
+.play-list-finder-flow .save-section {
+  margin-top: 24px;
+}
+
+.play-list-finder-flow .save-section .primary-button {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  display: block;
+}
+
+.play-list-finder-flow .no-skills-warning {
+  text-align: center;
+  padding: 24px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 16px;
+}
+
+.play-list-finder-flow .no-skills-warning p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px;
+  font-size: 15px;
+}
+
+/* ============ RATING SCREEN ============ */
+
+.play-list-finder-flow .rating-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.play-list-finder-flow .rating-legend {
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.play-list-finder-flow .legend-items {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.play-list-finder-flow .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.play-list-finder-flow .legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.play-list-finder-flow .legend-item span {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+}
+
+.play-list-finder-flow .rating-progress {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin: 0;
+}
+
+.play-list-finder-flow .skill-rating-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.play-list-finder-flow .skill-rating-card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.play-list-finder-flow .skill-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.play-list-finder-flow .skill-label {
+  font-weight: 600;
+  color: white;
+  font-size: 16px;
+}
+
+.play-list-finder-flow .skill-insight {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+
+.play-list-finder-flow .rating-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.play-list-finder-flow .rating-btn {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.play-list-finder-flow .rating-btn.learning {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+
+.play-list-finder-flow .rating-btn.learning.active {
+  background: #fbbf24;
+  color: #1a1a2e;
+}
+
+.play-list-finder-flow .rating-btn.practicing {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+
+.play-list-finder-flow .rating-btn.practicing.active {
+  background: #60a5fa;
+  color: #1a1a2e;
+}
+
+.play-list-finder-flow .rating-btn.mastering {
+  background: rgba(107, 203, 119, 0.15);
+  color: #6BCB77;
+}
+
+.play-list-finder-flow .rating-btn.mastering.active {
+  background: #6BCB77;
+  color: #1a1a2e;
+}
+
+.play-list-finder-flow .save-btn {
+  margin-top: auto;
+}
+
+.play-list-finder-flow .save-btn:disabled {
+  opacity: 0.5;
+}
+
+/* ============ COMPLETE SCREEN ============ */
+
+.play-list-finder-flow .complete-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.play-list-finder-flow .complete-icon {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-radius: 50%;
+  font-size: 48px;
+  margin-bottom: 24px;
+  animation: plfScaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes plfScaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.play-list-finder-flow .complete-screen h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.play-list-finder-flow .complete-text {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 32px;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+/* Skill Results */
+.play-list-finder-flow .skill-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.play-list-finder-flow .skill-result-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: left;
+}
+
+.play-list-finder-flow .level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.play-list-finder-flow .level-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.play-list-finder-flow .skill-result-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.play-list-finder-flow .skill-result-card p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.play-list-finder-flow .cluster-evidence {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.play-list-finder-flow .evidence-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
+}
+
+.play-list-finder-flow .cluster-evidence ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.play-list-finder-flow .cluster-evidence li {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+.play-list-finder-flow .confirmed-skills-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.play-list-finder-flow .skill-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.play-list-finder-flow .skill-icon {
+  font-size: 32px;
+}
+
+.play-list-finder-flow .skill-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 4px;
+}
+
+.play-list-finder-flow .skill-info p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ============ ERROR MESSAGE ============ */
+
+.play-list-finder-flow .error-message {
+  padding: 14px 16px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  color: #ff6b6b;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* ============ RESPONSIVE DESIGN ============ */
+
+@media (max-width: 480px) {
+  .play-list-finder-flow {
+    padding: 16px;
+  }
+
+  .play-list-finder-flow h1 {
+    font-size: 26px;
+  }
+
+  .play-list-finder-flow h2 {
+    font-size: 24px;
+  }
+
+  .play-list-finder-flow .flow-subtitle {
+    font-size: 16px;
+  }
+
+  .play-list-finder-flow .role-model-row {
+    flex-wrap: wrap;
+    position: relative;
+    padding-right: 44px;
+  }
+
+  .play-list-finder-flow .person-input,
+  .play-list-finder-flow .activity-input {
+    flex: 1 1 100%;
+  }
+
+  .play-list-finder-flow .remove-row-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .play-list-finder-flow .nav-buttons {
+    flex-direction: column;
+  }
+
+  .play-list-finder-flow .nav-buttons .secondary-button {
+    order: 1;
+  }
+}
+
+/* iOS Safe Area Support */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .play-list-finder-flow {
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  }
+}
