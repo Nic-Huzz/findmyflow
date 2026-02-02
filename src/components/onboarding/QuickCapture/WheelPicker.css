@@ -472,3 +472,152 @@
   color: #EF4444;
   background: rgba(239, 68, 68, 0.2);
 }
+
+/* ============================================
+   Segment Info Modal - Shows covers + example jobs
+   ============================================ */
+
+.wheel-picker .segment-info-modal {
+  max-width: 440px;
+}
+
+.wheel-picker .segment-tagline {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+.wheel-picker .segment-info-content {
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.wheel-picker .info-section {
+  margin-bottom: 20px;
+}
+
+.wheel-picker .info-section:last-child {
+  margin-bottom: 0;
+}
+
+.wheel-picker .info-section h4 {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 12px;
+}
+
+.wheel-picker .keyword-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wheel-picker .keyword-tag {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: capitalize;
+  animation: wp-tagIn 0.3s ease backwards;
+}
+
+.wheel-picker .keyword-tag:nth-child(1) { animation-delay: 0.05s; }
+.wheel-picker .keyword-tag:nth-child(2) { animation-delay: 0.08s; }
+.wheel-picker .keyword-tag:nth-child(3) { animation-delay: 0.11s; }
+.wheel-picker .keyword-tag:nth-child(4) { animation-delay: 0.14s; }
+.wheel-picker .keyword-tag:nth-child(5) { animation-delay: 0.17s; }
+.wheel-picker .keyword-tag:nth-child(6) { animation-delay: 0.20s; }
+.wheel-picker .keyword-tag:nth-child(7) { animation-delay: 0.23s; }
+
+@keyframes wp-tagIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.wheel-picker .example-jobs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wheel-picker .job-tag {
+  padding: 6px 12px;
+  background: rgba(233, 162, 59, 0.15);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 100px;
+  font-size: 13px;
+  color: #E9A23B;
+  font-weight: 500;
+  animation: wp-tagIn 0.3s ease backwards;
+}
+
+.wheel-picker .job-tag:nth-child(1) { animation-delay: 0.1s; }
+.wheel-picker .job-tag:nth-child(2) { animation-delay: 0.15s; }
+.wheel-picker .job-tag:nth-child(3) { animation-delay: 0.2s; }
+.wheel-picker .job-tag:nth-child(4) { animation-delay: 0.25s; }
+.wheel-picker .job-tag:nth-child(5) { animation-delay: 0.3s; }
+
+/* Info Modal Actions */
+.wheel-picker .info-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wheel-picker .confirm-button {
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #E9A23B 0%, #D4922A 100%);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(233, 162, 59, 0.3);
+}
+
+.wheel-picker .confirm-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+.wheel-picker .confirm-button:active {
+  transform: translateY(0);
+}
+
+/* Ring Modal Actions */
+.wheel-picker .ring-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.wheel-picker .back-button {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.wheel-picker .back-button:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
