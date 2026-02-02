@@ -370,6 +370,113 @@
 }
 
 /* ========================================
+   PRODUCT LINKING SECTION (Upsell Cross-tagging)
+   ======================================== */
+
+.offer-checklist-page .product-linking-section {
+  margin-top: 32px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 16px;
+  animation: fadeInUp 0.4s ease;
+}
+
+.offer-checklist-page .linking-header {
+  margin-bottom: 20px;
+}
+
+.offer-checklist-page .linking-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #fbbf24;
+}
+
+.offer-checklist-page .linking-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.offer-checklist-page .linking-description strong {
+  color: white;
+  font-weight: 600;
+}
+
+.offer-checklist-page .product-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.offer-checklist-page .product-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.offer-checklist-page .product-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.offer-checklist-page .product-option.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+}
+
+.offer-checklist-page .product-option .product-name {
+  font-size: 15px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.offer-checklist-page .product-option .product-price {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-right: 12px;
+}
+
+.offer-checklist-page .product-option .selected-check {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #212529;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.offer-checklist-page .product-option.skip-option {
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+.offer-checklist-page .product-option.skip-option:hover {
+  opacity: 1;
+}
+
+.offer-checklist-page .product-option.skip-option.selected {
+  opacity: 1;
+  border-style: solid;
+}
+
+/* ========================================
    COMPLETE SECTION
    ======================================== */
 

@@ -106,7 +106,7 @@ function QuestCard({
             </span>
           )}
         </div>
-        <span className="quest-points">+{quest.points} pts</span>
+        <span className="quest-points">+{quest.points} XP</span>
       </div>
 
       {/* Daily streak bubbles */}
@@ -124,7 +124,10 @@ function QuestCard({
         </div>
       )}
 
-      <p className="quest-description">{renderDescription(quest.description)}</p>
+      {/* Hide description for voice quests - it's shown in the input component */}
+      {!quest.voiceType && (
+        <p className="quest-description">{renderDescription(quest.description)}</p>
+      )}
 
       {/* Daily Release Challenge content (for release_daily_challenge quest) */}
       {quest.id === 'release_daily_challenge' && !completed && dailyReleaseContent && (
@@ -418,7 +421,10 @@ function QuestCard({
               onComplete={(quest, data, e) => onComplete(quest, data, e)}
             />
           ) : quest.inputType === 'offer_checklist' ? (
-            <Link to={quest.actionLink} className="quest-checklist-link">
+            <Link
+              to={selectedProject?.id ? `${quest.actionLink}?projectId=${selectedProject.id}` : quest.actionLink}
+              className="quest-checklist-link"
+            >
               {quest.actionLinkText || 'Open Checklist'}
             </Link>
           ) : quest.inputType === 'progress_dropdown' ? (
@@ -508,7 +514,7 @@ function QuestCard({
             {completedBadgeText}
           </div>
           {justCompleted && (
-            <div className="points-fly-up">+{quest.points} pts</div>
+            <div className="points-fly-up">+{quest.points} XP</div>
           )}
           {quest.flow_route && (
             <button

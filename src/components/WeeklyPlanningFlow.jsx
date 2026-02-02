@@ -206,10 +206,8 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   const [joiningGroup, setJoiningGroup] = useState(false)
   const [groupError, setGroupError] = useState(null)
 
-  // Foundation check state
-  const [hasNervousSystem, setHasNervousSystem] = useState(null)
-  const [hasHealingCompass, setHasHealingCompass] = useState(null)
-  const [showFoundationStep, setShowFoundationStep] = useState(false)
+  // Foundation reminder (kept for save data)
+  const [foundationReminder, setFoundationReminder] = useState(false)
 
   // Form data
   const [weekType, setWeekType] = useState(existingPlan?.week_type || null)
@@ -236,7 +234,6 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   const [bigReleaseDay, setBigReleaseDay] = useState(existingPlan?.big_release_day || null)
   const [delivering, setDelivering] = useState(existingPlan?.three_percent_improvement ? true : false)
   const [threePercentImprovement, setThreePercentImprovement] = useState(existingPlan?.three_percent_improvement || '')
-  const [foundationReminder, setFoundationReminder] = useState(false)
 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState(null)
@@ -249,15 +246,59 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     }
   }, [])
 
-  // Check foundation flows and load Flow Finder data on mount
+  // Load data on mount
   useEffect(() => {
     if (user) {
-      checkFoundationFlows()
       loadFlowFinderData()
       loadProjects()
       loadLastWeekStats()
+      autoJoinTestGroup()
     }
   }, [user])
+
+  // Auto-join all users to "Test Group" (temporary for launch testing)
+  const autoJoinTestGroup = async () => {
+    try {
+      // Look for existing Test Group
+      let { data: testGroup } = await supabase
+        .from('challenge_groups')
+        .select('*')
+        .eq('code', 'TESTGRP1')
+        .single()
+
+      // Create if doesn't exist
+      if (!testGroup) {
+        const { data: newGroup } = await supabase
+          .from('challenge_groups')
+          .insert([{
+            code: 'TESTGRP1',
+            created_by: user.id,
+            start_date: new Date().toISOString().split('T')[0]
+          }])
+          .select()
+          .single()
+        testGroup = newGroup
+      }
+
+      if (testGroup) {
+        // Add user as participant (upsert to handle existing)
+        await supabase
+          .from('challenge_participants')
+          .upsert([{
+            group_id: testGroup.id,
+            user_id: user.id
+          }], { onConflict: 'group_id,user_id' })
+
+        setGroupMode('join')
+        setGroupData(testGroup)
+        setGroupCode('TESTGRP1')
+      }
+    } catch (err) {
+      console.error('Error auto-joining test group:', err)
+      // Fallback to solo mode if group join fails
+      setGroupMode('solo')
+    }
+  }
 
   // Load user's projects
   const loadProjects = async () => {
@@ -334,33 +375,6 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     if (completed) {
       const { data } = await fetchFlowFinderData(user.id)
       setFlowFinderData(data)
-    }
-  }
-
-  const checkFoundationFlows = async () => {
-    try {
-      // Check nervous system
-      const { data: nsData } = await supabase
-        .from('nervous_system_responses')
-        .select('id')
-        .eq('user_id', user.id)
-        .limit(1)
-        .maybeSingle()
-
-      // Check healing compass
-      const { data: hcData } = await supabase
-        .from('healing_compass_responses')
-        .select('id')
-        .eq('user_id', user.id)
-        .limit(1)
-        .maybeSingle()
-
-      setHasNervousSystem(!!nsData)
-      setHasHealingCompass(!!hcData)
-      setShowFoundationStep(!nsData || !hcData)
-    } catch (err) {
-      console.error('Error checking foundation flows:', err)
-      setShowFoundationStep(false)
     }
   }
 
@@ -471,10 +485,10 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     return monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
-  // Calculate total steps (accounting for conditional foundation step)
-  // Flow: Review(1) + WeekType(2) + Priorities(3) + Foundation?(4) + Morning(4/5) + Commits(5/6) + Group(6/7) + Summary(7/8)
+  // Calculate total steps (foundation + commitments + group steps removed)
+  // Flow: Review(1) + WeekType(2) + Guidance(3) + Morning(4) + Summary(5)
   const getTotalSteps = () => {
-    return showFoundationStep ? 8 : 7
+    return 5
   }
 
   // Get actual step number for display (always show from 1)
@@ -490,34 +504,13 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     // Step 2: Week Type Selection - need week type selected
     if (step === 2) return weekType !== null
 
-    // Step 3: Quest Priorities - optional, can skip
+    // Step 3: Guidance - can always continue
     if (step === 3) return true
 
-    // Step 4: Foundation check (if shown) OR Morning routine (if no foundation)
-    if (step === 4) {
-      if (showFoundationStep) return true // Foundation check - can always skip
-      return morningRoutine.length > 0 // Morning routine
-    }
+    // Step 4: Morning routine
+    if (step === 4) return morningRoutine.length > 0
 
-    // Step 5: Morning routine (if foundation shown) OR Conditionals (if no foundation)
-    if (step === 5) {
-      if (showFoundationStep) return morningRoutine.length > 0
-      return true // Conditionals - all optional
-    }
-
-    // Step 6: Conditionals (if foundation shown) OR Group Selection (if no foundation)
-    if (step === 6) {
-      if (showFoundationStep) return true // Conditionals - all optional
-      return groupMode !== null // Group selection
-    }
-
-    // Step 7: Group Selection (if foundation shown) OR Summary (if no foundation)
-    if (step === 7) {
-      if (showFoundationStep) return groupMode !== null // Group selection
-      return true // Summary
-    }
-
-    // Step 8: Summary (if foundation shown)
+    // Step 5: Summary
     return true
   }
 
@@ -695,7 +688,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
                   const stageInfo = getStageInfo(project.current_stage)
                   return (
                     <option key={project.id} value={project.id}>
-                      {stageInfo.icon} {project.name} {project.is_primary ? '(Primary)' : ''}
+                      {stageInfo.icon}&nbsp;&nbsp;{project.name} {project.is_primary ? '(Primary)' : ''}
                     </option>
                   )
                 })}
@@ -834,7 +827,6 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
           emoji: '💼',
           intro: 'This week, focus on visibility and growth activities.',
           signposts: [
-            { icon: '😤', label: 'Groans', desc: 'Push your edges with courage challenges', tab: 'Groans' },
             { icon: '💼', label: 'Business Milestones', desc: 'Complete stage-specific business tasks', tab: 'Business' },
             { icon: '🧭', label: 'Tracker', desc: 'Log your flow to spot patterns', tab: 'Tracker' }
           ],
@@ -1090,7 +1082,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
                 const stageInfo = getStageInfo(project.current_stage)
                 return (
                   <option key={project.id} value={project.id}>
-                    {stageInfo.icon} {project.name} - {stageInfo.name}
+                    {stageInfo.icon}&nbsp;&nbsp;{project.name} - {stageInfo.name}
                   </option>
                 )
               })}
@@ -1124,62 +1116,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     )
   }
 
-  // Render Step 2: Foundation Check (conditional)
-  const renderFoundationCheck = () => (
-    <div className="planning-step foundation-step">
-      <h2>Before we plan...</h2>
-
-      <div className="foundation-info">
-        <p>
-          <strong>Nervous System</strong> + <strong>Healing Compass</strong> are foundational flows
-          that unlock your personalized healing journey.
-        </p>
-        <p>
-          They reveal <em>WHY</em> your protective voice shows up and
-          give you tools to release what's blocking you.
-        </p>
-      </div>
-
-      <div className="foundation-status">
-        <div className={`status-item ${hasNervousSystem ? 'complete' : 'incomplete'}`}>
-          <span className="status-icon">{hasNervousSystem ? '✅' : '⭕'}</span>
-          <span>Nervous System</span>
-        </div>
-        <div className={`status-item ${hasHealingCompass ? 'complete' : 'incomplete'}`}>
-          <span className="status-icon">{hasHealingCompass ? '✅' : '⭕'}</span>
-          <span>Healing Compass</span>
-        </div>
-      </div>
-
-      <div className="foundation-actions">
-        {!hasNervousSystem && (
-          <button
-            className="foundation-btn primary"
-            onClick={() => navigate('/nervous-system')}
-          >
-            🧠 Do Nervous System Now
-          </button>
-        )}
-        <button
-          className="foundation-btn secondary"
-          onClick={() => {
-            setFoundationReminder(true)
-            handleNext()
-          }}
-        >
-          📅 I'll do it this week
-        </button>
-        <button
-          className="foundation-btn skip"
-          onClick={handleNext}
-        >
-          Skip for now
-        </button>
-      </div>
-    </div>
-  )
-
-  // Render Step 3: Morning Routine Builder
+  // Render Step 4: Morning Routine Builder
   const renderMorningRoutine = () => (
     <div className="planning-step routine-step">
       <h2>Pick your morning reconnection routine:</h2>
@@ -1738,7 +1675,8 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
               className="summary-type"
               style={{ color: selectedType?.color }}
             >
-              {selectedType?.icon} {selectedType?.label}
+              <span style={{ marginRight: '6px' }}>{selectedType?.icon}</span>
+              {selectedType?.label}
             </span>
           </div>
 
@@ -1806,23 +1744,20 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   }
 
   // Render current step
-  // Flow: 1.Review → 2.WeekType → 3.Guidance → 4.Foundation? → 5.Morning → 6.Commits → 7.Group → 8.Summary
+  // Flow: 1.Review → 2.WeekType → 3.Guidance → 4.Morning → 5.Summary
   const renderStep = () => {
     switch (step) {
       case 1: return renderWeeklyReview()
       case 2: return renderWeekTypeSelection()
       case 3: return renderGuidanceStep()
-      case 4: return showFoundationStep ? renderFoundationCheck() : renderMorningRoutine()
-      case 5: return showFoundationStep ? renderMorningRoutine() : renderConditionalCommitments()
-      case 6: return showFoundationStep ? renderConditionalCommitments() : renderGroupSelection()
-      case 7: return showFoundationStep ? renderGroupSelection() : renderSummary()
-      case 8: return renderSummary()
+      case 4: return renderMorningRoutine()
+      case 5: return renderSummary()
       default: return null
     }
   }
 
   // Determine if we're on the summary step
-  const isSummaryStep = showFoundationStep ? step === 8 : step === 7
+  const isSummaryStep = step === 5
 
   // If no projects and done loading, show empty state prompting Mind Space
   if (!loadingProjects && projects.length === 0) {
@@ -1866,11 +1801,11 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
         <span className="progress-text">Step {step} of {getTotalSteps()}</span>
       </div>
 
-      {/* Step content with navigation inside (scrolls together) */}
+      {/* Step content with navigation */}
       <div className="planning-content">
         {renderStep()}
 
-        {/* Navigation - inside content so it scrolls with the page */}
+        {/* Navigation */}
         <div className="planning-navigation">
           {step > 1 && (
             <button className="nav-btn back" onClick={handleBack}>

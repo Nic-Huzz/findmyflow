@@ -1,5 +1,6 @@
 import { supabase } from './supabaseClient'
 import { cacheBustUrl } from './fetchJson'
+import { syncScoreToLeaderboard } from './scoringCategories'
 
 /**
  * Auto-completes a challenge quest when a flow is completed
@@ -159,6 +160,17 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
     }
 
     console.log('✅ Challenge progress updated')
+
+    // 5b. Sync to leaderboard scoring system (non-blocking)
+    syncScoreToLeaderboard(supabase, {
+      userId,
+      questCategory: matchingQuest.category,
+      points: pointsEarned,
+      projectId: null, // Flow quests are user-level
+      source: `flow_quest:${flowId}`
+    }).catch(err => {
+      console.warn('Leaderboard sync failed (non-blocking):', err)
+    })
 
     // 6. Record flow completion
     const { error: flowCompletionError } = await supabase

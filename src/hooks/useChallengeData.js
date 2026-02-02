@@ -1666,6 +1666,19 @@ export function useChallengeData() {
     }
   }, [leaderboardView, progress])
 
+  // Refresh data when page becomes visible (returning from a flow)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && user) {
+        // Reload completions and progress to get latest points
+        loadUserProgress()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [user])
+
   // Handle click outside settings menu
   useEffect(() => {
     const handleClickOutside = (event) => {

@@ -131,7 +131,7 @@ export const MONEY_MODEL_CONFIGS = {
     },
 
     challengeFlowId: 'upsell_offer',
-    pointsEarned: 8,
+    pointsEarned: 5,
 
     stageGroups: STAGE_GROUP_TEMPLATES.strategyExecution,
 
@@ -171,7 +171,7 @@ export const MONEY_MODEL_CONFIGS = {
     },
 
     challengeFlowId: 'downsell_offer',
-    pointsEarned: 8,
+    pointsEarned: 5,
 
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
 
@@ -211,7 +211,7 @@ export const MONEY_MODEL_CONFIGS = {
     },
 
     challengeFlowId: 'continuity_offer',
-    pointsEarned: 8,
+    pointsEarned: 5,
 
     stageGroups: STAGE_GROUP_TEMPLATES.marketGoals,
 
@@ -300,7 +300,7 @@ export const MONEY_MODEL_CONFIGS = {
     },
 
     challengeFlowId: 'lead_magnet',
-    pointsEarned: 8,
+    pointsEarned: 5,
 
     stageGroups: STAGE_GROUP_TEMPLATES.resourcesSkills,
 

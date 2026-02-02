@@ -11,10 +11,12 @@
  */
 
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import { createRelationship, RELATIONSHIP_TYPES } from '../lib/productRelationships'
+import { getUserProducts } from '../lib/productsService'
 import './OfferChecklist.css'
 
 // Checklist data for each offer type
@@ -249,13 +251,20 @@ const FEELING_OPTIONS = [
 function OfferChecklist() {
   const { category } = useParams()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const projectId = searchParams.get('projectId')
 
   const [selectedOfferType, setSelectedOfferType] = useState(null)
   const [checkedItems, setCheckedItems] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState(null)
+
+  // Product linking state (for upsell cross-tagging)
+  const [coreProduct, setCoreProduct] = useState(null)
+  const [linkableProducts, setLinkableProducts] = useState([])
+  const [selectedUpsellProduct, setSelectedUpsellProduct] = useState(null)
 
   // POST-ACTION state
   const [showPostAction, setShowPostAction] = useState(false)
@@ -274,6 +283,48 @@ function OfferChecklist() {
   useEffect(() => {
     loadProgress()
   }, [user, category])
+
+  // Load product data for cross-tagging (upsell category only)
+  useEffect(() => {
+    if (user?.id && category === 'upsell') {
+      loadProductData()
+    }
+  }, [user, projectId, category])
+
+  const loadProductData = async () => {
+    if (!user?.id) return
+
+    try {
+      let coreProductId = null
+
+      // Get the core product for this project (if projectId provided)
+      if (projectId) {
+        const { data: projectProduct } = await supabase
+          .from('products')
+          .select('*')
+          .eq('project_id', projectId)
+          .eq('status', 'active')
+          .single()
+
+        if (projectProduct) {
+          setCoreProduct(projectProduct)
+          coreProductId = projectProduct.id
+        }
+      }
+
+      // Get all other products user owns (excluding core product)
+      const { success, products } = await getUserProducts(user.id, { status: 'active' })
+      if (success && products) {
+        // Filter out the core product if we have one
+        const filteredProducts = coreProductId
+          ? products.filter(p => p.id !== coreProductId)
+          : products
+        setLinkableProducts(filteredProducts)
+      }
+    } catch (err) {
+      console.error('Error loading product data:', err)
+    }
+  }
 
   const loadProgress = async () => {
     if (!user?.id || !category) return
@@ -368,6 +419,19 @@ function OfferChecklist() {
 
     setIsSaving(true)
     try {
+      // Create product relationship for upsell (if core product and upsell product selected, not skipped)
+      if (category === 'upsell' && coreProduct?.id && selectedUpsellProduct && selectedUpsellProduct !== 'skip') {
+        const relationResult = await createRelationship(
+          coreProduct.id,
+          selectedUpsellProduct,
+          RELATIONSHIP_TYPES.UPSELL,
+          'offer_checklist'
+        )
+        if (!relationResult.success) {
+          console.warn('Failed to create product relationship:', relationResult.error)
+        }
+      }
+
       // Save POST-ACTION data
       await supabase.from('flow_sessions').insert({
         user_id: user.id,
@@ -381,6 +445,8 @@ function OfferChecklist() {
           post_feeling: postFeeling,
           three_percent_reflection: threePercent.trim() || null,
           items_completed: Object.keys(checkedItems).filter(k => checkedItems[k]).length,
+          linked_upsell_product_id: category === 'upsell' && selectedUpsellProduct !== 'skip' ? selectedUpsellProduct : null,
+          core_product_id: coreProduct?.id || null,
           timestamp: new Date().toISOString()
         }
       })
@@ -402,7 +468,8 @@ function OfferChecklist() {
           offer_type: selectedOfferType,
           items_completed: Object.keys(checkedItems).filter(k => checkedItems[k]),
           post_feeling: postFeeling,
-          three_percent: threePercent.trim() || null
+          three_percent: threePercent.trim() || null,
+          linked_upsell_product_id: category === 'upsell' && selectedUpsellProduct !== 'skip' ? selectedUpsellProduct : null
         }
       })
 
@@ -423,7 +490,12 @@ function OfferChecklist() {
     ? currentChecklist.items.filter(item => checkedItems[item.id]).length
     : 0
   const totalCount = currentChecklist?.items.length || 0
-  const allComplete = totalCount > 0 && completedCount === totalCount
+  const checklistComplete = totalCount > 0 && completedCount === totalCount
+
+  // For upsell with linkable products, require product selection (or skip)
+  const productLinkingRequired = category === 'upsell' && linkableProducts.length > 0
+  const productLinkingComplete = !productLinkingRequired || selectedUpsellProduct !== null
+  const allComplete = checklistComplete && productLinkingComplete
 
   if (isLoading) {
     return (
@@ -463,12 +535,6 @@ function OfferChecklist() {
                 </button>
               ))}
             </div>
-            <span
-              className="go-back-link"
-              onClick={() => navigate('/7-day-challenge?tab=business')}
-            >
-              ← Back to Challenge
-            </span>
           </div>
         )}
 
@@ -528,6 +594,52 @@ function OfferChecklist() {
                 </div>
               ))}
             </div>
+
+            {/* Product Linking Section (Upsell only) */}
+            {category === 'upsell' && linkableProducts.length > 0 && (
+              <div className="product-linking-section">
+                <div className="linking-header">
+                  <h3 className="linking-title">Link Your Upsell Product</h3>
+                  <p className="linking-description">
+                    {coreProduct ? (
+                      <>Which of your existing products is the upsell for <strong>{coreProduct.name}</strong>?</>
+                    ) : (
+                      'Which of your existing products is this upsell?'
+                    )}
+                  </p>
+                </div>
+                <div className="product-options">
+                  {linkableProducts.map(product => (
+                    <button
+                      key={product.id}
+                      className={`product-option ${selectedUpsellProduct === product.id ? 'selected' : ''}`}
+                      onClick={() => setSelectedUpsellProduct(
+                        selectedUpsellProduct === product.id ? null : product.id
+                      )}
+                    >
+                      <span className="product-name">{product.name}</span>
+                      {product.price_amount && (
+                        <span className="product-price">${product.price_amount}</span>
+                      )}
+                      {selectedUpsellProduct === product.id && (
+                        <span className="selected-check">✓</span>
+                      )}
+                    </button>
+                  ))}
+                  <button
+                    className={`product-option skip-option ${selectedUpsellProduct === 'skip' ? 'selected' : ''}`}
+                    onClick={() => setSelectedUpsellProduct(
+                      selectedUpsellProduct === 'skip' ? null : 'skip'
+                    )}
+                  >
+                    <span className="product-name">Skip - I'll add this later</span>
+                    {selectedUpsellProduct === 'skip' && (
+                      <span className="selected-check">✓</span>
+                    )}
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Complete Quest Button */}
             {allComplete && (

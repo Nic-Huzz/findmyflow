@@ -517,6 +517,7 @@ export const handleGroanReflectionCompletion = async (userId, groanData, questCo
       groan_task,
       protective_archetype,
       fear_type,
+      fear_types, // Support both singular and array formats
       flow_direction,
       reflection_note,
       project_id,
@@ -524,6 +525,13 @@ export const handleGroanReflectionCompletion = async (userId, groanData, questCo
       quest_category,
       stage
     } = groanData;
+
+    // Handle both fear_type (singular) and fear_types (array) formats
+    // Store as comma-separated string if array, or use singular value
+    let fearTypeValue = fear_type;
+    if (fear_types && Array.isArray(fear_types) && fear_types.length > 0) {
+      fearTypeValue = fear_types.join(',');
+    }
 
     // Insert groan reflection
     const { data: newReflection, error: reflectionError } = await supabase
@@ -534,11 +542,12 @@ export const handleGroanReflectionCompletion = async (userId, groanData, questCo
         project_id: project_id || null,
         challenge_instance_id: challenge_instance_id || null,
         protective_archetype,
-        fear_type,
+        fear_type: fearTypeValue,
         flow_direction,
         reflection_note: reflection_note || null,
         quest_category: quest_category || 'Groans',
-        stage: stage || null
+        stage: stage || null,
+        groan_task: groan_task || null
       })
       .select()
       .single();
