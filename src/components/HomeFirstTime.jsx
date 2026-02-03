@@ -280,7 +280,7 @@ function HomeFirstTime() {
   }
 
   // Handle Q3 (Goal) selection - with validation
-  const handleQ3Selection = (option) => {
+  const handleQ3Selection = async (option) => {
     const validGoals = getValidGoalsForWealthLadder(wealthLadderRung)
     if (!validGoals.includes(option.value)) return // Shouldn't happen, but safety check
 
@@ -302,18 +302,23 @@ function HomeFirstTime() {
       confidence: 'high' // V2 uses wealth ladder derivation, always high confidence
     })
 
-    // Save all V2 data to database
-    saveOnboardingV2Data(derivedPersona, emphasis, option.value)
+    // Save all V2 data to database - MUST await before clearing localStorage
+    const success = await saveOnboardingV2Data(derivedPersona, emphasis, option.value)
 
-    // Clear localStorage progress since Q1-Q3 is complete
-    clearSavedProgress()
-
-    transitionToScreen(SCREENS.PERSONA_REVEAL)
+    if (success) {
+      // Only clear localStorage after successful save
+      clearSavedProgress()
+      transitionToScreen(SCREENS.PERSONA_REVEAL)
+    }
+    // If save failed, user stays on Q3 and can retry
   }
 
-  // Save all V2 onboarding data to database
+  // Save all V2 onboarding data to database - returns true on success, false on failure
   const saveOnboardingV2Data = async (persona, emphasis, goal) => {
-    if (!user?.id) return
+    if (!user?.id) {
+      console.error('No user ID available for saving onboarding data')
+      return false
+    }
 
     try {
       // Get path config to determine correct starting stage
@@ -343,11 +348,14 @@ function HomeFirstTime() {
 
       if (error) {
         console.error('Error saving V2 onboarding data:', error)
-      } else {
-        console.log('V2 onboarding data saved successfully')
+        return false
       }
+
+      console.log('V2 onboarding data saved successfully')
+      return true
     } catch (err) {
       console.error('Error saving V2 onboarding data:', err)
+      return false
     }
   }
 
