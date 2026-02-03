@@ -232,8 +232,10 @@ function HomeFirstTime() {
 
   // Handle Q1 (Journey Stage) selection
   const handleQ1Selection = (option) => {
-    // Use data.employment_status if available, otherwise fall back to option.value
-    const empStatus = option.data?.employment_status || option.value
+    // Use option.value directly - it contains the full employment status
+    // (employed_exploring, employed_building, self_employed_early, self_employed_established)
+    // NOT option.data.employment_status which only has 'employed' or 'self_employed'
+    const empStatus = option.value
     const sideProject = option.data?.has_side_project || false
     const newAnswers = {
       ...personaAnswers,
