@@ -103,7 +103,8 @@ const HIDDEN_ROUTES = [
   '/persona-selection',
   '/report-card',
   '/mvp-readiness',
-  '/feedback-analysis'
+  '/feedback-analysis',
+  '/validation-flows' // Validation flows manager
 ]
 
 function BottomToolbar() {
