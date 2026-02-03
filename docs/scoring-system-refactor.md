@@ -1,7 +1,8 @@
 # Scoring System Refactor Plan
 
 **Created:** January 25, 2025
-**Status:** Planning
+**Updated:** February 3, 2025
+**Status:** Implemented (with bug fixes)
 **Priority:** High
 
 ## Problem Statement
@@ -132,67 +133,102 @@ CREATE POLICY "Users can manage own scores" ON user_lifetime_scores
 
 Atomic function to update both weekly and lifetime scores.
 
+**Note:** The original implementation had bugs with NULL `project_id` handling. See [Bug Fixes](#bug-fixes-february-2025) section below.
+
 ```sql
+-- Fixed version (February 2025)
 CREATE OR REPLACE FUNCTION increment_scores(
   p_user_id UUID,
   p_project_id UUID,
   p_category TEXT,  -- 'business', 'healing', or 'courage'
-  p_points INTEGER
+  p_points INTEGER,
+  p_week_start DATE DEFAULT NULL  -- Optional: client-provided week start for timezone consistency
 )
-RETURNS VOID AS $$
+RETURNS JSON AS $$
 DECLARE
   v_week_start DATE;
+  v_weekly_record challenge_weekly_scores%ROWTYPE;
+  v_lifetime_record user_lifetime_scores%ROWTYPE;
+  v_weekly_exists BOOLEAN;
+  v_lifetime_exists BOOLEAN;
 BEGIN
-  -- Calculate Monday of current week
-  v_week_start := date_trunc('week', CURRENT_DATE)::DATE;
+  -- Use client-provided week start if available, otherwise calculate server-side
+  IF p_week_start IS NOT NULL THEN
+    v_week_start := p_week_start;
+  ELSE
+    v_week_start := date_trunc('week', CURRENT_DATE)::DATE;
+  END IF;
 
-  -- Upsert weekly score
-  INSERT INTO challenge_weekly_scores (user_id, project_id, week_start_date, business_score, healing_score, courage_score)
-  VALUES (p_user_id, p_project_id, v_week_start, 0, 0, 0)
-  ON CONFLICT (user_id, project_id, week_start_date) DO NOTHING;
+  -- Check if weekly record exists (handles NULL project_id correctly)
+  SELECT EXISTS (
+    SELECT 1 FROM challenge_weekly_scores
+    WHERE user_id = p_user_id
+      AND (project_id = p_project_id OR (project_id IS NULL AND p_project_id IS NULL))
+      AND week_start_date = v_week_start
+  ) INTO v_weekly_exists;
 
-  -- Update the appropriate category
+  -- Insert if not exists
+  IF NOT v_weekly_exists THEN
+    INSERT INTO challenge_weekly_scores (user_id, project_id, week_start_date, business_score, healing_score, courage_score)
+    VALUES (p_user_id, p_project_id, v_week_start, 0, 0, 0);
+  END IF;
+
+  -- Update the appropriate category (with proper NULL handling)
   IF p_category = 'business' THEN
     UPDATE challenge_weekly_scores
     SET business_score = business_score + p_points, updated_at = NOW()
-    WHERE user_id = p_user_id AND project_id = p_project_id AND week_start_date = v_week_start;
+    WHERE user_id = p_user_id
+      AND (project_id = p_project_id OR (project_id IS NULL AND p_project_id IS NULL))
+      AND week_start_date = v_week_start
+    RETURNING * INTO v_weekly_record;
   ELSIF p_category = 'healing' THEN
     UPDATE challenge_weekly_scores
     SET healing_score = healing_score + p_points, updated_at = NOW()
-    WHERE user_id = p_user_id AND project_id = p_project_id AND week_start_date = v_week_start;
+    WHERE user_id = p_user_id
+      AND (project_id = p_project_id OR (project_id IS NULL AND p_project_id IS NULL))
+      AND week_start_date = v_week_start
+    RETURNING * INTO v_weekly_record;
   ELSIF p_category = 'courage' THEN
     UPDATE challenge_weekly_scores
     SET courage_score = courage_score + p_points, updated_at = NOW()
-    WHERE user_id = p_user_id AND project_id = p_project_id AND week_start_date = v_week_start;
+    WHERE user_id = p_user_id
+      AND (project_id = p_project_id OR (project_id IS NULL AND p_project_id IS NULL))
+      AND week_start_date = v_week_start
+    RETURNING * INTO v_weekly_record;
+  ELSE
+    RAISE EXCEPTION 'Invalid category: %. Must be business, healing, or courage', p_category;
   END IF;
 
-  -- Upsert lifetime score
-  INSERT INTO user_lifetime_scores (user_id, project_id)
-  VALUES (p_user_id, p_project_id)
-  ON CONFLICT (user_id, project_id) DO NOTHING;
+  -- Similar pattern for lifetime scores...
+  -- (See full implementation in migration file)
 
-  -- Update lifetime totals
-  IF p_category = 'business' THEN
-    UPDATE user_lifetime_scores
-    SET lifetime_business_score = lifetime_business_score + p_points,
-        lifetime_total_score = lifetime_total_score + p_points,
-        updated_at = NOW()
-    WHERE user_id = p_user_id AND project_id = p_project_id;
-  ELSIF p_category = 'healing' THEN
-    UPDATE user_lifetime_scores
-    SET lifetime_healing_score = lifetime_healing_score + p_points,
-        lifetime_total_score = lifetime_total_score + p_points,
-        updated_at = NOW()
-    WHERE user_id = p_user_id AND project_id = p_project_id;
-  ELSIF p_category = 'courage' THEN
-    UPDATE user_lifetime_scores
-    SET lifetime_courage_score = lifetime_courage_score + p_points,
-        lifetime_total_score = lifetime_total_score + p_points,
-        updated_at = NOW()
-    WHERE user_id = p_user_id AND project_id = p_project_id;
-  END IF;
+  RETURN json_build_object(
+    'weekly', json_build_object(
+      'business_score', COALESCE(v_weekly_record.business_score, 0),
+      'healing_score', COALESCE(v_weekly_record.healing_score, 0),
+      'courage_score', COALESCE(v_weekly_record.courage_score, 0),
+      'total', COALESCE(v_weekly_record.business_score, 0) + COALESCE(v_weekly_record.healing_score, 0) + COALESCE(v_weekly_record.courage_score, 0)
+    ),
+    'lifetime', json_build_object(...)
+  );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+```
+
+### Required Partial Unique Indexes
+
+PostgreSQL UNIQUE constraints don't work with NULL values. These partial indexes handle the NULL `project_id` case:
+
+```sql
+-- Weekly scores: unique index for NULL project_id
+CREATE UNIQUE INDEX IF NOT EXISTS idx_weekly_scores_user_null_project_week
+  ON challenge_weekly_scores(user_id, week_start_date)
+  WHERE project_id IS NULL;
+
+-- Lifetime scores: unique index for NULL project_id
+CREATE UNIQUE INDEX IF NOT EXISTS idx_lifetime_scores_user_null_project
+  ON user_lifetime_scores(user_id)
+  WHERE project_id IS NULL;
 ```
 
 ---
@@ -336,25 +372,29 @@ ON CONFLICT (user_id, project_id, week_start_date) DO UPDATE SET
 
 **File:** `src/Challenge.jsx`
 
-Replace the dual-update logic with single RPC call:
+The RPC call now includes the client's week start for timezone consistency:
 
 ```javascript
-// OLD CODE (lines 588-605):
-// await supabase.from('challenge_progress').update({ total_points: newTotalPoints })
-// await supabase.from('user_projects').update({ total_points: newTotalPoints })
-
-// NEW CODE:
 import { getScoringCategory } from '../lib/scoringCategories'
 
 const scoringCategory = getScoringCategory(quest.category)
 
-await supabase.rpc('increment_scores', {
-  p_user_id: user.id,
-  p_project_id: selectedProject?.id || null,
-  p_category: scoringCategory,
-  p_points: quest.points
-})
+try {
+  await supabase.rpc('increment_scores', {
+    p_user_id: user.id,
+    p_project_id: null, // User-level scores
+    p_category: scoringCategory,
+    p_points: quest.points,
+    p_week_start: getWeekStart() // Pass client's week start for timezone consistency
+  })
+  await loadUserScores()
+} catch (scoreError) {
+  console.error('Error updating scores:', scoreError)
+  // Non-fatal - continue with quest completion
+}
 ```
+
+**Note:** The old dual-update to `challenge_progress` and `user_projects` is still maintained for backwards compatibility until deprecated columns are removed.
 
 ### 2. Create Scoring Categories Helper
 
@@ -384,32 +424,45 @@ export const CATEGORY_DISPLAY = {
 
 **File:** `src/hooks/useChallengeData.js`
 
-Add functions to load weekly and lifetime scores:
+Key functions added/updated:
 
 ```javascript
-const loadWeeklyScores = async () => {
+// Get Monday of current week (in local timezone, formatted as YYYY-MM-DD)
+const getWeekStart = () => {
+  const now = new Date()
+  const day = now.getDay()
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1)
+  now.setDate(diff)
+  // Format as local date (not UTC) to avoid timezone mismatch
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const date = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${date}`
+}
+
+// Load weekly scores from new scoring tables
+const loadUserScores = async () => {
   const weekStart = getWeekStart()
 
-  const { data } = await supabase
+  const { data: weekly } = await supabase
     .from('challenge_weekly_scores')
-    .select('*')
+    .select('business_score, healing_score, courage_score')
     .eq('user_id', user.id)
     .eq('week_start_date', weekStart)
+    .is('project_id', null) // User-level scores
     .maybeSingle()
 
-  setWeeklyScores(data || { business_score: 0, healing_score: 0, courage_score: 0 })
+  setWeeklyScores(weekly || { business_score: 0, healing_score: 0, courage_score: 0 })
 }
 
-const loadLifetimeScores = async () => {
-  const { data } = await supabase
-    .from('user_lifetime_scores')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('project_id', selectedProject?.id)
-    .maybeSingle()
-
-  setLifetimeScores(data)
-}
+// Compute points for header display - always uses completions for reliability
+const currentWeeklyPoints = (() => {
+  if (!completions || completions.length === 0) return 0
+  const weekStart = new Date(getWeekStart() + 'T00:00:00')
+  return completions
+    .filter(c => new Date(c.completed_at) >= weekStart)
+    .reduce((sum, c) => sum + (c.points_earned || 0), 0)
+})()
 ```
 
 ### 4. Update ChallengeHeader Component
@@ -514,18 +567,147 @@ ORDER BY total_category_wins DESC;
 
 ---
 
+## Bug Fixes (February 2025)
+
+Several bugs were discovered after initial implementation. All have been fixed.
+
+### Bug 1: Header Points Not Updating After Quest Completion
+
+**Symptom:** Points displayed in ChallengeHeader didn't update after completing quests.
+
+**Root Cause:** The `currentWeeklyPoints` calculation checked `if (weeklyScores)` and used RPC-based scores. But once `weeklyScores` was set to a default zeros object `{ business_score: 0, ... }` on first load, it was always truthy. The fallback calculation from `completions` never ran, even when the RPC wasn't working.
+
+**Fix:** Changed `currentWeeklyPoints` to always calculate from `completions` state, which is reliably updated after each quest completion.
+
+```javascript
+// src/hooks/useChallengeData.js
+const currentWeeklyPoints = (() => {
+  // Always calculate from completions (source of truth for current session)
+  if (!completions || completions.length === 0) return 0
+  const weekStart = new Date(getWeekStart() + 'T00:00:00')
+  return completions
+    .filter(c => new Date(c.completed_at) >= weekStart)
+    .reduce((sum, c) => sum + (c.points_earned || 0), 0)
+})()
+```
+
+### Bug 2: Tab Bonus Using Stale React State
+
+**Symptom:** Tab completion bonus could calculate wrong total points.
+
+**Root Cause:** `awardTabCompletionBonus` read from the closure's `progress` state, but React state updates are async. When called immediately after `setProgress()`, it still saw old values.
+
+**Fix:** Added optional `currentProgress` parameter to accept fresh data:
+
+```javascript
+const awardTabCompletionBonus = async (category, bonusPoints, currentProgress = null) => {
+  const effectiveProgress = currentProgress || progress
+  // ... use effectiveProgress instead of progress
+}
+
+// Caller passes fresh data:
+await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints, updatedProgress)
+```
+
+### Bug 3: RPC NULL project_id Not Working
+
+**Symptom:** Scores for user-level quests (NULL project_id) weren't being stored.
+
+**Root Cause:** PostgreSQL's `ON CONFLICT` clause doesn't work with NULL values in UNIQUE constraints. The clause `ON CONFLICT (user_id, project_id, week_start_date)` never matched rows where `project_id` was NULL.
+
+**Fix:** Replaced `INSERT ... ON CONFLICT` with explicit existence checks:
+
+```sql
+-- Check if record exists (handles NULL correctly)
+SELECT EXISTS (
+  SELECT 1 FROM challenge_weekly_scores
+  WHERE user_id = p_user_id
+    AND (project_id = p_project_id OR (project_id IS NULL AND p_project_id IS NULL))
+    AND week_start_date = v_week_start
+) INTO v_weekly_exists;
+
+IF NOT v_weekly_exists THEN
+  INSERT INTO challenge_weekly_scores (...) VALUES (...);
+END IF;
+```
+
+### Bug 4: Timezone Mismatch Between Client and Server
+
+**Symptom:** Scores stored under wrong week, queries couldn't find them.
+
+**Root Cause:** JavaScript `getWeekStart()` used `toISOString()` which converts to UTC, but `getDay()`/`getDate()` use local timezone. A user in Sydney on Monday local time (Sunday UTC) would get mismatched dates.
+
+**Fix:**
+1. Changed `getWeekStart()` to use local date formatting
+2. Added optional `p_week_start` parameter to RPC
+3. Client passes its calculated week start to ensure consistency
+
+```javascript
+// Fixed getWeekStart() - uses local dates
+const getWeekStart = () => {
+  const now = new Date()
+  const day = now.getDay()
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1)
+  now.setDate(diff)
+  // Format as local date (not UTC)
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const date = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${date}`
+}
+
+// RPC call includes week start
+await supabase.rpc('increment_scores', {
+  p_user_id: user.id,
+  p_project_id: null,
+  p_category: scoringCategory,
+  p_points: quest.points,
+  p_week_start: getWeekStart()
+})
+```
+
+### Bug 5: Missing Error Handling on Completions Reload
+
+**Symptom:** If database query failed, points would show as 0.
+
+**Root Cause:** The completions reload didn't check for errors. If the query failed, `setCompletions(newCompletions || [])` would reset to empty array.
+
+**Fix:** Added error handling to preserve existing state:
+
+```javascript
+const { data: newCompletions, error: completionsError } = await supabase
+  .from('quest_completions')
+  .select('*')
+  .eq('user_id', user.id)
+  .eq('challenge_instance_id', progress.challenge_instance_id)
+
+if (completionsError) {
+  console.error('Error reloading completions:', completionsError)
+  // Don't reset completions on error - keep existing state
+} else {
+  setCompletions(newCompletions || [])
+}
+```
+
+---
+
 ## Implementation Checklist
 
 - [x] Create migration file with new tables (`20250125000001_scoring_system_refactor.sql`)
 - [x] Create increment_scores RPC function (in migration)
 - [x] Create backfill migration (`20250125000002_scoring_system_backfill.sql`)
 - [x] Create src/lib/scoringCategories.js
-- [ ] **NEXT: Run migrations on Supabase**
-- [ ] Verify backfill data looks correct
-- [ ] Update Challenge.jsx quest completion handler
-- [ ] Update useChallengeData.js with new loaders
-- [ ] Update ChallengeHeader.jsx UI
-- [ ] Update ChallengeLeaderboard.jsx
+- [x] Run migrations on Supabase
+- [x] Add partial unique indexes for NULL project_id (`20250125000001b_scoring_null_fix.sql`)
+- [x] Fix increment_scores RPC for NULL handling (`20260203000000_fix_increment_scores_null_conflict.sql`)
+- [x] Update Challenge.jsx quest completion handler
+- [x] Update useChallengeData.js with new loaders
+- [x] Fix currentWeeklyPoints to use completions
+- [x] Fix awardTabCompletionBonus stale state issue
+- [x] Fix getWeekStart() timezone issue
+- [x] Add error handling for completions reload
+- [x] Update ChallengeHeader.jsx UI
+- [x] Update ChallengeLeaderboard.jsx
 - [ ] Update ChallengeProjectSelector.jsx to use new scores
 - [ ] Test thoroughly with existing users
 - [ ] Remove deprecated columns (after verification)

@@ -13,7 +13,7 @@ Three wheels that map a user's "Founder DNA":
 |----|--------------|-------------------|---------|---------------|
 | `clarifying` | Clarifying | The Translator | You make the complex simple | Turning confusion into understanding |
 | `analyzing` | Analyzing | The Pattern Spotter | You see what others miss | Turning data into insight |
-| `strategizing` | Strategizing | The Chess Player | You think 10 moves ahead | Turning goals into plans |
+| `strategizing` | Strategizing | The Gamemaker | You think 10 moves ahead | Turning goals into plans |
 | `organizing` | Organizing | The Systems Architect | You create order from chaos | Turning chaos into order |
 | `building` | Building | The Maker | You turn ideas into reality | Turning blueprints into reality |
 | `designing` | Designing | The Experience Crafter | You shape how things feel | Turning function into experience |

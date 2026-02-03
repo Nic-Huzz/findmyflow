@@ -273,6 +273,10 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 | Update Healing Compass | Improvements to existing flow | Small | ⬜ Not started |
 | Update Nervous System Flow | Improvements to existing flow | Small | ⬜ Not started |
 | Healing Book Assessment | Track books read + accountability | Small | ⬜ Not started |
+| **NEW: Recognise Tab Enhancements** | | | |
+| Essence count question | "How many times did your essence show up today?" | Small | ⬜ Not started |
+| Protective count question | "How many times did your protective voice show up today?" | Small | ⬜ Not started |
+| Essence vs Protective % graph | Add % graph slide to results to visualize essence:protective ratio over time | Medium | ⬜ Not started |
 | **NEW: From Founder Journey** | | | |
 | Earthquake Inventory | Healing flow for grief of traditional path ("I was lied to") | Medium | ⬜ Not started |
 | Relationship Audit | Reflection on who supports new vs old you | Small | ⬜ Not started |

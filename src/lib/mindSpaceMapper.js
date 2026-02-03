@@ -12,7 +12,7 @@ export const SEGMENT_DISPLAY = {
   skills: {
     clarifying: { icon: '💡', title: 'The Translator', description: 'Making complex ideas simple' },
     analyzing: { icon: '📊', title: 'The Pattern Spotter', description: 'Finding insights in data' },
-    strategizing: { icon: '🎯', title: 'The Chess Player', description: 'Planning and vision' },
+    strategizing: { icon: '🎯', title: 'The Gamemaker', description: 'Planning and vision' },
     organizing: { icon: '⚙️', title: 'The Systems Architect', description: 'Building processes' },
     building: { icon: '🔨', title: 'The Maker', description: 'Creating tangible things' },
     designing: { icon: '🎨', title: 'The Experience Crafter', description: 'Shaping how things feel' },
@@ -86,13 +86,22 @@ export async function mapAllToWheelSegments(parsedData) {
   const prompt = buildMappingPrompt(parsedData)
 
   try {
+    console.log('🗺️ Calling mind-space-map Edge Function...')
     const { data: mappings, error } = await supabase.functions.invoke('mind-space-map', {
       body: { prompt }
     })
 
     if (error) {
+      console.error('Edge Function error:', error)
       throw new Error(error.message || 'Mapping API failed')
     }
+
+    if (!mappings || !mappings.skills) {
+      console.warn('Invalid response from Edge Function:', mappings)
+      throw new Error('Invalid mapping response')
+    }
+
+    console.log('✅ AI Mapping successful:', mappings)
 
     // Apply mappings to data
     mapped.skills = parsedData.skills.map((skill, i) => ({
@@ -111,11 +120,12 @@ export async function mapAllToWheelSegments(parsedData) {
     }))
 
   } catch (error) {
-    console.error('Haiku mapping failed, using fallback:', error)
+    console.warn('⚠️ AI mapping failed, using keyword fallback:', error.message)
     // Fallback to keyword mapping if API fails
     mapped.skills = parsedData.skills.map(s => ({ ...s, mappedTo: fallbackMap(s, 'skills') }))
     mapped.problems = parsedData.problems.map(p => ({ ...p, mappedTo: fallbackMap(p, 'problems') }))
     mapped.personas = parsedData.personas.map(p => ({ ...p, mappedTo: fallbackMap(p, 'personas') }))
+    console.log('🔧 Fallback mappings applied')
   }
 
   return mapped

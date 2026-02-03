@@ -355,6 +355,28 @@
   margin: 0 0 14px 0;
 }
 
+/* Taxonomy Tags - wheel segment mappings */
+.library-of-answers .cluster-taxonomy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.library-of-answers .cluster-taxonomy-tags .taxonomy-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.library-of-answers .cluster-taxonomy-tags .taxonomy-icon {
+  font-size: 0.85rem;
+}
+
 .library-of-answers .cluster-tags {
   display: flex;
   flex-wrap: wrap;

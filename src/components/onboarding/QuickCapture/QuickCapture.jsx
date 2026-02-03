@@ -14,7 +14,7 @@
  * Created: Jan 2026
  */
 
-import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
 import { logError } from '../../../lib/errorSupport'
 import { STAGES } from '../../../lib/stageConfig'
@@ -55,6 +55,9 @@ function QuickCapture({
   const [isSaving, setIsSaving] = useState(false)
   const [saveError, setSaveError] = useState(null)
   const [errorSupport, setErrorSupport] = useState(null)
+
+  // Ref to prevent double-submission (state updates are async, ref is immediate)
+  const saveTriggeredRef = useRef(false)
 
   // Transition state for smooth page changes
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -215,6 +218,13 @@ function QuickCapture({
 
   // Save all data to database
   const saveToDatabase = async () => {
+    // Prevent double-submission
+    if (saveTriggeredRef.current) {
+      console.log('Save already in progress, ignoring duplicate call')
+      return
+    }
+    saveTriggeredRef.current = true
+
     setIsSaving(true)
     setSaveError(null)
 
@@ -389,6 +399,8 @@ function QuickCapture({
 
       setErrorSupport(() => offerSupport)
       setSaveError(error.message || 'Failed to save. Please try again.')
+      // Reset ref so user can retry
+      saveTriggeredRef.current = false
     } finally {
       setIsSaving(false)
     }
@@ -491,6 +503,14 @@ function QuickCapture({
       case 'summary':
         return (
           <div className="summary-step">
+            {isSaving && (
+              <div className="saving-overlay">
+                <div className="saving-content">
+                  <div className="saving-spinner" />
+                  <p>Setting up your profile...</p>
+                </div>
+              </div>
+            )}
             <div className="summary-header">
               <span className="success-icon">🎉</span>
               <h2>Epic!</h2>

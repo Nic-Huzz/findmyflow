@@ -111,6 +111,7 @@ function Challenge() {
     showWeeklyPlanning,
     setShowWeeklyPlanning,
     isSunday,
+    getWeekStart,
     getWeekLabel,
     handleWeeklyPlanComplete,
     completeWeeklyGroan,
@@ -579,7 +580,8 @@ function Challenge() {
           p_user_id: user.id,
           p_project_id: null, // User-level scores (not project-specific)
           p_category: scoringCategory,
-          p_points: quest.points
+          p_points: quest.points,
+          p_week_start: getWeekStart() // Pass client's week start for timezone consistency
         })
         // Refresh user's scores from new tables
         await loadUserScores()
@@ -645,13 +647,18 @@ function Challenge() {
       }
 
       // Reload completions
-      const { data: newCompletions } = await supabase
+      const { data: newCompletions, error: completionsError } = await supabase
         .from('quest_completions')
         .select('*')
         .eq('user_id', user.id)
         .eq('challenge_instance_id', progress.challenge_instance_id)
 
-      setCompletions(newCompletions || [])
+      if (completionsError) {
+        console.error('Error reloading completions:', completionsError)
+        // Don't reset completions on error - keep existing state
+      } else {
+        setCompletions(newCompletions || [])
+      }
       setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
 
       // Check for artifact unlock
@@ -683,9 +690,9 @@ function Challenge() {
 
       // Check for tab completion bonus using fresh data (Option A: immediate check)
       // Pass newCompletions and updatedProgress to avoid React state timing issues
-      const tabStatus = getTabCompletionStatus(quest.category, newCompletions, updatedProgress)
+      const tabStatus = getTabCompletionStatus(quest.category, newCompletions || completions, updatedProgress)
       if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
-        await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints)
+        await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints, updatedProgress)
       }
 
       // Check for project graduation
@@ -924,11 +931,19 @@ function Challenge() {
 
   // Check if we're viewing the Groans stage (0.5) in Business tab
   const isGroansStage = activeCategory === 'Business' && viewingStage === 0.5
+  const isFlowFinderStage = activeCategory === 'Business' && viewingStage === 0
+
+  // Deep Dive quest IDs for Flow Finder (includes archived flow_finder_skills)
+  const DEEP_DIVE_QUEST_IDS = ['flow_finder_skills', 'flow_finder_problems', 'flow_finder_persona', 'flow_finder_integration']
 
   // Filter quests by the active category tab (exclude archived quests)
   // Special case: When viewing Groans stage in Business, pull from 'Groans' category
+  // Special case: Allow archived Deep Dive quests through when on Flow Finder stage
   let filteredQuests = challengeData?.quests?.filter(q => {
-    if (q.archived) return false
+    // Allow Deep Dive quests through even if archived (when on Flow Finder)
+    if (q.archived && !(isFlowFinderStage && DEEP_DIVE_QUEST_IDS.includes(q.id))) {
+      return false
+    }
     if (isGroansStage) {
       return q.category === 'Groans'
     }
@@ -939,11 +954,19 @@ function Challenge() {
   if (activeCategory === 'Business') {
     const userPersonaNormalized = normalizePersona(userData?.persona)
 
-    // Handle sub-tabs: Tasks vs Voices
-    // Note: Groans stage only has Tasks, no Voices sub-tab
+    // Handle sub-tabs: Tasks vs Voices (or Deep Dive for Flow Finder)
+    // Note: Groans stage only has Tasks, no sub-tabs
+
     if (businessSubTab === 'voices' && !isGroansStage) {
-      // Generate voice quests for the current stage
-      filteredQuests = generateVoiceQuestsForStage(viewingStage, userArchetypes)
+      if (isFlowFinderStage) {
+        // Deep Dive: show the original Flow Finder discovery quests
+        filteredQuests = filteredQuests.filter(quest =>
+          DEEP_DIVE_QUEST_IDS.includes(quest.id)
+        )
+      } else {
+        // Voices: generate voice quests for the current stage
+        filteredQuests = generateVoiceQuestsForStage(viewingStage, userArchetypes)
+      }
     } else {
       // Tasks sub-tab: filter regular business quests
       // For Groans stage, show all non-archived Groans quests
@@ -951,6 +974,11 @@ function Challenge() {
         filteredQuests = filteredQuests.filter(quest => {
           // Exclude stage groan quests - they now appear in Voices sub-tab
           if (quest.type === 'groan' || quest.id?.startsWith('groan_stage')) {
+            return false
+          }
+
+          // For Flow Finder, exclude Deep Dive quests from Tasks tab
+          if (isFlowFinderStage && DEEP_DIVE_QUEST_IDS.includes(quest.id)) {
             return false
           }
 
@@ -1179,8 +1207,8 @@ function Challenge() {
                 onTabChange={setActiveStageTab}
                 flowFinderComplete={flowFinderComplete}
               />
-              {/* Sub-tabs: Tasks | Voices - hidden for Flow Finder and Groans stages */}
-              {activeStageTab !== 0 && activeStageTab !== 0.5 && (
+              {/* Sub-tabs: Tasks | Voices (or Deep Dive for Flow Finder) - hidden for Groans stage only */}
+              {activeStageTab !== 0.5 && (
                 <div className="business-sub-tabs">
                   <button
                     className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
@@ -1192,7 +1220,7 @@ function Challenge() {
                     className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
                     onClick={() => setBusinessSubTab('voices')}
                   >
-                    Voices
+                    {activeStageTab === 0 ? 'Deep Dive' : 'Voices'}
                   </button>
                 </div>
               )}

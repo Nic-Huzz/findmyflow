@@ -63,6 +63,7 @@ const FlowFinderIntegration = lazy(() => import('./flows/FlowFinderIntegration')
 const MindSpace = lazy(() => import('./flows/MindSpace'))
 const PlayListFinderFlow = lazy(() => import('./flows/PlayListFinderFlow'))
 const PersonaIdentifierFlow = lazy(() => import('./flows/PersonaIdentifierFlow'))
+const FlowFinderExplainer = lazy(() => import('./flows/FlowFinderExplainer'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazy(() => import('./flows/HealingCompass'))
@@ -429,6 +430,11 @@ function AppRouter() {
             <Route path="/persona-identifier" element={
               <AuthGate>
                 <PersonaIdentifierFlow />
+              </AuthGate>
+            } />
+            <Route path="/flow-finder-explainer" element={
+              <AuthGate>
+                <FlowFinderExplainer />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={

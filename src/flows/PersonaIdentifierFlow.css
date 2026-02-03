@@ -846,6 +846,8 @@
 
 .persona-identifier-flow .save-btn {
   margin-top: auto;
+  flex: none;
+  padding: 14px 32px;
 }
 
 .persona-identifier-flow .save-btn:disabled {

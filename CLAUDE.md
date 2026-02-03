@@ -282,6 +282,8 @@ npm run db:push   # Apply migrations
 
 ## Key Documentation
 
+- `docs/DEVELOPMENT_PATTERNS.md` - **Required reading for flow/challenge work** - Supabase patterns, challenge sync, error handling
+- `docs/scoring-system-refactor.md` - Points/scoring system architecture and bug fixes
 - `docs/PUSH_NOTIFICATIONS.md` - Push notification system setup, testing, troubleshooting
 - `docs/` - Session notes and historical changes
 

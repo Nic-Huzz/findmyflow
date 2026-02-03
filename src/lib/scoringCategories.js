@@ -108,6 +108,21 @@ export const formatScoresForDisplay = (scores) => {
 export const SCORING_CATEGORY_KEYS = ['business', 'healing', 'courage']
 
 /**
+ * Get Monday of current week (in local timezone, formatted as YYYY-MM-DD)
+ * Used for consistent week start calculation across the app
+ */
+export const getWeekStartDate = () => {
+  const now = new Date()
+  const day = now.getDay()
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1) // Adjust for Sunday
+  now.setDate(diff)
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const date = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${date}`
+}
+
+/**
  * Sync points to the leaderboard scoring system
  *
  * This is a NON-BLOCKING helper - failures are logged but don't throw.
@@ -120,6 +135,7 @@ export const SCORING_CATEGORY_KEYS = ['business', 'healing', 'courage']
  * @param {number} params.points - Points to add
  * @param {string|null} params.projectId - Optional project ID (null for user-level)
  * @param {string} params.source - Source for logging (e.g., 'tab_bonus', 'flow_finder')
+ * @param {string|null} params.weekStart - Optional week start date (YYYY-MM-DD) for timezone consistency
  * @returns {Promise<{success: boolean, error?: string}>}
  */
 export const syncScoreToLeaderboard = async (supabase, {
@@ -127,7 +143,8 @@ export const syncScoreToLeaderboard = async (supabase, {
   questCategory,
   points,
   projectId = null,
-  source = 'unknown'
+  source = 'unknown',
+  weekStart = null
 }) => {
   if (!userId || !points || points <= 0) {
     console.warn(`[syncScore] Invalid params: userId=${userId}, points=${points}`)
@@ -141,7 +158,8 @@ export const syncScoreToLeaderboard = async (supabase, {
       p_user_id: userId,
       p_project_id: projectId,
       p_category: scoringCategory,
-      p_points: points
+      p_points: points,
+      p_week_start: weekStart || getWeekStartDate()
     })
 
     if (error) {
@@ -165,5 +183,6 @@ export default {
   calculateTotalScore,
   formatScoresForDisplay,
   SCORING_CATEGORY_KEYS,
+  getWeekStartDate,
   syncScoreToLeaderboard
 }

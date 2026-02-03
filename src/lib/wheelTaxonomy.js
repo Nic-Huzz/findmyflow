@@ -41,7 +41,7 @@ export const SKILLS_SEGMENTS = [
   {
     id: 'strategizing',
     displayName: 'Strategizing',
-    aspirationalTitle: 'The Chess Player',
+    aspirationalTitle: 'The Gamemaker',
     tagline: 'You think 10 moves ahead',
     keywords: ['plan', 'strategy', 'prioritize', 'decide', 'roadmap', 'vision', 'direction', 'big picture'],
     exampleJobs: ['Consultant', 'Strategist', 'Executive', 'Product Manager', 'Business Advisor'],

@@ -98,6 +98,30 @@
   font-size: 0.9rem;
 }
 
+.mind-space .error-banner p {
+  margin: 0 0 0.75rem;
+}
+
+.mind-space .reformat-help {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+}
+
+.mind-space .reformat-help p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+}
+
+.mind-space .copy-button.small {
+  width: auto;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
 /* Step Content - Scoped */
 .mind-space .step-content {
   max-width: 600px;
@@ -123,6 +147,63 @@
   margin: 0 0 1.5rem;
   font-size: 1rem;
   line-height: 1.6;
+}
+
+/* AI Usage Card - Scoped */
+.mind-space .ai-usage-card {
+  margin-bottom: 1rem;
+}
+
+.mind-space .ai-usage-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.mind-space .ai-usage-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mind-space .ai-usage-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mind-space .ai-usage-btn.selected {
+  background: rgba(94, 23, 235, 0.3);
+  border-color: #5e17eb;
+  color: #fff;
+}
+
+.mind-space .ai-usage-btn .usage-label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.mind-space .ai-usage-btn .usage-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mind-space .ai-usage-btn.selected .usage-desc {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Dimmed card until AI usage selected */
+.mind-space .card-dimmed {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(0.3);
 }
 
 /* Prompt Preview - Scoped */
@@ -502,31 +583,53 @@
   font-size: 0.95rem;
 }
 
-.mind-space .item-header .freq {
+.mind-space .freq {
   font-size: 0.7rem;
-  padding: 0.2rem 0.5rem;
+  padding: 0.25rem 0.6rem;
   border-radius: 100px;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 0.03em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.mind-space .freq-high {
+.mind-space .freq.freq-high {
   background: rgba(16, 185, 129, 0.2);
   color: #6ee7b7;
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-.mind-space .freq-medium {
+.mind-space .freq.freq-medium {
   background: rgba(255, 221, 39, 0.15);
   color: #ffdd27;
   border: 1px solid rgba(255, 221, 39, 0.3);
 }
 
-.mind-space .freq-low {
+.mind-space .freq.freq-low {
   background: rgba(156, 163, 175, 0.15);
   color: #9ca3af;
   border: 1px solid rgba(156, 163, 175, 0.3);
+}
+
+.mind-space .item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.mind-space .taxonomy-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.2), rgba(233, 162, 59, 0.2));
+  border: 1px solid rgba(255, 221, 39, 0.4);
+  color: #ffdd27;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .mind-space .evidence {
@@ -646,6 +749,22 @@
   box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
 }
 
+.mind-space .graduation-banner {
+  background: linear-gradient(135deg, rgba(255, 221, 39, 0.2), rgba(233, 162, 59, 0.2));
+  border: 2px solid rgba(255, 221, 39, 0.5);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0 1.5rem;
+  text-align: center;
+}
+
+.mind-space .graduation-banner p {
+  color: #ffdd27;
+  font-weight: 600;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
 .mind-space .whats-next h2 {
   margin-bottom: 0.5rem;
 }
@@ -731,6 +850,98 @@
 
 .mind-space .option-btn.primary .option-text span {
   color: rgba(255, 221, 39, 0.9);
+}
+
+/* Results Summary (for viewing saved results) */
+.mind-space .results-summary {
+  text-align: left;
+  margin: 1.5rem 0;
+}
+
+.mind-space .results-section {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mind-space .results-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.mind-space .results-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mind-space .result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mind-space .result-item:last-child {
+  border-bottom: none;
+}
+
+.mind-space .result-name {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.mind-space .result-level {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.mind-space .result-level.level-learning {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.mind-space .result-level.level-practicing {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.mind-space .result-level.level-mastering {
+  background: rgba(107, 203, 119, 0.2);
+  color: #6BCB77;
+  border: 1px solid rgba(107, 203, 119, 0.3);
+}
+
+.mind-space .more-items {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  margin: 0.5rem 0 0;
+  text-align: center;
+}
+
+/* Nav buttons for results view */
+.mind-space .nav-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mind-space .nav-buttons .primary-button,
+.mind-space .nav-buttons .secondary-button {
+  flex: 1;
+  min-width: 120px;
 }
 
 /* Responsive */

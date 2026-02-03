@@ -1,0 +1,47 @@
+/**
+ * GoDeeper.css
+ * Styles for the GoDeeper CTA component
+ */
+
+.go-deeper {
+  background: rgba(94, 23, 235, 0.15);
+  border: 1px solid rgba(94, 23, 235, 0.3);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 24px auto;
+}
+
+.go-deeper h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.go-deeper p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+.go-deeper-btn {
+  background: linear-gradient(135deg, #E9A23B, #D4922F);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.go-deeper-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}

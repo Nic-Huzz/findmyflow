@@ -299,6 +299,692 @@ That's actually more tragic and more true for burnt-out professionals:
 
 ---
 
+## Part 3.6: Play-List Visual Representation
+
+### The Hero Profile (Character Sheet)
+
+The Play-List should be displayed as a **Hero Profile** that combines:
+- Their **Essence** (skill archetype from Flow Finder)
+- Their **Gift** (what they naturally do)
+- Who they **Serve** (persona)
+- Their **Blocking Voice** (Protective Voice)
+- Their **Play-List** organized by visibility stage
+
+### Character Sheet Concept
+
+```
+┌─────────────────────────────────────┐
+│  THE TRANSLATOR                      │
+│  "Making complex ideas simple"       │
+│                                      │
+│  🛡️ Blocking Voice: The Perfectionist│
+│  "You're not ready to explain it yet"│
+│                                      │
+│  VISIBILITY PROGRESS                 │
+│  Screen:     ████████░░ 80%          │
+│  Live:       █████░░░░░ 50%          │
+│  Money:      ██░░░░░░░░ 20%          │
+│  Vulnerable: ░░░░░░░░░░ 0%           │
+│  Authority:  🔒 Locked                │
+│                                      │
+│  ACTIVE PLAY-LIST                    │
+│  ☐ Post a "here's how I think about X"│
+│  ☐ Explain your work to a stranger   │
+│  ☐ Offer to clarify for someone (free)│
+└─────────────────────────────────────┘
+```
+
+### Full Hero Profile (Hybrid View)
+
+```
+YOUR HERO PROFILE
+─────────────────────────────────────
+Essence:    The Translator
+Gift:       Making complex ideas simple
+Serves:     The Compass (seekers needing direction)
+─────────────────────────────────────
+Blocking Voice: The Perfectionist
+Its Lie:    "You're not ready to explain it yet"
+─────────────────────────────────────
+
+YOUR PLAY-LIST (5 scenes to play)
+
+SCREEN STAGE          ███████░░░ 70%
+└── ☑ Posted 3 explainers
+└── ☐ Record a Loom walkthrough
+
+LIVE STAGE            ████░░░░░░ 40%
+└── ☐ Explain to 1 stranger this week
+└── ☐ Teach a friend something
+
+MONEY STAGE           █░░░░░░░░░ 10%
+└── ☐ Offer to help someone (paid)
+
+VULNERABLE STAGE      ░░░░░░░░░░ 0%
+└── 🔒 Unlocks after Money Stage
+
+AUTHORITY STAGE       ░░░░░░░░░░ 0%
+└── 🔒 "Become known as The Translator"
+```
+
+### Design Principles
+
+1. **Same identity, expanding expression** - The Play-List shows different *volumes* of the same identity, not costume changes. "The Translator" doesn't become someone else at each stage — they become *more fully* The Translator.
+
+2. **Visibility as volume dial** - Screen → Authority is turning up the volume on who you already are.
+
+3. **Progress visualization** - Each visibility layer shows completion percentage, creating a sense of progression.
+
+4. **Blocking Voice integration** - The Protective Voice is visible as what's holding them back, with its specific "lie" shown.
+
+5. **Unlockable stages** - Higher visibility stages can be locked until earlier stages reach a threshold, creating natural progression.
+
+---
+
+## Part 3.7: Avatar Layer System
+
+### The Two-Level Identity Architecture
+
+The hero identity operates on **two distinct levels**:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     USER LEVEL                               │
+│              (Who You Are At Your Core)                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ESSENCE ARCHETYPE (1 of 12)                                 │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ 🎭 THE PLAYFUL CREATOR                               │    │
+│  │ Group: Activator                                     │    │
+│  │ "Joy in motion, color that moves, laughter that     │    │
+│  │  builds, a spark dressed in creativity"              │    │
+│  │                                                      │    │
+│  │ Superpower: Alchemize boredom into magic            │    │
+│  │ Essence Wound: "Stop being silly. Grow up."         │    │
+│  │ [Customizable name + image in future]               │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+│  PROTECTIVE VOICE (Shadow)                                   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ 🛡️ THE PERFECTIONIST                                 │    │
+│  │ Lie: "You're not ready yet"                         │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              │ Expresses through
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    PROJECT LEVEL                             │
+│           (How You Express Your Essence)                     │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  PROJECT: "Joy-Based Productivity Coaching"                  │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ Skills: The Translator + Experience Crafter         │    │
+│  │ Problem: Mind Guardian (mental wellness)            │    │
+│  │ Persona: The Compass (seekers needing direction)    │    │
+│  │ ─────────────────────────────────────────────────   │    │
+│  │ Play-List Score: 847 XP                             │    │
+│  │ Business Stage: 3 (Offer Building)                  │    │
+│  │ Visibility: Live Stage                              │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+│  PROJECT: "Creative Workshop Facilitation"                   │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ Skills: Experience Crafter + Catalyst               │    │
+│  │ Problem: Voice Liberator (creative expression)      │    │
+│  │ Persona: The Muse (those seeking inspiration)       │    │
+│  │ ─────────────────────────────────────────────────   │    │
+│  │ Play-List Score: 234 XP                             │    │
+│  │ Business Stage: 1 (Validation)                      │    │
+│  │ Visibility: Screen Stage                            │    │
+│  └─────────────────────────────────────────────────────┘    │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### The 12 Essence Archetypes
+
+The user's core avatar is one of 12 Essence Archetypes, organized into 4 groups:
+
+#### Activators (Fire Energy)
+*Ignite, disrupt, energize*
+
+| Archetype | Essence | Superpower |
+|-----------|---------|------------|
+| **Radiant Rebel** | Disruptive truth-teller with heart | Ignite courage in the quiet |
+| **Playful Creator** | Joy, innovation, curiosity-led action | Alchemize boredom into magic |
+| **Sacred Jester** | Disruption through play, heart-led absurdity | Disarm defenses with humor |
+
+#### Bridgers (Air Energy)
+*Connect, translate, unite*
+
+| Archetype | Essence | Superpower |
+|-----------|---------|------------|
+| **Compassionate Leader** | Grounded authority, trust-building | Hold the center when things shake |
+| **Cosmic Connector** | Multidimensional vision, integration | Weave worlds together |
+| **Wise Sage** | Translator of complexity | Connect the dots, name the frame |
+
+#### Transmuters (Water Energy)
+*Transform, reveal, liberate*
+
+| Archetype | Essence | Superpower |
+|-----------|---------|------------|
+| **Mystic Messenger** | Inner knowing, intuitive depth | Decode the invisible |
+| **Wild Alchemist** | Liberation, emotion, transformation | Transmute chaos into meaning |
+| **Truth-Teller** | Clarity, boldness, no-BS simplicity | Crack illusions with precision |
+
+#### Stabilisers (Earth Energy)
+*Ground, protect, sustain*
+
+| Archetype | Essence | Superpower |
+|-----------|---------|------------|
+| **Grounded Guardian** | Devotion, protection, integrity | Stabilize wild energy |
+| **Heart Holder** | Steady presence that calms | Co-regulate rooms |
+| **Rhythm Architect** | Architect of reliability | Build the rails that scale |
+
+### Archetype Data Structure
+
+Each Essence Archetype contains rich narrative data (from `essenceProfiles.js`):
+
+| Field | Purpose | Example (Playful Creator) |
+|-------|---------|---------------------------|
+| `name` | Archetype title | "Playful Creator" |
+| `group` | Energy group | "Activator" |
+| `essence` | Core description | "Joy, innovation, curiosity-led action" |
+| `poetic_line` | Identity statement | "You are joy in motion, color that moves..." |
+| `poetic_vision` | Aspirational vision | "What if your joy was the funnel?..." |
+| `superpower` | Unique gift | "Alchemize boredom into magic" |
+| `north_star` | Guiding principle | "Channel joy into containers that scale" |
+| `energetic_transmission` | How others experience you | "Joy crackles through the air" |
+| `recognition_pattern` | When people seek you | "When things feel too serious" |
+| `inner_child_desire` | Childhood expression | "Turn everything into a game" |
+| `essence_wound` | The suppression message | "Stop being silly. Grow up." |
+| `characters` | Pop culture examples | Spider-Man, Robin Williams, Willy Wonka |
+| `vision_in_action` | Impact description | "Turn pressure into play" |
+
+### User Level vs Project Level
+
+| Aspect | User Level | Project Level |
+|--------|-----------|---------------|
+| **What it represents** | WHO you are | HOW you express it |
+| **Changes?** | Rarely (core identity) | Per project |
+| **Includes** | Essence Archetype, Protective Voice | Skills, Problems, Personas |
+| **Scores** | Total XP, Voice progress | Project Play-List, Stage |
+| **Customizable** | Name, image (future) | Project name, combinations |
+
+### How Projects Express the Core Avatar
+
+The Essence Archetype is the **constant**. Projects are **expressions** of that constant through different Skills/Problems/Personas combinations.
+
+**Example: "The Playful Creator"**
+
+This person's CORE is joy, innovation, play. But they might have:
+
+| Project | How Essence Expresses |
+|---------|----------------------|
+| Productivity Coaching | Making productivity feel like play (Translator + Mind Guardian + Compass) |
+| Creative Workshops | Unleashing creative joy (Experience Crafter + Voice Liberator + Muse) |
+| Kids Education App | Gamifying learning (Systems Architect + Growth Catalyst + Pioneer) |
+
+Same essence, different expressions. The avatar remains "The Playful Creator" — but each project tells a different story of how they bring play to the world.
+
+### The Story Generation Framework
+
+Each project can generate a narrative that weaves together:
+
+1. **The Core** (Essence Archetype) - Who they ARE
+2. **The Gift** (Skills) - What they DO in this project
+3. **The Cause** (Problem) - What they CHAMPION in this project
+4. **The Tribe** (Persona) - Who they SERVE in this project
+5. **The Shadow** (Protective Voice) - What they're BATTLING
+6. **The Journey** (Stage + Visibility) - Where they ARE in this project
+
+**Story Template:**
+
+```
+THE STORY OF [PROJECT NAME]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+At your core, you are [ESSENCE ARCHETYPE] — [poetic_line].
+
+Through [PROJECT NAME], you express this essence by becoming
+[SKILL TITLE], using your gift of [skill description].
+
+Your cause is [PROBLEM TITLE] — you champion [problem description].
+
+The people who need you most are [PERSONA TITLE] —
+[persona description].
+
+But [PROTECTIVE VOICE] whispers: "[voice lie]"
+
+You are currently at [BUSINESS STAGE], with [VISIBILITY STAGE]
+visibility. Your Play-List score is [SCORE] XP.
+
+This is your hero's journey. Not the only one — but this one
+is yours.
+```
+
+**Generated Example:**
+
+```
+THE STORY OF "JOY-BASED PRODUCTIVITY"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+At your core, you are The Playful Creator — joy in motion,
+color that moves, laughter that builds, a spark dressed
+in creativity.
+
+Through "Joy-Based Productivity", you express this essence
+by becoming The Translator, using your gift of making
+complex ideas simple and accessible.
+
+Your cause is Mind Guardianship — you champion mental
+wellness and protect overwhelmed minds.
+
+The people who need you most are The Compass seekers —
+those who sense there's more but can't see the path.
+
+But The Perfectionist whispers: "You're not ready yet."
+
+You are currently at Stage 3 (Offer Building), with Live
+visibility. Your Play-List score is 847 XP.
+
+This is your hero's journey. Not the only one — but this
+one is yours.
+```
+
+### Project Score System
+
+Each project has its own scoring that reflects both Play-List progress and business stage:
+
+```
+PROJECT SCORECARD: "Joy-Based Productivity"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLAY-LIST PROGRESS (Visibility Mastery)
+Screen:     ████████████ 100% ✓
+Live:       ██████████░░  83% ◐
+Money:      ████░░░░░░░░  33%
+Vulnerable: ░░░░░░░░░░░░   0% 🔒
+Authority:  ░░░░░░░░░░░░   0% 🔒
+
+Play-List XP: 847
+
+BUSINESS STAGE PROGRESS
+Stage 3: Offer Building ████████░░░░ 67%
+
+Next milestone: Complete offer validation
+
+COMBINED PROJECT SCORE: 1,247 XP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Hero Profile Dashboard Concept
+
+The dashboard shows BOTH levels — the constant core identity AND the project expressions.
+
+---
+
+#### Main Dashboard View
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  HERO COMMAND CENTER                                       ⚡ 12,847 XP  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ╔═══════════════════════════════════════════════════════════════════╗  │
+│  ║                                                                    ║  │
+│  ║      [AVATAR]        THE PLAYFUL CREATOR                          ║  │
+│  ║       IMAGE          ═══════════════════                          ║  │
+│  ║                      Group: Activator 🔥                          ║  │
+│  ║                                                                    ║  │
+│  ║      "Joy in motion, color that moves, laughter that builds,      ║  │
+│  ║       a spark dressed in creativity."                             ║  │
+│  ║                                                                    ║  │
+│  ║  ┌──────────────────────────┐  ┌──────────────────────────┐      ║  │
+│  ║  │ ⚡ SUPERPOWER            │  │ 🛡️ SHADOW                 │      ║  │
+│  ║  │ Alchemize boredom        │  │ The Perfectionist         │      ║  │
+│  ║  │ into magic               │  │ "You're not ready yet"    │      ║  │
+│  ║  └──────────────────────────┘  └──────────────────────────┘      ║  │
+│  ║                                                                    ║  │
+│  ║  [✏️ Customize Avatar]                                             ║  │
+│  ╚═══════════════════════════════════════════════════════════════════╝  │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  YOUR EXPRESSIONS                                    Total: 2 Projects   │
+│  How you bring your essence to the world                                 │
+│                                                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  📁 JOY-BASED PRODUCTIVITY                          ⚡ 847 XP      │  │
+│  │  ─────────────────────────────────────────────────────────────────│  │
+│  │                                                                    │  │
+│  │  🎯 GIFT           🌍 CAUSE              👥 TRIBE                  │  │
+│  │  The Translator    Mind Guardian         The Compass               │  │
+│  │                                                                    │  │
+│  │  JOURNEY PROGRESS                                                  │  │
+│  │  Business: Stage 3 (Offer)  ████████████░░░░ 75%                  │  │
+│  │  Visibility: Live Stage     ██████████░░░░░░ 62%                  │  │
+│  │                                                                    │  │
+│  │  [View Project →]                                                  │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  📁 CREATIVE WORKSHOP FACILITATION                  ⚡ 234 XP      │  │
+│  │  ─────────────────────────────────────────────────────────────────│  │
+│  │                                                                    │  │
+│  │  🎯 GIFT              🌍 CAUSE            👥 TRIBE                 │  │
+│  │  Experience Crafter   Voice Liberator     The Muse                 │  │
+│  │                                                                    │  │
+│  │  JOURNEY PROGRESS                                                  │  │
+│  │  Business: Stage 1 (Validation)  ████░░░░░░░░░░░░ 25%             │  │
+│  │  Visibility: Screen Stage        ███░░░░░░░░░░░░░ 18%             │  │
+│  │                                                                    │  │
+│  │  [View Project →]                                                  │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │                    [+ CREATE NEW EXPRESSION]                       │  │
+│  │                                                                    │  │
+│  │     "Every project is a new way to bring your essence             │  │
+│  │      to people who need it."                                       │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Project Detail View (When clicking "View Project")
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  ← Back to Profile                                         ⚡ 847 XP     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  JOY-BASED PRODUCTIVITY                                                  │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  YOUR STORY                                                              │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  At your core, you are THE PLAYFUL CREATOR — joy in motion,       │  │
+│  │  color that moves, laughter that builds.                          │  │
+│  │                                                                    │  │
+│  │  Through this project, you become THE TRANSLATOR, using your      │  │
+│  │  gift of making complex ideas simple and accessible.              │  │
+│  │                                                                    │  │
+│  │  Your cause is MIND GUARDIANSHIP — you champion mental            │  │
+│  │  wellness and protect overwhelmed minds.                          │  │
+│  │                                                                    │  │
+│  │  The people who need you are THE COMPASS — seekers who            │  │
+│  │  sense there's more but can't see the path.                       │  │
+│  │                                                                    │  │
+│  │  But THE PERFECTIONIST whispers: "You're not ready yet."          │  │
+│  │                                                                    │  │
+│  │  This is one expression of your essence. This story is yours.     │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  PROJECT IDENTITY                                                        │
+│  ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐        │
+│  │ 🎯 GIFT          │ │ 🌍 CAUSE         │ │ 👥 TRIBE         │        │
+│  │                  │ │                  │ │                  │        │
+│  │ The Translator   │ │ Mind Guardian    │ │ The Compass      │        │
+│  │                  │ │                  │ │                  │        │
+│  │ Making complex   │ │ Protecting       │ │ Seekers needing  │        │
+│  │ ideas simple     │ │ mental wellness  │ │ direction        │        │
+│  └──────────────────┘ └──────────────────┘ └──────────────────┘        │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  BUSINESS JOURNEY                                     Stage 3 of 8       │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  ○ ──── ○ ──── ● ──── ○ ──── ○ ──── ○ ──── ○ ──── ○              │  │
+│  │  1      2      3      4      5      6      7      8               │  │
+│  │  Valid  Offer  BUILD  Lead   Funnel Sales  Launch Scale           │  │
+│  │                 ↑                                                  │  │
+│  │            YOU ARE HERE                                           │  │
+│  │                                                                    │  │
+│  │  Current Quest: Complete offer validation                         │  │
+│  │  Progress: ████████████░░░░ 75%                                   │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  PLAY-LIST (Visibility Mastery)                         Total: 547 XP   │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  SCREEN        Own it behind a screen                             │  │
+│  │  ████████████████████ 100%  ✓ Complete                           │  │
+│  │  12/12 challenges · 150 XP earned                                 │  │
+│  │                                                                    │  │
+│  │  LIVE          Own it in person                                   │  │
+│  │  ██████████████░░░░░░  70%  ◐ In Progress                        │  │
+│  │  7/10 challenges · 263 XP earned                                  │  │
+│  │  [Continue →]                                                      │  │
+│  │                                                                    │  │
+│  │  MONEY         Claim it's worth paying for                        │  │
+│  │  ████████░░░░░░░░░░░░  40%                                        │  │
+│  │  4/10 challenges · 134 XP earned                                  │  │
+│  │                                                                    │  │
+│  │  VULNERABLE    Own it even when imperfect                         │  │
+│  │  ░░░░░░░░░░░░░░░░░░░░   0%  🔒 Unlocks at 80% Live               │  │
+│  │                                                                    │  │
+│  │  AUTHORITY     Fully own: "This is who I am"                      │  │
+│  │  ░░░░░░░░░░░░░░░░░░░░   0%  🔒 Unlocks at 60% Vulnerable         │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  ACTIVE PLAY-LIST ITEMS                                                  │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  ☐  Explain your method to someone in person         LIVE  +75 XP │  │
+│  │  ☐  Host a free clarity call                         MONEY +100 XP│  │
+│  │  ☐  Post a "how I think about X" thread              LIVE  +75 XP │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  [Generate New Play-List Items]                                          │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Expanded Essence View (When clicking on Avatar)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  ← Back to Profile                                                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│                    ┌─────────────────────┐                              │
+│                    │                     │                              │
+│                    │    [AVATAR IMAGE]   │                              │
+│                    │                     │                              │
+│                    │    🎭 Activator     │                              │
+│                    │                     │                              │
+│                    └─────────────────────┘                              │
+│                                                                          │
+│                      THE PLAYFUL CREATOR                                 │
+│                      ════════════════════                                │
+│                                                                          │
+│                   [✏️ Edit Name]  [📷 Change Image]                      │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  YOUR ESSENCE                                                            │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  "You are joy in motion, color that moves, laughter that builds,  │  │
+│  │   a spark dressed in creativity."                                  │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  YOUR SUPERPOWER                                                         │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  You alchemize boredom into magic. You make joy contagious,       │  │
+│  │  creativity safe, and weirdness welcome.                          │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  YOUR VISION                                                             │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  What if your joy was the funnel? What if your weirdness was      │  │
+│  │  the strategy?                                                     │  │
+│  │                                                                    │  │
+│  │  You weren't born to fit into boxes — you were born to make       │  │
+│  │  confetti out of them.                                            │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  YOUR NORTH STAR                                                         │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  Channel your joy into containers that scale.                     │  │
+│  │  Play can be the portal to mastery.                               │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  YOUR ORIGIN                                                             │
+│                                                                          │
+│  ┌────────────────────────────┐  ┌────────────────────────────┐        │
+│  │ 👶 INNER CHILD             │  │ 💔 ESSENCE WOUND           │        │
+│  │                            │  │                            │        │
+│  │ "I wanted to turn          │  │ "Stop being silly.         │        │
+│  │  everything into a game    │  │  Grow up."                 │        │
+│  │  or invention — joy was    │  │                            │        │
+│  │  my way of connecting"     │  │ You learned to be serious  │        │
+│  │                            │  │ to fit in.                 │        │
+│  └────────────────────────────┘  └────────────────────────────┘        │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  HEROES LIKE YOU                                                         │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  🕷️ Spider-Man  ·  🎭 Robin Williams  ·  🍫 Willy Wonka           │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  ═══════════════════════════════════════════════════════════════════════ │
+│                                                                          │
+│  YOUR SHADOW: THE PERFECTIONIST                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  🛡️ The Lie: "You're not ready yet. One more revision."           │  │
+│  │                                                                    │  │
+│  │  This voice developed to protect you from the shame of failure.   │  │
+│  │  Now it prevents you from shipping your playful creations.        │  │
+│  │                                                                    │  │
+│  │  Kryptonite: Shipping something imperfect. "Done beats perfect."  │  │
+│  │                                                                    │  │
+│  │  Voice Progress: ████████░░░░░░░░ 52%                             │  │
+│  │  Play-List challenges faced: 23                                   │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+#### Mobile-First Summary Card (For Quick View)
+
+```
+┌─────────────────────────────────┐
+│                                 │
+│  ┌─────────┐  THE PLAYFUL       │
+│  │ AVATAR  │  CREATOR           │
+│  │  IMAGE  │  ─────────────     │
+│  │   🎭    │  Activator 🔥      │
+│  └─────────┘                    │
+│                                 │
+│  ⚡ 12,847 XP                    │
+│                                 │
+│  Shadow: The Perfectionist      │
+│  Progress: ████████░░ 52%       │
+│                                 │
+├─────────────────────────────────┤
+│                                 │
+│  EXPRESSIONS                    │
+│                                 │
+│  📁 Joy-Based Productivity      │
+│     Stage 3 · 847 XP            │
+│                                 │
+│  📁 Creative Workshops          │
+│     Stage 1 · 234 XP            │
+│                                 │
+│  [+ New Expression]             │
+│                                 │
+└─────────────────────────────────┘
+```
+
+### Implementation Notes
+
+**TODO - Player Profile Section:**
+1. Display Essence Archetype with full narrative data
+2. Show Protective Voice as shadow/challenge
+3. List all projects with their Skills/Problems/Personas combinations
+4. Show per-project Play-List scores and business stages
+5. Allow future customization of avatar name + image
+
+**Data Sources:**
+- Essence Archetype: `essenceProfiles.js` (12 archetypes)
+- Protective Voice: `protectiveVoices.js` (5 voices)
+- Skills: `wheelTaxonomy.js` → `SKILLS_SEGMENTS` (12 skills)
+- Problems: `wheelTaxonomy.js` → `PROBLEM_SEGMENTS` (12 problems)
+- Personas: `wheelTaxonomy.js` → `PERSONA_SEGMENTS` (12 personas)
+
+---
+
+### Essence Archetypes (from Flow Finder Skills)
+
+| Skill Category | Essence Archetype | Gift Description |
+|----------------|-------------------|------------------|
+| clarifying | The Translator | Making complex ideas simple |
+| analyzing | The Pattern Spotter | Finding insights in data |
+| strategizing | The Gamemaker | Planning and vision |
+| organizing | The Systems Architect | Building processes |
+| building | The Maker | Creating tangible things |
+| designing | The Experience Crafter | Shaping how things feel |
+| creating | The Originator | Generating new ideas |
+| expressing | The Voice | Storytelling and communication |
+| connecting | The Bridge Builder | Bringing people together |
+| influencing | The Catalyst | Moving people to action |
+| nurturing | The Grower | Developing and supporting others |
+| synthesizing | The Integrator | Connecting the big picture |
+
+### Play-List Items Per Essence
+
+Each Essence archetype would have stage-appropriate Play-List items generated. Example for "The Translator":
+
+| Stage | Play-List Item | Why It's Play |
+|-------|---------------|---------------|
+| Screen | Post a "here's how I think about X" | Sharing clarity feels natural |
+| Screen | Create a simple diagram of something complex | Visual translation is fun |
+| Live | Explain your work to a stranger | Real-time simplification |
+| Live | Teach a friend something you know | Sharing knowledge in person |
+| Money | Offer a paid "clarity session" | Getting paid to translate |
+| Vulnerable | Share something you don't fully understand yet | Admitting you're still learning |
+| Authority | Become known as "the one who makes it simple" | Full identity ownership |
+
+---
+
 ## Part 4: The Power System
 
 ### The Flow as Power Source
@@ -1431,6 +2117,7 @@ Heroes who reach "Flow Master" status don't disappear. They:
 | 2025-01-29 | Added Incremental Implementation Plan (Part 20) | Claude + Nic |
 | 2025-01-31 | Finalized terminology (Nemesis→Voice, Power→XP, etc.) | Claude + Nic |
 | 2025-01-31 | Added Play-List concept, Arena→Playground, Vulnerability Framework (Part 3.5) | Claude + Nic |
+| 2025-02-03 | Rewrote Avatar Layer System (Part 3.7) - Two-level architecture: User-level Essence Archetype (12 types) + Project-level Skills/Problems/Personas with per-project scoring | Claude + Nic |
 
 ---
 

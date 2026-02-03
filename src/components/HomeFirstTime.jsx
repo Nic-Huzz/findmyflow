@@ -392,8 +392,10 @@ function HomeFirstTime() {
 
   // Handle Quick Capture completion
   const handleQuickCaptureComplete = (capturedData) => {
+    console.log('handleQuickCaptureComplete called, navigating to /me...')
     // Navigate to main profile page after onboarding
     navigate('/me')
+    console.log('navigate(/me) called')
   }
 
   // Loading state

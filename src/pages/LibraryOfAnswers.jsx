@@ -747,17 +747,68 @@ function LibraryOfAnswers() {
     )
   }
 
+  // Get taxonomy tags for a cluster - prefer saved taxonomy_keys, fallback to label matching
+  const getTaxonomyTagsForCluster = (cluster) => {
+    const clusterType = cluster.cluster_type
+
+    // Choose the right segments and mapping function based on cluster type
+    let segments, mapFunction
+    if (clusterType === 'skills') {
+      segments = SKILLS_SEGMENTS
+      mapFunction = mapClusterToSegments
+    } else if (clusterType === 'problems') {
+      segments = PROBLEM_SEGMENTS
+      mapFunction = mapProblemClusterToSegments
+    } else if (clusterType === 'persona') {
+      segments = PERSONA_SEGMENTS
+      mapFunction = mapPersonaClusterToSegments
+    } else {
+      return []
+    }
+
+    // Prefer saved taxonomy_keys if available
+    if (cluster.taxonomy_keys && cluster.taxonomy_keys.length > 0) {
+      const validTags = cluster.taxonomy_keys
+        .map(key => segments.find(s => s.id === key))
+        .filter(Boolean)
+      if (validTags.length > 0) return validTags
+    }
+
+    // Fallback: use label matching to get segment indices, then convert to tags
+    const indices = mapFunction(cluster.cluster_label)
+    return indices.map(idx => segments[idx]).filter(Boolean)
+  }
+
   // Render cluster card (report-card style - always visible)
   const renderClusterCard = (cluster) => {
     const items = cluster.items || []
     const visibleItems = items.slice(0, 3)
     const remainingCount = items.length - 3
+    const taxonomyTags = getTaxonomyTagsForCluster(cluster)
 
     return (
       <div key={cluster.id} className="cluster-card-v2">
         <h4 className="cluster-title">{cluster.cluster_label}</h4>
         {cluster.insight && (
           <p className="cluster-insight-v2">{cluster.insight}</p>
+        )}
+        {/* Taxonomy Tags - show which wheel segments this cluster maps to */}
+        {taxonomyTags.length > 0 && (
+          <div className="cluster-taxonomy-tags">
+            {taxonomyTags.map((tag, idx) => (
+              <span
+                key={idx}
+                className="taxonomy-tag"
+                style={{
+                  background: tag.color ? `${tag.color}20` : 'rgba(255,255,255,0.1)',
+                  color: tag.color || 'rgba(255,255,255,0.8)',
+                }}
+              >
+                {tag.icon && <span className="taxonomy-icon">{tag.icon}</span>}
+                {tag.displayName || tag.id}
+              </span>
+            ))}
+          </div>
         )}
         {items.length > 0 && (
           <div className="cluster-tags">

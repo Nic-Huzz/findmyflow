@@ -220,12 +220,16 @@ export const getUserStageProgress = async (userId) => {
  */
 export const syncFlowFinderWithChallenge = async (userId, flowType) => {
   try {
-    // Map flow types to quest IDs
+    // Map flow types to quest IDs (must match public/challengeQuestsUpdate.json)
     const flowToQuestMap = {
       'skills': 'flow_finder_skills',
       'problems': 'flow_finder_problems',
       'persona': 'flow_finder_persona',
-      'integration': 'flow_finder_integration'
+      'integration': 'flow_finder_integration',
+      'play_list_finder': 'play_list_finder',
+      'persona_identifier': 'persona_identifier',
+      'flow_finder_explainer': 'flow_finder_explainer',
+      'mind_space': 'mind_space_extraction'  // Matches JSON quest ID
     };
 
     const questId = flowToQuestMap[flowType];
@@ -307,15 +311,20 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     }
 
     // Get quest details from challengeQuestsUpdate.json (we need points)
-    // For now, use known point values
+    // Points must match challengeQuestsUpdate.json values
+    // Points per quest (must match public/challengeQuestsUpdate.json)
     const questPoints = {
-      'flow_finder_skills': 40,
-      'flow_finder_problems': 40,
-      'flow_finder_persona': 30,
-      'flow_finder_integration': 30
+      'flow_finder_skills': 5,
+      'flow_finder_problems': 5,
+      'flow_finder_persona': 4,
+      'flow_finder_integration': 4,
+      'flow_finder_explainer': 5,
+      'play_list_finder': 10,
+      'persona_identifier': 10,
+      'mind_space_extraction': 10  // Matches JSON quest ID
     };
 
-    const points = questPoints[questId] || 30;
+    const points = questPoints[questId] || 5;
 
     // Create quest completion
     const { error: completionError } = await supabase

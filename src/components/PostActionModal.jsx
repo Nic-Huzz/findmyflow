@@ -86,7 +86,7 @@ function PostActionModal({ quest, userId, onComplete, onSkip }) {
 
     setSaving(true)
     try {
-      await supabase.from('post_action_reflections').insert({
+      const { error } = await supabase.from('post_action_reflections').insert({
         user_id: userId,
         quest_id: quest.id,
         quest_name: quest.name,
@@ -95,6 +95,10 @@ function PostActionModal({ quest, userId, onComplete, onSkip }) {
         key_insight: keyInsight.trim() || null,
         created_at: new Date().toISOString()
       })
+
+      if (error) {
+        console.error('Error saving post-action reflection:', error)
+      }
 
       onComplete?.()
     } catch (error) {

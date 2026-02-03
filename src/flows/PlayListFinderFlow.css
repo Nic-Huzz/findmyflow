@@ -850,7 +850,12 @@
 }
 
 .play-list-finder-flow .save-btn {
-  margin-top: auto;
+  flex: none !important;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 320px;
+  align-self: center;
+  padding: 14px 32px;
 }
 
 .play-list-finder-flow .save-btn:disabled {
@@ -977,6 +982,7 @@
   margin-bottom: 4px;
   font-style: italic;
 }
+
 
 .play-list-finder-flow .confirmed-skills-summary {
   display: flex;

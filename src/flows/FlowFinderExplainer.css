@@ -1,0 +1,523 @@
+/**
+ * FlowFinderExplainer.css
+ * Styles for the Flow Finder framework explainer quest
+ */
+
+.flow-finder-explainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  padding: 24px 16px;
+  padding-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.explainer-container {
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Progress dots */
+.explainer-progress {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.explainer-progress .progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.explainer-progress .progress-dot.active {
+  background: #E9A23B;
+  transform: scale(1.2);
+}
+
+.explainer-progress .progress-dot.completed {
+  background: rgba(233, 162, 59, 0.5);
+}
+
+/* Slide content */
+.explainer-slide {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.slide-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.slide-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 24px;
+}
+
+.slide-subtitle {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 24px;
+  font-style: italic;
+}
+
+/* Insight cards for first slide */
+.insight-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.insight-number {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  background: rgba(233, 162, 59, 0.3);
+  color: #E9A23B;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.insight-body {
+  flex: 1;
+}
+
+.insight-body h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 8px;
+}
+
+.insight-body p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.insight-body p:last-child {
+  margin-bottom: 0;
+}
+
+.insight-question {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.slide-content {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+}
+
+.slide-content p {
+  margin: 0 0 16px;
+}
+
+.slide-intro {
+  font-size: 18px;
+  color: white;
+  font-weight: 500;
+}
+
+.slide-content .highlight {
+  color: #E9A23B;
+  font-weight: 600;
+}
+
+.slide-content .highlight-box {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.slide-question {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Pillars grid */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.pillar-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.pillar-card.skills {
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.pillar-card.problems {
+  border: 1px solid rgba(233, 162, 59, 0.3);
+}
+
+.pillar-card.persona {
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.pillar-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.pillar-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #E9A23B;
+  margin: 0 0 4px;
+}
+
+.pillar-card p {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Formula */
+.pillar-formula {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.formula-item {
+  font-weight: 600;
+  color: white;
+}
+
+.formula-operator {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.formula-result {
+  font-weight: 700;
+  color: #E9A23B;
+}
+
+/* Wheel slides */
+.wheel-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.wheel-demo {
+  display: flex;
+  justify-content: center;
+}
+
+.wheel-explanation {
+  text-align: left;
+  width: 100%;
+}
+
+.wheel-explanation p {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.ring-legend {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.ring-item {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.ring-item.emerging,
+.ring-item.awakening {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.ring-item.establishing,
+.ring-item.struggling {
+  background: rgba(96, 165, 250, 0.2);
+  color: #60a5fa;
+}
+
+.ring-item.mastering,
+.ring-item.ready {
+  background: rgba(107, 203, 119, 0.2);
+  color: #6BCB77;
+}
+
+.sphere-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.sphere-item {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+}
+
+.sphere-arrow {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.wheel-tip {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Segment examples grid */
+.segment-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.segment-examples span {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: rgba(233, 162, 59, 0.15);
+  color: #E9A23B;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.segment-examples.small span {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+.segment-why {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  margin: 8px 0;
+  text-align: center;
+}
+
+/* Flows grid */
+.flows-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.flow-option {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: left;
+  position: relative;
+}
+
+.flow-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.flow-badge.quick {
+  background: rgba(107, 203, 119, 0.2);
+  color: #6BCB77;
+}
+
+.flow-badge.deep {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.flow-option h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 6px;
+}
+
+.flow-option p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.flow-tip {
+  font-size: 13px;
+  color: #E9A23B;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Ready checklist */
+.ready-checklist {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(233, 162, 59, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.check-item {
+  font-size: 14px;
+  color: #E9A23B;
+  padding: 6px 0;
+}
+
+.ready-cta {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin-top: 20px;
+}
+
+/* Navigation */
+.explainer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.nav-btn.primary {
+  background: linear-gradient(135deg, #E9A23B, #D4922F);
+  color: white;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.nav-btn.primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+.nav-btn.secondary {
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.nav-btn.secondary:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .explainer-slide {
+    padding: 24px 16px;
+  }
+
+  .slide-title {
+    font-size: 20px;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .pillar-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .pillar-icon {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .pillar-card h3 {
+    margin: 0;
+  }
+
+  .pillar-formula {
+    font-size: 14px;
+  }
+
+  .flows-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ring-legend {
+    flex-direction: column;
+    align-items: center;
+  }
+}

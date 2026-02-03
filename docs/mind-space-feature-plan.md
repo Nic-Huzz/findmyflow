@@ -123,7 +123,7 @@ Each extracted skill is mapped to one of 12 wheel categories. User selects their
 |----------------|------|-------------------|
 | Clarifying | 💡 | The Translator |
 | Analyzing | 📊 | The Pattern Spotter |
-| Strategizing | 🎯 | The Chess Player |
+| Strategizing | 🎯 | The Gamemaker |
 | Organizing | ⚙️ | The Systems Architect |
 | Building | 🔨 | The Maker |
 | Designing | 🎨 | The Experience Crafter |

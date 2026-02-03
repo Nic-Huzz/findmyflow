@@ -331,13 +331,18 @@ export function useChallengeData() {
     }
   }
 
-  // Get Monday of current week
+  // Get Monday of current week (in local timezone, formatted as YYYY-MM-DD)
+  // Uses local date to match user's perception of "this week"
   const getWeekStart = () => {
     const now = new Date()
     const day = now.getDay()
     const diff = now.getDate() - day + (day === 0 ? -6 : 1) // Adjust for Sunday
-    const monday = new Date(now.setDate(diff))
-    return monday.toISOString().split('T')[0]
+    now.setDate(diff)
+    // Format as local date (not UTC) to avoid timezone mismatch
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const date = String(now.getDate()).padStart(2, '0')
+    return `${year}-${month}-${date}`
   }
 
   // Get formatted week label
@@ -1467,15 +1472,18 @@ export function useChallengeData() {
     }
   }
 
-  const awardTabCompletionBonus = async (category, bonusPoints) => {
-    if (!progress || !user) return
+  // Accept optional currentProgress to avoid stale state issues when called
+  // immediately after setProgress (React state updates are async)
+  const awardTabCompletionBonus = async (category, bonusPoints, currentProgress = null) => {
+    const effectiveProgress = currentProgress || progress
+    if (!effectiveProgress || !user) return
 
     const bonusKey = `${category.toLowerCase().replace(/\s+/g, '_')}_bonus_awarded`
 
-    if (progress[bonusKey]) return
+    if (effectiveProgress[bonusKey]) return
 
     try {
-      const newTotalPoints = (progress.total_points || 0) + bonusPoints
+      const newTotalPoints = (effectiveProgress.total_points || 0) + bonusPoints
 
       const updateData = {
         total_points: newTotalPoints,
@@ -1487,7 +1495,7 @@ export function useChallengeData() {
         .from('challenge_progress')
         .update(updateData)
         .eq('user_id', user.id)
-        .eq('challenge_instance_id', progress.challenge_instance_id)
+        .eq('challenge_instance_id', effectiveProgress.challenge_instance_id)
         .eq('status', 'active')
         .select()
         .single()
@@ -1716,16 +1724,12 @@ export function useChallengeData() {
   }, [user, leaderboardView])
 
   // ============================================
-  // Compute current user's weekly points (from new scoring tables)
+  // Compute current user's weekly points
+  // Always calculate from completions since that state is reliably updated
+  // after each quest completion. The weeklyScores from RPC may have sync delays.
   // ============================================
   const currentWeeklyPoints = (() => {
-    // Use new weekly scores if available
-    if (weeklyScores) {
-      return (weeklyScores.business_score || 0) +
-             (weeklyScores.healing_score || 0) +
-             (weeklyScores.courage_score || 0)
-    }
-    // Fallback to calculating from completions (for backwards compatibility)
+    // Calculate from completions (source of truth for current session)
     if (!completions || completions.length === 0) return 0
     const weekStart = new Date(getWeekStart() + 'T00:00:00')
     return completions
@@ -1830,6 +1834,7 @@ export function useChallengeData() {
     showWeeklyPlanning,
     setShowWeeklyPlanning,
     isSunday,
+    getWeekStart,
     getWeekLabel,
     loadWeeklyPlan,
     completeWeeklyGroan,

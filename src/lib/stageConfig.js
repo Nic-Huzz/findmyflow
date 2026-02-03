@@ -35,15 +35,14 @@ export const STAGE_CONFIG = {
     description: 'Discover your unique skills, problems, and personas',
     icon: '🧭',
     color: '#5e17eb', // brand purple (ombre start)
-    requiredFlows: ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration'],
+    requiredFlows: ['mind_space'], // Mind Space extraction is the only requirement
     milestones: [],
     groanChallenge: null, // No groan for Flow Finder
     tabLabel: 'Flow Finder',
     upsellPrompt: null,
     externalLink: null,
     isUserLevel: true, // Key flag: this stage is user-level, not project-level
-    alwaysAccessible: true, // Can be accessed from any project stage
-    temporarilyLocked: true // Flag to lock this tab during testing
+    alwaysAccessible: true // Can be accessed from any project stage
   },
   [STAGES.GROANS]: {
     id: 0.5,
@@ -523,13 +522,17 @@ export const FLOW_FINDER_CONFIG = {
   description: 'Discover your unique skills, problems, and personas',
   icon: '🧭',
   color: '#5e17eb', // brand purple (matches stage config)
+  // Required flow for graduation (checked via flow_sessions completion, not points)
   flows: [
-    { id: 'nikigai_skills', name: 'Skills', route: '/nikigai/skills', points: 10 },
-    { id: 'nikigai_problems', name: 'Problems', route: '/nikigai/problems', points: 10 },
-    { id: 'nikigai_persona', name: 'Personas', route: '/nikigai/persona', points: 9 },
-    { id: 'nikigai_integration', name: 'Integration', route: '/nikigai/integration', points: 6 }
+    { id: 'mind_space', name: 'Mind Space', route: '/mind-space', points: 10 }
   ],
-  totalPoints: 35,
+  // Optional deeper exploration flows (not required for graduation)
+  optionalFlows: [
+    { id: 'play_list_finder', name: 'Playlist Finder', route: '/play-list-finder', points: 10 },
+    { id: 'persona_identifier', name: 'Persona Identifier', route: '/persona-identifier', points: 10 },
+    { id: 'nikigai_problems', name: 'Problems Discovery', route: '/nikigai/problems', points: 10 }
+  ],
+  totalPoints: 10, // Points are for gamification only, graduation is based on flow completion
   // Flow Finder is required for:
   // - All Vibe Seekers
   // - Vibe Risers choosing "new opportunity"

@@ -174,7 +174,9 @@ const LEVELS = {
 // Calculate category levels from answers
 function calculateCategoryLevels(answers) {
   const wealthLadder = answers.q2_wealth_ladder?.value
-  const isPreLadder = wealthLadder === 'pre_ladder'
+  const journeyStage = answers.q1_journey_stage?.value
+  // Treat "exploring from day job" as pre-ladder since they skip q2
+  const isPreLadder = wealthLadder === 'pre_ladder' || journeyStage === 'employed_exploring'
 
   const levels = {
     journey: 1,
@@ -803,7 +805,9 @@ export default function PublicOfferAuditFlow() {
   }
 
   // Check if user is pre-ladder (still discovering, no business yet)
-  const isPreLadder = answers.q2_wealth_ladder?.value === 'pre_ladder'
+  // Also treat "exploring from day job" as pre-ladder since they skip q2
+  const isPreLadder = answers.q2_wealth_ladder?.value === 'pre_ladder' ||
+    answers.q1_journey_stage?.value === 'employed_exploring'
 
   // Generate PDF content
   const generatePdfContent = () => {

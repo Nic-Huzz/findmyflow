@@ -19,15 +19,32 @@ export function parseMindSpaceResponse(rawText) {
     parseErrors: []
   }
 
-  // Normalize different dash styles to standard
+  // Handle null/undefined input
+  if (!rawText || typeof rawText !== 'string') {
+    return result
+  }
+
+  // Normalize different dash/bullet styles to standard
   let normalizedText = rawText
-    .replace(/—/g, '---')  // em-dash to triple dash
+    .replace(/—/g, '-')     // em-dash to dash
     .replace(/–/g, '-')     // en-dash to dash
+    .replace(/⸻/g, '---')   // horizontal line to triple dash
     .replace(/•/g, '-')     // bullet to dash
+    .replace(/\t/g, ' ')    // tabs to spaces
 
   // Check for markers (handle variations)
-  const startMarkers = ['---START EXTRACTION---', '--- START EXTRACTION ---', 'START EXTRACTION']
-  const endMarkers = ['---END EXTRACTION---', '--- END EXTRACTION ---', 'END EXTRACTION']
+  const startMarkers = [
+    '---START EXTRACTION---',
+    '--- START EXTRACTION ---',
+    '-START EXTRACTION-',
+    'START EXTRACTION'
+  ]
+  const endMarkers = [
+    '---END EXTRACTION---',
+    '--- END EXTRACTION ---',
+    '-END EXTRACTION-',
+    'END EXTRACTION'
+  ]
 
   let contentToParse = normalizedText
 
@@ -61,12 +78,13 @@ export function parseMindSpaceResponse(rawText) {
  */
 function parseSkillsSection(text) {
   const skills = []
-  const skillsSection = extractSection(text, '## SKILLS', '##')
+  const skillsSection = extractSection(text, 'SKILLS', '##')
 
   if (!skillsSection) return skills
 
-  // Split by "SKILL:" pattern (with optional bullet/dash prefix)
-  const skillBlocks = skillsSection.split(/(?=[-•]\s*SKILL:)/i).filter(s => s.trim())
+  // Split by "SKILL:" pattern - handle various formats:
+  // - SKILL:, • SKILL:, **SKILL:**, 1. SKILL:, SKILL:
+  const skillBlocks = skillsSection.split(/(?=(?:[-•*\d.]+\s*)?(?:\*\*)?SKILL:)/i).filter(s => s.trim())
 
   for (const block of skillBlocks) {
     const skill = {
@@ -102,11 +120,12 @@ function normalizeFrequency(freq) {
  */
 function parseProblemsSection(text) {
   const problems = []
-  const problemsSection = extractSection(text, '## PROBLEMS', '##')
+  const problemsSection = extractSection(text, 'PROBLEMS', '##')
 
   if (!problemsSection) return problems
 
-  const problemBlocks = problemsSection.split(/(?=[-•]\s*PROBLEM:)/i).filter(s => s.trim())
+  // Split by "PROBLEM:" pattern - handle various formats
+  const problemBlocks = problemsSection.split(/(?=(?:[-•*\d.]+\s*)?(?:\*\*)?PROBLEM:)/i).filter(s => s.trim())
 
   for (const block of problemBlocks) {
     const problem = {
@@ -131,11 +150,12 @@ function parseProblemsSection(text) {
  */
 function parsePersonasSection(text) {
   const personas = []
-  const personasSection = extractSection(text, '## PERSONAS', '##')
+  const personasSection = extractSection(text, 'PERSONAS', '##')
 
   if (!personasSection) return personas
 
-  const personaBlocks = personasSection.split(/(?=[-•]\s*PERSONA:)/i).filter(s => s.trim())
+  // Split by "PERSONA:" pattern - handle various formats
+  const personaBlocks = personasSection.split(/(?=(?:[-•*\d.]+\s*)?(?:\*\*)?PERSONA:)/i).filter(s => s.trim())
 
   for (const block of personaBlocks) {
     const persona = {
@@ -160,11 +180,12 @@ function parsePersonasSection(text) {
  */
 function parseThemesSection(text) {
   const themes = []
-  const themesSection = extractSection(text, '## RECURRING THEMES', '##')
+  const themesSection = extractSection(text, 'RECURRING THEMES', '##')
 
   if (!themesSection) return themes
 
-  const themeBlocks = themesSection.split(/(?=[-•]\s*THEME:)/i).filter(s => s.trim())
+  // Split by "THEME:" pattern - handle various formats
+  const themeBlocks = themesSection.split(/(?=(?:[-•*\d.]+\s*)?(?:\*\*)?THEME:)/i).filter(s => s.trim())
 
   for (const block of themeBlocks) {
     const theme = {
@@ -185,11 +206,12 @@ function parseThemesSection(text) {
  */
 function parseCuriosityGapsSection(text) {
   const gaps = []
-  const gapsSection = extractSection(text, '## CURIOSITY GAPS', '##')
+  const gapsSection = extractSection(text, 'CURIOSITY GAPS', '##')
 
   if (!gapsSection) return gaps
 
-  const gapBlocks = gapsSection.split(/(?=[-•]\s*GAP:)/i).filter(s => s.trim())
+  // Split by "GAP:" pattern - handle various formats
+  const gapBlocks = gapsSection.split(/(?=(?:[-•*\d.]+\s*)?(?:\*\*)?GAP:)/i).filter(s => s.trim())
 
   for (const block of gapBlocks) {
     const gap = {
@@ -210,34 +232,76 @@ function parseCuriosityGapsSection(text) {
  * Parse north star statement
  */
 function parseNorthStar(text) {
-  const northStarSection = extractSection(text, '## NORTH STAR', '---')
+  const northStarSection = extractSection(text, 'NORTH STAR', '---')
 
   if (!northStarSection) return ''
 
-  // Look for the quoted statement or the full paragraph
-  const quoteMatch = northStarSection.match(/"([^"]+)"/)
+  // Look for the quoted statement (handle curly quotes too)
+  const quoteMatch = northStarSection.match(/[""]([^""]+)[""]/)
   if (quoteMatch) return quoteMatch[1]
+
+  // Also try standard quotes
+  const stdQuoteMatch = northStarSection.match(/"([^"]+)"/)
+  if (stdQuoteMatch) return stdQuoteMatch[1]
 
   // Otherwise return the cleaned section
   return northStarSection
     .replace(/^.*?complete this sentence:/i, '')
+    .replace(/^.*?HYPOTHESIS\s*/i, '')
     .trim()
 }
 
 /**
  * Extract a section between two headers
+ * Handles formats like "## SKILLS" or "SKILLS (description)" or just "SKILLS"
  */
-function extractSection(text, startHeader, endMarker) {
-  const startIdx = text.indexOf(startHeader)
+function extractSection(text, sectionName, endMarker) {
+  // Try multiple patterns to find the section header (case-insensitive)
+  const patterns = [
+    new RegExp(`##\\s*${sectionName}[^\\n]*`, 'i'),      // ## SKILLS ...
+    new RegExp(`^${sectionName}\\s*\\([^)]*\\)`, 'im'),  // SKILLS (description)
+    new RegExp(`^${sectionName}\\s*$`, 'im'),            // Just SKILLS
+    new RegExp(`\\n${sectionName}\\s*\\([^)]*\\)`, 'i'), // Newline + SKILLS (description)
+    new RegExp(`\\n${sectionName}\\s*\\n`, 'i')          // Newline + SKILLS + newline
+  ]
+
+  let startIdx = -1
+  let headerLength = 0
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern)
+    if (match) {
+      startIdx = match.index
+      headerLength = match[0].length
+      break
+    }
+  }
+
   if (startIdx === -1) return null
 
-  const contentStart = startIdx + startHeader.length
+  const contentStart = startIdx + headerLength
 
   // Find next section or end marker
+  // Look for next section header (---\n or ## or UPPERCASE_WORD followed by newline/paren)
   let endIdx = text.length
-  const nextSectionMatch = text.slice(contentStart).match(new RegExp(`\n${endMarker}\\s*[A-Z]`))
-  if (nextSectionMatch) {
-    endIdx = contentStart + nextSectionMatch.index
+  const remainingText = text.slice(contentStart)
+
+  // Look for section separators: ---, ##, or next uppercase section header
+  const nextSectionPatterns = [
+    /\n---+\s*\n/,                           // --- separator
+    /\n##\s*[A-Z]/,                          // ## header
+    /\n[A-Z][A-Z\s]+\([^)]*\)\s*\n/,        // SECTION_NAME (description)
+    /\n[A-Z][A-Z\s]+\n(?=\s*-)/             // SECTION_NAME followed by bullet items
+  ]
+
+  for (const pattern of nextSectionPatterns) {
+    const match = remainingText.match(pattern)
+    if (match && match.index > 0) {
+      const newEndIdx = contentStart + match.index
+      if (newEndIdx < endIdx) {
+        endIdx = newEndIdx
+      }
+    }
   }
 
   return text.slice(contentStart, endIdx).trim()
@@ -245,13 +309,35 @@ function extractSection(text, startHeader, endMarker) {
 
 /**
  * Extract a field value from a block
+ * Handles formats like:
+ * - SKILL: value
+ * - **SKILL:** value
+ * - SKILL: value (on its own line)
  */
 function extractField(block, fieldName) {
-  const regex = new RegExp(`${fieldName}:\\s*(.+?)(?=\\n-|\\n\\n|$)`, 'is')
-  const match = block.match(regex)
-  if (match) {
-    return match[1].trim().replace(/^\[|\]$/g, '').trim()
+  // Remove markdown bold markers
+  const cleanBlock = block.replace(/\*\*/g, '')
+
+  // Try multiple patterns
+  const patterns = [
+    // Standard: FIELD: value (until next field, bullet, or double newline)
+    new RegExp(`${fieldName}:\\s*(.+?)(?=\\n\\s*(?:[A-Z_]+:|[-•*]|\\n)|$)`, 'is'),
+    // Field on its own line with value on same line
+    new RegExp(`${fieldName}:\\s*([^\\n]+)`, 'i'),
+    // Fallback: just grab everything after the field name
+    new RegExp(`${fieldName}:\\s*(.+?)$`, 'is')
+  ]
+
+  for (const regex of patterns) {
+    const match = cleanBlock.match(regex)
+    if (match && match[1]) {
+      let value = match[1].trim()
+      // Remove surrounding brackets and quotes
+      value = value.replace(/^\[|\]$/g, '').replace(/^[""]|[""]$/g, '').trim()
+      if (value) return value
+    }
   }
+
   return ''
 }
 
@@ -260,19 +346,96 @@ function extractField(block, fieldName) {
  */
 export function validateParsedData(data) {
   const errors = []
+  const found = []
 
-  if (data.skills.length === 0) {
+  const skills = data?.skills || []
+  const problems = data?.problems || []
+  const personas = data?.personas || []
+
+  if (skills.length === 0) {
     errors.push('No skills were extracted')
+  } else {
+    found.push(`${skills.length} skills`)
   }
-  if (data.problems.length === 0) {
+  if (problems.length === 0) {
     errors.push('No problems were extracted')
+  } else {
+    found.push(`${problems.length} problems`)
   }
-  if (data.personas.length === 0) {
+  if (personas.length === 0) {
     errors.push('No personas were extracted')
+  } else {
+    found.push(`${personas.length} personas`)
   }
 
   return {
     isValid: errors.length === 0,
-    errors
+    errors,
+    found
   }
+}
+
+/**
+ * Generate a prompt for the user to copy back to their AI to reformat the response
+ */
+export function generateReformatPrompt(rawText) {
+  return `Please reformat your previous response using this EXACT structure. Use these EXACT field names with colons. Do not use markdown headers with ##, just the section names.
+
+---START EXTRACTION---
+
+SKILLS
+- SKILL: [Name of skill]
+  EVIDENCE: [Brief quote or pattern]
+  FREQUENCY: [Low/Medium/High]
+  CATEGORY: [Technical/Creative/Interpersonal/Strategic/Healing/Other]
+
+- SKILL: [Next skill...]
+  EVIDENCE: ...
+  FREQUENCY: ...
+  CATEGORY: ...
+
+---
+
+PROBLEMS
+- PROBLEM: [Name/Description]
+  EVIDENCE: [What made you identify this]
+  FREQUENCY: [Low/Medium/High]
+  EMOTIONAL_CHARGE: [Low/Medium/High]
+
+---
+
+PERSONAS
+- PERSONA: [Description]
+  EVIDENCE: [What made you identify this]
+  FREQUENCY: [Low/Medium/High]
+  CONNECTION: [Why I might relate to this persona]
+
+---
+
+RECURRING THEMES
+- THEME: [Name]
+  CONNECTS: [Which skills, problems, or personas this links]
+
+---
+
+CURIOSITY GAPS
+- GAP: [Topic]
+  EVIDENCE: [Why you think I'm curious but haven't gone deep]
+  SUGGESTED_CONNECTION: [What existing interest this might link to]
+
+---
+
+NORTH STAR HYPOTHESIS
+"You seem most alive when you're using [SKILLS] to help [PERSONAS] solve [PROBLEMS]."
+
+---END EXTRACTION---
+
+IMPORTANT FORMATTING RULES:
+1. Start each item with a dash (-) followed by the field name and colon
+2. Use SKILL:, PROBLEM:, PERSONA:, THEME:, GAP: exactly as shown
+3. Put each field on its own line
+4. Include the ---START EXTRACTION--- and ---END EXTRACTION--- markers
+5. Separate sections with --- on its own line
+
+Please reformat the extraction you just gave me using this structure.`
 }

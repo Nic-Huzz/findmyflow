@@ -15,10 +15,14 @@
  * Created: Feb 2026
  */
 
-import { useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useCallback, useEffect, useMemo } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import GoDeeper from '../components/GoDeeper'
+import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import { GradientWheel } from '../components/CompetenceWheels'
+import { SKILLS_SEGMENTS, PROFICIENCY_RINGS } from '../lib/wheelTaxonomy'
 // Proficiency levels for skill rating
 const PROFICIENCY_LEVELS = [
   { id: 'learning', label: 'Learning', color: '#fbbf24' },
@@ -42,7 +46,9 @@ const SCREENS = {
 export default function PlayListFinderFlow() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [currentScreen, setCurrentScreen] = useState(SCREENS.INTRO)
+  const [viewingResults, setViewingResults] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [error, setError] = useState(null)
 
@@ -60,6 +66,202 @@ export default function PlayListFinderFlow() {
   const [clusters, setClusters] = useState([])
   // Proficiency ratings for each skill: { 'cluster_label': 'learning' | 'practicing' | 'mastering' }
   const [skillRatings, setSkillRatings] = useState({})
+  // Session ID for database tracking
+  const [sessionId, setSessionId] = useState(null)
+  // Wheel visualization state
+  const [litCells, setLitCells] = useState(new Set())
+
+  // Add hue values to segments for wheel rendering
+  const skillsWithHue = useMemo(() =>
+    SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
+    []
+  )
+
+  // Map cluster labels to taxonomy keys (segment IDs like 'clarifying', 'analyzing')
+  // This is used for NEW clusters - saved for persistence
+  const mapClusterToTaxonomyKeys = (clusterLabel) => {
+    const labelLower = clusterLabel.toLowerCase()
+
+    // Map keywords to segment IDs (not indices)
+    const keywordToKeys = {
+      // Clarifying
+      clarifying: ['clarifying'], explaining: ['clarifying'], teaching: ['clarifying'], translating: ['clarifying'],
+      // Analyzing
+      analyzing: ['analyzing'], analysis: ['analyzing'], data: ['analyzing'], patterns: ['analyzing'], research: ['analyzing'],
+      // Strategizing
+      strategizing: ['strategizing'], strategy: ['strategizing'], planning: ['strategizing'], vision: ['strategizing'],
+      // Organizing
+      organizing: ['organizing'], systems: ['organizing'], operations: ['organizing'], processes: ['organizing'],
+      // Building
+      building: ['building'], making: ['building'], engineering: ['building'], coding: ['building'], developing: ['building'],
+      // Designing
+      designing: ['designing'], design: ['designing'], ux: ['designing'], visual: ['designing'], aesthetic: ['designing'],
+      // Creating
+      creating: ['creating'], creative: ['creating'], art: ['creating'], writing: ['creating'], ideation: ['creating'],
+      // Expressing
+      expressing: ['expressing'], storytelling: ['expressing'], presenting: ['expressing'], speaking: ['expressing'],
+      // Connecting
+      connecting: ['connecting'], networking: ['connecting'], collaboration: ['connecting'], facilitating: ['connecting'],
+      // Influencing
+      influencing: ['influencing'], sales: ['influencing'], persuading: ['influencing'], motivating: ['influencing'],
+      // Nurturing
+      nurturing: ['nurturing'], coaching: ['nurturing'], mentoring: ['nurturing'], supporting: ['nurturing'],
+      // Synthesizing
+      synthesizing: ['synthesizing'], integrating: ['synthesizing'], wisdom: ['synthesizing'], 'big picture': ['synthesizing'],
+      // Compound terms
+      'problem solving': ['analyzing', 'strategizing'], 'problem-solving': ['analyzing', 'strategizing'],
+      'team building': ['connecting', 'nurturing'], leadership: ['strategizing', 'influencing'],
+      communication: ['clarifying', 'expressing'], 'project management': ['strategizing', 'organizing'],
+      innovation: ['building', 'creating'], entrepreneurship: ['strategizing', 'building', 'influencing'],
+    }
+
+    // Find matching segment keys
+    const matchedKeys = new Set()
+    Object.entries(keywordToKeys).forEach(([keyword, keys]) => {
+      if (labelLower.includes(keyword)) {
+        keys.forEach(k => matchedKeys.add(k))
+      }
+    })
+
+    // Default to 'clarifying' if no match
+    return matchedKeys.size > 0 ? Array.from(matchedKeys) : ['clarifying']
+  }
+
+  // Convert taxonomy keys to segment indices for wheel rendering
+  const getSegmentIndicesFromKeys = (taxonomyKeys) => {
+    if (!taxonomyKeys || taxonomyKeys.length === 0) return [0]
+
+    return taxonomyKeys.map(key => {
+      const idx = SKILLS_SEGMENTS.findIndex(s => s.id === key)
+      return idx >= 0 ? idx : 0
+    }).filter((v, i, a) => a.indexOf(v) === i) // dedupe
+  }
+
+  // Get segment indices - prefer saved taxonomy_keys, fallback to label matching
+  const getSegmentIndices = (cluster) => {
+    if (cluster.taxonomy_keys && cluster.taxonomy_keys.length > 0) {
+      // Use saved taxonomy keys - check they still exist in current taxonomy
+      const validKeys = cluster.taxonomy_keys.filter(key =>
+        SKILLS_SEGMENTS.some(s => s.id === key)
+      )
+      if (validKeys.length > 0) {
+        return getSegmentIndicesFromKeys(validKeys)
+      }
+    }
+    // Fallback: regenerate from label
+    const keys = mapClusterToTaxonomyKeys(cluster.label)
+    return getSegmentIndicesFromKeys(keys)
+  }
+
+  // Map proficiency rating to ring index (0-2) for 3-ring wheel
+  const getRingForProficiency = (rating) => {
+    switch (rating) {
+      case 'learning': return 0
+      case 'practicing': return 1
+      case 'mastering': return 2
+      default: return 1 // Default to practicing
+    }
+  }
+
+  // Get taxonomy tags for a cluster - prefer saved keys, fallback to label matching
+  const getTaxonomyTags = (cluster) => {
+    const indices = getSegmentIndices(cluster)
+    return indices.map(idx => SKILLS_SEGMENTS[idx]).filter(Boolean)
+  }
+
+  // Update lit cells when clusters or ratings change
+  useEffect(() => {
+    if (clusters.length > 0) {
+      const newLitCells = new Set()
+
+      clusters.forEach(cluster => {
+        // Use saved taxonomy_keys if available, else fallback to label matching
+        const segmentIndices = getSegmentIndices(cluster)
+        const proficiency = cluster.proficiency || skillRatings[cluster.label] || 'practicing'
+        const ringIdx = getRingForProficiency(proficiency)
+
+        segmentIndices.forEach(segIdx => {
+          newLitCells.add(`${segIdx}-${ringIdx}`)
+        })
+      })
+
+      setLitCells(newLitCells)
+    }
+  }, [clusters, skillRatings])
+
+  // Create flow session on mount (skip if viewing results)
+  useEffect(() => {
+    if (searchParams.get('results') === 'true') return
+
+    const createSession = async () => {
+      if (!user?.id) return
+      try {
+        const { data, error } = await supabase
+          .from('flow_sessions')
+          .insert({
+            user_id: user.id,
+            flow_type: 'play_list_finder',
+            status: 'in_progress'
+          })
+          .select('id')
+          .single()
+
+        if (!error && data) {
+          setSessionId(data.id)
+        }
+      } catch (err) {
+        console.error('Error creating session:', err)
+      }
+    }
+    createSession()
+  }, [user?.id, searchParams])
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      try {
+        // Load saved clusters from database
+        const { data: savedClusters, error } = await supabase
+          .from('nikigai_clusters')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('cluster_type', 'skills')
+          .eq('cluster_stage', 'final')
+          .order('created_at', { ascending: false })
+          .limit(10)
+
+        if (error) throw error
+
+        if (savedClusters && savedClusters.length > 0) {
+          // Format clusters for display
+          const formattedClusters = savedClusters.map(c => ({
+            label: c.cluster_label,
+            insight: c.insight,
+            proficiency: c.proficiency,
+            taxonomy_keys: c.taxonomy_keys || [], // Load saved taxonomy keys
+            items: c.items || []
+          }))
+
+          // Build skill ratings from proficiency
+          const ratings = {}
+          formattedClusters.forEach(c => {
+            if (c.proficiency) ratings[c.label] = c.proficiency
+          })
+
+          setClusters(formattedClusters)
+          setSkillRatings(ratings)
+          setViewingResults(true)
+          setCurrentScreen(SCREENS.COMPLETE)
+        }
+      } catch (err) {
+        console.error('Error loading saved results:', err)
+      }
+    }
+
+    loadSavedResults()
+  }, [searchParams, user])
 
   // Add role model row
   const addRoleModelRow = () => {
@@ -183,18 +385,28 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
     }
   }, [roleModels, noFearAnswers, secretWishAnswers, groanZoneAnswers, user?.id])
 
+  // Track saving state to prevent double-clicks
+  const [isSaving, setIsSaving] = useState(false)
+
   // Save clusters with proficiency ratings to database
   const saveWithRatings = async () => {
+    if (isSaving) return // Prevent double-clicks
+    setIsSaving(true)
+    setError(null) // Clear any previous errors
+
     try {
-      // Add proficiency to each cluster
+      // Add proficiency and taxonomy keys to each cluster
       const clustersWithRatings = clusters.map(cluster => ({
         ...cluster,
-        proficiency: skillRatings[cluster.label] || 'practicing'
+        proficiency: skillRatings[cluster.label] || 'practicing',
+        // Generate and save taxonomy keys for persistence
+        taxonomy_keys: cluster.taxonomy_keys || mapClusterToTaxonomyKeys(cluster.label)
       }))
 
-      // Save to nikigai_responses
-      await supabase.from('nikigai_responses').insert({
+      // Save to nikigai_responses (include session_id for consistency)
+      const { error: responseError } = await supabase.from('nikigai_responses').insert({
         user_id: user.id,
+        session_id: sessionId,
         flow_type: 'play_list_finder',
         response_type: 'skills',
         response_data: {
@@ -208,14 +420,21 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
         }
       })
 
+      if (responseError) {
+        console.error('❌ Response save error:', responseError)
+      }
+
       // Also save to nikigai_clusters for integration
+      // taxonomy_keys persists wheel segment mappings (requires migration 20260203000000)
       const clustersToSave = clustersWithRatings.map(cluster => ({
         user_id: user.id,
+        session_id: sessionId,
         cluster_type: 'skills',
         cluster_stage: 'final',
         cluster_label: cluster.label,
         insight: cluster.insight,
         proficiency: cluster.proficiency,
+        taxonomy_keys: cluster.taxonomy_keys, // Persist wheel segment mappings
         items: (cluster.items || []).map(item => ({
           text: typeof item === 'string' ? item : item.text || item
         }))
@@ -230,11 +449,25 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
         // Don't throw - responses already saved
       }
 
+      // Mark flow session as complete
+      if (sessionId) {
+        await supabase
+          .from('flow_sessions')
+          .update({ status: 'completed', completed_at: new Date().toISOString() })
+          .eq('id', sessionId)
+      }
+
+      // Sync with 7-day challenge
+      await syncFlowFinderWithChallenge(user.id, 'play_list_finder')
+
+      console.log('✅ Play-List Finder saved successfully')
       setClusters(clustersWithRatings)
       setCurrentScreen(SCREENS.COMPLETE)
     } catch (err) {
       console.error('Error saving with ratings:', err)
       setError('Error saving. Please try again.')
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -301,6 +534,13 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
 
       <button className="primary-button" onClick={goToNext}>
         Let's Go
+      </button>
+      <button
+        className="secondary-button"
+        onClick={() => navigate('/7-day-challenge')}
+        style={{ marginTop: '12px', width: '100%' }}
+      >
+        Go Back
       </button>
     </div>
   )
@@ -590,9 +830,9 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
         <button
           className="primary-button save-btn"
           onClick={saveWithRatings}
-          disabled={!allSkillsRated()}
+          disabled={!allSkillsRated() || isSaving}
         >
-          Save & See Results
+          {isSaving ? 'Saving...' : 'Save & See Results'}
         </button>
       </div>
     )
@@ -611,14 +851,46 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
     return (
       <div className="flow-screen complete-screen">
         <div className="complete-icon">🎉</div>
-        <h2>Skills Discovered!</h2>
+        <h2>{viewingResults ? 'Your Play-List Skills' : 'Skills Discovered!'}</h2>
         <p className="complete-text">
-          Based on what feels like play to you, we've identified {clusters.length} skill areas:
+          {viewingResults
+            ? `Here are the ${clusters.length} skill areas we identified from your play preferences:`
+            : `Based on what feels like play to you, we've identified ${clusters.length} skill areas:`}
         </p>
+
+        {/* Skills Wheel Visualization */}
+        <div className="wheel-reveal" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px 0' }}>
+          <GradientWheel
+            segments={skillsWithHue}
+            rings={PROFICIENCY_RINGS}
+            litCells={litCells}
+            size={280}
+            centerLabel="SKILLS"
+            interactive={false}
+            celebrate={!viewingResults}
+          />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '12px', fontSize: '11px' }}>
+            {PROFICIENCY_RINGS.map((r, i) => (
+              <span key={r.id} style={{
+                padding: '4px 10px',
+                background: `${r.color}20`,
+                borderRadius: '12px',
+                color: r.color,
+                fontWeight: '500'
+              }}>
+                {i === 0 ? '← Inner ' : ''}{r.label}{i === PROFICIENCY_RINGS.length - 1 ? ' Outer →' : ''}
+              </span>
+            ))}
+          </div>
+          <div style={{ fontSize: '13px', color: '#6BCB77', marginTop: '12px', fontWeight: '500' }}>
+            {litCells.size} skill × proficiency combinations identified
+          </div>
+        </div>
 
         <div className="skill-results">
           {clusters.map((cluster, index) => {
             const levelInfo = getLevelInfo(cluster.proficiency || skillRatings[cluster.label])
+            const taxonomyTags = getTaxonomyTags(cluster)
             return (
               <div key={index} className="skill-result-card">
                 {levelInfo && (
@@ -629,6 +901,33 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
                 )}
                 <h3>{cluster.label}</h3>
                 <p>{cluster.insight}</p>
+                {/* Wheel Taxonomy Tags */}
+                {taxonomyTags.length > 0 && (
+                  <div className="taxonomy-tags" style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '6px',
+                    marginTop: '12px',
+                    marginBottom: '8px'
+                  }}>
+                    {taxonomyTags.map((tag, i) => (
+                      <span key={i} className="taxonomy-tag" style={{
+                        fontSize: '11px',
+                        padding: '4px 10px',
+                        background: `${tag.color}20`,
+                        color: tag.color,
+                        borderRadius: '12px',
+                        fontWeight: '500',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}>
+                        <span>{tag.icon}</span>
+                        {tag.displayName}
+                      </span>
+                    ))}
+                  </div>
+                )}
                 {cluster.items && cluster.items.length > 0 && (
                   <div className="cluster-evidence">
                     <div className="evidence-label">Based on your answers:</div>
@@ -644,14 +943,45 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
           })}
         </div>
 
-        <div className="nav-buttons">
-          <button
-            className="primary-button"
-            onClick={() => navigate('/7-day-challenge')}
-          >
-            Continue to Challenges
-          </button>
-        </div>
+        <GoDeeper flowType="skills" />
+
+        {viewingResults ? (
+          <div className="nav-buttons">
+            <button
+              className="secondary-button"
+              onClick={() => navigate(-1)}
+            >
+              Back
+            </button>
+            <button
+              className="primary-button"
+              onClick={() => {
+                setViewingResults(false)
+                setCurrentScreen(SCREENS.INTRO)
+                setClusters([])
+                setSkillRatings({})
+                navigate('/play-list-finder', { replace: true })
+              }}
+            >
+              Retake Flow
+            </button>
+          </div>
+        ) : (
+          <div className="nav-buttons">
+            <button
+              className="secondary-button"
+              onClick={() => navigate('/me')}
+            >
+              Back to Profile
+            </button>
+            <button
+              className="primary-button"
+              onClick={() => navigate('/7-day-challenge')}
+            >
+              Continue to Challenges
+            </button>
+          </div>
+        )}
       </div>
     )
   }

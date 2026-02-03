@@ -276,7 +276,7 @@ Each segment has:
 |---------|-------------|--------------|-------------------|
 | 1 | `clarifying` | Clarifying | **The Translator** - You make the complex simple |
 | 2 | `analyzing` | Analyzing | **The Pattern Spotter** - You see what others miss |
-| 3 | `strategizing` | Strategizing | **The Chess Player** - You think 10 moves ahead |
+| 3 | `strategizing` | Strategizing | **The Gamemaker** - You think 10 moves ahead |
 | 4 | `organizing` | Organizing | **The Systems Architect** - You create order from chaos |
 | 5 | `building` | Building | **The Maker** - You turn ideas into reality |
 | 6 | `designing` | Designing | **The Experience Crafter** - You shape how things feel |
@@ -329,7 +329,7 @@ Library of Answers:
 YOUR SKILLS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎯 THE CHESS PLAYER (Strategizing)
+🎯 THE GAMEMAKER (Strategizing)
    "You think 10 moves ahead"
    ├── "I naturally think about the big picture"
    ├── "I'm always planning 3 steps ahead"
@@ -355,7 +355,7 @@ YOUR FOUNDER IDENTITY
 
 You are THE STRATEGIC LIBERATOR
 
-A Chess Player who spots patterns and translates complexity,
+A Gamemaker who spots patterns and translates complexity,
 helping Explorers escape systems that trap them.
 
 Your superpower: Turning confusion into clear escape routes.

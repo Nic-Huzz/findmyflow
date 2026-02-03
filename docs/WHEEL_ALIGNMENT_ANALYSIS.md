@@ -99,7 +99,7 @@ This defines: "If you have THIS skill, you CAN help solve THESE problems."
 |-------|---------------|----------------------|-----------|
 | **clarifying** | Turning confusion into understanding | `mental_wellbeing`, `personal_mastery`, `human_progress`, `economic_freedom` | Translators help explain emotions (therapy), teach skills (mastery), demystify tech (progress), simplify business concepts (freedom) |
 | **analyzing** | Turning data into insight | `physical_vitality`, `economic_freedom`, `human_progress`, `planetary_health` | Pattern Spotters analyze health metrics, financial data, research findings, environmental data |
-| **strategizing** | Turning goals into plans | `economic_freedom`, `personal_mastery`, `local_impact`, `human_progress` | Chess Players create business strategy, life roadmaps, community plans, innovation strategy |
+| **strategizing** | Turning goals into plans | `economic_freedom`, `personal_mastery`, `local_impact`, `human_progress` | Gamemakers create business strategy, life roadmaps, community plans, innovation strategy |
 | **organizing** | Turning chaos into order | `economic_freedom`, `service_care`, `local_impact`, `personal_mastery` | Systems Architects build business operations, care coordination, team structure, productivity systems |
 | **building** | Turning blueprints into reality | `economic_freedom`, `human_progress`, `creative_expression`, `local_impact` | Makers build products/businesses, tech solutions, creative tools, community platforms |
 | **designing** | Turning function into experience | `creative_expression`, `economic_freedom`, `human_progress`, `mental_wellbeing` | Experience Crafters shape art/brand, product UX, tech interfaces, healing experiences |

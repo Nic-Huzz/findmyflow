@@ -128,7 +128,7 @@ function PreActionModal({ quest, userId, onProceed, onCancel }) {
 
   const handleSaveAndProceed = async (f = feeling, l = visibilityLayer, v = protectiveVoice) => {
     if (userId && f) {
-      await supabase.from('pre_action_captures').insert({
+      const { error } = await supabase.from('pre_action_captures').insert({
         user_id: userId,
         action_type: `milestone_${quest.id}`,
         flow_type: 'milestone',
@@ -136,6 +136,9 @@ function PreActionModal({ quest, userId, onProceed, onCancel }) {
         visibility_layer: l,
         protective_voice: v
       })
+      if (error) {
+        console.error('Error saving pre-action capture:', error)
+      }
     }
     onProceed?.()
   }

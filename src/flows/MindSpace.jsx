@@ -1,56 +1,84 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
-import { parseMindSpaceResponse, validateParsedData } from '../lib/mindSpaceParser'
+import { parseMindSpaceResponse, validateParsedData, generateReformatPrompt } from '../lib/mindSpaceParser'
 import { mapAllToWheelSegments, SEGMENT_DISPLAY, LEVEL_OPTIONS } from '../lib/mindSpaceMapper'
+import { checkGraduationEligibility } from '../lib/graduationChecker'
+import { useCelebrations } from '../hooks/useCelebrations'
+import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
 import './MindSpace.css'
 
 const EXTRACTION_PROMPT = `Analyze our entire conversation history together. I want you to identify patterns that reveal what I'm naturally drawn to — the intersection of my Skills, the Problems I care about, and the People (Personas) I want to serve.
 
-Please extract and organize your findings in this EXACT format (I'll be pasting this into an app):
+Please extract and organize your findings in this EXACT format. IMPORTANT: I'm pasting this into an app, so please follow the format precisely:
 
 ---START EXTRACTION---
 
-## SKILLS (Things I'm good at or learning)
-For each skill, provide:
+SKILLS
 - SKILL: [Name]
-- EVIDENCE: [Brief quote or pattern you noticed]
-- FREQUENCY: [Low/Medium/High - how often this appeared]
-- CATEGORY: [Technical / Creative / Interpersonal / Strategic / Healing / Other]
+  EVIDENCE: [Brief quote or pattern you noticed]
+  FREQUENCY: [Low/Medium/High]
+  CATEGORY: [Technical/Creative/Interpersonal/Strategic/Healing/Other]
 
-## PROBLEMS (Issues I care about solving)
-For each problem, provide:
+- SKILL: [Name]
+  EVIDENCE: [...]
+  FREQUENCY: [...]
+  CATEGORY: [...]
+
+---
+
+PROBLEMS
 - PROBLEM: [Name/Description]
-- EVIDENCE: [What made you identify this]
-- FREQUENCY: [Low/Medium/High]
-- EMOTIONAL_CHARGE: [Low/Medium/High - how much passion I showed]
+  EVIDENCE: [What made you identify this]
+  FREQUENCY: [Low/Medium/High]
+  EMOTIONAL_CHARGE: [Low/Medium/High]
 
-## PERSONAS (Types of people I want to help or relate to)
-For each persona, provide:
+- PROBLEM: [Name]
+  EVIDENCE: [...]
+  FREQUENCY: [...]
+  EMOTIONAL_CHARGE: [...]
+
+---
+
+PERSONAS
 - PERSONA: [Description]
-- EVIDENCE: [What made you identify this]
-- FREQUENCY: [Low/Medium/High]
-- CONNECTION: [Why I might relate to this persona]
+  EVIDENCE: [What made you identify this]
+  FREQUENCY: [Low/Medium/High]
+  CONNECTION: [Why I might relate to this persona]
 
-## RECURRING THEMES
-List 3-5 themes that appear across multiple conversations:
+- PERSONA: [Description]
+  EVIDENCE: [...]
+  FREQUENCY: [...]
+  CONNECTION: [...]
+
+---
+
+RECURRING THEMES
 - THEME: [Name]
-- CONNECTS: [Which skills, problems, or personas this links]
+  CONNECTS: [Which skills, problems, or personas this links]
 
-## CURIOSITY GAPS
-Things I've circled around but haven't fully explored:
+---
+
+CURIOSITY GAPS
 - GAP: [Topic]
-- EVIDENCE: [Why you think I'm curious but haven't gone deep]
-- SUGGESTED_CONNECTION: [What existing interest this might link to]
+  EVIDENCE: [Why you think I'm curious but haven't gone deep]
+  SUGGESTED_CONNECTION: [What existing interest this might link to]
 
-## NORTH STAR HYPOTHESIS
-Based on everything above, complete this sentence:
+---
+
+NORTH STAR HYPOTHESIS
 "You seem most alive when you're using [SKILLS] to help [PERSONAS] solve [PROBLEMS]."
 
 ---END EXTRACTION---
 
-Important guidelines:
+FORMAT RULES (please follow exactly):
+1. Start each item with a dash and the field name: - SKILL:, - PROBLEM:, - PERSONA:, etc.
+2. Put each field (EVIDENCE, FREQUENCY, etc.) on its own line, indented with spaces
+3. Separate sections with --- on its own line
+4. Include the ---START EXTRACTION--- and ---END EXTRACTION--- markers
+
+CONTENT GUIDELINES:
 1. Be specific — use my actual words and topics, not generic descriptions
 2. Look for PATTERNS, not just one-off mentions
 3. Include things I might not consciously recognize about myself
@@ -63,8 +91,11 @@ Important guidelines:
 export default function MindSpace() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const { triggerConfetti, celebrateLevelUp } = useCelebrations()
 
   const [step, setStep] = useState(1)
+  const [viewingResults, setViewingResults] = useState(false)
   const [rawResponse, setRawResponse] = useState('')
   const [parsedData, setParsedData] = useState(null)
   const [mappedData, setMappedData] = useState(null)
@@ -72,10 +103,69 @@ export default function MindSpace() {
   const [error, setError] = useState(null)
   const [copied, setCopied] = useState(false)
   const [sourceAI, setSourceAI] = useState('chatgpt')
+  const [aiUsageLevel, setAiUsageLevel] = useState(null)
+  const [graduationMessage, setGraduationMessage] = useState(null)
 
   const [starredSkills, setStarredSkills] = useState(new Set())
   const [starredProblems, setStarredProblems] = useState(new Set())
   const [starredPersonas, setStarredPersonas] = useState(new Set())
+  const [showReformatPrompt, setShowReformatPrompt] = useState(false)
+  const [reformatCopied, setReformatCopied] = useState(false)
+
+  // Check for ?results=true to show saved results directly
+  useEffect(() => {
+    const loadSavedResults = async () => {
+      if (searchParams.get('results') !== 'true' || !user) return
+
+      try {
+        // Load the most recent mind_space extraction from nikigai_responses
+        const { data: savedResponse, error } = await supabase
+          .from('nikigai_responses')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('flow_type', 'mind_space')
+          .eq('response_type', 'extraction')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single()
+
+        if (error) throw error
+
+        if (savedResponse && savedResponse.response_data) {
+          const data = savedResponse.response_data
+          // Restore the mapped data
+          setMappedData({
+            skills: data.skills || [],
+            problems: data.problems || [],
+            personas: data.personas || []
+          })
+          // Restore parsed data (for north star, themes, gaps)
+          setParsedData({
+            skills: data.skills || [],
+            problems: data.problems || [],
+            personas: data.personas || [],
+            northStar: data.northStar || '',
+            themes: data.themes || [],
+            curiosityGaps: data.curiosityGaps || []
+          })
+          // Restore starred items
+          if (data.starredSkills) setStarredSkills(new Set(data.starredSkills))
+          if (data.starredProblems) setStarredProblems(new Set(data.starredProblems))
+          if (data.starredPersonas) setStarredPersonas(new Set(data.starredPersonas))
+          if (data.sourceAI) setSourceAI(data.sourceAI)
+          if (data.aiUsageLevel) setAiUsageLevel(data.aiUsageLevel)
+
+          setViewingResults(true)
+          setStep(4) // Go to "what's next" / results screen
+        }
+      } catch (err) {
+        console.error('Error loading saved Mind Space results:', err)
+        // If no results found, just stay on step 1
+      }
+    }
+
+    loadSavedResults()
+  }, [searchParams, user])
 
   const handleCopyPrompt = async () => {
     try {
@@ -94,29 +184,55 @@ export default function MindSpace() {
     }
   }
 
-  const handleParse = () => {
+  const handleParse = async () => {
     setIsProcessing(true)
     setError(null)
+    setShowReformatPrompt(false)
 
     try {
       const parsed = parseMindSpaceResponse(rawResponse)
       const validation = validateParsedData(parsed)
 
       if (!validation.isValid) {
-        setError(`Couldn't extract enough data: ${validation.errors.join(', ')}. Try a longer conversation or check the format.`)
+        const found = validation.found || []
+        const foundMsg = found.length > 0
+          ? ` (Found: ${found.join(', ')})`
+          : ''
+        setError(`Couldn't extract all data: ${validation.errors.join(', ')}.${foundMsg}`)
+        setShowReformatPrompt(true)
         setIsProcessing(false)
         return
       }
 
-      const mapped = mapAllToWheelSegments(parsed)
+      const mapped = await mapAllToWheelSegments(parsed)
       setParsedData(parsed)
       setMappedData(mapped)
       setStep(3)
     } catch (err) {
-      setError('Failed to parse the response. Make sure the AI followed the format.')
+      console.error('Parse error:', err)
+      setError('Failed to parse the response. The format may not match what we expected.')
+      setShowReformatPrompt(true)
     }
 
     setIsProcessing(false)
+  }
+
+  const handleCopyReformatPrompt = async () => {
+    const prompt = generateReformatPrompt(rawResponse)
+    try {
+      await navigator.clipboard.writeText(prompt)
+      setReformatCopied(true)
+      setTimeout(() => setReformatCopied(false), 2000)
+    } catch (err) {
+      const textArea = document.createElement('textarea')
+      textArea.value = prompt
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      setReformatCopied(true)
+      setTimeout(() => setReformatCopied(false), 2000)
+    }
   }
 
   const handleLevelChange = (type, index, level) => {
@@ -155,107 +271,198 @@ export default function MindSpace() {
   }
 
   const saveToNikigaiClusters = async () => {
-    // Save skills
+    let hasErrors = false
+
+    // First create a flow session to get a session_id
+    const sessionId = crypto.randomUUID()
+    const { data: sessionData, error: sessionError } = await supabase.from('flow_sessions').insert({
+      id: sessionId,
+      user_id: user.id,
+      flow_type: 'mind_space',
+      flow_version: '1.0',
+      status: 'completed',
+      last_step_id: 'extraction_complete',
+      completed_at: new Date().toISOString()
+    }).select().single()
+
+    if (sessionError) {
+      console.error('❌ Error creating flow session:', sessionError)
+      hasErrors = true
+      // Don't continue if session creation failed - we need the session_id
+      return
+    }
+
+    console.log('✅ Flow session created:', sessionData?.id || sessionId)
+
+    // Save skills - using correct nikigai_clusters column names
     for (let i = 0; i < mappedData.skills.length; i++) {
       const skill = mappedData.skills[i]
       if (!skill.userLevel) continue
 
-      await supabase.from('nikigai_clusters').upsert({
+      const { error } = await supabase.from('nikigai_clusters').insert({
+        session_id: sessionId,
         user_id: user.id,
-        flow_type: 'skills',
-        label: skill.name,
-        summary: skill.evidence,
-        confidence: skill.frequency === 'High' ? 0.9 : skill.frequency === 'Medium' ? 0.7 : 0.5,
-        source: 'mind_space',
-        metadata: {
-          mappedTo: skill.mappedTo,
-          level: skill.userLevel,
+        cluster_type: 'skills',
+        cluster_stage: 'final',
+        cluster_label: skill.name,
+        insight: skill.evidence,
+        proficiency: skill.userLevel,
+        taxonomy_keys: skill.mappedTo ? [skill.mappedTo] : [],
+        items: [{
+          text: skill.evidence,
+          frequency: skill.frequency,
           isStarred: starredSkills.has(i),
           sourceAI
-        }
-      }, { onConflict: 'user_id,flow_type,label' })
+        }]
+      })
+      if (error) {
+        console.error('❌ Error saving skill:', skill.name, error)
+        hasErrors = true
+      }
     }
 
-    // Save problems
+    // Save problems - using correct nikigai_clusters column names
     for (let i = 0; i < mappedData.problems.length; i++) {
       const problem = mappedData.problems[i]
       if (!problem.userLevel) continue
 
-      await supabase.from('nikigai_clusters').upsert({
+      const { error } = await supabase.from('nikigai_clusters').insert({
+        session_id: sessionId,
         user_id: user.id,
-        flow_type: 'problems',
-        label: problem.name,
-        summary: problem.evidence,
-        confidence: problem.frequency === 'High' ? 0.9 : problem.frequency === 'Medium' ? 0.7 : 0.5,
-        source: 'mind_space',
-        metadata: {
-          mappedTo: problem.mappedTo,
-          level: problem.userLevel,
+        cluster_type: 'problems',
+        cluster_stage: 'final',
+        cluster_label: problem.name,
+        insight: problem.evidence,
+        proficiency: problem.userLevel,
+        taxonomy_keys: problem.mappedTo ? [problem.mappedTo] : [],
+        items: [{
+          text: problem.evidence,
+          frequency: problem.frequency,
           emotionalCharge: problem.emotionalCharge,
           isStarred: starredProblems.has(i),
           sourceAI
-        }
-      }, { onConflict: 'user_id,flow_type,label' })
+        }]
+      })
+      if (error) {
+        console.error('❌ Error saving problem:', problem.name, error)
+        hasErrors = true
+      }
     }
 
-    // Save personas
+    // Save personas - using correct nikigai_clusters column names
     for (let i = 0; i < mappedData.personas.length; i++) {
       const persona = mappedData.personas[i]
       if (!persona.userLevel) continue
 
-      await supabase.from('nikigai_clusters').upsert({
+      const { error } = await supabase.from('nikigai_clusters').insert({
+        session_id: sessionId,
         user_id: user.id,
-        flow_type: 'persona',
-        label: persona.name,
-        summary: persona.evidence,
-        confidence: persona.frequency === 'High' ? 0.9 : persona.frequency === 'Medium' ? 0.7 : 0.5,
-        source: 'mind_space',
-        metadata: {
-          mappedTo: persona.mappedTo,
-          level: persona.userLevel,
+        cluster_type: 'persona',
+        cluster_stage: 'final',
+        cluster_label: persona.name,
+        insight: persona.evidence,
+        proficiency: persona.userLevel,
+        taxonomy_keys: persona.mappedTo ? [persona.mappedTo] : [],
+        items: [{
+          text: persona.evidence,
+          frequency: persona.frequency,
           connection: persona.connection,
           isStarred: starredPersonas.has(i),
           sourceAI
-        }
-      }, { onConflict: 'user_id,flow_type,label' })
+        }]
+      })
+      if (error) {
+        console.error('❌ Error saving persona:', persona.name, error)
+        hasErrors = true
+      }
     }
 
-    // Save north star as key outcome
-    if (parsedData.northStar) {
-      await supabase.from('nikigai_key_outcomes').upsert({
-        user_id: user.id,
-        outcome_type: 'north_star',
-        content: parsedData.northStar,
-        source: 'mind_space'
-      }, { onConflict: 'user_id,outcome_type' })
+    // Save raw extraction data to nikigai_responses for re-clustering capability
+    // This stores the complete parsed output including north star, themes, and gaps
+    const { error: responseError } = await supabase.from('nikigai_responses').insert({
+      session_id: sessionId,
+      user_id: user.id,
+      flow_type: 'mind_space',
+      response_type: 'extraction',
+      response_data: {
+        skills: mappedData.skills,
+        problems: mappedData.problems,
+        personas: mappedData.personas,
+        northStar: parsedData.northStar,
+        themes: parsedData.themes || [],
+        curiosityGaps: parsedData.curiosityGaps || [],
+        sourceAI,
+        aiUsageLevel,
+        starredSkills: Array.from(starredSkills),
+        starredProblems: Array.from(starredProblems),
+        starredPersonas: Array.from(starredPersonas)
+      }
+    })
+    if (responseError) {
+      console.error('❌ Error saving raw extraction:', responseError)
+      hasErrors = true
+    }
+
+    if (hasErrors) {
+      console.warn('⚠️ Some items failed to save to MindSpace')
     }
   }
 
   const handleConfirm = async () => {
+    if (isProcessing) return // Prevent double-clicks
     setIsProcessing(true)
     setError(null)
 
     try {
       await saveToNikigaiClusters()
+
+      // Sync with 7-day challenge to award points
+      try {
+        await syncFlowFinderWithChallenge(user.id, 'mind_space')
+        console.log('✅ Mind Space synced with challenge')
+      } catch (syncError) {
+        console.warn('Challenge sync failed:', syncError)
+        // Don't block completion if sync fails
+      }
+
+      // Check if user can now graduate from Flow Finder to Validation
+      try {
+        const eligibility = await checkGraduationEligibility(user.id)
+        console.log('🎓 Graduation eligibility:', eligibility)
+
+        if (eligibility.eligible) {
+          // Trigger celebration!
+          triggerConfetti()
+          setGraduationMessage({
+            title: '🎉 Stage Unlocked: Validation!',
+            message: 'You\'ve completed Flow Finder and unlocked Stage 1: Validation. Time to validate your ideas with real people!',
+            nextStep: 'Head to the Challenge page to start your validation journey.'
+          })
+        }
+      } catch (gradError) {
+        console.warn('Graduation check failed:', gradError)
+        // Don't block completion if graduation check fails
+      }
+
       setStep(4) // Go to "what's next" screen
     } catch (err) {
       console.error('Save error:', err)
       setError('Failed to save. Please try again.')
+    } finally {
+      setIsProcessing(false)
     }
-
-    setIsProcessing(false)
   }
 
   const handleNextChoice = (choice) => {
     switch (choice) {
       case 'skills':
-        navigate('/nikigai/skills')
+        navigate('/play-list-finder')
         break
       case 'problems':
+        navigate('/nikigai/problems')
+        break
       case 'people':
-        navigate('/nikigai/problems', {
-          state: choice === 'people' ? { showPeopleExplanation: true } : undefined
-        })
+        navigate('/persona-identifier')
         break
       case 'done':
         navigate('/7-day-challenge', { state: { completedMindSpace: true } })
@@ -287,12 +494,50 @@ export default function MindSpace() {
         </div>
       </header>
 
-      {error && <div className="error-banner">{error}</div>}
+      {error && (
+        <div className="error-banner">
+          <p>{error}</p>
+          {showReformatPrompt && (
+            <div className="reformat-help">
+              <p>Copy this prompt back to your AI to get the correct format:</p>
+              <button
+                className={`copy-button small ${reformatCopied ? 'copied' : ''}`}
+                onClick={handleCopyReformatPrompt}
+              >
+                {reformatCopied ? 'Copied!' : 'Copy Reformat Prompt'}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Step 1: Copy Prompt */}
       {step === 1 && (
         <div className="step-content">
-          <div className="card">
+          <div className="card ai-usage-card">
+            <h2>How often do you use AI chats?</h2>
+            <p>This helps us understand how effective this tool will be for you.</p>
+
+            <div className="ai-usage-options">
+              {[
+                { value: 'rare', label: 'Rarely', desc: 'Tried it a few times' },
+                { value: 'occasional', label: 'Occasionally', desc: 'A few times a month' },
+                { value: 'regular', label: 'Regularly', desc: 'A few times a week' },
+                { value: 'daily', label: 'Daily', desc: "It's part of my workflow" }
+              ].map(opt => (
+                <button
+                  key={opt.value}
+                  className={`ai-usage-btn ${aiUsageLevel === opt.value ? 'selected' : ''}`}
+                  onClick={() => setAiUsageLevel(opt.value)}
+                >
+                  <span className="usage-label">{opt.label}</span>
+                  <span className="usage-desc">{opt.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={`card ${!aiUsageLevel ? 'card-dimmed' : ''}`}>
             <h2>Copy this prompt</h2>
             <p>Paste it into ChatGPT, Claude, or any AI you've had meaningful conversations with.</p>
 
@@ -410,7 +655,14 @@ export default function MindSpace() {
                         <span className="icon">{SEGMENT_DISPLAY.skills[skill.mappedTo].icon}</span>
                       )}
                       <span className="name">{skill.name}</span>
-                      <span className={`freq freq-${skill.frequency.toLowerCase()}`}>{skill.frequency}</span>
+                    </div>
+                    <div className="item-tags">
+                      {skill.mappedTo && SEGMENT_DISPLAY.skills[skill.mappedTo] && (
+                        <span className="taxonomy-tag">
+                          {SEGMENT_DISPLAY.skills[skill.mappedTo].title}
+                        </span>
+                      )}
+                      <span className={`freq freq-${skill.frequency?.toLowerCase() || 'medium'}`}>{skill.frequency}</span>
                     </div>
                     <div className="evidence">{skill.evidence}</div>
                     <div className="level-btns">
@@ -453,7 +705,14 @@ export default function MindSpace() {
                         <span className="icon">{SEGMENT_DISPLAY.problems[problem.mappedTo].icon}</span>
                       )}
                       <span className="name">{problem.name}</span>
-                      <span className={`freq freq-${problem.frequency.toLowerCase()}`}>{problem.frequency}</span>
+                    </div>
+                    <div className="item-tags">
+                      {problem.mappedTo && SEGMENT_DISPLAY.problems[problem.mappedTo] && (
+                        <span className="taxonomy-tag">
+                          {SEGMENT_DISPLAY.problems[problem.mappedTo].title}
+                        </span>
+                      )}
+                      <span className={`freq freq-${problem.frequency?.toLowerCase() || 'medium'}`}>{problem.frequency}</span>
                     </div>
                     <div className="evidence">{problem.evidence}</div>
                     <div className="level-btns">
@@ -496,7 +755,14 @@ export default function MindSpace() {
                         <span className="icon">{SEGMENT_DISPLAY.personas[persona.mappedTo].icon}</span>
                       )}
                       <span className="name">{persona.name}</span>
-                      <span className={`freq freq-${persona.frequency.toLowerCase()}`}>{persona.frequency}</span>
+                    </div>
+                    <div className="item-tags">
+                      {persona.mappedTo && SEGMENT_DISPLAY.personas[persona.mappedTo] && (
+                        <span className="taxonomy-tag">
+                          {SEGMENT_DISPLAY.personas[persona.mappedTo].title}
+                        </span>
+                      )}
+                      <span className={`freq freq-${persona.frequency?.toLowerCase() || 'medium'}`}>{persona.frequency}</span>
                     </div>
                     <div className="evidence">{persona.evidence}</div>
                     {persona.connection && <div className="connection">Connection: {persona.connection}</div>}
@@ -558,52 +824,145 @@ export default function MindSpace() {
         </div>
       )}
 
-      {/* Step 4: What's Next */}
+      {/* Step 4: What's Next / Results View */}
       {step === 4 && (
         <div className="step-content">
           <div className="card whats-next">
-            <div className="success-icon">✓</div>
-            <h2>Extraction Complete!</h2>
-            <p>Your skills, problems, and people have been saved.</p>
+            <div className="success-icon">{viewingResults ? '🎯' : (graduationMessage ? '🎉' : '✓')}</div>
+            <h2>{viewingResults ? 'Your Mind Space Results' : (graduationMessage ? graduationMessage.title : 'Extraction Complete!')}</h2>
+            <p>{viewingResults ? 'Here\'s what we extracted from your AI conversations.' : (graduationMessage ? graduationMessage.message : 'Your skills, problems, and people have been saved.')}</p>
 
-            <div className="next-question">
-              <h3>Does this capture everything?</h3>
-              <p>You can go deeper on any area, or proceed to validation.</p>
-            </div>
+            {graduationMessage && !viewingResults && (
+              <div className="graduation-banner">
+                <p>{graduationMessage.nextStep}</p>
+              </div>
+            )}
 
-            <div className="next-options">
-              <button className="option-btn" onClick={() => handleNextChoice('skills')}>
-                <span className="option-icon">💡</span>
-                <span className="option-text">
-                  <strong>Skills feel incomplete</strong>
-                  <span>Explore deeper in Skills Discovery</span>
-                </span>
-              </button>
+            {/* Show extracted data when viewing results */}
+            {viewingResults && mappedData && (
+              <div className="results-summary">
+                {parsedData?.northStar && (
+                  <div className="north-star">
+                    <span className="north-star-label">Your North Star</span>
+                    <p>"{parsedData.northStar}"</p>
+                  </div>
+                )}
 
-              <button className="option-btn" onClick={() => handleNextChoice('problems')}>
-                <span className="option-icon">🎯</span>
-                <span className="option-text">
-                  <strong>Problems feel incomplete</strong>
-                  <span>Explore deeper in Problems Discovery</span>
-                </span>
-              </button>
+                {mappedData.skills?.length > 0 && (
+                  <div className="results-section">
+                    <h3>💡 Skills ({mappedData.skills.length})</h3>
+                    <div className="results-items">
+                      {mappedData.skills.slice(0, 5).map((skill, i) => (
+                        <div key={i} className="result-item">
+                          <span className="result-name">{skill.name}</span>
+                          {skill.userLevel && <span className={`result-level level-${skill.userLevel}`}>{skill.userLevel}</span>}
+                        </div>
+                      ))}
+                      {mappedData.skills.length > 5 && <p className="more-items">+{mappedData.skills.length - 5} more</p>}
+                    </div>
+                  </div>
+                )}
 
-              <button className="option-btn" onClick={() => handleNextChoice('people')}>
-                <span className="option-icon">👥</span>
-                <span className="option-text">
-                  <strong>People feel incomplete</strong>
-                  <span>Found through Problems → Persona flow</span>
-                </span>
-              </button>
+                {mappedData.problems?.length > 0 && (
+                  <div className="results-section">
+                    <h3>🎯 Problems ({mappedData.problems.length})</h3>
+                    <div className="results-items">
+                      {mappedData.problems.slice(0, 5).map((problem, i) => (
+                        <div key={i} className="result-item">
+                          <span className="result-name">{problem.name}</span>
+                          {problem.userLevel && <span className={`result-level level-${problem.userLevel}`}>{problem.userLevel}</span>}
+                        </div>
+                      ))}
+                      {mappedData.problems.length > 5 && <p className="more-items">+{mappedData.problems.length - 5} more</p>}
+                    </div>
+                  </div>
+                )}
 
-              <button className="option-btn primary" onClick={() => handleNextChoice('done')}>
-                <span className="option-icon">🚀</span>
-                <span className="option-text">
-                  <strong>Looks good!</strong>
-                  <span>Proceed to Stage 1: Validation</span>
-                </span>
-              </button>
-            </div>
+                {mappedData.personas?.length > 0 && (
+                  <div className="results-section">
+                    <h3>👥 People ({mappedData.personas.length})</h3>
+                    <div className="results-items">
+                      {mappedData.personas.slice(0, 5).map((persona, i) => (
+                        <div key={i} className="result-item">
+                          <span className="result-name">{persona.name}</span>
+                          {persona.userLevel && <span className={`result-level level-${persona.userLevel}`}>{persona.userLevel}</span>}
+                        </div>
+                      ))}
+                      {mappedData.personas.length > 5 && <p className="more-items">+{mappedData.personas.length - 5} more</p>}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Navigation for viewing results */}
+            {viewingResults ? (
+              <div className="nav-buttons" style={{ marginTop: '24px' }}>
+                <button
+                  className="secondary-button"
+                  onClick={() => navigate(-1)}
+                >
+                  Back
+                </button>
+                <button
+                  className="primary-button"
+                  onClick={() => {
+                    setViewingResults(false)
+                    setStep(1)
+                    setMappedData(null)
+                    setParsedData(null)
+                    setRawResponse('')
+                    setStarredSkills(new Set())
+                    setStarredProblems(new Set())
+                    setStarredPersonas(new Set())
+                    navigate('/mind-space', { replace: true })
+                  }}
+                >
+                  Retake Flow
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="next-question">
+                  <h3>Does this capture everything?</h3>
+                  <p>You can go deeper on any area, or proceed to validation.</p>
+                </div>
+
+                <div className="next-options">
+                  <button className="option-btn" onClick={() => handleNextChoice('skills')}>
+                    <span className="option-icon">💡</span>
+                    <span className="option-text">
+                      <strong>Skills feel incomplete</strong>
+                      <span>Explore deeper in Playlist Finder</span>
+                    </span>
+                  </button>
+
+                  <button className="option-btn" onClick={() => handleNextChoice('problems')}>
+                    <span className="option-icon">🎯</span>
+                    <span className="option-text">
+                      <strong>Problems feel incomplete</strong>
+                      <span>Explore deeper in Problems Discovery</span>
+                    </span>
+                  </button>
+
+                  <button className="option-btn" onClick={() => handleNextChoice('people')}>
+                    <span className="option-icon">👥</span>
+                    <span className="option-text">
+                      <strong>People feel incomplete</strong>
+                      <span>Explore deeper in Persona Identifier</span>
+                    </span>
+                  </button>
+
+                  <button className="option-btn primary" onClick={() => handleNextChoice('done')}>
+                    <span className="option-icon">🚀</span>
+                    <span className="option-text">
+                      <strong>Looks good!</strong>
+                      <span>Proceed to Stage 1: Validation</span>
+                    </span>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

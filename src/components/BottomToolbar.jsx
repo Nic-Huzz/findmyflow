@@ -82,6 +82,10 @@ const HIDDEN_ROUTES = [
   '/try/', // Public lead magnet flows
   '/weekly-planning', // Full-screen planning flow
   '/nikigai/', // Flow finder flows
+  '/flow-finder-explainer', // Flow Finder framework explainer
+  '/play-list-finder', // Quick skills discovery
+  '/persona-identifier', // Quick persona discovery
+  '/mind-space', // Mind space extraction
   '/nervous-system',
   '/healing-compass',
   '/attraction-offer',

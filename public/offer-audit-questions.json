@@ -38,6 +38,10 @@
       "id": "q2_wealth_ladder",
       "question": "What have you created so far?",
       "subtext": "Think about what you're currently offering or selling",
+      "conditional": {
+        "field": "q1_journey_stage",
+        "values": ["employed_building", "solo_early", "solo_established"]
+      },
       "options": [
         {
           "label": "Still discovering",

@@ -1,6 +1,22 @@
 {
   "quests": [
     {
+      "id": "flow_finder_explainer",
+      "category": "Business",
+      "type": "Flow Finder",
+      "frequency": "anytime",
+      "stage_required": 0,
+      "name": "Understand Flow Finder",
+      "description": "Learn how Skills × Problems × Persona creates your Unique Flow",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "flow_finder_explainer",
+      "flow_route": "/flow-finder-explainer",
+      "learnMore": "Before diving into discovery flows, understand the framework that ties everything together.\n\nYou'll learn:\n• How Skills, Problems, and Persona combine to create opportunities\n• What the competence wheels represent\n• How proficiency levels light up your unique profile\n• Which flows to start with based on your goals\n\nThis 2-minute explainer sets you up for success with all Flow Finder quests.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
       "id": "mind_space_extraction",
       "category": "Business",
       "type": "Flow Finder",
@@ -527,7 +543,6 @@
       "flow_id": "nikigai_problems",
       "flow_route": "/nikigai/problems",
       "stage_required": 0,
-      "requires_quest": "flow_finder_skills",
       "counts_toward_graduation": false,
       "learnMore": "Discover which problems energize you to solve. These become the foundation of your impact."
     },

@@ -44,13 +44,18 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       console.log('No active challenge - flow completed but not linked to quest')
 
       // Still record the flow completion (for future challenges)
-      await supabase
+      const { error: flowError } = await supabase
         .from('flow_completions')
         .insert([{
           user_id: userId,
           flow_id: flowId,
           challenge_instance_id: null  // Not part of a challenge
         }])
+
+      if (flowError) {
+        console.error('Error recording flow completion (no active challenge):', flowError)
+        // Non-fatal - just log, don't fail
+      }
 
       return {
         success: false,
