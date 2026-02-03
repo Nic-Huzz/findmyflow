@@ -303,14 +303,17 @@ function HomeFirstTime() {
     })
 
     // Save all V2 data to database - MUST await before clearing localStorage
+    setError(null) // Clear any previous error
     const success = await saveOnboardingV2Data(derivedPersona, emphasis, option.value)
 
     if (success) {
       // Only clear localStorage after successful save
       clearSavedProgress()
       transitionToScreen(SCREENS.PERSONA_REVEAL)
+    } else {
+      // Show error to user so they know to retry
+      setError('Failed to save your answers. Please try again.')
     }
-    // If save failed, user stays on Q3 and can retry
   }
 
   // Save all V2 onboarding data to database - returns true on success, false on failure

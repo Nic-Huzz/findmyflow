@@ -220,10 +220,15 @@ function ExistingProjectFlow({ onComplete, onBack }) {
         await saveSeedClusters(result.project?.id)
 
         // Mark onboarding as complete
-        await supabase
+        const { error: updateError } = await supabase
           .from('user_stage_progress')
           .update({ onboarding_completed: true })
           .eq('user_id', user.id)
+
+        if (updateError) {
+          console.error('Error marking onboarding complete:', updateError)
+          // Don't block - project was created successfully
+        }
 
         setStage(FLOW_STAGES.SUCCESS)
         setTimeout(() => {

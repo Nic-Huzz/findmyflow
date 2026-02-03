@@ -325,7 +325,7 @@ function QuickCapture({
 
       if (existingProgress) {
         // Update existing record
-        await supabase
+        const { error: updateError } = await supabase
           .from('user_stage_progress')
           .update({
             onboarding_completed: true,
@@ -334,6 +334,10 @@ function QuickCapture({
             updated_at: new Date().toISOString()
           })
           .eq('user_id', userId)
+
+        if (updateError) {
+          throw new Error('Failed to mark onboarding complete: ' + updateError.message)
+        }
       } else {
         // Create new record if it doesn't exist
         // Map wealth ladder to persona (service + productized = vibe_riser, products = movement_maker)
@@ -342,7 +346,7 @@ function QuickCapture({
           productized: 'vibe_riser',
           products: 'movement_maker'
         }
-        await supabase
+        const { error: insertError } = await supabase
           .from('user_stage_progress')
           .insert({
             user_id: userId,
@@ -352,6 +356,10 @@ function QuickCapture({
             onboarding_v2_completed: true,
             guidance_emphasis: guidanceEmphasis
           })
+
+        if (insertError) {
+          throw new Error('Failed to create onboarding record: ' + insertError.message)
+        }
       }
 
       // Clear localStorage

@@ -152,7 +152,7 @@ function PersonaAssessment() {
 
         // Note: Persona is now determined post-auth in HomeFirstTime.jsx
         // We save essence/protective archetypes here, persona will be updated later
-        await supabase.from('lead_flow_profiles').insert([{
+        const { error: leadError } = await supabase.from('lead_flow_profiles').insert([{
           session_id: sessionId,
           user_name: userName,
           email: email.toLowerCase(),
@@ -164,6 +164,11 @@ function PersonaAssessment() {
             archetypes_completed: true
           }
         }])
+
+        if (leadError) {
+          console.error('Error saving lead profile:', leadError)
+          // Don't block - user can still authenticate
+        }
       }
 
       // Now send the verification code
