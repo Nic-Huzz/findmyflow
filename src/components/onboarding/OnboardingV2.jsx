@@ -38,6 +38,7 @@ function OnboardingV2({ userId, onComplete, initialData = null }) {
   const [questions, setQuestions] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState(null)
 
   // Q1-Q3 answers
   const [employmentStatus, setEmploymentStatus] = useState(initialData?.employmentStatus || null)
@@ -133,7 +134,7 @@ function OnboardingV2({ userId, onComplete, initialData = null }) {
   }
 
   // Q3 Handler
-  const handleQ3Selection = (option) => {
+  const handleQ3Selection = async (option) => {
     const validGoals = getValidGoalsForWealthLadder(wealthLadderRung)
     if (!validGoals.includes(option.value)) return
 
@@ -143,21 +144,37 @@ function OnboardingV2({ userId, onComplete, initialData = null }) {
 
     setGuidanceEmphasis(emphasis)
     setPersona(derivedPersona)
+    setSaveError(null)
 
-    // Save to database
-    saveToDatabase(derivedPersona, emphasis, option.value)
-    setTimeout(() => setCurrentStep(STEPS.PERSONA_REVEAL), 300)
+    // Save to database and wait for result
+    const success = await saveToDatabase(derivedPersona, emphasis, option.value)
+    if (success) {
+      setTimeout(() => setCurrentStep(STEPS.PERSONA_REVEAL), 300)
+    }
   }
 
-  // Save to database
+  // Save to database - returns true on success, false on failure
   const saveToDatabase = async (derivedPersona, emphasis, goal) => {
-    if (!userId) return
+    if (!userId) {
+      setSaveError('No user ID available. Please refresh and try again.')
+      return false
+    }
     setIsSaving(true)
+    setSaveError(null)
 
     try {
-      await supabase
+      // Get path config to determine correct starting stage
+      const pathConfig = determineOnboardingPath(wealthLadderRung, goal)
+      // Use startingStage from path, default to '0' for pre_ladder (null case)
+      const startingStage = pathConfig.startingStage !== null
+        ? String(pathConfig.startingStage)
+        : '0'
+
+      // Use upsert to handle both new and existing users
+      const { error } = await supabase
         .from('user_stage_progress')
-        .update({
+        .upsert({
+          user_id: userId,
           persona: derivedPersona,
           employment_status: employmentStatus,
           has_side_project: hasSideProject,
@@ -165,11 +182,22 @@ function OnboardingV2({ userId, onComplete, initialData = null }) {
           primary_goal: goal,
           guidance_emphasis: emphasis,
           onboarding_v2_completed: true,
-          current_stage: wealthLadderRung === 'pre_ladder' ? null : 1
+          onboarding_completed: true,
+          current_stage: startingStage
+        }, {
+          onConflict: 'user_id'
         })
-        .eq('user_id', userId)
+
+      if (error) {
+        console.error('Error saving onboarding data:', error)
+        setSaveError('Failed to save your answers. Please try again.')
+        return false
+      }
+      return true
     } catch (err) {
       console.error('Error saving onboarding data:', err)
+      setSaveError('Failed to save your answers. Please try again.')
+      return false
     } finally {
       setIsSaving(false)
     }
@@ -286,6 +314,13 @@ function OnboardingV2({ userId, onComplete, initialData = null }) {
         <h2 className="question-title">{question.question}</h2>
         <p className="question-subtext">{question.subtext || 'Your answers help us personalise your journey'}</p>
 
+        {saveError && (
+          <div className="save-error">
+            <p>{saveError}</p>
+            <button onClick={() => setSaveError(null)}>Dismiss</button>
+          </div>
+        )}
+
         <div className="options-list">
           {question.options.map((option) => {
             const isDisabled = validGoals && !validGoals.includes(option.value)
@@ -293,9 +328,9 @@ function OnboardingV2({ userId, onComplete, initialData = null }) {
             return (
               <button
                 key={option.value}
-                className={`option-button ${isDisabled ? 'disabled' : ''}`}
-                onClick={() => !isDisabled && handleOptionClick(option)}
-                disabled={isDisabled}
+                className={`option-button ${isDisabled ? 'disabled' : ''} ${isSaving ? 'saving' : ''}`}
+                onClick={() => !isDisabled && !isSaving && handleOptionClick(option)}
+                disabled={isDisabled || isSaving}
               >
                 <span className="option-label">{option.label}</span>
                 <span className="option-description">{option.description}</span>

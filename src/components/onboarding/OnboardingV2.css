@@ -168,3 +168,40 @@
 .onboarding-v2 .back-button:hover {
   color: white;
 }
+
+/* Save Error */
+.onboarding-v2 .save-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.onboarding-v2 .save-error p {
+  color: #fca5a5;
+  font-size: 14px;
+  margin: 0 0 12px;
+}
+
+.onboarding-v2 .save-error button {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.onboarding-v2 .save-error button:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* Saving State */
+.onboarding-v2 .option-button.saving {
+  opacity: 0.6;
+  cursor: wait;
+}

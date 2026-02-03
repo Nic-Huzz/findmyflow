@@ -314,6 +314,13 @@ function HomeFirstTime() {
     if (!user?.id) return
 
     try {
+      // Get path config to determine correct starting stage
+      const pathConfig = determineOnboardingPath(wealthLadderRung, goal)
+      // Use startingStage from path, default to '0' for pre_ladder (null case)
+      const startingStage = pathConfig.startingStage !== null
+        ? String(pathConfig.startingStage)
+        : '0'
+
       // Use upsert to handle both new and existing users
       const { error } = await supabase
         .from('user_stage_progress')
@@ -327,8 +334,7 @@ function HomeFirstTime() {
           guidance_emphasis: emphasis,
           onboarding_completed: true,
           onboarding_v2_completed: true,
-          // Set initial stage based on wealth ladder
-          current_stage: wealthLadderRung === 'pre_ladder' ? null : 1
+          current_stage: startingStage
         }, {
           onConflict: 'user_id'
         })

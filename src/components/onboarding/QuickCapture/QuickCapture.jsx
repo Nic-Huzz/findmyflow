@@ -336,9 +336,9 @@ function QuickCapture({
           .eq('user_id', userId)
       } else {
         // Create new record if it doesn't exist
-        // Map wealth ladder to persona
+        // Map wealth ladder to persona (service + productized = vibe_riser, products = movement_maker)
         const personaMap = {
-          service: 'vibe_seeker',
+          service: 'vibe_riser',
           productized: 'vibe_riser',
           products: 'movement_maker'
         }

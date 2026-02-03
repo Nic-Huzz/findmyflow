@@ -215,10 +215,10 @@ function PersonaAssessment() {
           if (!existingProgress) {
             // Create new stage progress record with onboarding_completed = false
             // Persona and V2 fields will be set after Q1-Q3 assessment in HomeFirstTime
+            // Note: Don't set current_stage here - let DB default apply, then V2 onboarding will set it
             await supabase.from('user_stage_progress').insert([{
               user_id: authUser.id,
               persona: null, // Will be set after Q1-Q3 assessment
-              current_stage: null, // Will be set after Q1-Q3 assessment
               conversations_logged: 0,
               onboarding_completed: false
             }])
