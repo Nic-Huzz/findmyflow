@@ -11,6 +11,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { useSteppedForm } from '../hooks/useSteppedForm'
 import { StepProgress } from './QuestInputShared'
+import { getEssenceDisplayName } from '../lib/essencePreferences'
 import './RewireQuestInput.css'
 
 // Rewire quest IDs
@@ -253,7 +254,7 @@ function RewireQuestInput({ quest, onComplete }) {
 
       const { data } = await supabase
         .from('lead_flow_profiles')
-        .select('protective_archetype, essence_archetype')
+        .select('protective_archetype, essence_archetype, custom_essence_name')
         .ilike('email', user.email)
         .order('created_at', { ascending: false })
         .limit(1)
@@ -261,7 +262,7 @@ function RewireQuestInput({ quest, onComplete }) {
       if (data && data.length > 0) {
         setUserArchetypes({
           protective: data[0].protective_archetype,
-          essence: data[0].essence_archetype
+          essence: getEssenceDisplayName(data[0])
         })
         if (data[0].protective_archetype) {
           setFormData(prev => ({ ...prev, protectiveVoice: data[0].protective_archetype }))

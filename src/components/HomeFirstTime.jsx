@@ -31,6 +31,7 @@ import {
 } from '../lib/onboardingV2'
 import { PersonaReveal, QuickCapture } from './onboarding'
 import ExistingProjectFlow from './ExistingProjectFlow'
+import { getEssenceDisplayName } from '../lib/essencePreferences'
 import './HomeFirstTime.css'
 
 const SCREENS = {
@@ -182,13 +183,16 @@ function HomeFirstTime() {
       if (leadProfile) {
         setUserName(leadProfile.user_name || user.user_metadata?.name || '')
 
-        // Get essence profile data
-        const essenceName = leadProfile.essence_archetype
-        if (essenceName) {
+        // Get essence profile data (use custom name if set)
+        const essenceDisplayName = getEssenceDisplayName(leadProfile)
+        const essenceOriginalName = leadProfile.essence_archetype
+        if (essenceOriginalName) {
           const essenceData = essenceProfiles.essence_archetypes?.find(
-            a => a.name?.toLowerCase() === essenceName.toLowerCase()
+            a => a.name?.toLowerCase() === essenceOriginalName.toLowerCase()
           )
-          setEssenceArchetype(essenceData || { name: essenceName })
+          setEssenceArchetype(essenceData
+            ? { ...essenceData, name: essenceDisplayName }
+            : { name: essenceDisplayName })
         }
 
         // Get protective profile data
@@ -396,6 +400,30 @@ function HomeFirstTime() {
     // Navigate to main profile page after onboarding
     navigate('/me')
     console.log('navigate(/me) called')
+  }
+
+  // Mark onboarding complete in the database
+  const markOnboardingComplete = async () => {
+    if (!user?.id) return
+    const { error } = await supabase
+      .from('user_stage_progress')
+      .update({ onboarding_v2_completed: true })
+      .eq('user_id', user.id)
+    if (error) {
+      console.error('Error updating onboarding status:', error)
+    }
+  }
+
+  // Handle "I'll do this later" - mark onboarding complete then go to profile
+  const handleSkipToProfile = async () => {
+    await markOnboardingComplete()
+    navigate('/me')
+  }
+
+  // Handle "I have 2 minutes now" - mark onboarding complete then go to mind-space
+  const handleStartMindSpace = async () => {
+    await markOnboardingComplete()
+    navigate('/mind-space')
   }
 
   // Loading state
@@ -676,7 +704,7 @@ function HomeFirstTime() {
           <div className="project-type-options">
             <button
               className="option-card"
-              onClick={() => navigate('/mind-space')}
+              onClick={handleStartMindSpace}
             >
               <span className="option-icon">🚀</span>
               <span className="option-title">I have 2 minutes now</span>
@@ -685,7 +713,7 @@ function HomeFirstTime() {
 
             <button
               className="option-card"
-              onClick={() => navigate('/me')}
+              onClick={handleSkipToProfile}
             >
               <span className="option-icon">⏰</span>
               <span className="option-title">I'll do this later</span>
@@ -745,7 +773,7 @@ function HomeFirstTime() {
           <div className="project-type-options">
             <button
               className="option-card"
-              onClick={() => navigate('/mind-space')}
+              onClick={handleStartMindSpace}
             >
               <span className="option-icon">🚀</span>
               <span className="option-title">I have 2 minutes now</span>
@@ -754,7 +782,7 @@ function HomeFirstTime() {
 
             <button
               className="option-card"
-              onClick={() => navigate('/me')}
+              onClick={handleSkipToProfile}
             >
               <span className="option-icon">⏰</span>
               <span className="option-title">I'll do this later</span>

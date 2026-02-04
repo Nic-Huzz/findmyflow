@@ -7,6 +7,7 @@ import { mapAllToWheelSegments, SEGMENT_DISPLAY, LEVEL_OPTIONS } from '../lib/mi
 import { checkGraduationEligibility } from '../lib/graduationChecker'
 import { useCelebrations } from '../hooks/useCelebrations'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import MindSpaceGraph from '../components/MindSpaceGraph'
 import './MindSpace.css'
 
 const EXTRACTION_PROMPT = `Analyze our entire conversation history together. I want you to identify patterns that reveal what I'm naturally drawn to — the intersection of my Skills, the Problems I care about, and the People (Personas) I want to serve.
@@ -287,9 +288,8 @@ export default function MindSpace() {
 
     if (sessionError) {
       console.error('❌ Error creating flow session:', sessionError)
-      hasErrors = true
       // Don't continue if session creation failed - we need the session_id
-      return
+      return { success: false, error: sessionError.message }
     }
 
     console.log('✅ Flow session created:', sessionData?.id || sessionId)
@@ -405,7 +405,10 @@ export default function MindSpace() {
 
     if (hasErrors) {
       console.warn('⚠️ Some items failed to save to MindSpace')
+      return { success: false, error: 'Some items failed to save' }
     }
+
+    return { success: true }
   }
 
   const handleConfirm = async () => {
@@ -414,7 +417,11 @@ export default function MindSpace() {
     setError(null)
 
     try {
-      await saveToNikigaiClusters()
+      const saveResult = await saveToNikigaiClusters()
+      if (saveResult && !saveResult.success) {
+        setError(saveResult.error || 'Failed to save. Please try again.')
+        return
+      }
 
       // Sync with 7-day challenge to award points
       try {
@@ -841,6 +848,21 @@ export default function MindSpace() {
             {/* Show extracted data when viewing results */}
             {viewingResults && mappedData && (
               <div className="results-summary">
+                {/* Mind Space Graph Visualization */}
+                <MindSpaceGraph
+                  data={{
+                    skills: mappedData.skills || [],
+                    problems: mappedData.problems || [],
+                    personas: mappedData.personas || [],
+                    themes: parsedData?.themes || [],
+                    curiosityGaps: parsedData?.curiosityGaps || [],
+                    northStar: parsedData?.northStar || '',
+                    starredSkills: Array.from(starredSkills),
+                    starredProblems: Array.from(starredProblems),
+                    starredPersonas: Array.from(starredPersonas)
+                  }}
+                />
+
                 {parsedData?.northStar && (
                   <div className="north-star">
                     <span className="north-star-label">Your North Star</span>

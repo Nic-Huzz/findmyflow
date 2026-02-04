@@ -70,19 +70,20 @@ function GroanMatrix({
       return
     }
 
-    // Fetch Flow Finder data
-    const { data: ffData } = await fetchFlowFinderData(userId)
+    // Fetch all three data sources in parallel (they're independent)
+    const [ffResult, statsResult, challengesResult] = await Promise.all([
+      fetchFlowFinderData(userId),
+      getGroanStats(userId),
+      supabase.from('groan_challenges').select('*').eq('user_id', userId)
+    ])
+
+    const { data: ffData } = ffResult
     setFlowFinderData(ffData)
 
-    // Fetch stats
-    const { data: statsData } = await getGroanStats(userId)
+    const { data: statsData } = statsResult
     setStats(statsData)
 
-    // Fetch all challenges for this user to populate the matrix
-    const { data: allChallenges } = await supabase
-      .from('groan_challenges')
-      .select('*')
-      .eq('user_id', userId)
+    const { data: allChallenges } = challengesResult
 
     // Organize challenges by source+layer key
     // Also organize skill × problem challenges separately

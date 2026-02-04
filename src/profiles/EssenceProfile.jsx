@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { essenceProfiles } from '../data/essenceProfiles'
 import { hasActiveChallenge } from '../lib/questCompletion'
+import { getEssenceDisplayName, getEssenceImagePath } from '../lib/essencePreferences'
 import './EssenceProfile.css'
 
 const EssenceProfile = () => {
@@ -64,16 +65,14 @@ const EssenceProfile = () => {
   }
 
   // Get the archetype name and find the profile data
-  const archetypeName = userData?.essence_archetype || 'Unknown'
+  const archetypeName = getEssenceDisplayName(userData)
+  const originalName = userData?.essence_archetype || 'Unknown'
   const archetypeData = essenceProfiles.essence_archetypes.find(
-    arch => arch.name === archetypeName
+    arch => arch.name === originalName
   ) || {}
 
-  // Format filename for image path
-  const getImagePath = () => {
-    const filename = archetypeName.toLowerCase().replace(/\s+/g, '-')
-    return `/images/archetypes/lead-magnet-essence/${filename}.PNG`
-  }
+  // Image path: custom or default
+  const getImagePath = () => getEssenceImagePath(userData)
 
   return (
     <div className="essence-profile-container">

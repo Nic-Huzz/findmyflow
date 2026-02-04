@@ -1,0 +1,486 @@
+/**
+ * MindSpaceGraph.css
+ *
+ * Styles for the Mind Space graph visualization
+ */
+
+/* Wrapper */
+.mind-space-graph-wrapper {
+  margin: 1.5rem 0;
+}
+
+/* ========== SHRUNK PREVIEW ========== */
+
+.mind-space-preview {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  background: #1a1a2e;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mind-space-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.preview-container {
+  width: 100%;
+  height: 100%;
+}
+
+.preview-container svg {
+  display: block;
+}
+
+.preview-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 40%,
+    rgba(26, 26, 46, 0.7) 70%,
+    rgba(26, 26, 46, 0.95) 100%
+  );
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+}
+
+.preview-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Expand Button */
+.expand-button {
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  border: none;
+  border-radius: 12px;
+  color: #212529;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+}
+
+.expand-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 221, 39, 0.4);
+}
+
+/* ========== FULLSCREEN MODE ========== */
+
+.mind-space-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #1a1a2e;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+/* North Star Banner */
+.north-star-banner {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  max-width: 70%;
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.north-star-icon {
+  margin-right: 0.5rem;
+}
+
+.north-star-label {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.north-star-text {
+  color: #f1f5f9;
+}
+
+/* Full Graph Container */
+.full-graph-container {
+  width: 100%;
+  height: 100%;
+}
+
+.full-graph-container svg {
+  display: block;
+}
+
+/* Legend */
+.graph-legend {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  color: #f1f5f9;
+}
+
+.legend-title {
+  font-weight: 600;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.legend-dot.dashed {
+  background: transparent;
+  border: 2px dashed;
+}
+
+.legend-star {
+  position: absolute;
+  top: -2px;
+  left: -1px;
+  font-size: 10px;
+}
+
+.legend-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Instructions */
+.graph-instructions {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* ========== NODE DETAIL PANEL ========== */
+
+.node-detail-panel {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: #f1f5f9;
+  animation: slideIn 0.25s ease;
+  z-index: 10;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+.panel-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: #94a3b8;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.panel-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.panel-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  padding-right: 2rem;
+  line-height: 1.3;
+}
+
+.panel-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.type-badge {
+  /* Colors set inline */
+}
+
+.level-badge {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.frequency-badge {
+  background: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+}
+
+.frequency-badge.frequency-high {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.frequency-badge.frequency-medium {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.frequency-badge.frequency-low {
+  background: rgba(148, 163, 184, 0.2);
+  color: #94a3b8;
+}
+
+.starred-badge {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.panel-description {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+  font-style: italic;
+}
+
+.panel-connection,
+.panel-meta {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.connection-label,
+.meta-label {
+  color: #f1f5f9;
+  font-weight: 500;
+}
+
+.charge-value.charge-high {
+  color: #ef4444;
+}
+
+.charge-value.charge-medium {
+  color: #fbbf24;
+}
+
+.charge-value.charge-low {
+  color: #22c55e;
+}
+
+/* Connected Nodes */
+.panel-connected {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.connected-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin: 0 0 0.75rem;
+}
+
+.connected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.connected-tag {
+  background: transparent;
+  border: 1px solid;
+  border-radius: 100px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.connected-tag:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* ========== RESPONSIVE ========== */
+
+@media (min-width: 768px) {
+  .mind-space-preview {
+    height: 350px;
+  }
+
+  .node-detail-panel {
+    width: 320px;
+  }
+
+  .graph-legend {
+    font-size: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .node-detail-panel {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: none;
+    width: 100%;
+    max-height: 60vh;
+    border-radius: 20px 20px 0 0;
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .north-star-banner {
+    max-width: 85%;
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .close-button {
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  .graph-legend {
+    bottom: auto;
+    top: 4rem;
+    left: 0.5rem;
+    font-size: 0.6rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .graph-instructions {
+    display: none;
+  }
+}

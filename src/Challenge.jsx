@@ -646,18 +646,28 @@ function Challenge() {
         }
       }
 
-      // Reload completions
-      const { data: newCompletions, error: completionsError } = await supabase
-        .from('quest_completions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('challenge_instance_id', progress.challenge_instance_id)
+      // Reload completions - merge challenge-specific + user-level (Flow Finder)
+      const [challengeResult, userLevelResult] = await Promise.all([
+        supabase
+          .from('quest_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('challenge_instance_id', progress.challenge_instance_id),
+        supabase
+          .from('quest_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .is('challenge_instance_id', null)
+      ])
 
-      if (completionsError) {
-        console.error('Error reloading completions:', completionsError)
+      if (challengeResult.error) {
+        console.error('Error reloading completions:', challengeResult.error)
         // Don't reset completions on error - keep existing state
       } else {
-        setCompletions(newCompletions || [])
+        setCompletions([
+          ...(userLevelResult.data || []),
+          ...(challengeResult.data || [])
+        ])
       }
       setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
 

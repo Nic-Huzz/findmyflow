@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { useAuth } from './auth/AuthProvider'
 import { protectiveProfiles } from './data/protectiveProfiles'
+import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePreferences'
 import './ArchetypeSelection.css'
 
 const ArchetypeSelection = () => {
@@ -48,14 +49,13 @@ const ArchetypeSelection = () => {
   }
 
   // Get archetype names for display
-  const essenceArchetype = userData?.essence_archetype || 'Unknown'
+  const essenceArchetype = getEssenceDisplayName(userData)
   const protectiveArchetype = userData?.protective_archetype || 'Unknown'
 
   // Format filename (e.g., "Radiant Rebel" -> "radiant-rebel")
   const getImagePath = (archetype, type) => {
     if (type === 'essence') {
-      const filename = archetype.toLowerCase().replace(/\s+/g, '-')
-      return `/images/archetypes/lead-magnet-essence/${filename}.PNG`
+      return getEssenceImagePath(userData)
     } else {
       // For protective, use the image property from the data file
       const protectiveData = protectiveProfiles[archetype]

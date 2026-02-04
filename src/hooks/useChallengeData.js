@@ -5,7 +5,7 @@
  * Handles all state, data loading, and challenge/group management.
  */
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
@@ -27,6 +27,7 @@ import { generateVoiceQuestsForStage } from '../lib/voiceQuestConfig'
 import { getScoringCategory, syncScoreToLeaderboard } from '../lib/scoringCategories'
 import { logError, showErrorWithSupport } from '../lib/errorSupport'
 import { cacheBustUrl } from '../lib/fetchJson'
+import { getEssenceDisplayName } from '../lib/essencePreferences'
 
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
@@ -136,12 +137,15 @@ export function useChallengeData() {
 
   const loadChallengeData = async () => {
     try {
-      const response = await fetch(cacheBustUrl('/challengeQuestsUpdate.json'))
-      const data = await response.json()
+      const [response, releaseChallengesResponse] = await Promise.all([
+        fetch(cacheBustUrl('/challengeQuestsUpdate.json')),
+        fetch(cacheBustUrl('/dailyReleaseChallenges.json'))
+      ])
+      const [data, releaseChallengesData] = await Promise.all([
+        response.json(),
+        releaseChallengesResponse.json()
+      ])
       setData(data)
-
-      const releaseChallengesResponse = await fetch(cacheBustUrl('/dailyReleaseChallenges.json'))
-      const releaseChallengesData = await releaseChallengesResponse.json()
       setDailyReleaseChallenges(releaseChallengesData)
     } catch (error) {
       console.error('Error loading challenge data:', error)
@@ -166,13 +170,31 @@ export function useChallengeData() {
       }
 
       if (!progressData) {
-        // Check if user has any previous challenges (returning user)
-        const { data: anyPrevious } = await supabase
-          .from('challenge_progress')
-          .select('id')
-          .eq('user_id', user.id)
-          .limit(1)
-          .maybeSingle()
+        // Run both queries in parallel - they're independent
+        const [userLevelResult, anyPreviousResult] = await Promise.all([
+          // Load user-level completions so Flow Finder quests show correct completion state
+          supabase
+            .from('quest_completions')
+            .select('*')
+            .eq('user_id', user.id)
+            .is('challenge_instance_id', null),
+          // Check if user has any previous challenges (returning user)
+          supabase
+            .from('challenge_progress')
+            .select('id')
+            .eq('user_id', user.id)
+            .limit(1)
+            .maybeSingle()
+        ])
+
+        const { data: userLevelCompletions, error: userLevelError } = userLevelResult
+        if (userLevelError) {
+          console.error('Error loading user-level completions:', userLevelError)
+        } else {
+          setCompletions(userLevelCompletions || [])
+        }
+
+        const { data: anyPrevious } = anyPreviousResult
 
         // Detect if running as installed PWA vs browser
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
@@ -208,23 +230,23 @@ export function useChallengeData() {
 
       setProgress(progressData)
 
-      // Load selected project if challenge has a project_id
-      if (progressData.project_id) {
-        const { data: projectData, error: projectError } = await supabase
-          .from('user_projects')
-          .select('*')
-          .eq('id', progressData.project_id)
-          .single()
+      // Run project fetch + streak check in parallel (both independent)
+      const [projectResult, streakResult] = await Promise.all([
+        progressData.project_id
+          ? supabase.from('user_projects').select('*').eq('id', progressData.project_id).single()
+          : Promise.resolve({ data: null, error: null }),
+        checkStreakBreak(user.id, progressData.challenge_instance_id)
+      ])
 
-        if (!projectError && projectData) {
-          setSelectedProject(projectData)
-          setProjectStage(projectData.current_stage || 1)
-          setActiveStageTab(projectData.current_stage || 1)
-        }
+      // Apply project data
+      const { data: projectData, error: projectError } = projectResult
+      if (!projectError && projectData) {
+        setSelectedProject(projectData)
+        setProjectStage(projectData.current_stage || 1)
+        setActiveStageTab(projectData.current_stage || 1)
       }
 
-      // Check if streak should be broken
-      const streakResult = await checkStreakBreak(user.id, progressData.challenge_instance_id)
+      // Apply streak result
       if (streakResult.streak_broken) {
         const { data: updatedProgress } = await supabase
           .from('challenge_progress')
@@ -247,18 +269,35 @@ export function useChallengeData() {
         await advanceDay(progressData, daysSinceLastActive)
       }
 
-      // Load quest completions
-      const { data: completionsData, error: completionsError } = await supabase
-        .from('quest_completions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('challenge_instance_id', progressData.challenge_instance_id)
+      // Load both completion sets in parallel
+      const [challengeCompletionsResult, userLevelCompletionsResult] = await Promise.all([
+        supabase
+          .from('quest_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('challenge_instance_id', progressData.challenge_instance_id),
+        supabase
+          .from('quest_completions')
+          .select('*')
+          .eq('user_id', user.id)
+          .is('challenge_instance_id', null)
+      ])
 
+      const { data: challengeCompletions, error: completionsError } = challengeCompletionsResult
       if (completionsError) {
-        console.error('Error loading completions:', completionsError)
-      } else {
-        setCompletions(completionsData || [])
+        console.error('Error loading challenge completions:', completionsError)
       }
+
+      const { data: userLevelCompletions, error: userLevelError } = userLevelCompletionsResult
+      if (userLevelError) {
+        console.error('Error loading user-level completions:', userLevelError)
+      }
+
+      // Merge completions: user-level + challenge-specific
+      setCompletions([
+        ...(userLevelCompletions || []),
+        ...(challengeCompletions || [])
+      ])
 
       setLoading(false)
     } catch (error) {
@@ -311,7 +350,7 @@ export function useChallengeData() {
         setUserData(data[0])
         // Extract archetypes for voice quests
         setUserArchetypes({
-          essence: data[0].essence_archetype || 'Essence',
+          essence: getEssenceDisplayName(data[0]),
           protective: data[0].protective_archetype || 'Protective Voice'
         })
       }
@@ -359,29 +398,31 @@ export function useChallengeData() {
     try {
       const weekStart = getWeekStart()
 
-      // Load weekly scores for current week
-      const { data: weekly, error: weeklyError } = await supabase
-        .from('challenge_weekly_scores')
-        .select('business_score, healing_score, courage_score')
-        .eq('user_id', user.id)
-        .eq('week_start_date', weekStart)
-        .is('project_id', null) // User-level scores (not project-specific)
-        .maybeSingle()
+      // Load weekly + lifetime scores in parallel
+      const [weeklyResult, lifetimeResult] = await Promise.all([
+        supabase
+          .from('challenge_weekly_scores')
+          .select('business_score, healing_score, courage_score')
+          .eq('user_id', user.id)
+          .eq('week_start_date', weekStart)
+          .is('project_id', null)
+          .maybeSingle(),
+        supabase
+          .from('user_lifetime_scores')
+          .select('lifetime_business_score, lifetime_healing_score, lifetime_courage_score, lifetime_total_score')
+          .eq('user_id', user.id)
+          .is('project_id', null)
+          .maybeSingle()
+      ])
 
+      const { data: weekly, error: weeklyError } = weeklyResult
       if (weeklyError) {
         console.error('Error loading weekly scores:', weeklyError)
       } else {
         setWeeklyScores(weekly || { business_score: 0, healing_score: 0, courage_score: 0 })
       }
 
-      // Load lifetime scores
-      const { data: lifetime, error: lifetimeError } = await supabase
-        .from('user_lifetime_scores')
-        .select('lifetime_business_score, lifetime_healing_score, lifetime_courage_score, lifetime_total_score')
-        .eq('user_id', user.id)
-        .is('project_id', null) // User-level scores
-        .maybeSingle()
-
+      const { data: lifetime, error: lifetimeError } = lifetimeResult
       if (lifetimeError) {
         console.error('Error loading lifetime scores:', lifetimeError)
       } else {
@@ -1623,18 +1664,21 @@ export function useChallengeData() {
   }, [])
 
   // Load user data when user is available
+  // All loads run in parallel via Promise.all for fastest possible load
   useEffect(() => {
     if (user) {
-      loadUserProgress()
-      loadLeaderboard()
-      loadUserData()
-      loadUserScores() // Load from new scoring tables
-      checkNervousSystemComplete()
-      checkHealingCompassComplete()
-      checkFlowFinderComplete()
-      loadStageProgress()
-      loadWeeklyPlan()
-      loadValidationResponseCounts()
+      Promise.all([
+        loadUserProgress(),
+        loadLeaderboard(),
+        loadUserData(),
+        loadUserScores(),
+        checkNervousSystemComplete(),
+        checkHealingCompassComplete(),
+        checkFlowFinderComplete(),
+        loadStageProgress(),
+        loadWeeklyPlan(),
+        loadValidationResponseCounts()
+      ])
     }
   }, [user])
 
@@ -1666,13 +1710,13 @@ export function useChallengeData() {
     initializeStageIfNeeded()
   }, [user?.id, userData?.persona, stageProgress])
 
-  // Update leaderboard when view changes
+  // Update leaderboard when view toggle changes (not on every progress update)
   useEffect(() => {
     if (user && progress) {
       loadLeaderboard()
       loadGroupInfo()
     }
-  }, [leaderboardView, progress])
+  }, [leaderboardView])
 
   // Refresh data when page becomes visible (returning from a flow)
   useEffect(() => {
@@ -1704,21 +1748,25 @@ export function useChallengeData() {
     }
   }, [showSettingsMenu])
 
-  // Real-time leaderboard subscription
+  // Real-time leaderboard subscription - debounce to avoid rapid reloads
   useEffect(() => {
     if (!user) return
 
+    let debounceTimer = null
     const subscription = supabase
       .channel('challenge_progress_changes')
       .on('postgres_changes',
         { event: '*', schema: 'public', table: 'challenge_progress' },
         () => {
-          loadLeaderboard()
+          // Debounce: only reload after 2s of no new events
+          clearTimeout(debounceTimer)
+          debounceTimer = setTimeout(() => loadLeaderboard(), 2000)
         }
       )
       .subscribe()
 
     return () => {
+      clearTimeout(debounceTimer)
       subscription.unsubscribe()
     }
   }, [user, leaderboardView])
@@ -1728,14 +1776,13 @@ export function useChallengeData() {
   // Always calculate from completions since that state is reliably updated
   // after each quest completion. The weeklyScores from RPC may have sync delays.
   // ============================================
-  const currentWeeklyPoints = (() => {
-    // Calculate from completions (source of truth for current session)
+  const currentWeeklyPoints = useMemo(() => {
     if (!completions || completions.length === 0) return 0
     const weekStart = new Date(getWeekStart() + 'T00:00:00')
     return completions
       .filter(c => new Date(c.completed_at) >= weekStart)
       .reduce((sum, c) => sum + (c.points_earned || 0), 0)
-  })()
+  }, [completions])
 
   // ============================================
   // Return all state and functions

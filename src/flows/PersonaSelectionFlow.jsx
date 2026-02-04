@@ -262,7 +262,7 @@ function PersonaSelectionFlow() {
       const selectedProfile = allProfiles.find(p => p.id === selectedProfileId)
 
       // Save to database
-      await supabase.from('persona_profiles').insert({
+      const { error: insertError } = await supabase.from('persona_profiles').insert({
         user_id: user.id,
         persona: selectedProfile.persona,
         problem: selectedProfile.problem,
@@ -276,6 +276,11 @@ function PersonaSelectionFlow() {
         all_profiles: allProfiles,
         selected_profile_id: selectedProfileId
       })
+
+      if (insertError) {
+        console.error('Error saving persona profile:', insertError)
+        throw insertError
+      }
 
       // Track flow completion
       try {
@@ -294,8 +299,8 @@ function PersonaSelectionFlow() {
       try {
         await completeFlowQuest({
           userId: user.id,
-          flowId: 'flow_persona_selection',
-          pointsEarned: 9
+          flowId: 'persona_selection',
+          pointsEarned: 3
         })
       } catch (questError) {
         console.warn('Quest completion failed:', questError)

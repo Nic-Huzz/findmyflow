@@ -211,12 +211,12 @@ export const getUserStageProgress = async (userId) => {
 };
 
 /**
- * Sync Flow Finder completion with 7-day challenge
- * - Checks if user has an active challenge
- * - Creates quest completion if not already completed
- * - Updates challenge progress points
+ * Sync Flow Finder completion with user-level quest completions
+ * - Creates quest completion with challenge_instance_id: null (user-level)
+ * - Flow Finder completions persist across all challenges
+ * - Syncs points to user-level leaderboard (project_id: null)
  * @param {string} userId - User ID
- * @param {string} flowType - One of: 'skills', 'problems', 'persona', 'integration'
+ * @param {string} flowType - One of: 'skills', 'problems', 'persona', 'integration', 'mind_space', etc.
  */
 export const syncFlowFinderWithChallenge = async (userId, flowType) => {
   try {
@@ -238,65 +238,12 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       return { success: false, error: 'Unknown flow type' };
     }
 
-    // Check for active challenge
-    const { data: activeChallenge, error: challengeError } = await supabase
-      .from('challenge_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('status', 'active')
-      .order('challenge_start_date', { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (challengeError) {
-      console.error('Error checking for active challenge:', challengeError);
-      return { success: false, error: challengeError.message };
-    }
-
-    if (!activeChallenge) {
-      console.log('ℹ️ No active challenge found - skipping sync');
-      return { success: true, skipped: true, reason: 'No active challenge' };
-    }
-
-    // Get user's persona and stage to verify quest is valid for them
-    const { data: stageProgress } = await supabase
-      .from('user_stage_progress')
-      .select('persona, current_stage')
-      .eq('user_id', userId)
-      .maybeSingle();
-
-    // Quest requirements - Flow Finder quests are only for vibe_seeker in clarity stage
-    const questRequirements = {
-      'flow_finder_skills': { persona: 'vibe_seeker', stage: 'clarity' },
-      'flow_finder_problems': { persona: 'vibe_seeker', stage: 'clarity' },
-      'flow_finder_persona': { persona: 'vibe_seeker', stage: 'clarity' },
-      'flow_finder_integration': { persona: 'vibe_seeker', stage: 'clarity' }
-    };
-
-    const requirements = questRequirements[questId];
-    if (requirements && stageProgress) {
-      const userPersona = normalizePersona(stageProgress.persona);
-      const requiredPersona = normalizePersona(requirements.persona);
-
-      // Check if quest is valid for user's persona
-      if (requiredPersona && userPersona !== requiredPersona) {
-        console.log(`ℹ️ Quest ${questId} is for ${requiredPersona}, but user is ${userPersona} - skipping`);
-        return { success: true, skipped: true, reason: 'Quest not valid for user persona' };
-      }
-
-      // Check if quest is valid for user's stage
-      if (requirements.stage && stageProgress.current_stage !== requirements.stage) {
-        console.log(`ℹ️ Quest ${questId} is for ${requirements.stage} stage, but user is in ${stageProgress.current_stage} - skipping`);
-        return { success: true, skipped: true, reason: 'Quest not valid for user stage' };
-      }
-    }
-
-    // Check if quest already completed in this challenge instance
+    // Check if quest already completed at user level (challenge_instance_id IS NULL)
     const { data: existingCompletion, error: checkError } = await supabase
       .from('quest_completions')
       .select('id')
       .eq('user_id', userId)
-      .eq('challenge_instance_id', activeChallenge.challenge_instance_id)
+      .is('challenge_instance_id', null)
       .eq('quest_id', questId)
       .maybeSingle();
 
@@ -306,12 +253,10 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     }
 
     if (existingCompletion) {
-      console.log(`ℹ️ Quest ${questId} already completed in this challenge`);
+      console.log(`ℹ️ Quest ${questId} already completed at user level`);
       return { success: true, skipped: true, reason: 'Already completed' };
     }
 
-    // Get quest details from challengeQuestsUpdate.json (we need points)
-    // Points must match challengeQuestsUpdate.json values
     // Points per quest (must match public/challengeQuestsUpdate.json)
     const questPoints = {
       'flow_finder_skills': 5,
@@ -326,20 +271,20 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
 
     const points = questPoints[questId] || 5;
 
-    // Create quest completion
+    // Create quest completion at user level (challenge_instance_id: null)
     const { error: completionError } = await supabase
       .from('quest_completions')
       .insert({
         user_id: userId,
-        challenge_instance_id: activeChallenge.challenge_instance_id,
+        challenge_instance_id: null,  // User-level completion
         quest_id: questId,
         quest_category: 'Flow Finder',
         quest_type: 'flow',
         points_earned: points,
-        challenge_day: activeChallenge.current_day,
-        reflection_text: `Completed ${flowType} flow from home page`,
-        project_id: activeChallenge.project_id || null,
-        stage: 1 // Flow Finder quests are Stage 1 (Validation)
+        challenge_day: null,
+        reflection_text: `Completed ${flowType} flow`,
+        project_id: null,  // User-level, not project-specific
+        stage: 0  // Flow Finder quests are Stage 0
       });
 
     if (completionError) {
@@ -347,34 +292,22 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       return { success: false, error: completionError.message };
     }
 
-    // Update challenge progress total points
-    const newTotalPoints = (activeChallenge.total_points || 0) + points;
-
-    const { error: updateError } = await supabase
-      .from('challenge_progress')
-      .update({
-        total_points: newTotalPoints,
-        last_active_date: new Date().toISOString()
-      })
-      .eq('user_id', userId)
-      .eq('challenge_instance_id', activeChallenge.challenge_instance_id);
-
-    if (updateError) {
-      console.error('Error updating challenge progress:', updateError);
-      return { success: false, error: updateError.message };
+    // Sync to user-level leaderboard (project_id: null) - non-blocking
+    try {
+      await syncScoreToLeaderboard(supabase, {
+        userId,
+        questCategory: 'Flow Finder',
+        points,
+        projectId: null,  // User-level scores
+        source: `flow_finder_${flowType}`
+      });
+    } catch (leaderboardError) {
+      // Don't fail the whole operation if leaderboard sync fails
+      console.error('Non-critical: Failed to sync to leaderboard:', leaderboardError);
     }
 
-    // Sync to leaderboard (non-blocking)
-    syncScoreToLeaderboard(supabase, {
-      userId,
-      questCategory: 'Flow Finder',
-      points,
-      projectId: activeChallenge.project_id || null,
-      source: `flow_finder_${flowType}`
-    });
-
-    console.log(`✅ Flow Finder quest ${questId} synced with challenge (+${points} pts)`);
-    return { success: true, questId, points, newTotalPoints };
+    console.log(`✅ Flow Finder quest ${questId} saved at user level (+${points} pts)`);
+    return { success: true, questId, points };
   } catch (error) {
     console.error('Error in syncFlowFinderWithChallenge:', error);
     return { success: false, error: error.message };

@@ -227,11 +227,13 @@ function OfferBuilderFlow() {
   const [error, setError] = useState(null)
 
   // Niche layers state (for Q6 - 4 layers)
+  // Layers 1-3 store cluster objects: { id, cluster_label, taxonomy_keys }
+  // Layer 4 stores AI-generated niche statement string
   const [nicheLayers, setNicheLayers] = useState({
-    layer1: '',
-    layer2: '',
-    layer3: '',
-    layer4: ''
+    layer1: null, // Problem cluster
+    layer2: null, // Persona cluster
+    layer3: null, // Skill cluster
+    layer4: ''    // AI-generated niche statement
   })
 
   // Multi-section inputs state (for Q7 reasons - Hormozi's 3 obstacle types)
@@ -264,8 +266,13 @@ function OfferBuilderFlow() {
   const [personaProfiles, setPersonaProfiles] = useState([])
   const [selectedProfile, setSelectedProfile] = useState(null)
 
-  // Flow Finder skill clusters (for Q8 suggestions)
+  // Flow Finder clusters (skills for Q8 suggestions, all types for Q6 dropdowns)
   const [skillClusters, setSkillClusters] = useState([])
+  const [problemClusters, setProblemClusters] = useState([])
+  const [personaClusters, setPersonaClusters] = useState([])
+
+  // Niche statement AI generation state
+  const [isGeneratingNiche, setIsGeneratingNiche] = useState(false)
 
   // AI-powered skill recommendations (from Haiku edge function)
   const [aiRecommendations, setAiRecommendations] = useState(null)
@@ -321,29 +328,40 @@ function OfferBuilderFlow() {
     }
   }, [user])
 
-  // Load Flow Finder skill clusters for Q8 suggestions
+  // Load Flow Finder clusters for Q6 dropdowns and Q8 suggestions
   useEffect(() => {
     if (user) {
-      loadSkillClusters()
+      loadAllClusters()
     }
   }, [user])
 
-  const loadSkillClusters = async () => {
+  const loadAllClusters = async () => {
     try {
       const { data: clusters, error } = await supabase
         .from('nikigai_clusters')
         .select('*')
         .eq('user_id', user.id)
-        .eq('cluster_type', 'skills')
         .eq('cluster_stage', 'final')
+        .eq('archived', false)
         .order('created_at', { ascending: false })
 
       if (error) throw error
-      console.log('Loaded skill clusters:', clusters)
-      setSkillClusters(clusters || [])
+
+      // Filter clusters by type
+      const allClusters = clusters || []
+      const skills = allClusters.filter(c => c.cluster_type === 'skills')
+      const problems = allClusters.filter(c => c.cluster_type === 'problems')
+      const personas = allClusters.filter(c => c.cluster_type === 'persona')
+
+      console.log('Loaded clusters:', { skills: skills.length, problems: problems.length, personas: personas.length })
+      setSkillClusters(skills)
+      setProblemClusters(problems)
+      setPersonaClusters(personas)
     } catch (err) {
-      console.error('Error loading skill clusters:', err)
+      console.error('Error loading clusters:', err)
       setSkillClusters([])
+      setProblemClusters([])
+      setPersonaClusters([])
     }
   }
 
@@ -609,7 +627,25 @@ function OfferBuilderFlow() {
           if (assessment?.responses) {
             // Load saved data from assessment
             if (assessment.responses.q6_niche_layers?.layers) {
-              setNicheLayers(assessment.responses.q6_niche_layers.layers)
+              const saved = assessment.responses.q6_niche_layers.layers
+              // Check if new format (has problem/persona/skill objects) or old format (layer1-4 strings)
+              if (saved.problem || saved.persona || saved.skill) {
+                // New format - restore as display-only (clusters may not be loaded yet)
+                setNicheLayers({
+                  layer1: saved.problem ? { id: saved.problem.cluster_id, cluster_label: saved.problem.cluster_label, taxonomy_keys: saved.problem.taxonomy_keys } : null,
+                  layer2: saved.persona ? { id: saved.persona.cluster_id, cluster_label: saved.persona.cluster_label, taxonomy_keys: saved.persona.taxonomy_keys } : null,
+                  layer3: saved.skill ? { id: saved.skill.cluster_id, cluster_label: saved.skill.cluster_label, taxonomy_keys: saved.skill.taxonomy_keys } : null,
+                  layer4: saved.niche_statement || ''
+                })
+              } else {
+                // Old format - layer1-4 were strings, just use layer4 for display
+                setNicheLayers({
+                  layer1: null,
+                  layer2: null,
+                  layer3: null,
+                  layer4: saved.layer4 || ''
+                })
+              }
             }
             if (assessment.responses.q7_obstacles?.sections) {
               setSectionInputs(assessment.responses.q7_obstacles.sections)
@@ -665,7 +701,22 @@ function OfferBuilderFlow() {
     if (savedProgressData) {
       setStage(savedProgressData.stage)
       if (savedProgressData.answers) setAnswers(savedProgressData.answers)
-      if (savedProgressData.nicheLayers) setNicheLayers(savedProgressData.nicheLayers)
+      if (savedProgressData.nicheLayers) {
+        const saved = savedProgressData.nicheLayers
+        // Check if old format (layer1-4 were strings) or new format (cluster objects)
+        if (typeof saved.layer1 === 'string' || saved.layer1 === '') {
+          // Old format - migrate to new structure, keep only layer4 text
+          setNicheLayers({
+            layer1: null,
+            layer2: null,
+            layer3: null,
+            layer4: saved.layer4 || ''
+          })
+        } else {
+          // New format - use as-is
+          setNicheLayers(saved)
+        }
+      }
       if (savedProgressData.sectionInputs) {
         // Migrate old section format to new Hormozi format if needed
         const oldData = savedProgressData.sectionInputs
@@ -778,17 +829,67 @@ function OfferBuilderFlow() {
       .map((sol, index) => ({ ...sol, id: `solution_${index}` }))
   }
 
+  // Generate AI niche statement from selected clusters
+  const generateNicheStatement = async () => {
+    if (!nicheLayers.layer1 || !nicheLayers.layer2 || !nicheLayers.layer3) return
+
+    setIsGeneratingNiche(true)
+
+    try {
+      const response = await supabase.functions.invoke('niche-sharpener', {
+        body: {
+          userId: user.id,
+          // Pass specific selections for focused generation
+          selectedProblem: nicheLayers.layer1.cluster_label,
+          selectedPersona: nicheLayers.layer2.cluster_label,
+          selectedSkill: nicheLayers.layer3.cluster_label
+        }
+      })
+
+      if (response.error) throw response.error
+
+      if (response.data?.analysis?.niche_statement) {
+        setNicheLayers(prev => ({
+          ...prev,
+          layer4: response.data.analysis.niche_statement
+        }))
+      }
+    } catch (err) {
+      console.error('Niche generation error:', err)
+      setError('Failed to generate niche statement. Please try again.')
+    } finally {
+      setIsGeneratingNiche(false)
+    }
+  }
+
   // Handle niche layers submission
   const handleNicheLayersSubmit = (questionId) => {
-    // At least layer 4 should be filled (the most specific)
-    if (!nicheLayers.layer4.trim()) return
+    // Layer 4 (AI-generated niche statement) must be filled
+    if (!nicheLayers.layer4?.trim()) return
 
     const newAnswers = {
       ...answers,
       [questionId]: {
-        type: 'niche_layers',
-        layers: nicheLayers,
-        // Combine for display
+        type: 'niche_layers_dropdown',
+        layers: {
+          problem: nicheLayers.layer1 ? {
+            cluster_id: nicheLayers.layer1.id,
+            cluster_label: nicheLayers.layer1.cluster_label,
+            taxonomy_keys: nicheLayers.layer1.taxonomy_keys
+          } : null,
+          persona: nicheLayers.layer2 ? {
+            cluster_id: nicheLayers.layer2.id,
+            cluster_label: nicheLayers.layer2.cluster_label,
+            taxonomy_keys: nicheLayers.layer2.taxonomy_keys
+          } : null,
+          skill: nicheLayers.layer3 ? {
+            cluster_id: nicheLayers.layer3.id,
+            cluster_label: nicheLayers.layer3.cluster_label,
+            taxonomy_keys: nicheLayers.layer3.taxonomy_keys
+          } : null,
+          niche_statement: nicheLayers.layer4
+        },
+        // For display/search
         value: nicheLayers.layer4.trim()
       }
     }
@@ -798,7 +899,7 @@ function OfferBuilderFlow() {
 
   // Check if niche layers are valid
   const areNicheLayersValid = () => {
-    return nicheLayers.layer4.trim().length > 0
+    return nicheLayers.layer4?.trim().length > 0
   }
 
   // Add current solution to list
@@ -1472,9 +1573,20 @@ function OfferBuilderFlow() {
       )
     }
 
-    // NICHE 4-LAYERS QUESTION (for Q6 - progressive niche definition)
-    if (question.type === 'niche_4_layers') {
+    // NICHE 4-LAYERS DROPDOWN QUESTION (for Q6 - dropdown-based niche definition)
+    if (question.type === 'niche_4_layers_dropdown') {
       const isValid = areNicheLayersValid()
+
+      // Helper to get clusters by source type
+      const getClustersBySource = (source) => {
+        switch (source) {
+          case 'problems': return problemClusters
+          case 'persona': return personaClusters
+          case 'skills': return skillClusters
+          default: return []
+        }
+      }
+
       return (
         <div className="offer-builder-flow">
           <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
@@ -1484,35 +1596,82 @@ function OfferBuilderFlow() {
             {question.subtext && <p className="question-subtext">{question.subtext}</p>}
 
             <div className="niche-layers-wrapper">
-              {question.layers.map((layer, index) => (
-                <div key={layer.id} className={`niche-layer ${nicheLayers[layer.id] ? 'filled' : ''}`}>
-                  <div className="layer-header">
-                    <span className="layer-number">{index + 1}</span>
-                    <div className="layer-label-group">
-                      <label className="layer-label">{layer.label}</label>
-                      <span className="layer-hint">{layer.hint}</span>
+              {question.layers.map((layer, index) => {
+                const clusters = getClustersBySource(layer.source)
+                const isAILayer = layer.source === 'ai'
+
+                return (
+                  <div key={layer.id} className={`niche-layer ${nicheLayers[layer.id] ? 'filled' : ''}`}>
+                    <div className="layer-header">
+                      <span className="layer-number">{index + 1}</span>
+                      <div className="layer-label-group">
+                        <label className="layer-label">{layer.label}</label>
+                        <span className="layer-hint">{layer.hint}</span>
+                      </div>
                     </div>
+
+                    {isAILayer ? (
+                      <div className="niche-ai-output">
+                        {isGeneratingNiche ? (
+                          <div className="generating-indicator">
+                            <span className="spinner"></span> Generating your niche statement...
+                          </div>
+                        ) : nicheLayers.layer4 ? (
+                          <p className="generated-niche">{nicheLayers.layer4}</p>
+                        ) : (
+                          <p className="niche-placeholder">Select all options above to generate</p>
+                        )}
+                        {nicheLayers.layer1 && nicheLayers.layer2 && nicheLayers.layer3 && (
+                          <button
+                            type="button"
+                            className="regenerate-btn"
+                            onClick={generateNicheStatement}
+                            disabled={isGeneratingNiche}
+                          >
+                            {nicheLayers.layer4 ? 'Regenerate' : 'Generate'} Niche Statement
+                          </button>
+                        )}
+                      </div>
+                    ) : clusters.length === 0 ? (
+                      <div className="no-clusters-message">
+                        <p>Complete the Flow Finder stage first to discover your {layer.source}.</p>
+                        <a href={`/nikigai/${layer.source === 'persona' ? 'persona' : layer.source}`} className="flow-finder-link">
+                          Go to Flow Finder →
+                        </a>
+                      </div>
+                    ) : (
+                      <select
+                        className="niche-layer-select"
+                        value={nicheLayers[layer.id]?.id || ''}
+                        onChange={(e) => {
+                          const selected = clusters.find(c => c.id === e.target.value)
+                          setNicheLayers(prev => ({
+                            ...prev,
+                            [layer.id]: selected || null,
+                            layer4: '' // Reset AI generation when selection changes
+                          }))
+                        }}
+                      >
+                        <option value="">Select {layer.label.replace(/Layer \d+: /, '')}...</option>
+                        {clusters.map(cluster => (
+                          <option key={cluster.id} value={cluster.id}>
+                            {cluster.cluster_label}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {index < question.layers.length - 1 && (
+                      <div className="layer-connector">↓</div>
+                    )}
                   </div>
-                  <input
-                    type="text"
-                    className="niche-layer-input"
-                    placeholder={layer.placeholder}
-                    value={nicheLayers[layer.id]}
-                    onChange={(e) => setNicheLayers(prev => ({
-                      ...prev,
-                      [layer.id]: e.target.value
-                    }))}
-                  />
-                  {index < question.layers.length - 1 && (
-                    <div className="layer-connector">↓</div>
-                  )}
-                </div>
-              ))}
+                )
+              })}
             </div>
 
             <div className="niche-preview">
               <h4>Your Niche Definition</h4>
-              <p>{nicheLayers.layer4 || nicheLayers.layer3 || nicheLayers.layer2 || nicheLayers.layer1 || 'Fill in the layers above...'}</p>
+              <p>{nicheLayers.layer4 || 'Complete selections and generate your niche statement'}</p>
             </div>
 
             <button

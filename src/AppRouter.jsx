@@ -127,6 +127,7 @@ const VoiceOfCustomerPage = lazy(() => import('./pages/VoiceOfCustomerPage'))
 const WheelDemo = lazy(() => import('./pages/WheelDemo'))
 const WeeklyPlanningFlow = lazy(() => import('./components/WeeklyPlanningFlow'))
 const GroanMatrix = lazy(() => import('./components/GroanMatrix'))
+const HeroCommandCenter = lazy(() => import('./components/HeroProfile/HeroCommandCenter'))
 const BrandToneDemo = lazy(() => import('./pages/BrandToneDemo'))
 import './App.css'
 import './PersonaAssessment.css'
@@ -173,6 +174,7 @@ import './pages/VoiceOfCustomerPage.css'
 import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
 import './components/GroanMatrix.css'
+import './components/HeroProfile/HeroProfile.css'
 import './pages/LandingPage.css'
 import './flows/CareerClarityQuiz.css'
 import './flows/MindSpace.css'
@@ -350,6 +352,18 @@ function AppRouter() {
             <Route path="/me" element={
               <AuthGate>
                 <Profile />
+              </AuthGate>
+            } />
+
+            {/* Hero Profile Dashboard */}
+            <Route path="/hero-profile" element={
+              <AuthGate>
+                <HeroCommandCenter />
+              </AuthGate>
+            } />
+            <Route path="/hero-profile/:projectId" element={
+              <AuthGate>
+                <HeroCommandCenter />
               </AuthGate>
             } />
             <Route path="/healing-compass" element={

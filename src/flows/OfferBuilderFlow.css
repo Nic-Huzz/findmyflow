@@ -1842,6 +1842,138 @@
   margin: 0;
 }
 
+/* Dropdown styling for niche layers */
+.offer-builder-flow .niche-layer-select {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  color: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .niche-layer-select:focus {
+  border-color: rgba(251, 191, 36, 0.6);
+  background-color: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.offer-builder-flow .niche-layer-select option {
+  background: #2d1b4e;
+  color: white;
+  padding: 8px;
+}
+
+/* AI output section */
+.offer-builder-flow .niche-ai-output {
+  padding: 16px;
+  background: rgba(251, 191, 36, 0.05);
+  border: 1px dashed rgba(251, 191, 36, 0.3);
+  border-radius: 8px;
+  min-height: 60px;
+}
+
+.offer-builder-flow .generated-niche {
+  font-size: 16px;
+  line-height: 1.5;
+  color: white;
+  font-style: italic;
+  margin: 0;
+}
+
+.offer-builder-flow .niche-placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  margin: 0;
+}
+
+.offer-builder-flow .regenerate-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  border-radius: 6px;
+  color: #fbbf24;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .regenerate-btn:hover {
+  background: rgba(251, 191, 36, 0.3);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.offer-builder-flow .regenerate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.offer-builder-flow .generating-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.offer-builder-flow .generating-indicator .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-top-color: #fbbf24;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state when no clusters available */
+.offer-builder-flow .no-clusters-message {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.offer-builder-flow .no-clusters-message p {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 12px;
+}
+
+.offer-builder-flow .flow-finder-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(147, 51, 234, 0.2);
+  border: 1px solid rgba(147, 51, 234, 0.4);
+  border-radius: 6px;
+  color: #a78bfa;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .flow-finder-link:hover {
+  background: rgba(147, 51, 234, 0.3);
+  border-color: rgba(147, 51, 234, 0.6);
+  color: #c4b5fd;
+}
+
 /* ============ PROBLEM SOLUTIONS (Q8) ============ */
 
 .offer-builder-flow .problem-solutions-container {

@@ -5,6 +5,7 @@
  * milestone, flow_compass, and groan reflections.
  */
 
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import ConversationLogInput from './ConversationLogInput'
 import MilestoneInput from './MilestoneInput'
@@ -539,4 +540,4 @@ function QuestCard({
   )
 }
 
-export default QuestCard
+export default memo(QuestCard)

@@ -77,33 +77,33 @@
     },
     {
       "id": "q6_niche_layers",
-      "type": "niche_4_layers",
-      "question": "Define your 4-layer niche",
-      "subtext": "Each layer gets more specific. The sharper your niche, the easier it is to stand out.",
+      "type": "niche_4_layers_dropdown",
+      "question": "Build your niche from your Flow Finder discoveries",
+      "subtext": "Select from your identified problems, personas, and skills. AI will craft your niche statement.",
       "layers": [
         {
           "id": "layer1",
           "label": "Layer 1: The Problem",
-          "placeholder": "e.g., Mental health",
-          "hint": "What broad problem do you solve?"
+          "hint": "What problem do you solve?",
+          "source": "problems"
         },
         {
           "id": "layer2",
-          "label": "Layer 2: + Who",
-          "placeholder": "e.g., Mental health for teenagers",
-          "hint": "Who specifically has this problem?"
+          "label": "Layer 2: The Who",
+          "hint": "Who has this problem?",
+          "source": "persona"
         },
         {
           "id": "layer3",
-          "label": "Layer 3: + Specific Who",
-          "placeholder": "e.g., Mental health for anxious teenage girls",
-          "hint": "Get more specific about your ideal customer"
+          "label": "Layer 3: Your Skill",
+          "hint": "How do you uniquely solve it?",
+          "source": "skills"
         },
         {
           "id": "layer4",
-          "label": "Layer 4: + Domain",
-          "placeholder": "e.g., Mental health for anxious teenage girls struggling with social media comparison",
-          "hint": "Add the specific situation or domain"
+          "label": "Layer 4: Your Niche Statement",
+          "hint": "AI-generated from your selections",
+          "source": "ai"
         }
       ],
       "required": true

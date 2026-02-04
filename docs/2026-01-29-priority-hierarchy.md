@@ -317,6 +317,81 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 
 ---
 
+### TIER 7: Octalysis Gamification (Milestone 2+)
+**Why:** Retention and engagement layer. Once core loop validated, these features keep users coming back and deepen the experience.
+**Reference:** `docs/octalysis-future-features.md` (full specs), `docs/octalysis-application-analysis.md` (scoring)
+
+**Current Octalysis Score: 217/800** (Moderate) → **Target: 374** (Strong)
+
+| Drive | Current | Target | Biggest Gap |
+|-------|---------|--------|-------------|
+| CD1 Epic Meaning | 7 | 8 | Community impact stats, "you're rare" messaging |
+| CD2 Accomplishment | 6 | 8 | Milestones, progress bars, Play Deck |
+| CD3 Creativity | 5 | 7 | Visual Offer Stack Builder, challenge customization |
+| CD4 Ownership | 5 | 7 | Play Deck, badge collections, avatar |
+| CD5 Social | 4 | 7 | **Priority** — Courage Pods, Community Feed, Week Recap |
+| CD6 Scarcity | 4 | 5 | Streak-at-risk notifications, last mile messaging |
+| CD7 Curiosity | 5 | 7 | Easter Egg achievements, Zarlo Curiosity Hooks |
+| CD8 Loss | 5 | 5 | Intentional ceiling — wellness app, no anxiety mechanics |
+
+#### Phase 1: Quick Wins (Current Sprint)
+| Task | Drives | Effort | Status |
+|------|--------|--------|--------|
+| Community Impact Widget | CD1, CD5 | Small | ⬜ Not started |
+| Completion Screen Enhancement | CD2 | Small | ⬜ Not started |
+| Name Your HQ (CRM onboarding) | CD1, CD4 | Small | ⬜ Not started |
+| Post-Flow Finder Rarity Reveal | CD1 | Small | ⬜ Not started |
+| Stage Groan reframing | CD1 | Small | ⬜ Not started |
+| Progress bars on tower cards | CD2 | Small | ⬜ Not started |
+
+#### Phase 2: Anticipation & Triggers
+| Task | Drives | Effort | Status |
+|------|--------|--------|--------|
+| Zarlo trigger system (Priority 1-3) | CD2, CD6 | Medium | ⬜ Not started |
+| "Last mile" messaging throughout app | CD6, CD2 | Small | ⬜ Not started |
+| Streak-at-Risk push notifications | CD8, CD6 | Small | ⬜ Not started |
+| Deal Stale Warnings (extend Smart Alerts) | CD8 | Small | ⬜ Not started |
+
+#### Phase 3: Milestones & Recognition
+| Task | Drives | Effort | Status |
+|------|--------|--------|--------|
+| Essence-aligned milestones | CD2 | Medium | ⬜ Not started |
+| Collections tab | CD4, CD2 | Medium | ⬜ Not started |
+| Badge system | CD4, CD2 | Medium | ⬜ Not started |
+| Play Deck v1 (Visibility tokens + Breakthrough cards) | CD4, CD3 | Medium | ⬜ Not started |
+| Easter Egg Achievements v1 (22 hidden achievements) | CD7 | Medium | ⬜ Not started |
+
+#### Phase 4: Creative & Ownership
+| Task | Drives | Effort | Status |
+|------|--------|--------|--------|
+| Visual Offer Stack Builder | CD3, CD4 | Medium | ⬜ Not started |
+| Play Deck v2 (Streak Freeze, Double Points) | CD4, CD8 | Medium | ⬜ Not started |
+| Zarlo Curiosity Hooks (pattern + milestone teasers) | CD7 | Medium | ⬜ Not started |
+| Avatar upload/customization | CD4 | Small | ⬜ Not started |
+| Achievement showcase page | CD4, CD5 | Medium | ⬜ Not started |
+
+#### Phase 5: Community
+| Task | Drives | Effort | Status |
+|------|--------|--------|--------|
+| Courage Pods (3-5 person accountability groups) | CD5 | Medium | ⬜ Not started |
+| Community Feed (activity + achievements) | CD5 | Medium | ⬜ Not started |
+| Week Recap with Rank Change | CD5, CD8 | Medium | ⬜ Not started |
+| Community challenges | CD5, CD1 | Medium | ⬜ Not started |
+| Discussion threads | CD5 | Medium | ⬜ Not started |
+
+#### Phase 6: Advanced
+| Task | Drives | Effort | Status |
+|------|--------|--------|--------|
+| Mentorship system | CD5, CD1 | High | ⬜ Not started |
+| AI-driven Zarlo personalization | CD1 | High | ⬜ Not started |
+| Full social features | CD5 | High | ⬜ Not started |
+| Play Deck v3 (proof trophies + photo gallery) | CD4 | Medium | ⬜ Not started |
+| Easter Egg Achievements v2 (secret/ultra-hidden) | CD7 | Small | ⬜ Not started |
+
+**Note:** Phases 1-2 can begin alongside Milestone 2 testing. Phases 3+ should wait until retention is validated. See full specs in `docs/octalysis-future-features.md`.
+
+---
+
 ## WHAT TO DEPRIORITIZE (For Now)
 
 ### Park These Ideas (Exciting but not now):

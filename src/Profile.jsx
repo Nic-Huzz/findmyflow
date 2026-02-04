@@ -8,6 +8,7 @@ import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/pe
 import { hasActiveChallenge } from './lib/questCompletion'
 import { cacheBustUrl } from './lib/fetchJson'
 import { getStageShortName } from './lib/stageConfig'
+import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePreferences'
 import { graduateUser } from './lib/graduationChecker'
 import GraduationModal from './components/GraduationModal'
 import FlowMap from './components/FlowMap'
@@ -484,6 +485,8 @@ const Profile = () => {
   }
 
   // Get archetype data
+  const essenceDisplayName = getEssenceDisplayName(userData)
+  const essenceImageUrl = getEssenceImagePath(userData)
   const essenceData = essenceProfiles.essence_archetypes.find(
     archetype => archetype.name === userData.essence_archetype
   )
@@ -653,8 +656,8 @@ const Profile = () => {
                 <>
                   <div className="stat-icon">
                     <img
-                      src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
-                      alt={userData.essence_archetype}
+                      src={essenceImageUrl}
+                      alt={essenceDisplayName}
                       onError={(e) => {
                         e.target.style.display = 'none'
                         e.target.parentElement.innerHTML = '✨'
@@ -662,7 +665,7 @@ const Profile = () => {
                     />
                   </div>
                   <div className="stat-label">Essence</div>
-                  <div className="stat-value">{userData.essence_archetype}</div>
+                  <div className="stat-value">{essenceDisplayName}</div>
                 </>
               )}
               <div className={`expand-arrow ${expandedArchetypes.essence ? 'expanded' : ''}`}>
@@ -675,13 +678,13 @@ const Profile = () => {
               <div className="archetype-expanded">
                 <div className="archetype-expanded-header">
                   <img
-                    src={`/images/archetypes/lead-magnet-essence/${userData.essence_archetype?.toLowerCase().replace(/\s+/g, '-')}.PNG`}
-                    alt={userData.essence_archetype}
+                    src={essenceImageUrl}
+                    alt={essenceDisplayName}
                   />
                   <div className="archetype-tag">Your Essence</div>
                 </div>
                 <div className="archetype-expanded-body">
-                  <h3 className="archetype-name">{userData.essence_archetype}</h3>
+                  <h3 className="archetype-name">{essenceDisplayName}</h3>
                   <p className="archetype-subtitle">Your Essence Voice</p>
                   <p className="archetype-description">
                     {essenceData?.poetic_line || 'Your essence voice'}

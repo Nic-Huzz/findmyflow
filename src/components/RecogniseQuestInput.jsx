@@ -18,6 +18,7 @@ import essenceProfiles from '../data/essenceProfiles'
 import { useSteppedForm } from '../hooks/useSteppedForm'
 import { StepProgress } from './QuestInputShared'
 import { getStageDisplayName } from '../lib/stageConfig'
+import { getEssenceDisplayName } from '../lib/essencePreferences'
 import './RecogniseQuestInput.css'
 
 // Protective voice options
@@ -292,14 +293,15 @@ function RecogniseQuestInput({ quest, onComplete }) {
 
       const { data, error } = await supabase
         .from('lead_flow_profiles')
-        .select('essence_archetype, protective_archetype')
+        .select('essence_archetype, protective_archetype, custom_essence_name')
         .ilike('email', user.email)
         .order('created_at', { ascending: false })
         .limit(1)
 
       if (data && data.length > 0 && !error) {
         setUserArchetypes({
-          essence: data[0].essence_archetype,
+          essence: getEssenceDisplayName(data[0]),
+          essenceOriginal: data[0].essence_archetype,
           protective: data[0].protective_archetype
         })
         if (data[0].protective_archetype) {
@@ -333,7 +335,7 @@ function RecogniseQuestInput({ quest, onComplete }) {
 
   const userVoice = PROTECTIVE_VOICES.find(v => v.id === userArchetypes.protective)
   const otherVoices = PROTECTIVE_VOICES.filter(v => v.id !== userArchetypes.protective)
-  const userEssenceProfile = essenceProfiles.essence_archetypes?.find(p => p.name === userArchetypes.essence)
+  const userEssenceProfile = essenceProfiles.essence_archetypes?.find(p => p.name === (userArchetypes.essenceOriginal || userArchetypes.essence))
 
   // ============ PROTECTIVE VOICE QUEST ============
   if (quest.id === 'recognise_protective_observe') {

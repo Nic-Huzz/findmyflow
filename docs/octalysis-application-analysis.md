@@ -11,15 +11,17 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 | Core Drive | Current Score (0-10) | Justification |
 |------------|---------------------|---------------|
 | **CD1** Epic Meaning | 7 | Strong Nikigai narrative, "essence vs protective voice" framing, Groan challenges as "becoming your true self" |
-| **CD2** Accomplishment | 6 | Points, streaks, stage progression, badges (Courage Starter → Essence Embodied) |
-| **CD3** Creativity | 4 | Flow Finder discovery, some choice in challenges, but limited creative expression |
-| **CD4** Ownership | 5 | Projects, personas, Flow Compass entries, but limited customization/collections |
-| **CD5** Social | 3 | Leaderboards exist, but minimal community/mentorship features |
-| **CD6** Scarcity | 2 | 7-day challenge timeframe, but weak scarcity mechanics |
-| **CD7** Curiosity | 5 | AI-generated challenges, essence zone discovery, Zarlo AI insights |
-| **CD8** Loss | 4 | Streak loss, but not heavily emphasized |
+| **CD2** Accomplishment | 6 | Points, streaks, stage progression, badges, confetti/LevelUpModal/FloatingPoints/haptics |
+| **CD3** Creativity | 5 | ContentGenerator with AI/tones/A/B, PhaseSelector + TaskMenuPicker, OfferBuilderFlow strategic choices, Story Bank with voice/AI interview, Flow Compass interactive selector |
+| **CD4** Ownership | 5 | Projects, personas, LibraryOfAnswers portfolio, GeneratedAssetsLibrary, Story Bank collections, but no badge inventory or avatar customization |
+| **CD5** Social | 4 | Weekly/all-time leaderboards with medals, group codes with WhatsApp sharing, public shareable flows, group filtering — but no peer connections, community feed, or real social features |
+| **CD6** Scarcity | 4 | 7-day challenge, streak system with flame escalation, stage-gated features with prerequisite chains, daily/weekly resets, push notifications live, offer-level scarcity |
+| **CD7** Curiosity | 5 | AI-generated Groan challenges, essence zone discovery (scary+wahoo scoring), Zarlo context-aware variable responses, protective voice archetypes with kryptonite, Mind Space graph |
+| **CD8** Loss | 5 | Streak loss mechanics, protective voice as therapeutic loss framing, longest vs current streak gap, CRM nudge engine, Smart Alerts, deal pipeline won/lost tracking, weekly planning forced |
 
-**Current Score: 49 + 36 + 16 + 25 + 9 + 4 + 25 + 16 = 180** (Basic-Moderate)
+**Current Score: 49 + 36 + 25 + 25 + 16 + 16 + 25 + 25 = 217** (Moderate)
+
+*Scores updated February 2025 after full codebase audit*
 
 ---
 
@@ -97,12 +99,16 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 
 ---
 
-### CD3: Empowerment of Creativity & Feedback (Current: 4/10)
+### CD3: Empowerment of Creativity & Feedback (Current: 5/10)
 
 **What's Working:**
-- Flow Finder lets users discover (not create)
-- PromptGenerator for AI content
-- Some strategic choices in Groan Matrix
+- ContentGenerator with AI, multiple tones, A/B testing, refinement options
+- PhaseSelector + TaskMenuPicker with custom task creation
+- OfferBuilderFlow with strategic delivery choices (10+ types)
+- Story Bank with voice recording, AI interview mode, gap analysis
+- Flow Compass interactive directional energy selector
+- Flow Finder discovery process
+- Strategic choices in Groan Matrix
 
 **Opportunities to Strengthen:**
 
@@ -171,11 +177,15 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 
 ---
 
-### CD5: Social Influence & Relatedness (Current: 3/10) ⚠️ BIGGEST GAP
+### CD5: Social Influence & Relatedness (Current: 4/10) ⚠️ BIGGEST GAP
 
 **What's Working:**
-- Basic leaderboards
-- (That's about it)
+- Weekly + all-time leaderboards with medals (top 3)
+- Group code system with WhatsApp sharing
+- Public shareable flows via `/v/:shareToken` with email gate
+- Group-specific leaderboard filtering
+- Top performers ranking in CRM analytics
+- Zarlo AI accountability mode
 
 **Opportunities to Strengthen:**
 
@@ -217,11 +227,17 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 
 ---
 
-### CD6: Scarcity & Impatience (Current: 2/10)
+### CD6: Scarcity & Impatience (Current: 4/10)
 
 **What's Working:**
 - 7-day challenge framework
-- Some time-sensitive quests
+- Streak system with flame escalation (cold → warm → hot → legendary)
+- Stage-gated feature unlocks with prerequisite chains
+- Daily quest resets at midnight
+- 4-phase weekly cycle resets (Push/Flow/Rest/Launch)
+- Push notifications live (timezone-aware: 8am/12pm/6pm)
+- "Almost there" messaging in several places
+- Offer-level scarcity mechanics (limited time/quantity)
 
 **Opportunities to Strengthen:**
 
@@ -294,11 +310,15 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 
 ---
 
-### CD8: Loss & Avoidance (Current: 4/10)
+### CD8: Loss & Avoidance (Current: 5/10)
 
 **What's Working:**
-- Streak loss fear (implicit)
-- Some FOMO in 7-day challenge
+- Streak loss mechanics (resets after 2+ missed days, longest vs current gap visible)
+- Protective voice as therapeutic loss framing ("What did your Perfectionist stop you from?")
+- CRM nudge engine (stuck tasks, stale funnels, mid-week progress checks)
+- Smart Alerts with colour-coded warnings (red/yellow)
+- Deal pipeline with explicit won/lost tracking and reason capture
+- Weekly planning forced if no plan exists (status quo sloth)
 
 **Opportunities to Strengthen (USE SPARINGLY):**
 
@@ -369,26 +389,26 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
 
 ## Recommended Octalysis Balance
 
-### Current Balance
+### Current Balance (Updated Feb 2025)
 ```
           WHITE HAT (Strong)
     ┌─────────────────────────────┐
     │ CD1: 7 - Epic Meaning ✓     │
     │ CD2: 6 - Accomplishment ✓   │
-    │ CD3: 4 - Creativity ⚠️      │
+    │ CD3: 5 - Creativity ⚠️      │
     └─────────────────────────────┘
 
           NEUTRAL (Weak)
     ┌─────────────────────────────┐
     │ CD4: 5 - Ownership ⚠️       │
-    │ CD5: 3 - Social ❌          │ ← BIGGEST GAP
+    │ CD5: 4 - Social ❌          │ ← BIGGEST GAP
     └─────────────────────────────┘
 
-          BLACK HAT (Minimal - Good)
+          BLACK HAT (Moderate - Good)
     ┌─────────────────────────────┐
-    │ CD6: 2 - Scarcity ✓         │
+    │ CD6: 4 - Scarcity ✓         │
     │ CD7: 5 - Curiosity ⚠️       │
-    │ CD8: 4 - Loss Avoidance ✓   │
+    │ CD8: 5 - Loss Avoidance ✓   │
     └─────────────────────────────┘
 ```
 
@@ -398,38 +418,74 @@ Assessing FindMyFlow's current gamification across the 8 Core Drives:
     ┌─────────────────────────────┐
     │ CD1: 8 - Epic Meaning       │ +1
     │ CD2: 8 - Accomplishment     │ +2
-    │ CD3: 7 - Creativity         │ +3
+    │ CD3: 7 - Creativity         │ +2
     └─────────────────────────────┘
 
           NEUTRAL (Strengthened)
     ┌─────────────────────────────┐
     │ CD4: 7 - Ownership          │ +2
-    │ CD5: 7 - Social             │ +4 ← Priority
+    │ CD5: 7 - Social             │ +3 ← Priority
     └─────────────────────────────┘
 
-          BLACK HAT (Minimal)
+          BLACK HAT (Controlled)
     ┌─────────────────────────────┐
-    │ CD6: 3 - Scarcity           │ +1 (light touch)
-    │ CD7: 6 - Curiosity          │ +1
-    │ CD8: 4 - Loss Avoidance     │ +0 (no change)
+    │ CD6: 5 - Scarcity           │ +1 (light touch)
+    │ CD7: 7 - Curiosity          │ +2
+    │ CD8: 5 - Loss Avoidance     │ +0 (intentional ceiling)
     └─────────────────────────────┘
 ```
 
-**Target Score: 64 + 64 + 49 + 49 + 49 + 9 + 36 + 16 = 336** (Strong)
+**Current Score: 217** (Moderate)
+**Target Score: 64 + 64 + 49 + 49 + 49 + 25 + 49 + 25 = 374** (Strong)
+**Delta: +157 points across 7 drives (CD8 intentionally held)**
 
 ---
 
-## Summary: Top 5 Recommendations
+## Full Summary: All 8 Core Drives
 
-1. **Build Community Features (CD5)** - This is the biggest gap. Accountability partners, community challenges, and discussion forums will dramatically increase engagement and retention.
+### Score Changes (After Feb 2025 Codebase Audit)
 
-2. **Add Visual Progress & Collections (CD2, CD4)** - Skill trees, tower mastery %, and a Collections tab create visible growth paths and ownership.
+| Drive | Was | Now | Change | Reason |
+|-------|-----|-----|--------|--------|
+| CD1 Epic Meaning | 7 | **7** | — | Strong as-is |
+| CD2 Accomplishment | 6 | **6** | — | Solid celebrations + points |
+| CD3 Creativity | 4 | **5** | +1 | ContentGenerator, OfferBuilder, Story Bank stronger than assessed |
+| CD4 Ownership | 5 | **5** | — | LibraryOfAnswers + Assets exist, but no collections/avatar |
+| CD5 Social | 3 | **4** | +1 | Groups, leaderboards, share tokens more than "basic" |
+| CD6 Scarcity | 2 | **4** | +2 | Streaks, gating, push notifications already live |
+| CD7 Curiosity | 5 | **5** | — | Essence zones + AI generation good, but fixed rewards |
+| CD8 Loss | 4 | **5** | +1 | Nudge engine, Smart Alerts, therapeutic framing |
 
-3. **Enable Creative Expression (CD3)** - "Create Your Own Challenge" and visual builders let users express themselves, creating evergreen engagement.
+**Total: 192 → 217** (Moderate) | **Target: 374** (Strong) | **Delta: +157**
 
-4. **Strengthen Epic Meaning (CD1)** - Community impact stats and personalized "you're rare" messaging reinforce the bigger purpose.
+### Build List (12 Features Across 6 Phases)
 
-5. **Add Gentle Unpredictability (CD7)** - Weekly mystery bonuses and hidden achievements add delight without manipulation.
+| Phase | Features | Drives |
+|-------|----------|--------|
+| **1: Quick Wins** | Community Impact Widget, Completion Screen, Name Your HQ, Rarity Reveal, Stage Groan reframing, Progress bars | CD1, CD2 |
+| **2: Triggers** | Zarlo trigger system, Last mile messaging, Streak-at-Risk notifications, Deal Stale Warnings | CD2, CD6, CD8 |
+| **3: Recognition** | Milestones, Collections tab, Badge system, Play Deck v1, Easter Eggs v1 | CD2, CD4, CD7 |
+| **4: Creative** | Visual Offer Stack Builder, Play Deck v2, Zarlo Curiosity Hooks, Avatar, Achievement showcase | CD3, CD4, CD7 |
+| **5: Community** | Courage Pods, Community Feed, Week Recap + Rank Change, Community challenges, Discussion threads | CD5, CD8 |
+| **6: Advanced** | Mentorship, AI Zarlo personalization, Full social, Play Deck v3, Easter Eggs v2 | CD1, CD5, CD7 |
+
+### Biggest Gaps Remaining
+
+1. **CD5 Social** (4 → 7 target) — Still the priority. Courage Pods + Community Feed + Week Recap are the path.
+2. **CD7 Curiosity** (5 → 7 target) — Easter Eggs + Zarlo Curiosity Hooks + variable rewards.
+3. **CD3 Creativity** (5 → 7 target) — Visual Offer Stack Builder + challenge customization.
+
+### Top 5 Recommendations
+
+1. **Build Community Features (CD5)** - Biggest gap. Courage Pods, Community Feed, and Week Recap will dramatically increase engagement and retention.
+
+2. **Add Visual Progress & Collections (CD2, CD4)** - Play Deck, milestones, and a Collections tab create visible growth paths and ownership.
+
+3. **Add Gentle Unpredictability (CD7)** - Easter Egg achievements and Zarlo Curiosity Hooks add delight without manipulation.
+
+4. **Enable Creative Expression (CD3)** - Visual Offer Stack Builder and challenge customization let users express themselves.
+
+5. **Strengthen Epic Meaning (CD1)** - Community impact stats and personalized "you're rare" messaging reinforce the bigger purpose.
 
 ---
 
@@ -471,5 +527,6 @@ Dashboard + Tower Mastery % (CD2)
 ---
 
 *Document created: January 2025*
+*Updated: February 2025 — Full CD1-CD8 codebase audit, revised scores*
 *Framework: Octalysis by Yu-kai Chou*
 *Application: FindMyFlow 7-Day Challenge + CRM*
