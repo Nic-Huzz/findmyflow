@@ -520,6 +520,18 @@ function HomeFirstTime() {
     const question = personaQuestions?.questions?.[questionIndex]
 
     if (!question) {
+      // If personaQuestions hasn't loaded yet, show loading state (not error)
+      if (!personaQuestions) {
+        return (
+          <div className="home-first-time">
+            <div className="loading-container">
+              <div className="loading-spinner" />
+              <p>Loading your questions...</p>
+            </div>
+          </div>
+        )
+      }
+      // Only show error if questions loaded but the specific question is missing
       return (
         <div className="home-first-time">
           <div className="error-state">
