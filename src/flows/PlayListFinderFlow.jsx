@@ -949,7 +949,7 @@ ${filledGroanZone.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Not answered'}
           <div className="nav-buttons">
             <button
               className="secondary-button"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/7-day-challenge')}
             >
               Back
             </button>

@@ -248,6 +248,30 @@
   transform: translateY(0);
 }
 
+.wo-generate-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  background: linear-gradient(135deg, #E9A23B, #f59e0b);
+  border: none;
+  color: #fff;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.wo-generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+.wo-generate-btn:active {
+  transform: translateY(0);
+}
+
 /* Filters */
 .wo-filters {
   display: flex;
@@ -668,6 +692,47 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Contact Toggle */
+.wo-contact-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--purple-lighter);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 0.5rem;
+}
+
+.wo-contact-toggle:has(input:checked) {
+  border-color: var(--purple);
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08), rgba(124, 58, 237, 0.08));
+}
+
+.wo-contact-toggle input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--purple);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.wo-contact-toggle-label {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.wo-contact-toggle-hint {
+  width: 100%;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  padding-left: 2rem;
 }
 
 /* Modal Actions */

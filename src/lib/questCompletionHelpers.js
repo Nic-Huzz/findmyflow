@@ -229,7 +229,8 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'play_list_finder': 'play_list_finder',
       'persona_identifier': 'persona_identifier',
       'flow_finder_explainer': 'flow_finder_explainer',
-      'mind_space': 'mind_space_extraction'  // Matches JSON quest ID
+      'mind_space': 'mind_space_extraction',  // Matches JSON quest ID
+      'milestone_read_money_model': 'milestone_read_money_model'  // Money Model Guide explainer
     };
 
     const questId = flowToQuestMap[flowType];
@@ -266,7 +267,8 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'flow_finder_explainer': 5,
       'play_list_finder': 10,
       'persona_identifier': 10,
-      'mind_space_extraction': 10  // Matches JSON quest ID
+      'mind_space_extraction': 10,  // Matches JSON quest ID
+      'milestone_read_money_model': 5  // Money Model Guide explainer
     };
 
     const points = questPoints[questId] || 5;
@@ -278,10 +280,10 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
         user_id: userId,
         challenge_instance_id: null,  // User-level completion
         quest_id: questId,
-        quest_category: 'Flow Finder',
+        quest_category: 'Business',
         quest_type: 'flow',
         points_earned: points,
-        challenge_day: null,
+        challenge_day: 0,
         reflection_text: `Completed ${flowType} flow`,
         project_id: null,  // User-level, not project-specific
         stage: 0  // Flow Finder quests are Stage 0
@@ -296,7 +298,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     try {
       await syncScoreToLeaderboard(supabase, {
         userId,
-        questCategory: 'Flow Finder',
+        questCategory: 'Business',
         points,
         projectId: null,  // User-level scores
         source: `flow_finder_${flowType}`

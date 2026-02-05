@@ -1,0 +1,225 @@
+/**
+ * Business Systems Page Styles
+ */
+@import './tower-shared.css';
+
+.biz-systems-page {
+  min-height: 100vh;
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  background: #f8f9fa;
+}
+
+/* Phase Tabs */
+.biz-phase-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  margin-bottom: 20px;
+}
+
+.biz-phase-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.biz-phase-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #dee2e6;
+  background: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.biz-phase-tab:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.biz-phase-tab.active {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.biz-phase-tab-icon {
+  font-size: 1rem;
+}
+
+.biz-phase-tab-pct {
+  font-size: 0.6875rem;
+  opacity: 0.8;
+}
+
+/* Phase Content */
+.biz-phase-content {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.biz-phase-desc {
+  color: #495057;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+/* Progress bar */
+.biz-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.biz-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.biz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb 0%, #E9A23B 100%);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.biz-progress-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Checklist */
+.biz-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.biz-check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.biz-check-item:hover {
+  background: #f8f9fa;
+}
+
+.biz-check-item.completed {
+  opacity: 0.7;
+}
+
+.biz-check-item.completed .biz-check-label {
+  text-decoration: line-through;
+  color: #6c757d;
+}
+
+.biz-checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 6px;
+  border: 2px solid #dee2e6;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.biz-checkbox.checked {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border-color: #5e17eb;
+}
+
+.biz-check-label {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #212529;
+}
+
+.biz-auto-badge {
+  font-size: 0.625rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #dbeafe;
+  color: #2563eb;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.biz-check-link {
+  background: none;
+  border: none;
+  color: #5e17eb;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.biz-check-link:hover {
+  background: #f3e8ff;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .biz-systems-page {
+    padding: 16px;
+    padding-top: 76px;
+    padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .biz-phase-tab {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+
+  .biz-phase-content {
+    padding: 16px;
+  }
+
+  .biz-check-item {
+    padding: 10px 8px;
+    gap: 10px;
+  }
+
+  .biz-check-label {
+    font-size: 0.8125rem;
+  }
+}

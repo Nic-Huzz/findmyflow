@@ -113,6 +113,9 @@ function LibraryOfAnswers() {
   // Healing Compass data
   const [healingEntries, setHealingEntries] = useState([])
 
+  // Let's Play data
+  const [letsPlayCompletions, setLetsPlayCompletions] = useState([])
+
   // Add hue values to segments for wheel rendering
   const skillsWithHue = useMemo(() =>
     SKILLS_SEGMENTS.map((s, i) => ({ ...s, hue: i * 30 })),
@@ -434,7 +437,8 @@ function LibraryOfAnswers() {
         fetchMoneyModelData(),
         fetchNervousSystemData(),
         fetchHealingCompassData(),
-        fetchProducts()
+        fetchProducts(),
+        fetchLetsPlayData()
       ])
     } catch (err) {
       console.error('Error fetching library data:', err)
@@ -607,6 +611,42 @@ function LibraryOfAnswers() {
       .order('created_at', { ascending: false })
 
     setHealingEntries(data || [])
+  }
+
+  const fetchLetsPlayData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('quest_completions')
+        .select('id, reflection_text, created_at')
+        .eq('user_id', user.id)
+        .eq('quest_id', 'lets_play')
+        .order('created_at', { ascending: false })
+
+      if (error) {
+        console.warn('Error fetching Let\'s Play data:', error)
+        return
+      }
+
+      // Parse structured data from reflection_text
+      const parsed = (data || []).map(completion => {
+        try {
+          const reflection = typeof completion.reflection_text === 'string'
+            ? JSON.parse(completion.reflection_text)
+            : completion.reflection_text
+          return {
+            id: completion.id,
+            createdAt: completion.created_at,
+            ...reflection
+          }
+        } catch {
+          return null
+        }
+      }).filter(Boolean)
+
+      setLetsPlayCompletions(parsed)
+    } catch (err) {
+      console.warn('fetchLetsPlayData error:', err)
+    }
   }
 
   const formatDate = (dateStr) => {
@@ -1089,13 +1129,75 @@ function LibraryOfAnswers() {
     switch (stageId) {
       case 1: // Validation
         return (
-          <div className="subsection">
-            <h3>Persona Selection</h3>
-            <p className="empty-text">
-              Persona validation data appears in Flow Finder → Personas.{' '}
-              <Link to="/persona-selection">Complete Persona Selection</Link>
-            </p>
-          </div>
+          <>
+            {/* Let's Play Completions */}
+            <div className="subsection">
+              <h3>Let's Play Experiments</h3>
+              {letsPlayCompletions.length === 0 ? (
+                <p className="empty-text">
+                  No Let's Play experiments yet.{' '}
+                  <Link to="/lets-play">Start Your First Play</Link>
+                </p>
+              ) : (
+                <div className="cards-grid">
+                  {letsPlayCompletions.map(play => {
+                    const outcomeIcons = {
+                      loved_it: '⭐',
+                      it_helped: '👍',
+                      mixed: '🤷',
+                      didnt_land: '😬',
+                      not_needed: '❌'
+                    }
+                    const flowIcons = {
+                      north: { icon: '🟢', label: 'Flow' },
+                      east: { icon: '🔵', label: 'Redirect' },
+                      south: { icon: '🔴', label: 'Rest' },
+                      west: { icon: '🟡', label: 'Honour' }
+                    }
+                    const flowInfo = play.flow_direction ? flowIcons[play.flow_direction] : null
+
+                    return (
+                      <div key={play.id} className="cluster-card-v2">
+                        <h4 className="cluster-title">
+                          {play.skill_name} × {play.problem_name}
+                        </h4>
+                        <p className="cluster-insight-v2">
+                          Helped {play.person_name}
+                          {play.what_happened && `: ${play.what_happened.substring(0, 80)}${play.what_happened.length > 80 ? '...' : ''}`}
+                        </p>
+                        <div className="cluster-tags">
+                          {play.outcome_rating && (
+                            <span className="cluster-tag">
+                              {outcomeIcons[play.outcome_rating] || '•'} {play.outcome_rating.replace(/_/g, ' ')}
+                            </span>
+                          )}
+                          {flowInfo && (
+                            <span className="cluster-tag">
+                              {flowInfo.icon} {flowInfo.label}
+                            </span>
+                          )}
+                          {play.phase === 'pending_review' && (
+                            <span className="cluster-tag" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#f59e0b' }}>
+                              Pending Review
+                            </span>
+                          )}
+                          <span className="cluster-tag-more">{formatDate(play.createdAt)}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+
+            <div className="subsection">
+              <h3>Persona Selection</h3>
+              <p className="empty-text">
+                Persona validation data appears in Flow Finder → Personas.{' '}
+                <Link to="/persona-selection">Complete Persona Selection</Link>
+              </p>
+            </div>
+          </>
         )
 
       case 2: // Product Creation

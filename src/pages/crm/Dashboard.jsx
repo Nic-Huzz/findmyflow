@@ -14,6 +14,7 @@ import { supabase } from '../../lib/supabaseClient'
 import { DashboardSkeleton } from '../../components/crm/Skeleton'
 import PullToRefresh from '../../components/crm/PullToRefresh'
 import DailyActions from '../../components/crm/DailyActions'
+import EcosystemStatusWidget from '../../components/crm/EcosystemStatusWidget'
 import { hapticLight } from '../../lib/haptics'
 import '../../components/crm/PageTransition.css'
 import './Dashboard.css'
@@ -96,6 +97,11 @@ export default function Dashboard() {
           <span className="hq-stat-label">Pipeline Value</span>
         </div>
       </div>
+
+        {/* Business Systems Progress */}
+        <section className="hq-section">
+          <EcosystemStatusWidget userId={user?.id} />
+        </section>
 
         {/* Daily Actions */}
         <section className="hq-section">

@@ -198,23 +198,15 @@
 
 /* ============ PROGRESS INDICATORS ============ */
 
-.flow-base .progress-container {
-  position: relative;
-  width: 100%;
-  padding: 16px 20px;
-  background: transparent;
-  z-index: 10;
-  box-sizing: border-box;
-}
-
-.flow-base .progress-dots {
+/* Base styles for shared ProgressDots component (used across all flows) */
+.progress-container .progress-dots {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
-.flow-base .progress-dot {
+.progress-container .progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -222,14 +214,24 @@
   transition: all 0.3s ease;
 }
 
-.flow-base .progress-dot.completed {
+.progress-container .progress-dot.completed {
   background: #ffdd27;
 }
 
-.flow-base .progress-dot.active {
+.progress-container .progress-dot.active {
   background: #ffdd27;
   box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
   transform: scale(1.2);
+}
+
+/* Flow-base specific overrides */
+.flow-base .progress-container {
+  position: relative;
+  width: 100%;
+  padding: 16px 20px;
+  background: transparent;
+  z-index: 10;
+  box-sizing: border-box;
 }
 
 .flow-base .section-progress {
@@ -317,6 +319,59 @@
   font-size: 14px;
   margin-top: 12px;
   text-align: center;
+}
+
+.flow-base .error-message-container {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.flow-base .error-message-container .error-message {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.flow-base .error-help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #25D366;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.flow-base .error-help-link:hover {
+  color: #128C7E;
+}
+
+/* Global error help styles (outside flows) */
+.error-message-container {
+  text-align: center;
+}
+
+.error-message-container .error-message {
+  margin-bottom: 8px;
+}
+
+.error-help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #25D366;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.error-help-link:hover {
+  color: #128C7E;
 }
 
 /* ============ INFO BOX ============ */

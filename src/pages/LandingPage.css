@@ -2306,6 +2306,50 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Three Pillars Diagrams */
+.landing-page .three-pillars-diagrams {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.landing-page .pillar-diagram-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1rem 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.landing-page .pillar-diagram-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(94, 23, 235, 0.12);
+}
+
+.landing-page .pillar-diagram-title {
+  color: #ffdd27;
+  text-align: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+}
+
+.landing-page .pillar-diagram-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .landing-page .three-pillars-diagrams {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
 /* Founder Why - New Story Section */
 .landing-page .founder-why-critique {
   font-size: 1.05rem;

@@ -26,6 +26,7 @@ import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage } from './lib/stageConfig'
 import { generateVoiceQuestsForStage } from './lib/voiceQuestConfig'
 import { getScoringCategory } from './lib/scoringCategories'
+import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -297,6 +298,11 @@ function Challenge() {
       }
     }
 
+    if (quest.inputType === 'lets_play_review' && !specialData) {
+      alert('Please complete the quest form.')
+      return
+    }
+
     // Handle text_with_tags input type (has object with text and tags)
     let sanitizedReflection = null
     if (quest.inputType === 'text_with_tags' && inputValue) {
@@ -525,6 +531,8 @@ function Challenge() {
         } else {
           completionData.reflection_text = sanitizedReflection
         }
+      } else if (quest.inputType === 'lets_play_review') {
+        completionData.reflection_text = safeStringify(specialData)
       } else if (quest.inputType === 'conversation_log' || quest.inputType === 'milestone' || quest.inputType === 'flow_compass') {
         completionData.reflection_text = safeStringify(specialData)
       } else if (quest.type === 'groan' && specialData) {
@@ -1143,6 +1151,12 @@ function Challenge() {
       <div className="challenge-container">
         <div className="challenge-error">
           <p>Unable to load challenge progress. Please try refreshing the page.</p>
+          <div style={{ marginTop: '1rem' }}>
+            <WhatsAppErrorButton
+              errorMessage="Unable to load challenge progress"
+              component="Challenge"
+            />
+          </div>
         </div>
       </div>
     )
@@ -1328,7 +1342,7 @@ function Challenge() {
                   if (tabStatus.bonusAwarded) {
                     return <p className="tab-bonus-text earned">+{tabStatus.bonusPoints} XP bonus earned!</p>
                   }
-                  return <p className="tab-bonus-text">Complete To Receive {BONUS_PERCENTAGE}% Point Boost</p>
+                  return null
                 })()}
               </div>
             )}

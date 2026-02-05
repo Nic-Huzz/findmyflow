@@ -170,7 +170,7 @@ export const showErrorWithSupport = async ({
   canRetry = true
 }) => {
   // Log the error first
-  const { offerSupport, errorMessage } = await logError({
+  const { offerSupport, errorMessage: _errorMessage } = await logError({
     error,
     component,
     action,
@@ -228,7 +228,44 @@ const getHelpfulMessage = (error) => {
   return 'Your data should be safe. Please try again or contact support.'
 }
 
+/**
+ * Open WhatsApp with error details (simpler version for quick use)
+ * Use this when you already have error info and just want to open WhatsApp
+ */
+export const openWhatsAppSupport = ({
+  component = 'Unknown',
+  action = null,
+  errorMessage = 'Unknown error',
+  errorCode = null,
+  errorStack = null
+}) => {
+  const pageUrl = typeof window !== 'undefined' ? window.location.href : 'Unknown'
+
+  const lines = [
+    `Hey! Something isn't working properly...`,
+    ``,
+    `*Page:* ${pageUrl}`,
+    `*Component:* ${component}${action ? ` (${action})` : ''}`,
+    `*Error:* ${errorMessage}`,
+  ]
+
+  if (errorCode) {
+    lines.push(`*Code:* ${errorCode}`)
+  }
+
+  if (errorStack) {
+    // Truncate stack to avoid hitting URL limits
+    const truncatedStack = errorStack.substring(0, 500)
+    lines.push(``, `*Stack:* ${truncatedStack}${errorStack.length > 500 ? '...' : ''}`)
+  }
+
+  const message = lines.join('\n')
+  const whatsappUrl = `https://wa.me/${SUPPORT_WHATSAPP}?text=${encodeURIComponent(message)}`
+  window.open(whatsappUrl, '_blank')
+}
+
 export default {
   logError,
-  showErrorWithSupport
+  showErrorWithSupport,
+  openWhatsAppSupport
 }

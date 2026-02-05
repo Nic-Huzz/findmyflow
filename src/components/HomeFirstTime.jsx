@@ -58,6 +58,7 @@ function HomeFirstTime() {
   const [currentScreen, setCurrentScreen] = useState(SCREENS.PERSONA_Q1)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [isSavingQ3, setIsSavingQ3] = useState(false)
 
   // Transition state for smooth page changes
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -285,9 +286,11 @@ function HomeFirstTime() {
 
   // Handle Q3 (Goal) selection - with validation
   const handleQ3Selection = async (option) => {
+    if (isSavingQ3) return // Prevent double-clicks during save
     const validGoals = getValidGoalsForWealthLadder(wealthLadderRung)
     if (!validGoals.includes(option.value)) return // Shouldn't happen, but safety check
 
+    setIsSavingQ3(true)
     setPrimaryGoal(option.value)
     const emphasis = determineGuidanceEmphasis(wealthLadderRung, option.value)
     setGuidanceEmphasis(emphasis)
@@ -309,6 +312,8 @@ function HomeFirstTime() {
     // Save all V2 data to database - MUST await before clearing localStorage
     setError(null) // Clear any previous error
     const success = await saveOnboardingV2Data(derivedPersona, emphasis, option.value)
+
+    setIsSavingQ3(false)
 
     if (success) {
       // Only clear localStorage after successful save
@@ -389,17 +394,17 @@ function HomeFirstTime() {
       // Paths 2-4: Go to Quick Capture flow
       setCurrentScreen(SCREENS.QUICK_CAPTURE)
     } else {
-      // Fallback: Go to profile
-      navigate('/me')
+      // Fallback: Go to profile (full reload to refresh stageProgress)
+      window.location.href = '/me'
     }
   }
 
   // Handle Quick Capture completion
   const handleQuickCaptureComplete = (capturedData) => {
-    console.log('handleQuickCaptureComplete called, navigating to /me...')
-    // Navigate to main profile page after onboarding
-    navigate('/me')
-    console.log('navigate(/me) called')
+    console.log('handleQuickCaptureComplete called, reloading profile...')
+    // Force full reload so Profile re-fetches stageProgress with onboarding_v2_completed: true
+    // navigate('/me') doesn't work here because we're already on /me
+    window.location.href = '/me'
   }
 
   // Mark onboarding complete in the database
@@ -417,7 +422,7 @@ function HomeFirstTime() {
   // Handle "I'll do this later" - mark onboarding complete then go to profile
   const handleSkipToProfile = async () => {
     await markOnboardingComplete()
-    navigate('/me')
+    window.location.href = '/me'
   }
 
   // Handle "I have 2 minutes now" - mark onboarding complete then go to mind-space
@@ -590,10 +595,42 @@ function HomeFirstTime() {
           <h2>{question.question}</h2>
           <p className="question-subtext">{question.subtext || 'Your answers help us personalise your journey'}</p>
 
+          {error && (
+            <p style={{
+              color: '#ff6b6b',
+              background: 'rgba(255, 107, 107, 0.1)',
+              border: '1px solid rgba(255, 107, 107, 0.3)',
+              borderRadius: '12px',
+              padding: '12px 16px',
+              fontSize: '14px',
+              marginBottom: '16px',
+              textAlign: 'center'
+            }}>
+              {error}
+            </p>
+          )}
+
+          {isSavingQ3 && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              padding: '12px',
+              marginBottom: '16px',
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontSize: '14px'
+            }}>
+              <div className="loading-spinner" style={{ width: '18px', height: '18px' }} />
+              Saving your answers...
+            </div>
+          )}
+
           <div className="options-list">
             {question.options.map((option) => {
               // For Q3, check if this option is valid based on wealth ladder
               const isDisabled = validGoals && !validGoals.includes(option.value)
+              const isBusy = currentScreen === SCREENS.PERSONA_Q3 && isSavingQ3
 
               return (
                 <button
@@ -604,11 +641,11 @@ function HomeFirstTime() {
                     border: `1px solid ${isDisabled ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.15)'}`,
                     borderRadius: '16px',
                     color: 'white',
-                    opacity: isDisabled ? 0.4 : 1,
-                    cursor: isDisabled ? 'not-allowed' : 'pointer'
+                    opacity: (isDisabled || isBusy) ? 0.4 : 1,
+                    cursor: (isDisabled || isBusy) ? 'not-allowed' : 'pointer'
                   }}
-                  onClick={() => !isDisabled && handleOptionClick(option)}
-                  disabled={isDisabled}
+                  onClick={() => !isDisabled && !isBusy && handleOptionClick(option)}
+                  disabled={isDisabled || isBusy}
                 >
                   <span className="option-label" style={{ color: 'white', fontWeight: 600, fontSize: '18px' }}>{option.label}</span>
                   <span className="option-description" style={{ color: 'rgba(255, 255, 255, 0.6)', fontSize: '14px' }}>{option.description}</span>
@@ -879,7 +916,7 @@ function HomeFirstTime() {
   if (currentScreen === SCREENS.EXISTING_PROJECT) {
     return (
       <ExistingProjectFlow
-        onComplete={() => navigate('/me')}
+        onComplete={() => window.location.href = '/me'}
         onBack={() => setCurrentScreen(SCREENS.PROJECT_TYPE)}
       />
     )

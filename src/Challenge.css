@@ -1618,6 +1618,29 @@
   box-shadow: none;
 }
 
+/* Guide quest area - styled button + secondary complete button */
+.quest-guide-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.quest-complete-btn.secondary {
+  background: transparent;
+  border: 1px solid rgba(94, 23, 235, 0.3);
+  color: #5e17eb;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+.quest-complete-btn.secondary:hover {
+  background: rgba(94, 23, 235, 0.08);
+  border-color: rgba(94, 23, 235, 0.5);
+  box-shadow: none;
+  transform: none;
+}
+
 .locked-info-icon {
   cursor: pointer;
   font-size: 0.875rem;

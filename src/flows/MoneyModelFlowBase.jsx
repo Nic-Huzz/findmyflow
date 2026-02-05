@@ -539,7 +539,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           </button>
           <button
             className="go-back-link"
-            onClick={() => setStage(STAGES.TIME_CHECK)}
+            onClick={() => navigate('/7-day-challenge')}
           >
             ← Go Back
           </button>
@@ -616,7 +616,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
               </button>
               <button
                 className="secondary-button"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/7-day-challenge')}
               >
                 Come Back Later
               </button>

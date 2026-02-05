@@ -64,6 +64,8 @@ const MindSpace = lazy(() => import('./flows/MindSpace'))
 const PlayListFinderFlow = lazy(() => import('./flows/PlayListFinderFlow'))
 const PersonaIdentifierFlow = lazy(() => import('./flows/PersonaIdentifierFlow'))
 const FlowFinderExplainer = lazy(() => import('./flows/FlowFinderExplainer'))
+const LetsPlayFlow = lazy(() => import('./flows/LetsPlayFlow'))
+const LetsPlayReviewFlow = lazy(() => import('./flows/LetsPlayReviewFlow'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazy(() => import('./flows/HealingCompass'))
@@ -110,6 +112,8 @@ const Pages = lazy(() => import('./pages/crm/Pages'))
 const Contacts = lazy(() => import('./pages/crm/Contacts'))
 const EmailSequences = lazy(() => import('./pages/crm/EmailSequences'))
 const WarmOutreach = lazy(() => import('./pages/crm/WarmOutreach'))
+const BusinessSystems = lazy(() => import('./pages/crm/BusinessSystems'))
+const DataImport = lazy(() => import('./pages/crm/DataImport'))
 
 // Lazy-loaded pages - Other
 const MoneyModelGuide = lazy(() => import('./MoneyModelGuide'))
@@ -163,6 +167,7 @@ import './pages/crm/ObjectionPatterns.css'
 import './pages/crm/Contacts.css'
 import './pages/crm/EmailSequences.css'
 import './pages/crm/WarmOutreach.css'
+import './pages/crm/BusinessSystems.css'
 import './pages/crm/Execute.css'
 import './pages/crm/Attract.css'
 import './pages/crm/Nurture.css'
@@ -180,6 +185,7 @@ import './flows/CareerClarityQuiz.css'
 import './flows/MindSpace.css'
 import './flows/PlayListFinderFlow.css'
 import './flows/PersonaIdentifierFlow.css'
+import './components/crm/CSVImport/CSVImportWizard.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -204,7 +210,9 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/income-calculator' ||
                         location.pathname === '/mind-space' ||
                         location.pathname === '/play-list-finder' ||
-                        location.pathname === '/persona-identifier'
+                        location.pathname === '/persona-identifier' ||
+                        location.pathname === '/lets-play' ||
+                        location.pathname === '/lets-play-review'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -436,6 +444,16 @@ function AppRouter() {
                 <MindSpace />
               </AuthGate>
             } />
+            <Route path="/lets-play" element={
+              <AuthGate>
+                <LetsPlayFlow />
+              </AuthGate>
+            } />
+            <Route path="/lets-play-review" element={
+              <AuthGate>
+                <LetsPlayReviewFlow />
+              </AuthGate>
+            } />
             <Route path="/play-list-finder" element={
               <AuthGate>
                 <PlayListFinderFlow />
@@ -592,6 +610,16 @@ function AppRouter() {
             <Route path="/crm/tools/calculators" element={
               <AuthGate>
                 <CRMLayout><Calculators /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/tools/systems" element={
+              <AuthGate>
+                <CRMLayout><BusinessSystems /></CRMLayout>
+              </AuthGate>
+            } />
+            <Route path="/crm/import" element={
+              <AuthGate>
+                <DataImport />
               </AuthGate>
             } />
 

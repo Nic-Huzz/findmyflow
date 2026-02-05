@@ -1,12 +1,13 @@
 /**
  * Email Sequences - Automated Nurture Campaigns
- * Create and manage email sequences for lead nurturing
+ * Create and manage email sequences with individual email steps
  */
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import PullToRefresh from '../../components/crm/PullToRefresh'
+import { usePromptGenerator } from '../../components/crm/PromptGenerator'
 import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './EmailSequences.css'
 
@@ -25,6 +26,14 @@ const STATUS_OPTIONS = [
   { id: 'completed', label: 'Completed', color: '#8b5cf6' },
 ]
 
+/**
+ * Get the default prompt template based on sequence type
+ */
+function getPromptTemplate(sequenceType) {
+  if (sequenceType === 'launch') return 'launchSequence'
+  return 'nurtureSequence'
+}
+
 export default function EmailSequences() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -35,6 +44,8 @@ export default function EmailSequences() {
   const [editingSequence, setEditingSequence] = useState(null)
   const [selectedSequence, setSelectedSequence] = useState(null)
   const [filterStatus, setFilterStatus] = useState('all')
+
+  const promptGenerator = usePromptGenerator()
 
   // Load sequences
   const loadSequences = useCallback(async () => {
@@ -131,6 +142,7 @@ export default function EmailSequences() {
 
       if (error) throw error
       setSequences(sequences.map(s => s.id === sequence.id ? data : s))
+      if (selectedSequence?.id === sequence.id) setSelectedSequence(data)
       hapticMedium()
     } catch (err) {
       console.error('Error toggling status:', err)
@@ -276,13 +288,18 @@ export default function EmailSequences() {
         {selectedSequence && (
           <SequenceDetailModal
             sequence={selectedSequence}
-            onClose={() => setSelectedSequence(null)}
+            userId={user.id}
+            onClose={() => { setSelectedSequence(null); loadSequences() }}
             onEdit={() => {
               handleEditSequence(selectedSequence)
               setSelectedSequence(null)
             }}
             onDelete={() => handleDeleteSequence(selectedSequence.id)}
             onToggleStatus={() => handleToggleStatus(selectedSequence)}
+            onGeneratePrompt={() => {
+              promptGenerator.open(getPromptTemplate(selectedSequence.sequence_type))
+              hapticLight()
+            }}
           />
         )}
 
@@ -306,17 +323,123 @@ export default function EmailSequences() {
             }}
           />
         )}
+
+        {/* Prompt Generator Modal */}
+        <promptGenerator.PromptGeneratorModal />
       </div>
     </PullToRefresh>
   )
 }
 
 /**
- * Sequence Detail Modal
+ * Sequence Detail Modal - with Email Steps & PromptGenerator
  */
-function SequenceDetailModal({ sequence, onClose, onEdit, onDelete, onToggleStatus }) {
+function SequenceDetailModal({ sequence, userId, onClose, onEdit, onDelete, onToggleStatus, onGeneratePrompt }) {
   const type = SEQUENCE_TYPES.find(t => t.id === sequence.sequence_type) || SEQUENCE_TYPES[1]
   const status = STATUS_OPTIONS.find(s => s.id === sequence.status) || STATUS_OPTIONS[0]
+
+  const [steps, setSteps] = useState([])
+  const [loadingSteps, setLoadingSteps] = useState(true)
+  const [showStepForm, setShowStepForm] = useState(false)
+  const [editingStep, setEditingStep] = useState(null)
+  const [copiedStepId, setCopiedStepId] = useState(null)
+
+  // Load email steps
+  useEffect(() => {
+    async function loadSteps() {
+      try {
+        const { data, error } = await supabase
+          .from('crm_email_steps')
+          .select('*')
+          .eq('sequence_id', sequence.id)
+          .eq('user_id', userId)
+          .order('step_number', { ascending: true })
+
+        if (error) throw error
+        setSteps(data || [])
+      } catch (err) {
+        console.error('Error loading steps:', err)
+      } finally {
+        setLoadingSteps(false)
+      }
+    }
+    loadSteps()
+  }, [sequence.id, userId])
+
+  const handleAddStep = () => {
+    setEditingStep(null)
+    setShowStepForm(true)
+    hapticLight()
+  }
+
+  const handleEditStep = (step) => {
+    setEditingStep(step)
+    setShowStepForm(true)
+    hapticLight()
+  }
+
+  const handleDeleteStep = async (stepId) => {
+    if (!confirm('Delete this email?')) return
+
+    try {
+      const { error } = await supabase
+        .from('crm_email_steps')
+        .delete()
+        .eq('id', stepId)
+        .eq('user_id', userId)
+
+      if (error) throw error
+      const remaining = steps.filter(s => s.id !== stepId)
+      setSteps(remaining)
+
+      // Update steps_count on sequence
+      await supabase
+        .from('crm_email_sequences')
+        .update({ steps_count: remaining.length })
+        .eq('id', sequence.id)
+
+      hapticMedium()
+    } catch (err) {
+      console.error('Error deleting step:', err)
+    }
+  }
+
+  const handleCopyStep = async (step) => {
+    const text = `Subject: ${step.subject}${step.body ? `\n\n${step.body}` : ''}`
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedStepId(step.id)
+      hapticLight()
+      setTimeout(() => setCopiedStepId(null), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
+
+  const handleCopyAll = async () => {
+    const text = steps.map(step =>
+      `--- Email ${step.step_number} (Day ${step.delay_days}) ---\nSubject: ${step.subject}${step.body ? `\n\n${step.body}` : ''}`
+    ).join('\n\n')
+    const full = `${sequence.name} - Email Sequence\n\n${text}`
+    try {
+      await navigator.clipboard.writeText(full)
+      setCopiedStepId('all')
+      hapticMedium()
+      setTimeout(() => setCopiedStepId(null), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
+
+  const handleStepSaved = (savedStep) => {
+    if (editingStep) {
+      setSteps(steps.map(s => s.id === savedStep.id ? savedStep : s))
+    } else {
+      setSteps([...steps, savedStep].sort((a, b) => a.step_number - b.step_number))
+    }
+    setShowStepForm(false)
+    setEditingStep(null)
+  }
 
   return (
     <div className="es-detail-overlay" onClick={onClose}>
@@ -335,7 +458,7 @@ function SequenceDetailModal({ sequence, onClose, onEdit, onDelete, onToggleStat
         <div className="es-detail-content">
           <div className="es-detail-stats">
             <div className="es-stat">
-              <span className="es-stat-value">{sequence.steps_count || 0}</span>
+              <span className="es-stat-value">{steps.length}</span>
               <span className="es-stat-label">Emails</span>
             </div>
             <div className="es-stat">
@@ -365,6 +488,75 @@ function SequenceDetailModal({ sequence, onClose, onEdit, onDelete, onToggleStat
               {status.label}
             </span>
           </div>
+
+          {/* Email Steps Section */}
+          <div className="es-steps-section">
+            <div className="es-steps-header">
+              <h3>Emails in Sequence</h3>
+              <button className="es-steps-add-btn" onClick={handleAddStep}>
+                + Add Email
+              </button>
+            </div>
+
+            {loadingSteps ? (
+              <div className="es-steps-loading">Loading emails...</div>
+            ) : steps.length === 0 ? (
+              <div className="es-steps-empty">
+                <p>No emails yet. Add your first email to this sequence.</p>
+              </div>
+            ) : (
+              <div className="es-steps-list">
+                {steps.map((step) => (
+                  <div key={step.id} className="es-step-item">
+                    <div className="es-step-number">
+                      <span>Day {step.delay_days}</span>
+                    </div>
+                    <div className="es-step-content">
+                      <span className="es-step-subject">{step.subject}</span>
+                      {step.body && (
+                        <p className="es-step-preview">
+                          {step.body.length > 80 ? step.body.slice(0, 80) + '...' : step.body}
+                        </p>
+                      )}
+                    </div>
+                    <div className="es-step-actions">
+                      <button
+                        className={`es-step-copy-btn ${copiedStepId === step.id ? 'copied' : ''}`}
+                        onClick={() => handleCopyStep(step)}
+                      >
+                        {copiedStepId === step.id ? '✓' : '📋'}
+                      </button>
+                      <button
+                        className="es-step-edit-btn"
+                        onClick={() => handleEditStep(step)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="es-step-delete-btn"
+                        onClick={() => handleDeleteStep(step.id)}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Copy All & Generate Buttons */}
+          {steps.length > 0 && (
+            <button
+              className={`es-copy-all-btn ${copiedStepId === 'all' ? 'copied' : ''}`}
+              onClick={handleCopyAll}
+            >
+              {copiedStepId === 'all' ? '✓ Copied All!' : '📋 Copy All Emails'}
+            </button>
+          )}
+          <button className="es-generate-prompt-btn" onClick={onGeneratePrompt}>
+            ✨ Generate Email Copy Prompt
+          </button>
         </div>
 
         <div className="es-detail-actions">
@@ -381,6 +573,153 @@ function SequenceDetailModal({ sequence, onClose, onEdit, onDelete, onToggleStat
             Edit
           </button>
         </div>
+
+        {/* Email Step Form (inline) */}
+        {showStepForm && (
+          <EmailStepForm
+            step={editingStep}
+            sequenceId={sequence.id}
+            userId={userId}
+            nextStepNumber={steps.length + 1}
+            onClose={() => { setShowStepForm(false); setEditingStep(null) }}
+            onSave={handleStepSaved}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Email Step Add/Edit Form (overlay within detail modal)
+ */
+function EmailStepForm({ step, sequenceId, userId, nextStepNumber, onClose, onSave }) {
+  const [saving, setSaving] = useState(false)
+  const [form, setForm] = useState({
+    subject: step?.subject || '',
+    body: step?.body || '',
+    delay_days: step?.delay_days || (nextStepNumber === 1 ? 0 : nextStepNumber),
+    step_number: step?.step_number || nextStepNumber,
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!form.subject.trim()) return
+
+    setSaving(true)
+    try {
+      if (step?.id) {
+        const { data, error } = await supabase
+          .from('crm_email_steps')
+          .update({
+            subject: form.subject.trim(),
+            body: form.body.trim() || null,
+            delay_days: parseInt(form.delay_days) || 0,
+            step_number: parseInt(form.step_number) || 1,
+          })
+          .eq('id', step.id)
+          .eq('user_id', userId)
+          .select()
+          .single()
+
+        if (error) throw error
+        onSave(data)
+      } else {
+        const { data, error } = await supabase
+          .from('crm_email_steps')
+          .insert({
+            sequence_id: sequenceId,
+            user_id: userId,
+            subject: form.subject.trim(),
+            body: form.body.trim() || null,
+            delay_days: parseInt(form.delay_days) || 0,
+            step_number: parseInt(form.step_number) || nextStepNumber,
+          })
+          .select()
+          .single()
+
+        if (error) throw error
+
+        // Update steps_count on the parent sequence
+        await supabase
+          .from('crm_email_sequences')
+          .update({ steps_count: nextStepNumber })
+          .eq('id', sequenceId)
+
+        onSave(data)
+      }
+      hapticMedium()
+    } catch (err) {
+      console.error('Error saving email step:', err)
+      alert('Failed to save email. Please try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div className="es-step-form-overlay" onClick={onClose}>
+      <div className="es-step-form" onClick={e => e.stopPropagation()}>
+        <header className="es-step-form-header">
+          <h3>{step ? 'Edit Email' : 'Add Email'}</h3>
+          <button className="es-detail-close" onClick={onClose}>×</button>
+        </header>
+
+        <form onSubmit={handleSubmit} className="es-step-form-body">
+          <div className="form-group">
+            <label>Subject Line *</label>
+            <input
+              type="text"
+              value={form.subject}
+              onChange={e => setForm({ ...form, subject: e.target.value })}
+              placeholder="e.g., Welcome to the journey!"
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="es-step-form-row">
+            <div className="form-group">
+              <label>Send Day</label>
+              <input
+                type="number"
+                min="0"
+                max="365"
+                value={form.delay_days}
+                onChange={e => setForm({ ...form, delay_days: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Order</label>
+              <input
+                type="number"
+                min="1"
+                max="99"
+                value={form.step_number}
+                onChange={e => setForm({ ...form, step_number: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Email Body</label>
+            <textarea
+              value={form.body}
+              onChange={e => setForm({ ...form, body: e.target.value })}
+              placeholder="Write your email content here..."
+              rows={6}
+            />
+          </div>
+
+          <div className="modal-actions">
+            <button type="button" className="btn-cancel" onClick={onClose}>
+              Cancel
+            </button>
+            <button type="submit" className="btn-save" disabled={saving}>
+              {saving ? 'Saving...' : (step ? 'Save' : 'Add Email')}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

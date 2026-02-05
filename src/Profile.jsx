@@ -11,6 +11,7 @@ import { getStageShortName } from './lib/stageConfig'
 import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePreferences'
 import { graduateUser } from './lib/graduationChecker'
 import GraduationModal from './components/GraduationModal'
+import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import FlowMap from './components/FlowMap'
 import FlowMapRiver from './components/FlowMapRiver'
 import SeeYourFlow from './components/SeeYourFlow'
@@ -407,8 +408,12 @@ const Profile = () => {
   if (error) {
     return (
       <div className="app">
-        <div className="error">
-          {error}
+        <div className="error" style={{ textAlign: 'center', padding: '2rem' }}>
+          <p style={{ marginBottom: '1rem' }}>{error}</p>
+          <WhatsAppErrorButton
+            errorMessage={error}
+            component="Profile"
+          />
         </div>
       </div>
     )

@@ -7,7 +7,6 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  padding-top: 80px;
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
@@ -19,13 +18,9 @@
 /* ============ SHARED STYLES ============ */
 
 .product-selection-flow .progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 16px 20px;
+  position: relative;
+  padding: 0 0 16px 0;
   background: transparent;
-  z-index: 10;
 }
 
 .product-selection-flow .welcome-container {
@@ -41,21 +36,20 @@
 }
 
 /* Push buttons to bottom of welcome screen */
-.product-selection-flow .welcome-container > .primary-button {
+.product-selection-flow .welcome-container .primary-button {
   display: block;
   width: 100%;
   max-width: 320px;
   padding: 14px 32px;
-  margin-top: auto !important;
-  margin-bottom: 0 !important;
+  margin: 24px auto 0 auto !important;
 }
 
-.product-selection-flow .welcome-container > .secondary-button {
+.product-selection-flow .welcome-container .secondary-button {
   display: block;
   width: 100%;
   max-width: 320px;
   padding: 14px 32px;
-  margin: 4px auto 0 !important;
+  margin: 12px auto 0 auto !important;
 }
 
 .product-selection-flow .welcome-greeting {
@@ -1641,7 +1635,7 @@
   grid-template-columns: 1fr 30px 1fr 32px;
   gap: 8px;
   align-items: center;
-  padding: 8px 0;
+  padding: 20px 0 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1675,6 +1669,22 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
+.product-selection-flow .input-with-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.product-selection-flow .input-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+}
+
 .product-selection-flow .row-arrow {
   text-align: center;
   color: #fbbf24;
@@ -1696,6 +1706,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: start;
+  margin-top: -16px;
 }
 
 .product-selection-flow .remove-row-btn:hover {
@@ -1744,6 +1756,10 @@
     position: relative;
   }
 
+  .product-selection-flow .feature-benefit-row:not(:first-child) {
+    padding-top: 24px;
+  }
+
   .product-selection-flow .feature-input,
   .product-selection-flow .benefit-input {
     width: 100%;
@@ -1763,7 +1779,7 @@
 
   .product-selection-flow .remove-row-btn {
     position: absolute;
-    top: 12px;
+    top: 22px;
     right: 0;
   }
 }

@@ -411,6 +411,7 @@
 }
 
 .es-detail-modal {
+  position: relative;
   width: 100%;
   max-width: 500px;
   max-height: 80vh;
@@ -846,13 +847,353 @@
   }
 }
 
+/* ================================ */
+/* Email Steps Section              */
+/* ================================ */
+.es-steps-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--soft-gray);
+}
+
+.es-steps-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.es-steps-header h3 {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0;
+}
+
+.es-steps-add-btn {
+  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  border: none;
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.es-steps-add-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.es-steps-loading,
+.es-steps-empty {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-gray);
+  font-size: 0.875rem;
+}
+
+.es-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.es-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background: var(--warm-gray);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+}
+
+.es-step-item:hover {
+  background: var(--soft-gray);
+}
+
+.es-step-number {
+  min-width: 48px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  color: var(--white);
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.es-step-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.es-step-subject {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.es-step-preview {
+  font-size: 0.75rem;
+  color: var(--text-gray);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.es-step-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.es-step-edit-btn {
+  background: none;
+  border: 1px solid var(--border-gray);
+  color: var(--purple);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.es-step-edit-btn:hover {
+  background: rgba(94, 23, 235, 0.05);
+  border-color: var(--purple);
+}
+
+.es-step-delete-btn {
+  background: none;
+  border: 1px solid var(--border-gray);
+  color: #dc2626;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.es-step-delete-btn:hover {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* Copy Step Button */
+.es-step-copy-btn {
+  background: none;
+  border: 1px solid var(--border-gray);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+
+.es-step-copy-btn:hover {
+  background: rgba(94, 23, 235, 0.05);
+  border-color: var(--purple);
+}
+
+.es-step-copy-btn.copied {
+  background: #ecfdf5;
+  border-color: #10b981;
+  color: #10b981;
+}
+
+/* Copy All Button */
+.es-copy-all-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--white);
+  border: 2px solid var(--border-gray);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-gray);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.es-copy-all-btn:hover {
+  border-color: var(--purple);
+  color: var(--purple);
+  background: rgba(94, 23, 235, 0.03);
+}
+
+.es-copy-all-btn.copied {
+  border-color: #10b981;
+  color: #10b981;
+  background: #ecfdf5;
+}
+
+/* Generate Prompt Button */
+.es-generate-prompt-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.875rem 1rem;
+  background: linear-gradient(135deg, #E9A23B, #f59e0b);
+  border: none;
+  color: var(--white);
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+}
+
+.es-generate-prompt-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+/* Email Step Form Overlay */
+.es-step-form-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 10;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.es-step-form {
+  width: 100%;
+  background: var(--white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 85%;
+  overflow-y: auto;
+}
+
+.es-step-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--soft-gray);
+}
+
+.es-step-form-header h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin: 0;
+}
+
+.es-step-form-body {
+  padding: 1.5rem;
+}
+
+.es-step-form-body .form-group {
+  margin-bottom: 1.25rem;
+}
+
+.es-step-form-body .form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+}
+
+.es-step-form-body .form-group input,
+.es-step-form-body .form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--warm-gray);
+  border: 2px solid var(--soft-gray);
+  border-radius: var(--radius-sm);
+  color: var(--dark);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.es-step-form-body .form-group input:focus,
+.es-step-form-body .form-group textarea:focus {
+  outline: none;
+  border-color: var(--purple);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.es-step-form-body .form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.es-step-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.es-step-form-body .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--soft-gray);
+}
+
+.es-step-form-body .btn-cancel {
+  padding: 0.75rem 1.25rem;
+  background: var(--white);
+  border: 2px solid var(--soft-gray);
+  border-radius: var(--radius-sm);
+  color: var(--text-gray);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.es-step-form-body .btn-save {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-button);
+}
+
+.es-step-form-body .btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .es-item,
   .filter-chip,
   .es-add-btn,
   .es-btn,
-  .es-type-option {
+  .es-type-option,
+  .es-steps-add-btn,
+  .es-generate-prompt-btn {
     transition: none;
   }
 

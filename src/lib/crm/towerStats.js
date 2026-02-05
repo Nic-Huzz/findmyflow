@@ -3,6 +3,7 @@
  * Fetches live stats for tower card displays
  */
 import { supabase } from '../supabaseClient'
+import { getEcosystemStats } from './ecosystemService'
 
 /**
  * Get stats for Attract tower cards
@@ -146,7 +147,7 @@ export async function getToolsStats(userId) {
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(1)
-      .single()
+      .maybeSingle()
 
     // Format last report date
     let lastReport = null
@@ -160,22 +161,28 @@ export async function getToolsStats(userId) {
       else lastReport = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
     }
 
-    // Script usage from saved_scripts or script_views (if exists)
+    // Script usage tracking
     const { count: scriptsUsed } = await supabase
-      .from('saved_scripts')
+      .from('script_usage_log')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
 
-    // Implementation stats from zarlo implementations
+    // Implementation stats
     const { data: implData } = await supabase
-      .from('zarlo_implementations')
+      .from('offer_implementations')
       .select('id, status')
       .eq('user_id', userId)
 
     const inProgress = implData?.filter(i => i.status === 'in_progress').length || 0
     const completed = implData?.filter(i => i.status === 'completed').length || 0
 
+    // Ecosystem stats
+    const ecoStats = await getEcosystemStats(userId)
+
     return {
+      ecosystem: {
+        percent: ecoStats?.percent != null ? `${ecoStats.percent}%` : '0%',
+      },
       analytics: {
         lastReport: lastReport || '—',
       },

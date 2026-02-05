@@ -235,6 +235,15 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+.mvp-readiness-flow .option-type {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 221, 39, 0.8);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* ============ CONTEXT BOXES ============ */
 
 .mvp-readiness-flow .context-box {

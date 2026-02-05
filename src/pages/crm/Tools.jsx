@@ -14,6 +14,22 @@ import './Tools.css'
 
 const CARDS = [
   {
+    id: 'import',
+    icon: '📥',
+    title: 'Import Data',
+    description: 'Import contacts, leads & deals from CSV',
+    path: '/crm/import',
+    statsKey: null,
+  },
+  {
+    id: 'systems',
+    icon: '⚙️',
+    title: 'Business Systems',
+    description: 'Build your flywheel checklist',
+    path: '/crm/tools/systems',
+    statsKey: 'ecosystem',
+  },
+  {
     id: 'reports',
     icon: '📊',
     title: 'Reports',
@@ -56,6 +72,7 @@ function formatStat(key, value) {
     used: 'used',
     inProgress: 'in progress',
     completed: 'completed',
+    percent: 'setup',
   }
 
   return { value, label: labels[key] || key }

@@ -6,6 +6,7 @@
  * 1. stageGroups + currentStage (MoneyModelFlowBase)
  * 2. current + total (OfferBuilder100M simple mode)
  */
+import '../../styles/flow-base.css'
 
 function ProgressDots({ stageGroups, currentStage, current, total }) {
   // Simple mode: current/total numbers

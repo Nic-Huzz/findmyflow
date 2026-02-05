@@ -332,7 +332,7 @@ function OfferBuilder100M() {
           </button>
           <button
             className="secondary-button"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/7-day-challenge')}
           >
             Come Back Later
           </button>

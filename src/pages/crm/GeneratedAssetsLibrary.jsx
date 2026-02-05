@@ -222,7 +222,7 @@ export default function GeneratedAssetsLibrary({ userId }) {
                 ? "You haven't favorited any content yet."
                 : "Generate content from the Implementation Tracker and save it here."}
             </p>
-            <button onClick={() => navigate('/crm/implementation')}>
+            <button onClick={() => navigate('/crm/implementations')}>
               Go to Implementation Tracker
             </button>
           </div>

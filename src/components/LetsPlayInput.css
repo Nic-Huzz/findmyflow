@@ -1,0 +1,749 @@
+/**
+ * LetsPlayInput.css
+ * Styles for Let's Play and Let's Play Review quest inputs
+ * Scoped to .lets-play and .lets-play-review prefixes
+ *
+ * Styled to match Money Model / flow-base design language:
+ * - Gold primary buttons (#E9A23B / #fbbf24 → #f59e0b gradient)
+ * - Gold accents for selected/focus states
+ * - Brand purple (#5e17eb) as secondary accent
+ */
+
+/* ============================================================================
+   BASE LAYOUT
+   ============================================================================ */
+
+.lets-play,
+.lets-play-review {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.lets-play.stepped,
+.lets-play-review.stepped {
+  gap: 0;
+}
+
+.lets-play .step-progress,
+.lets-play-review .step-progress {
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.lets-play .step-content,
+.lets-play-review .step-content {
+  min-height: 200px;
+}
+
+/* ============================================================================
+   STEP HEADER & DESCRIPTION
+   ============================================================================ */
+
+.lets-play .step-header,
+.lets-play-review .step-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.lets-play .step-header h4,
+.lets-play-review .step-header h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.lets-play .step-icon,
+.lets-play-review .step-icon {
+  font-size: 1.25rem;
+}
+
+.lets-play .step-description,
+.lets-play-review .step-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.lets-play .step-description em,
+.lets-play-review .step-description em {
+  color: #4b5563;
+  font-style: italic;
+}
+
+.lets-play .step-subsection,
+.lets-play-review .step-subsection {
+  margin-top: 1.25rem;
+}
+
+/* Selected context badge (shows previous selection on next step) */
+.lets-play .selected-context {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.lets-play .selected-context .context-label {
+  color: #6b7280;
+}
+
+.lets-play .selected-context .context-value {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+/* ============================================================================
+   INPUT LABELS
+   ============================================================================ */
+
+.lets-play .input-label,
+.lets-play-review .input-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.lets-play .optional-tag,
+.lets-play-review .optional-tag {
+  font-weight: 400;
+  color: #9ca3af;
+  font-size: 0.8125rem;
+}
+
+/* ============================================================================
+   TEXT INPUTS & TEXTAREAS
+   ============================================================================ */
+
+.lets-play .lets-play-text-input,
+.lets-play-review .lets-play-text-input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  color: #1f2937;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.lets-play .lets-play-text-input:focus,
+.lets-play-review .lets-play-text-input:focus {
+  border-color: #E9A23B;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.15);
+}
+
+.lets-play .lets-play-textarea,
+.lets-play-review .lets-play-textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  color: #1f2937;
+  resize: vertical;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.lets-play .lets-play-textarea:focus,
+.lets-play-review .lets-play-textarea:focus {
+  border-color: #E9A23B;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.15);
+}
+
+.lets-play .lets-play-text-input::placeholder,
+.lets-play .lets-play-textarea::placeholder,
+.lets-play-review .lets-play-text-input::placeholder,
+.lets-play-review .lets-play-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* ============================================================================
+   CHARACTER HINT
+   ============================================================================ */
+
+.lets-play .char-hint,
+.lets-play-review .char-hint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.lets-play .char-hint.met,
+.lets-play-review .char-hint.met {
+  color: #E9A23B;
+  font-weight: 600;
+}
+
+/* ============================================================================
+   STEP NAVIGATION — Gold primary buttons (Money Model style)
+   ============================================================================ */
+
+.lets-play .step-navigation,
+.lets-play-review .step-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.lets-play .nav-btn,
+.lets-play-review .nav-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lets-play .nav-btn.back,
+.lets-play-review .nav-btn.back {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.lets-play .nav-btn.back:hover,
+.lets-play-review .nav-btn.back:hover {
+  background: #e5e7eb;
+}
+
+.lets-play .nav-btn.next,
+.lets-play .nav-btn.complete,
+.lets-play-review .nav-btn.next,
+.lets-play-review .nav-btn.complete {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: white;
+  margin-left: auto;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.lets-play .nav-btn.next:hover:not(:disabled),
+.lets-play .nav-btn.complete:hover:not(:disabled),
+.lets-play-review .nav-btn.next:hover:not(:disabled),
+.lets-play-review .nav-btn.complete:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.lets-play .nav-btn.next:disabled,
+.lets-play .nav-btn.complete:disabled,
+.lets-play-review .nav-btn.next:disabled,
+.lets-play-review .nav-btn.complete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================================================
+   COMBO GRID (Step 1: Pick Your Play) — Gold selected state
+   ============================================================================ */
+
+.lets-play .combo-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lets-play .combo-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lets-play .combo-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.lets-play .combo-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.lets-play .combo-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 10px 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.lets-play .combo-cell:hover {
+  border-color: rgba(233, 162, 59, 0.5);
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.lets-play .combo-cell.selected {
+  border-color: #E9A23B;
+  background: rgba(251, 191, 36, 0.12);
+  color: #92400e;
+  box-shadow: 0 0 0 1px rgba(233, 162, 59, 0.2);
+}
+
+.lets-play .combo-cell-icon {
+  font-size: 1rem;
+}
+
+.lets-play .combo-cell-name {
+  white-space: nowrap;
+}
+
+.lets-play .combo-cell-prof {
+  font-size: 0.625rem;
+  letter-spacing: 1px;
+}
+
+.lets-play .combo-divider {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #d1d5db;
+  padding: 0.25rem 0;
+}
+
+.lets-play .combo-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 12px 16px;
+  margin-top: 1rem;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.08));
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.lets-play .combo-x {
+  color: #d1d5db;
+  font-weight: 700;
+}
+
+/* ============================================================================
+   ICON GRID OVERRIDE — Gold selected state
+   ============================================================================ */
+
+.lets-play .lets-play-icon-grid .icon-grid-item.selected,
+.lets-play-review .lets-play-icon-grid .icon-grid-item.selected {
+  border-color: #E9A23B;
+  background: rgba(251, 191, 36, 0.12);
+  color: #92400e;
+}
+
+/* ============================================================================
+   OUTCOME GRID (Step 4: How did it land?) — Gold selected state
+   ============================================================================ */
+
+.lets-play .outcome-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lets-play .outcome-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.lets-play .outcome-card:hover {
+  border-color: rgba(233, 162, 59, 0.5);
+  background: rgba(251, 191, 36, 0.04);
+  transform: translateY(-1px);
+}
+
+.lets-play .outcome-card.selected {
+  border-color: #E9A23B;
+  background: rgba(251, 191, 36, 0.12);
+}
+
+.lets-play .outcome-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.lets-play .outcome-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.lets-play .outcome-desc {
+  font-size: 13px;
+  color: #6b7280;
+  margin-left: auto;
+}
+
+/* ============================================================================
+   DIFFICULTY BADGE — Gold scheme
+   ============================================================================ */
+
+.lets-play .difficulty-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.08));
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 100px;
+  margin-bottom: 0.75rem;
+}
+
+.lets-play .difficulty-label {
+  font-size: 12px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lets-play .difficulty-prompt {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* ============================================================================
+   PREREQUISITE STATE
+   ============================================================================ */
+
+.lets-play .lets-play-prereq,
+.lets-play-review .lets-play-prereq {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #6b7280;
+}
+
+.lets-play .prereq-icon,
+.lets-play-review .prereq-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.lets-play .prereq-hint,
+.lets-play-review .prereq-hint {
+  font-size: 13px;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
+
+/* ============================================================================
+   RESUME PROMPT — Gold title (matches flow-base resume-prompt)
+   ============================================================================ */
+
+.lets-play .lets-play-resume {
+  text-align: center;
+  padding: 24px 16px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.04));
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 16px;
+}
+
+.lets-play .resume-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #E9A23B;
+  margin: 0 0 8px;
+}
+
+.lets-play .resume-info {
+  font-size: 15px;
+  color: #4b5563;
+  margin: 0 0 4px;
+}
+
+.lets-play .resume-info strong {
+  color: #1f2937;
+}
+
+.lets-play .resume-question {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0 0 20px;
+}
+
+.lets-play .resume-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* ============================================================================
+   ENCOURAGEMENT CARD — Gold accent
+   ============================================================================ */
+
+.lets-play .lets-play-encouragement {
+  text-align: center;
+  padding: 32px 16px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.04));
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 16px;
+}
+
+.lets-play .encouragement-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.lets-play .encouragement-text {
+  font-size: 16px;
+  color: #1f2937;
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.lets-play .encouragement-text strong {
+  color: #E9A23B;
+}
+
+.lets-play .encouragement-sub {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 1.5rem;
+}
+
+/* ============================================================================
+   PLAYS LIST (Review Step 1) — Subtle gold card borders
+   ============================================================================ */
+
+.lets-play-review .plays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.lets-play-review .play-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: rgba(251, 191, 36, 0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(251, 191, 36, 0.15);
+}
+
+.lets-play-review .play-card-combo {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.lets-play-review .play-card-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.lets-play-review .play-card-outcome {
+  font-size: 1rem;
+}
+
+/* ============================================================================
+   COMBO SELECTOR (Review Step 2) — Gold selected state
+   ============================================================================ */
+
+.lets-play-review .combo-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lets-play-review .combo-option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.lets-play-review .combo-option:hover {
+  border-color: rgba(233, 162, 59, 0.5);
+  background: rgba(251, 191, 36, 0.04);
+}
+
+.lets-play-review .combo-option.selected {
+  border-color: #E9A23B;
+  background: rgba(251, 191, 36, 0.12);
+}
+
+.lets-play-review .combo-option-header {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.lets-play-review .combo-option-summary {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.lets-play-review .combo-x {
+  color: #d1d5db;
+  font-weight: 700;
+}
+
+/* ============================================================================
+   NEXT PLAY GRID (Review Step 3) — Gold selected state
+   ============================================================================ */
+
+.lets-play-review .next-play-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.lets-play-review .next-play-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.lets-play-review .next-play-card:hover {
+  border-color: rgba(233, 162, 59, 0.5);
+  background: rgba(251, 191, 36, 0.04);
+  transform: translateY(-2px);
+}
+
+.lets-play-review .next-play-card.selected {
+  border-color: #E9A23B;
+  background: rgba(251, 191, 36, 0.12);
+}
+
+.lets-play-review .next-play-icon {
+  font-size: 1.5rem;
+}
+
+.lets-play-review .next-play-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.lets-play-review .next-play-desc {
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.3;
+}
+
+/* ============================================================================
+   LOADING STATE — Gold spinner
+   ============================================================================ */
+
+.lets-play .loading-state,
+.lets-play-review .loading-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #6b7280;
+}
+
+.lets-play .spinner,
+.lets-play-review .spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: letsPlaySpin 0.8s linear infinite;
+  margin: 0 auto 0.75rem;
+}
+
+@keyframes letsPlaySpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 480px) {
+  .lets-play .outcome-card {
+    flex-wrap: wrap;
+  }
+
+  .lets-play .outcome-desc {
+    margin-left: 2rem;
+    width: 100%;
+  }
+
+  .lets-play-review .next-play-grid {
+    grid-template-columns: 1fr;
+  }
+}

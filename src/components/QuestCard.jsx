@@ -477,18 +477,25 @@ function QuestCard({
                 Complete Quest
               </button>
             </>
+          ) : quest.actionLink ? (
+            // Checkbox with action link - show styled button like flow quests
+            <div className="quest-guide-area">
+              <Link to={quest.actionLink} className="quest-flow-btn">
+                {quest.actionLinkText || 'View Guide'}
+              </Link>
+              <button
+                className="quest-complete-btn secondary"
+                onClick={(e) => onComplete(quest, null, e)}
+              >
+                ✓ I've Completed This
+              </button>
+            </div>
           ) : (
-            // Default: checkbox type
+            // Default: simple checkbox type
             <>
               <div className="quest-checkbox-area">
                 <label className="quest-checkbox-label">
-                  {quest.actionLink ? (
-                    <Link to={quest.actionLink} className="quest-inline-link">
-                      {quest.actionLinkText || 'View'}
-                    </Link>
-                  ) : (
-                    'Mark as complete'
-                  )}
+                  Mark as complete
                 </label>
               </div>
               <button
@@ -522,7 +529,7 @@ function QuestCard({
               className="view-results-btn"
               onClick={() => navigate(`${quest.flow_route}?results=true`)}
             >
-              View Results
+              {quest.isExplainer ? 'Read Again' : 'View Results'}
             </button>
           )}
         </div>

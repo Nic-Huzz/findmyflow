@@ -789,13 +789,13 @@
       "frequency": "anytime",
       "stage_required": 2,
       "name": "Product Builder",
-      "description": "Categorize your solutions into Core Product, Lead Magnet, and Bonuses",
+      "description": "Define your niche, identify why customers are stuck, and brainstorm solutions",
       "points": 6,
       "inputType": "flow",
       "flow_id": "100m_offer",
       "flow_route": "/offer-builder",
       "counts_toward_graduation": true,
-      "learnMore": "This flow helps you categorize the solutions you've brainstormed into your offer stack:\n\n• **Core Product** - What they pay for\n• **Lead Magnet** - Free value for expressing interest\n• **Bonus** - Added value with purchase\n\nComplete this first, then use Offer Builder V2 to refine your Grand Slam offer."
+      "learnMore": "Build the foundation of your offer using the $100M Offers framework:\n\n• **Customer Profile** - Pain level, spending capacity, and emotional state\n• **Niche Builder** - Combine your Flow Finder discoveries into a sharp niche statement\n• **Excuses & Beliefs** - Uncover the vehicle, internal, and external blockers stopping your audience\n• **Solutions** - Brainstorm solutions that directly address each problem\n• **Core Offer & Lead Magnet** - Define what they pay for and what you give for free\n\nComplete this first, then use Product Designer to apply the Value Equation to each solution."
     },
     {
       "id": "flow_grand_slam_offer",
@@ -1068,15 +1068,14 @@
       "type": "Money Models",
       "frequency": "anytime",
       "stage_required": 4,
-      "name": "Read Money Model Guide",
+      "name": "Money Model Guide",
       "description": "Read the Money Model Guide to understand how all your offers work together",
       "points": 5,
-      "inputType": "checkbox",
-      "milestone_type": "read_putting_it_together",
-      "counts_toward_graduation": true,
-      "actionLink": "/money-model-guide",
-      "actionLinkText": "Read Guide Here",
-      "learnMore": "Understanding your complete money model helps you see how each offer type works together to maximize revenue."
+      "inputType": "flow",
+      "flow_id": "money_model_guide",
+      "flow_route": "/money-model-guide",
+      "learnMore": "Understanding your complete money model helps you see how each offer type works together to maximize revenue.",
+      "isExplainer": true
     },
     {
       "id": "flow_attraction_offer",
@@ -1360,6 +1359,34 @@
       "placeholder": "Describe your product suite: What's your attraction offer? Core offer? What's the customer journey from first touch to highest tier?",
       "counts_toward_graduation": true,
       "learnMore": "A Product Suite Map shows your complete money model ecosystem:\n\n**The Journey:**\n```\nAttraction Offer → Lead Magnet → Core Offer\n                                    ↓\n                              Upsell Path\n                                    ↓\n                              Continuity\n                    (+ Downsell for price objectors)\n```\n\n**What to include:**\n• Each product/offer name\n• Product type (service, course, digital, etc.)\n• Price point for each tier\n• How customers move between offers\n• Expected conversion rates\n\nThis becomes your business blueprint."
+    },
+    {
+      "id": "lets_play",
+      "category": "Business",
+      "type": "Validation",
+      "frequency": "anytime",
+      "stage_required": 1,
+      "name": "Let's Play",
+      "description": "Plan to use one of your skills to solve a real problem for a real person. Then go do it!",
+      "points": 8,
+      "inputType": "flow",
+      "flow_route": "/lets-play",
+      "counts_toward_graduation": true,
+      "learnMore": "Let's Play is bottom-up validation: instead of asking 'would people pay for this?', you actually USE your skill to help someone and see what happens.\n\n**How it works:**\n1. Pick a skill × problem combo from your Flow Finder data\n2. Choose a real person to help\n3. Plan your approach and go do it\n4. Come back and reflect on what happened\n\n**Why it matters:**\nThis proves your skills create real value before you ever build a product. Each play teaches you something about where you belong.\n\n**Difficulty scales up:**\n• Starter: Help someone you know\n• Growing (3+): Help someone outside your close circle\n• Confident (7+): Help someone you've never met\n• Pro (12+): Help someone and ask for a testimonial"
+    },
+    {
+      "id": "lets_play_review",
+      "category": "Business",
+      "type": "Validation",
+      "frequency": "anytime",
+      "stage_required": 1,
+      "name": "Let's Play Review",
+      "description": "Reflect on your Let's Play experience. Complete this after helping someone to earn bonus points.",
+      "points": 4,
+      "inputType": "flow",
+      "flow_route": "/lets-play-review",
+      "counts_toward_graduation": true,
+      "learnMore": "Every play teaches you something about your flow.\n\n**This review helps you:**\n• Reflect on what actually happened\n• Rate how it landed with the person you helped\n• Capture surprises and learnings\n• Plan what you'd do differently next time\n\nComplete this after each Let's Play to earn bonus points and build your validation evidence."
     },
     {
       "id": "flow_persona_validation",

@@ -7,7 +7,6 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  padding-top: 80px;
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   color: white;
@@ -19,10 +18,8 @@
 /* ============ SHARED STYLES (match Money Model flows) ============ */
 
 .offer-builder-flow .progress-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  width: 100%;
   padding: 16px 20px;
   background: transparent;
   z-index: 10;
@@ -993,6 +990,28 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+.offer-builder-flow .solution-name-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .solution-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.offer-builder-flow .solution-name-input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .offer-builder-flow .differentiators-section {
   margin-top: 16px;
   padding-top: 16px;
@@ -1495,8 +1514,8 @@
 
 .offer-builder-flow .stack-solution {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 8px;
 }
 
@@ -2210,6 +2229,51 @@
 }
 
 /* Solution Category Options (Part 1) */
+/* Solution Methods List */
+.offer-builder-flow .solution-methods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.offer-builder-flow .solution-method-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .solution-method-input:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-flow .solution-method-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.offer-builder-flow .add-method-btn {
+  align-self: flex-start;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.offer-builder-flow .add-method-btn:hover {
+  border-color: rgba(251, 191, 36, 0.5);
+  color: #fbbf24;
+}
+
 .offer-builder-flow .solution-category-options {
   display: flex;
   gap: 10px;
@@ -2254,6 +2318,40 @@
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
   line-height: 1.3;
+}
+
+.offer-builder-flow .solution-category-btn.recommended {
+  border-color: rgba(251, 191, 36, 0.4);
+  position: relative;
+}
+
+.offer-builder-flow .solution-category-btn .recommended-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #1a1a2e;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.offer-builder-flow .delivery-recommendation {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+.offer-builder-flow .delivery-recommendation strong {
+  color: #fbbf24;
 }
 
 /* Solution Type Options (Part 2) */
@@ -2734,6 +2832,112 @@
   }
 }
 
+/* ============ SKILL CONTEXT PANEL (Q8 - No, this is new) ============ */
+
+.offer-builder-flow .skill-context-panel {
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: left;
+}
+
+.offer-builder-flow .skill-context-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.offer-builder-flow .skill-cluster-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.offer-builder-flow .skill-taxonomy-tag {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.offer-builder-flow .skill-prompt-label {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+.offer-builder-flow .skill-prompt-label strong {
+  color: #fbbf24;
+}
+
+.offer-builder-flow .skill-tagline {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  margin: 0 0 12px 0;
+}
+
+.offer-builder-flow .skill-taxonomy-tag.amplifier {
+  background: rgba(147, 51, 234, 0.2);
+  color: #a78bfa;
+}
+
+.offer-builder-flow .skill-product-hints {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.offer-builder-flow .hints-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.offer-builder-flow .hints-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.offer-builder-flow .hint-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.offer-builder-flow .hint-icon {
+  font-size: 0.9rem;
+}
+
+.offer-builder-flow .amplifier-context {
+  margin-top: 14px;
+  padding: 12px;
+  background: rgba(147, 51, 234, 0.1);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
 /* ============ FLOW FINDER SKILLS SUGGESTIONS PANEL ============ */
 
 .offer-builder-flow .skills-suggestions-panel {
@@ -2837,6 +3041,56 @@
 .offer-builder-flow .skill-suggestion-card.high-relevance {
   background: rgba(251, 191, 36, 0.08);
   border-color: rgba(251, 191, 36, 0.2);
+}
+
+.offer-builder-flow .skill-suggestion-card.is-amplifier {
+  background: rgba(147, 51, 234, 0.08);
+  border-color: rgba(147, 51, 234, 0.2);
+}
+
+.offer-builder-flow .amplifier-badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(147, 51, 234, 0.2);
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+}
+
+.offer-builder-flow .amplifier-message {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 10px 0;
+  padding: 8px 10px;
+  background: rgba(147, 51, 234, 0.08);
+  border-radius: 6px;
+  line-height: 1.4;
+}
+
+.offer-builder-flow .proficiency-tip {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 10px 0 0 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  line-height: 1.4;
+}
+
+.offer-builder-flow .proficiency-label {
+  color: #fbbf24;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.offer-builder-flow .use-suggestion-btn.amplifier-suggestion {
+  border-color: rgba(147, 51, 234, 0.3);
+}
+
+.offer-builder-flow .use-suggestion-btn.amplifier-suggestion:hover {
+  background: rgba(147, 51, 234, 0.15);
+  border-color: rgba(147, 51, 234, 0.5);
 }
 
 .offer-builder-flow .skill-header {
@@ -3172,6 +3426,7 @@
 
 .offer-builder-flow .ai-context-info {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 12px;
@@ -3285,6 +3540,9 @@
   border-radius: 8px;
   padding: 12px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .offer-builder-flow .solution-format-badge {
@@ -3294,7 +3552,16 @@
   font-size: 12px;
   font-weight: 600;
   color: #fbbf24;
-  margin-bottom: 4px;
+}
+
+.offer-builder-flow .solutions-summary .stack-solution p {
+  margin: 0;
+}
+
+.offer-builder-flow .solutions-summary .stack-solution p:last-child {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 @media (max-width: 480px) {

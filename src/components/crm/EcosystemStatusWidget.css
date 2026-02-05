@@ -1,0 +1,80 @@
+/**
+ * Ecosystem Status Widget Styles
+ */
+.eco-widget {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.eco-widget:hover {
+  border-color: #5e17eb;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.1);
+}
+
+.eco-widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.eco-widget-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+}
+
+.eco-widget-pct {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #5e17eb;
+}
+
+.eco-widget-phases {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.eco-widget-phase-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #495057;
+  margin-bottom: 4px;
+}
+
+.eco-widget-phase-count {
+  margin-left: auto;
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 0.6875rem;
+}
+
+.eco-widget-mini-bar {
+  height: 4px;
+  background: #e9ecef;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.eco-widget-mini-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb 0%, #E9A23B 100%);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.eco-widget-cta {
+  font-size: 0.75rem;
+  color: #5e17eb;
+  font-weight: 600;
+}

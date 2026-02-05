@@ -148,7 +148,7 @@ function Step1A_OfferSelection({ onSelect, setIsLoading, setError }) {
           </button>
           <button
             className="secondary-button"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/7-day-challenge')}
           >
             Back
           </button>

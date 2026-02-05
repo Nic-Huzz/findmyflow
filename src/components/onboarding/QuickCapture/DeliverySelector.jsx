@@ -38,7 +38,7 @@ export const CATEGORY_OPTIONS = [
     label: 'Product',
     description: 'Something they buy from me',
     icon: '🛍️',
-    productTypes: ['digital_product'],
+    productTypes: ['digital_product', 'content'],
     showSubtype: true
   }
 ]
@@ -92,6 +92,14 @@ export const PRODUCT_TYPES = {
     icon: '🛍️',
     category: 'product',
     examples: ['Templates', 'Software', 'Physical goods']
+  },
+  content: {
+    id: 'content',
+    label: 'Content',
+    description: 'Audience-driven content you monetise',
+    icon: '🎙️',
+    category: 'product',
+    examples: ['Podcast', 'Newsletter', 'YouTube channel']
   }
 }
 
@@ -100,6 +108,13 @@ export const PRODUCT_SUBTYPES = [
   { id: 'digital', label: 'Digital Download', description: 'Templates, guides, eBooks', icon: '📄' },
   { id: 'software', label: 'Software/App', description: 'SaaS, tools, plugins', icon: '💻' },
   { id: 'physical', label: 'Physical Product', description: 'Shipped goods, merchandise', icon: '📦' }
+]
+
+// Content subtypes
+export const CONTENT_SUBTYPES = [
+  { id: 'content_podcast', label: 'Podcast', description: 'Audio content, ads & sponsors', icon: '🎙️' },
+  { id: 'content_newsletter', label: 'Newsletter', description: 'Paid or sponsored email content', icon: '📧' },
+  { id: 'content_youtube', label: 'YouTube Channel', description: 'Video content, ads & sponsors', icon: '📺' }
 ]
 
 function DeliverySelector({
@@ -112,22 +127,9 @@ function DeliverySelector({
   showCategorySelector = false,
   defaultCategory = null
 }) {
-  // Determine initial step - if defaultCategory has only 1 type and it's digital_product, start at subtype
+  // Determine initial step
   const getInitialStep = () => {
     if (showCategorySelector) return 'category'
-
-    // Check if default category has only one product type
-    if (defaultCategory) {
-      const category = CATEGORY_OPTIONS.find(c => c.id === defaultCategory)
-      if (category?.productTypes.length === 1 && category.productTypes[0] === 'digital_product') {
-        // Auto-select digital_product and show subtypes
-        if (!selectedType) {
-          // Use setTimeout to avoid state update during render
-          setTimeout(() => onTypeSelect('digital_product'), 0)
-        }
-        return 'subtype'
-      }
-    }
     return 'type'
   }
 
@@ -147,7 +149,10 @@ function DeliverySelector({
   }, [selectedCategory, defaultCategory])
 
   // Check if subtype needed
-  const needsSubtype = selectedType === 'digital_product'
+  const needsSubtype = selectedType === 'digital_product' || selectedType === 'content'
+
+  // Get the right subtypes for the selected type
+  const activeSubtypes = selectedType === 'content' ? CONTENT_SUBTYPES : PRODUCT_SUBTYPES
 
   // Handle category selection
   const handleCategorySelect = (categoryId) => {
@@ -158,8 +163,7 @@ function DeliverySelector({
     if (category?.productTypes.length === 1) {
       const autoType = category.productTypes[0]
       onTypeSelect(autoType)
-      // If it's digital_product, show subtypes; otherwise move on
-      if (autoType === 'digital_product') {
+      if (autoType === 'digital_product' || autoType === 'content') {
         setStep('subtype')
       }
       return
@@ -171,7 +175,7 @@ function DeliverySelector({
   // Handle type selection
   const handleTypeSelect = (typeId) => {
     onTypeSelect(typeId)
-    if (typeId === 'digital_product') {
+    if (typeId === 'digital_product' || typeId === 'content') {
       setStep('subtype')
     }
   }
@@ -200,15 +204,15 @@ function DeliverySelector({
     )
   }
 
-  // Subtype selector step (for digital products)
+  // Subtype selector step (for digital products and content)
   if (step === 'subtype' && needsSubtype) {
     return (
       <div className="delivery-selector">
-        <h3 className="selector-title">What kind of product?</h3>
+        <h3 className="selector-title">{selectedType === 'content' ? 'What kind of content?' : 'What kind of product?'}</h3>
         <p className="selector-subtitle">Help us understand your offering better</p>
 
         <div className="subtype-options">
-          {PRODUCT_SUBTYPES.map(subtype => (
+          {activeSubtypes.map(subtype => (
             <button
               key={subtype.id}
               className={`subtype-option ${selectedSubtype === subtype.id ? 'selected' : ''}`}

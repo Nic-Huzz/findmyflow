@@ -487,7 +487,7 @@ function LeadMagnetSelectionFlow() {
           </div>
           <button
             className="secondary-button"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/7-day-challenge')}
             style={{ marginTop: '12px' }}
           >
             Back

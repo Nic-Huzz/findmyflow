@@ -1,4 +1,5 @@
 import React from 'react'
+import { openWhatsAppSupport } from '../lib/errorSupport'
 
 /**
  * Error Boundary Component
@@ -21,7 +22,7 @@ class ErrorBoundary extends React.Component {
     }
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(_error) {
     // Update state so the next render shows the fallback UI
     return { hasError: true }
   }
@@ -50,6 +51,15 @@ class ErrorBoundary extends React.Component {
 
   handleReload = () => {
     window.location.reload()
+  }
+
+  handleGetHelp = () => {
+    const { error, errorInfo } = this.state
+    openWhatsAppSupport({
+      component: 'App Crash',
+      errorMessage: error?.toString() || 'Unknown error',
+      errorStack: errorInfo?.componentStack
+    })
   }
 
   render() {
@@ -93,7 +103,7 @@ class ErrorBoundary extends React.Component {
               color: '#6b7280',
               marginBottom: '1.5rem'
             }}>
-              We're sorry for the inconvenience. An unexpected error occurred.
+              We&apos;re sorry for the inconvenience. An unexpected error occurred.
             </p>
 
             {/* Show error details in development mode */}
@@ -132,7 +142,8 @@ class ErrorBoundary extends React.Component {
             <div style={{
               display: 'flex',
               gap: '1rem',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              flexWrap: 'wrap'
             }}>
               <button
                 onClick={this.handleReset}
@@ -171,6 +182,28 @@ class ErrorBoundary extends React.Component {
               >
                 Refresh Page
               </button>
+
+              <button
+                onClick={this.handleGetHelp}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#25D366',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '1rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#128C7E'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#25D366'}
+              >
+                <span>💬</span> Get Help
+              </button>
             </div>
 
             <p style={{
@@ -178,7 +211,7 @@ class ErrorBoundary extends React.Component {
               fontSize: '0.875rem',
               color: '#9ca3af'
             }}>
-              If the problem persists, please contact support.
+              Click &quot;Get Help&quot; to message Nic directly on WhatsApp
             </p>
           </div>
         </div>

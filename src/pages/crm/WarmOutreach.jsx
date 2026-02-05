@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import PullToRefresh from '../../components/crm/PullToRefresh'
+import { usePromptGenerator } from '../../components/crm/PromptGenerator'
 import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './WarmOutreach.css'
 
@@ -30,6 +31,42 @@ const ENGAGEMENT_TYPES = [
 
 const PLATFORMS = ['Instagram', 'LinkedIn', 'Twitter/X', 'Facebook', 'Email', 'Other']
 
+const PLATFORM_TO_SOURCE = {
+  Instagram: 'Organic Social',
+  LinkedIn: 'Organic Social',
+  'Twitter/X': 'Organic Social',
+  Facebook: 'Organic Social',
+  Email: 'Other',
+  Other: 'Other',
+}
+
+/**
+ * Create a contact from warm lead data
+ */
+async function promoteLeadToContact(userId, leadData) {
+  const engagement = ENGAGEMENT_TYPES.find(e => e.id === leadData.engagement_type)
+  const noteParts = []
+  if (leadData.handle) noteParts.push(`${leadData.platform}: ${leadData.handle}`)
+  if (leadData.last_message) noteParts.push(`Last message: ${leadData.last_message}`)
+  if (leadData.notes) noteParts.push(leadData.notes)
+
+  const { data, error } = await supabase
+    .from('crm_contacts')
+    .insert({
+      user_id: userId,
+      name: leadData.name,
+      source: PLATFORM_TO_SOURCE[leadData.platform] || 'Other',
+      lifecycle_stage: 'lead',
+      tags: [leadData.platform, engagement?.label].filter(Boolean),
+      notes: noteParts.join('\n') || null,
+    })
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 export default function WarmOutreach() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -39,6 +76,8 @@ export default function WarmOutreach() {
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingLead, setEditingLead] = useState(null)
   const [filterStatus, setFilterStatus] = useState('all')
+
+  const promptGenerator = usePromptGenerator()
 
   // Load leads
   const loadLeads = useCallback(async () => {
@@ -192,6 +231,12 @@ export default function WarmOutreach() {
           <button className="wo-add-btn" onClick={handleAddLead}>
             + Add Warm Lead
           </button>
+          <button
+            className="wo-generate-btn"
+            onClick={() => { promptGenerator.open('warmFollowUp'); hapticLight() }}
+          >
+            ✨ Generate Follow-up
+          </button>
         </div>
 
         {/* Status Filters */}
@@ -302,6 +347,9 @@ export default function WarmOutreach() {
             onDelete={handleDeleteLead}
           />
         )}
+
+        {/* Prompt Generator Modal */}
+        <promptGenerator.PromptGeneratorModal />
       </div>
     </PullToRefresh>
   )
@@ -312,6 +360,7 @@ export default function WarmOutreach() {
  */
 function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
   const [saving, setSaving] = useState(false)
+  const [addToContacts, setAddToContacts] = useState(false)
   const [form, setForm] = useState({
     name: lead?.name || '',
     platform: lead?.platform || 'Instagram',
@@ -329,6 +378,7 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
 
     setSaving(true)
     try {
+      let savedResult
       if (lead?.id) {
         // Update
         const { data, error } = await supabase
@@ -349,7 +399,7 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
           .single()
 
         if (error) throw error
-        onSave(data)
+        savedResult = data
       } else {
         // Create
         const { data, error } = await supabase
@@ -369,8 +419,26 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
           .single()
 
         if (error) throw error
-        onSave(data)
+        savedResult = data
       }
+
+      // Promote to contacts if checked
+      if (addToContacts) {
+        try {
+          await promoteLeadToContact(userId, {
+            name: form.name.trim(),
+            platform: form.platform,
+            handle: form.handle.trim(),
+            engagement_type: form.engagement_type,
+            last_message: form.last_message.trim(),
+            notes: form.notes.trim(),
+          })
+        } catch (contactErr) {
+          console.error('Error creating contact:', contactErr)
+        }
+      }
+
+      onSave(savedResult)
       hapticMedium()
     } catch (err) {
       console.error('Error saving lead:', err)
@@ -484,6 +552,21 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
               rows={2}
             />
           </div>
+
+          {/* Add to Contacts toggle */}
+          <label className="wo-contact-toggle">
+            <input
+              type="checkbox"
+              checked={addToContacts}
+              onChange={e => setAddToContacts(e.target.checked)}
+            />
+            <span className="wo-contact-toggle-label">
+              Also add to Contacts
+            </span>
+            <span className="wo-contact-toggle-hint">
+              Creates a contact record for CRM tracking
+            </span>
+          </label>
 
           <div className="modal-actions">
             {lead && (

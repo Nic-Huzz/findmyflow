@@ -1,8 +1,55 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useAuth } from './auth/AuthProvider'
+import { supabase } from './lib/supabaseClient'
+import { syncFlowFinderWithChallenge } from './lib/questCompletionHelpers'
 import './MoneyModelGuide.css'
 
 function MoneyModelGuide() {
+  const { user } = useAuth()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const [isCompleting, setIsCompleting] = useState(false)
+  const [viewingResults, setViewingResults] = useState(false)
+
+  // Check for ?results=true to show "viewing results" state
+  useEffect(() => {
+    if (searchParams.get('results') === 'true') {
+      setViewingResults(true)
+    }
+  }, [searchParams])
+
+  const handleComplete = async () => {
+    // If user not logged in, just navigate back
+    if (!user) {
+      navigate('/7-day-challenge')
+      return
+    }
+
+    setIsCompleting(true)
+    try {
+      // Sync with challenge system
+      await syncFlowFinderWithChallenge(user.id, 'milestone_read_money_model')
+
+      // Create a flow session to track completion
+      const { error } = await supabase.from('flow_sessions').insert({
+        user_id: user.id,
+        flow_type: 'money_model_guide',
+        status: 'completed',
+        completed_at: new Date().toISOString()
+      })
+
+      if (error) {
+        console.error('Error saving flow session:', error)
+        // Non-fatal - continue to challenge page
+      }
+
+      navigate('/7-day-challenge')
+    } catch (err) {
+      console.error('Error completing guide:', err)
+      navigate('/7-day-challenge')
+    }
+  }
   const offerTypes = [
     {
       number: 1,
@@ -221,20 +268,43 @@ function MoneyModelGuide() {
       </section>
 
       <section className="return-section" style={{ marginTop: '40px', marginBottom: '40px', textAlign: 'center' }}>
-        <Link to="/7-day-challenge" className="return-button" style={{
-          display: 'inline-block',
-          padding: '16px 32px',
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
-          borderRadius: '12px',
-          color: 'white',
-          textDecoration: 'none',
-          fontSize: '16px',
-          fontWeight: '600',
-          transition: 'all 0.3s ease'
-        }}>
-          ← Return to 7-Day Challenge
-        </Link>
+        {viewingResults ? (
+          <Link to="/7-day-challenge" className="return-button" style={{
+            display: 'inline-block',
+            padding: '16px 32px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+            borderRadius: '12px',
+            color: 'white',
+            textDecoration: 'none',
+            fontSize: '16px',
+            fontWeight: '600',
+            transition: 'all 0.3s ease'
+          }}>
+            ← Return to 7-Day Challenge
+          </Link>
+        ) : (
+          <button
+            onClick={handleComplete}
+            disabled={isCompleting}
+            className="complete-button"
+            style={{
+              display: 'inline-block',
+              padding: '16px 32px',
+              background: 'linear-gradient(135deg, #E9A23B 0%, #d4922e 100%)',
+              border: 'none',
+              borderRadius: '12px',
+              color: 'white',
+              fontSize: '16px',
+              fontWeight: '600',
+              cursor: isCompleting ? 'not-allowed' : 'pointer',
+              transition: 'all 0.3s ease',
+              opacity: isCompleting ? 0.7 : 1
+            }}
+          >
+            {isCompleting ? 'Completing...' : 'Complete & Return →'}
+          </button>
+        )}
       </section>
     </div>
   )

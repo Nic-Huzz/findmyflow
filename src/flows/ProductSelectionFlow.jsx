@@ -63,6 +63,10 @@ const SOLUTION_LABELS = {
   tech_digital: 'Tech/Digital',
   software: 'Software/SaaS',
   physical_product: 'Physical Product',
+  content: 'Content',
+  content_podcast: 'Podcast',
+  content_newsletter: 'Newsletter',
+  content_youtube: 'YouTube Channel',
   mixed_products: 'Mixed Products'
 }
 
@@ -254,12 +258,31 @@ function ProductSelectionFlow() {
   const [savedProgressData, setSavedProgressData] = useState(null)
   const { saveProgress, loadProgress, clearProgress } = useAutoSave('product-selection', user?.id)
 
+  // Existing products from products table (for looking up names)
+  const [existingProducts, setExistingProducts] = useState([])
+
   // Load all solutions from the most recent offer builder assessment
   useEffect(() => {
     if (user) {
       loadProducts()
+      loadExistingProducts()
     }
   }, [user])
+
+  // Load existing products for name lookup
+  const loadExistingProducts = async () => {
+    try {
+      const { data: products, error } = await supabase
+        .from('products')
+        .select('id, name')
+        .eq('user_id', user.id)
+      if (!error && products) {
+        setExistingProducts(products)
+      }
+    } catch (err) {
+      console.error('Error loading existing products:', err)
+    }
+  }
 
   // Note: Removed auto-register useEffect that was causing duplicate quest completions
   // Quest completion now only happens once when flow is completed
@@ -395,6 +418,23 @@ function ProductSelectionFlow() {
       setError('Failed to load products. Complete the Offer Builder first.')
       setStage(STAGES.WELCOME)
     }
+  }
+
+  // Get display label for a product (includes existing product name or new product name)
+  const getProductDisplayLabel = (product) => {
+    const baseLabel = SOLUTION_LABELS[product.solutionType] || product.solutionType || 'Product'
+    // For existing products, use the linked product's name
+    if (product.existingProductId) {
+      const existingProduct = existingProducts.find(p => p.id === product.existingProductId)
+      if (existingProduct?.name) {
+        return `${baseLabel}: ${existingProduct.name}`
+      }
+    }
+    // For new products, use the name they gave it
+    if (product.name?.trim()) {
+      return `${baseLabel}: ${product.name}`
+    }
+    return baseLabel
   }
 
   // Calculate value score for a product (0-100 scale)
@@ -603,9 +643,9 @@ function ProductSelectionFlow() {
     const nextIndex = currentProductIndex + 1
     setCurrentProductIndex(nextIndex)
     setCurrentQuestionIndex(0)
-    // Reset current inputs for next product
+    // Reset current inputs for next product, pre-fill mechanism with description from offer-builder
     const nextProduct = coreProducts[nextIndex]
-    setCurrentMechanism(productSpecs[nextProduct?.id]?.mechanism || '')
+    setCurrentMechanism(productSpecs[nextProduct?.id]?.mechanism || nextProduct?.description || '')
     setCurrentFeatureBenefits(
       productSpecs[nextProduct?.id]?.featureBenefits?.length > 0
         ? productSpecs[nextProduct.id].featureBenefits
@@ -797,7 +837,7 @@ function ProductSelectionFlow() {
                     <div key={prod.id} className="product-preview-card">
                       <span className="preview-number">{idx + 1}</span>
                       <div className="preview-content">
-                        <h4>{prod.label}</h4>
+                        <h4>{getProductDisplayLabel(prod)}</h4>
                         <p>{prod.description}</p>
                       </div>
                     </div>
@@ -807,8 +847,9 @@ function ProductSelectionFlow() {
                 <button
                   className="primary-button glow-button"
                   onClick={() => {
-                    // Reset inputs for first product
-                    setCurrentMechanism('')
+                    // Pre-fill mechanism with description from offer-builder (if available)
+                    const firstProduct = coreProducts[0]
+                    setCurrentMechanism(firstProduct?.description || '')
                     setCurrentFeatureBenefits([{ feature: '', benefit: '' }])
                     setStage(STAGES.MECHANISM)
                   }}
@@ -821,7 +862,7 @@ function ProductSelectionFlow() {
           </div>
           <button
             className="secondary-button"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/7-day-challenge')}
             style={{ marginTop: '12px' }}
           >
             Back
@@ -842,7 +883,7 @@ function ProductSelectionFlow() {
         <div className="question-container mechanism-container">
           <div className="product-context">
             <span className="product-badge">Product {currentProductIndex + 1} of {coreProducts.length}</span>
-            <h3 className="product-name">{currentProduct.label}</h3>
+            <h3 className="product-name">{getProductDisplayLabel(currentProduct)}</h3>
             <p className="product-problem">Solving: {currentProduct.problemText}</p>
           </div>
 
@@ -892,7 +933,7 @@ function ProductSelectionFlow() {
         <div className="question-container features-container">
           <div className="product-context">
             <span className="product-badge">Product {currentProductIndex + 1} of {coreProducts.length}</span>
-            <h3 className="product-name">{currentProduct.label}</h3>
+            <h3 className="product-name">{getProductDisplayLabel(currentProduct)}</h3>
           </div>
 
           <div className="question-content">
@@ -903,28 +944,34 @@ function ProductSelectionFlow() {
 
             <div className="feature-benefit-table">
               <div className="table-header">
-                <span className="header-feature">What's included</span>
+                <span className="header-feature">Feature</span>
                 <span className="header-arrow">→</span>
-                <span className="header-benefit">How it helps them</span>
+                <span className="header-benefit">Benefit</span>
               </div>
 
               {currentFeatureBenefits.map((fb, index) => (
                 <div key={index} className="feature-benefit-row">
-                  <input
-                    type="text"
-                    className="feature-input"
-                    placeholder="e.g., Weekly group call"
-                    value={fb.feature}
-                    onChange={(e) => updateFeatureBenefit(index, 'feature', e.target.value)}
-                  />
+                  <div className="input-with-label">
+                    <label className="input-label">Feature</label>
+                    <input
+                      type="text"
+                      className="feature-input"
+                      placeholder="e.g., Weekly group call"
+                      value={fb.feature}
+                      onChange={(e) => updateFeatureBenefit(index, 'feature', e.target.value)}
+                    />
+                  </div>
                   <span className="row-arrow">→</span>
-                  <input
-                    type="text"
-                    className="benefit-input"
-                    placeholder="e.g., Stay accountable and get unstuck"
-                    value={fb.benefit}
-                    onChange={(e) => updateFeatureBenefit(index, 'benefit', e.target.value)}
-                  />
+                  <div className="input-with-label">
+                    <label className="input-label">Benefit</label>
+                    <input
+                      type="text"
+                      className="benefit-input"
+                      placeholder="e.g., Stay accountable and get unstuck"
+                      value={fb.benefit}
+                      onChange={(e) => updateFeatureBenefit(index, 'benefit', e.target.value)}
+                    />
+                  </div>
                   {currentFeatureBenefits.length > 1 && (
                     <button
                       type="button"
@@ -983,7 +1030,7 @@ function ProductSelectionFlow() {
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
         <div className="question-container">
           <div className="product-context">
-            <span className="product-badge">{currentProduct.label}</span>
+            <span className="product-badge">{getProductDisplayLabel(currentProduct)}</span>
             {currentProduct.problemText && (
               <p className="product-problem">Solving: {currentProduct.problemText}</p>
             )}
@@ -1049,7 +1096,7 @@ function ProductSelectionFlow() {
             <span className="completed-icon">✓</span>
             <h3>Product {currentProductIndex + 1} Complete!</h3>
             <div className="completed-product-card">
-              <span className="product-badge">{completedProduct.label}</span>
+              <span className="product-badge">{getProductDisplayLabel(completedProduct)}</span>
               <div className="completed-score">
                 <span className="score-value" style={{ color: completedLevel.color }}>{completedScore}</span>
                 <span className="score-label">Value Score</span>
@@ -1066,7 +1113,7 @@ function ProductSelectionFlow() {
           <div className="transition-next">
             <div className="next-product-card">
               <span className="next-badge">Product {currentProductIndex + 2} of {coreProducts.length}</span>
-              <h2 className="next-product-name">{nextProduct.label}</h2>
+              <h2 className="next-product-name">{getProductDisplayLabel(nextProduct)}</h2>
               {nextProduct.problemText && (
                 <p className="next-product-problem">Solving: {nextProduct.problemText}</p>
               )}
@@ -1077,7 +1124,7 @@ function ProductSelectionFlow() {
             className="primary-button glow-button"
             onClick={startNextProduct}
           >
-            Define {nextProduct.label}
+            Define {getProductDisplayLabel(nextProduct)}
           </button>
           <BackButton onClick={() => {
             setCurrentQuestionIndex(VALUE_QUESTIONS.length - 1)
@@ -1138,7 +1185,7 @@ function ProductSelectionFlow() {
                     <div key={product.id} className={`comparison-row ${isRecommended ? 'recommended' : ''}`}>
                       <span className="comparison-product">
                         {isRecommended && <span className="rec-star">★</span>}
-                        {product.label}
+                        {getProductDisplayLabel(product)}
                       </span>
                       <span className="comparison-value" style={{ color: level.color }}>{score}</span>
                       <span className="comparison-speed">
@@ -1171,7 +1218,7 @@ function ProductSelectionFlow() {
                     <div className="header-left">
                       <span className="level-icon">{level.icon}</span>
                       <div>
-                        <h3>{product.label}</h3>
+                        <h3>{getProductDisplayLabel(product)}</h3>
                         <p className="score-description">{product.description}</p>
                       </div>
                     </div>

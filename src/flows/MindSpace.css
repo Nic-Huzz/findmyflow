@@ -852,6 +852,10 @@
   color: rgba(255, 221, 39, 0.9);
 }
 
+.mind-space .complete-btn {
+  margin-top: 1.5rem;
+}
+
 /* Results Summary (for viewing saved results) */
 .mind-space .results-summary {
   text-align: left;

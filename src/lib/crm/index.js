@@ -190,6 +190,22 @@ export {
   getToolsStats,
 } from './towerStats'
 
+// Ecosystem / Business Flywheel System
+export {
+  getEcosystemProgress,
+  getEcosystemSummary,
+  toggleSystemItem,
+  getEcosystemStats,
+  detectAutoChecks,
+} from './ecosystemService'
+
+export {
+  ECOSYSTEM_PHASES,
+  AUTO_CHECK_MAP,
+  getPhaseItems,
+  getTotalItemCount,
+} from './ecosystemConfig'
+
 // Groan Challenge Service (Matrix System)
 export {
   // Challenge CRUD
@@ -263,3 +279,16 @@ export {
   getRecentFlowEntries,
   analyzeFlowPatterns,
 } from './reflectionService'
+
+// CSV Import Service
+export {
+  TABLE_CONFIGS,
+  parseCSV,
+  autoMapHeaders,
+  validateRow,
+  validateAllRows,
+  transformRow,
+  importData,
+  generateFailedRowsCSV,
+  downloadCSV,
+} from './csvImportService'

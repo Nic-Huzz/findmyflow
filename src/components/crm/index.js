@@ -52,3 +52,6 @@ export { default as LeadsCapture } from './LeadsCapture'
 
 // Dashboard Components
 export { default as DailyActions } from './DailyActions'
+
+// CSV Import
+export { CSVImportWizard } from './CSVImport'

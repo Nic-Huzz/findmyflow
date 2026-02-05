@@ -3,6 +3,44 @@ import { useNavigate } from 'react-router-dom';
 import WaitlistModal from '../components/WaitlistModal';
 import './LandingPage.css';
 
+const PillarDiagram = ({ title, xLabel, yLabel, lineName, topZone, topSub, bottomZone, bottomSub, gradientId }) => (
+  <div className="pillar-diagram-card">
+    <h4 className="pillar-diagram-title">{title}</h4>
+    <svg viewBox="0 0 300 280" className="pillar-diagram-svg">
+      <defs>
+        <linearGradient id={gradientId} x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#5e17eb" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#E9A23B" stopOpacity="1" />
+        </linearGradient>
+      </defs>
+      {/* Axes */}
+      <line x1="50" y1="30" x2="50" y2="240" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" />
+      <line x1="50" y1="240" x2="270" y2="240" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" />
+      {/* Arrow heads */}
+      <polygon points="46,36 50,26 54,36" fill="rgba(255,255,255,0.4)" />
+      <polygon points="264,236 274,240 264,244" fill="rgba(255,255,255,0.4)" />
+      {/* Diagonal gold line */}
+      <line x1="55" y1="235" x2="265" y2="35" stroke={`url(#${gradientId})`} strokeWidth="3.5" strokeLinecap="round" />
+      {/* Zone labels - top left */}
+      <text x="60" y="70" fill="rgba(255,255,255,0.7)" fontSize="11" fontWeight="600">{topZone}</text>
+      <text x="60" y="86" fill="rgba(255,255,255,0.45)" fontSize="9" fontStyle="italic">{topSub}</text>
+      {/* Zone labels - bottom right */}
+      <text x="155" y="220" fill="rgba(255,255,255,0.7)" fontSize="11" fontWeight="600">{bottomZone}</text>
+      <text x="155" y="236" fill="rgba(255,255,255,0.45)" fontSize="9" fontStyle="italic">{bottomSub}</text>
+      {/* Diagonal label */}
+      <text
+        x="160" y="135"
+        fill="white" fontSize="12" fontWeight="700"
+        transform="rotate(-42, 160, 135)"
+        style={{ textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}
+      >{lineName}</text>
+      {/* Axis labels */}
+      <text x="160" y="268" fill="rgba(255,255,255,0.8)" fontSize="11" fontWeight="600" textAnchor="middle">{xLabel}</text>
+      <text x="18" y="140" fill="rgba(255,255,255,0.8)" fontSize="11" fontWeight="600" textAnchor="middle" transform="rotate(-90, 18, 140)">{yLabel}</text>
+    </svg>
+  </div>
+);
+
 const LandingPage = () => {
   const navigate = useNavigate();
   const [expandedFaq, setExpandedFaq] = useState(null);
@@ -482,7 +520,7 @@ const LandingPage = () => {
                   </div>
                 </div>
 
-                
+
                 <div className="credentials-formula">
                   <span className="formula-intro">My secret?</span>
                   <span className="formula-name">The Three Pillars</span>
@@ -491,6 +529,42 @@ const LandingPage = () => {
                     — my unique formula for creating "magic programs" that cause participants
                     to walk away feeling like they've had one of the most transformational experiences of their life
                   </span>
+                </div>
+
+                <div className="three-pillars-diagrams">
+                  <PillarDiagram
+                    title="Frameworks"
+                    xLabel="Self-Knowledge"
+                    yLabel="Action"
+                    lineName="Self-Actualisation"
+                    topZone="Misguided Zone"
+                    topSub="Lack of Fulfilment"
+                    bottomZone="Paralysis Zone"
+                    bottomSub="Head Full of Dreams"
+                    gradientId="pillarGrad1"
+                  />
+                  <PillarDiagram
+                    title="Implementation"
+                    xLabel="Ability"
+                    yLabel="Challenge"
+                    lineName="Groan Zone"
+                    topZone="Failure Zone"
+                    topSub="Lose Confidence"
+                    bottomZone="Safe Zone"
+                    bottomSub="Growth Stagnates"
+                    gradientId="pillarGrad2"
+                  />
+                  <PillarDiagram
+                    title="Community"
+                    xLabel="Readiness"
+                    yLabel="Shared"
+                    lineName="Vulnerability Sweet Spot"
+                    topZone="Burden Zone"
+                    topSub="Push Away"
+                    bottomZone="Shallow Zone"
+                    bottomSub="Fail to Connect"
+                    gradientId="pillarGrad3"
+                  />
                 </div>
 
                 <p className="credentials-kicker">

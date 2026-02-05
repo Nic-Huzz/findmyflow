@@ -466,7 +466,7 @@ export default function PersonaIdentifierFlow() {
         </button>
         <button
           className="secondary-button"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/7-day-challenge')}
           style={{ width: '100%' }}
         >
           Back
@@ -787,7 +787,7 @@ export default function PersonaIdentifierFlow() {
           <div className="nav-buttons">
             <button
               className="secondary-button"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/7-day-challenge')}
             >
               Back
             </button>

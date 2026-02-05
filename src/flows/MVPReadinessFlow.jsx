@@ -162,13 +162,46 @@ function MVPReadinessFlow() {
       if (offerData?.responses?.q8_solutions?.solutions) {
         const solutions = offerData.responses.q8_solutions.solutions
         const solutionsArray = Array.isArray(solutions) ? solutions : Object.values(solutions)
+
+        // Collect existingProductIds to look up names
+        const existingProductIds = solutionsArray
+          .filter(data => data?.existingProductId)
+          .map(data => data.existingProductId)
+
+        // Load existing product names if needed
+        let existingProductsMap = {}
+        if (existingProductIds.length > 0) {
+          const { data: existingProducts } = await supabase
+            .from('products')
+            .select('id, name')
+            .in('id', existingProductIds)
+
+          if (existingProducts) {
+            existingProductsMap = Object.fromEntries(
+              existingProducts.map(p => [p.id, p.name])
+            )
+          }
+        }
+
         const prods = solutionsArray
           .filter(data => data && data.description)
-          .map((data, idx) => ({
-            id: `solution_${idx}`,
-            ...data,
-            label: SOLUTION_LABELS[data.solutionType] || data.solutionType || 'Product'
-          }))
+          .map((data, idx) => {
+            // Determine the display name: user-entered name > existing product name > solution type label
+            let displayName = data.name?.trim()
+            if (!displayName && data.existingProductId) {
+              displayName = existingProductsMap[data.existingProductId]
+            }
+            if (!displayName) {
+              displayName = SOLUTION_LABELS[data.solutionType] || data.solutionType || 'Product'
+            }
+
+            return {
+              id: `solution_${idx}`,
+              ...data,
+              label: displayName,
+              typeLabel: SOLUTION_LABELS[data.solutionType] || data.solutionType
+            }
+          })
         setProducts(prods)
       }
 
@@ -379,7 +412,7 @@ function MVPReadinessFlow() {
               </button>
               <button
                 className="secondary-button"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/7-day-challenge')}
               >
                 Come Back Later
               </button>
@@ -414,7 +447,7 @@ function MVPReadinessFlow() {
           </button>
           <button
             className="go-back-link"
-            onClick={() => setStage(STAGES.TIME_CHECK)}
+            onClick={() => navigate('/7-day-challenge')}
           >
             &larr; Go Back
           </button>
@@ -508,6 +541,9 @@ function MVPReadinessFlow() {
                   }}
                 >
                   <div className="option-label">{product.label}</div>
+                  {product.typeLabel && product.label !== product.typeLabel && (
+                    <div className="option-type">{product.typeLabel}</div>
+                  )}
                   <div className="option-description">{product.description}</div>
                 </button>
               ))}
@@ -735,6 +771,11 @@ function MVPReadinessFlow() {
               <div className="summary-label">Product</div>
               <div className="summary-value">
                 <strong>{selectedProduct?.label}</strong>
+                {selectedProduct?.typeLabel && selectedProduct?.label !== selectedProduct?.typeLabel && (
+                  <span style={{ marginLeft: '8px', fontSize: '12px', color: 'rgba(251, 191, 36, 0.8)' }}>
+                    ({selectedProduct.typeLabel})
+                  </span>
+                )}
                 <p className="summary-description">{selectedProduct?.description}</p>
               </div>
             </div>

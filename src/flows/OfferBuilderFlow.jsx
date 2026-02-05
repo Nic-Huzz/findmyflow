@@ -27,7 +27,10 @@ import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { getValidationObstaclesForOfferBuilder } from '../lib/validationObstacles'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
+import ErrorMessage from '../components/ErrorMessage'
 import { cacheBustUrl } from '../lib/fetchJson'
+import { getSkillProductSuggestions, getAmplifierMessages, DIRECT_MAPPINGS, AMPLIFIER_MAPPINGS } from '../lib/skillProductMapping'
+import { SKILLS_SEGMENTS } from '../lib/wheelTaxonomy'
 import './OfferBuilderFlow.css'
 
 const STAGES = {
@@ -141,6 +144,12 @@ const SOLUTION_TYPES_BY_CATEGORY = {
       icon: '📦'
     },
     {
+      id: 'content',
+      label: 'Content',
+      description: 'Podcast, newsletter, YouTube, blog',
+      icon: '🎙️'
+    },
+    {
       id: 'mixed_products',
       label: 'Mix of different types',
       description: 'Multiple product types',
@@ -161,6 +170,10 @@ const SOLUTION_LABELS = {
   digital_product: 'Digital Product',
   software: 'Software/SaaS',
   physical_product: 'Physical Product',
+  content: 'Content',
+  content_podcast: 'Podcast',
+  content_newsletter: 'Newsletter',
+  content_youtube: 'YouTube Channel',
   mixed_products: 'Mixed Products'
 }
 
@@ -250,6 +263,7 @@ function OfferBuilderFlow() {
   const [currentSolution, setCurrentSolution] = useState({
     problemId: '',
     problemText: '',
+    name: '',  // Product name for new solutions
     solutionCategory: '',  // service, productized, or product
     solutionType: '',
     description: '',
@@ -257,6 +271,9 @@ function OfferBuilderFlow() {
     alreadyDelivers: null,  // null = not answered, true = yes, false = no
     existingProductId: null
   })
+
+  // Solution methods for "No, this is new" path (list of ways to solve)
+  const [solutionMethods, setSolutionMethods] = useState(['', '', ''])
 
   // Existing products from Quick Capture / wealth ladder
   const [existingProducts, setExistingProducts] = useState([])
@@ -408,7 +425,7 @@ function OfferBuilderFlow() {
   }
 
   // Get delivery format suggestions based on skill cluster
-  // Uses AI recommendations if available, otherwise falls back to rule-based logic
+  // Uses AI recommendations if available, otherwise falls back to taxonomy-based mapping
   const getDeliveryFormatSuggestions = (cluster) => {
     // Check if we have AI recommendation for this skill
     if (aiRecommendations?.recommendations) {
@@ -441,113 +458,13 @@ function OfferBuilderFlow() {
           })
         }
 
-        if (suggestions.length > 0) return suggestions
+        if (suggestions.length > 0) return { suggestions, amplifierMessage: null }
       }
     }
 
-    // Fall back to rule-based logic
-    const label = cluster?.cluster_label?.toLowerCase() || ''
-    const proficiency = cluster?.proficiency || 'establishing'
-
-    // Map skill archetypes to delivery formats
-    const suggestions = []
-
-    // Guide-type skills → Service (Facilitating, Coaching, Nurturing, Connecting)
-    if (label.includes('facilitat') || label.includes('coach') || label.includes('nurtur') || label.includes('connect') || label.includes('influenc')) {
-      suggestions.push({
-        category: 'service',
-        type: proficiency === 'mastering' ? 'custom_service' : 'packaged_service',
-        icon: '💼',
-        label: proficiency === 'mastering' ? 'Custom Service' : 'Packaged Service',
-        reason: `Your ${cluster.cluster_label} skills shine in personal delivery`
-      })
-      suggestions.push({
-        category: 'productized',
-        type: 'live_group',
-        icon: '📦',
-        label: 'Live Cohort',
-        reason: 'Scale your guidance to groups'
-      })
-    }
-
-    // Maker-type skills → Products (Building, Creating, Designing, Expressing)
-    if (label.includes('build') || label.includes('creat') || label.includes('design') || label.includes('express')) {
-      suggestions.push({
-        category: 'product',
-        type: 'digital_product',
-        icon: '🛍️',
-        label: 'Digital Product',
-        reason: `Turn your ${cluster.cluster_label} output into templates/tools`
-      })
-      if (proficiency === 'mastering') {
-        suggestions.push({
-          category: 'productized',
-          type: 'automated_group',
-          icon: '📦',
-          label: 'Self-Paced Course',
-          reason: 'Teach your mastered process'
-        })
-      }
-    }
-
-    // Analyst-type skills → Service/Productized (Researching, Analyzing, Strategizing, Organizing)
-    if (label.includes('research') || label.includes('learn') || label.includes('analyz') || label.includes('strateg') || label.includes('organiz')) {
-      suggestions.push({
-        category: 'service',
-        type: 'packaged_service',
-        icon: '💼',
-        label: 'Packaged Service',
-        reason: `Deliver your ${cluster.cluster_label} as a structured engagement`
-      })
-      suggestions.push({
-        category: 'product',
-        type: 'digital_product',
-        icon: '🛍️',
-        label: 'Templates/Frameworks',
-        reason: 'Package your analytical process'
-      })
-    }
-
-    // Communicator-type skills → Productized/Products (Expressing, Communicating)
-    if (label.includes('communicat') || label.includes('writing') || label.includes('speaking')) {
-      suggestions.push({
-        category: 'productized',
-        type: 'automated_group',
-        icon: '📦',
-        label: 'Online Course',
-        reason: 'Teach your communication methods'
-      })
-      suggestions.push({
-        category: 'product',
-        type: 'digital_product',
-        icon: '🛍️',
-        label: 'Content Templates',
-        reason: 'Package your communication frameworks'
-      })
-    }
-
-    // If no specific match, provide generic suggestions based on proficiency
-    if (suggestions.length === 0) {
-      if (proficiency === 'mastering') {
-        suggestions.push({
-          category: 'service',
-          type: 'custom_service',
-          icon: '💼',
-          label: 'Premium Service',
-          reason: `Leverage your mastery in ${cluster.cluster_label}`
-        })
-      } else {
-        suggestions.push({
-          category: 'productized',
-          type: 'live_group',
-          icon: '📦',
-          label: 'Group Program',
-          reason: `Share your ${cluster.cluster_label} journey with others`
-        })
-      }
-    }
-
-    return suggestions.slice(0, 2) // Return top 2 suggestions
+    // Fall back to taxonomy-based mapping from skillProductMapping.js
+    // This uses taxonomy_keys from the cluster to match against wheel segments
+    return getSkillProductSuggestions(cluster)
   }
 
   // Pre-fill solution from skill suggestion
@@ -907,10 +824,11 @@ function OfferBuilderFlow() {
     if (!currentSolution.problemId || !currentSolution.description.trim() || !currentSolution.solutionType) return
 
     setProblemSolutions(prev => [...prev, { ...currentSolution }])
-    // Reset current solution
+    // Reset current solution and methods
     setCurrentSolution({
       problemId: '',
       problemText: '',
+      name: '',
       solutionCategory: '',
       solutionType: '',
       description: '',
@@ -918,6 +836,24 @@ function OfferBuilderFlow() {
       alreadyDelivers: null,
       existingProductId: null
     })
+    setSolutionMethods(['', '', ''])
+  }
+
+  // Update a solution method and sync to description
+  const updateSolutionMethod = (index, value) => {
+    setSolutionMethods(prev => {
+      const updated = [...prev]
+      updated[index] = value
+      // Sync non-empty methods to description
+      const description = updated.filter(m => m.trim()).join('\n')
+      setCurrentSolution(curr => ({ ...curr, description }))
+      return updated
+    })
+  }
+
+  // Add another method input
+  const addSolutionMethod = () => {
+    setSolutionMethods(prev => [...prev, ''])
   }
 
   // Handle selecting an existing product
@@ -936,7 +872,7 @@ function OfferBuilderFlow() {
           ...prev,
           existingProductId: productId,
           solutionType: product.product_type || '',
-          description: product.name + (product.description ? ` - ${product.description}` : '')
+          description: ''  // Start empty - user describes how this product solves the problem
         }))
       }
     }
@@ -1276,7 +1212,7 @@ function OfferBuilderFlow() {
           </button>
           <button
             className="secondary-button"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/7-day-challenge')}
             style={{ marginTop: '12px' }}
           >
             Come Back Later
@@ -1923,7 +1859,8 @@ function OfferBuilderFlow() {
     if (question.type === 'problem_solutions') {
       const allProblems = getAllProblems()
       const isValid = problemSolutions.length > 0
-      const canAddSolution = currentSolution.problemId && currentSolution.description.trim() && currentSolution.solutionType
+      const canAddSolution = currentSolution.problemId && currentSolution.description.trim() && currentSolution.solutionType &&
+        (currentSolution.existingProductId || currentSolution.name?.trim())
 
       // Calculate coverage - how many unique problems have at least one solution
       const coveredProblemIds = new Set(problemSolutions.map(s => s.problemId))
@@ -1939,39 +1876,35 @@ function OfferBuilderFlow() {
             <h2 className="question-text">{question.question}</h2>
             {question.subtext && <p className="question-subtext">{question.subtext}</p>}
 
-            {/* Unified Customer Intelligence Box */}
+            {/* Unified Customer Intelligence Box - only shows with real validation data */}
             {(() => {
-              // Use real data if available, otherwise show dummy data for testing
               const hasRealData = validationData?.hasValidationData
               const hasRealPrefs = validationData?.solutionPreferences?.hasPreferences
 
-              const displayData = hasRealData ? {
+              // Show prompt to complete validation if no real data
+              if (!hasRealData && !hasRealPrefs) return (
+                <div className="customer-intelligence-box" style={{ textAlign: 'center', padding: '20px' }}>
+                  <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', margin: '0 0 8px' }}>
+                    Want customer insights to guide your solutions?
+                  </p>
+                  <a
+                    href="/validation-flows"
+                    style={{ color: '#fbbf24', fontSize: '14px', fontWeight: 600 }}
+                  >
+                    Complete validation to unlock Customer Intelligence →
+                  </a>
+                </div>
+              )
+
+              const displayData = {
                 totalResponses: validationData.totalResponses,
                 dreamOutcome: validationData.insights?.dreamOutcomes?.[0]?.text,
                 painLevel: validationData.insights?.painLevel?.average,
                 budget: validationData.insights?.budgets?.aggregated?.[0]?.text,
                 hellYesFactors: validationData.insights?.hellYesFactors?.slice(0, 3).map(f => f.text)
-              } : {
-                // DUMMY DATA FOR TESTING - Remove when done
-                totalResponses: 12,
-                dreamOutcome: "Finally feel confident showing up online and attracting dream clients",
-                painLevel: 7.5,
-                budget: "$500 - $2,000",
-                hellYesFactors: ["Proven step-by-step system", "Personal feedback & support", "Results within 30 days"]
               }
 
-              const prefsData = hasRealPrefs ? validationData.solutionPreferences : {
-                // DUMMY DATA FOR TESTING
-                hasPreferences: true,
-                recommendedVersion: 'productized',
-                breakdown: { service: 3, productized: 7, product: 2 },
-                totalVotes: 12,
-                specificTypes: {
-                  service: [],
-                  productized: [{ text: 'Live cohort', count: 4 }, { text: 'Self-paced course', count: 3 }],
-                  product: []
-                }
-              }
+              const prefsData = hasRealPrefs ? validationData.solutionPreferences : null
 
               const hasDreamOutcome = displayData.dreamOutcome
               const hasPainLevel = displayData.painLevel
@@ -1997,6 +1930,25 @@ function OfferBuilderFlow() {
                       {(hasRealData || hasRealPrefs) ? `${displayData.totalResponses} responses` : 'demo data'}
                     </span>
                   </div>
+
+                  {/* Low confidence warning */}
+                  {displayData.totalResponses < 2 && (
+                    <div style={{
+                      background: 'rgba(251, 191, 36, 0.1)',
+                      border: '1px solid rgba(251, 191, 36, 0.3)',
+                      borderRadius: '8px',
+                      padding: '8px 12px',
+                      marginBottom: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '12px',
+                      color: 'rgba(255, 255, 255, 0.7)'
+                    }}>
+                      <span>⚠️</span>
+                      <span>Low confidence — only {displayData.totalResponses || 0} response{displayData.totalResponses === 1 ? '' : 's'}. Get 2+ responses for reliable insights.</span>
+                    </div>
+                  )}
 
                   {/* Dream Outcome - Hero */}
                   {hasDreamOutcome && (
@@ -2143,11 +2095,13 @@ function OfferBuilderFlow() {
                       problemText: problem?.text || '',
                       alreadyDelivers: null,
                       existingProductId: null,
+                      name: '',
                       solutionCategory: '',
                       solutionType: '',
                       description: ''
                     }))
-                    // Reset AI recommendations when problem changes (will refetch with new problem)
+                    // Reset solution methods and AI recommendations when problem changes
+                    setSolutionMethods(['', '', ''])
                     setAiRecommendations(null)
                     setSkillsPanelOpen(false)
                   }}
@@ -2173,6 +2127,7 @@ function OfferBuilderFlow() {
                         ...prev,
                         alreadyDelivers: true,
                         existingProductId: null,
+                        name: '',
                         solutionCategory: '',
                         solutionType: '',
                         description: ''
@@ -2188,6 +2143,7 @@ function OfferBuilderFlow() {
                           ...prev,
                           alreadyDelivers: false,
                           existingProductId: null,
+                          name: '',
                           solutionCategory: '',
                           solutionType: '',
                           description: ''
@@ -2239,138 +2195,93 @@ function OfferBuilderFlow() {
                 </div>
               )}
 
-              {/* Flow Finder Skills Panel - Show when "No, this is new" is selected */}
-              {currentSolution.alreadyDelivers === false && skillClusters.length > 0 && (
-                <div className={`skills-suggestions-panel ${skillsPanelOpen ? 'open' : 'collapsed'}`}>
-                  <div className="skills-panel-header-row">
-                    <button
-                      type="button"
-                      className="skills-panel-toggle"
-                      onClick={handleSkillsPanelToggle}
-                    >
-                      <div className="skills-panel-header">
-                        <span className="panel-icon">💡</span>
-                        <span>SUGGESTIONS FROM YOUR SKILLS</span>
+              {/* Skill-based solution prompt - Show when "No, this is new" is selected */}
+              {currentSolution.alreadyDelivers === false && nicheLayers.layer3 && (() => {
+                const taxonomyKey = nicheLayers.layer3.taxonomy_keys?.[0]
+                const skillSegment = SKILLS_SEGMENTS.find(s => s.id === taxonomyKey)
+                const mapping = DIRECT_MAPPINGS[taxonomyKey] || AMPLIFIER_MAPPINGS[taxonomyKey]
+                const isAmplifier = !!AMPLIFIER_MAPPINGS[taxonomyKey]
+
+                return (
+                  <div className="skill-context-panel">
+                    <div className="skill-context-header">
+                      <span className="skill-cluster-label">{nicheLayers.layer3.cluster_label}</span>
+                      {skillSegment && (
+                        <span className={`skill-taxonomy-tag ${isAmplifier ? 'amplifier' : ''}`}>
+                          {skillSegment.displayName}
+                        </span>
+                      )}
+                    </div>
+
+                    {mapping && (
+                      <p className="skill-tagline">{mapping.tagline}</p>
+                    )}
+
+                    <label className="skill-prompt-label">
+                      What are all the ways you could solve this with your{' '}
+                      <strong>{skillSegment?.displayName?.toLowerCase() || 'skill'}</strong>?
+                    </label>
+
+                    {mapping && (
+                      <div className="skill-product-hints">
+                        <span className="hints-label">Common formats:</span>
+                        <div className="hints-list">
+                          {(mapping.primary || mapping.defaultProducts)?.slice(0, 3).map((p, i) => (
+                            <span key={i} className="hint-chip">
+                              <span className="hint-icon">{p.icon}</span>
+                              {p.label}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <span className="toggle-arrow">{skillsPanelOpen ? '▲' : '▼'}</span>
-                    </button>
-                    {skillsPanelOpen && (
-                      <button
-                        type="button"
-                        className="skip-suggestions-btn"
-                        onClick={() => setSkillsPanelOpen(false)}
-                      >
-                        Skip
-                      </button>
+                    )}
+
+                    {isAmplifier && mapping?.uiMessage && (
+                      <p className="amplifier-context">{mapping.uiMessage}</p>
                     )}
                   </div>
+                )
+              })()}
 
-                  {skillsPanelOpen && (
-                    <>
-                      {/* Show AI context if available */}
-                      {aiRecommendations?.context && (
-                        <div className="ai-context-info">
-                          <span className="ai-badge">AI-Powered</span>
-                          <span className="context-item">
-                            Your level: <strong>{aiRecommendations.context.wealthLadder?.replace(/_/g, ' ') || 'Unknown'}</strong>
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Loading state */}
-                      {recommendationsLoading && (
-                        <div className="recommendations-loading">
-                          <div className="typing-indicator small">
-                            <span></span><span></span><span></span>
-                          </div>
-                          <span className="loading-text">Analyzing your profile...</span>
-                        </div>
-                      )}
-
-                      {/* Show top 3 skills, sorted by relevance if available */}
-                      <div className="skills-suggestions-list">
-                        {skillClusters.slice(0, 3).map((cluster, idx) => {
-                          const suggestions = getDeliveryFormatSuggestions(cluster)
-                          if (suggestions.length === 0) return null
-
-                          // Get relevance score for this skill (from AI recommendations)
-                          const aiRec = aiRecommendations?.recommendations?.find(r => r.skillId === cluster.id)
-                          const relevanceScore = aiRec?.relevanceScore || 0
-                          const isHighlyRelevant = relevanceScore >= 7
-
-                          return (
-                            <div key={idx} className={`skill-suggestion-card ${isHighlyRelevant ? 'high-relevance' : ''}`}>
-                              <div className="skill-header">
-                                <strong>{cluster.cluster_label}</strong>
-                                {relevanceScore > 0 && (
-                                  <span
-                                    className={`relevance-indicator clickable ${isHighlyRelevant ? 'high' : relevanceScore >= 5 ? 'medium' : 'low'}`}
-                                    onClick={(e) => { e.stopPropagation(); setShowFitExplainer(showFitExplainer === idx ? null : idx) }}
-                                  >
-                                    <span className="relevance-label">Fit</span>
-                                    {isHighlyRelevant ? '●●●' : relevanceScore >= 5 ? '●●○' : '●○○'}
-                                  </span>
-                                )}
-                              </div>
-                              {showFitExplainer === idx && (
-                                <div className="fit-explainer-popup">
-                                  <button className="fit-explainer-close" onClick={() => setShowFitExplainer(null)}>×</button>
-                                  <h5>Skill Fit Score</h5>
-                                  <p>AI analyses how well each skill matches the problem you selected.</p>
-                                  <div className="fit-legend">
-                                    <span><span className="dot high">●●●</span> Strong fit</span>
-                                    <span><span className="dot medium">●●○</span> Good fit</span>
-                                    <span><span className="dot low">●○○</span> Possible fit</span>
-                                  </div>
-                                </div>
-                              )}
-
-                              {/* Equal-sized suggestion buttons */}
-                              <div className="delivery-suggestions">
-                                {suggestions.map((suggestion, i) => (
-                                  <button
-                                    key={i}
-                                    type="button"
-                                    className={`use-suggestion-btn ${suggestion.isAI && isHighlyRelevant ? 'ai-powered' : ''}`}
-                                    onClick={() => prefillSolutionFromSkill(cluster, suggestion)}
-                                  >
-                                    <span className="suggestion-icon">{suggestion.icon}</span>
-                                    <span className="suggestion-label">
-                                      {suggestion.label}
-                                      {suggestion.isAI && i === 0 && isHighlyRelevant && (
-                                        <span className="recommended-tag">Recommended</span>
-                                      )}
-                                    </span>
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-
-                      {/* Show more link if there are more skills */}
-                      {skillClusters.length > 3 && (
-                        <p className="more-skills-hint">
-                          + {skillClusters.length - 3} more skills available
-                        </p>
-                      )}
-                    </>
-                  )}
+              {/* Step 1: Solution methods - for "No, this is new" path */}
+              {currentSolution.alreadyDelivers === false && (
+                <div className="form-field">
+                  <label>How can you solve this problem for the user?</label>
+                  <div className="solution-methods-list">
+                    {solutionMethods.map((method, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        className="solution-method-input"
+                        placeholder={`e.g. ${index === 0 ? 'Help them see their blind spots through 1:1 feedback' : index === 1 ? 'Give them a proven framework to follow' : 'Hold them accountable weekly'}`}
+                        value={method}
+                        onChange={(e) => updateSolutionMethod(index, e.target.value)}
+                      />
+                    ))}
+                    <button
+                      type="button"
+                      className="add-method-btn"
+                      onClick={addSolutionMethod}
+                    >
+                      + Add another way
+                    </button>
+                  </div>
                 </div>
               )}
 
-              {/* Solution category selector (Part 1) - show if NO or if YES with new product */}
-              {(currentSolution.alreadyDelivers === false ||
-                (currentSolution.alreadyDelivers === true && currentSolution.existingProductId === null && existingProducts.length > 0)) && (
+              {/* Step 2: Category selector - show after describing transformation */}
+              {currentSolution.alreadyDelivers === false && currentSolution.description.trim() && (
                 <div className="form-field">
-                  <label>What type of offering is this?</label>
+                  <label>How will you deliver this?</label>
+                  <p className="delivery-recommendation">
+                    💡 <strong>Recommendation:</strong> Start with a Service to validate demand and refine your process, then productize as you gain experience.
+                  </p>
                   <div className="solution-category-options">
                     {SOLUTION_CATEGORIES.map(cat => (
                       <button
                         key={cat.id}
                         type="button"
-                        className={`solution-category-btn ${currentSolution.solutionCategory === cat.id ? 'selected' : ''}`}
+                        className={`solution-category-btn ${currentSolution.solutionCategory === cat.id ? 'selected' : ''} ${cat.id === 'service' ? 'recommended' : ''}`}
                         onClick={() => setCurrentSolution(prev => ({
                           ...prev,
                           solutionCategory: cat.id,
@@ -2380,16 +2291,17 @@ function OfferBuilderFlow() {
                         <span className="cat-icon">{cat.icon}</span>
                         <span className="cat-label">{cat.label}</span>
                         <span className="cat-desc">{cat.description}</span>
+                        {cat.id === 'service' && <span className="recommended-badge">Start here</span>}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Solution type selector (Part 2) - show after category selected */}
-              {currentSolution.solutionCategory && (
+              {/* Step 3: Type selector - show after category selected */}
+              {currentSolution.solutionCategory && !currentSolution.existingProductId && (
                 <div className="form-field">
-                  <label>How do you deliver this?</label>
+                  <label>What format works best?</label>
                   <div className="solution-type-options">
                     {SOLUTION_TYPES_BY_CATEGORY[currentSolution.solutionCategory]?.map(type => (
                       <button
@@ -2410,16 +2322,11 @@ function OfferBuilderFlow() {
                 </div>
               )}
 
-              {/* Solution description - show if type selected (for new) or product selected (for existing) */}
-              {(currentSolution.solutionType || currentSolution.existingProductId) && (
+              {/* Solution description - for "Yes" path with existing product */}
+              {currentSolution.existingProductId && (
                 <div className="form-field">
                   <label>
-                    {currentSolution.existingProductId
-                      ? 'Confirm or edit the description'
-                      : currentSolution.problemText
-                        ? `To solve "${currentSolution.problemText.length > 40 ? currentSolution.problemText.substring(0, 40) + '...' : currentSolution.problemText}", what does the solution need to do?`
-                        : 'What does the solution need to do?'
-                    }
+                    How does {existingProducts.find(p => p.id === currentSolution.existingProductId)?.name || 'this product'} solve "{currentSolution.problemText?.length > 40 ? currentSolution.problemText.substring(0, 40) + '...' : currentSolution.problemText}"?
                   </label>
                   <textarea
                     className="solution-input"
@@ -2434,8 +2341,26 @@ function OfferBuilderFlow() {
                 </div>
               )}
 
-              {/* Differentiators */}
-              {currentSolution.description.trim() && (
+              {/* Name input - for new solutions only */}
+              {currentSolution.alreadyDelivers === false && currentSolution.solutionType && currentSolution.description.trim() && (
+                <div className="form-field">
+                  <label>What will you call this offering?</label>
+                  <input
+                    type="text"
+                    className="solution-name-input"
+                    placeholder="e.g. Strategy Sprint, Growth Accelerator, Success Blueprint..."
+                    value={currentSolution.name}
+                    onChange={(e) => setCurrentSolution(prev => ({
+                      ...prev,
+                      name: e.target.value
+                    }))}
+                  />
+                </div>
+              )}
+
+              {/* Differentiators - show after type selected (for new) or description entered (for existing) */}
+              {((currentSolution.solutionType && currentSolution.description.trim() && (currentSolution.existingProductId || currentSolution.name?.trim())) ||
+                (currentSolution.existingProductId && currentSolution.description.trim())) && (
                 <div className="form-field">
                   <label>What makes your solution better than competitors? (optional)</label>
                   <div className="differentiator-chips">
@@ -2561,7 +2486,7 @@ function OfferBuilderFlow() {
           <div className="summary-section">
             <h3>Your Solutions ({problemSolutions.length})</h3>
             <p className="summary-subtext" style={{ marginBottom: '16px', color: 'rgba(255,255,255,0.6)' }}>
-              These solutions will be assigned to offer tiers in the Grand Slam Matrix
+              Next, you'll apply the Value Equation to maximize perceived value
             </p>
             <div className="solutions-summary">
               {problemSolutions.map((sol, index) => (
@@ -2582,10 +2507,10 @@ function OfferBuilderFlow() {
           </div>
 
           <div className="summary-callout">
-            <p><strong>Next step:</strong> Complete the Money Model flows, then use the Grand Slam Matrix to assign these solutions to your offer tiers (Core, Upsell, Downsell, etc.)</p>
+            <p><strong>Next step:</strong> Complete Product Designer — apply the Value Equation to each of your solutions to maximise their perceived value.</p>
           </div>
 
-          {error && <p className="error-message">{error}</p>}
+          {error && <ErrorMessage error={error} component="OfferBuilder" action="save" />}
 
           <button
             className="primary-button"
@@ -2612,51 +2537,25 @@ function OfferBuilderFlow() {
         <div className="success-container">
           <div className="success-icon">✓</div>
           <h2>Solutions Captured, {userName}!</h2>
-          <p style={{ marginBottom: '8px' }}>You've captured {problemSolutions.length} solution{problemSolutions.length !== 1 ? 's' : ''}. Next, define your offer strategies.</p>
+          <p style={{ marginBottom: '8px' }}>You've captured {problemSolutions.length} solution{problemSolutions.length !== 1 ? 's' : ''}.</p>
           <p style={{ color: '#fbbf24', fontWeight: '600', fontSize: '18px' }}>+6 points earned!</p>
 
           <div className="next-steps-container">
-            <h3>Next Steps</h3>
-            <p className="next-steps-intro">Define your products, then build your Grand Slam offer:</p>
+            <h3>Next Step</h3>
+            <p className="next-steps-intro">Apply the Value Equation to maximize your offer's perceived value:</p>
 
-            <div className="next-flow-cards">
-              <button
-                className="next-flow-card recommended"
-                onClick={() => navigate('/product-selection')}
-              >
-                <span className="flow-icon">💎</span>
-                <div className="flow-info">
-                  <h4>Product Definition</h4>
-                  <p>Define how each product solves the problem</p>
-                  <span className="recommended-badge">Recommended Next</span>
-                </div>
-                <span className="flow-arrow">→</span>
-              </button>
-
-              <button
-                className="next-flow-card"
-                onClick={() => navigate('/offer-builder-v2')}
-              >
-                <span className="flow-icon">🏆</span>
-                <div className="flow-info">
-                  <h4>Grand Slam Offer</h4>
-                  <p>Package with bonuses, guarantees & pricing</p>
-                </div>
-                <span className="flow-arrow">→</span>
-              </button>
-
-              <button
-                className="next-flow-card secondary"
-                onClick={() => navigate('/grand-slam-matrix')}
-              >
-                <span className="flow-icon">📊</span>
-                <div className="flow-info">
-                  <h4>Grand Slam Matrix</h4>
-                  <p>View all solutions by offer tier</p>
-                </div>
-                <span className="flow-arrow">→</span>
-              </button>
-            </div>
+            <button
+              className="next-flow-card recommended"
+              onClick={() => navigate('/product-selection')}
+              style={{ width: '100%' }}
+            >
+              <span className="flow-icon">💎</span>
+              <div className="flow-info">
+                <h4>Product Designer</h4>
+                <p>Define how each product solves the problem using the Value Equation</p>
+              </div>
+              <span className="flow-arrow">→</span>
+            </button>
           </div>
 
           <button

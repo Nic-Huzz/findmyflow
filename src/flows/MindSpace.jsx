@@ -922,7 +922,7 @@ export default function MindSpace() {
               <div className="nav-buttons" style={{ marginTop: '24px' }}>
                 <button
                   className="secondary-button"
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate('/7-day-challenge')}
                 >
                   Back
                 </button>
@@ -983,6 +983,13 @@ export default function MindSpace() {
                     </span>
                   </button>
                 </div>
+
+                <button
+                  className="primary-button complete-btn"
+                  onClick={() => navigate('/7-day-challenge', { state: { completedMindSpace: true } })}
+                >
+                  Complete
+                </button>
               </>
             )}
           </div>

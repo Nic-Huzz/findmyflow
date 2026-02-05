@@ -299,11 +299,12 @@ function ZarloChat({ onClose, challengeTab = null }) {
 
     // Build prompts - add next best action if available
     const prompts = getPromptsForPage(currentRoute, challengeTab)
+    const bugReportOption = { id: 'report_bug', label: 'Report a bug' }
     if (nextAction?.action) {
       // Insert the suggested action at the top
-      setCurrentOptions([nextAction.action, ...prompts])
+      setCurrentOptions([nextAction.action, ...prompts, bugReportOption])
     } else {
-      setCurrentOptions(prompts)
+      setCurrentOptions([...prompts, bugReportOption])
     }
   }
 
@@ -684,6 +685,16 @@ Now go make it happen. Your future self is counting on you.`)
       return
     }
 
+    // Handle bug report
+    if (option.id === 'report_bug') {
+      window.open(
+        'https://wa.me/61423220241?text=Hey!%20Something%20isn\'t%20working%20properly...',
+        '_blank',
+        'noopener,noreferrer'
+      )
+      return
+    }
+
     // Handle navigation
     if (option.route) {
       addMessage('user', option.label)
@@ -947,6 +958,16 @@ That's it. No action required. Just awareness.`)
           </div>
         </div>
         <div className="zarlo-header-right">
+          <a
+            className="zarlo-bug-report"
+            href="https://wa.me/61423220241?text=Hey!%20Something%20isn't%20working%20properly..."
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Report a bug"
+          >
+            <span className="zarlo-bug-icon">🐛</span>
+            <span className="zarlo-bug-label">Bug?</span>
+          </a>
           <button
             className={`zarlo-voice-toggle ${showVoiceInput ? 'active' : ''}`}
             onClick={() => setShowVoiceInput(!showVoiceInput)}
