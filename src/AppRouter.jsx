@@ -132,6 +132,9 @@ const WheelDemo = lazy(() => import('./pages/WheelDemo'))
 const WeeklyPlanningFlow = lazy(() => import('./components/WeeklyPlanningFlow'))
 const GroanMatrix = lazy(() => import('./components/GroanMatrix'))
 const HeroCommandCenter = lazy(() => import('./components/HeroProfile/HeroCommandCenter'))
+const Codex = lazy(() => import('./pages/Codex'))
+const CodexEntry = lazy(() => import('./pages/CodexEntry'))
+const ProfileHub = lazy(() => import('./pages/ProfileHub'))
 const BrandToneDemo = lazy(() => import('./pages/BrandToneDemo'))
 import './App.css'
 import './PersonaAssessment.css'
@@ -180,6 +183,7 @@ import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
 import './components/GroanMatrix.css'
 import './components/HeroProfile/HeroProfile.css'
+import './pages/Codex.css'
 import './pages/LandingPage.css'
 import './flows/CareerClarityQuiz.css'
 import './flows/MindSpace.css'
@@ -203,6 +207,7 @@ function ConditionalBottomToolbar() {
   const location = useLocation()
   const isPublicRoute = location.pathname.startsWith('/v/') ||
                         location.pathname.startsWith('/try/') ||
+                        location.pathname.startsWith('/guidebook') ||
                         location.pathname === '/' ||
                         location.pathname === '/career-clarity' ||
                         location.pathname === '/launch-readiness' ||
@@ -374,6 +379,18 @@ function AppRouter() {
                 <HeroCommandCenter />
               </AuthGate>
             } />
+
+            {/* Guidebook - Lore Library */}
+            <Route path="/guidebook" element={
+              <AuthGate>
+                <Codex />
+              </AuthGate>
+            } />
+            <Route path="/guidebook/:entryId" element={
+              <AuthGate>
+                <CodexEntry />
+              </AuthGate>
+            } />
             <Route path="/healing-compass" element={
               <AuthGate>
                 <HealingCompass />
@@ -411,7 +428,7 @@ function AppRouter() {
             } />
             <Route path="/archetypes/protective" element={
               <AuthGate>
-                <ProtectiveProfile />
+                <EssenceProfile />
               </AuthGate>
             } />
             <Route path="/feedback" element={
@@ -472,6 +489,11 @@ function AppRouter() {
             <Route path="/settings/notifications" element={
               <AuthGate>
                 <NotificationSettings />
+              </AuthGate>
+            } />
+            <Route path="/profile-hub" element={
+              <AuthGate>
+                <ProfileHub />
               </AuthGate>
             } />
             <Route path="/library" element={

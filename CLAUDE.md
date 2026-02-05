@@ -38,12 +38,14 @@ src/
 │   └── useAutoSave.js, useSteppedForm.js
 │
 ├── components/
-│   ├── crm/                  # 37 CRM components
+│   ├── crm/                  # 42 CRM components
 │   │   ├── CRMLayout.jsx           # Wrapper with nudge engine
 │   │   ├── Content*.jsx            # Generator, Planning, Checklist, etc.
 │   │   ├── Weekly*.jsx             # Planning, Reflection, etc.
 │   │   ├── Lead*.jsx               # Capture, Score, Sliders
 │   │   ├── Story*.jsx              # Miner, Bank
+│   │   ├── CSVImport/              # 6-step import wizard
+│   │   ├── EcosystemStatusWidget   # Business flywheel progress
 │   │   └── *Widget.jsx, *Modal.jsx # Intelligence, Activity, etc.
 │   │
 │   ├── onboarding/QuickCapture/    # 5-step business capture
@@ -57,11 +59,13 @@ src/
 │   ├── FlowMap*.jsx          # River visualization
 │   └── SeeYourFlow.jsx       # Journey mapping
 │
-├── pages/crm/                # 33 CRM pages
-│   ├── Dashboard.jsx         # Command center
+├── pages/crm/                # 34 CRM pages
+│   ├── Dashboard.jsx         # Command center with DailyActions, EcosystemWidget
 │   ├── Attract.jsx, Nurture.jsx, Tools.jsx  # Tower hubs
 │   ├── Content*.jsx          # Create, Queue, History
-│   ├── Sales*.jsx, Contacts.jsx, EmailSequences.jsx
+│   ├── Sales*.jsx, Contacts.jsx, EmailSequences.jsx, WarmOutreach.jsx
+│   ├── DataImport.jsx        # CSV import wizard
+│   ├── BusinessSystems.jsx   # Flywheel checklist (4 phases)
 │   └── *Calculator.jsx, Analytics.jsx, etc.
 │
 ├── lib/
@@ -71,7 +75,7 @@ src/
 │   ├── haptics.js            # Mobile vibration feedback
 │   ├── aiHelper.js           # Claude AI integration
 │   ├── zarlo/                # zarloEngine.js, zarloPageContent.js
-│   ├── crm/                  # 20+ services (contentContext, promptTemplates, towerStats)
+│   ├── crm/                  # 20+ services (contentContext, promptTemplates, towerStats, csvImportService, ecosystemService)
 │   └── templates/            # AI prompt templates
 │
 ├── data/                     # Static config (personas, archetypes, beliefs)
@@ -85,7 +89,7 @@ supabase/
 
 public/                       # Static assets, flow JSON definitions
 scripts/                      # db-query.sh, deploy-functions.sh
-docs/                         # 31 documentation files
+docs/                         # 33+ documentation files
 ```
 
 ## Routes
@@ -100,7 +104,7 @@ docs/                         # 31 documentation files
 
 **Other Flows**: `/nervous-system`, `/healing-compass`, `/persona-selection`, `/validation-flows`, `/v/:shareToken` (public)
 
-**CRM** (`/crm/*`): Dashboard, Attract, Nurture, Tools (tower hubs) | content/create, content/queue, content/history | marketing, pages, sales, sales/scripts, contacts, email-sequences, warm-outreach | execute, analytics, performance, reports | calculators, calculators/ltv, calculators/cac, calculators/ptuf | ascension, objections, implementation, assets, autonomous, alerts
+**CRM** (`/crm/*`): Dashboard, Attract, Nurture, Tools (tower hubs) | content/create, content/queue, content/history | marketing, pages, sales, sales/scripts, contacts, email-sequences, warm-outreach | execute, analytics, performance, reports | calculators, calculators/ltv, calculators/cac, calculators/ptuf | import, tools/systems | ascension, objections, implementations, assets, autonomous, alerts
 
 ## Key Features
 
@@ -143,9 +147,20 @@ Two modes: **Actual** (track real numbers), **Planner** (project with industry a
 
 ### 7. CRM Command Center
 
-Three towers: **Attract** (content, pages, outreach), **Nurture** (contacts, email, pipeline), **Tools** (analytics, calculators, scripts).
+Three towers with 34 pages and 42 components:
 
-Key services in `src/lib/crm/`: contentContext.js (data aggregation), promptTemplates.js (AI prompts), towerStats.js (live stats).
+**Attract Tower**: Content Generator, Content Queue/History, Pages Manager, Marketing Hub
+- PromptGenerator integrated for AI content generation
+
+**Nurture Tower**: Contacts (full CRUD, lifecycle stages, tagging), Email Sequences (step editor, copy-to-clipboard), Warm Outreach (priority scoring, contact promotion), Sales Pipeline (deals, scripts)
+- Warm Lead → Contact promotion checkbox
+
+**Tools Tower**: Analytics, Calculators (PTUF/LTV/CAC), Sales Scripts (15 Hormozi scripts), Execute (gamified tasks), Business Systems (4-phase flywheel), CSV Import (6-step wizard)
+- Import supports: Contacts, Warm Leads, Deals
+
+**Dashboard**: Stats grid, DailyActions widget (today's content + stale leads), EcosystemStatusWidget (flywheel progress), Quick Actions
+
+Key services in `src/lib/crm/`: contentContext.js (data aggregation), promptTemplates.js (7 AI templates), towerStats.js (live stats), csvImportService.js (parsing, validation, batch insert), ecosystemService.js (flywheel auto-detection).
 
 ### 8. Groan Matrix
 
@@ -207,9 +222,9 @@ Import `src/styles/flow-base.css`. Classes: `.primary-button`, `.secondary-butto
 ### Tower Organization
 ```javascript
 const towers = {
-  attract: ['marketing', 'pages', 'cold-outreach', 'ads'],
-  nurture: ['contacts', 'email-sequences', 'sales', 'warm-outreach'],
-  tools: ['analytics', 'calculators', 'scripts', 'execute']
+  attract: ['marketing', 'content/create', 'content/queue', 'pages', 'cold-outreach', 'ads'],
+  nurture: ['contacts', 'email-sequences', 'sales', 'sales/scripts', 'warm-outreach'],
+  tools: ['import', 'tools/systems', 'analytics', 'calculators', 'execute', 'implementations', 'assets', 'alerts']
 }
 ```
 
@@ -240,7 +255,7 @@ const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 `attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
 
 ### CRM Tables
-`crm_pages` | `crm_contacts` | `crm_email_sequences` | `crm_email_steps` | `crm_warm_leads`
+`crm_pages` | `crm_contacts` | `crm_email_sequences` | `crm_email_steps` | `crm_warm_leads` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
 
 ### Notifications
 `push_subscriptions` (endpoint, keys) | `notification_preferences` (quest_reminders, achievement_celebrations, timezone)
@@ -264,17 +279,26 @@ npm run build     # Production build
 npm run db:push   # Apply migrations
 ```
 
+## Recent Updates (Feb 2026)
+
+- **CSV Import Wizard**: 6-step wizard (`/crm/import`) for bulk importing Contacts, Warm Leads, Deals from CSV files. Auto-mapping, validation, batch insert with duplicate handling.
+- **Business Flywheel System**: 4-phase checklist (`/crm/tools/systems`) - Attract, Nurture, Deliver, Retain. Auto-detection from source tables. Dashboard widget shows progress.
+- **Email Sequences Enhanced**: Step editor for individual emails, copy-to-clipboard (single + all), PromptGenerator integration with template auto-selection.
+- **Warm Lead → Contact Promotion**: "Also add to Contacts" checkbox in WarmLeadModal promotes leads to crm_contacts with field mapping.
+- **PromptGenerator Expansion**: Now integrated in Pages, Email Sequences, Warm Outreach with 7 templates.
+- **Flow Finder Universalized**: User-level completions (not project-specific), syncs with challenge system.
+
 ## Recent Updates (Feb 2025)
 
 - **Push Notifications**: Timezone-aware scheduled notifications at 8am/12pm/6pm. See `docs/PUSH_NOTIFICATIONS.md`
 - **Challenge Onboarding**: PWA install instructions + notification enable screens
 - **Mind Space**: New `/mind-space` flow for quick flow discovery
 
-## Recent Updates (Jan 2025)
+## Previous Updates (Jan 2025)
 
 - **10-Stage System**: Added Stage 0 (Flow Finder), 0.5 (Groans), 8 (Tracking)
 - **Brand Refresh**: Purple→Gold ombre; gold action buttons (was emerald)
-- **CRM System**: 33 pages, 37 components, tower-based architecture
+- **CRM System**: Tower-based architecture foundation
 - **Weekly Planning**: 4-phase cycle with PhaseSelector, TaskMenuPicker
 - **Groan Matrix**: 2D challenges with scary/wahoo scoring, proof collection
 - **QuickCapture**: 5-step onboarding for business data
@@ -283,6 +307,8 @@ npm run db:push   # Apply migrations
 ## Key Documentation
 
 - `docs/DEVELOPMENT_PATTERNS.md` - **Required reading for flow/challenge work** - Supabase patterns, challenge sync, error handling
+- `docs/crm-status.md` - **CRM feature status** - What's built, recent changes, bugs fixed, full audit
+- `docs/crm-testing-checklist.md` - **CRM testing** - 120+ checkpoints for verifying CRM functionality
 - `docs/scoring-system-refactor.md` - Points/scoring system architecture and bug fixes
 - `docs/PUSH_NOTIFICATIONS.md` - Push notification system setup, testing, troubleshooting
 - `docs/` - Session notes and historical changes

@@ -1,5 +1,31 @@
 import { supabase } from './supabaseClient'
 
+// Map field names to archetype data keys
+const FIELD_KEYS = {
+  // Essence fields
+  tagline: 'essence',
+  essence: 'poetic_line',
+  superpower: 'superpower',
+  vision: 'poetic_vision',
+  north_star: 'north_star',
+  inner_child: 'inner_child_desire',
+  wound: 'essence_wound',
+  characters: 'characters',
+  energetic_transmission: 'energetic_transmission',
+  recognition_pattern: 'recognition_pattern',
+  vision_in_action: 'vision_in_action',
+  // Shadow/Protective Voice fields
+  shadow_lie: 'lie',
+  shadow_origin: 'origin',
+  shadow_protects: 'howItProtects',
+  shadow_kryptonite: 'kryptonite',
+  shadow_affirmation: 'affirmation',
+  shadow_play_blocker: 'playBlocker'
+}
+
+// Export for use in other components
+export { FIELD_KEYS }
+
 /**
  * Returns custom essence name if set, else original archetype name
  */
@@ -73,24 +99,38 @@ export function compressImage(file, maxDimension = 800, quality = 0.85) {
 
 /**
  * Build an AI image prompt from archetype + project data
+ * Styled as a mystical tarot card
  */
-export function buildAvatarPrompt({ essenceName, group, superpower, poeticLine, skills, problems, persona }) {
+export function buildAvatarPrompt({ essenceName, superpower, poeticLine, skills, problems, persona }) {
   const parts = [
-    `Create a stylized portrait avatar for a personal brand archetype called "${essenceName}".`,
+    `Create a tarot card illustration for an archetype called "The ${essenceName}".`,
   ]
 
-  if (group) parts.push(`They belong to the "${group}" energy group.`)
-  if (superpower) parts.push(`Their superpower is: ${superpower}.`)
-  if (poeticLine) parts.push(`Their essence is captured in the line: "${poeticLine}".`)
-
-  if (skills?.length) parts.push(`Their key skills include: ${skills.join(', ')}.`)
-  if (problems?.length) parts.push(`They solve problems like: ${problems.join(', ')}.`)
-  if (persona) parts.push(`Their ideal audience persona is: ${persona}.`)
+  // Build narrative from their journey data
+  if (skills?.length) {
+    parts.push(`This person has gifts in: ${skills.join(', ')}.`)
+  }
+  if (problems?.length) {
+    parts.push(`They are called to solve: ${problems.join(', ')}.`)
+  }
+  if (persona) {
+    parts.push(`They serve and guide: ${persona}.`)
+  }
+  if (superpower) {
+    parts.push(`Their unique power: ${superpower}.`)
+  }
+  if (poeticLine) {
+    parts.push(`Their essence: "${poeticLine}".`)
+  }
 
   parts.push(
-    'Style: Warm, aspirational, modern illustration with a purple-to-gold gradient background.',
-    'The image should feel empowering and personal — like a hero card in a video game.',
-    'Square format, centered portrait, clean composition. No text.'
+    'Style: Vintage woodblock print illustration with folk mythology aesthetic.',
+    'Duotone color palette using warm amber/orange and black only.',
+    'Central symbolic figure with radiating sun halo behind them.',
+    'Decorative border with small vignette panels showing the archetype in symbolic scenes related to their gifts and mission.',
+    'Linocut/woodcut texture with grainy letterpress printing feel.',
+    'Bold outlines, flat colors, no gradients. Southeast Asian folk art influence.',
+    'Vertical card format (2:3 ratio), ornate border frame, no text.'
   )
 
   return parts.join(' ')
@@ -169,4 +209,186 @@ export async function updateEssencePreferences(userId, email, { customName, cust
   }
 
   return { data }
+}
+
+/**
+ * Get the display value for an essence field (custom or default from archetype)
+ * @param {Object} profile - User's lead_flow_profile
+ * @param {string} field - Field name: 'essence', 'superpower', 'vision', 'north_star'
+ * @param {Object} archetypeData - The archetype data object
+ * @returns {string} The value to display
+ */
+export function getEssenceFieldValue(profile, field, archetypeData) {
+  const customFields = profile?.custom_essence_fields || {}
+  const customField = customFields[field]
+
+  if (customField?.value) {
+    return customField.value
+  }
+
+  // Fall back to default archetype value
+  const fieldKey = FIELD_KEYS[field]
+  return archetypeData?.[fieldKey] || ''
+}
+
+/**
+ * Get metadata about a custom essence field (mode, sources)
+ * @param {Object} profile - User's lead_flow_profile
+ * @param {string} field - Field name
+ * @returns {Object|null} { mode, value, sources } or null if not customized
+ */
+export function getEssenceFieldMeta(profile, field) {
+  const customFields = profile?.custom_essence_fields || {}
+  return customFields[field] || null
+}
+
+/**
+ * Check if a field has been customized
+ * @param {Object} profile - User's lead_flow_profile
+ * @param {string} field - Field name
+ * @returns {boolean}
+ */
+export function isEssenceFieldCustomized(profile, field) {
+  const customFields = profile?.custom_essence_fields || {}
+  return !!customFields[field]?.value
+}
+
+/**
+ * Update a custom essence field in lead_flow_profiles
+ * @param {string} userId - User ID
+ * @param {string} email - User email (fallback)
+ * @param {string} field - Field name: 'essence', 'superpower', 'vision', 'north_star'
+ * @param {Object} data - { mode: 'browse'|'hybrid'|'custom', value: string, sources?: string[] }
+ */
+export async function updateEssenceField(userId, email, field, data) {
+  // First get current custom_essence_fields
+  let currentProfile = null
+
+  // Try user_id first
+  let { data: profiles, error: fetchError } = await supabase
+    .from('lead_flow_profiles')
+    .select('id, custom_essence_fields')
+    .eq('user_id', userId)
+    .limit(1)
+
+  if (!fetchError && profiles?.length > 0) {
+    currentProfile = profiles[0]
+  } else if (email) {
+    // Fallback to email
+    const { data: emailProfiles, error: emailError } = await supabase
+      .from('lead_flow_profiles')
+      .select('id, custom_essence_fields')
+      .ilike('email', email)
+      .order('created_at', { ascending: false })
+      .limit(1)
+
+    if (!emailError && emailProfiles?.length > 0) {
+      currentProfile = emailProfiles[0]
+    }
+  }
+
+  if (!currentProfile) {
+    return { error: new Error('Profile not found') }
+  }
+
+  // Merge the new field data
+  const currentFields = currentProfile.custom_essence_fields || {}
+  const updatedFields = {
+    ...currentFields,
+    [field]: data
+  }
+
+  // Update the profile
+  const { data: updated, error } = await supabase
+    .from('lead_flow_profiles')
+    .update({ custom_essence_fields: updatedFields })
+    .eq('id', currentProfile.id)
+    .select()
+
+  if (error) {
+    console.error('Error updating essence field:', error)
+    return { error }
+  }
+
+  return { data: updated }
+}
+
+/**
+ * Reset a custom essence field back to default
+ */
+export async function resetEssenceField(userId, email, field) {
+  // Get current profile
+  let currentProfile = null
+
+  let { data: profiles } = await supabase
+    .from('lead_flow_profiles')
+    .select('id, custom_essence_fields')
+    .eq('user_id', userId)
+    .limit(1)
+
+  if (profiles?.length > 0) {
+    currentProfile = profiles[0]
+  } else if (email) {
+    const { data: emailProfiles } = await supabase
+      .from('lead_flow_profiles')
+      .select('id, custom_essence_fields')
+      .ilike('email', email)
+      .order('created_at', { ascending: false })
+      .limit(1)
+
+    if (emailProfiles?.length > 0) {
+      currentProfile = emailProfiles[0]
+    }
+  }
+
+  if (!currentProfile) {
+    return { error: new Error('Profile not found') }
+  }
+
+  // Remove the field from custom_essence_fields
+  const currentFields = currentProfile.custom_essence_fields || {}
+  const { [field]: removed, ...remainingFields } = currentFields
+
+  const { data: updated, error } = await supabase
+    .from('lead_flow_profiles')
+    .update({ custom_essence_fields: remainingFields })
+    .eq('id', currentProfile.id)
+    .select()
+
+  if (error) {
+    console.error('Error resetting essence field:', error)
+    return { error }
+  }
+
+  return { data: updated }
+}
+
+/**
+ * Generate a hybrid statement from multiple archetypes using edge function
+ * @param {string} field - Field name
+ * @param {string[]} sources - Array of archetype names (2-3)
+ * @param {Array} archetypeData - All archetype data
+ * @returns {Promise<{ statement: string, synthesis_note: string }>}
+ */
+export async function generateHybridStatement(field, sources, archetypeData) {
+  const { data, error } = await supabase.functions.invoke('essence-hybrid-generator', {
+    body: {
+      field,
+      sources,
+      archetype_data: archetypeData
+    }
+  })
+
+  if (error) {
+    console.error('Error generating hybrid statement:', error)
+    throw error
+  }
+
+  // Validate response structure
+  if (!data || !data.statement) {
+    console.error('Invalid AI response:', data)
+    throw new Error(data?.error || 'Invalid response from AI: missing statement')
+  }
+
+  return data
 }

@@ -32,10 +32,10 @@ const MAIN_NAV_ITEMS = [
     path: '/flow-compass'
   },
   {
-    id: 'library',
-    label: 'Library',
-    icon: '📚',
-    path: '/library'
+    id: 'profile',
+    label: 'Profile',
+    icon: '👤',
+    path: '/profile-hub'
   }
 ]
 
@@ -104,7 +104,8 @@ const HIDDEN_ROUTES = [
   '/report-card',
   '/mvp-readiness',
   '/feedback-analysis',
-  '/validation-flows' // Validation flows manager
+  '/validation-flows', // Validation flows manager
+  '/archetypes/' // Essence and Shadow deep dive pages
 ]
 
 function BottomToolbar() {
@@ -112,12 +113,13 @@ function BottomToolbar() {
   const navigate = useNavigate()
   const [isOnboarding, setIsOnboarding] = useState(false)
 
-  // Watch for onboarding-active or project-selector-active class on body
+  // Watch for onboarding-active, project-selector-active, or modal-active class on body
   useEffect(() => {
     const checkShouldHide = () => {
       const hasOnboarding = document.body.classList.contains('onboarding-active')
       const hasProjectSelector = document.body.classList.contains('project-selector-active')
-      setIsOnboarding(hasOnboarding || hasProjectSelector)
+      const hasModal = document.body.classList.contains('modal-active')
+      setIsOnboarding(hasOnboarding || hasProjectSelector || hasModal)
     }
 
     // Check immediately

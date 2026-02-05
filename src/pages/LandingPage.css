@@ -2294,6 +2294,7 @@
 .landing-page .formula-desc {
   font-size: 0.9375rem;
   color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
 }
 
 .landing-page .credentials-kicker {
@@ -2429,6 +2430,10 @@
   color: #212529;
   text-align: center;
   transition: all 0.3s ease;
+}
+
+.landing-page .timeline-marker.single-line {
+  white-space: nowrap;
 }
 
 .landing-page .timeline-text {
@@ -2592,9 +2597,8 @@
   font-size: clamp(1rem, 2vw, 1.125rem);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
-  margin: 1.5rem 0 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 1rem 0 2rem;
+  text-align: center;
 }
 
 /* ============ HOW IT WORKS SECTION - GAMIFIED ============ */
@@ -3314,6 +3318,222 @@
   }
 }
 
+/* ============ TRACK SYNERGIES SECTION ============ */
+
+.landing-page .track-synergies-section {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.landing-page .synergies-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 2rem;
+}
+
+.landing-page .synergies-diagram {
+  max-width: 400px;
+  margin: 0 auto 2.5rem;
+}
+
+.landing-page .synergies-svg {
+  width: 100%;
+  height: auto;
+}
+
+.landing-page .synergies-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 600px;
+  text-align: left;
+}
+
+.landing-page .synergies-list li {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.75rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.landing-page .synergies-list li:last-child {
+  border-bottom: none;
+}
+
+.landing-page .synergies-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #E9A23B;
+  font-weight: 700;
+}
+
+.landing-page .synergies-list strong {
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .landing-page .synergies-title {
+    font-size: 1.25rem;
+  }
+
+  .landing-page .synergies-list li {
+    font-size: 0.875rem;
+  }
+}
+
+/* ============ FIRST WINS INLINE ============ */
+
+.landing-page .first-wins-inline {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.landing-page .first-wins-inline .section-heading {
+  text-align: center;
+}
+
+.landing-page .first-wins-inline .section-subheading {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.landing-page .first-wins-inline .wins-promise {
+  text-align: center;
+  margin-top: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ============ GAME STORY SECTION ============ */
+
+.landing-page .game-story-section {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.landing-page .game-story-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffdd27;
+  margin: 0 0 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.landing-page .lore-slides-container {
+  max-width: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 221, 39, 0.2);
+}
+
+.landing-page .lore-slides {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.landing-page .lore-slide {
+  min-width: 100%;
+  padding: 3rem 2rem;
+}
+
+.landing-page .lore-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem;
+  line-height: 1.3;
+}
+
+.landing-page .lore-subtext {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.7;
+}
+
+.landing-page .lore-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.landing-page .lore-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 221, 39, 0.4);
+  background: rgba(255, 221, 39, 0.1);
+  color: #ffdd27;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-page .lore-nav-btn:hover:not(:disabled) {
+  background: rgba(255, 221, 39, 0.2);
+  transform: scale(1.1);
+}
+
+.landing-page .lore-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.landing-page .lore-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.landing-page .lore-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.landing-page .lore-dot:hover {
+  background: rgba(255, 221, 39, 0.5);
+}
+
+.landing-page .lore-dot.active {
+  background: #ffdd27;
+  transform: scale(1.2);
+}
+
+@media (max-width: 600px) {
+  .landing-page .lore-slide {
+    padding: 2rem 1.5rem;
+  }
+
+  .landing-page .lore-text {
+    font-size: 1.25rem;
+  }
+
+  .landing-page .lore-subtext {
+    font-size: 0.9rem;
+  }
+}
+
 /* ============ FIRST WINS SECTION ============ */
 
 .landing-page .landing-first-wins {
@@ -3635,6 +3855,115 @@
 .landing-page .wisdom-separator {
   color: rgba(33, 37, 41, 0.4);
   font-size: 0.75rem;
+}
+
+/* Flow States Comparison */
+.landing-page .flow-states-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.landing-page .flow-state {
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.landing-page .flow-state-in {
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.15), rgba(72, 187, 120, 0.05));
+  border: 1px solid rgba(72, 187, 120, 0.3);
+}
+
+.landing-page .flow-state-out {
+  background: linear-gradient(135deg, rgba(245, 101, 101, 0.15), rgba(245, 101, 101, 0.05));
+  border: 1px solid rgba(245, 101, 101, 0.3);
+}
+
+.landing-page .flow-state-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.landing-page .flow-state-in .flow-state-title {
+  color: #68d391;
+}
+
+.landing-page .flow-state-out .flow-state-title {
+  color: #fc8181;
+}
+
+.landing-page .flow-state-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.landing-page .flow-state-list li {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.4rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.landing-page .flow-state-in .flow-state-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #68d391;
+  font-weight: 700;
+}
+
+.landing-page .flow-state-out .flow-state-list li::before {
+  content: '✗';
+  position: absolute;
+  left: 0;
+  color: #fc8181;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .landing-page .flow-states-comparison {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Flow Equation Diagram */
+.landing-page .flow-equation-diagram {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.landing-page .flow-equation-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1.5rem;
+}
+
+.landing-page .flow-equation-svg {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .landing-page .flow-equation-svg {
+    max-width: 100%;
+  }
+
+  .landing-page .flow-equation-svg text {
+    font-size: smaller;
+  }
 }
 
 /* Framework Archetypes (inside Flow Finder) */

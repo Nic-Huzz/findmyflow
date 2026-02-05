@@ -1,0 +1,142 @@
+/* Archetype Browse Carousel */
+/* Aligned with FindMyFlow Design Guide */
+
+.archetype-carousel-container {
+  width: 100%;
+  position: relative;
+}
+
+.archetype-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 8px 4px 20px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.archetype-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.archetype-carousel-card {
+  flex: 0 0 280px;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  scroll-snap-align: center;
+  position: relative;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.archetype-carousel-card:hover {
+  border-color: #5e17eb;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.15);
+}
+
+.archetype-carousel-card.selected {
+  border-color: #5e17eb;
+  border-width: 2px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.04) 0%, rgba(255, 221, 39, 0.06) 100%);
+  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.2);
+}
+
+.archetype-carousel-card.current {
+  border-color: #ffdd27;
+}
+
+.archetype-carousel-card.current.selected {
+  border-color: #5e17eb;
+}
+
+.carousel-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.carousel-card-name {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #5e17eb;
+}
+
+.carousel-card-badge {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  color: #212529;
+  padding: 4px 10px;
+  border-radius: 100px;
+  box-shadow: 0 2px 8px rgba(255, 221, 39, 0.3);
+}
+
+.carousel-card-value {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #495057;
+  margin: 0;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carousel-card-check {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.carousel-scroll-hint {
+  text-align: center;
+  padding: 8px 0 4px;
+}
+
+.carousel-scroll-hint span {
+  font-size: 0.75rem;
+  color: #adb5bd;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .archetype-carousel-card {
+    flex: 0 0 240px;
+    min-height: 120px;
+  }
+
+  .carousel-card-value {
+    -webkit-line-clamp: 3;
+  }
+}

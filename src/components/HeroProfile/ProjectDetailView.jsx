@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import HeroStoryNarrative from './HeroStoryNarrative'
 import IdentityTriad from './IdentityTriad'
 import BusinessJourneyTracker from './BusinessJourneyTracker'
-import PlayListProgress from './PlayListProgress'
 
 /**
  * ProjectDetailView - Full project view with journey progress and Play-List
@@ -48,12 +47,6 @@ function ProjectDetailView({ archetypes, project, groanChallenges, visibilityPro
 
       <h2 className="detail-project-name">{project.name}</h2>
 
-      {/* Your Story */}
-      <HeroStoryNarrative
-        archetypes={archetypes}
-        project={project}
-      />
-
       {/* Identity Triad */}
       <IdentityTriad
         skill={project.skill}
@@ -61,14 +54,14 @@ function ProjectDetailView({ archetypes, project, groanChallenges, visibilityPro
         persona={project.persona}
       />
 
+      {/* Your Story */}
+      <HeroStoryNarrative
+        archetypes={archetypes}
+        project={project}
+      />
+
       {/* Business Journey */}
       <BusinessJourneyTracker currentStage={project.stage} />
-
-      {/* Play-List Progress */}
-      <PlayListProgress
-        visibilityProgress={visibilityProgress}
-        groanChallenges={groanChallenges}
-      />
 
       {/* Active Play-List Items */}
       {activeChallenges.length > 0 && (

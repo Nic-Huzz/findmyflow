@@ -46,6 +46,14 @@ function EditEssenceModal({
     }
   }, [])
 
+  // Hide bottom toolbar when modal is open
+  useEffect(() => {
+    document.body.classList.add('modal-active')
+    return () => {
+      document.body.classList.remove('modal-active')
+    }
+  }, [])
+
   // Auto-clear toast
   useEffect(() => {
     if (!toast) return
@@ -100,9 +108,9 @@ function EditEssenceModal({
   const avatarPrompt = useMemo(() => {
     return buildAvatarPrompt({
       essenceName: customName.trim() || originalName,
-      group, superpower, poeticLine, skills, problems, persona
+      superpower, poeticLine, skills, problems, persona
     })
-  }, [customName, originalName, group, superpower, poeticLine, skills, problems, persona])
+  }, [customName, originalName, superpower, poeticLine, skills, problems, persona])
 
   const handleCopyPrompt = async () => {
     try {

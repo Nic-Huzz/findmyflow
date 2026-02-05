@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabaseClient'
 import { getSegmentById } from '../lib/wheelTaxonomy'
 import { essenceProfiles } from '../data/essenceProfiles'
 import { protectiveProfiles } from '../data/protectiveProfiles'
-import { getEssenceDisplayName, getEssenceImagePath } from '../lib/essencePreferences'
+import { getEssenceDisplayName, getEssenceImagePath, getEssenceFieldValue } from '../lib/essencePreferences'
 
 /**
  * GROAN_VISIBILITY_LAYERS - Visibility progression for groan challenges
@@ -133,7 +133,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
       // Try user_id first, fallback to email match
       let profileQuery = supabase
         .from('lead_flow_profiles')
-        .select('essence_archetype, protective_archetype, email, custom_essence_name, custom_essence_image')
+        .select('essence_archetype, protective_archetype, email, custom_essence_name, custom_essence_image, custom_essence_fields')
 
       // Try user_id first
       let { data: profileData, error: profileError } = await profileQuery
@@ -145,7 +145,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
       if (!profileError && (!profileData || profileData.length === 0) && userEmail) {
         const emailResult = await supabase
           .from('lead_flow_profiles')
-          .select('essence_archetype, protective_archetype, email, custom_essence_name, custom_essence_image')
+          .select('essence_archetype, protective_archetype, email, custom_essence_name, custom_essence_image, custom_essence_fields')
           .ilike('email', userEmail)
           .order('created_at', { ascending: false })
           .limit(1)
@@ -171,13 +171,22 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
             name: getEssenceDisplayName(profile),
             originalName: profile.essence_archetype,
             group: essenceData?.group || 'Unknown',
-            poeticLine: essenceData?.poetic_line || '',
-            superpower: essenceData?.superpower || '',
-            northStar: essenceData?.north_star || '',
-            characters: essenceData?.characters || [],
+            // Use custom values if set, otherwise fall back to archetype defaults
+            tagline: getEssenceFieldValue(profile, 'tagline', essenceData),
+            poeticLine: getEssenceFieldValue(profile, 'essence', essenceData),
+            superpower: getEssenceFieldValue(profile, 'superpower', essenceData),
+            vision: getEssenceFieldValue(profile, 'vision', essenceData),
+            northStar: getEssenceFieldValue(profile, 'north_star', essenceData),
+            innerChild: getEssenceFieldValue(profile, 'inner_child', essenceData),
+            wound: getEssenceFieldValue(profile, 'wound', essenceData),
+            characters: getEssenceFieldValue(profile, 'characters', essenceData) || [],
+            energeticTransmission: getEssenceFieldValue(profile, 'energetic_transmission', essenceData),
+            recognitionPattern: getEssenceFieldValue(profile, 'recognition_pattern', essenceData),
+            visionInAction: getEssenceFieldValue(profile, 'vision_in_action', essenceData),
             image: getEssenceImagePath(profile),
             customName: profile.custom_essence_name,
             customImage: profile.custom_essence_image,
+            customFields: profile.custom_essence_fields || {},
           },
           protective: {
             name: profile.protective_archetype,
@@ -302,21 +311,31 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
       const [voiceResult, healingResult] = await Promise.all([
         supabase
           .from('quest_completions')
-          .select('quest_id, completed_at')
+          .select('quest_id, quest_type, completed_at')
           .eq('user_id', userId)
-          .like('quest_id', 'voice_stage_%'),
+          .or('quest_id.like.voice_stage_%,quest_type.eq.Voice'),
         supabase
           .from('quest_completions')
           .select('quest_id, quest_type, quest_category, completed_at')
           .eq('user_id', userId)
-          .in('quest_category', ['Healing', 'Recognise', 'Release', 'Rewire', 'Reconnect']),
+          .or('quest_category.eq.Healing,quest_type.in.(Recognise,Release,Rewire,Reconnect)'),
       ])
 
       const voiceCompletions = voiceResult.data || []
       const healingCompletions = healingResult.data || []
 
-      const essenceCount = voiceCompletions.filter(c => c.quest_id?.endsWith('_essence_voice')).length
-      const protectiveCount = voiceCompletions.filter(c => c.quest_id?.endsWith('_protective_voice')).length
+      // Count essence vs protective voice moments
+      // Matches quest_id patterns like 'voice_stage_1_essence_voice' or quest_type containing 'essence'/'protective'
+      const essenceCount = voiceCompletions.filter(c =>
+        c.quest_id?.endsWith('_essence_voice') ||
+        c.quest_id?.includes('essence') ||
+        c.quest_type?.toLowerCase().includes('essence')
+      ).length
+      const protectiveCount = voiceCompletions.filter(c =>
+        c.quest_id?.endsWith('_protective_voice') ||
+        c.quest_id?.includes('protective') ||
+        c.quest_type?.toLowerCase().includes('protective')
+      ).length
       const totalVoice = essenceCount + protectiveCount
 
       const voiceTracker = {

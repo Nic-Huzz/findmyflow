@@ -31,9 +31,14 @@ You have:
 
 ### CRM ✅
 - 3 towers (Attract, Nurture, Tools)
-- 33 pages, 37 components
+- 34 pages, 42 components
 - Content Generator + Planning
 - Weekly Planning Session
+- Business Flywheel System (4 phases, auto-detection)
+- Email Sequences with step editor
+- CSV Import Wizard (6-step)
+- Warm Lead → Contact promotion
+- Generated Assets Library
 
 ### Money Model ✅
 - 6 flows using MoneyModelFlowBase
@@ -47,13 +52,13 @@ You have:
 
 ---
 
-## What's In Progress (Recent 2 Days Focus)
+## What's In Progress (Recent Focus)
 
 | Doc | Focus | Status |
 |-----|-------|--------|
-| `landing-page-analysis-2025-01-27.md` | Story-driven landing page restructure | Planned, not implemented |
+| `landing-page-analysis-2025-01-27.md` | Story-driven landing page restructure | ✅ Implemented |
 | `hero-journey-game-design.md` | Ready Player One narrative layer | Design doc complete |
-| `income-calculator-and-ecosystem-plan.md` | Public income calculator + ecosystem model | Design doc complete |
+| `income-calculator-and-ecosystem-plan.md` | Business Flywheel System | ✅ Implemented (BusinessSystems.jsx) |
 | `founder-journey-discovery.md` | Nic's 5-year journey as teachable content | Research captured |
 
 ---
@@ -142,6 +147,10 @@ You have:
 | Weekly Planning → actions | ✅ Built | DailyActions.jsx shows today's content + leads |
 | Lead tracking works | ✅ Built | LeadScoreSliders.jsx with PTUF scoring |
 | Sales scripts available | ✅ Built | ScriptsModal.jsx with smart objection-based suggestions |
+| Business Flywheel checklist | ✅ Built | BusinessSystems.jsx with 4 phases, auto-detection |
+| Email Sequences with steps | ✅ Built | Full CRUD + PromptGenerator |
+| CSV Import for bulk data | ✅ Built | 6-step wizard, 3 tables |
+| Warm → Contact promotion | ✅ Built | Checkbox promotes leads to contacts |
 | User follows up on leads | ❓ Unknown | Test with real user |
 
 **DONE WHEN:** 1 user makes an actual sale using CRM guidance.
@@ -196,12 +205,16 @@ You have:
 | ExecutionReview component | Small | HIGH | ✅ Built |
 | Integrate into WeeklyPlanningFlow | Small | HIGH | ✅ Built |
 | **NEW: Business Flywheel System** | | | |
-| Finalize phase checklist items | - | HIGH | 📝 In Review |
-| Database tables (ecosystem_system_progress) | Small | HIGH | ⬜ Not started |
-| Config files (ecosystemConfig.js, ecosystemService.js) | Small | HIGH | ⬜ Not started |
-| BusinessSystems page (Tools tab) | Medium | HIGH | ⬜ Not started |
-| EcosystemStatusWidget (Dashboard) | Small | HIGH | ⬜ Not started |
-| Auto-activation on contact status change | Small | MEDIUM | ⬜ Not started |
+| Finalize phase checklist items | - | HIGH | ✅ Built |
+| Database tables (ecosystem_system_progress) | Small | HIGH | ✅ Built |
+| Config files (ecosystemConfig.js, ecosystemService.js) | Small | HIGH | ✅ Built |
+| BusinessSystems page (Tools tab) | Medium | HIGH | ✅ Built |
+| EcosystemStatusWidget (Dashboard) | Small | HIGH | ✅ Built |
+| Auto-activation on contact status change | Small | MEDIUM | ✅ Built |
+| **NEW: CSV Import** | | | |
+| CSV Import Wizard (6-step) | Medium | HIGH | ✅ Built |
+| Import to Contacts, Warm Leads, Deals | Medium | HIGH | ✅ Built |
+| Auto-mapping + validation | Small | HIGH | ✅ Built |
 | **NEW: Mindset Stage** | | | |
 | Add 'Mindset' stage to Business tab | Modules to set users up for success | Medium | ⬜ Not started |
 | **NEW: Financial Security Tools** | | | |
@@ -268,6 +281,11 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 
 | Task | Description | Effort | Status |
 |------|-------------|--------|--------|
+| **NEW: Protective Archetype Flow** | | | |
+| Protective Archetype Identification | Flow to identify user's dominant protective pattern (Perfectionist, People Pleaser, Controller, Performer, Ghost) | Medium | ⬜ Not started |
+| Archetype Deep Dive Cards | Educational content for each archetype: origin, triggers, costs, gifts | Small | ⬜ Not started |
+| Archetype → Groan Connection | Link identified archetype to relevant courage challenges | Small | ⬜ Not started |
+| Archetype Journal Prompts | Reflection questions specific to each protective pattern | Small | ⬜ Not started |
 | Shadow Work Flow | Deep dive into shadow aspects/parts work | Medium | ⬜ Not started |
 | Memory Reconsolidation | Rewiring traumatic memories safely | Medium | ⬜ Not started |
 | Update Healing Compass | Improvements to existing flow | Small | ⬜ Not started |
@@ -422,24 +440,17 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 - [x] DailyActions integration
 - [x] ExecutionReview → WeeklyPlanningFlow merge
 - [x] Tab locking for user testing (Play, Healing, Bonus)
+- [x] Business Flywheel System (4 phases, 19 items, auto-detection)
+- [x] Database migration (ecosystem_system_progress table)
+- [x] Config files (ecosystemConfig.js, ecosystemService.js)
+- [x] BusinessSystems page in Tools tab
+- [x] EcosystemStatusWidget on Dashboard
+- [x] Email Sequences step editor + copy-to-clipboard
+- [x] PromptGenerator expansion (Pages, Email Sequences, Warm Outreach)
+- [x] Warm Lead → Contact promotion
+- [x] CSV Import Wizard (6-step, 3 tables, auto-mapping, validation)
 
-### 📝 IN PROGRESS: Flywheel System Planning
-- [ ] Review & finalize phase checklist items (see income-calculator-and-ecosystem-plan.md)
-  - [ ] ATTRACT items confirmed
-  - [ ] NURTURE items confirmed
-  - [ ] DELIVER items confirmed
-  - [ ] RETAIN items confirmed
-- [ ] Decide: required vs optional items per phase
-- [ ] Decide: auto-check from existing flows?
-
-### ⬜ NEXT: Flywheel System Build
-- [ ] Database migration (ecosystem_system_progress table)
-- [ ] Config files (ecosystemConfig.js, ecosystemService.js)
-- [ ] BusinessSystems page in Tools tab
-- [ ] EcosystemStatusWidget on Dashboard
-- [ ] Route + navigation wiring
-
-### ⬜ THEN: User Testing
+### ⬜ NEXT: User Testing
 - [ ] Create Milestone 1 test script (what to ask, what to observe)
 - [ ] Message 5 testers with clear ask
 - [ ] Set up simple feedback form

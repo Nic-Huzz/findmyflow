@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FindMyFlow - Me Screen V3 (Minimal Cards)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      background: #fafafa;
+      color: #212529;
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    /* ============ TOP HEADER ============ */
+    .top-header {
+      background: white;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #f0f0f0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #5e17eb, #E9A23B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .xp-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #5e17eb, #7c3aed);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ============ HERO SECTION ============ */
+    .hero-section {
+      background: white;
+      padding: 24px 20px;
+      text-align: center;
+      border-bottom: 8px solid #fafafa;
+    }
+
+    .hero-avatar-ring {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 16px;
+      padding: 4px;
+      background: linear-gradient(135deg, #5e17eb, #E9A23B);
+      border-radius: 50%;
+    }
+
+    .hero-avatar {
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .hero-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #212529;
+      margin-bottom: 4px;
+    }
+
+    .hero-tagline {
+      font-size: 14px;
+      color: #6c757d;
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .hero-badges {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .badge.streak {
+      background: rgba(255, 165, 0, 0.1);
+      color: #E67E22;
+    }
+
+    .badge.level {
+      background: rgba(94, 23, 235, 0.1);
+      color: #5e17eb;
+    }
+
+    /* XP Bar */
+    .xp-progress {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .xp-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+
+    .xp-bar {
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .xp-fill {
+      height: 100%;
+      width: 65%;
+      background: linear-gradient(90deg, #5e17eb, #E9A23B);
+      border-radius: 4px;
+    }
+
+    /* ============ MAIN CONTENT ============ */
+    .content {
+      padding: 16px;
+    }
+
+    /* ============ QUEST BANNER ============ */
+    .quest-banner {
+      background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+      border-radius: 20px;
+      padding: 24px;
+      color: white;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quest-banner::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(255, 221, 39, 0.2) 0%, transparent 70%);
+    }
+
+    .quest-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .quest-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .quest-day {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .quest-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .quest-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 20px;
+    }
+
+    .quest-dots {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .dot {
+      flex: 1;
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .dot.done {
+      background: #E9A23B;
+    }
+
+    .dot.active {
+      background: rgba(233, 162, 59, 0.5);
+    }
+
+    .quest-cta {
+      width: 100%;
+      background: linear-gradient(135deg, #E9A23B, #f5c55a);
+      color: #1a1a2e;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* ============ CARD GRID ============ */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid #e9ecef;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .card-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6c757d;
+      margin-bottom: 4px;
+    }
+
+    .card-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: #212529;
+      margin-bottom: 2px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      color: #6c757d;
+      line-height: 1.4;
+    }
+
+    .card.essence {
+      border-left: 4px solid #5e17eb;
+    }
+
+    .card.shadow {
+      border-left: 4px solid #6c757d;
+    }
+
+    /* ============ STORY SECTION ============ */
+    .story-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid #e9ecef;
+    }
+
+    .story-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .story-icon {
+      font-size: 1.25rem;
+    }
+
+    .story-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #5e17eb;
+    }
+
+    .story-text {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #495057;
+    }
+
+    .story-text strong {
+      color: #212529;
+    }
+
+    .story-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #5e17eb;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 12px;
+      text-decoration: none;
+    }
+
+    /* ============ STATS ROW ============ */
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      background: white;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      border: 1px solid #e9ecef;
+    }
+
+    .stat {
+      text-align: center;
+      flex: 1;
+    }
+
+    .stat + .stat {
+      border-left: 1px solid #e9ecef;
+    }
+
+    .stat-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: #212529;
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============ QUICK ACTIONS ============ */
+    .quick-actions-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #6c757d;
+      margin-bottom: 12px;
+      padding-left: 4px;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .action-btn {
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 16px;
+      padding: 16px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      border-color: #5e17eb;
+      transform: translateY(-2px);
+    }
+
+    .action-icon {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .action-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #495057;
+    }
+
+    /* ============ BOTTOM NAV ============ */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 24px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: #6c757d;
+      text-decoration: none;
+    }
+
+    .nav-item.active {
+      color: #5e17eb;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 1.25rem;
+    }
+
+    /* ============ MOBILE TWEAKS ============ */
+    @media (max-width: 380px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <div class="top-header">
+    <div class="brand">FindMyFlow</div>
+    <div class="xp-pill">
+      <span>⚡</span>
+      <span>2,450</span>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-avatar-ring">
+      <div class="hero-avatar">🎭</div>
+    </div>
+    <h1 class="hero-name">Playful Creator</h1>
+    <p class="hero-tagline">Making complexity feel like play</p>
+
+    <div class="hero-badges">
+      <div class="badge streak">
+        <span>🔥</span>
+        <span>12 Day Streak</span>
+      </div>
+      <div class="badge level">
+        <span>⭐</span>
+        <span>Level 3</span>
+      </div>
+    </div>
+
+    <div class="xp-progress">
+      <div class="xp-labels">
+        <span>Level 3</span>
+        <span>2,450 / 4,000 XP</span>
+      </div>
+      <div class="xp-bar">
+        <div class="xp-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+
+    <!-- Quest Banner -->
+    <div class="quest-banner">
+      <div class="quest-eyebrow">
+        <span class="quest-label">Today's Quest</span>
+        <span class="quest-day">Day 4 of 7</span>
+      </div>
+      <h2 class="quest-title">Flow Finder Reflection</h2>
+      <p class="quest-subtitle">Discover what lights you up today</p>
+      <div class="quest-dots">
+        <div class="dot done"></div>
+        <div class="dot done"></div>
+        <div class="dot done"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <button class="quest-cta">
+        Continue Quest <span>→</span>
+      </button>
+    </div>
+
+    <!-- Essence & Shadow Cards -->
+    <div class="card-grid">
+      <div class="card essence">
+        <div class="card-icon">✨</div>
+        <div class="card-label">Essence</div>
+        <div class="card-value">Playful Creator</div>
+        <p class="card-desc">Your superpower awaits</p>
+      </div>
+      <div class="card shadow">
+        <div class="card-icon">🛡️</div>
+        <div class="card-label">Protective</div>
+        <div class="card-value">Perfectionist</div>
+        <p class="card-desc">"It's not ready yet"</p>
+      </div>
+    </div>
+
+    <!-- Story Card -->
+    <div class="story-card">
+      <div class="story-header">
+        <span class="story-icon">📖</span>
+        <span class="story-label">Your Journey</span>
+      </div>
+      <p class="story-text">
+        You've been on your journey for <strong>12 days</strong>.
+        You've faced <strong>3 groans</strong>, completed <strong>2 challenges</strong>,
+        and discovered your gift lies in <strong>making complexity feel like play</strong>.
+      </p>
+      <a href="#" class="story-link">
+        View full journey <span>→</span>
+      </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-num">🔥 12</div>
+        <div class="stat-lbl">Streak</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">✅ 7</div>
+        <div class="stat-lbl">Quests</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">🦁 3</div>
+        <div class="stat-lbl">Groans</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">📊 4</div>
+        <div class="stat-lbl">Stage</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions-title">Quick Actions</div>
+    <div class="actions-grid">
+      <div class="action-btn">
+        <div class="action-icon">🧭</div>
+        <div class="action-label">Check-in</div>
+      </div>
+      <div class="action-btn">
+        <div class="action-icon">📚</div>
+        <div class="action-label">Library</div>
+      </div>
+      <div class="action-btn">
+        <div class="action-icon">🎪</div>
+        <div class="action-label">Projects</div>
+      </div>
+      <div class="action-btn">
+        <div class="action-icon">📖</div>
+        <div class="action-label">Codex</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🎯</span>
+      <span>Challenge</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🧭</span>
+      <span>Compass</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span>Profile</span>
+    </a>
+  </div>
+
+</body>
+</html>

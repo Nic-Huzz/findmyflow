@@ -1,19 +1,36 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { essenceProfiles } from '../data/essenceProfiles'
+import { protectiveProfiles } from '../data/protectiveProfiles'
 import { hasActiveChallenge } from '../lib/questCompletion'
-import { getEssenceDisplayName, getEssenceImagePath } from '../lib/essencePreferences'
+import {
+  getEssenceDisplayName,
+  getEssenceImagePath,
+  getEssenceFieldValue,
+  getEssenceFieldMeta,
+  isEssenceFieldCustomized
+} from '../lib/essencePreferences'
+import EditEssenceModal from '../components/HeroProfile/EditEssenceModal'
+import EditEssenceFieldModal from '../components/EditEssenceFieldModal'
 import './EssenceProfile.css'
 
 const EssenceProfile = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { user } = useAuth()
   const [userData, setUserData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('overview')
   const [hasChallenge, setHasChallenge] = useState(false)
+  const [deeperInsightsOpen, setDeeperInsightsOpen] = useState(true)
+
+  // Determine active tab from URL
+  const activeTab = location.pathname.includes('/protective') ? 'protective' : 'essence'
+
+  // Modal states
+  const [showAvatarModal, setShowAvatarModal] = useState(false)
+  const [editingField, setEditingField] = useState(null)
 
   useEffect(() => {
     if (user?.email) {
@@ -31,7 +48,6 @@ const EssenceProfile = () => {
 
   const loadUserProfile = async () => {
     try {
-      // Use ilike for case-insensitive email matching
       const { data, error } = await supabase
         .from('lead_flow_profiles')
         .select('*')
@@ -51,9 +67,23 @@ const EssenceProfile = () => {
     }
   }
 
-  const switchTab = (tabName) => {
-    setActiveTab(tabName)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+  const handleAvatarSaved = async () => {
+    setLoading(true)
+    await loadUserProfile()
+  }
+
+  const handleFieldSaved = async () => {
+    setLoading(true)
+    await loadUserProfile()
+    setEditingField(null)
+  }
+
+  const switchTab = (tab) => {
+    if (tab === 'essence') {
+      navigate('/archetypes/essence', { replace: true })
+    } else {
+      navigate('/archetypes/protective', { replace: true })
+    }
   }
 
   if (loading) {
@@ -64,196 +94,625 @@ const EssenceProfile = () => {
     )
   }
 
-  // Get the archetype name and find the profile data
+  // Get archetype data
   const archetypeName = getEssenceDisplayName(userData)
   const originalName = userData?.essence_archetype || 'Unknown'
   const archetypeData = essenceProfiles.essence_archetypes.find(
     arch => arch.name === originalName
   ) || {}
+  const allArchetypes = essenceProfiles.essence_archetypes
 
-  // Image path: custom or default
-  const getImagePath = () => getEssenceImagePath(userData)
+  // Get protective archetype data
+  const protectiveArchetypeName = userData?.protective_archetype
+  const protectiveArchetype = protectiveArchetypeName ? protectiveProfiles[protectiveArchetypeName] : null
+  const allProtectiveArchetypes = Object.entries(protectiveProfiles).map(([name, data]) => ({
+    name,
+    ...data
+  }))
+
+  // Get essence field values (custom or default)
+  const taglineValue = getEssenceFieldValue(userData, 'tagline', archetypeData)
+  const essenceValue = getEssenceFieldValue(userData, 'essence', archetypeData)
+  const superpowerValue = getEssenceFieldValue(userData, 'superpower', archetypeData)
+  const visionValue = getEssenceFieldValue(userData, 'vision', archetypeData)
+  const northStarValue = getEssenceFieldValue(userData, 'north_star', archetypeData)
+  const innerChildValue = getEssenceFieldValue(userData, 'inner_child', archetypeData)
+  const woundValue = getEssenceFieldValue(userData, 'wound', archetypeData)
+  const charactersValue = getEssenceFieldValue(userData, 'characters', archetypeData)
+  const energeticValue = getEssenceFieldValue(userData, 'energetic_transmission', archetypeData)
+  const recognitionValue = getEssenceFieldValue(userData, 'recognition_pattern', archetypeData)
+  const visionInActionValue = getEssenceFieldValue(userData, 'vision_in_action', archetypeData)
+
+  // Protective archetype values come directly from the profile data (not customizable for now)
+
+  // Check if essence fields are customized
+  const taglineCustomized = isEssenceFieldCustomized(userData, 'tagline')
+  const essenceCustomized = isEssenceFieldCustomized(userData, 'essence')
+  const superpowerCustomized = isEssenceFieldCustomized(userData, 'superpower')
+  const visionCustomized = isEssenceFieldCustomized(userData, 'vision')
+  const northStarCustomized = isEssenceFieldCustomized(userData, 'north_star')
+  const innerChildCustomized = isEssenceFieldCustomized(userData, 'inner_child')
+  const woundCustomized = isEssenceFieldCustomized(userData, 'wound')
+  const charactersCustomized = isEssenceFieldCustomized(userData, 'characters')
+  const energeticCustomized = isEssenceFieldCustomized(userData, 'energetic_transmission')
+  const recognitionCustomized = isEssenceFieldCustomized(userData, 'recognition_pattern')
+  const visionInActionCustomized = isEssenceFieldCustomized(userData, 'vision_in_action')
+
+
+  const imagePath = getEssenceImagePath(userData)
 
   return (
-    <div className="essence-profile-container">
+    <div className="essence-profile-container essence-single-page">
       {/* Header */}
-      <div className="essence-profile-header">
-        <div className="header-top">
-          <button className="back-btn" onClick={() => navigate('/archetypes')}>
-            ←
-          </button>
-          <h1 className="archetype-name">{archetypeName}</h1>
+      <div className="essence-profile-header essence-header-compact">
+        <button className="back-btn" onClick={() => navigate('/archetypes')}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <div className="header-center">
+          <span className="header-icon">✦</span>
+          <h1 className="header-title">{activeTab === 'essence' ? 'Essence Deep Dive' : 'Protective Deep Dive'}</h1>
+          <span className="header-icon">✦</span>
         </div>
-
-        <div className="tabs">
-          <button
-            className={`tab ${activeTab === 'overview' ? 'active' : ''}`}
-            onClick={() => switchTab('overview')}
-          >
-            Overview
-          </button>
-          <button
-            className={`tab ${activeTab === 'powers' ? 'active' : ''}`}
-            onClick={() => switchTab('powers')}
-          >
-            Powers
-          </button>
-          <button
-            className={`tab ${activeTab === 'patterns' ? 'active' : ''}`}
-            onClick={() => switchTab('patterns')}
-          >
-            Patterns
-          </button>
-          <button
-            className={`tab ${activeTab === 'characters' ? 'active' : ''}`}
-            onClick={() => switchTab('characters')}
-          >
-            Characters
-          </button>
-          <button
-            className={`tab ${activeTab === 'vision' ? 'active' : ''}`}
-            onClick={() => switchTab('vision')}
-          >
-            Vision
-          </button>
-        </div>
+        <div className="header-spacer" />
       </div>
 
-      {/* Overview Tab */}
-      {activeTab === 'overview' && (
-        <div className="tab-content">
-          {/* Image Section */}
-          <section className="magazine-section image-section">
+      {/* Content */}
+      <div className="essence-scroll-content">
+        {/* Avatar Section */}
+        <section className="essence-section essence-avatar-section">
+          <div className="avatar-wrapper">
             <img
-              src={getImagePath()}
-              alt={archetypeName}
-              className="archetype-image"
+              src={activeTab === 'essence' ? imagePath : null}
+              alt={activeTab === 'essence' ? archetypeName : protectiveArchetypeName}
+              className="essence-avatar-image"
+              style={activeTab === 'protective' ? {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #212529 0%, #343a40 100%)',
+                fontSize: '4rem'
+              } : {}}
               onError={(e) => {
                 e.target.style.display = 'none'
-                e.target.parentElement.style.background = 'linear-gradient(135deg, #f0e7ff, #fff9e6)'
               }}
             />
-            <div className="image-overlay">
-              <span className="archetype-tag-mag">Essence</span>
-              <h2 className="section-title">{archetypeName}</h2>
-              <p style={{ fontSize: '1.25rem', fontStyle: 'italic', opacity: 0.95 }}>
-                {archetypeData.essence}
-              </p>
-              <div className="scroll-indicator">↓</div>
-            </div>
-          </section>
+            {activeTab === 'protective' && (
+              <div className="shadow-avatar-icon">🛡️</div>
+            )}
+            {activeTab === 'essence' && (
+              <button
+                className="avatar-edit-btn"
+                onClick={() => setShowAvatarModal(true)}
+                aria-label="Edit avatar"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+              </button>
+            )}
+          </div>
+          <div className="avatar-info">
+            <h2 className="avatar-name">
+              {activeTab === 'essence' ? archetypeName : (protectiveArchetypeName || 'Unknown')}
+            </h2>
+            {activeTab === 'essence' && (
+              <div className="avatar-tagline-wrapper">
+                <p className="avatar-tagline">{taglineValue}</p>
+                {taglineCustomized && <span className="customized-badge-small">Customized</span>}
+                <button
+                  className="tagline-edit-btn"
+                  onClick={() => setEditingField('tagline')}
+                  aria-label="Edit tagline"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                </button>
+              </div>
+            )}
+            {activeTab === 'protective' && protectiveArchetype && (
+              <p className="avatar-tagline shadow-tagline">{protectiveArchetype.summary}</p>
+            )}
+          </div>
+        </section>
 
-          {/* Poetic Line */}
-          <section className="magazine-section bg-dark">
-            <div className="quote">
-              <div className="quote-mark">"</div>
-              {archetypeData.poetic_line}
-            </div>
-            <div className="scroll-indicator">↓</div>
-          </section>
-
-          {/* Superpower */}
-          <section className="magazine-section bg-deep-purple">
-            <div className="section-icon">✨</div>
-            <div className="section-label">Your Superpower</div>
-            <h2 className="section-title">Your Unique Gift</h2>
-            <p className="section-text">{archetypeData.superpower}</p>
-            <div className="scroll-indicator">↓</div>
-          </section>
-
-          {/* North Star */}
-          <section className="magazine-section bg-light">
-            <div className="section-icon">🌟</div>
-            <div className="section-label">Your North Star</div>
-            <h2 className="section-title">Your Guiding Light</h2>
-            <p className="section-text">{archetypeData.north_star}</p>
-            <div className="scroll-indicator" style={{ color: '#5e17eb' }}>↓</div>
-          </section>
-
-          {/* The Wound */}
-          <section className="magazine-section bg-wound">
-            <div className="section-icon">🩹</div>
-            <div className="section-label">The Wound</div>
-            <h2 className="section-title">Your Origin Story</h2>
-            <p className="section-text">{archetypeData.essence_wound}</p>
-          </section>
-        </div>
-      )}
-
-      {/* Powers Tab */}
-      {activeTab === 'powers' && (
-        <div className="tab-content">
-          <section className="magazine-section bg-purple">
-            <div className="section-icon">⚡</div>
-            <div className="section-label">Energetic Transmission</div>
-            <h2 className="section-title">Your Energy</h2>
-            <p className="section-text">{archetypeData.energetic_transmission}</p>
-            <div className="scroll-indicator">↓</div>
-          </section>
-
-          <section className="magazine-section bg-light">
-            <div className="section-icon">🚀</div>
-            <div className="section-label">Vision in Action</div>
-            <h2 className="section-title">You In Action</h2>
-            <p className="section-text">{archetypeData.vision_in_action}</p>
-          </section>
-        </div>
-      )}
-
-      {/* Patterns Tab */}
-      {activeTab === 'patterns' && (
-        <div className="tab-content">
-          <section className="magazine-section bg-dark">
-            <div className="section-icon">🎯</div>
-            <div className="section-label">Recognition Pattern</div>
-            <h2 className="section-title">When People Seek You</h2>
-            <p className="section-text">{archetypeData.recognition_pattern}</p>
-            <div className="scroll-indicator">↓</div>
-          </section>
-
-          <section className="magazine-section bg-yellow">
-            <div className="section-icon">🧸</div>
-            <div className="section-label">Inner Child Desire</div>
-            <h2 className="section-title">Your Childhood Nature</h2>
-            <p className="section-text">{archetypeData.inner_child_desire}</p>
-          </section>
-        </div>
-      )}
-
-      {/* Characters Tab */}
-      {activeTab === 'characters' && (
-        <div className="tab-content">
-          <section className="magazine-section bg-light">
-            <div className="section-label">Characters Like You</div>
-            <h2 className="section-title">Your Essence in Action</h2>
-            <div>
-              {archetypeData.characters && archetypeData.characters.map((character, index) => (
-                <div key={index} className="character-card">
-                  <div className="character-icon">✨</div>
-                  <div className="character-name">{character}</div>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      )}
-
-      {/* Vision Tab */}
-      {activeTab === 'vision' && (
-        <div className="tab-content">
-          <section className="magazine-section bg-purple">
-            <div className="section-icon">🔮</div>
-            <div className="section-label">Poetic Vision</div>
-            <h2 className="section-title">Your Future Awaits</h2>
-            <p className="section-text">{archetypeData.poetic_vision}</p>
+        {/* Tab Switcher */}
+        <section className="essence-section essence-tabs-section">
+          <div className="archetype-tabs">
             <button
-              className="cta-button"
-              onClick={() => navigate('/7-day-challenge')}
+              className={`archetype-tab ${activeTab === 'essence' ? 'active' : ''}`}
+              onClick={() => switchTab('essence')}
             >
-              {hasChallenge ? 'Continue Your 7-Day Challenge' : 'Start Your 7-Day Challenge'}
+              <span className="tab-icon">✨</span>
+              <span>Essence</span>
             </button>
+            <button
+              className={`archetype-tab ${activeTab === 'protective' ? 'active' : ''}`}
+              onClick={() => switchTab('protective')}
+            >
+              <span className="tab-icon">🛡️</span>
+              <span>Protective</span>
+            </button>
+          </div>
+        </section>
+
+        {/* ========== ESSENCE CONTENT ========== */}
+        {activeTab === 'essence' && (
+          <>
+            {/* Your Essence (poetic_line) */}
+            <section className="essence-section essence-editable-section">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">✨</span>
+                  <span className="section-label">Your Essence</span>
+                  {essenceCustomized && <span className="customized-badge">Customized</span>}
+                </div>
+                <button
+                  className="section-edit-btn"
+                  onClick={() => setEditingField('essence')}
+                  aria-label="Edit essence"
+                >
+                  Edit
+                </button>
+              </div>
+              <div className="quote essence-quote">
+                <div className="quote-mark">"</div>
+                {essenceValue}
+              </div>
+            </section>
+
+            {/* Your Superpower */}
+            <section className="essence-section essence-editable-section bg-purple-soft">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">⚡</span>
+                  <span className="section-label">Your Superpower</span>
+                  {superpowerCustomized && <span className="customized-badge">Customized</span>}
+                </div>
+                <button
+                  className="section-edit-btn"
+                  onClick={() => setEditingField('superpower')}
+                  aria-label="Edit superpower"
+                >
+                  Edit
+                </button>
+              </div>
+              <p className="section-text">{superpowerValue}</p>
+            </section>
+
+            {/* Your Vision */}
+            <section className="essence-section essence-editable-section">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">🔮</span>
+                  <span className="section-label">Your Vision</span>
+                  {visionCustomized && <span className="customized-badge">Customized</span>}
+                </div>
+                <button
+                  className="section-edit-btn"
+                  onClick={() => setEditingField('vision')}
+                  aria-label="Edit vision"
+                >
+                  Edit
+                </button>
+              </div>
+              <p className="section-text">{visionValue}</p>
+            </section>
+
+            {/* Your North Star */}
+            <section className="essence-section essence-editable-section bg-gold-soft">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">🌟</span>
+                  <span className="section-label">Your North Star</span>
+                  {northStarCustomized && <span className="customized-badge">Customized</span>}
+                </div>
+                <button
+                  className="section-edit-btn"
+                  onClick={() => setEditingField('north_star')}
+                  aria-label="Edit north star"
+                >
+                  Edit
+                </button>
+              </div>
+              <p className="section-text">{northStarValue}</p>
+            </section>
+
+            {/* Your Origin */}
+            <section className="essence-section essence-origin-section">
+              <h3 className="origin-title">Your Origin</h3>
+              <div className="origin-cards">
+                <div className="origin-card">
+                  <div className="origin-card-header">
+                    <span className="origin-icon">🧒</span>
+                    <button
+                      className="origin-edit-btn"
+                      onClick={() => setEditingField('inner_child')}
+                      aria-label="Edit inner child desire"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  <div className="origin-label-row">
+                    <span className="origin-label">Inner Child Desire</span>
+                    {innerChildCustomized && <span className="customized-badge-small">Customized</span>}
+                  </div>
+                  <p>{innerChildValue}</p>
+                </div>
+                <div className="origin-card wound-card">
+                  <div className="origin-card-header">
+                    <span className="origin-icon">🩹</span>
+                    <button
+                      className="origin-edit-btn wound-edit-btn"
+                      onClick={() => setEditingField('wound')}
+                      aria-label="Edit essence wound"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  <div className="origin-label-row">
+                    <span className="origin-label">Essence Wound</span>
+                    {woundCustomized && <span className="customized-badge-small">Customized</span>}
+                  </div>
+                  <p>{woundValue}</p>
+                </div>
+              </div>
+            </section>
+
+            {/* Heroes Like You */}
+            <section className="essence-section essence-characters-section">
+              <div className="characters-header">
+                <div className="characters-title-row">
+                  <h3 className="characters-title">Heroes Like You</h3>
+                  {charactersCustomized && <span className="customized-badge-small">Customized</span>}
+                </div>
+                <button
+                  className="section-edit-btn"
+                  onClick={() => setEditingField('characters')}
+                  aria-label="Edit heroes"
+                >
+                  Edit
+                </button>
+              </div>
+              <div className="characters-list">
+                {(Array.isArray(charactersValue) ? charactersValue : (charactersValue || '').split(',').map(s => s.trim()).filter(Boolean)).map((character, index) => (
+                  <div key={index} className="character-chip">
+                    <span className="character-icon">✨</span>
+                    <span>{character}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Deeper Insights (Collapsible) */}
+            <section className="essence-section essence-deeper-section">
+              <button
+                className="deeper-toggle"
+                onClick={() => setDeeperInsightsOpen(!deeperInsightsOpen)}
+                aria-expanded={deeperInsightsOpen}
+              >
+                <span>Deeper Insights</span>
+                <span className={`deeper-chevron ${deeperInsightsOpen ? 'rotated' : ''}`}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </span>
+              </button>
+
+              {deeperInsightsOpen && (
+                <div className="deeper-content">
+                  <div className="deeper-item">
+                    <div className="deeper-item-header">
+                      <div className="deeper-item-icon">⚡</div>
+                      <button
+                        className="deeper-edit-btn"
+                        onClick={() => setEditingField('energetic_transmission')}
+                        aria-label="Edit energetic transmission"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">Energetic Transmission</div>
+                      {energeticCustomized && <span className="customized-badge-small">Customized</span>}
+                    </div>
+                    <p>{energeticValue}</p>
+                  </div>
+
+                  <div className="deeper-item">
+                    <div className="deeper-item-header">
+                      <div className="deeper-item-icon">🎯</div>
+                      <button
+                        className="deeper-edit-btn"
+                        onClick={() => setEditingField('recognition_pattern')}
+                        aria-label="Edit recognition pattern"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">Recognition Pattern</div>
+                      {recognitionCustomized && <span className="customized-badge-small">Customized</span>}
+                    </div>
+                    <p>{recognitionValue}</p>
+                  </div>
+
+                  <div className="deeper-item">
+                    <div className="deeper-item-header">
+                      <div className="deeper-item-icon">🚀</div>
+                      <button
+                        className="deeper-edit-btn"
+                        onClick={() => setEditingField('vision_in_action')}
+                        aria-label="Edit vision in action"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">Vision in Action</div>
+                      {visionInActionCustomized && <span className="customized-badge-small">Customized</span>}
+                    </div>
+                    <p>{visionInActionValue}</p>
+                  </div>
+                </div>
+              )}
+            </section>
+          </>
+        )}
+
+        {/* ========== PROTECTIVE CONTENT ========== */}
+        {activeTab === 'protective' && protectiveArchetype && (
+          <>
+            {/* Core Narrative */}
+            <section className="essence-section essence-editable-section">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">🎭</span>
+                  <span className="section-label">Core Narrative</span>
+                </div>
+              </div>
+              <div className="quote essence-quote">
+                <div className="quote-mark">"</div>
+                {protectiveArchetype.coreNarrative?.belief}
+              </div>
+            </section>
+
+            {/* Emotional Wound */}
+            <section className="essence-section essence-origin-section">
+              <h3 className="origin-title">Emotional Wound</h3>
+              <div className="origin-cards">
+                <div className="origin-card">
+                  <div className="origin-card-header">
+                    <span className="origin-icon">😰</span>
+                  </div>
+                  <div className="origin-label-row">
+                    <span className="origin-label">The Fear</span>
+                  </div>
+                  <p>{protectiveArchetype.emotionalWound?.fear}</p>
+                </div>
+                <div className="origin-card wound-card">
+                  <div className="origin-card-header">
+                    <span className="origin-icon">📖</span>
+                  </div>
+                  <div className="origin-label-row">
+                    <span className="origin-label">What You Learned</span>
+                  </div>
+                  <p>{protectiveArchetype.emotionalWound?.learned}</p>
+                </div>
+              </div>
+            </section>
+
+            {/* Behavioral Strategy */}
+            <section className="essence-section essence-editable-section bg-purple-soft">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">🎯</span>
+                  <span className="section-label">Behavioral Strategy</span>
+                </div>
+              </div>
+              <p className="section-text">{protectiveArchetype.behavioralStrategy?.description}</p>
+            </section>
+
+            {/* Avoidance Pattern */}
+            <section className="essence-section essence-editable-section">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">🚫</span>
+                  <span className="section-label">Avoidance Pattern</span>
+                </div>
+              </div>
+              <p className="section-text">{protectiveArchetype.avoidancePattern?.description}</p>
+            </section>
+
+            {/* Nervous System Pattern */}
+            <section className="essence-section essence-editable-section bg-purple-soft">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">⚡</span>
+                  <span className="section-label">Nervous System Pattern</span>
+                </div>
+              </div>
+              <p className="section-text">
+                <strong>{protectiveArchetype.nervousSystemPattern?.pattern}</strong>
+                {' — '}
+                {protectiveArchetype.nervousSystemPattern?.description}
+              </p>
+            </section>
+
+            {/* Somatic Expression */}
+            <section className="essence-section essence-editable-section">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">🧘</span>
+                  <span className="section-label">Somatic Expression</span>
+                </div>
+              </div>
+              <p className="section-text">{protectiveArchetype.somaticExpression?.description}</p>
+            </section>
+
+            {/* Splinter Moment */}
+            <section className="essence-section essence-editable-section bg-purple-soft">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">💔</span>
+                  <span className="section-label">Splinter Moment Type</span>
+                </div>
+              </div>
+              <p className="section-text">{protectiveArchetype.splinterMomentType?.description}</p>
+            </section>
+
+            {/* Discharge Pattern */}
+            <section className="essence-section essence-editable-section">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">🌊</span>
+                  <span className="section-label">Discharge Pattern Needed</span>
+                </div>
+              </div>
+              <p className="section-text">{protectiveArchetype.dischargePatternNeeded?.description}</p>
+            </section>
+
+            {/* Rewiring Affirmations */}
+            {protectiveArchetype.rewiringOpportunity?.affirmations?.length > 0 && (
+              <section className="essence-section essence-editable-section bg-gold-soft">
+                <div className="section-header">
+                  <div className="section-label-row">
+                    <span className="section-icon-small">💛</span>
+                    <span className="section-label">Rewiring Affirmations</span>
+                  </div>
+                </div>
+                <div className="affirmations-list">
+                  {protectiveArchetype.rewiringOpportunity.affirmations.map((affirmation, index) => (
+                    <div key={index} className="quote essence-quote" style={{ marginBottom: index < protectiveArchetype.rewiringOpportunity.affirmations.length - 1 ? '1rem' : 0 }}>
+                      <div className="quote-mark">"</div>
+                      {affirmation}
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* How It Shows Up + Breaking Free */}
+            {protectiveArchetype.detailed && (
+              <section className="essence-section essence-deeper-section">
+                <h3 className="origin-title">Understanding & Healing</h3>
+                <div className="deeper-content" style={{ marginTop: 0 }}>
+                  <div className="deeper-item">
+                    <div className="deeper-item-header">
+                      <div className="deeper-item-icon">👁️</div>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">How It Shows Up</div>
+                    </div>
+                    <p>{protectiveArchetype.detailed.howItShowsUp}</p>
+                  </div>
+
+                  <div className="deeper-item" style={{ background: 'linear-gradient(135deg, rgba(255, 221, 39, 0.08) 0%, rgba(255, 193, 7, 0.04) 100%)' }}>
+                    <div className="deeper-item-header">
+                      <div className="deeper-item-icon">🦋</div>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">Breaking Free</div>
+                    </div>
+                    <p>{protectiveArchetype.detailed.breakingFree}</p>
+                  </div>
+                </div>
+              </section>
+            )}
+          </>
+        )}
+
+        {activeTab === 'protective' && !protectiveArchetype && (
+          <section className="essence-section">
+            <div className="no-shadow-message">
+              <p>No protective archetype assigned yet.</p>
+              <p>Complete the assessment to discover your protective pattern.</p>
+            </div>
           </section>
-        </div>
+        )}
+
+        {/* CTA */}
+        <section className="essence-section essence-cta-section">
+          {activeTab === 'essence' ? (
+            <>
+              <div className="cta-icon">🔮</div>
+              <div className="cta-label">POETIC VISION</div>
+              <h2 className="cta-title">Your Future Awaits</h2>
+              <p className="cta-description">
+                What if your joy was the funnel? What if your weirdness was the strategy?
+                You weren't born to fit into boxes — you were born to make confetti out of them.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="cta-icon">🦋</div>
+              <div className="cta-label">YOUR INVITATION</div>
+              <h2 className="cta-title">Step Into Your Essence</h2>
+              <p className="cta-description">
+                {protectiveArchetype?.detailed?.breakingFree ||
+                  "Showing up is brave. Your presence matters, even when it feels risky."}
+              </p>
+            </>
+          )}
+          <button
+            className="essence-cta-button"
+            onClick={() => navigate('/7-day-challenge')}
+          >
+            {activeTab === 'essence'
+              ? (hasChallenge ? 'Continue Your 7-Day Challenge' : 'Start Your 7-Day Challenge')
+              : 'Explore Your Essence Voice'
+            }
+          </button>
+        </section>
+      </div>
+
+      {/* Avatar Edit Modal */}
+      {showAvatarModal && (
+        <EditEssenceModal
+          userId={user?.id}
+          userEmail={user?.email}
+          currentName={archetypeName}
+          originalName={originalName}
+          currentImage={imagePath}
+          originalImage={getEssenceImagePath({ essence_archetype: originalName })}
+          group={archetypeData.group}
+          superpower={archetypeData.superpower}
+          poeticLine={archetypeData.poetic_line}
+          onClose={() => setShowAvatarModal(false)}
+          onSaved={handleAvatarSaved}
+        />
+      )}
+
+      {/* Field Edit Modal (Essence fields only) */}
+      {editingField && (
+        <EditEssenceFieldModal
+          field={editingField}
+          currentValue={
+            editingField === 'tagline' ? taglineValue :
+            editingField === 'essence' ? essenceValue :
+            editingField === 'superpower' ? superpowerValue :
+            editingField === 'vision' ? visionValue :
+            editingField === 'north_star' ? northStarValue :
+            editingField === 'inner_child' ? innerChildValue :
+            editingField === 'wound' ? woundValue :
+            editingField === 'characters' ? charactersValue :
+            editingField === 'energetic_transmission' ? energeticValue :
+            editingField === 'recognition_pattern' ? recognitionValue :
+            editingField === 'vision_in_action' ? visionInActionValue :
+            ''
+          }
+          currentMeta={getEssenceFieldMeta(userData, editingField)}
+          archetypes={allArchetypes}
+          userArchetype={originalName}
+          userId={user?.id}
+          userEmail={user?.email}
+          onClose={() => setEditingField(null)}
+          onSaved={handleFieldSaved}
+        />
       )}
     </div>
   )

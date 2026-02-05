@@ -1,0 +1,465 @@
+/* Journey Map Component Styles */
+/* Matches HeroProfile.css design patterns */
+
+.hero-profile .journey-map {
+  margin-top: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.hero-profile .journey-map-header {
+  margin-bottom: 16px;
+}
+
+.hero-profile .journey-map-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+/* Timeline Section */
+.hero-profile .journey-timeline {
+  margin-bottom: 20px;
+}
+
+/* Act Labels */
+.hero-profile .timeline-acts {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.hero-profile .timeline-act {
+  flex: 1;
+  text-align: center;
+}
+
+.hero-profile .timeline-act .act-name {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease;
+}
+
+.hero-profile .timeline-act.current .act-name {
+  color: #E9A23B;
+  font-weight: 700;
+}
+
+/* Timeline Track */
+.hero-profile .timeline-track {
+  position: relative;
+  padding: 24px 0;
+}
+
+.hero-profile .timeline-line {
+  position: relative;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.hero-profile .timeline-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Timeline Markers */
+.hero-profile .timeline-marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.hero-profile .timeline-marker.completed {
+  background: #fff;
+  border-color: #fff;
+}
+
+.hero-profile .timeline-marker.current {
+  width: 18px;
+  height: 18px;
+  background: #E9A23B;
+  border-color: #E9A23B;
+  box-shadow: 0 0 0 4px rgba(233, 162, 59, 0.3);
+}
+
+/* Current Position Indicator */
+.hero-profile .timeline-current-position {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+
+.hero-profile .position-marker {
+  width: 24px;
+  height: 24px;
+  background: #E9A23B;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  animation: journeyPulse 2s infinite;
+}
+
+@keyframes journeyPulse {
+  0%, 100% {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 2px 20px rgba(233, 162, 59, 0.5);
+    transform: scale(1.05);
+  }
+}
+
+.hero-profile .position-label {
+  position: absolute;
+  top: 32px;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 700;
+  color: #E9A23B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Moments Section */
+.hero-profile .journey-moments {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-profile .moment-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.hero-profile .moment-item.system {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hero-profile .moment-item.user {
+  background: rgba(233, 162, 59, 0.08);
+  border-color: rgba(233, 162, 59, 0.2);
+}
+
+.hero-profile .moment-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.hero-profile .moment-text {
+  flex: 1;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.hero-profile .moment-date {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.hero-profile .moment-delete {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.hero-profile .moment-delete:hover {
+  color: #ef4444;
+}
+
+/* Add Moment Button */
+.hero-profile .add-moment-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px dashed rgba(233, 162, 59, 0.3);
+  border-radius: 10px;
+  color: rgba(233, 162, 59, 0.7);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.hero-profile .add-moment-button:hover {
+  background: rgba(233, 162, 59, 0.05);
+  border-color: rgba(233, 162, 59, 0.5);
+  color: #E9A23B;
+}
+
+/* Modal Styles */
+.moment-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.moment-modal {
+  background: #1a1a2e;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  color: #fff;
+}
+
+.moment-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.moment-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.modal-close:hover {
+  color: #fff;
+}
+
+.moment-modal-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.moment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moment-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.moment-field textarea,
+.moment-field input[type="date"] {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #fff;
+  resize: none;
+  transition: border-color 0.2s;
+}
+
+.moment-field textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.moment-field textarea:focus,
+.moment-field input[type="date"]:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+.char-count {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: right;
+}
+
+/* Act Options */
+.act-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.act-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.act-option:hover {
+  border-color: rgba(94, 23, 235, 0.5);
+}
+
+.act-option.selected {
+  border-color: #5e17eb;
+  background: rgba(94, 23, 235, 0.1);
+}
+
+.act-option input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #5e17eb;
+}
+
+.act-option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.act-option-name {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.act-option-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Modal Actions */
+.moment-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-error {
+  color: #ef4444;
+  font-size: 13px;
+  margin: 0;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-cancel,
+.modal-save {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.modal-cancel:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.modal-save {
+  background: #E9A23B;
+  border: none;
+  color: #1a1a2e;
+}
+
+.modal-save:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.modal-save:disabled,
+.modal-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .hero-profile .journey-map {
+    padding: 16px;
+  }
+
+  .hero-profile .timeline-act .act-name {
+    font-size: 8px;
+  }
+
+  .hero-profile .position-label {
+    font-size: 8px;
+  }
+
+  .hero-profile .moment-item {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+}

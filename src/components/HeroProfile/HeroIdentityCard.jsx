@@ -65,16 +65,6 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
 
   // Image comes from useHeroProfile utility (custom or default)
   const imagePath = essence?.image || null
-
-  // Group emoji mapping
-  const groupEmojis = {
-    Activator: '🔥',
-    Bridger: '🌉',
-    Transmuter: '⚗️',
-    Stabiliser: '⚓',
-    Stabilizer: '⚓',
-  }
-
   const showImage = imagePath && !imageError
 
   // Build original (default) image path for reset comparison
@@ -108,9 +98,6 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
 
         <div className="identity-titles">
           <h2 className="essence-name">{essence.name || 'Unknown Archetype'}</h2>
-          <span className="essence-group">
-            {groupEmojis[essence.group] || '✨'} {essence.group}
-          </span>
           {onViewEssence && (
             <span className="essence-view-link">View full profile →</span>
           )}

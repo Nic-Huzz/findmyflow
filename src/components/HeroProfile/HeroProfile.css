@@ -20,13 +20,6 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 0;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(94, 23, 235, 0.95);
-  backdrop-filter: blur(10px);
-  margin: 0 -16px;
-  padding: 16px;
 }
 
 .hero-profile .header-left {
@@ -724,10 +717,32 @@
   padding: 16px 0;
 }
 
+.hero-profile .detail-header .back-button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-profile .detail-header .back-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(147, 51, 234, 0.5);
+}
+
 .hero-profile .detail-xp {
+  background: rgba(255, 221, 39, 0.2);
+  color: #ffdd27;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
   font-size: 14px;
   font-weight: 600;
-  color: #E9A23B;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 221, 39, 0.4);
 }
 
 .hero-profile .detail-project-name {
@@ -791,6 +806,18 @@
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.75);
   margin: 0;
+}
+
+.hero-profile .story-paragraph strong {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.hero-profile .story-closing {
+  font-style: italic;
+  color: rgba(233, 162, 59, 0.8);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ============ IDENTITY TRIAD DETAIL ============ */
@@ -975,6 +1002,67 @@
 
 .hero-profile .journey-node.completed .journey-label {
   color: rgba(255, 255, 255, 0.5);
+}
+
+/* Journey Progress Section */
+.hero-profile .journey-progress-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-profile .journey-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.hero-profile .journey-progress-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.hero-profile .journey-progress-stage {
+  font-size: 13px;
+  color: #E9A23B;
+  font-weight: 600;
+}
+
+.hero-profile .journey-progress-bar {
+  height: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.hero-profile .journey-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+.hero-profile .journey-progress-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-profile .journey-progress-percent {
+  font-size: 14px;
+  font-weight: 700;
+  color: #E9A23B;
+}
+
+.hero-profile .journey-progress-milestone {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
 }
 
 /* ============ PLAY-LIST PROGRESS ============ */
@@ -1934,4 +2022,102 @@
 
 .share-card-btn:hover {
   opacity: 0.9;
+}
+
+/* ============================================================================
+   CODEX PREVIEW CARD
+   ============================================================================ */
+
+.hero-profile .codex-preview-card {
+  margin-top: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hero-profile .codex-preview-card:hover {
+  border-color: rgba(233, 162, 59, 0.3);
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.1);
+  transform: translateY(-2px);
+}
+
+.hero-profile .codex-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hero-profile .codex-preview-icon {
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(233, 162, 59, 0.1);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.hero-profile .codex-preview-title-group {
+  flex: 1;
+}
+
+.hero-profile .codex-preview-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 2px;
+  background: linear-gradient(135deg, #fff, rgba(233, 162, 59, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-profile .codex-preview-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.hero-profile .codex-preview-arrow {
+  font-size: 18px;
+  color: rgba(233, 162, 59, 0.6);
+  transition: transform 0.2s, color 0.2s;
+}
+
+.hero-profile .codex-preview-card:hover .codex-preview-arrow {
+  transform: translateX(4px);
+  color: #E9A23B;
+}
+
+.hero-profile .codex-preview-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-profile .codex-preview-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hero-profile .codex-preview-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.hero-profile .codex-preview-count {
+  font-size: 12px;
+  color: #E9A23B;
+  font-weight: 600;
+  white-space: nowrap;
 }

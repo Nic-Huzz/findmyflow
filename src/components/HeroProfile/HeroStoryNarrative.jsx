@@ -1,10 +1,31 @@
 import React from 'react'
 
 /**
+ * Stage names for business journey
+ */
+const STAGE_NAMES = {
+  1: 'Validation',
+  2: 'Product',
+  3: 'Testing',
+  4: 'Money Models',
+  5: 'Grand Slam',
+  6: 'Campaign',
+  7: 'Launch',
+  8: 'Tracking',
+}
+
+/**
  * HeroStoryNarrative - Combines all identity elements into a story paragraph
  *
- * Weaves together: essence archetype, project skill/problem/persona,
- * and protective voice into a cohesive narrative.
+ * Template from hero-journey-game-design.md:
+ * THE STORY OF [PROJECT NAME]
+ * - Essence archetype + poetic line
+ * - Skill/Gift expression
+ * - Problem/Cause
+ * - Persona/Tribe
+ * - Protective Voice
+ * - Current stage + XP
+ * - Closing
  */
 function HeroStoryNarrative({ archetypes, project }) {
   if (!archetypes?.essence || !project) {
@@ -12,57 +33,64 @@ function HeroStoryNarrative({ archetypes, project }) {
   }
 
   const { essence, protective } = archetypes
-  const { skill, problem, persona, name } = project
+  const { skill, problem, persona, name, stage, xp } = project
 
-  // Build narrative parts - only include sections where data exists
-  const parts = []
-
-  // Opening: Essence archetype identity
-  if (essence.name) {
-    parts.push(
-      `At your core, you are ${essence.name.toUpperCase()}${essence.poeticLine ? ' — ' + essence.poeticLine.toLowerCase() : '.'}`
-    )
-  }
-
-  // Skill: Gift through this project
-  if (skill?.aspirationalTitle) {
-    parts.push(
-      `Through this project, you become ${skill.aspirationalTitle.toUpperCase()}, using your gift of ${skill.tagline?.toLowerCase() || skill.displayName?.toLowerCase() || 'your unique talent'}.`
-    )
-  }
-
-  // Problem: Cause this project champions
-  if (problem?.aspirationalTitle) {
-    parts.push(
-      `Your cause is ${problem.aspirationalTitle.toUpperCase()} — you champion ${problem.tagline?.toLowerCase() || problem.displayName?.toLowerCase() || 'important change'}.`
-    )
-  }
-
-  // Persona: Tribe this project serves
-  if (persona?.aspirationalTitle) {
-    parts.push(
-      `The people who need you are ${persona.aspirationalTitle.toUpperCase()} — ${persona.tagline?.toLowerCase() || persona.displayName?.toLowerCase() || 'those seeking transformation'}.`
-    )
-  }
-
-  // Shadow: Protective voice
-  if (protective?.name && protective?.coreNarrative) {
-    parts.push(
-      `But ${protective.name.toUpperCase()} whispers: "${protective.coreNarrative}"`
-    )
-  }
-
-  if (parts.length === 0) {
-    return null
-  }
+  const stageName = STAGE_NAMES[stage] || `Stage ${stage}`
 
   return (
     <div className="hero-story">
-      <h3 className="story-title">Your Story</h3>
+      <h3 className="story-title">The Story of {name}</h3>
       <div className="story-content">
-        {parts.map((part, index) => (
-          <p key={index} className="story-paragraph">{part}</p>
-        ))}
+        {/* Essence */}
+        {essence.name && (
+          <p className="story-paragraph">
+            At your core, you are <strong>{essence.name.toUpperCase()}</strong>
+            {essence.poeticLine ? ` — ${essence.poeticLine.toLowerCase()}` : '.'}
+          </p>
+        )}
+
+        {/* Skill/Gift */}
+        {skill?.aspirationalTitle && (
+          <p className="story-paragraph">
+            Through <strong>{name}</strong>, you express this essence by becoming{' '}
+            <strong>{skill.aspirationalTitle.toUpperCase()}</strong>, using your gift of{' '}
+            {skill.tagline?.toLowerCase() || skill.displayName?.toLowerCase() || 'your unique talent'}.
+          </p>
+        )}
+
+        {/* Problem/Cause */}
+        {problem?.aspirationalTitle && (
+          <p className="story-paragraph">
+            Your cause is <strong>{problem.aspirationalTitle.toUpperCase()}</strong> — you champion{' '}
+            {problem.tagline?.toLowerCase() || problem.displayName?.toLowerCase() || 'important change'}.
+          </p>
+        )}
+
+        {/* Persona/Tribe */}
+        {persona?.aspirationalTitle && (
+          <p className="story-paragraph">
+            The people who need you most are <strong>{persona.aspirationalTitle.toUpperCase()}</strong> —{' '}
+            {persona.tagline?.toLowerCase() || persona.displayName?.toLowerCase() || 'those seeking transformation'}.
+          </p>
+        )}
+
+        {/* Protective Voice */}
+        {protective?.name && protective?.coreNarrative && (
+          <p className="story-paragraph">
+            But <strong>{protective.name.toUpperCase()}</strong> whispers: "{protective.coreNarrative}"
+          </p>
+        )}
+
+        {/* Progress */}
+        <p className="story-paragraph">
+          You are currently at <strong>{stageName}</strong>.
+          {xp > 0 && ` Your score is ${xp.toLocaleString()} XP.`}
+        </p>
+
+        {/* Closing */}
+        <p className="story-paragraph story-closing">
+          This is your hero's journey. Not the only one — but this one is yours.
+        </p>
       </div>
     </div>
   )

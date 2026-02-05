@@ -4,11 +4,11 @@ import React from 'react'
  * Visibility layers in order, with unlock requirements
  */
 const VISIBILITY_LAYERS = [
-  { id: 'screen', label: 'Screen', emoji: '💻', unlockNote: null },
-  { id: 'live', label: 'Live', emoji: '🎤', unlockNote: null },
-  { id: 'money', label: 'Money', emoji: '💰', unlockNote: null },
-  { id: 'vulnerable', label: 'Vulnerable', emoji: '💎', unlockNote: 'Unlocks at 80% Live' },
-  { id: 'authority', label: 'Authority', emoji: '👑', unlockNote: 'Unlocks at 60% Vulnerable' },
+  { id: 'screen', label: 'Screen', emoji: '💻' },
+  { id: 'live', label: 'Live', emoji: '🎤' },
+  { id: 'money', label: 'Money', emoji: '💰' },
+  { id: 'vulnerable', label: 'Vulnerable', emoji: '💎' },
+  { id: 'authority', label: 'Authority', emoji: '👑' },
 ]
 
 /**
@@ -56,12 +56,11 @@ function PlayListProgress({ visibilityProgress, groanChallenges = [] }) {
           const total = progress?.total || 0
           const isComplete = percentage === 100 && total > 0
           const isInProgress = percentage > 0 && percentage < 100
-          const isLocked = total === 0 && layer.unlockNote
 
           return (
             <div
               key={layer.id}
-              className={`playlist-layer ${isComplete ? 'complete' : ''} ${isLocked ? 'locked' : ''}`}
+              className={`playlist-layer ${isComplete ? 'complete' : ''}`}
             >
               <div className="layer-info">
                 <span className="layer-emoji">{layer.emoji}</span>
@@ -84,10 +83,7 @@ function PlayListProgress({ visibilityProgress, groanChallenges = [] }) {
                 {isInProgress && (
                   <span className="status-progress">◐ {completed}/{total}</span>
                 )}
-                {isLocked && (
-                  <span className="status-locked">🔒 {layer.unlockNote}</span>
-                )}
-                {!isComplete && !isInProgress && !isLocked && (
+                {!isComplete && !isInProgress && (
                   <span className="status-empty">{percentage}%</span>
                 )}
               </div>

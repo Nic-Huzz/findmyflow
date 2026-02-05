@@ -1,0 +1,158 @@
+/* Shadow Expandable Component */
+/* Aligned with FindMyFlow Design Guide */
+
+.shadow-expandable {
+  background: linear-gradient(135deg, #212529 0%, #343a40 100%);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-expandable.expanded {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d44 100%);
+}
+
+/* Header (always visible) */
+.shadow-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.shadow-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.shadow-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.shadow-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.shadow-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shadow-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: white;
+}
+
+.shadow-lie {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.shadow-chevron {
+  color: rgba(255, 255, 255, 0.5);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.shadow-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* Expanded Content */
+.shadow-content {
+  padding: 0 20px 24px;
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.shadow-section {
+  margin-bottom: 20px;
+}
+
+.shadow-section-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 8px;
+}
+
+.shadow-section p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Affirmation (special styling) */
+.shadow-affirmation {
+  background: rgba(255, 221, 39, 0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  border-left: 4px solid #ffdd27;
+}
+
+.affirmation-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffdd27;
+  margin-bottom: 8px;
+}
+
+.affirmation-text {
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: white;
+  font-style: italic;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .shadow-header {
+    padding: 16px;
+  }
+
+  .shadow-icon {
+    font-size: 1.75rem;
+  }
+
+  .shadow-name {
+    font-size: 1rem;
+  }
+
+  .shadow-lie {
+    font-size: 0.8125rem;
+  }
+
+  .shadow-content {
+    padding: 0 16px 20px;
+  }
+}

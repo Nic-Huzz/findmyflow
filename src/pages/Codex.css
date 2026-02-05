@@ -1,0 +1,635 @@
+/* ============================================================================
+   CODEX - Scoped Styles
+   All styles scoped to .codex-page to prevent leaks
+   Following design-guide.md patterns
+   ============================================================================ */
+
+/* ============ LAYOUT ============ */
+
+.codex-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: #fff;
+  padding: 0 16px 40px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* ============ HEADER ============ */
+
+.codex-page .codex-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.codex-page .header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.codex-page .back-button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.codex-page .back-button:hover {
+  color: #fff;
+}
+
+.codex-page .header-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #fff, rgba(233, 162, 59, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.codex-page .header-progress {
+  font-size: 13px;
+  font-weight: 600;
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(233, 162, 59, 0.2);
+}
+
+/* ============ CATEGORY TABS ============ */
+
+.codex-page .codex-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.codex-page .codex-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.codex-page .codex-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.codex-page .codex-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.codex-page .codex-tab.active {
+  background: rgba(233, 162, 59, 0.15);
+  border-color: rgba(233, 162, 59, 0.3);
+  color: #E9A23B;
+}
+
+.codex-page .tab-icon {
+  font-size: 14px;
+}
+
+.codex-page .tab-count {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-left: 2px;
+}
+
+.codex-page .codex-tab.active .tab-count {
+  color: rgba(233, 162, 59, 0.7);
+}
+
+/* ============ CATEGORY HEADER ============ */
+
+.codex-page .category-header {
+  padding: 8px 0 16px;
+}
+
+.codex-page .category-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 4px;
+}
+
+.codex-page .category-description {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+/* ============ ENTRY GRID ============ */
+
+.codex-page .codex-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============ ENTRY CARD ============ */
+
+.codex-page .codex-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.codex-page .codex-card:hover:not(.locked) {
+  transform: translateY(-4px);
+  border-color: rgba(255, 221, 39, 0.3);
+  box-shadow: 0 8px 24px rgba(94, 23, 235, 0.2);
+}
+
+.codex-page .codex-card.locked {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.codex-page .codex-card.locked:hover {
+  transform: none;
+}
+
+/* Card Content */
+.codex-page .card-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.codex-page .card-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.codex-page .codex-card.locked .card-icon {
+  filter: grayscale(100%);
+}
+
+.codex-page .card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.codex-page .card-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #fff;
+}
+
+.codex-page .codex-card.locked .card-title {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.codex-page .card-subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Card Arrow */
+.codex-page .card-arrow {
+  color: rgba(233, 162, 59, 0.6);
+  font-size: 16px;
+  flex-shrink: 0;
+  align-self: center;
+  transition: transform 0.2s;
+}
+
+.codex-page .codex-card:hover:not(.locked) .card-arrow {
+  transform: translateX(4px);
+  color: #E9A23B;
+}
+
+/* Lock Icon */
+.codex-page .lock-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Lock Hint Tooltip */
+.codex-page .lock-hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ============ LOADING & ERROR ============ */
+
+.codex-page .codex-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+}
+
+.codex-page .codex-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #E9A23B;
+  border-radius: 50%;
+  animation: codexSpin 0.8s linear infinite;
+}
+
+@keyframes codexSpin {
+  to { transform: rotate(360deg); }
+}
+
+.codex-page .codex-loading p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.codex-page .codex-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  text-align: center;
+}
+
+.codex-page .codex-error p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.codex-page .codex-error button {
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  color: #212529;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+  transition: all 0.3s ease;
+}
+
+.codex-page .codex-error button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 221, 39, 0.4);
+}
+
+/* ============ EMPTY STATE ============ */
+
+.codex-page .codex-empty {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.codex-page .empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.codex-page .empty-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+}
+
+/* ============================================================================
+   CODEX ENTRY VIEW
+   ============================================================================ */
+
+.codex-entry-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: #fff;
+  padding: 0 16px 40px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Entry Header */
+.codex-entry-page .entry-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.codex-entry-page .back-button {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s;
+}
+
+.codex-entry-page .back-button:hover {
+  color: #fff;
+}
+
+.codex-entry-page .entry-meta {
+  flex: 1;
+}
+
+.codex-entry-page .entry-category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(233, 162, 59, 0.8);
+  background: rgba(233, 162, 59, 0.1);
+  padding: 4px 8px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+}
+
+.codex-entry-page .entry-title {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, #fff, rgba(233, 162, 59, 0.9));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.codex-entry-page .entry-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+/* Entry Icon */
+.codex-entry-page .entry-icon {
+  font-size: 36px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  flex-shrink: 0;
+}
+
+/* Entry Content */
+.codex-entry-page .entry-content {
+  padding-top: 8px;
+}
+
+/* Content Section */
+.codex-entry-page .content-section {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.codex-entry-page .section-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #E9A23B;
+  margin: 0 0 12px;
+}
+
+.codex-entry-page .section-body {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.codex-entry-page .section-body p {
+  margin: 0 0 12px;
+}
+
+.codex-entry-page .section-body p:last-child {
+  margin-bottom: 0;
+}
+
+.codex-entry-page .section-body strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.codex-entry-page .section-body em {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Quote Blocks */
+.codex-entry-page .section-quote {
+  background: rgba(233, 162, 59, 0.08);
+  border-left: 3px solid rgba(233, 162, 59, 0.4);
+  padding: 12px 16px;
+  margin: 16px 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: rgba(233, 162, 59, 0.9);
+  font-size: 15px;
+}
+
+/* Lists in content */
+.codex-entry-page .section-body ul {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.codex-entry-page .section-body li {
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Entry Navigation */
+.codex-entry-page .entry-navigation {
+  display: flex;
+  gap: 12px;
+  padding-top: 24px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.codex-entry-page .nav-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.codex-entry-page .nav-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.codex-entry-page .nav-button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.codex-entry-page .nav-button.prev {
+  justify-content: flex-start;
+}
+
+.codex-entry-page .nav-button.next {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.codex-entry-page .nav-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.4);
+  display: block;
+}
+
+.codex-entry-page .nav-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: inherit;
+}
+
+.codex-entry-page .nav-button.next .nav-text {
+  text-align: right;
+}
+
+.codex-entry-page .nav-arrow {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* Locked Entry View */
+.codex-entry-page .entry-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  text-align: center;
+  gap: 16px;
+}
+
+.codex-entry-page .locked-icon {
+  font-size: 48px;
+  opacity: 0.5;
+}
+
+.codex-entry-page .locked-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.codex-entry-page .locked-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width: 480px) {
+  .codex-page .codex-tabs {
+    margin: 0 -16px;
+    padding: 16px;
+  }
+
+  .codex-page .card-content {
+    gap: 12px;
+  }
+
+  .codex-page .card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+  }
+
+  .codex-entry-page .entry-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
+  }
+
+  .codex-entry-page .entry-title {
+    font-size: 18px;
+  }
+
+  .codex-entry-page .entry-navigation {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 768px) {
+  .codex-page {
+    padding: 0 24px 60px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .codex-entry-page {
+    padding: 0 24px 60px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .codex-page .codex-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}

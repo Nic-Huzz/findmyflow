@@ -2,6 +2,20 @@ import React from 'react'
 import { STAGE_CONFIG } from '../../lib/stageConfig'
 
 /**
+ * Next milestone descriptions for each stage
+ */
+const STAGE_MILESTONES = {
+  1: 'Complete problem validation interviews',
+  2: 'Finalize your core product/service',
+  3: 'Run your first paid test',
+  4: 'Build your money model stack',
+  5: 'Create your grand slam offer',
+  6: 'Launch your marketing campaign',
+  7: 'Execute your launch sequence',
+  8: 'Track and optimize your funnel',
+}
+
+/**
  * BusinessJourneyTracker - Visual 8-stage progress tracker
  *
  * Shows a horizontal timeline of stages 1-8 with the current stage highlighted.
@@ -14,6 +28,9 @@ function BusinessJourneyTracker({ currentStage = 1 }) {
   )
 
   const totalStages = projectStages.length
+  const currentStageConfig = projectStages.find(s => s.id === currentStage)
+  const progressPercentage = Math.round((currentStage / totalStages) * 100)
+  const nextMilestone = STAGE_MILESTONES[currentStage] || 'Continue your journey'
 
   return (
     <div className="business-journey">
@@ -56,6 +73,28 @@ function BusinessJourneyTracker({ currentStage = 1 }) {
             </React.Fragment>
           )
         })}
+      </div>
+
+      {/* Business Stage Progress */}
+      <div className="journey-progress-section">
+        <div className="journey-progress-header">
+          <span className="journey-progress-title">Business Stage Progress</span>
+          <span className="journey-progress-stage">
+            Stage {currentStage}: {currentStageConfig?.name || 'Unknown'}
+          </span>
+        </div>
+        <div className="journey-progress-bar">
+          <div
+            className="journey-progress-fill"
+            style={{ width: `${progressPercentage}%` }}
+          />
+        </div>
+        <div className="journey-progress-footer">
+          <span className="journey-progress-percent">{progressPercentage}%</span>
+          <span className="journey-progress-milestone">
+            Next milestone: {nextMilestone}
+          </span>
+        </div>
       </div>
     </div>
   )

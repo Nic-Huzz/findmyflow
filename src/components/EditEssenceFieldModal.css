@@ -1,0 +1,389 @@
+/* Edit Essence Field Modal */
+/* Aligned with FindMyFlow Design Guide */
+
+.edit-field-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0;
+}
+
+.edit-field-modal {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 24px 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Toast */
+.edit-field-toast {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  animation: fadeInDown 0.3s ease;
+  z-index: 10;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Header */
+.edit-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.edit-field-header h3 {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #212529;
+}
+
+.edit-field-description {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #495057;
+  line-height: 1.6;
+}
+
+.edit-field-close {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  color: #dee2e6;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.edit-field-close:hover {
+  color: #5e17eb;
+}
+
+/* Tabs */
+.edit-field-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px;
+  background: #f8f9fa;
+}
+
+.edit-field-tab {
+  flex: 1;
+  background: white;
+  border: 1px solid #e9ecef;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-field-tab:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.edit-field-tab.active {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+/* Content */
+.edit-field-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  min-height: 300px;
+}
+
+.edit-field-hint {
+  font-size: 0.875rem;
+  color: #495057;
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+/* Preview Box */
+.edit-field-preview {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.04) 0%, rgba(255, 221, 39, 0.06) 100%);
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.edit-field-preview label {
+  display: block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #5e17eb;
+  margin-bottom: 8px;
+}
+
+.edit-field-preview p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #212529;
+}
+
+/* Hybrid Mode */
+.hybrid-selection-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.hybrid-chip {
+  background: white;
+  border: 1px solid #e9ecef;
+  padding: 10px 16px;
+  border-radius: 100px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.hybrid-chip:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+  transform: translateY(-2px);
+}
+
+.hybrid-chip.selected {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  border-color: transparent;
+  color: white;
+  padding-right: 36px;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.hybrid-chip-num {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  color: #5e17eb;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hybrid-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hybrid-count {
+  font-size: 0.875rem;
+  color: #495057;
+}
+
+.hybrid-generate-btn {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+}
+
+.hybrid-generate-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.hybrid-generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Custom Mode */
+.custom-textarea {
+  width: 100%;
+  padding: 16px 20px;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  line-height: 1.7;
+  resize: vertical;
+  font-family: inherit;
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.custom-textarea:focus {
+  outline: none;
+  border-color: #5e17eb;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.custom-textarea::placeholder {
+  color: #adb5bd;
+}
+
+.custom-char-count {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #adb5bd;
+  margin-top: 8px;
+}
+
+/* Error */
+.edit-field-error {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px 24px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-left: 4px solid #dc2626;
+}
+
+/* Actions */
+.edit-field-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.edit-field-actions-right {
+  display: flex;
+  gap: 12px;
+}
+
+.edit-field-reset {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.edit-field-reset:hover {
+  text-decoration: underline;
+}
+
+.edit-field-cancel {
+  background: white;
+  border: 1px solid #e9ecef;
+  color: #495057;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-field-cancel:hover {
+  border-color: #5e17eb;
+  color: #5e17eb;
+}
+
+.edit-field-save {
+  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  border: none;
+  color: #212529;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+}
+
+.edit-field-save:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 221, 39, 0.4);
+}
+
+.edit-field-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Desktop adjustments */
+@media (min-width: 640px) {
+  .edit-field-overlay {
+    align-items: center;
+    padding: 20px;
+  }
+
+  .edit-field-modal {
+    border-radius: 24px;
+    max-height: 85vh;
+  }
+}

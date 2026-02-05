@@ -2118,6 +2118,8 @@ Heroes who reach "Flow Master" status don't disappear. They:
 | 2025-01-31 | Finalized terminology (Nemesis→Voice, Power→XP, etc.) | Claude + Nic |
 | 2025-01-31 | Added Play-List concept, Arena→Playground, Vulnerability Framework (Part 3.5) | Claude + Nic |
 | 2025-02-03 | Rewrote Avatar Layer System (Part 3.7) - Two-level architecture: User-level Essence Archetype (12 types) + Project-level Skills/Problems/Personas with per-project scoring | Claude + Nic |
+| 2026-02-05 | Added Part 21: Implementation Status Tracker - Comprehensive audit of what's built vs. planned | Claude + Nic |
+| 2026-02-05 | Added Part 22: The Codex & Journey Map Specifications - Tab navigation, Journey Map under Identity Card, Codex as second tab | Claude + Nic |
 
 ---
 
@@ -2650,6 +2652,533 @@ Simple group feature for accountability and shared challenges.
 | 5 | Daily engagement increases | +20% DAU |
 | 6 | Play-List completion increases | +30% completion rate |
 | 7 | Retention improves | +15% week-2 retention |
+
+---
+
+## Part 21: Implementation Status Tracker
+
+**Last Updated:** 2026-02-05
+
+This section tracks actual implementation progress against the game design vision.
+
+---
+
+### Status Legend
+
+| Symbol | Meaning |
+|--------|---------|
+| ✅ | Fully implemented |
+| ⚠️ | Partially implemented |
+| ❌ | Not yet started |
+| 🚧 | In progress |
+
+---
+
+### Core Features Status
+
+#### Fully Implemented (✅)
+
+| Feature | Key Files | Notes |
+|---------|-----------|-------|
+| **Hero Profile / Command Center** | `HeroCommandCenter.jsx`, `HeroIdentityCard.jsx` | Displays essence, protective voice, total XP, projects |
+| **XP System** | `user_lifetime_scores` table, `useHeroProfile.js` | Lifetime tracking, project-level XP |
+| **Play-List / Playground (5 layers)** | `PlayListProgress.jsx` | Screen, Live, Money, Vulnerable, Authority with progress bars |
+| **12 Essence Archetypes** | `src/data/essenceProfiles.js` | All 4 groups (Activators, Bridgers, Transmuters, Stabilisers) with rich narrative |
+| **5 Protective Voices** | `src/data/protectiveVoices.js` | Perfectionist, People Pleaser, Controller, Performer, Ghost with full profiles |
+| **Flow Compass** | Multiple flow components | N/E/S/W energy tracking system |
+| **Flow Finder** | `src/flows/FlowFinder*.jsx` | Skills, Problems, Personas discovery |
+| **7-Day Challenge System** | `useChallengeData.js`, `QuestCard.jsx` | Quest categories, daily tracking, streaks |
+| **Zarlo AI** | `src/components/Zarlo/` | Context-aware chat widget |
+| **Groan Matrix** | `GroanMatrix.jsx`, `groan_challenges` table | 2D challenges with visibility layers, scary/wahoo scoring |
+| **10-Stage Business Journey** | `stageConfig.js`, `BusinessJourneyTracker.jsx` | Flow Finder → Tracking with ombre gradient |
+
+---
+
+#### Partially Implemented (⚠️)
+
+| Feature | What Exists | What's Missing |
+|---------|-------------|----------------|
+| **Leaderboards** | Basic weekly/all-time with medals (`ChallengeLeaderboard.jsx`) | Multiple named boards (Heroes Rising, Flow Masters, Playground Champions, etc.) |
+| **Movement Makers (Community)** | Group codes, WhatsApp sharing | Team challenges, shared goals, guild mechanics, team XP pooling |
+| **Quest System** | Fixed quest sets per category | AI-generated personalized daily quests based on stage/voice/activity |
+| **Hero Levels** | 10-stage business progression | Separate RPG-style hero levels (Civilian → Flow Master), level-up ceremonies |
+| **Voice Progress Tracking** | Voice identification and display | Progress bar showing cumulative progress (e.g., "340/500"), milestones |
+
+---
+
+#### Not Yet Implemented (❌)
+
+| Feature | Description | Priority |
+|---------|-------------|----------|
+| **Three Keys Gate System** | Copper (discover Flow), Jade (First Service), Crystal (90+ days sustained) | High |
+| **Easter Eggs** | Hidden achievements: "Full Circle", "Wound = Gift", "Voice Befriended" | Medium |
+| **The Codex** | Progressive lore unlock - Voice Profiles, Flow Scrolls, Hero Archives, Ancient Wisdom. **Spec + Content complete (Part 22)** | Medium |
+| **Real-Time Voice Detection** | Alerts when voice active (e.g., "Perfectionist active for 47 minutes"), override options | High |
+| **Flow State Logger** | Quick N/E/S/W check-ins building personal flow map. *Already exists in Compass tab.* | ✅ Done |
+| **Action Logger** | Simple interface to log real-world actions and earn XP | Medium |
+| **AI Quest Generator** | Context-aware daily quests based on stage, voice, recent activity. *Add to Rewire healing tab.* | High |
+| **The Map (Journey Visualization)** | Visual journey: Matrix → Awakening → Training → Becoming. **Spec complete (Part 22)** | Medium |
+| **Hero Archives** | Graduate stories inspiring new heroes | Low |
+| **Seasonal Events** | Q1 Awakening, Q2 Visibility, Q3 Mastery, Q4 Legacy | Low |
+| **Physical World Integration** | Hero badges, guild patches, voice cards | Future |
+| **Mentor Matching** | Veteran heroes guide trainees | Future |
+
+---
+
+### Implementation Progress by Phase
+
+| Phase | Description | Status | Completion |
+|-------|-------------|--------|------------|
+| **Phase 0** | Foundation (XP tables, utilities) | ✅ | 100% |
+| **Phase 1** | Silent XP Tracking | ✅ | 100% |
+| **Phase 2** | Show the XP (UI) | ✅ | 100% |
+| **Phase 3** | Protective Voice Introduction | ✅ | 100% |
+| **Phase 4** | Narrative Copy Changes | ⚠️ | 40% |
+| **Phase 5** | Command Center | ✅ | 90% |
+| **Phase 6** | The Playground Enhancement | ⚠️ | 70% |
+| **Phase 7** | Social & Leaderboards | ⚠️ | 30% |
+
+---
+
+### Database Tables Status
+
+| Table | Status | Purpose |
+|-------|--------|---------|
+| `user_lifetime_scores` | ✅ | Total XP tracking |
+| `user_projects` | ✅ | Project-level progression |
+| `groan_challenges` | ✅ | Courage challenges with visibility layers |
+| `quest_completions` | ✅ | Daily/weekly quest tracking |
+| `lead_flow_profiles` | ✅ | Essence & protective archetype storage |
+| `weekly_leaderboard` (view) | ✅ | Leaderboard rankings |
+| `hero_xp_log` | ❌ | Detailed XP action logging (from design doc) |
+| `hero_keys` | ❌ | Three Keys gate tracking |
+| `hero_achievements` | ❌ | Easter eggs / hidden achievements |
+| `codex_unlocks` | ❌ | Progressive lore unlock tracking |
+
+---
+
+### Octalysis Core Drives Progress
+
+| Core Drive | Target | Current | Gap |
+|------------|--------|---------|-----|
+| **CD1** Epic Meaning & Calling | 9 | 8 | Needs more narrative framing |
+| **CD2** Development & Accomplishment | 8 | 7 | Need Three Keys, level ceremonies |
+| **CD3** Empowerment of Creativity | 7 | 5 | Need custom quests, strategy choices |
+| **CD4** Ownership & Possession | 8 | 7 | Need Codex collection, voice cards |
+| **CD5** Social Influence & Relatedness | 7 | 4 | **Biggest gap** - need team mechanics |
+| **CD6** Scarcity & Impatience | 4 | 2 | Need Three Keys, seasonal events |
+| **CD7** Unpredictability & Curiosity | 7 | 5 | Need Easter Eggs, lore reveals |
+| **CD8** Loss & Avoidance | 5 | 4 | Need streak protection, voice recovery |
+
+---
+
+### Next Priority Items
+
+Based on Octalysis analysis and user impact:
+
+1. **Three Keys Gate System** - Creates major progression milestones
+2. **AI Quest Generation** - Personalized daily engagement
+3. **Voice Progress Bar** - Visual feedback on inner work
+4. **Team Challenges** - Address CD5 gap (biggest opportunity)
+5. **Easter Eggs** - Add discovery/delight moments
+
+---
+
+### Change Log
+
+| Date | Change | Author |
+|------|--------|--------|
+| 2026-02-05 | Added Part 21: Implementation Status Tracker | Claude + Nic |
+| 2026-02-05 | Added Part 22: The Codex & Journey Map Specifications | Claude + Nic |
+| 2026-02-05 | Created all Codex content files (23 entries): voiceArchives.js, flowScrolls.js, founderJourney.js, ancientWisdom.js | Claude + Nic |
+
+---
+
+## Part 22: The Codex & Journey Map Specifications
+
+**Created:** 2026-02-05
+
+This section defines the UI/UX specifications for The Codex (progressive lore library) and The Journey Map (visual transformation timeline).
+
+---
+
+### Hero Command Center Tab Structure
+
+The Hero Command Center gains tab navigation with two primary views:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  HERO COMMAND CENTER                        ⚡ 12,847 XP │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│     [Identity]                    [Codex]               │
+│         ↑                            ↑                  │
+│    Current view               Lore library              │
+│    + Journey Map              (unlockable)              │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+| Tab | Contents |
+|-----|----------|
+| **Identity** | Hero Identity Card + Journey Map + Projects + Play-List |
+| **Codex** | Unlockable lore library |
+
+---
+
+### Identity Tab Layout
+
+The Identity tab contains the current Hero Profile content with the Journey Map added below the Hero Identity Card:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│     [Identity]                    [Codex]               │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  🐯 RADIANT REBEL                    ✏️  ↗️     │   │
+│  │      View full profile →                         │   │
+│  │                                                  │   │
+│  │  "You are fire with a heartbeat, designed to     │   │
+│  │   disrupt what's false and awaken what's real."  │   │
+│  │                                                  │   │
+│  │  ⚡ SUPERPOWER                                   │   │
+│  │  You ignite courage in the quiet. You say what   │   │
+│  │  others won't and move like fire through what    │   │
+│  │  feels stuck.                                    │   │
+│  │                                                  │   │
+│  │  🛡️ SHADOW                                       │   │
+│  │  Controller                                      │   │
+│  │  "Safety comes from controlling outcomes."       │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  YOUR JOURNEY                                    │   │
+│  │  ─────────────────────────────────────────────   │   │
+│  │                                                  │   │
+│  │  THE        AWAKENING      TRAINING    BECOMING  │   │
+│  │  MATRIX                                          │   │
+│  │    ●━━━━━━━━━━●━━━━━━━━━━●━━━━━━━━━○            │   │
+│  │                            ↑                     │   │
+│  │                        YOU ARE HERE              │   │
+│  │                                                  │   │
+│  │  📍 Stage 3: Testing         Today              │   │
+│  │  📍 Discovered your Flow     Feb 2              │   │
+│  │  📍 Felt the earthquake      Jan 15             │   │
+│  │                                                  │   │
+│  │  [+ Add a moment]                               │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  YOUR EXPRESSIONS                                │   │
+│  │  [Existing projects section...]                  │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  PLAY-LIST PROGRESS                              │   │
+│  │  [Existing visibility layers section...]         │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Journey Map Specification
+
+**Purpose:** Visual timeline showing the user's transformation from Matrix to Flow Master.
+
+#### The Four Acts
+
+| Act | Name | Description | Visual |
+|-----|------|-------------|--------|
+| **I** | The Matrix | Life before awakening | Gray/muted |
+| **II** | Awakening | Discovery phase (Flow Finder, Voice ID) | Purple |
+| **III** | Training | Building & facing fears (Stages 1-5) | Purple→Gold gradient |
+| **IV** | Becoming | Mastery & service (Stages 6-8, Flow Master) | Gold |
+
+#### Map Elements
+
+| Element | Description |
+|---------|-------------|
+| **Timeline spine** | Horizontal line with act markers |
+| **Current position** | Animated/highlighted marker showing "YOU ARE HERE" |
+| **Milestone markers** | Dots on the timeline for completed stages |
+| **Moment cards** | User-logged significant moments with dates |
+| **Add moment button** | Allows users to log meaningful realizations |
+
+#### Milestone Types
+
+| Milestone | Trigger | Act |
+|-----------|---------|-----|
+| Felt the earthquake | User signup / onboarding complete | Matrix → Awakening |
+| Discovered your Flow | Flow Finder complete | Awakening |
+| Met your Shadow | Protective Voice identified | Awakening |
+| Copper Key | Flow + Voice + First project | Awakening complete |
+| Stage progression | Each stage 1-7 completion | Training |
+| Jade Key | First Service (paying client) | Training → Becoming |
+| Crystal Key | 90+ days sustained service | Becoming |
+| Flow Master | Internalized the game | Becoming complete |
+
+#### User-Logged Moments
+
+Users can add their own significant moments:
+
+```
+┌─────────────────────────────────────────┐
+│  ADD A MOMENT                           │
+│  ─────────────────────────────────────  │
+│                                         │
+│  What happened?                         │
+│  ┌─────────────────────────────────┐   │
+│  │ Quit my corporate job today     │   │
+│  └─────────────────────────────────┘   │
+│                                         │
+│  When? [Feb 5, 2026]                   │
+│                                         │
+│  Which act does this belong to?        │
+│  ○ Awakening  ● Training  ○ Becoming   │
+│                                         │
+│  [Save Moment]                          │
+└─────────────────────────────────────────┘
+```
+
+#### Database: `hero_moments` table
+
+```sql
+CREATE TABLE hero_moments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  moment_text TEXT NOT NULL,
+  moment_date DATE NOT NULL,
+  act TEXT CHECK (act IN ('matrix', 'awakening', 'training', 'becoming')),
+  is_system_generated BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+---
+
+### The Codex Tab Specification
+
+**Purpose:** Progressive knowledge library that unlocks as users advance, creating discovery and ownership.
+
+#### Codex Tab Layout
+
+```
+┌─────────────────────────────────────────────────────────┐
+│     [Identity]                    [Codex]               │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  THE CODEX                            12/37 unlocked 📚 │
+│  ─────────────────────────────────────────────────────  │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  📜 VOICE ARCHIVES                    3/5       │   │
+│  │                                                  │   │
+│  │  🔓 The Controller        ← Your shadow         │   │
+│  │  🔓 The Perfectionist     ← Faced in Playground │   │
+│  │  🔓 The Ghost             ← Faced in Playground │   │
+│  │  🔒 The Performer                               │   │
+│  │  🔒 The People Pleaser                          │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  ⚡ FLOW SCROLLS                      4/8       │   │
+│  │                                                  │   │
+│  │  🔓 The Four Directions                         │   │
+│  │  🔓 The Flow Equation                           │   │
+│  │  🔓 The Groan Decoded                           │   │
+│  │  🔓 Energy Alchemy                              │   │
+│  │  🔒 The Visibility Ladder                       │   │
+│  │  🔒 Play as Portal                              │   │
+│  │  🔒 The Service Threshold                       │   │
+│  │  🔒 Flow Mastery                                │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  🏆 HERO ARCHIVES                     2/6       │   │
+│  │                                                  │   │
+│  │  🔓 "The Teacher Who Found Her Stage"           │   │
+│  │  🔓 "From Burnout to Business"                  │   │
+│  │  🔒 "The Ghost Who Went Live"                   │   │
+│  │  🔒 "Perfectionist's First Ship"                │   │
+│  │  🔒 "The Reluctant Authority"                   │   │
+│  │  🔒 [More coming...]                            │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  🌏 ANCIENT WISDOM                    2/4       │   │
+│  │                                                  │   │
+│  │  🔓 Ikigai: Reason for Being                    │   │
+│  │  🔓 The Hero's Journey                          │   │
+│  │  🔒 Svadharma: Sacred Duty                      │   │
+│  │  🔒 Te: Inherent Power                          │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  🎭 ESSENCE SECRETS                   1/12      │   │
+│  │                                                  │   │
+│  │  🔓 Radiant Rebel: Deep Dive   ← Your essence   │   │
+│  │  🔒 Playful Creator                             │   │
+│  │  🔒 Sacred Jester                               │   │
+│  │  🔒 [9 more archetypes...]                      │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### Codex Categories
+
+| Category | Entries | Unlock Mechanism |
+|----------|---------|------------------|
+| **Voice Archives** | 5 (one per voice) | Identify as your voice OR face in Playground |
+| **Flow Scrolls** | 8 teachings | Stage progression, challenge completions |
+| **Hero Archives** | 6+ graduate stories | Reaching milestones (Stage 5, First Service, etc.) |
+| **Ancient Wisdom** | 4 traditions | Flow Finder complete, stage gates, Easter eggs |
+| **Essence Secrets** | 12 archetypes | Your archetype auto-unlocks; others via Easter eggs |
+
+#### Unlock Triggers
+
+| Entry | Unlock Trigger |
+|-------|----------------|
+| **Your Voice** | Identified during onboarding |
+| **Other Voices** | Complete 3+ Playground challenges targeting that voice |
+| **The Four Directions** | First Flow Compass check-in |
+| **The Flow Equation** | Complete Flow Finder |
+| **The Groan Decoded** | Complete 5 Playground challenges |
+| **Energy Alchemy** | Reach Stage 3 |
+| **Ikigai** | Complete Flow Finder |
+| **The Hero's Journey** | Reach Stage 6 |
+| **Hero Archives entries** | Various milestones (Stage 5, First Service, etc.) |
+| **Other Essence Archetypes** | Easter eggs or complete 50+ challenges |
+
+#### Codex Entry Structure
+
+Each entry contains:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  ← Back to Codex                                        │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  👻 VOICE ARCHIVE                                       │
+│  THE GHOST                                              │
+│  ═══════════════════════════════════════════════════   │
+│                                                         │
+│  THE ORIGIN                                             │
+│  ─────────────────────────────────────────────────────  │
+│  Before the Matrix taught you to hide, you were seen.  │
+│                                                         │
+│  Maybe it was a classroom where your answer was        │
+│  mocked. A family dinner where your excitement was     │
+│  dismissed. A moment on stage where silence felt like  │
+│  rejection...                                          │
+│                                                         │
+│  [Full narrative content...]                           │
+│                                                         │
+│  ═══════════════════════════════════════════════════   │
+│                                                         │
+│  THE LIE IT TELLS                                       │
+│  ─────────────────────────────────────────────────────  │
+│  "Visibility is dangerous. Stay small. Don't attract   │
+│   attention."                                          │
+│                                                         │
+│  [More sections: How It Protected You, Why It's        │
+│   Blocking Your Flow, The Kryptonite, The Rewiring,    │
+│   Ancient Wisdom, Heroes Who Faced This Voice]         │
+│                                                         │
+│  ═══════════════════════════════════════════════════   │
+│                                                         │
+│  YOUR PROGRESS WITH THE GHOST                          │
+│  ████████░░░░░░░░ 52%                                  │
+│  23 visibility challenges completed                    │
+│                                                         │
+│  [Continue to Playground →]                            │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+#### Database: `codex_unlocks` table
+
+```sql
+CREATE TABLE codex_unlocks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  codex_entry_id TEXT NOT NULL,          -- e.g., 'voice_ghost', 'scroll_four_directions'
+  codex_category TEXT NOT NULL,          -- 'voice', 'scroll', 'hero', 'wisdom', 'essence'
+  unlocked_at TIMESTAMPTZ DEFAULT NOW(),
+  unlock_trigger TEXT,                   -- What action unlocked it
+  UNIQUE(user_id, codex_entry_id)
+);
+
+-- Index for quick lookups
+CREATE INDEX idx_codex_user ON codex_unlocks(user_id);
+```
+
+#### Codex Content Storage
+
+Codex content lives in static JS files (like `essenceProfiles.js` and `protectiveVoices.js`):
+
+```
+src/data/
+├── codex/
+│   ├── voiceArchives.js      -- Deep content for each voice
+│   ├── flowScrolls.js        -- Teaching content
+│   ├── heroArchives.js       -- Graduate stories
+│   ├── ancientWisdom.js      -- Tradition content
+│   └── codexConfig.js        -- Unlock rules and metadata
+```
+
+---
+
+### New Notification: Codex Unlock
+
+When a user unlocks a new Codex entry:
+
+```
+┌─────────────────────────────────────────┐
+│  📚 NEW CODEX ENTRY UNLOCKED            │
+│                                         │
+│  "The Ghost" has been added to your     │
+│  Voice Archives.                        │
+│                                         │
+│  You faced The Ghost 3 times in the     │
+│  Playground. Now learn its secrets.     │
+│                                         │
+│  [Read Now]        [Later]              │
+└─────────────────────────────────────────┘
+```
+
+---
+
+### Implementation Files
+
+| Feature | New Files | Modified Files |
+|---------|-----------|----------------|
+| **Tab Navigation** | - | `HeroCommandCenter.jsx` |
+| **Journey Map** | `JourneyMap.jsx`, `hero_moments` migration | `HeroCommandCenter.jsx` |
+| **Codex Tab** | `CodexTab.jsx`, `CodexEntry.jsx` | `HeroCommandCenter.jsx` |
+| **Codex Content** | `src/data/codex/*.js` | - |
+| **Codex Unlocks** | `codex_unlocks` migration, `useCodex.js` hook | - |
+
+---
+
+### Mobile Considerations
+
+On mobile, the tab navigation should be sticky at the top:
+
+```
+┌───────────────────────────┐
+│  [Identity]    [Codex]    │  ← Sticky tabs
+├───────────────────────────┤
+│                           │
+│  [Scrollable content]     │
+│                           │
+└───────────────────────────┘
+```
+
+The Journey Map should be horizontally scrollable on mobile if needed, with the current position centered on load.
 
 ---
 

@@ -45,6 +45,8 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [showWaitlist, setShowWaitlist] = useState(false);
+  const [currentLoreSlide, setCurrentLoreSlide] = useState(0);
+  const totalLoreSlides = 6;
 
   const faqs = [
     {
@@ -98,7 +100,7 @@ const LandingPage = () => {
       <section className="landing-hero">
         <div className="landing-container">
           <span className="landing-badge landing-badge-gold">
-            Monetise your mission and gain financial + location independence
+            A game to monetise your mission
           </span>
 
           <h1 className="landing-headline">
@@ -413,14 +415,14 @@ const LandingPage = () => {
                 <div className="transformation-journey">
                   <div className="journey-point journey-from">
                     <span className="journey-emoji">🏖️</span>
-                    <span className="journey-stat">13 headsets</span>
                     <span className="journey-place">Dancing on beaches in Thailand</span>
+                    <span className="journey-stat">13 headsets</span>
                   </div>
                   <div className="journey-arrow">→</div>
                   <div className="journey-point journey-to">
                     <span className="journey-emoji">🎉</span>
-                    <span className="journey-stat">350 headsets</span>
                     <span className="journey-place">Hosting Bali beach club events</span>
+                    <span className="journey-stat">350 headsets</span>
                   </div>
                 </div>
               </div>
@@ -456,12 +458,12 @@ const LandingPage = () => {
                       <span className="timeline-text">Working from Bali</span>
                     </div>
                     <div className="timeline-item">
-                      <span className="timeline-marker">3 months</span>
+                      <span className="timeline-marker single-line">3 months</span>
                       <span className="timeline-text">Quit my job</span>
                     </div>
                     <div className="timeline-item">
-                      <span className="timeline-marker">5 months</span>
-                      <span className="timeline-text">Hosting silent discos on beaches across Thailand and Bali</span>
+                      <span className="timeline-marker single-line">5 months</span>
+                      <span className="timeline-text">Funding my life through hosting silent discos on beaches across South-East Asia</span>
                     </div>
                   </div>
                 </div>
@@ -524,11 +526,6 @@ const LandingPage = () => {
                 <div className="credentials-formula">
                   <span className="formula-intro">My secret?</span>
                   <span className="formula-name">The Three Pillars</span>
-                  <span className="formula-pillars">Frameworks + Implementation + Community</span>
-                  <span className="formula-desc">
-                    — my unique formula for creating "magic programs" that cause participants
-                    to walk away feeling like they've had one of the most transformational experiences of their life
-                  </span>
                 </div>
 
                 <div className="three-pillars-diagrams">
@@ -567,15 +564,20 @@ const LandingPage = () => {
                   />
                 </div>
 
+                <p className="formula-desc">
+                  — my unique formula for creating "magic programs" that cause participants
+                  to walk away feeling like they've had one of the most transformational experiences of their life
+                </p>
+
                 <p className="credentials-kicker">
                   This is the level of design thinking behind every flow you'll experience.
                 </p>
-              </div>
 
-              <p className="founder-mission">
-                <strong>My north star:</strong> Help you go from idea to monetising your mission —
-                as fast as possible.
-              </p>
+                <p className="founder-mission">
+                  <strong>My north star:</strong> Help you go from idea to monetising your mission —
+                  as fast as possible.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -697,7 +699,7 @@ const LandingPage = () => {
                   <div className="passion-item passion-item-mission">
                     <span className="passion-icon">🔥</span>
                     <span className="passion-label">Mission</span>
-                    <span className="passion-question">you're passionate about <strong>suffering for</strong></span>
+                    <span className="passion-question">you're passionate about <strong>standing for</strong></span>
                   </div>
                 </div>
               </div>
@@ -731,6 +733,112 @@ const LandingPage = () => {
                     </div>
                     <span className="result-desc">The thing no one else can compete with</span>
                   </div>
+                </div>
+
+                <div className="flow-states-comparison">
+                  <div className="flow-state flow-state-in">
+                    <h4 className="flow-state-title">When you're in Flow:</h4>
+                    <ul className="flow-state-list">
+                      <li>Work feels like play</li>
+                      <li>Time distorts (hours feel like minutes)</li>
+                      <li>Output quality increases effortlessly</li>
+                      <li>Energy is generated, not depleted</li>
+                      <li>Impact happens naturally</li>
+                    </ul>
+                  </div>
+                  <div className="flow-state flow-state-out">
+                    <h4 className="flow-state-title">When you're out of Flow:</h4>
+                    <ul className="flow-state-list">
+                      <li>Everything feels heavy</li>
+                      <li>Resistance is constant</li>
+                      <li>Energy drains rapidly</li>
+                      <li>Quality suffers despite effort</li>
+                      <li>Impact requires force</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Flow Equation Diagram */}
+                <div className="flow-equation-diagram">
+                  <h4 className="flow-equation-title">The Flow Equation</h4>
+                  <svg viewBox="0 0 400 520" className="flow-equation-svg">
+                    <defs>
+                      <linearGradient id="flowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#5e17eb" />
+                        <stop offset="100%" stopColor="#E9A23B" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* THE FLOW - Power Source */}
+                    <rect x="125" y="10" width="150" height="50" rx="8" fill="rgba(94, 23, 235, 0.3)" stroke="#5e17eb" strokeWidth="2" />
+                    <text x="200" y="32" textAnchor="middle" fill="white" fontSize="14" fontWeight="700">THE FLOW</text>
+                    <text x="200" y="48" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="10">(Power Source)</text>
+
+                    {/* Connector line down */}
+                    <line x1="200" y1="60" x2="200" y2="90" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <text x="200" y="105" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="9">Activates through alignment of:</text>
+
+                    {/* Branch lines to three boxes */}
+                    <line x1="200" y1="115" x2="200" y2="130" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="70" y1="130" x2="330" y2="130" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="70" y1="130" x2="70" y2="145" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="200" y1="130" x2="200" y2="145" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="330" y1="130" x2="330" y2="145" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+
+                    {/* Arrows */}
+                    <polygon points="70,145 65,138 75,138" fill="rgba(255,255,255,0.4)" />
+                    <polygon points="200,145 195,138 205,138" fill="rgba(255,255,255,0.4)" />
+                    <polygon points="330,145 325,138 335,138" fill="rgba(255,255,255,0.4)" />
+
+                    {/* SKILLS Box */}
+                    <rect x="20" y="150" width="100" height="90" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                    <text x="70" y="172" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">SKILLS</text>
+                    <text x="70" y="192" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">What</text>
+                    <text x="70" y="205" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">comes</text>
+                    <text x="70" y="218" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">naturally</text>
+                    <text x="70" y="231" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">to you</text>
+
+                    {/* PROBLEMS Box */}
+                    <rect x="150" y="150" width="100" height="90" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                    <text x="200" y="172" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">PROBLEMS</text>
+                    <text x="200" y="192" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">What</text>
+                    <text x="200" y="205" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">lights</text>
+                    <text x="200" y="218" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">you up</text>
+                    <text x="200" y="231" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">to solve</text>
+
+                    {/* PEOPLE Box */}
+                    <rect x="280" y="150" width="100" height="90" rx="8" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+                    <text x="330" y="172" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">PEOPLE</text>
+                    <text x="330" y="192" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">Who</text>
+                    <text x="330" y="205" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">you're</text>
+                    <text x="330" y="218" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">meant</text>
+                    <text x="330" y="231" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="9">to serve</text>
+
+                    {/* Converging lines from three boxes */}
+                    <line x1="70" y1="240" x2="70" y2="260" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="200" y1="240" x2="200" y2="260" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="330" y1="240" x2="330" y2="260" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="70" y1="260" x2="330" y2="260" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <line x1="200" y1="260" x2="200" y2="280" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <polygon points="200,285 195,278 205,278" fill="rgba(255,255,255,0.4)" />
+
+                    {/* YOUR UNIQUE GIFT Box */}
+                    <rect x="100" y="290" width="200" height="80" rx="8" fill="url(#flowGradient)" fillOpacity="0.3" stroke="#E9A23B" strokeWidth="2" />
+                    <text x="200" y="315" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">YOUR UNIQUE GIFT</text>
+                    <text x="200" y="340" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="10" fontStyle="italic">"An offer only</text>
+                    <text x="200" y="355" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="10" fontStyle="italic">YOU can make"</text>
+
+                    {/* Arrow to service */}
+                    <line x1="200" y1="370" x2="200" y2="395" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+                    <polygon points="200,400 195,393 205,393" fill="rgba(255,255,255,0.4)" />
+
+                    {/* YOUR UNIQUE SERVICE Box */}
+                    <rect x="100" y="405" width="200" height="100" rx="8" fill="rgba(233, 162, 59, 0.2)" stroke="#E9A23B" strokeWidth="2" />
+                    <text x="200" y="430" textAnchor="middle" fill="#E9A23B" fontSize="13" fontWeight="700">YOUR UNIQUE SERVICE</text>
+                    <text x="200" y="455" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="10">The specific</text>
+                    <text x="200" y="470" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="10">change you create</text>
+                    <text x="200" y="485" textAnchor="middle" fill="rgba(255,255,255,0.7)" fontSize="10">in the world</text>
+                  </svg>
                 </div>
               </div>
             </div>
@@ -772,15 +880,28 @@ const LandingPage = () => {
       {/* How It Works Section - Gamified */}
       <section className="landing-how-it-works">
         <div className="landing-container">
-          <h2 className="section-heading">How It Works</h2>
+          <h2 className="section-heading">How To Play</h2>
           <p className="section-subheading">
-            Live your ambitions faster
+            A real life game to live your ambitions faster
           </p>
 
           {/* The Process Steps */}
           <div className="process-steps process-steps-3">
             <div className="process-step">
               <div className="step-number">1</div>
+              <div className="step-content">
+                <h3 className="step-title">Create Your Essence Profile</h3>
+                <p className="step-description">
+                  Discover your unique character — your skills, the problems you solve, and who you're meant to serve.
+                </p>
+                <p className="step-game">
+                  <span className="game-tag">Build your hero identity</span>
+                </p>
+              </div>
+            </div>
+
+            <div className="process-step">
+              <div className="step-number">2</div>
               <div className="step-content">
                 <h3 className="step-title">Take the Stage Finder</h3>
                 <p className="step-description">
@@ -793,20 +914,7 @@ const LandingPage = () => {
                   <span className="mini-stage">📈 Scale</span>
                 </div>
                 <p className="step-game">
-                  <span className="game-tag">Discover which stage you're actually at</span>
-                </p>
-              </div>
-            </div>
-
-            <div className="process-step">
-              <div className="step-number">2</div>
-              <div className="step-content">
-                <h3 className="step-title">Unlock Your Quests</h3>
-                <p className="step-description">
-                  Unlock quests that give you clarity on action + accountability to take action.
-                </p>
-                <p className="step-game">
-                  <span className="game-tag">No overwhelm — just what you need now</span>
+                  <span className="game-tag">Discover which level you're at</span>
                 </p>
               </div>
             </div>
@@ -814,12 +922,12 @@ const LandingPage = () => {
             <div className="process-step">
               <div className="step-number">3</div>
               <div className="step-content">
-                <h3 className="step-title">Build Your Streak</h3>
+                <h3 className="step-title">Unlock Your Quests</h3>
                 <p className="step-description">
-                  Score points for your project as you build it.
+                  Get stage-specific quests that give you clarity on action + accountability to take action.
                 </p>
                 <p className="step-game">
-                  <span className="game-tag">Points are yours to keep forever</span>
+                  <span className="game-tag">No overwhelm — just what you need now</span>
                 </p>
               </div>
             </div>
@@ -838,14 +946,9 @@ const LandingPage = () => {
               <span className="element-desc">Track progress</span>
             </div>
             <div className="game-element">
-              <span className="element-icon">🔥</span>
-              <span className="element-name">Streaks</span>
-              <span className="element-desc">Build consistency</span>
-            </div>
-            <div className="game-element">
-              <span className="element-icon">🐉</span>
-              <span className="element-name">Courage Challenges</span>
-              <span className="element-desc">Face fears</span>
+              <span className="element-icon">🧭</span>
+              <span className="element-name">Flow Tracker</span>
+              <span className="element-desc">Find your path</span>
             </div>
           </div>
 
@@ -955,58 +1058,182 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* First Wins Section - Outcome Focused */}
-      <section className="landing-first-wins">
-        <div className="landing-container">
-          <h2 className="section-heading">Your First Wins</h2>
-          <p className="section-subheading">
-            Wherever you start, you get unstuck
-          </p>
+          {/* First Wins - Moved here */}
+          <div className="first-wins-inline">
+            <h3 className="section-heading">Your First Wins</h3>
+            <p className="section-subheading">Wherever you start, you get unstuck</p>
 
-          <div className="wins-grid">
-            <div className="win-card">
-              <div className="win-stage">
-                <span className="win-stage-icon">🎯</span>
-                <span className="win-stage-name">Clarity</span>
+            <div className="wins-grid">
+              <div className="win-card">
+                <div className="win-stage">
+                  <span className="win-stage-icon">🎯</span>
+                  <span className="win-stage-name">Clarity</span>
+                </div>
+                <p className="win-stuck">If you're stuck on direction...</p>
+                <p className="win-outcome">Know exactly what to build and who to serve</p>
               </div>
-              <p className="win-stuck">If you're stuck on direction...</p>
-              <p className="win-outcome">Know exactly what to build and who to serve</p>
+
+              <div className="win-card">
+                <div className="win-stage">
+                  <span className="win-stage-icon">🛠️</span>
+                  <span className="win-stage-name">Build</span>
+                </div>
+                <p className="win-stuck">If you're stuck on your offer...</p>
+                <p className="win-outcome">An offer so good people feel stupid saying no</p>
+              </div>
+
+              <div className="win-card">
+                <div className="win-stage">
+                  <span className="win-stage-icon">💰</span>
+                  <span className="win-stage-name">Sell</span>
+                </div>
+                <p className="win-stuck">If you're stuck on sales...</p>
+                <p className="win-outcome">Your first paying customer</p>
+              </div>
+
+              <div className="win-card">
+                <div className="win-stage">
+                  <span className="win-stage-icon">📈</span>
+                  <span className="win-stage-name">Scale</span>
+                </div>
+                <p className="win-stuck">If you're stuck on growth...</p>
+                <p className="win-outcome">Systems that grow your income</p>
+              </div>
             </div>
 
-            <div className="win-card">
-              <div className="win-stage">
-                <span className="win-stage-icon">🛠️</span>
-                <span className="win-stage-name">Build</span>
-              </div>
-              <p className="win-stuck">If you're stuck on your offer...</p>
-              <p className="win-outcome">An offer so good people feel stupid saying no</p>
-            </div>
-
-            <div className="win-card">
-              <div className="win-stage">
-                <span className="win-stage-icon">💰</span>
-                <span className="win-stage-name">Sell</span>
-              </div>
-              <p className="win-stuck">If you're stuck on sales...</p>
-              <p className="win-outcome">Your first paying customer</p>
-            </div>
-
-            <div className="win-card">
-              <div className="win-stage">
-                <span className="win-stage-icon">📈</span>
-                <span className="win-stage-name">Scale</span>
-              </div>
-              <p className="win-stuck">If you're stuck on growth...</p>
-              <p className="win-outcome">Systems that grow your income</p>
-            </div>
+            <p className="wins-promise"><strong>Live your ambitions faster.</strong></p>
           </div>
 
-          <p className="wins-promise">
-            <strong>Live your ambitions faster.</strong>
-          </p>
+          {/* Track Synergies */}
+          <div className="track-synergies-section">
+            <h3 className="synergies-title">How does healing impact business?</h3>
+
+            <div className="synergies-diagram">
+              <svg viewBox="0 0 260 480" className="synergies-svg">
+                <defs>
+                  <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffdd27" />
+                    <stop offset="100%" stopColor="#ffc107" />
+                  </linearGradient>
+                  <filter id="goldGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feFlood floodColor="#ffdd27" floodOpacity="0.3" />
+                    <feComposite in2="blur" operator="in" />
+                    <feMerge>
+                      <feMergeNode />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                {/* HEALING Box - Top */}
+                <rect x="30" y="10" width="200" height="65" rx="16" fill="rgba(255, 221, 39, 0.1)" stroke="#ffdd27" strokeWidth="1.5" />
+                <text x="130" y="35" textAnchor="middle" fill="#ffdd27" fontSize="14" fontWeight="700">HEALING</text>
+                <text x="130" y="55" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="11">Feel safe to take action</text>
+
+                {/* Arrow down */}
+                <line x1="130" y1="75" x2="130" y2="100" stroke="url(#goldGradient)" strokeWidth="2" />
+                <polygon points="130,105 124,96 136,96" fill="#ffdd27" />
+
+                {/* PLAYGROUND Box */}
+                <rect x="30" y="110" width="200" height="65" rx="16" fill="rgba(255, 221, 39, 0.1)" stroke="#ffdd27" strokeWidth="1.5" />
+                <text x="130" y="135" textAnchor="middle" fill="#ffdd27" fontSize="14" fontWeight="700">PLAY-LIST</text>
+                <text x="130" y="155" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="11">Do things you love</text>
+
+                {/* Arrow down */}
+                <line x1="130" y1="175" x2="130" y2="200" stroke="url(#goldGradient)" strokeWidth="2" />
+                <polygon points="130,205 124,196 136,196" fill="#ffdd27" />
+
+                {/* BUSINESS Box */}
+                <rect x="30" y="210" width="200" height="65" rx="16" fill="rgba(255, 221, 39, 0.1)" stroke="#ffdd27" strokeWidth="1.5" />
+                <text x="130" y="235" textAnchor="middle" fill="#ffdd27" fontSize="14" fontWeight="700">BUSINESS</text>
+                <text x="130" y="255" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="11">Earn money from it</text>
+
+                {/* Arrow down */}
+                <line x1="130" y1="275" x2="130" y2="300" stroke="url(#goldGradient)" strokeWidth="2" />
+                <polygon points="130,305 124,296 136,296" fill="#ffdd27" />
+
+                {/* SERVICE Box */}
+                <rect x="30" y="310" width="200" height="65" rx="16" fill="rgba(255, 221, 39, 0.1)" stroke="#ffdd27" strokeWidth="1.5" />
+                <text x="130" y="335" textAnchor="middle" fill="#ffdd27" fontSize="14" fontWeight="700">SERVICE</text>
+                <text x="130" y="355" textAnchor="middle" fill="rgba(255,255,255,0.8)" fontSize="11">Create positive impact</text>
+
+                {/* Arrow down */}
+                <line x1="130" y1="375" x2="130" y2="400" stroke="url(#goldGradient)" strokeWidth="2" />
+                <polygon points="130,405 124,396 136,396" fill="#ffdd27" />
+
+                {/* YOUR FLOW Box - Bottom (Final - highlighted) */}
+                <rect x="30" y="410" width="200" height="65" rx="16" fill="rgba(255, 221, 39, 0.2)" stroke="url(#goldGradient)" strokeWidth="2" filter="url(#goldGlow)" />
+                <text x="130" y="437" textAnchor="middle" fill="#ffdd27" fontSize="15" fontWeight="700">YOUR FLOW</text>
+                <text x="130" y="457" textAnchor="middle" fill="rgba(255,255,255,0.9)" fontSize="11">Your unique life adventure</text>
+              </svg>
+            </div>
+
+            <ul className="synergies-list">
+              <li><strong>Healing</strong> enables <strong>Play-List</strong> — you can approach play when you understand why it scared you</li>
+              <li><strong>Play-List</strong> enables <strong>Business</strong> — you can own your identity publicly when play feels safe again</li>
+              <li><strong>Business</strong> creates <strong>Service</strong> — your gift reaches people</li>
+              <li><strong>Service</strong> unlocks <strong>Your Flow</strong> — your unique life adventure</li>
+            </ul>
+          </div>
+
+          {/* Game Story - The Lore */}
+          <div className="game-story-section">
+            <h3 className="game-story-title">The Story</h3>
+            <div className="lore-slides-container">
+              <div className="lore-slides" style={{ transform: `translateX(-${currentLoreSlide * 100}%)` }}>
+                <div className="lore-slide">
+                  <p className="lore-text">In the beginning, humans lived in Flow.</p>
+                  <p className="lore-subtext">They knew their gifts instinctively. They served their communities naturally. Work and play were indistinguishable.</p>
+                </div>
+                <div className="lore-slide">
+                  <p className="lore-text">Then came the Matrix.</p>
+                  <p className="lore-subtext">Not a conspiracy. An optimization. Society needed predictability, so it created systems: schools that trained compliance, careers that rewarded conformity.</p>
+                </div>
+                <div className="lore-slide">
+                  <p className="lore-text">The Protective Voices were born.</p>
+                  <p className="lore-subtext">The Perfectionist, The People Pleaser, The Controller, The Performer, The Ghost. They were protectors. But protectors can become prisons.</p>
+                </div>
+                <div className="lore-slide">
+                  <p className="lore-text">The ancient Flow Masters left breadcrumbs.</p>
+                  <p className="lore-subtext">Teachings about finding your true path, encoded in philosophy and wisdom traditions. They knew some would awaken.</p>
+                </div>
+                <div className="lore-slide">
+                  <p className="lore-text">You are one of the Awakening.</p>
+                  <p className="lore-subtext">The glitch you felt was real. The restlessness isn't a flaw—it's your Flow trying to activate after years of suppression.</p>
+                </div>
+                <div className="lore-slide">
+                  <p className="lore-text">Welcome to the game, hero.</p>
+                  <p className="lore-subtext">FindMyFlow is the training program the Flow Masters would have built. The game is real. And you've already begun.</p>
+                </div>
+              </div>
+            </div>
+            <div className="lore-nav">
+              <button
+                className="lore-nav-btn lore-prev"
+                onClick={() => setCurrentLoreSlide(prev => Math.max(0, prev - 1))}
+                disabled={currentLoreSlide === 0}
+                aria-label="Previous slide"
+              >←</button>
+              <div className="lore-dots">
+                {[...Array(totalLoreSlides)].map((_, i) => (
+                  <button
+                    key={i}
+                    className={`lore-dot ${currentLoreSlide === i ? 'active' : ''}`}
+                    onClick={() => setCurrentLoreSlide(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+              <button
+                className="lore-nav-btn lore-next"
+                onClick={() => setCurrentLoreSlide(prev => Math.min(totalLoreSlides - 1, prev + 1))}
+                disabled={currentLoreSlide === totalLoreSlides - 1}
+                aria-label="Next slide"
+              >→</button>
+            </div>
+          </div>
         </div>
       </section>
 
