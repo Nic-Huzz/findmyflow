@@ -9,7 +9,6 @@ import { hasActiveChallenge } from './lib/questCompletion'
 import { cacheBustUrl } from './lib/fetchJson'
 import { getStageShortName } from './lib/stageConfig'
 import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePreferences'
-import { graduateUser } from './lib/graduationChecker'
 import GraduationModal from './components/GraduationModal'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import FlowMapRiver from './components/FlowMapRiver'
@@ -242,14 +241,33 @@ const Profile = () => {
                 .eq('challenge_instance_id', progressData.challenge_instance_id)
             ])
 
-            const questData = await questsResponse.json()
+            // Validate quest data response
+            if (!questsResponse.ok) {
+              console.error('Failed to fetch quest data:', questsResponse.status)
+              return
+            }
+
+            let questData
+            try {
+              questData = await questsResponse.json()
+            } catch (parseErr) {
+              console.error('Failed to parse quest data JSON:', parseErr)
+              return
+            }
+
+            // Validate quest data structure
+            if (!questData || !Array.isArray(questData.quests)) {
+              console.error('Invalid quest data structure:', questData)
+              return
+            }
+
             const completions = completionsResponse.data || []
 
             // Get today's date for daily quest check
             const today = new Date().toISOString().split('T')[0]
 
             // Filter active quests (not archived, not coming_soon)
-            const activeQuests = questData.quests?.filter(q => !q.archived && q.status !== 'coming_soon') || []
+            const activeQuests = questData.quests.filter(q => !q.archived && q.status !== 'coming_soon')
 
             // Count daily quests
             const dailyQuests = activeQuests.filter(q => q.frequency === 'daily')
@@ -349,38 +367,6 @@ const Profile = () => {
     } catch (err) {
       console.warn('Error loading stage progress:', err)
       setStageProgressLoaded(true)
-    }
-  }
-
-  const handleGraduation = async (fromStage, toStage) => {
-    if (!user?.id || !stageProgress?.persona) return
-
-    try {
-      const result = await graduateUser(
-        user.id,
-        fromStage,
-        toStage,
-        stageProgress.persona,
-        { timestamp: new Date().toISOString() }
-      )
-
-      if (result.graduated) {
-        // Show celebration modal
-        setGraduationModal({
-          isOpen: true,
-          celebration: result.celebration_message
-        })
-
-        // Reload stage progress
-        await loadStageProgress()
-
-        // If persona switched (Vibe Seeker → Vibe Riser), reload user profile
-        if (result.persona_switched) {
-          await loadUserProfile()
-        }
-      }
-    } catch (err) {
-      console.error('Error graduating user:', err)
     }
   }
 
