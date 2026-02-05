@@ -317,14 +317,20 @@ const Profile = () => {
   }
 
   const loadStageProgress = async () => {
-    if (!user?.id) return
+    if (!user?.id) {
+      console.log('🔍 loadStageProgress: No user.id, returning early')
+      return
+    }
 
     try {
+      console.log('🔍 loadStageProgress: Querying for user_id:', user.id)
       const { data, error } = await supabase
         .from('user_stage_progress')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle()
+
+      console.log('🔍 loadStageProgress result:', { data, error })
 
       if (error) {
         console.warn('Error loading stage progress (this is OK if flows not set up yet):', error)
@@ -485,6 +491,17 @@ const Profile = () => {
   // 1. No stageProgress exists yet
   // 2. V2 onboarding not completed (ensures all users go through new flow)
   // This forces old V1 users to complete the new Q1→Q2→Q3 onboarding
+  console.log('🔍 Profile.jsx onboarding check:', {
+    userId: user?.id,
+    email: user?.email,
+    stageProgress: stageProgress ? {
+      id: stageProgress.id,
+      persona: stageProgress.persona,
+      onboarding_v2_completed: stageProgress.onboarding_v2_completed,
+      onboarding_completed: stageProgress.onboarding_completed
+    } : null,
+    willShowHomeFirstTime: !stageProgress || stageProgress.onboarding_v2_completed !== true
+  })
   if (!stageProgress || stageProgress.onboarding_v2_completed !== true) {
     return <HomeFirstTime />
   }
