@@ -1561,3 +1561,14 @@
 .no-project-prompt .action-btn {
   margin: 0 auto;
 }
+
+/* Flow Map Loading State */
+.flow-map-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: rgba(94, 23, 235, 0.05);
+  border-radius: 16px;
+  margin: 16px 0;
+}

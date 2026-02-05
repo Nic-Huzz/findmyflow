@@ -36,6 +36,7 @@ const Profile = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [primaryProject, setPrimaryProject] = useState(null)
   const [allProjects, setAllProjects] = useState([])
+  const [projectsLoaded, setProjectsLoaded] = useState(false)
   const [riverRefreshKey, setRiverRefreshKey] = useState(0)
   const [streakData, setStreakData] = useState({ dailyStreak: 0, groanStreak: 0 })
 
@@ -57,7 +58,10 @@ const Profile = () => {
   }, [user])
 
   const loadUserProjects = async () => {
-    if (!user?.id) return
+    if (!user?.id) {
+      setProjectsLoaded(true)
+      return
+    }
 
     try {
       const { data: projects, error } = await supabase
@@ -70,6 +74,7 @@ const Profile = () => {
 
       if (error) {
         console.error('Error loading projects:', error)
+        setProjectsLoaded(true)
         return
       }
 
@@ -80,6 +85,8 @@ const Profile = () => {
       setPrimaryProject(primary || null)
     } catch (err) {
       console.error('Error in loadUserProjects:', err)
+    } finally {
+      setProjectsLoaded(true)
     }
   }
 
@@ -424,6 +431,48 @@ const Profile = () => {
     )
   }
 
+  // Wait for stageProgress to load FIRST before making any decisions
+  // This prevents showing wrong UI while data is still loading
+  if (!stageProgressLoaded) {
+    return (
+      <div className="app">
+        <div className="loading" style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh',
+          background: 'linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%)'
+        }}>
+          <div className="loading-spinner">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Check if user needs to complete onboarding (first-time experience)
+  // Show HomeFirstTime if:
+  // 1. No stageProgress exists yet
+  // 2. V2 onboarding not completed (ensures all users go through new flow)
+  // This forces old V1 users to complete the new Q1→Q2→Q3 onboarding
+  console.log('🔍 Profile.jsx onboarding check:', {
+    userId: user?.id,
+    email: user?.email,
+    stageProgress: stageProgress ? {
+      id: stageProgress.id,
+      persona: stageProgress.persona,
+      onboarding_v2_completed: stageProgress.onboarding_v2_completed,
+      onboarding_completed: stageProgress.onboarding_completed
+    } : null,
+    willShowHomeFirstTime: !stageProgress || stageProgress.onboarding_v2_completed !== true
+  })
+  if (!stageProgress || stageProgress.onboarding_v2_completed !== true) {
+    return <HomeFirstTime />
+  }
+
+  // Only show "no profile" error AFTER we've confirmed onboarding is complete
+  // If user completed onboarding but has no lead_flow_profile, something went wrong
   if (!userData) {
     return (
       <div className="app">
@@ -463,46 +512,6 @@ const Profile = () => {
         </div>
       </div>
     )
-  }
-
-  // Wait for stageProgress to load before deciding to show HomeFirstTime
-  // This prevents flashing HomeFirstTime while the data is still loading
-  if (!stageProgressLoaded) {
-    return (
-      <div className="app">
-        <div className="loading" style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-          background: 'linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%)'
-        }}>
-          <div className="loading-spinner">
-            <span></span><span></span><span></span>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Check if user needs to complete onboarding (first-time experience)
-  // Show HomeFirstTime if:
-  // 1. No stageProgress exists yet
-  // 2. V2 onboarding not completed (ensures all users go through new flow)
-  // This forces old V1 users to complete the new Q1→Q2→Q3 onboarding
-  console.log('🔍 Profile.jsx onboarding check:', {
-    userId: user?.id,
-    email: user?.email,
-    stageProgress: stageProgress ? {
-      id: stageProgress.id,
-      persona: stageProgress.persona,
-      onboarding_v2_completed: stageProgress.onboarding_v2_completed,
-      onboarding_completed: stageProgress.onboarding_completed
-    } : null,
-    willShowHomeFirstTime: !stageProgress || stageProgress.onboarding_v2_completed !== true
-  })
-  if (!stageProgress || stageProgress.onboarding_v2_completed !== true) {
-    return <HomeFirstTime />
   }
 
   // Get archetype data
@@ -814,6 +823,12 @@ const Profile = () => {
               }}
             />
           </>
+        ) : !projectsLoaded ? (
+          <div className="flow-map-loading">
+            <div className="loading-spinner">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
         ) : (
           <div className="no-project-prompt">
             <div className="prompt-icon">🚀</div>
