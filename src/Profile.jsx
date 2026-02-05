@@ -12,7 +12,6 @@ import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePrefere
 import { graduateUser } from './lib/graduationChecker'
 import GraduationModal from './components/GraduationModal'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
-import FlowMap from './components/FlowMap'
 import FlowMapRiver from './components/FlowMapRiver'
 import SeeYourFlow from './components/SeeYourFlow'
 import HomeFirstTime from './components/HomeFirstTime'
@@ -816,7 +815,17 @@ const Profile = () => {
             />
           </>
         ) : (
-          <FlowMap persona={stageProgress?.persona} />
+          <div className="no-project-prompt">
+            <div className="prompt-icon">🚀</div>
+            <h3>Create Your First Project</h3>
+            <p>Set up a project to start tracking your flow and progress.</p>
+            <button
+              className="action-btn primary"
+              onClick={() => navigate('/7-day-challenge')}
+            >
+              Get Started
+            </button>
+          </div>
         )}
 
         {/* Graduation Modal */}
