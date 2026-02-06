@@ -918,6 +918,14 @@ function HomeFirstTime() {
       <ExistingProjectFlow
         onComplete={() => window.location.href = '/me'}
         onBack={() => setCurrentScreen(SCREENS.PROJECT_TYPE)}
+        onboardingData={{
+          persona: assignedPersona?.persona || null,
+          employmentStatus,
+          hasSideProject,
+          wealthLadderRung,
+          primaryGoal,
+          guidanceEmphasis
+        }}
       />
     )
   }

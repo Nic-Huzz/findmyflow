@@ -47,7 +47,7 @@ const STAGE_OPTIONS = [
   { value: 'ready_to_launch_campaign', label: 'Ready to launch major campaign', stage: STAGES.LAUNCH }
 ]
 
-function ExistingProjectFlow({ onComplete, onBack }) {
+function ExistingProjectFlow({ onComplete, onBack, onboardingData }) {
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -219,11 +219,23 @@ function ExistingProjectFlow({ onComplete, onBack }) {
         // Save seed clusters for Flow Finder
         await saveSeedClusters(result.project?.id)
 
-        // Mark onboarding as complete
+        // Mark onboarding as complete + save Q1-Q3 answers
         const { error: updateError } = await supabase
           .from('user_stage_progress')
-          .update({ onboarding_completed: true })
-          .eq('user_id', user.id)
+          .upsert({
+            user_id: user.id,
+            persona: onboardingData?.persona || null,
+            employment_status: onboardingData?.employmentStatus || null,
+            has_side_project: onboardingData?.hasSideProject || null,
+            wealth_ladder_rung: onboardingData?.wealthLadderRung || null,
+            primary_goal: onboardingData?.primaryGoal || null,
+            guidance_emphasis: onboardingData?.guidanceEmphasis || null,
+            onboarding_completed: true,
+            onboarding_v2_completed: true,
+            current_stage: String(projectData.startingStage)
+          }, {
+            onConflict: 'user_id'
+          })
 
         if (updateError) {
           console.error('Error marking onboarding complete:', updateError)
