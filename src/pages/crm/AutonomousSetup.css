@@ -22,7 +22,7 @@
 .autonomous-setup {
   min-height: 100vh;
   background: var(--warm-gray);
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--text-primary);
 }
 

@@ -38,10 +38,16 @@ export default function ContentCreate() {
   if (!triggerConfig?.triggerId) {
     return (
       <div className="content-create">
-        <header className="cc-header">
-          <button className="back-btn" onClick={() => navigate('/crm')}>
-            ← Back
+        {/* Top Toolbar */}
+        <div className="cc-toolbar">
+          <button className="cc-toolbar-back" onClick={() => navigate('/crm/attract')}>
+            ←
           </button>
+          <h2 className="cc-toolbar-title">Create Content</h2>
+          <span className="cc-toolbar-icon">✨</span>
+        </div>
+
+        <header className="cc-header">
           <div className="header-content">
             <h1>Create Content</h1>
             <p>Choose what type of content to create</p>
@@ -77,10 +83,16 @@ export default function ContentCreate() {
 
   return (
     <div className="content-create">
-      <header className="cc-header">
-        <button className="back-btn" onClick={() => navigate('/crm/alerts')}>
-          ← Back to Alerts
+      {/* Top Toolbar */}
+      <div className="cc-toolbar">
+        <button className="cc-toolbar-back" onClick={() => navigate('/crm/attract')}>
+          ←
         </button>
+        <h2 className="cc-toolbar-title">Create Content</h2>
+        <span className="cc-toolbar-icon">✨</span>
+      </div>
+
+      <header className="cc-header">
         <div className="header-content">
           <h1>Create Content</h1>
           <p>AI-powered content from your recommendation</p>

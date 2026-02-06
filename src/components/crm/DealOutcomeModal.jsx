@@ -4,6 +4,7 @@
  * Enhanced: Also captures offer category for Ascension Engine
  */
 import { useState } from 'react'
+import { THREE_DISTORTIONS, DISTORTION_REASON_LABELS } from '../../data/salesPlaybook'
 import './DealOutcomeModal.css'
 
 // Offer categories for Value Ladder / Ascension Engine
@@ -54,14 +55,15 @@ const WIN_REASONS = [
   { id: 'referral', label: 'Strong referral', description: 'Came pre-sold from trusted source' },
 ]
 
-const LOSS_REASONS = [
-  { id: 'price', label: 'Price too high', description: 'Budget constraints' },
-  { id: 'timing', label: 'Bad timing', description: 'Not ready yet' },
-  { id: 'competitor', label: 'Went with competitor', description: 'Chose another solution' },
-  { id: 'no_decision', label: 'No decision', description: 'Went dark or delayed' },
-  { id: 'fit', label: 'Not a fit', description: 'Wrong solution for their needs' },
-  { id: 'trust', label: 'Trust issues', description: 'Needed more credibility' },
-]
+// Build loss reasons from Three Distortions framework
+const LOSS_REASONS = THREE_DISTORTIONS.layers.flatMap(layer =>
+  layer.categories.map(cat => ({
+    id: `${layer.id}/${cat.id}`,
+    label: DISTORTION_REASON_LABELS[`${layer.id}/${cat.id}`]?.split(' — ')[0] || cat.name,
+    description: cat.subtitle?.replace(/"/g, '') || layer.description,
+    layer: layer.id,
+  }))
+)
 
 export default function DealOutcomeModal({
   deal,
@@ -101,16 +103,16 @@ export default function DealOutcomeModal({
   function handleSubmit(e) {
     e.preventDefault()
 
-    // Auto-set factor flags based on selected reasons
+    // Auto-set factor flags based on selected reasons (supports both old flat and new layer/category format)
     const allReasons = [formData.primary_reason, ...formData.secondary_reasons]
     const selectedOffer = OFFER_CATEGORIES.find(c => c.id === formData.offer_category)
 
     const outcomeData = {
       ...formData,
       outcome,
-      price_factor: allReasons.includes('price'),
-      timing_factor: allReasons.includes('timing'),
-      fit_factor: allReasons.includes('fit'),
+      price_factor: allReasons.some(r => r === 'price' || r?.includes('/price')),
+      timing_factor: allReasons.some(r => r === 'timing' || r?.includes('/time')),
+      fit_factor: allReasons.some(r => r === 'fit' || r?.includes('/fit')),
       // Add offer data for ascension engine
       is_continuity: formData.offer_category === 'continuity',
       is_actual_sale: selectedOffer?.isActualSale ?? true,
@@ -254,7 +256,7 @@ export default function DealOutcomeModal({
           )}
 
           {/* Loss-specific: Competitor */}
-          {!isWin && formData.primary_reason === 'competitor' && (
+          {!isWin && (formData.primary_reason === 'competitor' || formData.primary_reason?.includes('/fit')) && (
             <div className="form-section">
               <label className="section-label">
                 Which competitor?

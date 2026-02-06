@@ -14,6 +14,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
+import { trackFlowCompletion } from '../lib/flowTracking'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
@@ -65,6 +67,7 @@ function MVPReadinessFlow() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
   const showResults = searchParams.get('results') === 'true'
 
   const [stage, setStage] = useState(STAGES.LOADING)
@@ -290,12 +293,11 @@ function MVPReadinessFlow() {
 
       // Track flow completion
       try {
-        await supabase.from('flow_sessions').insert({
-          user_id: user.id,
-          flow_type: 'mvp_readiness',
-          flow_version: '1.0',
-          status: 'completed',
-          last_step_id: 'complete'
+        await trackFlowCompletion({
+          userId: user.id,
+          projectId,
+          flowType: 'mvp_readiness',
+          flowVersion: '1.0'
         })
       } catch (e) {
         console.warn('Flow tracking failed:', e)

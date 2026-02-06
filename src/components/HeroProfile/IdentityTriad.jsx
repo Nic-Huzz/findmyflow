@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 /**
  * IdentityTriad - Detailed Gift/Cause/Tribe identity cards
@@ -20,7 +21,10 @@ function IdentityTriad({ skill, problem, persona }) {
           icon="🎯"
           label="Gift"
           segment={skill}
-          emptyText="Complete Flow Finder Skills to discover your gift"
+          emptyText="Complete"
+          emptyLinkText="Flow Finder Skills"
+          emptyLinkTo="/nikigai/skills"
+          emptyTextAfter="to discover your gift"
         />
 
         {/* Cause (Problem) */}
@@ -28,7 +32,10 @@ function IdentityTriad({ skill, problem, persona }) {
           icon="🌍"
           label="Cause"
           segment={problem}
-          emptyText="Complete Flow Finder Problems to discover your cause"
+          emptyText="Complete"
+          emptyLinkText="Flow Finder Problems"
+          emptyLinkTo="/nikigai/problems"
+          emptyTextAfter="to discover your cause"
         />
 
         {/* Tribe (Persona) */}
@@ -36,14 +43,17 @@ function IdentityTriad({ skill, problem, persona }) {
           icon="👥"
           label="Tribe"
           segment={persona}
-          emptyText="Complete Flow Finder Persona to discover your tribe"
+          emptyText="Complete"
+          emptyLinkText="Flow Finder Persona"
+          emptyLinkTo="/nikigai/persona"
+          emptyTextAfter="to discover your tribe"
         />
       </div>
     </div>
   )
 }
 
-function TriadDetailCard({ icon, label, segment, emptyText }) {
+function TriadDetailCard({ icon, label, segment, emptyText, emptyLinkText, emptyLinkTo, emptyTextAfter }) {
   if (!segment) {
     return (
       <div className="triad-detail-card triad-detail-card--empty">
@@ -51,7 +61,13 @@ function TriadDetailCard({ icon, label, segment, emptyText }) {
           <span className="triad-detail-icon">{icon}</span>
           <span className="triad-detail-label">{label}</span>
         </div>
-        <p className="triad-detail-empty">{emptyText}</p>
+        <p className="triad-detail-empty">
+          {emptyText}{' '}
+          <Link to={emptyLinkTo} className="hero-profile-link">
+            {emptyLinkText} →
+          </Link>{' '}
+          {emptyTextAfter}
+        </p>
       </div>
     )
   }

@@ -226,6 +226,15 @@ export default function ImplementationTracker() {
 
   return (
     <div className="implementation-tracker">
+      {/* Top Toolbar */}
+      <div className="impl-toolbar">
+        <button className="impl-toolbar-back" onClick={() => navigate('/crm/tools')}>
+          ←
+        </button>
+        <h2 className="impl-toolbar-title">Implementations</h2>
+        <span className="impl-toolbar-icon">📋</span>
+      </div>
+
       {/* Celebration Overlay */}
       {celebration && (
         <div className={`celebration-overlay ${celebration.type}`}>

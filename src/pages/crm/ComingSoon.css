@@ -9,8 +9,8 @@
   min-height: 100vh;
   background: #fff !important;
   padding: 1rem;
-  padding-bottom: 120px;
-  color: #1a1a1a;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  color: #212529;
 }
 
 /* Top Toolbar */
@@ -22,7 +22,7 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #dee2e6;
   margin: -1rem -1rem 1rem -1rem;
   z-index: 10;
 }
@@ -33,7 +33,7 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #1a1a1a;
+  color: #212529;
   cursor: pointer;
   padding: 0.25rem;
   line-height: 1;
@@ -42,7 +42,7 @@
 .cs-toolbar-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #212529;
   margin: 0;
 }
 
@@ -76,26 +76,26 @@
 }
 
 .cs-separator {
-  color: #9ca3af;
+  color: #6c757d;
 }
 
 .cs-title {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #212529;
   margin: 0 0 0.25rem 0;
 }
 
 .cs-subtitle {
   font-size: 0.9375rem;
-  color: #6b7280;
+  color: #495057;
   margin: 0;
 }
 
 /* Main Card */
 .coming-soon-card {
   background: #fff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dee2e6;
   border-left: 4px solid #5e17eb;
   border-radius: 12px;
   padding: 2rem 1.5rem;
@@ -125,7 +125,7 @@
   transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
-  border: 3px solid #e5e7eb;
+  border: 3px solid #dee2e6;
   border-radius: 50%;
   animation: cs-pulse 2s ease-in-out infinite;
 }
@@ -149,13 +149,13 @@
 .cs-headline {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #212529;
   margin: 0 0 0.5rem 0;
 }
 
 .cs-message {
   font-size: 1rem;
-  color: #6b7280;
+  color: #495057;
   margin: 0 0 1.5rem 0;
   max-width: 400px;
   margin-left: auto;
@@ -165,7 +165,7 @@
 /* Features List */
 .cs-features {
   background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dee2e6;
   border-radius: 10px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
@@ -205,14 +205,14 @@
 
 /* Notify Section */
 .cs-notify {
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #dee2e6;
   padding-top: 1.5rem;
   margin-top: 1.5rem;
 }
 
 .cs-notify-text {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #495057;
   margin: 0 0 0.75rem 0;
 }
 
@@ -241,7 +241,7 @@
 .cs-action-btn {
   flex: 1;
   background: #fff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #dee2e6;
   color: #374151;
   padding: 0.875rem 1rem;
   border-radius: 10px;

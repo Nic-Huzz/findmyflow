@@ -22,6 +22,7 @@ export {
 export {
   DEAL_STAGES,
   ACTIVE_STAGES,
+  POST_SALE_STAGES,
   STAGE_INFO,
   LEGACY_STAGE_MAP,
   PRODUCTS,
@@ -292,3 +293,19 @@ export {
   generateFailedRowsCSV,
   downloadCSV,
 } from './csvImportService'
+
+// Objection Logging (Sales Playbook)
+export {
+  logObjection,
+  fetchObjectionLogs,
+  getObjectionStats,
+  deleteObjectionLog,
+} from './objectionService'
+
+// CLOSER Script System (Sales Playbook)
+export {
+  fetchCloserScript,
+  saveCloserScript,
+  generateDefaultScript,
+  buildCloserStepPrompt,
+} from './closerScriptService'

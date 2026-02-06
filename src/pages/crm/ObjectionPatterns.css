@@ -22,7 +22,7 @@
 
 .objection-patterns {
   padding: 1.5rem;
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   max-width: 1200px;
   margin: 0 auto;
   background: var(--warm-gray);
@@ -302,7 +302,7 @@
 @media (max-width: 768px) {
   .objection-patterns {
     padding: 1rem;
-    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
   .objection-patterns .op-stats {

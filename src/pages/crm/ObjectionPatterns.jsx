@@ -8,9 +8,13 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../../auth/AuthProvider'
 import { fetchDealOutcomes, getDealOutcomeStats } from '../../lib/crm/dealService'
 import { fetchValidationAnalysis } from '../../lib/crm/challengeDataService'
+import { DISTORTION_REASON_LABELS } from '../../data/salesPlaybook'
 import './ObjectionPatterns.css'
 
 const LOSS_REASON_LABELS = {
+  // New Three Distortions format
+  ...DISTORTION_REASON_LABELS,
+  // Legacy flat format (for unmigrated data)
   price: 'Price too high',
   timing: 'Bad timing',
   competitor: 'Went with competitor',

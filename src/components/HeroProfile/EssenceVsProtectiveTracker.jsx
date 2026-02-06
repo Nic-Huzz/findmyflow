@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 /**
  * Healing R-type configuration
@@ -98,8 +99,11 @@ function EssenceVsProtectiveTracker({ voiceTracker, archetypes }) {
           <div className="voice-balance-empty">
             <p className="voice-empty-text">
               Track moments when your essence voice guides you vs when your
-              protective voice holds you back. Complete voice quests in the
-              7-day challenge to start tracking.
+              protective voice holds you back. Complete voice quests in the{' '}
+              <Link to="/7-day-challenge?tab=business" className="hero-profile-link">
+                7-Day Challenge →
+              </Link>{' '}
+              to start tracking.
             </p>
           </div>
         )}
@@ -136,8 +140,11 @@ function EssenceVsProtectiveTracker({ voiceTracker, archetypes }) {
 
         {!hasHealingData && (
           <p className="healing-empty-text">
-            Complete healing quests (Recognise, Release, Rewire, Reconnect) to
-            track your inner growth journey.
+            Complete healing quests (Recognise, Release, Rewire, Reconnect) in the{' '}
+            <Link to="/7-day-challenge?tab=healing" className="hero-profile-link">
+              7-Day Challenge →
+            </Link>{' '}
+            to track your inner growth journey.
           </p>
         )}
       </div>

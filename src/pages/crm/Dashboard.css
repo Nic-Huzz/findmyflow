@@ -52,7 +52,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .hq-stat-card {
@@ -79,6 +79,106 @@
 .hq-stat-label {
   font-size: 0.8125rem;
   color: #6c757d;
+}
+
+/* Trend Indicators */
+.hq-trend {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.hq-trend--up {
+  color: #10b981;
+}
+
+.hq-trend--down {
+  color: #ef4444;
+}
+
+.hq-trend--neutral {
+  color: #6c757d;
+}
+
+/* Weekly Game Scores */
+.hq-weekly-scores {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #e9ecef;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hq-weekly-scores-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+}
+
+.hq-score-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hq-score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hq-score-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.hq-score-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.hq-score-value--positive {
+  color: #10b981;
+}
+
+.hq-score-value--negative {
+  color: #ef4444;
+}
+
+.hq-score-bar {
+  height: 6px;
+  background: #f1f3f5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.hq-score-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+  min-width: 2px;
+}
+
+.hq-score-fill--execution {
+  background: linear-gradient(90deg, #5e17eb, #8b5cf6);
+}
+
+.hq-score-fill--conversion {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.hq-score-fill--improvement {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.hq-score-fill--decline {
+  background: linear-gradient(90deg, #ef4444, #f87171);
 }
 
 /* Section */
@@ -156,6 +256,10 @@
 
   .hq-stat-value {
     font-size: 1.25rem;
+  }
+
+  .hq-weekly-scores {
+    padding: 12px;
   }
 
   .hq-quick-actions {

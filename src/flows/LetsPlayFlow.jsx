@@ -8,7 +8,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { fetchFlowFinderData } from '../lib/crm/groanChallengeService'
@@ -133,6 +133,7 @@ export default function LetsPlayFlow() {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA)
   const [completionCount, setCompletionCount] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hasSelfTest, setHasSelfTest] = useState(true) // default true to avoid flash
 
   const { saveProgress } = useAutoSave('lets_play', user?.id)
 
@@ -157,6 +158,15 @@ export default function LetsPlayFlow() {
           .eq('quest_id', 'lets_play')
 
         setCompletionCount(count || 0)
+
+        // Check if user has completed a self-test
+        const { count: selfTestCount } = await supabase
+          .from('quest_completions')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('quest_id', 'self_test')
+
+        setHasSelfTest((selfTestCount || 0) > 0)
       } catch (err) {
         console.warn('LetsPlayFlow init error:', err)
       } finally {
@@ -462,6 +472,21 @@ export default function LetsPlayFlow() {
             <p>That's it. That's the game.</p>
             <p><strong>To start:</strong> Pick a skill. Pick a problem. Help one real person.</p>
           </div>
+          {!hasSelfTest && (
+            <div className="self-test-nudge" style={{
+              padding: '12px 16px',
+              background: 'rgba(255, 221, 39, 0.12)',
+              border: '1px solid rgba(255, 221, 39, 0.25)',
+              borderRadius: '12px',
+              fontSize: '0.875rem',
+              color: 'rgba(255, 255, 255, 0.85)',
+              marginBottom: '16px',
+              maxWidth: '400px',
+              textAlign: 'center'
+            }}>
+              <p style={{ margin: 0 }}><strong>First time?</strong> Try a <Link to="/self-test" style={{ color: '#ffdd27', fontWeight: 600 }}>Self-Test</Link> first — prove your skill works on yourself before helping someone else.</p>
+            </div>
+          )}
           <button className="primary-button" onClick={() => setStep(1)}>
             Let's Play
           </button>

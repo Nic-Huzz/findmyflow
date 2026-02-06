@@ -20,6 +20,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
+import { trackFlowCompletion } from '../lib/flowTracking'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import FlowFeedback from '../components/FlowFeedback/FlowFeedback'
@@ -234,6 +236,7 @@ function ProductSelectionFlow() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
   const showResults = searchParams.get('results') === 'true'
 
   const [stage, setStage] = useState(STAGES.LOADING)
@@ -729,6 +732,17 @@ function ProductSelectionFlow() {
             updated_at: new Date().toISOString()
           })
           .eq('id', assessment.id)
+      }
+
+      // Track flow completion
+      try {
+        await trackFlowCompletion({
+          userId: user.id,
+          projectId,
+          flowType: 'product_selection'
+        })
+      } catch (trackingError) {
+        console.warn('Flow tracking failed:', trackingError)
       }
 
       // Complete challenge quest

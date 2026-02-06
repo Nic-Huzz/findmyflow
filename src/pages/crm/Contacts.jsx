@@ -39,6 +39,16 @@ export default function Contacts() {
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStage, setFilterStage] = useState('all')
 
+  // Hide bottom toolbar when modal is open
+  useEffect(() => {
+    if (showAddModal) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showAddModal])
+
   // Load contacts
   const loadContacts = useCallback(async () => {
     if (!user?.id) return

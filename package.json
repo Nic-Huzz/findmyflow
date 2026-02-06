@@ -16,9 +16,16 @@
     "functions:deploy:all": "supabase functions deploy --all",
     "functions:serve": "supabase functions serve",
     "supabase:status": "supabase status",
-    "db:connect": "./scripts/db-connect.sh"
+    "db:connect": "./scripts/db-connect.sh",
+    "studio": "remotion studio remotion/index.ts",
+    "render": "remotion render remotion/index.ts",
+    "render:nikigai": "remotion render remotion/index.ts nikigai-explainer out/nikigai-explainer.mp4"
   },
   "dependencies": {
+    "@remotion/cli": "^4.0.419",
+    "@remotion/google-fonts": "^4.0.419",
+    "@remotion/player": "^4.0.419",
+    "@remotion/transitions": "^4.0.419",
     "@supabase/supabase-js": "^2.81.1",
     "canvas-confetti": "^1.9.4",
     "d3": "^7.9.0",
@@ -26,7 +33,8 @@
     "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.9.4"
+    "react-router-dom": "^7.9.4",
+    "remotion": "^4.0.419"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

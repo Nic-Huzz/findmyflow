@@ -204,6 +204,7 @@
 @media (max-width: 480px) {
   .tower-page {
     padding: 16px;
+    padding-top: 80px; /* Preserve toolbar offset (shorthand above resets it) */
     padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   }
 

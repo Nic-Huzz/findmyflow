@@ -10,10 +10,10 @@
   --purple-lighter: #f3eeff;
   --gold: #ffdd27;
   --warm-gray: #f8f9fa;
-  --text-primary: #1a1a1a;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --border-color: #e5e7eb;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
   --success: #10b981;
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-card-hover: 0 8px 24px rgba(94, 23, 235, 0.15);
@@ -30,7 +30,7 @@
   min-height: 100vh;
   background: var(--warm-gray) !important;
   padding: 1rem;
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--text-primary);
 }
 
@@ -938,7 +938,7 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
-    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
   .crm-marketing .modal-overlay {

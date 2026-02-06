@@ -19,7 +19,7 @@
 .ltv-calculator {
   min-height: 100vh;
   padding: 24px;
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   background: var(--warm-gray);
   color: var(--text-primary);
 }
@@ -273,7 +273,7 @@
 @media (max-width: 768px) {
   .ltv-calculator {
     padding: 16px;
-    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
   .ltv-header {

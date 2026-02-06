@@ -1560,6 +1560,19 @@
   text-align: center;
 }
 
+/* ============ CTA LINKS IN EMPTY STATES ============ */
+
+.hero-profile .hero-profile-link {
+  color: #5e17eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hero-profile .hero-profile-link:hover {
+  text-decoration: underline;
+  color: #7b3ff2;
+}
+
 /* ============ EDIT ESSENCE MODAL ============ */
 
 .hero-profile .hero-identity-card {

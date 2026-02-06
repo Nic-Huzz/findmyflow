@@ -13,6 +13,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
+import { trackFlowCompletion } from '../lib/flowTracking'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import './FeedbackAnalysisFlow.css'
 
@@ -38,6 +40,7 @@ function FeedbackAnalysisFlow() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
   const showResults = searchParams.get('results') === 'true'
 
   const [stage, setStage] = useState(STAGES.LOADING)
@@ -230,12 +233,11 @@ function FeedbackAnalysisFlow() {
 
       // Track flow completion
       try {
-        await supabase.from('flow_sessions').insert({
-          user_id: user.id,
-          flow_type: 'feedback_analysis',
-          flow_version: '1.0',
-          status: 'completed',
-          last_step_id: 'complete'
+        await trackFlowCompletion({
+          userId: user.id,
+          projectId,
+          flowType: 'feedback_analysis',
+          flowVersion: '1.0'
         })
       } catch (e) {
         console.warn('Flow tracking failed:', e)

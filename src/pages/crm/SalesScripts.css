@@ -4,6 +4,7 @@
 .sales-scripts {
   min-height: 100vh;
   padding: 24px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
   color: #495057;
 }

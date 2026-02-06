@@ -79,6 +79,16 @@ export default function WarmOutreach() {
 
   const promptGenerator = usePromptGenerator()
 
+  // Hide bottom toolbar when modal is open
+  useEffect(() => {
+    if (showAddModal) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showAddModal])
+
   // Load leads
   const loadLeads = useCallback(async () => {
     if (!user?.id) return

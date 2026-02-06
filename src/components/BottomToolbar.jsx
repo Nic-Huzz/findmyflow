@@ -105,7 +105,8 @@ const HIDDEN_ROUTES = [
   '/mvp-readiness',
   '/feedback-analysis',
   '/validation-flows', // Validation flows manager
-  '/archetypes/' // Essence and Shadow deep dive pages
+  '/archetypes/', // Essence and Shadow deep dive pages
+  '/crm/import' // CSV import wizard has bottom action buttons
 ]
 
 function BottomToolbar() {

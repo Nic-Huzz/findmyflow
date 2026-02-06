@@ -4,6 +4,7 @@
  * Manages ascension triggers and continuity tracking
  */
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import {
   VALUE_LADDER_RUNGS,
@@ -23,6 +24,7 @@ import './AscensionEngine.css'
 
 export default function AscensionEngine() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('ladder') // 'ladder', 'customers', 'triggers', 'retention'
 
@@ -110,6 +112,15 @@ export default function AscensionEngine() {
 
   return (
     <div className="ascension-engine">
+      {/* Top Toolbar */}
+      <div className="ae-toolbar">
+        <button className="ae-toolbar-back" onClick={() => navigate('/crm/nurture')}>
+          ←
+        </button>
+        <h2 className="ae-toolbar-title">Ascension Engine</h2>
+        <span className="ae-toolbar-icon">🚀</span>
+      </div>
+
       <header className="ae-header">
         <div className="ae-title-section">
           <h1>Ascension Engine</h1>
@@ -488,6 +499,16 @@ function CustomerJourney({ customer, onClose, ladder }) {
 // ============================================
 function RetentionView({ stats, customers, onChurn }) {
   const [showChurnModal, setShowChurnModal] = useState(null)
+
+  // Hide bottom toolbar when modal is open
+  useEffect(() => {
+    if (showChurnModal) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showChurnModal])
 
   const churnReasons = [
     'Price too high',

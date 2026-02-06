@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import BottomToolbar from '../../components/BottomToolbar'
 import './GeneratedAssetsLibrary.css'
@@ -30,7 +31,9 @@ const ASSET_TYPES = {
   content: 'Content',
 }
 
-export default function GeneratedAssetsLibrary({ userId }) {
+export default function GeneratedAssetsLibrary({ userId: propUserId }) {
+  const { user } = useAuth()
+  const userId = propUserId || user?.id
   const navigate = useNavigate()
   const [assets, setAssets] = useState([])
   const [loading, setLoading] = useState(true)

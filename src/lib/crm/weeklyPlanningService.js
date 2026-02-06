@@ -247,8 +247,8 @@ export async function calculateExecutionScore(userId, weekStart) {
     .select('id')
     .eq('user_id', userId)
     .eq('completed', true)
-    .gte('scheduled_date', weekStart)
-    .lt('scheduled_date', weekEnd.toISOString().split('T')[0])
+    .gte('date', weekStart)
+    .lt('date', weekEnd.toISOString().split('T')[0])
 
   const plannedCount = plan.tasks.reduce((sum, t) => sum + (t.count || 1), 0)
   const completedCount = completedTasks?.length || 0

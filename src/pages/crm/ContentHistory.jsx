@@ -64,6 +64,17 @@ export default function ContentHistory() {
   const [editingId, setEditingId] = useState(null)
   const [editText, setEditText] = useState('')
   const [showMetricsUpload, setShowMetricsUpload] = useState(null)
+
+  // Hide bottom toolbar when modal is open
+  useEffect(() => {
+    if (showMetricsUpload) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showMetricsUpload])
+
   const [viewMode, setViewMode] = useState('grid') // 'grid' or 'list'
   const [expandedId, setExpandedId] = useState(null)
 
@@ -223,12 +234,18 @@ export default function ContentHistory() {
 
   return (
     <div className="ch-container">
+      {/* Top Toolbar */}
+      <div className="ch-toolbar">
+        <button className="ch-toolbar-back" onClick={() => navigate('/crm/attract')}>
+          ←
+        </button>
+        <h2 className="ch-toolbar-title">Content History</h2>
+        <span className="ch-toolbar-icon">📚</span>
+      </div>
+
       {/* Header */}
       <div className="ch-header">
         <div className="ch-header-left">
-          <button className="ch-back-btn" onClick={() => navigate('/crm/marketing')}>
-            ← Back
-          </button>
           <div>
             <h1 className="ch-title">Content History</h1>
             <p className="ch-subtitle">View and manage all your generated content</p>

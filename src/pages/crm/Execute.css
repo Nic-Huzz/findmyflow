@@ -7,37 +7,56 @@
   min-height: 100vh;
   background: #f8f9fa;
   padding: 24px 20px;
+  padding-top: 80px; /* Account for fixed toolbar */
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   overflow-x: hidden;
+}
+
+/* Top Toolbar */
+.execute-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.execute-toolbar-back {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.execute-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.execute-toolbar-icon {
+  font-size: 1.25rem;
 }
 
 /* Header */
 .execute-header {
   margin-bottom: 24px;
   overflow: hidden;
-}
-
-.execute-header .breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.875rem;
-  color: #495057;
-  margin-bottom: 8px;
-}
-
-.execute-header .breadcrumb button {
-  background: none;
-  border: none;
-  padding: 0;
-  color: #5e17eb;
-  cursor: pointer;
-  font-size: inherit;
-  font-weight: 500;
-}
-
-.execute-header .breadcrumb button:hover {
-  text-decoration: underline;
 }
 
 .execute-header h1 {
@@ -638,6 +657,7 @@
 @media (max-width: 480px) {
   .execute-page {
     padding: 16px;
+    padding-top: 80px; /* Preserve toolbar offset */
     padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   }
 

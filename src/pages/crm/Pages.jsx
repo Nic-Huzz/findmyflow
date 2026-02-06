@@ -149,6 +149,16 @@ export default function Pages() {
   }
 
   // Handle page actions
+  // Toggle body class for bottom toolbar hiding when modal is open
+  useEffect(() => {
+    if (showAddModal) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showAddModal])
+
   const handleAddPage = () => {
     setEditingPage(null)
     setShowAddModal(true)

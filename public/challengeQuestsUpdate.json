@@ -1361,6 +1361,20 @@
       "learnMore": "A Product Suite Map shows your complete money model ecosystem:\n\n**The Journey:**\n```\nAttraction Offer → Lead Magnet → Core Offer\n                                    ↓\n                              Upsell Path\n                                    ↓\n                              Continuity\n                    (+ Downsell for price objectors)\n```\n\n**What to include:**\n• Each product/offer name\n• Product type (service, course, digital, etc.)\n• Price point for each tier\n• How customers move between offers\n• Expected conversion rates\n\nThis becomes your business blueprint."
     },
     {
+      "id": "self_test",
+      "category": "Business",
+      "type": "Validation",
+      "frequency": "anytime",
+      "stage_required": 1,
+      "name": "Self-Test",
+      "description": "Apply one of your skills to solve a problem you personally have. Prove it works before helping others.",
+      "points": 5,
+      "inputType": "flow",
+      "flow_route": "/self-test",
+      "counts_toward_graduation": true,
+      "learnMore": "Before you help someone else, test your skill on yourself.\n\n**How it works:**\n1. Pick a skill from your Flow Finder discoveries\n2. Pick a problem you're personally dealing with\n3. Plan how you'll apply your skill\n4. Do it, then reflect on what happened\n\n**Why it matters:**\nThis builds confidence that your skills create real value. If it works for you, it'll work for others.\n\nRecommended before your first Let's Play, but not required."
+    },
+    {
       "id": "lets_play",
       "category": "Business",
       "type": "Validation",

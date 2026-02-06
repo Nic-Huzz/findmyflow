@@ -29,7 +29,7 @@
   min-height: 100vh;
   background: var(--warm-gray);
   padding: 1rem;
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--dark);
 }
 
@@ -283,7 +283,7 @@
 
 .es-empty-hint {
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: #6c757d;
   margin-bottom: 1rem !important;
 }
 
@@ -367,7 +367,7 @@
 
 .es-item-stats {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: #6c757d;
   display: flex;
   gap: 0.5rem;
 }
@@ -717,7 +717,7 @@
 
 .es-modal-form .form-group input::placeholder,
 .es-modal-form .form-group textarea::placeholder {
-  color: #9ca3af;
+  color: #6c757d;
 }
 
 .es-modal-form .form-group textarea {

@@ -56,7 +56,7 @@ export async function fetchScripts() {
     return {
       ...script,
       name: displayName,
-      stage: script.stage || mapCategoryToStage(script.category),
+      stage: script.category || script.stage || 'objection',
       tips: script.tips || script.follow_up_if_a || script.follow_up_if_b
     }
   })

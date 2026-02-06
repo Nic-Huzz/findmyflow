@@ -47,6 +47,17 @@ export default function EmailSequences() {
 
   const promptGenerator = usePromptGenerator()
 
+  // Hide bottom toolbar when any modal is open
+  useEffect(() => {
+    const anyModalOpen = showAddModal || !!selectedSequence
+    if (anyModalOpen) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showAddModal, selectedSequence])
+
   // Load sequences
   const loadSequences = useCallback(async () => {
     if (!user?.id) return

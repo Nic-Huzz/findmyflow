@@ -23,7 +23,7 @@
 .pd-container {
   min-height: 100vh;
   padding: 1.5rem;
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   background: var(--warm-gray);
   color: var(--text-primary);
 }
@@ -373,7 +373,7 @@
 @media (max-width: 768px) {
   .pd-container {
     padding: 1rem;
-    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
   .pd-header {

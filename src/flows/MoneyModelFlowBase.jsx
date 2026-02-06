@@ -14,6 +14,8 @@ import { completeFlowQuest } from '../lib/questCompletion'
 import { BackButton, ProgressDots, ChecklistDisplay } from '../components/MoneyModelShared'
 import { STAGES } from './moneyModelConfigs'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { useProjectId } from '../hooks/useProjectId'
+import { trackFlowCompletion } from '../lib/flowTracking'
 import { FlowFeedback } from '../components/FlowFeedback'
 import { cacheBustUrl } from '../lib/fetchJson'
 import '../styles/flow-base.css'
@@ -85,6 +87,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
 
   // Core state - start with TIME_CHECK before welcome
   const [stage, setStage] = useState(STAGES.TIME_CHECK)
@@ -416,12 +419,11 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
 
       // Track flow completion
       try {
-        await supabase.from('flow_sessions').insert({
-          user_id: user.id,
-          flow_type: config.flowType,
-          flow_version: config.flowVersion,
-          status: 'completed',
-          last_step_id: 'complete'
+        await trackFlowCompletion({
+          userId: user.id,
+          projectId,
+          flowType: config.flowType,
+          flowVersion: config.flowVersion
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)
@@ -458,9 +460,9 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
 
           await supabase.from('milestone_completions').insert({
             user_id: user.id,
+            project_id: projectId || null,
             milestone_id: config.milestoneId,
-            stage: stageProgress?.current_stage || 'validation',
-            persona: stageProgress?.persona || 'vibe_seeker',
+            stage: stageProgress?.current_stage || 1,
             evidence_text: `Completed ${config.name} flow: ${recommendedOffer?.offer?.name}`
           })
         } catch (milestoneError) {

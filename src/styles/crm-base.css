@@ -58,9 +58,9 @@
   --crm-green-light: #34d399;
 
   /* Text Colors */
-  --crm-text-primary: #1a1a2e;
-  --crm-text-secondary: #6b7280;
-  --crm-text-muted: #9ca3af;
+  --crm-text-primary: #212529;
+  --crm-text-secondary: #495057;
+  --crm-text-muted: #6c757d;
   --crm-text-light: #ffffff;
   --crm-text-light-secondary: rgba(255, 255, 255, 0.7);
 

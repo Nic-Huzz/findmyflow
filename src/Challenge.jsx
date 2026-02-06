@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
 import { trackGroanCompleted } from './lib/analytics'
 import confetti from 'canvas-confetti'
+import { triggerSideCannons } from './components/Celebrations'
+import GraduationModal from './components/GraduationModal'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
 import ChallengeProjectSelector from './components/ChallengeProjectSelector'
@@ -174,6 +176,42 @@ function Challenge() {
   const [groanReflectionStep, setGroanReflectionStep] = useState(false)
   const [groanReflection, setGroanReflection] = useState({ scaryScore: 5, wahooScore: 5, reflection: '' })
   const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
+
+  // Graduation modal state
+  const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
+  const graduationCheckedRef = useRef(false)
+
+  // Check graduation on mount (catches completions from flow navigation)
+  useEffect(() => {
+    if (!selectedProject?.id || !user?.id || !progress?.challenge_instance_id || graduationCheckedRef.current) return
+    graduationCheckedRef.current = true
+
+    const checkGraduation = async () => {
+      try {
+        const result = await checkAndGraduateProject(
+          user.id,
+          selectedProject.id,
+          progress.challenge_instance_id
+        )
+        if (result?.graduated) {
+          setGraduationModal({
+            isOpen: true,
+            celebration: result.celebration_message
+          })
+          triggerSideCannons()
+          setSelectedProject(prev => ({
+            ...prev,
+            current_stage: result.new_stage
+          }))
+          setProjectStage(result.new_stage)
+          setActiveStageTab(result.new_stage)
+        }
+      } catch (e) {
+        console.warn('Graduation check on mount failed:', e)
+      }
+    }
+    checkGraduation()
+  }, [selectedProject?.id, user?.id, progress?.challenge_instance_id])
 
   // Morning reconnect quest IDs that can be hidden if not planned
   const MORNING_RECONNECT_QUEST_IDS = [
@@ -723,10 +761,12 @@ function Challenge() {
           )
 
           if (graduationResult.graduated) {
-            const celebration = graduationResult.celebration_message
             setTimeout(() => {
-              alert(`${celebration.title}\n\n${celebration.message}\n\n${celebration.next_step}`)
-              triggerConfetti()
+              setGraduationModal({
+                isOpen: true,
+                celebration: graduationResult.celebration_message
+              })
+              triggerSideCannons()
             }, 600)
 
             setSelectedProject(prev => ({
@@ -1814,6 +1854,13 @@ function Challenge() {
           onSkip={() => setPostActionQuest(null)}
         />
       )}
+
+      {/* Graduation celebration modal */}
+      <GraduationModal
+        isOpen={graduationModal.isOpen}
+        celebration={graduationModal.celebration}
+        onClose={() => setGraduationModal({ isOpen: false, celebration: null })}
+      />
       </div>
     </div>
   )

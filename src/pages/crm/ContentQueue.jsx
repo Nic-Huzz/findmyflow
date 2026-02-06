@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
-import { ApprovalQueue } from '../../components/crm'
+import { ApprovalQueue, PullToRefresh } from '../../components/crm'
 import './ContentQueue.css'
 
 // Platform icons
@@ -142,7 +142,14 @@ export default function ContentQueue() {
     return text.substring(0, max) + '...'
   }
 
+  const handleRefresh = async () => {
+    await loadCounts()
+    if (activeTab === 'scheduled') await loadScheduled()
+    if (activeTab === 'posted') await loadPosted()
+  }
+
   return (
+    <PullToRefresh onRefresh={handleRefresh}>
     <div className="cq-page">
       {/* Toast Notification */}
       {toast && (
@@ -308,5 +315,6 @@ export default function ContentQueue() {
         )}
       </div>
     </div>
+    </PullToRefresh>
   )
 }

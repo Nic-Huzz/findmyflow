@@ -7,6 +7,7 @@ import { mapAllToWheelSegments, SEGMENT_DISPLAY, LEVEL_OPTIONS } from '../lib/mi
 import { checkGraduationEligibility } from '../lib/graduationChecker'
 import { useCelebrations } from '../hooks/useCelebrations'
 import { syncFlowFinderWithChallenge } from '../lib/questCompletionHelpers'
+import { createProjectFromSession } from '../lib/projectCreation'
 import MindSpaceGraph from '../components/MindSpaceGraph'
 import './MindSpace.css'
 
@@ -408,7 +409,7 @@ export default function MindSpace() {
       return { success: false, error: 'Some items failed to save' }
     }
 
-    return { success: true }
+    return { success: true, sessionId }
   }
 
   const handleConfirm = async () => {
@@ -430,6 +431,21 @@ export default function MindSpace() {
       } catch (syncError) {
         console.warn('Challenge sync failed:', syncError)
         // Don't block completion if sync fails
+      }
+
+      // Auto-create project if user doesn't have one (vibe seekers)
+      try {
+        const projectResult = await createProjectFromSession(user.id, saveResult.sessionId, 'mind_space')
+        if (projectResult.skipped) {
+          console.log('✅ User already has a project, skipped auto-creation')
+        } else if (projectResult.success) {
+          console.log('✅ Auto-created project from Mind Space:', projectResult.projectName)
+        } else {
+          console.warn('⚠️ Project auto-creation failed:', projectResult.error)
+        }
+      } catch (projectError) {
+        console.warn('Project creation failed:', projectError)
+        // Don't block completion if project creation fails
       }
 
       // Check if user can now graduate from Flow Finder to Validation
@@ -876,7 +892,12 @@ export default function MindSpace() {
                     <div className="results-items">
                       {mappedData.skills.slice(0, 5).map((skill, i) => (
                         <div key={i} className="result-item">
-                          <span className="result-name">{skill.name}</span>
+                          <div className="result-main">
+                            <span className="result-name">{skill.name}</span>
+                            {skill.mappedTo && SEGMENT_DISPLAY.skills[skill.mappedTo] && (
+                              <span className="taxonomy-tag">{SEGMENT_DISPLAY.skills[skill.mappedTo].title}</span>
+                            )}
+                          </div>
                           {skill.userLevel && <span className={`result-level level-${skill.userLevel}`}>{skill.userLevel}</span>}
                         </div>
                       ))}
@@ -891,7 +912,12 @@ export default function MindSpace() {
                     <div className="results-items">
                       {mappedData.problems.slice(0, 5).map((problem, i) => (
                         <div key={i} className="result-item">
-                          <span className="result-name">{problem.name}</span>
+                          <div className="result-main">
+                            <span className="result-name">{problem.name}</span>
+                            {problem.mappedTo && SEGMENT_DISPLAY.problems[problem.mappedTo] && (
+                              <span className="taxonomy-tag">{SEGMENT_DISPLAY.problems[problem.mappedTo].title}</span>
+                            )}
+                          </div>
                           {problem.userLevel && <span className={`result-level level-${problem.userLevel}`}>{problem.userLevel}</span>}
                         </div>
                       ))}
@@ -906,7 +932,12 @@ export default function MindSpace() {
                     <div className="results-items">
                       {mappedData.personas.slice(0, 5).map((persona, i) => (
                         <div key={i} className="result-item">
-                          <span className="result-name">{persona.name}</span>
+                          <div className="result-main">
+                            <span className="result-name">{persona.name}</span>
+                            {persona.mappedTo && SEGMENT_DISPLAY.personas[persona.mappedTo] && (
+                              <span className="taxonomy-tag">{SEGMENT_DISPLAY.personas[persona.mappedTo].title}</span>
+                            )}
+                          </div>
                           {persona.userLevel && <span className={`result-level level-${persona.userLevel}`}>{persona.userLevel}</span>}
                         </div>
                       ))}

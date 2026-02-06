@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import HeroStoryNarrative from './HeroStoryNarrative'
 import IdentityTriad from './IdentityTriad'
 import BusinessJourneyTracker from './BusinessJourneyTracker'
@@ -64,7 +64,7 @@ function ProjectDetailView({ archetypes, project, groanChallenges, visibilityPro
       <BusinessJourneyTracker currentStage={project.stage} />
 
       {/* Active Play-List Items */}
-      {activeChallenges.length > 0 && (
+      {activeChallenges.length > 0 ? (
         <div className="active-playlist">
           <h3 className="active-playlist-title">Active Play-List Items</h3>
           <div className="active-playlist-items">
@@ -85,6 +85,17 @@ function ProjectDetailView({ archetypes, project, groanChallenges, visibilityPro
               </div>
             ))}
           </div>
+        </div>
+      ) : (
+        <div className="active-playlist">
+          <h3 className="active-playlist-title">Active Play-List Items</h3>
+          <p className="playlist-empty-text">
+            No active challenges yet. Generate courage challenges in the{' '}
+            <Link to="/7-day-challenge?tab=groans" className="hero-profile-link">
+              Groan Matrix →
+            </Link>{' '}
+            to start your Play-List.
+          </p>
         </div>
       )}
     </div>

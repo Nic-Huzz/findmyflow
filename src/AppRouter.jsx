@@ -1,6 +1,18 @@
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 
+// Retry wrapper for lazy imports — retries once on chunk load failure
+// (common after deploys when old chunk hashes are invalidated)
+function lazyRetry(importFn) {
+  return lazy(() =>
+    importFn().catch(() => {
+      // Wait briefly then retry once
+      return new Promise(resolve => setTimeout(resolve, 1500))
+        .then(() => importFn())
+    })
+  )
+}
+
 // Static imports - Core infrastructure and frequently accessed pages
 import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
@@ -9,7 +21,7 @@ import Challenge from './Challenge'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import AuthGate from './AuthGate'
 import { AuthProvider } from './auth/AuthProvider'
-import ErrorBoundary from './components/ErrorBoundary'
+import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
 import { OnboardingProvider } from './context/OnboardingContext'
@@ -34,108 +46,110 @@ function LoadingSpinner() {
 }
 
 // Lazy-loaded flows - Money Model
-const AttractionOfferFlow = lazy(() => import('./flows/AttractionOfferFlow'))
-const UpsellFlow = lazy(() => import('./flows/UpsellFlow'))
-const DownsellFlow = lazy(() => import('./flows/DownsellFlow'))
-const ContinuityFlow = lazy(() => import('./flows/ContinuityFlow'))
-const LeadsStrategyFlow = lazy(() => import('./flows/LeadsStrategyFlow'))
-const OfferBuilderFlow = lazy(() => import('./flows/OfferBuilderFlow'))
-const LeadMagnetSelectionFlow = lazy(() => import('./flows/LeadMagnetSelectionFlow'))
-const ProductSelectionFlow = lazy(() => import('./flows/ProductSelectionFlow'))
-const FunnelBuilderFlow = lazy(() => import('./flows/FunnelBuilderFlow'))
-const FunnelCalculator = lazy(() => import('./flows/FunnelCalculator'))
-const IncomeCalculator = lazy(() => import('./flows/IncomeCalculator'))
-const FunnelBaselineFlow = lazy(() => import('./flows/FunnelBaselineFlow'))
-const MVPReadinessFlow = lazy(() => import('./flows/MVPReadinessFlow'))
-const FeedbackAnalysisFlow = lazy(() => import('./flows/FeedbackAnalysisFlow'))
-const OfferChecklist = lazy(() => import('./pages/OfferChecklist'))
-const GrandSlamOfferFlow = lazy(() => import('./flows/GrandSlamOfferFlow'))
-const OfferStackBuilderFlow = lazy(() => import('./flows/OfferStackBuilderFlow'))
-const GrandSlamMatrix = lazy(() => import('./flows/GrandSlamMatrix'))
-const PersonaSelectionFlow = lazy(() => import('./flows/PersonaSelectionFlow'))
-const LaunchReadinessFlow = lazy(() => import('./flows/LaunchReadinessFlow'))
+const AttractionOfferFlow = lazyRetry(() => import('./flows/AttractionOfferFlow'))
+const UpsellFlow = lazyRetry(() => import('./flows/UpsellFlow'))
+const DownsellFlow = lazyRetry(() => import('./flows/DownsellFlow'))
+const ContinuityFlow = lazyRetry(() => import('./flows/ContinuityFlow'))
+const LeadsStrategyFlow = lazyRetry(() => import('./flows/LeadsStrategyFlow'))
+const OfferBuilderFlow = lazyRetry(() => import('./flows/OfferBuilderFlow'))
+const LeadMagnetSelectionFlow = lazyRetry(() => import('./flows/LeadMagnetSelectionFlow'))
+const ProductSelectionFlow = lazyRetry(() => import('./flows/ProductSelectionFlow'))
+const FunnelBuilderFlow = lazyRetry(() => import('./flows/FunnelBuilderFlow'))
+const FunnelCalculator = lazyRetry(() => import('./flows/FunnelCalculator'))
+const IncomeCalculator = lazyRetry(() => import('./flows/IncomeCalculator'))
+const FunnelBaselineFlow = lazyRetry(() => import('./flows/FunnelBaselineFlow'))
+const MVPReadinessFlow = lazyRetry(() => import('./flows/MVPReadinessFlow'))
+const FeedbackAnalysisFlow = lazyRetry(() => import('./flows/FeedbackAnalysisFlow'))
+const OfferChecklist = lazyRetry(() => import('./pages/OfferChecklist'))
+const GrandSlamOfferFlow = lazyRetry(() => import('./flows/GrandSlamOfferFlow'))
+const OfferStackBuilderFlow = lazyRetry(() => import('./flows/OfferStackBuilderFlow'))
+const GrandSlamMatrix = lazyRetry(() => import('./flows/GrandSlamMatrix'))
+const PersonaSelectionFlow = lazyRetry(() => import('./flows/PersonaSelectionFlow'))
+const LaunchReadinessFlow = lazyRetry(() => import('./flows/LaunchReadinessFlow'))
 
 // Lazy-loaded flows - FlowFinder
-const FlowFinderSkills = lazy(() => import('./flows/FlowFinderSkills'))
-const FlowFinderProblems = lazy(() => import('./flows/FlowFinderProblems'))
-const FlowFinderPersona = lazy(() => import('./flows/FlowFinderPersona'))
-const FlowFinderIntegration = lazy(() => import('./flows/FlowFinderIntegration'))
-const MindSpace = lazy(() => import('./flows/MindSpace'))
-const PlayListFinderFlow = lazy(() => import('./flows/PlayListFinderFlow'))
-const PersonaIdentifierFlow = lazy(() => import('./flows/PersonaIdentifierFlow'))
-const FlowFinderExplainer = lazy(() => import('./flows/FlowFinderExplainer'))
-const LetsPlayFlow = lazy(() => import('./flows/LetsPlayFlow'))
-const LetsPlayReviewFlow = lazy(() => import('./flows/LetsPlayReviewFlow'))
+const FlowFinderSkills = lazyRetry(() => import('./flows/FlowFinderSkills'))
+const FlowFinderProblems = lazyRetry(() => import('./flows/FlowFinderProblems'))
+const FlowFinderPersona = lazyRetry(() => import('./flows/FlowFinderPersona'))
+const FlowFinderIntegration = lazyRetry(() => import('./flows/FlowFinderIntegration'))
+const MindSpace = lazyRetry(() => import('./flows/MindSpace'))
+const PlayListFinderFlow = lazyRetry(() => import('./flows/PlayListFinderFlow'))
+const PersonaIdentifierFlow = lazyRetry(() => import('./flows/PersonaIdentifierFlow'))
+const FlowFinderExplainer = lazyRetry(() => import('./flows/FlowFinderExplainer'))
+const LetsPlayFlow = lazyRetry(() => import('./flows/LetsPlayFlow'))
+const LetsPlayReviewFlow = lazyRetry(() => import('./flows/LetsPlayReviewFlow'))
+const SelfTestFlow = lazyRetry(() => import('./flows/SelfTestFlow'))
 
 // Lazy-loaded flows - Healing & Nervous System
-const HealingCompass = lazy(() => import('./flows/HealingCompass'))
-const NervousSystemFlow = lazy(() => import('./flows/NervousSystemFlow'))
+const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
+const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
-const PublicMoneyModelFlow = lazy(() => import('./flows/PublicMoneyModelFlow'))
-const PublicNervousSystemFlow = lazy(() => import('./flows/PublicNervousSystemFlow'))
-const PublicOfferAuditFlow = lazy(() => import('./flows/PublicOfferAuditFlow'))
-const CareerClarityQuiz = lazy(() => import('./flows/CareerClarityQuiz'))
+const PublicMoneyModelFlow = lazyRetry(() => import('./flows/PublicMoneyModelFlow'))
+const PublicNervousSystemFlow = lazyRetry(() => import('./flows/PublicNervousSystemFlow'))
+const PublicOfferAuditFlow = lazyRetry(() => import('./flows/PublicOfferAuditFlow'))
+const CareerClarityQuiz = lazyRetry(() => import('./flows/CareerClarityQuiz'))
 
 // Lazy-loaded flows - Setup & Training
-const BusinessBaselineFlow = lazy(() => import('./flows/BusinessBaselineFlow'))
-const CustomerSegmentsFlow = lazy(() => import('./flows/CustomerSegmentsFlow'))
-const CompetitorSnapshotFlow = lazy(() => import('./flows/CompetitorSnapshotFlow'))
-const VoiceTraining = lazy(() => import('./flows/VoiceTraining'))
+const BusinessBaselineFlow = lazyRetry(() => import('./flows/BusinessBaselineFlow'))
+const CustomerSegmentsFlow = lazyRetry(() => import('./flows/CustomerSegmentsFlow'))
+const CompetitorSnapshotFlow = lazyRetry(() => import('./flows/CompetitorSnapshotFlow'))
+const VoiceTraining = lazyRetry(() => import('./flows/VoiceTraining'))
 
 // Lazy-loaded pages - CRM
-const Dashboard = lazy(() => import('./pages/crm/Dashboard'))
-const Marketing = lazy(() => import('./pages/crm/Marketing'))
-const Sales = lazy(() => import('./pages/crm/Sales'))
-const Analytics = lazy(() => import('./pages/crm/Analytics'))
-const Reports = lazy(() => import('./pages/crm/Reports'))
-const Calculators = lazy(() => import('./pages/crm/Calculators'))
-const Execute = lazy(() => import('./pages/crm/Execute'))
-const Attract = lazy(() => import('./pages/crm/Attract'))
-const Nurture = lazy(() => import('./pages/crm/Nurture'))
-const Tools = lazy(() => import('./pages/crm/Tools'))
-const ContentHistory = lazy(() => import('./pages/crm/ContentHistory'))
-const ContentQueue = lazy(() => import('./pages/crm/ContentQueue'))
-const PerformanceDashboard = lazy(() => import('./pages/crm/PerformanceDashboard'))
-const ImplementationTracker = lazy(() => import('./pages/crm/ImplementationTracker'))
-const GeneratedAssetsLibrary = lazy(() => import('./pages/crm/GeneratedAssetsLibrary'))
-const AutonomousSetup = lazy(() => import('./pages/crm/AutonomousSetup'))
-const PTUFCalculator = lazy(() => import('./pages/crm/PTUFCalculator'))
-const LTVCalculator = lazy(() => import('./pages/crm/LTVCalculator'))
-const CACTracker = lazy(() => import('./pages/crm/CACTracker'))
-const SalesScripts = lazy(() => import('./pages/crm/SalesScripts'))
-const SmartAlerts = lazy(() => import('./pages/crm/SmartAlerts'))
-const ContentCreate = lazy(() => import('./pages/crm/ContentCreate'))
-const AscensionEngine = lazy(() => import('./pages/crm/AscensionEngine'))
-const ObjectionPatterns = lazy(() => import('./pages/crm/ObjectionPatterns'))
-const Pages = lazy(() => import('./pages/crm/Pages'))
-const Contacts = lazy(() => import('./pages/crm/Contacts'))
-const EmailSequences = lazy(() => import('./pages/crm/EmailSequences'))
-const WarmOutreach = lazy(() => import('./pages/crm/WarmOutreach'))
-const BusinessSystems = lazy(() => import('./pages/crm/BusinessSystems'))
-const DataImport = lazy(() => import('./pages/crm/DataImport'))
+const Dashboard = lazyRetry(() => import('./pages/crm/Dashboard'))
+const Marketing = lazyRetry(() => import('./pages/crm/Marketing'))
+const Sales = lazyRetry(() => import('./pages/crm/Sales'))
+const Analytics = lazyRetry(() => import('./pages/crm/Analytics'))
+const Reports = lazyRetry(() => import('./pages/crm/Reports'))
+const Calculators = lazyRetry(() => import('./pages/crm/Calculators'))
+const Execute = lazyRetry(() => import('./pages/crm/Execute'))
+const Attract = lazyRetry(() => import('./pages/crm/Attract'))
+const Nurture = lazyRetry(() => import('./pages/crm/Nurture'))
+const Tools = lazyRetry(() => import('./pages/crm/Tools'))
+const ContentHistory = lazyRetry(() => import('./pages/crm/ContentHistory'))
+const ContentQueue = lazyRetry(() => import('./pages/crm/ContentQueue'))
+const PerformanceDashboard = lazyRetry(() => import('./pages/crm/PerformanceDashboard'))
+const ImplementationTracker = lazyRetry(() => import('./pages/crm/ImplementationTracker'))
+const GeneratedAssetsLibrary = lazyRetry(() => import('./pages/crm/GeneratedAssetsLibrary'))
+const AutonomousSetup = lazyRetry(() => import('./pages/crm/AutonomousSetup'))
+const PTUFCalculator = lazyRetry(() => import('./pages/crm/PTUFCalculator'))
+const LTVCalculator = lazyRetry(() => import('./pages/crm/LTVCalculator'))
+const CACTracker = lazyRetry(() => import('./pages/crm/CACTracker'))
+const SalesScripts = lazyRetry(() => import('./pages/crm/SalesScripts'))
+const SmartAlerts = lazyRetry(() => import('./pages/crm/SmartAlerts'))
+const ContentCreate = lazyRetry(() => import('./pages/crm/ContentCreate'))
+const AscensionEngine = lazyRetry(() => import('./pages/crm/AscensionEngine'))
+const ObjectionPatterns = lazyRetry(() => import('./pages/crm/ObjectionPatterns'))
+const Pages = lazyRetry(() => import('./pages/crm/Pages'))
+const Contacts = lazyRetry(() => import('./pages/crm/Contacts'))
+const EmailSequences = lazyRetry(() => import('./pages/crm/EmailSequences'))
+const WarmOutreach = lazyRetry(() => import('./pages/crm/WarmOutreach'))
+const BusinessSystems = lazyRetry(() => import('./pages/crm/BusinessSystems'))
+const DataImport = lazyRetry(() => import('./pages/crm/DataImport'))
+const SalesPlaybook = lazyRetry(() => import('./pages/crm/SalesPlaybook'))
 
 // Lazy-loaded pages - Other
-const MoneyModelGuide = lazy(() => import('./MoneyModelGuide'))
-const ArchetypeSelection = lazy(() => import('./ArchetypeSelection'))
-const EssenceProfile = lazy(() => import('./profiles/EssenceProfile'))
-const ProtectiveProfile = lazy(() => import('./profiles/ProtectiveProfile'))
-const Feedback = lazy(() => import('./Feedback'))
-const NotificationSettings = lazy(() => import('./components/NotificationSettings'))
-const LibraryOfAnswers = lazy(() => import('./pages/LibraryOfAnswers'))
-const FlowReportCard = lazy(() => import('./pages/FlowReportCard'))
-const FlowCompassPage = lazy(() => import('./pages/FlowCompassPage'))
-const FlowMapMockups = lazy(() => import('./components/FlowMapMockups'))
-const ValidationFlowsManager = lazy(() => import('./pages/ValidationFlowsManager'))
-const VoiceOfCustomerPage = lazy(() => import('./pages/VoiceOfCustomerPage'))
-const WheelDemo = lazy(() => import('./pages/WheelDemo'))
-const WeeklyPlanningFlow = lazy(() => import('./components/WeeklyPlanningFlow'))
-const GroanMatrix = lazy(() => import('./components/GroanMatrix'))
-const HeroCommandCenter = lazy(() => import('./components/HeroProfile/HeroCommandCenter'))
-const Codex = lazy(() => import('./pages/Codex'))
-const CodexEntry = lazy(() => import('./pages/CodexEntry'))
-const ProfileHub = lazy(() => import('./pages/ProfileHub'))
-const BrandToneDemo = lazy(() => import('./pages/BrandToneDemo'))
+const MoneyModelGuide = lazyRetry(() => import('./MoneyModelGuide'))
+const ArchetypeSelection = lazyRetry(() => import('./ArchetypeSelection'))
+const EssenceProfile = lazyRetry(() => import('./profiles/EssenceProfile'))
+const ProtectiveProfile = lazyRetry(() => import('./profiles/ProtectiveProfile'))
+const Feedback = lazyRetry(() => import('./Feedback'))
+const NotificationSettings = lazyRetry(() => import('./components/NotificationSettings'))
+const LibraryOfAnswers = lazyRetry(() => import('./pages/LibraryOfAnswers'))
+const FlowReportCard = lazyRetry(() => import('./pages/FlowReportCard'))
+const FlowCompassPage = lazyRetry(() => import('./pages/FlowCompassPage'))
+const FlowMapMockups = lazyRetry(() => import('./components/FlowMapMockups'))
+const ValidationFlowsManager = lazyRetry(() => import('./pages/ValidationFlowsManager'))
+const VoiceOfCustomerPage = lazyRetry(() => import('./pages/VoiceOfCustomerPage'))
+const WheelDemo = lazyRetry(() => import('./pages/WheelDemo'))
+const WeeklyPlanningFlow = lazyRetry(() => import('./components/WeeklyPlanningFlow'))
+const GroanMatrix = lazyRetry(() => import('./components/GroanMatrix'))
+const HeroCommandCenter = lazyRetry(() => import('./components/HeroProfile/HeroCommandCenter'))
+const Codex = lazyRetry(() => import('./pages/Codex'))
+const CodexEntry = lazyRetry(() => import('./pages/CodexEntry'))
+const ProfileHub = lazyRetry(() => import('./pages/ProfileHub'))
+const BrandToneDemo = lazyRetry(() => import('./pages/BrandToneDemo'))
 import './App.css'
 import './PersonaAssessment.css'
 import './flows/AttractionOfferFlow.css'
@@ -190,6 +204,7 @@ import './flows/MindSpace.css'
 import './flows/PlayListFinderFlow.css'
 import './flows/PersonaIdentifierFlow.css'
 import './components/crm/CSVImport/CSVImportWizard.css'
+import './pages/crm/SalesPlaybook.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -217,7 +232,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/play-list-finder' ||
                         location.pathname === '/persona-identifier' ||
                         location.pathname === '/lets-play' ||
-                        location.pathname === '/lets-play-review'
+                        location.pathname === '/lets-play-review' ||
+                        location.pathname === '/self-test'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -229,6 +245,7 @@ function AppRouter() {
       <AuthProvider>
         <OnboardingProvider>
         <Router>
+          <LocationAwareErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
               {/* Landing Page - Public */}
@@ -459,6 +476,11 @@ function AppRouter() {
             <Route path="/mind-space" element={
               <AuthGate>
                 <MindSpace />
+              </AuthGate>
+            } />
+            <Route path="/self-test" element={
+              <AuthGate>
+                <SelfTestFlow />
               </AuthGate>
             } />
             <Route path="/lets-play" element={
@@ -743,10 +765,18 @@ function AppRouter() {
                 <ObjectionPatterns />
               </AuthGate>
             } />
+            <Route path="/crm/sales-playbook" element={
+              <AuthGate>
+                <CRMLayout>
+                  <SalesPlaybook />
+                </CRMLayout>
+              </AuthGate>
+            } />
             </Routes>
           </Suspense>
           <ConditionalBottomToolbar />
           <ConditionalZarlo />
+          </LocationAwareErrorBoundary>
         </Router>
         </OnboardingProvider>
       </AuthProvider>

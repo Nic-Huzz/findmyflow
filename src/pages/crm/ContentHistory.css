@@ -23,9 +23,51 @@
 .ch-container {
   min-height: 100vh;
   padding: 1.5rem;
-  padding-bottom: 120px;
+  padding-top: 80px; /* Account for fixed toolbar */
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   background: var(--warm-gray);
   color: var(--text-primary);
+}
+
+/* Top Toolbar */
+.ch-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.ch-toolbar-back {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--purple);
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.ch-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.ch-toolbar-icon {
+  font-size: 1.25rem;
 }
 
 /* Loading State */
@@ -647,7 +689,8 @@
 @media (max-width: 768px) {
   .ch-container {
     padding: 1rem;
-    padding-bottom: 120px;
+    padding-top: 80px; /* Preserve toolbar offset (shorthand above resets it) */
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
   .ch-header {

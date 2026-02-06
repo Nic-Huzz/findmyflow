@@ -47,7 +47,7 @@ export async function calculateFunnelActuals(userId, startDate, endDate, project
 
   // Count deals that reached each stage
   // A deal counts for a stage if it's currently at that stage or passed through it
-  const stageOrder = { lead: 0, discovery: 1, proposal: 2, won: 3, lost: 3 }
+  const stageOrder = { lead: 0, discovery: 1, proposal: 2, won: 3, delivering: 4, completed: 5, lost: 3 }
 
   const reachedStage = (deal, targetStage) => {
     const currentOrder = stageOrder[deal.status] ?? 0

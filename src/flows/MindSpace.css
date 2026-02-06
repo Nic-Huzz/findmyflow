@@ -902,6 +902,17 @@
   flex: 1;
 }
 
+.mind-space .result-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.mind-space .result-main .taxonomy-tag {
+  align-self: flex-start;
+}
+
 .mind-space .result-level {
   font-size: 0.7rem;
   padding: 0.25rem 0.6rem;

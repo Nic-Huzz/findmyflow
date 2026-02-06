@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 /**
  * Visibility layers in order, with unlock requirements
@@ -43,7 +44,11 @@ function PlayListProgress({ visibilityProgress, groanChallenges = [] }) {
           <p className="playlist-empty-text">
             Your Play-List tracks courage challenges across 5 visibility layers
             — from behind a screen to full authority. Start generating challenges
-            in the Groan Matrix to light up your progress.
+            in the{' '}
+            <Link to="/7-day-challenge?tab=groans" className="hero-profile-link">
+              Groan Matrix →
+            </Link>{' '}
+            to light up your progress.
           </p>
         </div>
       )}

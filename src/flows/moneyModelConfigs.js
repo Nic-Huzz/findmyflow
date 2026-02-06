@@ -121,7 +121,7 @@ export const MONEY_MODEL_CONFIGS = {
     offersPath: '/Money Model/Upsell/offers.json',
 
     dbTable: 'upsell_assessments',
-    flowType: 'upsell_flow',
+    flowType: 'upsell_offer',
     flowVersion: 'upsell-v1',
 
     // PRE-ACTION config
@@ -161,7 +161,7 @@ export const MONEY_MODEL_CONFIGS = {
     offersPath: '/Money Model/Downsell/offers.json',
 
     dbTable: 'downsell_assessments',
-    flowType: 'downsell_flow',
+    flowType: 'downsell_offer',
     flowVersion: 'downsell-v1',
 
     // PRE-ACTION config
@@ -201,7 +201,7 @@ export const MONEY_MODEL_CONFIGS = {
     offersPath: '/Money Model/Continuity/offers.json',
 
     dbTable: 'continuity_assessments',
-    flowType: 'continuity_flow',
+    flowType: 'continuity_offer',
     flowVersion: 'continuity-v1',
 
     // PRE-ACTION config
@@ -241,7 +241,7 @@ export const MONEY_MODEL_CONFIGS = {
     offersPath: '/leads-strategy-offers.json',
 
     dbTable: 'leads_assessments',
-    flowType: '100m_leads',
+    flowType: 'leads_strategy',
     flowVersion: 'leads-strategy-v1',
 
     // PRE-ACTION config

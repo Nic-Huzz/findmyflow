@@ -120,8 +120,8 @@
 .pg-spinner {
   width: 40px;
   height: 40px;
-  border: 3px solid #eee;
-  border-top-color: #6366f1;
+  border: 3px solid #e9ecef;
+  border-top-color: #5e17eb;
   border-radius: 50%;
   animation: pgSpin 0.8s linear infinite;
 }

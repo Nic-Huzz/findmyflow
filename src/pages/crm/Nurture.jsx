@@ -53,6 +53,13 @@ const CARDS = [
     path: '/crm/ascension',
     statsKey: 'ascension',
   },
+  {
+    id: 'playbook',
+    icon: '📚',
+    title: 'Sales Playbook',
+    description: 'Closing frameworks & objection handling',
+    path: '/crm/sales-playbook',
+  },
 ]
 
 function formatStat(key, value) {

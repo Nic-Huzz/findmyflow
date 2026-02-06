@@ -55,3 +55,6 @@ export { default as DailyActions } from './DailyActions'
 
 // CSV Import
 export { CSVImportWizard } from './CSVImport'
+
+// Sales Playbook
+export { default as PlaybookDrawer } from './PlaybookDrawer'

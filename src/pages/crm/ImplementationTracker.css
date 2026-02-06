@@ -7,8 +7,51 @@
 .implementation-tracker {
   min-height: 100vh;
   padding: 24px;
+  padding-top: 80px; /* Account for fixed toolbar */
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
   color: #495057;
+}
+
+/* Top Toolbar */
+.impl-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+}
+
+.impl-toolbar-back {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.impl-toolbar-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.impl-toolbar-icon {
+  font-size: 1.25rem;
 }
 
 /* Loading State */

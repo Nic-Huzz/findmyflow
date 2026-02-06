@@ -24,7 +24,7 @@ import {
   scheduleMeeting,
   syncCRMToFunnel,
 } from '../../lib/crm'
-import { LeadScoreSliders, LeadScoreBadge, ScriptsModal, ScreenshotUpload, DealOutcomeModal } from '../../components/crm'
+import { LeadScoreSliders, LeadScoreBadge, ScriptsModal, ScreenshotUpload, DealOutcomeModal, PlaybookDrawer, PullToRefresh } from '../../components/crm'
 import './Sales.css'
 
 export default function Sales() {
@@ -43,6 +43,7 @@ export default function Sales() {
   const [pendingOutcomeDeal, setPendingOutcomeDeal] = useState(null)
   const [userProducts, setUserProducts] = useState(PRODUCTS)
   const [hasCustomProducts, setHasCustomProducts] = useState(false)
+  const [playbookDeal, setPlaybookDeal] = useState(null)
   const [newDeal, setNewDeal] = useState({
     contact_name: '',
     contact_email: '',
@@ -51,6 +52,17 @@ export default function Sales() {
     source: 'Manual',
     notes: '',
   })
+
+  // Hide bottom toolbar when any modal is open
+  useEffect(() => {
+    const anyModalOpen = showAddModal || !!selectedDeal || showUnscoredPrompt || showScriptsModal || showScreenshotUpload || !!showOutcomeModal || !!playbookDeal
+    if (anyModalOpen) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showAddModal, selectedDeal, showUnscoredPrompt, showScriptsModal, showScreenshotUpload, showOutcomeModal, playbookDeal])
 
   useEffect(() => {
     if (user?.id) {
@@ -326,8 +338,8 @@ export default function Sales() {
     setShowScreenshotUpload(false)
   }
 
-  // Active stages for pipeline view (excludes lost, includes won for visibility)
-  const activeStages = [...ACTIVE_STAGES, 'won']
+  // Active stages for pipeline view (excludes lost, includes post-sale stages)
+  const activeStages = [...ACTIVE_STAGES, 'won', 'delivering', 'completed']
 
   if (loading) {
     return (
@@ -341,6 +353,7 @@ export default function Sales() {
   }
 
   return (
+    <PullToRefresh onRefresh={loadDeals}>
     <div className="crm-sales">
       {/* Top Toolbar */}
       <div className="sales-toolbar">
@@ -608,6 +621,17 @@ export default function Sales() {
               <button className="scripts-btn" onClick={() => setShowScriptsModal(true)}>
                 📜 Scripts
               </button>
+              {['booked', 'showed', 'pitched', 'follow_up'].includes(selectedDeal.status) && (
+                <button
+                  className="playbook-btn"
+                  onClick={() => {
+                    setPlaybookDeal(selectedDeal)
+                    setSelectedDeal(null)
+                  }}
+                >
+                  {['booked', 'showed'].includes(selectedDeal.status) ? '📋 Prep' : '🎯 Objection?'}
+                </button>
+              )}
               <button className="save-btn" onClick={handleSaveLeadScores}>
                 Save Scores
               </button>
@@ -669,6 +693,17 @@ export default function Sales() {
           onCancel={handleOutcomeCancel}
         />
       )}
+
+      {/* Sales Playbook Drawer */}
+      {playbookDeal && (
+        <PlaybookDrawer
+          deal={playbookDeal}
+          userId={user.id}
+          onClose={() => setPlaybookDeal(null)}
+          onObjectionLogged={() => {}}
+        />
+      )}
     </div>
+    </PullToRefresh>
   )
 }

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
+import { trackFlowCompletion } from '../lib/flowTracking'
 import WheelPicker from '../components/onboarding/QuickCapture/WheelPicker'
 import {
   PERSONA_SEGMENTS,
@@ -68,6 +70,7 @@ const getEssenceMessage = (voice, layer) => {
 function PersonaSelectionFlow() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
 
   const [stage, setStage] = useState(STAGES.WELCOME)
   const [nikigaiPersonas, setNikigaiPersonas] = useState([])
@@ -284,12 +287,10 @@ function PersonaSelectionFlow() {
 
       // Track flow completion
       try {
-        await supabase.from('flow_sessions').insert({
-          user_id: user.id,
-          flow_type: 'persona_selection',
-          flow_version: 'v1',
-          status: 'completed',
-          last_step_id: 'complete'
+        await trackFlowCompletion({
+          userId: user.id,
+          projectId,
+          flowType: 'persona_selection'
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)

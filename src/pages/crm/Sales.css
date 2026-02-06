@@ -10,10 +10,10 @@
   --purple-lighter: #f3eeff;
   --gold: #ffdd27;
   --warm-gray: #f8f9fa;
-  --text-primary: #1a1a1a;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --border-color: #e5e7eb;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
   --success: #10b981;
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
   --shadow-card-hover: 0 8px 24px rgba(94, 23, 235, 0.15);
@@ -30,7 +30,7 @@
   min-height: 100vh;
   background: var(--warm-gray) !important;
   padding: 1rem;
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--text-primary);
 }
 
@@ -771,6 +771,24 @@
   transform: translateY(-1px);
 }
 
+.crm-sales .playbook-btn {
+  background: rgba(233, 162, 59, 0.12);
+  border: 2px solid rgba(233, 162, 59, 0.3);
+  color: #E9A23B;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.crm-sales .playbook-btn:hover {
+  background: rgba(233, 162, 59, 0.2);
+  border-color: #E9A23B;
+  transform: translateY(-1px);
+}
+
 /* Modal Header with Badge */
 .crm-sales .modal-header {
   display: flex;
@@ -839,7 +857,7 @@
 @media (max-width: 640px) {
   .crm-sales {
     padding: 1rem;
-    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
   .crm-sales .pipeline-grid {

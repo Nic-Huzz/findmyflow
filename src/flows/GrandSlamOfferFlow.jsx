@@ -23,6 +23,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
+import { useProjectId } from '../hooks/useProjectId'
+import { trackFlowCompletion } from '../lib/flowTracking'
 import { useAutoSave } from '../hooks/useAutoSave'
 import { ProgressDots } from '../components/MoneyModelShared'
 import './GrandSlamOfferFlow.css'
@@ -113,6 +115,7 @@ function GrandSlamOfferFlow() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
 
   const [stage, setStage] = useState(STAGES.LOADING)
   const [existingOffer, setExistingOffer] = useState(null)
@@ -458,6 +461,17 @@ function GrandSlamOfferFlow() {
 
       // Auto-select as main product (user can change on SUCCESS screen)
       setChosenMainProduct(selectedProduct)
+
+      // Track flow completion
+      try {
+        await trackFlowCompletion({
+          userId: user.id,
+          projectId,
+          flowType: 'offer_builder_v2'
+        })
+      } catch (trackingError) {
+        console.warn('Flow tracking failed:', trackingError)
+      }
 
       // Complete quest
       const questResult = await completeFlowQuest({

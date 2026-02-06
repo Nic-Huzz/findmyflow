@@ -6,22 +6,27 @@ import { supabase } from '../supabaseClient'
 import { processDealForAscension } from './ascensionService'
 
 // Deal stages in order (Hormozi-style pipeline)
-// Tracks: Lead → Qualified → Booked → Showed → Pitched → Follow-up → Won/Lost
-export const DEAL_STAGES = ['lead', 'qualified', 'booked', 'showed', 'pitched', 'follow_up', 'won', 'lost']
+// Tracks: Lead → Qualified → Booked → Showed → Pitched → Follow-up → Won → Delivering → Completed / Lost
+export const DEAL_STAGES = ['lead', 'qualified', 'booked', 'showed', 'pitched', 'follow_up', 'won', 'delivering', 'completed', 'lost']
 
-// Active stages (excludes terminal states)
+// Active stages (excludes terminal and post-sale states)
 export const ACTIVE_STAGES = ['lead', 'qualified', 'booked', 'showed', 'pitched', 'follow_up']
+
+// Post-sale stages (active customers)
+export const POST_SALE_STAGES = ['delivering', 'completed']
 
 // Stage display info with colors
 export const STAGE_INFO = {
-  lead:      { label: 'Lead', probability: 10, color: '#6b7280', description: 'Raw inbound interest' },
-  qualified: { label: 'Qualified', probability: 25, color: '#3b82f6', description: 'Passed PTUF screen' },
-  booked:    { label: 'Booked', probability: 40, color: '#8b5cf6', description: 'Meeting scheduled' },
-  showed:    { label: 'Showed', probability: 55, color: '#f59e0b', description: 'Attended meeting' },
-  pitched:   { label: 'Pitched', probability: 70, color: '#f97316', description: 'Made the offer' },
-  follow_up: { label: 'Follow-up', probability: 50, color: '#eab308', description: 'Thinking/negotiating' },
-  won:       { label: 'Won', probability: 100, color: '#10b981', description: 'Closed deal' },
-  lost:      { label: 'Lost', probability: 0, color: '#ef4444', description: 'Deal lost' },
+  lead:       { label: 'Lead', probability: 10, color: '#6b7280', description: 'Raw inbound interest' },
+  qualified:  { label: 'Qualified', probability: 25, color: '#3b82f6', description: 'Passed PTUF screen' },
+  booked:     { label: 'Booked', probability: 40, color: '#8b5cf6', description: 'Meeting scheduled' },
+  showed:     { label: 'Showed', probability: 55, color: '#f59e0b', description: 'Attended meeting' },
+  pitched:    { label: 'Pitched', probability: 70, color: '#f97316', description: 'Made the offer' },
+  follow_up:  { label: 'Follow-up', probability: 50, color: '#eab308', description: 'Thinking/negotiating' },
+  won:        { label: 'Won', probability: 100, color: '#10b981', description: 'Closed deal' },
+  delivering: { label: 'Delivering', probability: 100, color: '#22c55e', description: 'Actively fulfilling' },
+  completed:  { label: 'Completed', probability: 100, color: '#059669', description: 'Delivered successfully' },
+  lost:       { label: 'Lost', probability: 0, color: '#ef4444', description: 'Deal lost' },
 }
 
 // Legacy mapping for backward compatibility
@@ -102,6 +107,8 @@ export async function fetchDealsByStage(userId) {
     pitched: [],
     follow_up: [],
     won: [],
+    delivering: [],
+    completed: [],
     lost: [],
   }
 
@@ -446,15 +453,17 @@ export function calculateRevenueStats(deals, monthlyGoal = 5000) {
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
 
+  const TERMINAL_STAGES = ['won', 'delivering', 'completed', 'lost']
+
   const wonThisMonth = deals.filter(d => {
-    if (d.status !== 'won') return false
+    if (!['won', 'delivering', 'completed'].includes(d.status)) return false
     const closeDate = new Date(d.actual_close_date || d.updated_at)
     return closeDate.getMonth() === currentMonth && closeDate.getFullYear() === currentYear
   })
 
   const currentRevenue = wonThisMonth.reduce((sum, d) => sum + (d.value || 0), 0)
 
-  const pipelineDeals = deals.filter(d => !['won', 'lost'].includes(d.status))
+  const pipelineDeals = deals.filter(d => !TERMINAL_STAGES.includes(d.status))
   const pipelineValue = pipelineDeals.reduce((sum, d) => sum + (d.value || 0), 0)
 
   const weightedPipeline = pipelineDeals.reduce(
@@ -464,7 +473,8 @@ export function calculateRevenueStats(deals, monthlyGoal = 5000) {
 
   const totalDeals = deals.length
   const activeDeals = pipelineDeals.length
-  const wonDeals = deals.filter(d => d.status === 'won').length
+  const activeCustomers = deals.filter(d => d.status === 'delivering').length
+  const wonDeals = deals.filter(d => ['won', 'delivering', 'completed'].includes(d.status)).length
   const lostDeals = deals.filter(d => d.status === 'lost').length
 
   const closedDeals = wonDeals + lostDeals
@@ -472,6 +482,7 @@ export function calculateRevenueStats(deals, monthlyGoal = 5000) {
 
   return {
     currentRevenue,
+    activeCustomers,
     monthlyGoal,
     progress: Math.min(100, Math.round((currentRevenue / monthlyGoal) * 100)),
     pipelineValue,
@@ -486,7 +497,7 @@ export function calculateRevenueStats(deals, monthlyGoal = 5000) {
 
 // Get points for stage transition
 export function getTransitionPoints(fromStage, toStage) {
-  const stageOrder = { lead: 0, discovery: 1, proposal: 2, won: 3 }
+  const stageOrder = { lead: 0, discovery: 1, proposal: 2, won: 3, delivering: 4, completed: 5 }
 
   if (toStage === 'won') return 100
   if (toStage === 'lost') return 0

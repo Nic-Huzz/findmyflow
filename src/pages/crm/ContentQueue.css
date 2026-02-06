@@ -23,7 +23,7 @@
   min-height: 100vh;
   background: var(--warm-gray);
   padding: 1rem;
-  padding-bottom: 120px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--text-primary);
 }
 
@@ -370,7 +370,7 @@
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .cq-page {
-    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
   .cq-page-header {

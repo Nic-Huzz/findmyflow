@@ -98,6 +98,17 @@ export default function Marketing() {
   const [generatingItem, setGeneratingItem] = useState(null)
   const [showLeadsCapture, setShowLeadsCapture] = useState(false)
 
+  // Hide bottom toolbar when any modal is open
+  useEffect(() => {
+    const anyModalOpen = !!engagementModal || !!quickGenerateTask || showStoryBank || showContentPlanning || !!generatingItem || showLeadsCapture
+    if (anyModalOpen) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [engagementModal, quickGenerateTask, showStoryBank, showContentPlanning, generatingItem, showLeadsCapture])
+
   const weekInfo = useMemo(() => getWeekInfo(weekOffset), [weekOffset])
   const todayInfo = useMemo(() => getTodayInfo(), [])
 

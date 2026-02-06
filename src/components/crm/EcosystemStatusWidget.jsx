@@ -24,7 +24,7 @@ export default function EcosystemStatusWidget({ userId }) {
       onClick={() => { hapticLight(); navigate('/crm/tools/systems') }}
     >
       <div className="eco-widget-header">
-        <h3 className="eco-widget-title">⚙️ Business Systems</h3>
+        <h3 className="eco-widget-title">⚙️ Business Systems Setup</h3>
         <span className="eco-widget-pct">{summary.overallPercent}%</span>
       </div>
 

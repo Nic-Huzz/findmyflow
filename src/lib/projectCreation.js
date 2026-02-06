@@ -102,6 +102,54 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
           projectDescription = 'A project born from my Nikigai discovery journey'
         }
       }
+    } else if (flowType === 'mind_space') {
+      // Build name from starred items in nikigai_clusters
+      try {
+        const { data: clusters } = await supabase
+          .from('nikigai_clusters')
+          .select('cluster_type, cluster_label, items')
+          .eq('session_id', sessionId)
+          .eq('user_id', userId)
+
+        if (clusters && clusters.length > 0) {
+          const starredSkill = clusters.find(c => c.cluster_type === 'skills' && c.items?.[0]?.isStarred)
+          const starredPersona = clusters.find(c => c.cluster_type === 'persona' && c.items?.[0]?.isStarred)
+
+          if (starredSkill && starredPersona) {
+            projectName = `${starredSkill.cluster_label} for ${starredPersona.cluster_label}`
+            projectDescription = `Using ${starredSkill.cluster_label} to help ${starredPersona.cluster_label}.`
+          } else {
+            // Fallback: query nikigai_responses for North Star hypothesis
+            const { data: responses } = await supabase
+              .from('nikigai_responses')
+              .select('response_data')
+              .eq('session_id', sessionId)
+              .eq('user_id', userId)
+              .eq('flow_type', 'mind_space')
+              .eq('response_type', 'extraction')
+              .limit(1)
+              .single()
+
+            const northStar = responses?.response_data?.northStar
+            if (northStar) {
+              // Strip common preamble like "You seem most alive when you're using..."
+              const stripped = northStar.replace(/^you\s+(seem|are)\s+most\s+alive\s+when\s+(you're|you\s+are)\s+/i, '')
+              projectName = stripped.split(' ').slice(0, 8).join(' ')
+              projectDescription = northStar
+            } else {
+              projectName = 'My Flow Discovery'
+              projectDescription = 'A project born from my Mind Space discovery'
+            }
+          }
+        } else {
+          projectName = 'My Flow Discovery'
+          projectDescription = 'A project born from my Mind Space discovery'
+        }
+      } catch (nameError) {
+        console.warn('⚠️ Error building project name from clusters:', nameError)
+        projectName = 'My Flow Discovery'
+        projectDescription = 'A project born from my Mind Space discovery'
+      }
     } else if (flowType === '100m_offer') {
       projectName = 'My $100M Offer'
       projectDescription = 'Building a grand slam offer that stands out in the market'

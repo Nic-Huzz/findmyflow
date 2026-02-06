@@ -62,6 +62,16 @@ export default function Execute() {
     removeFloatingPoints,
   } = useExecute(user?.id, currentProject?.id)
 
+  // Toggle body class for bottom toolbar hiding when modal is open
+  useEffect(() => {
+    if (showTaskMenu) {
+      document.body.classList.add('modal-active')
+    } else {
+      document.body.classList.remove('modal-active')
+    }
+    return () => document.body.classList.remove('modal-active')
+  }, [showTaskMenu])
+
   // Load projects and stats
   useEffect(() => {
     if (user?.id) {
@@ -233,13 +243,17 @@ export default function Execute() {
 
   return (
     <div className="execute-page">
+      {/* Top Toolbar */}
+      <div className="execute-toolbar">
+        <button className="execute-toolbar-back" onClick={() => navigate('/crm')}>
+          ←
+        </button>
+        <h2 className="execute-toolbar-title">Execute</h2>
+        <span className="execute-toolbar-icon">🚀</span>
+      </div>
+
       {/* Header */}
       <header className="execute-header">
-        <div className="breadcrumb">
-          <button onClick={() => navigate('/crm')}>Home</button>
-          <span>→</span>
-          <span>Execute</span>
-        </div>
         <h1>🚀 Execute</h1>
         <p className="week-label">Week of {weekDisplay}</p>
         {projects.length > 1 && (

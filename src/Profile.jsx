@@ -8,6 +8,7 @@ import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/pe
 import { hasActiveChallenge } from './lib/questCompletion'
 import { cacheBustUrl } from './lib/fetchJson'
 import { getStageShortName } from './lib/stageConfig'
+import { checkAndGraduateProject } from './lib/graduationChecker'
 import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePreferences'
 import GraduationModal from './components/GraduationModal'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
@@ -82,6 +83,18 @@ const Profile = () => {
       // Find primary project
       const primary = projects?.find(p => p.is_primary) || projects?.[0]
       setPrimaryProject(primary || null)
+
+      // Check if primary project is eligible for graduation
+      if (primary?.id) {
+        try {
+          const result = await checkAndGraduateProject(user.id, primary.id, null)
+          if (result?.graduated) {
+            setGraduationModal({ isOpen: true, celebration: result })
+          }
+        } catch (e) {
+          console.warn('Graduation check failed:', e)
+        }
+      }
     } catch (err) {
       console.error('Error in loadUserProjects:', err)
     } finally {

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import { openWhatsAppSupport } from '../lib/errorSupport'
 
 /**
@@ -12,7 +13,7 @@ import { openWhatsAppSupport } from '../lib/errorSupport'
  *   <YourComponent />
  * </ErrorBoundary>
  */
-class ErrorBoundary extends React.Component {
+class ErrorBoundaryInner extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -35,9 +36,17 @@ class ErrorBoundary extends React.Component {
       error,
       errorInfo
     })
+  }
 
-    // TODO: Send to error tracking service in production
-    // Example: Sentry.captureException(error, { contexts: { react: { componentStack: errorInfo.componentStack } } })
+  // Auto-reset when route changes (via location prop from wrapper)
+  componentDidUpdate(prevProps) {
+    if (this.state.hasError && prevProps.location !== this.props.location) {
+      this.setState({
+        hasError: false,
+        error: null,
+        errorInfo: null
+      })
+    }
   }
 
   handleReset = () => {
@@ -223,4 +232,19 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-export default ErrorBoundary
+/**
+ * Location-aware ErrorBoundary wrapper
+ * Auto-resets on route changes so errors don't persist across navigations
+ */
+function LocationAwareErrorBoundary({ children }) {
+  const location = useLocation()
+  return (
+    <ErrorBoundaryInner location={location.pathname}>
+      {children}
+    </ErrorBoundaryInner>
+  )
+}
+
+// Also export the basic version for use outside Router (e.g. wrapping the Router itself)
+export { ErrorBoundaryInner as ErrorBoundary }
+export default LocationAwareErrorBoundary

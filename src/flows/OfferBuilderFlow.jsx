@@ -25,6 +25,8 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
 import { useAutoSave } from '../hooks/useAutoSave'
+import { useProjectId } from '../hooks/useProjectId'
+import { trackFlowCompletion } from '../lib/flowTracking'
 import { getValidationObstaclesForOfferBuilder } from '../lib/validationObstacles'
 import { BackButton, ProgressDots } from '../components/MoneyModelShared'
 import ErrorMessage from '../components/ErrorMessage'
@@ -228,6 +230,7 @@ function OfferBuilderFlow() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { user } = useAuth()
+  const { projectId } = useProjectId()
   const showResults = searchParams.get('results') === 'true'
 
   const [stage, setStage] = useState(STAGES.TIME_CHECK)
@@ -1077,12 +1080,11 @@ function OfferBuilderFlow() {
 
       // Track flow completion
       try {
-        await supabase.from('flow_sessions').insert({
-          user_id: user.id,
-          flow_type: '100m_offer',
-          flow_version: 'offer-builder-v2',
-          status: 'completed',
-          last_step_id: 'complete'
+        await trackFlowCompletion({
+          userId: user.id,
+          projectId,
+          flowType: '100m_offer',
+          flowVersion: 'offer-builder-v2'
         })
       } catch (trackingError) {
         console.warn('Flow tracking failed:', trackingError)
