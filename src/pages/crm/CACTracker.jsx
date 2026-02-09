@@ -62,8 +62,8 @@ export default function CACTracker() {
       try {
         const sources = []
 
-        // Fetch Core Four strategy and LTV data
-        const [leadsStrategy, ltvModel] = await Promise.all([
+        // Fetch Core Four strategy and offer data for LTV estimate
+        const [leadsStrategy, coreOffer, continuityOffer] = await Promise.all([
           supabase
             .from('leads_assessments')
             .select('*')
@@ -72,8 +72,15 @@ export default function CACTracker() {
             .limit(1)
             .maybeSingle(),
           supabase
-            .from('ltv_models')
-            .select('*')
+            .from('attraction_offer_assessments')
+            .select('data')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
+          supabase
+            .from('continuity_assessments')
+            .select('data')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1)
@@ -89,10 +96,14 @@ export default function CACTracker() {
           }
         }
 
-        // Set LTV from saved model
-        if (ltvModel?.data?.ltv_per_customer) {
-          setLtv(Math.round(ltvModel.data.ltv_per_customer))
-          sources.push('LTV Calculator')
+        // Estimate LTV from offer assessments
+        const corePrice = parseFloat(coreOffer?.data?.data?.price) || 0
+        const monthlyPrice = parseFloat(continuityOffer?.data?.data?.monthly_price || continuityOffer?.data?.data?.price) || 0
+        const months = parseFloat(continuityOffer?.data?.data?.avg_months) || 6
+        const estimatedLtv = corePrice + (monthlyPrice * months)
+        if (estimatedLtv > 0) {
+          setLtv(Math.round(estimatedLtv))
+          sources.push('Offer Assessments')
         }
 
         if (sources.length > 0) {

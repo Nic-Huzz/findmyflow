@@ -92,6 +92,7 @@ export const TABLE_CONFIGS = {
     icon: '💰',
     fields: [
       { key: 'contact_name', label: 'Contact Name', required: true, type: 'text' },
+      { key: 'contact_email', label: 'Contact Email', required: false, type: 'email' },
       {
         key: 'product_type',
         label: 'Product Type',
@@ -105,9 +106,10 @@ export const TABLE_CONFIGS = {
         label: 'Status',
         required: false,
         type: 'enum',
-        options: ['won', 'lost', 'pending'],
-        default: 'pending'
+        options: ['lead', 'qualified', 'booked', 'showed', 'pitched', 'follow_up', 'won', 'delivering', 'completed', 'lost'],
+        default: 'lead'
       },
+      { key: 'source', label: 'Source', required: false, type: 'text', default: 'CSV Import' },
       { key: 'notes', label: 'Notes', required: false, type: 'text' },
     ],
     uniqueKey: null, // Deals can be duplicated
@@ -124,6 +126,7 @@ const HEADER_ALIASES = {
   // Name fields
   name: ['name', 'full name', 'fullname', 'contact name', 'contact', 'lead name', 'customer name', 'person'],
   contact_name: ['contact name', 'contact', 'name', 'customer', 'client', 'person'],
+  contact_email: ['contact email', 'contact_email', 'email', 'email address', 'e-mail', 'client email'],
 
   // Contact info
   email: ['email', 'email address', 'e-mail', 'mail', 'email id'],

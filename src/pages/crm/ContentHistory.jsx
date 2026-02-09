@@ -255,7 +255,7 @@ export default function ContentHistory() {
           <button className="ch-btn ch-btn-secondary" onClick={handleExport}>
             📥 Export CSV
           </button>
-          <button className="ch-btn ch-btn-primary" onClick={() => navigate('/crm/marketing')}>
+          <button className="ch-btn ch-btn-primary" onClick={() => navigate('/crm/content-create')}>
             ✨ Create New
           </button>
         </div>
@@ -373,7 +373,7 @@ export default function ContentHistory() {
           <div className="ch-empty-icon">📝</div>
           <h3>No content found</h3>
           <p>Try adjusting your filters or create new content</p>
-          <button className="ch-btn ch-btn-primary" onClick={() => navigate('/crm/marketing')}>
+          <button className="ch-btn ch-btn-primary" onClick={() => navigate('/crm/content-create')}>
             Create Content
           </button>
         </div>
