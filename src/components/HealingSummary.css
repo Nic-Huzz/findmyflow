@@ -169,6 +169,14 @@
   background: rgba(56, 189, 248, 0.25);
 }
 
+.healing-summary .voice-item.rewire {
+  background: rgba(74, 222, 128, 0.25);
+}
+
+.healing-summary .voice-item.reconnect {
+  background: rgba(251, 146, 60, 0.25);
+}
+
 .healing-summary .voice-icon {
   font-size: 1.25rem;
 }
@@ -195,6 +203,14 @@
   color: #7dd3fc;
 }
 
+.healing-summary .voice-item.rewire .voice-percent {
+  color: #86efac;
+}
+
+.healing-summary .voice-item.reconnect .voice-percent {
+  color: #fdba74;
+}
+
 .healing-summary .voice-bar-container {
   height: 6px;
   background: rgba(255, 255, 255, 0.2);
@@ -214,6 +230,14 @@
 
 .healing-summary .voice-bar.release {
   background: #38bdf8;
+}
+
+.healing-summary .voice-bar.rewire {
+  background: #4ade80;
+}
+
+.healing-summary .voice-bar.reconnect {
+  background: #fb923c;
 }
 
 /* Flow Data Display */

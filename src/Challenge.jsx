@@ -552,6 +552,13 @@ function Challenge() {
         stage: quest.stage_required || null
       }
 
+      // Make Healing completions user-level (like Flow Finder)
+      if (quest.category === 'Healing') {
+        completionData.challenge_instance_id = null
+        completionData.project_id = null
+        completionData.challenge_day = 0  // NOT NULL constraint requires a value
+      }
+
       // Quest types that use specialized input components with structured data
       const structuredDataTypes = ['reconnect', 'recognise', 'rewire', 'release']
       const hasStructuredData = structuredDataTypes.includes(quest.type?.toLowerCase()) && specialData
@@ -586,12 +593,24 @@ function Challenge() {
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
       const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
 
-      let duplicateQuery = supabase
-        .from('quest_completions')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('challenge_instance_id', progress.challenge_instance_id)
-        .eq('quest_id', quest.id)
+      let duplicateQuery
+      if (quest.category === 'Healing') {
+        // User-level: check by user + quest + date (no challenge instance)
+        duplicateQuery = supabase
+          .from('quest_completions')
+          .select('id')
+          .eq('user_id', user.id)
+          .is('challenge_instance_id', null)
+          .eq('quest_id', quest.id)
+      } else {
+        // Challenge-level: existing behavior
+        duplicateQuery = supabase
+          .from('quest_completions')
+          .select('id')
+          .eq('user_id', user.id)
+          .eq('challenge_instance_id', progress.challenge_instance_id)
+          .eq('quest_id', quest.id)
+      }
 
       if (!quest.milestone_type) {
         duplicateQuery = duplicateQuery
@@ -636,63 +655,67 @@ function Challenge() {
         // Non-fatal - continue with quest completion
       }
 
-      await handleStreakUpdate(user.id, progress.challenge_instance_id)
-
-      // Calculate new points
+      // Calculate points (used by challenge_progress update and artifact check)
       const rType = quest.type?.toLowerCase()
       const frequencyKey = quest.frequency === 'weekly' ? 'weekly' : 'daily'
-      const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
-      const hasPointsColumn = rTypesWithColumns.includes(rType)
-
       const newTotalPoints = (progress.total_points || 0) + quest.points
 
-      const updateData = {
-        total_points: newTotalPoints,
-        last_active_date: new Date().toISOString()
-      }
+      // User-level quests (Healing) skip challenge_progress and project updates.
+      // Their scoring is handled entirely by increment_scores RPC above.
+      if (quest.category !== 'Healing') {
+        await handleStreakUpdate(user.id, progress.challenge_instance_id)
 
-      if (hasPointsColumn) {
-        const pointsField = `${rType}_${frequencyKey}_points`
-        updateData[pointsField] = (progress[pointsField] || 0) + quest.points
-      }
+        const rTypesWithColumns = ['recognise', 'release', 'rewire', 'reconnect']
+        const hasPointsColumn = rTypesWithColumns.includes(rType)
 
-      const { data: updatedProgress, error: progressError } = await supabase
-        .from('challenge_progress')
-        .update(updateData)
-        .eq('user_id', user.id)
-        .eq('challenge_instance_id', progress.challenge_instance_id)
-        .eq('status', 'active')
-        .select()
-        .single()
+        const updateData = {
+          total_points: newTotalPoints,
+          last_active_date: new Date().toISOString()
+        }
 
-      if (progressError) {
-        console.error('Error updating progress:', progressError)
-        alert('Error updating progress. Please try again.')
-        return
-      }
+        if (hasPointsColumn) {
+          const pointsField = `${rType}_${frequencyKey}_points`
+          updateData[pointsField] = (progress[pointsField] || 0) + quest.points
+        }
 
-      setProgress(updatedProgress)
+        const { data: updatedProgress, error: progressError } = await supabase
+          .from('challenge_progress')
+          .update(updateData)
+          .eq('user_id', user.id)
+          .eq('challenge_instance_id', progress.challenge_instance_id)
+          .eq('status', 'active')
+          .select()
+          .single()
 
-      // Update project points to match challenge total (keeps them in sync)
-      if (selectedProject?.id) {
-        const { error: projectError } = await supabase
-          .from('user_projects')
-          .update({
-            total_points: newTotalPoints
-          })
-          .eq('id', selectedProject.id)
+        if (progressError) {
+          console.error('Error updating progress:', progressError)
+          alert('Error updating progress. Please try again.')
+          return
+        }
 
-        if (projectError) {
-          console.error('Error updating project points:', projectError)
-        } else {
-          setSelectedProject(prev => ({
-            ...prev,
-            total_points: newTotalPoints
-          }))
+        setProgress(updatedProgress)
+
+        // Update project points to match challenge total (keeps them in sync)
+        if (selectedProject?.id) {
+          const { error: projectError } = await supabase
+            .from('user_projects')
+            .update({
+              total_points: newTotalPoints
+            })
+            .eq('id', selectedProject.id)
+
+          if (projectError) {
+            console.error('Error updating project points:', projectError)
+          } else {
+            setSelectedProject(prev => ({
+              ...prev,
+              total_points: newTotalPoints
+            }))
+          }
         }
       }
 
-      // Reload completions - merge challenge-specific + user-level (Flow Finder)
+      // Reload completions - merge challenge-specific + user-level (Flow Finder, Healing)
       const [challengeResult, userLevelResult] = await Promise.all([
         supabase
           .from('quest_completions')
@@ -744,11 +767,12 @@ function Challenge() {
         setPostActionQuest(quest)
       }
 
-      // Check for tab completion bonus using fresh data (Option A: immediate check)
-      // Pass newCompletions and updatedProgress to avoid React state timing issues
-      const tabStatus = getTabCompletionStatus(quest.category, newCompletions || completions, updatedProgress)
-      if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
-        await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints, updatedProgress)
+      // Check for tab completion bonus (skip for user-level Healing — bonus writes to challenge_progress)
+      if (quest.category !== 'Healing') {
+        const tabStatus = getTabCompletionStatus(quest.category, completions, null)
+        if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
+          await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints, null)
+        }
       }
 
       // Check for project graduation
@@ -1461,7 +1485,7 @@ function Challenge() {
                 </button>
               )}
             </div>
-            {['Recognise', 'Release'].filter(rType =>
+            {['Recognise', 'Release', 'Rewire', 'Reconnect'].filter(rType =>
               activeRTypeFilter === 'All' || activeRTypeFilter === rType
             ).map(rType => {
               const rTypeQuests = displayQuests

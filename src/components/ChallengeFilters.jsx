@@ -83,6 +83,18 @@ function ChallengeFilters({
             >
               Release
             </button>
+            <button
+              className={`filter-chip ${activeRTypeFilter === 'Rewire' ? 'active' : ''}`}
+              onClick={() => setActiveRTypeFilter('Rewire')}
+            >
+              Rewire
+            </button>
+            <button
+              className={`filter-chip ${activeRTypeFilter === 'Reconnect' ? 'active' : ''}`}
+              onClick={() => setActiveRTypeFilter('Reconnect')}
+            >
+              Reconnect
+            </button>
           </>
         )}
       </div>

@@ -129,19 +129,50 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
     setError(null)
 
     try {
-      // 1. Fetch archetypes from lead_flow_profiles
-      // Try user_id first, fallback to email match
-      let profileQuery = supabase
+      // Fire all independent queries in parallel
+      const profilePromise = supabase
         .from('lead_flow_profiles')
         .select('essence_archetype, protective_archetype, email, custom_essence_name, custom_essence_image, custom_essence_fields')
-
-      // Try user_id first
-      let { data: profileData, error: profileError } = await profileQuery
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(1)
 
-      // Fallback to email if no result
+      const projectsPromise = supabase
+        .from('user_projects')
+        .select(`
+          id, name, description, current_stage, total_points, status,
+          linked_skill_cluster_id, linked_problem_cluster_id, linked_persona_cluster_id, created_at
+        `)
+        .eq('user_id', userId)
+        .in('status', ['active', 'completed'])
+        .order('created_at', { ascending: false })
+
+      const xpPromise = fetchUserXP(userId)
+
+      const dashboardGroansPromise = !projectId
+        ? supabase.from('groan_challenges').select('id, visibility_layer, status, completed_at').eq('user_id', userId)
+        : Promise.resolve({ data: null })
+
+      const voicePromise = supabase
+        .from('quest_completions')
+        .select('quest_id, quest_type, completed_at')
+        .eq('user_id', userId)
+        .or('quest_id.like.voice_stage_%,quest_type.eq.Voice')
+
+      const healingPromise = supabase
+        .from('quest_completions')
+        .select('quest_id, quest_type, quest_category, completed_at')
+        .eq('user_id', userId)
+        .or('quest_category.eq.Healing,quest_type.in.(Recognise,Release,Rewire,Reconnect)')
+
+      // Await all parallel queries
+      const [profileResult, projectsResult, totalXP, dashboardGroansResult, voiceResult, healingResult] = await Promise.all([
+        profilePromise, projectsPromise, xpPromise, dashboardGroansPromise, voicePromise, healingPromise,
+      ])
+
+      // 1. Process profile (with email fallback if needed)
+      let { data: profileData, error: profileError } = profileResult
+
       if (!profileError && (!profileData || profileData.length === 0) && userEmail) {
         const emailResult = await supabase
           .from('lead_flow_profiles')
@@ -155,7 +186,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
 
       if (profileError) throw profileError
 
-      // Get archetype details from data files
       let archetypes = null
       if (profileData && profileData.length > 0) {
         const profile = profileData[0]
@@ -171,7 +201,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
             name: getEssenceDisplayName(profile),
             originalName: profile.essence_archetype,
             group: essenceData?.group || 'Unknown',
-            // Use custom values if set, otherwise fall back to archetype defaults
             tagline: getEssenceFieldValue(profile, 'tagline', essenceData),
             poeticLine: getEssenceFieldValue(profile, 'essence', essenceData),
             superpower: getEssenceFieldValue(profile, 'superpower', essenceData),
@@ -197,28 +226,10 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         }
       }
 
-      // 2. Fetch user projects with linked cluster IDs
-      const { data: projectsData, error: projectsError } = await supabase
-        .from('user_projects')
-        .select(`
-          id,
-          name,
-          description,
-          current_stage,
-          total_points,
-          status,
-          linked_skill_cluster_id,
-          linked_problem_cluster_id,
-          linked_persona_cluster_id,
-          created_at
-        `)
-        .eq('user_id', userId)
-        .in('status', ['active', 'completed'])
-        .order('created_at', { ascending: false })
-
+      // 2. Process projects + cluster enrichment
+      const { data: projectsData, error: projectsError } = projectsResult
       if (projectsError) throw projectsError
 
-      // 3. Collect all cluster IDs to fetch
       const clusterIds = new Set()
       projectsData?.forEach(project => {
         if (project.linked_skill_cluster_id) clusterIds.add(project.linked_skill_cluster_id)
@@ -226,7 +237,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         if (project.linked_persona_cluster_id) clusterIds.add(project.linked_persona_cluster_id)
       })
 
-      // 4. Fetch nikigai_clusters by IDs
       let clustersMap = {}
       if (clusterIds.size > 0) {
         const { data: clustersData, error: clustersError } = await supabase
@@ -241,7 +251,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         })
       }
 
-      // 5. Build projects with cluster display info
       const projects = projectsData?.map(project => {
         const skillCluster = clustersMap[project.linked_skill_cluster_id]
         const problemCluster = clustersMap[project.linked_problem_cluster_id]
@@ -254,17 +263,13 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
           stage: project.current_stage || 1,
           xp: project.total_points || 0,
           status: project.status,
-          // Wheel taxonomy display info
           skill: getClusterDisplayInfo(skillCluster, 'skills'),
           problem: getClusterDisplayInfo(problemCluster, 'problems'),
           persona: getClusterDisplayInfo(personaCluster, 'persona'),
         }
       }) || []
 
-      // 6. Fetch total user XP
-      const totalXP = await fetchUserXP(userId)
-
-      // 7. If projectId provided, fetch project-specific groan challenges
+      // 3. Process groan challenges
       let projectDetail = null
       let groanChallenges = []
       let visibilityProgress = {}
@@ -273,7 +278,6 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         projectDetail = projects.find(p => p.id === projectId) || null
 
         if (projectDetail) {
-          // Fetch groan challenges matching project's clusters
           const clusterConditions = []
           if (projectDetail.skill?.id) clusterConditions.push(projectDetail.skill.id)
           if (projectDetail.problem?.id) clusterConditions.push(projectDetail.problem.id)
@@ -295,37 +299,17 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
           }
         }
       } else {
-        // For main dashboard, fetch all user's groan challenges for overall progress
-        const { data: allGroans, error: allGroansError } = await supabase
-          .from('groan_challenges')
-          .select('id, visibility_layer, status')
-          .eq('user_id', userId)
-
-        if (!allGroansError && allGroans) {
+        const allGroans = dashboardGroansResult.data
+        if (allGroans) {
           groanChallenges = allGroans
           visibilityProgress = calculateVisibilityProgress(allGroans)
         }
       }
 
-      // 8. Fetch voice tracker data (essence vs protective + healing journey)
-      const [voiceResult, healingResult] = await Promise.all([
-        supabase
-          .from('quest_completions')
-          .select('quest_id, quest_type, completed_at')
-          .eq('user_id', userId)
-          .or('quest_id.like.voice_stage_%,quest_type.eq.Voice'),
-        supabase
-          .from('quest_completions')
-          .select('quest_id, quest_type, quest_category, completed_at')
-          .eq('user_id', userId)
-          .or('quest_category.eq.Healing,quest_type.in.(Recognise,Release,Rewire,Reconnect)'),
-      ])
-
+      // 4. Process voice tracker
       const voiceCompletions = voiceResult.data || []
       const healingCompletions = healingResult.data || []
 
-      // Count essence vs protective voice moments
-      // Matches quest_id patterns like 'voice_stage_1_essence_voice' or quest_type containing 'essence'/'protective'
       const essenceCount = voiceCompletions.filter(c =>
         c.quest_id?.endsWith('_essence_voice') ||
         c.quest_id?.includes('essence') ||

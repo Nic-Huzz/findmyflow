@@ -10,6 +10,7 @@ import ProjectExpressionCard, { CreateExpressionCard } from './ProjectExpression
 import ProjectDetailView from './ProjectDetailView'
 import PlayListProgress from './PlayListProgress'
 import EssenceVsProtectiveTracker from './EssenceVsProtectiveTracker'
+import VibeColorPicker from '../VibeColorPicker'
 import './HeroProfile.css'
 import './JourneyMap.css'
 
@@ -130,10 +131,13 @@ function HeroCommandCenter() {
       {/* Header */}
       <div className="hero-profile-header">
         <div className="header-left">
-          <h1 className="header-title">Hero Command Center</h1>
+          <h1 className="header-title">Hero Flow Centre</h1>
         </div>
-        <div className="header-xp">
-          ⚡ {totalXP.toLocaleString()} XP
+        <div className="header-right-group">
+          <div className="header-xp">
+            ⚡ {totalXP.toLocaleString()} XP
+          </div>
+          <VibeColorPicker />
         </div>
       </div>
 
@@ -149,6 +153,18 @@ function HeroCommandCenter() {
         onRefresh={refresh}
       />
 
+      {/* Play-List (Visibility Mastery) - User-level, not project-specific */}
+      <PlayListProgress
+        visibilityProgress={visibilityProgress}
+        groanChallenges={groanChallenges}
+      />
+
+      {/* Essence vs Protective Voice Tracker */}
+      <EssenceVsProtectiveTracker
+        voiceTracker={voiceTracker}
+        archetypes={archetypes}
+      />
+
       {/* Journey Map */}
       <JourneyMap
         currentStage={currentStage}
@@ -158,26 +174,6 @@ function HeroCommandCenter() {
         onAddMoment={addMoment}
         onDeleteMoment={deleteMoment}
       />
-
-      {/* Essence vs Protective Voice Tracker */}
-      <EssenceVsProtectiveTracker
-        voiceTracker={voiceTracker}
-        archetypes={archetypes}
-      />
-
-      {/* Play-List (Visibility Mastery) - User-level, not project-specific */}
-      <PlayListProgress
-        visibilityProgress={visibilityProgress}
-        groanChallenges={groanChallenges}
-      />
-
-      {/* Guidebook Preview */}
-      {codexProgress && (
-        <CodexPreviewCard
-          totalProgress={codexProgress}
-          onClick={() => navigate('/guidebook')}
-        />
-      )}
 
       {/* Projects Section */}
       <div className="projects-section">
@@ -205,6 +201,14 @@ function HeroCommandCenter() {
           />
         </div>
       </div>
+
+      {/* Guidebook Preview */}
+      {codexProgress && (
+        <CodexPreviewCard
+          totalProgress={codexProgress}
+          onClick={() => navigate('/guidebook')}
+        />
+      )}
     </div>
   )
 }

@@ -1,0 +1,205 @@
+/* HorizontalFlowRiver.css — Horizontal river visualization */
+
+.h-flow-river .flow-path-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 0 8px;
+}
+.h-flow-river .flow-path-scroll::-webkit-scrollbar { display: none; }
+
+.h-flow-river .flow-path-container {
+  min-width: 900px;
+  height: 220px;
+  position: relative;
+  padding: 0 24px;
+}
+
+.h-flow-river .flow-path-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.h-flow-river .fp-river-glow {
+  fill: none;
+  stroke-width: 28;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.08;
+}
+
+.h-flow-river .fp-river {
+  fill: none;
+  stroke-width: 18;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: url(#hfrGlow);
+}
+
+.h-flow-river .fp-river-highlight {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 16 10;
+  animation: hfrFlowDash 2s linear infinite;
+}
+
+@keyframes hfrFlowDash {
+  0% { stroke-dashoffset: 26; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.h-flow-river .fp-node { cursor: pointer; }
+
+.h-flow-river .fp-hover-ring {
+  fill: none;
+  stroke: rgba(94, 23, 235, 0.25);
+  stroke-width: 3;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.h-flow-river .fp-node:hover .fp-hover-ring { opacity: 1; }
+
+.h-flow-river .fp-stuck-pulse { animation: hfrStuckRing 1.5s ease-out infinite; }
+@keyframes hfrStuckRing {
+  0% { r: 12; opacity: 0.6; }
+  100% { r: 22; opacity: 0; }
+}
+
+.h-flow-river .fp-now-pulse { animation: hfrNowRing 2s ease-out infinite; }
+@keyframes hfrNowRing {
+  0% { r: 18; opacity: 0.8; }
+  100% { r: 30; opacity: 0; }
+}
+
+.h-flow-river .fp-now-glow { animation: hfrNowGlow 2s ease-in-out infinite; }
+@keyframes hfrNowGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+.h-flow-river .fp-date { font-size: 8px; font-weight: 700; fill: #adb5bd; }
+.h-flow-river .fp-ms-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+.h-flow-river .fp-ms-sublabel { font-size: 8px; font-weight: 600; }
+.h-flow-river .fp-arrow { font-size: 11px; font-weight: 800; fill: white; }
+
+/* Node popup overlay (bottom sheet) */
+.h-flow-river .fp-popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(4px);
+  z-index: 100; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.h-flow-river .fp-popup-overlay.active { opacity: 1; pointer-events: auto; }
+
+.h-flow-river .fp-popup {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; border-radius: 24px 24px 0 0;
+  padding: 0 24px 40px; z-index: 101;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  max-height: 70vh; overflow-y: auto;
+}
+.h-flow-river .fp-popup-overlay.active .fp-popup { transform: translateY(0); }
+
+.h-flow-river .fp-popup-handle {
+  width: 40px; height: 4px; background: #dee2e6;
+  border-radius: 2px; margin: 12px auto 20px;
+}
+.h-flow-river .fp-popup-header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+}
+.h-flow-river .fp-popup-icon {
+  width: 52px; height: 52px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.h-flow-river .fp-popup-title { font-size: 18px; font-weight: 800; color: #1a1a2e; line-height: 1.2; }
+.h-flow-river .fp-popup-subtitle { font-size: 12px; font-weight: 600; color: #adb5bd; margin-top: 2px; }
+.h-flow-river .fp-popup-direction {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 10px;
+  font-size: 13px; font-weight: 700; margin-bottom: 16px;
+}
+.h-flow-river .fp-popup-body { font-size: 14px; line-height: 1.7; color: #6c757d; margin-bottom: 16px; }
+.h-flow-river .fp-popup-body strong { color: #1a1a2e; font-weight: 700; }
+.h-flow-river .fp-popup-feeling {
+  background: linear-gradient(135deg, var(--vibe-soft, rgba(255, 217, 61, 0.08)), rgba(94, 23, 235, 0.04));
+  border-radius: 14px; padding: 14px 18px; margin-bottom: 16px;
+}
+.h-flow-river .fp-popup-feeling-label {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1px; color: #adb5bd; margin-bottom: 6px;
+}
+.h-flow-river .fp-popup-feeling-text { font-size: 13px; font-style: italic; line-height: 1.6; color: #6c757d; }
+
+/* River loading */
+.h-flow-river.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+}
+.h-flow-river .river-loading-indicator {
+  width: 24px; height: 24px;
+  border: 3px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-radius: 50%;
+  animation: hfrSpin 0.8s linear infinite;
+}
+@keyframes hfrSpin { to { transform: rotate(360deg); } }
+
+/* Milestone nodes (quest/groan) */
+.h-flow-river .fp-milestone-outer {
+  fill: none;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+  animation: hfrMsDash 3s linear infinite;
+}
+@keyframes hfrMsDash {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 21; }
+}
+
+/* Enhanced popup — dashed icon border for milestones */
+.h-flow-river .fp-popup-icon-dashed {
+  position: relative;
+}
+.h-flow-river .fp-popup-icon-dashed::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px dashed;
+  border-color: inherit;
+  border-radius: 20px;
+  opacity: 0.4;
+  animation: hfrIconDash 4s linear infinite;
+}
+@keyframes hfrIconDash {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Popup meta tags */
+.h-flow-river .fp-popup-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.h-flow-river .fp-popup-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}

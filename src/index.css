@@ -51,7 +51,7 @@ html, body, #root {
 }
 
 body {
-  background: linear-gradient(135deg, var(--warm-gray) 0%, #f1f3f4 100%);
+  background: var(--vibe-body-bg, var(--warm-gray));
   color: var(--text-gray);
   line-height: 1.6;
 }

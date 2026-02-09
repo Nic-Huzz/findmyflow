@@ -221,6 +221,7 @@ You have:
 | Runway Calculator | Savings ÷ expenses = weeks of runway | Small | ⬜ Not started |
 | Income Bridge Tracker | Track side income vs job income progress | Medium | ⬜ Not started |
 | **Polish & Integration** | | | |
+| Custom toolbar icons | Replace emoji icons in BottomToolbar with custom image assets (Home, Let's Play, Compass, Profile) | Small | ⬜ Not started |
 | Weekly Plan → DailyActions tighter connection | ? | HIGH | 🔍 To assess |
 | UX polish on existing features | ? | MEDIUM | 🔍 To assess |
 | Missing pieces from user testing | ? | HIGH | 🔍 To assess |

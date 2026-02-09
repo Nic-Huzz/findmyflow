@@ -448,7 +448,7 @@ export default function LetsPlayFlow() {
               You're going to use <strong>{skillInfo.name}</strong> to help <strong>{formData.personName}</strong> with <strong>{problemInfo.name}</strong>.
             </p>
             <p className="encouragement-sub">
-              After you've done it, complete the <strong>Let's Play Review</strong> quest to reflect and earn bonus points!
+              After you've done it, complete the <strong>Let's Play Peer-Trial Review</strong> quest to reflect and earn bonus points!
             </p>
             <button className="primary-button" onClick={() => navigate('/7-day-challenge')}>
               Got it
@@ -465,7 +465,7 @@ export default function LetsPlayFlow() {
       <div className="lets-play-flow flow-base">
         <div className="welcome-container">
           <p className="time-icon">🎮</p>
-          <h1 className="welcome-greeting">Ready to Play?</h1>
+          <h1 className="welcome-greeting">Let's Play Peer-Trial</h1>
           <div className="welcome-message animated-text">
             <p>Most people waste time writing out business plans and overplanning.</p>
             <p>But the best way to build a business? <strong>Start delivering value</strong>, getting feedback and improving over time.</p>
@@ -484,7 +484,7 @@ export default function LetsPlayFlow() {
               maxWidth: '400px',
               textAlign: 'center'
             }}>
-              <p style={{ margin: 0 }}><strong>First time?</strong> Try a <Link to="/self-test" style={{ color: '#ffdd27', fontWeight: 600 }}>Self-Test</Link> first — prove your skill works on yourself before helping someone else.</p>
+              <p style={{ margin: 0 }}><strong>First time?</strong> Try a <Link to="/self-test" style={{ color: '#ffdd27', fontWeight: 600 }}>Self-Trial</Link> first — prove your skill works on yourself before helping someone else.</p>
             </div>
           )}
           <button className="primary-button" onClick={() => setStep(1)}>

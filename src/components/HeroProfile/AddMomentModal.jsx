@@ -6,8 +6,8 @@ import React, { useState } from 'react'
 
 const ACTS = [
   { id: 'awakening', name: 'Awakening', description: 'Discovery & realization' },
-  { id: 'training', name: 'Training', description: 'Building & facing fears' },
-  { id: 'becoming', name: 'Becoming', description: 'Mastery & service' },
+  { id: 'finding', name: 'Finding Flow', description: 'Building & facing fears' },
+  { id: 'living', name: 'Living Flow', description: 'Mastery & service' },
 ]
 
 function AddMomentModal({ onClose, onSave, currentAct }) {
@@ -15,7 +15,7 @@ function AddMomentModal({ onClose, onSave, currentAct }) {
   const [momentDate, setMomentDate] = useState(
     new Date().toISOString().split('T')[0]
   )
-  const [selectedAct, setSelectedAct] = useState(currentAct || 'training')
+  const [selectedAct, setSelectedAct] = useState(currentAct || 'finding')
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState(null)
 

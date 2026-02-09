@@ -32,12 +32,12 @@ const ENGAGEMENT_TYPES = [
 const PLATFORMS = ['Instagram', 'LinkedIn', 'Twitter/X', 'Facebook', 'Email', 'Other']
 
 const PLATFORM_TO_SOURCE = {
-  Instagram: 'Organic Social',
-  LinkedIn: 'Organic Social',
-  'Twitter/X': 'Organic Social',
-  Facebook: 'Organic Social',
-  Email: 'Other',
-  Other: 'Other',
+  Instagram: 'Content',
+  LinkedIn: 'Content',
+  'Twitter/X': 'Content',
+  Facebook: 'Content',
+  Email: 'Warm Outreach',
+  Other: 'Warm Outreach',
 }
 
 /**

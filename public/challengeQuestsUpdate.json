@@ -1366,13 +1366,27 @@
       "type": "Validation",
       "frequency": "anytime",
       "stage_required": 1,
-      "name": "Self-Test",
+      "name": "Play-list Self-Trial",
       "description": "Apply one of your skills to solve a problem you personally have. Prove it works before helping others.",
       "points": 5,
       "inputType": "flow",
       "flow_route": "/self-test",
       "counts_toward_graduation": true,
-      "learnMore": "Before you help someone else, test your skill on yourself.\n\n**How it works:**\n1. Pick a skill from your Flow Finder discoveries\n2. Pick a problem you're personally dealing with\n3. Plan how you'll apply your skill\n4. Do it, then reflect on what happened\n\n**Why it matters:**\nThis builds confidence that your skills create real value. If it works for you, it'll work for others.\n\nRecommended before your first Let's Play, but not required."
+      "learnMore": "Before you help someone else, trial your skill on yourself.\n\n**How it works:**\n1. Pick a skill from your Flow Finder discoveries\n2. Pick a problem you're personally dealing with\n3. Plan how you'll apply your skill\n4. Do it, then reflect on what happened\n\n**Why it matters:**\nThis builds confidence that your skills create real value. If it works for you, it'll work for others.\n\nRecommended before your first Peer-Trial, but not required."
+    },
+    {
+      "id": "self_test_review",
+      "category": "Business",
+      "type": "Validation",
+      "frequency": "anytime",
+      "stage_required": 1,
+      "name": "Play-list Self-Trial Review",
+      "description": "Reflect on your Self-Trial experience. Complete this after testing a skill on yourself to earn bonus points.",
+      "points": 4,
+      "inputType": "flow",
+      "flow_route": "/self-test-review",
+      "counts_toward_graduation": true,
+      "learnMore": "Every self-trial teaches you something about your skills.\n\n**This review helps you:**\n• Reflect on what actually happened when you applied your skill\n• Rate how the skill worked on your own problem\n• Capture surprises and learnings\n• Decide if you're ready to help someone else\n\nComplete this after each Self-Trial to earn bonus points and build confidence before your first Peer-Trial."
     },
     {
       "id": "lets_play",
@@ -1380,13 +1394,13 @@
       "type": "Validation",
       "frequency": "anytime",
       "stage_required": 1,
-      "name": "Let's Play",
+      "name": "Let's Play Peer-Trial",
       "description": "Plan to use one of your skills to solve a real problem for a real person. Then go do it!",
       "points": 8,
       "inputType": "flow",
       "flow_route": "/lets-play",
       "counts_toward_graduation": true,
-      "learnMore": "Let's Play is bottom-up validation: instead of asking 'would people pay for this?', you actually USE your skill to help someone and see what happens.\n\n**How it works:**\n1. Pick a skill × problem combo from your Flow Finder data\n2. Choose a real person to help\n3. Plan your approach and go do it\n4. Come back and reflect on what happened\n\n**Why it matters:**\nThis proves your skills create real value before you ever build a product. Each play teaches you something about where you belong.\n\n**Difficulty scales up:**\n• Starter: Help someone you know\n• Growing (3+): Help someone outside your close circle\n• Confident (7+): Help someone you've never met\n• Pro (12+): Help someone and ask for a testimonial"
+      "learnMore": "The Peer-Trial is bottom-up validation: instead of asking 'would people pay for this?', you actually USE your skill to help someone and see what happens.\n\n**How it works:**\n1. Pick a skill × problem combo from your Flow Finder data\n2. Choose a real person to help\n3. Plan your approach and go do it\n4. Come back and reflect on what happened\n\n**Why it matters:**\nThis proves your skills create real value before you ever build a product. Each trial teaches you something about where you belong.\n\n**Difficulty scales up:**\n• Starter: Help someone you know\n• Growing (3+): Help someone outside your close circle\n• Confident (7+): Help someone you've never met\n• Pro (12+): Help someone and ask for a testimonial"
     },
     {
       "id": "lets_play_review",
@@ -1394,13 +1408,13 @@
       "type": "Validation",
       "frequency": "anytime",
       "stage_required": 1,
-      "name": "Let's Play Review",
-      "description": "Reflect on your Let's Play experience. Complete this after helping someone to earn bonus points.",
+      "name": "Let's Play Peer-Trial Review",
+      "description": "Reflect on your Peer-Trial experience. Complete this after helping someone to earn bonus points.",
       "points": 4,
       "inputType": "flow",
       "flow_route": "/lets-play-review",
       "counts_toward_graduation": true,
-      "learnMore": "Every play teaches you something about your flow.\n\n**This review helps you:**\n• Reflect on what actually happened\n• Rate how it landed with the person you helped\n• Capture surprises and learnings\n• Plan what you'd do differently next time\n\nComplete this after each Let's Play to earn bonus points and build your validation evidence."
+      "learnMore": "Every peer-trial teaches you something about your flow.\n\n**This review helps you:**\n• Reflect on what actually happened\n• Rate how it landed with the person you helped\n• Capture surprises and learnings\n• Plan what you'd do differently next time\n\nComplete this after each Peer-Trial to earn bonus points and build your validation evidence."
     },
     {
       "id": "flow_persona_validation",

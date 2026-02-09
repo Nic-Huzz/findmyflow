@@ -17,6 +17,7 @@ function lazyRetry(importFn) {
 import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
 import Profile from './Profile'
+import MePage from './pages/MePage'
 import Challenge from './Challenge'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import AuthGate from './AuthGate'
@@ -26,6 +27,10 @@ import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
 import { OnboardingProvider } from './context/OnboardingContext'
 import { CRMLayout } from './components/crm'
+import { initVibeColor } from './hooks/useVibeColor'
+
+// Initialize vibe color before first render (restores saved preference)
+initVibeColor()
 
 // Loading component for Suspense fallback
 function LoadingSpinner() {
@@ -79,6 +84,7 @@ const FlowFinderExplainer = lazyRetry(() => import('./flows/FlowFinderExplainer'
 const LetsPlayFlow = lazyRetry(() => import('./flows/LetsPlayFlow'))
 const LetsPlayReviewFlow = lazyRetry(() => import('./flows/LetsPlayReviewFlow'))
 const SelfTestFlow = lazyRetry(() => import('./flows/SelfTestFlow'))
+const SelfTestReviewFlow = lazyRetry(() => import('./flows/SelfTestReviewFlow'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
@@ -149,6 +155,7 @@ const HeroCommandCenter = lazyRetry(() => import('./components/HeroProfile/HeroC
 const Codex = lazyRetry(() => import('./pages/Codex'))
 const CodexEntry = lazyRetry(() => import('./pages/CodexEntry'))
 const ProfileHub = lazyRetry(() => import('./pages/ProfileHub'))
+const UserSettings = lazyRetry(() => import('./pages/UserSettings'))
 const BrandToneDemo = lazyRetry(() => import('./pages/BrandToneDemo'))
 import './App.css'
 import './PersonaAssessment.css'
@@ -197,6 +204,7 @@ import './components/BottomToolbar.css'
 import './components/WeeklyPlanningFlow.css'
 import './components/GroanMatrix.css'
 import './components/HeroProfile/HeroProfile.css'
+import './components/VibeColorPicker.css'
 import './pages/Codex.css'
 import './pages/LandingPage.css'
 import './flows/CareerClarityQuiz.css'
@@ -233,7 +241,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/persona-identifier' ||
                         location.pathname === '/lets-play' ||
                         location.pathname === '/lets-play-review' ||
-                        location.pathname === '/self-test'
+                        location.pathname === '/self-test' ||
+                        location.pathname === '/self-test-review'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -381,7 +390,7 @@ function AppRouter() {
 
             <Route path="/me" element={
               <AuthGate>
-                <Profile />
+                <MePage />
               </AuthGate>
             } />
 
@@ -483,6 +492,11 @@ function AppRouter() {
                 <SelfTestFlow />
               </AuthGate>
             } />
+            <Route path="/self-test-review" element={
+              <AuthGate>
+                <SelfTestReviewFlow />
+              </AuthGate>
+            } />
             <Route path="/lets-play" element={
               <AuthGate>
                 <LetsPlayFlow />
@@ -516,6 +530,11 @@ function AppRouter() {
             <Route path="/profile-hub" element={
               <AuthGate>
                 <ProfileHub />
+              </AuthGate>
+            } />
+            <Route path="/user-settings" element={
+              <AuthGate>
+                <UserSettings />
               </AuthGate>
             } />
             <Route path="/library" element={

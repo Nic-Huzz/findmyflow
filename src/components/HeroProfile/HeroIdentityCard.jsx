@@ -81,19 +81,21 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
     <div className="hero-identity-card">
       {/* Avatar and Title Section */}
       <div className="identity-header" onClick={onViewEssence} style={{ cursor: onViewEssence ? 'pointer' : 'default' }}>
-        <div className="identity-avatar">
-          {showImage && (
-            <img
-              src={imagePath}
-              alt={essence.name}
-              onError={() => setImageError(true)}
-            />
-          )}
-          {!showImage && (
-            <div className="avatar-fallback">
-              {essence.name?.charAt(0) || '?'}
-            </div>
-          )}
+        <div className="identity-avatar-ring">
+          <div className="identity-avatar">
+            {showImage && (
+              <img
+                src={imagePath}
+                alt={essence.name}
+                onError={() => setImageError(true)}
+              />
+            )}
+            {!showImage && (
+              <div className="avatar-fallback">
+                {essence.name?.charAt(0) || '?'}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="identity-titles">
@@ -144,7 +146,7 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
       {/* Superpower and Shadow Cards */}
       <div className="identity-cards">
         {/* Superpower Card */}
-        <div className="identity-mini-card superpower-card">
+        <div className="identity-mini-card superpower-card" onClick={onViewEssence} style={{ cursor: onViewEssence ? 'pointer' : 'default' }}>
           <div className="mini-card-header">
             <span className="mini-card-icon">⚡</span>
             <span className="mini-card-label">Superpower</span>
@@ -152,6 +154,7 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
           <p className="mini-card-content">
             {essence.superpower || 'Your unique gift to the world'}
           </p>
+          {onViewEssence && <span className="mini-card-link">Learn more →</span>}
         </div>
 
         {/* Shadow Card */}
@@ -164,6 +167,7 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
           <p className="mini-card-content">
             {protective?.coreNarrative ? `"${protective.coreNarrative}"` : 'Your protective voice'}
           </p>
+          {onViewProtective && <span className="mini-card-link">Learn more →</span>}
         </div>
       </div>
 

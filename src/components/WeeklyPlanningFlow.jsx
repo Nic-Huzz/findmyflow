@@ -5,15 +5,14 @@
  * Replaces discrete 7-day challenge starts with auto-rolling weekly rhythm.
  *
  * Flow Screens:
- * 1. Weekly Review (NEW) - Flow check-in + project review
- * 2. Week Type Selection (push/flow/rest/launch) + project focus
- * 3. Recommended Tasks (NEW) - Based on week type
- * 4. Foundation Check (conditional - if NS/Healing incomplete)
- * 5. Morning Reconnect Builder
- * 6. Weekly Groan Carousel (Nic's story)
- * 7. Conditional Commitments (Healing Priority + 3% Improvement)
- * 8. Group Selection (Solo / Create Group / Join Group)
- * 9. Week Plan Summary
+ * 1. Weekly Review - Flow check-in + project review → Start Week
+ *
+ * ARCHIVED (until Healing tab is live):
+ * - Week Type Selection (push/flow/rest/launch) + project focus
+ * - Guidance (signposts based on week type)
+ * - Morning Reconnect Builder
+ * - Week Plan Summary
+ * - Groan Carousel, Conditional Commitments, Group Selection
  *
  * Created: Dec 2024
  * Updated: Jan 2025 - Added weekly review and task recommendations
@@ -485,10 +484,9 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     return monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
   }
 
-  // Calculate total steps (foundation + commitments + group steps removed)
-  // Flow: Review(1) + WeekType(2) + Guidance(3) + Morning(4) + Summary(5)
+  // Single-step flow: Review only (other steps archived until Healing tab is live)
   const getTotalSteps = () => {
-    return 5
+    return 1
   }
 
   // Get actual step number for display (always show from 1)
@@ -808,6 +806,11 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       </div>
     )
   }
+
+  // ====================================================================
+  // ARCHIVED STEPS — Re-enable when Healing tab is live
+  // Steps: Week Type, Guidance, Morning Routine, Groan, Commitments, Summary
+  // ====================================================================
 
   // Toggle priority selection
   const togglePriority = (priorityId) => {
@@ -1743,21 +1746,16 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     )
   }
 
-  // Render current step
-  // Flow: 1.Review → 2.WeekType → 3.Guidance → 4.Morning → 5.Summary
+  // Render current step (single-step flow — other steps archived until Healing tab is live)
   const renderStep = () => {
     switch (step) {
       case 1: return renderWeeklyReview()
-      case 2: return renderWeekTypeSelection()
-      case 3: return renderGuidanceStep()
-      case 4: return renderMorningRoutine()
-      case 5: return renderSummary()
       default: return null
     }
   }
 
-  // Determine if we're on the summary step
-  const isSummaryStep = step === 5
+  // Single step = always the final step
+  const isSummaryStep = step === 1
 
   // If no projects and done loading, show empty state prompting Mind Space
   if (!loadingProjects && projects.length === 0) {
@@ -1825,7 +1823,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
             <button
               className="nav-btn complete"
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || !flowState.internal || !flowState.external}
             >
               {saving ? 'Saving...' : 'Start Week →'}
             </button>

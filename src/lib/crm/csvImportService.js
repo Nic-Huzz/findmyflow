@@ -31,7 +31,7 @@ export const TABLE_CONFIGS = {
         label: 'Lifecycle Stage',
         required: false,
         type: 'enum',
-        options: ['lead', 'qualified', 'opportunity', 'customer', 'evangelist'],
+        options: ['lead', 'opportunity', 'customer', 'evangelist'],
         default: 'lead'
       },
       { key: 'source', label: 'Source', required: false, type: 'text' },

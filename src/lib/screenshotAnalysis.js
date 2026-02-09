@@ -482,9 +482,9 @@ export async function createContactsFromLeads(userId, leads, sourceContentId = n
 
       // Map temperature to lifecycle stage
       const stageMap = {
-        hot: 'qualified',  // Hot leads are already qualified
-        warm: 'lead',      // Warm leads are standard leads
-        cold: 'lead'       // Cold leads start as leads
+        hot: 'lead',   // All new contacts start as leads
+        warm: 'lead',  // Auto-promoted to opportunity when a deal is created
+        cold: 'lead'
       }
 
       const contactData = {

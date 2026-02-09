@@ -23,6 +23,14 @@ const ProfileHub = () => {
       description: 'Access your saved answers and completed flows',
       path: '/library',
       color: '#E9A23B'
+    },
+    {
+      id: 'settings',
+      icon: '⚙️',
+      title: 'User Settings',
+      description: 'Update your name, email, and notification preferences',
+      path: '/user-settings',
+      color: '#6c757d'
     }
   ]
 

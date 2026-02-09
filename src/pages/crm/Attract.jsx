@@ -14,6 +14,13 @@ import './Attract.css'
 
 const CARDS = [
   {
+    id: 'create',
+    icon: '✨',
+    title: 'Create Content',
+    description: 'AI-powered content from your data',
+    path: '/crm/content-create',
+  },
+  {
     id: 'content',
     icon: '📝',
     title: 'Content',

@@ -7,21 +7,21 @@ import AddMomentModal from './AddMomentModal'
  * Four Acts:
  * - Matrix: Life before awakening (gray)
  * - Awakening: Discovery phase (purple)
- * - Training: Building & facing fears (purple→gold)
- * - Becoming: Mastery & service (gold)
+ * - Finding Flow: Building & facing fears (purple→gold)
+ * - Living Flow: Mastery & service (gold)
  */
 
 const ACTS = [
   { id: 'matrix', name: 'Matrix Path', color: '#6b7280' },
   { id: 'awakening', name: 'Awakening', color: '#5e17eb' },
-  { id: 'training', name: 'Training', color: '#9b59b6' },
-  { id: 'becoming', name: 'Becoming', color: '#E9A23B' },
+  { id: 'finding', name: 'Finding Flow', color: '#9b59b6' },
+  { id: 'living', name: 'Living Flow', color: '#E9A23B' },
 ]
 
 // Map stage numbers to acts
 function getActFromStage(stage, hasFlowFinder, hasVoice) {
-  if (stage >= 6) return 'becoming'
-  if (stage >= 1) return 'training'
+  if (stage >= 8) return 'living'
+  if (stage >= 1) return 'finding'
   if (hasFlowFinder || hasVoice) return 'awakening'
   return 'matrix'
 }
@@ -80,7 +80,7 @@ function JourneyMap({
     systemMilestones.push({
       id: 'stage-1',
       text: 'Stage 1: Validation',
-      act: 'training',
+      act: 'finding',
       isSystem: true,
     })
   }
@@ -89,7 +89,7 @@ function JourneyMap({
     systemMilestones.push({
       id: 'stage-3',
       text: 'Stage 3: Testing',
-      act: 'training',
+      act: 'finding',
       isSystem: true,
     })
   }
@@ -97,8 +97,17 @@ function JourneyMap({
   if (currentStage >= 6) {
     systemMilestones.push({
       id: 'stage-6',
-      text: 'Stage 6: First Service',
-      act: 'becoming',
+      text: 'Stage 6: First Campaign',
+      act: 'finding',
+      isSystem: true,
+    })
+  }
+
+  if (currentStage >= 8) {
+    systemMilestones.push({
+      id: 'stage-8',
+      text: 'Stage 8: Living Flow',
+      act: 'living',
       isSystem: true,
     })
   }
@@ -153,16 +162,18 @@ function JourneyMap({
               style={{ width: `${positionPercent}%` }}
             />
 
-            {/* Act markers */}
+            {/* Act markers — centered under each label */}
             {ACTS.map((act, index) => {
               const isCompleted = ACTS.findIndex(a => a.id === currentAct) > index
               const isCurrent = currentAct === act.id
+              const segmentWidth = 100 / ACTS.length
+              const markerPos = (index * segmentWidth) + (segmentWidth / 2)
               return (
                 <div
                   key={act.id}
                   className={`timeline-marker ${isCompleted ? 'completed' : ''} ${isCurrent ? 'current' : ''}`}
                   style={{
-                    left: `${(index / (ACTS.length - 1)) * 100}%`,
+                    left: `${markerPos}%`,
                     '--marker-color': act.color,
                   }}
                 />

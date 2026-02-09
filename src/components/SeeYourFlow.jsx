@@ -533,7 +533,8 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
               {/* Step 1: Current State */}
               {currentStep === STEPS.CURRENT && (
                 <div className="step-content">
-                  <h3 className="step-title">How's your flow right now?</h3>
+                  <h3 className="step-title">How's your project flowing right now?</h3>
+                  <p className="step-subtitle">Answer the following questions to start building your flow map</p>
 
                   <div className="question-section">
                     <label className="question-label">Are you feeling excited?</label>
@@ -798,7 +799,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
           {/* CHECK-IN MODE (Returning users) */}
           {hasCompletedMapping && (
             <div className="checkin-content">
-              <h3 className="step-title">How's your flow today?</h3>
+              <h3 className="step-title">How's your project flowing today?</h3>
 
               <div className="question-section">
                 <label className="question-label">Are you feeling excited?</label>

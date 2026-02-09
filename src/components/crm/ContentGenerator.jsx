@@ -839,7 +839,8 @@ Only provide the hooks, nothing else.`,
                         disabled={refining || loading}
                         title={ref.label}
                       >
-                        {ref.icon}
+                        <span className="refinement-icon">{ref.icon}</span>
+                        <span className="refinement-name">{ref.label}</span>
                       </button>
                     ))}
                   </div>

@@ -5,6 +5,46 @@
 import { supabase } from '../supabaseClient'
 import { processDealForAscension } from './ascensionService'
 
+// Contact lifecycle stages in order (forward-only progression)
+const LIFECYCLE_ORDER = ['lead', 'opportunity', 'customer', 'evangelist']
+
+/**
+ * Forward-only lifecycle sync: push a contact's lifecycle stage forward
+ * based on deal events. Never moves backward.
+ * - Deal created → contact becomes "opportunity" (if not already higher)
+ * - Deal won → contact becomes "customer" (if not already higher)
+ */
+async function syncContactLifecycleFromDeal(userId, contactEmail, targetStage) {
+  if (!contactEmail || !targetStage) return
+
+  const targetIndex = LIFECYCLE_ORDER.indexOf(targetStage)
+  if (targetIndex < 0) return
+
+  try {
+    const { data: contact, error } = await supabase
+      .from('crm_contacts')
+      .select('id, lifecycle_stage')
+      .eq('user_id', userId)
+      .ilike('email', contactEmail.trim())
+      .maybeSingle()
+
+    if (error || !contact) return
+
+    const currentIndex = LIFECYCLE_ORDER.indexOf(contact.lifecycle_stage || 'lead')
+
+    // Forward-only: only update if target stage is higher
+    if (targetIndex > currentIndex) {
+      await supabase
+        .from('crm_contacts')
+        .update({ lifecycle_stage: targetStage })
+        .eq('id', contact.id)
+        .eq('user_id', userId)
+    }
+  } catch (err) {
+    console.error('Lifecycle sync error (non-blocking):', err)
+  }
+}
+
 // Deal stages in order (Hormozi-style pipeline)
 // Tracks: Lead → Qualified → Booked → Showed → Pitched → Follow-up → Won → Delivering → Completed / Lost
 export const DEAL_STAGES = ['lead', 'qualified', 'booked', 'showed', 'pitched', 'follow_up', 'won', 'delivering', 'completed', 'lost']
@@ -51,9 +91,9 @@ export const PRODUCTS = DEFAULT_PRODUCTS
 export async function fetchUserProducts(userId) {
   const { data, error } = await supabase
     .from('offer_creations')
-    .select('id, version_name, core_price, selected_version, status')
+    .select('id, selected_version, price, dream_outcome, completed_at')
     .eq('user_id', userId)
-    .eq('status', 'completed')
+    .not('completed_at', 'is', null)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -65,8 +105,8 @@ export async function fetchUserProducts(userId) {
   if (data && data.length > 0) {
     const userProducts = {}
     data.forEach(offer => {
-      const name = offer.version_name || `${offer.selected_version} Offer`
-      userProducts[name] = offer.core_price || 497
+      const name = offer.dream_outcome || `${offer.selected_version || 'Custom'} Offer`
+      userProducts[name] = offer.price || 497
     })
     return { products: userProducts, isCustom: true }
   }
@@ -152,6 +192,11 @@ export async function createDeal(userId, dealData) {
     return { data: null, error }
   }
 
+  // Forward-only lifecycle sync: deal created → contact becomes "opportunity"
+  if (data?.contact_email) {
+    syncContactLifecycleFromDeal(userId, data.contact_email, 'opportunity')
+  }
+
   return { data, error: null }
 }
 
@@ -192,6 +237,11 @@ export async function updateDealStage(dealId, userId, newStatus, extraUpdates = 
   // Auto-process for Ascension Engine when deal is won
   // This creates customer record and triggers upsell/continuity tasks
   if (newStatus === 'won' && data) {
+    // Forward-only lifecycle sync: deal won → contact becomes "customer"
+    if (data.contact_email) {
+      syncContactLifecycleFromDeal(userId, data.contact_email, 'customer')
+    }
+
     try {
       await processDealForAscension(userId, data, data.project_id)
     } catch (ascensionErr) {

@@ -16,6 +16,21 @@ const STAGE_NAMES = {
 }
 
 /**
+ * Stage-themed icons — evolves as the project grows
+ */
+const STAGE_ICONS = {
+  0: '🌱',
+  1: '🌱',
+  2: '🔍',
+  3: '🔥',
+  4: '🎯',
+  5: '✍️',
+  6: '🚀',
+  7: '🏆',
+  8: '👑',
+}
+
+/**
  * ProjectExpressionCard - Displays a project with its identity triad
  *
  * Shows:
@@ -54,7 +69,7 @@ function ProjectExpressionCard({ project, visibilityProgress, onClick }) {
     <div className="project-expression-card" onClick={handleClick}>
       {/* Header */}
       <div className="project-header">
-        <div className="project-icon">📁</div>
+        <div className="project-icon">{STAGE_ICONS[stage] || '🌱'}</div>
         <h3 className="project-name">{name}</h3>
         <span className="project-xp">⚡ {xp.toLocaleString()} XP</span>
       </div>

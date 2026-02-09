@@ -21,8 +21,8 @@ const MAIN_NAV_ITEMS = [
   },
   {
     id: 'challenge',
-    label: 'Challenge',
-    icon: '🎯',
+    label: "Let's Play",
+    icon: '🎮',
     path: '/7-day-challenge'
   },
   {

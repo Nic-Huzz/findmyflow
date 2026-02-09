@@ -7,11 +7,152 @@
 
 .hero-profile {
   min-height: 100vh;
-  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
-  color: #fff;
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(94, 23, 235, 0.04) 1px, transparent 0),
+    linear-gradient(
+      180deg,
+      var(--vibe-soft, rgba(94, 23, 235, 0.06)) 0%,
+      var(--vibe-bg, rgba(94, 23, 235, 0.03)) 100%
+    );
+  background-size: 24px 24px, 100% 100%;
+  color: #1a1025;
   padding: 0 16px 100px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+/* ---- Staggered card entry animation ---- */
+@keyframes heroCardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Light card base — shared by all content sections
+   White surface with vibe-tinted border. Each card gets a unique
+   accent via its own ::before / ::after pseudo-element. */
+.hero-profile .hero-identity-card,
+.hero-profile .journey-map,
+.hero-profile .voice-tracker,
+.hero-profile .playlist-progress,
+.hero-profile .codex-preview-card,
+.hero-profile .projects-section {
+  background: #ffffff;
+  color: #1a1a2e;
+  border-radius: 24px;
+  padding: 24px;
+  margin-top: 24px;
+  border: 1px solid var(--vibe-strong, rgba(94, 23, 235, 0.25));
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  /* Staggered entry — fast so page feels instant */
+  opacity: 0;
+  animation: heroCardSlideUp 0.3s ease forwards;
+}
+
+/* ---- Per-card unique accent treatments ---- */
+
+/* ---- Accent entrance animations ---- */
+@keyframes accentSlideRight {
+  from { transform: scaleX(0); transform-origin: left; opacity: 0; }
+  to   { transform: scaleX(1); transform-origin: left; opacity: 1; }
+}
+
+@keyframes accentSlideDown {
+  from { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  to   { transform: scaleY(1); transform-origin: top; opacity: 1; }
+}
+
+/* Identity Card: top 3px gradient border (purple → gold) */
+.hero-profile .hero-identity-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #5e17eb, var(--vibe-color, #a78bfa), #E9A23B);
+  z-index: 1;
+  transform-origin: left;
+  animation: accentSlideRight 0.4s ease 0.15s both;
+}
+
+/* Play-List: left 5px gradient bar (purple shades) */
+.hero-profile .playlist-progress::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, #5e17eb, #a78bfa, #c4b5fd);
+  border-radius: 24px 0 0 24px;
+  z-index: 1;
+  transform-origin: top;
+  animation: accentSlideDown 0.4s ease 0.2s both;
+}
+
+/* Voice Tracker: left gold accent */
+.hero-profile .voice-tracker::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #E9A23B, rgba(233, 162, 59, 0.3));
+  border-radius: 24px 0 0 24px;
+  z-index: 1;
+  transform-origin: top;
+  animation: accentSlideDown 0.4s ease 0.22s both;
+}
+
+/* Journey Map: bottom 3px gradient (gold) */
+.hero-profile .journey-map::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(233, 162, 59, 0.3), #E9A23B, rgba(233, 162, 59, 0.3));
+  z-index: 1;
+  transform-origin: left;
+  animation: accentSlideRight 0.4s ease 0.25s both;
+}
+
+/* Codex Preview: purple icon badge glow (handled via icon bg below) */
+/* No pseudo-element needed — the codex-preview-icon already has purple bg */
+
+/* Stagger delays — tight so above-fold content appears near-instantly */
+.hero-profile .hero-identity-card   { animation-delay: 0s; }
+.hero-profile .playlist-progress    { animation-delay: 0.04s; }
+.hero-profile .voice-tracker        { animation-delay: 0.08s; }
+.hero-profile .journey-map          { animation-delay: 0.12s; }
+.hero-profile .projects-section     { animation-delay: 0.16s; }
+.hero-profile .codex-preview-card   { animation-delay: 0.20s; }
+
+/* Card press feedback — tactile response on tap/click */
+.hero-profile .hero-identity-card:active,
+.hero-profile .journey-map:active,
+.hero-profile .voice-tracker:active,
+.hero-profile .playlist-progress:active,
+.hero-profile .codex-preview-card:active,
+.hero-profile .projects-section:active {
+  transform: scale(0.985);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.hero-profile .project-expression-card,
+.hero-profile .create-expression-card {
+  background: #ffffff;
+  color: #1a1a2e;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  /* Stage-colored left border added via inline style in JSX */
+  border-left: 4px solid var(--stage-color, #5e17eb);
+}
+
+/* (Inner bubble glow applied per-element below) */
 
 /* ============ HEADER ============ */
 
@@ -31,7 +172,7 @@
 .hero-profile .back-button {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(94, 23, 235, 0.6);
   font-size: 20px;
   cursor: pointer;
   padding: 4px 8px;
@@ -39,27 +180,41 @@
 }
 
 .hero-profile .back-button:hover {
-  color: #fff;
+  color: #5e17eb;
 }
 
 .hero-profile .header-title {
   font-size: 18px;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #fff, rgba(233, 162, 59, 0.9));
+  background: linear-gradient(135deg, #5e17eb, rgba(233, 162, 59, 0.9));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+.hero-profile .header-right-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .hero-profile .header-xp {
   font-size: 14px;
-  font-weight: 600;
-  color: #E9A23B;
-  background: rgba(233, 162, 59, 0.1);
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid rgba(233, 162, 59, 0.2);
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: none;
+  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
+  animation: xpBadgePulse 1.8s ease-out 0.6s 1 both;
+}
+
+@keyframes xpBadgePulse {
+  0%   { box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3), 0 0 0 0 rgba(94, 23, 235, 0.4); }
+  40%  { box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3), 0 0 0 8px rgba(94, 23, 235, 0); }
+  100% { box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3); }
 }
 
 /* ============ LOADING & ERROR ============ */
@@ -87,7 +242,7 @@
 }
 
 .hero-profile .hero-loading p {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(94, 23, 235, 0.5);
   font-size: 14px;
 }
 
@@ -102,7 +257,7 @@
 }
 
 .hero-profile .hero-error p {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(94, 23, 235, 0.5);
 }
 
 .hero-profile .hero-error button {
@@ -118,11 +273,7 @@
 /* ============ HERO IDENTITY CARD ============ */
 
 .hero-profile .hero-identity-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  padding: 24px;
-  margin-top: 16px;
+  /* border set by shared purple card rule above */
 }
 
 .hero-profile .hero-identity-card--empty {
@@ -131,8 +282,7 @@
   justify-content: center;
   min-height: 240px;
   border-style: dashed;
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 .hero-profile .identity-empty-state {
@@ -153,7 +303,7 @@
 }
 
 .hero-profile .identity-empty-state p {
-  color: rgba(255, 255, 255, 0.6);
+  color: #6c757d;
   font-size: 13px;
   line-height: 1.5;
   margin: 0 0 20px;
@@ -191,7 +341,7 @@
 
 .hero-profile .step-text {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #6c757d;
   line-height: 1.3;
 }
 
@@ -220,13 +370,59 @@
   margin-bottom: 16px;
 }
 
+/* Animated conic-gradient ring around avatar.
+   The ring spins via ::after so the image stays still. */
+.hero-profile .identity-avatar-ring {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Spinning gradient ring (sits behind the avatar) */
+.hero-profile .identity-avatar-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #5e17eb, var(--vibe-color, #a78bfa), #E9A23B, #5e17eb);
+  animation: avatarRingSpin 8s linear infinite;
+  z-index: 0;
+}
+
+/* Soft glow behind ring */
+.hero-profile .identity-avatar-ring::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--vibe-glow, rgba(94, 23, 235, 0.2)) 0%, transparent 70%);
+  animation: avatarGlowPulse 3s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes avatarRingSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes avatarGlowPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+
 .hero-profile .identity-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 16px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  background: rgba(94, 23, 235, 0.2);
+  background: #ffffff;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-profile .identity-avatar img {
@@ -243,8 +439,8 @@
   justify-content: center;
   font-size: 32px;
   font-weight: 700;
-  color: rgba(94, 23, 235, 0.6);
-  background: rgba(94, 23, 235, 0.1);
+  color: #5e17eb;
+  background: rgba(94, 23, 235, 0.06);
 }
 
 .hero-profile .identity-titles {
@@ -257,7 +453,7 @@
   margin: 0 0 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: linear-gradient(135deg, #fff, rgba(233, 162, 59, 0.9));
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -265,7 +461,7 @@
 
 .hero-profile .essence-group {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #6c757d;
   font-weight: 500;
 }
 
@@ -286,7 +482,7 @@
 /* Tagline */
 .hero-profile .identity-tagline {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.65);
+  color: #6c757d;
   font-style: italic;
   line-height: 1.5;
   margin: 0 0 20px;
@@ -301,20 +497,20 @@
 }
 
 .hero-profile .identity-mini-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 12px;
   padding: 14px;
 }
 
 .hero-profile .superpower-card {
-  border-color: rgba(233, 162, 59, 0.25);
-  background: rgba(233, 162, 59, 0.08);
+  background: rgba(233, 162, 59, 0.06);
+  border-color: rgba(233, 162, 59, 0.15);
 }
 
 .hero-profile .shadow-card {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(94, 23, 235, 0.04);
+  border-color: rgba(94, 23, 235, 0.12);
 }
 
 .hero-profile .mini-card-header {
@@ -326,6 +522,23 @@
 
 .hero-profile .mini-card-icon {
   font-size: 14px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hero-profile .superpower-card .mini-card-icon {
+  background: rgba(233, 162, 59, 0.12);
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.15);
+}
+
+.hero-profile .shadow-card .mini-card-icon {
+  background: rgba(94, 23, 235, 0.08);
+  box-shadow: 0 0 8px rgba(94, 23, 235, 0.1);
 }
 
 .hero-profile .mini-card-label {
@@ -333,12 +546,12 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #adb5bd;
 }
 
 .hero-profile .mini-card-content {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #1a1a2e;
   line-height: 1.4;
   margin: 0;
 }
@@ -347,7 +560,21 @@
   font-size: 14px;
   font-weight: 600;
   margin: 0 0 4px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #1a1a2e;
+}
+
+.hero-profile .mini-card-link {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #E9A23B;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.hero-profile .identity-mini-card:hover .mini-card-link {
+  opacity: 1;
 }
 
 /* ============ PROJECTS SECTION ============ */
@@ -369,11 +596,23 @@
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-profile .projects-title::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, #E9A23B, rgba(233, 162, 59, 0.3));
+  border-radius: 1px;
+  flex-shrink: 0;
 }
 
 .hero-profile .projects-count {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #adb5bd;
 }
 
 .hero-profile .projects-list {
@@ -385,8 +624,6 @@
 /* ============ PROJECT EXPRESSION CARD ============ */
 
 .hero-profile .project-expression-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 20px;
   cursor: pointer;
@@ -395,8 +632,13 @@
 
 .hero-profile .project-expression-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(94, 23, 235, 0.3);
-  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.1);
+  border-color: rgba(94, 23, 235, 0.2);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+.hero-profile .project-expression-card:active {
+  transform: scale(0.985);
+  transition: transform 0.1s ease;
 }
 
 /* Project Header */
@@ -435,8 +677,8 @@
 }
 
 .hero-profile .triad-tile {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   padding: 10px;
   text-align: center;
@@ -459,7 +701,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #adb5bd;
 }
 
 .hero-profile .triad-title {
@@ -485,7 +727,7 @@
 
 .hero-profile .progress-label {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
   min-width: 140px;
   white-space: nowrap;
   overflow: hidden;
@@ -495,7 +737,7 @@
 .hero-profile .progress-bar {
   flex: 1;
   height: 6px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #e9ecef;
   border-radius: 3px;
   overflow: hidden;
 }
@@ -504,6 +746,30 @@
   height: 100%;
   border-radius: 3px;
   transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer sweep on progress bars */
+.hero-profile .progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  animation: progressShimmer 1.6s ease 0.8s 1 forwards;
+}
+
+@keyframes progressShimmer {
+  from { left: -100%; }
+  to   { left: 100%; }
 }
 
 .hero-profile .progress-fill--stage {
@@ -516,7 +782,7 @@
 
 .hero-profile .progress-value {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
   min-width: 32px;
   text-align: right;
 }
@@ -541,8 +807,6 @@
 
 .hero-profile .create-expression-card {
   border-style: dashed;
-  border-color: rgba(233, 162, 59, 0.2);
-  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -551,7 +815,7 @@
 
 .hero-profile .create-expression-card:hover {
   border-color: rgba(233, 162, 59, 0.4);
-  background: rgba(233, 162, 59, 0.03);
+  background: rgba(233, 162, 59, 0.04);
 }
 
 .hero-profile .create-content {
@@ -605,7 +869,7 @@
 
 .hero-profile .create-first-description {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #6c757d;
   line-height: 1.5;
   margin: 0 0 16px;
   max-width: 320px;
@@ -624,8 +888,8 @@
 
 .hero-profile .create-first-step {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.06);
+  color: #6c757d;
+  background: #f8f9fa;
   padding: 4px 8px;
   border-radius: 6px;
 }
@@ -648,7 +912,7 @@
 
 .hero-profile .playlist-empty-text {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
   line-height: 1.5;
   margin: 0;
 }
@@ -685,9 +949,14 @@
     font-size: 18px;
   }
 
+  .hero-profile .identity-avatar-ring {
+    width: 68px;
+    height: 68px;
+  }
+
   .hero-profile .identity-avatar {
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
   }
 }
 
@@ -701,6 +970,34 @@
   .hero-profile .hero-profile-header {
     margin: 0 -24px;
     padding: 16px 24px;
+  }
+}
+
+/* Respect reduced-motion preference — show everything instantly */
+@media (prefers-reduced-motion: reduce) {
+  .hero-profile .hero-identity-card,
+  .hero-profile .journey-map,
+  .hero-profile .voice-tracker,
+  .hero-profile .playlist-progress,
+  .hero-profile .codex-preview-card,
+  .hero-profile .projects-section {
+    animation: none;
+    opacity: 1;
+  }
+  .hero-profile .hero-identity-card::before,
+  .hero-profile .playlist-progress::before,
+  .hero-profile .voice-tracker::before,
+  .hero-profile .journey-map::before {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .hero-profile .identity-avatar-ring::after {
+    animation: none;
+  }
+  .hero-profile .identity-avatar-ring::before {
+    animation: none;
+    opacity: 0.5;
   }
 }
 
@@ -791,7 +1088,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0 0 16px;
 }
 
@@ -804,7 +1101,7 @@
 .hero-profile .story-paragraph {
   font-size: 14px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
 }
 
@@ -831,7 +1128,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0 0 16px;
 }
 
@@ -842,8 +1139,8 @@
 }
 
 .hero-profile .triad-detail-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(100, 40, 210, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   padding: 16px;
   text-align: center;
@@ -870,7 +1167,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .hero-profile .triad-detail-name {
@@ -881,20 +1178,20 @@
 
 .hero-profile .triad-detail-display {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.8);
   margin: 0 0 4px;
 }
 
 .hero-profile .triad-detail-tagline {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
   font-style: italic;
   margin: 0;
 }
 
 .hero-profile .triad-detail-empty {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
   margin: 0;
 }
 
@@ -916,13 +1213,13 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   margin: 0;
 }
 
 .hero-profile .journey-stage-label {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .hero-profile .journey-track {
@@ -979,7 +1276,7 @@
 }
 
 .hero-profile .journey-node.future .journey-dot {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 @keyframes heroPulse {
@@ -989,7 +1286,7 @@
 
 .hero-profile .journey-label {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
   max-width: 50px;
   line-height: 1.2;
@@ -1001,7 +1298,7 @@
 }
 
 .hero-profile .journey-node.completed .journey-label {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Journey Progress Section */
@@ -1023,7 +1320,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .hero-profile .journey-progress-stage {
@@ -1045,6 +1342,24 @@
   background: linear-gradient(90deg, #5e17eb, #E9A23B);
   border-radius: 6px;
   transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-profile .journey-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  animation: progressShimmer 1.6s ease 0.8s 1 forwards;
 }
 
 .hero-profile .journey-progress-footer {
@@ -1061,7 +1376,7 @@
 
 .hero-profile .journey-progress-milestone {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   font-style: italic;
 }
 
@@ -1070,9 +1385,6 @@
 .hero-profile .playlist-progress {
   margin-top: 28px;
   margin-bottom: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
   padding: 20px;
 }
 
@@ -1088,8 +1400,20 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #1a1a2e;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-profile .playlist-title::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 1px;
+  flex-shrink: 0;
 }
 
 .hero-profile .playlist-xp {
@@ -1138,7 +1462,7 @@
 
 .hero-profile .layer-bar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #e9ecef;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -1148,6 +1472,24 @@
   background: linear-gradient(90deg, #5e17eb, #E9A23B);
   border-radius: 4px;
   transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-profile .layer-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  animation: progressShimmer 1.6s ease 1s 1 forwards;
 }
 
 .hero-profile .playlist-layer.complete .layer-bar-fill {
@@ -1170,12 +1512,12 @@
 }
 
 .hero-profile .status-locked {
-  color: rgba(255, 255, 255, 0.3);
+  color: #adb5bd;
   font-size: 10px;
 }
 
 .hero-profile .status-empty {
-  color: rgba(255, 255, 255, 0.3);
+  color: #adb5bd;
 }
 
 /* ============ ACTIVE PLAY-LIST ITEMS ============ */
@@ -1189,7 +1531,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
   margin: 0 0 16px;
 }
 
@@ -1203,15 +1545,15 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   padding: 12px;
 }
 
 .hero-profile .playlist-checkbox {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.3);
+  color: #adb5bd;
   flex-shrink: 0;
   margin-top: 1px;
 }
@@ -1222,7 +1564,7 @@
 
 .hero-profile .playlist-item-title {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.8);
+  color: #1a1a2e;
   display: block;
   margin-bottom: 4px;
 }
@@ -1315,10 +1657,6 @@
 
 .hero-profile .voice-tracker {
   margin-top: 24px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px;
 }
 
 .hero-profile .voice-tracker-title {
@@ -1326,8 +1664,20 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #1a1a2e;
   margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-profile .voice-tracker-title::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, #a78bfa, rgba(167, 139, 250, 0.3));
+  border-radius: 1px;
+  flex-shrink: 0;
 }
 
 /* ---- Voice Balance Section ---- */
@@ -1356,7 +1706,7 @@
 .hero-profile .voice-label-name {
   font-size: 13px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: #1a1a2e;
 }
 
 .hero-profile .essence-label .voice-label-name {
@@ -1364,14 +1714,14 @@
 }
 
 .hero-profile .protective-label .voice-label-name {
-  color: rgba(255, 255, 255, 0.6);
+  color: #6c757d;
 }
 
 /* Ratio slider bar */
 .hero-profile .voice-balance-bar {
   position: relative;
   height: 28px;
-  background: rgba(255, 255, 255, 0.06);
+  background: #e9ecef;
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 10px;
@@ -1394,7 +1744,7 @@
 }
 
 .hero-profile .voice-balance-fill.protective-fill {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.06);
   border-radius: 0 14px 14px 0;
   justify-content: center;
 }
@@ -1410,7 +1760,7 @@
 }
 
 .hero-profile .voice-bar-pct.protective-pct {
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
 }
 
 .hero-profile .voice-balance-marker {
@@ -1418,11 +1768,17 @@
   top: 0;
   width: 3px;
   height: 100%;
-  background: #fff;
+  background: #1a1a2e;
   transform: translateX(-50%);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   transition: left 0.6s ease;
   z-index: 1;
+}
+
+/* Soft gradient blend at the meeting edge */
+.hero-profile .voice-balance-fill.essence-fill {
+  mask-image: linear-gradient(90deg, #000 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, #000 90%, transparent 100%);
 }
 
 /* Counts row */
@@ -1434,7 +1790,7 @@
 
 .hero-profile .voice-count {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
 }
 
 .hero-profile .voice-count.essence-count {
@@ -1451,16 +1807,22 @@
 .hero-profile .voice-balance-status.essence-leads {
   color: #E9A23B;
   background: rgba(233, 162, 59, 0.12);
+  animation: essenceLeadsPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes essenceLeadsPulse {
+  0%, 100% { box-shadow: none; }
+  50%      { box-shadow: 0 0 0 3px rgba(233, 162, 59, 0.12); }
 }
 
 .hero-profile .voice-balance-status.protective-leads {
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.06);
+  color: #6c757d;
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .hero-profile .voice-balance-status.balanced {
-  color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.04);
+  color: #6c757d;
+  background: rgba(0, 0, 0, 0.03);
 }
 
 /* Voice empty state */
@@ -1470,7 +1832,7 @@
 
 .hero-profile .voice-empty-text {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.45);
+  color: #6c757d;
   line-height: 1.5;
   margin: 0;
 }
@@ -1478,7 +1840,7 @@
 /* ---- Healing Journey Section ---- */
 
 .hero-profile .healing-journey-section {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   padding-top: 18px;
 }
 
@@ -1494,12 +1856,12 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.8px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #6c757d;
 }
 
 .hero-profile .healing-journey-total {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #adb5bd;
 }
 
 .hero-profile .healing-types-grid {
@@ -1509,8 +1871,8 @@
 }
 
 .hero-profile .healing-type-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   padding: 12px 8px;
   text-align: center;
@@ -1522,8 +1884,9 @@
 }
 
 .hero-profile .healing-type-card.active {
-  border-color: rgba(233, 162, 59, 0.2);
-  background: rgba(233, 162, 59, 0.05);
+  border-color: rgba(233, 162, 59, 0.25);
+  background: rgba(233, 162, 59, 0.06);
+  box-shadow: inset 0 0 14px rgba(233, 162, 59, 0.08);
 }
 
 .hero-profile .healing-type-icon {
@@ -1535,26 +1898,33 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #adb5bd;
 }
 
 .hero-profile .healing-type-card.active .healing-type-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: #6c757d;
 }
 
 .hero-profile .healing-type-count {
   font-size: 18px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.25);
+  color: #adb5bd;
 }
 
 .hero-profile .healing-type-card.active .healing-type-count {
   color: #E9A23B;
+  animation: healingCountPop 0.4s ease 0.2s 1 both;
+}
+
+@keyframes healingCountPop {
+  0%   { transform: scale(0.8); opacity: 0.5; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .hero-profile .healing-empty-text {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.35);
+  color: #adb5bd;
   line-height: 1.5;
   margin: 10px 0 0;
   text-align: center;
@@ -1563,14 +1933,29 @@
 /* ============ CTA LINKS IN EMPTY STATES ============ */
 
 .hero-profile .hero-profile-link {
-  color: #5e17eb;
+  display: inline-block;
+  color: #E9A23B;
   text-decoration: none;
   font-weight: 600;
+  background: rgba(233, 162, 59, 0.15);
+  padding: 4px 12px;
+  border-radius: 20px;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
 }
 
 .hero-profile .hero-profile-link:hover {
-  text-decoration: underline;
-  color: #7b3ff2;
+  text-decoration: none;
+  background: rgba(233, 162, 59, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Dashed outline around empty-state content areas */
+.hero-profile .voice-balance-empty,
+.hero-profile .playlist-empty {
+  border: 1.5px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 16px;
 }
 
 /* ============ EDIT ESSENCE MODAL ============ */
@@ -1590,8 +1975,8 @@
 
 .hero-profile .edit-essence-icon,
 .hero-profile .share-essence-icon {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -1606,7 +1991,7 @@
 
 .hero-profile .edit-essence-icon:hover,
 .hero-profile .share-essence-icon:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.08);
 }
 
 /* First-time tooltip */
@@ -2043,17 +2428,13 @@
 
 .hero-profile .codex-preview-card {
   margin-top: 24px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .hero-profile .codex-preview-card:hover {
-  border-color: rgba(233, 162, 59, 0.3);
-  box-shadow: 0 4px 16px rgba(94, 23, 235, 0.1);
+  border-color: rgba(94, 23, 235, 0.3);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
 }
 
@@ -2071,9 +2452,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(233, 162, 59, 0.1);
+  background: rgba(94, 23, 235, 0.08);
   border-radius: 12px;
   flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(94, 23, 235, 0.1);
 }
 
 .hero-profile .codex-preview-title-group {
@@ -2084,7 +2466,7 @@
   font-size: 16px;
   font-weight: 700;
   margin: 0 0 2px;
-  background: linear-gradient(135deg, #fff, rgba(233, 162, 59, 0.9));
+  background: linear-gradient(135deg, #5e17eb, #E9A23B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2092,7 +2474,7 @@
 
 .hero-profile .codex-preview-subtitle {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #6c757d;
   margin: 0;
 }
 
@@ -2100,6 +2482,16 @@
   font-size: 18px;
   color: rgba(233, 162, 59, 0.6);
   transition: transform 0.2s, color 0.2s;
+  animation: arrowNudge 2s ease 1.5s 1 both;
+}
+
+@keyframes arrowNudge {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(5px); }
+  40%  { transform: translateX(0); }
+  60%  { transform: translateX(3px); }
+  80%  { transform: translateX(0); }
+  100% { transform: translateX(0); }
 }
 
 .hero-profile .codex-preview-card:hover .codex-preview-arrow {
@@ -2116,7 +2508,7 @@
 .hero-profile .codex-preview-bar {
   flex: 1;
   height: 8px;
-  background: rgba(255, 255, 255, 0.08);
+  background: #e9ecef;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -2126,6 +2518,24 @@
   background: linear-gradient(90deg, #5e17eb, #E9A23B);
   border-radius: 4px;
   transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-profile .codex-preview-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  animation: progressShimmer 1.6s ease 1.2s 1 forwards;
 }
 
 .hero-profile .codex-preview-count {

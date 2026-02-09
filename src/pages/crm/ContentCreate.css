@@ -107,6 +107,103 @@
   font-size: 0.875rem;
 }
 
+/* Recommendations Section */
+.cc-recs-section {
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(124, 58, 237, 0.03));
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.cc-recs-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--purple);
+}
+
+.cc-recs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cc-rec-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--purple);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+}
+
+.cc-rec-card:hover {
+  border-color: var(--purple);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.1);
+  transform: translateX(2px);
+}
+
+.cc-rec-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.cc-rec-category {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--purple);
+  font-weight: 600;
+}
+
+.cc-rec-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 4px 0;
+  color: var(--text-primary);
+}
+
+.cc-rec-context {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cc-rec-arrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--purple);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.cc-recs-hint {
+  background: rgba(94, 23, 235, 0.04);
+  border: 1px dashed rgba(94, 23, 235, 0.2);
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.cc-all-types-heading {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--text-primary);
+}
+
 /* Trigger Selection Grid */
 .cc-trigger-grid {
   display: grid;
@@ -621,6 +718,16 @@
     padding: 16px;
     padding-top: 80px; /* Preserve toolbar offset (shorthand above resets it) */
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cc-rec-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .cc-rec-arrow {
+    align-self: flex-end;
   }
 
   .cc-trigger-grid {

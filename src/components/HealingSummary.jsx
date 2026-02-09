@@ -18,7 +18,7 @@ function HealingSummary({ onBack, progress }) {
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     totalCompleted: 0,
-    byType: { Recognise: 0, Release: 0 },
+    byType: { Recognise: 0, Release: 0, Rewire: 0, Reconnect: 0 },
     emotions: {},
     triggerPatterns: {},
     releaseMethods: {},
@@ -63,40 +63,18 @@ function HealingSummary({ onBack, progress }) {
         // Fetch all healing-related quest completions
         const { data: completions, error } = await supabase
           .from('quest_completions')
-          .select('quest_id, quest_category, response_data, points_earned, created_at')
+          .select('quest_id, quest_type, reflection_text, points_earned, created_at')
           .eq('user_id', user.id)
-          .eq('quest_type', 'Healing')
+          .eq('quest_category', 'Healing')
 
         if (error) throw error
 
-        // Also check for Recognise/Release categories
-        const { data: rCompletions } = await supabase
-          .from('quest_completions')
-          .select('quest_id, quest_category, response_data, points_earned, created_at')
-          .eq('user_id', user.id)
-          .in('quest_category', ['Recognise', 'Release'])
-
-        // Combine results, filtering for Healing-specific quests
-        const healingQuestIds = [
-          'recognise_positive_frequency',
-          'recognise_negative_frequency',
-          'recognise_trigger_pattern',
-          'recognise_nervous_system',
-          'recognise_healing_compass',
-          'release_daily_challenge',
-          'release_negative_charge',
-          'release_weekly_big'
-        ]
-
-        const allCompletions = [...(completions || []), ...(rCompletions || [])]
-        const uniqueCompletions = allCompletions.filter((c, i, arr) =>
-          arr.findIndex(x => x.quest_id === c.quest_id && x.created_at === c.created_at) === i
-        ).filter(c => healingQuestIds.includes(c.quest_id) || c.quest_category === 'Release')
+        const uniqueCompletions = completions || []
 
         // Process the data
         const processed = {
           totalCompleted: uniqueCompletions?.length || 0,
-          byType: { Recognise: 0, Release: 0 },
+          byType: { Recognise: 0, Release: 0, Rewire: 0, Reconnect: 0 },
           emotions: {},
           triggerPatterns: {},
           releaseMethods: {},
@@ -106,15 +84,16 @@ function HealingSummary({ onBack, progress }) {
         }
 
         uniqueCompletions?.forEach(completion => {
-          // Count by type
-          if (completion.quest_id?.startsWith('recognise_')) {
+          // Count by type (quest_type is Recognise, Release, Rewire, or Reconnect)
+          const questType = completion.quest_type
+          if (questType === 'Recognise' || completion.quest_id?.startsWith('recognise_')) {
             processed.byType.Recognise++
-          } else if (completion.quest_id?.startsWith('release_')) {
+          } else if (questType === 'Release' || completion.quest_id?.startsWith('release_')) {
             processed.byType.Release++
-          } else if (completion.quest_category === 'Release') {
-            processed.byType.Release++
-          } else if (completion.quest_category === 'Recognise') {
-            processed.byType.Recognise++
+          } else if (questType === 'Rewire' || completion.quest_id?.startsWith('rewire_')) {
+            processed.byType.Rewire++
+          } else if (questType === 'Reconnect' || completion.quest_id?.startsWith('reconnect_')) {
+            processed.byType.Reconnect++
           }
 
           // Add points
@@ -125,12 +104,12 @@ function HealingSummary({ onBack, progress }) {
           const dayKey = date.toISOString().split('T')[0]
           processed.daysWithCompletions.add(dayKey)
 
-          // Parse response data for insights
-          if (completion.response_data) {
+          // Parse reflection text for insights
+          if (completion.reflection_text) {
             try {
-              const data = typeof completion.response_data === 'string'
-                ? JSON.parse(completion.response_data)
-                : completion.response_data
+              const data = typeof completion.reflection_text === 'string'
+                ? JSON.parse(completion.reflection_text)
+                : completion.reflection_text
 
               // Track emotions
               if (data.emotion) {
@@ -182,10 +161,17 @@ function HealingSummary({ onBack, progress }) {
     fetchStats()
   }, [user])
 
-  // Calculate percentages
-  const totalByType = stats.byType.Recognise + stats.byType.Release
-  const recognisePercentage = totalByType > 0 ? Math.round((stats.byType.Recognise / totalByType) * 100) : 0
-  const releasePercentage = totalByType > 0 ? 100 - recognisePercentage : 0
+  // Calculate percentages for all 4 types
+  const totalByType = stats.byType.Recognise + stats.byType.Release + stats.byType.Rewire + stats.byType.Reconnect
+  const typePercentages = {
+    Recognise: totalByType > 0 ? Math.round((stats.byType.Recognise / totalByType) * 100) : 0,
+    Release: totalByType > 0 ? Math.round((stats.byType.Release / totalByType) * 100) : 0,
+    Rewire: totalByType > 0 ? Math.round((stats.byType.Rewire / totalByType) * 100) : 0,
+    Reconnect: totalByType > 0 ? Math.round((stats.byType.Reconnect / totalByType) * 100) : 0
+  }
+  // Legacy aliases for insight logic
+  const recognisePercentage = typePercentages.Recognise
+  const releasePercentage = typePercentages.Release
 
   // Get top emotions
   const topEmotions = Object.entries(stats.emotions)
@@ -271,7 +257,7 @@ function HealingSummary({ onBack, progress }) {
           </div>
         )}
 
-        {/* Type Balance - Recognise vs Release */}
+        {/* Type Balance - All 4 R-Types */}
         <div className="summary-section">
           <h3>Healing Balance</h3>
           {totalByType > 0 ? (
@@ -280,17 +266,29 @@ function HealingSummary({ onBack, progress }) {
                 <div className="voice-item recognise">
                   <span className="voice-icon">👁️</span>
                   <span className="voice-label">Recognise</span>
-                  <span className="voice-percent">{recognisePercentage}%</span>
+                  <span className="voice-percent">{typePercentages.Recognise}%</span>
                 </div>
                 <div className="voice-item release">
                   <span className="voice-icon">🌊</span>
                   <span className="voice-label">Release</span>
-                  <span className="voice-percent">{releasePercentage}%</span>
+                  <span className="voice-percent">{typePercentages.Release}%</span>
+                </div>
+                <div className="voice-item rewire">
+                  <span className="voice-icon">🔄</span>
+                  <span className="voice-label">Rewire</span>
+                  <span className="voice-percent">{typePercentages.Rewire}%</span>
+                </div>
+                <div className="voice-item reconnect">
+                  <span className="voice-icon">🤝</span>
+                  <span className="voice-label">Reconnect</span>
+                  <span className="voice-percent">{typePercentages.Reconnect}%</span>
                 </div>
               </div>
               <div className="voice-bar-container">
-                <div className="voice-bar recognise" style={{ width: `${recognisePercentage}%` }} />
-                <div className="voice-bar release" style={{ width: `${releasePercentage}%` }} />
+                <div className="voice-bar recognise" style={{ width: `${typePercentages.Recognise}%` }} />
+                <div className="voice-bar release" style={{ width: `${typePercentages.Release}%` }} />
+                <div className="voice-bar rewire" style={{ width: `${typePercentages.Rewire}%` }} />
+                <div className="voice-bar reconnect" style={{ width: `${typePercentages.Reconnect}%` }} />
               </div>
             </div>
           ) : (

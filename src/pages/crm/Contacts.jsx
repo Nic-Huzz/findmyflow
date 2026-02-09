@@ -6,27 +6,36 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
+import { createDeal, scheduleFollowUp } from '../../lib/crm/dealService'
 import PullToRefresh from '../../components/crm/PullToRefresh'
 import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './Contacts.css'
 
 const LIFECYCLE_STAGES = [
   { id: 'lead', label: 'Lead', color: '#6b7280', icon: '🎯' },
-  { id: 'qualified', label: 'Qualified', color: '#3b82f6', icon: '✓' },
   { id: 'opportunity', label: 'Opportunity', color: '#8b5cf6', icon: '💼' },
   { id: 'customer', label: 'Customer', color: '#10b981', icon: '⭐' },
   { id: 'evangelist', label: 'Evangelist', color: '#f59e0b', icon: '🔥' },
 ]
 
 const SOURCES = [
-  'Organic Social',
-  'Paid Ads',
-  'Referral',
-  'Website',
-  'Cold Outreach',
-  'Event',
-  'Other',
+  { id: 'Content', label: 'Content', icon: '📝' },
+  { id: 'Warm Outreach', label: 'Warm Outreach', icon: '🤝' },
+  { id: 'Cold Outreach', label: 'Cold Outreach', icon: '📧' },
+  { id: 'Paid Ads', label: 'Paid Ads', icon: '📣' },
 ]
+
+function timeAgo(dateStr) {
+  if (!dateStr) return ''
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  const days = Math.floor(hrs / 24)
+  if (days < 7) return `${days}d ago`
+  return new Date(dateStr).toLocaleDateString()
+}
 
 export default function Contacts() {
   const { user } = useAuth()
@@ -36,8 +45,11 @@ export default function Contacts() {
   const [contacts, setContacts] = useState([])
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingContact, setEditingContact] = useState(null)
+  const [prefillData, setPrefillData] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStage, setFilterStage] = useState('all')
+  const [showAddMenu, setShowAddMenu] = useState(false)
+  const [analyzing, setAnalyzing] = useState(false)
 
   // Hide bottom toolbar when modal is open
   useEffect(() => {
@@ -81,7 +93,8 @@ export default function Contacts() {
       const matchesSearch = !searchQuery ||
         contact.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         contact.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        contact.company?.toLowerCase().includes(searchQuery.toLowerCase())
+        contact.company?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        contact.social_handle?.toLowerCase().includes(searchQuery.toLowerCase())
 
       const matchesStage = filterStage === 'all' || contact.lifecycle_stage === filterStage
 
@@ -109,8 +122,62 @@ export default function Contacts() {
   // Handlers
   const handleAddContact = () => {
     setEditingContact(null)
+    setPrefillData(null)
     setShowAddModal(true)
+    setShowAddMenu(false)
     hapticLight()
+  }
+
+  const handleScreenshotAnalysis = () => {
+    setShowAddMenu(false)
+    hapticLight()
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.capture = 'environment'
+    input.onchange = async (e) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+
+      setAnalyzing(true)
+      try {
+        // Convert to base64
+        const reader = new FileReader()
+        const base64 = await new Promise((resolve) => {
+          reader.onload = () => resolve(reader.result.split(',')[1])
+          reader.readAsDataURL(file)
+        })
+
+        const { data, error } = await supabase.functions.invoke('analyze-leads-screenshot', {
+          body: { imageBase64: base64, mimeType: file.type }
+        })
+
+        if (error) throw error
+
+        if (data?.success && data.leads?.length > 0) {
+          const lead = data.leads[0]
+          setPrefillData({
+            name: lead.name?.replace(/^@/, '') || '',
+            email: lead.email || '',
+            phone: lead.phone || '',
+            social_handle: lead.handle || '',
+            notes: lead.message_preview || '',
+            source: lead.platform === 'Instagram' || lead.platform === 'LinkedIn'
+              ? 'Content' : 'Warm Outreach',
+          })
+          setEditingContact(null)
+          setShowAddModal(true)
+        } else {
+          alert('No contacts found in screenshot. Try a clearer image.')
+        }
+      } catch (err) {
+        console.error('Screenshot analysis error:', err)
+        alert('Failed to analyze screenshot. Please try again.')
+      } finally {
+        setAnalyzing(false)
+      }
+    }
+    input.click()
   }
 
   const handleEditContact = (contact) => {
@@ -159,39 +226,6 @@ export default function Contacts() {
           <h2 className="contacts-toolbar-title">Contacts</h2>
         </div>
 
-        {/* Header */}
-        <header className="contacts-header">
-          <div className="contacts-breadcrumb">
-            <button onClick={() => navigate('/crm')}>Home</button>
-            <span>→</span>
-            <button onClick={() => navigate('/crm/nurture')}>Nurture</button>
-            <span>→</span>
-            <span>Contacts</span>
-          </div>
-          <h1 className="contacts-title">👥 Contacts</h1>
-          <p className="contacts-subtitle">Manage your leads and customers</p>
-        </header>
-
-        {/* Stats Card */}
-        <div className="contacts-stats-card">
-          <div className="stats-row">
-            <div className="stat-item">
-              <span className="stat-value">{stats.total}</span>
-              <span className="stat-label">Total</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-value">{stats.thisWeek}</span>
-              <span className="stat-label">This Week</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-value">{stats.byStage.customer || 0}</span>
-              <span className="stat-label">Customers</span>
-            </div>
-          </div>
-        </div>
-
         {/* Actions Card */}
         <div className="contacts-actions-card">
           <div className="search-row">
@@ -202,11 +236,43 @@ export default function Contacts() {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
             />
-            <button className="contacts-add-btn" onClick={handleAddContact}>
-              + Add
-            </button>
+            <div className="add-btn-wrapper">
+              <button
+                className="contacts-add-btn"
+                onClick={() => { setShowAddMenu(!showAddMenu); hapticLight() }}
+              >
+                + Add
+              </button>
+              {showAddMenu && (
+                <>
+                  <div className="add-menu-backdrop" onClick={() => setShowAddMenu(false)} />
+                  <div className="add-menu">
+                    <button className="add-menu-item" onClick={handleAddContact}>
+                      <span className="add-menu-icon">👤</span>
+                      <span>Single Contact</span>
+                    </button>
+                    <button className="add-menu-item" onClick={() => { setShowAddMenu(false); navigate('/crm/import') }}>
+                      <span className="add-menu-icon">📄</span>
+                      <span>CSV Upload</span>
+                    </button>
+                    <button className="add-menu-item" onClick={handleScreenshotAnalysis}>
+                      <span className="add-menu-icon">📸</span>
+                      <span>Screenshot Analysis</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Screenshot analyzing overlay */}
+        {analyzing && (
+          <div className="analyzing-overlay">
+            <div className="contacts-spinner" />
+            <p>Analyzing screenshot...</p>
+          </div>
+        )}
 
         {/* Stage Filters */}
         <div className="contacts-filters">
@@ -235,22 +301,26 @@ export default function Contacts() {
               {searchQuery || filterStage !== 'all' ? (
                 <p>No contacts match your filters</p>
               ) : (
-                <>
-                  <p>No contacts yet</p>
+                <div className="contacts-empty-rich">
+                  <div className="empty-icon">👥</div>
+                  <h3>Let's build your network</h3>
+                  <p>Track the people in your world — from first touch to loyal customer</p>
                   <button className="empty-add-btn" onClick={handleAddContact}>
                     Add Your First Contact
                   </button>
-                </>
+                </div>
               )}
             </div>
           ) : (
             <div className="contacts-list">
-              {filteredContacts.map(contact => {
+              {filteredContacts.map((contact, idx) => {
                 const stage = LIFECYCLE_STAGES.find(s => s.id === contact.lifecycle_stage) || LIFECYCLE_STAGES[0]
+                const recency = timeAgo(contact.updated_at)
                 return (
                   <div
                     key={contact.id}
                     className="contact-item"
+                    style={{ animationDelay: `${Math.min(idx * 0.04, 0.4)}s` }}
                     onClick={() => handleEditContact(contact)}
                   >
                     <div className="contact-avatar" style={{ backgroundColor: stage.color }}>
@@ -258,7 +328,7 @@ export default function Contacts() {
                     </div>
                     <div className="contact-info">
                       <span className="contact-name">{contact.name}</span>
-                      <span className="contact-email">{contact.email || 'No email'}</span>
+                      <span className="contact-email">{contact.email || contact.social_handle || 'No email'}</span>
                       {contact.company && (
                         <span className="contact-company">{contact.company}</span>
                       )}
@@ -267,6 +337,7 @@ export default function Contacts() {
                       <span className="contact-stage" style={{ backgroundColor: stage.color }}>
                         {stage.icon} {stage.label}
                       </span>
+                      {recency && <span className="contact-recency">{recency}</span>}
                     </div>
                   </div>
                 )
@@ -279,6 +350,7 @@ export default function Contacts() {
         {showAddModal && (
           <ContactModal
             contact={editingContact}
+            prefill={prefillData}
             userId={user.id}
             onClose={() => {
               setShowAddModal(false)
@@ -304,19 +376,43 @@ export default function Contacts() {
 /**
  * Contact Add/Edit Modal
  */
-function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
+function ContactModal({ contact, prefill, userId, onClose, onSave, onDelete }) {
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({
-    name: contact?.name || '',
-    email: contact?.email || '',
-    phone: contact?.phone || '',
+    name: contact?.name || prefill?.name || '',
+    email: contact?.email || prefill?.email || '',
+    phone: contact?.phone || prefill?.phone || '',
     company: contact?.company || '',
+    social_handle: contact?.social_handle || prefill?.social_handle || '',
     lifecycle_stage: contact?.lifecycle_stage || 'lead',
-    source: contact?.source || 'Other',
+    source: contact?.source || prefill?.source || 'Content',
     tags: contact?.tags || [],
-    notes: contact?.notes || '',
+    notes: contact?.notes || prefill?.notes || '',
   })
   const [tagInput, setTagInput] = useState('')
+
+  // Deal creation toggle (only for new contacts)
+  const [alsoDeal, setAlsoDeal] = useState(false)
+  const [projects, setProjects] = useState([])
+  const [dealProject, setDealProject] = useState('')
+  const [dealValue, setDealValue] = useState(497)
+  const [dealFollowUp, setDealFollowUp] = useState('')
+
+  useEffect(() => {
+    if (alsoDeal && projects.length === 0) {
+      supabase
+        .from('user_projects')
+        .select('id, name')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .then(({ data }) => {
+          if (data?.length) {
+            setProjects(data)
+            setDealProject(data[0].id)
+          }
+        })
+    }
+  }, [alsoDeal, userId, projects.length])
 
   const handleAddTag = () => {
     if (tagInput.trim() && !form.tags.includes(tagInput.trim())) {
@@ -344,6 +440,7 @@ function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
             email: form.email.trim() || null,
             phone: form.phone.trim() || null,
             company: form.company.trim() || null,
+            social_handle: form.social_handle.trim() || null,
             lifecycle_stage: form.lifecycle_stage,
             source: form.source,
             tags: form.tags,
@@ -366,6 +463,7 @@ function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
             email: form.email.trim() || null,
             phone: form.phone.trim() || null,
             company: form.company.trim() || null,
+            social_handle: form.social_handle.trim() || null,
             lifecycle_stage: form.lifecycle_stage,
             source: form.source,
             tags: form.tags,
@@ -375,6 +473,27 @@ function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
           .single()
 
         if (error) throw error
+
+        // Also create a deal if toggled on
+        if (alsoDeal && dealProject) {
+          const project = projects.find(p => p.id === dealProject)
+          const dealName = `${form.name.trim()} - ${project?.name || 'Project'}`
+          const { data: newDeal } = await createDeal(userId, {
+            project_id: dealProject,
+            contact_name: dealName,
+            contact_email: form.email.trim() || null,
+            source: form.source,
+            product_type: project?.name || 'Project',
+            value: dealValue || 0,
+            status: 'lead',
+          })
+
+          // Schedule follow-up if date set
+          if (newDeal?.id && dealFollowUp) {
+            await scheduleFollowUp(newDeal.id, userId, dealFollowUp)
+          }
+        }
+
         onSave(data)
       }
       hapticMedium()
@@ -393,6 +512,14 @@ function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
           <h2>{contact ? 'Edit Contact' : 'Add Contact'}</h2>
           <button className="contact-modal-close" onClick={onClose}>×</button>
         </header>
+
+        {contact && (
+          <div className="contact-modal-context">
+            <span>Added {timeAgo(contact.created_at)}</span>
+            <span className="context-dot">·</span>
+            <span>Updated {timeAgo(contact.updated_at)}</span>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="contact-modal-form">
           <div className="form-group">
@@ -427,14 +554,25 @@ function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Company</label>
-            <input
-              type="text"
-              value={form.company}
-              onChange={e => setForm({ ...form, company: e.target.value })}
-              placeholder="Acme Inc."
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Company</label>
+              <input
+                type="text"
+                value={form.company}
+                onChange={e => setForm({ ...form, company: e.target.value })}
+                placeholder="Acme Inc."
+              />
+            </div>
+            <div className="form-group">
+              <label>Social Handle</label>
+              <input
+                type="text"
+                value={form.social_handle}
+                onChange={e => setForm({ ...form, social_handle: e.target.value })}
+                placeholder="@username"
+              />
+            </div>
           </div>
 
           <div className="form-row">
@@ -458,7 +596,7 @@ function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
                 onChange={e => setForm({ ...form, source: e.target.value })}
               >
                 {SOURCES.map(source => (
-                  <option key={source} value={source}>{source}</option>
+                  <option key={source.id} value={source.id}>{source.icon} {source.label}</option>
                 ))}
               </select>
             </div>
@@ -504,6 +642,63 @@ function ContactModal({ contact, userId, onClose, onSave, onDelete }) {
               rows={3}
             />
           </div>
+
+          {/* Deal creation toggle - only for new contacts */}
+          {!contact && (
+            <div className="deal-toggle-section">
+              <label className="toggle-row">
+                <span className="toggle-label">Also create a deal?</span>
+                <input
+                  type="checkbox"
+                  checked={alsoDeal}
+                  onChange={e => setAlsoDeal(e.target.checked)}
+                  className="toggle-checkbox"
+                />
+                <span className="toggle-switch" />
+              </label>
+
+              {alsoDeal && (
+                <div className="deal-fields">
+                  <div className="form-group">
+                    <label>Project</label>
+                    {projects.length > 0 ? (
+                      <select
+                        value={dealProject}
+                        onChange={e => setDealProject(e.target.value)}
+                      >
+                        {projects.map(p => (
+                          <option key={p.id} value={p.id}>{p.name}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      <p className="deal-no-projects">No projects found. Create one first.</p>
+                    )}
+                  </div>
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Value ($)</label>
+                      <input
+                        type="number"
+                        value={dealValue}
+                        onChange={e => setDealValue(Number(e.target.value))}
+                        min="0"
+                        placeholder="497"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Follow-up Date</label>
+                      <input
+                        type="date"
+                        value={dealFollowUp}
+                        onChange={e => setDealFollowUp(e.target.value)}
+                        min={new Date().toISOString().split('T')[0]}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="modal-actions">
             {contact && (

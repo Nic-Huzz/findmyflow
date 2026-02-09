@@ -3,10 +3,6 @@
 
 .hero-profile .journey-map {
   margin-top: 24px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 20px;
 }
 
 .hero-profile .journey-map-header {
@@ -18,8 +14,20 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
+  color: #1a1a2e;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-profile .journey-map-title::before {
+  content: '';
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, #E9A23B, rgba(233, 162, 59, 0.3));
+  border-radius: 1px;
+  flex-shrink: 0;
 }
 
 /* Timeline Section */
@@ -45,7 +53,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #adb5bd;
   transition: color 0.3s ease;
 }
 
@@ -63,7 +71,7 @@
 .hero-profile .timeline-line {
   position: relative;
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e9ecef;
   border-radius: 3px;
 }
 
@@ -75,6 +83,29 @@
   background: linear-gradient(90deg, #5e17eb, #E9A23B);
   border-radius: 3px;
   transition: width 0.5s ease;
+  filter: drop-shadow(0 0 6px rgba(94, 23, 235, 0.4));
+  overflow: hidden;
+}
+
+.hero-profile .timeline-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  animation: progressShimmer 1.6s ease 0.8s 1 forwards;
+}
+
+@keyframes progressShimmer {
+  from { left: -100%; }
+  to   { left: 100%; }
 }
 
 /* Timeline Markers */
@@ -84,16 +115,16 @@
   transform: translate(-50%, -50%);
   width: 14px;
   height: 14px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: #e9ecef;
+  border: 2px solid #dee2e6;
   border-radius: 50%;
   transition: all 0.3s ease;
   z-index: 1;
 }
 
 .hero-profile .timeline-marker.completed {
-  background: #fff;
-  border-color: #fff;
+  background: #5e17eb;
+  border-color: #5e17eb;
 }
 
 .hero-profile .timeline-marker.current {
@@ -119,9 +150,9 @@
   width: 24px;
   height: 24px;
   background: #E9A23B;
-  border: 3px solid #fff;
+  border: 3px solid #ffffff;
   border-radius: 50%;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   animation: journeyPulse 2s infinite;
 }
 
@@ -159,19 +190,19 @@
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   font-size: 13px;
 }
 
 .hero-profile .moment-item.system {
-  background: rgba(255, 255, 255, 0.03);
+  background: #f8f9fa;
 }
 
 .hero-profile .moment-item.user {
-  background: rgba(233, 162, 59, 0.08);
-  border-color: rgba(233, 162, 59, 0.2);
+  background: rgba(233, 162, 59, 0.06);
+  border-color: rgba(233, 162, 59, 0.15);
 }
 
 .hero-profile .moment-icon {
@@ -181,20 +212,20 @@
 
 .hero-profile .moment-text {
   flex: 1;
-  color: rgba(255, 255, 255, 0.8);
+  color: #1a1a2e;
   font-weight: 500;
 }
 
 .hero-profile .moment-date {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: #adb5bd;
   flex-shrink: 0;
 }
 
 .hero-profile .moment-delete {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.3);
+  color: #adb5bd;
   font-size: 16px;
   cursor: pointer;
   padding: 0 4px;

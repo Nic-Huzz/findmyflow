@@ -252,8 +252,8 @@ export default function Dashboard() {
           <h2 className="hq-section-title">Quick Actions</h2>
           <div className="hq-quick-actions stagger-children">
             {/* Attract */}
-            <button className="hq-action-card" onClick={() => handleActionClick('/crm/marketing')}>
-              <span className="hq-action-icon">📝</span>
+            <button className="hq-action-card" onClick={() => handleActionClick('/crm/content-create')}>
+              <span className="hq-action-icon">✨</span>
               <span className="hq-action-label">Create Content</span>
             </button>
 

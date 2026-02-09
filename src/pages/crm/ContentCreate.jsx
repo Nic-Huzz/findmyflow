@@ -6,7 +6,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
-import { parseContentTriggerParams, CONTENT_TRIGGERS } from '../../lib/crm/contentTriggers'
+import { parseContentTriggerParams, CONTENT_TRIGGERS, buildContentTriggerUrl } from '../../lib/crm/contentTriggers'
+import { getContentRecommendations } from '../../lib/crm/contentRecommendations'
 import ContentGenerator from '../../components/crm/ContentGenerator'
 import './ContentCreate.css'
 
@@ -16,6 +17,8 @@ export default function ContentCreate() {
   const [searchParams] = useSearchParams()
   const [triggerConfig, setTriggerConfig] = useState(null)
   const [showGenerator, setShowGenerator] = useState(false)
+  const [recommendations, setRecommendations] = useState([])
+  const [recsLoading, setRecsLoading] = useState(true)
 
   useEffect(() => {
     // Parse URL params to get trigger configuration
@@ -26,6 +29,23 @@ export default function ContentCreate() {
       setTimeout(() => setShowGenerator(true), 500)
     }
   }, [searchParams])
+
+  useEffect(() => {
+    if (user?.id) {
+      getContentRecommendations(user.id)
+        .then(setRecommendations)
+        .finally(() => setRecsLoading(false))
+    } else {
+      setRecsLoading(false)
+    }
+  }, [user?.id])
+
+  function handleRecommendationClick(rec) {
+    const trigger = CONTENT_TRIGGERS[rec.triggerId]
+    if (!trigger?.contentConfig) return
+    const url = buildContentTriggerUrl(rec.triggerId)
+    navigate(url)
+  }
 
   function handleContentGenerated(content) {
     // Content was generated and user clicked "Use This"
@@ -54,6 +74,41 @@ export default function ContentCreate() {
           </div>
         </header>
 
+        {/* Recommendations Section */}
+        {!recsLoading && recommendations.length > 0 && (
+          <div className="cc-recs-section">
+            <h2 className="cc-recs-title">Recommended For You</h2>
+            <div className="cc-recs-list">
+              {recommendations.map(rec => {
+                const trigger = CONTENT_TRIGGERS[rec.triggerId]
+                if (!trigger) return null
+                return (
+                  <button
+                    key={rec.triggerId}
+                    className="cc-rec-card"
+                    onClick={() => handleRecommendationClick(rec)}
+                  >
+                    <div className="cc-rec-content">
+                      <span className="cc-rec-category">{trigger.category}</span>
+                      <h3 className="cc-rec-name">{trigger.name}</h3>
+                      <p className="cc-rec-context">{rec.contextMessage}</p>
+                    </div>
+                    <span className="cc-rec-arrow">Create →</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {!recsLoading && recommendations.length === 0 && (
+          <div className="cc-recs-hint">
+            Add deals and leads to get personalized content suggestions
+          </div>
+        )}
+
+        <h2 className="cc-all-types-heading">All Content Types</h2>
+
         <div className="cc-trigger-grid">
           {Object.values(CONTENT_TRIGGERS).filter(t => t.contentConfig).map(trigger => (
             <button
@@ -65,6 +120,9 @@ export default function ContentCreate() {
                   type: trigger.contentConfig.type,
                   platform: trigger.contentConfig.platform,
                 })
+                if (trigger.contentConfig.prefilledInstructions) {
+                  params.set('instructions', btoa(encodeURIComponent(trigger.contentConfig.prefilledInstructions)))
+                }
                 navigate(`/crm/content-create?${params.toString()}`)
               }}
             >

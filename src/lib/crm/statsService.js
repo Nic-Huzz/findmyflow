@@ -6,10 +6,12 @@ import { supabase } from '../supabaseClient'
 
 // Level configuration
 export const LEVELS = [
-  { min: 0, name: 'Vibe Apprentice', emoji: '🏰' },
-  { min: 501, name: 'Vibe Builder', emoji: '🔨' },
-  { min: 1001, name: 'Vibe Master', emoji: '⚔️' },
-  { min: 2001, name: 'Vibe Legend', emoji: '👑' },
+  { min: 0, name: 'Vibe Seeker', emoji: '🔍' },
+  { min: 75, name: 'Vibe Explorer', emoji: '🧭' },
+  { min: 250, name: 'Vibe Finder', emoji: '⭐' },
+  { min: 500, name: 'Vibe Builder', emoji: '🔨' },
+  { min: 1000, name: 'Vibe Master', emoji: '⚔️' },
+  { min: 2000, name: 'Vibe Legend', emoji: '👑' },
 ]
 
 // Get current level based on points
@@ -48,6 +50,22 @@ export function getPointsToNextLevel(points) {
   }
 
   return LEVELS[currentIndex + 1].min - points
+}
+
+// Get level number (1-indexed) based on points
+export function getLevelNumber(points) {
+  for (let i = LEVELS.length - 1; i >= 0; i--) {
+    if (points >= LEVELS[i].min) return i + 1
+  }
+  return 1
+}
+
+// Get the max XP for the current level bracket (next level min)
+export function getLevelMaxXP(points) {
+  const currentLevel = getLevel(points)
+  const currentIndex = LEVELS.findIndex(l => l.min === currentLevel.min)
+  if (currentIndex === LEVELS.length - 1) return currentLevel.min
+  return LEVELS[currentIndex + 1].min
 }
 
 // Calculate streak based on last activity
