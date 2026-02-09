@@ -10,6 +10,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
+import { fetchLaunchReadiness } from '../../lib/crm/challengeDataService'
 import './CACTracker.css'
 
 // Map Core Four strategy choices to channel IDs
@@ -63,7 +64,7 @@ export default function CACTracker() {
         const sources = []
 
         // Fetch Core Four strategy and offer data for LTV estimate
-        const [leadsStrategy, coreOffer, continuityOffer] = await Promise.all([
+        const [leadsStrategy, launchReadiness, continuityData] = await Promise.all([
           supabase
             .from('leads_assessments')
             .select('*')
@@ -71,16 +72,10 @@ export default function CACTracker() {
             .order('created_at', { ascending: false })
             .limit(1)
             .maybeSingle(),
-          supabase
-            .from('attraction_offer_assessments')
-            .select('data')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .maybeSingle(),
+          fetchLaunchReadiness(user.id),
           supabase
             .from('continuity_assessments')
-            .select('data')
+            .select('*')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(1)
@@ -96,14 +91,14 @@ export default function CACTracker() {
           }
         }
 
-        // Estimate LTV from offer assessments
-        const corePrice = parseFloat(coreOffer?.data?.data?.price) || 0
-        const monthlyPrice = parseFloat(continuityOffer?.data?.data?.monthly_price || continuityOffer?.data?.data?.price) || 0
-        const months = parseFloat(continuityOffer?.data?.data?.avg_months) || 6
+        // Estimate LTV from launch readiness + continuity data
+        const corePrice = parseFloat(launchReadiness?.pricing_data?.coreOfferPrice) || 0
+        const monthlyPrice = parseFloat(continuityData?.data?.monthly_price) || 0
+        const months = parseFloat(continuityData?.data?.avg_retention_months) || 6
         const estimatedLtv = corePrice + (monthlyPrice * months)
         if (estimatedLtv > 0) {
           setLtv(Math.round(estimatedLtv))
-          sources.push('Offer Assessments')
+          sources.push('Launch Readiness')
         }
 
         if (sources.length > 0) {
