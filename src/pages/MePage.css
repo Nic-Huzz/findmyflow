@@ -483,9 +483,13 @@
   50% { opacity: 1; }
 }
 
-/* SeeYourFlow embed */
-.me-page .syf-embed {
-  padding: 0 24px 16px;
+/* SeeYourFlow inline journey mapper */
+.me-page .fj-journey-inline {
+  margin: 8px 16px 16px;
+}
+
+.me-page .fj-journey-inline .see-your-flow {
+  margin-top: 0;
 }
 
 /* ============================================================

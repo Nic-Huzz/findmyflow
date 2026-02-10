@@ -88,7 +88,7 @@ const MONTH_OPTIONS = generateMonthOptions()
 const getStorageKey = (userId, projectId) => `journey_mapping_${userId}_${projectId}`
 const getCompletedKey = (userId, projectId) => `journey_mapping_completed_${userId}_${projectId}`
 
-function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
+function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete }) {
   const { user } = useAuth()
 
   // Check if user has completed journey mapping
@@ -419,6 +419,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded }) {
 
     setHasCompletedMapping(true)
     setIsExpanded(false)
+    onMappingComplete?.()
   }
 
   // Add highlight card

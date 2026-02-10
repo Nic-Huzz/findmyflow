@@ -19,8 +19,8 @@ import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP } from '../li
 import { getStageDisplayName } from '../lib/stageConfig'
 import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
-import { protectiveProfiles } from '../data/protectiveProfiles'
 import HomeFirstTime from '../components/HomeFirstTime'
+import SeeYourFlow from '../components/SeeYourFlow'
 import './MePage.css'
 
 // Stat ring circumference for r=22
@@ -74,6 +74,7 @@ export default function MePage() {
   const [stageGraduations, setStageGraduations] = useState([])
   const [selectedProject, setSelectedProject] = useState(null)
   const [projectMenuOpen, setProjectMenuOpen] = useState(false)
+  const [showInlineMapper, setShowInlineMapper] = useState(null) // null = not determined yet
   const projectMenuRef = useRef(null)
 
   const primaryProject = selectedProject || projects?.[0] || null
@@ -146,7 +147,7 @@ export default function MePage() {
 
   // Fetch flow entries + stage graduations for river
   useEffect(() => {
-    if (!user?.id || !primaryProject?.id) { setFlowEntries([]); setStageGraduations([]); return }
+    if (!user?.id || !primaryProject?.id) { setFlowEntries([]); setStageGraduations([]); setShowInlineMapper(false); return }
     Promise.all([
       supabase
         .from('flow_entries')
@@ -162,10 +163,28 @@ export default function MePage() {
         .eq('project_id', primaryProject.id)
         .order('graduated_at', { ascending: true }),
     ]).then(([flowResult, stageResult]) => {
-      setFlowEntries(flowResult.data || [])
+      const entries = flowResult.data || []
+      setFlowEntries(entries)
       setStageGraduations(stageResult.data || [])
+      // Show inline mapper if: no entries yet, OR mapping is in progress (mid-refresh)
+      const completedKey = `journey_mapping_completed_${user.id}_${primaryProject.id}`
+      const mappingCompleted = localStorage.getItem(completedKey) === 'true'
+      setShowInlineMapper(entries.length === 0 || !mappingCompleted)
     })
   }, [user?.id, primaryProject?.id])
+
+  // Re-fetch flow entries (called by SeeYourFlow after each step)
+  const refreshFlowEntries = async () => {
+    if (!user?.id || !primaryProject?.id) return
+    const { data } = await supabase
+      .from('flow_entries')
+      .select('id, direction, logged_at, activity_description, reasoning')
+      .eq('user_id', user.id)
+      .eq('project_id', primaryProject.id)
+      .order('logged_at', { ascending: true })
+      .limit(30)
+    setFlowEntries(data || [])
+  }
 
   // Load quest definitions
   useEffect(() => {
@@ -213,11 +232,6 @@ export default function MePage() {
   const isFirstTime = totalXP === 0 && streakCount === 0
 
   // Derived: protective pattern tag (e.g., "Freeze + sympathetic blend")
-  const protectivePattern = useMemo(() => {
-    if (!archetypes?.protective?.name) return null
-    const profile = protectiveProfiles[archetypes.protective.name]
-    return profile?.nervousSystemPattern?.pattern || null
-  }, [archetypes?.protective?.name])
 
   // Derived: voice tracker
   const essencePct = voiceTracker?.essencePercentage ?? 50
@@ -506,18 +520,29 @@ export default function MePage() {
             />
           </div>
 
-          {/* Narrative */}
-          <div className={`fj-narrative ${!narrativeText ? 'fj-narrative-empty' : ''}`}>
-            {narrativeText ? (
-              <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
-            ) : (
-              <p>Complete your first compass check-in to see your story unfold here</p>
-            )}
-          </div>
-
-          <button className="fj-link" onClick={() => navigate('/flow-compass')}>
-            Open Flow Compass <span>→</span>
-          </button>
+          {/* Narrative or inline journey mapper */}
+          {narrativeText && !showInlineMapper ? (
+            <>
+              <div className="fj-narrative">
+                <p dangerouslySetInnerHTML={{ __html: narrativeText }} />
+              </div>
+              <button className="fj-link" onClick={() => navigate('/flow-compass')}>
+                Open Flow Compass <span>→</span>
+              </button>
+            </>
+          ) : showInlineMapper ? (
+            <div className="fj-journey-inline">
+              <SeeYourFlow
+                project={primaryProject}
+                onFlowEntryAdded={refreshFlowEntries}
+                onMappingComplete={() => setShowInlineMapper(false)}
+              />
+            </div>
+          ) : (
+            <button className="fj-link" onClick={() => navigate('/flow-compass')}>
+              Open Flow Compass <span>→</span>
+            </button>
+          )}
         </div>
       </section>
 
@@ -638,9 +663,6 @@ export default function MePage() {
               <div className="hp-protective-name">
                 {archetypes?.protective?.name ? `The ${archetypes.protective.name}` : 'Your Protective Voice'}
               </div>
-              {protectivePattern && (
-                <div className="hp-protective-tag">{protectivePattern}</div>
-              )}
               <div className="hp-protective-desc">
                 {archetypes?.protective?.summary || 'Complete the archetype quiz to discover your protective pattern'}
               </div>
