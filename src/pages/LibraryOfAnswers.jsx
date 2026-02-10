@@ -927,6 +927,7 @@ function LibraryOfAnswers() {
                 size={260}
                 centerLabel="SKILLS"
                 interactive={false}
+                showLitLabels
               />
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -968,6 +969,7 @@ function LibraryOfAnswers() {
                 size={260}
                 centerLabel="PROBLEMS"
                 interactive={false}
+                showLitLabels
               />
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -1009,6 +1011,7 @@ function LibraryOfAnswers() {
                 size={260}
                 centerLabel="PERSONAS"
                 interactive={false}
+                showLitLabels
               />
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: '16px', fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

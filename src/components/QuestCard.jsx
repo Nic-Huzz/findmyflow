@@ -41,6 +41,7 @@ const isVoiceQuest = (questId) => {
 function QuestCard({
   quest,
   completed,
+  isCompleting = false,
   locked,
   lockedMessage,
   lockedPrerequisite,
@@ -300,8 +301,9 @@ function QuestCard({
               <button
                 className="quest-complete-btn"
                 onClick={(e) => onComplete(quest, null, e)}
+                disabled={isCompleting}
               >
-                Complete Quest
+                {isCompleting ? 'Completing...' : 'Complete Quest'}
               </button>
             </>
           ) : quest.inputType === 'text_with_tags' ? (
@@ -348,8 +350,9 @@ function QuestCard({
               <button
                 className="quest-complete-btn"
                 onClick={(e) => onComplete(quest, null, e)}
+                disabled={isCompleting}
               >
-                Complete Quest
+                {isCompleting ? 'Completing...' : 'Complete Quest'}
               </button>
             </>
           ) : quest.inputType === 'multi_select' ? (
@@ -385,9 +388,9 @@ function QuestCard({
               <button
                 className="quest-complete-btn"
                 onClick={(e) => onComplete(quest, null, e)}
-                disabled={!Array.isArray(questInput) || questInput.length === 0}
+                disabled={isCompleting || !Array.isArray(questInput) || questInput.length === 0}
               >
-                Complete Quest
+                {isCompleting ? 'Completing...' : 'Complete Quest'}
               </button>
             </>
           ) : quest.inputType === 'conversation_log' ? (
@@ -445,8 +448,9 @@ function QuestCard({
                 <button
                   className="quest-complete-btn"
                   onClick={(e) => onComplete(quest, { progress: questInput }, e)}
+                  disabled={isCompleting}
                 >
-                  Complete Quest
+                  {isCompleting ? 'Completing...' : 'Complete Quest'}
                 </button>
               )}
               {questInput === 'in_progress' && (
@@ -473,8 +477,9 @@ function QuestCard({
               <button
                 className="quest-complete-btn"
                 onClick={(e) => onComplete(quest, null, e)}
+                disabled={isCompleting}
               >
-                Complete Quest
+                {isCompleting ? 'Completing...' : 'Complete Quest'}
               </button>
             </>
           ) : quest.actionLink ? (
@@ -486,8 +491,9 @@ function QuestCard({
               <button
                 className="quest-complete-btn secondary"
                 onClick={(e) => onComplete(quest, null, e)}
+                disabled={isCompleting}
               >
-                ✓ I've Completed This
+                {isCompleting ? 'Completing...' : "✓ I've Completed This"}
               </button>
             </div>
           ) : (
@@ -501,8 +507,9 @@ function QuestCard({
               <button
                 className="quest-complete-btn"
                 onClick={(e) => onComplete(quest, null, e)}
+                disabled={isCompleting}
               >
-                Complete Quest
+                {isCompleting ? 'Completing...' : 'Complete Quest'}
               </button>
             </>
           )}

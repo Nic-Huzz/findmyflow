@@ -3,28 +3,13 @@
  * Calculates metrics, comparisons, and weekly grades
  */
 import { supabase } from '../supabaseClient'
+import { getMondayDate, formatLocalDate } from '../dateUtils'
 
-// Get Monday of a given week
-function getMonday(date) {
-  const d = new Date(date)
-  const day = d.getDay()
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-  d.setDate(diff)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
-
-// Format date as YYYY-MM-DD
-function formatDate(date) {
-  return date.toISOString().split('T')[0]
-}
+const formatDate = (date) => formatLocalDate(date)
 
 // Get week range
 export function getWeekRange(weekOffset = 0) {
-  const today = new Date()
-  today.setDate(today.getDate() + weekOffset * 7)
-
-  const monday = getMonday(today)
+  const monday = getMondayDate(new Date(), weekOffset)
   const sunday = new Date(monday)
   sunday.setDate(monday.getDate() + 6)
 

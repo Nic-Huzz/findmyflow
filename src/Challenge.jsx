@@ -157,6 +157,9 @@ function Challenge() {
   // State for tracking recently completed quest for animation
   const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
 
+  // Guard against double-click on quest completion
+  const [completingQuestId, setCompletingQuestId] = useState(null)
+
   // Search state for filtering quests
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -212,6 +215,16 @@ function Challenge() {
     }
     checkGraduation()
   }, [selectedProject?.id, user?.id, progress?.challenge_instance_id])
+
+  // Manage hide-bottom-toolbar class via useEffect (not in render path)
+  useEffect(() => {
+    if (showProjectSelector) {
+      document.body.classList.add('hide-bottom-toolbar')
+    } else {
+      document.body.classList.remove('hide-bottom-toolbar')
+    }
+    return () => document.body.classList.remove('hide-bottom-toolbar')
+  }, [showProjectSelector])
 
   // Morning reconnect quest IDs that can be hidden if not planned
   const MORNING_RECONNECT_QUEST_IDS = [
@@ -288,73 +301,76 @@ function Challenge() {
 
   // Main quest completion handler
   const handleQuestComplete = async (quest, specialData = null, event = null) => {
-    const inputValue = specialData || questInputs[quest.id]
-
-    // Check for PRE-ACTION milestones - show modal BEFORE completing
-    if (PRE_ACTION_MILESTONE_IDS.includes(quest.id) && !preActionPendingData) {
-      setPreActionQuest(quest)
-      setPreActionPendingData({ quest, specialData, event })
-      return // Wait for modal to complete
-    }
-
-    // Validate input based on type
-    if (quest.inputType === 'text' && (!inputValue || inputValue.trim() === '')) {
-      alert('Please enter your reflection before completing this quest.')
-      return
-    }
-
-    if (quest.inputType === 'conversation_log' && !specialData) {
-      alert('Please fill out the conversation details.')
-      return
-    }
-
-    if (quest.inputType === 'milestone' && !specialData) {
-      alert('Please describe what you accomplished.')
-      return
-    }
-
-    if (quest.inputType === 'flow_compass' && !specialData) {
-      alert('Please select your flow direction and describe what happened.')
-      return
-    }
-
-    if (quest.type === 'groan' && !specialData) {
-      alert('Please complete the groan reflection form.')
-      return
-    }
-
-    if (quest.inputType === 'dropdown' && (!inputValue || inputValue.trim() === '')) {
-      alert('Please select an option before completing this quest.')
-      return
-    }
-
-    if (quest.inputType === 'text_with_tags') {
-      const textValue = typeof inputValue === 'object' ? inputValue?.text : inputValue
-      if (!textValue || textValue.trim() === '') {
-        alert('Please enter your response before completing this quest.')
-        return
-      }
-    }
-
-    if (quest.inputType === 'lets_play_review' && !specialData) {
-      alert('Please complete the quest form.')
-      return
-    }
-
-    // Handle text_with_tags input type (has object with text and tags)
-    let sanitizedReflection = null
-    if (quest.inputType === 'text_with_tags' && inputValue) {
-      const textValue = typeof inputValue === 'object' ? inputValue.text : inputValue
-      const tags = typeof inputValue === 'object' ? inputValue.tags : []
-      sanitizedReflection = JSON.stringify({
-        text: sanitizeText(textValue || ''),
-        tags: tags || []
-      })
-    } else if ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue) {
-      sanitizedReflection = sanitizeText(inputValue)
-    }
+    // Guard against double-clicks / rapid submissions
+    if (completingQuestId) return
+    setCompletingQuestId(quest.id)
 
     try {
+      const inputValue = specialData || questInputs[quest.id]
+
+      // Check for PRE-ACTION milestones - show modal BEFORE completing
+      if (PRE_ACTION_MILESTONE_IDS.includes(quest.id) && !preActionPendingData) {
+        setPreActionQuest(quest)
+        setPreActionPendingData({ quest, specialData, event })
+        return // Wait for modal to complete
+      }
+
+      // Validate input based on type
+      if (quest.inputType === 'text' && (!inputValue || inputValue.trim() === '')) {
+        alert('Please enter your reflection before completing this quest.')
+        return
+      }
+
+      if (quest.inputType === 'conversation_log' && !specialData) {
+        alert('Please fill out the conversation details.')
+        return
+      }
+
+      if (quest.inputType === 'milestone' && !specialData) {
+        alert('Please describe what you accomplished.')
+        return
+      }
+
+      if (quest.inputType === 'flow_compass' && !specialData) {
+        alert('Please select your flow direction and describe what happened.')
+        return
+      }
+
+      if (quest.type === 'groan' && !specialData) {
+        alert('Please complete the groan reflection form.')
+        return
+      }
+
+      if (quest.inputType === 'dropdown' && (!inputValue || inputValue.trim() === '')) {
+        alert('Please select an option before completing this quest.')
+        return
+      }
+
+      if (quest.inputType === 'text_with_tags') {
+        const textValue = typeof inputValue === 'object' ? inputValue?.text : inputValue
+        if (!textValue || textValue.trim() === '') {
+          alert('Please enter your response before completing this quest.')
+          return
+        }
+      }
+
+      if (quest.inputType === 'lets_play_review' && !specialData) {
+        alert('Please complete the quest form.')
+        return
+      }
+
+      // Handle text_with_tags input type (has object with text and tags)
+      let sanitizedReflection = null
+      if (quest.inputType === 'text_with_tags' && inputValue) {
+        const textValue = typeof inputValue === 'object' ? inputValue.text : inputValue
+        const tags = typeof inputValue === 'object' ? inputValue.tags : []
+        sanitizedReflection = JSON.stringify({
+          text: sanitizeText(textValue || ''),
+          tags: tags || []
+        })
+      } else if ((quest.inputType === 'text' || quest.inputType === 'dropdown') && inputValue) {
+        sanitizedReflection = sanitizeText(inputValue)
+      }
       // Handle special quest types BEFORE creating quest completion
       if (quest.inputType === 'conversation_log') {
         const result = await handleConversationLogCompletion(
@@ -660,6 +676,9 @@ function Challenge() {
       const frequencyKey = quest.frequency === 'weekly' ? 'weekly' : 'daily'
       const newTotalPoints = (progress.total_points || 0) + quest.points
 
+      // Track fresh progress for tab bonus check (avoids stale closure after setProgress)
+      let updatedProgress = progress
+
       // User-level quests (Healing) skip challenge_progress and project updates.
       // Their scoring is handled entirely by increment_scores RPC above.
       if (quest.category !== 'Healing') {
@@ -678,7 +697,7 @@ function Challenge() {
           updateData[pointsField] = (progress[pointsField] || 0) + quest.points
         }
 
-        const { data: updatedProgress, error: progressError } = await supabase
+        const { data: freshProgress, error: progressError } = await supabase
           .from('challenge_progress')
           .update(updateData)
           .eq('user_id', user.id)
@@ -693,6 +712,7 @@ function Challenge() {
           return
         }
 
+        updatedProgress = freshProgress
         setProgress(updatedProgress)
 
         // Update project points to match challenge total (keeps them in sync)
@@ -729,14 +749,19 @@ function Challenge() {
           .is('challenge_instance_id', null)
       ])
 
-      if (challengeResult.error) {
-        console.error('Error reloading completions:', challengeResult.error)
+      // Capture merged completions in local var so tab bonus check uses fresh data
+      // (setCompletions doesn't update the closure variable until next render)
+      let freshCompletions = completions
+      if (challengeResult.error || userLevelResult.error) {
+        if (challengeResult.error) console.error('Error reloading challenge completions:', challengeResult.error)
+        if (userLevelResult.error) console.error('Error reloading user-level completions:', userLevelResult.error)
         // Don't reset completions on error - keep existing state
       } else {
-        setCompletions([
+        freshCompletions = [
           ...(userLevelResult.data || []),
           ...(challengeResult.data || [])
-        ])
+        ]
+        setCompletions(freshCompletions)
       }
       setQuestInputs(prev => ({ ...prev, [quest.id]: '' }))
 
@@ -768,10 +793,11 @@ function Challenge() {
       }
 
       // Check for tab completion bonus (skip for user-level Healing — bonus writes to challenge_progress)
+      // Use freshCompletions + updatedProgress to avoid stale closure values
       if (quest.category !== 'Healing') {
-        const tabStatus = getTabCompletionStatus(quest.category, completions, null)
+        const tabStatus = getTabCompletionStatus(quest.category, freshCompletions, updatedProgress)
         if (tabStatus.isComplete && !tabStatus.bonusAwarded && tabStatus.bonusPoints > 0) {
-          await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints, null)
+          await awardTabCompletionBonus(quest.category, tabStatus.bonusPoints, updatedProgress)
         }
       }
 
@@ -807,6 +833,8 @@ function Challenge() {
     } catch (error) {
       console.error('Error in handleQuestComplete:', error)
       alert('Error completing quest. Please try again.')
+    } finally {
+      setCompletingQuestId(null)
     }
   }
 
@@ -949,28 +977,19 @@ function Challenge() {
     }
   }
 
-  // Handle regenerating a challenge (delete and create new)
+  // Handle regenerating a challenge (generate new first, then delete old)
   const handleRegenerateChallenge = async () => {
     if (!selectedGroanChallenge) return
     setGroanChallengeLoading(true)
 
-    // Store the challenge info before deleting
     const challenge = selectedGroanChallenge
     const isSkillProblem = challenge.skill_cluster_id && challenge.problem_cluster_id
 
     try {
-      // Delete the current challenge
-      await supabase
-        .from('groan_challenges')
-        .delete()
-        .eq('id', challenge.id)
-
-      // Close modal temporarily
-      setSelectedGroanChallenge(null)
-
-      // Generate a new challenge with the same parameters
+      // Generate the new challenge FIRST — if this fails, old challenge is preserved
+      let generateResult
       if (isSkillProblem) {
-        await handleGenerateChallenge({
+        generateResult = await handleGenerateChallenge({
           sourceType: 'skill_x_problem',
           skillId: challenge.skill_cluster_id,
           skillLabel: challenge.source_label?.split(' × ')[0] || 'Skill',
@@ -980,13 +999,30 @@ function Challenge() {
           personaLabel: null
         })
       } else {
-        await handleGenerateChallenge({
+        generateResult = await handleGenerateChallenge({
           sourceType: challenge.source_type,
           sourceId: challenge.source_id,
           sourceLabel: challenge.source_label,
           visibilityLayer: challenge.visibility_layer
         })
       }
+
+      // Only delete old challenge if new one was generated successfully
+      if (!generateResult) {
+        // Generation failed — handleGenerateChallenge already showed an alert
+        return
+      }
+
+      const { error: deleteError } = await supabase
+        .from('groan_challenges')
+        .delete()
+        .eq('id', challenge.id)
+
+      if (deleteError) {
+        console.error('Error deleting old challenge:', deleteError)
+      }
+
+      setSelectedGroanChallenge(null)
 
       // Refresh matrix
       setGroanMatrixKey(prev => prev + 1)
@@ -1144,8 +1180,6 @@ function Challenge() {
   // ============================================
 
   if (showProjectSelector) {
-    // Hide bottom toolbar during project selection
-    document.body.classList.add('hide-bottom-toolbar')
     return (
       <div className="challenge-container">
         <div className="challenge-onboarding">
@@ -1156,9 +1190,6 @@ function Challenge() {
         </div>
       </div>
     )
-  } else {
-    // Restore bottom toolbar when not on project selection
-    document.body.classList.remove('hide-bottom-toolbar')
   }
 
   // ============================================
@@ -1518,6 +1549,7 @@ function Challenge() {
                           key={quest.id}
                           quest={quest}
                           completed={completed}
+                          isCompleting={completingQuestId === quest.id}
                           showStreak={quest.frequency === 'daily'}
                           streak={getDailyStreak(quest.id)}
                           dayLabels={getDayLabels()}
@@ -1576,6 +1608,7 @@ function Challenge() {
                     key={quest.id}
                     quest={quest}
                     completed={completed}
+                    isCompleting={completingQuestId === quest.id}
                     locked={locked}
                     lockedPrerequisite={locked ? getRequiredQuestName(quest.requires_quest) : null}
                     showStreak={!!quest.maxPerDay}
@@ -1618,6 +1651,7 @@ function Challenge() {
                     key={quest.id}
                     quest={quest}
                     completed={completed}
+                    isCompleting={completingQuestId === quest.id}
                     showStreak={false}
                     questInput={questInputs[quest.id]}
                     onInputChange={handleInputChange}
@@ -1661,6 +1695,7 @@ function Challenge() {
                       key={quest.id}
                       quest={quest}
                       completed={completed}
+                      isCompleting={completingQuestId === quest.id}
                       showStreak={quest.frequency === 'daily'}
                       streak={getDailyStreak(quest.id)}
                       dayLabels={getDayLabels()}

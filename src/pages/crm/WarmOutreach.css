@@ -8,7 +8,7 @@
   --purple: #5e17eb;
   --purple-light: #7c3aed;
   --purple-lighter: #f3eeff;
-  --gold: #ffdd27;
+  --gold: #E9A23B;
   --warm-gray: #f8f9fa;
   --text-primary: #212529;
   --text-secondary: #495057;
@@ -27,7 +27,7 @@
 /* Container */
 .warm-outreach-container {
   min-height: 100vh;
-  background: var(--warm-gray) !important;
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%) !important;
   padding: 1rem;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--text-primary);
@@ -96,52 +96,35 @@
   margin: 0;
 }
 
-/* Header */
-.warm-outreach-header {
-  margin-bottom: 1.5rem;
+/* Source Channel Selector */
+.wo-source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
-.wo-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+.wo-source-btn {
+  padding: 10px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--text-secondary);
-  margin-bottom: 0.75rem;
-}
-
-.wo-breadcrumb button {
-  background: none;
-  border: none;
-  color: var(--purple);
   cursor: pointer;
-  padding: 0;
-  font-size: inherit;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
-.wo-breadcrumb button:hover {
-  color: var(--purple-light);
-  text-decoration: underline;
+.wo-source-btn:hover {
+  border-color: var(--purple);
+  background: var(--purple-lighter);
+  color: var(--purple);
 }
 
-.wo-breadcrumb span:last-child {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.wo-title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  margin: 0 0 0.25rem 0;
-}
-
-.wo-subtitle {
-  font-size: 0.9375rem;
-  color: var(--text-secondary);
-  margin: 0;
+.wo-source-btn.active {
+  border-color: var(--purple);
+  background: rgba(94, 23, 235, 0.08);
+  color: var(--purple);
 }
 
 /* Stats Card */
@@ -694,46 +677,6 @@
   background-clip: text;
 }
 
-/* Contact Toggle */
-.wo-contact-toggle {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: var(--purple-lighter);
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 0.5rem;
-}
-
-.wo-contact-toggle:has(input:checked) {
-  border-color: var(--purple);
-  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08), rgba(124, 58, 237, 0.08));
-}
-
-.wo-contact-toggle input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  accent-color: var(--purple);
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.wo-contact-toggle-label {
-  font-size: 0.9375rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.wo-contact-toggle-hint {
-  width: 100%;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  padding-left: 2rem;
-}
 
 /* Modal Actions */
 .wo-modal-form .modal-actions {

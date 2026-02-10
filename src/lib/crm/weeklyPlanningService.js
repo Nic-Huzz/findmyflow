@@ -2,20 +2,14 @@
 // Service layer for CRM Weekly Planning System
 
 import { supabase } from '../supabaseClient'
+import { getWeekStartLocal as getWeekStart, formatLocalDate } from '../dateUtils'
 
 // ============================================
 // DATE HELPERS
 // ============================================
 
-/**
- * Get Monday of the week containing the given date
- */
-export function getWeekStart(date = new Date()) {
-  const d = new Date(date)
-  const day = d.getDay()
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-  return new Date(d.setDate(diff)).toISOString().split('T')[0]
-}
+// Re-export for backwards compatibility
+export { getWeekStart }
 
 /**
  * Get the upcoming Monday (for planning the next week)
@@ -27,7 +21,7 @@ export function getUpcomingMonday() {
   const daysUntilMonday = day === 0 ? 1 : (8 - day)
   const monday = new Date(now)
   monday.setDate(monday.getDate() + daysUntilMonday)
-  return monday.toISOString().split('T')[0]
+  return formatLocalDate(monday)
 }
 
 /**
@@ -351,6 +345,6 @@ export async function getWeeklyScores(userId, weekStart) {
  * Get last week's scores for reflection screen
  */
 export async function getLastWeekScores(userId) {
-  const lastWeekStart = getWeekStart(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000))
+  const lastWeekStart = getWeekStart(new Date(), -1)
   return getWeeklyScores(userId, lastWeekStart)
 }

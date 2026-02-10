@@ -6,21 +6,11 @@
  */
 import { supabase } from '../supabaseClient'
 import { fetchContentStrategy, generateWeeklyTemplate } from '../contentStrategy'
+import { getMondayDate, formatLocalDate } from '../dateUtils'
 
-// Get Monday of a given week
-function getMonday(date) {
-  const d = new Date(date)
-  const day = d.getDay()
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-  d.setDate(diff)
-  d.setHours(0, 0, 0, 0)
-  return d
-}
-
-// Format date as YYYY-MM-DD
-function formatDate(date) {
-  return date.toISOString().split('T')[0]
-}
+// Re-use shared date utilities
+const getMonday = (date) => getMondayDate(date)
+const formatDate = (date) => formatLocalDate(date)
 
 // Generate tasks for a specific week based on user's content strategy
 export async function generateWeeklyTasks(userId, projectId, weekStartDate = new Date()) {
@@ -241,10 +231,7 @@ export function getWeekInfo(weekOffset = 0) {
 
 // Get date object for a specific week offset
 export function getWeekStartDate(weekOffset = 0) {
-  const today = new Date()
-  const offsetDate = new Date(today)
-  offsetDate.setDate(today.getDate() + (weekOffset * 7))
-  return getMonday(offsetDate)
+  return getMondayDate(new Date(), weekOffset)
 }
 
 // Get today's date info

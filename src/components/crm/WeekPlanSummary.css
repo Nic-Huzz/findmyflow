@@ -164,7 +164,7 @@
 .week-plan-summary .start-week-btn {
   flex: 2;
   padding: 16px 24px;
-  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  background: linear-gradient(135deg, #E9A23B 0%, #d4912e 100%);
   color: #212529;
   border: none;
   border-radius: 12px;
@@ -172,12 +172,12 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 8px 24px rgba(255, 221, 39, 0.4);
+  box-shadow: 0 8px 24px rgba(233, 162, 59, 0.4);
 }
 
 .week-plan-summary .start-week-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(255, 221, 39, 0.5);
+  box-shadow: 0 12px 32px rgba(233, 162, 59, 0.5);
 }
 
 /* Mobile */

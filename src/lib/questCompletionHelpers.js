@@ -103,8 +103,6 @@ export const handleConversationLogCompletion = async (userId, challengeInstanceI
 
           if (milestoneError) {
             console.error('Error creating milestone from conversations:', milestoneError);
-          } else {
-            console.log(`✅ Created milestone ${quest.milestone_type} after ${newCount} conversations`);
           }
         }
       }
@@ -235,7 +233,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
 
     const questId = flowToQuestMap[flowType];
     if (!questId) {
-      console.log(`⚠️ Unknown flow type: ${flowType}`);
+      console.warn(`Unknown flow type: ${flowType}`);
       return { success: false, error: 'Unknown flow type' };
     }
 
@@ -254,7 +252,6 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     }
 
     if (existingCompletion) {
-      console.log(`ℹ️ Quest ${questId} already completed at user level`);
       return { success: true, skipped: true, reason: 'Already completed' };
     }
 
@@ -308,7 +305,6 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       console.error('Non-critical: Failed to sync to leaderboard:', leaderboardError);
     }
 
-    console.log(`✅ Flow Finder quest ${questId} saved at user level (+${points} pts)`);
     return { success: true, questId, points };
   } catch (error) {
     console.error('Error in syncFlowFinderWithChallenge:', error);
@@ -357,8 +353,6 @@ export const handleFlowCompassCompletion = async (userId, challengeInstanceId, f
       throw entryError;
     }
 
-    console.log('✅ Flow entry saved:', newEntry.id);
-
     // Optionally extract tags using AI (non-blocking)
     try {
       await supabase.functions.invoke('flow-extract-tags', {
@@ -368,7 +362,6 @@ export const handleFlowCompassCompletion = async (userId, challengeInstanceId, f
           activityDescription: activity_description
         }
       });
-      console.log('✅ Tag extraction triggered');
     } catch (tagError) {
       // Don't fail the whole operation if tag extraction fails
       console.warn('Tag extraction failed (non-critical):', tagError);
@@ -441,7 +434,6 @@ export const handleValidationAnalysisCompletion = async (userId, analysisData, s
       throw milestoneError;
     }
 
-    console.log('✅ Validation analysis milestone created');
     return { success: true, analysisId: analysis_id };
   } catch (error) {
     console.error('Error in handleValidationAnalysisCompletion:', error);
@@ -500,8 +492,6 @@ export const handleGroanReflectionCompletion = async (userId, groanData, questCo
       console.error('Error saving groan reflection:', reflectionError);
       throw reflectionError;
     }
-
-    console.log('✅ Groan reflection saved:', newReflection.id);
 
     return { success: true, reflectionId: newReflection.id };
   } catch (error) {

@@ -395,6 +395,7 @@
 
 .me-page .fj-legend-row {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 6px;
 }
@@ -405,7 +406,9 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-muted);
-  margin-right: 4px;
+  margin-right: 2px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .me-page .fj-legend-item {

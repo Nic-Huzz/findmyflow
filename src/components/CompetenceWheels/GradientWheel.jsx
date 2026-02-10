@@ -17,6 +17,7 @@ function GradientWheel({
   size = 320,
   centerLabel = '',
   showLabels = false,
+  showLitLabels = false,
   interactive = true,
   className = '',
   celebrate = false,
@@ -147,12 +148,28 @@ function GradientWheel({
     };
   };
 
+  // Determine which segments have at least one lit cell
+  const litSegmentIndices = useMemo(() => {
+    const indices = new Set();
+    litCells.forEach(cellId => {
+      const segIdx = parseInt(cellId.split('-')[0], 10);
+      indices.add(segIdx);
+    });
+    return indices;
+  }, [litCells]);
+
+  // Padding for labels around edge
+  const labelPad = showLitLabels ? 70 : 0;
+  const svgSize = size + labelPad * 2;
+  const offsetX = labelPad;
+  const offsetY = labelPad;
+
   return (
     <div className={`gradient-wheel ${className} ${celebrate ? 'celebrating' : ''}`} onMouseMove={handleMouseMove}>
       <svg
-        width={size}
-        height={size}
-        viewBox={`0 0 ${size} ${size}`}
+        width={svgSize}
+        height={svgSize}
+        viewBox={`${-offsetX} ${-offsetY} ${svgSize} ${svgSize}`}
         className="gradient-wheel-svg"
       >
         {/* Definitions for filters */}
@@ -246,6 +263,48 @@ function GradientWheel({
             </text>
           );
         })}
+
+        {/* Lit segment labels — only shown for segments with at least one lit cell */}
+        {showLitLabels && segments.map((segment, segIdx) => {
+          if (!litSegmentIndices.has(segIdx)) return null;
+
+          const midAngleDeg = segIdx * segmentAngle + segmentAngle / 2 - 90;
+          const midAngleRad = midAngleDeg * Math.PI / 180;
+          const labelR = outerRadius + 12;
+          const lx = cx + labelR * Math.cos(midAngleRad);
+          const ly = cy + labelR * Math.sin(midAngleRad);
+          const hue = segment.hue ?? (segIdx * (360 / segments.length));
+          const label = segment.displayName || segment.name || '';
+          const words = label.split(' ');
+          const isMultiWord = words.length > 1;
+
+          // Determine text-anchor based on position (left/right of center)
+          const normDeg = ((midAngleDeg + 90) % 360 + 360) % 360; // 0 = top
+          let anchor = 'middle';
+          if (normDeg > 30 && normDeg < 150) anchor = 'start';
+          if (normDeg > 210 && normDeg < 330) anchor = 'end';
+
+          return (
+            <text
+              key={`lit-label-${segIdx}`}
+              x={lx}
+              y={ly}
+              textAnchor={anchor}
+              dominantBaseline="middle"
+              fill={`hsl(${hue}, 70%, 75%)`}
+              fontSize="9"
+              fontWeight="600"
+              className="wheel-lit-label"
+            >
+              {isMultiWord ? (
+                <>
+                  <tspan x={lx} dy={-5}>{words[0]}</tspan>
+                  <tspan x={lx} dy={11}>{words.slice(1).join(' ')}</tspan>
+                </>
+              ) : label}
+            </text>
+          );
+        })}
       </svg>
 
       {/* Tooltip */}
@@ -312,6 +371,9 @@ GradientWheel.propTypes = {
 
   /** Whether to show segment labels around the edge */
   showLabels: PropTypes.bool,
+
+  /** Whether to show labels only for lit segments around the edge */
+  showLitLabels: PropTypes.bool,
 
   /** Whether the wheel is interactive (clickable/hoverable) */
   interactive: PropTypes.bool,

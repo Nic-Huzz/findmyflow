@@ -5,7 +5,7 @@
   min-height: 100vh;
   padding: 24px;
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(135deg, #f8f9fa 0%, #f1f3f4 100%);
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
   color: #495057;
 }
 

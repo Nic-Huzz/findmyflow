@@ -5,7 +5,7 @@
 .ltv-calculator {
   --purple: #5e17eb;
   --purple-light: #7c3aed;
-  --gold: #ffdd27;
+  --gold: #E9A23B;
   --warm-gray: #f8f9fa;
   --soft-gray: #e9ecef;
   --text-primary: #212529;
@@ -20,7 +20,7 @@
   min-height: 100vh;
   padding: 24px;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
-  background: var(--warm-gray);
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
   color: var(--text-primary);
 }
 

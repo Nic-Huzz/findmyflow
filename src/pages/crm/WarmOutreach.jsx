@@ -19,52 +19,84 @@ const OUTREACH_STATUS = [
   { id: 'not_interested', label: 'Not Interested', color: '#ef4444', icon: '❌' },
 ]
 
-const ENGAGEMENT_TYPES = [
-  { id: 'liked_post', label: 'Liked Post', icon: '❤️' },
-  { id: 'commented', label: 'Commented', icon: '💬' },
-  { id: 'dm', label: 'Sent DM', icon: '📩' },
-  { id: 'email_reply', label: 'Email Reply', icon: '📧' },
-  { id: 'webinar', label: 'Webinar Attendee', icon: '🎥' },
-  { id: 'lead_magnet', label: 'Downloaded Lead Magnet', icon: '📥' },
-  { id: 'referral', label: 'Referral', icon: '🤝' },
-]
+const ENGAGEMENT_BY_SOURCE = {
+  'Content': [
+    { id: 'liked_post', label: 'Liked Post', icon: '❤️' },
+    { id: 'commented', label: 'Commented', icon: '💬' },
+    { id: 'lead_magnet', label: 'Downloaded Lead Magnet', icon: '📥' },
+    { id: 'webinar', label: 'Webinar Attendee', icon: '🎥' },
+  ],
+  'Warm Outreach': [
+    { id: 'dm', label: 'Sent DM', icon: '📩' },
+    { id: 'email_reply', label: 'Email Reply', icon: '📧' },
+    { id: 'referral', label: 'Referral', icon: '🤝' },
+  ],
+  'Cold Outreach': [
+    { id: 'cold_dm', label: 'Cold DM', icon: '📩' },
+    { id: 'cold_email', label: 'Cold Email', icon: '📧' },
+    { id: 'cold_call', label: 'Cold Call', icon: '📞' },
+  ],
+  'Paid Ads': [
+    { id: 'clicked_ad', label: 'Clicked Ad', icon: '🖱️' },
+    { id: 'lead_form', label: 'Submitted Form', icon: '📋' },
+    { id: 'landing_page', label: 'Landing Page', icon: '🔗' },
+  ],
+}
+
+const ALL_ENGAGEMENT_TYPES = Object.values(ENGAGEMENT_BY_SOURCE).flat()
+const SOURCE_CHANNELS = Object.keys(ENGAGEMENT_BY_SOURCE)
 
 const PLATFORMS = ['Instagram', 'LinkedIn', 'Twitter/X', 'Facebook', 'Email', 'Other']
 
-const PLATFORM_TO_SOURCE = {
-  Instagram: 'Content',
-  LinkedIn: 'Content',
-  'Twitter/X': 'Content',
-  Facebook: 'Content',
-  Email: 'Warm Outreach',
-  Other: 'Warm Outreach',
-}
-
 /**
- * Create a contact from warm lead data
+ * Auto-sync warm lead to crm_contacts (upsert by user_id + name)
  */
-async function promoteLeadToContact(userId, leadData) {
-  const engagement = ENGAGEMENT_TYPES.find(e => e.id === leadData.engagement_type)
-  const noteParts = []
-  if (leadData.handle) noteParts.push(`${leadData.platform}: ${leadData.handle}`)
-  if (leadData.last_message) noteParts.push(`Last message: ${leadData.last_message}`)
-  if (leadData.notes) noteParts.push(leadData.notes)
+async function syncLeadToContact(userId, leadData) {
+  const engagement = ALL_ENGAGEMENT_TYPES.find(e => e.id === leadData.engagement_type)
 
-  const { data, error } = await supabase
+  const contactFields = {
+    user_id: userId,
+    name: leadData.name,
+    email: leadData.email || null,
+    phone: leadData.phone || null,
+    company: leadData.company || null,
+    social_handle: leadData.handle || null,
+    source: leadData.source || 'Content',
+    lifecycle_stage: 'lead',
+    tags: [leadData.platform, engagement?.label].filter(Boolean),
+    notes: leadData.notes || null,
+  }
+
+  // Check if contact already exists for this user+name
+  const { data: existing } = await supabase
     .from('crm_contacts')
-    .insert({
-      user_id: userId,
-      name: leadData.name,
-      source: PLATFORM_TO_SOURCE[leadData.platform] || 'Other',
-      lifecycle_stage: 'lead',
-      tags: [leadData.platform, engagement?.label].filter(Boolean),
-      notes: noteParts.join('\n') || null,
-    })
-    .select()
-    .single()
+    .select('id')
+    .eq('user_id', userId)
+    .eq('name', leadData.name)
+    .maybeSingle()
 
-  if (error) throw error
-  return data
+  if (existing) {
+    // Update existing — don't overwrite lifecycle_stage
+    const { id, ...updateFields } = contactFields
+    delete updateFields.user_id
+    delete updateFields.lifecycle_stage
+    const { data, error } = await supabase
+      .from('crm_contacts')
+      .update(updateFields)
+      .eq('id', existing.id)
+      .select()
+      .single()
+    if (error) throw error
+    return data
+  } else {
+    const { data, error } = await supabase
+      .from('crm_contacts')
+      .insert(contactFields)
+      .select()
+      .single()
+    if (error) throw error
+    return data
+  }
 }
 
 export default function WarmOutreach() {
@@ -79,15 +111,15 @@ export default function WarmOutreach() {
 
   const promptGenerator = usePromptGenerator()
 
-  // Hide bottom toolbar when modal is open
+  // Hide bottom toolbar when any modal is open
   useEffect(() => {
-    if (showAddModal) {
+    if (showAddModal || promptGenerator.isOpen) {
       document.body.classList.add('modal-active')
     } else {
       document.body.classList.remove('modal-active')
     }
     return () => document.body.classList.remove('modal-active')
-  }, [showAddModal])
+  }, [showAddModal, promptGenerator.isOpen])
 
   // Load leads
   const loadLeads = useCallback(async () => {
@@ -203,19 +235,6 @@ export default function WarmOutreach() {
           <h2 className="wo-toolbar-title">Warm Outreach</h2>
         </div>
 
-        {/* Header */}
-        <header className="warm-outreach-header">
-          <div className="wo-breadcrumb">
-            <button onClick={() => navigate('/crm')}>Home</button>
-            <span>→</span>
-            <button onClick={() => navigate('/crm/nurture')}>Nurture</button>
-            <span>→</span>
-            <span>Warm Outreach</span>
-          </div>
-          <h1 className="wo-title">🤝 Warm Outreach</h1>
-          <p className="wo-subtitle">Follow up with engaged leads</p>
-        </header>
-
         {/* Stats Card */}
         <div className="wo-stats-card">
           <div className="stats-row">
@@ -288,7 +307,7 @@ export default function WarmOutreach() {
             <div className="wo-list">
               {filteredLeads.map(lead => {
                 const status = OUTREACH_STATUS.find(s => s.id === lead.status) || OUTREACH_STATUS[0]
-                const engagement = ENGAGEMENT_TYPES.find(e => e.id === lead.engagement_type)
+                const engagement = ALL_ENGAGEMENT_TYPES.find(e => e.id === lead.engagement_type)
 
                 return (
                   <div
@@ -370,17 +389,35 @@ export default function WarmOutreach() {
  */
 function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
   const [saving, setSaving] = useState(false)
-  const [addToContacts, setAddToContacts] = useState(false)
+
+  // Merge old last_message into notes for existing leads
+  const initialNotes = lead
+    ? [lead.notes, lead.last_message].filter(Boolean).join('\n')
+    : ''
+
   const [form, setForm] = useState({
     name: lead?.name || '',
+    email: lead?.email || '',
+    phone: lead?.phone || '',
+    company: lead?.company || '',
+    source: lead?.source || 'Content',
     platform: lead?.platform || 'Instagram',
     handle: lead?.handle || '',
     engagement_type: lead?.engagement_type || 'liked_post',
     status: lead?.status || 'to_contact',
     priority: lead?.priority || 5,
-    last_message: lead?.last_message || '',
-    notes: lead?.notes || '',
+    notes: initialNotes,
   })
+
+  // When source changes, reset engagement_type if current selection isn't in new source
+  useEffect(() => {
+    const options = ENGAGEMENT_BY_SOURCE[form.source] || []
+    if (options.length && !options.find(e => e.id === form.engagement_type)) {
+      setForm(prev => ({ ...prev, engagement_type: options[0].id }))
+    }
+  }, [form.source])
+
+  const sourceEngagements = ENGAGEMENT_BY_SOURCE[form.source] || []
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -388,21 +425,25 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
 
     setSaving(true)
     try {
+      const leadFields = {
+        name: form.name.trim(),
+        email: form.email.trim() || null,
+        phone: form.phone.trim() || null,
+        company: form.company.trim() || null,
+        source: form.source,
+        platform: form.platform,
+        handle: form.handle.trim() || null,
+        engagement_type: form.engagement_type,
+        status: form.status,
+        priority: parseInt(form.priority),
+        notes: form.notes.trim() || null,
+      }
+
       let savedResult
       if (lead?.id) {
-        // Update
         const { data, error } = await supabase
           .from('crm_warm_leads')
-          .update({
-            name: form.name.trim(),
-            platform: form.platform,
-            handle: form.handle.trim() || null,
-            engagement_type: form.engagement_type,
-            status: form.status,
-            priority: parseInt(form.priority),
-            last_message: form.last_message.trim() || null,
-            notes: form.notes.trim() || null,
-          })
+          .update(leadFields)
           .eq('id', lead.id)
           .eq('user_id', userId)
           .select()
@@ -411,20 +452,9 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
         if (error) throw error
         savedResult = data
       } else {
-        // Create
         const { data, error } = await supabase
           .from('crm_warm_leads')
-          .insert({
-            user_id: userId,
-            name: form.name.trim(),
-            platform: form.platform,
-            handle: form.handle.trim() || null,
-            engagement_type: form.engagement_type,
-            status: form.status,
-            priority: parseInt(form.priority),
-            last_message: form.last_message.trim() || null,
-            notes: form.notes.trim() || null,
-          })
+          .insert({ user_id: userId, ...leadFields })
           .select()
           .single()
 
@@ -432,20 +462,21 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
         savedResult = data
       }
 
-      // Promote to contacts if checked
-      if (addToContacts) {
-        try {
-          await promoteLeadToContact(userId, {
-            name: form.name.trim(),
-            platform: form.platform,
-            handle: form.handle.trim(),
-            engagement_type: form.engagement_type,
-            last_message: form.last_message.trim(),
-            notes: form.notes.trim(),
-          })
-        } catch (contactErr) {
-          console.error('Error creating contact:', contactErr)
-        }
+      // Auto-sync to contacts
+      try {
+        await syncLeadToContact(userId, {
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          company: form.company.trim(),
+          source: form.source,
+          platform: form.platform,
+          handle: form.handle.trim(),
+          engagement_type: form.engagement_type,
+          notes: form.notes.trim(),
+        })
+      } catch (contactErr) {
+        console.error('Error syncing contact:', contactErr)
       }
 
       onSave(savedResult)
@@ -467,6 +498,7 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
         </header>
 
         <form onSubmit={handleSubmit} className="wo-modal-form">
+          {/* Name */}
           <div className="form-group">
             <label>Name *</label>
             <input
@@ -478,6 +510,75 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
             />
           </div>
 
+          {/* Email + Phone */}
+          <div className="form-row">
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={e => setForm({ ...form, email: e.target.value })}
+                placeholder="john@example.com"
+              />
+            </div>
+            <div className="form-group">
+              <label>Phone</label>
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={e => setForm({ ...form, phone: e.target.value })}
+                placeholder="+1 555 000 0000"
+              />
+            </div>
+          </div>
+
+          {/* Company */}
+          <div className="form-group">
+            <label>Company</label>
+            <input
+              type="text"
+              value={form.company}
+              onChange={e => setForm({ ...form, company: e.target.value })}
+              placeholder="Acme Inc."
+            />
+          </div>
+
+          {/* Source Channel */}
+          <div className="form-group">
+            <label>Source Channel</label>
+            <div className="wo-source-grid">
+              {SOURCE_CHANNELS.map(ch => (
+                <button
+                  key={ch}
+                  type="button"
+                  className={`wo-source-btn ${form.source === ch ? 'active' : ''}`}
+                  onClick={() => setForm({ ...form, source: ch })}
+                >
+                  {ch}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Engagement Type (filtered by source) */}
+          <div className="form-group">
+            <label>How did they engage?</label>
+            <div className="wo-engagement-grid">
+              {sourceEngagements.map(type => (
+                <button
+                  key={type.id}
+                  type="button"
+                  className={`wo-engagement-option ${form.engagement_type === type.id ? 'selected' : ''}`}
+                  onClick={() => setForm({ ...form, engagement_type: type.id })}
+                >
+                  <span>{type.icon}</span>
+                  <span>{type.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Platform + Handle */}
           <div className="form-row">
             <div className="form-group">
               <label>Platform</label>
@@ -501,23 +602,7 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>How did they engage?</label>
-            <div className="wo-engagement-grid">
-              {ENGAGEMENT_TYPES.map(type => (
-                <button
-                  key={type.id}
-                  type="button"
-                  className={`wo-engagement-option ${form.engagement_type === type.id ? 'selected' : ''}`}
-                  onClick={() => setForm({ ...form, engagement_type: type.id })}
-                >
-                  <span>{type.icon}</span>
-                  <span>{type.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
+          {/* Status + Priority */}
           <div className="form-row">
             <div className="form-group">
               <label>Status</label>
@@ -543,40 +628,16 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Last Message / Context</label>
-            <textarea
-              value={form.last_message}
-              onChange={e => setForm({ ...form, last_message: e.target.value })}
-              placeholder="What did they say or do?"
-              rows={2}
-            />
-          </div>
-
+          {/* Notes (merged) */}
           <div className="form-group">
             <label>Notes</label>
             <textarea
               value={form.notes}
               onChange={e => setForm({ ...form, notes: e.target.value })}
-              placeholder="Any other notes..."
-              rows={2}
+              placeholder="Context, last message, any details..."
+              rows={3}
             />
           </div>
-
-          {/* Add to Contacts toggle */}
-          <label className="wo-contact-toggle">
-            <input
-              type="checkbox"
-              checked={addToContacts}
-              onChange={e => setAddToContacts(e.target.checked)}
-            />
-            <span className="wo-contact-toggle-label">
-              Also add to Contacts
-            </span>
-            <span className="wo-contact-toggle-hint">
-              Creates a contact record for CRM tracking
-            </span>
-          </label>
 
           <div className="modal-actions">
             {lead && (

@@ -22,14 +22,6 @@ const CARDS = [
     statsKey: 'contacts',
   },
   {
-    id: 'email',
-    icon: '✉️',
-    title: 'Email Sequences',
-    description: 'Automated nurture campaigns',
-    path: '/crm/email-sequences',
-    statsKey: 'email',
-  },
-  {
     id: 'pipeline',
     icon: '📊',
     title: 'Pipeline',
@@ -54,11 +46,12 @@ const CARDS = [
     statsKey: 'ascension',
   },
   {
-    id: 'playbook',
-    icon: '📚',
-    title: 'Sales Playbook',
-    description: 'Closing frameworks & objection handling',
-    path: '/crm/sales-playbook',
+    id: 'execute',
+    icon: '⚡',
+    title: 'Execute',
+    description: 'Daily action hub',
+    path: '/crm/execute',
+    statsKey: 'execute',
   },
 ]
 
@@ -74,6 +67,8 @@ function formatStat(key, value) {
     pipelineValue: 'value',
     toFollowUp: 'to follow up',
     upsellRate: 'upsell rate',
+    completed: 'done',
+    planned: 'planned',
   }
 
   // Format currency values
@@ -122,7 +117,6 @@ export default function Nurture() {
             ←
           </button>
           <h2 className="tower-toolbar-title">Nurture</h2>
-          <span className="tower-toolbar-points">💜</span>
         </div>
 
         <div className="tower-grid stagger-children">

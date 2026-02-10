@@ -61,6 +61,21 @@ const CARDS = [
     path: '/crm/implementations',
     statsKey: 'implementations',
   },
+  {
+    id: 'email',
+    icon: '✉️',
+    title: 'Email Sequences',
+    description: 'Set-and-forget nurture campaigns',
+    path: '/crm/email-sequences',
+    statsKey: 'email',
+  },
+  {
+    id: 'playbook',
+    icon: '📚',
+    title: 'Sales Playbook',
+    description: 'Closing frameworks & objection handling',
+    path: '/crm/sales-playbook',
+  },
 ]
 
 function formatStat(key, value) {
@@ -73,6 +88,7 @@ function formatStat(key, value) {
     inProgress: 'in progress',
     completed: 'completed',
     percent: 'setup',
+    active: 'active',
   }
 
   return { value, label: labels[key] || key }
@@ -116,18 +132,7 @@ export default function Tools() {
             ←
           </button>
           <h2 className="tower-toolbar-title">Tools</h2>
-          <span className="tower-toolbar-points">🧰</span>
         </div>
-
-        <header className="tower-header">
-          <div className="tower-breadcrumb">
-            <button onClick={() => navigate('/crm')}>Home</button>
-            <span>→</span>
-            <span>Tools</span>
-          </div>
-          <h1 className="tower-title">🧰 Tools</h1>
-          <p className="tower-subtitle">Calculators, scripts, and analytics</p>
-        </header>
 
         <div className="tower-grid stagger-children">
         {CARDS.map(card => {

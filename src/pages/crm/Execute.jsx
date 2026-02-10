@@ -54,6 +54,8 @@ export default function Execute() {
     completeTask,
     uncompleteTask,
     addTask,
+    frameworks,
+    frameworkProgress,
     showLevelUp,
     floatingPoints,
     toast,
@@ -140,7 +142,7 @@ export default function Execute() {
     loadQuickStats()
   }
 
-  // Group tasks by phase
+  // Group manual tasks by phase (exclude framework tasks)
   const tasksByPhase = useMemo(() => {
     const grouped = {
       build: [],
@@ -150,6 +152,7 @@ export default function Execute() {
     }
 
     tasks.forEach(task => {
+      if (task.is_framework) return // Framework tasks rendered separately
       const phase = task.phase || 'build'
       if (grouped[phase]) {
         grouped[phase].push(task)
@@ -159,13 +162,27 @@ export default function Execute() {
     return grouped
   }, [tasks])
 
-  // Calculate phase completion rates
+  // Group frameworks by phase
+  const frameworksByPhase = useMemo(() => {
+    const grouped = { build: [], launch: [], deliver: [], recap: [] }
+    frameworks.forEach(fw => {
+      if (grouped[fw.phase]) {
+        grouped[fw.phase].push(fw)
+      }
+    })
+    return grouped
+  }, [frameworks])
+
+  // Calculate phase completion rates (manual + frameworks combined)
   const phaseStats = useMemo(() => {
     const stats = {}
     PHASES.forEach(phase => {
       const phaseTasks = tasksByPhase[phase.id] || []
-      const completed = phaseTasks.filter(t => t.completed).length
-      const total = phaseTasks.length
+      const phaseFws = frameworksByPhase[phase.id] || []
+      const manualCompleted = phaseTasks.filter(t => t.completed).length
+      const fwCompleted = phaseFws.filter(fw => frameworkProgress[fw.key]?.isComplete).length
+      const completed = manualCompleted + fwCompleted
+      const total = phaseTasks.length + phaseFws.length
       stats[phase.id] = {
         completed,
         total,
@@ -173,7 +190,7 @@ export default function Execute() {
       }
     })
     return stats
-  }, [tasksByPhase])
+  }, [tasksByPhase, frameworksByPhase, frameworkProgress])
 
   // Week info
   const weekStart = getWeekStart()
@@ -234,7 +251,7 @@ export default function Execute() {
     return (
       <div className="execute-page">
         <div className="execute-toolbar">
-          <button className="execute-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+          <button className="execute-toolbar-back" onClick={() => navigate('/crm/nurture')}>←</button>
           <h2 className="execute-toolbar-title">Execute</h2>
         </div>
         <div className="execute-loading">
@@ -353,7 +370,39 @@ export default function Execute() {
           </button>
         </div>
 
-        {tasksByPhase[activePhase]?.length === 0 ? (
+        {/* Framework Tasks (auto-tracked progress bars) */}
+        {frameworksByPhase[activePhase]?.length > 0 && (
+          <div className="framework-tasks">
+            {frameworksByPhase[activePhase].map(fw => {
+              const progress = frameworkProgress[fw.key] || { current: 0, target: fw.target, isComplete: false }
+              const pct = Math.min(100, Math.round((progress.current / progress.target) * 100))
+
+              return (
+                <div key={fw.key} className={`framework-task ${progress.isComplete ? 'done' : ''}`}>
+                  <div className="framework-task-header">
+                    <span className="framework-task-icon">{progress.isComplete ? '✓' : '⚡'}</span>
+                    <span className="framework-task-title">{fw.title}</span>
+                    <span className="framework-count">{progress.current}/{progress.target}</span>
+                    {progress.isComplete ? (
+                      <span className="framework-done-badge">Done</span>
+                    ) : (
+                      <span className="framework-points">{fw.points}pts</span>
+                    )}
+                  </div>
+                  <div className="framework-progress-bar">
+                    <div
+                      className="framework-progress-fill"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Manual Tasks (checkboxes) */}
+        {tasksByPhase[activePhase]?.length === 0 && (frameworksByPhase[activePhase]?.length || 0) === 0 ? (
           <div className="empty-tasks">
             <p>No {activePhase} tasks this week</p>
             <button

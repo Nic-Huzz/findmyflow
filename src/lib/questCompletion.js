@@ -24,8 +24,6 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       return { success: false, error: 'Invalid pointsEarned: must be a non-negative number' }
     }
 
-    console.log('🎯 completeFlowQuest called:', { userId, flowId, pointsEarned })
-
     // 1. Check if user has an active challenge
     const { data: activeChallenge, error: challengeError } = await supabase
       .from('challenge_progress')
@@ -41,8 +39,6 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
     }
 
     if (!activeChallenge) {
-      console.log('No active challenge - flow completed but not linked to quest')
-
       // Still record the flow completion (for future challenges)
       const { error: flowError } = await supabase
         .from('flow_completions')
@@ -64,8 +60,6 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       }
     }
 
-    console.log('Active challenge found:', activeChallenge.challenge_instance_id)
-
     // 2. Load quest configuration
     const questsResponse = await fetch(cacheBustUrl('/challengeQuestsUpdate.json'))
     if (!questsResponse.ok) {
@@ -82,15 +76,12 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
     const matchingQuest = questsData.quests.find(q => q.flow_id === flowId)
 
     if (!matchingQuest) {
-      console.log('No quest matches this flow ID:', flowId)
       return {
         success: false,
         reason: 'no_matching_quest',
         message: `No quest found with flow_id: ${flowId}`
       }
     }
-
-    console.log('Matching quest found:', matchingQuest.id)
 
     // 3. Check if quest already completed for this challenge instance
     const { data: existingCompletion } = await supabase
@@ -102,7 +93,6 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       .maybeSingle()
 
     if (existingCompletion) {
-      console.log('Quest already completed for this challenge instance')
       return {
         success: false,
         reason: 'already_completed',
@@ -127,8 +117,6 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       console.error('Error creating quest completion:', completionError)
       return { success: false, error: completionError.message }
     }
-
-    console.log('✅ Quest completion created')
 
     // 5. Update challenge_progress points
     // R-type is now in matchingQuest.type (Recognise, Release, Rewire, Reconnect)
@@ -164,8 +152,6 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       return { success: false, error: updateError.message }
     }
 
-    console.log('✅ Challenge progress updated')
-
     // 5b. Sync to leaderboard scoring system (non-blocking)
     syncScoreToLeaderboard(supabase, {
       userId,
@@ -190,8 +176,6 @@ export async function completeFlowQuest({ userId, flowId, pointsEarned }) {
       console.error('Error recording flow completion:', flowCompletionError)
       // Non-fatal - quest still completed successfully
     }
-
-    console.log('✅ Flow completion recorded')
 
     return {
       success: true,

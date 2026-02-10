@@ -27,6 +27,7 @@ import { generateVoiceQuestsForStage } from '../lib/voiceQuestConfig'
 import { getScoringCategory, syncScoreToLeaderboard } from '../lib/scoringCategories'
 import { logError, showErrorWithSupport } from '../lib/errorSupport'
 import { cacheBustUrl } from '../lib/fetchJson'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import { getEssenceDisplayName } from '../lib/essencePreferences'
 
 // Map URL tab params to internal category names
@@ -154,7 +155,6 @@ export function useChallengeData() {
 
   const loadUserProgress = async () => {
     try {
-      setLoading(true)
 
       const { data: progressData, error: progressError } = await supabase
         .from('challenge_progress')
@@ -224,7 +224,6 @@ export function useChallengeData() {
           }
           setShowOnboarding(true)
         }
-        setLoading(false)
         return
       }
 
@@ -299,10 +298,8 @@ export function useChallengeData() {
         ...(challengeCompletions || [])
       ])
 
-      setLoading(false)
     } catch (error) {
       console.error('Error in loadUserProgress:', error)
-      setLoading(false)
     }
   }
 
@@ -370,21 +367,8 @@ export function useChallengeData() {
     }
   }
 
-  // Get Monday of current week (in local timezone, formatted as YYYY-MM-DD)
-  // Uses local date to match user's perception of "this week"
-  const getWeekStart = () => {
-    const now = new Date()
-    const day = now.getDay()
-    const diff = now.getDate() - day + (day === 0 ? -6 : 1) // Adjust for Sunday
-    now.setDate(diff)
-    // Format as local date (not UTC) to avoid timezone mismatch
-    const year = now.getFullYear()
-    const month = String(now.getMonth() + 1).padStart(2, '0')
-    const date = String(now.getDate()).padStart(2, '0')
-    return `${year}-${month}-${date}`
-  }
+  const getWeekStart = () => getWeekStartLocal()
 
-  // Get formatted week label
   const getWeekLabel = () => {
     const weekStart = getWeekStart()
     const monday = new Date(weekStart + 'T00:00:00')
@@ -1665,8 +1649,10 @@ export function useChallengeData() {
 
   // Load user data when user is available
   // All loads run in parallel via Promise.all for fastest possible load
+  // Loading stays true until ALL promises resolve (not just loadUserProgress)
   useEffect(() => {
     if (user) {
+      setLoading(true)
       Promise.all([
         loadUserProgress(),
         loadLeaderboard(),
@@ -1678,7 +1664,7 @@ export function useChallengeData() {
         loadStageProgress(),
         loadWeeklyPlan(),
         loadValidationResponseCounts()
-      ])
+      ]).finally(() => setLoading(false))
     }
   }, [user])
 

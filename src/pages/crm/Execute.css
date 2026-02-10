@@ -480,6 +480,94 @@
   margin-top: 2px;
 }
 
+/* === FRAMEWORK TASKS === */
+.execute-page .framework-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.execute-page .framework-task {
+  padding: 14px 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.execute-page .framework-task.done {
+  background: rgba(34, 197, 94, 0.06);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.execute-page .framework-task-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.execute-page .framework-task-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.execute-page .framework-task.done .framework-task-icon {
+  color: #22c55e;
+  font-weight: 800;
+}
+
+.execute-page .framework-task-title {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.execute-page .framework-task.done .framework-task-title {
+  color: var(--text-secondary);
+}
+
+.execute-page .framework-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.execute-page .framework-points {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--brand-gold);
+}
+
+.execute-page .framework-done-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.execute-page .framework-progress-bar {
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.execute-page .framework-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-gold), #f5c55a);
+  border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+.execute-page .framework-task.done .framework-progress-fill {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
 /* === IMPROVEMENTS SECTION === */
 .execute-page .improvements-section {
   margin-top: 16px;

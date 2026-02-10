@@ -2,20 +2,14 @@
 // Shared helpers for the Execute system
 
 import { supabase } from './supabaseClient'
+import { getWeekStartLocal as getWeekStart, getTodayLocal } from './dateUtils'
 
 // ============================================
 // DATE HELPERS
 // ============================================
 
-/**
- * Get Monday of the week containing the given date
- */
-export function getWeekStart(date = new Date()) {
-  const d = new Date(date)
-  const day = d.getDay()
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1) // Adjust for Sunday
-  return new Date(d.setDate(diff)).toISOString().split('T')[0]
-}
+// Re-export for backwards compatibility
+export { getWeekStart }
 
 /**
  * Calculate days since a given date
@@ -31,7 +25,7 @@ export function daysSince(dateString) {
  * Get today's date as YYYY-MM-DD string
  */
 export function getToday() {
-  return new Date().toISOString().split('T')[0]
+  return getTodayLocal()
 }
 
 // ============================================
@@ -346,15 +340,24 @@ export async function getStuckTasks(userId) {
 
 /**
  * Get this week's tasks
+ * Includes both project-specific tasks and user-level framework tasks
  */
-export async function getThisWeekTasks(userId) {
+export async function getThisWeekTasks(userId, projectId) {
   const weekStart = getWeekStart()
 
-  const { data } = await supabase
+  // Fetch project tasks + framework tasks (project_id IS NULL) in one query
+  let query = supabase
     .from('execute_tasks')
     .select('*')
     .eq('user_id', userId)
     .gte('scheduled_date', weekStart)
+
+  if (projectId) {
+    // Get tasks for this project OR framework tasks (no project)
+    query = query.or(`project_id.eq.${projectId},project_id.is.null`)
+  }
+
+  const { data } = await query
 
   return data || []
 }

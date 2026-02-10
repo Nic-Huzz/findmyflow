@@ -4,7 +4,6 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { getDirectionColor, getDirectionLabel, getDirectionIcon, formatFlowDate } from '../lib/flowCompass'
 import './FlowCompassPage.css'
-import '../Profile.css'
 
 // Generate month options for date picker (last 5 years)
 const generateMonthOptions = () => {
@@ -29,27 +28,21 @@ const generateMonthOptions = () => {
 
 const MONTH_OPTIONS = generateMonthOptions()
 
-/**
- * FlowCompassPage - Redesigned with card grid and quick log
- * Based on merged mockup design
- */
-
 const FlowCompassPage = () => {
   const navigate = useNavigate()
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   const [projects, setProjects] = useState([])
   const [selectedProjectId, setSelectedProjectId] = useState('')
-  const [selectedEnergy, setSelectedEnergy] = useState(null) // 'excited' or 'tired'
-  const [selectedFlow, setSelectedFlow] = useState(null) // 'ease' or 'resistance'
-  const [headline, setHeadline] = useState('') // headline for quick log
-  const [comment, setComment] = useState('') // optional comment for quick log
-  const [dateOption, setDateOption] = useState('recent') // 'recent' or 'custom'
+  const [selectedEnergy, setSelectedEnergy] = useState(null)
+  const [selectedFlow, setSelectedFlow] = useState(null)
+  const [headline, setHeadline] = useState('')
+  const [comment, setComment] = useState('')
+  const [dateOption, setDateOption] = useState('recent')
   const [customMonth, setCustomMonth] = useState(null)
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [timelineModal, setTimelineModal] = useState({ isOpen: false, project: null, entries: [] })
   const [projectStats, setProjectStats] = useState({})
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [newProjectName, setNewProjectName] = useState('')
   const [creatingProject, setCreatingProject] = useState(false)
@@ -73,14 +66,11 @@ const FlowCompassPage = () => {
 
       setProjects(data || [])
 
-      // Auto-select the first (and only) project for single-project MVP
       if (data && data.length > 0) {
         setSelectedProjectId(data[0].id)
         await loadProjectStats(data.map(p => p.id))
       } else {
-        // No projects exist - still load unassigned entries from challenge
         await loadUnassignedEntries()
-        // Show create modal
         setShowCreateModal(true)
       }
     } catch (err) {
@@ -92,7 +82,6 @@ const FlowCompassPage = () => {
 
   const loadProjectStats = async (projectIds) => {
     try {
-      // Load entries for all projects
       const { data: projectData, error: projectError } = await supabase
         .from('flow_entries')
         .select('project_id, direction, logged_at')
@@ -101,7 +90,6 @@ const FlowCompassPage = () => {
 
       if (projectError) throw projectError
 
-      // Also load entries without a project_id (from challenge tracker quests)
       const { data: unassignedData, error: unassignedError } = await supabase
         .from('flow_entries')
         .select('id, project_id, direction, logged_at, activity_description, reasoning')
@@ -110,14 +98,12 @@ const FlowCompassPage = () => {
 
       if (unassignedError) throw unassignedError
 
-      // Calculate stats per project
       const stats = {}
       projectIds.forEach(projectId => {
         const projectEntries = projectData.filter(e => e.project_id === projectId)
         stats[projectId] = calculateProjectStats(projectEntries)
       })
 
-      // Add unassigned entries stats with special key
       if (unassignedData && unassignedData.length > 0) {
         stats['unassigned'] = calculateProjectStats(unassignedData)
       }
@@ -128,7 +114,6 @@ const FlowCompassPage = () => {
     }
   }
 
-  // Load unassigned entries when there are no projects
   const loadUnassignedEntries = async () => {
     try {
       const { data: unassignedData, error: unassignedError } = await supabase
@@ -139,7 +124,6 @@ const FlowCompassPage = () => {
 
       if (unassignedError) throw unassignedError
 
-      // Only set stats if there are unassigned entries
       if (unassignedData && unassignedData.length > 0) {
         setProjectStats({
           'unassigned': calculateProjectStats(unassignedData)
@@ -155,12 +139,7 @@ const FlowCompassPage = () => {
       return { total: 0, north: 0, east: 0, south: 0, west: 0, recent: [] }
     }
 
-    const directionCounts = {
-      north: 0,
-      east: 0,
-      south: 0,
-      west: 0
-    }
+    const directionCounts = { north: 0, east: 0, south: 0, west: 0 }
 
     entries.forEach(entry => {
       if (directionCounts.hasOwnProperty(entry.direction)) {
@@ -176,7 +155,6 @@ const FlowCompassPage = () => {
       west: total > 0 ? Math.round((directionCounts.west / total) * 100) : 0
     }
 
-    // Get 3 most recent entries
     const recent = entries
       .sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at))
       .slice(0, 3)
@@ -205,7 +183,6 @@ const FlowCompassPage = () => {
 
       if (error) throw error
 
-      // Close modal and reload projects
       setShowCreateModal(false)
       setNewProjectName('')
       await loadProjects()
@@ -217,14 +194,12 @@ const FlowCompassPage = () => {
     }
   }
 
-  // Helper to get date from month string
   const getDateFromMonth = (monthStr) => {
     if (!monthStr) return new Date()
     const [year, month] = monthStr.split('-')
     return new Date(parseInt(year), parseInt(month) - 1, 15)
   }
 
-  // Get direction from energy + flow
   const getDirection = () => {
     if (selectedEnergy === 'excited' && selectedFlow === 'ease') return 'north'
     if (selectedEnergy === 'excited' && selectedFlow === 'resistance') return 'east'
@@ -253,12 +228,11 @@ const FlowCompassPage = () => {
     try {
       const direction = getDirection()
 
-      // Calculate logged_at based on date option
       const loggedAt = dateOption === 'recent'
         ? new Date().toISOString()
         : getDateFromMonth(customMonth).toISOString()
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('flow_entries')
         .insert({
           user_id: user.id,
@@ -275,7 +249,6 @@ const FlowCompassPage = () => {
 
       if (error) throw error
 
-      // Reset form but keep project selected
       setSelectedEnergy(null)
       setSelectedFlow(null)
       setHeadline('')
@@ -283,7 +256,6 @@ const FlowCompassPage = () => {
       setDateOption('recent')
       setCustomMonth(null)
 
-      // Reload projects to update stats
       await loadProjects()
     } catch (err) {
       console.error('Error logging entry:', err)
@@ -302,7 +274,6 @@ const FlowCompassPage = () => {
         .order('logged_at', { ascending: false })
         .limit(20)
 
-      // Handle unassigned entries (from challenge tracker quests)
       if (project.id === null) {
         query = query.is('project_id', null)
       } else {
@@ -361,22 +332,9 @@ const FlowCompassPage = () => {
     return groups
   }
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-
-  const getUserInitials = (email) => {
-    if (!email) return '?'
-    const parts = email.split('@')[0].split(/[._-]/)
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[1][0]).toUpperCase()
-    }
-    return email.substring(0, 2).toUpperCase()
-  }
-
   if (loading) {
     return (
-      <div className="dashboard-container flow-compass-page">
+      <div className="flow-compass-page">
         <div className="loading">
           <div className="typing-indicator">
             <span></span><span></span><span></span>
@@ -387,71 +345,35 @@ const FlowCompassPage = () => {
   }
 
   return (
-    <div className="dashboard-container flow-compass-page">
-      {/* Mobile Top Bar */}
-      <div className="mobile-topbar">
-        <div className="topbar-content">
-          <div className="topbar-logo">FindMyFlow</div>
-          <button className="hamburger-btn" onClick={toggleSidebar}>
-            ☰
-          </button>
-        </div>
+    <div className="flow-compass-page">
+      {/* Page Header */}
+      <div className="page-header">
+        <h1 className="page-title">Flow Compass</h1>
+        <p className="page-subtitle">Track your project momentum and flow states</p>
       </div>
 
-      {/* Sidebar Overlay for Mobile */}
-      {sidebarOpen && (
-        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
-      )}
-
-      {/* Sidebar */}
-      <div className={`sidebar ${sidebarOpen ? '' : 'mobile-hidden'}`}>
-        <div className="logo">FindMyFlow</div>
-
-        <div className="user-profile">
-          <div className="user-avatar">{getUserInitials(user?.email)}</div>
-          <div className="user-name">{user?.email?.split('@')[0] || 'User'}</div>
-          <div className="user-email">{user?.email}</div>
-        </div>
-
-        <ul className="nav-menu">
-          <li className="nav-item" onClick={() => { navigate('/me'); setSidebarOpen(false); }}>
-            📊 Dashboard
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
-            ✨ Archetypes
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
-            📈 7-Day Challenge
-          </li>
-          <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
-            🧭 Flow Compass
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/library'); setSidebarOpen(false); }}>
-            📚 Library of Answers
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
-            💬 Give Feedback
-          </li>
-        </ul>
-
-        <div className="signout-link" onClick={signOut}>
-          Sign Out
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="main-content">
-        {/* Page Header */}
-        <div className="page-header">
-        <div>
-          <h1 className="page-title">Flow Compass</h1>
-          <p className="page-subtitle">Track your project momentum and flow states</p>
-        </div>
-      </div>
-
-      {/* Quick Log Section - Styled like SeeYourFlow */}
+      {/* Quick Log Section */}
       <div className="quick-log flow-style">
-        <h2 className="quick-log-title">Log Your Flow</h2>
+        <div className="quick-log-eyebrow">Log Your Flow</div>
+        <h2 className="quick-log-title">How are you feeling?</h2>
+
+        {/* Project Selector */}
+        {projects.length > 1 && (
+          <div className="question-group">
+            <label className="question-label">Project</label>
+            <div className="project-selector">
+              {projects.map(p => (
+                <button
+                  key={p.id}
+                  className={`project-option ${selectedProjectId === p.id ? 'selected' : ''}`}
+                  onClick={() => setSelectedProjectId(p.id)}
+                >
+                  {p.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Energy Question */}
         <div className="question-group">
@@ -569,6 +491,14 @@ const FlowCompassPage = () => {
         </button>
       </div>
 
+      {/* Section Eyebrow */}
+      <div className="section-eyebrow">
+        <span className="eyebrow-icon-box">
+          <span className="eyebrow-icon">📊</span>
+        </span>
+        <span>Your Projects</span>
+      </div>
+
       {/* Projects Grid */}
       <div className="projects-grid">
         {projects.map(project => {
@@ -577,20 +507,18 @@ const FlowCompassPage = () => {
           return (
             <div key={project.id} className="project-card">
               <div className="project-card-header">
-                <h3 className="project-card-title">{project.name}</h3>
+                <h3 className="project-card-title">{(project.name || '').replace(/_/g, ' ')}</h3>
                 {project.description && (
-                  <p className="project-card-description">{project.description}</p>
+                  <p className="project-card-description">{project.description.replace(/_/g, ' ')}</p>
                 )}
                 <div className="project-status-row">
                   <span className="project-status-badge">
-                    <span className={`health-indicator ${getHealthIndicator(stats)}`}></span>
-                    <span>{project.status || 'Active'}</span>
+                    <span>{(project.status || 'Active').replace(/_/g, ' ')}</span>
                   </span>
                   <span className="project-count">{stats.total} entries total</span>
                 </div>
               </div>
 
-              {/* Momentum Bar */}
               {stats.total > 0 && (
                 <div className="momentum-section">
                   <div className="momentum-label">Flow Momentum</div>
@@ -629,7 +557,6 @@ const FlowCompassPage = () => {
                 </div>
               )}
 
-              {/* Recent Entries */}
               {stats.recent && stats.recent.length > 0 && (
                 <div className="recent-entries">
                   <div className="recent-title">Recent Activity</div>
@@ -647,7 +574,6 @@ const FlowCompassPage = () => {
                 </div>
               )}
 
-              {/* Card Actions */}
               <div className="card-actions">
                 <button
                   className="quick-add-mini-btn"
@@ -666,7 +592,7 @@ const FlowCompassPage = () => {
           )
         })}
 
-        {/* Challenge Entries Card - show entries from 7-day challenge tracker quests */}
+        {/* Challenge Entries Card */}
         {projectStats['unassigned'] && projectStats['unassigned'].total > 0 && (
           <div className="project-card challenge-entries-card">
             <div className="project-card-header">
@@ -674,14 +600,12 @@ const FlowCompassPage = () => {
               <p className="project-card-description">Flow entries logged from the 7-Day Challenge</p>
               <div className="project-status-row">
                 <span className="project-status-badge">
-                  <span className={`health-indicator ${getHealthIndicator(projectStats['unassigned'])}`}></span>
                   <span>From Challenge</span>
                 </span>
                 <span className="project-count">{projectStats['unassigned'].total} entries total</span>
               </div>
             </div>
 
-            {/* Momentum Bar */}
             {projectStats['unassigned'].total > 0 && (
               <div className="momentum-section">
                 <div className="momentum-label">Flow Momentum</div>
@@ -720,7 +644,6 @@ const FlowCompassPage = () => {
               </div>
             )}
 
-            {/* Recent Entries */}
             {projectStats['unassigned'].recent && projectStats['unassigned'].recent.length > 0 && (
               <div className="recent-entries">
                 <div className="recent-title">Recent Activity</div>
@@ -738,7 +661,6 @@ const FlowCompassPage = () => {
               </div>
             )}
 
-            {/* Card Actions */}
             <div className="card-actions">
               <button
                 className="view-timeline-btn"
@@ -749,7 +671,6 @@ const FlowCompassPage = () => {
             </div>
           </div>
         )}
-      </div>
       </div>
 
       {/* Timeline Modal */}
@@ -819,21 +740,19 @@ const FlowCompassPage = () => {
       {/* Create Project Modal */}
       {showCreateModal && (
         <div className="timeline-modal" onClick={(e) => e.stopPropagation()}>
-          <div className="timeline-modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
+          <div className="timeline-modal-content create-modal" onClick={(e) => e.stopPropagation()}>
             <div className="timeline-modal-header">
               <h2 className="timeline-modal-title">Create Your Project</h2>
             </div>
             <div className="timeline-modal-body">
-              <p style={{ marginBottom: '20px', color: '#666' }}>
+              <p className="create-modal-desc">
                 Let's set up your Flow Compass. What project are you working on?
               </p>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
-                  Project Name *
-                </label>
+              <div className="create-modal-field">
+                <label className="create-modal-label">Project Name *</label>
                 <input
                   type="text"
-                  className="project-select"
+                  className="create-modal-input"
                   placeholder="e.g., My Business Launch, Personal Growth Journey..."
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
@@ -844,28 +763,23 @@ const FlowCompassPage = () => {
                   }}
                   autoFocus
                   disabled={creatingProject}
-                  style={{ width: '100%', padding: '12px' }}
                 />
               </div>
               <button
-                className="submit-log-btn"
+                className="create-modal-cta gold-cta"
                 onClick={handleCreateProject}
                 disabled={!newProjectName.trim() || creatingProject}
-                style={{ width: '100%', marginBottom: '12px' }}
               >
                 {creatingProject ? 'Creating...' : 'Create Project'}
               </button>
-              <div style={{ textAlign: 'center', margin: '16px 0', color: '#999', fontSize: '14px' }}>
-                or
-              </div>
+              <div className="create-modal-divider">or</div>
               <button
-                className="submit-log-btn"
+                className="create-modal-cta purple-cta"
                 onClick={() => navigate('/mind-space')}
-                style={{ width: '100%', background: 'linear-gradient(135deg, #5e17eb, #7c3aed)' }}
               >
                 Complete Mind Space
               </button>
-              <p style={{ marginTop: '12px', fontSize: '13px', color: '#999', textAlign: 'center' }}>
+              <p className="create-modal-hint">
                 Completing the Mind Space will help you discover your ideal project
               </p>
             </div>

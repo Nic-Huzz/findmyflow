@@ -7,7 +7,7 @@
 .story-bank {
   --purple: #5e17eb;
   --purple-light: #7c3aed;
-  --gold: #ffdd27;
+  --gold: #E9A23B;
   --warm-gray: #f8f9fa;
   --soft-gray: #e9ecef;
   --text-primary: #212529;
@@ -167,8 +167,8 @@
 /* Gap Analysis Alert */
 .story-bank .sb-gap-alert {
   padding: 16px;
-  background: rgba(255, 221, 39, 0.1);
-  border: 1px solid rgba(255, 221, 39, 0.3);
+  background: rgba(233, 162, 59, 0.1);
+  border: 1px solid rgba(233, 162, 59, 0.3);
   border-radius: 12px;
   margin-bottom: 16px;
 }
@@ -271,8 +271,8 @@
 .story-bank .sb-mine-btn {
   flex: 1;
   padding: 16px;
-  background: rgba(255, 221, 39, 0.1);
-  border: 2px dashed rgba(255, 221, 39, 0.4);
+  background: rgba(233, 162, 59, 0.1);
+  border: 2px dashed rgba(233, 162, 59, 0.4);
   border-radius: 12px;
   color: #b8860b;
   font-size: 1rem;
@@ -282,8 +282,8 @@
 }
 
 .story-bank .sb-mine-btn:hover {
-  background: rgba(255, 221, 39, 0.2);
-  border-color: rgba(255, 221, 39, 0.6);
+  background: rgba(233, 162, 59, 0.2);
+  border-color: rgba(233, 162, 59, 0.6);
 }
 
 /* Stories List */

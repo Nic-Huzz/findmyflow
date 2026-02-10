@@ -1,292 +1,449 @@
 /* ============================================================================
-   Flow Compass Page Styles - Merged Design
+   Flow Compass Page — /me Design System
    ============================================================================ */
 
 .flow-compass-page {
-  max-width: 1400px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 20px 16px 120px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #fafafa;
 }
 
-/* Page Header
+/* Page Header — hero-style centered text, no card
    ========================================================================== */
 .flow-compass-page .page-header {
-  background: white;
-  color: #1a1a1a;
-  padding: 32px;
-  border-radius: 16px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
+  padding: 8px 0 20px;
 }
 
 .flow-compass-page .page-title {
-  font-size: 32px;
-  font-weight: 800;
-  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 900;
+  color: #1a1a2e;
+  letter-spacing: -0.5px;
+  margin: 0 0 6px;
 }
 
 .flow-compass-page .page-subtitle {
-  font-size: 16px;
-  color: #666;
+  font-size: 15px;
+  color: #6c757d;
+  font-style: italic;
+  margin: 0;
 }
 
-.flow-compass-page .add-project-btn {
-  background: #5e17eb;
+/* Section Eyebrow — matches /me pattern
+   ========================================================================== */
+.flow-compass-page .section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 0 12px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5e17eb;
+}
+
+.flow-compass-page .eyebrow-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.flow-compass-page .eyebrow-icon {
+  font-size: 14px;
+  filter: brightness(10);
+}
+
+/* Quick Log — Quest Banner Treatment (purple gradient hero)
+   ========================================================================== */
+.flow-compass-page .quick-log.flow-style {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+}
+
+/* Glow orb — top right (purple) */
+.flow-compass-page .quick-log.flow-style::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.5) 0%, transparent 70%);
+  pointer-events: none;
+  animation: fcGlow 4s ease-in-out infinite;
+}
+
+/* Glow orb — bottom left (gold) */
+.flow-compass-page .quick-log.flow-style::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -30px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+  animation: fcGlow 4s ease-in-out infinite reverse;
+}
+
+@keyframes fcGlow {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+.flow-compass-page .quick-log-eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.flow-compass-page .quick-log.flow-style .quick-log-title {
   color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.flow-compass-page .quick-log.flow-style .question-group {
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Project selector — pill buttons */
+.flow-compass-page .quick-log.flow-style .project-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.flow-compass-page .quick-log.flow-style .project-option {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  color: white;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  font-size: 14px;
   transition: all 0.2s;
+  font-family: inherit;
 }
 
-.flow-compass-page .add-project-btn:hover {
-  transform: scale(1.05);
+.flow-compass-page .quick-log.flow-style .project-option:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* Quick Log Section
-   ========================================================================== */
-.flow-compass-page .quick-log {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+.flow-compass-page .quick-log.flow-style .project-option.selected {
+  background: rgba(233, 162, 59, 0.25);
+  border-color: #E9A23B;
+  color: #fde68a;
 }
 
-.flow-compass-page .quick-log-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 20px;
-}
-
-.flow-compass-page .project-select-group {
-  margin-bottom: 24px;
-}
-
-.flow-compass-page .project-select-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
+.flow-compass-page .quick-log.flow-style .question-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
   display: block;
 }
 
-.flow-compass-page .project-select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  background: white;
-  cursor: pointer;
-  transition: border-color 0.2s;
-}
-
-.flow-compass-page .project-select:hover {
-  border-color: #5e17eb;
-}
-
-.flow-compass-page .project-select:focus {
-  outline: none;
-  border-color: #5e17eb;
-}
-
-.flow-compass-page .question-group {
-  margin-bottom: 24px;
-}
-
-.flow-compass-page .question-heading {
-  font-size: 15px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 12px;
-}
-
-.flow-compass-page .button-row {
+.flow-compass-page .quick-log.flow-style .two-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
-.flow-compass-page .energy-btn,
-.flow-compass-page .flow-btn {
-  padding: 14px 20px;
-  border: 2px solid;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
+/* Glass morphism option buttons */
+.flow-compass-page .quick-log.flow-style .option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
-  background: white;
+  font-family: inherit;
+  position: relative;
+  z-index: 1;
+}
+
+.flow-compass-page .quick-log.flow-style .option-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.flow-compass-page .quick-log.flow-style .option-btn.selected {
+  background: rgba(233, 162, 59, 0.25);
+  border-color: #E9A23B;
+}
+
+.flow-compass-page .quick-log.flow-style .option-emoji {
+  font-size: 1.5rem;
+}
+
+/* Direction Preview — semi-transparent colored backgrounds */
+.flow-compass-page .quick-log.flow-style .direction-preview {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-}
-
-.flow-compass-page .energy-btn:hover,
-.flow-compass-page .flow-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.flow-compass-page .energy-btn.selected,
-.flow-compass-page .flow-btn.selected {
-  color: white;
-}
-
-/* Energy buttons */
-.flow-compass-page .energy-excited {
-  border-color: #10b981;
-  color: #10b981;
-}
-
-.flow-compass-page .energy-excited.selected {
-  background: #10b981;
-}
-
-.flow-compass-page .energy-tired {
-  border-color: #ef4444;
-  color: #ef4444;
-}
-
-.flow-compass-page .energy-tired.selected {
-  background: #ef4444;
-}
-
-/* Flow buttons */
-.flow-compass-page .flow-great {
-  border-color: #10b981;
-  color: #10b981;
-}
-
-.flow-compass-page .flow-great.selected {
-  background: #10b981;
-}
-
-.flow-compass-page .flow-resistance {
-  border-color: #f59e0b;
-  color: #f59e0b;
-}
-
-.flow-compass-page .flow-resistance.selected {
-  background: #f59e0b;
-}
-
-.flow-compass-page .flow-opportunity {
-  border-color: #5e17eb;
-  color: #5e17eb;
-}
-
-.flow-compass-page .flow-opportunity.selected {
-  background: #5e17eb;
-}
-
-.flow-compass-page .arrow-icon {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* Comment Input */
-.flow-compass-page .comment-input {
-  width: 100%;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: white;
-  font-size: 14px;
-  font-family: inherit;
-  resize: vertical;
-  min-height: 60px;
-  transition: border-color 0.2s;
-}
-
-.flow-compass-page .comment-input:focus {
-  outline: none;
-  border-color: #5e17eb;
-}
-
-.flow-compass-page .comment-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.flow-compass-page .submit-log-btn {
-  width: 100%;
-  padding: 14px;
-  background: #5e17eb;
-  color: white;
-  border: none;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border-radius: 12px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.flow-compass-page .quick-log.flow-style .direction-preview.direction-north {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.flow-compass-page .quick-log.flow-style .direction-preview.direction-east {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+.flow-compass-page .quick-log.flow-style .direction-preview.direction-south {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.flow-compass-page .quick-log.flow-style .direction-preview.direction-west {
+  background: rgba(251, 191, 36, 0.2);
+  color: #fde68a;
+}
+
+.flow-compass-page .quick-log.flow-style .direction-arrow {
+  font-size: 1.2rem;
+}
+
+/* Glass morphism inputs */
+.flow-compass-page .quick-log.flow-style .headline-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.flow-compass-page .quick-log.flow-style .headline-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-compass-page .quick-log.flow-style .headline-input:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+.flow-compass-page .quick-log.flow-style .comment-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: none;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.flow-compass-page .quick-log.flow-style .comment-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.flow-compass-page .quick-log.flow-style .comment-textarea:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+/* Glass morphism date options */
+.flow-compass-page .quick-log.flow-style .date-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.flow-compass-page .quick-log.flow-style .date-option {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: inherit;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.flow-compass-page .quick-log.flow-style .date-option:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.flow-compass-page .quick-log.flow-style .date-option.selected {
+  background: rgba(233, 162, 59, 0.25);
+  border-color: #E9A23B;
+}
+
+/* Month picker */
+.flow-compass-page .quick-log.flow-style .month-picker {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: white;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.5l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  margin-top: 10px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.flow-compass-page .quick-log.flow-style .month-picker:focus {
+  outline: none;
+  border-color: #E9A23B;
+}
+
+.flow-compass-page .quick-log.flow-style .month-picker option {
+  background: #4a0ea8;
+  color: white;
+}
+
+/* Gold gradient submit CTA */
+.flow-compass-page .quick-log.flow-style .submit-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  border: none;
+  border-radius: 14px;
+  color: #1a1a2e;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
   margin-top: 8px;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
-.flow-compass-page .submit-log-btn:hover {
-  background: #4912c4;
-  transform: scale(1.02);
+.flow-compass-page .quick-log.flow-style .submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
 }
 
-.flow-compass-page .submit-log-btn:disabled {
+.flow-compass-page .quick-log.flow-style .submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 /* Projects Grid
    ========================================================================== */
-.main-content .projects-grid {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 24px;
+.flow-compass-page .projects-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* Project Card
+/* Project Cards — White data cards with gradient left accent bar
    ========================================================================== */
 .flow-compass-page .project-card {
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   transition: all 0.3s;
+  position: relative;
+}
+
+/* Gradient left accent bar */
+.flow-compass-page .project-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, #5e17eb, #10b981, #E9A23B);
+  border-radius: 24px 0 0 24px;
 }
 
 .flow-compass-page .project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 .flow-compass-page .project-card-header {
-  padding: 20px;
-  border-bottom: 2px solid #f0f0f0;
+  padding: 20px 20px 16px 24px;
 }
 
 .flow-compass-page .project-card-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #1a1a2e;
+  letter-spacing: -0.3px;
+  margin: 0 0 6px;
 }
 
 .flow-compass-page .project-card-description {
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
+  color: #6c757d;
   line-height: 1.5;
-  margin-bottom: 12px;
+  margin: 0 0 12px;
 }
 
 .flow-compass-page .project-status-row {
@@ -299,17 +456,20 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: 100px;
-  font-size: 12px;
-  font-weight: 600;
-  background: #e0e7ff;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.1), rgba(124, 58, 237, 0.1));
   color: #5e17eb;
+  border: 1px solid rgba(94, 23, 235, 0.15);
 }
 
 .flow-compass-page .project-count {
   font-size: 13px;
-  color: #999;
+  color: #adb5bd;
   font-weight: 500;
 }
 
@@ -323,62 +483,39 @@
   margin-right: 4px;
 }
 
-.flow-compass-page .health-great {
-  background: #10b981;
-}
-
-.flow-compass-page .health-good {
-  background: #f59e0b;
-}
-
-.flow-compass-page .health-low {
-  background: #ef4444;
-}
+.flow-compass-page .health-great { background: #10b981; }
+.flow-compass-page .health-good { background: #f59e0b; }
+.flow-compass-page .health-low { background: #ef4444; }
 
 /* Momentum Bar
    ========================================================================== */
 .flow-compass-page .momentum-section {
-  padding: 16px 20px;
-  background: #fafafa;
-  border-bottom: 2px solid #f0f0f0;
+  padding: 14px 20px 14px 24px;
 }
 
 .flow-compass-page .momentum-label {
   font-size: 11px;
-  font-weight: 600;
-  color: #999;
+  font-weight: 800;
+  color: #adb5bd;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   margin-bottom: 8px;
 }
 
 .flow-compass-page .momentum-bar {
   display: flex;
   height: 8px;
-  border-radius: 100px;
+  border-radius: 4px;
   overflow: hidden;
-  background: #e0e0e0;
+  background: #e9ecef;
 }
 
-.flow-compass-page .momentum-segment {
-  transition: width 0.3s;
-}
+.flow-compass-page .momentum-segment { transition: width 0.3s; }
 
-.flow-compass-page .momentum-north {
-  background: #10b981;  /* Green - Flow (Ease + Excited) */
-}
-
-.flow-compass-page .momentum-east {
-  background: #3b82f6;  /* Blue - Redirect (Resistance + Excited) */
-}
-
-.flow-compass-page .momentum-south {
-  background: #ef4444;  /* Red - Rest (Resistance + Tired) */
-}
-
-.flow-compass-page .momentum-west {
-  background: #fbbf24;  /* Yellow - Honour (Ease + Tired) */
-}
+.flow-compass-page .momentum-north { background: #10b981; }
+.flow-compass-page .momentum-east { background: #3b82f6; }
+.flow-compass-page .momentum-south { background: #ef4444; }
+.flow-compass-page .momentum-west { background: #fbbf24; }
 
 .flow-compass-page .momentum-legend {
   display: flex;
@@ -392,7 +529,7 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #666;
+  color: #6c757d;
 }
 
 .flow-compass-page .legend-dot {
@@ -404,15 +541,15 @@
 /* Recent Entries
    ========================================================================== */
 .flow-compass-page .recent-entries {
-  padding: 16px 20px;
+  padding: 14px 20px 14px 24px;
 }
 
 .flow-compass-page .recent-title {
   font-size: 11px;
-  font-weight: 600;
-  color: #999;
+  font-weight: 800;
+  color: #adb5bd;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   margin-bottom: 12px;
 }
 
@@ -445,67 +582,67 @@
 
 .flow-compass-page .entry-mini-direction {
   font-weight: 600;
-  color: #1a1a1a;
+  color: #1a1a2e;
 }
 
 .flow-compass-page .entry-mini-time {
-  color: #999;
+  color: #adb5bd;
   font-size: 11px;
 }
 
 /* Card Actions
    ========================================================================== */
 .flow-compass-page .card-actions {
-  padding: 16px 20px;
-  background: #fafafa;
+  padding: 16px 20px 16px 24px;
   display: flex;
-  flex-direction: column;
   gap: 10px;
 }
 
 .flow-compass-page .quick-add-mini-btn {
-  width: 100%;
+  flex: 1;
   padding: 10px;
-  background: white;
-  border: 2px dashed #e0e0e0;
-  border-radius: 8px;
-  color: #666;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  color: #6c757d;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: inherit;
 }
 
 .flow-compass-page .quick-add-mini-btn:hover {
   border-color: #5e17eb;
   color: #5e17eb;
-  background: #f9f9ff;
+  background: #f5f0ff;
 }
 
 .flow-compass-page .view-timeline-btn {
-  width: 100%;
+  flex: 1;
   padding: 10px;
-  background: #5e17eb;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
   border: none;
-  border-radius: 8px;
-  color: white;
+  border-radius: 12px;
+  color: #1a1a2e;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: inherit;
 }
 
 .flow-compass-page .view-timeline-btn:hover {
-  background: #4912c4;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
 }
 
-/* Empty State Card
+/* Empty State
    ========================================================================== */
 .flow-compass-page .empty-card {
   background: white;
-  border: 2px dashed #e0e0e0;
-  border-radius: 16px;
+  border: 2px dashed #e9ecef;
+  border-radius: 24px;
   padding: 40px 20px;
   text-align: center;
   cursor: pointer;
@@ -513,9 +650,9 @@
 }
 
 .flow-compass-page .empty-card:hover {
-  border-color: #5e17eb;
-  background: #f9f9ff;
-  transform: translateY(-4px);
+  border-color: #E9A23B;
+  background: #fffbf0;
+  transform: translateY(-2px);
 }
 
 .flow-compass-page .empty-icon {
@@ -526,13 +663,13 @@
 .flow-compass-page .empty-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #1a1a2e;
   margin-bottom: 8px;
 }
 
 .flow-compass-page .empty-text {
   font-size: 14px;
-  color: #666;
+  color: #6c757d;
 }
 
 /* Timeline Modal
@@ -554,32 +691,47 @@
 
 .flow-compass-page .timeline-modal-content {
   background: white;
-  border-radius: 16px;
-  max-width: 800px;
+  border-radius: 24px;
+  max-width: 700px;
   width: 100%;
   margin: 40px auto;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
+/* Gradient top accent bar via pseudo-element (border-image breaks border-radius) */
 .flow-compass-page .timeline-modal-header {
   padding: 24px;
-  border-bottom: 2px solid #f0f0f0;
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.flow-compass-page .timeline-modal-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #5e17eb, #E9A23B);
+  border-radius: 24px 24px 0 0;
+}
+
 .flow-compass-page .timeline-modal-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a2e;
+  letter-spacing: -0.3px;
+  margin: 0;
 }
 
 .flow-compass-page .close-modal-btn {
-  background: #f0f0f0;
-  border: none;
-  width: 32px;
-  height: 32px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   font-size: 20px;
   cursor: pointer;
@@ -587,11 +739,12 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
+  color: #6c757d;
 }
 
 .flow-compass-page .close-modal-btn:hover {
-  background: #e0e0e0;
-  transform: scale(1.1);
+  background: #e9ecef;
+  color: #1a1a2e;
 }
 
 .flow-compass-page .timeline-modal-body {
@@ -606,22 +759,20 @@
   position: relative;
 }
 
-/* Date Group */
 .flow-compass-page .date-group {
   margin-bottom: 32px;
 }
 
 .flow-compass-page .date-header {
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 800;
   color: #5e17eb;
   margin-bottom: 16px;
   padding-left: 40px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 }
 
-/* Timeline Entry */
 .flow-compass-page .timeline-entry {
   position: relative;
   padding-left: 40px;
@@ -646,7 +797,7 @@
   top: 24px;
   bottom: -20px;
   width: 2px;
-  background: #e0e0e0;
+  background: #e9ecef;
   z-index: 1;
 }
 
@@ -654,34 +805,31 @@
   display: none;
 }
 
-.flow-compass-page .timeline-dot.north {
-  color: #10b981;
-}
+.flow-compass-page .timeline-dot.north { color: #10b981; }
+.flow-compass-page .timeline-dot.east { color: #3b82f6; }
+.flow-compass-page .timeline-dot.south { color: #ef4444; }
+.flow-compass-page .timeline-dot.west { color: #fbbf24; }
 
-.flow-compass-page .timeline-dot.east {
-  color: #f59e0b;
-}
-
-.flow-compass-page .timeline-dot.south {
-  color: #ef4444;
-}
-
-.flow-compass-page .timeline-dot.west {
-  color: #5e17eb;
-}
-
-/* Entry Card in Timeline */
+/* Entry Card in Timeline — left accent bar colored by direction */
 .flow-compass-page .timeline-entry .entry-card {
-  background: #fafafa;
-  border-radius: 12px;
+  background: #f8f9fa;
+  border-radius: 16px;
   padding: 16px;
   transition: all 0.3s;
+  position: relative;
+  border-left: 5px solid transparent;
 }
 
 .flow-compass-page .timeline-entry .entry-card:hover {
-  background: #f5f5f5;
+  background: #f0f0f5;
   transform: translateX(4px);
 }
+
+/* Direction-colored left borders for entry cards */
+.flow-compass-page .timeline-entry .timeline-dot.north ~ .entry-card { border-left-color: #10b981; }
+.flow-compass-page .timeline-entry .timeline-dot.east ~ .entry-card { border-left-color: #3b82f6; }
+.flow-compass-page .timeline-entry .timeline-dot.south ~ .entry-card { border-left-color: #ef4444; }
+.flow-compass-page .timeline-entry .timeline-dot.west ~ .entry-card { border-left-color: #fbbf24; }
 
 .flow-compass-page .entry-header {
   display: flex;
@@ -704,7 +852,7 @@
 
 .flow-compass-page .entry-time {
   font-size: 12px;
-  color: #999;
+  color: #adb5bd;
   font-weight: 500;
 }
 
@@ -718,14 +866,14 @@
 .flow-compass-page .state-box {
   background: white;
   padding: 10px;
-  border-radius: 8px;
-  border-left: 3px solid #5e17eb;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
 }
 
 .flow-compass-page .state-label {
   font-size: 11px;
-  font-weight: 600;
-  color: #999;
+  font-weight: 800;
+  color: #adb5bd;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 4px;
@@ -733,18 +881,19 @@
 
 .flow-compass-page .state-value {
   font-size: 13px;
-  color: #1a1a1a;
+  color: #1a1a2e;
   font-weight: 500;
+  text-transform: capitalize;
 }
 
 .flow-compass-page .entry-reasoning {
   font-size: 14px;
-  color: #666;
+  color: #6c757d;
   line-height: 1.5;
   margin: 0;
 }
 
-/* Empty State
+/* Empty State in Modal
    ========================================================================== */
 .flow-compass-page .empty-state {
   text-align: center;
@@ -759,7 +908,115 @@
 
 .flow-compass-page .empty-state .empty-text {
   font-size: 16px;
-  color: #999;
+  color: #adb5bd;
+}
+
+/* Create Project Modal
+   ========================================================================== */
+.flow-compass-page .create-modal {
+  max-width: 500px;
+}
+
+.flow-compass-page .create-modal-desc {
+  margin: 0 0 20px;
+  color: #6c757d;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.flow-compass-page .create-modal-field {
+  margin-bottom: 20px;
+}
+
+.flow-compass-page .create-modal-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #1a1a2e;
+  font-size: 14px;
+}
+
+.flow-compass-page .create-modal-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  background: white;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.flow-compass-page .create-modal-input:hover {
+  border-color: #5e17eb;
+}
+
+.flow-compass-page .create-modal-input:focus {
+  outline: none;
+  border-color: #5e17eb;
+}
+
+/* Gold CTA button */
+.flow-compass-page .create-modal-cta.gold-cta {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #E9A23B, #f5c55a);
+  border: none;
+  border-radius: 14px;
+  color: #1a1a2e;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  margin-bottom: 12px;
+}
+
+.flow-compass-page .create-modal-cta.gold-cta:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
+}
+
+.flow-compass-page .create-modal-cta.gold-cta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Purple CTA button */
+.flow-compass-page .create-modal-cta.purple-cta {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #5e17eb, #7c3aed);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.flow-compass-page .create-modal-cta.purple-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(94, 23, 235, 0.3);
+}
+
+.flow-compass-page .create-modal-divider {
+  text-align: center;
+  margin: 16px 0;
+  color: #adb5bd;
+  font-size: 14px;
+}
+
+.flow-compass-page .create-modal-hint {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #adb5bd;
+  text-align: center;
 }
 
 /* Loading States
@@ -795,296 +1052,34 @@
 }
 
 @keyframes flowCompassTypingBounce {
-  0%,
-  80%,
-  100% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-  40% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1.2); opacity: 1; }
 }
 
-/* ============================================================================
-   SeeYourFlow-Style Quick Log
-   ============================================================================ */
-.flow-compass-page .quick-log.flow-style {
-  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 24px;
-}
-
-.flow-compass-page .quick-log.flow-style .quick-log-title {
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.flow-compass-page .quick-log.flow-style .question-group {
-  margin-bottom: 16px;
-}
-
-.flow-compass-page .quick-log.flow-style .question-label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 10px;
-  display: block;
-}
-
-.flow-compass-page .quick-log.flow-style .two-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.flow-compass-page .quick-log.flow-style .option-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 16px 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  color: white;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-
-.flow-compass-page .quick-log.flow-style .option-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.flow-compass-page .quick-log.flow-style .option-btn.selected {
-  background: rgba(233, 162, 59, 0.3);
-  border-color: #E9A23B;
-}
-
-.flow-compass-page .quick-log.flow-style .option-emoji {
-  font-size: 1.5rem;
-}
-
-/* Direction Preview */
-.flow-compass-page .quick-log.flow-style .direction-preview {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 16px;
-}
-
-.flow-compass-page .quick-log.flow-style .direction-preview.direction-north {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
-}
-
-.flow-compass-page .quick-log.flow-style .direction-preview.direction-east {
-  background: rgba(245, 158, 11, 0.2);
-  color: #f59e0b;
-}
-
-.flow-compass-page .quick-log.flow-style .direction-preview.direction-south {
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-}
-
-.flow-compass-page .quick-log.flow-style .direction-preview.direction-west {
-  background: rgba(59, 130, 246, 0.2);
-  color: #3b82f6;
-}
-
-.flow-compass-page .quick-log.flow-style .direction-arrow {
-  font-size: 1.2rem;
-}
-
-/* Headline Input */
-.flow-compass-page .quick-log.flow-style .headline-input {
-  width: 100%;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  color: white;
-  font-size: 0.95rem;
-  font-family: inherit;
-}
-
-.flow-compass-page .quick-log.flow-style .headline-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.flow-compass-page .quick-log.flow-style .headline-input:focus {
-  outline: none;
-  border-color: #E9A23B;
-}
-
-/* Comment Textarea */
-.flow-compass-page .quick-log.flow-style .comment-textarea {
-  width: 100%;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  color: white;
-  font-size: 0.95rem;
-  font-family: inherit;
-  resize: none;
-}
-
-.flow-compass-page .quick-log.flow-style .comment-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.flow-compass-page .quick-log.flow-style .comment-textarea:focus {
-  outline: none;
-  border-color: #E9A23B;
-}
-
-/* Date Options */
-.flow-compass-page .quick-log.flow-style .date-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.flow-compass-page .quick-log.flow-style .date-option {
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  color: white;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-
-.flow-compass-page .quick-log.flow-style .date-option:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.flow-compass-page .quick-log.flow-style .date-option.selected {
-  background: rgba(233, 162, 59, 0.3);
-  border-color: #E9A23B;
-}
-
-/* Month Picker */
-.flow-compass-page .quick-log.flow-style .month-picker {
-  width: 100%;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  color: white;
-  font-size: 0.95rem;
-  font-family: inherit;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.5l-5-5h10l-5 5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  margin-top: 10px;
-}
-
-.flow-compass-page .quick-log.flow-style .month-picker:focus {
-  outline: none;
-  border-color: #E9A23B;
-}
-
-.flow-compass-page .quick-log.flow-style .month-picker option {
-  background: #4a0ea8;
-  color: white;
-}
-
-/* Submit Button */
-.flow-compass-page .quick-log.flow-style .submit-btn {
-  width: 100%;
-  padding: 16px 24px;
-  background: #E9A23B;
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: inherit;
-  margin-top: 8px;
-}
-
-.flow-compass-page .quick-log.flow-style .submit-btn:hover:not(:disabled) {
-  background: #d4912f;
-  transform: translateY(-2px);
-}
-
-.flow-compass-page .quick-log.flow-style .submit-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Mobile Responsive
+/* Responsive
    ========================================================================== */
 @media (max-width: 768px) {
   .flow-compass-page {
-    padding: 1rem;
-  }
-
-  .flow-compass-page .page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+    padding: 12px 12px 120px;
   }
 
   .flow-compass-page .page-title {
     font-size: 24px;
   }
 
-  .flow-compass-page .page-subtitle {
-    font-size: 14px;
-  }
-
-  .flow-compass-page .projects-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .flow-compass-page .momentum-legend {
-    gap: 12px;
+  .flow-compass-page .quick-log.flow-style {
+    padding: 24px 16px;
   }
 
   .flow-compass-page .entry-states {
     grid-template-columns: 1fr;
   }
 
-  .flow-compass-page .button-row {
-    grid-template-columns: 1fr;
+  .flow-compass-page .card-actions {
+    flex-direction: column;
   }
 
-  .flow-compass-page .quick-log.flow-style .two-options {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .flow-compass-page .quick-log.flow-style .option-btn {
-    padding: 14px 10px;
-  }
-
-  .flow-compass-page .quick-log.flow-style .option-emoji {
-    font-size: 1.25rem;
+  .flow-compass-page .timeline-modal-content {
+    margin: 20px auto;
   }
 }

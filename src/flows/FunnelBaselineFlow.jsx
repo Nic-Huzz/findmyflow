@@ -21,6 +21,7 @@
 
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getMondayDate, formatLocalDate } from '../lib/dateUtils'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { completeFlowQuest } from '../lib/questCompletion'
@@ -95,12 +96,7 @@ function FunnelBaselineFlow() {
   // Quest completion now only happens once when flow is completed
 
   function getWeekStart() {
-    const now = new Date()
-    const dayOfWeek = now.getDay()
-    const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1)
-    const monday = new Date(now.setDate(diff))
-    monday.setHours(0, 0, 0, 0)
-    return monday
+    return getMondayDate()
   }
 
   async function loadExistingData() {
@@ -176,7 +172,7 @@ function FunnelBaselineFlow() {
           user_id: user.id,
           mode: 'actual',
           source: 'quest',
-          week_start: weekStart.toISOString().split('T')[0],
+          week_start: formatLocalDate(weekStart),
           is_baseline: isFirstBaseline,
           awareness: parseInt(funnelData.awareness) || 0,
           attraction: parseInt(funnelData.attraction) || 0,

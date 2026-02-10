@@ -743,15 +743,15 @@
 }
 
 .crm-gold-glow {
-  box-shadow: 0 4px 16px rgba(255, 221, 39, 0.3);
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
 }
 
 /* Won deal card styling */
 :is(.crm-sales, .deal-outcome-modal) .deal-card.won,
 :is(.crm-sales, .deal-outcome-modal) .won-highlight {
   background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
-  border-color: #ffdd27;
-  box-shadow: 0 4px 16px rgba(255, 221, 39, 0.25);
+  border-color: #E9A23B;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.25);
 }
 
 /* Gold badge (like Challenge rank badge) */
@@ -877,7 +877,7 @@
 
 /* Confetti color variants */
 .crm-confetti-purple { background: var(--crm-purple); }
-.crm-confetti-gold { background: #ffdd27; }
+.crm-confetti-gold { background: #E9A23B; }
 .crm-confetti-green { background: var(--crm-green); }
 .crm-confetti-blue { background: #3b82f6; }
 
@@ -1043,8 +1043,8 @@
 
 .crm-leaderboard-entry.current-user {
   background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
-  border-color: #ffdd27;
-  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.3);
+  border-color: #E9A23B;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
 }
 
 .crm-leaderboard-rank {

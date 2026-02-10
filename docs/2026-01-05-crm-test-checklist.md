@@ -140,7 +140,7 @@
 
 ### Edge Functions to Deploy
 ```bash
-SUPABASE_ACCESS_TOKEN=sbp_7944efd6f507cccb90784510905d04d3845fd6ef npx supabase functions deploy analyze-deal-screenshot
+SUPABASE_ACCESS_TOKEN=$SUPABASE_ACCESS_TOKEN npx supabase functions deploy analyze-deal-screenshot
 ```
 
 ### Migrations to Run

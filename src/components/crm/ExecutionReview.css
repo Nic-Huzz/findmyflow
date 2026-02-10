@@ -235,7 +235,7 @@
 .execution-primary-btn {
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #ffdd27 0%, #ffc107 100%);
+  background: linear-gradient(135deg, #E9A23B 0%, #d4912e 100%);
   color: #212529;
   border: none;
   border-radius: 12px;
@@ -247,7 +247,7 @@
 
 .execution-primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 221, 39, 0.4);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.4);
 }
 
 .execution-skip-btn {

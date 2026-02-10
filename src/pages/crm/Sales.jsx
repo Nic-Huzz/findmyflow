@@ -465,6 +465,16 @@ export default function Sales() {
         </div>
       </div>
 
+      {/* Pipeline Action Links */}
+      <div className="pipeline-action-links">
+        <button className="pipeline-action-btn" onClick={() => navigate('/crm/warm-outreach')}>
+          🤝 Outreach
+        </button>
+        <button className="pipeline-action-btn" onClick={() => navigate('/crm/ascension')}>
+          🚀 Upsell
+        </button>
+      </div>
+
       {/* Project Filters */}
       {projectsWithDeals.length > 0 && (
         <div className="pipeline-filters">

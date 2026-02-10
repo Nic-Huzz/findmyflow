@@ -1,7 +1,7 @@
 // src/hooks/useExecute.js
 // Hook for Execute system with celebration integration
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { useCelebrations } from './useCelebrations'
 import {
   createTask,
@@ -10,6 +10,11 @@ import {
   getThisWeekTasks,
   getQuickStats,
 } from '../lib/executeHelpers'
+import {
+  getActiveFrameworks,
+  getAllFrameworkProgress,
+  awardFrameworkCompletion,
+} from '../lib/crm/frameworkService'
 import { supabase } from '../lib/supabaseClient'
 
 // Points for different task types
@@ -28,6 +33,9 @@ export function useExecute(userId, projectId) {
   const [tasks, setTasks] = useState([])
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [frameworks, setFrameworks] = useState([])
+  const [frameworkProgress, setFrameworkProgress] = useState({})
+  const loadingFrameworks = useRef(false)
 
   const {
     celebrateTaskComplete,
@@ -40,6 +48,49 @@ export function useExecute(userId, projectId) {
     clearToast,
     removeFloatingPoints,
   } = useCelebrations()
+
+  // Load frameworks and compute live progress
+  const loadFrameworks = useCallback(async () => {
+    if (!userId || loadingFrameworks.current) return
+    loadingFrameworks.current = true
+
+    try {
+      const fws = await getActiveFrameworks(userId)
+      setFrameworks(fws)
+
+      const progress = await getAllFrameworkProgress(userId, fws)
+      setFrameworkProgress(progress)
+
+      // Auto-award completed frameworks
+      for (const fw of fws) {
+        const p = progress[fw.key]
+        if (p?.isComplete) {
+          const awarded = await awardFrameworkCompletion(userId, fw.key, fw)
+          if (awarded) {
+            celebrateTaskComplete(fw.points, {})
+            // Update user stats for the awarded points
+            await updateUserStats(userId, fw.points)
+            await checkLevelUp(userId, fw.points)
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Error loading frameworks:', err)
+    } finally {
+      loadingFrameworks.current = false
+    }
+  }, [userId, celebrateTaskComplete])
+
+  // Refresh framework progress on visibility change
+  useEffect(() => {
+    function handleVisibility() {
+      if (document.visibilityState === 'visible' && userId) {
+        loadFrameworks()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [userId, loadFrameworks])
 
   // Load tasks and stats
   const loadData = useCallback(async () => {
@@ -54,12 +105,15 @@ export function useExecute(userId, projectId) {
 
       setTasks(tasksResult || [])
       setStats(statsResult)
+
+      // Also load frameworks
+      loadFrameworks()
     } catch (err) {
       console.error('Error loading execute data:', err)
     } finally {
       setLoading(false)
     }
-  }, [userId, projectId])
+  }, [userId, projectId, loadFrameworks])
 
   // Complete a task with celebration
   const completeTask = useCallback(async (taskId, taskPhase, position = {}) => {
@@ -198,12 +252,15 @@ export function useExecute(userId, projectId) {
     tasks,
     stats,
     loading,
+    frameworks,
+    frameworkProgress,
 
     // Actions
     loadData,
     completeTask,
     uncompleteTask,
     addTask,
+    loadFrameworks,
 
     // Celebration state (for rendering overlays)
     showLevelUp,

@@ -4,6 +4,7 @@
  */
 import { supabase } from '../supabaseClient'
 import { getEcosystemStats } from './ecosystemService'
+import { getWeekStart } from '../executeHelpers'
 
 /**
  * Get stats for Attract tower cards
@@ -109,14 +110,22 @@ export async function getNurtureStats(userId) {
       .eq('status', 'won')
       .gte('actual_close_date', monthAgo.toISOString().split('T')[0])
 
+    // Execute stats — completed/total tasks this week
+    const weekStartStr = getWeekStart()
+
+    const { data: execTasks } = await supabase
+      .from('execute_tasks')
+      .select('completed')
+      .eq('user_id', userId)
+      .gte('scheduled_date', weekStartStr)
+
+    const execCompleted = execTasks?.filter(t => t.completed).length || 0
+    const execTotal = execTasks?.length || 0
+
     return {
       contacts: {
         total: 0, // Contacts table doesn't exist yet
         thisWeek: newDealsCount || 0,
-      },
-      email: {
-        active: 0,
-        openRate: '—',
       },
       pipeline: {
         activeDeals,
@@ -127,6 +136,10 @@ export async function getNurtureStats(userId) {
       },
       ascension: {
         upsellRate: wonDeals > 0 ? `${wonDeals} won` : '—',
+      },
+      execute: {
+        completed: execCompleted,
+        planned: execTotal,
       },
     }
   } catch (err) {
@@ -179,6 +192,12 @@ export async function getToolsStats(userId) {
     // Ecosystem stats
     const ecoStats = await getEcosystemStats(userId)
 
+    // Email sequence stats
+    const { count: emailCount } = await supabase
+      .from('crm_email_sequences')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', userId)
+
     return {
       ecosystem: {
         percent: ecoStats?.percent != null ? `${ecoStats.percent}%` : '0%',
@@ -195,6 +214,9 @@ export async function getToolsStats(userId) {
       implementations: {
         inProgress,
         completed,
+      },
+      email: {
+        active: emailCount || 0,
       },
     }
   } catch (err) {

@@ -9,6 +9,8 @@
  * See: docs/scoring-system-refactor.md
  */
 
+import { getWeekStartLocal as getWeekStartDate } from './dateUtils'
+
 // Map quest categories to scoring categories
 export const SCORING_CATEGORIES = {
   // Business score
@@ -106,21 +108,6 @@ export const formatScoresForDisplay = (scores) => {
  * All scoring category keys
  */
 export const SCORING_CATEGORY_KEYS = ['business', 'healing', 'courage']
-
-/**
- * Get Monday of current week (in local timezone, formatted as YYYY-MM-DD)
- * Used for consistent week start calculation across the app
- */
-export const getWeekStartDate = () => {
-  const now = new Date()
-  const day = now.getDay()
-  const diff = now.getDate() - day + (day === 0 ? -6 : 1) // Adjust for Sunday
-  now.setDate(diff)
-  const year = now.getFullYear()
-  const month = String(now.getMonth() + 1).padStart(2, '0')
-  const date = String(now.getDate()).padStart(2, '0')
-  return `${year}-${month}-${date}`
-}
 
 /**
  * Sync points to the leaderboard scoring system

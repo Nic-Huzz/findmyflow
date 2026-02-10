@@ -36,15 +36,11 @@ function TrendIndicator({ current, previous, prefix = '', suffix = '', isPercent
   )
 }
 
+import { getMondayDate } from '../../lib/dateUtils'
+
 // Get Monday of a given week offset (0 = this week, -1 = last week)
 function getWeekStartDate(offset = 0) {
-  const now = new Date()
-  const day = now.getDay()
-  const diff = now.getDate() - day + (day === 0 ? -6 : 1) + (offset * 7)
-  const d = new Date(now)
-  d.setDate(diff)
-  d.setHours(0, 0, 0, 0)
-  return d
+  return getMondayDate(new Date(), offset)
 }
 
 export default function Dashboard() {

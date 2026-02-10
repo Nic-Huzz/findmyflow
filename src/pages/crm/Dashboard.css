@@ -6,7 +6,7 @@
   min-height: 100vh;
   padding: 24px 20px;
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
-  background: #f8f9fa;
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
 }
 
 .hq-loading {

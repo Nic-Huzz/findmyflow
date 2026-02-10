@@ -121,6 +121,7 @@ function LaunchReviewInput({ quest, onComplete, projectId, challengeInstanceId }
       await onComplete(quest, reviewData)
     } catch (error) {
       console.error('Error submitting launch review:', error)
+    } finally {
       setIsSubmitting(false)
     }
   }

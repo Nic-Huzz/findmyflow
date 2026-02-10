@@ -6,6 +6,7 @@
  * Funnel → CRM: When funnel metrics update, reflect in analytics
  */
 import { supabase } from '../supabaseClient'
+import { getWeekStartLocal, formatLocalDate } from '../dateUtils'
 
 /**
  * Map CRM deal stages to funnel metric stages
@@ -264,20 +265,14 @@ export async function forceCRMSync(userId, projectId = null) {
 // Helper functions
 
 function getWeekStart(weekOffset = 0) {
-  const now = new Date()
-  const dayOfWeek = now.getDay()
-  const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) // Adjust for Monday start
-  const monday = new Date(now.setDate(diff + (weekOffset * 7)))
-  monday.setHours(0, 0, 0, 0)
-  return monday.toISOString().split('T')[0]
+  return getWeekStartLocal(new Date(), weekOffset)
 }
 
 function getWeekEnd(weekOffset = 0) {
-  const weekStart = new Date(getWeekStart(weekOffset))
+  const weekStart = new Date(getWeekStart(weekOffset) + 'T00:00:00')
   const sunday = new Date(weekStart)
   sunday.setDate(sunday.getDate() + 6)
-  sunday.setHours(23, 59, 59, 999)
-  return sunday.toISOString().split('T')[0]
+  return formatLocalDate(sunday)
 }
 
 function getEmptyFunnelMetrics() {

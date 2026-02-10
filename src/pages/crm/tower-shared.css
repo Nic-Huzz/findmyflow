@@ -1,125 +1,139 @@
 /**
- * Shared Tower Page Styles - Matching Prototype
+ * Shared Tower Page Styles
+ * Design system aligned
  */
 
-/* Page Layout */
+/* ============================================
+   DESIGN TOKENS
+   ============================================ */
+.tower-page {
+  --brand-purple: #5e17eb;
+  --brand-purple-light: #7c3aed;
+  --brand-purple-deep: #4c1d95;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --border: #e9ecef;
+}
+
+/* ============================================
+   PAGE LAYOUT
+   ============================================ */
 .tower-page {
   min-height: 100vh;
   padding: 24px 20px;
-  padding-top: 80px; /* Account for toolbar */
+  padding-top: 80px;
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
-  background: #f8f9fa;
+  background: linear-gradient(180deg,
+    rgba(94,23,235,0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233,162,59,0.04) 100%
+  );
+  overflow-x: hidden;
 }
 
-/* Top Toolbar */
+/* ============================================
+   TOP TOOLBAR
+   ============================================ */
 .tower-toolbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 56px;
-  background: #ffffff;
-  border-bottom: 1px solid #dee2e6;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 0 16px;
   z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .tower-toolbar-back {
+  position: absolute;
+  left: 16px;
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #5e17eb;
+  color: var(--text-primary);
   cursor: pointer;
   padding: 8px;
   margin: -8px;
   line-height: 1;
+  font-family: inherit;
+  transition: transform 0.2s ease;
+}
+
+.tower-toolbar-back:hover {
+  transform: translateX(-2px);
 }
 
 .tower-toolbar-title {
   font-size: 1.125rem;
-  font-weight: 700;
-  color: #212529;
+  font-weight: 800;
+  color: var(--text-primary);
   margin: 0;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .tower-toolbar-points {
+  position: absolute;
+  right: 16px;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #5e17eb;
+  color: var(--brand-purple);
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-/* Page Header */
-.tower-header {
-  margin-bottom: 24px;
-}
-
-.tower-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.875rem;
-  color: #495057;
-  margin-bottom: 8px;
-}
-
-.tower-breadcrumb button {
-  background: none;
-  border: none;
-  padding: 0;
-  color: #5e17eb;
-  cursor: pointer;
-  font-size: inherit;
-  font-weight: 500;
-}
-
-.tower-breadcrumb button:hover {
-  text-decoration: underline;
-}
-
-.tower-title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #212529;
-  margin: 0 0 4px 0;
-}
-
-.tower-subtitle {
-  color: #495057;
-  font-size: 1rem;
-  margin: 0;
-}
-
-/* Tower Grid */
+/* ============================================
+   TOWER GRID
+   ============================================ */
 .tower-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 
-/* Tower Card */
+/* ============================================
+   TOWER CARD
+   ============================================ */
 .tower-card {
-  background: #ffffff;
-  border-radius: 20px;
+  background: var(--surface);
+  border-radius: 24px;
   padding: 20px;
-  border: 1px solid #dee2e6;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.tower-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--brand-purple-light), #c9b8f8);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .tower-card:hover:not(.disabled) {
   transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(94, 23, 235, 0.12);
-  border-color: #5e17eb;
+}
+
+.tower-card:hover:not(.disabled)::before {
+  opacity: 1;
 }
 
 .tower-card:active:not(.disabled) {
@@ -138,8 +152,8 @@
 
 .tower-card-title {
   font-size: 1rem;
-  font-weight: 700;
-  color: #212529;
+  font-weight: 800;
+  color: var(--text-primary);
   margin: 0 0 6px 0;
   display: flex;
   align-items: center;
@@ -149,37 +163,39 @@
 
 .tower-badge {
   font-size: 0.625rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
 .tower-badge.new {
-  background: #5e17eb;
+  background: var(--brand-purple);
   color: white;
 }
 
 .tower-badge.soon {
-  background: #e9ecef;
-  color: #6c757d;
+  background: var(--border);
+  color: var(--text-secondary);
 }
 
 .tower-card-description {
-  color: #495057;
+  color: var(--text-secondary);
   font-size: 0.8125rem;
   line-height: 1.5;
   margin: 0;
 }
 
-/* Card Stats */
+/* ============================================
+   CARD STATS
+   ============================================ */
 .tower-card-stats {
   display: flex;
   gap: 16px;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid #e9ecef;
+  border-top: 1px solid var(--border);
 }
 
 .tower-stat {
@@ -189,32 +205,31 @@
 
 .tower-stat-value {
   font-size: 1.125rem;
-  font-weight: 700;
-  color: #212529;
+  font-weight: 800;
+  color: var(--text-primary);
 }
 
 .tower-stat-label {
   font-size: 0.6875rem;
-  color: #6c757d;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.3px;
+  font-weight: 600;
 }
 
-/* Mobile Responsive */
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
 @media (max-width: 480px) {
   .tower-page {
     padding: 16px;
-    padding-top: 80px; /* Preserve toolbar offset (shorthand above resets it) */
+    padding-top: 80px;
     padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   }
 
   .tower-grid {
     grid-template-columns: 1fr;
     gap: 12px;
-  }
-
-  .tower-title {
-    font-size: 1.5rem;
   }
 
   .tower-card {
@@ -232,5 +247,18 @@
 
   .tower-card-description {
     font-size: 0.75rem;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .tower-page *,
+  .tower-page *::before,
+  .tower-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

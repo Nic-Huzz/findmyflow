@@ -164,6 +164,7 @@ function GroanReflectionInput({ quest, onComplete, projectId, challengeInstanceI
       await onComplete(quest, groanData)
     } catch (error) {
       console.error('Error submitting groan reflection:', error)
+    } finally {
       setIsSubmitting(false)
     }
   }

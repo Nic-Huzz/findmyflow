@@ -24,6 +24,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
 import { trackWeeklyPlanCompleted } from '../lib/analytics'
+import { getWeekStartLocal } from '../lib/dateUtils'
 import {
   GROAN_VISIBILITY_LAYERS,
   GROAN_SOURCE_TYPES,
@@ -245,6 +246,9 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     }
   }, [])
 
+  // Track whether last week stats have been checked
+  const [lastWeekChecked, setLastWeekChecked] = useState(false)
+
   // Load data on mount
   useEffect(() => {
     if (user) {
@@ -254,6 +258,19 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       autoJoinTestGroup()
     }
   }, [user])
+
+  // Skip review entirely for new users with no previous challenge data
+  useEffect(() => {
+    if (!lastWeekChecked || loadingProjects) return
+    if (lastWeekStats && lastWeekStats.questCount === 0 && lastWeekStats.totalPoints === 0) {
+      // No previous activity — skip straight to the challenge
+      if (onComplete) {
+        onComplete({})
+      } else {
+        navigate('/7-day-challenge')
+      }
+    }
+  }, [lastWeekChecked, loadingProjects, lastWeekStats])
 
   // Auto-join all users to "Test Group" (temporary for launch testing)
   const autoJoinTestGroup = async () => {
@@ -364,6 +381,8 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
       })
     } catch (err) {
       console.error('Error loading last week stats:', err)
+    } finally {
+      setLastWeekChecked(true)
     }
   }
 
@@ -469,14 +488,7 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
     alert('Group code copied to clipboard!')
   }
 
-  // Get Monday of current week
-  const getWeekStart = () => {
-    const now = new Date()
-    const day = now.getDay()
-    const diff = now.getDate() - day + (day === 0 ? -6 : 1) // Adjust for Sunday
-    const monday = new Date(now.setDate(diff))
-    return monday.toISOString().split('T')[0]
-  }
+  const getWeekStart = () => getWeekStartLocal()
 
   // Get week label
   const getWeekLabel = () => {
@@ -705,38 +717,31 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
           )}
         </div>
 
-        {/* Last Week Stats Card */}
-        <div className="review-card stats-review-card">
-          <div className="review-card-header">
-            <span className="review-card-icon">📊</span>
-            <span className="review-card-title">
-              {lastWeekStats ? `Week of ${lastWeekStats.weekOf}` : 'Last Week'}
-            </span>
-          </div>
-
-          {lastWeekStats ? (
-            <>
-              <div className="stats-grid">
-                <div className="stat-item">
-                  <span className="stat-value">{lastWeekStats.totalPoints}</span>
-                  <span className="stat-label">Points</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-value">{lastWeekStats.questCount}</span>
-                  <span className="stat-label">Quests</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-value">{getDaysSinceWeek()}</span>
-                  <span className="stat-label">Days Active</span>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="stats-empty">
-              <span>No activity recorded last week</span>
+        {/* Last Week Stats Card — only show if there's actual activity */}
+        {lastWeekStats && (lastWeekStats.questCount > 0 || lastWeekStats.totalPoints > 0) && (
+          <div className="review-card stats-review-card">
+            <div className="review-card-header">
+              <span className="review-card-icon">📊</span>
+              <span className="review-card-title">
+                Week of {lastWeekStats.weekOf}
+              </span>
             </div>
-          )}
-        </div>
+            <div className="stats-grid">
+              <div className="stat-item">
+                <span className="stat-value">{lastWeekStats.totalPoints}</span>
+                <span className="stat-label">Points</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">{lastWeekStats.questCount}</span>
+                <span className="stat-label">Quests</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">{getDaysSinceWeek()}</span>
+                <span className="stat-label">Days Active</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Flow Check-In Card - matching existing flow capture pattern */}
         <div className="review-card flow-check-card">

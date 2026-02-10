@@ -112,18 +112,7 @@ export default function Attract() {
             ←
           </button>
           <h2 className="tower-toolbar-title">Attract</h2>
-          <span className="tower-toolbar-points">🎯</span>
         </div>
-
-        <header className="tower-header">
-          <div className="tower-breadcrumb">
-            <button onClick={() => navigate('/crm')}>Home</button>
-            <span>→</span>
-            <span>Attract</span>
-          </div>
-          <h1 className="tower-title">🎯 Attract</h1>
-          <p className="tower-subtitle">Bring new leads into your world</p>
-        </header>
 
         <div className="tower-grid stagger-children">
         {CARDS.map(card => {

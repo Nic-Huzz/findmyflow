@@ -39,18 +39,11 @@
  */
 
 import { supabase } from './supabaseClient';
+import { getTodayLocal, getYesterdayLocal, formatLocalDate } from './dateUtils';
 
-// Helper function to get today's date in YYYY-MM-DD format
-const getTodayDate = () => {
-  return new Date().toISOString().split('T')[0];
-};
-
-// Helper function to get yesterday's date in YYYY-MM-DD format
-const getYesterdayDate = () => {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  return yesterday.toISOString().split('T')[0];
-};
+// Use local-timezone helpers from dateUtils (fixes UTC mismatch for western timezones)
+const getTodayDate = getTodayLocal;
+const getYesterdayDate = getYesterdayLocal;
 
 // Check if user completed any challenges today
 const hasCompletedChallengeToday = async (userId, challengeInstanceId) => {
@@ -181,7 +174,7 @@ export const checkStreakBreak = async (userId, challengeInstanceId) => {
     }
 
     // Check if last active date was yesterday (streak continues) or today (already active)
-    const lastActiveDate = new Date(progress.last_active_date).toISOString().split('T')[0];
+    const lastActiveDate = formatLocalDate(new Date(progress.last_active_date));
     const today = getTodayDate();
     const yesterday = getYesterdayDate();
 

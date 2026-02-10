@@ -355,6 +355,39 @@
   color: #212529;
 }
 
+/* Pipeline Action Links */
+.crm-sales .pipeline-action-links {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.crm-sales .pipeline-action-btn {
+  flex: 1;
+  padding: 10px 16px;
+  background: rgba(94, 23, 235, 0.06);
+  border: 1px solid rgba(94, 23, 235, 0.15);
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--brand-purple);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  text-align: center;
+}
+
+.crm-sales .pipeline-action-btn:hover {
+  background: rgba(94, 23, 235, 0.12);
+  border-color: var(--brand-purple);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.1);
+}
+
+.crm-sales .pipeline-action-btn:active {
+  transform: translateY(0);
+}
+
 /* Project Filters (matches me-page .badge pattern) */
 .crm-sales .pipeline-filters {
   display: flex;

@@ -272,8 +272,12 @@ export default function MePage() {
       type: 'compass',
       date: e.logged_at,
     }))
+    // Deduplicate quest completions by quest_id (user-level + project-level can both exist)
+    const seenQuestIds = new Set()
     projectQuestCompletions.forEach(qc => {
       if (!qc.completed_at) return
+      if (seenQuestIds.has(qc.quest_id)) return
+      seenQuestIds.add(qc.quest_id)
       const quest = questData.find(q => q.id === qc.quest_id)
       if (!quest) return
       // Extract flow_direction from reflection_text JSON if present

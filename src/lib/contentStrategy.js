@@ -3,6 +3,7 @@
  * Part of the AI Content Copilot system
  */
 import { supabase } from './supabaseClient'
+import { getWeekStartLocal as getWeekStartDate } from './dateUtils'
 
 // ============================================
 // CONSTANTS
@@ -428,13 +429,8 @@ function getContentGuidance(contentType, leadStrategy) {
 /**
  * Get Monday of current week as YYYY-MM-DD
  */
-export function getWeekStartDate(date = new Date()) {
-  const d = new Date(date)
-  const day = d.getDay()
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-  d.setDate(diff)
-  return d.toISOString().split('T')[0]
-}
+// Re-export from shared dateUtils (fixes UTC timezone bug)
+export { getWeekStartLocal as getWeekStartDate } from './dateUtils'
 
 /**
  * Get available content types based on time
