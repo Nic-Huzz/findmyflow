@@ -169,6 +169,19 @@ function PersonaAssessment() {
           console.error('Error saving lead profile:', leadError)
           // Don't block - user can still authenticate
         }
+
+        // Notify lead capture (fire-and-forget)
+        supabase.functions.invoke('notify-lead-capture', {
+          body: {
+            email: email.toLowerCase(),
+            name: userName,
+            source: 'Get Started — Signup',
+            meta: {
+              essence_archetype: essenceArchetype?.name,
+              protective_archetype: protectiveArchetype?.name
+            }
+          }
+        }).catch(() => {})
       }
 
       // Now send the verification code

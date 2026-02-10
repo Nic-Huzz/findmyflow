@@ -772,6 +772,19 @@ export default function PublicOfferAuditFlow() {
             }
           }
         })
+        // Notify lead capture (fire-and-forget)
+        supabase.functions.invoke('notify-lead-capture', {
+          body: {
+            email: submittedEmail,
+            name: submittedName,
+            source: 'Offer Audit',
+            meta: {
+              score: results.score,
+              top_gap: results.gaps[0]?.title || null,
+              strengths: results.strengths.length
+            }
+          }
+        }).catch(() => {})
       } catch (err) {
         console.error('Error saving assessment:', err)
       }

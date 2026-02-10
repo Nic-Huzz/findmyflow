@@ -241,6 +241,19 @@ export default function PublicMoneyModelFlow() {
             personalization_tokens: personalizationTokens
           }
         })
+
+        // Notify lead capture (fire-and-forget)
+        supabase.functions.invoke('notify-lead-capture', {
+          body: {
+            email: submittedEmail,
+            name: submittedName,
+            source: `Money Model — ${config.title || config.flowType}`,
+            meta: {
+              recommended_offer: topOffer?.offer?.name,
+              confidence: topOffer?.confidence
+            }
+          }
+        }).catch(() => {})
       } catch (err) {
         console.error('Error saving assessment:', err)
       }

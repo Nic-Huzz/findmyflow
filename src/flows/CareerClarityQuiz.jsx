@@ -500,6 +500,15 @@ const CareerClarityQuiz = () => {
             .update({ email: email })
             .eq('id', quizResultId);
         }
+
+        // Notify lead capture (fire-and-forget)
+        supabase.functions.invoke('notify-lead-capture', {
+          body: {
+            email: email,
+            source: 'Career Clarity Quiz'
+          }
+        }).catch(() => {});
+
         setEmailSubmitted(true);
       } catch (err) {
         console.error('Error saving email:', err);

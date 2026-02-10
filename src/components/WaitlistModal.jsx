@@ -88,6 +88,16 @@ export default function WaitlistModal({ isOpen, onClose }) {
         return
       }
 
+      // Notify lead capture (fire-and-forget)
+      supabase.functions.invoke('notify-lead-capture', {
+        body: {
+          email: formData.email.toLowerCase().trim(),
+          name: formData.name.trim(),
+          source: 'Waitlist Signup',
+          meta: { whatsapp: formData.whatsapp.trim() }
+        }
+      }).catch(() => {})
+
       setSuccess(true)
     } catch (err) {
       console.error('Waitlist signup error:', err)
