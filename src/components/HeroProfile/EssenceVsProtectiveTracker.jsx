@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 
 /**
  * Healing R-type configuration
@@ -37,12 +36,12 @@ function NsArchetypeCard({ nervousSystemArchetype }) {
 
       {/* Incomplete data nudge */}
       {isIncomplete && (
-        <Link to="/nervous-system" className="ns-upgrade-nudge">
+        <div className="ns-upgrade-nudge" style={{ cursor: 'default' }}>
           <span className="ns-upgrade-nudge-text">
-            Retake the assessment to unlock your full nervous system profile — including your primary limiting belief and rewiring plan.
+            A deeper nervous system profile — including your primary limiting belief and rewiring plan — is on the way.
           </span>
-          <span className="ns-upgrade-nudge-cta">Retake Now →</span>
-        </Link>
+          <span className="coming-soon-tag">Coming soon</span>
+        </div>
       )}
 
       {/* Full profile sections (only when data exists) */}
@@ -89,12 +88,7 @@ function NsArchetypeCard({ nervousSystemArchetype }) {
         </div>
       )}
 
-      {/* Only show bottom retake link when profile is complete */}
-      {!isIncomplete && (
-        <Link to="/nervous-system" className="hero-profile-link ns-archetype-link">
-          Retake Assessment →
-        </Link>
-      )}
+      {/* Retake link — disabled while NS flow is locked */}
     </div>
   )
 }
@@ -187,11 +181,8 @@ function EssenceVsProtectiveTracker({ voiceTracker, archetypes, nervousSystemArc
           <div className="voice-balance-empty">
             <p className="voice-empty-text">
               Track moments when your essence voice guides you vs when your
-              protective voice holds you back. Complete voice quests in the{' '}
-              <Link to="/7-day-challenge?tab=business" className="hero-profile-link">
-                7-Day Challenge →
-              </Link>{' '}
-              to start tracking.
+              protective voice holds you back.{' '}
+              <span className="coming-soon-tag">Coming soon</span>
             </p>
           </div>
         )}
@@ -209,9 +200,7 @@ function EssenceVsProtectiveTracker({ voiceTracker, archetypes, nervousSystemArc
           <div className="ns-archetype-empty">
             <p className="ns-empty-text">
               Discover how your nervous system affects your visibility and earning capacity.{' '}
-              <Link to="/nervous-system" className="hero-profile-link">
-                Take the Assessment →
-              </Link>
+              <span className="coming-soon-tag">Coming soon</span>
             </p>
           </div>
         )}
@@ -248,11 +237,8 @@ function EssenceVsProtectiveTracker({ voiceTracker, archetypes, nervousSystemArc
 
         {!hasHealingData && (
           <p className="healing-empty-text">
-            Complete healing quests (Recognise, Release, Rewire, Reconnect) in the{' '}
-            <Link to="/7-day-challenge?tab=healing" className="hero-profile-link">
-              7-Day Challenge →
-            </Link>{' '}
-            to track your inner growth journey.
+            Healing quests (Recognise, Release, Rewire, Reconnect) will track your inner growth journey.{' '}
+            <span className="coming-soon-tag">Coming soon</span>
           </p>
         )}
       </div>

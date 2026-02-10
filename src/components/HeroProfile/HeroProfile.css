@@ -1930,6 +1930,19 @@
   text-align: center;
 }
 
+.hero-profile .coming-soon-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.1);
+  padding: 2px 8px;
+  border-radius: 100px;
+  vertical-align: middle;
+}
+
 /* ---- Nervous System Archetype Section ---- */
 
 .hero-profile .ns-archetype-section {
