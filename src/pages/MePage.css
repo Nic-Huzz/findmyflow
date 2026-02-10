@@ -483,17 +483,198 @@
   50% { opacity: 1; }
 }
 
-/* SeeYourFlow inline journey mapper */
+/* ============================================================
+   INLINE JOURNEY MAPPER — theme overrides for /me card context
+   Flips SeeYourFlow from purple-bg/white-text to white-bg/dark-text
+   ============================================================ */
 .me-page .fj-journey-inline {
-  margin: 8px 16px 16px;
+  margin: 0 24px 24px;
 }
 
-.me-page .fj-journey-inline .see-your-flow {
-  margin-top: 0;
+/* Reset purple gradient → transparent (sits inside white card) */
+.me-page .fj-journey-inline .see-your-flow.inline {
+  background: none;
+  border-radius: 0;
+  margin: 0;
 }
 
 .me-page .fj-journey-inline .see-your-flow.inline .flow-content {
-  padding-top: 20px;
+  padding: 0 0 4px;
+}
+
+/* Loading spinner */
+.me-page .fj-journey-inline .see-your-flow .loading-spinner {
+  border-color: rgba(94, 23, 235, 0.2);
+  border-top-color: var(--brand-purple);
+}
+
+/* ---- Progress dots ---- */
+.me-page .fj-journey-inline .progress-dots .dot {
+  background: #e9ecef;
+}
+.me-page .fj-journey-inline .progress-dots .dot.active {
+  background: rgba(94, 23, 235, 0.25);
+}
+.me-page .fj-journey-inline .progress-dots .dot.current {
+  background: var(--brand-gold);
+  box-shadow: 0 0 8px rgba(233, 162, 59, 0.4);
+}
+
+/* ---- Step titles & text ---- */
+.me-page .fj-journey-inline .step-title {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 800;
+}
+.me-page .fj-journey-inline .step-subtitle {
+  color: var(--text-muted);
+}
+.me-page .fj-journey-inline .step-hint {
+  color: var(--text-secondary);
+}
+.me-page .fj-journey-inline .question-label {
+  color: var(--brand-purple);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* ---- Option buttons (Excited/Tired, Great/Resistance) ---- */
+.me-page .fj-journey-inline .option-btn {
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+  color: var(--text-primary);
+  padding: 14px 12px;
+}
+.me-page .fj-journey-inline .option-btn:hover {
+  background: #f0f0f0;
+  border-color: rgba(94, 23, 235, 0.3);
+}
+.me-page .fj-journey-inline .option-btn.selected {
+  background: rgba(233, 162, 59, 0.08);
+  border-color: var(--brand-gold);
+  box-shadow: 0 0 0 1px rgba(233, 162, 59, 0.15);
+}
+.me-page .fj-journey-inline .option-btn.small {
+  color: var(--text-primary);
+}
+
+/* ---- Direction preview ---- */
+.me-page .fj-journey-inline .direction-preview {
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+/* ---- Month picker ---- */
+.me-page .fj-journey-inline .month-picker {
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+  color: var(--text-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.5l-5-5h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+.me-page .fj-journey-inline .month-picker:focus {
+  border-color: var(--brand-purple);
+}
+.me-page .fj-journey-inline .month-picker option {
+  background: white;
+  color: var(--text-primary);
+}
+
+/* ---- Entry cards (highlights/challenges) ---- */
+.me-page .fj-journey-inline .entry-card {
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+}
+.me-page .fj-journey-inline .entry-card.highlight-card {
+  border-left: 4px solid var(--brand-gold);
+}
+.me-page .fj-journey-inline .entry-card.challenge-card {
+  border-left: 4px solid var(--brand-purple);
+}
+.me-page .fj-journey-inline .card-number {
+  color: var(--text-muted);
+}
+.me-page .fj-journey-inline .card-title-input {
+  background: white;
+  border-color: #e9ecef;
+  color: var(--text-primary);
+}
+.me-page .fj-journey-inline .card-title-input::placeholder {
+  color: var(--text-muted);
+}
+.me-page .fj-journey-inline .card-title-input:focus {
+  border-color: var(--brand-purple);
+}
+.me-page .fj-journey-inline .card-reflection {
+  background: white;
+  border-color: #e9ecef;
+  color: var(--text-primary);
+}
+.me-page .fj-journey-inline .card-reflection::placeholder {
+  color: var(--text-muted);
+}
+.me-page .fj-journey-inline .card-reflection:focus {
+  border-color: var(--brand-purple);
+}
+.me-page .fj-journey-inline .feeling-select label {
+  color: var(--text-secondary);
+}
+
+/* ---- Add card button ---- */
+.me-page .fj-journey-inline .add-card-btn {
+  border-color: #d0d5dd;
+  color: var(--text-secondary);
+}
+.me-page .fj-journey-inline .add-card-btn:hover {
+  border-color: var(--brand-purple);
+  color: var(--brand-purple);
+  background: rgba(94, 23, 235, 0.03);
+}
+
+/* ---- Action buttons ---- */
+.me-page .fj-journey-inline .next-btn {
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e;
+  font-weight: 800;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+}
+.me-page .fj-journey-inline .next-btn:hover:not(:disabled) {
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
+}
+.me-page .fj-journey-inline .next-btn:disabled {
+  opacity: 0.4;
+}
+.me-page .fj-journey-inline .skip-btn {
+  background: #f8f9fa;
+  border: 1.5px solid #e9ecef;
+  color: var(--text-secondary);
+}
+.me-page .fj-journey-inline .skip-btn:hover {
+  background: #f0f0f0;
+  border-color: rgba(94, 23, 235, 0.2);
+}
+
+/* ---- Summary step ---- */
+.me-page .fj-journey-inline .summary-title {
+  color: var(--text-primary);
+}
+.me-page .fj-journey-inline .summary-stats .stat-item .stat-value {
+  color: var(--brand-purple) !important;
+}
+.me-page .fj-journey-inline .summary-stats .stat-item .stat-label {
+  color: var(--text-muted) !important;
+}
+.me-page .fj-journey-inline .done-btn {
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e;
+  font-weight: 800;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+}
+.me-page .fj-journey-inline .done-btn:hover {
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
 }
 
 /* ============================================================
