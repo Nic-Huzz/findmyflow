@@ -536,6 +536,7 @@ export default function MePage() {
                 project={primaryProject}
                 onFlowEntryAdded={refreshFlowEntries}
                 onMappingComplete={() => setShowInlineMapper(false)}
+                inline
               />
             </div>
           ) : (

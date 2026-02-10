@@ -88,7 +88,7 @@ const MONTH_OPTIONS = generateMonthOptions()
 const getStorageKey = (userId, projectId) => `journey_mapping_${userId}_${projectId}`
 const getCompletedKey = (userId, projectId) => `journey_mapping_completed_${userId}_${projectId}`
 
-function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete }) {
+function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, inline }) {
   const { user } = useAuth()
 
   // Check if user has completed journey mapping
@@ -229,12 +229,12 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete })
     localStorage.setItem(storageKey, JSON.stringify(progressData))
   }, [currentStep, journeyData, user?.id, project?.id, hasCompletedMapping])
 
-  // Auto-expand for first-time users
+  // Auto-expand for first-time users (or always when inline)
   useEffect(() => {
-    if (hasCompletedMapping === false) {
+    if (inline || hasCompletedMapping === false) {
       setIsExpanded(true)
     }
-  }, [hasCompletedMapping])
+  }, [hasCompletedMapping, inline])
 
   // Convert month string to date (mid-month)
   const getDateFromMonth = (monthStr) => {
@@ -498,25 +498,27 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete })
   }
 
   return (
-    <div className={`see-your-flow ${isExpanded ? 'expanded' : ''}`}>
-      {/* Header */}
-      <button
-        className="flow-header"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        <div className="flow-header-left">
-          <span className="flow-icon">🌊</span>
-          <span className="flow-title">
-            {hasCompletedMapping ? "Log Your Flow" : "Map Your Journey"}
-          </span>
-        </div>
-        <div className="flow-header-right">
-          <span className={`expand-icon ${isExpanded ? 'rotated' : ''}`}>▾</span>
-        </div>
-      </button>
+    <div className={`see-your-flow ${isExpanded ? 'expanded' : ''} ${inline ? 'inline' : ''}`}>
+      {/* Header (hidden in inline mode) */}
+      {!inline && (
+        <button
+          className="flow-header"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <div className="flow-header-left">
+            <span className="flow-icon">🌊</span>
+            <span className="flow-title">
+              {hasCompletedMapping ? "Log Your Flow" : "Map Your Journey"}
+            </span>
+          </div>
+          <div className="flow-header-right">
+            <span className={`expand-icon ${isExpanded ? 'rotated' : ''}`}>▾</span>
+          </div>
+        </button>
+      )}
 
       {/* Content */}
-      {isExpanded && (
+      {(inline || isExpanded) && (
         <div className="flow-content">
           {/* JOURNEY MAPPING MODE (First-time users) */}
           {!hasCompletedMapping && (
