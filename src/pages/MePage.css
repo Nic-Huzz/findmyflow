@@ -508,16 +508,40 @@
   border-top-color: var(--brand-purple);
 }
 
-/* ---- Progress dots ---- */
+/* ---- "Start Here" heading ---- */
+.me-page .fj-journey-inline .inline-heading {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--brand-purple);
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+/* ---- Progress bar (quest-style segments) ---- */
+.me-page .fj-journey-inline .progress-dots {
+  gap: 4px;
+  margin-bottom: 16px;
+}
 .me-page .fj-journey-inline .progress-dots .dot {
+  flex: 1;
+  height: 6px;
+  width: auto;
+  border-radius: 3px;
   background: #e9ecef;
+  transform: none;
 }
 .me-page .fj-journey-inline .progress-dots .dot.active {
-  background: rgba(94, 23, 235, 0.25);
-}
-.me-page .fj-journey-inline .progress-dots .dot.current {
   background: var(--brand-gold);
   box-shadow: 0 0 8px rgba(233, 162, 59, 0.4);
+  transform: none;
+}
+.me-page .fj-journey-inline .progress-dots .dot.current {
+  background: rgba(233, 162, 59, 0.4);
+  animation: meDotPulse 2s ease-in-out infinite;
+  box-shadow: none;
+  transform: none;
 }
 
 /* ---- Step titles & text ---- */

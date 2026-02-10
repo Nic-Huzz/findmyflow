@@ -523,7 +523,8 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
           {/* JOURNEY MAPPING MODE (First-time users) */}
           {!hasCompletedMapping && (
             <>
-              {/* Progress Dots */}
+              {/* Progress */}
+              {inline && <h3 className="inline-heading">Start Here</h3>}
               <div className="progress-dots">
                 {[1, 2, 3, 4, 5].map(num => (
                   <div
