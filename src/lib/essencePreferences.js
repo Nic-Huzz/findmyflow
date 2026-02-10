@@ -40,7 +40,7 @@ export function getEssenceImagePath(profile) {
   if (profile?.custom_essence_image) return profile.custom_essence_image
   const name = profile?.essence_archetype
   if (!name) return null
-  return `/images/archetypes/lead-magnet-essence/${name.toLowerCase().replace(/\s+/g, '-')}.PNG`
+  return `/images/archetypes/lead-magnet-essence/${name.toLowerCase().replace(/\s+/g, '-')}.webp`
 }
 
 /**

@@ -743,7 +743,7 @@ const Profile = () => {
                 <>
                   <div className="stat-icon">
                     <img
-                      src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
+                      src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.webp'}`}
                       alt={userData.protective_archetype}
                       onError={(e) => {
                         e.target.style.display = 'none'
@@ -765,7 +765,7 @@ const Profile = () => {
               <div className="archetype-expanded">
                 <div className="archetype-expanded-header">
                   <img
-                    src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
+                    src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.webp'}`}
                     alt={userData.protective_archetype}
                   />
                   <div className="archetype-tag">Protective</div>

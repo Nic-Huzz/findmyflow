@@ -69,7 +69,7 @@ function HeroIdentityCard({ archetypes, userId, userEmail, projects, onLearnMore
 
   // Build original (default) image path for reset comparison
   const originalImage = essence?.originalName
-    ? `/images/archetypes/lead-magnet-essence/${essence.originalName.toLowerCase().replace(/\s+/g, '-')}.PNG`
+    ? `/images/archetypes/lead-magnet-essence/${essence.originalName.toLowerCase().replace(/\s+/g, '-')}.webp`
     : null
 
   // Extract skill/problem names from projects for prompt generator

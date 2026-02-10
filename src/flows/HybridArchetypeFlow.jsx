@@ -38,14 +38,25 @@ const HybridArchetypeFlow = ({
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Load archetype data
+  // Load archetype data and preload all images
   useEffect(() => {
     const loadArchetypes = async () => {
       try {
         const fileName = archetypeType === 'protective' ? 'protective-archetypes.json' : 'essence-archetypes.json'
         const response = await fetch(`/${fileName}`)
         const data = await response.json()
-        setArchetypes(data.archetypes || [])
+        const list = data.archetypes || []
+        setArchetypes(list)
+
+        // Preload all archetype images so swiping feels instant
+        const imagePath = archetypeType === 'protective' ? 'lead-magnet-protective' : 'lead-magnet-essence'
+        list.forEach(a => {
+          if (a.image) {
+            const img = new Image()
+            img.src = `/images/archetypes/${imagePath}/${a.image}`
+          }
+        })
+
         setLoading(false)
       } catch (error) {
         console.error('Error loading archetypes:', error)

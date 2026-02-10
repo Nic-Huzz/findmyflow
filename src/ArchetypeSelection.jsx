@@ -63,7 +63,7 @@ const ArchetypeSelection = () => {
         return `/images/archetypes/lead-magnet-protective/${protectiveData.image}`
       }
       const filename = archetype.toLowerCase().replace(/\s+/g, '-')
-      return `/images/archetypes/lead-magnet-protective/${filename}.png`
+      return `/images/archetypes/lead-magnet-protective/${filename}.webp`
     }
   }
 

@@ -512,7 +512,7 @@ function PersonaAssessment() {
         <div className="reveal-container archetype-reveal">
           <div className="archetype-image-container">
             <img
-              src={`/images/archetypes/lead-magnet-essence/${essenceArchetype?.image || essenceArchetype?.name?.toLowerCase().replace(/\s+/g, '-') + '.PNG'}`}
+              src={`/images/archetypes/lead-magnet-essence/${essenceArchetype?.image || essenceArchetype?.name?.toLowerCase().replace(/\s+/g, '-') + '.webp'}`}
               alt={essenceArchetype?.name}
               className="archetype-reveal-image"
               onError={(e) => { e.target.style.display = 'none' }}
@@ -596,7 +596,7 @@ function PersonaAssessment() {
         <div className="reveal-container archetype-reveal">
           <div className="archetype-image-container">
             <img
-              src={`/images/archetypes/lead-magnet-protective/${protectiveDisplay?.image || protectiveArchetype?.image || protectiveArchetype?.name?.toLowerCase().replace(/\s+/g, '-') + '.png'}`}
+              src={`/images/archetypes/lead-magnet-protective/${protectiveDisplay?.image || protectiveArchetype?.image || protectiveArchetype?.name?.toLowerCase().replace(/\s+/g, '-') + '.webp'}`}
               alt={protectiveArchetype?.name}
               className="archetype-reveal-image"
               onError={(e) => { e.target.style.display = 'none' }}

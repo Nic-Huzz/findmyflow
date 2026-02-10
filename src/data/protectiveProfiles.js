@@ -4,7 +4,7 @@
 const protectiveProfiles = {
   "People Pleaser": {
     summary: "This archetype developed to protect you from rejection and conflict.",
-    image: "people-pleaser.png",
+    image: "people-pleaser.webp",
     emotionalWound: {
       title: "Emotional Wound",
       fear: "Fear of rejection, abandonment, or being \"too much.\"",
@@ -54,7 +54,7 @@ const protectiveProfiles = {
 
   Performer: {
     summary: "This archetype developed to protect you from being unliked or rejected.",
-    image: "the-performer.png",
+    image: "the-performer.webp",
     emotionalWound: {
       title: "Emotional Wound",
       fear: "Wound around worth = achievement.",
@@ -104,7 +104,7 @@ const protectiveProfiles = {
 
   Controller: {
     summary: "This archetype developed to protect you from chaos and unpredictability.",
-    image: "the-controller.png",
+    image: "the-controller.webp",
     emotionalWound: {
       title: "Emotional Wound",
       fear: "Chaos, unpredictability, or emotional volatility.",
@@ -154,7 +154,7 @@ const protectiveProfiles = {
 
   Perfectionist: {
     summary: "This archetype developed to protect you from criticism and failure.",
-    image: "perfectionist.png",
+    image: "perfectionist.webp",
     emotionalWound: {
       title: "Emotional Wound",
       fear: "Shame around \"not good enough.\"",
@@ -204,7 +204,7 @@ const protectiveProfiles = {
 
   Ghost: {
     summary: "This archetype developed to protect you from being hurt or disappointed.",
-    image: "the-ghost.png",
+    image: "the-ghost.webp",
     emotionalWound: {
       title: "Emotional Wound",
       fear: "Overwhelm, emotional intensity, unsafe closeness.",

@@ -5,35 +5,35 @@
       "description": "It's safer for me to endlessly improve than finish and possibly fail",
       "voice": "You prepare. You polish. You wait until it's perfect. Nothing is ever ready because making a mistake feels like the end of the world.",
       "bio": "It's safer for me to endlessly improve than finish and possibly fail. You prepare. You polish. You wait until it's perfect. Nothing is ever ready because making a mistake feels like the end of the world.",
-      "image": "perfectionist.png"
+      "image": "perfectionist.webp"
     },
     {
       "name": "People Pleaser",
       "description": "It's safer for me to stay agreeable, helpful, and low-maintenance than possibly upset others",
       "voice": "You say yes when you mean no. You put everyone else first. You abandon yourself to keep others happy because your needs never seemed to matter.",
       "bio": "It's safer for me to stay agreeable, helpful, and low-maintenance than possibly upset others. You say yes when you mean no. You put everyone else first. You abandon yourself to keep others happy because your needs never seemed to matter.",
-      "image": "people-pleaser.png"
+      "image": "people-pleaser.webp"
     },
     {
       "name": "Controller",
       "description": "It's safer for me to manage everything to ensure the outcome is positive",
       "voice": "You grip. You manage. You can't delegate, can't trust, can't let go. You white-knuckle through life because if you're not in control, everything falls apart.",
       "bio": "It's safer for me to manage everything to ensure the outcome is positive. You grip. You manage. You can't delegate, can't trust, can't let go. You white-knuckle through life because if you're not in control, everything falls apart.",
-      "image": "the-controller.png"
+      "image": "the-controller.webp"
     },
     {
       "name": "Performer",
       "description": "It's safer for me to do what's needed to be liked than leave it to chance",
       "voice": "You achieve. You impress. You're always ON. You earn love through what you do because who you are never felt like enough.",
       "bio": "It's safer for me to do what's needed to be liked than leave it to chance. You achieve. You impress. You're always ON. You earn love through what you do because who you are never felt like enough.",
-      "image": "the-performer.png"
+      "image": "the-performer.webp"
     },
     {
       "name": "Ghost",
       "description": "It's safer for me to hide or withdraw than show up and possibly be hurt",
       "voice": "You disappear. You hide. You stay invisible. You avoid being seen at all costs because being seen feels dangerous.",
       "bio": "It's safer for me to hide or withdraw than show up and possibly be hurt. You disappear. You hide. You stay invisible. You avoid being seen at all costs because being seen feels dangerous.",
-      "image": "the-ghost.png"
+      "image": "the-ghost.webp"
     }
   ]
 }
