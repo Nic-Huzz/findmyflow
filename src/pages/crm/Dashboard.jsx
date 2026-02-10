@@ -63,15 +63,15 @@ export default function Dashboard() {
       const [dealsResult, warmLeadsResult, prevWarmLeadsResult, scores, lastScores] = await Promise.all([
         fetchDeals(user.id),
         supabase
-          .from('crm_warm_leads')
+          .from('crm_contacts')
           .select('id', { count: 'exact', head: true })
           .eq('user_id', user.id)
-          .in('status', ['to_contact', 'reached_out', 'in_conversation', 'meeting_booked']),
+          .in('outreach_status', ['to_contact', 'reached_out', 'in_conversation', 'meeting_booked']),
         supabase
-          .from('crm_warm_leads')
+          .from('crm_contacts')
           .select('id', { count: 'exact', head: true })
           .eq('user_id', user.id)
-          .in('status', ['to_contact', 'reached_out', 'in_conversation', 'meeting_booked'])
+          .in('outreach_status', ['to_contact', 'reached_out', 'in_conversation', 'meeting_booked'])
           .lt('created_at', thisWeekStart.toISOString()),
         getWeeklyScores(user.id, weekStart),
         getLastWeekScores(user.id),

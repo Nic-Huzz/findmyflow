@@ -129,8 +129,9 @@ BEGIN
   SELECT COUNT(*) INTO row_count FROM crm_email_sequences WHERE user_id = target_user_id;
   RAISE NOTICE 'crm_email_sequences: % rows', row_count;
 
-  SELECT COUNT(*) INTO row_count FROM crm_warm_leads WHERE user_id = target_user_id;
-  RAISE NOTICE 'crm_warm_leads: % rows', row_count;
+  -- crm_warm_leads merged into crm_contacts (outreach_status IS NOT NULL = warm lead)
+  SELECT COUNT(*) INTO row_count FROM crm_contacts WHERE user_id = target_user_id AND outreach_status IS NOT NULL;
+  RAISE NOTICE 'crm_contacts (outreach): % rows', row_count;
 
   RAISE NOTICE '';
 

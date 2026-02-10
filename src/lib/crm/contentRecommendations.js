@@ -37,10 +37,10 @@ export async function getContentRecommendations(userId) {
         .eq('user_id', userId)
         .gte('created_at', fourteenDaysISO),
       supabase
-        .from('crm_warm_leads')
-        .select('temperature, status')
+        .from('crm_contacts')
+        .select('temperature, outreach_status')
         .eq('user_id', userId)
-        .in('status', ['to_contact', 'reached_out', 'in_conversation', 'meeting_booked']),
+        .in('outreach_status', ['to_contact', 'reached_out', 'in_conversation', 'meeting_booked']),
     ])
 
     const deals = dealsResult.data || []

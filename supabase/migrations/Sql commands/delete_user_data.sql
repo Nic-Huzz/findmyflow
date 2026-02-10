@@ -190,12 +190,12 @@ BEGIN
   END;
 
   BEGIN
-    DELETE FROM crm_warm_leads WHERE user_id = ANY(target_user_ids);
+    DELETE FROM crm_warm_leads_deprecated WHERE user_id = ANY(target_user_ids);
     GET DIAGNOSTICS row_count = ROW_COUNT;
     total_deleted := total_deleted + row_count;
-    RAISE NOTICE 'crm_warm_leads: % deleted', row_count;
+    RAISE NOTICE 'crm_warm_leads_deprecated: % deleted', row_count;
   EXCEPTION WHEN undefined_table THEN
-    RAISE NOTICE 'crm_warm_leads: table does not exist';
+    RAISE NOTICE 'crm_warm_leads_deprecated: table does not exist (already merged into crm_contacts)';
   END;
 
   RAISE NOTICE '';

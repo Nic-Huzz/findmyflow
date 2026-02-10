@@ -29,7 +29,7 @@ const MILESTONE_CONFIG = {
   stage: { color: '#10b981', icon: '📊', label: 'Stage Graduation' },
 }
 
-function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }) {
+function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries, showEmpty = false }) {
   const { user } = useAuth()
   const scrollRef = useRef(null)
 
@@ -46,11 +46,16 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
     if (user?.id && projectId) fetchEntries()
   }, [user, projectId, externalEntries])
 
-  // Auto-scroll to right end when entries load
+  // Auto-scroll to show the latest entry (right end), but only when there are enough entries to overflow
   useEffect(() => {
     if (entries.length > 0 && scrollRef.current) {
       setTimeout(() => {
-        scrollRef.current?.scrollTo({ left: scrollRef.current.scrollWidth, behavior: 'smooth' })
+        const container = scrollRef.current
+        if (!container) return
+        // Only scroll if content overflows the visible area
+        if (container.scrollWidth > container.clientWidth) {
+          container.scrollTo({ left: container.scrollWidth - container.clientWidth, behavior: 'smooth' })
+        }
       }, 400)
     }
   }, [entries])
@@ -88,13 +93,36 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
     )
   }
 
-  if (entries.length === 0) return null
+  if (entries.length === 0) {
+    if (!showEmpty) return null
+    // Ghost river placeholder
+    return (
+      <div className="h-flow-river">
+        <div style={{ height: 160, position: 'relative', padding: '0 24px' }}>
+          <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }}>
+            <path
+              d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60"
+              fill="none" stroke="#e9ecef" strokeWidth="4" strokeLinecap="round" opacity="0.5"
+            />
+            <path
+              d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60"
+              fill="none" stroke="#adb5bd" strokeWidth="2" strokeLinecap="round" strokeDasharray="6 4" opacity="0.3"
+            />
+            <circle cx="40" cy="80" r="8" fill="#5e17eb" stroke="white" strokeWidth="2" />
+            <text x="40" y="80" textAnchor="middle" dominantBaseline="central" fill="white" fontSize="7" fontWeight="800">🚩</text>
+            <text x="40" y="102" textAnchor="middle" fill="#adb5bd" fontSize="8" fontWeight="700">Start</text>
+            <text x="200" y="140" textAnchor="middle" fill="#adb5bd" fontSize="10">Log a compass entry to start your river</text>
+          </svg>
+        </div>
+      </div>
+    )
+  }
 
   // Build path + nodes
   const nodeSpacing = 70
   const startX = 40
   const centerY = 110
-  const svgWidth = Math.max(900, startX + entries.length * nodeSpacing + 60)
+  const svgWidth = startX + entries.length * nodeSpacing + 60
 
   const points = entries.map((entry, i) => {
     const x = startX + (i + 1) * nodeSpacing

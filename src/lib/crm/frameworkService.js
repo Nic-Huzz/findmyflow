@@ -18,10 +18,10 @@ export const FRAMEWORKS = [
     defaultCycle: 'daily',
     points: 15,
     source: {
-      table: 'crm_warm_leads',
-      statusField: 'status',
+      table: 'crm_contacts',
+      statusField: 'outreach_status',
       statusValue: 'reached_out',
-      dateField: 'status_entered_at',
+      dateField: 'outreach_status_entered_at',
     },
   },
   {
@@ -101,9 +101,9 @@ export const FRAMEWORKS = [
 // ============================================
 
 const QUERY_BUILDERS = {
-  crm_warm_leads: (userId, fw, since) =>
+  crm_contacts: (userId, fw, since) =>
     supabase
-      .from('crm_warm_leads')
+      .from('crm_contacts')
       .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
       .eq(fw.source.statusField, fw.source.statusValue)

@@ -189,9 +189,8 @@ BEGIN
   GET DIAGNOSTICS updated_count = ROW_COUNT;
   RAISE NOTICE 'crm_email_sequences: % rows', updated_count;
 
-  UPDATE crm_warm_leads SET user_id = new_user_id WHERE user_id = old_user_id;
-  GET DIAGNOSTICS updated_count = ROW_COUNT;
-  RAISE NOTICE 'crm_warm_leads: % rows', updated_count;
+  -- crm_warm_leads merged into crm_contacts (outreach fields now on crm_contacts)
+  -- No separate transfer needed
 
   -- =============================================
   -- GROAN MATRIX

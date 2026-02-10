@@ -5,7 +5,7 @@
 
 import { TABLE_CONFIGS } from '../../../lib/crm/csvImportService'
 
-const TABLE_ORDER = ['crm_contacts', 'crm_warm_leads', 'sales_deals']
+const TABLE_ORDER = ['crm_contacts', 'sales_deals']
 
 export default function TableSelector({ onSelect, onBack, selectedTable }) {
   return (

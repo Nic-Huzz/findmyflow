@@ -15,7 +15,7 @@ import ChallengeOnboarding from './components/ChallengeOnboarding'
 import ChallengeLeaderboard from './components/ChallengeLeaderboard'
 import ChallengeFilters from './components/ChallengeFilters'
 import QuestCard from './components/QuestCard'
-import FlowMapRiver from './components/FlowMapRiver'
+import HorizontalFlowRiver from './components/HorizontalFlowRiver'
 import GroansSummary from './components/GroansSummary'
 import HealingSummary from './components/HealingSummary'
 import WeeklyPlanningFlow from './components/WeeklyPlanningFlow'
@@ -1326,23 +1326,6 @@ function Challenge() {
                 onTabChange={setActiveStageTab}
                 flowFinderComplete={flowFinderComplete}
               />
-              {/* Sub-tabs: Tasks | Voices (or Deep Dive for Flow Finder) - hidden for Groans stage only */}
-              {activeStageTab !== 0.5 && (
-                <div className="business-sub-tabs">
-                  <button
-                    className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
-                    onClick={() => setBusinessSubTab('tasks')}
-                  >
-                    Tasks
-                  </button>
-                  <button
-                    className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
-                    onClick={() => setBusinessSubTab('voices')}
-                  >
-                    {activeStageTab === 0 ? 'Deep Dive' : 'Voices'}
-                  </button>
-                </div>
-              )}
             </>
           ) : (
             <div className="no-project-prompt">
@@ -1450,31 +1433,24 @@ function Challenge() {
           </div>
         )}
 
-        {/* Category Points Summary */}
-        <div className="category-points-summary">
-          <div className="category-point-item total">
-            <span>Category Total</span>
-            <span className="point-value">{categoryPoints.total}</span>
+
+        {/* Sub-tabs: Tasks | Voices (or Deep Dive for Flow Finder) - only for Business, hidden for Groans stage */}
+        {activeCategory === 'Business' && selectedProject && activeStageTab !== 0.5 && (
+          <div className="business-sub-tabs">
+            <button
+              className={`sub-tab ${businessSubTab === 'tasks' ? 'active' : ''}`}
+              onClick={() => setBusinessSubTab('tasks')}
+            >
+              Tasks
+            </button>
+            <button
+              className={`sub-tab ${businessSubTab === 'voices' ? 'active' : ''}`}
+              onClick={() => setBusinessSubTab('voices')}
+            >
+              {activeStageTab === 0 ? 'Deep Dive' : 'Voices'}
+            </button>
           </div>
-          <button
-            className="category-point-item summary-card-btn"
-            onClick={() => {
-              if (activeCategory === 'Groans') setActiveCategory('GroansSummary')
-              if (activeCategory === 'Healing') setActiveCategory('HealingSummary')
-            }}
-            disabled={activeCategory !== 'Groans' && activeCategory !== 'Healing'}
-          >
-            <span className="summary-button-label">Summary</span>
-            <span className="summary-button-value">📊</span>
-          </button>
-          <button
-            className="category-point-item leaderboard-button"
-            onClick={() => setActiveCategory('Leaderboard')}
-          >
-            <span className="leaderboard-button-label">Leaderboard</span>
-            <span className="leaderboard-button-value">🏆</span>
-          </button>
-        </div>
+        )}
 
         {/* Groans Tab - Courage Matrix */}
         {activeCategory === 'Groans' && (
@@ -1721,14 +1697,31 @@ function Challenge() {
               </div>
             )}
 
-            {/* Flow Map River */}
+            {/* Flow Journey River */}
             {selectedProject && (
               <div className="flow-map-section">
                 <h2 className="section-title">Your Flow Journey</h2>
-                <FlowMapRiver
+                <p className="flow-journey-hint">Swipe to explore your river — compass entries and milestones show your journey.</p>
+                <HorizontalFlowRiver
                   projectId={selectedProject.id}
-                  limit={10}
+                  limit={30}
+                  showEmpty
                 />
+                <div className="flow-journey-legend">
+                  <div className="fj-legend-row">
+                    <span className="fj-legend-label">Compass</span>
+                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#10b981' }} /> Flow</div>
+                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#3b82f6' }} /> Redirect</div>
+                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#fbbf24' }} /> Honour</div>
+                    <div className="fj-legend-item"><div className="fj-legend-dot" style={{ background: '#ef4444' }} /> Rest</div>
+                  </div>
+                  <div className="fj-legend-row">
+                    <span className="fj-legend-label">Challenge</span>
+                    <div className="fj-legend-item"><span className="fj-legend-icon">⚡</span> Quest</div>
+                    <div className="fj-legend-item"><span className="fj-legend-icon">🦁</span> Groan</div>
+                    <div className="fj-legend-item"><span className="fj-legend-icon">📊</span> Stage</div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

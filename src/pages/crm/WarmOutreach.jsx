@@ -1,6 +1,6 @@
 /**
  * Warm Outreach - Follow Up with Engaged Leads
- * Track and manage warm lead outreach conversations
+ * Filtered view of crm_contacts where outreach_status IS NOT NULL
  */
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -48,57 +48,6 @@ const SOURCE_CHANNELS = Object.keys(ENGAGEMENT_BY_SOURCE)
 
 const PLATFORMS = ['Instagram', 'LinkedIn', 'Twitter/X', 'Facebook', 'Email', 'Other']
 
-/**
- * Auto-sync warm lead to crm_contacts (upsert by user_id + name)
- */
-async function syncLeadToContact(userId, leadData) {
-  const engagement = ALL_ENGAGEMENT_TYPES.find(e => e.id === leadData.engagement_type)
-
-  const contactFields = {
-    user_id: userId,
-    name: leadData.name,
-    email: leadData.email || null,
-    phone: leadData.phone || null,
-    company: leadData.company || null,
-    social_handle: leadData.handle || null,
-    source: leadData.source || 'Content',
-    lifecycle_stage: 'lead',
-    tags: [leadData.platform, engagement?.label].filter(Boolean),
-    notes: leadData.notes || null,
-  }
-
-  // Check if contact already exists for this user+name
-  const { data: existing } = await supabase
-    .from('crm_contacts')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('name', leadData.name)
-    .maybeSingle()
-
-  if (existing) {
-    // Update existing — don't overwrite lifecycle_stage
-    const { id, ...updateFields } = contactFields
-    delete updateFields.user_id
-    delete updateFields.lifecycle_stage
-    const { data, error } = await supabase
-      .from('crm_contacts')
-      .update(updateFields)
-      .eq('id', existing.id)
-      .select()
-      .single()
-    if (error) throw error
-    return data
-  } else {
-    const { data, error } = await supabase
-      .from('crm_contacts')
-      .insert(contactFields)
-      .select()
-      .single()
-    if (error) throw error
-    return data
-  }
-}
-
 export default function WarmOutreach() {
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -121,16 +70,17 @@ export default function WarmOutreach() {
     return () => document.body.classList.remove('modal-active')
   }, [showAddModal, promptGenerator.isOpen])
 
-  // Load leads
+  // Load leads (contacts with outreach_status set)
   const loadLeads = useCallback(async () => {
     if (!user?.id) return
 
     try {
       const { data, error } = await supabase
-        .from('crm_warm_leads')
+        .from('crm_contacts')
         .select('*')
         .eq('user_id', user.id)
-        .order('priority', { ascending: false })
+        .not('outreach_status', 'is', null)
+        .order('priority', { ascending: false, nullsFirst: false })
         .order('updated_at', { ascending: false })
 
       if (error) throw error
@@ -151,15 +101,15 @@ export default function WarmOutreach() {
   // Filtered leads
   const filteredLeads = useMemo(() => {
     if (filterStatus === 'all') return leads
-    return leads.filter(l => l.status === filterStatus)
+    return leads.filter(l => l.outreach_status === filterStatus)
   }, [leads, filterStatus])
 
   // Stats
   const stats = useMemo(() => {
     const total = leads.length
-    const toContact = leads.filter(l => l.status === 'to_contact').length
-    const inConversation = leads.filter(l => l.status === 'in_conversation').length
-    const booked = leads.filter(l => l.status === 'meeting_booked').length
+    const toContact = leads.filter(l => l.outreach_status === 'to_contact').length
+    const inConversation = leads.filter(l => l.outreach_status === 'in_conversation').length
+    const booked = leads.filter(l => l.outreach_status === 'meeting_booked').length
 
     return { total, toContact, inConversation, booked }
   }, [leads])
@@ -177,29 +127,51 @@ export default function WarmOutreach() {
     hapticLight()
   }
 
-  const handleDeleteLead = async (leadId) => {
-    if (!confirm('Are you sure you want to delete this lead?')) return
-
+  const handleRemoveFromOutreach = async (contactId) => {
     try {
       const { error } = await supabase
-        .from('crm_warm_leads')
-        .delete()
-        .eq('id', leadId)
+        .from('crm_contacts')
+        .update({
+          outreach_status: null,
+          priority: null,
+          temperature: null,
+          engagement_type: null,
+          outreach_status_entered_at: null,
+        })
+        .eq('id', contactId)
         .eq('user_id', user.id)
 
       if (error) throw error
-      setLeads(leads.filter(l => l.id !== leadId))
+      setLeads(leads.filter(l => l.id !== contactId))
       hapticMedium()
     } catch (err) {
-      console.error('Error deleting lead:', err)
+      console.error('Error removing from outreach:', err)
+    }
+  }
+
+  const handleDeleteContact = async (contactId) => {
+    if (!confirm('This removes the contact entirely (not just from outreach). Are you sure?')) return
+
+    try {
+      const { error } = await supabase
+        .from('crm_contacts')
+        .delete()
+        .eq('id', contactId)
+        .eq('user_id', user.id)
+
+      if (error) throw error
+      setLeads(leads.filter(l => l.id !== contactId))
+      hapticMedium()
+    } catch (err) {
+      console.error('Error deleting contact:', err)
     }
   }
 
   const handleStatusChange = async (lead, newStatus) => {
     try {
       const { data, error } = await supabase
-        .from('crm_warm_leads')
-        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .from('crm_contacts')
+        .update({ outreach_status: newStatus, updated_at: new Date().toISOString() })
         .eq('id', lead.id)
         .eq('user_id', user.id)
         .select()
@@ -282,7 +254,7 @@ export default function WarmOutreach() {
               className={`filter-chip ${filterStatus === status.id ? 'active' : ''}`}
               onClick={() => setFilterStatus(status.id)}
             >
-              {status.icon} ({leads.filter(l => l.status === status.id).length})
+              {status.icon} ({leads.filter(l => l.outreach_status === status.id).length})
             </button>
           ))}
         </div>
@@ -306,7 +278,7 @@ export default function WarmOutreach() {
           ) : (
             <div className="wo-list">
               {filteredLeads.map(lead => {
-                const status = OUTREACH_STATUS.find(s => s.id === lead.status) || OUTREACH_STATUS[0]
+                const status = OUTREACH_STATUS.find(s => s.id === lead.outreach_status) || OUTREACH_STATUS[0]
                 const engagement = ALL_ENGAGEMENT_TYPES.find(e => e.id === lead.engagement_type)
 
                 return (
@@ -336,7 +308,7 @@ export default function WarmOutreach() {
                     <div className="wo-item-actions">
                       <select
                         className="wo-status-select"
-                        value={lead.status}
+                        value={lead.outreach_status}
                         onClick={e => e.stopPropagation()}
                         onChange={e => handleStatusChange(lead, e.target.value)}
                         style={{ borderColor: status.color }}
@@ -373,7 +345,8 @@ export default function WarmOutreach() {
               setShowAddModal(false)
               setEditingLead(null)
             }}
-            onDelete={handleDeleteLead}
+            onRemoveFromOutreach={handleRemoveFromOutreach}
+            onDeleteContact={handleDeleteContact}
           />
         )}
 
@@ -387,7 +360,7 @@ export default function WarmOutreach() {
 /**
  * Warm Lead Add/Edit Modal
  */
-function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
+function WarmLeadModal({ lead, userId, onClose, onSave, onRemoveFromOutreach, onDeleteContact }) {
   const [saving, setSaving] = useState(false)
 
   // Merge old last_message into notes for existing leads
@@ -402,9 +375,9 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
     company: lead?.company || '',
     source: lead?.source || 'Content',
     platform: lead?.platform || 'Instagram',
-    handle: lead?.handle || '',
+    handle: lead?.social_handle || '',
     engagement_type: lead?.engagement_type || 'liked_post',
-    status: lead?.status || 'to_contact',
+    status: lead?.outreach_status || 'to_contact',
     priority: lead?.priority || 5,
     notes: initialNotes,
   })
@@ -425,25 +398,33 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
 
     setSaving(true)
     try {
-      const leadFields = {
+      const contactFields = {
         name: form.name.trim(),
         email: form.email.trim() || null,
         phone: form.phone.trim() || null,
         company: form.company.trim() || null,
         source: form.source,
         platform: form.platform,
-        handle: form.handle.trim() || null,
+        social_handle: form.handle.trim() || null,
         engagement_type: form.engagement_type,
-        status: form.status,
+        outreach_status: form.status,
         priority: parseInt(form.priority),
         notes: form.notes.trim() || null,
       }
 
       let savedResult
+      // Clear stale last_message since notes now contains the merged content
+      contactFields.last_message = null
+      // Set outreach_status_entered_at on new leads (trigger only fires on UPDATE)
+      if (!lead?.id) {
+        contactFields.outreach_status_entered_at = new Date().toISOString()
+      }
+
       if (lead?.id) {
+        // Editing existing contact
         const { data, error } = await supabase
-          .from('crm_warm_leads')
-          .update(leadFields)
+          .from('crm_contacts')
+          .update(contactFields)
           .eq('id', lead.id)
           .eq('user_id', userId)
           .select()
@@ -452,31 +433,37 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
         if (error) throw error
         savedResult = data
       } else {
-        const { data, error } = await supabase
-          .from('crm_warm_leads')
-          .insert({ user_id: userId, ...leadFields })
-          .select()
-          .single()
+        // New lead — case-insensitive check for existing contact by name
+        const { data: matches } = await supabase
+          .from('crm_contacts')
+          .select('id')
+          .eq('user_id', userId)
+          .ilike('name', form.name.trim())
+          .limit(1)
 
-        if (error) throw error
-        savedResult = data
-      }
+        if (matches?.length > 0) {
+          // Update existing contact with outreach fields
+          const { data, error } = await supabase
+            .from('crm_contacts')
+            .update(contactFields)
+            .eq('id', matches[0].id)
+            .eq('user_id', userId)
+            .select()
+            .single()
 
-      // Auto-sync to contacts
-      try {
-        await syncLeadToContact(userId, {
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          company: form.company.trim(),
-          source: form.source,
-          platform: form.platform,
-          handle: form.handle.trim(),
-          engagement_type: form.engagement_type,
-          notes: form.notes.trim(),
-        })
-      } catch (contactErr) {
-        console.error('Error syncing contact:', contactErr)
+          if (error) throw error
+          savedResult = data
+        } else {
+          // Insert new contact
+          const { data, error } = await supabase
+            .from('crm_contacts')
+            .insert({ user_id: userId, lifecycle_stage: 'lead', ...contactFields })
+            .select()
+            .single()
+
+          if (error) throw error
+          savedResult = data
+        }
       }
 
       onSave(savedResult)
@@ -641,16 +628,28 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onDelete }) {
 
           <div className="modal-actions">
             {lead && (
-              <button
-                type="button"
-                className="btn-delete"
-                onClick={() => {
-                  onDelete(lead.id)
-                  onClose()
-                }}
-              >
-                Delete
-              </button>
+              <div className="modal-actions-left">
+                <button
+                  type="button"
+                  className="btn-remove-outreach"
+                  onClick={() => {
+                    onRemoveFromOutreach(lead.id)
+                    onClose()
+                  }}
+                >
+                  Remove from Outreach
+                </button>
+                <button
+                  type="button"
+                  className="btn-delete"
+                  onClick={() => {
+                    onDeleteContact(lead.id)
+                    onClose()
+                  }}
+                >
+                  Delete Contact
+                </button>
+              </div>
             )}
             <div className="modal-actions-right">
               <button type="button" className="btn-cancel" onClick={onClose}>

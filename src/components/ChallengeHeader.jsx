@@ -75,16 +75,14 @@ function ChallengeHeader({
       {/* Row 2: Quick actions - Voices, Settings, Edit, Flow */}
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
-          {userData?.essence_archetype && (
-            <div
-              className="challenge-day archetype-badge"
-              title="View your voices"
-              onClick={() => navigate('/archetypes')}
-              style={{ cursor: 'pointer' }}
-            >
-              🎭 Voices
-            </div>
-          )}
+          <div
+            className="challenge-day archetype-badge"
+            title="View leaderboard"
+            onClick={onLeaderboardClick}
+            style={{ cursor: 'pointer' }}
+          >
+            🏆 Leaderboard
+          </div>
           <div className="settings-menu-container" ref={settingsMenuRef}>
             <button
               className="challenge-day settings-badge"
@@ -125,16 +123,6 @@ function ChallengeHeader({
               </div>
             )}
           </div>
-          {/* Edit Plan button */}
-          {onEditPlan && (
-            <div
-              className="challenge-day edit-badge"
-              onClick={onEditPlan}
-              style={{ cursor: 'pointer' }}
-            >
-              ✏️ Edit
-            </div>
-          )}
           {/* Week Type Badge */}
           {weekTypeInfo && (
             <div

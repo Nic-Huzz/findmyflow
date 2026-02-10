@@ -689,9 +689,16 @@
   border-top: 1px solid var(--border-color);
 }
 
+.wo-modal-form .modal-actions-left {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .wo-modal-form .modal-actions-right {
   display: flex;
   gap: 0.75rem;
+  margin-left: auto;
 }
 
 .wo-modal-form .btn-cancel {
@@ -749,6 +756,24 @@
 .wo-modal-form .btn-delete:hover {
   background: #fee2e2;
   border-color: #f87171;
+  transform: translateY(-1px);
+}
+
+.wo-modal-form .btn-remove-outreach {
+  padding: 0.875rem 1.25rem;
+  background: #fffbeb;
+  border: 2px solid #fde68a;
+  border-radius: var(--radius-sm);
+  color: #92400e;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wo-modal-form .btn-remove-outreach:hover {
+  background: #fef3c7;
+  border-color: #fbbf24;
   transform: translateY(-1px);
 }
 

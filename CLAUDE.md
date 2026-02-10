@@ -94,7 +94,7 @@ docs/                         # 33+ documentation files
 
 ## Routes
 
-**Core**: `/` (Login) | `/me` (Profile) | `/7-day-challenge` | `/library` | `/flow-compass` | `/feedback`
+**Core**: `/` (Login) | `/me` (Profile) | `/7-day-challenge` | `/library` | `/flow-compass` | `/feedback` | `/hero-profile` (Hero Command Center)
 
 **Archetypes**: `/archetypes`, `/archetypes/essence`, `/archetypes/protective`
 
@@ -123,7 +123,11 @@ Stage flags: `alwaysAccessible`, `isUserLevel`, `isGroansStage`
 
 Categories: Groans (Recognise/Rewire/Reconnect), Healing (Recognise/Release), Flow Finder, Bonus, Tracker
 
-Key files: `useChallengeData.js` (state), `QuestCard.jsx` (rendering), `ChallengeHeader/Filters/Leaderboard.jsx`
+Key files: `Challenge.jsx` (main page), `useChallengeData.js` (state), `QuestCard.jsx` (rendering), `ChallengeHeader.jsx`, `ChallengeFilters.jsx`, `ChallengeLeaderboard.jsx`
+
+Layout: Header (streak, leaderboard badge, settings cog, week type) → Category tabs → Stage tabs (Business only) → Artifact progress → Sub-tabs (Tasks | Voices/Deep Dive) → Quest cards. Tracker tab includes `HorizontalFlowRiver` with compass/challenge legend.
+
+Weekly Planning: Auto-skips "Review Last Week" step for new users with no previous data (0 quests, 0 points).
 
 ### 3. Money Model Flows
 
@@ -152,11 +156,10 @@ Three towers with 34 pages and 42 components:
 **Attract Tower**: Content Generator, Content Queue/History, Pages Manager, Marketing Hub
 - PromptGenerator integrated for AI content generation
 
-**Nurture Tower**: Contacts (full CRUD, lifecycle stages, tagging), Email Sequences (step editor, copy-to-clipboard), Warm Outreach (priority scoring, contact promotion), Sales Pipeline (deals, scripts)
-- Warm Lead → Contact promotion checkbox
+**Nurture Tower**: Contacts (full CRUD, lifecycle stages, tagging), Email Sequences (step editor, copy-to-clipboard), Warm Outreach (filtered view of contacts with outreach_status, priority scoring), Sales Pipeline (deals, scripts)
 
 **Tools Tower**: Analytics, Calculators (PTUF/LTV/CAC), Sales Scripts (15 Hormozi scripts), Execute (gamified tasks), Business Systems (4-phase flywheel), CSV Import (6-step wizard)
-- Import supports: Contacts, Warm Leads, Deals
+- Import supports: Contacts, Deals
 
 **Dashboard**: Stats grid, DailyActions widget (today's content + stale leads), EcosystemStatusWidget (flywheel progress), Quick Actions
 
@@ -188,6 +191,26 @@ All use purple gradient background; gold for selection.
 ### 11. Journey Mapping (SeeYourFlow)
 
 First-time: 5 steps mapping journey highlights/challenges. Returning: Two-factor check-in (Excited/Tired × Great/Resistance). Saves to localStorage.
+
+### 12. /me Page (MePage.jsx)
+
+Dashboard hub with three sections: Hero Profile (archetype, level, XP), Flow Journey (HorizontalFlowRiver with compass + challenge entries, stats rings, SeeYourFlow inline mapper for first-time), Today's Quest (next stage quest with progress dots). Design: purple gradient hero cards, gold CTAs, glow orbs. See `docs/page-component-design-guide.md`.
+
+### 13. Hero Profile (/hero-profile)
+
+`HeroCommandCenter.jsx` — project-specific hero profile with identity triad, project expression cards, play-list progress. Route: `/hero-profile` or `/hero-profile/:projectId`.
+
+### 14. Archetypes (/archetypes/essence)
+
+`EssenceProfile.jsx` — displays user's essence archetype profile, strengths, shadow aspects, and integration guidance.
+
+### 15. Library of Answers (/library)
+
+`LibraryOfAnswers.jsx` — three GradientWheel visualizations (Skills, Problems, Personas) showing lit segments from Flow Finder completions. `showLitLabels` prop displays labels on lit segments outside the wheel with multi-word wrapping.
+
+### 16. Flow Compass (/flow-compass)
+
+`FlowCompassPage.jsx` — energy tracking with N/E/S/W compass directions. Restyled to match /me design (purple gradient quick-log hero, white project cards, gold CTAs, glass morphism). Project selector for multi-project users. No sidebar.
 
 ## Architecture Patterns
 
@@ -255,7 +278,7 @@ const { celebrateTaskComplete, celebrateLevelUp } = useCelebrations()
 `attraction_offer_assessments` | `upsell_assessments` | `downsell_assessments` | `continuity_assessments` | `leads_assessments` | `lead_magnet_assessments` | `offer_builder_assessments` | `funnel_metrics` | `zarlo_conversations`
 
 ### CRM Tables
-`crm_pages` | `crm_contacts` | `crm_email_sequences` | `crm_email_steps` | `crm_warm_leads` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
+`crm_pages` | `crm_contacts` (includes outreach columns: outreach_status, platform, engagement_type, priority, temperature, last_message, outreach_status_entered_at) | `crm_email_sequences` | `crm_email_steps` | `sales_deals` | `sales_scripts` | `script_usage_log` | `content_history` | `ecosystem_system_progress` | `offer_implementations`
 
 ### Notifications
 `push_subscriptions` (endpoint, keys) | `notification_preferences` (quest_reminders, achievement_celebrations, timezone)
@@ -281,10 +304,15 @@ npm run db:push   # Apply migrations
 
 ## Recent Updates (Feb 2026)
 
-- **CSV Import Wizard**: 6-step wizard (`/crm/import`) for bulk importing Contacts, Warm Leads, Deals from CSV files. Auto-mapping, validation, batch insert with duplicate handling.
+- **Flow Compass Restyled**: Removed sidebar layout, now uses /me design system — purple gradient quick-log hero, white project cards with gradient left accent bars, gold CTAs, glass morphism buttons. Project selector for multi-project users.
+- **7-Day Challenge Layout**: Moved "Tasks | Deep Dive" sub-tabs below artifact progress and above quest cards. Replaced "Voices" header badge with "Leaderboard" button. Removed category points summary row (Category Total/Summary/Leaderboard). Removed "Edit" plan button from header. Tracker tab now uses `HorizontalFlowRiver` (matching /me page) with compass/challenge legend.
+- **Weekly Planning Skip**: New users with no previous challenge data (0 quests, 0 points) auto-skip the "Review Last Week" step entirely.
+- **Library Wheel Labels**: `GradientWheel` `showLitLabels` prop renders labels on lit segments outside the wheel. Multi-word labels wrap into two `<tspan>` lines. Used in all three LibraryOfAnswers wheels.
+- **/me Page Legend Fix**: Aligned "COMPASS" and "CHALLENGE" headings horizontally with their legend pills.
+- **Warm Leads Merged into Contacts**: `crm_warm_leads` deprecated and merged into `crm_contacts` with outreach columns (`outreach_status`, `platform`, `engagement_type`, `priority`, `temperature`, `outreach_status_entered_at`). Warm Outreach page is now a filtered view of contacts where `outreach_status IS NOT NULL`. Old table renamed to `crm_warm_leads_deprecated`.
+- **CSV Import Wizard**: 6-step wizard (`/crm/import`) for bulk importing Contacts and Deals from CSV files. Auto-mapping, validation, batch insert with duplicate handling.
 - **Business Flywheel System**: 4-phase checklist (`/crm/tools/systems`) - Attract, Nurture, Deliver, Retain. Auto-detection from source tables. Dashboard widget shows progress.
 - **Email Sequences Enhanced**: Step editor for individual emails, copy-to-clipboard (single + all), PromptGenerator integration with template auto-selection.
-- **Warm Lead → Contact Promotion**: "Also add to Contacts" checkbox in WarmLeadModal promotes leads to crm_contacts with field mapping.
 - **PromptGenerator Expansion**: Now integrated in Pages, Email Sequences, Warm Outreach with 7 templates.
 - **Flow Finder Universalized**: User-level completions (not project-specific), syncs with challenge system.
 

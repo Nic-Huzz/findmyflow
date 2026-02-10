@@ -542,6 +542,7 @@
   display: flex;
   gap: 8px;
   margin-top: 12px;
+  margin-bottom: 16px;
   padding: 4px;
   background: rgba(94, 23, 235, 0.05);
   border-radius: 10px;
@@ -835,8 +836,63 @@
 
 .challenge-container .flow-map-section {
   margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  padding: 20px 16px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.challenge-container .flow-journey-hint {
+  font-size: 0.8rem;
+  color: #adb5bd;
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+.challenge-container .flow-journey-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 0;
+}
+
+.challenge-container .flow-journey-legend .fj-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.challenge-container .flow-journey-legend .fj-legend-label {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #adb5bd;
+  margin-right: 2px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.challenge-container .flow-journey-legend .fj-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #6c757d;
+}
+
+.challenge-container .flow-journey-legend .fj-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.challenge-container .flow-journey-legend .fj-legend-icon {
+  font-size: 10px;
 }
 
 .challenge-container .section-title {

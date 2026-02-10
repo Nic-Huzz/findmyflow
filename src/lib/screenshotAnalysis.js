@@ -502,6 +502,13 @@ export async function createContactsFromLeads(userId, leads, sourceContentId = n
         notes: buildLeadNotes(lead, sourceContentId)
       }
 
+      // Set outreach fields directly on contact
+      contactData.platform = lead.platform || 'Instagram'
+      contactData.social_handle = lead.handle || null
+      contactData.engagement_type = mapEngagementType(lead.engagement_type)
+      contactData.outreach_status = 'to_contact'
+      contactData.outreach_status_entered_at = new Date().toISOString()
+
       const { data, error } = await supabase
         .from('crm_contacts')
         .insert(contactData)
@@ -513,19 +520,6 @@ export async function createContactsFromLeads(userId, leads, sourceContentId = n
         errors.push({ lead, error: error.message })
       } else {
         created.push(data)
-
-        // Also create a warm_leads entry for tracking
-        await supabase
-          .from('crm_warm_leads')
-          .insert({
-            user_id: userId,
-            name: lead.name || lead.handle,
-            platform: lead.platform || 'Instagram',
-            handle: lead.handle,
-            engagement_type: mapEngagementType(lead.engagement_type),
-            status: 'to_contact',
-            notes: lead.message_preview || null
-          })
       }
     } catch (err) {
       console.error('Error processing lead:', err)

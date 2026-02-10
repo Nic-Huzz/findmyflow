@@ -19,7 +19,7 @@ import { supabase } from '../supabaseClient'
 export const TABLE_CONFIGS = {
   crm_contacts: {
     name: 'Contacts',
-    description: 'Leads and customers in your pipeline',
+    description: 'Leads, prospects, and customers in your pipeline',
     icon: '👥',
     fields: [
       { key: 'name', label: 'Name', required: true, type: 'text' },
@@ -35,42 +35,28 @@ export const TABLE_CONFIGS = {
         default: 'lead'
       },
       { key: 'source', label: 'Source', required: false, type: 'text' },
-      { key: 'tags', label: 'Tags', required: false, type: 'tags', help: 'Comma-separated' },
-      { key: 'notes', label: 'Notes', required: false, type: 'text' },
-    ],
-    uniqueKey: 'email', // For duplicate detection
-    duplicateLabel: 'email address',
-  },
-  crm_warm_leads: {
-    name: 'Warm Leads',
-    description: 'Engaged prospects to follow up with',
-    icon: '🔥',
-    fields: [
-      { key: 'name', label: 'Name', required: true, type: 'text' },
       {
         key: 'platform',
         label: 'Platform',
         required: false,
         type: 'enum',
         options: ['Instagram', 'LinkedIn', 'Twitter/X', 'Facebook', 'Email', 'Other'],
-        default: 'Other'
       },
-      { key: 'handle', label: 'Handle/Username', required: false, type: 'text' },
+      { key: 'social_handle', label: 'Handle/Username', required: false, type: 'text' },
       {
         key: 'engagement_type',
         label: 'Engagement Type',
         required: false,
         type: 'enum',
-        options: ['liked_post', 'commented', 'dm', 'email_reply', 'webinar', 'lead_magnet', 'referral'],
-        default: 'commented'
+        options: ['liked_post', 'commented', 'dm', 'email_reply', 'webinar', 'lead_magnet', 'referral',
+                  'cold_dm', 'cold_email', 'cold_call', 'clicked_ad', 'lead_form', 'landing_page'],
       },
       {
-        key: 'status',
-        label: 'Status',
+        key: 'outreach_status',
+        label: 'Outreach Status',
         required: false,
         type: 'enum',
         options: ['to_contact', 'reached_out', 'in_conversation', 'meeting_booked', 'not_interested'],
-        default: 'to_contact'
       },
       {
         key: 'priority',
@@ -79,12 +65,12 @@ export const TABLE_CONFIGS = {
         type: 'number',
         min: 1,
         max: 10,
-        default: 5
       },
+      { key: 'tags', label: 'Tags', required: false, type: 'tags', help: 'Comma-separated' },
       { key: 'notes', label: 'Notes', required: false, type: 'text' },
     ],
-    uniqueKey: ['name', 'platform'], // Composite key
-    duplicateLabel: 'name + platform',
+    uniqueKey: 'email', // For duplicate detection
+    duplicateLabel: 'email address',
   },
   sales_deals: {
     name: 'Deals',
@@ -142,7 +128,10 @@ const HEADER_ALIASES = {
   platform: ['platform', 'social platform', 'network', 'channel', 'source'],
 
   // Social
-  handle: ['handle', 'username', 'social handle', 'profile', 'account', 'ig handle', 'twitter handle'],
+  social_handle: ['social handle', 'handle', 'username', 'profile', 'account', 'ig handle', 'twitter handle'],
+
+  // Outreach
+  outreach_status: ['outreach status', 'outreach_status', 'lead status', 'outreach'],
 
   // Engagement
   engagement_type: ['engagement type', 'engagement', 'action', 'interaction', 'how engaged'],

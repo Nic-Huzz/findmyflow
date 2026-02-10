@@ -83,11 +83,11 @@ export default function DailyActions({ userId }) {
     async function fetchLeads() {
       try {
         const { data, error } = await supabase
-          .from('crm_warm_leads')
+          .from('crm_contacts')
           .select('*')
           .eq('user_id', userId)
-          .in('status', ['to_contact', 'reached_out', 'in_conversation'])
-          .order('priority', { ascending: false })
+          .in('outreach_status', ['to_contact', 'reached_out', 'in_conversation'])
+          .order('priority', { ascending: false, nullsFirst: false })
           .order('updated_at', { ascending: true })
 
         if (cancelled) return
@@ -164,7 +164,7 @@ export default function DailyActions({ userId }) {
     if (!rawLeads) return []
     const now = new Date()
     const tasks = rawLeads.map(lead => {
-      const enteredAt = new Date(lead.updated_at || lead.created_at)
+      const enteredAt = new Date(lead.outreach_status_entered_at || lead.updated_at || lead.created_at)
       const daysInStatus = Math.floor((now - enteredAt) / (1000 * 60 * 60 * 24))
       const temperature = lead.temperature || 'warm'
       const threshold = STALE_THRESHOLDS[temperature] || 3
@@ -294,7 +294,7 @@ export default function DailyActions({ userId }) {
                     <div className="da-item-info">
                       <span className="da-item-label">
                         {lead.name}
-                        {lead.handle && <span className="da-handle">@{lead.handle}</span>}
+                        {lead.social_handle && <span className="da-handle">@{lead.social_handle}</span>}
                       </span>
                       <span className="da-item-context">
                         {lead.platform} • {lead.engagement_type?.replace('_', ' ')}
