@@ -524,7 +524,7 @@ function SeeYourFlow({ project, onUpdate, onFlowEntryAdded, onMappingComplete, i
           {!hasCompletedMapping && (
             <>
               {/* Progress */}
-              {inline && <h3 className="inline-heading">Start Here</h3>}
+              {inline && <h3 className="inline-heading">Start Here <span className="inline-heading-arrow">↓</span></h3>}
               <div className="progress-dots">
                 {[1, 2, 3, 4, 5].map(num => (
                   <div
