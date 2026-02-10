@@ -431,7 +431,7 @@ export async function getUserContext(userId) {
       groanCount: groanData?.length || 0,
       lastCompassDirection: compassData?.[0]?.direction,
       isInSouth,
-      currentStage: stageData?.current_stage || 1,
+      currentStage: stageData?.current_stage ?? 1,
       persona: stageData?.persona_type,
       // Wheel data
       wheelData,

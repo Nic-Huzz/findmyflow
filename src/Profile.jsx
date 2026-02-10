@@ -874,7 +874,7 @@ const Profile = () => {
 
               <div className="progress-stat-item">
                 <span className="progress-stat-icon">🎯</span>
-                <span className="progress-stat-value">{primaryProject.current_stage || 1}/7</span>
+                <span className="progress-stat-value">{primaryProject.current_stage ?? 1}/7</span>
                 <span className="progress-stat-label">Stage</span>
               </div>
             </div>
@@ -887,7 +887,7 @@ const Profile = () => {
 
               <div className="progress-stage-tag">
                 <span className="progress-stage-label">Stage:</span>
-                <span className="progress-stage-name">{getStageShortName(primaryProject.current_stage || 1)}</span>
+                <span className="progress-stage-name">{getStageShortName(primaryProject.current_stage ?? 1)}</span>
               </div>
 
               {hasChallenge && (

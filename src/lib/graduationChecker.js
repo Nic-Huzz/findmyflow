@@ -610,7 +610,7 @@ export const checkProjectGraduationEligibility = async (userId, projectId, chall
       };
     }
 
-    const currentStage = project.current_stage || 1;
+    const currentStage = project.current_stage ?? 1;
     const stageConfig = getStageConfig(currentStage);
 
     if (!stageConfig) {

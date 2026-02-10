@@ -184,7 +184,7 @@ export default function MePage() {
   )
 
   // Derived: quest progress
-  const projectStage = primaryProject?.stage || 1
+  const projectStage = primaryProject?.stage ?? 1
   const stageQuests = useMemo(
     () => questData.filter(q => q.stage_required === projectStage),
     [questData, projectStage]
@@ -338,14 +338,14 @@ export default function MePage() {
       <section className="hero-section">
         <div className="hero-top-bar">
           <div className="brand">FindMyFlow</div>
-          <div className="xp-pill">
-            <span>⚡</span>
-            <span>{totalXP} XP</span>
+          <div className="hero-top-right">
+            <VibeColorPicker />
+            <div className="xp-pill">
+              <span>⚡</span>
+              <span>{totalXP} XP</span>
+            </div>
           </div>
         </div>
-
-        {/* VibeColorPicker in top-right (already position:fixed via its own CSS) */}
-        <VibeColorPicker />
 
         <div className="hero-avatar-container">
           <div className="avatar-ring-bg" />
@@ -493,10 +493,10 @@ export default function MePage() {
               percentage={flowPercentage}
             />
             <StatRing
-              value={groanTotal > 0 ? `${groanCompleted}/${groanTotal}` : '0/0'}
-              label="Courage"
+              value={groanCompleted}
+              label="Play-list"
               color="#E9A23B"
-              percentage={groanTotal > 0 ? (groanCompleted / groanTotal) * 100 : 0}
+              percentage={Math.min(100, (groanCompleted / 10) * 100)}
             />
             <StatRing
               value={projectStage}

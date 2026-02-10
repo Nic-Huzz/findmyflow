@@ -269,7 +269,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
           id: project.id,
           name: project.name,
           description: project.description,
-          stage: project.current_stage || 1,
+          stage: project.current_stage ?? 1,
           xp: project.total_points || 0,
           status: project.status,
           skill: getClusterDisplayInfo(skillCluster, 'skills'),

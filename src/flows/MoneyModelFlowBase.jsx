@@ -462,7 +462,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
             user_id: user.id,
             project_id: projectId || null,
             milestone_id: config.milestoneId,
-            stage: stageProgress?.current_stage || 1,
+            stage: stageProgress?.current_stage ?? 1,
             evidence_text: `Completed ${config.name} flow: ${recommendedOffer?.offer?.name}`
           })
         } catch (milestoneError) {

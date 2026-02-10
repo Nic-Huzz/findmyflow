@@ -24,7 +24,7 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
     // Step 0: Check if user already has an active project (Single-Project MVP)
     const { data: existingProjects, error: checkError } = await supabase
       .from('user_projects')
-      .select('id, name')
+      .select('id, name, source_flow')
       .eq('user_id', userId)
       .eq('status', 'active')
 
@@ -33,13 +33,18 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
     }
 
     if (existingProjects && existingProjects.length > 0) {
-      console.log('✅ User already has an active project, skipping auto-creation:', existingProjects[0].name)
-      return {
-        success: true,
-        projectId: existingProjects[0].id,
-        skipped: true,
-        reason: 'User already has an active project'
+      // Check if user has any real (non-placeholder) project
+      const realProject = existingProjects.find(p => p.source_flow !== 'discovery_default')
+      if (realProject) {
+        console.log('✅ User already has an active project, skipping auto-creation:', realProject.name)
+        return {
+          success: true,
+          projectId: realProject.id,
+          skipped: true,
+          reason: 'User already has an active project'
+        }
       }
+      // Otherwise only a Discovery Project exists — we'll upgrade it below
     }
 
     // Step 1: Fetch the session data
@@ -169,56 +174,87 @@ export const createProjectFromSession = async (userId, sessionId, flowType) => {
       }
     }
 
-    // Step 5: Create the project with project-based stage fields
-    // New projects start at Stage 1 (Validation)
-    // First project for user is set as primary
-    const isFirstProject = !existingProjects || existingProjects.length === 0
+    // Step 5: Create or upgrade project
+    // If a Discovery Project placeholder exists, upgrade it; otherwise insert new
+    const discoveryProject = existingProjects?.find(p => p.source_flow === 'discovery_default')
 
-    const { data: newProject, error: createError } = await supabase
-      .from('user_projects')
-      .insert({
-        user_id: userId,
-        name: projectName,
-        description: projectDescription,
-        source_flow: flowType,
-        source_session_id: sessionId,
-        status: 'active',
-        // New project-based stage fields (Dec 2024)
-        current_stage: STAGES.VALIDATION,
-        total_points: 0,
-        is_primary: isFirstProject,
-        linked_skill_cluster_id: linkedSkillClusterId,
-        linked_problem_cluster_id: linkedProblemClusterId,
-        linked_persona_cluster_id: linkedPersonaClusterId
-      })
-      .select()
-      .single()
+    let newProject
 
-    if (createError) {
-      // Check if it's a duplicate error (unique constraint violation)
-      if (createError.code === '23505') {
-        console.log('✅ Project already exists for this session')
-        // Fetch existing project
-        const { data: existingProject } = await supabase
-          .from('user_projects')
-          .select('id')
-          .eq('user_id', userId)
-          .eq('source_flow', flowType)
-          .eq('source_session_id', sessionId)
-          .single()
+    if (discoveryProject) {
+      // Upgrade Discovery Project with real data
+      console.log('🔄 Upgrading Discovery Project:', discoveryProject.id)
+      const { data: upgraded, error: updateError } = await supabase
+        .from('user_projects')
+        .update({
+          name: projectName,
+          description: projectDescription,
+          source_flow: flowType,
+          source_session_id: sessionId,
+          current_stage: STAGES.VALIDATION,
+          is_primary: true,
+          linked_skill_cluster_id: linkedSkillClusterId,
+          linked_problem_cluster_id: linkedProblemClusterId,
+          linked_persona_cluster_id: linkedPersonaClusterId
+        })
+        .eq('id', discoveryProject.id)
+        .select()
+        .single()
 
-        return {
-          success: true,
-          projectId: existingProject?.id,
-          alreadyExists: true
-        }
+      if (updateError) {
+        console.error('❌ Error upgrading Discovery Project:', updateError)
+        return { success: false, error: updateError.message }
       }
 
-      console.error('❌ Error creating project:', createError)
-      return { success: false, error: createError.message }
-    }
+      newProject = upgraded
+      console.log('✅ Discovery Project upgraded:', newProject.id, newProject.name)
+    } else {
+      // Normal insert — new project
+      const isFirstProject = !existingProjects || existingProjects.length === 0
 
-    console.log('✅ Project auto-created:', newProject.id, newProject.name)
+      const { data: created, error: createError } = await supabase
+        .from('user_projects')
+        .insert({
+          user_id: userId,
+          name: projectName,
+          description: projectDescription,
+          source_flow: flowType,
+          source_session_id: sessionId,
+          status: 'active',
+          current_stage: STAGES.VALIDATION,
+          total_points: 0,
+          is_primary: isFirstProject,
+          linked_skill_cluster_id: linkedSkillClusterId,
+          linked_problem_cluster_id: linkedProblemClusterId,
+          linked_persona_cluster_id: linkedPersonaClusterId
+        })
+        .select()
+        .single()
+
+      if (createError) {
+        if (createError.code === '23505') {
+          console.log('✅ Project already exists for this session')
+          const { data: existingProject } = await supabase
+            .from('user_projects')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('source_flow', flowType)
+            .eq('source_session_id', sessionId)
+            .single()
+
+          return {
+            success: true,
+            projectId: existingProject?.id,
+            alreadyExists: true
+          }
+        }
+
+        console.error('❌ Error creating project:', createError)
+        return { success: false, error: createError.message }
+      }
+
+      newProject = created
+      console.log('✅ Project auto-created:', newProject.id, newProject.name)
+    }
 
     // Step 6: Update user_stage_progress to track onboarding
     // Note: is_primary flag on user_projects now handles "default project" logic

@@ -242,8 +242,8 @@ export function useChallengeData() {
       const { data: projectData, error: projectError } = projectResult
       if (!projectError && projectData) {
         setSelectedProject(projectData)
-        setProjectStage(projectData.current_stage || 1)
-        setActiveStageTab(projectData.current_stage || 1)
+        setProjectStage(projectData.current_stage ?? 1)
+        setActiveStageTab(projectData.current_stage ?? 1)
       }
 
       // Apply streak result
@@ -1010,8 +1010,8 @@ export function useChallengeData() {
 
   const handleProjectSelected = async (project) => {
     setSelectedProject(project)
-    setProjectStage(project.current_stage || 1)
-    setActiveStageTab(project.current_stage || 1)
+    setProjectStage(project.current_stage ?? 1)
+    setActiveStageTab(project.current_stage ?? 1)
     setShowProjectSelector(false)
 
     await startChallengeWithProject(project, groupData?.id || null)
@@ -1041,7 +1041,7 @@ export function useChallengeData() {
         challenge_start_date: new Date().toISOString(),
         last_active_date: new Date().toISOString(),
         persona: stageProgress?.persona || 'vibe_seeker',
-        current_stage: project.current_stage || 1,
+        current_stage: project.current_stage ?? 1,
         project_id: project.id
       }
 

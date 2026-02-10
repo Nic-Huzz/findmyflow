@@ -1289,7 +1289,7 @@ function Challenge() {
                 </button>
               </div>
               <ChallengeStageTabs
-                currentStage={selectedProject.current_stage || 1}
+                currentStage={selectedProject.current_stage ?? 1}
                 completedStages={getCompletedStages()}
                 activeTab={activeStageTab}
                 onTabChange={setActiveStageTab}

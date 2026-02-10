@@ -419,14 +419,44 @@ function HomeFirstTime() {
     }
   }
 
+  // Ensure a Discovery Project exists so /me always has a project context.
+  // Called by both skip and MindSpace paths as a safety net.
+  const ensureDiscoveryProject = async () => {
+    if (!user?.id) return
+    const { data: existing } = await supabase
+      .from('user_projects')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('status', 'active')
+      .limit(1)
+      .maybeSingle()
+
+    if (!existing) {
+      const { error } = await supabase.from('user_projects').insert({
+        user_id: user.id,
+        name: 'Discovery Project',
+        description: 'Your flow discovery journey — this will update as you explore.',
+        source_flow: 'discovery_default',
+        status: 'active',
+        current_stage: 0,
+        total_points: 0,
+        is_primary: true
+      })
+      if (error) console.error('Error creating Discovery Project:', error)
+    }
+  }
+
   // Handle "I'll do this later" - mark onboarding complete then go to profile
   const handleSkipToProfile = async () => {
+    await ensureDiscoveryProject()
     await markOnboardingComplete()
     window.location.href = '/me'
   }
 
   // Handle "I have 2 minutes now" - mark onboarding complete then go to mind-space
+  // Also creates Discovery Project as safety net in case user abandons MindSpace
   const handleStartMindSpace = async () => {
+    await ensureDiscoveryProject()
     await markOnboardingComplete()
     navigate('/mind-space')
   }

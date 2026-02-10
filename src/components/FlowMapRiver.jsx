@@ -431,7 +431,7 @@ function FlowMapRiver({ projectId, limit = 20, onViewAll, projects = [], selecte
                 onClick={() => onProjectSelect && onProjectSelect(project)}
               >
                 <span className="project-chip-name">{project.name}</span>
-                <span className="project-chip-stage">{getStageShortName(project.current_stage || 1)}</span>
+                <span className="project-chip-stage">{getStageShortName(project.current_stage ?? 1)}</span>
               </button>
             ))}
           </div>
