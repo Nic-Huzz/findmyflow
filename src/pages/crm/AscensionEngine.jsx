@@ -272,7 +272,10 @@ function ValueLadderView({ stats, customers, userLadder, completeness }) {
       )}
 
       <div className="ladder-visual">
-        <h3 className="ladder-title">Your Value Ladder</h3>
+        <div className="ladder-section-header">
+          <div className="ladder-section-icon">🪜</div>
+          <span className="ladder-section-eyebrow">Your Value Ladder</span>
+        </div>
         <div className="ladder-rungs">
           {[...ladder].reverse().map((rung, index) => {
             const rungStats = stats?.byRung?.[rung.id] || { count: 0, totalValue: 0 }
@@ -285,52 +288,51 @@ function ValueLadderView({ stats, customers, userLadder, completeness }) {
             return (
               <div
                 key={rung.id}
-                className={`ladder-rung ${rung.id} ${hasCustomData ? 'has-data' : ''}`}
+                className={`ladder-rung ${hasCustomData ? 'has-data' : ''}`}
                 style={{ '--rung-color': rung.color }}
               >
-                <div className="rung-bar" style={{
-                  width: stats?.totalCustomers
-                    ? `${Math.max(20, (rungStats.count / stats.totalCustomers) * 100)}%`
-                    : '60%'
-                }}>
-                  <span className="rung-icon">{rung.icon}</span>
-                  <div className="rung-info">
-                    <span className="rung-label">
-                      {rung.customLabel || rung.label}
-                    </span>
-                    {rung.customLabel && (
-                      <span className="rung-type">{rung.label}</span>
-                    )}
-                    {rung.price > 0 && (
-                      <span className="rung-price">
-                        ${rung.price.toLocaleString()}{rung.isRecurring ? '/mo' : ''}
+                <div className="rung-card">
+                  <div className="rung-card-top">
+                    <span className="rung-icon">{rung.icon}</span>
+                    <div className="rung-info">
+                      <span className="rung-label">
+                        {rung.customLabel || rung.label}
                       </span>
-                    )}
-                    {stats && (
-                      <span className="rung-count">
-                        {rungStats.count} customer{rungStats.count !== 1 ? 's' : ''}
-                      </span>
-                    )}
+                      {rung.customLabel && (
+                        <span className="rung-type">{rung.label}</span>
+                      )}
+                    </div>
+                    <div className="rung-numbers">
+                      {rung.price > 0 && (
+                        <span className="rung-price">
+                          ${rung.price.toLocaleString()}{rung.isRecurring ? '/mo' : ''}
+                        </span>
+                      )}
+                      {stats && rungStats.totalValue > 0 && (
+                        <span className="rung-value">${rungStats.totalValue.toLocaleString()}</span>
+                      )}
+                    </div>
                   </div>
-                  {stats && (
-                    <span className="rung-value">${rungStats.totalValue.toLocaleString()}</span>
+                  {(stats || hasCustomData) && (
+                    <div className="rung-card-bottom">
+                      {stats && (
+                        <span className="rung-count">
+                          {rungStats.count} customer{rungStats.count !== 1 ? 's' : ''}
+                        </span>
+                      )}
+                      {hasCustomData && (
+                        <div className="rung-badges">
+                          {rung.guarantee && <span className="detail-badge">🛡️ {rung.guarantee}</span>}
+                          {rung.bonuses > 0 && <span className="detail-badge">🎁 {rung.bonuses} bonuses</span>}
+                          {rung.magnetType && <span className="detail-badge">📋 {rung.magnetType}</span>}
+                        </div>
+                      )}
+                      {ascensionRate !== null && ascensionRate > 0 && (
+                        <span className="ascension-rate">↑ {ascensionRate}%</span>
+                      )}
+                    </div>
                   )}
                 </div>
-                {/* Offer details tooltip */}
-                {hasCustomData && (
-                  <div className="rung-details">
-                    {rung.description && <p>{rung.description}</p>}
-                    {rung.guarantee && <span className="detail-badge">🛡️ {rung.guarantee}</span>}
-                    {rung.bonuses > 0 && <span className="detail-badge">🎁 {rung.bonuses} bonuses</span>}
-                    {rung.magnetType && <span className="detail-badge">📋 {rung.magnetType}</span>}
-                  </div>
-                )}
-                {ascensionRate !== null && ascensionRate > 0 && (
-                  <div className="ascension-rate">
-                    <span className="rate-arrow">↑</span>
-                    <span className="rate-value">{ascensionRate}%</span>
-                  </div>
-                )}
               </div>
             )
           })}

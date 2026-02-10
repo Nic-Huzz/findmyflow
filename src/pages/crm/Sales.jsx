@@ -409,6 +409,10 @@ export default function Sales() {
   if (loading) {
     return (
       <div className="crm-sales">
+        <div className="sales-toolbar">
+          <button className="back-btn" onClick={() => navigate('/crm/nurture')}>←</button>
+          <h2 className="toolbar-title">Sales Pipeline</h2>
+        </div>
         <div className="crm-loading">
           <div className="crm-spinner"></div>
           <p>Loading your deals...</p>

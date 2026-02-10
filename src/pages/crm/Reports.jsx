@@ -252,6 +252,10 @@ export default function Reports() {
   if (loading) {
     return (
       <div className="reports-page">
+        <div className="reports-toolbar">
+          <button className="reports-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+          <h2 className="reports-toolbar-title">Reports</h2>
+        </div>
         <div className="reports-loading">
           <div className="reports-spinner"></div>
           <p>Crunching your numbers...</p>
@@ -262,45 +266,44 @@ export default function Reports() {
 
   return (
     <div className="reports-page">
-      <header className="reports-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          <span className="back-arrow">←</span> Back
-        </button>
-        <div className="header-content">
-          <h1>Reports</h1>
+      <div className="reports-toolbar">
+        <button className="reports-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+        <h2 className="reports-toolbar-title">Reports</h2>
+      </div>
 
-          {/* View Mode Toggle */}
-          <div className="view-mode-toggle">
-            <button
-              className={viewMode === 'week' ? 'active' : ''}
-              onClick={() => setViewMode('week')}
-            >
-              Week
-            </button>
-            <button
-              className={viewMode === 'month' ? 'active' : ''}
-              onClick={() => setViewMode('month')}
-            >
-              Month
-            </button>
-          </div>
-
-          {/* Period Navigation */}
-          <div className="period-nav">
-            <button className="period-btn" onClick={handlePrevPeriod}>
-              ← Previous
-            </button>
-            <span className="period-label">{periodRange.label}</span>
-            <button
-              className="period-btn"
-              onClick={handleNextPeriod}
-              disabled={!canGoNext}
-            >
-              Next →
-            </button>
-          </div>
+      {/* Controls Bar */}
+      <div className="reports-controls">
+        {/* View Mode Toggle */}
+        <div className="view-mode-toggle">
+          <button
+            className={viewMode === 'week' ? 'active' : ''}
+            onClick={() => setViewMode('week')}
+          >
+            Week
+          </button>
+          <button
+            className={viewMode === 'month' ? 'active' : ''}
+            onClick={() => setViewMode('month')}
+          >
+            Month
+          </button>
         </div>
-      </header>
+
+        {/* Period Navigation */}
+        <div className="period-nav">
+          <button className="period-btn" onClick={handlePrevPeriod}>
+            ← Previous
+          </button>
+          <span className="period-label">{periodRange.label}</span>
+          <button
+            className="period-btn"
+            onClick={handleNextPeriod}
+            disabled={!canGoNext}
+          >
+            Next →
+          </button>
+        </div>
+      </div>
 
       {/* Overall Grade */}
       <div className="grade-card">

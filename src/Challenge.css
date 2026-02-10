@@ -419,7 +419,7 @@
 .challenge-tabs {
   display: flex;
   gap: 0.5rem;
-  padding: 1.5rem 1.5rem 0;
+  padding: 1.5rem 1.5rem 0.75rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -467,16 +467,15 @@
 
 /* Stage Tabs Wrapper (for project-based challenges) */
 .stage-tabs-wrapper {
-  padding: 1rem 1.5rem;
-  background: rgba(94, 23, 235, 0.03);
-  border-bottom: 1px solid rgba(94, 23, 235, 0.1);
+  padding: 0.5rem 1.5rem 0.25rem;
+  background: transparent;
 }
 
 .selected-project-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .selected-project-info .project-name {
@@ -589,7 +588,7 @@
 
 /* Content */
 .challenge-content {
-  padding: 1.5rem;
+  padding: 0.75rem 1.5rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }

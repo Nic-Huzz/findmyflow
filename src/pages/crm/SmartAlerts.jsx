@@ -270,6 +270,10 @@ export default function SmartAlerts() {
   if (loading) {
     return (
       <div className="smart-alerts">
+        <div className="alerts-toolbar">
+          <button className="alerts-back" onClick={() => navigate('/crm')}>←</button>
+          <h2 className="alerts-toolbar-title">Smart Alerts</h2>
+        </div>
         <div className="crm-loading">
           <div className="crm-spinner"></div>
           <p>Analyzing your data...</p>
@@ -280,20 +284,15 @@ export default function SmartAlerts() {
 
   return (
     <div className="smart-alerts">
-      <header className="alerts-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="header-content">
-          <h1>Smart Alerts</h1>
-          <p>Intelligent notifications based on your data</p>
-        </div>
+      <div className="alerts-toolbar">
+        <button className="alerts-back" onClick={() => navigate('/crm')}>←</button>
+        <h2 className="alerts-toolbar-title">Smart Alerts</h2>
         {dismissedAlerts.length > 0 && (
-          <button className="reset-btn" onClick={clearAllDismissed}>
-            Reset Dismissed
+          <button className="alerts-reset" onClick={clearAllDismissed}>
+            Reset
           </button>
         )}
-      </header>
+      </div>
 
       {/* AI-Generated Recommendations Section */}
       {recommendations.length > 0 && (

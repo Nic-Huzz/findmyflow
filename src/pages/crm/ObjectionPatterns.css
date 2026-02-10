@@ -22,6 +22,7 @@
 
 .objection-patterns {
   padding: 1.5rem;
+  padding-top: 80px;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   max-width: 1200px;
   margin: 0 auto;
@@ -53,24 +54,40 @@
   to { transform: rotate(360deg); }
 }
 
-/* Header */
-.objection-patterns .op-header {
-  margin-bottom: 1.5rem;
+/* Fixed Toolbar */
+.objection-patterns .op-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.objection-patterns .op-title-section h1 {
-  font-size: 1.75rem;
+.objection-patterns .op-toolbar-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.objection-patterns .op-toolbar-title {
+  font-size: 1.1rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0 0 0.25rem 0;
-}
-
-.objection-patterns .op-subtitle {
-  color: var(--text-muted);
-  font-size: 0.9rem;
+  color: #1a1a2e;
   margin: 0;
 }
 
@@ -302,6 +319,7 @@
 @media (max-width: 768px) {
   .objection-patterns {
     padding: 1rem;
+    padding-top: 80px;
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 

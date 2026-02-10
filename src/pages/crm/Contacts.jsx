@@ -25,6 +25,38 @@ const SOURCES = [
   { id: 'Paid Ads', label: 'Paid Ads', icon: '📣' },
 ]
 
+const OUTREACH_STATUS = [
+  { id: 'to_contact', label: 'To Contact', color: '#6b7280', icon: '📋' },
+  { id: 'reached_out', label: 'Reached Out', color: '#3b82f6', icon: '📤' },
+  { id: 'in_conversation', label: 'In Conversation', color: '#8b5cf6', icon: '💬' },
+  { id: 'meeting_booked', label: 'Meeting Booked', color: '#10b981', icon: '📅' },
+  { id: 'not_interested', label: 'Not Interested', color: '#ef4444', icon: '❌' },
+]
+
+const ENGAGEMENT_BY_SOURCE = {
+  'Content': [
+    { id: 'liked_post', label: 'Liked Post', icon: '❤️' },
+    { id: 'commented', label: 'Commented', icon: '💬' },
+    { id: 'lead_magnet', label: 'Downloaded Lead Magnet', icon: '📥' },
+    { id: 'poll_response', label: 'Poll Response', icon: '📊' },
+  ],
+  'Warm Outreach': [
+    { id: 'dm', label: 'Sent DM', icon: '📩' },
+    { id: 'email_reply', label: 'Email Reply', icon: '📧' },
+    { id: 'referral', label: 'Referral', icon: '🤝' },
+  ],
+  'Cold Outreach': [
+    { id: 'cold_dm', label: 'Cold DM', icon: '📩' },
+    { id: 'cold_email', label: 'Cold Email', icon: '📧' },
+    { id: 'cold_call', label: 'Cold Call', icon: '📞' },
+  ],
+  'Paid Ads': [
+    { id: 'clicked_ad', label: 'Clicked Ad', icon: '🖱️' },
+    { id: 'lead_form', label: 'Submitted Form', icon: '📋' },
+    { id: 'landing_page', label: 'Landing Page', icon: '🔗' },
+  ],
+}
+
 function timeAgo(dateStr) {
   if (!dateStr) return ''
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -522,10 +554,21 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
     social_handle: contact?.social_handle || prefill?.social_handle || '',
     lifecycle_stage: contact?.lifecycle_stage || 'lead',
     source: contact?.source || prefill?.source || 'Content',
+    engagement_type: contact?.engagement_type || '',
+    outreach_status: contact?.outreach_status || '',
     tags: contact?.tags || [],
     notes: contact?.notes || prefill?.notes || '',
   })
   const [tagInput, setTagInput] = useState('')
+
+  // Reset engagement_type when source changes if current selection isn't in new source
+  const sourceEngagements = ENGAGEMENT_BY_SOURCE[form.source] || []
+  useEffect(() => {
+    const options = ENGAGEMENT_BY_SOURCE[form.source] || []
+    if (form.engagement_type && options.length && !options.find(e => e.id === form.engagement_type)) {
+      setForm(prev => ({ ...prev, engagement_type: '' }))
+    }
+  }, [form.source, form.engagement_type])
 
   // Project + deal creation
   const [dealProject, setDealProject] = useState('')
@@ -572,6 +615,8 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
             social_handle: form.social_handle.trim() || null,
             lifecycle_stage: form.lifecycle_stage,
             source: form.source,
+            engagement_type: form.engagement_type || null,
+            outreach_status: form.outreach_status || null,
             tags: form.tags,
             notes: form.notes.trim() || null,
           })
@@ -595,6 +640,9 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
             social_handle: form.social_handle.trim() || null,
             lifecycle_stage: form.lifecycle_stage,
             source: form.source,
+            engagement_type: form.engagement_type || null,
+            outreach_status: form.outreach_status || null,
+            outreach_status_entered_at: form.outreach_status ? new Date().toISOString() : null,
             tags: form.tags,
             notes: form.notes.trim() || null,
           })
@@ -733,6 +781,40 @@ function ContactModal({ contact, prefill, userId, userProjects = [], existingDea
                 ))}
               </select>
             </div>
+          </div>
+
+          {/* Engagement Type (filtered by source) */}
+          {sourceEngagements.length > 0 && (
+            <div className="form-group">
+              <label>How did they engage?</label>
+              <div className="contacts-engagement-grid">
+                {sourceEngagements.map(type => (
+                  <button
+                    key={type.id}
+                    type="button"
+                    className={`contacts-engagement-option ${form.engagement_type === type.id ? 'selected' : ''}`}
+                    onClick={() => setForm({ ...form, engagement_type: type.id })}
+                  >
+                    <span>{type.icon}</span>
+                    <span>{type.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Outreach Status */}
+          <div className="form-group">
+            <label>Status</label>
+            <select
+              value={form.outreach_status}
+              onChange={e => setForm({ ...form, outreach_status: e.target.value })}
+            >
+              <option value="">No outreach status</option>
+              {OUTREACH_STATUS.map(s => (
+                <option key={s.id} value={s.id}>{s.icon} {s.label}</option>
+              ))}
+            </select>
           </div>
 
           <div className="form-group">

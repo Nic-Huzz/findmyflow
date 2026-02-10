@@ -14,6 +14,7 @@ import {
 } from '../lib/essencePreferences'
 import EditEssenceModal from '../components/HeroProfile/EditEssenceModal'
 import EditEssenceFieldModal from '../components/EditEssenceFieldModal'
+import ProtectiveArchetypeIcon from '../components/ProtectiveArchetypeIcon'
 import './EssenceProfile.css'
 
 const EssenceProfile = () => {
@@ -181,18 +182,14 @@ const EssenceProfile = () => {
                 {archetypeName?.charAt(0) || '?'}
               </div>
             )}
-            {activeTab === 'protective' && protectiveArchetype?.image && !imageError && (
-              <img
-                key={protectiveArchetype.image}
-                src={`/images/archetypes/lead-magnet-protective/${protectiveArchetype.image}`}
-                alt={protectiveArchetypeName}
-                className="essence-avatar-image"
-                onError={() => setImageError(true)}
-              />
+            {activeTab === 'protective' && protectiveArchetypeName && (
+              <div className="essence-avatar-image" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <ProtectiveArchetypeIcon archetype={protectiveArchetypeName} size={100} />
+              </div>
             )}
-            {activeTab === 'protective' && (!protectiveArchetype?.image || imageError) && (
+            {activeTab === 'protective' && !protectiveArchetypeName && (
               <div className="essence-avatar-image avatar-fallback" style={{ background: 'linear-gradient(135deg, #212529 0%, #343a40 100%)' }}>
-                {protectiveArchetypeName?.charAt(0) || '🛡️'}
+                🛡️
               </div>
             )}
             {activeTab === 'essence' && (

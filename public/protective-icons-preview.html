@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protective Archetype Icons</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f8f7fc;
+    padding: 2rem;
+    color: #1a1a2e;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #5e17eb, #E9A23B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle {
+    text-align: center;
+    color: #888;
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(94, 23, 235, 0.08);
+    border: 1px solid rgba(94, 23, 235, 0.08);
+  }
+  .card h2 {
+    margin: 1rem 0 0.25rem;
+    font-size: 1.2rem;
+    color: #1a1a2e;
+  }
+  .card p {
+    font-size: 0.85rem;
+    color: #777;
+    line-height: 1.4;
+  }
+  .icon-wrap {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  svg { overflow: visible; }
+  .perfectionist-svg { overflow: hidden; }
+
+  /* ========================
+     PEOPLE PLEASER — Morphing heart that stretches toward others
+     ======================== */
+  @keyframes heart-stretch {
+    0%, 100% { transform: scale(1) translateX(0); }
+    25% { transform: scale(1.1, 0.9) translateX(6px); }
+    50% { transform: scale(0.9, 1.1) translateX(-4px); }
+    75% { transform: scale(1.05, 0.95) translateX(3px); }
+  }
+  @keyframes heart-glow {
+    0%, 100% { filter: drop-shadow(0 0 4px rgba(94, 23, 235, 0.2)); }
+    50% { filter: drop-shadow(0 0 12px rgba(94, 23, 235, 0.5)); }
+  }
+  .pleaser-heart {
+    animation: heart-stretch 3s ease-in-out infinite, heart-glow 3s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes hand-reach {
+    0%, 100% { transform: translateX(0) rotate(0deg); opacity: 0.4; }
+    50% { transform: translateX(8px) rotate(-5deg); opacity: 0.8; }
+  }
+  .pleaser-hand-left { animation: hand-reach 3s ease-in-out infinite; }
+  .pleaser-hand-right { animation: hand-reach 3s ease-in-out infinite 1.5s; }
+
+  /* ========================
+     PERFORMER — Spotlight with dancing star
+     ======================== */
+  @keyframes spotlight-pulse {
+    0%, 100% { opacity: 0.15; transform: scaleY(1); }
+    50% { opacity: 0.3; transform: scaleY(1.05); }
+  }
+  .performer-spotlight {
+    animation: spotlight-pulse 2.5s ease-in-out infinite;
+    transform-origin: top center;
+  }
+  @keyframes star-spin {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.15); }
+    50% { transform: rotate(180deg) scale(1); }
+    75% { transform: rotate(270deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+  .performer-star {
+    animation: star-spin 4s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+  .performer-sparkle-1 { animation: sparkle 2s ease-in-out infinite 0s; }
+  .performer-sparkle-2 { animation: sparkle 2s ease-in-out infinite 0.7s; }
+  .performer-sparkle-3 { animation: sparkle 2s ease-in-out infinite 1.4s; }
+
+  /* ========================
+     CONTROLLER — Rigid grid with pulsing lock
+     ======================== */
+  @keyframes grid-tighten {
+    0%, 100% { stroke-dashoffset: 0; }
+    50% { stroke-dashoffset: 4; }
+  }
+  .controller-grid line {
+    stroke-dasharray: 4 2;
+    animation: grid-tighten 3s ease-in-out infinite;
+  }
+  @keyframes lock-pulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(94, 23, 235, 0.3)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(94, 23, 235, 0.6)); }
+  }
+  .controller-lock {
+    animation: lock-pulse 2s ease-in-out infinite;
+    transform-origin: center;
+  }
+  @keyframes bolt-flash {
+    0%, 70%, 100% { opacity: 0.3; }
+    75% { opacity: 1; }
+  }
+  .controller-bolt { animation: bolt-flash 3s ease-in-out infinite; }
+
+  /* ========================
+     PERFECTIONIST — Obsessive measuring circle that never closes
+     ======================== */
+  @keyframes circle-chase {
+    0% { transform: rotate(0deg); stroke-dashoffset: 15; }
+    25% { stroke-dashoffset: 10; }
+    50% { transform: rotate(180deg); stroke-dashoffset: 18; }
+    75% { stroke-dashoffset: 12; }
+    100% { transform: rotate(360deg); stroke-dashoffset: 15; }
+  }
+  .perfectionist-circle {
+    stroke-dasharray: 98 15;
+    stroke-dashoffset: 15;
+    animation: circle-chase 3s ease-in-out infinite;
+    transform-origin: 50px 50px;
+  }
+  @keyframes tick-marks {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+  }
+  .perfectionist-tick { animation: tick-marks 2s ease-in-out infinite; }
+  .perfectionist-tick:nth-child(2) { animation-delay: 0.25s; }
+  .perfectionist-tick:nth-child(3) { animation-delay: 0.5s; }
+  .perfectionist-tick:nth-child(4) { animation-delay: 0.75s; }
+  @keyframes eraser-move {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    40% { opacity: 0; }
+    50% { opacity: 0.7; transform: translate(-3px, 3px) rotate(-8deg); }
+    70% { opacity: 0.7; transform: translate(3px, -2px) rotate(5deg); }
+    80% { opacity: 0; }
+  }
+  .perfectionist-eraser { animation: eraser-move 4s ease-in-out infinite; }
+
+  /* ========================
+     GHOST — Fading figure that flickers in and out
+     ======================== */
+  @keyframes ghost-fade {
+    0%, 100% { opacity: 0.25; transform: translateY(0) scale(1); }
+    30% { opacity: 0.7; transform: translateY(-3px) scale(1.02); }
+    50% { opacity: 0.15; transform: translateY(2px) scale(0.98); }
+    70% { opacity: 0.55; transform: translateY(-1px) scale(1.01); }
+  }
+  .ghost-figure {
+    animation: ghost-fade 5s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+  @keyframes ghost-wisp {
+    0%, 100% { opacity: 0; transform: translateY(0) translateX(0); }
+    30% { opacity: 0.4; transform: translateY(-8px) translateX(4px); }
+    60% { opacity: 0.1; transform: translateY(-16px) translateX(-2px); }
+  }
+  .ghost-wisp-1 { animation: ghost-wisp 4s ease-out infinite 0s; }
+  .ghost-wisp-2 { animation: ghost-wisp 4s ease-out infinite 1.3s; }
+  .ghost-wisp-3 { animation: ghost-wisp 4s ease-out infinite 2.6s; }
+</style>
+</head>
+<body>
+
+<h1>Protective Archetype Icons</h1>
+<p class="subtitle">Animated SVG concepts for FindMyFlow</p>
+
+<div class="grid">
+
+  <!-- ========== PEOPLE PLEASER ========== -->
+  <div class="card">
+    <div class="icon-wrap">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <!-- Reaching hands -->
+        <g class="pleaser-hand-left" opacity="0.4">
+          <path d="M10 55 Q5 50 10 45 L22 48 Q18 52 22 55Z" fill="#5e17eb" opacity="0.5"/>
+          <circle cx="10" cy="50" r="4" fill="#5e17eb" opacity="0.3"/>
+        </g>
+        <g class="pleaser-hand-right" opacity="0.4">
+          <path d="M90 45 Q95 50 90 55 L78 52 Q82 48 78 45Z" fill="#5e17eb" opacity="0.5"/>
+          <circle cx="90" cy="50" r="4" fill="#5e17eb" opacity="0.3"/>
+        </g>
+        <!-- Central heart that stretches -->
+        <g class="pleaser-heart">
+          <path d="M50 75 L30 52 Q25 40 35 35 Q45 30 50 42 Q55 30 65 35 Q75 40 70 52Z"
+                fill="url(#pleaser-grad)" stroke="#5e17eb" stroke-width="2"/>
+          <!-- Inner glow -->
+          <path d="M50 65 L38 52 Q35 45 42 42 Q48 39 50 48 Q52 39 58 42 Q65 45 62 52Z"
+                fill="white" opacity="0.3"/>
+        </g>
+        <!-- Small reaching lines -->
+        <line x1="30" y1="50" x2="22" y2="48" stroke="#5e17eb" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+        <line x1="70" y1="50" x2="78" y2="48" stroke="#5e17eb" stroke-width="1.5" opacity="0.3" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="pleaser-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#8b5cf6"/>
+            <stop offset="100%" stop-color="#5e17eb"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h2>People Pleaser</h2>
+    <p>Heart stretching toward others, always reaching out</p>
+  </div>
+
+  <!-- ========== PERFORMER ========== -->
+  <div class="card">
+    <div class="icon-wrap">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <!-- Spotlight cone -->
+        <g class="performer-spotlight">
+          <path d="M50 15 L30 85 L70 85Z" fill="url(#spotlight-grad)" opacity="0.15"/>
+        </g>
+        <!-- Stage line -->
+        <line x1="20" y1="85" x2="80" y2="85" stroke="#5e17eb" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
+        <!-- Central star -->
+        <g class="performer-star">
+          <polygon points="50,25 54,40 70,40 57,50 62,65 50,55 38,65 43,50 30,40 46,40"
+                   fill="url(#star-grad)" stroke="#E9A23B" stroke-width="1.5"/>
+          <polygon points="50,32 53,42 62,42 55,48 58,58 50,52 42,58 45,48 38,42 47,42"
+                   fill="white" opacity="0.3"/>
+        </g>
+        <!-- Sparkles -->
+        <circle class="performer-sparkle-1" cx="25" cy="30" r="2.5" fill="#E9A23B"/>
+        <circle class="performer-sparkle-2" cx="78" cy="35" r="2" fill="#E9A23B"/>
+        <circle class="performer-sparkle-3" cx="35" cy="70" r="1.5" fill="#8b5cf6"/>
+        <defs>
+          <linearGradient id="spotlight-grad" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stop-color="#E9A23B"/>
+            <stop offset="100%" stop-color="#E9A23B" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="star-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#E9A23B"/>
+            <stop offset="100%" stop-color="#d4891f"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h2>Performer</h2>
+    <p>Star spinning under a spotlight, always on stage</p>
+  </div>
+
+  <!-- ========== CONTROLLER ========== -->
+  <div class="card">
+    <div class="icon-wrap">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <!-- Background grid -->
+        <g class="controller-grid" opacity="0.2">
+          <line x1="20" y1="20" x2="20" y2="80" stroke="#5e17eb" stroke-width="1"/>
+          <line x1="40" y1="20" x2="40" y2="80" stroke="#5e17eb" stroke-width="1"/>
+          <line x1="60" y1="20" x2="60" y2="80" stroke="#5e17eb" stroke-width="1"/>
+          <line x1="80" y1="20" x2="80" y2="80" stroke="#5e17eb" stroke-width="1"/>
+          <line x1="20" y1="20" x2="80" y2="20" stroke="#5e17eb" stroke-width="1"/>
+          <line x1="20" y1="40" x2="80" y2="40" stroke="#5e17eb" stroke-width="1"/>
+          <line x1="20" y1="60" x2="80" y2="60" stroke="#5e17eb" stroke-width="1"/>
+          <line x1="20" y1="80" x2="80" y2="80" stroke="#5e17eb" stroke-width="1"/>
+        </g>
+        <!-- Central lock -->
+        <g class="controller-lock">
+          <!-- Lock body -->
+          <rect x="36" y="48" width="28" height="22" rx="4" fill="url(#lock-grad)" stroke="#5e17eb" stroke-width="2"/>
+          <!-- Lock shackle -->
+          <path d="M40 48 L40 38 Q40 28 50 28 Q60 28 60 38 L60 48" fill="none" stroke="#5e17eb" stroke-width="3" stroke-linecap="round"/>
+          <!-- Keyhole -->
+          <circle cx="50" cy="57" r="3" fill="white" opacity="0.6"/>
+          <rect x="49" y="57" width="2" height="6" rx="1" fill="white" opacity="0.6"/>
+        </g>
+        <!-- Corner bolts -->
+        <g class="controller-bolt">
+          <circle cx="20" cy="20" r="3" fill="#5e17eb" opacity="0.4"/>
+          <circle cx="80" cy="20" r="3" fill="#5e17eb" opacity="0.4"/>
+          <circle cx="20" cy="80" r="3" fill="#5e17eb" opacity="0.4"/>
+          <circle cx="80" cy="80" r="3" fill="#5e17eb" opacity="0.4"/>
+        </g>
+        <defs>
+          <linearGradient id="lock-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#5e17eb"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h2>Controller</h2>
+    <p>Rigid grid with pulsing lock, everything in its place</p>
+  </div>
+
+  <!-- ========== PERFECTIONIST ========== -->
+  <div class="card">
+    <div class="icon-wrap">
+      <svg class="perfectionist-svg" width="100" height="100" viewBox="0 0 100 100">
+        <!-- Tight circle hugging the text -->
+        <circle class="perfectionist-circle"
+                cx="50" cy="50" r="18"
+                fill="none" stroke="#8b5cf6" stroke-width="3" stroke-linecap="round"
+                transform="rotate(-90 50 50)"/>
+        <!-- Percentage text -->
+        <text x="50" y="47" text-anchor="middle" font-size="14" font-weight="700" fill="#5e17eb">99</text>
+        <text x="50" y="60" text-anchor="middle" font-size="9" fill="#8b5cf6" opacity="0.7">%</text>
+        <!-- Tick marks close to the circle -->
+        <g opacity="0.4">
+          <line class="perfectionist-tick" x1="50" y1="26" x2="50" y2="30" stroke="#5e17eb" stroke-width="2" stroke-linecap="round"/>
+          <line class="perfectionist-tick" x1="74" y1="50" x2="70" y2="50" stroke="#5e17eb" stroke-width="2" stroke-linecap="round"/>
+          <line class="perfectionist-tick" x1="50" y1="74" x2="50" y2="70" stroke="#5e17eb" stroke-width="2" stroke-linecap="round"/>
+          <line class="perfectionist-tick" x1="26" y1="50" x2="30" y2="50" stroke="#5e17eb" stroke-width="2" stroke-linecap="round"/>
+          <line class="perfectionist-tick" x1="67" y1="33" x2="64" y2="36" stroke="#5e17eb" stroke-width="1.5" stroke-linecap="round"/>
+          <line class="perfectionist-tick" x1="67" y1="67" x2="64" y2="64" stroke="#5e17eb" stroke-width="1.5" stroke-linecap="round"/>
+          <line class="perfectionist-tick" x1="33" y1="67" x2="36" y2="64" stroke="#5e17eb" stroke-width="1.5" stroke-linecap="round"/>
+          <line class="perfectionist-tick" x1="33" y1="33" x2="36" y2="36" stroke="#5e17eb" stroke-width="1.5" stroke-linecap="round"/>
+        </g>
+        <!-- Eraser trying to fix -->
+        <g class="perfectionist-eraser">
+          <rect x="62" y="34" width="8" height="5" rx="2" fill="#E9A23B" opacity="0.6" transform="rotate(15 66 37)"/>
+        </g>
+        <defs>
+          <linearGradient id="perf-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#5e17eb"/>
+            <stop offset="70%" stop-color="#8b5cf6"/>
+            <stop offset="100%" stop-color="#c4b5fd"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h2>Perfectionist</h2>
+    <p>Circle that draws and redraws, never quite closing</p>
+  </div>
+
+  <!-- ========== GHOST ========== -->
+  <div class="card">
+    <div class="icon-wrap">
+      <svg width="100" height="100" viewBox="0 0 100 100">
+        <!-- Wisps floating away -->
+        <circle class="ghost-wisp-1" cx="42" cy="35" r="3" fill="#8b5cf6" opacity="0"/>
+        <circle class="ghost-wisp-2" cx="55" cy="30" r="2.5" fill="#a78bfa" opacity="0"/>
+        <circle class="ghost-wisp-3" cx="48" cy="40" r="2" fill="#c4b5fd" opacity="0"/>
+        <!-- Ghost figure -->
+        <g class="ghost-figure">
+          <!-- Body -->
+          <path d="M35 80 L35 45 Q35 25 50 25 Q65 25 65 45 L65 80 L58 73 L50 80 L42 73Z"
+                fill="url(#ghost-grad)" stroke="none"/>
+          <!-- Face area - subtle -->
+          <circle cx="43" cy="45" r="2.5" fill="white" opacity="0.4"/>
+          <circle cx="57" cy="45" r="2.5" fill="white" opacity="0.4"/>
+          <!-- Inner highlight -->
+          <path d="M40 80 L40 47 Q40 30 50 30 Q58 30 60 42"
+                fill="none" stroke="white" stroke-width="2" opacity="0.15" stroke-linecap="round"/>
+        </g>
+        <!-- Ground shadow -->
+        <ellipse cx="50" cy="84" rx="18" ry="3" fill="#5e17eb" opacity="0.08"/>
+        <defs>
+          <linearGradient id="ghost-grad" x1="50%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#5e17eb" stop-opacity="0.2"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <h2>Ghost</h2>
+    <p>Translucent figure fading in and out, wisps dissolving</p>
+  </div>
+
+</div>
+
+</body>
+</html>

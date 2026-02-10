@@ -19,6 +19,7 @@
 .smart-alerts {
   min-height: 100vh;
   padding: 24px;
+  padding-top: 80px;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
   color: var(--text-primary);
@@ -46,49 +47,60 @@
   to { transform: rotate(360deg); }
 }
 
-.smart-alerts .alerts-header {
+/* Fixed Toolbar */
+.smart-alerts .alerts-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.smart-alerts .back-btn {
-  background: #ffffff;
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  padding: 8px 16px;
-  border-radius: 8px;
+.smart-alerts .alerts-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
   cursor: pointer;
-  font-size: 0.875rem;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.smart-alerts .alerts-toolbar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.smart-alerts .alerts-reset {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: 1px solid #dee2e6;
+  color: #5e17eb;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
   transition: all 0.2s;
 }
 
-.smart-alerts .back-btn:hover {
-  background: var(--soft-gray);
-  border-color: var(--purple);
-  color: var(--purple);
-}
-
-.smart-alerts .header-content {
-  flex: 1;
-}
-
-.smart-alerts .header-content h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.smart-alerts .header-content p {
-  color: var(--text-muted);
-  margin: 0;
-  font-size: 0.875rem;
+.smart-alerts .alerts-reset:hover {
+  background: rgba(94, 23, 235, 0.08);
+  border-color: #5e17eb;
 }
 
 /* Alerts Summary */
@@ -328,11 +340,8 @@
 @media (max-width: 768px) {
   .smart-alerts {
     padding: 16px;
+    padding-top: 80px;
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
-  }
-
-  .smart-alerts .alerts-header {
-    flex-direction: column;
   }
 
   .alerts-summary {

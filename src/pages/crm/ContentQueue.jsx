@@ -158,23 +158,21 @@ export default function ContentQueue() {
         </div>
       )}
 
-      <header className="cq-page-header">
-        <button className="cq-back-btn" onClick={() => navigate('/crm/marketing')}>
-          ← Back to Marketing
+      {/* Toolbar */}
+      <div className="cq-toolbar">
+        <button className="cq-toolbar-back" onClick={() => navigate('/crm/attract')}>←</button>
+        <h2 className="cq-toolbar-title">Content Queue</h2>
+      </div>
+
+      {/* Action Bar */}
+      <div className="cq-action-bar">
+        <button
+          className="cq-action-btn"
+          onClick={() => navigate('/crm/content-history')}
+        >
+          📚 All History
         </button>
-        <div className="cq-page-title">
-          <h1>Content Queue</h1>
-          <p>Manage your content pipeline</p>
-        </div>
-        <div className="cq-page-actions">
-          <button
-            className="cq-action-btn"
-            onClick={() => navigate('/crm/content-history')}
-          >
-            📚 All History
-          </button>
-        </div>
-      </header>
+      </div>
 
       {/* Tab Navigation */}
       <div className="cq-tabs">

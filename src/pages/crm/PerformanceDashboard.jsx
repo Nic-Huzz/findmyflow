@@ -149,6 +149,10 @@ export default function PerformanceDashboard() {
   if (loading) {
     return (
       <div className="pd-container">
+        <div className="pd-toolbar">
+          <button className="pd-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+          <h2 className="pd-toolbar-title">Performance</h2>
+        </div>
         <div className="pd-loading">
           <div className="pd-loading-spinner" />
           <p>Loading performance data...</p>
@@ -159,38 +163,32 @@ export default function PerformanceDashboard() {
 
   return (
     <div className="pd-container">
-      {/* Header */}
-      <div className="pd-header">
-        <div className="pd-header-left">
-          <button className="pd-back-btn" onClick={() => navigate('/crm/marketing')}>
-            ← Back
-          </button>
-          <div>
-            <h1 className="pd-title">Performance Dashboard</h1>
-            <p className="pd-subtitle">Track your content performance and insights</p>
-          </div>
-        </div>
+      {/* Toolbar */}
+      <div className="pd-toolbar">
+        <button className="pd-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+        <h2 className="pd-toolbar-title">Performance</h2>
+      </div>
 
-        <div className="pd-time-selector">
-          <button
-            className={`pd-time-btn ${timeRange === 7 ? 'active' : ''}`}
-            onClick={() => setTimeRange(7)}
-          >
-            7 Days
-          </button>
-          <button
-            className={`pd-time-btn ${timeRange === 30 ? 'active' : ''}`}
-            onClick={() => setTimeRange(30)}
-          >
-            30 Days
-          </button>
-          <button
-            className={`pd-time-btn ${timeRange === 90 ? 'active' : ''}`}
-            onClick={() => setTimeRange(90)}
-          >
-            90 Days
-          </button>
-        </div>
+      {/* Time Range Selector */}
+      <div className="pd-time-selector">
+        <button
+          className={`pd-time-btn ${timeRange === 7 ? 'active' : ''}`}
+          onClick={() => setTimeRange(7)}
+        >
+          7 Days
+        </button>
+        <button
+          className={`pd-time-btn ${timeRange === 30 ? 'active' : ''}`}
+          onClick={() => setTimeRange(30)}
+        >
+          30 Days
+        </button>
+        <button
+          className={`pd-time-btn ${timeRange === 90 ? 'active' : ''}`}
+          onClick={() => setTimeRange(90)}
+        >
+          90 Days
+        </button>
       </div>
 
       {/* Key Metrics */}

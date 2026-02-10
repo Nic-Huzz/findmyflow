@@ -8,6 +8,7 @@ import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
 import PullToRefresh from '../../components/crm/PullToRefresh'
 import { usePromptGenerator } from '../../components/crm/PromptGenerator'
+import { createDeal, scheduleFollowUp, ACTIVE_STAGES, STAGE_INFO } from '../../lib/crm/dealService'
 import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './WarmOutreach.css'
 
@@ -24,7 +25,7 @@ const ENGAGEMENT_BY_SOURCE = {
     { id: 'liked_post', label: 'Liked Post', icon: '❤️' },
     { id: 'commented', label: 'Commented', icon: '💬' },
     { id: 'lead_magnet', label: 'Downloaded Lead Magnet', icon: '📥' },
-    { id: 'webinar', label: 'Webinar Attendee', icon: '🎥' },
+    { id: 'poll_response', label: 'Poll Response', icon: '📊' },
   ],
   'Warm Outreach': [
     { id: 'dm', label: 'Sent DM', icon: '📩' },
@@ -54,6 +55,8 @@ export default function WarmOutreach() {
 
   const [loading, setLoading] = useState(true)
   const [leads, setLeads] = useState([])
+  const [deals, setDeals] = useState([])
+  const [projects, setProjects] = useState([])
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingLead, setEditingLead] = useState(null)
   const [filterStatus, setFilterStatus] = useState('all')
@@ -75,16 +78,29 @@ export default function WarmOutreach() {
     if (!user?.id) return
 
     try {
-      const { data, error } = await supabase
-        .from('crm_contacts')
-        .select('*')
-        .eq('user_id', user.id)
-        .not('outreach_status', 'is', null)
-        .order('priority', { ascending: false, nullsFirst: false })
-        .order('updated_at', { ascending: false })
+      const [leadsRes, dealsRes, projectsRes] = await Promise.all([
+        supabase
+          .from('crm_contacts')
+          .select('*')
+          .eq('user_id', user.id)
+          .not('outreach_status', 'is', null)
+          .order('priority', { ascending: false, nullsFirst: false })
+          .order('updated_at', { ascending: false }),
+        supabase
+          .from('sales_deals')
+          .select('id, contact_id, contact_email, contact_name, project_id, status')
+          .eq('user_id', user.id),
+        supabase
+          .from('user_projects')
+          .select('id, name')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false }),
+      ])
 
-      if (error) throw error
-      setLeads(data || [])
+      if (leadsRes.error) throw leadsRes.error
+      setLeads(leadsRes.data || [])
+      setDeals(dealsRes.data || [])
+      setProjects(projectsRes.data || [])
     } catch (err) {
       console.error('Error loading leads:', err)
     } finally {
@@ -332,16 +348,21 @@ export default function WarmOutreach() {
           <WarmLeadModal
             lead={editingLead}
             userId={user.id}
+            userProjects={projects}
+            existingDeals={editingLead
+              ? deals.filter(d =>
+                  d.contact_id === editingLead.id ||
+                  (d.contact_email && editingLead.email &&
+                   d.contact_email.toLowerCase() === editingLead.email.toLowerCase())
+                )
+              : []
+            }
             onClose={() => {
               setShowAddModal(false)
               setEditingLead(null)
             }}
             onSave={(savedLead) => {
-              if (editingLead) {
-                setLeads(leads.map(l => l.id === savedLead.id ? savedLead : l))
-              } else {
-                setLeads([savedLead, ...leads])
-              }
+              loadLeads() // Re-fetch to pick up deal links
               setShowAddModal(false)
               setEditingLead(null)
             }}
@@ -360,7 +381,7 @@ export default function WarmOutreach() {
 /**
  * Warm Lead Add/Edit Modal
  */
-function WarmLeadModal({ lead, userId, onClose, onSave, onRemoveFromOutreach, onDeleteContact }) {
+function WarmLeadModal({ lead, userId, userProjects = [], existingDeals = [], onClose, onSave, onRemoveFromOutreach, onDeleteContact }) {
   const [saving, setSaving] = useState(false)
 
   // Merge old last_message into notes for existing leads
@@ -382,13 +403,27 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onRemoveFromOutreach, on
     notes: initialNotes,
   })
 
+  // Project + deal creation
+  const [dealProject, setDealProject] = useState('')
+  const [dealStage, setDealStage] = useState('lead')
+  const [dealFollowUp, setDealFollowUp] = useState('')
+
+  const linkedProjectIds = useMemo(() =>
+    new Set(existingDeals.map(d => d.project_id).filter(Boolean)),
+    [existingDeals]
+  )
+  const availableProjects = useMemo(() =>
+    userProjects.filter(p => !linkedProjectIds.has(p.id)),
+    [userProjects, linkedProjectIds]
+  )
+
   // When source changes, reset engagement_type if current selection isn't in new source
   useEffect(() => {
     const options = ENGAGEMENT_BY_SOURCE[form.source] || []
     if (options.length && !options.find(e => e.id === form.engagement_type)) {
       setForm(prev => ({ ...prev, engagement_type: options[0].id }))
     }
-  }, [form.source])
+  }, [form.source, form.engagement_type])
 
   const sourceEngagements = ENGAGEMENT_BY_SOURCE[form.source] || []
 
@@ -463,6 +498,28 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onRemoveFromOutreach, on
 
           if (error) throw error
           savedResult = data
+        }
+      }
+
+      // Create a deal if a project was selected
+      if (dealProject) {
+        const project = availableProjects.find(p => p.id === dealProject)
+        const dealName = `${form.name.trim()} - ${project?.name || 'Project'}`
+        const stageInfo = STAGE_INFO[dealStage]
+        const { data: newDeal } = await createDeal(userId, {
+          project_id: dealProject,
+          contact_id: savedResult.id,
+          contact_name: dealName,
+          contact_email: form.email.trim() || null,
+          source: form.source,
+          product_type: project?.name || 'Project',
+          value: 0,
+          status: dealStage,
+          probability: stageInfo?.probability || 10,
+        })
+
+        if (newDeal?.id && dealFollowUp) {
+          await scheduleFollowUp(newDeal.id, userId, dealFollowUp)
         }
       }
 
@@ -625,6 +682,78 @@ function WarmLeadModal({ lead, userId, onClose, onSave, onRemoveFromOutreach, on
               rows={3}
             />
           </div>
+
+          {/* Project + Deal section */}
+          {userProjects.length > 0 && (
+            <div className="wo-deal-section">
+              {/* Show existing project links when editing */}
+              {lead && existingDeals.length > 0 && (
+                <div className="wo-existing-projects">
+                  <label>Linked Projects</label>
+                  <div className="wo-existing-project-list">
+                    {existingDeals.map(deal => {
+                      const proj = userProjects.find(p => p.id === deal.project_id)
+                      const stageInfo = STAGE_INFO[deal.status]
+                      return proj ? (
+                        <div key={deal.id} className="wo-project-pill">
+                          <span className="wo-project-pill-name">{proj.name}</span>
+                          <span className="wo-project-pill-stage">{stageInfo?.label || deal.status}</span>
+                        </div>
+                      ) : null
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Add new project */}
+              {availableProjects.length > 0 && (
+                <>
+                  <div className="form-group">
+                    <label>{lead && existingDeals.length > 0 ? 'Add Another Project' : 'Project'}</label>
+                    <select
+                      value={dealProject}
+                      onChange={e => setDealProject(e.target.value)}
+                    >
+                      <option value="">No project (lead only)</option>
+                      {availableProjects.map(p => (
+                        <option key={p.id} value={p.id}>{p.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {dealProject && (
+                    <div className="wo-deal-fields">
+                      <p className="wo-deal-fields-hint">A deal will be created for this project</p>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Pipeline Stage</label>
+                          <select
+                            value={dealStage}
+                            onChange={e => setDealStage(e.target.value)}
+                          >
+                            {ACTIVE_STAGES.map(stage => (
+                              <option key={stage} value={stage}>
+                                {STAGE_INFO[stage]?.label || stage}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label>Follow-up</label>
+                          <input
+                            type="date"
+                            value={dealFollowUp}
+                            onChange={e => setDealFollowUp(e.target.value)}
+                            min={new Date().toISOString().split('T')[0]}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
 
           <div className="modal-actions">
             {lead && (

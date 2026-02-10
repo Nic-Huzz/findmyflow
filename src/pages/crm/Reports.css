@@ -19,6 +19,7 @@
 .reports-page {
   min-height: 100vh;
   padding: 24px;
+  padding-top: 80px;
   background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
   color: var(--text-primary);
 }
@@ -50,47 +51,50 @@
   color: var(--text-muted);
 }
 
-/* Header */
-.reports-page .reports-header {
+/* Fixed Toolbar */
+.reports-page .reports-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.reports-page .reports-toolbar-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.reports-page .reports-toolbar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+/* Controls Bar */
+.reports-page .reports-controls {
+  display: flex;
+  align-items: center;
   gap: 16px;
   margin-bottom: 24px;
   flex-wrap: wrap;
-}
-
-.reports-page .back-btn {
-  background: #ffffff;
-  border: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.reports-page .back-btn:hover {
-  background: var(--soft-gray);
-  border-color: var(--purple);
-  color: var(--purple);
-}
-
-.reports-page .header-content {
-  flex: 1;
-}
-
-.reports-page .header-content h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0 0 12px 0;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* View Mode Toggle */
@@ -784,9 +788,10 @@
 @media (max-width: 640px) {
   .reports-page {
     padding: 16px;
+    padding-top: 80px;
   }
 
-  .reports-page .reports-header {
+  .reports-page .reports-controls {
     flex-direction: column;
   }
 
@@ -842,12 +847,16 @@
     padding: 20px;
   }
 
-  .reports-page .back-btn,
+  .reports-page .reports-toolbar,
   .reports-page .view-mode-toggle,
   .reports-page .period-nav,
   .reports-page .sync-btn,
   .reports-page .export-section {
     display: none !important;
+  }
+
+  .reports-page {
+    padding-top: 20px;
   }
 
   .reports-page .reports-section {
@@ -860,12 +869,6 @@
   .reports-page .grade-card {
     break-inside: avoid;
     page-break-inside: avoid;
-  }
-
-  .reports-page .header-content h1 {
-    color: var(--text-primary);
-    -webkit-text-fill-color: var(--text-primary);
-    background: none;
   }
 
   .reports-page .grade-letter {

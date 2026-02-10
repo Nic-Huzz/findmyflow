@@ -4,6 +4,7 @@
 .sales-scripts {
   min-height: 100vh;
   padding: 24px;
+  padding-top: 80px;
   padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
   color: #495057;
@@ -28,51 +29,44 @@
   animation: crm-spin 1s linear infinite;
 }
 
-/* Header */
-.sales-scripts .sales-scripts-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.sales-scripts .sales-scripts-back {
+/* Toolbar */
+.sales-scripts .ss-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
   background: #ffffff;
-  border: 1px solid #dee2e6;
-  color: #495057;
-  padding: 8px 16px;
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.sales-scripts .ss-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
   cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
 }
 
-.sales-scripts .sales-scripts-back:hover {
-  background: #f8f9fa;
-  border-color: #5e17eb;
-}
-
-.sales-scripts .sales-scripts-title {
-  flex: 1;
-}
-
-.sales-scripts .sales-scripts-title h1 {
-  font-size: 1.75rem;
+.sales-scripts .ss-toolbar-title {
+  font-size: 1.1rem;
   font-weight: 700;
-  margin: 0 0 8px 0;
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.sales-scripts .sales-scripts-title p {
+  color: #1a1a2e;
   margin: 0;
-  color: #6c757d;
-  font-size: 0.875rem;
 }
 
+/* Stats Toggle */
 .sales-scripts .sales-scripts-stats-btn {
   background: #ffffff;
   border: 1px solid #dee2e6;
@@ -82,6 +76,7 @@
   cursor: pointer;
   font-size: 0.875rem;
   transition: all 0.2s;
+  margin-bottom: 16px;
 }
 
 .sales-scripts .sales-scripts-stats-btn.active {
@@ -407,15 +402,7 @@
 @media (max-width: 640px) {
   .sales-scripts {
     padding: 16px;
-  }
-
-  .sales-scripts .sales-scripts-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .sales-scripts .sales-scripts-back {
-    width: fit-content;
+    padding-top: 80px;
   }
 
   .sales-scripts .sales-scripts-stats-btn {

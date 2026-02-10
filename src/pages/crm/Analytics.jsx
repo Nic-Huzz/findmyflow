@@ -124,6 +124,10 @@ export default function Analytics() {
   if (loading) {
     return (
       <div className="crm-analytics">
+        <div className="analytics-toolbar">
+          <button className="analytics-back" onClick={() => navigate('/crm')}>←</button>
+          <h2 className="analytics-toolbar-title">Analytics</h2>
+        </div>
         <div className="crm-loading">
           <div className="crm-spinner"></div>
           <p>Crunching your numbers...</p>
@@ -134,30 +138,27 @@ export default function Analytics() {
 
   return (
     <div className="crm-analytics">
-      <header className="analytics-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
+      <div className="analytics-toolbar">
+        <button className="analytics-back" onClick={() => navigate('/crm')}>←</button>
+        <h2 className="analytics-toolbar-title">Analytics</h2>
+      </div>
+
+      <div className="analytics-week-nav">
+        <button
+          className="week-btn"
+          onClick={() => setWeekOffset(prev => prev - 1)}
+        >
+          ← Previous
         </button>
-        <div className="header-content">
-          <h1>Weekly Report Card</h1>
-          <div className="week-nav">
-            <button
-              className="week-btn"
-              onClick={() => setWeekOffset(prev => prev - 1)}
-            >
-              ← Previous
-            </button>
-            <span className="week-label">{weekRange.label}</span>
-            <button
-              className="week-btn"
-              onClick={() => setWeekOffset(prev => Math.min(0, prev + 1))}
-              disabled={weekOffset >= 0}
-            >
-              Next →
-            </button>
-          </div>
-        </div>
-      </header>
+        <span className="week-label">{weekRange.label}</span>
+        <button
+          className="week-btn"
+          onClick={() => setWeekOffset(prev => Math.min(0, prev + 1))}
+          disabled={weekOffset >= 0}
+        >
+          Next →
+        </button>
+      </div>
 
       {/* Overall Grade */}
       <div className="grade-card">

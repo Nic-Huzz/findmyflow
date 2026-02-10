@@ -163,6 +163,10 @@ export default function EmailSequences() {
   if (loading) {
     return (
       <div className="email-sequences-container">
+        <div className="email-sequences-toolbar">
+          <button className="es-back-btn" onClick={() => navigate('/crm/nurture')}>←</button>
+          <h2 className="es-toolbar-title">Email Sequences</h2>
+        </div>
         <div className="email-sequences-loading">
           <div className="email-sequences-spinner" />
           <p>Loading sequences...</p>
@@ -181,19 +185,6 @@ export default function EmailSequences() {
           </button>
           <h2 className="es-toolbar-title">Email Sequences</h2>
         </div>
-
-        {/* Header */}
-        <header className="email-sequences-header">
-          <div className="es-breadcrumb">
-            <button onClick={() => navigate('/crm')}>Home</button>
-            <span>→</span>
-            <button onClick={() => navigate('/crm/nurture')}>Nurture</button>
-            <span>→</span>
-            <span>Email Sequences</span>
-          </div>
-          <h1 className="es-title">✉️ Email Sequences</h1>
-          <p className="es-subtitle">Automated nurture campaigns</p>
-        </header>
 
         {/* Stats Card */}
         <div className="es-stats-card">

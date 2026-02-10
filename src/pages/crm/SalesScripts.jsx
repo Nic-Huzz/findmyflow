@@ -72,6 +72,10 @@ export default function SalesScripts() {
   if (loading) {
     return (
       <div className="sales-scripts">
+        <div className="ss-toolbar">
+          <button className="ss-back" onClick={() => navigate('/crm/sales')}>←</button>
+          <h2 className="ss-toolbar-title">Sales Scripts</h2>
+        </div>
         <div className="sales-scripts-loading">
           <div className="sales-scripts-spinner"></div>
           <p>Loading scripts...</p>
@@ -82,21 +86,17 @@ export default function SalesScripts() {
 
   return (
     <div className="sales-scripts">
-      <header className="sales-scripts-header">
-        <button className="sales-scripts-back" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="sales-scripts-title">
-          <h1>Hormozi Sales Scripts</h1>
-          <p>15 proven scripts based on $100M Offers framework</p>
-        </div>
-        <button
-          className={`sales-scripts-stats-btn ${showStats ? 'active' : ''}`}
-          onClick={() => setShowStats(!showStats)}
-        >
-          📊 {showStats ? 'Hide' : 'Show'} Stats
-        </button>
-      </header>
+      <div className="ss-toolbar">
+        <button className="ss-back" onClick={() => navigate('/crm/sales')}>←</button>
+        <h2 className="ss-toolbar-title">Sales Scripts</h2>
+      </div>
+
+      <button
+        className={`sales-scripts-stats-btn ${showStats ? 'active' : ''}`}
+        onClick={() => setShowStats(!showStats)}
+      >
+        📊 {showStats ? 'Hide' : 'Show'} Stats
+      </button>
 
       {/* Stage Filter */}
       <div className="sales-scripts-filters">

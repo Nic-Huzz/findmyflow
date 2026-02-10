@@ -5,6 +5,7 @@
  * Now includes Expected vs Actual comparison from validation data
  */
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { fetchDealOutcomes, getDealOutcomeStats } from '../../lib/crm/dealService'
 import { fetchValidationAnalysis } from '../../lib/crm/challengeDataService'
@@ -34,6 +35,7 @@ const WIN_REASON_LABELS = {
 
 export default function ObjectionPatterns() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState(null)
   const [outcomes, setOutcomes] = useState([])
@@ -68,6 +70,10 @@ export default function ObjectionPatterns() {
   if (loading) {
     return (
       <div className="objection-patterns loading">
+        <div className="op-toolbar">
+          <button className="op-toolbar-back" onClick={() => navigate('/crm/sales')}>←</button>
+          <h2 className="op-toolbar-title">Objection Patterns</h2>
+        </div>
         <div className="op-spinner"></div>
         <p>Loading patterns...</p>
       </div>
@@ -79,12 +85,10 @@ export default function ObjectionPatterns() {
 
   return (
     <div className="objection-patterns">
-      <header className="op-header">
-        <div className="op-title-section">
-          <h1>Win/Loss Patterns</h1>
-          <p className="op-subtitle">Understand why deals close or don't</p>
-        </div>
-      </header>
+      <div className="op-toolbar">
+        <button className="op-toolbar-back" onClick={() => navigate('/crm/sales')}>←</button>
+        <h2 className="op-toolbar-title">Objection Patterns</h2>
+      </div>
 
       {/* Summary Cards */}
       <div className="op-summary">

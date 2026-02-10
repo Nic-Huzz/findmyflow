@@ -1,0 +1,132 @@
+.protective-archetype-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.protective-icon { overflow: visible; }
+.prot-perfectionist-svg { overflow: hidden; }
+
+/* People Pleaser — heart stretching toward others */
+@keyframes prot-heart-stretch {
+  0%, 100% { transform: scale(1) translateX(0); }
+  25% { transform: scale(1.1, 0.9) translateX(6px); }
+  50% { transform: scale(0.9, 1.1) translateX(-4px); }
+  75% { transform: scale(1.05, 0.95) translateX(3px); }
+}
+@keyframes prot-heart-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(94, 23, 235, 0.2)); }
+  50% { filter: drop-shadow(0 0 12px rgba(94, 23, 235, 0.5)); }
+}
+.prot-pleaser-heart {
+  animation: prot-heart-stretch 3s ease-in-out infinite, prot-heart-glow 3s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes prot-hand-reach {
+  0%, 100% { transform: translateX(0) rotate(0deg); opacity: 0.4; }
+  50% { transform: translateX(8px) rotate(-5deg); opacity: 0.8; }
+}
+.prot-pleaser-hand-left { animation: prot-hand-reach 3s ease-in-out infinite; }
+.prot-pleaser-hand-right { animation: prot-hand-reach 3s ease-in-out infinite 1.5s; }
+
+/* Performer — spotlight with dancing star */
+@keyframes prot-spotlight-pulse {
+  0%, 100% { opacity: 0.15; transform: scaleY(1); }
+  50% { opacity: 0.3; transform: scaleY(1.05); }
+}
+.prot-performer-spotlight {
+  animation: prot-spotlight-pulse 2.5s ease-in-out infinite;
+  transform-origin: top center;
+}
+@keyframes prot-star-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.15); }
+  50% { transform: rotate(180deg) scale(1); }
+  75% { transform: rotate(270deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+.prot-performer-star {
+  animation: prot-star-spin 4s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes prot-sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+.prot-performer-sparkle-1 { animation: prot-sparkle 2s ease-in-out infinite 0s; }
+.prot-performer-sparkle-2 { animation: prot-sparkle 2s ease-in-out infinite 0.7s; }
+.prot-performer-sparkle-3 { animation: prot-sparkle 2s ease-in-out infinite 1.4s; }
+
+/* Controller — rigid grid with pulsing lock */
+@keyframes prot-grid-tighten {
+  0%, 100% { stroke-dashoffset: 0; }
+  50% { stroke-dashoffset: 4; }
+}
+.prot-controller-grid line {
+  stroke-dasharray: 4 2;
+  animation: prot-grid-tighten 3s ease-in-out infinite;
+}
+@keyframes prot-lock-pulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(94, 23, 235, 0.3)); }
+  50% { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(94, 23, 235, 0.6)); }
+}
+.prot-controller-lock {
+  animation: prot-lock-pulse 2s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes prot-bolt-flash {
+  0%, 70%, 100% { opacity: 0.3; }
+  75% { opacity: 1; }
+}
+.prot-controller-bolt { animation: prot-bolt-flash 3s ease-in-out infinite; }
+
+/* Perfectionist — circle that never closes */
+@keyframes prot-circle-chase {
+  0% { transform: rotate(0deg); stroke-dashoffset: 15; }
+  25% { stroke-dashoffset: 10; }
+  50% { transform: rotate(180deg); stroke-dashoffset: 18; }
+  75% { stroke-dashoffset: 12; }
+  100% { transform: rotate(360deg); stroke-dashoffset: 15; }
+}
+.prot-perfectionist-circle {
+  stroke-dasharray: 98 15;
+  stroke-dashoffset: 15;
+  animation: prot-circle-chase 3s ease-in-out infinite;
+  transform-origin: 50px 50px;
+}
+@keyframes prot-tick-marks {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+.prot-perfectionist-tick { animation: prot-tick-marks 2s ease-in-out infinite; }
+.prot-perfectionist-tick:nth-child(2) { animation-delay: 0.25s; }
+.prot-perfectionist-tick:nth-child(3) { animation-delay: 0.5s; }
+.prot-perfectionist-tick:nth-child(4) { animation-delay: 0.75s; }
+@keyframes prot-eraser-move {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  40% { opacity: 0; }
+  50% { opacity: 0.7; transform: translate(-3px, 3px) rotate(-8deg); }
+  70% { opacity: 0.7; transform: translate(3px, -2px) rotate(5deg); }
+  80% { opacity: 0; }
+}
+.prot-perfectionist-eraser { animation: prot-eraser-move 4s ease-in-out infinite; }
+
+/* Ghost — fading figure */
+@keyframes prot-ghost-fade {
+  0%, 100% { opacity: 0.25; transform: translateY(0) scale(1); }
+  30% { opacity: 0.7; transform: translateY(-3px) scale(1.02); }
+  50% { opacity: 0.15; transform: translateY(2px) scale(0.98); }
+  70% { opacity: 0.55; transform: translateY(-1px) scale(1.01); }
+}
+.prot-ghost-figure {
+  animation: prot-ghost-fade 5s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+@keyframes prot-ghost-wisp {
+  0%, 100% { opacity: 0; transform: translateY(0) translateX(0); }
+  30% { opacity: 0.4; transform: translateY(-8px) translateX(4px); }
+  60% { opacity: 0.1; transform: translateY(-16px) translateX(-2px); }
+}
+.prot-ghost-wisp-1 { animation: prot-ghost-wisp 4s ease-out infinite 0s; }
+.prot-ghost-wisp-2 { animation: prot-ghost-wisp 4s ease-out infinite 1.3s; }
+.prot-ghost-wisp-3 { animation: prot-ghost-wisp 4s ease-out infinite 2.6s; }

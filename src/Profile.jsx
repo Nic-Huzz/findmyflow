@@ -7,6 +7,7 @@ import { protectiveProfiles } from './data/protectiveProfiles'
 import { personaProfiles, getPersonaWithFlow, normalizePersona } from './data/personaProfiles'
 import { hasActiveChallenge } from './lib/questCompletion'
 import { cacheBustUrl } from './lib/fetchJson'
+import ProtectiveArchetypeIcon from './components/ProtectiveArchetypeIcon'
 import { getStageShortName } from './lib/stageConfig'
 import { checkAndGraduateProject } from './lib/graduationChecker'
 import { getEssenceDisplayName, getEssenceImagePath } from './lib/essencePreferences'
@@ -742,14 +743,7 @@ const Profile = () => {
               {!expandedArchetypes.protective && (
                 <>
                   <div className="stat-icon">
-                    <img
-                      src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.webp'}`}
-                      alt={userData.protective_archetype}
-                      onError={(e) => {
-                        e.target.style.display = 'none'
-                        e.target.parentElement.innerHTML = '🛡️'
-                      }}
-                    />
+                    <ProtectiveArchetypeIcon archetype={userData.protective_archetype} size={48} />
                   </div>
                   <div className="stat-label">Protective</div>
                   <div className="stat-value">{userData.protective_archetype}</div>
@@ -764,10 +758,7 @@ const Profile = () => {
             {expandedArchetypes.protective && (
               <div className="archetype-expanded">
                 <div className="archetype-expanded-header">
-                  <img
-                    src={`/images/archetypes/lead-magnet-protective/${protectiveData?.image || userData.protective_archetype?.toLowerCase().replace(/\s+/g, '-') + '.webp'}`}
-                    alt={userData.protective_archetype}
-                  />
+                  <ProtectiveArchetypeIcon archetype={userData.protective_archetype} size={80} />
                   <div className="archetype-tag">Protective</div>
                 </div>
                 <div className="archetype-expanded-body">

@@ -153,15 +153,10 @@ export default function GeneratedAssetsLibrary({ userId: propUserId }) {
 
   return (
     <div className="assets-library">
-      {/* Header */}
-      <div className="assets-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="header-text">
-          <h1>Content Library</h1>
-          <p>Your saved AI-generated content</p>
-        </div>
+      {/* Toolbar */}
+      <div className="assets-toolbar">
+        <button className="assets-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+        <h2 className="assets-toolbar-title">Generated Assets</h2>
       </div>
 
       {/* Filters */}
@@ -204,7 +199,7 @@ export default function GeneratedAssetsLibrary({ userId: propUserId }) {
       <div className="assets-content">
         {loading && (
           <div className="assets-loading">
-            <div className="spinner"></div>
+            <div className="assets-spinner"></div>
             <p>Loading your content...</p>
           </div>
         )}

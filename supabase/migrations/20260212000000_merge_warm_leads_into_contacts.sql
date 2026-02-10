@@ -65,6 +65,8 @@ CREATE TRIGGER trg_outreach_status_entered
 
 -- ============================================================================
 -- 1b. Migrate data from crm_warm_leads into crm_contacts
+--     Actual crm_warm_leads columns: id, user_id, name, platform, handle,
+--     engagement_type, status, priority, last_message, notes, created_at, updated_at
 -- ============================================================================
 
 -- UPDATE existing contacts that match a warm lead by user_id + LOWER(TRIM(name))
@@ -74,43 +76,35 @@ SET
   engagement_type = COALESCE(c.engagement_type, wl.engagement_type),
   outreach_status = COALESCE(c.outreach_status, wl.status),
   priority        = COALESCE(c.priority, wl.priority),
-  temperature     = COALESCE(c.temperature, wl.temperature),
   last_message    = COALESCE(c.last_message, wl.last_message),
   social_handle   = COALESCE(c.social_handle, wl.handle),
-  email           = COALESCE(c.email, wl.email),
-  phone           = COALESCE(c.phone, wl.phone),
-  company         = COALESCE(c.company, wl.company),
   notes           = COALESCE(c.notes, wl.notes),
-  outreach_status_entered_at = COALESCE(c.outreach_status_entered_at, wl.status_entered_at, wl.updated_at)
+  outreach_status_entered_at = COALESCE(c.outreach_status_entered_at, wl.updated_at)
 FROM crm_warm_leads wl
 WHERE c.user_id = wl.user_id
   AND LOWER(TRIM(c.name)) = LOWER(TRIM(wl.name));
 
 -- INSERT warm leads that have no matching contact
 INSERT INTO crm_contacts (
-  user_id, name, email, phone, company, social_handle,
+  user_id, name, social_handle,
   source, lifecycle_stage, notes,
-  platform, engagement_type, outreach_status, priority, temperature,
+  platform, engagement_type, outreach_status, priority,
   last_message, outreach_status_entered_at,
   created_at, updated_at
 )
 SELECT
   wl.user_id,
   wl.name,
-  wl.email,
-  wl.phone,
-  wl.company,
   wl.handle,
-  COALESCE(wl.source, 'Content'),
+  'Content',
   'lead',
   wl.notes,
   wl.platform,
   wl.engagement_type,
   wl.status,
   wl.priority,
-  wl.temperature,
   wl.last_message,
-  COALESCE(wl.status_entered_at, wl.updated_at),
+  wl.updated_at,
   wl.created_at,
   wl.updated_at
 FROM crm_warm_leads wl

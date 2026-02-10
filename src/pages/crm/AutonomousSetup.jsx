@@ -110,6 +110,10 @@ export default function AutonomousSetup({ userId }) {
   if (loading) {
     return (
       <div className="autonomous-setup">
+        <div className="setup-toolbar">
+          <button className="setup-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+          <h2 className="setup-toolbar-title">Autonomous Setup</h2>
+        </div>
         <div className="setup-loading">
           <div className="spinner"></div>
           <p>Loading your progress...</p>
@@ -121,16 +125,13 @@ export default function AutonomousSetup({ userId }) {
 
   return (
     <div className="autonomous-setup">
-      {/* Header */}
-      <div className="setup-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="header-text">
-          <h1>Setup Your Autonomous AI</h1>
-          <p>Answer a few questions to unlock AI that runs your business</p>
-        </div>
+      {/* Toolbar */}
+      <div className="setup-toolbar">
+        <button className="setup-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+        <h2 className="setup-toolbar-title">Autonomous Setup</h2>
       </div>
+
+      <p className="setup-description">Answer a few questions to unlock AI that runs your business</p>
 
       {/* Progress Overview */}
       <div className="setup-progress">

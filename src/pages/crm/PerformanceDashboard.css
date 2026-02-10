@@ -23,6 +23,7 @@
 .pd-container {
   min-height: 100vh;
   padding: 1.5rem;
+  padding-top: 80px;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
   color: var(--text-primary);
@@ -55,63 +56,51 @@
   color: var(--text-muted);
 }
 
-/* Header */
-.pd-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 2rem;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.pd-header-left {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.pd-back-btn {
-  padding: 0.5rem 1rem;
+/* Toolbar */
+.pd-container .pd-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
   background: #ffffff;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.pd-container .pd-toolbar-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #5e17eb;
   cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
 }
 
-.pd-back-btn:hover {
-  background: var(--soft-gray);
-  border-color: var(--purple);
-  color: var(--purple);
-}
-
-.pd-title {
-  font-size: 1.75rem;
+.pd-container .pd-toolbar-title {
+  font-size: 1.1rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1a1a2e;
   margin: 0;
 }
 
-.pd-subtitle {
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  margin: 0.25rem 0 0 0;
-}
-
-/* Date Range Picker */
-.pd-date-range {
+/* Time Range Selector */
+.pd-container .pd-time-selector {
   display: flex;
   gap: 0.5rem;
-  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.pd-date-btn {
+.pd-container .pd-time-btn {
   padding: 0.5rem 1rem;
   background: #ffffff;
   border: 1px solid var(--border-color);
@@ -122,11 +111,11 @@
   transition: all 0.2s;
 }
 
-.pd-date-btn:hover {
+.pd-container .pd-time-btn:hover {
   border-color: var(--purple);
 }
 
-.pd-date-btn.active {
+.pd-container .pd-time-btn.active {
   background: rgba(94, 23, 235, 0.1);
   border-color: var(--purple);
   color: var(--purple);
@@ -373,19 +362,11 @@
 @media (max-width: 768px) {
   .pd-container {
     padding: 1rem;
+    padding-top: 80px;
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
-  .pd-header {
-    flex-direction: column;
-  }
-
-  .pd-header-left {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .pd-date-range {
+  .pd-container .pd-time-selector {
     flex-wrap: wrap;
   }
 
