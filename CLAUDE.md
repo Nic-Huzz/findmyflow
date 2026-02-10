@@ -340,6 +340,7 @@ npm run db:push   # Apply migrations
 - `docs/scoring-system-refactor.md` - Points/scoring system architecture and bug fixes
 - `docs/PUSH_NOTIFICATIONS.md` - Push notification system setup, testing, troubleshooting
 - `docs/page-component-design-guide.md` - **REQUIRED before creating/modifying any page or component UI** — starter templates, decision trees, token tables, anti-patterns
+- `docs/2026-01-29-priority-hierarchy.md` - **Priority hierarchy & test milestones** - Defines testable "done" gates, what's built vs what to build next, stops scope creep
 - `docs/` - Session notes and historical changes
 
 ## Links
