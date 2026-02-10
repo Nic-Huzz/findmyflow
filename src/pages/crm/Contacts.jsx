@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { supabase } from '../../lib/supabaseClient'
-import { createDeal, scheduleFollowUp } from '../../lib/crm/dealService'
+import { createDeal, scheduleFollowUp, ACTIVE_STAGES, STAGE_INFO } from '../../lib/crm/dealService'
 import PullToRefresh from '../../components/crm/PullToRefresh'
 import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './Contacts.css'
@@ -43,11 +43,14 @@ export default function Contacts() {
 
   const [loading, setLoading] = useState(true)
   const [contacts, setContacts] = useState([])
+  const [deals, setDeals] = useState([])
+  const [projects, setProjects] = useState([])
   const [showAddModal, setShowAddModal] = useState(false)
   const [editingContact, setEditingContact] = useState(null)
   const [prefillData, setPrefillData] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterStage, setFilterStage] = useState('all')
+  const [filterProject, setFilterProject] = useState('all')
   const [showAddMenu, setShowAddMenu] = useState(false)
   const [analyzing, setAnalyzing] = useState(false)
 
@@ -61,19 +64,32 @@ export default function Contacts() {
     return () => document.body.classList.remove('modal-active')
   }, [showAddModal])
 
-  // Load contacts
+  // Load contacts, deals, and projects
   const loadContacts = useCallback(async () => {
     if (!user?.id) return
 
     try {
-      const { data, error } = await supabase
-        .from('crm_contacts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('updated_at', { ascending: false })
+      const [contactsRes, dealsRes, projectsRes] = await Promise.all([
+        supabase
+          .from('crm_contacts')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('updated_at', { ascending: false }),
+        supabase
+          .from('sales_deals')
+          .select('id, contact_id, contact_email, contact_name, project_id, status')
+          .eq('user_id', user.id),
+        supabase
+          .from('user_projects')
+          .select('id, name')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false }),
+      ])
 
-      if (error) throw error
-      setContacts(data || [])
+      if (contactsRes.error) throw contactsRes.error
+      setContacts(contactsRes.data || [])
+      setDeals(dealsRes.data || [])
+      setProjects(projectsRes.data || [])
     } catch (err) {
       console.error('Error loading contacts:', err)
     } finally {
@@ -87,6 +103,52 @@ export default function Contacts() {
     }
   }, [user?.id, loadContacts])
 
+  // Map contact ID → project IDs via deals (with email fallback for legacy deals)
+  const contactProjectMap = useMemo(() => {
+    const byId = {}    // contact UUID → Set of project_ids
+    const byEmail = {} // email (lowercase) → Set of project_ids (fallback)
+    deals.forEach(deal => {
+      if (!deal.project_id) return
+      if (deal.contact_id) {
+        if (!byId[deal.contact_id]) byId[deal.contact_id] = new Set()
+        byId[deal.contact_id].add(deal.project_id)
+      }
+      if (deal.contact_email) {
+        const key = deal.contact_email.toLowerCase()
+        if (!byEmail[key]) byEmail[key] = new Set()
+        byEmail[key].add(deal.project_id)
+      }
+    })
+    return { byId, byEmail }
+  }, [deals])
+
+  // Helper: get project IDs for a contact
+  const getProjectsForContact = useCallback((contact) => {
+    const fromId = contactProjectMap.byId[contact.id]
+    if (fromId?.size) return fromId
+    const emailKey = contact.email?.toLowerCase()
+    if (emailKey) return contactProjectMap.byEmail[emailKey] || null
+    return null
+  }, [contactProjectMap])
+
+  // Projects that have at least one linked contact
+  const projectsWithContacts = useMemo(() => {
+    const projectIds = new Set()
+    contacts.forEach(c => {
+      const pids = getProjectsForContact(c)
+      if (pids) pids.forEach(pid => projectIds.add(pid))
+    })
+    return projects.filter(p => projectIds.has(p.id))
+  }, [contacts, projects, getProjectsForContact])
+
+  // Reset project filter if selected project no longer has contacts
+  useEffect(() => {
+    if (filterProject !== 'all' && filterProject !== 'no-project') {
+      const stillExists = projectsWithContacts.some(p => p.id === filterProject)
+      if (!stillExists) setFilterProject('all')
+    }
+  }, [projectsWithContacts, filterProject])
+
   // Filtered contacts
   const filteredContacts = useMemo(() => {
     return contacts.filter(contact => {
@@ -98,9 +160,17 @@ export default function Contacts() {
 
       const matchesStage = filterStage === 'all' || contact.lifecycle_stage === filterStage
 
-      return matchesSearch && matchesStage
+      let matchesProject = true
+      if (filterProject === 'no-project') {
+        matchesProject = !getProjectsForContact(contact)
+      } else if (filterProject !== 'all') {
+        const pids = getProjectsForContact(contact)
+        matchesProject = pids?.has(filterProject) || false
+      }
+
+      return matchesSearch && matchesStage && matchesProject
     })
-  }, [contacts, searchQuery, filterStage])
+  }, [contacts, searchQuery, filterStage, filterProject, getProjectsForContact])
 
   // Stats
   const stats = useMemo(() => {
@@ -294,11 +364,41 @@ export default function Contacts() {
           ))}
         </div>
 
+        {/* Project Filters */}
+        {projectsWithContacts.length > 0 && (
+          <div className="contacts-filters project-filters">
+            <button
+              className={`filter-chip ${filterProject === 'all' ? 'active' : ''}`}
+              onClick={() => setFilterProject('all')}
+              style={{ '--chip-color': '#5e17eb' }}
+            >
+              All Projects
+            </button>
+            {projectsWithContacts.map(project => (
+              <button
+                key={project.id}
+                className={`filter-chip ${filterProject === project.id ? 'active' : ''}`}
+                onClick={() => setFilterProject(project.id)}
+                style={{ '--chip-color': '#E9A23B' }}
+              >
+                {project.name}
+              </button>
+            ))}
+            <button
+              className={`filter-chip ${filterProject === 'no-project' ? 'active' : ''}`}
+              onClick={() => setFilterProject('no-project')}
+              style={{ '--chip-color': '#6b7280' }}
+            >
+              No Project
+            </button>
+          </div>
+        )}
+
         {/* Contacts List */}
         <div className="contacts-list-card">
           {filteredContacts.length === 0 ? (
             <div className="contacts-empty">
-              {searchQuery || filterStage !== 'all' ? (
+              {searchQuery || filterStage !== 'all' || filterProject !== 'all' ? (
                 <p>No contacts match your filters</p>
               ) : (
                 <div className="contacts-empty-rich">
@@ -316,6 +416,10 @@ export default function Contacts() {
               {filteredContacts.map((contact, idx) => {
                 const stage = LIFECYCLE_STAGES.find(s => s.id === contact.lifecycle_stage) || LIFECYCLE_STAGES[0]
                 const recency = timeAgo(contact.updated_at)
+                const pids = getProjectsForContact(contact)
+                const contactProjects = pids
+                  ? projects.filter(p => pids.has(p.id))
+                  : []
                 return (
                   <div
                     key={contact.id}
@@ -331,6 +435,11 @@ export default function Contacts() {
                       <span className="contact-email">{contact.email || contact.social_handle || 'No email'}</span>
                       {contact.company && (
                         <span className="contact-company">{contact.company}</span>
+                      )}
+                      {contactProjects.length > 0 && (
+                        <span className="contact-project-tag">
+                          {contactProjects.map(p => p.name).join(', ')}
+                        </span>
                       )}
                     </div>
                     <div className="contact-meta">
@@ -352,16 +461,22 @@ export default function Contacts() {
             contact={editingContact}
             prefill={prefillData}
             userId={user.id}
+            userProjects={projects}
+            existingDeals={editingContact
+              ? deals.filter(d =>
+                  d.contact_id === editingContact.id ||
+                  (d.contact_email && editingContact.email &&
+                   d.contact_email.toLowerCase() === editingContact.email.toLowerCase())
+                )
+              : []
+            }
             onClose={() => {
               setShowAddModal(false)
               setEditingContact(null)
             }}
             onSave={(savedContact) => {
-              if (editingContact) {
-                setContacts(contacts.map(c => c.id === savedContact.id ? savedContact : c))
-              } else {
-                setContacts([savedContact, ...contacts])
-              }
+              // Always re-fetch to pick up any new deals/project links
+              loadContacts()
               setShowAddModal(false)
               setEditingContact(null)
             }}
@@ -376,7 +491,7 @@ export default function Contacts() {
 /**
  * Contact Add/Edit Modal
  */
-function ContactModal({ contact, prefill, userId, onClose, onSave, onDelete }) {
+function ContactModal({ contact, prefill, userId, userProjects = [], existingDeals = [], onClose, onSave, onDelete }) {
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({
     name: contact?.name || prefill?.name || '',
@@ -391,28 +506,20 @@ function ContactModal({ contact, prefill, userId, onClose, onSave, onDelete }) {
   })
   const [tagInput, setTagInput] = useState('')
 
-  // Deal creation toggle (only for new contacts)
-  const [alsoDeal, setAlsoDeal] = useState(false)
-  const [projects, setProjects] = useState([])
+  // Project + deal creation
   const [dealProject, setDealProject] = useState('')
-  const [dealValue, setDealValue] = useState(497)
+  const [dealStage, setDealStage] = useState('lead')
   const [dealFollowUp, setDealFollowUp] = useState('')
 
-  useEffect(() => {
-    if (alsoDeal && projects.length === 0) {
-      supabase
-        .from('user_projects')
-        .select('id, name')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .then(({ data }) => {
-          if (data?.length) {
-            setProjects(data)
-            setDealProject(data[0].id)
-          }
-        })
-    }
-  }, [alsoDeal, userId, projects.length])
+  // Projects already linked via existing deals
+  const linkedProjectIds = useMemo(() =>
+    new Set(existingDeals.map(d => d.project_id).filter(Boolean)),
+    [existingDeals]
+  )
+  const availableProjects = useMemo(() =>
+    userProjects.filter(p => !linkedProjectIds.has(p.id)),
+    [userProjects, linkedProjectIds]
+  )
 
   const handleAddTag = () => {
     if (tagInput.trim() && !form.tags.includes(tagInput.trim())) {
@@ -431,6 +538,7 @@ function ContactModal({ contact, prefill, userId, onClose, onSave, onDelete }) {
 
     setSaving(true)
     try {
+      let savedData
       if (contact?.id) {
         // Update
         const { data, error } = await supabase
@@ -452,7 +560,7 @@ function ContactModal({ contact, prefill, userId, onClose, onSave, onDelete }) {
           .single()
 
         if (error) throw error
-        onSave(data)
+        savedData = data
       } else {
         // Create
         const { data, error } = await supabase
@@ -473,29 +581,33 @@ function ContactModal({ contact, prefill, userId, onClose, onSave, onDelete }) {
           .single()
 
         if (error) throw error
-
-        // Also create a deal if toggled on
-        if (alsoDeal && dealProject) {
-          const project = projects.find(p => p.id === dealProject)
-          const dealName = `${form.name.trim()} - ${project?.name || 'Project'}`
-          const { data: newDeal } = await createDeal(userId, {
-            project_id: dealProject,
-            contact_name: dealName,
-            contact_email: form.email.trim() || null,
-            source: form.source,
-            product_type: project?.name || 'Project',
-            value: dealValue || 0,
-            status: 'lead',
-          })
-
-          // Schedule follow-up if date set
-          if (newDeal?.id && dealFollowUp) {
-            await scheduleFollowUp(newDeal.id, userId, dealFollowUp)
-          }
-        }
-
-        onSave(data)
+        savedData = data
       }
+
+      // Create a deal if a project was selected (works for both add and edit)
+      if (dealProject) {
+        const project = availableProjects.find(p => p.id === dealProject)
+        const dealName = `${form.name.trim()} - ${project?.name || 'Project'}`
+        const stageInfo = STAGE_INFO[dealStage]
+        const { data: newDeal } = await createDeal(userId, {
+          project_id: dealProject,
+          contact_id: savedData.id,
+          contact_name: dealName,
+          contact_email: form.email.trim() || null,
+          source: form.source,
+          product_type: project?.name || 'Project',
+          value: 0,
+          status: dealStage,
+          probability: stageInfo?.probability || 10,
+        })
+
+        // Schedule follow-up if date set
+        if (newDeal?.id && dealFollowUp) {
+          await scheduleFollowUp(newDeal.id, userId, dealFollowUp)
+        }
+      }
+
+      onSave(savedData)
       hapticMedium()
     } catch (err) {
       console.error('Error saving contact:', err)
@@ -643,59 +755,74 @@ function ContactModal({ contact, prefill, userId, onClose, onSave, onDelete }) {
             />
           </div>
 
-          {/* Deal creation toggle - only for new contacts */}
-          {!contact && (
+          {/* Project + Deal section */}
+          {userProjects.length > 0 && (
             <div className="deal-toggle-section">
-              <label className="toggle-row">
-                <span className="toggle-label">Also create a deal?</span>
-                <input
-                  type="checkbox"
-                  checked={alsoDeal}
-                  onChange={e => setAlsoDeal(e.target.checked)}
-                  className="toggle-checkbox"
-                />
-                <span className="toggle-switch" />
-              </label>
-
-              {alsoDeal && (
-                <div className="deal-fields">
-                  <div className="form-group">
-                    <label>Project</label>
-                    {projects.length > 0 ? (
-                      <select
-                        value={dealProject}
-                        onChange={e => setDealProject(e.target.value)}
-                      >
-                        {projects.map(p => (
-                          <option key={p.id} value={p.id}>{p.name}</option>
-                        ))}
-                      </select>
-                    ) : (
-                      <p className="deal-no-projects">No projects found. Create one first.</p>
-                    )}
-                  </div>
-                  <div className="form-row">
-                    <div className="form-group">
-                      <label>Value ($)</label>
-                      <input
-                        type="number"
-                        value={dealValue}
-                        onChange={e => setDealValue(Number(e.target.value))}
-                        min="0"
-                        placeholder="497"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Follow-up Date</label>
-                      <input
-                        type="date"
-                        value={dealFollowUp}
-                        onChange={e => setDealFollowUp(e.target.value)}
-                        min={new Date().toISOString().split('T')[0]}
-                      />
-                    </div>
+              {/* Show existing project links when editing */}
+              {contact && existingDeals.length > 0 && (
+                <div className="existing-projects">
+                  <label>Linked Projects</label>
+                  <div className="existing-project-list">
+                    {existingDeals.map(deal => {
+                      const proj = userProjects.find(p => p.id === deal.project_id)
+                      const stageInfo = STAGE_INFO[deal.status]
+                      return proj ? (
+                        <div key={deal.id} className="existing-project-pill">
+                          <span className="project-pill-name">{proj.name}</span>
+                          <span className="project-pill-stage">{stageInfo?.label || deal.status}</span>
+                        </div>
+                      ) : null
+                    })}
                   </div>
                 </div>
+              )}
+
+              {/* Add new project - show available (unlinked) projects */}
+              {availableProjects.length > 0 && (
+                <>
+                  <div className="form-group">
+                    <label>{contact && existingDeals.length > 0 ? 'Add Another Project' : 'Project'}</label>
+                    <select
+                      value={dealProject}
+                      onChange={e => setDealProject(e.target.value)}
+                    >
+                      <option value="">No project (contact only)</option>
+                      {availableProjects.map(p => (
+                        <option key={p.id} value={p.id}>{p.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {dealProject && (
+                    <div className="deal-fields">
+                      <p className="deal-fields-hint">A deal will be created for this project</p>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Pipeline Stage</label>
+                          <select
+                            value={dealStage}
+                            onChange={e => setDealStage(e.target.value)}
+                          >
+                            {ACTIVE_STAGES.map(stage => (
+                              <option key={stage} value={stage}>
+                                {STAGE_INFO[stage]?.label || stage}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label>Follow-up</label>
+                          <input
+                            type="date"
+                            value={dealFollowUp}
+                            onChange={e => setDealFollowUp(e.target.value)}
+                            min={new Date().toISOString().split('T')[0]}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

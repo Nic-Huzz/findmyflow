@@ -16,7 +16,6 @@ function lazyRetry(importFn) {
 // Static imports - Core infrastructure and frequently accessed pages
 import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
-import Profile from './Profile'
 import MePage from './pages/MePage'
 import Challenge from './Challenge'
 import PublicValidationFlow from './pages/PublicValidationFlow'
@@ -139,7 +138,6 @@ const SalesPlaybook = lazyRetry(() => import('./pages/crm/SalesPlaybook'))
 const MoneyModelGuide = lazyRetry(() => import('./MoneyModelGuide'))
 const ArchetypeSelection = lazyRetry(() => import('./ArchetypeSelection'))
 const EssenceProfile = lazyRetry(() => import('./profiles/EssenceProfile'))
-const ProtectiveProfile = lazyRetry(() => import('./profiles/ProtectiveProfile'))
 const Feedback = lazyRetry(() => import('./Feedback'))
 const NotificationSettings = lazyRetry(() => import('./components/NotificationSettings'))
 const LibraryOfAnswers = lazyRetry(() => import('./pages/LibraryOfAnswers'))
@@ -166,7 +164,6 @@ import './flows/ContinuityFlow.css'
 import './flows/LeadsStrategyFlow.css'
 import './flows/PersonaSelectionFlow.css'
 import './MoneyModelGuide.css'
-import './Profile.css'
 import './Auth.css'
 // HybridEssenceFlow.css removed - component is archived, was causing style leaks
 import './Challenge.css'

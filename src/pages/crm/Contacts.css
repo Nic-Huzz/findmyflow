@@ -255,6 +255,27 @@
   box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
+/* Project filter row */
+.project-filters {
+  margin-top: -8px;
+}
+
+/* Contact project tag */
+.contact-project-tag {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #E9A23B;
+  background: rgba(233, 162, 59, 0.1);
+  padding: 2px 8px;
+  border-radius: 100px;
+  margin-top: 2px;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Contacts List Card */
 .contacts-list-card {
   background: #ffffff;
@@ -735,56 +756,47 @@
   border-top: 1px solid #e9ecef;
 }
 
-.toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+/* Existing project pills */
+.existing-projects {
+  margin-bottom: 1.25rem;
 }
 
-.toggle-label {
-  font-size: 0.9375rem;
+.existing-projects label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.existing-project-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.existing-project-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: rgba(233, 162, 59, 0.1);
+  border: 1px solid rgba(233, 162, 59, 0.25);
+  border-radius: 100px;
+}
+
+.project-pill-name {
+  font-size: 0.8125rem;
   font-weight: 600;
   color: #212529;
 }
 
-.toggle-checkbox {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.toggle-switch {
-  position: relative;
-  width: 48px;
-  height: 28px;
-  background: #dee2e6;
-  border-radius: 100px;
-  transition: background 0.3s ease;
-  flex-shrink: 0;
-}
-
-.toggle-switch::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 22px;
-  height: 22px;
-  background: #ffffff;
-  border-radius: 50%;
-  transition: transform 0.3s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-.toggle-checkbox:checked + .toggle-switch {
-  background: #5e17eb;
-}
-
-.toggle-checkbox:checked + .toggle-switch::after {
-  transform: translateX(20px);
+.project-pill-stage {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #E9A23B;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .deal-fields {
@@ -803,11 +815,11 @@
   margin-bottom: 0;
 }
 
-.deal-no-projects {
-  font-size: 0.875rem;
-  color: #6c757d;
-  margin: 0;
-  font-style: italic;
+.deal-fields-hint {
+  font-size: 0.8125rem;
+  color: #5e17eb;
+  font-weight: 500;
+  margin: 0 0 0.75rem 0;
 }
 
 /* Desktop */

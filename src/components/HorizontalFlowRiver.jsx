@@ -2,12 +2,13 @@
  * HorizontalFlowRiver.jsx
  *
  * Horizontal river visualization of timeline entries (left→right).
- * Supports compass entries (direction-colored) and milestone entries (quest/groan).
+ * Supports compass entries (direction-colored) and milestone entries (quest/groan/stage).
  *
  * Entry types:
  * - compass: Flow direction nodes (N/E/S/W)
  * - quest: Quest completion milestones (⚡)
  * - groan: Groan challenge milestones (🦁)
+ * - stage: Stage graduation milestones (📊)
  */
 
 import { useState, useEffect, useRef } from 'react'
@@ -25,6 +26,7 @@ const DIRECTION_CONFIG = {
 const MILESTONE_CONFIG = {
   quest: { color: '#5e17eb', icon: '⚡', label: 'Quest Complete' },
   groan: { color: '#E9A23B', icon: '🦁', label: 'Courage Challenge' },
+  stage: { color: '#10b981', icon: '📊', label: 'Stage Graduation' },
 }
 
 function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }) {
@@ -106,11 +108,24 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
     let y = centerY
     if (entryType === 'compass') {
       if (dir === 'north') y = centerY - 30 - offset * 20
-      else if (dir === 'east') y = centerY - 10 + offset * 20
-      else if (dir === 'south') y = centerY + 30 + offset * 10
+      else if (dir === 'east') y = centerY - 25 - offset * 15
+      else if (dir === 'south') y = centerY + offset * 5
       else if (dir === 'west') y = centerY + 10 + offset * 15
+    } else if (entryType === 'stage') {
+      // Stage graduations positioned HIGH like Flow — forward progress
+      y = centerY - 30 - offset * 15
+    } else if (entryType === 'quest') {
+      // Quests: use flow_direction from review if available, otherwise near center
+      const questDir = entry.direction
+      if (questDir === 'north') y = centerY - 30 - offset * 20
+      else if (questDir === 'east') y = centerY - 25 - offset * 15
+      else if (questDir === 'south') y = centerY + offset * 5
+      else if (questDir === 'west') y = centerY + 10 + offset * 15
+      else y = centerY - 30 - offset * 15 // no direction: forward energy like Flow
+    } else if (entryType === 'groan') {
+      // Groans positioned HIGH like Flow — forward energy
+      y = centerY - 30 - offset * 15
     } else {
-      // Milestones sit near center with slight variation
       y = centerY - 15 + offset * 30
     }
 
@@ -132,8 +147,7 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
   entries.forEach((entry, i) => {
     const pct = Math.round(((i + 1) / entries.length) * 100)
     let color
-    if (entry.type === 'quest') color = MILESTONE_CONFIG.quest.color
-    else if (entry.type === 'groan') color = MILESTONE_CONFIG.groan.color
+    if (MILESTONE_CONFIG[entry.type]) color = MILESTONE_CONFIG[entry.type].color
     else color = (DIRECTION_CONFIG[entry.direction] || DIRECTION_CONFIG.north).color
     gradientStops.push({ offset: `${pct}%`, color })
   })
@@ -174,7 +188,7 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
             {/* Entry nodes */}
             {points.map((pt, i) => {
               const isCurrent = isLast(i)
-              const isMilestone = pt.entryType === 'quest' || pt.entryType === 'groan'
+              const isMilestone = pt.entryType === 'quest' || pt.entryType === 'groan' || pt.entryType === 'stage'
 
               if (isMilestone) {
                 const mc = MILESTONE_CONFIG[pt.entryType]
@@ -208,7 +222,7 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
                       {mc.icon}
                     </text>
                     <text x={pt.x} y={pt.y - 26} textAnchor="middle" className="fp-ms-label" fill={mc.color}>
-                      {pt.entryType === 'quest' ? 'Quest' : 'Groan'}
+                      {pt.entryType === 'quest' ? 'Quest' : pt.entryType === 'stage' ? `Stage ${pt.entry.to_stage}` : 'Groan'}
                     </text>
                     <text x={pt.x} y={pt.y + 24} textAnchor="middle" className="fp-date">
                       {formatDate(pt.entry.date)}
@@ -274,7 +288,7 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
           {selectedEntry && (() => {
             const entryType = selectedEntry.type || 'compass'
 
-            if (entryType === 'quest' || entryType === 'groan') {
+            if (entryType === 'quest' || entryType === 'groan' || entryType === 'stage') {
               const mc = MILESTONE_CONFIG[entryType]
               return (
                 <>
@@ -283,7 +297,12 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
                       {mc.icon}
                     </div>
                     <div>
-                      <div className="fp-popup-title">{mc.label}</div>
+                      <div className="fp-popup-title">
+                        {entryType === 'stage'
+                          ? `Graduated to ${selectedEntry.stage_name || `Stage ${selectedEntry.to_stage}`}`
+                          : mc.label
+                        }
+                      </div>
                       <div className="fp-popup-subtitle">{formatDate(selectedEntry.date)}</div>
                     </div>
                   </div>
@@ -296,10 +315,15 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
                   {(selectedEntry.quest_description || selectedEntry.description) && (
                     <div className="fp-popup-body">{selectedEntry.quest_description || selectedEntry.description}</div>
                   )}
+                  {entryType === 'stage' && selectedEntry.from_stage != null && (
+                    <div className="fp-popup-body">
+                      You completed Stage {selectedEntry.from_stage} and advanced to <strong>{selectedEntry.stage_name || `Stage ${selectedEntry.to_stage}`}</strong>.
+                    </div>
+                  )}
                   <div className="fp-popup-meta">
-                    {entryType === 'quest' && selectedEntry.points && (
+                    {entryType === 'stage' && (
                       <span className="fp-popup-tag" style={{ background: `${mc.color}15`, color: mc.color }}>
-                        +{selectedEntry.points} XP
+                        🎓 Graduated!
                       </span>
                     )}
                     {entryType === 'groan' && selectedEntry.essence_zone && (
@@ -313,6 +337,11 @@ function HorizontalFlowRiver({ projectId, limit = 30, entries: externalEntries }
                       </span>
                     )}
                   </div>
+                  {selectedEntry.points && (
+                    <div className="fp-popup-points">
+                      <span>⚡</span> +{selectedEntry.points} XP earned
+                    </div>
+                  )}
                 </>
               )
             }

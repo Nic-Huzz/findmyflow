@@ -71,6 +71,7 @@ export default function MePage() {
   const [flowEntries, setFlowEntries] = useState([])
   const [questData, setQuestData] = useState([])
   const [questCompletions, setQuestCompletions] = useState([])
+  const [stageGraduations, setStageGraduations] = useState([])
   const [selectedProject, setSelectedProject] = useState(null)
   const [projectMenuOpen, setProjectMenuOpen] = useState(false)
   const projectMenuRef = useRef(null)
@@ -97,15 +98,23 @@ export default function MePage() {
       .select('*')
       .eq('user_id', user.id)
       .maybeSingle()
-      .then(({ data }) => setStageProgress(data ?? null))
+      .then(({ data, error }) => {
+        if (error) {
+          // On error, assume onboarded to avoid trapping existing users in onboarding
+          console.error('Error fetching stage progress:', error)
+          setStageProgress({ onboarding_v2_completed: true })
+          return
+        }
+        setStageProgress(data ?? null)
+      })
   }, [user?.id])
 
-  // Fetch quest completions (used for both streak + quest progress)
+  // Fetch quest completions (used for streak + quest progress + river direction)
   useEffect(() => {
     if (!user?.id) return
     supabase
       .from('quest_completions')
-      .select('quest_id, completed_at')
+      .select('quest_id, completed_at, reflection_text, project_id')
       .eq('user_id', user.id)
       .order('completed_at', { ascending: false })
       .then(({ data }) => {
@@ -135,17 +144,27 @@ export default function MePage() {
       })
   }, [user?.id])
 
-  // Fetch flow entries for river
+  // Fetch flow entries + stage graduations for river
   useEffect(() => {
-    if (!user?.id || !primaryProject?.id) { setFlowEntries([]); return }
-    supabase
-      .from('flow_entries')
-      .select('id, direction, logged_at, activity_description, reasoning')
-      .eq('user_id', user.id)
-      .eq('project_id', primaryProject.id)
-      .order('logged_at', { ascending: true })
-      .limit(30)
-      .then(({ data }) => setFlowEntries(data || []))
+    if (!user?.id || !primaryProject?.id) { setFlowEntries([]); setStageGraduations([]); return }
+    Promise.all([
+      supabase
+        .from('flow_entries')
+        .select('id, direction, logged_at, activity_description, reasoning')
+        .eq('user_id', user.id)
+        .eq('project_id', primaryProject.id)
+        .order('logged_at', { ascending: true })
+        .limit(30),
+      supabase
+        .from('stage_graduation_history')
+        .select('id, from_stage, to_stage, graduated_at')
+        .eq('user_id', user.id)
+        .eq('project_id', primaryProject.id)
+        .order('graduated_at', { ascending: true }),
+    ]).then(([flowResult, stageResult]) => {
+      setFlowEntries(flowResult.data || [])
+      setStageGraduations(stageResult.data || [])
+    })
   }, [user?.id, primaryProject?.id])
 
   // Load quest definitions
@@ -156,6 +175,14 @@ export default function MePage() {
       .catch(() => {})
   }, [])
 
+  // Derived: quest completions filtered to current project (user-level ones included)
+  const projectQuestCompletions = useMemo(
+    () => questCompletions.filter(qc =>
+      qc.project_id === primaryProject?.id || qc.project_id === null
+    ),
+    [questCompletions, primaryProject?.id]
+  )
+
   // Derived: quest progress
   const projectStage = primaryProject?.stage || 1
   const stageQuests = useMemo(
@@ -163,8 +190,8 @@ export default function MePage() {
     [questData, projectStage]
   )
   const completedQuestIds = useMemo(
-    () => new Set(questCompletions.map(c => c.quest_id)),
-    [questCompletions]
+    () => new Set(projectQuestCompletions.map(c => c.quest_id)),
+    [projectQuestCompletions]
   )
   const doneCount = stageQuests.filter(q => completedQuestIds.has(q.id)).length
   const nextQuest = stageQuests.find(q => !completedQuestIds.has(q.id))
@@ -224,17 +251,27 @@ export default function MePage() {
     return `Your recent pattern shows <strong>${label}</strong> energy. Every direction teaches you something.`
   }, [flowEntries])
 
-  // Merged timeline: compass entries + quest milestones + groan milestones
+  // Merged timeline: compass entries + quest milestones + groan milestones + stage graduations
   const timelineEntries = useMemo(() => {
     const timeline = flowEntries.map(e => ({
       ...e,
       type: 'compass',
       date: e.logged_at,
     }))
-    questCompletions.forEach(qc => {
+    projectQuestCompletions.forEach(qc => {
       if (!qc.completed_at) return
       const quest = questData.find(q => q.id === qc.quest_id)
       if (!quest) return
+      // Extract flow_direction from reflection_text JSON if present
+      let flowDirection = null
+      if (qc.reflection_text) {
+        try {
+          const parsed = typeof qc.reflection_text === 'string'
+            ? JSON.parse(qc.reflection_text)
+            : qc.reflection_text
+          flowDirection = parsed.flow_direction || null
+        } catch { /* not JSON */ }
+      }
       timeline.push({
         id: `quest-${qc.quest_id}`,
         type: 'quest',
@@ -243,6 +280,7 @@ export default function MePage() {
         quest_name: quest.name,
         quest_description: quest.description,
         points: quest.points,
+        direction: flowDirection,
       })
     })
     groanChallenges
@@ -259,9 +297,19 @@ export default function MePage() {
           visibility_layer: g.visibility_layer,
         })
       })
+    stageGraduations.forEach(sg => {
+      timeline.push({
+        id: `stage-${sg.id}`,
+        type: 'stage',
+        date: sg.graduated_at,
+        from_stage: sg.from_stage,
+        to_stage: sg.to_stage,
+        stage_name: `Stage ${sg.to_stage} — ${getStageDisplayName(sg.to_stage)}`,
+      })
+    })
     timeline.sort((a, b) => new Date(a.date) - new Date(b.date))
     return timeline
-  }, [flowEntries, questCompletions, questData, groanChallenges])
+  }, [flowEntries, projectQuestCompletions, questData, groanChallenges, stageGraduations])
 
   // First-time onboarding gate — check BEFORE hero loading to avoid unnecessary waits
   if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
@@ -426,6 +474,7 @@ export default function MePage() {
               <span className="fj-legend-label">Challenge</span>
               <div className="fj-legend-item"><span className="fj-legend-icon">⚡</span> Quest</div>
               <div className="fj-legend-item"><span className="fj-legend-icon">🦁</span> Groan</div>
+              <div className="fj-legend-item"><span className="fj-legend-icon">📊</span> Stage</div>
             </div>
           </div>
 

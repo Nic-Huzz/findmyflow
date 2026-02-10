@@ -69,6 +69,7 @@ function HeroCommandCenter() {
     groanChallenges,
     visibilityProgress,
     voiceTracker,
+    nervousSystemArchetype,
     loading,
     error,
     refresh,
@@ -153,7 +154,7 @@ function HeroCommandCenter() {
         onRefresh={refresh}
       />
 
-      {/* Play-List (Visibility Mastery) - User-level, not project-specific */}
+      {/* Play-List Mastery - User-level, not project-specific */}
       <PlayListProgress
         visibilityProgress={visibilityProgress}
         groanChallenges={groanChallenges}
@@ -163,6 +164,7 @@ function HeroCommandCenter() {
       <EssenceVsProtectiveTracker
         voiceTracker={voiceTracker}
         archetypes={archetypes}
+        nervousSystemArchetype={nervousSystemArchetype}
       />
 
       {/* Journey Map */}

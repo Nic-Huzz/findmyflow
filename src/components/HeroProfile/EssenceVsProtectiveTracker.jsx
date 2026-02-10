@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 /**
@@ -11,6 +11,94 @@ const HEALING_TYPES = [
   { id: 'reconnect', label: 'Reconnect', icon: '🌱' },
 ]
 
+const DEFAULT_CONTRACTS_SHOWN = 3
+
+/**
+ * NsArchetypeCard — renders the nervous system archetype with
+ * incomplete-data nudge and collapsible safety contracts.
+ */
+function NsArchetypeCard({ nervousSystemArchetype }) {
+  const [contractsExpanded, setContractsExpanded] = useState(false)
+
+  const isIncomplete = !nervousSystemArchetype.coreFear || !nervousSystemArchetype.rewiringNeeded
+  const contracts = nervousSystemArchetype.safetyContracts || []
+  const hasMoreContracts = contracts.length > DEFAULT_CONTRACTS_SHOWN
+  const visibleContracts = contractsExpanded ? contracts : contracts.slice(0, DEFAULT_CONTRACTS_SHOWN)
+
+  return (
+    <div className="ns-archetype-card">
+      <div className="ns-archetype-name-row">
+        <span className="ns-archetype-icon">🧠</span>
+        <span className="ns-archetype-name">{nervousSystemArchetype.archetype}</span>
+      </div>
+      {nervousSystemArchetype.description && (
+        <p className="ns-archetype-description">{nervousSystemArchetype.description}</p>
+      )}
+
+      {/* Incomplete data nudge */}
+      {isIncomplete && (
+        <Link to="/nervous-system" className="ns-upgrade-nudge">
+          <span className="ns-upgrade-nudge-text">
+            Retake the assessment to unlock your full nervous system profile — including your primary limiting belief and rewiring plan.
+          </span>
+          <span className="ns-upgrade-nudge-cta">Retake Now →</span>
+        </Link>
+      )}
+
+      {/* Full profile sections (only when data exists) */}
+      {nervousSystemArchetype.coreFear && (
+        <div className="ns-archetype-detail">
+          <span className="ns-detail-label">Primary Limiting Belief</span>
+          <span className="ns-detail-value">{nervousSystemArchetype.coreFear}</span>
+          {nervousSystemArchetype.fearInterpretation && (
+            <span className="ns-fear-interpretation">{nervousSystemArchetype.fearInterpretation}</span>
+          )}
+        </div>
+      )}
+
+      {contracts.length > 0 && (
+        <div className="ns-contracts-section">
+          <span className="ns-detail-label">Active Safety Contracts</span>
+          <ul className="ns-contracts-list">
+            {visibleContracts.map((contract, i) => (
+              <li key={i} className="ns-contract-item">{contract}</li>
+            ))}
+          </ul>
+          {hasMoreContracts && (
+            <button
+              className="ns-contracts-toggle"
+              onClick={() => setContractsExpanded(prev => !prev)}
+            >
+              {contractsExpanded ? 'Show less' : `Show all ${contracts.length}`} →
+            </button>
+          )}
+        </div>
+      )}
+
+      {nervousSystemArchetype.rewiringNeeded && (
+        <div className="ns-rewiring-section">
+          <span className="ns-detail-label">What Needs Rewiring</span>
+          <p className="ns-rewiring-text">
+            {nervousSystemArchetype.rewiringNeeded.split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {i > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
+          </p>
+        </div>
+      )}
+
+      {/* Only show bottom retake link when profile is complete */}
+      {!isIncomplete && (
+        <Link to="/nervous-system" className="hero-profile-link ns-archetype-link">
+          Retake Assessment →
+        </Link>
+      )}
+    </div>
+  )
+}
+
 /**
  * EssenceVsProtectiveTracker - Shows the balance between essence and protective
  * voice moments from the 7-day challenge, plus healing journey progress.
@@ -19,7 +107,7 @@ const HEALING_TYPES = [
  * - Business > Voices tab: voice_stage_*_essence_voice / voice_stage_*_protective_voice
  * - Healing tab: Recognise, Release, Rewire, Reconnect quest completions
  */
-function EssenceVsProtectiveTracker({ voiceTracker, archetypes }) {
+function EssenceVsProtectiveTracker({ voiceTracker, archetypes, nervousSystemArchetype }) {
   if (!voiceTracker) return null
 
   const {
@@ -104,6 +192,26 @@ function EssenceVsProtectiveTracker({ voiceTracker, archetypes }) {
                 7-Day Challenge →
               </Link>{' '}
               to start tracking.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Nervous System Archetype Section */}
+      <div className="ns-archetype-section">
+        <div className="ns-archetype-header">
+          <span className="ns-archetype-label">Nervous System Archetype</span>
+        </div>
+
+        {nervousSystemArchetype ? (
+          <NsArchetypeCard nervousSystemArchetype={nervousSystemArchetype} />
+        ) : (
+          <div className="ns-archetype-empty">
+            <p className="ns-empty-text">
+              Discover how your nervous system affects your visibility and earning capacity.{' '}
+              <Link to="/nervous-system" className="hero-profile-link">
+                Take the Assessment →
+              </Link>
             </p>
           </div>
         )}

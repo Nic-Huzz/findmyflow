@@ -2,9 +2,11 @@
  * CRM Sales - Pipeline Manager
  * Kanban-style deal pipeline with drag-drop stages
  */
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
+import { supabase } from '../../lib/supabaseClient'
+import { hapticLight } from '../../lib/haptics'
 import {
   DEAL_STAGES,
   ACTIVE_STAGES,
@@ -32,7 +34,11 @@ export default function Sales() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [dealsByStage, setDealsByStage] = useState({})
+  const [projects, setProjects] = useState([])
+  const [filterProject, setFilterProject] = useState('all')
+  const [showAddMenu, setShowAddMenu] = useState(false)
   const [showAddModal, setShowAddModal] = useState(false)
+  const [analyzing, setAnalyzing] = useState(false)
   const [selectedDeal, setSelectedDeal] = useState(null)
   const [leadScores, setLeadScores] = useState(null)
   const [showUnscoredPrompt, setShowUnscoredPrompt] = useState(false)
@@ -44,6 +50,7 @@ export default function Sales() {
   const [userProducts, setUserProducts] = useState(PRODUCTS)
   const [hasCustomProducts, setHasCustomProducts] = useState(false)
   const [playbookDeal, setPlaybookDeal] = useState(null)
+  const [expandedStages, setExpandedStages] = useState(new Set())
   const [newDeal, setNewDeal] = useState({
     contact_name: '',
     contact_email: '',
@@ -55,7 +62,7 @@ export default function Sales() {
 
   // Hide bottom toolbar when any modal is open
   useEffect(() => {
-    const anyModalOpen = showAddModal || !!selectedDeal || showUnscoredPrompt || showScriptsModal || showScreenshotUpload || !!showOutcomeModal || !!playbookDeal
+    const anyModalOpen = showAddModal || !!selectedDeal || showScriptsModal || showScreenshotUpload || !!showOutcomeModal || !!playbookDeal
     if (anyModalOpen) {
       document.body.classList.add('modal-active')
     } else {
@@ -74,7 +81,17 @@ export default function Sales() {
   async function loadDeals() {
     setLoading(true)
     try {
-      const result = await fetchDealsByStage(user.id)
+      const [result, projectsRes] = await Promise.all([
+        fetchDealsByStage(user.id),
+        supabase
+          .from('user_projects')
+          .select('id, name')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false }),
+      ])
+
+      if (projectsRes.data) setProjects(projectsRes.data)
+
       if (result.data) {
         setDealsByStage(result.data)
 
@@ -338,6 +355,54 @@ export default function Sales() {
     setShowScreenshotUpload(false)
   }
 
+  function toggleStage(stage) {
+    setExpandedStages(prev => {
+      const next = new Set(prev)
+      if (next.has(stage)) {
+        next.delete(stage)
+      } else {
+        next.add(stage)
+      }
+      return next
+    })
+    hapticLight()
+  }
+
+  function handleScreenshotCapture() {
+    setShowAddMenu(false)
+    hapticLight()
+    setShowScreenshotUpload(true)
+  }
+
+  function handleManualAdd() {
+    setShowAddMenu(false)
+    hapticLight()
+    setShowAddModal(true)
+  }
+
+  // Projects that have deals
+  const projectsWithDeals = useMemo(() => {
+    const projectIds = new Set()
+    Object.values(dealsByStage).flat().forEach(deal => {
+      if (deal.project_id) projectIds.add(deal.project_id)
+    })
+    return projects.filter(p => projectIds.has(p.id))
+  }, [dealsByStage, projects])
+
+  // Filter deals by project
+  const filteredDealsByStage = useMemo(() => {
+    if (filterProject === 'all') return dealsByStage
+    const filtered = {}
+    for (const [stage, deals] of Object.entries(dealsByStage)) {
+      if (filterProject === 'no-project') {
+        filtered[stage] = deals.filter(d => !d.project_id)
+      } else {
+        filtered[stage] = deals.filter(d => d.project_id === filterProject)
+      }
+    }
+    return filtered
+  }, [dealsByStage, filterProject])
+
   // Active stages for pipeline view (excludes lost, includes post-sale stages)
   const activeStages = [...ACTIVE_STAGES, 'won', 'delivering', 'completed']
 
@@ -363,108 +428,169 @@ export default function Sales() {
         <h2 className="toolbar-title">Sales Pipeline</h2>
       </div>
 
-      {/* Header */}
-      <header className="sales-header">
-        <div className="sales-breadcrumb">
-          <button onClick={() => navigate('/crm')}>Home</button>
-          <span>→</span>
-          <button onClick={() => navigate('/crm/nurture')}>Nurture</button>
-          <span>→</span>
-          <span>Sales</span>
-        </div>
-        <h1>💼 Sales Pipeline</h1>
-        <p className="sales-subtitle">Track deals from lead to close</p>
-      </header>
-
-      {/* Stats Card */}
+      {/* Stats + Actions Card */}
       <div className="sales-stats-card">
         <div className="stats-row">
-          <div className="stat-item">
-            <span className="stat-value">${stats.currentRevenue.toLocaleString()}</span>
+          <div className="stat-cell">
             <span className="stat-label">This Month</span>
+            <span className="stat-value stat-earned">${stats.currentRevenue.toLocaleString()}</span>
           </div>
           <div className="stat-divider"></div>
-          <div className="stat-item">
-            <span className="stat-value">${stats.pipelineValue.toLocaleString()}</span>
+          <div className="stat-cell">
             <span className="stat-label">In Pipeline</span>
+            <span className="stat-value stat-pipeline">${stats.pipelineValue.toLocaleString()}</span>
+          </div>
+        </div>
+        <div className="actions-row">
+          <div className="add-btn-wrapper">
+            <button className="add-btn" onClick={() => { setShowAddMenu(!showAddMenu); hapticLight() }}>
+              + Add Deal
+            </button>
+            {showAddMenu && (
+              <>
+                <div className="add-menu-backdrop" onClick={() => setShowAddMenu(false)} />
+                <div className="add-menu">
+                  <button className="add-menu-item" onClick={handleManualAdd}>
+                    <span className="add-menu-icon">✏️</span>
+                    <span>Manual Entry</span>
+                  </button>
+                  <button className="add-menu-item" onClick={handleScreenshotCapture}>
+                    <span className="add-menu-icon">📸</span>
+                    <span>Screenshot Analysis</span>
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Actions Card */}
-      <div className="sales-actions-card">
-        <div className="actions-row">
-          <button className="screenshot-btn" onClick={() => setShowScreenshotUpload(true)}>
-            📸 Screenshot
+      {/* Project Filters */}
+      {projectsWithDeals.length > 0 && (
+        <div className="pipeline-filters">
+          <button
+            className={`filter-chip ${filterProject === 'all' ? 'active' : ''}`}
+            onClick={() => setFilterProject('all')}
+          >
+            All Projects
           </button>
-          <button className="add-btn" onClick={() => setShowAddModal(true)}>
-            + Add Deal
+          {projectsWithDeals.map(project => (
+            <button
+              key={project.id}
+              className={`filter-chip ${filterProject === project.id ? 'active' : ''}`}
+              onClick={() => setFilterProject(project.id)}
+            >
+              {project.name}
+            </button>
+          ))}
+          <button
+            className={`filter-chip ${filterProject === 'no-project' ? 'active' : ''}`}
+            onClick={() => setFilterProject('no-project')}
+          >
+            No Project
           </button>
         </div>
-      </div>
+      )}
 
-      {/* Pipeline Columns */}
-      <div className="pipeline-grid">
-        {activeStages.map(stage => (
-          <div key={stage} className={`pipeline-column stage-${stage}`}>
-            <div className="column-header" style={{ borderColor: STAGE_INFO[stage].color }}>
-              <div className="column-title-row">
-                <span className="column-title">{STAGE_INFO[stage].label}</span>
-                <span className="column-count" style={{ background: STAGE_INFO[stage].color }}>
-                  {(dealsByStage[stage] || []).length}
-                </span>
-              </div>
-              <span className="column-description">{STAGE_INFO[stage].description}</span>
+      {/* Unscored Deals Banner */}
+      {showUnscoredPrompt && (
+        <div className="unscored-banner" onClick={startScoringDeals}>
+          <div className="unscored-banner-left">
+            <span className="unscored-banner-icon">📊</span>
+            <div>
+              <strong>{unscoredDeals.length} unscored deal{unscoredDeals.length !== 1 ? 's' : ''}</strong>
+              <span className="unscored-banner-sub">Score leads to find hot opportunities</span>
             </div>
-            <div className="column-deals">
-              {(dealsByStage[stage] || []).map(deal => {
-                const daysSinceUpdate = Math.floor((Date.now() - new Date(deal.updated_at)) / (1000 * 60 * 60 * 24))
-                const isStale = daysSinceUpdate >= 7 && !['won', 'lost'].includes(deal.status)
-                const isVeryStale = daysSinceUpdate >= 14 && !['won', 'lost'].includes(deal.status)
+          </div>
+          <button
+            className="unscored-banner-dismiss"
+            onClick={(e) => { e.stopPropagation(); dismissUnscoredPrompt() }}
+          >
+            ×
+          </button>
+        </div>
+      )}
 
-                return (
-                  <div
-                    key={deal.id}
-                    className={`deal-card ${isVeryStale ? 'deal-very-stale' : isStale ? 'deal-stale' : ''}`}
-                    onClick={() => handleSelectDeal(deal)}
-                  >
-                    <div className="deal-header">
-                      <div className="deal-name">{deal.contact_name}</div>
-                      <LeadScoreBadge
-                        totalScore={deal.lead_total_score}
-                        temperature={deal.lead_temperature}
-                        compact
-                      />
-                    </div>
-                    <div className="deal-product">{deal.product_type}</div>
-                    <div className="deal-value">${deal.value.toLocaleString()}</div>
-                    {/* Show meeting date for booked deals */}
-                    {deal.status === 'booked' && deal.meeting_scheduled_at && (
-                      <div className="deal-meeting">
-                        📅 {new Date(deal.meeting_scheduled_at).toLocaleDateString()}
+      {/* Pipeline Columns (Accordion) */}
+      <div className="pipeline-accordion">
+        {activeStages.map(stage => {
+          const stageDeals = filteredDealsByStage[stage] || []
+          const isExpanded = expandedStages.has(stage)
+          const stageValue = stageDeals.reduce((sum, d) => sum + (d.value || 0), 0)
+
+          return (
+            <div key={stage} className={`accordion-stage stage-${stage} ${isExpanded ? 'expanded' : ''}`}>
+              <button
+                className="accordion-header"
+                onClick={() => toggleStage(stage)}
+                style={{ '--stage-color': STAGE_INFO[stage].color }}
+              >
+                <div className="accordion-header-left">
+                  <span className="accordion-color-dot" style={{ background: STAGE_INFO[stage].color }} />
+                  <span className="accordion-title">{STAGE_INFO[stage].label}</span>
+                  <span className="accordion-count" style={{ background: STAGE_INFO[stage].color }}>
+                    {stageDeals.length}
+                  </span>
+                </div>
+                <div className="accordion-header-right">
+                  {stageValue > 0 && (
+                    <span className="accordion-value">${stageValue.toLocaleString()}</span>
+                  )}
+                  <span className={`accordion-chevron ${isExpanded ? 'open' : ''}`}>›</span>
+                </div>
+              </button>
+
+              {isExpanded && (
+                <div className="accordion-body">
+                  {stageDeals.map((deal, idx) => {
+                    const daysSinceUpdate = Math.floor((Date.now() - new Date(deal.updated_at)) / (1000 * 60 * 60 * 24))
+                    const isStale = daysSinceUpdate >= 7 && !['won', 'lost'].includes(deal.status)
+                    const isVeryStale = daysSinceUpdate >= 14 && !['won', 'lost'].includes(deal.status)
+
+                    return (
+                      <div
+                        key={deal.id}
+                        className={`deal-card ${isVeryStale ? 'deal-very-stale' : isStale ? 'deal-stale' : ''}`}
+                        style={{ animationDelay: `${Math.min(idx * 0.04, 0.4)}s` }}
+                        onClick={() => handleSelectDeal(deal)}
+                      >
+                        <div className="deal-header">
+                          <div className="deal-name">{deal.contact_name}</div>
+                          <LeadScoreBadge
+                            totalScore={deal.lead_total_score}
+                            temperature={deal.lead_temperature}
+                            compact
+                          />
+                        </div>
+                        <div className="deal-product">{deal.product_type}</div>
+                        <div className="deal-value">${deal.value.toLocaleString()}</div>
+                        {deal.status === 'booked' && deal.meeting_scheduled_at && (
+                          <div className="deal-meeting">
+                            📅 {new Date(deal.meeting_scheduled_at).toLocaleDateString()}
+                          </div>
+                        )}
+                        {isStale && (
+                          <div className={`deal-stale-badge ${isVeryStale ? 'very-stale' : ''}`}>
+                            ⚠️ {daysSinceUpdate}d ago
+                          </div>
+                        )}
+                        <div className="deal-meta">
+                          <span className="deal-probability">{deal.probability}%</span>
+                          <span className="deal-source">{deal.source}</span>
+                        </div>
                       </div>
-                    )}
-                    {/* Show stale indicator */}
-                    {isStale && (
-                      <div className={`deal-stale-badge ${isVeryStale ? 'very-stale' : ''}`}>
-                        ⚠️ {daysSinceUpdate}d ago
-                      </div>
-                    )}
-                    <div className="deal-meta">
-                      <span className="deal-probability">{deal.probability}%</span>
-                      <span className="deal-source">{deal.source}</span>
+                    )
+                  })}
+                  {stageDeals.length === 0 && (
+                    <div className="empty-column">
+                      <p>No deals yet</p>
                     </div>
-                  </div>
-                )
-              })}
-              {(dealsByStage[stage] || []).length === 0 && (
-                <div className="empty-column">
-                  <p>No deals yet</p>
+                  )}
                 </div>
               )}
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Lost Deals (Collapsed) */}
@@ -483,10 +609,13 @@ export default function Sales() {
 
       {/* Add Deal Modal */}
       {showAddModal && (
-        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
-          <div className="deal-modal" onClick={e => e.stopPropagation()}>
-            <h3>Add New Deal</h3>
-            <form onSubmit={handleCreateDeal}>
+        <div className="modal-overlay modal-top" onClick={() => setShowAddModal(false)}>
+          <div className="deal-modal deal-modal-top" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Add New Deal</h3>
+              <button className="modal-close-btn" onClick={() => setShowAddModal(false)}>×</button>
+            </div>
+            <form onSubmit={handleCreateDeal} className="modal-body">
               <div className="form-field">
                 <label>Contact Name *</label>
                 <input
@@ -577,93 +706,76 @@ export default function Sales() {
                 totalScore={leadScores ? (leadScores.pain_score + leadScores.trust_score + leadScores.urgency_score + leadScores.fit_score) : selectedDeal.lead_total_score}
                 temperature={null}
               />
+              <button className="modal-close-btn" onClick={() => setSelectedDeal(null)}>×</button>
             </div>
-            <div className="deal-details">
-              <p><strong>Product:</strong> {selectedDeal.product_type}</p>
-              <p><strong>Value:</strong> ${selectedDeal.value.toLocaleString()}</p>
-              <p><strong>Stage:</strong> {STAGE_INFO[selectedDeal.status].label}</p>
-              <p><strong>Probability:</strong> {selectedDeal.probability}%</p>
-              <p><strong>Source:</strong> {selectedDeal.source}</p>
-              {selectedDeal.contact_email && (
-                <p><strong>Email:</strong> {selectedDeal.contact_email}</p>
-              )}
-              {selectedDeal.notes && (
-                <p><strong>Notes:</strong> {selectedDeal.notes}</p>
-              )}
-            </div>
+            <div className="modal-body">
+              <div className="deal-details">
+                <p><strong>Product:</strong> {selectedDeal.product_type}</p>
+                <p><strong>Value:</strong> ${selectedDeal.value.toLocaleString()}</p>
+                <p><strong>Stage:</strong> {STAGE_INFO[selectedDeal.status].label}</p>
+                <p><strong>Probability:</strong> {selectedDeal.probability}%</p>
+                <p><strong>Source:</strong> {selectedDeal.source}</p>
+                {selectedDeal.contact_email && (
+                  <p><strong>Email:</strong> {selectedDeal.contact_email}</p>
+                )}
+                {selectedDeal.notes && (
+                  <p><strong>Notes:</strong> {selectedDeal.notes}</p>
+                )}
+              </div>
 
-            {/* Lead Scoring Section */}
-            <LeadScoreSliders
-              scores={leadScores}
-              onChange={setLeadScores}
-              showNotes={true}
-            />
+              {/* Lead Scoring Section */}
+              <LeadScoreSliders
+                scores={leadScores}
+                onChange={setLeadScores}
+                showNotes={true}
+              />
 
-            <div className="stage-actions">
-              <span className="stage-label">Move to:</span>
-              <div className="stage-buttons">
-                {DEAL_STAGES.filter(s => s !== selectedDeal.status).map(stage => (
+              <div className="stage-actions">
+                <span className="stage-label">Move to:</span>
+                <div className="stage-buttons">
+                  {DEAL_STAGES.filter(s => s !== selectedDeal.status).map(stage => (
+                    <button
+                      key={stage}
+                      className={`stage-btn stage-${stage}`}
+                      onClick={() => handleMoveStage(selectedDeal, stage)}
+                    >
+                      {STAGE_INFO[stage].label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button className="delete-btn" onClick={() => handleDeleteDeal(selectedDeal)}>
+                  Delete
+                </button>
+                <button className="scripts-btn" onClick={() => setShowScriptsModal(true)}>
+                  Scripts
+                </button>
+                {['booked', 'showed', 'pitched', 'follow_up'].includes(selectedDeal.status) && (
                   <button
-                    key={stage}
-                    className={`stage-btn stage-${stage}`}
-                    onClick={() => handleMoveStage(selectedDeal, stage)}
+                    className="playbook-btn"
+                    onClick={() => {
+                      setPlaybookDeal(selectedDeal)
+                      setSelectedDeal(null)
+                    }}
                   >
-                    {STAGE_INFO[stage].label}
+                    {['booked', 'showed'].includes(selectedDeal.status) ? 'Prep' : 'Objection?'}
                   </button>
-                ))}
+                )}
+                <button className="save-btn" onClick={handleSaveLeadScores}>
+                  Save Scores
+                </button>
+                <button className="cancel-btn" onClick={() => setSelectedDeal(null)}>
+                  Close
+                </button>
               </div>
             </div>
-
-            <div className="modal-actions">
-              <button className="delete-btn" onClick={() => handleDeleteDeal(selectedDeal)}>
-                Delete
-              </button>
-              <button className="scripts-btn" onClick={() => setShowScriptsModal(true)}>
-                📜 Scripts
-              </button>
-              {['booked', 'showed', 'pitched', 'follow_up'].includes(selectedDeal.status) && (
-                <button
-                  className="playbook-btn"
-                  onClick={() => {
-                    setPlaybookDeal(selectedDeal)
-                    setSelectedDeal(null)
-                  }}
-                >
-                  {['booked', 'showed'].includes(selectedDeal.status) ? '📋 Prep' : '🎯 Objection?'}
-                </button>
-              )}
-              <button className="save-btn" onClick={handleSaveLeadScores}>
-                Save Scores
-              </button>
-              <button className="cancel-btn" onClick={() => setSelectedDeal(null)}>
-                Close
-              </button>
-            </div>
           </div>
         </div>
       )}
 
-      {/* Unscored Deals Prompt */}
-      {showUnscoredPrompt && (
-        <div className="modal-overlay" onClick={dismissUnscoredPrompt}>
-          <div className="deal-modal unscored-modal" onClick={e => e.stopPropagation()}>
-            <div className="unscored-icon">📊</div>
-            <h3>Let's Score Your Leads</h3>
-            <p>
-              You have <strong>{unscoredDeals.length}</strong> deal{unscoredDeals.length !== 1 ? 's' : ''} without
-              lead scores. Scoring helps you focus on the hottest opportunities.
-            </p>
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={dismissUnscoredPrompt}>
-                Skip for now
-              </button>
-              <button className="save-btn" onClick={startScoringDeals}>
-                Let's Do It
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Unscored Deals Prompt removed - replaced by inline banner above */}
 
       {/* Scripts Modal */}
       {showScriptsModal && selectedDeal && (

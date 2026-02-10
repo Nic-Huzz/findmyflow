@@ -203,3 +203,16 @@
   font-weight: 700;
   text-transform: capitalize;
 }
+
+/* XP earned highlight box */
+.h-flow-river .fp-popup-points {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, rgba(94, 23, 235, 0.08), rgba(233, 162, 59, 0.08));
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #5e17eb;
+}

@@ -14,19 +14,26 @@ const LIFECYCLE_ORDER = ['lead', 'opportunity', 'customer', 'evangelist']
  * - Deal created → contact becomes "opportunity" (if not already higher)
  * - Deal won → contact becomes "customer" (if not already higher)
  */
-async function syncContactLifecycleFromDeal(userId, contactEmail, targetStage) {
-  if (!contactEmail || !targetStage) return
+async function syncContactLifecycleFromDeal(userId, { contactId, contactEmail }, targetStage) {
+  if ((!contactId && !contactEmail) || !targetStage) return
 
   const targetIndex = LIFECYCLE_ORDER.indexOf(targetStage)
   if (targetIndex < 0) return
 
   try {
-    const { data: contact, error } = await supabase
+    let query = supabase
       .from('crm_contacts')
       .select('id, lifecycle_stage')
       .eq('user_id', userId)
-      .ilike('email', contactEmail.trim())
-      .maybeSingle()
+
+    // Prefer direct ID match, fall back to email
+    if (contactId) {
+      query = query.eq('id', contactId)
+    } else {
+      query = query.ilike('email', contactEmail.trim())
+    }
+
+    const { data: contact, error } = await query.maybeSingle()
 
     if (error || !contact) return
 
@@ -173,6 +180,7 @@ export async function createDeal(userId, dealData) {
     .insert({
       user_id: userId,
       project_id: dealData.project_id || null,
+      contact_id: dealData.contact_id || null,
       contact_name: dealData.contact_name,
       contact_email: dealData.contact_email || null,
       source: dealData.source || 'Manual',
@@ -193,8 +201,11 @@ export async function createDeal(userId, dealData) {
   }
 
   // Forward-only lifecycle sync: deal created → contact becomes "opportunity"
-  if (data?.contact_email) {
-    syncContactLifecycleFromDeal(userId, data.contact_email, 'opportunity')
+  if (data?.contact_id || data?.contact_email) {
+    syncContactLifecycleFromDeal(userId, {
+      contactId: data.contact_id,
+      contactEmail: data.contact_email,
+    }, 'opportunity')
   }
 
   return { data, error: null }
@@ -238,8 +249,11 @@ export async function updateDealStage(dealId, userId, newStatus, extraUpdates = 
   // This creates customer record and triggers upsell/continuity tasks
   if (newStatus === 'won' && data) {
     // Forward-only lifecycle sync: deal won → contact becomes "customer"
-    if (data.contact_email) {
-      syncContactLifecycleFromDeal(userId, data.contact_email, 'customer')
+    if (data.contact_id || data.contact_email) {
+      syncContactLifecycleFromDeal(userId, {
+        contactId: data.contact_id,
+        contactEmail: data.contact_email,
+      }, 'customer')
     }
 
     try {

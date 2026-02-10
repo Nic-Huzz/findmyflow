@@ -117,6 +117,8 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
     visibilityProgress: {},
     // Voice tracker data
     voiceTracker: null,
+    // Nervous system archetype
+    nervousSystemArchetype: null,
   })
 
   const fetchData = useCallback(async () => {
@@ -165,9 +167,16 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         .eq('user_id', userId)
         .or('quest_category.eq.Healing,quest_type.in.(Recognise,Release,Rewire,Reconnect)')
 
+      const nervousSystemPromise = supabase
+        .from('nervous_system_responses')
+        .select('archetype, archetype_description, core_fear, nervous_system_impact_limit, nervous_system_income_limit, safety_contracts, rewiring_needed, fear_interpretation')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+
       // Await all parallel queries
-      const [profileResult, projectsResult, totalXP, dashboardGroansResult, voiceResult, healingResult] = await Promise.all([
-        profilePromise, projectsPromise, xpPromise, dashboardGroansPromise, voicePromise, healingPromise,
+      const [profileResult, projectsResult, totalXP, dashboardGroansResult, voiceResult, healingResult, nervousSystemResult] = await Promise.all([
+        profilePromise, projectsPromise, xpPromise, dashboardGroansPromise, voicePromise, healingPromise, nervousSystemPromise,
       ])
 
       // 1. Process profile (with email fallback if needed)
@@ -338,6 +347,19 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         totalHealingCompleted: healingCompletions.length,
       }
 
+      // 5. Process nervous system archetype
+      const nsData = nervousSystemResult.data?.[0] || null
+      const nervousSystemArchetype = nsData ? {
+        archetype: nsData.archetype,
+        description: nsData.archetype_description,
+        coreFear: nsData.core_fear,
+        visibilityLimit: nsData.nervous_system_impact_limit,
+        earningLimit: nsData.nervous_system_income_limit,
+        safetyContracts: nsData.safety_contracts,
+        rewiringNeeded: nsData.rewiring_needed,
+        fearInterpretation: nsData.fear_interpretation,
+      } : null
+
       setData({
         archetypes,
         projects,
@@ -346,6 +368,7 @@ export function useHeroProfile(userId, userEmail = null, projectId = null) {
         groanChallenges,
         visibilityProgress,
         voiceTracker,
+        nervousSystemArchetype,
       })
     } catch (err) {
       console.error('Error in useHeroProfile:', err)

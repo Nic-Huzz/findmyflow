@@ -31,6 +31,7 @@ const EssenceProfile = () => {
   // Modal states
   const [showAvatarModal, setShowAvatarModal] = useState(false)
   const [editingField, setEditingField] = useState(null)
+  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     if (user?.email) {
@@ -68,6 +69,8 @@ const EssenceProfile = () => {
   }
 
   const handleAvatarSaved = async () => {
+    setShowAvatarModal(false)
+    setImageError(false)
     setLoading(true)
     await loadUserProfile()
   }
@@ -79,6 +82,7 @@ const EssenceProfile = () => {
   }
 
   const switchTab = (tab) => {
+    setImageError(false)
     if (tab === 'essence') {
       navigate('/archetypes/essence', { replace: true })
     } else {
@@ -145,7 +149,7 @@ const EssenceProfile = () => {
     <div className="essence-profile-container essence-single-page">
       {/* Header */}
       <div className="essence-profile-header essence-header-compact">
-        <button className="back-btn" onClick={() => navigate('/archetypes')}>
+        <button className="back-btn" onClick={() => navigate('/hero-profile')}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
@@ -163,23 +167,33 @@ const EssenceProfile = () => {
         {/* Avatar Section */}
         <section className="essence-section essence-avatar-section">
           <div className="avatar-wrapper">
-            <img
-              src={activeTab === 'essence' ? imagePath : null}
-              alt={activeTab === 'essence' ? archetypeName : protectiveArchetypeName}
-              className="essence-avatar-image"
-              style={activeTab === 'protective' ? {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'linear-gradient(135deg, #212529 0%, #343a40 100%)',
-                fontSize: '4rem'
-              } : {}}
-              onError={(e) => {
-                e.target.style.display = 'none'
-              }}
-            />
-            {activeTab === 'protective' && (
-              <div className="shadow-avatar-icon">🛡️</div>
+            {activeTab === 'essence' && !imageError && imagePath && (
+              <img
+                key={imagePath}
+                src={imagePath}
+                alt={archetypeName}
+                className="essence-avatar-image"
+                onError={() => setImageError(true)}
+              />
+            )}
+            {activeTab === 'essence' && (imageError || !imagePath) && (
+              <div className="essence-avatar-image avatar-fallback">
+                {archetypeName?.charAt(0) || '?'}
+              </div>
+            )}
+            {activeTab === 'protective' && protectiveArchetype?.image && !imageError && (
+              <img
+                key={protectiveArchetype.image}
+                src={`/images/archetypes/lead-magnet-protective/${protectiveArchetype.image}`}
+                alt={protectiveArchetypeName}
+                className="essence-avatar-image"
+                onError={() => setImageError(true)}
+              />
+            )}
+            {activeTab === 'protective' && (!protectiveArchetype?.image || imageError) && (
+              <div className="essence-avatar-image avatar-fallback" style={{ background: 'linear-gradient(135deg, #212529 0%, #343a40 100%)' }}>
+                {protectiveArchetypeName?.charAt(0) || '🛡️'}
+              </div>
             )}
             {activeTab === 'essence' && (
               <button
@@ -201,17 +215,19 @@ const EssenceProfile = () => {
             {activeTab === 'essence' && (
               <div className="avatar-tagline-wrapper">
                 <p className="avatar-tagline">{taglineValue}</p>
-                {taglineCustomized && <span className="customized-badge-small">Customized</span>}
-                <button
-                  className="tagline-edit-btn"
-                  onClick={() => setEditingField('tagline')}
-                  aria-label="Edit tagline"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                  </svg>
-                </button>
+                <div className="section-footer-row" style={{ justifyContent: 'center' }}>
+                  {taglineCustomized && <span className="customized-badge-small">Customized</span>}
+                  <button
+                    className="tagline-edit-btn"
+                    onClick={() => setEditingField('tagline')}
+                    aria-label="Edit tagline"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             )}
             {activeTab === 'protective' && protectiveArchetype && (
@@ -249,8 +265,14 @@ const EssenceProfile = () => {
                 <div className="section-label-row">
                   <span className="section-icon-small">✨</span>
                   <span className="section-label">Your Essence</span>
-                  {essenceCustomized && <span className="customized-badge">Customized</span>}
                 </div>
+              </div>
+              <div className="quote essence-quote">
+                <div className="quote-mark">"</div>
+                {essenceValue}
+              </div>
+              <div className="section-footer-row">
+                {essenceCustomized && <span className="customized-badge">Customized</span>}
                 <button
                   className="section-edit-btn"
                   onClick={() => setEditingField('essence')}
@@ -258,10 +280,6 @@ const EssenceProfile = () => {
                 >
                   Edit
                 </button>
-              </div>
-              <div className="quote essence-quote">
-                <div className="quote-mark">"</div>
-                {essenceValue}
               </div>
             </section>
 
@@ -271,8 +289,11 @@ const EssenceProfile = () => {
                 <div className="section-label-row">
                   <span className="section-icon-small">⚡</span>
                   <span className="section-label">Your Superpower</span>
-                  {superpowerCustomized && <span className="customized-badge">Customized</span>}
                 </div>
+              </div>
+              <p className="section-text">{superpowerValue}</p>
+              <div className="section-footer-row">
+                {superpowerCustomized && <span className="customized-badge">Customized</span>}
                 <button
                   className="section-edit-btn"
                   onClick={() => setEditingField('superpower')}
@@ -281,7 +302,6 @@ const EssenceProfile = () => {
                   Edit
                 </button>
               </div>
-              <p className="section-text">{superpowerValue}</p>
             </section>
 
             {/* Your Vision */}
@@ -290,8 +310,11 @@ const EssenceProfile = () => {
                 <div className="section-label-row">
                   <span className="section-icon-small">🔮</span>
                   <span className="section-label">Your Vision</span>
-                  {visionCustomized && <span className="customized-badge">Customized</span>}
                 </div>
+              </div>
+              <p className="section-text">{visionValue}</p>
+              <div className="section-footer-row">
+                {visionCustomized && <span className="customized-badge">Customized</span>}
                 <button
                   className="section-edit-btn"
                   onClick={() => setEditingField('vision')}
@@ -300,7 +323,6 @@ const EssenceProfile = () => {
                   Edit
                 </button>
               </div>
-              <p className="section-text">{visionValue}</p>
             </section>
 
             {/* Your North Star */}
@@ -309,8 +331,11 @@ const EssenceProfile = () => {
                 <div className="section-label-row">
                   <span className="section-icon-small">🌟</span>
                   <span className="section-label">Your North Star</span>
-                  {northStarCustomized && <span className="customized-badge">Customized</span>}
                 </div>
+              </div>
+              <p className="section-text">{northStarValue}</p>
+              <div className="section-footer-row">
+                {northStarCustomized && <span className="customized-badge">Customized</span>}
                 <button
                   className="section-edit-btn"
                   onClick={() => setEditingField('north_star')}
@@ -319,7 +344,6 @@ const EssenceProfile = () => {
                   Edit
                 </button>
               </div>
-              <p className="section-text">{northStarValue}</p>
             </section>
 
             {/* Your Origin */}
@@ -329,6 +353,13 @@ const EssenceProfile = () => {
                 <div className="origin-card">
                   <div className="origin-card-header">
                     <span className="origin-icon">🧒</span>
+                  </div>
+                  <div className="origin-label-row">
+                    <span className="origin-label">Inner Child Desire</span>
+                  </div>
+                  <p>{innerChildValue}</p>
+                  <div className="section-footer-row">
+                    {innerChildCustomized && <span className="customized-badge-small">Customized</span>}
                     <button
                       className="origin-edit-btn"
                       onClick={() => setEditingField('inner_child')}
@@ -337,15 +368,17 @@ const EssenceProfile = () => {
                       Edit
                     </button>
                   </div>
-                  <div className="origin-label-row">
-                    <span className="origin-label">Inner Child Desire</span>
-                    {innerChildCustomized && <span className="customized-badge-small">Customized</span>}
-                  </div>
-                  <p>{innerChildValue}</p>
                 </div>
                 <div className="origin-card wound-card">
                   <div className="origin-card-header">
                     <span className="origin-icon">🩹</span>
+                  </div>
+                  <div className="origin-label-row">
+                    <span className="origin-label">Essence Wound</span>
+                  </div>
+                  <p>{woundValue}</p>
+                  <div className="section-footer-row">
+                    {woundCustomized && <span className="customized-badge-small">Customized</span>}
                     <button
                       className="origin-edit-btn wound-edit-btn"
                       onClick={() => setEditingField('wound')}
@@ -354,11 +387,6 @@ const EssenceProfile = () => {
                       Edit
                     </button>
                   </div>
-                  <div className="origin-label-row">
-                    <span className="origin-label">Essence Wound</span>
-                    {woundCustomized && <span className="customized-badge-small">Customized</span>}
-                  </div>
-                  <p>{woundValue}</p>
                 </div>
               </div>
             </section>
@@ -368,15 +396,7 @@ const EssenceProfile = () => {
               <div className="characters-header">
                 <div className="characters-title-row">
                   <h3 className="characters-title">Heroes Like You</h3>
-                  {charactersCustomized && <span className="customized-badge-small">Customized</span>}
                 </div>
-                <button
-                  className="section-edit-btn"
-                  onClick={() => setEditingField('characters')}
-                  aria-label="Edit heroes"
-                >
-                  Edit
-                </button>
               </div>
               <div className="characters-list">
                 {(Array.isArray(charactersValue) ? charactersValue : (charactersValue || '').split(',').map(s => s.trim()).filter(Boolean)).map((character, index) => (
@@ -385,6 +405,16 @@ const EssenceProfile = () => {
                     <span>{character}</span>
                   </div>
                 ))}
+              </div>
+              <div className="section-footer-row">
+                {charactersCustomized && <span className="customized-badge-small">Customized</span>}
+                <button
+                  className="section-edit-btn"
+                  onClick={() => setEditingField('characters')}
+                  aria-label="Edit heroes"
+                >
+                  Edit
+                </button>
               </div>
             </section>
 
@@ -408,6 +438,13 @@ const EssenceProfile = () => {
                   <div className="deeper-item">
                     <div className="deeper-item-header">
                       <div className="deeper-item-icon">⚡</div>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">Energetic Transmission</div>
+                    </div>
+                    <p>{energeticValue}</p>
+                    <div className="section-footer-row">
+                      {energeticCustomized && <span className="customized-badge-small">Customized</span>}
                       <button
                         className="deeper-edit-btn"
                         onClick={() => setEditingField('energetic_transmission')}
@@ -416,16 +453,18 @@ const EssenceProfile = () => {
                         Edit
                       </button>
                     </div>
-                    <div className="deeper-label-row">
-                      <div className="deeper-item-label">Energetic Transmission</div>
-                      {energeticCustomized && <span className="customized-badge-small">Customized</span>}
-                    </div>
-                    <p>{energeticValue}</p>
                   </div>
 
                   <div className="deeper-item">
                     <div className="deeper-item-header">
                       <div className="deeper-item-icon">🎯</div>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">Recognition Pattern</div>
+                    </div>
+                    <p>{recognitionValue}</p>
+                    <div className="section-footer-row">
+                      {recognitionCustomized && <span className="customized-badge-small">Customized</span>}
                       <button
                         className="deeper-edit-btn"
                         onClick={() => setEditingField('recognition_pattern')}
@@ -434,16 +473,18 @@ const EssenceProfile = () => {
                         Edit
                       </button>
                     </div>
-                    <div className="deeper-label-row">
-                      <div className="deeper-item-label">Recognition Pattern</div>
-                      {recognitionCustomized && <span className="customized-badge-small">Customized</span>}
-                    </div>
-                    <p>{recognitionValue}</p>
                   </div>
 
                   <div className="deeper-item">
                     <div className="deeper-item-header">
                       <div className="deeper-item-icon">🚀</div>
+                    </div>
+                    <div className="deeper-label-row">
+                      <div className="deeper-item-label">Vision in Action</div>
+                    </div>
+                    <p>{visionInActionValue}</p>
+                    <div className="section-footer-row">
+                      {visionInActionCustomized && <span className="customized-badge-small">Customized</span>}
                       <button
                         className="deeper-edit-btn"
                         onClick={() => setEditingField('vision_in_action')}
@@ -452,11 +493,6 @@ const EssenceProfile = () => {
                         Edit
                       </button>
                     </div>
-                    <div className="deeper-label-row">
-                      <div className="deeper-item-label">Vision in Action</div>
-                      {visionInActionCustomized && <span className="customized-badge-small">Customized</span>}
-                    </div>
-                    <p>{visionInActionValue}</p>
                   </div>
                 </div>
               )}
@@ -466,7 +502,7 @@ const EssenceProfile = () => {
 
         {/* ========== PROTECTIVE CONTENT ========== */}
         {activeTab === 'protective' && protectiveArchetype && (
-          <>
+          <div className="protective-content">
             {/* Core Narrative */}
             <section className="essence-section essence-editable-section">
               <div className="section-header">
@@ -481,29 +517,26 @@ const EssenceProfile = () => {
               </div>
             </section>
 
-            {/* Emotional Wound */}
-            <section className="essence-section essence-origin-section">
-              <h3 className="origin-title">Emotional Wound</h3>
-              <div className="origin-cards">
-                <div className="origin-card">
-                  <div className="origin-card-header">
-                    <span className="origin-icon">😰</span>
-                  </div>
-                  <div className="origin-label-row">
-                    <span className="origin-label">The Fear</span>
-                  </div>
-                  <p>{protectiveArchetype.emotionalWound?.fear}</p>
-                </div>
-                <div className="origin-card wound-card">
-                  <div className="origin-card-header">
-                    <span className="origin-icon">📖</span>
-                  </div>
-                  <div className="origin-label-row">
-                    <span className="origin-label">What You Learned</span>
-                  </div>
-                  <p>{protectiveArchetype.emotionalWound?.learned}</p>
+            {/* The Fear */}
+            <section className="essence-section essence-editable-section bg-purple-soft">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">😰</span>
+                  <span className="section-label">The Fear</span>
                 </div>
               </div>
+              <p className="section-text">{protectiveArchetype.emotionalWound?.fear}</p>
+            </section>
+
+            {/* What You Learned */}
+            <section className="essence-section essence-editable-section">
+              <div className="section-header">
+                <div className="section-label-row">
+                  <span className="section-icon-small">📖</span>
+                  <span className="section-label">What You Learned</span>
+                </div>
+              </div>
+              <p className="section-text">{protectiveArchetype.emotionalWound?.learned}</p>
             </section>
 
             {/* Behavioral Strategy */}
@@ -623,7 +656,7 @@ const EssenceProfile = () => {
                 </div>
               </section>
             )}
-          </>
+          </div>
         )}
 
         {activeTab === 'protective' && !protectiveArchetype && (
