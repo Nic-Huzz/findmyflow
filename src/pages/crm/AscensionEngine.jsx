@@ -103,9 +103,15 @@ export default function AscensionEngine() {
 
   if (loading) {
     return (
-      <div className="ascension-engine loading">
-        <div className="ae-spinner"></div>
-        <p>Loading Ascension Engine...</p>
+      <div className="ascension-engine">
+        <div className="ae-toolbar">
+          <button className="ae-toolbar-back" onClick={() => navigate('/crm/nurture')}>←</button>
+          <h2 className="ae-toolbar-title">Ascension Engine</h2>
+        </div>
+        <div className="ae-loading">
+          <div className="ae-spinner"></div>
+          <p>Loading Ascension Engine...</p>
+        </div>
       </div>
     )
   }
@@ -118,29 +124,27 @@ export default function AscensionEngine() {
           ←
         </button>
         <h2 className="ae-toolbar-title">Ascension Engine</h2>
-        <span className="ae-toolbar-icon">🚀</span>
       </div>
 
-      <header className="ae-header">
-        <div className="ae-title-section">
-          <h1>Ascension Engine</h1>
-          <p className="ae-subtitle">Track customer journeys through your value ladder</p>
+      {/* Dark Hero Stats Card */}
+      <div className="ae-hero">
+        <div className="ae-hero-stats">
+          <div className="ae-hero-stat">
+            <span className="ae-hero-value">{customers.length}</span>
+            <span className="ae-hero-label">Customers</span>
+          </div>
+          <div className="ae-hero-divider"></div>
+          <div className="ae-hero-stat">
+            <span className="ae-hero-value gold">${ladderStats?.totalLTV?.toLocaleString() || 0}</span>
+            <span className="ae-hero-label">Total LTV</span>
+          </div>
+          <div className="ae-hero-divider"></div>
+          <div className="ae-hero-stat">
+            <span className="ae-hero-value">{ascensionTasks.length}</span>
+            <span className="ae-hero-label">Pending</span>
+          </div>
         </div>
-        <div className="ae-quick-stats">
-          <div className="ae-stat">
-            <span className="stat-value">{customers.length}</span>
-            <span className="stat-label">Customers</span>
-          </div>
-          <div className="ae-stat">
-            <span className="stat-value">${ladderStats?.totalLTV?.toLocaleString() || 0}</span>
-            <span className="stat-label">Total LTV</span>
-          </div>
-          <div className="ae-stat">
-            <span className="stat-value">{ascensionTasks.length}</span>
-            <span className="stat-label">Pending Tasks</span>
-          </div>
-        </div>
-      </header>
+      </div>
 
       {/* Pending Ascension Tasks */}
       {ascensionTasks.length > 0 && (

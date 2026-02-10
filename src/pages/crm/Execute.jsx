@@ -233,6 +233,10 @@ export default function Execute() {
   if (loading && !tasks.length) {
     return (
       <div className="execute-page">
+        <div className="execute-toolbar">
+          <button className="execute-toolbar-back" onClick={() => navigate('/crm')}>←</button>
+          <h2 className="execute-toolbar-title">Execute</h2>
+        </div>
         <div className="execute-loading">
           <div className="execute-spinner"></div>
           <p>Loading your week...</p>
@@ -249,53 +253,44 @@ export default function Execute() {
           ←
         </button>
         <h2 className="execute-toolbar-title">Execute</h2>
-        <span className="execute-toolbar-icon">🚀</span>
       </div>
 
-      {/* Header */}
-      <header className="execute-header">
-        <h1>🚀 Execute</h1>
-        <p className="week-label">Week of {weekDisplay}</p>
-        {projects.length > 1 && (
-          <select
-            className="project-select"
-            value={currentProject?.id || ''}
-            onChange={(e) => {
-              const project = projects.find(p => p.id === e.target.value)
-              if (project) handleProjectChange(project)
-            }}
-          >
-            {projects.map(p => (
-              <option key={p.id} value={p.id}>{p.name}</option>
-            ))}
-          </select>
-        )}
-      </header>
-
-      {/* Stats Bar */}
-      <div className="execute-stats">
-        <div className="stat-item">
-          <span className="stat-icon">🎯</span>
-          <div className="stat-content">
-            <span className="stat-value">{quickStats?.executionRate || 0}%</span>
-            <span className="stat-label">Execution</span>
+      {/* Dark Hero Stats Card */}
+      <div className="execute-hero">
+        <div className="execute-hero-week">Week of {weekDisplay}</div>
+        <div className="execute-hero-stats">
+          <div className="execute-hero-stat">
+            <span className="execute-hero-value gold">{quickStats?.executionRate || 0}%</span>
+            <span className="execute-hero-label">Execution</span>
           </div>
-        </div>
-        <div className="stat-item">
-          <span className="stat-icon">✅</span>
-          <div className="stat-content">
-            <span className="stat-value">{quickStats?.tasksCompleted || 0}/{quickStats?.totalTasks || 0}</span>
-            <span className="stat-label">Tasks</span>
+          <div className="execute-hero-divider"></div>
+          <div className="execute-hero-stat">
+            <span className="execute-hero-value">{quickStats?.tasksCompleted || 0}/{quickStats?.totalTasks || 0}</span>
+            <span className="execute-hero-label">Tasks</span>
           </div>
-        </div>
-        <div className="stat-item">
-          <span className="stat-icon">🔥</span>
-          <div className="stat-content">
-            <span className="stat-value">{quickStats?.streak || 0}</span>
-            <span className="stat-label">Day Streak</span>
+          <div className="execute-hero-divider"></div>
+          <div className="execute-hero-stat">
+            <span className="execute-hero-value">{quickStats?.streak || 0}</span>
+            <span className="execute-hero-label">Streak</span>
           </div>
         </div>
       </div>
+
+      {/* Project Selector */}
+      {projects.length > 1 && (
+        <select
+          className="execute-project-select"
+          value={currentProject?.id || ''}
+          onChange={(e) => {
+            const project = projects.find(p => p.id === e.target.value)
+            if (project) handleProjectChange(project)
+          }}
+        >
+          {projects.map(p => (
+            <option key={p.id} value={p.id}>{p.name}</option>
+          ))}
+        </select>
+      )}
 
       {/* Weekly Plan Banner */}
       {weeklyPlan && (

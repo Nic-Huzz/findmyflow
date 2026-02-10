@@ -2,12 +2,11 @@
  * Business Systems - Flywheel Setup Checklist
  * Guided checklist showing users what business systems to build
  */
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { ECOSYSTEM_PHASES } from '../../lib/crm/ecosystemConfig'
 import { getEcosystemProgress, toggleSystemItem } from '../../lib/crm/ecosystemService'
-import { TowerSkeleton } from '../../components/crm/Skeleton'
 import PullToRefresh from '../../components/crm/PullToRefresh'
 import { hapticLight, hapticMedium } from '../../lib/haptics'
 import './BusinessSystems.css'
@@ -59,7 +58,35 @@ export default function BusinessSystems() {
     }
   }
 
-  if (loading) return <TowerSkeleton />
+  // Compute overall stats across all phases
+  const overallStats = useMemo(() => {
+    let totalCompleted = 0
+    let totalItems = 0
+    let phasesComplete = 0
+    ECOSYSTEM_PHASES.forEach(phase => {
+      const prog = getPhaseProgress(phase)
+      totalCompleted += prog.completed
+      totalItems += prog.total
+      if (prog.percent === 100) phasesComplete++
+    })
+    const overallPercent = totalItems > 0 ? Math.round((totalCompleted / totalItems) * 100) : 0
+    return { totalCompleted, totalItems, overallPercent, phasesComplete }
+  }, [progressMap])
+
+  if (loading) {
+    return (
+      <div className="biz-systems-page">
+        <div className="tower-toolbar">
+          <button className="tower-toolbar-back" onClick={() => navigate('/crm/tools')}>←</button>
+          <h2 className="tower-toolbar-title">Business Systems</h2>
+        </div>
+        <div className="biz-loading">
+          <div className="biz-spinner"></div>
+          <p>Loading systems...</p>
+        </div>
+      </div>
+    )
+  }
 
   const currentPhase = ECOSYSTEM_PHASES.find(p => p.id === activePhase) || ECOSYSTEM_PHASES[0]
   const currentProgress = getPhaseProgress(currentPhase)
@@ -73,21 +100,27 @@ export default function BusinessSystems() {
             ←
           </button>
           <h2 className="tower-toolbar-title">Business Systems</h2>
-          <span className="tower-toolbar-points">⚙️</span>
         </div>
 
-        {/* Header */}
-        <header className="tower-header">
-          <div className="tower-breadcrumb">
-            <button onClick={() => navigate('/crm')}>Home</button>
-            <span>→</span>
-            <button onClick={() => navigate('/crm/tools')}>Tools</button>
-            <span>→</span>
-            <span>Business Systems</span>
+        {/* Dark Hero Stats Card */}
+        <div className="biz-hero">
+          <div className="biz-hero-stats">
+            <div className="biz-hero-stat">
+              <span className="biz-hero-value gold">{overallStats.overallPercent}%</span>
+              <span className="biz-hero-label">Complete</span>
+            </div>
+            <div className="biz-hero-divider"></div>
+            <div className="biz-hero-stat">
+              <span className="biz-hero-value">{overallStats.totalCompleted}/{overallStats.totalItems}</span>
+              <span className="biz-hero-label">Systems</span>
+            </div>
+            <div className="biz-hero-divider"></div>
+            <div className="biz-hero-stat">
+              <span className="biz-hero-value">{overallStats.phasesComplete}/{ECOSYSTEM_PHASES.length}</span>
+              <span className="biz-hero-label">Phases</span>
+            </div>
           </div>
-          <h1 className="tower-title">⚙️ Business Systems</h1>
-          <p className="tower-subtitle">Build your flywheel, one system at a time</p>
-        </header>
+        </div>
 
         {/* Phase Tabs */}
         <div className="biz-phase-tabs">

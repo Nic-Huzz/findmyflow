@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FindMyFlow - Option D: Merged Flow River + Journey Path</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --brand-purple: #5e17eb;
+      --brand-gold: #E9A23B;
+      --text-primary: #1a1a2e;
+      --text-secondary: #6c757d;
+      --text-muted: #adb5bd;
+      --surface: #ffffff;
+      --bg: #fafafa;
+      --north: #10b981;
+      --east: #3b82f6;
+      --south: #ef4444;
+      --west: #fbbf24;
+      --archetype-color: #FFD93D;
+      --archetype-color-soft: rgba(255, 217, 61, 0.08);
+      --archetype-color-strong: rgba(255, 217, 61, 0.25);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, var(--archetype-color-soft) 0%, var(--bg) 30%, var(--bg) 70%, var(--archetype-color-soft) 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    /* ============================================================
+       HEADER (context from v4 mockup)
+       ============================================================ */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--brand-purple), var(--brand-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .xp-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
+    }
+
+    .context-label {
+      text-align: center;
+      padding: 0 20px 20px;
+    }
+
+    .context-label span {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--brand-purple), var(--brand-gold));
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 100px;
+    }
+
+    /* ============================================================
+       THE MERGED FLOW JOURNEY CARD
+       ============================================================ */
+    .flow-journey {
+      margin: 0 16px;
+      background: var(--surface);
+      border-radius: 24px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--archetype-color-strong);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Accent bar on left */
+    .flow-journey::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--brand-purple), var(--north), var(--brand-gold));
+      border-radius: 24px 0 0 24px;
+      z-index: 2;
+    }
+
+    .fj-top {
+      padding: 24px 24px 0;
+    }
+
+    .fj-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .fj-header-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--brand-purple), var(--north));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .fj-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--brand-purple);
+    }
+
+    .fj-growth-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .fj-growth-text .hl { color: var(--brand-purple); font-weight: 800; }
+    .fj-growth-text .gold { color: var(--brand-gold); font-weight: 800; }
+
+    .fj-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ============================================================
+       HORIZONTAL FLOW RIVER PATH (the merged visual)
+       ============================================================ */
+    .flow-path-scroll {
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 0 8px;
+      position: relative;
+    }
+
+    .flow-path-scroll::-webkit-scrollbar { display: none; }
+
+    .flow-path-container {
+      min-width: 900px;
+      height: 220px;
+      position: relative;
+      padding: 0 24px;
+    }
+
+    .flow-path-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* River background glow */
+    .fp-river-glow {
+      fill: none;
+      stroke-width: 28;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.08;
+    }
+
+    /* Main river path */
+    .fp-river {
+      fill: none;
+      stroke-width: 18;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: url(#fpGlow);
+    }
+
+    /* Animated highlight on river */
+    .fp-river-highlight {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.25);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 16 10;
+      animation: fpFlowDash 2s linear infinite;
+    }
+
+    @keyframes fpFlowDash {
+      0% { stroke-dashoffset: 26; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    /* Direction nodes — clickable, with subtle hover glow */
+    .fp-node {
+      cursor: pointer;
+    }
+
+    .fp-hover-ring {
+      fill: none;
+      stroke: rgba(94, 23, 235, 0.25);
+      stroke-width: 3;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .fp-node:hover .fp-hover-ring,
+    .fp-node.tapped .fp-hover-ring {
+      opacity: 1;
+    }
+
+    .fp-node-ring {
+      fill: none;
+      stroke-width: 2;
+      opacity: 0.3;
+    }
+
+    /* Milestone nodes (bigger, special) */
+    .fp-milestone-outer {
+      fill: none;
+      stroke-width: 2;
+      stroke-dasharray: 4 3;
+      animation: msDash 3s linear infinite;
+    }
+
+    @keyframes msDash {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: 21; }
+    }
+
+    /* Stuck / Rest point */
+    .fp-stuck-pulse {
+      animation: fpStuckRing 1.5s ease-out infinite;
+    }
+
+    @keyframes fpStuckRing {
+      0% { r: 12; opacity: 0.6; }
+      100% { r: 22; opacity: 0; }
+    }
+
+    /* Now beacon */
+    .fp-now-pulse {
+      animation: fpNowRing 2s ease-out infinite;
+    }
+
+    @keyframes fpNowRing {
+      0% { r: 18; opacity: 0.8; }
+      100% { r: 30; opacity: 0; }
+    }
+
+    .fp-now-glow {
+      animation: fpNowGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes fpNowGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Date labels */
+    .fp-date {
+      font-size: 8px;
+      font-weight: 700;
+      fill: var(--text-muted);
+    }
+
+    /* Milestone labels */
+    .fp-ms-label {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .fp-ms-sublabel {
+      font-size: 8px;
+      font-weight: 600;
+    }
+
+    /* Direction arrow text */
+    .fp-arrow {
+      font-size: 11px;
+      font-weight: 800;
+      fill: white;
+    }
+
+    /* Milestone emoji */
+    .fp-ms-emoji {
+      font-size: 14px;
+    }
+
+    /* Scroll hint */
+    .fj-scroll-hint {
+      text-align: right;
+      padding: 4px 24px 0;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      animation: hintPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* ============================================================
+       LEGEND
+       ============================================================ */
+    .fj-legend {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 12px 20px 0;
+    }
+
+    .fj-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: #f8f9fa;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .fj-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .fj-legend-dot.stuck {
+      box-shadow: 0 0 4px var(--south);
+    }
+
+    .fj-legend-icon {
+      font-size: 12px;
+    }
+
+    /* ============================================================
+       STATS ROW
+       ============================================================ */
+    .fj-stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 16px 24px 0;
+    }
+
+    .fj-stat {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .fj-stat-ring {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 6px;
+      position: relative;
+    }
+
+    .fj-stat-ring svg {
+      transform: rotate(-90deg);
+      width: 52px;
+      height: 52px;
+    }
+
+    .fj-ring-bg {
+      fill: none;
+      stroke: #e9ecef;
+      stroke-width: 4;
+    }
+
+    .fj-ring-fill {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.5s ease-out;
+    }
+
+    .fj-stat-val {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .fj-stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       NARRATIVE
+       ============================================================ */
+    .fj-narrative {
+      margin: 16px 24px 24px;
+      background: linear-gradient(135deg, var(--archetype-color-soft), rgba(94, 23, 235, 0.04));
+      border-radius: 16px;
+      padding: 16px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fj-narrative::before {
+      content: '"';
+      position: absolute;
+      top: -4px;
+      left: 12px;
+      font-size: 44px;
+      font-weight: 900;
+      color: rgba(255, 217, 61, 0.15);
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+
+    .fj-narrative p {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      font-style: italic;
+      padding-left: 6px;
+    }
+
+    .fj-narrative strong {
+      color: var(--text-primary);
+      font-style: normal;
+    }
+
+    .fj-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--brand-purple);
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0 24px 24px;
+      text-decoration: none;
+      transition: gap 0.2s;
+    }
+
+    .fj-link:hover { gap: 8px; }
+
+    /* ============================================================
+       NODE POPUP
+       ============================================================ */
+    .fp-popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .fp-popup-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .fp-popup {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 0 24px 40px;
+      z-index: 101;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .fp-popup-overlay.active .fp-popup {
+      transform: translateY(0);
+    }
+
+    .fp-popup-handle {
+      width: 40px;
+      height: 4px;
+      background: #dee2e6;
+      border-radius: 2px;
+      margin: 12px auto 20px;
+    }
+
+    .fp-popup-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .fp-popup-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .fp-popup-icon::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 19px;
+      border: 2px dashed;
+      border-color: inherit;
+      opacity: 0.3;
+      animation: msDash 3s linear infinite;
+    }
+
+    .fp-popup-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .fp-popup-subtitle {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .fp-popup-direction {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .fp-popup-direction .dir-arrow {
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .fp-popup-body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .fp-popup-body strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .fp-popup-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .fp-popup-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #f8f9fa;
+      color: var(--text-secondary);
+    }
+
+    .fp-popup-tag .tag-icon {
+      font-size: 13px;
+    }
+
+    .fp-popup-feeling {
+      background: linear-gradient(135deg, var(--archetype-color-soft), rgba(94, 23, 235, 0.04));
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+
+    .fp-popup-feeling-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .fp-popup-feeling-text {
+      font-size: 13px;
+      font-style: italic;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .fp-popup-points {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(233, 162, 59, 0.06));
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--brand-purple);
+    }
+
+    .fp-popup-points span {
+      font-size: 18px;
+    }
+
+    /* ============================================================
+       BOTTOM NAV (context)
+       ============================================================ */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 28px;
+      z-index: 50;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .nav-item.active { color: var(--brand-purple); }
+    .nav-item .nav-icon { font-size: 1.25rem; }
+  </style>
+</head>
+<body>
+
+  <!-- Header context -->
+  <div class="top-bar">
+    <div class="brand">FindMyFlow</div>
+    <div class="xp-pill"><span>⚡</span><span>2,450</span></div>
+  </div>
+
+  <div class="context-label">
+    <span>Option D — Merged Flow + Journey</span>
+  </div>
+
+  <!-- ============================================================
+       THE MERGED FLOW JOURNEY CARD
+       ============================================================ -->
+  <div class="flow-journey">
+    <div class="fj-top">
+      <div class="fj-header">
+        <div class="fj-header-icon">🌊</div>
+        <span class="fj-title">Your Flow Journey</span>
+      </div>
+      <p class="fj-growth-text">
+        You've been <span class="hl">finding your flow</span> for <span class="gold">12 days</span> now
+      </p>
+      <p class="fj-sub">Swipe to explore your river — compass entries, quests, groans, and stages all in one flow.</p>
+    </div>
+
+    <!-- THE HORIZONTAL FLOW RIVER -->
+    <div class="flow-path-scroll" id="flowScroll">
+      <div class="flow-path-container">
+        <svg class="flow-path-svg" viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <!-- River gradient following compass directions -->
+            <linearGradient id="fpRiverGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="var(--brand-purple)" />
+              <stop offset="8%" stop-color="var(--north)" />
+              <stop offset="16%" stop-color="var(--north)" />
+              <stop offset="24%" stop-color="var(--east)" />
+              <stop offset="32%" stop-color="var(--north)" />
+              <stop offset="40%" stop-color="var(--north)" />
+              <stop offset="48%" stop-color="var(--south)" />
+              <stop offset="52%" stop-color="var(--south)" />
+              <stop offset="60%" stop-color="var(--north)" />
+              <stop offset="68%" stop-color="var(--west)" />
+              <stop offset="76%" stop-color="var(--north)" />
+              <stop offset="84%" stop-color="var(--east)" />
+              <stop offset="92%" stop-color="var(--north)" />
+              <stop offset="100%" stop-color="var(--north)" />
+            </linearGradient>
+            <filter id="fpGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- River glow background -->
+          <path class="fp-river-glow" stroke="#adb5bd"
+            d="M 40,120 Q 100,60 160,100 Q 220,140 280,80 Q 340,30 400,90
+               Q 440,130 480,140 Q 520,150 540,130
+               Q 580,80 640,70 Q 700,60 740,100 Q 780,140 820,80 Q 850,40 870,60" />
+
+          <!-- Main river -->
+          <path class="fp-river" stroke="url(#fpRiverGrad)"
+            d="M 40,120 Q 100,60 160,100 Q 220,140 280,80 Q 340,30 400,90
+               Q 440,130 480,140 Q 520,150 540,130
+               Q 580,80 640,70 Q 700,60 740,100 Q 780,140 820,80 Q 850,40 870,60" />
+
+          <!-- Animated flow highlight -->
+          <path class="fp-river-highlight"
+            d="M 40,120 Q 100,60 160,100 Q 220,140 280,80 Q 340,30 400,90
+               Q 440,130 480,140 Q 520,150 540,130
+               Q 580,80 640,70 Q 700,60 740,100 Q 780,140 820,80 Q 850,40 870,60" />
+
+          <!-- ============ START MARKER ============ -->
+          <g class="fp-node" data-node="start" onclick="showPopup('start')">
+            <circle cx="40" cy="120" r="18" fill="transparent" />
+            <circle cx="40" cy="120" r="16" class="fp-hover-ring" />
+            <circle cx="40" cy="120" r="10" fill="var(--brand-purple)" stroke="white" stroke-width="2" />
+            <text x="40" y="120" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="9">🚩</text>
+            <text x="40" y="145" text-anchor="middle" class="fp-date">Jan 27</text>
+            <text x="40" y="156" text-anchor="middle" class="fp-ms-sublabel" fill="var(--brand-purple)">Start</text>
+          </g>
+
+          <!-- ============ NODE 1: Flow + Quest 1 ============ -->
+          <g class="fp-node" data-node="quest1" onclick="showPopup('quest1')">
+            <circle cx="100" cy="72" r="30" fill="transparent" />
+            <circle cx="100" cy="72" r="28" class="fp-hover-ring" />
+            <circle cx="100" cy="72" r="22" class="fp-milestone-outer" stroke="var(--brand-purple)" />
+            <circle cx="100" cy="72" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+            <text x="100" y="72" text-anchor="middle" dominant-baseline="central" class="fp-arrow">↑</text>
+            <text x="100" y="44" text-anchor="middle" class="fp-ms-label" fill="var(--brand-purple)">Quest 1</text>
+            <text x="100" y="100" text-anchor="middle" class="fp-date">Jan 28</text>
+          </g>
+
+          <!-- ============ NODE 2: Flow ============ -->
+          <g class="fp-node" data-node="flow1" onclick="showPopup('flow1')">
+            <circle cx="160" cy="100" r="18" fill="transparent" />
+            <circle cx="160" cy="100" r="17" class="fp-hover-ring" />
+            <circle cx="160" cy="100" r="11" fill="var(--north)" stroke="white" stroke-width="2" />
+            <text x="160" y="100" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">↑</text>
+            <text x="160" y="124" text-anchor="middle" class="fp-date">Jan 29</text>
+          </g>
+
+          <!-- ============ NODE 3: Redirect ============ -->
+          <g class="fp-node" data-node="redirect1" onclick="showPopup('redirect1')">
+            <circle cx="220" cy="130" r="18" fill="transparent" />
+            <circle cx="220" cy="130" r="17" class="fp-hover-ring" />
+            <circle cx="220" cy="130" r="11" fill="var(--east)" stroke="white" stroke-width="2" />
+            <text x="220" y="130" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">→</text>
+            <text x="220" y="154" text-anchor="middle" class="fp-date">Jan 30</text>
+          </g>
+
+          <!-- ============ NODE 4: Flow + Groan 1 ============ -->
+          <g class="fp-node" data-node="groan1" onclick="showPopup('groan1')">
+            <circle cx="280" cy="80" r="30" fill="transparent" />
+            <circle cx="280" cy="80" r="28" class="fp-hover-ring" />
+            <circle cx="280" cy="80" r="22" class="fp-milestone-outer" stroke="var(--brand-gold)" />
+            <circle cx="280" cy="80" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+            <text x="280" y="80" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">🦁</text>
+            <text x="280" y="56" text-anchor="middle" class="fp-ms-label" fill="var(--brand-gold)">Groan 1</text>
+            <text x="280" y="110" text-anchor="middle" class="fp-date">Jan 31</text>
+          </g>
+
+          <!-- ============ NODE 5: Flow ============ -->
+          <g class="fp-node" data-node="flow2" onclick="showPopup('flow2')">
+            <circle cx="340" cy="42" r="18" fill="transparent" />
+            <circle cx="340" cy="42" r="17" class="fp-hover-ring" />
+            <circle cx="340" cy="42" r="11" fill="var(--north)" stroke="white" stroke-width="2" />
+            <text x="340" y="42" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">↑</text>
+            <text x="340" y="66" text-anchor="middle" class="fp-date">Feb 1</text>
+          </g>
+
+          <!-- ============ NODE 6: Flow + Quest 3 + Stage 3 ============ -->
+          <g class="fp-node" data-node="stage3" onclick="showPopup('stage3')">
+            <circle cx="400" cy="90" r="32" fill="transparent" />
+            <circle cx="400" cy="90" r="30" class="fp-hover-ring" />
+            <circle cx="400" cy="90" r="24" class="fp-milestone-outer" stroke="var(--north)" />
+            <circle cx="400" cy="90" r="15" fill="var(--north)" stroke="white" stroke-width="2.5" />
+            <text x="400" y="90" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">📊</text>
+            <text x="400" y="62" text-anchor="middle" class="fp-ms-label" fill="var(--north)">Stage 3</text>
+            <text x="400" y="122" text-anchor="middle" class="fp-date">Feb 2</text>
+          </g>
+
+          <!-- ============ NODE 7: Rest (stuck point) ============ -->
+          <g class="fp-node" data-node="rest1" onclick="showPopup('rest1')">
+            <circle cx="480" cy="140" r="22" fill="transparent" />
+            <circle cx="480" cy="140" r="20" class="fp-hover-ring" />
+            <circle cx="480" cy="140" r="16" fill="none" stroke="var(--south)" stroke-width="2" class="fp-stuck-pulse" />
+            <circle cx="480" cy="140" r="11" fill="var(--south)" stroke="white" stroke-width="2" />
+            <text x="480" y="140" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="12">●</text>
+            <text x="480" y="165" text-anchor="middle" class="fp-date">Feb 3</text>
+            <text x="480" y="176" text-anchor="middle" class="fp-ms-sublabel" fill="var(--south)">Rest day</text>
+          </g>
+
+          <!-- ============ NODE 8: Rest ============ -->
+          <g class="fp-node" data-node="rest2" onclick="showPopup('rest2')">
+            <circle cx="520" cy="148" r="16" fill="transparent" />
+            <circle cx="520" cy="148" r="15" class="fp-hover-ring" />
+            <circle cx="520" cy="148" r="9" fill="var(--south)" stroke="white" stroke-width="2" opacity="0.7" />
+            <text x="520" y="148" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="9">●</text>
+          </g>
+
+          <!-- ============ NODE 9: Flow + Quest 4 ============ -->
+          <g class="fp-node" data-node="quest4" onclick="showPopup('quest4')">
+            <circle cx="580" cy="88" r="30" fill="transparent" />
+            <circle cx="580" cy="88" r="28" class="fp-hover-ring" />
+            <circle cx="580" cy="88" r="22" class="fp-milestone-outer" stroke="var(--brand-purple)" />
+            <circle cx="580" cy="88" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+            <text x="580" y="88" text-anchor="middle" dominant-baseline="central" class="fp-arrow">↑</text>
+            <text x="580" y="62" text-anchor="middle" class="fp-ms-label" fill="var(--brand-purple)">Quest 4</text>
+            <text x="580" y="118" text-anchor="middle" class="fp-date">Feb 4</text>
+          </g>
+
+          <!-- ============ NODE 10: Honour ============ -->
+          <g class="fp-node" data-node="honour1" onclick="showPopup('honour1')">
+            <circle cx="640" cy="70" r="18" fill="transparent" />
+            <circle cx="640" cy="70" r="17" class="fp-hover-ring" />
+            <circle cx="640" cy="70" r="11" fill="var(--west)" stroke="white" stroke-width="2" />
+            <text x="640" y="70" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">←</text>
+            <text x="640" y="94" text-anchor="middle" class="fp-date">Feb 5</text>
+          </g>
+
+          <!-- ============ NODE 11: Flow + Groan 2 ============ -->
+          <g class="fp-node" data-node="groan2" onclick="showPopup('groan2')">
+            <circle cx="700" cy="65" r="30" fill="transparent" />
+            <circle cx="700" cy="65" r="28" class="fp-hover-ring" />
+            <circle cx="700" cy="65" r="22" class="fp-milestone-outer" stroke="var(--brand-gold)" />
+            <circle cx="700" cy="65" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+            <text x="700" y="65" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">🦁</text>
+            <text x="700" y="40" text-anchor="middle" class="fp-ms-label" fill="var(--brand-gold)">Groan 2</text>
+            <text x="700" y="95" text-anchor="middle" class="fp-date">Feb 5</text>
+          </g>
+
+          <!-- ============ NODE 12: Redirect ============ -->
+          <g class="fp-node" data-node="redirect2" onclick="showPopup('redirect2')">
+            <circle cx="760" cy="108" r="18" fill="transparent" />
+            <circle cx="760" cy="108" r="17" class="fp-hover-ring" />
+            <circle cx="760" cy="108" r="11" fill="var(--east)" stroke="white" stroke-width="2" />
+            <text x="760" y="108" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">→</text>
+            <text x="760" y="132" text-anchor="middle" class="fp-date">Feb 6</text>
+          </g>
+
+          <!-- ============ NODE 13: Flow + Quest 5 + Stage 4 ============ -->
+          <g class="fp-node" data-node="stage4" onclick="showPopup('stage4')">
+            <circle cx="820" cy="80" r="32" fill="transparent" />
+            <circle cx="820" cy="80" r="30" class="fp-hover-ring" />
+            <circle cx="820" cy="80" r="24" class="fp-milestone-outer" stroke="var(--north)" />
+            <circle cx="820" cy="80" r="15" fill="var(--north)" stroke="white" stroke-width="2.5" />
+            <text x="820" y="80" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">📊</text>
+            <text x="820" y="52" text-anchor="middle" class="fp-ms-label" fill="var(--north)">Stage 4</text>
+            <text x="820" y="112" text-anchor="middle" class="fp-date">Feb 7</text>
+          </g>
+
+          <!-- ============ NOW MARKER ============ -->
+          <g class="fp-node" data-node="now" onclick="showPopup('now')">
+            <circle cx="870" cy="60" r="26" fill="transparent" />
+            <circle cx="870" cy="60" r="24" class="fp-hover-ring" />
+            <circle cx="870" cy="60" r="20" fill="var(--brand-gold)" opacity="0.1" class="fp-now-glow" />
+            <circle cx="870" cy="60" r="18" fill="none" stroke="var(--brand-gold)" stroke-width="2" class="fp-now-pulse" />
+            <circle cx="870" cy="60" r="16" fill="var(--north)" stroke="var(--brand-gold)" stroke-width="3" />
+            <text x="870" y="60" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="12">↑</text>
+            <text x="870" y="36" text-anchor="middle" class="fp-ms-label" fill="var(--brand-gold)">Now</text>
+            <text x="870" y="86" text-anchor="middle" class="fp-date">Today</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <p class="fj-scroll-hint">← Swipe to explore your flow →</p>
+
+    <!-- Legend -->
+    <div class="fj-legend">
+      <div class="fj-legend-item">
+        <div class="fj-legend-dot" style="background: var(--north);"></div>
+        Flow
+      </div>
+      <div class="fj-legend-item">
+        <div class="fj-legend-dot" style="background: var(--east);"></div>
+        Redirect
+      </div>
+      <div class="fj-legend-item">
+        <div class="fj-legend-dot" style="background: var(--west);"></div>
+        Honour
+      </div>
+      <div class="fj-legend-item">
+        <div class="fj-legend-dot stuck" style="background: var(--south);"></div>
+        Rest
+      </div>
+      <div class="fj-legend-item">
+        <span class="fj-legend-icon">⚡</span>
+        Quest
+      </div>
+      <div class="fj-legend-item">
+        <span class="fj-legend-icon">🦁</span>
+        Groan
+      </div>
+      <div class="fj-legend-item">
+        <span class="fj-legend-icon">📊</span>
+        Stage
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="fj-stats">
+      <div class="fj-stat">
+        <div class="fj-stat-ring">
+          <svg viewBox="0 0 52 52">
+            <circle class="fj-ring-bg" cx="26" cy="26" r="22" />
+            <circle class="fj-ring-fill" cx="26" cy="26" r="22" style="stroke: #E67E22; stroke-dasharray: 138; stroke-dashoffset: 45;" />
+          </svg>
+          <div class="fj-stat-val">12</div>
+        </div>
+        <div class="fj-stat-label">Streak</div>
+      </div>
+      <div class="fj-stat">
+        <div class="fj-stat-ring">
+          <svg viewBox="0 0 52 52">
+            <circle class="fj-ring-bg" cx="26" cy="26" r="22" />
+            <circle class="fj-ring-fill" cx="26" cy="26" r="22" style="stroke: var(--brand-purple); stroke-dasharray: 138; stroke-dashoffset: 58;" />
+          </svg>
+          <div class="fj-stat-val">7</div>
+        </div>
+        <div class="fj-stat-label">Quests</div>
+      </div>
+      <div class="fj-stat">
+        <div class="fj-stat-ring">
+          <svg viewBox="0 0 52 52">
+            <circle class="fj-ring-bg" cx="26" cy="26" r="22" />
+            <circle class="fj-ring-fill" cx="26" cy="26" r="22" style="stroke: var(--brand-gold); stroke-dasharray: 138; stroke-dashoffset: 100;" />
+          </svg>
+          <div class="fj-stat-val">3</div>
+        </div>
+        <div class="fj-stat-label">Groans</div>
+      </div>
+      <div class="fj-stat">
+        <div class="fj-stat-ring">
+          <svg viewBox="0 0 52 52">
+            <circle class="fj-ring-bg" cx="26" cy="26" r="22" />
+            <circle class="fj-ring-fill" cx="26" cy="26" r="22" style="stroke: var(--north); stroke-dasharray: 138; stroke-dashoffset: 70;" />
+          </svg>
+          <div class="fj-stat-val">4</div>
+        </div>
+        <div class="fj-stat-label">Stage</div>
+      </div>
+    </div>
+
+    <!-- Narrative -->
+    <div class="fj-narrative">
+      <p>
+        Your river is <strong>running strong</strong> — mostly in Flow, with a healthy rest bend on Day 7.
+        This week you faced your <strong>second groan</strong>, redirected once, and
+        climbed to <strong>Stage 4</strong>. You're <strong>making complexity feel like play</strong>.
+      </p>
+    </div>
+
+    <a href="#" class="fj-link">
+      Open Flow Compass <span>→</span>
+    </a>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🎯</span>
+      <span>Challenge</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🧭</span>
+      <span>Compass</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- ============================================================
+       POPUP (bottom sheet)
+       ============================================================ -->
+  <div class="fp-popup-overlay" id="popupOverlay" onclick="hidePopup(event)">
+    <div class="fp-popup" id="popupSheet" onclick="event.stopPropagation()">
+      <div class="fp-popup-handle"></div>
+      <div id="popupContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // Auto-scroll to end (Now) on load
+    const scrollEl = document.getElementById('flowScroll');
+    setTimeout(() => {
+      scrollEl.scrollTo({
+        left: scrollEl.scrollWidth,
+        behavior: 'smooth'
+      });
+    }, 600);
+
+    // Track touch start position to distinguish tap from swipe
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let isScrolling = false;
+
+    scrollEl.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isScrolling = false;
+    }, { passive: true });
+
+    scrollEl.addEventListener('touchmove', (e) => {
+      const dx = Math.abs(e.touches[0].clientX - touchStartX);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY);
+      if (dx > 8 || dy > 8) isScrolling = true;
+    }, { passive: true });
+
+    // ============================================================
+    // NODE DATA — each marker's popup content
+    // ============================================================
+    const nodeData = {
+      start: {
+        type: 'start',
+        icon: '🚩',
+        iconBg: '#5e17eb',
+        title: 'Your Journey Begins',
+        subtitle: 'Jan 27, 2026',
+        body: 'This is the day you decided to <strong>find your flow</strong>. You signed up, answered the big questions, and took the first step toward building a business that feels like you.',
+        feeling: 'Excited, nervous, ready for something new.',
+        tags: [
+          { icon: '🌱', text: 'Day 1' },
+          { icon: '✨', text: 'New beginning' }
+        ],
+        points: null
+      },
+      quest1: {
+        type: 'quest',
+        icon: '⚡',
+        iconBg: '#5e17eb',
+        title: 'Quest 1: Discover Your Skills',
+        subtitle: 'Jan 28 — Day 2 of 7',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'You completed the <strong>Flow Finder skills quest</strong> — listing out everything you\'re naturally good at, even the things you take for granted. This is the raw material of your future offer.',
+        feeling: 'Surprised by how many skills I actually have. Felt validating.',
+        tags: [
+          { icon: '🎯', text: 'Flow Finder' },
+          { icon: '📋', text: 'Skills mapped' },
+          { icon: '⚡', text: 'Quest complete' }
+        ],
+        points: 150
+      },
+      flow1: {
+        type: 'compass',
+        icon: '↑',
+        iconBg: '#10b981',
+        title: 'Flow Day',
+        subtitle: 'Jan 29 — Day 3',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'You felt <strong>excited and at ease</strong>. Everything was clicking — the work felt natural, ideas were flowing, and you were in your element.',
+        feeling: 'Writing felt effortless today. Like the words already knew where to go.',
+        tags: [
+          { icon: '🧭', text: 'North' },
+          { icon: '💚', text: 'Ease + Excited' }
+        ],
+        points: null
+      },
+      redirect1: {
+        type: 'compass',
+        icon: '→',
+        iconBg: '#3b82f6',
+        title: 'Redirect Day',
+        subtitle: 'Jan 30 — Day 4',
+        direction: { label: 'Redirect', arrow: '→', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
+        body: 'You felt <strong>excited but hit some resistance</strong>. The energy was there, but something needed to shift. This is growth in disguise — your nervous system meeting a new edge.',
+        feeling: 'Wanted to post my first piece of content but froze when I opened the app. The excitement is there but so is the fear.',
+        tags: [
+          { icon: '🧭', text: 'East' },
+          { icon: '💙', text: 'Resistance + Excited' }
+        ],
+        points: null
+      },
+      groan1: {
+        type: 'groan',
+        icon: '🦁',
+        iconBg: '#E9A23B',
+        title: 'Groan Challenge: Go Live',
+        subtitle: 'Jan 31 — Day 5',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'You faced your first <strong>groan challenge</strong> — going live on Instagram to share one thing you\'re learning. Scary score: 7/10. Wahoo score: 9/10. This landed in your <strong>Essence Zone</strong>.',
+        feeling: 'Hands were shaking before I hit Go Live, but 30 seconds in I was actually laughing. That rush after was unreal.',
+        tags: [
+          { icon: '👁️', text: 'Live visibility' },
+          { icon: '🔥', text: 'Scary: 7/10' },
+          { icon: '🎉', text: 'Wahoo: 9/10' },
+          { icon: '💎', text: 'Essence Zone' }
+        ],
+        points: 250
+      },
+      flow2: {
+        type: 'compass',
+        icon: '↑',
+        iconBg: '#10b981',
+        title: 'Flow Day',
+        subtitle: 'Feb 1 — Day 6',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'Another <strong>flow day</strong> — riding the wave from yesterday\'s groan. When you face your edge and survive, the next day always feels lighter.',
+        feeling: 'Still buzzing from yesterday. Wrote my best content draft yet.',
+        tags: [
+          { icon: '🧭', text: 'North' },
+          { icon: '💚', text: 'Ease + Excited' }
+        ],
+        points: null
+      },
+      stage3: {
+        type: 'stage',
+        icon: '📊',
+        iconBg: '#10b981',
+        title: 'Graduated to Stage 3: Offer Design',
+        subtitle: 'Feb 2 — Day 7',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'You completed all requirements for <strong>Stage 2: Validation</strong> and graduated to <strong>Stage 3: Offer Design</strong>. This means you\'ve validated your idea and are now ready to design your offer stack.',
+        feeling: 'Can\'t believe how much has happened in one week. This actually feels real now.',
+        tags: [
+          { icon: '🎓', text: 'Graduated!' },
+          { icon: '📊', text: 'Stage 3' },
+          { icon: '⚡', text: 'Quest 3 complete' },
+          { icon: '🏆', text: 'Week 1 done' }
+        ],
+        points: 500
+      },
+      rest1: {
+        type: 'rest',
+        icon: '●',
+        iconBg: '#ef4444',
+        title: 'Rest Day',
+        subtitle: 'Feb 3 — Day 8',
+        direction: { label: 'Rest', arrow: '●', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)' },
+        body: 'Your body and mind said <strong>slow down</strong>. You felt tired and hit resistance — and instead of pushing through, you <strong>honoured the rest</strong>. This is wisdom, not weakness. Recovery is part of the flow.',
+        feeling: 'Felt flat. Nothing was clicking. Tried to force it and eventually just stopped. Went for a walk instead.',
+        tags: [
+          { icon: '🧭', text: 'South' },
+          { icon: '❤️', text: 'Resistance + Tired' },
+          { icon: '🫶', text: 'Rest is healthy' }
+        ],
+        points: null
+      },
+      rest2: {
+        type: 'rest',
+        icon: '●',
+        iconBg: '#ef4444',
+        title: 'Continued Rest',
+        subtitle: 'Feb 3 — Day 8 (afternoon)',
+        direction: { label: 'Rest', arrow: '●', color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)' },
+        body: 'Still in <strong>rest mode</strong>. A second rest entry on the same day — your body was processing. Sometimes growth happens when you\'re not looking at the screen.',
+        feeling: 'Journaled instead. Actually had some good realisations about why I do this.',
+        tags: [
+          { icon: '🧭', text: 'South' },
+          { icon: '📝', text: 'Reflection' }
+        ],
+        points: null
+      },
+      quest4: {
+        type: 'quest',
+        icon: '⚡',
+        iconBg: '#5e17eb',
+        title: 'Quest 4: Map Your Problems',
+        subtitle: 'Feb 4 — Day 9',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'Back in flow after rest! You completed the <strong>Problems quest</strong> — identifying the specific problems your ideal customers face, and how your skills solve them.',
+        feeling: 'The rest yesterday was exactly what I needed. Came back sharper. Connecting the dots between skills and real problems.',
+        tags: [
+          { icon: '🎯', text: 'Flow Finder' },
+          { icon: '🔍', text: 'Problems mapped' },
+          { icon: '⚡', text: 'Quest complete' }
+        ],
+        points: 150
+      },
+      honour1: {
+        type: 'compass',
+        icon: '←',
+        iconBg: '#fbbf24',
+        title: 'Honour Day',
+        subtitle: 'Feb 5 — Day 10',
+        direction: { label: 'Honour', arrow: '←', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.1)' },
+        body: 'You felt <strong>at ease but tired</strong>. No resistance, just low energy. The compass says <strong>honour this</strong> — do what feels gentle, and trust that the river is still flowing beneath the surface.',
+        feeling: 'Peaceful but low-key. Did some light reading about offer structures. Didn\'t force anything.',
+        tags: [
+          { icon: '🧭', text: 'West' },
+          { icon: '💛', text: 'Ease + Tired' }
+        ],
+        points: null
+      },
+      groan2: {
+        type: 'groan',
+        icon: '🦁',
+        iconBg: '#E9A23B',
+        title: 'Groan Challenge: Ask For Money',
+        subtitle: 'Feb 5 — Day 10',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'Your second groan! You messaged a potential customer and <strong>offered a paid pilot</strong> of your service. Scary score: 8/10. Wahoo score: 8/10. Squarely in the <strong>Essence Zone</strong> — this is where transformation lives.',
+        feeling: 'Typing that price out was the hardest thing I\'ve done this week. They said they\'d think about it. But I DID it.',
+        tags: [
+          { icon: '💰', text: 'Money visibility' },
+          { icon: '🔥', text: 'Scary: 8/10' },
+          { icon: '🎉', text: 'Wahoo: 8/10' },
+          { icon: '💎', text: 'Essence Zone' }
+        ],
+        points: 250
+      },
+      redirect2: {
+        type: 'compass',
+        icon: '→',
+        iconBg: '#3b82f6',
+        title: 'Redirect Day',
+        subtitle: 'Feb 6 — Day 11',
+        direction: { label: 'Redirect', arrow: '→', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
+        body: 'Excited but meeting resistance again. After yesterday\'s bold move, your nervous system is <strong>recalibrating</strong>. The redirect says: keep the momentum, but find a slightly different angle.',
+        feeling: 'Brain is buzzing with ideas but I keep second-guessing the pricing. Need to sit with this.',
+        tags: [
+          { icon: '🧭', text: 'East' },
+          { icon: '💙', text: 'Resistance + Excited' }
+        ],
+        points: null
+      },
+      stage4: {
+        type: 'stage',
+        icon: '📊',
+        iconBg: '#10b981',
+        title: 'Graduated to Stage 4: Lead Magnet',
+        subtitle: 'Feb 7 — Day 12',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'You\'ve graduated to <strong>Stage 4: Lead Magnet</strong>! Your offer is designed, your persona is clear, and now it\'s time to build something that attracts your ideal customer to you.',
+        feeling: 'Four stages in 12 days. I didn\'t think I\'d get here this fast. The river is flowing.',
+        tags: [
+          { icon: '🎓', text: 'Graduated!' },
+          { icon: '📊', text: 'Stage 4' },
+          { icon: '⚡', text: 'Quest 5 complete' },
+          { icon: '🧲', text: 'Lead Magnet time' }
+        ],
+        points: 500
+      },
+      now: {
+        type: 'now',
+        icon: '↑',
+        iconBg: '#10b981',
+        title: 'You Are Here',
+        subtitle: 'Today — Day 12',
+        direction: { label: 'Flow', arrow: '↑', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+        body: 'Right now you\'re in <strong>Flow</strong> — excited and at ease. Your river has carried you through <strong>12 days, 4 stages, 2 groans, and 5 quests</strong>. Look how far you\'ve come.',
+        feeling: 'This is it. I\'m actually doing this.',
+        tags: [
+          { icon: '🔥', text: '12-day streak' },
+          { icon: '📊', text: 'Stage 4' },
+          { icon: '💪', text: '2,450 XP' },
+          { icon: '🌊', text: 'In Flow' }
+        ],
+        points: null
+      }
+    };
+
+    // ============================================================
+    // POPUP FUNCTIONS
+    // ============================================================
+    function showPopup(nodeId) {
+      // Don't open popup if user was swiping/scrolling
+      if (isScrolling) return;
+
+      const data = nodeData[nodeId];
+      if (!data) return;
+
+      let html = '';
+
+      // Header
+      html += `
+        <div class="fp-popup-header">
+          <div class="fp-popup-icon" style="background: ${data.iconBg}; color: white; border-color: ${data.iconBg};">
+            ${data.icon}
+          </div>
+          <div>
+            <div class="fp-popup-title">${data.title}</div>
+            <div class="fp-popup-subtitle">${data.subtitle}</div>
+          </div>
+        </div>
+      `;
+
+      // Direction badge
+      if (data.direction) {
+        html += `
+          <div class="fp-popup-direction" style="background: ${data.direction.bg}; color: ${data.direction.color};">
+            <span class="dir-arrow">${data.direction.arrow}</span>
+            ${data.direction.label}
+          </div>
+        `;
+      }
+
+      // Body
+      html += `<div class="fp-popup-body">${data.body}</div>`;
+
+      // Tags
+      if (data.tags && data.tags.length) {
+        html += '<div class="fp-popup-meta">';
+        data.tags.forEach(tag => {
+          html += `
+            <div class="fp-popup-tag">
+              <span class="tag-icon">${tag.icon}</span>
+              ${tag.text}
+            </div>
+          `;
+        });
+        html += '</div>';
+      }
+
+      // Feeling
+      if (data.feeling) {
+        html += `
+          <div class="fp-popup-feeling">
+            <div class="fp-popup-feeling-label">How you were feeling</div>
+            <div class="fp-popup-feeling-text">"${data.feeling}"</div>
+          </div>
+        `;
+      }
+
+      // Points
+      if (data.points) {
+        html += `
+          <div class="fp-popup-points">
+            <span>⚡</span> +${data.points} XP earned
+          </div>
+        `;
+      }
+
+      document.getElementById('popupContent').innerHTML = html;
+      document.getElementById('popupOverlay').classList.add('active');
+
+      // Prevent body scroll
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hidePopup(e) {
+      document.getElementById('popupOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  </script>
+
+</body>
+</html>

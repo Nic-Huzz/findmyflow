@@ -1,0 +1,2828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FindMyFlow - Me Screen V4 (Spiff)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      /* Archetype color - Playful Creator = Yellow/Sunshine */
+      --archetype-hue: 45;
+      --archetype-color: #FFD93D;
+      --archetype-color-soft: rgba(255, 217, 61, 0.08);
+      --archetype-color-medium: rgba(255, 217, 61, 0.15);
+      --archetype-color-strong: rgba(255, 217, 61, 0.25);
+      --archetype-glow: rgba(255, 217, 61, 0.4);
+
+      --brand-purple: #5e17eb;
+      --brand-gold: #E9A23B;
+      --text-primary: #1a1a2e;
+      --text-secondary: #6c757d;
+      --text-muted: #adb5bd;
+      --surface: #ffffff;
+      --bg: #fafafa;
+      --north: #10b981;
+      --east: #3b82f6;
+      --south: #ef4444;
+      --west: #fbbf24;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding-bottom: 100px;
+      overflow-x: hidden;
+      /* Subtle archetype-tinted background */
+      background: linear-gradient(
+        180deg,
+        var(--archetype-color-soft) 0%,
+        var(--bg) 30%,
+        var(--bg) 70%,
+        var(--archetype-color-soft) 100%
+      );
+    }
+
+    /* ============================================================
+       COLOR SWITCHER (top-right corner)
+       ============================================================ */
+    .color-switcher {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .color-switcher-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      background: var(--archetype-color);
+      cursor: pointer;
+      box-shadow: 0 2px 12px var(--archetype-glow);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .color-switcher-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .color-options {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 8px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .color-options.open {
+      display: flex;
+    }
+
+    .color-option {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .color-option:hover {
+      transform: scale(1.15);
+    }
+
+    .color-option.active {
+      border-color: var(--text-primary);
+    }
+
+    .color-option .tooltip {
+      position: absolute;
+      right: 36px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--text-primary);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .color-option:hover .tooltip {
+      opacity: 1;
+    }
+
+    /* ============================================================
+       SECTION 1: HERO IDENTITY
+       ============================================================ */
+    .hero-section {
+      padding: 20px 20px 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--brand-purple), var(--brand-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .xp-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(94, 23, 235, 0.3);
+    }
+
+    /* Animated avatar ring */
+    .hero-avatar-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+    }
+
+    .avatar-ring-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        var(--brand-purple),
+        var(--archetype-color),
+        var(--brand-gold),
+        var(--brand-purple)
+      );
+      animation: ringRotate 6s linear infinite;
+    }
+
+    @keyframes ringRotate {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-ring-inner {
+      position: absolute;
+      inset: 4px;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+
+    .avatar-ring-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* Soft glow behind avatar */
+    .hero-avatar-container::before {
+      content: '';
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--archetype-glow) 0%, transparent 70%);
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    /* Essence vs Protective tracker */
+    .voice-tracker-mini {
+      max-width: 260px;
+      margin: 0 auto 14px;
+    }
+
+    .voice-tracker-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .vt-label {
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vt-label.essence { color: var(--archetype-color); }
+    .vt-label.protective { color: var(--text-muted); }
+
+    .vt-pct {
+      font-weight: 800;
+      font-size: 11px;
+    }
+
+    .voice-tracker-bar {
+      height: 8px;
+      border-radius: 4px;
+      display: flex;
+      overflow: hidden;
+      background: #e9ecef;
+    }
+
+    .vt-fill-essence {
+      height: 100%;
+      background: linear-gradient(90deg, var(--archetype-color), var(--brand-gold));
+      border-radius: 4px 0 0 4px;
+      transition: width 1s ease-out;
+    }
+
+    .vt-fill-protective {
+      height: 100%;
+      background: linear-gradient(90deg, #adb5bd, #6c757d);
+      border-radius: 0 4px 4px 0;
+      transition: width 1s ease-out;
+    }
+
+    .voice-tracker-status {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .hero-name {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-tagline {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .hero-badges {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid;
+    }
+
+    .badge.streak {
+      background: rgba(255, 165, 0, 0.08);
+      color: #E67E22;
+      border-color: rgba(255, 165, 0, 0.2);
+    }
+
+    .badge.level {
+      background: rgba(94, 23, 235, 0.06);
+      color: var(--brand-purple);
+      border-color: rgba(94, 23, 235, 0.15);
+    }
+
+    /* XP Bar */
+    .xp-progress {
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .xp-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .xp-bar {
+      height: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .xp-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand-purple), var(--archetype-color), var(--brand-gold));
+      border-radius: 5px;
+      animation: xpFill 1.5s ease-out 0.5s forwards;
+      position: relative;
+    }
+
+    .xp-fill::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4));
+      animation: xpShimmer 2s ease-in-out infinite;
+    }
+
+    @keyframes xpFill { to { width: 45%; } }
+    @keyframes xpShimmer {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    /* Section divider - flowing wave */
+    .section-wave {
+      height: 40px;
+      position: relative;
+      overflow: hidden;
+      margin: 0 -20px;
+    }
+
+    .section-wave svg {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 40px;
+    }
+
+    /* ============================================================
+       SECTION 2: YOUR FLOW JOURNEY (Option D - Merged River)
+       ============================================================ */
+    .journey-section {
+      padding: 0 16px 32px;
+      position: relative;
+    }
+
+    .flow-journey {
+      background: var(--surface);
+      border-radius: 24px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--archetype-color-strong);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .flow-journey::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 5px;
+      background: linear-gradient(180deg, var(--brand-purple), var(--north), var(--brand-gold));
+      border-radius: 24px 0 0 24px;
+      z-index: 2;
+    }
+
+    .fj-top { padding: 24px 24px 0; }
+
+    .fj-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .fj-header-icon {
+      width: 32px; height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--brand-purple), var(--north));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .fj-title {
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--brand-purple);
+    }
+
+    .fj-growth-text {
+      font-size: 15px; font-weight: 600;
+      color: var(--text-primary); line-height: 1.5; margin-bottom: 4px;
+    }
+    .fj-growth-text .hl { color: var(--brand-purple); font-weight: 800; }
+    .fj-growth-text .gold { color: var(--brand-gold); font-weight: 800; }
+
+    .fj-sub {
+      font-size: 12px; color: var(--text-muted); margin-bottom: 12px;
+    }
+
+    /* Project selector */
+    .fj-project-select {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .fj-project-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: #f8f9fa;
+      border: 1.5px solid #e9ecef;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .fj-project-btn:hover {
+      border-color: var(--brand-purple);
+      background: rgba(94, 23, 235, 0.04);
+    }
+
+    .fj-project-btn .proj-emoji {
+      font-size: 15px;
+    }
+
+    .fj-project-btn .proj-chevron {
+      font-size: 10px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+
+    .fj-project-btn.open .proj-chevron {
+      transform: rotate(180deg);
+    }
+
+    .fj-project-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 4px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 6px;
+      z-index: 20;
+      min-width: 220px;
+    }
+
+    .fj-project-dropdown.open {
+      display: block;
+    }
+
+    .fj-project-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .fj-project-option:hover {
+      background: #f8f9fa;
+    }
+
+    .fj-project-option.active {
+      background: rgba(94, 23, 235, 0.06);
+      color: var(--brand-purple);
+    }
+
+    .fj-project-option .opt-emoji {
+      font-size: 16px;
+    }
+
+    .fj-project-option .opt-stage {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .fj-project-option.active .opt-stage {
+      background: rgba(94, 23, 235, 0.1);
+      color: var(--brand-purple);
+    }
+
+    /* Categorised legend */
+    .fj-legend-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 20px 0;
+    }
+
+    .fj-legend-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .fj-legend-label {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    /* Horizontal flow river */
+    .flow-path-scroll {
+      overflow-x: auto; overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 0 8px;
+    }
+    .flow-path-scroll::-webkit-scrollbar { display: none; }
+
+    .flow-path-container {
+      min-width: 900px; height: 220px;
+      position: relative; padding: 0 24px;
+    }
+
+    .flow-path-svg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+
+    .fp-river-glow {
+      fill: none; stroke-width: 28;
+      stroke-linecap: round; stroke-linejoin: round; opacity: 0.08;
+    }
+
+    .fp-river {
+      fill: none; stroke-width: 18;
+      stroke-linecap: round; stroke-linejoin: round;
+      filter: url(#fpGlow);
+    }
+
+    .fp-river-highlight {
+      fill: none; stroke: rgba(255, 255, 255, 0.25);
+      stroke-width: 5; stroke-linecap: round; stroke-linejoin: round;
+      stroke-dasharray: 16 10;
+      animation: fpFlowDash 2s linear infinite;
+    }
+
+    @keyframes fpFlowDash {
+      0% { stroke-dashoffset: 26; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    .fp-node { cursor: pointer; }
+
+    .fp-hover-ring {
+      fill: none; stroke: rgba(94, 23, 235, 0.25);
+      stroke-width: 3; opacity: 0;
+      transition: opacity 0.2s; pointer-events: none;
+    }
+    .fp-node:hover .fp-hover-ring,
+    .fp-node.tapped .fp-hover-ring { opacity: 1; }
+
+    .fp-milestone-outer {
+      fill: none; stroke-width: 2;
+      stroke-dasharray: 4 3;
+      animation: msDash 3s linear infinite;
+    }
+
+    @keyframes msDash {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: 21; }
+    }
+
+    .fp-stuck-pulse { animation: fpStuckRing 1.5s ease-out infinite; }
+    @keyframes fpStuckRing {
+      0% { r: 12; opacity: 0.6; }
+      100% { r: 22; opacity: 0; }
+    }
+
+    .fp-now-pulse { animation: fpNowRing 2s ease-out infinite; }
+    @keyframes fpNowRing {
+      0% { r: 18; opacity: 0.8; }
+      100% { r: 30; opacity: 0; }
+    }
+
+    .fp-now-glow { animation: fpNowGlow 2s ease-in-out infinite; }
+    @keyframes fpNowGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+
+    .fp-date { font-size: 8px; font-weight: 700; fill: var(--text-muted); }
+    .fp-ms-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .fp-ms-sublabel { font-size: 8px; font-weight: 600; }
+    .fp-arrow { font-size: 11px; font-weight: 800; fill: white; }
+    .fp-ms-emoji { font-size: 14px; }
+
+    .fj-scroll-hint {
+      text-align: right; padding: 4px 24px 0;
+      font-size: 10px; color: var(--text-muted); font-weight: 600;
+      animation: hintPulse 2s ease-in-out infinite;
+    }
+    @keyframes hintPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Legend */
+    .fj-legend {
+      display: flex; justify-content: center; gap: 6px;
+      flex-wrap: wrap; padding: 12px 20px 0;
+    }
+    .fj-legend-item {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 10px; font-weight: 700; color: var(--text-secondary);
+      background: #f8f9fa; padding: 4px 10px; border-radius: 8px;
+    }
+    .fj-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .fj-legend-dot.stuck { box-shadow: 0 0 4px var(--south); }
+    .fj-legend-icon { font-size: 12px; }
+
+    /* Stats row */
+    .fj-stats {
+      display: flex; justify-content: space-between; gap: 8px; padding: 16px 24px 0;
+    }
+    .fj-stat { flex: 1; text-align: center; }
+    .fj-stat-ring { width: 52px; height: 52px; margin: 0 auto 6px; position: relative; }
+    .fj-stat-ring svg { transform: rotate(-90deg); width: 52px; height: 52px; }
+    .fj-ring-bg { fill: none; stroke: #e9ecef; stroke-width: 4; }
+    .fj-ring-fill { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease-out; }
+    .fj-stat-val {
+      position: absolute; inset: 0; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: var(--text-primary);
+    }
+    .fj-stat-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--text-muted);
+    }
+
+    /* Narrative */
+    .fj-narrative {
+      margin: 16px 24px 24px;
+      background: linear-gradient(135deg, var(--archetype-color-soft), rgba(94, 23, 235, 0.04));
+      border-radius: 16px; padding: 16px 20px;
+      position: relative; overflow: hidden;
+    }
+    .fj-narrative::before {
+      content: '\201C'; position: absolute; top: -4px; left: 12px;
+      font-size: 44px; font-weight: 900;
+      color: var(--archetype-color-medium); font-family: Georgia, serif; line-height: 1;
+    }
+    .fj-narrative p {
+      font-size: 13px; line-height: 1.7; color: var(--text-secondary);
+      font-style: italic; padding-left: 6px;
+    }
+    .fj-narrative strong { color: var(--text-primary); font-style: normal; }
+
+    .fj-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      color: var(--brand-purple); font-size: 13px; font-weight: 700;
+      margin: 0 24px 24px; text-decoration: none; transition: gap 0.2s;
+    }
+    .fj-link:hover { gap: 8px; }
+
+    /* Node popup (bottom sheet) */
+    .fp-popup-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(4px);
+      z-index: 100; opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .fp-popup-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .fp-popup {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: white; border-radius: 24px 24px 0 0;
+      padding: 0 24px 40px; z-index: 101;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+      max-height: 70vh; overflow-y: auto;
+    }
+    .fp-popup-overlay.active .fp-popup { transform: translateY(0); }
+
+    .fp-popup-handle {
+      width: 40px; height: 4px; background: #dee2e6;
+      border-radius: 2px; margin: 12px auto 20px;
+    }
+    .fp-popup-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .fp-popup-icon {
+      width: 52px; height: 52px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0; position: relative;
+    }
+    .fp-popup-icon::after {
+      content: ''; position: absolute; inset: -3px;
+      border-radius: 19px; border: 2px dashed;
+      border-color: inherit; opacity: 0.3;
+      animation: msDash 3s linear infinite;
+    }
+    .fp-popup-title { font-size: 18px; font-weight: 800; color: var(--text-primary); line-height: 1.2; }
+    .fp-popup-subtitle { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+    .fp-popup-direction {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 10px;
+      font-size: 13px; font-weight: 700; margin-bottom: 16px;
+    }
+    .fp-popup-direction .dir-arrow { font-size: 16px; font-weight: 900; }
+    .fp-popup-body { font-size: 14px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 16px; }
+    .fp-popup-body strong { color: var(--text-primary); font-weight: 700; }
+    .fp-popup-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .fp-popup-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 12px; border-radius: 8px;
+      font-size: 11px; font-weight: 700; background: #f8f9fa; color: var(--text-secondary);
+    }
+    .fp-popup-tag .tag-icon { font-size: 13px; }
+    .fp-popup-feeling {
+      background: linear-gradient(135deg, var(--archetype-color-soft), rgba(94, 23, 235, 0.04));
+      border-radius: 14px; padding: 14px 18px; margin-bottom: 16px;
+    }
+    .fp-popup-feeling-label {
+      font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .fp-popup-feeling-text { font-size: 13px; font-style: italic; line-height: 1.6; color: var(--text-secondary); }
+    .fp-popup-points {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px; border-radius: 12px;
+      background: linear-gradient(135deg, rgba(94, 23, 235, 0.06), rgba(233, 162, 59, 0.06));
+      font-size: 14px; font-weight: 800; color: var(--brand-purple);
+    }
+    .fp-popup-points span { font-size: 18px; }
+
+    /* ============================================================
+       SECTION 3: TODAY'S QUEST
+       ============================================================ */
+    .quest-section {
+      padding: 0 20px 32px;
+    }
+
+    .quest-banner {
+      background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+      border-radius: 24px;
+      padding: 28px 24px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+    }
+
+    /* Decorative background shapes */
+    .quest-banner::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -20px;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, var(--archetype-glow) 0%, transparent 70%);
+      animation: questGlow 4s ease-in-out infinite;
+    }
+
+    .quest-banner::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: -30px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(233, 162, 59, 0.15) 0%, transparent 70%);
+    }
+
+    @keyframes questGlow {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+    }
+
+    .quest-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .quest-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .quest-day-badge {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      white-space: nowrap;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .quest-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.3px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quest-subtitle {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.65);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quest-dots {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quest-progress-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dot {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      transition: background 0.3s;
+    }
+
+    .dot.done {
+      background: var(--brand-gold);
+      box-shadow: 0 0 8px rgba(233, 162, 59, 0.4);
+    }
+
+    .dot.active {
+      background: rgba(233, 162, 59, 0.4);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .quest-cta {
+      width: 100%;
+      background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+      color: #1a1a2e;
+      border: none;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .quest-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
+    }
+
+    /* ============================================================
+       HERO PROFILE (Essence + Protective merged)
+       ============================================================ */
+    .hero-profile-section {
+      padding: 0 20px 32px;
+    }
+
+    .hero-profile-card {
+      background: var(--surface);
+      border: 1px solid #e9ecef;
+      border-radius: 24px;
+      padding: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--brand-purple), var(--archetype-color), var(--brand-gold));
+    }
+
+    .hero-profile-card:hover {
+      border-color: var(--brand-purple);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(94, 23, 235, 0.1);
+    }
+
+    .hp-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .hp-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--brand-purple), var(--archetype-color), var(--brand-gold), var(--brand-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      animation: ringRotate 6s linear infinite;
+    }
+
+    .hp-avatar-inner {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .hp-identity {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hp-name {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .hp-tagline {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .hp-chevron {
+      font-size: 20px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+
+    .hero-profile-card:hover .hp-chevron {
+      transform: translateX(4px);
+      color: var(--brand-purple);
+    }
+
+    .hp-stats {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .hp-stat {
+      flex: 1;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .hp-stat-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: block;
+    }
+
+    .hp-stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .hp-duo {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .hp-duo-item {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .hp-duo-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .hp-duo-text {
+      min-width: 0;
+    }
+
+    .hp-duo-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .hp-duo-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Essence vs Protective tracker inside hero profile */
+    .hp-voice-tracker {
+      margin-bottom: 4px;
+    }
+
+    .hp-vt-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .hp-vt-label {
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hp-vt-label.essence { color: var(--archetype-color); }
+    .hp-vt-label.protective { color: var(--text-muted); }
+
+    .hp-vt-pct {
+      font-weight: 800;
+      font-size: 11px;
+    }
+
+    .hp-vt-bar {
+      height: 8px;
+      border-radius: 4px;
+      display: flex;
+      overflow: hidden;
+      background: #e9ecef;
+    }
+
+    .hp-vt-fill-essence {
+      height: 100%;
+      background: linear-gradient(90deg, var(--archetype-color), var(--brand-gold));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .hp-vt-fill-protective {
+      height: 100%;
+      background: linear-gradient(90deg, #adb5bd, #6c757d);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .hp-vt-status {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Divider inside hero profile card */
+    .hp-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e9ecef, transparent);
+      margin: 4px 0 16px;
+    }
+
+    /* Essence row inside hero profile */
+    .hp-essence {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .hp-essence-photo {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .hp-essence-photo-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--archetype-color), var(--brand-gold), var(--archetype-color));
+      animation: ringRotate 6s linear infinite;
+    }
+
+    .hp-essence-photo-img {
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      overflow: hidden;
+    }
+
+    .hp-essence-photo-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .hp-essence-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hp-essence-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .hp-essence-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Superpower highlight */
+    .hp-superpower {
+      background: linear-gradient(135deg, var(--archetype-color-soft), rgba(94, 23, 235, 0.03));
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .hp-superpower-bolt {
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+      animation: boltPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes boltPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .hp-superpower-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .hp-superpower-text strong {
+      color: var(--text-primary);
+    }
+
+    /* Protective row inside hero profile */
+    .hp-protective {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .hp-protective-diagram {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .hp-protective-diagram .perfectionist-anim {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .hp-protective-diagram .perfectionist-anim svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .hp-protective-diagram .attempt-circle {
+      fill: none;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 270;
+    }
+
+    .hp-protective-diagram .attempt-1 {
+      stroke: rgba(108, 117, 125, 0.15);
+      stroke-dashoffset: 270;
+      animation: almostClose 4s ease-in-out infinite;
+    }
+
+    .hp-protective-diagram .attempt-2 {
+      stroke: rgba(108, 117, 125, 0.3);
+      stroke-dashoffset: 270;
+      animation: almostClose 4s ease-in-out 1.3s infinite;
+    }
+
+    .hp-protective-diagram .attempt-3 {
+      stroke: rgba(94, 23, 235, 0.5);
+      stroke-dashoffset: 270;
+      animation: almostClose 4s ease-in-out 2.6s infinite;
+    }
+
+    @keyframes almostClose {
+      0% { stroke-dashoffset: 270; opacity: 0; }
+      10% { opacity: 1; }
+      70% { stroke-dashoffset: 30; opacity: 1; }
+      80% { stroke-dashoffset: 30; opacity: 0.5; }
+      90% { stroke-dashoffset: 30; opacity: 0; }
+      100% { stroke-dashoffset: 270; opacity: 0; }
+    }
+
+    .hp-protective-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hp-protective-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .hp-protective-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      background: #f0f0f0;
+      padding: 2px 8px;
+      border-radius: 5px;
+      margin-bottom: 4px;
+    }
+
+    .hp-protective-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Belief whisper — matches superpower style */
+    .hp-belief {
+      background: linear-gradient(135deg, rgba(108, 117, 125, 0.06), rgba(108, 117, 125, 0.1));
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .hp-belief-icon {
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .hp-belief-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .hp-belief-text strong {
+      color: var(--text-primary);
+    }
+
+    /* View full profile link */
+    .hp-full-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e9ecef;
+      color: var(--brand-purple);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: gap 0.3s;
+    }
+
+    .hero-profile-card:hover .hp-full-link {
+      gap: 10px;
+    }
+
+    /* ============================================================
+       BOTTOM NAV
+       ============================================================ */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 28px;
+      z-index: 50;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active {
+      color: var(--brand-purple);
+    }
+
+    .nav-item .nav-icon {
+      font-size: 1.25rem;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 380px) {
+      .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* ============================================================
+       USER STATE TOGGLE (top-left corner)
+       ============================================================ */
+    .state-toggle {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border-radius: 100px;
+      padding: 6px 14px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+      user-select: none;
+      font-family: inherit;
+    }
+
+    .state-toggle-track {
+      width: 36px;
+      height: 20px;
+      background: #e9ecef;
+      border-radius: 10px;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .state-toggle-track.active {
+      background: var(--brand-purple);
+    }
+
+    .state-toggle-thumb {
+      width: 16px;
+      height: 16px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
+    .state-toggle-track.active .state-toggle-thumb {
+      transform: translateX(16px);
+    }
+
+    .state-toggle-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       FIRST-TIME USER EMPTY STATE STYLES
+       ============================================================ */
+
+    /* Streak badge — dashed, muted */
+    body.first-time .badge.streak {
+      border-style: dashed;
+      border-color: rgba(255, 165, 0, 0.15);
+      background: rgba(255, 165, 0, 0.03);
+      color: #c9a87c;
+    }
+
+    /* XP fill — no animation, zero width */
+    body.first-time .xp-fill {
+      animation: none !important;
+      width: 0% !important;
+    }
+
+    /* Ghost river SVG styles */
+    .ghost-river-path {
+      fill: none;
+      stroke: #d0d5dd;
+      stroke-width: 18;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 8 6;
+      opacity: 0.15;
+    }
+
+    .ghost-river-glow {
+      fill: none;
+      stroke: #d0d5dd;
+      stroke-width: 28;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.06;
+    }
+
+    /* SeeYourFlow prompt card */
+    .syf-prompt {
+      margin: 16px 24px;
+      background: linear-gradient(135deg, var(--archetype-color-soft), rgba(94, 23, 235, 0.04));
+      border-radius: 18px;
+      padding: 24px 20px;
+      border: 1.5px dashed var(--archetype-color-medium);
+    }
+
+    .syf-prompt-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .syf-prompt-icon {
+      font-size: 18px;
+    }
+
+    .syf-prompt-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .syf-prompt-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .syf-question {
+      margin-bottom: 14px;
+    }
+
+    .syf-question-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .syf-two-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .syf-option-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #e9ecef;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .syf-option-btn:hover {
+      border-color: var(--brand-purple);
+      background: rgba(94, 23, 235, 0.03);
+    }
+
+    .syf-option-btn.selected {
+      border-color: var(--brand-purple);
+      background: rgba(94, 23, 235, 0.06);
+      color: var(--brand-purple);
+      box-shadow: 0 2px 8px rgba(94, 23, 235, 0.12);
+    }
+
+    .syf-option-btn .syf-option-emoji {
+      font-size: 16px;
+    }
+
+    .syf-direction-preview {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      transition: all 0.3s;
+    }
+
+    .syf-direction-preview .syf-dir-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .syf-prompt-hint {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand-purple);
+      opacity: 0.7;
+    }
+
+    .syf-prompt-note {
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .syf-continue-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+      color: #1a1a2e;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .syf-continue-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
+    }
+
+    .syf-continue-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* First node on ghost river */
+    .ghost-first-node {
+      opacity: 0;
+      transition: opacity 0.6s ease-out;
+    }
+
+    .ghost-first-node.visible {
+      opacity: 1;
+    }
+
+    .ghost-first-node-pulse {
+      animation: ghostNodePulse 2s ease-out infinite;
+    }
+
+    @keyframes ghostNodePulse {
+      0% { r: 14; opacity: 0.6; }
+      100% { r: 24; opacity: 0; }
+    }
+
+    .ghost-first-node-glow {
+      animation: ghostNodeGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes ghostNodeGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Short colored river segment from start to first node */
+    .ghost-river-segment {
+      fill: none;
+      stroke-width: 18;
+      stroke-linecap: round;
+      opacity: 0;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .ghost-river-segment.visible {
+      opacity: 1;
+    }
+
+    /* Empty narrative prompt */
+    .fj-narrative-empty p {
+      text-align: center;
+      font-style: normal;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .fj-narrative-empty::before {
+      display: none;
+    }
+
+    /* Voice tracker empty state */
+    .hp-vt-empty .hp-vt-fill-essence,
+    .hp-vt-empty .hp-vt-fill-protective {
+      width: 0% !important;
+    }
+
+    .hp-vt-empty .hp-vt-bar {
+      background: #e9ecef;
+    }
+
+    .hp-vt-empty .hp-vt-label {
+      color: var(--text-muted) !important;
+    }
+
+    .hp-vt-empty .hp-vt-status {
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    /* Hidden elements in first-time mode */
+    body.first-time .flow-path-scroll,
+    body.first-time .fj-scroll-hint {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- User State Toggle -->
+  <div class="state-toggle" onclick="toggleUserState()">
+    <div class="state-toggle-track" id="stateToggleTrack">
+      <div class="state-toggle-thumb"></div>
+    </div>
+    <span class="state-toggle-label" id="stateToggleLabel">Returning User</span>
+  </div>
+
+  <!-- Color Switcher -->
+  <div class="color-switcher">
+    <button class="color-switcher-toggle" onclick="toggleColorMenu()" title="Change vibe color">
+      🎨
+    </button>
+    <div class="color-options" id="colorMenu">
+      <div class="color-option active" style="background: #FFD93D;" onclick="setColor('playful-creator', this)" title="Playful Creator">
+        <span class="tooltip">Sunshine (You)</span>
+      </div>
+      <div class="color-option" style="background: #FF6B6B;" onclick="setColor('radiant-rebel', this)">
+        <span class="tooltip">Fire</span>
+      </div>
+      <div class="color-option" style="background: #A78BFA;" onclick="setColor('mystic-messenger', this)">
+        <span class="tooltip">Violet</span>
+      </div>
+      <div class="color-option" style="background: #51CF66;" onclick="setColor('grounded-guardian', this)">
+        <span class="tooltip">Forest</span>
+      </div>
+      <div class="color-option" style="background: #74C0FC;" onclick="setColor('cosmic-connector', this)">
+        <span class="tooltip">Sky</span>
+      </div>
+      <div class="color-option" style="background: #FF8CC8;" onclick="setColor('heart-holder', this)">
+        <span class="tooltip">Rose</span>
+      </div>
+      <div class="color-option" style="background: #20C997;" onclick="setColor('sacred-jester', this)">
+        <span class="tooltip">Teal</span>
+      </div>
+      <div class="color-option" style="background: #E8A05C;" onclick="setColor('wise-sage', this)">
+        <span class="tooltip">Amber</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 1: HERO IDENTITY
+       ============================================================ -->
+  <section class="hero-section">
+    <div class="hero-top-bar">
+      <div class="brand">FindMyFlow</div>
+      <div class="xp-pill" id="xpPill">
+        <span>⚡</span>
+        <span id="xpPillValue">350 XP</span>
+      </div>
+    </div>
+
+    <div class="hero-avatar-container">
+      <div class="avatar-ring-bg"></div>
+      <div class="avatar-ring-inner">
+        <!-- Shows essence profile photo if uploaded, otherwise default emoji -->
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=PlayfulCreator&backgroundColor=ffd93d" alt="Essence profile">
+      </div>
+    </div>
+
+    <h1 class="hero-name">Playful Creator</h1>
+    <p class="hero-tagline">You turn pressure into play and make innovation feel like recess for the soul</p>
+
+    <div class="hero-badges">
+      <div class="badge streak" id="streakBadge">
+        <span>🔥</span>
+        <span id="streakText">12 Day Streak</span>
+      </div>
+      <div class="badge level">
+        <span>⭐</span>
+        <span id="levelText">Vibe Finder</span>
+      </div>
+    </div>
+
+    <div class="xp-progress">
+      <div class="xp-labels">
+        <span id="xpLevelLabel">Lv 3 — Vibe Finder</span>
+        <span id="xpAmountLabel">350 / 500 XP</span>
+      </div>
+      <div class="xp-bar">
+        <div class="xp-fill" id="xpFill"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 2: YOUR FLOW JOURNEY (Option D)
+       ============================================================ -->
+  <section class="journey-section">
+    <div class="flow-journey">
+      <div class="fj-top">
+        <div class="fj-header">
+          <div class="fj-header-icon">🌊</div>
+          <span class="fj-title">Your Flow Journey</span>
+        </div>
+
+        <!-- Project selector (above growth text — changing project changes the sentence) -->
+        <div class="fj-project-select" id="fjProjectSelect">
+          <button class="fj-project-btn" id="projectBtn" onclick="toggleProjectMenu()">
+            <span class="proj-emoji">🎨</span>
+            <span id="projectName">Creative Coaching</span>
+            <span class="proj-chevron" id="projChevron">▾</span>
+          </button>
+          <div class="fj-project-dropdown" id="projectDropdown">
+            <div class="fj-project-option active" onclick="selectProject('Creative Coaching', '🎨', 'Stage 4', 12, this)">
+              <span class="opt-emoji">🎨</span>
+              Creative Coaching
+              <span class="opt-stage">Stage 4</span>
+            </div>
+            <div class="fj-project-option" onclick="selectProject('Podcast Launch', '🎙️', 'Stage 2', 5, this)">
+              <span class="opt-emoji">🎙️</span>
+              Podcast Launch
+              <span class="opt-stage">Stage 2</span>
+            </div>
+            <div class="fj-project-option" onclick="selectProject('Online Course', '📚', 'Stage 1', 2, this)">
+              <span class="opt-emoji">📚</span>
+              Online Course
+              <span class="opt-stage">Stage 1</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="fj-sub" id="fjSub">Swipe to explore your river — compass entries, quests, groans, and stages all in one flow.</p>
+      </div>
+
+      <!-- Ghost river (hidden by default, shown in first-time mode) -->
+      <div id="ghostRiverContainer" style="display: none; padding: 0 0 8px;">
+        <div style="height: 160px; position: relative; padding: 0 24px;">
+          <svg viewBox="0 0 400 160" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: 100%;">
+            <!-- Ghost path (always visible in first-time mode) -->
+            <path class="ghost-river-glow"
+              d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
+            <path class="ghost-river-path"
+              d="M 40,80 Q 80,40 120,70 Q 160,100 200,60 Q 240,25 280,70 Q 320,110 360,60" />
+
+            <!-- Colored river segment: start to first node (hidden until Continue) -->
+            <path class="ghost-river-segment" id="ghostRiverSegment"
+              d="M 40,80 Q 80,40 120,70"
+              stroke="var(--north)" />
+
+            <!-- Start marker (always visible) -->
+            <g>
+              <circle cx="40" cy="80" r="8" fill="var(--brand-purple)" stroke="white" stroke-width="2" />
+              <text x="40" y="80" text-anchor="middle" dominant-baseline="central" fill="white" font-size="7" font-weight="800">🚩</text>
+              <text x="40" y="102" text-anchor="middle" fill="#adb5bd" font-size="8" font-weight="700">Start</text>
+            </g>
+
+            <!-- First node (hidden until Continue is clicked) -->
+            <g class="ghost-first-node" id="ghostFirstNode">
+              <circle cx="120" cy="70" r="14" fill="none" class="ghost-first-node-pulse" id="ghostNodePulse" stroke="var(--north)" stroke-width="2" />
+              <circle cx="120" cy="70" r="16" fill="none" opacity="0.1" class="ghost-first-node-glow" id="ghostNodeGlow" />
+              <circle cx="120" cy="70" r="10" id="ghostNodeFill" fill="var(--north)" stroke="white" stroke-width="2.5" />
+              <text x="120" y="70" text-anchor="middle" dominant-baseline="central" fill="white" font-size="11" font-weight="900" id="ghostNodeArrow">↑</text>
+              <text x="120" y="92" text-anchor="middle" fill="#6c757d" font-size="8" font-weight="700">Today</text>
+              <text x="120" y="54" text-anchor="middle" font-size="9" font-weight="800" id="ghostNodeLabel" fill="var(--north)">Flow</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- SeeYourFlow prompt (hidden by default) -->
+      <!-- NOTE: When building for real, this is Step 1 of the full 5-step SeeYourFlow journey mapping:
+           Step 1: Current State (shown here) — two-factor compass check-in
+           Step 2: Journey Start — month/year picker for when project started
+           Step 3: Highlights — up to 3 moments of magic (title + month + reflection)
+           Step 4: Challenges — up to 3 curve balls (title + month + feeling + reflection)
+           Step 5: Summary — stats + celebration with confetti
+           See SeeYourFlow.jsx for the full implementation. -->
+      <div class="syf-prompt" id="syfPrompt" style="display: none;">
+        <div class="syf-prompt-header">
+          <span class="syf-prompt-icon">🧭</span>
+          <span class="syf-prompt-title">Map Your Journey</span>
+        </div>
+        <p class="syf-prompt-subtitle">Answer two quick questions to start building your flow map</p>
+
+        <div class="syf-question">
+          <div class="syf-question-label">Are you feeling excited?</div>
+          <div class="syf-two-options">
+            <button class="syf-option-btn" id="syfExcited" onclick="syfSelectInternal('excited')">
+              <span class="syf-option-emoji">🔥</span> Excited
+            </button>
+            <button class="syf-option-btn" id="syfTired" onclick="syfSelectInternal('tired')">
+              <span class="syf-option-emoji">😴</span> Tired
+            </button>
+          </div>
+        </div>
+
+        <div class="syf-question">
+          <div class="syf-question-label">How is the business flowing?</div>
+          <div class="syf-two-options">
+            <button class="syf-option-btn" id="syfEase" onclick="syfSelectExternal('ease')">
+              <span class="syf-option-emoji">✨</span> Great
+            </button>
+            <button class="syf-option-btn" id="syfResistance" onclick="syfSelectExternal('resistance')">
+              <span class="syf-option-emoji">🧗</span> Facing resistance
+            </button>
+          </div>
+        </div>
+
+        <div class="syf-direction-preview" id="syfDirectionPreview" style="display: none;">
+          <div class="syf-dir-dot" id="syfDirDot"></div>
+          <span id="syfDirLabel"></span>
+        </div>
+
+        <button class="syf-continue-btn" id="syfContinueBtn" disabled onclick="syfContinue()">
+          Continue <span>→</span>
+        </button>
+
+        <div class="syf-prompt-hint" id="syfHint">This creates your first river node!</div>
+        <div class="syf-prompt-note">Step 1 of 5 — your full journey mapping continues after this</div>
+      </div>
+
+      <div class="flow-path-scroll" id="flowScroll">
+        <div class="flow-path-container">
+          <svg class="flow-path-svg" viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="fpRiverGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="var(--brand-purple)" />
+                <stop offset="8%" stop-color="var(--north)" />
+                <stop offset="16%" stop-color="var(--north)" />
+                <stop offset="24%" stop-color="var(--east)" />
+                <stop offset="32%" stop-color="var(--north)" />
+                <stop offset="40%" stop-color="var(--north)" />
+                <stop offset="48%" stop-color="var(--south)" />
+                <stop offset="52%" stop-color="var(--south)" />
+                <stop offset="60%" stop-color="var(--north)" />
+                <stop offset="68%" stop-color="var(--west)" />
+                <stop offset="76%" stop-color="var(--north)" />
+                <stop offset="84%" stop-color="var(--east)" />
+                <stop offset="92%" stop-color="var(--north)" />
+                <stop offset="100%" stop-color="var(--north)" />
+              </linearGradient>
+              <filter id="fpGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            </defs>
+
+            <path class="fp-river-glow" stroke="#adb5bd"
+              d="M 40,120 Q 100,60 160,100 Q 220,140 280,80 Q 340,30 400,90 Q 440,130 480,140 Q 520,150 540,130 Q 580,80 640,70 Q 700,60 740,100 Q 780,140 820,80 Q 850,40 870,60" />
+            <path class="fp-river" stroke="url(#fpRiverGrad)"
+              d="M 40,120 Q 100,60 160,100 Q 220,140 280,80 Q 340,30 400,90 Q 440,130 480,140 Q 520,150 540,130 Q 580,80 640,70 Q 700,60 740,100 Q 780,140 820,80 Q 850,40 870,60" />
+            <path class="fp-river-highlight"
+              d="M 40,120 Q 100,60 160,100 Q 220,140 280,80 Q 340,30 400,90 Q 440,130 480,140 Q 520,150 540,130 Q 580,80 640,70 Q 700,60 740,100 Q 780,140 820,80 Q 850,40 870,60" />
+
+            <!-- Start -->
+            <g class="fp-node" onclick="showPopup('start')">
+              <circle cx="40" cy="120" r="18" fill="transparent" />
+              <circle cx="40" cy="120" r="16" class="fp-hover-ring" />
+              <circle cx="40" cy="120" r="10" fill="var(--brand-purple)" stroke="white" stroke-width="2" />
+              <text x="40" y="120" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="9">🚩</text>
+              <text x="40" y="145" text-anchor="middle" class="fp-date">Jan 27</text>
+              <text x="40" y="156" text-anchor="middle" class="fp-ms-sublabel" fill="var(--brand-purple)">Start</text>
+            </g>
+
+            <!-- Quest 1 -->
+            <g class="fp-node" onclick="showPopup('quest1')">
+              <circle cx="100" cy="72" r="30" fill="transparent" />
+              <circle cx="100" cy="72" r="28" class="fp-hover-ring" />
+              <circle cx="100" cy="72" r="22" class="fp-milestone-outer" stroke="var(--brand-purple)" />
+              <circle cx="100" cy="72" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+              <text x="100" y="72" text-anchor="middle" dominant-baseline="central" class="fp-arrow">↑</text>
+              <text x="100" y="44" text-anchor="middle" class="fp-ms-label" fill="var(--brand-purple)">Quest 1</text>
+              <text x="100" y="100" text-anchor="middle" class="fp-date">Jan 28</text>
+            </g>
+
+            <!-- Flow -->
+            <g class="fp-node" onclick="showPopup('flow1')">
+              <circle cx="160" cy="100" r="18" fill="transparent" />
+              <circle cx="160" cy="100" r="17" class="fp-hover-ring" />
+              <circle cx="160" cy="100" r="11" fill="var(--north)" stroke="white" stroke-width="2" />
+              <text x="160" y="100" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">↑</text>
+              <text x="160" y="124" text-anchor="middle" class="fp-date">Jan 29</text>
+            </g>
+
+            <!-- Redirect -->
+            <g class="fp-node" onclick="showPopup('redirect1')">
+              <circle cx="220" cy="130" r="18" fill="transparent" />
+              <circle cx="220" cy="130" r="17" class="fp-hover-ring" />
+              <circle cx="220" cy="130" r="11" fill="var(--east)" stroke="white" stroke-width="2" />
+              <text x="220" y="130" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">→</text>
+              <text x="220" y="154" text-anchor="middle" class="fp-date">Jan 30</text>
+            </g>
+
+            <!-- Groan 1 -->
+            <g class="fp-node" onclick="showPopup('groan1')">
+              <circle cx="280" cy="80" r="30" fill="transparent" />
+              <circle cx="280" cy="80" r="28" class="fp-hover-ring" />
+              <circle cx="280" cy="80" r="22" class="fp-milestone-outer" stroke="var(--brand-gold)" />
+              <circle cx="280" cy="80" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+              <text x="280" y="80" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">🦁</text>
+              <text x="280" y="56" text-anchor="middle" class="fp-ms-label" fill="var(--brand-gold)">Groan 1</text>
+              <text x="280" y="110" text-anchor="middle" class="fp-date">Jan 31</text>
+            </g>
+
+            <!-- Flow -->
+            <g class="fp-node" onclick="showPopup('flow2')">
+              <circle cx="340" cy="42" r="18" fill="transparent" />
+              <circle cx="340" cy="42" r="17" class="fp-hover-ring" />
+              <circle cx="340" cy="42" r="11" fill="var(--north)" stroke="white" stroke-width="2" />
+              <text x="340" y="42" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">↑</text>
+              <text x="340" y="66" text-anchor="middle" class="fp-date">Feb 1</text>
+            </g>
+
+            <!-- Stage 3 -->
+            <g class="fp-node" onclick="showPopup('stage3')">
+              <circle cx="400" cy="90" r="32" fill="transparent" />
+              <circle cx="400" cy="90" r="30" class="fp-hover-ring" />
+              <circle cx="400" cy="90" r="24" class="fp-milestone-outer" stroke="var(--north)" />
+              <circle cx="400" cy="90" r="15" fill="var(--north)" stroke="white" stroke-width="2.5" />
+              <text x="400" y="90" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">📊</text>
+              <text x="400" y="62" text-anchor="middle" class="fp-ms-label" fill="var(--north)">Stage 3</text>
+              <text x="400" y="122" text-anchor="middle" class="fp-date">Feb 2</text>
+            </g>
+
+            <!-- Rest (stuck) -->
+            <g class="fp-node" onclick="showPopup('rest1')">
+              <circle cx="480" cy="140" r="22" fill="transparent" />
+              <circle cx="480" cy="140" r="20" class="fp-hover-ring" />
+              <circle cx="480" cy="140" r="16" fill="none" stroke="var(--south)" stroke-width="2" class="fp-stuck-pulse" />
+              <circle cx="480" cy="140" r="11" fill="var(--south)" stroke="white" stroke-width="2" />
+              <text x="480" y="140" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="12">●</text>
+              <text x="480" y="165" text-anchor="middle" class="fp-date">Feb 3</text>
+              <text x="480" y="176" text-anchor="middle" class="fp-ms-sublabel" fill="var(--south)">Rest day</text>
+            </g>
+
+            <!-- Rest 2 -->
+            <g class="fp-node" onclick="showPopup('rest2')">
+              <circle cx="520" cy="148" r="16" fill="transparent" />
+              <circle cx="520" cy="148" r="15" class="fp-hover-ring" />
+              <circle cx="520" cy="148" r="9" fill="var(--south)" stroke="white" stroke-width="2" opacity="0.7" />
+              <text x="520" y="148" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="9">●</text>
+            </g>
+
+            <!-- Quest 4 -->
+            <g class="fp-node" onclick="showPopup('quest4')">
+              <circle cx="580" cy="88" r="30" fill="transparent" />
+              <circle cx="580" cy="88" r="28" class="fp-hover-ring" />
+              <circle cx="580" cy="88" r="22" class="fp-milestone-outer" stroke="var(--brand-purple)" />
+              <circle cx="580" cy="88" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+              <text x="580" y="88" text-anchor="middle" dominant-baseline="central" class="fp-arrow">↑</text>
+              <text x="580" y="62" text-anchor="middle" class="fp-ms-label" fill="var(--brand-purple)">Quest 4</text>
+              <text x="580" y="118" text-anchor="middle" class="fp-date">Feb 4</text>
+            </g>
+
+            <!-- Honour -->
+            <g class="fp-node" onclick="showPopup('honour1')">
+              <circle cx="640" cy="70" r="18" fill="transparent" />
+              <circle cx="640" cy="70" r="17" class="fp-hover-ring" />
+              <circle cx="640" cy="70" r="11" fill="var(--west)" stroke="white" stroke-width="2" />
+              <text x="640" y="70" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">←</text>
+              <text x="640" y="94" text-anchor="middle" class="fp-date">Feb 5</text>
+            </g>
+
+            <!-- Groan 2 -->
+            <g class="fp-node" onclick="showPopup('groan2')">
+              <circle cx="700" cy="65" r="30" fill="transparent" />
+              <circle cx="700" cy="65" r="28" class="fp-hover-ring" />
+              <circle cx="700" cy="65" r="22" class="fp-milestone-outer" stroke="var(--brand-gold)" />
+              <circle cx="700" cy="65" r="14" fill="var(--north)" stroke="white" stroke-width="2.5" />
+              <text x="700" y="65" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">🦁</text>
+              <text x="700" y="40" text-anchor="middle" class="fp-ms-label" fill="var(--brand-gold)">Groan 2</text>
+              <text x="700" y="95" text-anchor="middle" class="fp-date">Feb 5</text>
+            </g>
+
+            <!-- Redirect -->
+            <g class="fp-node" onclick="showPopup('redirect2')">
+              <circle cx="760" cy="108" r="18" fill="transparent" />
+              <circle cx="760" cy="108" r="17" class="fp-hover-ring" />
+              <circle cx="760" cy="108" r="11" fill="var(--east)" stroke="white" stroke-width="2" />
+              <text x="760" y="108" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="10">→</text>
+              <text x="760" y="132" text-anchor="middle" class="fp-date">Feb 6</text>
+            </g>
+
+            <!-- Stage 4 -->
+            <g class="fp-node" onclick="showPopup('stage4')">
+              <circle cx="820" cy="80" r="32" fill="transparent" />
+              <circle cx="820" cy="80" r="30" class="fp-hover-ring" />
+              <circle cx="820" cy="80" r="24" class="fp-milestone-outer" stroke="var(--north)" />
+              <circle cx="820" cy="80" r="15" fill="var(--north)" stroke="white" stroke-width="2.5" />
+              <text x="820" y="80" text-anchor="middle" dominant-baseline="central" class="fp-ms-emoji">📊</text>
+              <text x="820" y="52" text-anchor="middle" class="fp-ms-label" fill="var(--north)">Stage 4</text>
+              <text x="820" y="112" text-anchor="middle" class="fp-date">Feb 7</text>
+            </g>
+
+            <!-- Now -->
+            <g class="fp-node" onclick="showPopup('now')">
+              <circle cx="870" cy="60" r="26" fill="transparent" />
+              <circle cx="870" cy="60" r="24" class="fp-hover-ring" />
+              <circle cx="870" cy="60" r="20" fill="var(--brand-gold)" opacity="0.1" class="fp-now-glow" />
+              <circle cx="870" cy="60" r="18" fill="none" stroke="var(--brand-gold)" stroke-width="2" class="fp-now-pulse" />
+              <circle cx="870" cy="60" r="16" fill="var(--north)" stroke="var(--brand-gold)" stroke-width="3" />
+              <text x="870" y="60" text-anchor="middle" dominant-baseline="central" class="fp-arrow" font-size="12">↑</text>
+              <text x="870" y="36" text-anchor="middle" class="fp-ms-label" fill="var(--brand-gold)">Now</text>
+              <text x="870" y="86" text-anchor="middle" class="fp-date">Today</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <p class="fj-scroll-hint">← Swipe to explore your flow →</p>
+
+      <div class="fj-legend-group">
+        <!-- Compass directions -->
+        <div class="fj-legend-row">
+          <span class="fj-legend-label">Compass</span>
+          <div class="fj-legend-item"><div class="fj-legend-dot" style="background: var(--north);"></div> Flow</div>
+          <div class="fj-legend-item"><div class="fj-legend-dot" style="background: var(--east);"></div> Redirect</div>
+          <div class="fj-legend-item"><div class="fj-legend-dot" style="background: var(--west);"></div> Honour</div>
+          <div class="fj-legend-item"><div class="fj-legend-dot stuck" style="background: var(--south);"></div> Rest</div>
+        </div>
+        <!-- Challenge milestones -->
+        <div class="fj-legend-row">
+          <span class="fj-legend-label">Challenge</span>
+          <div class="fj-legend-item"><span class="fj-legend-icon">⚡</span> Quest</div>
+          <div class="fj-legend-item"><span class="fj-legend-icon">🦁</span> Groan</div>
+          <div class="fj-legend-item"><span class="fj-legend-icon">📊</span> Stage</div>
+        </div>
+      </div>
+
+      <div class="fj-stats" id="fjStats">
+        <!-- Streak: 12 days (12/30 target = 40% = dashoffset ~83) -->
+        <div class="fj-stat">
+          <div class="fj-stat-ring">
+            <svg viewBox="0 0 52 52"><circle class="fj-ring-bg" cx="26" cy="26" r="22" /><circle class="fj-ring-fill" id="statStreakFill" cx="26" cy="26" r="22" style="stroke: #E67E22; stroke-dasharray: 138; stroke-dashoffset: 83;" /></svg>
+            <div class="fj-stat-val" id="statStreakVal">12</div>
+          </div>
+          <div class="fj-stat-label">Streak</div>
+        </div>
+        <!-- Flow %: 67% of compass entries are North (67% fill = dashoffset ~46) -->
+        <div class="fj-stat">
+          <div class="fj-stat-ring">
+            <svg viewBox="0 0 52 52"><circle class="fj-ring-bg" cx="26" cy="26" r="22" /><circle class="fj-ring-fill" id="statFlowFill" cx="26" cy="26" r="22" style="stroke: var(--north); stroke-dasharray: 138; stroke-dashoffset: 46;" /></svg>
+            <div class="fj-stat-val" id="statFlowVal">67%</div>
+          </div>
+          <div class="fj-stat-label">Flow</div>
+        </div>
+        <!-- Courage: 2 completed / 3 generated = 67% (dashoffset ~46) -->
+        <div class="fj-stat">
+          <div class="fj-stat-ring">
+            <svg viewBox="0 0 52 52"><circle class="fj-ring-bg" cx="26" cy="26" r="22" /><circle class="fj-ring-fill" id="statCourageFill" cx="26" cy="26" r="22" style="stroke: var(--brand-gold); stroke-dasharray: 138; stroke-dashoffset: 46;" /></svg>
+            <div class="fj-stat-val" id="statCourageVal">2/3</div>
+          </div>
+          <div class="fj-stat-label">Courage</div>
+        </div>
+        <!-- Stage: 4 of 8 = 50% (dashoffset ~69) -->
+        <div class="fj-stat">
+          <div class="fj-stat-ring">
+            <svg viewBox="0 0 52 52"><circle class="fj-ring-bg" cx="26" cy="26" r="22" /><circle class="fj-ring-fill" id="statStageFill" cx="26" cy="26" r="22" style="stroke: var(--brand-purple); stroke-dasharray: 138; stroke-dashoffset: 69;" /></svg>
+            <div class="fj-stat-val" id="statStageVal">4</div>
+          </div>
+          <div class="fj-stat-label">Stage</div>
+        </div>
+      </div>
+
+      <div class="fj-narrative" id="fjNarrative">
+        <p>
+          Your river is <strong>running strong</strong> — mostly in Flow, with a healthy rest bend on Day 7.
+          This week you faced your <strong>second groan</strong>, redirected once, and
+          climbed to <strong>Stage 4</strong>. You're <strong>making complexity feel like play</strong>.
+        </p>
+      </div>
+
+      <a href="#" class="fj-link">Open Flow Compass <span>→</span></a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECTION 3: TODAY'S QUEST
+       ============================================================ -->
+  <section class="quest-section">
+    <div class="quest-banner">
+      <div class="quest-eyebrow">
+        <span class="quest-label">Today's Quest</span>
+        <span class="quest-day-badge" id="questDayBadge">Stage 4 — Money Models</span>
+      </div>
+      <h2 class="quest-title" id="questTitle">Build Your Attraction Offer</h2>
+      <p class="quest-subtitle" id="questSubtitle">Design the offer that brings people in the door</p>
+      <div class="quest-dots" id="questDots">
+        <div class="dot done"></div>
+        <div class="dot done"></div>
+        <div class="dot done"></div>
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <div class="quest-progress-label" id="questProgressLabel">3 of 14 challenges complete</div>
+      <button class="quest-cta" id="questCta">
+        Continue Quest <span>→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Hero Profile (Essence + Protective merged) -->
+  <section class="hero-profile-section">
+    <div class="hero-profile-card" onclick="window.location.href='/hero-profile'">
+
+      <div class="hp-top">
+        <div class="hp-avatar">
+          <div class="hp-avatar-inner">🎭</div>
+        </div>
+        <div class="hp-identity">
+          <div class="hp-name">Your Hero Profile</div>
+          <div class="hp-tagline">Playful Creator + The Perfectionist</div>
+        </div>
+        <span class="hp-chevron">›</span>
+      </div>
+
+      <!-- Essence vs Protective tracker -->
+      <div class="hp-voice-tracker" id="hpVoiceTracker">
+        <div class="hp-vt-labels">
+          <span class="hp-vt-label essence" id="hpVtEssenceLabel">✨ <span class="hp-vt-pct" id="hpVtEssencePct">68%</span> Essence</span>
+          <span class="hp-vt-label protective" id="hpVtProtectiveLabel">Protective <span class="hp-vt-pct" id="hpVtProtectivePct">32%</span> 🛡️</span>
+        </div>
+        <div class="hp-vt-bar" id="hpVtBar">
+          <div class="hp-vt-fill-essence" id="hpVtFillEssence" style="width: 68%"></div>
+          <div class="hp-vt-fill-protective" id="hpVtFillProtective" style="width: 32%"></div>
+        </div>
+        <div class="hp-vt-status" id="hpVtStatus">Essence leads — 17 of 25 voice moments</div>
+      </div>
+
+      <div class="hp-divider"></div>
+
+      <!-- Essence -->
+      <div class="hp-essence">
+        <div class="hp-essence-photo">
+          <div class="hp-essence-photo-ring"></div>
+          <div class="hp-essence-photo-img">✨</div>
+          <!-- With user photo: <div class="hp-essence-photo-img"><img src="user-photo.jpg" alt=""></div> -->
+        </div>
+        <div class="hp-essence-info">
+          <div class="hp-essence-name">Playful Creator</div>
+          <div class="hp-essence-desc">Joy, innovation, curiosity-led action. You alchemize boredom into magic.</div>
+        </div>
+      </div>
+
+      <div class="hp-superpower">
+        <span class="hp-superpower-bolt">⚡</span>
+        <p class="hp-superpower-text">
+          <strong>Superpower:</strong> You make joy contagious, creativity safe, and weirdness welcome.
+        </p>
+      </div>
+
+      <div class="hp-divider"></div>
+
+      <!-- Protective -->
+      <div class="hp-protective">
+        <div class="hp-protective-diagram">
+          <div class="perfectionist-anim">
+            <svg viewBox="0 0 100 100">
+              <circle class="attempt-circle attempt-1" cx="50" cy="50" r="43" />
+              <circle class="attempt-circle attempt-2" cx="50" cy="50" r="36" />
+              <circle class="attempt-circle attempt-3" cx="50" cy="50" r="29" />
+            </svg>
+          </div>
+        </div>
+        <div class="hp-protective-info">
+          <div class="hp-protective-name">The Perfectionist</div>
+          <span class="hp-protective-tag">Freeze + Flight</span>
+          <div class="hp-protective-desc">Protects you from criticism and shame of "not good enough."</div>
+        </div>
+      </div>
+
+      <div class="hp-belief">
+        <span class="hp-belief-icon">🔇</span>
+        <p class="hp-belief-text">
+          <strong>It whispers:</strong> "If I can just get it perfect, then I'll be safe from judgment."
+        </p>
+      </div>
+
+      <div class="hp-full-link">
+        View full Hero Profile <span>→</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <span class="nav-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🎯</span>
+      <span>Challenge</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">🧭</span>
+      <span>Compass</span>
+    </a>
+    <a href="#" class="nav-item">
+      <span class="nav-icon">👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+  <!-- Popup overlay -->
+  <div class="fp-popup-overlay" id="popupOverlay" onclick="hidePopup(event)">
+    <div class="fp-popup" id="popupSheet" onclick="event.stopPropagation()">
+      <div class="fp-popup-handle"></div>
+      <div id="popupContent"></div>
+    </div>
+  </div>
+
+  <script>
+    // ========== Flow River scroll + popups ==========
+    const scrollEl = document.getElementById('flowScroll');
+    if (scrollEl) {
+      setTimeout(() => {
+        scrollEl.scrollTo({ left: scrollEl.scrollWidth, behavior: 'smooth' });
+      }, 600);
+
+      let touchStartX = 0, touchStartY = 0, isScrolling = false;
+      scrollEl.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        isScrolling = false;
+      }, { passive: true });
+      scrollEl.addEventListener('touchmove', (e) => {
+        const dx = Math.abs(e.touches[0].clientX - touchStartX);
+        const dy = Math.abs(e.touches[0].clientY - touchStartY);
+        if (dx > 8 || dy > 8) isScrolling = true;
+      }, { passive: true });
+    }
+
+    const nodeData = {
+      start: { type:'start', icon:'🚩', iconBg:'#5e17eb', title:'Your Journey Begins', subtitle:'Jan 27, 2026', body:'This is the day you decided to <strong>find your flow</strong>. You signed up, answered the big questions, and took the first step toward building a business that feels like you.', feeling:'Excited, nervous, ready for something new.', tags:[{icon:'🌱',text:'Day 1'},{icon:'✨',text:'New beginning'}], points:null },
+      quest1: { type:'quest', icon:'⚡', iconBg:'#5e17eb', title:'Quest 1: Discover Your Skills', subtitle:'Jan 28 — Day 2 of 7', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'You completed the <strong>Flow Finder skills quest</strong> — listing out everything you\'re naturally good at, even the things you take for granted.', feeling:'Surprised by how many skills I actually have. Felt validating.', tags:[{icon:'🎯',text:'Flow Finder'},{icon:'📋',text:'Skills mapped'},{icon:'⚡',text:'Quest complete'}], points:150 },
+      flow1: { type:'compass', icon:'↑', iconBg:'#10b981', title:'Flow Day', subtitle:'Jan 29 — Day 3', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'You felt <strong>excited and at ease</strong>. Everything was clicking — the work felt natural, ideas were flowing, and you were in your element.', feeling:'Writing felt effortless today. Like the words already knew where to go.', tags:[{icon:'🧭',text:'North'},{icon:'💚',text:'Ease + Excited'}], points:null },
+      redirect1: { type:'compass', icon:'→', iconBg:'#3b82f6', title:'Redirect Day', subtitle:'Jan 30 — Day 4', direction:{label:'Redirect',arrow:'→',color:'#3b82f6',bg:'rgba(59,130,246,0.1)'}, body:'You felt <strong>excited but hit some resistance</strong>. The energy was there, but something needed to shift.', feeling:'Wanted to post my first piece of content but froze when I opened the app.', tags:[{icon:'🧭',text:'East'},{icon:'💙',text:'Resistance + Excited'}], points:null },
+      groan1: { type:'groan', icon:'🦁', iconBg:'#E9A23B', title:'Groan Challenge: Go Live', subtitle:'Jan 31 — Day 5', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'You faced your first <strong>groan challenge</strong> — going live on Instagram. Scary score: 7/10. Wahoo score: 9/10. This landed in your <strong>Essence Zone</strong>.', feeling:'Hands were shaking before I hit Go Live, but 30 seconds in I was actually laughing.', tags:[{icon:'👁️',text:'Live visibility'},{icon:'🔥',text:'Scary: 7/10'},{icon:'🎉',text:'Wahoo: 9/10'},{icon:'💎',text:'Essence Zone'}], points:250 },
+      flow2: { type:'compass', icon:'↑', iconBg:'#10b981', title:'Flow Day', subtitle:'Feb 1 — Day 6', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'Another <strong>flow day</strong> — riding the wave from yesterday\'s groan. When you face your edge and survive, the next day always feels lighter.', feeling:'Still buzzing from yesterday. Wrote my best content draft yet.', tags:[{icon:'🧭',text:'North'},{icon:'💚',text:'Ease + Excited'}], points:null },
+      stage3: { type:'stage', icon:'📊', iconBg:'#10b981', title:'Graduated to Stage 3: Offer Design', subtitle:'Feb 2 — Day 7', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'You completed all requirements for <strong>Stage 2</strong> and graduated to <strong>Stage 3: Offer Design</strong>.', feeling:'Can\'t believe how much has happened in one week. This actually feels real now.', tags:[{icon:'🎓',text:'Graduated!'},{icon:'📊',text:'Stage 3'},{icon:'⚡',text:'Quest 3 complete'},{icon:'🏆',text:'Week 1 done'}], points:500 },
+      rest1: { type:'rest', icon:'●', iconBg:'#ef4444', title:'Rest Day', subtitle:'Feb 3 — Day 8', direction:{label:'Rest',arrow:'●',color:'#ef4444',bg:'rgba(239,68,68,0.1)'}, body:'Your body and mind said <strong>slow down</strong>. You <strong>honoured the rest</strong>. This is wisdom, not weakness.', feeling:'Felt flat. Nothing was clicking. Went for a walk instead.', tags:[{icon:'🧭',text:'South'},{icon:'❤️',text:'Resistance + Tired'},{icon:'🫶',text:'Rest is healthy'}], points:null },
+      rest2: { type:'rest', icon:'●', iconBg:'#ef4444', title:'Continued Rest', subtitle:'Feb 3 — Day 8 (afternoon)', direction:{label:'Rest',arrow:'●',color:'#ef4444',bg:'rgba(239,68,68,0.1)'}, body:'Still in <strong>rest mode</strong>. Sometimes growth happens when you\'re not looking at the screen.', feeling:'Journaled instead. Actually had some good realisations about why I do this.', tags:[{icon:'🧭',text:'South'},{icon:'📝',text:'Reflection'}], points:null },
+      quest4: { type:'quest', icon:'⚡', iconBg:'#5e17eb', title:'Quest 4: Map Your Problems', subtitle:'Feb 4 — Day 9', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'Back in flow after rest! You completed the <strong>Problems quest</strong> — identifying the specific problems your ideal customers face.', feeling:'The rest yesterday was exactly what I needed. Came back sharper.', tags:[{icon:'🎯',text:'Flow Finder'},{icon:'🔍',text:'Problems mapped'},{icon:'⚡',text:'Quest complete'}], points:150 },
+      honour1: { type:'compass', icon:'←', iconBg:'#fbbf24', title:'Honour Day', subtitle:'Feb 5 — Day 10', direction:{label:'Honour',arrow:'←',color:'#fbbf24',bg:'rgba(251,191,36,0.1)'}, body:'You felt <strong>at ease but tired</strong>. The compass says <strong>honour this</strong> — do what feels gentle.', feeling:'Peaceful but low-key. Did some light reading about offer structures.', tags:[{icon:'🧭',text:'West'},{icon:'💛',text:'Ease + Tired'}], points:null },
+      groan2: { type:'groan', icon:'🦁', iconBg:'#E9A23B', title:'Groan Challenge: Ask For Money', subtitle:'Feb 5 — Day 10', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'Your second groan! You <strong>offered a paid pilot</strong> of your service. Scary: 8/10. Wahoo: 8/10. <strong>Essence Zone</strong>.', feeling:'Typing that price out was the hardest thing I\'ve done this week. But I DID it.', tags:[{icon:'💰',text:'Money visibility'},{icon:'🔥',text:'Scary: 8/10'},{icon:'🎉',text:'Wahoo: 8/10'},{icon:'💎',text:'Essence Zone'}], points:250 },
+      redirect2: { type:'compass', icon:'→', iconBg:'#3b82f6', title:'Redirect Day', subtitle:'Feb 6 — Day 11', direction:{label:'Redirect',arrow:'→',color:'#3b82f6',bg:'rgba(59,130,246,0.1)'}, body:'Excited but meeting resistance again. Your nervous system is <strong>recalibrating</strong>.', feeling:'Brain is buzzing with ideas but I keep second-guessing the pricing.', tags:[{icon:'🧭',text:'East'},{icon:'💙',text:'Resistance + Excited'}], points:null },
+      stage4: { type:'stage', icon:'📊', iconBg:'#10b981', title:'Graduated to Stage 4: Lead Magnet', subtitle:'Feb 7 — Day 12', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'You\'ve graduated to <strong>Stage 4: Lead Magnet</strong>! Your offer is designed, your persona is clear.', feeling:'Four stages in 12 days. The river is flowing.', tags:[{icon:'🎓',text:'Graduated!'},{icon:'📊',text:'Stage 4'},{icon:'⚡',text:'Quest 5 complete'},{icon:'🧲',text:'Lead Magnet time'}], points:500 },
+      now: { type:'now', icon:'↑', iconBg:'#10b981', title:'You Are Here', subtitle:'Today — Day 12', direction:{label:'Flow',arrow:'↑',color:'#10b981',bg:'rgba(16,185,129,0.1)'}, body:'Right now you\'re in <strong>Flow</strong>. Your river has carried you through <strong>12 days, 4 stages, 2 groans, and 5 quests</strong>. Look how far you\'ve come.', feeling:'This is it. I\'m actually doing this.', tags:[{icon:'🔥',text:'12-day streak'},{icon:'📊',text:'Stage 4'},{icon:'💪',text:'2,450 XP'},{icon:'🌊',text:'In Flow'}], points:null }
+    };
+
+    function showPopup(nodeId) {
+      if (typeof isScrolling !== 'undefined' && isScrolling) return;
+      const data = nodeData[nodeId];
+      if (!data) return;
+      let html = `<div class="fp-popup-header"><div class="fp-popup-icon" style="background:${data.iconBg};color:white;border-color:${data.iconBg};">${data.icon}</div><div><div class="fp-popup-title">${data.title}</div><div class="fp-popup-subtitle">${data.subtitle}</div></div></div>`;
+      if (data.direction) html += `<div class="fp-popup-direction" style="background:${data.direction.bg};color:${data.direction.color};"><span class="dir-arrow">${data.direction.arrow}</span>${data.direction.label}</div>`;
+      html += `<div class="fp-popup-body">${data.body}</div>`;
+      if (data.tags && data.tags.length) { html += '<div class="fp-popup-meta">'; data.tags.forEach(t => { html += `<div class="fp-popup-tag"><span class="tag-icon">${t.icon}</span>${t.text}</div>`; }); html += '</div>'; }
+      if (data.feeling) html += `<div class="fp-popup-feeling"><div class="fp-popup-feeling-label">How you were feeling</div><div class="fp-popup-feeling-text">"${data.feeling}"</div></div>`;
+      if (data.points) html += `<div class="fp-popup-points"><span>⚡</span> +${data.points} XP earned</div>`;
+      document.getElementById('popupContent').innerHTML = html;
+      document.getElementById('popupOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hidePopup(e) {
+      document.getElementById('popupOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // ========== Project Selector ==========
+    function toggleProjectMenu() {
+      const btn = document.getElementById('projectBtn');
+      const dropdown = document.getElementById('projectDropdown');
+      btn.classList.toggle('open');
+      dropdown.classList.toggle('open');
+    }
+
+    function selectProject(name, emoji, stage, days, el) {
+      document.getElementById('projectName').textContent = name;
+      document.querySelector('#projectBtn .proj-emoji').textContent = emoji;
+      document.getElementById('projectDays').textContent = days + ' day' + (days !== 1 ? 's' : '');
+      document.querySelectorAll('.fj-project-option').forEach(o => o.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('projectBtn').classList.remove('open');
+      document.getElementById('projectDropdown').classList.remove('open');
+    }
+
+    // Close project dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.fj-project-select')) {
+        document.getElementById('projectBtn')?.classList.remove('open');
+        document.getElementById('projectDropdown')?.classList.remove('open');
+      }
+    });
+
+    // ========== Color Switcher ==========
+    const colorThemes = {
+      'playful-creator':   { color: '#FFD93D', soft: 'rgba(255, 217, 61, 0.08)', medium: 'rgba(255, 217, 61, 0.15)', strong: 'rgba(255, 217, 61, 0.25)', glow: 'rgba(255, 217, 61, 0.4)' },
+      'radiant-rebel':     { color: '#FF6B6B', soft: 'rgba(255, 107, 107, 0.08)', medium: 'rgba(255, 107, 107, 0.15)', strong: 'rgba(255, 107, 107, 0.25)', glow: 'rgba(255, 107, 107, 0.4)' },
+      'mystic-messenger':  { color: '#A78BFA', soft: 'rgba(167, 139, 250, 0.08)', medium: 'rgba(167, 139, 250, 0.15)', strong: 'rgba(167, 139, 250, 0.25)', glow: 'rgba(167, 139, 250, 0.4)' },
+      'grounded-guardian':  { color: '#51CF66', soft: 'rgba(81, 207, 102, 0.08)', medium: 'rgba(81, 207, 102, 0.15)', strong: 'rgba(81, 207, 102, 0.25)', glow: 'rgba(81, 207, 102, 0.4)' },
+      'cosmic-connector':   { color: '#74C0FC', soft: 'rgba(116, 192, 252, 0.08)', medium: 'rgba(116, 192, 252, 0.15)', strong: 'rgba(116, 192, 252, 0.25)', glow: 'rgba(116, 192, 252, 0.4)' },
+      'heart-holder':      { color: '#FF8CC8', soft: 'rgba(255, 140, 200, 0.08)', medium: 'rgba(255, 140, 200, 0.15)', strong: 'rgba(255, 140, 200, 0.25)', glow: 'rgba(255, 140, 200, 0.4)' },
+      'sacred-jester':     { color: '#20C997', soft: 'rgba(32, 201, 151, 0.08)', medium: 'rgba(32, 201, 151, 0.15)', strong: 'rgba(32, 201, 151, 0.25)', glow: 'rgba(32, 201, 151, 0.4)' },
+      'wise-sage':         { color: '#E8A05C', soft: 'rgba(232, 160, 92, 0.08)', medium: 'rgba(232, 160, 92, 0.15)', strong: 'rgba(232, 160, 92, 0.25)', glow: 'rgba(232, 160, 92, 0.4)' },
+    };
+
+    function toggleColorMenu() {
+      document.getElementById('colorMenu').classList.toggle('open');
+    }
+
+    function setColor(theme, el) {
+      const t = colorThemes[theme];
+      if (!t) return;
+
+      const root = document.documentElement;
+      root.style.setProperty('--archetype-color', t.color);
+      root.style.setProperty('--archetype-color-soft', t.soft);
+      root.style.setProperty('--archetype-color-medium', t.medium);
+      root.style.setProperty('--archetype-color-strong', t.strong);
+      root.style.setProperty('--archetype-glow', t.glow);
+
+      // Update toggle button color
+      document.querySelector('.color-switcher-toggle').style.background = t.color;
+
+      // Move active state
+      document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      // Close menu
+      document.getElementById('colorMenu').classList.remove('open');
+    }
+
+    // Close color menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.color-switcher')) {
+        document.getElementById('colorMenu').classList.remove('open');
+      }
+    });
+
+    // ========== Perfectionist counter animation ==========
+    const counter = document.getElementById('pctCounter');
+    let pctVal = 0;
+    const pctTarget = 89;
+
+    function animateCounter() {
+      const interval = setInterval(() => {
+        pctVal++;
+        counter.textContent = pctVal + '%';
+        if (pctVal >= pctTarget) {
+          clearInterval(interval);
+          // Pause then restart
+          setTimeout(() => {
+            pctVal = 0;
+            counter.textContent = '0%';
+            animateCounter();
+          }, 2500);
+        }
+      }, 30);
+    }
+
+    // Start after a short delay
+    setTimeout(animateCounter, 800);
+
+    // ========== First-Time / Returning User Toggle ==========
+    let isFirstTime = false;
+
+    function toggleUserState() {
+      isFirstTime = !isFirstTime;
+
+      // Toggle body class
+      document.body.classList.toggle('first-time', isFirstTime);
+
+      // Toggle switch visual
+      const track = document.getElementById('stateToggleTrack');
+      const label = document.getElementById('stateToggleLabel');
+      track.classList.toggle('active', !isFirstTime);
+      label.textContent = isFirstTime ? 'First-Time User' : 'Returning User';
+
+      if (isFirstTime) {
+        syfReset();
+        applyFirstTimeState();
+      } else {
+        applyReturningState();
+      }
+    }
+
+    function applyFirstTimeState() {
+      // === Section 1: Hero Identity ===
+      document.getElementById('xpPillValue').textContent = '0 XP';
+      document.getElementById('streakText').textContent = '0 Day Streak';
+      document.getElementById('levelText').textContent = 'Vibe Seeker';
+      document.getElementById('xpLevelLabel').textContent = 'Lv 1 — Vibe Seeker';
+      document.getElementById('xpAmountLabel').textContent = '0 / 75 XP';
+
+      // === Section 2: Flow Journey ===
+      // Show ghost river + SeeYourFlow prompt, hide real river
+      document.getElementById('ghostRiverContainer').style.display = 'block';
+      document.getElementById('syfPrompt').style.display = 'block';
+      document.getElementById('fjSub').textContent = 'Log your first compass check-in to start building your river.';
+
+      // Single project, hide chevron
+      document.getElementById('projectName').textContent = 'My Business';
+      document.querySelector('#projectBtn .proj-emoji').textContent = '🚀';
+      document.getElementById('projChevron').style.display = 'none';
+      document.getElementById('projectDropdown').classList.remove('open');
+
+      // Stats: all zeroed
+      document.getElementById('statStreakVal').textContent = '0';
+      document.getElementById('statStreakFill').style.strokeDashoffset = '138';
+      document.getElementById('statFlowVal').textContent = '0%';
+      document.getElementById('statFlowFill').style.strokeDashoffset = '138';
+      document.getElementById('statCourageVal').textContent = '0/0';
+      document.getElementById('statCourageFill').style.strokeDashoffset = '138';
+      document.getElementById('statStageVal').textContent = '1';
+      document.getElementById('statStageFill').style.strokeDashoffset = '121'; // 1/8 = 12.5%
+
+      // Narrative → empty prompt
+      const narrative = document.getElementById('fjNarrative');
+      narrative.classList.add('fj-narrative-empty');
+      narrative.innerHTML = '<p>Complete your first compass check-in to see your story unfold here</p>';
+
+      // === Section 3: Today's Quest ===
+      document.getElementById('questDayBadge').textContent = 'Stage 1 — Validation';
+      document.getElementById('questTitle').textContent = 'Begin Your Flow Journey';
+      document.getElementById('questSubtitle').textContent = 'Complete your first quest to start building momentum';
+      document.getElementById('questProgressLabel').textContent = '0 of 7 challenges complete';
+      document.getElementById('questCta').innerHTML = 'Start Your First Quest <span>\u2192</span>';
+
+      // Quest dots — 7 empty dots for Stage 1
+      const dotsContainer = document.getElementById('questDots');
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < 7; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dotsContainer.appendChild(dot);
+      }
+
+      // === Section 4: Hero Profile — Voice Tracker ===
+      const tracker = document.getElementById('hpVoiceTracker');
+      tracker.classList.add('hp-vt-empty');
+      document.getElementById('hpVtEssencePct').textContent = '--%';
+      document.getElementById('hpVtProtectivePct').textContent = '--%';
+      document.getElementById('hpVtFillEssence').style.width = '0%';
+      document.getElementById('hpVtFillProtective').style.width = '0%';
+      document.getElementById('hpVtStatus').textContent = 'Complete voice quests in the 7-Day Challenge to start tracking';
+    }
+
+    function applyReturningState() {
+      // === Section 1: Hero Identity ===
+      document.getElementById('xpPillValue').textContent = '350 XP';
+      document.getElementById('streakText').textContent = '12 Day Streak';
+      document.getElementById('levelText').textContent = 'Vibe Finder';
+      document.getElementById('xpLevelLabel').textContent = 'Lv 3 — Vibe Finder';
+      document.getElementById('xpAmountLabel').textContent = '350 / 500 XP';
+
+      // Re-trigger XP fill animation
+      const xpFill = document.getElementById('xpFill');
+      xpFill.style.animation = 'none';
+      xpFill.offsetHeight; // force reflow
+      xpFill.style.animation = 'xpFill 1.5s ease-out 0.5s forwards';
+
+      // === Section 2: Flow Journey ===
+      document.getElementById('ghostRiverContainer').style.display = 'none';
+      document.getElementById('syfPrompt').style.display = 'none';
+      document.getElementById('fjSub').textContent = 'Swipe to explore your river — compass entries, quests, groans, and stages all in one flow.';
+
+      // Restore project selector
+      document.getElementById('projectName').textContent = 'Creative Coaching';
+      document.querySelector('#projectBtn .proj-emoji').textContent = '🎨';
+      document.getElementById('projChevron').style.display = '';
+
+      // Stats: restored
+      document.getElementById('statStreakVal').textContent = '12';
+      document.getElementById('statStreakFill').style.strokeDashoffset = '83';
+      document.getElementById('statFlowVal').textContent = '67%';
+      document.getElementById('statFlowFill').style.strokeDashoffset = '46';
+      document.getElementById('statCourageVal').textContent = '2/3';
+      document.getElementById('statCourageFill').style.strokeDashoffset = '46';
+      document.getElementById('statStageVal').textContent = '4';
+      document.getElementById('statStageFill').style.strokeDashoffset = '69';
+
+      // Narrative restored
+      const narrative = document.getElementById('fjNarrative');
+      narrative.classList.remove('fj-narrative-empty');
+      narrative.innerHTML = '<p>Your river is <strong>running strong</strong> — mostly in Flow, with a healthy rest bend on Day 7. This week you faced your <strong>second groan</strong>, redirected once, and climbed to <strong>Stage 4</strong>. You\'re <strong>making complexity feel like play</strong>.</p>';
+
+      // Scroll river to end
+      const scrollEl = document.getElementById('flowScroll');
+      if (scrollEl) {
+        setTimeout(() => {
+          scrollEl.scrollTo({ left: scrollEl.scrollWidth, behavior: 'smooth' });
+        }, 300);
+      }
+
+      // === Section 3: Today's Quest ===
+      document.getElementById('questDayBadge').textContent = 'Stage 4 — Money Models';
+      document.getElementById('questTitle').textContent = 'Build Your Attraction Offer';
+      document.getElementById('questSubtitle').textContent = 'Design the offer that brings people in the door';
+      document.getElementById('questProgressLabel').textContent = '3 of 14 challenges complete';
+      document.getElementById('questCta').innerHTML = 'Continue Quest <span>\u2192</span>';
+
+      // Quest dots — 14 dots, 3 done, 1 active
+      const dotsContainer = document.getElementById('questDots');
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < 14; i++) {
+        const dot = document.createElement('div');
+        if (i < 3) dot.className = 'dot done';
+        else if (i === 3) dot.className = 'dot active';
+        else dot.className = 'dot';
+        dotsContainer.appendChild(dot);
+      }
+
+      // === Section 4: Hero Profile — Voice Tracker ===
+      const tracker = document.getElementById('hpVoiceTracker');
+      tracker.classList.remove('hp-vt-empty');
+      document.getElementById('hpVtEssencePct').textContent = '68%';
+      document.getElementById('hpVtProtectivePct').textContent = '32%';
+      document.getElementById('hpVtFillEssence').style.width = '68%';
+      document.getElementById('hpVtFillProtective').style.width = '32%';
+      document.getElementById('hpVtStatus').textContent = 'Essence leads — 17 of 25 voice moments';
+    }
+
+    // ========== SeeYourFlow 2-Question Compass ==========
+    let syfInternal = null; // 'excited' or 'tired'
+    let syfExternal = null; // 'ease' or 'resistance'
+
+    const syfDirections = {
+      'excited-ease':       { label: 'Flow',     color: 'var(--north)', bg: 'rgba(16,185,129,0.1)' },
+      'excited-resistance': { label: 'Redirect', color: 'var(--east)',  bg: 'rgba(59,130,246,0.1)' },
+      'tired-ease':         { label: 'Honour',   color: 'var(--west)',  bg: 'rgba(251,191,36,0.1)' },
+      'tired-resistance':   { label: 'Rest',     color: 'var(--south)', bg: 'rgba(239,68,68,0.1)' },
+    };
+
+    function syfSelectInternal(value) {
+      syfInternal = value;
+      document.getElementById('syfExcited').classList.toggle('selected', value === 'excited');
+      document.getElementById('syfTired').classList.toggle('selected', value === 'tired');
+      syfUpdatePreview();
+    }
+
+    function syfSelectExternal(value) {
+      syfExternal = value;
+      document.getElementById('syfEase').classList.toggle('selected', value === 'ease');
+      document.getElementById('syfResistance').classList.toggle('selected', value === 'resistance');
+      syfUpdatePreview();
+    }
+
+    const syfArrows = {
+      'excited-ease': '↑', 'excited-resistance': '→',
+      'tired-ease': '←', 'tired-resistance': '●',
+    };
+
+    function syfUpdatePreview() {
+      const preview = document.getElementById('syfDirectionPreview');
+      const btn = document.getElementById('syfContinueBtn');
+      if (syfInternal && syfExternal) {
+        const key = syfInternal + '-' + syfExternal;
+        const dir = syfDirections[key];
+        preview.style.display = 'flex';
+        preview.style.background = dir.bg;
+        preview.style.color = dir.color;
+        document.getElementById('syfDirDot').style.background = dir.color;
+        document.getElementById('syfDirLabel').textContent = dir.label;
+        btn.disabled = false;
+      } else {
+        preview.style.display = 'none';
+        btn.disabled = true;
+      }
+    }
+
+    function syfContinue() {
+      if (!syfInternal || !syfExternal) return;
+
+      const key = syfInternal + '-' + syfExternal;
+      const dir = syfDirections[key];
+      const arrow = syfArrows[key];
+
+      // Update ghost river first node to match selected direction
+      const nodeGroup = document.getElementById('ghostFirstNode');
+      document.getElementById('ghostNodeFill').setAttribute('fill', dir.color);
+      document.getElementById('ghostNodePulse').setAttribute('stroke', dir.color);
+      document.getElementById('ghostNodeArrow').textContent = arrow;
+      document.getElementById('ghostNodeLabel').textContent = dir.label;
+      document.getElementById('ghostNodeLabel').setAttribute('fill', dir.color);
+
+      // Color the river segment to match
+      document.getElementById('ghostRiverSegment').setAttribute('stroke', dir.color);
+
+      // Reveal the node + segment with animation
+      nodeGroup.classList.add('visible');
+      document.getElementById('ghostRiverSegment').classList.add('visible');
+
+      // Update the hint text
+      document.getElementById('syfHint').textContent = 'Your first river node! Next: when did you start this project?';
+
+      // Disable the button and show it completed
+      const btn = document.getElementById('syfContinueBtn');
+      btn.disabled = true;
+      btn.innerHTML = 'Node created! ✓';
+      btn.style.background = 'linear-gradient(135deg, var(--north), #34d399)';
+      btn.style.color = 'white';
+    }
+
+    function syfReset() {
+      syfInternal = null;
+      syfExternal = null;
+      ['syfExcited', 'syfTired', 'syfEase', 'syfResistance'].forEach(id => {
+        document.getElementById(id)?.classList.remove('selected');
+      });
+      document.getElementById('syfDirectionPreview').style.display = 'none';
+      document.getElementById('syfContinueBtn').disabled = true;
+      document.getElementById('syfContinueBtn').innerHTML = 'Continue <span>→</span>';
+      document.getElementById('syfContinueBtn').style.background = '';
+      document.getElementById('syfContinueBtn').style.color = '';
+      document.getElementById('syfHint').textContent = 'This creates your first river node!';
+
+      // Hide the first node + segment
+      document.getElementById('ghostFirstNode')?.classList.remove('visible');
+      document.getElementById('ghostRiverSegment')?.classList.remove('visible');
+    }
+
+    // Initialize toggle as "Returning" (active = purple)
+    document.getElementById('stateToggleTrack').classList.add('active');
+  </script>
+
+</body>
+</html>

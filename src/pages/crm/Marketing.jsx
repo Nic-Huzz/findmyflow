@@ -415,6 +415,10 @@ export default function Marketing() {
   if (loading && onboardingStage === ONBOARDING_STAGES.COMPLETE) {
     return (
       <div className="crm-marketing">
+        <div className="marketing-toolbar">
+          <button className="back-btn" onClick={() => navigate('/crm/attract')}>←</button>
+          <h2 className="toolbar-title">Content</h2>
+        </div>
         <div className="crm-loading">
           <div className="crm-spinner"></div>
           <p>Loading your quests...</p>
@@ -433,18 +437,28 @@ export default function Marketing() {
         <h2 className="toolbar-title">Content</h2>
       </div>
 
-      {/* Header */}
-      <header className="marketing-header">
-        <div className="marketing-breadcrumb">
-          <button onClick={() => navigate('/crm')}>Home</button>
-          <span>→</span>
-          <button onClick={() => navigate('/crm/attract')}>Attract</button>
-          <span>→</span>
-          <span>Content</span>
+      {/* Dark Hero Stats Card */}
+      <div className="marketing-hero">
+        <div className="marketing-hero-stats">
+          <div className="marketing-hero-stat">
+            <span className="marketing-hero-value gold">{stats.rate}%</span>
+            <span className="marketing-hero-label">Completion</span>
+          </div>
+          <div className="marketing-hero-divider"></div>
+          <div className="marketing-hero-stat">
+            <span className="marketing-hero-value">{stats.completed}/{stats.total}</span>
+            <span className="marketing-hero-label">Tasks</span>
+          </div>
+          <div className="marketing-hero-divider"></div>
+          <div className="marketing-hero-stat">
+            <span className="marketing-hero-value">{stats.points}</span>
+            <span className="marketing-hero-label">Points</span>
+          </div>
         </div>
-        <h1>📝 Content Quests</h1>
-        <p className="marketing-subtitle">Weekly marketing tasks with AI-powered content generation</p>
-      </header>
+        <div className="marketing-hero-progress">
+          <div className="marketing-hero-progress-fill" style={{ width: `${stats.rate}%` }}></div>
+        </div>
+      </div>
 
       {/* Action Buttons Card */}
       <div className="marketing-actions-card">
@@ -523,19 +537,6 @@ export default function Marketing() {
           >
             →
           </button>
-        </div>
-      </div>
-
-      {/* Week Progress */}
-      <div className="week-progress">
-        <div className="progress-stats">
-          <span className="progress-text">
-            {stats.completed}/{stats.total} tasks • {stats.points} pts
-          </span>
-          <span className="progress-rate">{stats.rate}%</span>
-        </div>
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${stats.rate}%` }}></div>
         </div>
       </div>
 

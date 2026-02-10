@@ -1,40 +1,43 @@
 /**
  * CRM Marketing - Content Quest Board
- * Brand-Aligned Theme following design guide
+ * Design system aligned
  */
 
-/* CSS Variables - Design Guide Values */
+/* ============================================
+   DESIGN TOKENS
+   ============================================ */
 .crm-marketing {
-  --purple: #5e17eb;
-  --purple-light: #7c3aed;
-  --purple-lighter: #f3eeff;
-  --gold: #ffdd27;
-  --warm-gray: #f8f9fa;
-  --text-primary: #212529;
-  --text-secondary: #495057;
-  --text-muted: #6c757d;
-  --border-color: #dee2e6;
-  --success: #10b981;
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 8px 24px rgba(94, 23, 235, 0.15);
-  --shadow-button: 0 4px 12px rgba(94, 23, 235, 0.3);
-  --shadow-button-hover: 0 6px 20px rgba(94, 23, 235, 0.4);
-  --radius-sm: 12px;
-  --radius-md: 16px;
-  --radius-lg: 20px;
-  --radius-pill: 100px;
+  --brand-purple: #5e17eb;
+  --brand-purple-light: #7c3aed;
+  --brand-purple-deep: #4c1d95;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --border: #e9ecef;
 }
 
-/* Container */
+/* ============================================
+   CONTAINER
+   ============================================ */
 .crm-marketing {
   min-height: 100vh;
-  background: var(--warm-gray) !important;
+  background: linear-gradient(180deg,
+    rgba(94,23,235,0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233,162,59,0.04) 100%
+  );
   padding: 1rem;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
-/* Loading State */
+/* ============================================
+   LOADING STATE
+   ============================================ */
 .crm-marketing .crm-loading {
   display: flex;
   flex-direction: column;
@@ -48,26 +51,28 @@
 .crm-marketing .crm-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--purple);
+  border: 3px solid var(--border);
+  border-top-color: var(--brand-purple);
   border-radius: 50%;
-  animation: marketing-spin 1s linear infinite;
+  animation: marketingSpin 1s linear infinite;
 }
 
-@keyframes marketing-spin {
+@keyframes marketingSpin {
   to { transform: rotate(360deg); }
 }
 
-/* Top Toolbar */
+/* ============================================
+   TOP TOOLBAR
+   ============================================ */
 .crm-marketing .marketing-toolbar {
   position: sticky;
   top: 0;
-  background: #fff;
+  background: var(--surface);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border);
   margin: -1rem -1rem 1rem -1rem;
   z-index: 10;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -83,6 +88,7 @@
   cursor: pointer;
   padding: 0.25rem;
   line-height: 1;
+  font-family: inherit;
   transition: transform 0.2s ease;
 }
 
@@ -92,67 +98,114 @@
 
 .crm-marketing .toolbar-title {
   font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-/* Header */
-.crm-marketing .marketing-header {
-  margin-bottom: 1.5rem;
-}
-
-.crm-marketing .marketing-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.75rem;
-}
-
-.crm-marketing .marketing-breadcrumb button {
-  background: none;
-  border: none;
-  color: var(--purple);
-  cursor: pointer;
-  padding: 0;
-  font-size: inherit;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.crm-marketing .marketing-breadcrumb button:hover {
-  color: var(--purple-light);
-  text-decoration: underline;
-}
-
-.crm-marketing .marketing-breadcrumb span:last-child {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.crm-marketing .marketing-header h1 {
-  font-size: 1.75rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 0.25rem 0;
-}
-
-.crm-marketing .marketing-subtitle {
-  font-size: 0.9375rem;
-  color: var(--text-secondary);
   margin: 0;
 }
 
-/* Actions Card */
+/* ============================================
+   DARK HERO STATS CARD
+   ============================================ */
+.crm-marketing .marketing-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, var(--brand-purple-light) 50%, var(--brand-purple-deep) 100%);
+  border-radius: 24px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+}
+
+.crm-marketing .marketing-hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.crm-marketing .marketing-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 160px;
+  height: 160px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.crm-marketing .marketing-hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 1rem;
+}
+
+.crm-marketing .marketing-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.crm-marketing .marketing-hero-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.crm-marketing .marketing-hero-value.gold {
+  color: var(--brand-gold);
+}
+
+.crm-marketing .marketing-hero-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.crm-marketing .marketing-hero-divider {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.crm-marketing .marketing-hero-progress {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.crm-marketing .marketing-hero-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-gold), #f5c842);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* ============================================
+   ACTIONS CARD
+   ============================================ */
 .crm-marketing .marketing-actions-card {
-  background: #fff;
+  background: var(--surface);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 24px;
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
 }
@@ -164,7 +217,7 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, var(--purple), var(--purple-light));
+  background: linear-gradient(180deg, var(--brand-purple), var(--brand-purple-light));
 }
 
 .crm-marketing .marketing-actions-grid {
@@ -182,10 +235,11 @@
   border: none;
   color: white;
   padding: 0.625rem 1rem;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 700;
+  font-family: inherit;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -193,67 +247,108 @@
 }
 
 .crm-marketing .performance-btn {
-  background: linear-gradient(135deg, var(--success), #059669);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, var(--brand-gold), #d4891a);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
 }
 
 .crm-marketing .queue-btn {
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
-  box-shadow: var(--shadow-button);
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-light));
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 .crm-marketing .story-bank-btn {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .crm-marketing .leads-capture-btn {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  background: linear-gradient(135deg, var(--brand-purple-deep), #5b21b6);
+  box-shadow: 0 4px 12px rgba(76, 29, 149, 0.3);
 }
 
 .crm-marketing .strategy-btn {
-  background: #fff;
-  border: 2px solid var(--border-color);
+  background: var(--surface);
+  border: 2px solid var(--border);
   color: var(--text-primary);
   box-shadow: none;
 }
 
 .crm-marketing .performance-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
 }
 
 .crm-marketing .queue-btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-button-hover);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
 }
 
 .crm-marketing .story-bank-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
 }
 
 .crm-marketing .leads-capture-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 20px rgba(76, 29, 149, 0.4);
 }
 
 .crm-marketing .strategy-btn:hover {
-  background: var(--warm-gray);
+  background: #f8f9fa;
   border-color: #d1d5db;
 }
 
-/* Week Navigation Card */
+/* ============================================
+   CONTENT PLAN SECTION
+   ============================================ */
+.crm-marketing .content-plan-section {
+  margin-bottom: 1.5rem;
+}
+
+.crm-marketing .content-plan-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.crm-marketing .content-plan-section .section-header h3 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.crm-marketing .edit-plan-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  color: var(--brand-purple);
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.crm-marketing .edit-plan-btn:hover {
+  background: rgba(94, 23, 235, 0.06);
+  border-color: var(--brand-purple);
+}
+
+/* ============================================
+   WEEK NAVIGATION
+   ============================================ */
 .crm-marketing .week-nav-card {
-  background: #fff;
+  background: var(--surface);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: 24px;
   padding: 0.875rem 1rem;
   margin-bottom: 1rem;
   display: flex;
   justify-content: center;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
 }
 
 .crm-marketing .week-nav {
@@ -263,15 +358,16 @@
 }
 
 .crm-marketing .week-nav-btn {
-  background: var(--warm-gray);
-  border: 2px solid var(--border-color);
+  background: #f8f9fa;
+  border: 2px solid var(--border);
   color: var(--text-primary);
   width: 36px;
   height: 36px;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   cursor: pointer;
   font-size: 0.9375rem;
   font-weight: 600;
+  font-family: inherit;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -279,9 +375,9 @@
 }
 
 .crm-marketing .week-nav-btn:hover:not(:disabled) {
-  background: var(--purple-lighter);
-  border-color: var(--purple);
-  color: var(--purple);
+  background: rgba(94, 23, 235, 0.06);
+  border-color: var(--brand-purple);
+  color: var(--brand-purple);
 }
 
 .crm-marketing .week-nav-btn:disabled {
@@ -292,98 +388,45 @@
 .crm-marketing .week-label {
   color: var(--text-primary);
   font-size: 0.9375rem;
-  font-weight: 700;
+  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .crm-marketing .current-week-badge {
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-light));
   color: white;
   font-size: 0.625rem;
   font-weight: 700;
   padding: 3px 10px;
-  border-radius: var(--radius-pill);
+  border-radius: 100px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* Week Progress Card */
-.crm-marketing .week-progress {
-  background: #fff;
-  border: none;
-  border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
-  box-shadow: var(--shadow-card);
-  position: relative;
-  overflow: hidden;
-}
-
-.crm-marketing .week-progress::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--purple), var(--purple-light));
-}
-
-.crm-marketing .progress-stats {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.crm-marketing .progress-text {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.crm-marketing .progress-rate {
-  font-size: 0.9375rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.crm-marketing .progress-bar {
-  height: 10px;
-  background: var(--border-color);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.crm-marketing .progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--purple), var(--purple-light));
-  border-radius: 5px;
-  transition: width 0.3s ease;
-}
-
-/* Day Tabs */
+/* ============================================
+   DAY TABS
+   ============================================ */
 .crm-marketing .day-tabs {
   display: flex;
   gap: 8px;
   margin-bottom: 1rem;
   overflow-x: auto;
   padding-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .crm-marketing .day-tab {
   position: relative;
   padding: 12px 20px;
-  background: #fff;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 100px;
   color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -391,21 +434,21 @@
 }
 
 .crm-marketing .day-tab:hover {
-  background: var(--purple-lighter);
-  border-color: var(--purple);
-  color: var(--purple);
+  background: rgba(94, 23, 235, 0.06);
+  border-color: var(--brand-purple);
+  color: var(--brand-purple);
   transform: translateY(-1px);
 }
 
 .crm-marketing .day-tab.active {
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-light));
   border-color: transparent;
   color: white;
-  box-shadow: var(--shadow-button);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 .crm-marketing .day-tab.today {
-  border-color: var(--purple);
+  border-color: var(--brand-purple);
 }
 
 .crm-marketing .today-dot {
@@ -414,12 +457,14 @@
   right: 6px;
   width: 8px;
   height: 8px;
-  background: var(--success);
+  background: var(--brand-gold);
   border-radius: 50%;
-  box-shadow: 0 0 0 2px #fff;
+  box-shadow: 0 0 0 2px var(--surface);
 }
 
-/* Tasks List */
+/* ============================================
+   TASKS LIST
+   ============================================ */
 .crm-marketing .tasks-list {
   display: flex;
   flex-direction: column;
@@ -430,9 +475,9 @@
   text-align: center;
   padding: 2.5rem 1rem;
   color: var(--text-secondary);
-  background: #fff;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-card);
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   font-weight: 500;
 }
 
@@ -441,11 +486,11 @@
   align-items: center;
   gap: 1rem;
   padding: 1.125rem;
-  background: #fff;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 24px;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
 }
@@ -457,18 +502,18 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, var(--purple-light), #c9b8f8);
+  background: linear-gradient(180deg, var(--brand-purple-light), #c9b8f8);
 }
 
 .crm-marketing .task-card:hover {
-  border-color: var(--purple);
-  background: var(--purple-lighter);
+  border-color: var(--brand-purple);
+  background: rgba(94, 23, 235, 0.03);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-card-hover);
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.12);
 }
 
 .crm-marketing .task-card:hover::before {
-  background: linear-gradient(180deg, var(--purple), var(--purple-light));
+  background: linear-gradient(180deg, var(--brand-purple), var(--brand-purple-light));
 }
 
 .crm-marketing .task-card.completed {
@@ -483,10 +528,11 @@
   width: 32px;
   height: 32px;
   border: 2px solid #d1d5db;
-  border-radius: var(--radius-sm);
-  background: #fff;
+  border-radius: 12px;
+  background: var(--surface);
   color: white;
   font-size: 1.125rem;
+  font-family: inherit;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -496,13 +542,13 @@
 }
 
 .crm-marketing .task-checkbox:hover {
-  border-color: var(--purple);
-  background: var(--purple-lighter);
+  border-color: var(--brand-purple);
+  background: rgba(94, 23, 235, 0.06);
 }
 
 .crm-marketing .task-card.completed .task-checkbox {
-  background: linear-gradient(135deg, var(--success), #059669);
-  border-color: var(--success);
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-color: #10b981;
 }
 
 .crm-marketing .task-content {
@@ -529,10 +575,7 @@
 
 .crm-marketing .task-points {
   font-weight: 700;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--brand-gold);
 }
 
 .crm-marketing .task-actions {
@@ -542,54 +585,62 @@
 }
 
 .crm-marketing .engagement-btn {
-  background: var(--warm-gray);
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: #f8f9fa;
+  border: 2px solid var(--border);
+  border-radius: 12px;
   padding: 10px 14px;
   font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .crm-marketing .engagement-btn:hover {
-  background: var(--purple-lighter);
-  border-color: var(--purple);
+  background: rgba(94, 23, 235, 0.06);
+  border-color: var(--brand-purple);
   transform: translateY(-1px);
 }
 
 .crm-marketing .quick-generate-btn {
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--brand-gold), #d4891a);
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   padding: 10px 14px;
   font-size: 1rem;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-button);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
 }
 
 .crm-marketing .quick-generate-btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-button-hover);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
 }
 
-/* Modal Overlay */
+/* ============================================
+   MODAL OVERLAY
+   ============================================ */
 .crm-marketing .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   z-index: 1000;
   padding: 1rem;
+  animation: marketingFadeIn 0.2s ease-out;
 }
 
-/* Quick Generate Modal */
+/* ============================================
+   QUICK GENERATE MODAL
+   ============================================ */
 .crm-marketing .quick-generate-modal {
-  background: #fff;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
@@ -597,6 +648,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+  animation: marketingSlideUp 0.3s ease-out;
 }
 
 .crm-marketing .qg-header {
@@ -604,8 +656,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border-color);
-  background: var(--warm-gray);
+  border-bottom: 1px solid var(--border);
+  background: #f8f9fa;
 }
 
 .crm-marketing .qg-header h3 {
@@ -621,38 +673,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
   color: var(--text-secondary);
   font-size: 1.25rem;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .crm-marketing .qg-close:hover {
-  background: var(--purple-lighter);
-  border-color: var(--purple);
-  color: var(--purple);
+  background: rgba(94, 23, 235, 0.06);
+  border-color: var(--brand-purple);
+  color: var(--brand-purple);
 }
 
 .crm-marketing .qg-task-info {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 14px 20px;
-  background: var(--purple-lighter);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(94, 23, 235, 0.04);
+  border-bottom: 1px solid var(--border);
 }
 
 .crm-marketing .qg-task-type {
   font-size: 0.9375rem;
   font-weight: 700;
-  color: var(--purple);
+  color: var(--brand-purple);
 }
 
 .crm-marketing .qg-task-platform {
   font-size: 0.9375rem;
   color: var(--text-secondary);
+}
+
+.crm-marketing .qg-context {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 8px 0 0 0;
+  line-height: 1.5;
+  width: 100%;
 }
 
 .crm-marketing .qg-generator {
@@ -661,14 +723,17 @@
   flex: 1;
 }
 
-/* Engagement Modal */
+/* ============================================
+   ENGAGEMENT MODAL
+   ============================================ */
 .crm-marketing .engagement-modal {
-  background: #fff;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
   padding: 1.5rem;
   width: 100%;
   max-width: 400px;
   box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+  animation: marketingSlideUp 0.3s ease-out;
 }
 
 .crm-marketing .engagement-modal h3 {
@@ -699,17 +764,18 @@
 
 .crm-marketing .engagement-field label {
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-primary);
 }
 
 .crm-marketing .engagement-field input {
-  background: #fff;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
   padding: 0.875rem 1rem;
   color: var(--text-primary);
   font-size: 1rem;
+  font-family: inherit;
   width: 100%;
   transition: all 0.2s ease;
 }
@@ -720,7 +786,7 @@
 
 .crm-marketing .engagement-field input:focus {
   outline: none;
-  border-color: var(--purple);
+  border-color: var(--brand-purple);
   box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
 }
 
@@ -731,44 +797,116 @@
 }
 
 .crm-marketing .cancel-btn {
-  background: #fff;
-  border: 2px solid var(--border-color);
+  background: var(--surface);
+  border: 2px solid var(--border);
   color: var(--text-primary);
   padding: 0.875rem 1.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   cursor: pointer;
   font-size: 0.9375rem;
   font-weight: 600;
+  font-family: inherit;
   transition: all 0.2s ease;
 }
 
 .crm-marketing .cancel-btn:hover {
-  background: var(--warm-gray);
+  background: #f8f9fa;
   border-color: #d1d5db;
 }
 
 .crm-marketing .save-btn {
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-light));
   border: none;
   color: white;
   padding: 0.875rem 1.75rem;
-  border-radius: var(--radius-sm);
+  border-radius: 12px;
   cursor: pointer;
   font-size: 0.9375rem;
   font-weight: 700;
+  font-family: inherit;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow-button);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 .crm-marketing .save-btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-button-hover);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+/* ============================================
+   STORY BANK MODAL
+   ============================================ */
+.crm-marketing .story-bank-modal {
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 24px 24px 0 0;
+  background: var(--surface);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+  animation: marketingSlideUp 0.3s ease-out;
+}
+
+.crm-marketing .story-bank-modal .story-bank {
+  min-height: auto;
+  border-radius: 24px;
+}
+
+/* ============================================
+   CONTENT PLANNING MODAL
+   ============================================ */
+.crm-marketing .content-planning-modal-overlay {
+  align-items: flex-start;
+  padding-top: 40px;
+}
+
+.crm-marketing .content-planning-modal {
+  background: #f8f9fa;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  animation: marketingSlideUp 0.3s ease-out;
+}
+
+.crm-marketing .modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  font-family: inherit;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.crm-marketing .modal-close-btn:hover {
+  background: rgba(94, 23, 235, 0.06);
+  border-color: var(--brand-purple);
+  color: var(--brand-purple);
+}
+
+/* Hide bottom toolbar when content planning modal is open */
+body:has(.content-planning-modal-overlay) .bottom-toolbar,
+body:has(.content-planning-modal-overlay) .crm-bottom-nav {
+  display: none !important;
 }
 
 /* ============================================
    ONBOARDING STAGES
    ============================================ */
-
 .crm-marketing .crm-onboarding {
   display: flex;
   flex-direction: column;
@@ -781,7 +919,7 @@
 .crm-marketing .onboarding-content {
   max-width: 480px;
   text-align: center;
-  animation: marketing-fadeIn 0.4s ease-out;
+  animation: marketingFadeIn 0.4s ease-out;
 }
 
 .crm-marketing .onboarding-icon {
@@ -823,16 +961,16 @@
   align-items: center;
   gap: 12px;
   padding: 14px 18px;
-  background: #fff;
-  border-radius: var(--radius-sm);
-  border: 2px solid var(--border-color);
-  box-shadow: var(--shadow-card);
+  background: var(--surface);
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
 .crm-marketing .benefit-item:hover {
-  border-color: var(--purple);
-  background: var(--purple-lighter);
+  border-color: var(--brand-purple);
+  background: rgba(94, 23, 235, 0.03);
   transform: translateY(-1px);
 }
 
@@ -846,29 +984,32 @@
   font-weight: 500;
 }
 
-/* Onboarding Buttons */
+/* ============================================
+   ONBOARDING BUTTONS
+   ============================================ */
 .crm-marketing .crm-primary-btn {
   width: 100%;
   padding: 1rem 1.5rem;
   font-size: 1rem;
   font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, var(--purple), var(--purple-light));
+  font-family: inherit;
+  color: #1a1a2e;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c842);
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: 12px;
-  box-shadow: var(--shadow-button);
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
 }
 
 .crm-marketing .crm-primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-button-hover);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
 }
 
 .crm-marketing .crm-primary-btn.glow-btn {
-  animation: marketing-glow 2s ease-in-out infinite;
+  animation: marketingGlow 2s ease-in-out infinite;
 }
 
 .crm-marketing .crm-secondary-btn {
@@ -876,16 +1017,17 @@
   padding: 0.875rem 1.5rem;
   font-size: 0.9375rem;
   font-weight: 600;
+  font-family: inherit;
   color: var(--text-primary);
-  background: #fff;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .crm-marketing .crm-secondary-btn:hover {
-  background: var(--warm-gray);
+  background: #f8f9fa;
   border-color: #d1d5db;
 }
 
@@ -895,8 +1037,10 @@
   margin-top: 16px;
 }
 
-/* Animations */
-@keyframes marketing-fadeIn {
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes marketingFadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -907,32 +1051,29 @@
   }
 }
 
-@keyframes marketing-glow {
+@keyframes marketingSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes marketingGlow {
   0%, 100% {
-    box-shadow: var(--shadow-button);
+    box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
   }
   50% {
-    box-shadow: 0 4px 24px rgba(94, 23, 235, 0.5);
+    box-shadow: 0 4px 24px rgba(233, 162, 59, 0.5);
   }
 }
 
-/* Story Bank Modal */
-.crm-marketing .story-bank-modal {
-  width: 100%;
-  max-width: 700px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  background: #fff;
-  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
-}
-
-.crm-marketing .story-bank-modal .story-bank {
-  min-height: auto;
-  border-radius: var(--radius-lg);
-}
-
-/* Desktop Styles */
+/* ============================================
+   DESKTOP
+   ============================================ */
 @media (min-width: 768px) {
   .crm-marketing {
     max-width: 800px;
@@ -948,117 +1089,19 @@
   .crm-marketing .quick-generate-modal,
   .crm-marketing .engagement-modal,
   .crm-marketing .story-bank-modal {
-    border-radius: var(--radius-lg);
+    border-radius: 24px;
   }
 }
 
-/* Content Plan Section */
-.crm-marketing .content-plan-section {
-  margin-bottom: 1.5rem;
-}
-
-.crm-marketing .content-plan-section .section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.crm-marketing .content-plan-section .section-header h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0;
-}
-
-.crm-marketing .edit-plan-btn {
-  background: white;
-  border: 2px solid var(--border-color);
-  color: var(--purple);
-  padding: 6px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.crm-marketing .edit-plan-btn:hover {
-  background: var(--purple-lighter);
-  border-color: var(--purple);
-}
-
-/* Content Planning Modal */
-.crm-marketing .content-planning-modal-overlay {
-  align-items: flex-start;
-  padding-top: 40px;
-}
-
-.crm-marketing .content-planning-modal {
-  background: var(--warm-gray);
-  border-radius: var(--radius-lg);
-  width: 100%;
-  max-width: 540px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-}
-
-.crm-marketing .modal-close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  font-size: 1.25rem;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s ease;
-}
-
-.crm-marketing .modal-close-btn:hover {
-  background: var(--purple-lighter);
-  border-color: var(--purple);
-  color: var(--purple);
-}
-
-/* Context in quick generate */
-.crm-marketing .qg-context {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  margin: 8px 0 0 0;
-  line-height: 1.5;
-}
-
-/* Hide bottom toolbar when content planning modal is open */
-body:has(.content-planning-modal-overlay) .bottom-toolbar,
-body:has(.content-planning-modal-overlay) .crm-bottom-nav {
-  display: none !important;
-}
-
-/* Reduced motion */
+/* ============================================
+   REDUCED MOTION
+   ============================================ */
 @media (prefers-reduced-motion: reduce) {
-  .crm-marketing .crm-primary-btn,
-  .crm-marketing .task-card,
-  .crm-marketing .day-tab,
-  .crm-marketing .benefit-item,
-  .crm-marketing .back-btn {
-    transition: none;
-  }
-
-  .crm-marketing .crm-spinner {
-    animation: none;
-  }
-
-  .crm-marketing .crm-primary-btn.glow-btn {
-    animation: none;
+  .crm-marketing *,
+  .crm-marketing *::before,
+  .crm-marketing *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

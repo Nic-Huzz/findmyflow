@@ -296,22 +296,26 @@ export default function Contacts() {
           <h2 className="contacts-toolbar-title">Contacts</h2>
         </div>
 
-        {/* Actions Card */}
-        <div className="contacts-actions-card">
-          <div className="search-row">
-            <input
-              type="text"
-              className="contacts-search"
-              placeholder="Search contacts..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-            />
+        {/* Hero Stats Card */}
+        <div className="contacts-hero">
+          <div className="contacts-stats-row">
+            <div className="contacts-stat">
+              <span className="contacts-stat-label">Total</span>
+              <span className="contacts-stat-value contacts-stat-white">{stats.total}</span>
+            </div>
+            <div className="contacts-stat-divider"></div>
+            <div className="contacts-stat">
+              <span className="contacts-stat-label">This Week</span>
+              <span className="contacts-stat-value contacts-stat-gold">+{stats.thisWeek}</span>
+            </div>
+          </div>
+          <div className="contacts-hero-actions">
             <div className="add-btn-wrapper">
               <button
                 className="contacts-add-btn"
                 onClick={() => { setShowAddMenu(!showAddMenu); hapticLight() }}
               >
-                + Add
+                + Add Contact
               </button>
               {showAddMenu && (
                 <>
@@ -338,11 +342,20 @@ export default function Contacts() {
 
         {/* Screenshot analyzing overlay */}
         {analyzing && (
-          <div className="analyzing-overlay">
+          <div className="contacts-analyzing">
             <div className="contacts-spinner" />
             <p>Analyzing screenshot...</p>
           </div>
         )}
+
+        {/* Search */}
+        <input
+          type="text"
+          className="contacts-search"
+          placeholder="Search contacts..."
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+        />
 
         {/* Stage Filters */}
         <div className="contacts-filters">
@@ -394,6 +407,14 @@ export default function Contacts() {
           </div>
         )}
 
+        {/* Section Header */}
+        <div className="contacts-section-header">
+          <div className="contacts-section-icon">👥</div>
+          <span className="contacts-section-title">
+            {filteredContacts.length} Contact{filteredContacts.length !== 1 ? 's' : ''}
+          </span>
+        </div>
+
         {/* Contacts List */}
         <div className="contacts-list-card">
           {filteredContacts.length === 0 ? (
@@ -405,8 +426,8 @@ export default function Contacts() {
                   <div className="empty-icon">👥</div>
                   <h3>Let's build your network</h3>
                   <p>Track the people in your world — from first touch to loyal customer</p>
-                  <button className="empty-add-btn" onClick={handleAddContact}>
-                    Add Your First Contact
+                  <button className="contacts-gold-cta" onClick={handleAddContact}>
+                    Add Your First Contact <span>→</span>
                   </button>
                 </div>
               )}

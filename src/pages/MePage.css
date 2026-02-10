@@ -56,6 +56,12 @@
   background-clip: text;
 }
 
+.me-page .hero-top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .me-page .xp-pill {
   display: flex;
   align-items: center;
@@ -684,7 +690,6 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  animation: meRingRotate 6s linear infinite;
 }
 
 .me-page .hp-avatar-inner {

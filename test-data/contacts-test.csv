@@ -1,0 +1,6 @@
+name,email,phone,company,lifecycle_stage,source,notes
+John Doe,john@example.com,555-1234,Acme Inc,lead,Organic Social,Met at conference
+Jane Smith,jane@test.com,555-5678,Tech Corp,customer,Referral,Long-time customer
+Bob Wilson,bob@email.com,,,prospect,Cold Outreach,Initial contact
+Sarah Connor,sarah@future.com,555-9999,Cyberdyne,lead,Website,Downloaded lead magnet
+Mike Ross,mike@firm.com,555-4321,Pearson Specter,subscriber,LinkedIn,Engaged with posts

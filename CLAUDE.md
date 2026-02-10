@@ -311,6 +311,7 @@ npm run db:push   # Apply migrations
 - `docs/crm-testing-checklist.md` - **CRM testing** - 120+ checkpoints for verifying CRM functionality
 - `docs/scoring-system-refactor.md` - Points/scoring system architecture and bug fixes
 - `docs/PUSH_NOTIFICATIONS.md` - Push notification system setup, testing, troubleshooting
+- `docs/page-component-design-guide.md` - **REQUIRED before creating/modifying any page or component UI** — starter templates, decision trees, token tables, anti-patterns
 - `docs/` - Session notes and historical changes
 
 ## Links

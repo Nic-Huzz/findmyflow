@@ -610,7 +610,7 @@ const HybridArchetypeFlow = ({
           {archetypeType === 'essence' ? 'Your Essence' : 'Your Pattern'}
         </div>
         <div style={styles.celebrationName}>{finalArchetype.name}</div>
-        <div style={styles.celebrationText}>Perfect match found!</div>
+        <div style={styles.celebrationText}>{archetypeType === 'essence' ? 'Essence Identified!' : 'Pattern Identified!'}</div>
       </div>
     )
   }

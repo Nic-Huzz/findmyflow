@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FindMyFlow - Journey Visual Ideas (6 Concepts)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    :root {
+      --brand-purple: #5e17eb;
+      --brand-gold: #E9A23B;
+      --text-primary: #1a1a2e;
+      --text-secondary: #6c757d;
+      --text-muted: #adb5bd;
+      --surface: #ffffff;
+      --bg: #f8f9fa;
+      --north: #10b981;
+      --east: #3b82f6;
+      --south: #ef4444;
+      --west: #fbbf24;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+    }
+
+    /* ============================================================
+       PAGE HEADER
+       ============================================================ */
+    .page-header {
+      background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+      color: white;
+      padding: 40px 20px 32px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      font-size: 14px;
+      opacity: 0.7;
+      max-width: 360px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       IDEA CARDS
+       ============================================================ */
+    .ideas-container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+    }
+
+    .idea-card {
+      background: var(--surface);
+      border-radius: 28px;
+      margin-bottom: 28px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .idea-number {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--brand-purple), var(--brand-gold));
+      color: white;
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .idea-header {
+      padding: 24px 24px 16px;
+    }
+
+    .idea-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin: 12px 0 6px;
+      color: var(--text-primary);
+    }
+
+    .idea-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .idea-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .tag.combine { background: rgba(94, 23, 235, 0.08); color: var(--brand-purple); }
+    .tag.replace { background: rgba(233, 162, 59, 0.1); color: var(--brand-gold); }
+    .tag.separate { background: rgba(16, 185, 129, 0.1); color: var(--north); }
+
+    /* Visual container */
+    .idea-visual {
+      padding: 8px 16px 24px;
+    }
+
+    .visual-frame {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .idea-footer {
+      padding: 0 24px 24px;
+    }
+
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .pro, .con {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .pro-title, .con-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .pro-title { color: var(--north); }
+    .con-title { color: var(--south); }
+
+    /* ============================================================
+       IDEA 1: CONSTELLATION MAP
+       ============================================================ */
+    .constellation-visual {
+      background: linear-gradient(180deg, #0f0a2a 0%, #1a1145 50%, #12082a 100%);
+      height: 360px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Stars twinkling in background */
+    .star-field {
+      position: absolute;
+      inset: 0;
+    }
+
+    .bg-star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out var(--delay) infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.8; }
+    }
+
+    /* Constellation lines */
+    .constellation-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .constellation-line {
+      stroke: rgba(255, 255, 255, 0.15);
+      stroke-width: 1;
+      stroke-dasharray: 400;
+      stroke-dashoffset: 400;
+      animation: drawConstellation 3s ease-out 0.5s forwards;
+    }
+
+    @keyframes drawConstellation {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Star nodes */
+    .constellation-star {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: starAppear 0.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    .constellation-star::before {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--star-color) 0%, transparent 70%);
+      opacity: 0.4;
+    }
+
+    .constellation-star::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    @keyframes starAppear {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .constellation-star.big {
+      width: 16px;
+      height: 16px;
+    }
+
+    .constellation-star.now {
+      width: 20px;
+      height: 20px;
+      animation: starAppear 0.5s ease-out 2.5s forwards, nowPulse 2s ease-in-out 3s infinite;
+    }
+
+    @keyframes nowPulse {
+      0%, 100% { box-shadow: 0 0 8px var(--star-color); }
+      50% { box-shadow: 0 0 20px var(--star-color); }
+    }
+
+    .constellation-label {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .constellation-reading {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .constellation-reading p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .constellation-reading strong {
+      color: white;
+    }
+
+    /* ============================================================
+       IDEA 2: LIVING GARDEN
+       ============================================================ */
+    .garden-visual {
+      background: linear-gradient(180deg, #e8f4f8 0%, #d5ecd4 40%, #b5d6a7 70%, #8fbc8f 100%);
+      height: 360px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Sun */
+    .garden-sun {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: radial-gradient(circle, #ffd93d 30%, rgba(255, 217, 61, 0) 70%);
+      border-radius: 50%;
+      animation: sunGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes sunGlow {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* Ground */
+    .garden-ground {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(180deg, #8fbc8f, #6d9b6d);
+      border-radius: 100% 100% 0 0 / 30px 30px 0 0;
+    }
+
+    /* Plants */
+    .garden-plant {
+      position: absolute;
+      bottom: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .plant-stem {
+      width: 3px;
+      background: linear-gradient(180deg, #4a8c3f, #6d9b6d);
+      border-radius: 2px;
+      transform-origin: bottom;
+      animation: plantGrow 2s ease-out forwards;
+      height: 0;
+    }
+
+    @keyframes plantGrow {
+      to { height: var(--stem-height); }
+    }
+
+    .plant-head {
+      font-size: var(--plant-size, 28px);
+      opacity: 0;
+      animation: bloomIn 0.5s ease-out forwards;
+      animation-delay: var(--bloom-delay, 2s);
+    }
+
+    @keyframes bloomIn {
+      0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    .plant-label {
+      position: absolute;
+      bottom: -24px;
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    /* Floating butterflies / particles */
+    .garden-particle {
+      position: absolute;
+      font-size: 14px;
+      animation: flutter var(--dur) ease-in-out var(--delay) infinite;
+    }
+
+    @keyframes flutter {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(10px, -15px) rotate(10deg); }
+      50% { transform: translate(-5px, -25px) rotate(-5deg); }
+      75% { transform: translate(15px, -10px) rotate(8deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+
+    /* Weather indicator */
+    .garden-weather {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .garden-stats {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .garden-stat {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .garden-stat-num {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .garden-stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       IDEA 3: MOUNTAIN TRAIL
+       ============================================================ */
+    .mountain-visual {
+      background: linear-gradient(180deg, #1a1a3e 0%, #2d2b55 30%, #4a3f6b 60%, #6d5f8a 100%);
+      height: 380px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Mountain silhouettes */
+    .mountain-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .mountain-bg svg {
+      width: 100%;
+      display: block;
+    }
+
+    /* Trail path */
+    .trail-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .trail-path {
+      fill: none;
+      stroke: rgba(233, 162, 59, 0.4);
+      stroke-width: 3;
+      stroke-dasharray: 8 6;
+      stroke-linecap: round;
+      stroke-dashoffset: 500;
+      animation: trailDraw 4s ease-out 0.5s forwards;
+    }
+
+    @keyframes trailDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .trail-glow {
+      fill: none;
+      stroke: rgba(233, 162, 59, 0.15);
+      stroke-width: 12;
+      stroke-linecap: round;
+    }
+
+    /* Trail markers */
+    .trail-marker {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      animation: markerPop 0.4s ease-out forwards;
+    }
+
+    .trail-marker-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--marker-color);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      box-shadow: 0 0 12px var(--marker-color);
+    }
+
+    .trail-marker-label {
+      position: absolute;
+      top: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.6);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Weather along trail */
+    .trail-weather {
+      position: absolute;
+      font-size: 18px;
+      opacity: 0;
+      animation: weatherFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes weatherFloat {
+      0%, 100% { opacity: 0.4; transform: translateY(0); }
+      50% { opacity: 0.8; transform: translateY(-5px); }
+    }
+
+    /* Summit beacon */
+    .summit-beacon {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--brand-gold);
+      box-shadow: 0 0 20px var(--brand-gold), 0 0 40px rgba(233, 162, 59, 0.3);
+      animation: beacon 2s ease-in-out infinite;
+    }
+
+    @keyframes beacon {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.3); }
+    }
+
+    /* Elevation label */
+    .elevation-label {
+      position: absolute;
+      right: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 10px;
+      padding: 8px 12px;
+      text-align: center;
+    }
+
+    .elevation-num {
+      font-size: 20px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .elevation-unit {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Signpost */
+    .trail-signpost {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: rgba(139, 90, 43, 0.8);
+      border: 2px solid rgba(180, 130, 70, 0.6);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .trail-signpost p {
+      font-size: 12px;
+      color: rgba(255, 240, 220, 0.9);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .trail-signpost strong {
+      color: var(--brand-gold);
+    }
+
+    /* ============================================================
+       IDEA 4: SPIRAL TIMELINE
+       ============================================================ */
+    .spiral-visual {
+      background: var(--surface);
+      height: 380px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spiral-svg-container {
+      width: 320px;
+      height: 320px;
+      position: relative;
+    }
+
+    .spiral-svg-container svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .spiral-path {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation: spiralDraw 3s ease-out 0.5s forwards;
+    }
+
+    @keyframes spiralDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .spiral-node {
+      opacity: 0;
+      animation: nodeIn 0.3s ease-out forwards;
+    }
+
+    .spiral-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .spiral-center-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    .spiral-center-day {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--brand-purple);
+    }
+
+    .spiral-center-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Now marker */
+    .spiral-now {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--brand-gold);
+      border: 3px solid var(--surface);
+      box-shadow: 0 0 12px var(--brand-gold);
+      transform: translate(-50%, -50%);
+      animation: spiralPulse 2s ease-in-out infinite;
+      opacity: 0;
+      animation: nodeIn 0.3s ease-out 3s forwards, spiralPulse 2s ease-in-out 3s infinite;
+    }
+
+    @keyframes spiralPulse {
+      0%, 100% { box-shadow: 0 0 8px var(--brand-gold); }
+      50% { box-shadow: 0 0 20px var(--brand-gold); }
+    }
+
+    @keyframes nodeIn {
+      to { opacity: 1; }
+    }
+
+    .spiral-legend {
+      position: absolute;
+      bottom: 12px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .spiral-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .spiral-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* ============================================================
+       IDEA 5: HEARTBEAT / PULSE LINE
+       ============================================================ */
+    .pulse-visual {
+      background: #0a0a1a;
+      height: 360px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Grid lines */
+    .pulse-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(94, 23, 235, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94, 23, 235, 0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    /* Midline */
+    .pulse-midline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: rgba(94, 23, 235, 0.15);
+    }
+
+    /* Zone labels */
+    .pulse-zone-label {
+      position: absolute;
+      right: 12px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .pulse-zone-label.flow-zone {
+      top: 60px;
+      color: rgba(16, 185, 129, 0.4);
+    }
+
+    .pulse-zone-label.rest-zone {
+      bottom: 60px;
+      color: rgba(239, 68, 68, 0.4);
+    }
+
+    .pulse-svg {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      z-index: 1;
+    }
+
+    .pulse-svg svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .pulse-line {
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 800;
+      stroke-dashoffset: 800;
+      animation: pulseDraw 3s ease-out 0.5s forwards;
+    }
+
+    .pulse-area {
+      opacity: 0;
+      animation: fadeIn 1s ease-out 2s forwards;
+    }
+
+    @keyframes pulseDraw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Event markers */
+    .pulse-event {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+    }
+
+    .pulse-event-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--event-color);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 8px var(--event-color);
+    }
+
+    .pulse-event-label {
+      position: absolute;
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.5);
+      white-space: nowrap;
+    }
+
+    .pulse-event-label.above {
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .pulse-event-label.below {
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Current BPM */
+    .pulse-bpm {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .pulse-bpm-num {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--north);
+      animation: bpmGlow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes bpmGlow {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    .pulse-bpm-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .pulse-trend {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--north);
+    }
+
+    .pulse-summary {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 12px 16px;
+    }
+
+    .pulse-summary p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+    }
+
+    .pulse-summary strong {
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* ============================================================
+       IDEA 6: SEASONS WHEEL
+       ============================================================ */
+    .wheel-visual {
+      background: linear-gradient(180deg, #faf9f6 0%, #f0ede5 100%);
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wheel-container {
+      width: 300px;
+      height: 300px;
+      position: relative;
+    }
+
+    .wheel-container svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .wheel-segment {
+      transition: opacity 0.3s;
+    }
+
+    .wheel-center-info {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 2;
+    }
+
+    .wheel-week-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    .wheel-week-num {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--text-primary);
+    }
+
+    .wheel-phase {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand-purple);
+      margin-top: 2px;
+    }
+
+    /* Current position glow */
+    .wheel-now-glow {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--brand-gold);
+      border: 3px solid white;
+      box-shadow: 0 0 12px var(--brand-gold);
+      transform: translate(-50%, -50%);
+      animation: wheelPulse 2s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    @keyframes wheelPulse {
+      0%, 100% { box-shadow: 0 0 8px var(--brand-gold); transform: translate(-50%, -50%) scale(1); }
+      50% { box-shadow: 0 0 20px var(--brand-gold); transform: translate(-50%, -50%) scale(1.15); }
+    }
+
+    .wheel-month-labels {
+      position: absolute;
+      inset: -16px;
+    }
+
+    .wheel-month {
+      position: absolute;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      transform: translate(-50%, -50%);
+    }
+
+    .wheel-legend {
+      position: absolute;
+      bottom: 12px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .wheel-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .wheel-legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .wheel-stats-strip {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .wheel-stat {
+      text-align: center;
+    }
+
+    .wheel-stat-val {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .wheel-stat-lbl {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 380px) {
+      .pros-cons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <h1>Journey Visual Ideas</h1>
+    <p>6 concepts for combining or separating the Flow Map + Journey section. Scroll to compare.</p>
+  </header>
+
+  <div class="ideas-container">
+
+    <!-- ============================================================
+         IDEA 1: CONSTELLATION MAP
+         ============================================================ -->
+    <div class="idea-card">
+      <div class="idea-header">
+        <span class="idea-number">Idea 1</span>
+        <h2 class="idea-title">The Constellation</h2>
+        <p class="idea-subtitle">Each milestone becomes a star. Connected by invisible threads, your journey forms a unique constellation in a personal night sky. Compass directions place stars in different quadrants.</p>
+        <div class="idea-tags">
+          <span class="tag combine">Combines Both</span>
+        </div>
+      </div>
+
+      <div class="idea-visual">
+        <div class="visual-frame constellation-visual">
+          <!-- Star field background -->
+          <div class="star-field">
+            <div class="bg-star" style="top: 8%; left: 15%; --dur: 3s; --delay: 0s;"></div>
+            <div class="bg-star" style="top: 22%; left: 72%; --dur: 4s; --delay: 1s;"></div>
+            <div class="bg-star" style="top: 35%; left: 40%; --dur: 2.5s; --delay: 0.5s;"></div>
+            <div class="bg-star" style="top: 12%; left: 88%; --dur: 3.5s; --delay: 1.5s;"></div>
+            <div class="bg-star" style="top: 55%; left: 25%; --dur: 4s; --delay: 0.3s;"></div>
+            <div class="bg-star" style="top: 65%; left: 60%; --dur: 3s; --delay: 2s;"></div>
+            <div class="bg-star" style="top: 45%; left: 85%; --dur: 2s; --delay: 0.8s;"></div>
+            <div class="bg-star" style="top: 18%; left: 52%; --dur: 3.5s; --delay: 1.2s;"></div>
+            <div class="bg-star" style="top: 72%; left: 38%; --dur: 4.5s; --delay: 0.6s;"></div>
+            <div class="bg-star" style="top: 38%; left: 12%; --dur: 3s; --delay: 1.8s;"></div>
+            <div class="bg-star" style="top: 82%; left: 75%; --dur: 2.5s; --delay: 0.2s;"></div>
+            <div class="bg-star" style="top: 50%; left: 55%; --dur: 4s; --delay: 1.1s;"></div>
+          </div>
+
+          <!-- Constellation lines -->
+          <svg class="constellation-svg" viewBox="0 0 400 360">
+            <line class="constellation-line" x1="80" y1="220" x2="140" y2="170" />
+            <line class="constellation-line" x1="140" y1="170" x2="200" y2="130" style="animation-delay: 0.8s;" />
+            <line class="constellation-line" x1="200" y1="130" x2="260" y2="160" style="animation-delay: 1.2s;" />
+            <line class="constellation-line" x1="260" y1="160" x2="230" y2="100" style="animation-delay: 1.6s;" />
+            <line class="constellation-line" x1="230" y1="100" x2="300" y2="60" style="animation-delay: 2s;" />
+          </svg>
+
+          <!-- Quadrant labels -->
+          <span class="constellation-label" style="top: 12px; left: 16px; color: rgba(16, 185, 129, 0.4);">Flow</span>
+          <span class="constellation-label" style="top: 12px; right: 16px; color: rgba(59, 130, 246, 0.4);">Redirect</span>
+
+          <!-- Star nodes -->
+          <div class="constellation-star" style="top: 62%; left: 20%; --star-color: #10b981; animation-delay: 0.5s;"></div>
+          <div class="constellation-star big" style="top: 47%; left: 35%; --star-color: #3b82f6; animation-delay: 1s;"></div>
+          <div class="constellation-star" style="top: 36%; left: 50%; --star-color: #10b981; animation-delay: 1.3s;"></div>
+          <div class="constellation-star" style="top: 44%; left: 65%; --star-color: #ef4444; animation-delay: 1.7s;"></div>
+          <div class="constellation-star big" style="top: 28%; left: 57%; --star-color: #10b981; animation-delay: 2s;"></div>
+          <div class="constellation-star now" style="top: 17%; left: 75%; --star-color: #E9A23B; animation-delay: 2.5s;"></div>
+
+          <!-- Reading -->
+          <div class="constellation-reading">
+            <p>Your constellation is <strong>rising northeast</strong> — a pattern of curiosity-driven momentum. The cluster near <strong>Flow</strong> suggests you're finding your rhythm.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-footer">
+        <div class="pros-cons">
+          <div class="pro">
+            <div class="pro-title">Strengths</div>
+            Beautiful, unique to each user. Compass + journey become one living visual. Deeply immersive.
+          </div>
+          <div class="con">
+            <div class="con-title">Tradeoffs</div>
+            More abstract — harder to read exact stats at a glance. Needs enough data points to look good.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         IDEA 2: LIVING GARDEN
+         ============================================================ -->
+    <div class="idea-card">
+      <div class="idea-header">
+        <span class="idea-number">Idea 2</span>
+        <h2 class="idea-title">The Living Garden</h2>
+        <p class="idea-subtitle">Your growth is a garden. Quests bloom as sunflowers, groans as roses with thorns that open, stages as trees growing taller. Compass sets the weather. Everything's alive.</p>
+        <div class="idea-tags">
+          <span class="tag combine">Combines Both</span>
+        </div>
+      </div>
+
+      <div class="idea-visual">
+        <div class="visual-frame garden-visual">
+          <!-- Sun -->
+          <div class="garden-sun"></div>
+
+          <!-- Weather indicator -->
+          <div class="garden-weather">
+            <span>☀️</span>
+            <span>Flow state</span>
+          </div>
+
+          <!-- Floating particles -->
+          <div class="garden-particle" style="top: 25%; left: 30%; --dur: 6s; --delay: 0s;">🦋</div>
+          <div class="garden-particle" style="top: 35%; left: 65%; --dur: 7s; --delay: 2s;">🦋</div>
+          <div class="garden-particle" style="top: 20%; left: 80%; --dur: 5s; --delay: 1s;">✨</div>
+
+          <!-- Ground -->
+          <div class="garden-ground"></div>
+
+          <!-- Plants -->
+          <div class="garden-plant" style="left: 12%;">
+            <div class="plant-head" style="--plant-size: 32px; --bloom-delay: 1.5s;">🌻</div>
+            <div class="plant-stem" style="--stem-height: 80px;"></div>
+            <span class="plant-label">Quest 1</span>
+          </div>
+
+          <div class="garden-plant" style="left: 28%;">
+            <div class="plant-head" style="--plant-size: 36px; --bloom-delay: 1.8s;">🌻</div>
+            <div class="plant-stem" style="--stem-height: 100px;"></div>
+            <span class="plant-label">Quest 2</span>
+          </div>
+
+          <div class="garden-plant" style="left: 44%;">
+            <div class="plant-head" style="--plant-size: 30px; --bloom-delay: 2.1s;">🌹</div>
+            <div class="plant-stem" style="--stem-height: 70px;"></div>
+            <span class="plant-label">Groan 1</span>
+          </div>
+
+          <div class="garden-plant" style="left: 58%;">
+            <div class="plant-head" style="--plant-size: 40px; --bloom-delay: 2.4s;">🌳</div>
+            <div class="plant-stem" style="--stem-height: 120px;"></div>
+            <span class="plant-label">Stage 4</span>
+          </div>
+
+          <div class="garden-plant" style="left: 72%;">
+            <div class="plant-head" style="--plant-size: 26px; --bloom-delay: 2.7s;">🌸</div>
+            <div class="plant-stem" style="--stem-height: 60px;"></div>
+            <span class="plant-label">Groan 2</span>
+          </div>
+
+          <div class="garden-plant" style="left: 86%;">
+            <div class="plant-head" style="--plant-size: 28px; --bloom-delay: 3s;">🌱</div>
+            <div class="plant-stem" style="--stem-height: 40px;"></div>
+            <span class="plant-label">Today</span>
+          </div>
+
+          <!-- Stats overlay -->
+          <div class="garden-stats">
+            <div class="garden-stat">
+              <div class="garden-stat-num">7</div>
+              <div class="garden-stat-label">Blooms</div>
+            </div>
+            <div class="garden-stat">
+              <div class="garden-stat-num">3</div>
+              <div class="garden-stat-label">Thorns</div>
+            </div>
+            <div class="garden-stat">
+              <div class="garden-stat-num">12</div>
+              <div class="garden-stat-label">Days</div>
+            </div>
+            <div class="garden-stat">
+              <div class="garden-stat-num">☀️</div>
+              <div class="garden-stat-label">Forecast</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-footer">
+        <div class="pros-cons">
+          <div class="pro">
+            <div class="pro-title">Strengths</div>
+            Emotionally warm. Growth feels organic, not clinical. Each plant type instantly communicates what happened. Delightful.
+          </div>
+          <div class="con">
+            <div class="con-title">Tradeoffs</div>
+            Gets crowded with many entries. Weather metaphor for compass may not be immediately obvious.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         IDEA 3: MOUNTAIN TRAIL
+         ============================================================ -->
+    <div class="idea-card">
+      <div class="idea-header">
+        <span class="idea-number">Idea 3</span>
+        <h2 class="idea-title">The Mountain Trail</h2>
+        <p class="idea-subtitle">You're climbing a mountain. Compass entries become weather along your trail (sunshine for Flow, clouds for Rest). Milestones are signposts. Elevation = progress. Summit = your vision.</p>
+        <div class="idea-tags">
+          <span class="tag combine">Combines Both</span>
+        </div>
+      </div>
+
+      <div class="idea-visual">
+        <div class="visual-frame mountain-visual">
+          <!-- Mountain background -->
+          <div class="mountain-bg">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="none" style="height: 200px;">
+              <polygon fill="rgba(45, 43, 85, 0.6)" points="0,200 60,80 120,140 200,40 280,120 340,60 400,200" />
+              <polygon fill="rgba(74, 63, 107, 0.8)" points="0,200 80,120 160,160 240,80 320,140 400,200" />
+              <polygon fill="#6d5f8a" points="0,200 40,160 120,180 200,140 280,170 360,150 400,200" />
+            </svg>
+          </div>
+
+          <!-- Trail -->
+          <svg class="trail-svg" viewBox="0 0 400 380">
+            <path class="trail-glow" d="M 60,340 Q 100,300 130,280 Q 160,260 180,230 Q 200,200 240,180 Q 280,160 290,130 Q 300,100 330,70" />
+            <path class="trail-path" d="M 60,340 Q 100,300 130,280 Q 160,260 180,230 Q 200,200 240,180 Q 280,160 290,130 Q 300,100 330,70" />
+          </svg>
+
+          <!-- Trail markers -->
+          <div class="trail-marker" style="top: 88%; left: 15%; --marker-color: var(--brand-purple); animation-delay: 1s;">
+            <div class="trail-marker-dot">🚩</div>
+            <span class="trail-marker-label">Start</span>
+          </div>
+
+          <div class="trail-marker" style="top: 68%; left: 35%; --marker-color: var(--north); animation-delay: 1.5s;">
+            <div class="trail-marker-dot" style="background: var(--north);">✓</div>
+            <span class="trail-marker-label">Quest 3</span>
+          </div>
+
+          <div class="trail-marker" style="top: 48%; left: 50%; --marker-color: var(--south); animation-delay: 2s;">
+            <div class="trail-marker-dot" style="background: var(--south);">!</div>
+            <span class="trail-marker-label">Rest stop</span>
+          </div>
+
+          <div class="trail-marker" style="top: 32%; left: 68%; --marker-color: var(--east); animation-delay: 2.5s;">
+            <div class="trail-marker-dot" style="background: var(--east);">→</div>
+            <span class="trail-marker-label">Redirect</span>
+          </div>
+
+          <!-- Summit beacon -->
+          <div class="summit-beacon" style="top: 17%; left: 82%;"></div>
+
+          <!-- Weather along trail -->
+          <div class="trail-weather" style="top: 58%; left: 42%; animation-delay: 0s;">☀️</div>
+          <div class="trail-weather" style="top: 42%; left: 58%; animation-delay: 1s;">🌧</div>
+          <div class="trail-weather" style="top: 25%; left: 73%; animation-delay: 2s;">⛅</div>
+
+          <!-- Elevation -->
+          <div class="elevation-label" style="top: 16px;">
+            <div class="elevation-num">2,450</div>
+            <div class="elevation-unit">XP Elevation</div>
+          </div>
+
+          <!-- Signpost narrative -->
+          <div class="trail-signpost">
+            <p>You're <strong>past the tree line</strong> now — the air is thinner but the view is breathtaking. Your next milestone is just around the bend.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-footer">
+        <div class="pros-cons">
+          <div class="pro">
+            <div class="pro-title">Strengths</div>
+            Universal metaphor (everyone gets "climbing"). Weather for compass is intuitive. Progress feels earned. The summit gives a clear goal.
+          </div>
+          <div class="con">
+            <div class="con-title">Tradeoffs</div>
+            Linear — may not capture the non-linear nature of real journeys. Could feel "gamified" in a corporate way.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         IDEA 4: SPIRAL TIMELINE
+         ============================================================ -->
+    <div class="idea-card">
+      <div class="idea-header">
+        <span class="idea-number">Idea 4</span>
+        <h2 class="idea-title">The Spiral</h2>
+        <p class="idea-subtitle">Everything in one expanding spiral. Start from center (Day 1), expand outward to now. Color segments show compass direction. Nodes mark milestones. Compact, data-rich, beautiful.</p>
+        <div class="idea-tags">
+          <span class="tag combine">Combines Both</span>
+        </div>
+      </div>
+
+      <div class="idea-visual">
+        <div class="visual-frame spiral-visual">
+          <div class="spiral-svg-container">
+            <svg viewBox="0 0 300 300">
+              <defs>
+                <linearGradient id="spiralGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="var(--brand-purple)" />
+                  <stop offset="30%" stop-color="var(--north)" />
+                  <stop offset="50%" stop-color="var(--east)" />
+                  <stop offset="70%" stop-color="var(--north)" />
+                  <stop offset="85%" stop-color="var(--south)" />
+                  <stop offset="100%" stop-color="var(--brand-gold)" />
+                </linearGradient>
+              </defs>
+
+              <!-- Spiral path -->
+              <path class="spiral-path" stroke="url(#spiralGrad)"
+                d="M 150,150
+                   C 150,145 155,140 160,140
+                   C 170,140 170,155 165,160
+                   C 155,170 135,165 135,150
+                   C 135,130 160,125 175,135
+                   C 190,145 185,175 170,185
+                   C 150,200 120,185 115,160
+                   C 110,130 135,105 165,105
+                   C 200,105 215,145 210,180
+                   C 205,215 165,235 130,225
+                   C 95,215 80,175 90,140
+                   C 100,105 140,80 180,85
+                   C 220,90 245,135 238,175
+                   C 230,220 185,250 140,242" />
+
+              <!-- Milestone nodes on spiral -->
+              <circle class="spiral-node" cx="160" cy="140" r="4" fill="var(--brand-purple)" style="animation-delay: 1s;" />
+              <circle class="spiral-node" cx="165" cy="160" r="4" fill="var(--north)" style="animation-delay: 1.3s;" />
+              <circle class="spiral-node" cx="135" cy="150" r="5" fill="var(--east)" style="animation-delay: 1.6s;" />
+              <circle class="spiral-node" cx="175" cy="135" r="4" fill="var(--north)" style="animation-delay: 1.9s;" />
+              <circle class="spiral-node" cx="170" cy="185" r="5" fill="var(--south)" style="animation-delay: 2.2s;" />
+              <circle class="spiral-node" cx="115" cy="160" r="4" fill="var(--north)" style="animation-delay: 2.5s;" />
+              <circle class="spiral-node" cx="165" cy="105" r="5" fill="var(--east)" style="animation-delay: 2.7s;" />
+              <circle class="spiral-node" cx="210" cy="180" r="4" fill="var(--north)" style="animation-delay: 2.9s;" />
+            </svg>
+
+            <!-- Now marker -->
+            <div class="spiral-now" style="top: 80.5%; left: 47%;"></div>
+
+            <!-- Center info -->
+            <div class="spiral-center">
+              <div class="spiral-center-label">Day</div>
+              <div class="spiral-center-day">1</div>
+              <div class="spiral-center-sub">Started here</div>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <div class="spiral-legend">
+            <div class="spiral-legend-item">
+              <div class="spiral-legend-dot" style="background: var(--north);"></div>
+              <span>Flow</span>
+            </div>
+            <div class="spiral-legend-item">
+              <div class="spiral-legend-dot" style="background: var(--east);"></div>
+              <span>Redirect</span>
+            </div>
+            <div class="spiral-legend-item">
+              <div class="spiral-legend-dot" style="background: var(--south);"></div>
+              <span>Rest</span>
+            </div>
+            <div class="spiral-legend-item">
+              <div class="spiral-legend-dot" style="background: var(--west);"></div>
+              <span>Honour</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-footer">
+        <div class="pros-cons">
+          <div class="pro">
+            <div class="pro-title">Strengths</div>
+            Most compact — everything in one shape. Spirals = growth in nature. Color tells the compass story. Deeply original.
+          </div>
+          <div class="con">
+            <div class="con-title">Tradeoffs</div>
+            Harder to read individual events. Might feel abstract to new users. Needs good onboarding tooltip.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         IDEA 5: HEARTBEAT / PULSE LINE
+         ============================================================ -->
+    <div class="idea-card">
+      <div class="idea-header">
+        <span class="idea-number">Idea 5</span>
+        <h2 class="idea-title">The Pulse</h2>
+        <p class="idea-subtitle">Your energy as a heartbeat monitor. Peaks = Flow moments. Valleys = Rest periods. Quest completions and groans are marked pulse events. The overall trend shows your growth trajectory.</p>
+        <div class="idea-tags">
+          <span class="tag combine">Combines Both</span>
+        </div>
+      </div>
+
+      <div class="idea-visual">
+        <div class="visual-frame pulse-visual">
+          <!-- Grid -->
+          <div class="pulse-grid"></div>
+          <div class="pulse-midline"></div>
+
+          <!-- Zone labels -->
+          <span class="pulse-zone-label flow-zone">Flow Zone</span>
+          <span class="pulse-zone-label rest-zone">Rest Zone</span>
+
+          <!-- BPM -->
+          <div class="pulse-bpm">
+            <span class="pulse-bpm-num">82</span>
+            <span class="pulse-bpm-label">Flow BPM</span>
+          </div>
+
+          <!-- Trend -->
+          <div class="pulse-trend">↑ 23% this week</div>
+
+          <!-- Pulse line -->
+          <div class="pulse-svg">
+            <svg viewBox="0 0 400 200" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="pulseGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="var(--brand-purple)" />
+                  <stop offset="30%" stop-color="var(--north)" />
+                  <stop offset="50%" stop-color="var(--south)" />
+                  <stop offset="70%" stop-color="var(--east)" />
+                  <stop offset="100%" stop-color="var(--brand-gold)" />
+                </linearGradient>
+                <linearGradient id="pulseAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(16, 185, 129, 0.15)" />
+                  <stop offset="50%" stop-color="rgba(16, 185, 129, 0)" />
+                  <stop offset="50%" stop-color="rgba(239, 68, 68, 0)" />
+                  <stop offset="100%" stop-color="rgba(239, 68, 68, 0.1)" />
+                </linearGradient>
+              </defs>
+
+              <!-- Area fill -->
+              <path class="pulse-area" fill="url(#pulseAreaGrad)"
+                d="M0,100 L20,90 L40,70 L60,40 L80,60 L100,80 L120,100
+                   L140,130 L160,150 L180,140 L200,100 L220,60 L240,30
+                   L260,50 L280,80 L300,100 L320,70 L340,40 L360,25
+                   L380,35 L400,30
+                   L400,200 L0,200 Z" />
+
+              <!-- Main pulse line -->
+              <path class="pulse-line" stroke="url(#pulseGrad)"
+                d="M0,100 L20,90 L40,70 L60,40 L80,60 L100,80 L120,100
+                   L140,130 L160,150 L180,140 L200,100 L220,60 L240,30
+                   L260,50 L280,80 L300,100 L320,70 L340,40 L360,25
+                   L380,35 L400,30" />
+
+              <!-- Event markers -->
+              <circle cx="60" cy="40" r="5" fill="var(--north)" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" style="animation: nodeIn 0.3s ease-out 2s forwards;" />
+              <circle cx="160" cy="150" r="5" fill="var(--south)" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" style="animation: nodeIn 0.3s ease-out 2.3s forwards;" />
+              <circle cx="240" cy="30" r="5" fill="var(--east)" stroke="rgba(255,255,255,0.3)" stroke-width="2" opacity="0" style="animation: nodeIn 0.3s ease-out 2.6s forwards;" />
+              <circle cx="360" cy="25" r="6" fill="var(--brand-gold)" stroke="rgba(255,255,255,0.5)" stroke-width="2" opacity="0" style="animation: nodeIn 0.3s ease-out 2.9s forwards, spiralPulse 2s ease-in-out 2.9s infinite;" />
+
+              <!-- Event labels -->
+              <text x="60" y="28" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-weight="bold" opacity="0" style="animation: nodeIn 0.3s ease-out 2.1s forwards;">Quest 3</text>
+              <text x="160" y="168" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-weight="bold" opacity="0" style="animation: nodeIn 0.3s ease-out 2.4s forwards;">Rest day</text>
+              <text x="240" y="18" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="8" font-weight="bold" opacity="0" style="animation: nodeIn 0.3s ease-out 2.7s forwards;">Groan faced</text>
+              <text x="360" y="13" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="8" font-weight="bold" opacity="0" style="animation: nodeIn 0.3s ease-out 3s forwards;">Now</text>
+            </svg>
+          </div>
+
+          <!-- Summary -->
+          <div class="pulse-summary">
+            <p>Your pulse is <strong>climbing</strong> — more time in the Flow Zone this week than last. The dip on Day 8 was healthy rest, not regression.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-footer">
+        <div class="pros-cons">
+          <div class="pro">
+            <div class="pro-title">Strengths</div>
+            Instantly readable. Energy levels are visceral — you FEEL the ups and downs. Trend line shows growth without needing stats. Very modern / health-app aesthetic.
+          </div>
+          <div class="con">
+            <div class="con-title">Tradeoffs</div>
+            Could feel clinical if not styled warmly. Doesn't show the "direction" aspect of compass as clearly.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         IDEA 6: SEASONS WHEEL
+         ============================================================ -->
+    <div class="idea-card">
+      <div class="idea-header">
+        <span class="idea-number">Idea 6</span>
+        <h2 class="idea-title">The Seasons Wheel</h2>
+        <p class="idea-subtitle">A circular calendar where each week is a slice. Colors show your compass direction that week. Inner rings show quest/groan completions. Reveals rhythm and seasonal patterns. Ties into weekly planning phases (Push, Flow, Rest, Launch).</p>
+        <div class="idea-tags">
+          <span class="tag combine">Combines Both</span>
+          <span class="tag separate">Ties to Weekly Planning</span>
+        </div>
+      </div>
+
+      <div class="idea-visual">
+        <div class="visual-frame wheel-visual">
+          <!-- Stats strip -->
+          <div class="wheel-stats-strip">
+            <div class="wheel-stat">
+              <div class="wheel-stat-val">12</div>
+              <div class="wheel-stat-lbl">Days</div>
+            </div>
+            <div class="wheel-stat">
+              <div class="wheel-stat-val">7</div>
+              <div class="wheel-stat-lbl">Quests</div>
+            </div>
+            <div class="wheel-stat">
+              <div class="wheel-stat-val">3</div>
+              <div class="wheel-stat-lbl">Groans</div>
+            </div>
+            <div class="wheel-stat">
+              <div class="wheel-stat-val">4</div>
+              <div class="wheel-stat-lbl">Stage</div>
+            </div>
+          </div>
+
+          <div class="wheel-container">
+            <svg viewBox="0 0 300 300">
+              <defs>
+                <!-- Outer ring segments (compass direction per week) -->
+                <clipPath id="wheelClip">
+                  <circle cx="150" cy="150" r="140" />
+                </clipPath>
+              </defs>
+
+              <!-- Background rings -->
+              <circle cx="150" cy="150" r="140" fill="none" stroke="#e9ecef" stroke-width="1" />
+              <circle cx="150" cy="150" r="110" fill="none" stroke="#e9ecef" stroke-width="1" />
+              <circle cx="150" cy="150" r="80" fill="none" stroke="#e9ecef" stroke-width="1" />
+              <circle cx="150" cy="150" r="50" fill="none" stroke="#e9ecef" stroke-width="0.5" />
+
+              <!-- Spoke lines (12 segments = 12 weeks of a quarter) -->
+              <line x1="150" y1="10" x2="150" y2="290" stroke="#e9ecef" stroke-width="0.5" />
+              <line x1="10" y1="150" x2="290" y2="150" stroke="#e9ecef" stroke-width="0.5" />
+              <line x1="47" y1="47" x2="253" y2="253" stroke="#e9ecef" stroke-width="0.5" />
+              <line x1="253" y1="47" x2="47" y2="253" stroke="#e9ecef" stroke-width="0.5" />
+
+              <!-- Outer ring: Compass direction color segments -->
+              <!-- Week 1-2: Flow (green) -->
+              <path d="M150,150 L150,10 A140,140 0 0,1 271,79 Z" fill="rgba(16, 185, 129, 0.2)" stroke="rgba(16, 185, 129, 0.3)" stroke-width="1" />
+              <!-- Week 3: Redirect (blue) -->
+              <path d="M150,150 L271,79 A140,140 0 0,1 290,150 Z" fill="rgba(59, 130, 246, 0.2)" stroke="rgba(59, 130, 246, 0.3)" stroke-width="1" />
+              <!-- Week 4-5: Flow (green) -->
+              <path d="M150,150 L290,150 A140,140 0 0,1 253,253 Z" fill="rgba(16, 185, 129, 0.25)" stroke="rgba(16, 185, 129, 0.3)" stroke-width="1" />
+              <!-- Week 6: Rest (red) -->
+              <path d="M150,150 L253,253 A140,140 0 0,1 150,290 Z" fill="rgba(239, 68, 68, 0.15)" stroke="rgba(239, 68, 68, 0.2)" stroke-width="1" />
+              <!-- Week 7-8: Honour (yellow) -->
+              <path d="M150,150 L150,290 A140,140 0 0,1 47,253 Z" fill="rgba(251, 191, 36, 0.2)" stroke="rgba(251, 191, 36, 0.3)" stroke-width="1" />
+              <!-- Week 9: Flow -->
+              <path d="M150,150 L47,253 A140,140 0 0,1 10,150 Z" fill="rgba(16, 185, 129, 0.2)" stroke="rgba(16, 185, 129, 0.3)" stroke-width="1" />
+              <!-- Week 10-11: Redirect -->
+              <path d="M150,150 L10,150 A140,140 0 0,1 47,47 Z" fill="rgba(59, 130, 246, 0.15)" stroke="rgba(59, 130, 246, 0.2)" stroke-width="1" />
+              <!-- Week 12 (current): Flow -->
+              <path d="M150,150 L47,47 A140,140 0 0,1 150,10 Z" fill="rgba(16, 185, 129, 0.3)" stroke="rgba(16, 185, 129, 0.4)" stroke-width="2" />
+
+              <!-- Inner ring: Quest completion dots (radius 90) -->
+              <circle cx="150" cy="60" r="5" fill="var(--brand-purple)" opacity="0.7" /> <!-- Week 1 -->
+              <circle cx="225" cy="85" r="5" fill="var(--brand-purple)" opacity="0.7" /> <!-- Week 2 -->
+              <circle cx="240" cy="150" r="5" fill="var(--brand-purple)" opacity="0.7" /> <!-- Week 4 -->
+              <circle cx="200" cy="225" r="4" fill="var(--brand-gold)" opacity="0.7" /> <!-- Week 5 groan -->
+              <circle cx="100" cy="225" r="4" fill="var(--brand-gold)" opacity="0.7" /> <!-- Week 7 groan -->
+              <circle cx="60" cy="150" r="5" fill="var(--brand-purple)" opacity="0.7" /> <!-- Week 9 -->
+              <circle cx="65" cy="80" r="4" fill="var(--brand-gold)" opacity="0.7" /> <!-- Week 11 groan -->
+
+              <!-- Phase labels (inner) -->
+              <text x="180" y="50" fill="var(--text-muted)" font-size="8" font-weight="700" opacity="0.5">PUSH</text>
+              <text x="248" y="180" fill="var(--text-muted)" font-size="8" font-weight="700" opacity="0.5">FLOW</text>
+              <text x="130" y="265" fill="var(--text-muted)" font-size="8" font-weight="700" opacity="0.5">REST</text>
+              <text x="25" y="120" fill="var(--text-muted)" font-size="8" font-weight="700" opacity="0.5">LAUNCH</text>
+            </svg>
+
+            <!-- Now marker -->
+            <div class="wheel-now-glow" style="top: 5%; left: 40%;"></div>
+
+            <!-- Center info -->
+            <div class="wheel-center-info">
+              <div class="wheel-week-label">Week</div>
+              <div class="wheel-week-num">12</div>
+              <div class="wheel-phase">Push Phase</div>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <div class="wheel-legend">
+            <div class="wheel-legend-item">
+              <div class="wheel-legend-swatch" style="background: var(--north);"></div>
+              <span>Flow</span>
+            </div>
+            <div class="wheel-legend-item">
+              <div class="wheel-legend-swatch" style="background: var(--east);"></div>
+              <span>Redirect</span>
+            </div>
+            <div class="wheel-legend-item">
+              <div class="wheel-legend-swatch" style="background: var(--south);"></div>
+              <span>Rest</span>
+            </div>
+            <div class="wheel-legend-item">
+              <div class="wheel-legend-swatch" style="background: var(--west);"></div>
+              <span>Honour</span>
+            </div>
+            <div class="wheel-legend-item">
+              <div class="wheel-legend-swatch" style="background: var(--brand-purple); border-radius: 50%;"></div>
+              <span>Quest</span>
+            </div>
+            <div class="wheel-legend-item">
+              <div class="wheel-legend-swatch" style="background: var(--brand-gold); border-radius: 50%;"></div>
+              <span>Groan</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="idea-footer">
+        <div class="pros-cons">
+          <div class="pro">
+            <div class="pro-title">Strengths</div>
+            Shows rhythm and patterns naturally. Ties directly into the 4-phase weekly planning. Reveals which compass direction dominates. Compact.
+          </div>
+          <div class="con">
+            <div class="con-title">Tradeoffs</div>
+            More analytical than emotional. Needs enough weeks of data to look meaningful. Might feel like a chart more than a story.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

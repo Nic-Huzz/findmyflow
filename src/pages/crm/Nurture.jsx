@@ -125,16 +125,6 @@ export default function Nurture() {
           <span className="tower-toolbar-points">💜</span>
         </div>
 
-        <header className="tower-header">
-          <div className="tower-breadcrumb">
-            <button onClick={() => navigate('/crm')}>Home</button>
-            <span>→</span>
-            <span>Nurture</span>
-          </div>
-          <h1 className="tower-title">💜 Nurture</h1>
-          <p className="tower-subtitle">Build relationships with your leads</p>
-        </header>
-
         <div className="tower-grid stagger-children">
         {CARDS.map(card => {
           const cardStats = stats?.[card.statsKey]
