@@ -46,21 +46,21 @@ export const STAGE_CONFIG = {
   },
   [STAGES.GROANS]: {
     id: 0.5,
-    name: 'Play',
-    shortName: 'Play',
+    name: 'Play-list',
+    shortName: 'Play-list',
     description: 'Challenges that push you past your comfort zone to grow',
     icon: '🎮',
     color: '#6d26d7', // purple→gold ombre
     requiredFlows: [],
     milestones: [],
     groanChallenge: null,
-    tabLabel: 'Play',
+    tabLabel: 'Play-list',
     upsellPrompt: null,
     externalLink: null,
     isUserLevel: true,
     alwaysAccessible: true, // Keep true so it renders
     isGroansStage: true, // Flag to identify this as the Groans stage for quest filtering
-    temporarilyLocked: true // Flag to lock this tab during testing
+    temporarilyLocked: false // Flag to lock this tab during testing
   },
   [STAGES.VALIDATION]: {
     id: 1,
@@ -305,7 +305,8 @@ export const GROAN_VISIBILITY_LAYERS = [
       'Share a behind-the-scenes moment',
       'Publish content without editing 10 times'
     ],
-    difficulty: 1
+    difficulty: 1,
+    unlock: { type: 'flow_finder', label: 'Complete Mind Space to unlock' }
   },
   {
     id: 'live',
@@ -319,7 +320,8 @@ export const GROAN_VISIBILITY_LAYERS = [
       'Host a virtual workshop',
       'Have a discovery call with a stranger'
     ],
-    difficulty: 2
+    difficulty: 2,
+    unlock: { type: 'flow_finder', label: 'Complete Mind Space to unlock' }
   },
   {
     id: 'money',
@@ -333,7 +335,8 @@ export const GROAN_VISIBILITY_LAYERS = [
       'Follow up on an unpaid invoice',
       'Pitch your premium offer'
     ],
-    difficulty: 3
+    difficulty: 3,
+    unlock: { type: 'stage', requiredStage: 4, label: 'Reach Money Models stage to unlock' }
   },
   {
     id: 'vulnerable',
@@ -347,7 +350,8 @@ export const GROAN_VISIBILITY_LAYERS = [
       'Ask for help from your community',
       'Admit you don\'t have all the answers'
     ],
-    difficulty: 4
+    difficulty: 4,
+    unlock: { type: 'stage', requiredStage: 6, label: 'Reach Campaign stage to unlock' }
   },
   {
     id: 'authority',
@@ -361,7 +365,8 @@ export const GROAN_VISIBILITY_LAYERS = [
       'Correct someone in your field publicly',
       'Pitch yourself to speak at an event'
     ],
-    difficulty: 5
+    difficulty: 5,
+    unlock: { type: 'stage', requiredStage: 8, label: 'Complete Launch to unlock' }
   }
 ]
 
@@ -391,6 +396,35 @@ export function getVisibilityLayerDisplay(layerId) {
  */
 export function getVisibilityLayersByDifficulty() {
   return [...GROAN_VISIBILITY_LAYERS].sort((a, b) => a.difficulty - b.difficulty)
+}
+
+/**
+ * Get locked layer IDs based on user progress
+ * @param {boolean} flowFinderComplete - Whether Mind Space / Flow Finder is done
+ * @param {number} highestStage - Highest current_stage across user's projects
+ * @returns {Object} Map of layerId → { locked: boolean, message: string }
+ */
+export function getLayerLockStatus(flowFinderComplete, highestStage = 0) {
+  const status = {}
+  for (const layer of GROAN_VISIBILITY_LAYERS) {
+    const { unlock } = layer
+    if (!unlock) {
+      status[layer.id] = { locked: false }
+      continue
+    }
+    if (unlock.type === 'flow_finder') {
+      status[layer.id] = {
+        locked: !flowFinderComplete,
+        message: unlock.label
+      }
+    } else if (unlock.type === 'stage') {
+      status[layer.id] = {
+        locked: highestStage < unlock.requiredStage,
+        message: unlock.label
+      }
+    }
+  }
+  return status
 }
 
 /**

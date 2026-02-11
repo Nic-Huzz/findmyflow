@@ -96,6 +96,20 @@
   letter-spacing: -0.3px;
 }
 
+/* === PROJECT SWITCHER BAR === */
+.ascension-engine .ae-project-bar {
+  margin-bottom: 12px;
+}
+
+.ascension-engine .ae-project-bar .project-switcher {
+  width: 100%;
+}
+
+.ascension-engine .ae-project-bar .current-project {
+  width: 100%;
+  justify-content: flex-start;
+}
+
 /* === DARK HERO CARD === */
 .ascension-engine .ae-hero {
   background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
@@ -513,6 +527,94 @@
   font-size: 12px;
   font-weight: 800;
   color: #10b981;
+}
+
+/* Clickable rung cards */
+.ascension-engine .rung-card.clickable {
+  cursor: pointer;
+}
+
+.ascension-engine .rung-card.clickable:hover {
+  border-color: var(--brand-purple);
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.15);
+}
+
+/* No-implementation state */
+.ascension-engine .ladder-rung.no-impl .rung-card {
+  opacity: 0.55;
+}
+
+.ascension-engine .ladder-rung.no-impl .rung-card:hover {
+  opacity: 0.75;
+}
+
+.ascension-engine .rung-empty-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Implementation status badge */
+.ascension-engine .impl-status-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 100px;
+  line-height: 1;
+}
+
+.ascension-engine .impl-status-badge.not_started {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+.ascension-engine .impl-status-badge.in_progress {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+.ascension-engine .impl-status-badge.completed {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+/* Implementation progress bar */
+.ascension-engine .rung-impl-progress {
+  margin-top: 10px;
+}
+
+.ascension-engine .impl-progress-bar {
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.ascension-engine .impl-progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.5s ease;
+}
+
+.ascension-engine .impl-progress-fill.not_started {
+  background: #6b7280;
+}
+
+.ascension-engine .impl-progress-fill.in_progress {
+  background: linear-gradient(90deg, var(--brand-purple) 0%, #7c3aed 100%);
+}
+
+.ascension-engine .impl-progress-fill.completed {
+  background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+}
+
+/* Offer type label in rung bottom */
+.ascension-engine .impl-offer-type {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 /* Ladder Metrics */

@@ -216,6 +216,17 @@ export default function ImplementationTracker() {
   if (loading) {
     return (
       <div className="implementation-tracker">
+        <div className="impl-toolbar">
+          <button className="impl-toolbar-back" onClick={() => navigate('/crm/tools')}>←</button>
+          <h2 className="impl-toolbar-title">Implementations</h2>
+        </div>
+        <div className="impl-project-bar">
+          <ProjectSwitcher
+            userId={user?.id}
+            currentProject={currentProject}
+            onProjectChange={setCurrentProject}
+          />
+        </div>
         <div className="impl-loading">
           <div className="impl-spinner"></div>
           <p>Loading implementations...</p>
@@ -232,7 +243,15 @@ export default function ImplementationTracker() {
           ←
         </button>
         <h2 className="impl-toolbar-title">Implementations</h2>
-        <span className="impl-toolbar-icon">📋</span>
+      </div>
+
+      {/* Project Switcher */}
+      <div className="impl-project-bar">
+        <ProjectSwitcher
+          userId={user?.id}
+          currentProject={currentProject}
+          onProjectChange={setCurrentProject}
+        />
       </div>
 
       {/* Celebration Overlay */}
@@ -255,18 +274,6 @@ export default function ImplementationTracker() {
           </div>
         </div>
       )}
-
-      <header className="impl-header">
-        <div className="header-top">
-          <ProjectSwitcher
-            userId={user?.id}
-            currentProject={currentProject}
-            onProjectChange={setCurrentProject}
-          />
-          <h1>Implementations</h1>
-        </div>
-        <p className="impl-subtitle">Track your offer implementation progress</p>
-      </header>
 
       {/* Filter Chips */}
       <div className="impl-filters">

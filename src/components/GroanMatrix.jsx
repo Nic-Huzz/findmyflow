@@ -40,7 +40,8 @@ function GroanMatrix({
   userId,
   onCellClick,
   onGenerateChallenge,
-  compact = false
+  compact = false,
+  layerLockStatus = {}
 }) {
   const navigate = useNavigate()
   const [activeSourceType, setActiveSourceType] = useState('skill')
@@ -303,7 +304,7 @@ function GroanMatrix({
       {/* Header */}
       <div className="groan-matrix-header">
         <h2 className="groan-matrix-title">
-          Courage Matrix
+          Play-list Matrix
         </h2>
 
         <div className="groan-matrix-controls">
@@ -350,7 +351,10 @@ function GroanMatrix({
           </div>
           <div className="groan-stat">
             <div className="groan-stat-value">{stats.byEssenceZone?.essence?.completed || 0}</div>
-            <div className="groan-stat-label">Essence Zones</div>
+            <div className="groan-stat-label">
+              Essence Zones
+              <span className="groan-essence-info" title="Challenges where both scary AND excitement scores are 7+. These are closest to your true calling — what terrifies and excites you most.">ⓘ</span>
+            </div>
           </div>
         </div>
       )}
@@ -361,19 +365,24 @@ function GroanMatrix({
           {/* Header row with visibility layers */}
           <div className="groan-matrix-header-row">
             <div className="groan-header-cell corner" />
-            {GROAN_VISIBILITY_LAYERS.map(layer => (
-              <div
-                key={layer.id}
-                className="groan-header-cell"
-                style={{ '--layer-color': layer.color }}
-              >
-                <span className="groan-layer-icon">{layer.icon}</span>
-                <span className="groan-layer-label">{layer.label}</span>
-                {!compact && (
-                  <span className="groan-layer-fear">{layer.fear}</span>
-                )}
-              </div>
-            ))}
+            {GROAN_VISIBILITY_LAYERS.map(layer => {
+              const isLocked = layerLockStatus[layer.id]?.locked
+              return (
+                <div
+                  key={layer.id}
+                  className={`groan-header-cell ${isLocked ? 'locked' : ''}`}
+                  style={{ '--layer-color': layer.color }}
+                >
+                  <span className="groan-layer-icon">{isLocked ? '🔒' : layer.icon}</span>
+                  <span className="groan-layer-label">{layer.label}</span>
+                  {!compact && (
+                    <span className="groan-layer-fear">
+                      {isLocked ? layerLockStatus[layer.id].message : layer.fear}
+                    </span>
+                  )}
+                </div>
+              )
+            })}
           </div>
 
           {/* Data rows */}
@@ -403,9 +412,24 @@ function GroanMatrix({
 
                 {/* Cells for each visibility layer */}
                 {GROAN_VISIBILITY_LAYERS.map(layer => {
+                  const isLocked = layerLockStatus[layer.id]?.locked
                   const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
                   const isLoading = loadingCell === `${sourceItem.id}_${layer.id}`
                   const isEssenceZone = challenge?.essence_zone === 'essence'
+
+                  if (isLocked) {
+                    return (
+                      <div
+                        key={layer.id}
+                        className="groan-matrix-cell locked"
+                        style={{ '--layer-color': layer.color }}
+                      >
+                        <div className="groan-cell-locked">
+                          <span className="groan-cell-locked-icon">🔒</span>
+                        </div>
+                      </div>
+                    )
+                  }
 
                   return (
                     <div
@@ -466,12 +490,23 @@ function GroanMatrix({
                         </div>
                       ) : (
                         <div className="groan-cell-empty">
-                          {onGenerateChallenge ? (
+                          {onCellClick ? (
                             <button
                               className="groan-generate-btn"
-                              onClick={(e) => handleGenerateClick(e, sourceItem, layer)}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                onCellClick({
+                                  sourceType: activeSourceType,
+                                  sourceId: sourceItem.id,
+                                  sourceLabel: sourceItem.cluster_label,
+                                  sourceInsight: sourceItem.insight,
+                                  visibilityLayer: layer.id,
+                                  layer,
+                                  challenge: null
+                                })
+                              }}
                             >
-                              + Generate
+                              + Select
                             </button>
                           ) : (
                             <>
@@ -616,12 +651,33 @@ function GroanMatrix({
                         </div>
                       ) : (
                         <div className="groan-cell-empty">
-                          {onGenerateChallenge ? (
+                          {onCellClick ? (
                             <button
                               className="groan-generate-btn"
-                              onClick={(e) => handleSkillProblemGenerateClick(e, skill, problem)}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                const persona = selectedPersona
+                                  ? (flowFinderData?.personas || []).find(p => p.id === selectedPersona)
+                                  : null
+                                onCellClick({
+                                  sourceType: 'skill_x_problem',
+                                  skill,
+                                  problem,
+                                  persona,
+                                  skillId: skill.id,
+                                  skillLabel: skill.cluster_label,
+                                  skillInsight: skill.insight || '',
+                                  problemId: problem.id,
+                                  problemLabel: problem.cluster_label,
+                                  problemInsight: problem.insight || '',
+                                  personaId: persona?.id || null,
+                                  personaLabel: persona?.cluster_label || null,
+                                  personaInsight: persona?.insight || null,
+                                  challenge: null
+                                })
+                              }}
                             >
-                              + Generate
+                              + Select
                             </button>
                           ) : (
                             <>
@@ -658,15 +714,25 @@ function GroanMatrix({
               </button>
             </div>
           ) : (
-            GROAN_VISIBILITY_LAYERS.map(layer => (
-              <div key={layer.id} className="groan-mobile-section">
+            GROAN_VISIBILITY_LAYERS.map(layer => {
+              const isLocked = layerLockStatus[layer.id]?.locked
+              return (
+              <div key={layer.id} className={`groan-mobile-section ${isLocked ? 'locked' : ''}`}>
                 <div className="groan-mobile-layer-header">
-                  <span className="groan-mobile-layer-icon">{layer.icon}</span>
+                  <span className="groan-mobile-layer-icon">{isLocked ? '🔒' : layer.icon}</span>
                   <div className="groan-mobile-layer-info">
                     <div className="groan-mobile-layer-label">{layer.label}</div>
-                    <div className="groan-mobile-layer-fear">{layer.fear}</div>
+                    <div className="groan-mobile-layer-fear">
+                      {isLocked ? layerLockStatus[layer.id].message : layer.fear}
+                    </div>
                   </div>
                 </div>
+                {isLocked ? (
+                  <div className="groan-mobile-locked-message">
+                    <span className="groan-cell-locked-icon">🔒</span>
+                    <span>{layerLockStatus[layer.id].message}</span>
+                  </div>
+                ) : (
                 <div className="groan-mobile-cards">
                   {sourceItems.map(sourceItem => {
                     const challenge = getCellActiveChallenge(sourceItem.id, layer.id)
@@ -701,15 +767,23 @@ function GroanMatrix({
                             {challenge.status === 'active' && !challenge.accepted_at && '👀 View'}
                           </div>
                         ) : (
-                          onGenerateChallenge ? (
+                          onCellClick ? (
                             <button
                               className="groan-mobile-generate"
                               onClick={(e) => {
                                 e.stopPropagation()
-                                handleGenerateClick(e, sourceItem, layer)
+                                onCellClick({
+                                  sourceType: activeSourceType,
+                                  sourceId: sourceItem.id,
+                                  sourceLabel: sourceItem.cluster_label,
+                                  sourceInsight: sourceItem.insight,
+                                  visibilityLayer: layer.id,
+                                  layer,
+                                  challenge: null
+                                })
                               }}
                             >
-                              + Generate
+                              + Select
                             </button>
                           ) : (
                             <span className="groan-mobile-card-status">+</span>
@@ -719,8 +793,10 @@ function GroanMatrix({
                     )
                   })}
                 </div>
+                )}
               </div>
-            ))
+              )
+            })
           )}
         </div>
       )}
@@ -789,15 +865,33 @@ function GroanMatrix({
                             {challenge.status === 'active' && !challenge.accepted_at && '👀 View'}
                           </div>
                         ) : (
-                          onGenerateChallenge ? (
+                          onCellClick ? (
                             <button
                               className="groan-mobile-generate"
                               onClick={(e) => {
                                 e.stopPropagation()
-                                handleSkillProblemGenerateClick(e, skill, problem)
+                                const persona = selectedPersona
+                                  ? (flowFinderData?.personas || []).find(p => p.id === selectedPersona)
+                                  : null
+                                onCellClick({
+                                  sourceType: 'skill_x_problem',
+                                  skill,
+                                  problem,
+                                  persona,
+                                  skillId: skill.id,
+                                  skillLabel: skill.cluster_label,
+                                  skillInsight: skill.insight || '',
+                                  problemId: problem.id,
+                                  problemLabel: problem.cluster_label,
+                                  problemInsight: problem.insight || '',
+                                  personaId: persona?.id || null,
+                                  personaLabel: persona?.cluster_label || null,
+                                  personaInsight: persona?.insight || null,
+                                  challenge: null
+                                })
                               }}
                             >
-                              + Generate
+                              + Select
                             </button>
                           ) : (
                             <span className="groan-mobile-card-status">+</span>

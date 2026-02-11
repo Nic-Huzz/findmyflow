@@ -1,714 +1,899 @@
-/* SalesPlaybook - Library page */
+/**
+ * SalesPlaybook.css — /crm/sales-playbook
+ * Educational library of Hormozi sales frameworks
+ */
 
+/* === ROOT === */
 .sales-playbook {
-  padding-bottom: 80px;
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(94, 23, 235, 0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233, 162, 59, 0.04) 100%
+  );
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  color: var(--text-primary);
+  overflow-x: hidden;
 }
 
-.sp-toolbar {
+/* === TOOLBAR === */
+.sales-playbook .sp-toolbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: #ffffff;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: #1a1a2e;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.sp-toolbar .back-btn {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 4px 8px;
-}
-
-.sp-toolbar .toolbar-title {
-  color: #fff;
-  font-size: 1rem;
-  margin: 0;
-}
-
-.sp-header {
-  padding: 16px;
-}
-
-.sp-breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.sp-breadcrumb button {
-  background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.75rem;
-  cursor: pointer;
-  padding: 0;
-}
-
-.sp-header h1 {
-  color: #fff;
-  font-size: 1.3rem;
-  margin: 0 0 4px;
-}
-
-.sp-subtitle {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.82rem;
-  margin: 0;
-}
-
-/* Tabs */
-.sp-tabs {
-  display: flex;
-  gap: 4px;
+  justify-content: center;
   padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.sales-playbook .sp-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--brand-purple);
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.sales-playbook .sp-toolbar-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* === DARK HERO CARD === */
+.sales-playbook .sp-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 28px 24px;
   margin-bottom: 16px;
-}
-
-.sp-tab {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 10px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.sp-tab.active {
-  background: rgba(94, 23, 235, 0.2);
-  border-color: #5e17eb;
-  color: #fff;
-}
-
-/* Learn Tab */
-.sp-learn {
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sp-section {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  color: white;
+  position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
 }
 
-.sp-section-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  cursor: pointer;
+.sales-playbook .sp-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
+  animation: spGlow 4s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.sp-section-icon {
-  font-size: 1.3rem;
-  flex-shrink: 0;
+.sales-playbook .sp-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -30px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(94, 23, 235, 0.25) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.sp-section-info {
-  flex: 1;
-  min-width: 0;
+@keyframes spGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
 }
 
-.sp-section-title {
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  display: block;
-}
-
-.sp-section-desc {
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 0.72rem;
-  display: block;
-  margin-top: 2px;
-}
-
-.sp-expand {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.7rem;
-  flex-shrink: 0;
-}
-
-.sp-section-body {
-  padding: 0 14px 14px;
-}
-
-/* Three Things */
-.sp-three-things {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sp-thing-card {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 10px 12px;
-  border-left: 3px solid;
-}
-
-.sp-thing-label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.sp-thing-desc {
+.sales-playbook .sp-hero-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
-}
-
-/* Conviction */
-.sp-conviction-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sp-conviction-card {
-  display: flex;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 10px 12px;
-}
-
-.sp-conviction-icon {
-  font-size: 1.2rem;
-  flex-shrink: 0;
-}
-
-.sp-conviction-title {
-  color: #fff;
-  font-size: 0.82rem;
-  font-weight: 600;
   display: block;
-  margin-bottom: 2px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
 }
 
-.sp-conviction-desc {
+.sales-playbook .sp-hero-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin: 0 0 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.sales-playbook .sp-hero-sub {
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.55);
-  font-size: 0.75rem;
-  line-height: 1.4;
-}
-
-/* CLOSER */
-.sp-closer-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.sp-closer-step {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.sp-closer-step-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  cursor: pointer;
-}
-
-.sp-closer-letter {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #5e17eb 0%, #E9A23B 100%);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-}
-
-.sp-closer-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.sp-closer-title {
-  color: #fff;
-  font-size: 0.82rem;
-  font-weight: 600;
-  display: block;
-}
-
-.sp-closer-desc {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.72rem;
-  display: block;
-  margin-top: 2px;
-}
-
-.sp-expand-sm {
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 0.6rem;
-}
-
-.sp-closer-body {
-  padding: 0 12px 12px;
-}
-
-.sp-closer-guidance {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.78rem;
-  font-style: italic;
-  line-height: 1.4;
-  margin: 0;
-}
-
-/* Distortions */
-.sp-distortion-layer {
-  margin-bottom: 12px;
-}
-
-.sp-layer-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.sp-layer-icon {
-  font-size: 1.1rem;
-}
-
-.sp-layer-name {
-  color: #fff;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.sp-layer-desc {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.72rem;
-  flex: 1;
-}
-
-.sp-category {
-  margin-bottom: 8px;
-  padding-left: 10px;
-}
-
-.sp-category-title {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.78rem;
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-
-.sp-strategy {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 8px 10px;
-  margin-bottom: 6px;
-}
-
-.sp-strategy-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
-.sp-strategy-name {
-  color: #E9A23B;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.sp-copy-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 3px 6px;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  cursor: pointer;
-}
-
-.sp-copy-btn.copied {
-  background: rgba(39, 174, 96, 0.4);
-  color: #fff;
-}
-
-.sp-strategy-text {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
-  line-height: 1.4;
-  margin: 0;
-}
-
-/* Nine Things */
-.sp-nine-things {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sp-thing {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 10px 12px;
-}
-
-.sp-thing.phase1 {
-  border-left: 3px solid #5e17eb;
-}
-
-.sp-thing-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
-}
-
-.sp-thing-name {
-  color: #fff;
-  font-size: 0.82rem;
-  font-weight: 600;
-}
-
-.sp-thing-badge {
-  background: rgba(94, 23, 235, 0.3);
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.65rem;
-  padding: 2px 8px;
-  border-radius: 10px;
-}
-
-.sp-thing-full {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.72rem;
-  display: block;
-  margin-bottom: 4px;
-}
-
-.sp-thing-description {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
-  line-height: 1.4;
-  margin: 0;
-}
-
-/* Vacation */
-.sp-vacation-text {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.85rem;
+  margin: 0 0 20px;
+  position: relative;
+  z-index: 1;
   line-height: 1.5;
-  margin: 0 0 8px;
 }
 
-.sp-vacation-guidance {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.78rem;
-  font-style: italic;
-  line-height: 1.4;
-  margin: 0;
-}
-
-/* Principles */
-.sp-principles {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sp-principle {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.sp-principle-num {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(94, 23, 235, 0.3);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.sp-principle-text {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.78rem;
-  line-height: 1.4;
-}
-
-/* Track Tab */
-.sp-track {
-  padding: 0 16px;
-}
-
-.sp-track-loading {
-  text-align: center;
-  padding: 40px 20px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.sp-spinner {
-  width: 24px;
-  height: 24px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #5e17eb;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 12px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Case Study */
-.sp-case-study {
-  background: rgba(94, 23, 235, 0.1);
-  border: 1px solid rgba(94, 23, 235, 0.2);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 20px;
-}
-
-.sp-case-study h3 {
-  color: #fff;
-  font-size: 0.9rem;
-  margin: 0 0 4px;
-}
-
-.sp-case-subtitle {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.75rem;
-  margin: 0 0 12px;
-}
-
-.sp-metrics-grid {
+/* Hero Stats Grid */
+.sales-playbook .sp-hero-stats {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
-.sp-metric-card {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 8px;
-  padding: 10px;
+.sales-playbook .sp-hero-stat {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 14px 12px;
   text-align: center;
+  backdrop-filter: blur(4px);
 }
 
-.sp-metric-label {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.7rem;
+.sales-playbook .sp-hero-stat-value {
   display: block;
-  margin-bottom: 4px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.sp-metric-comparison {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.sp-metric-before {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.82rem;
-  text-decoration: line-through;
-}
-
-.sp-metric-arrow {
-  color: #E9A23B;
-  font-size: 0.75rem;
-}
-
-.sp-metric-after {
-  color: #E9A23B;
-  font-size: 1rem;
+.sales-playbook .sp-hero-stat-label {
+  display: block;
+  font-size: 9px;
   font-weight: 700;
-}
-
-/* Empty State */
-.sp-track-empty {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.sp-empty-icon {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 12px;
-}
-
-.sp-track-empty h3 {
-  color: #fff;
-  font-size: 1rem;
-  margin: 0 0 8px;
-}
-
-.sp-track-empty p {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.82rem;
-  margin: 0;
-}
-
-/* Stats Summary */
-.sp-stats-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.sp-stat-card {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  padding: 12px;
-  text-align: center;
-}
-
-.sp-stat-value {
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 700;
-  display: block;
-}
-
-.sp-stat-label {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.7rem;
-  display: block;
   margin-top: 4px;
 }
 
-/* Stats Section */
-.sp-stats-section {
-  margin-bottom: 20px;
+/* === TABS === */
+.sales-playbook .sp-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
-.sp-stats-section h4 {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.78rem;
+.sales-playbook .sp-tab {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.sales-playbook .sp-tab.active {
+  background: rgba(94, 23, 235, 0.06);
+  border-color: rgba(94, 23, 235, 0.15);
+  color: var(--brand-purple);
+}
+
+/* === WHITE CARD === */
+.sales-playbook .sp-card {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  padding: 0;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+/* === SECTION HEADER (eyebrow) === */
+.sales-playbook .sp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.sales-playbook .sp-section-icon {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+
+.sales-playbook .sp-section-title {
+  font-size: 11px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0 0 10px;
+  letter-spacing: 1.5px;
+  color: var(--brand-purple);
 }
 
-/* Layer Bars */
-.sp-layer-bars {
+/* === ACCORDION (Learn Tab) === */
+.sales-playbook .sp-learn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sales-playbook .sp-accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sales-playbook .sp-accordion-header:hover {
+  background: #f8f9fa;
+}
+
+.sales-playbook .sp-accordion-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.sales-playbook .sp-accordion-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sales-playbook .sp-accordion-title {
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 800;
+  display: block;
+  letter-spacing: -0.2px;
+}
+
+.sales-playbook .sp-accordion-desc {
+  color: var(--text-secondary);
+  font-size: 12px;
+  display: block;
+  margin-top: 2px;
+}
+
+.sales-playbook .sp-chevron {
+  color: var(--text-muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.sales-playbook .sp-chevron-sm {
+  color: var(--text-muted);
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.sales-playbook .sp-accordion-body {
+  padding: 0 24px 24px;
+}
+
+/* === THREE THINGS === */
+.sales-playbook .sp-three-things {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sales-playbook .sp-thing-card {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 14px 16px;
+  border-left: 4px solid;
+}
+
+.sales-playbook .sp-thing-label {
+  font-size: 14px;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.sales-playbook .sp-thing-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* === CONVICTION === */
+.sales-playbook .sp-conviction-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sales-playbook .sp-conviction-card {
+  display: flex;
+  gap: 12px;
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.sales-playbook .sp-conviction-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.sales-playbook .sp-conviction-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.sales-playbook .sp-conviction-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* === CLOSER FRAMEWORK === */
+.sales-playbook .sp-closer-steps {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.sp-bar-item {
-  margin-bottom: 4px;
+.sales-playbook .sp-closer-step {
+  background: #f8f9fa;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.sp-bar-header {
+.sales-playbook .sp-closer-step-header {
   display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.sales-playbook .sp-closer-letter {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-purple) 0%, var(--brand-gold) 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.sales-playbook .sp-closer-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sales-playbook .sp-closer-title {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 800;
+  display: block;
+}
+
+.sales-playbook .sp-closer-desc {
+  color: var(--text-secondary);
+  font-size: 12px;
+  display: block;
+  margin-top: 2px;
+}
+
+.sales-playbook .sp-closer-body {
+  padding: 0 16px 16px;
+}
+
+.sales-playbook .sp-closer-guidance {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 0;
+  padding: 12px 16px;
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 12px;
+  border-left: 3px solid var(--brand-purple);
+}
+
+/* === THREE DISTORTIONS === */
+.sales-playbook .sp-distortion-layer {
+  margin-bottom: 16px;
+}
+
+.sales-playbook .sp-distortion-layer:last-child {
+  margin-bottom: 0;
+}
+
+.sales-playbook .sp-layer-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sales-playbook .sp-layer-icon {
+  font-size: 1.2rem;
+}
+
+.sales-playbook .sp-layer-name {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.sales-playbook .sp-layer-desc {
+  color: var(--text-muted);
+  font-size: 12px;
+  flex: 1;
+}
+
+.sales-playbook .sp-category {
+  margin-bottom: 10px;
+  padding-left: 8px;
+}
+
+.sales-playbook .sp-category-title {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.sales-playbook .sp-strategy {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+.sales-playbook .sp-strategy-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.sales-playbook .sp-strategy-name {
+  color: var(--brand-gold);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sales-playbook .sp-copy-btn {
+  background: rgba(94, 23, 235, 0.08);
+  border: none;
+  color: var(--brand-purple);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.sales-playbook .sp-copy-btn:hover {
+  background: rgba(94, 23, 235, 0.15);
+}
+
+.sales-playbook .sp-copy-btn.copied {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.sales-playbook .sp-strategy-text {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* === NINE THINGS === */
+.sales-playbook .sp-nine-things {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sales-playbook .sp-nine-item {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.sales-playbook .sp-nine-item.active {
+  border-left: 4px solid var(--brand-purple);
+}
+
+.sales-playbook .sp-nine-header {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
 }
 
-.sp-bar-label {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.78rem;
+.sales-playbook .sp-nine-name {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 800;
 }
 
-.sp-bar-count {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.72rem;
+.sales-playbook .sp-nine-badge {
+  background: rgba(94, 23, 235, 0.1);
+  color: var(--brand-purple);
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.sp-bar-track {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+.sales-playbook .sp-nine-full {
+  color: var(--text-muted);
+  font-size: 12px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.sales-playbook .sp-nine-description {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* === VACATION === */
+.sales-playbook .sp-vacation-text {
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.sales-playbook .sp-vacation-guidance {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 0;
+  padding: 12px 16px;
+  background: rgba(94, 23, 235, 0.04);
+  border-radius: 12px;
+  border-left: 3px solid var(--brand-purple);
+}
+
+/* === PRINCIPLES === */
+.sales-playbook .sp-principles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sales-playbook .sp-principle {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.sales-playbook .sp-principle-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.sales-playbook .sp-principle-text {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* === TRACK TAB === */
+.sales-playbook .sp-track {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sales-playbook .sp-track-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+/* === LOADING SPINNER === */
+.sales-playbook .sp-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e9ecef;
+  border-top-color: var(--brand-purple);
+  border-radius: 50%;
+  animation: spSpin 0.8s linear infinite;
+}
+
+@keyframes spSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* === CASE STUDY === */
+.sales-playbook .sp-case-study-card {
+  padding: 24px;
+}
+
+.sales-playbook .sp-case-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+  letter-spacing: -0.2px;
+}
+
+.sales-playbook .sp-case-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 16px;
+}
+
+.sales-playbook .sp-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sales-playbook .sp-metric-card {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 14px;
+  text-align: center;
+}
+
+.sales-playbook .sp-metric-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.sales-playbook .sp-metric-comparison {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sales-playbook .sp-metric-before {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-decoration: line-through;
+}
+
+.sales-playbook .sp-metric-arrow {
+  color: var(--brand-gold);
+  font-size: 12px;
+}
+
+.sales-playbook .sp-metric-after {
+  color: var(--brand-gold);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+/* === EMPTY STATE === */
+.sales-playbook .sp-empty-card {
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.sales-playbook .sp-empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.sales-playbook .sp-empty-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.sales-playbook .sp-empty-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* === STATS SUMMARY === */
+.sales-playbook .sp-stats-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.sales-playbook .sp-stat-tile {
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+
+.sales-playbook .sp-stat-value {
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: block;
+}
+
+.sales-playbook .sp-stat-value.sp-stat-gold {
+  color: var(--brand-gold);
+}
+
+.sales-playbook .sp-stat-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-top: 6px;
+}
+
+/* === LAYER BARS (Track Tab) === */
+.sales-playbook .sp-layer-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sales-playbook .sp-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sales-playbook .sp-bar-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sales-playbook .sp-bar-label {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sales-playbook .sp-bar-count {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.sales-playbook .sp-bar-track {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
   overflow: hidden;
 }
 
-.sp-bar-fill {
+.sales-playbook .sp-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #5e17eb, #E9A23B);
-  border-radius: 3px;
+  background: linear-gradient(90deg, var(--brand-purple), var(--brand-gold));
+  border-radius: 4px;
   min-width: 4px;
+  transition: width 0.4s ease;
 }
 
-/* Top Category */
-.sp-top-category {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  padding: 12px;
+/* === TOP OBJECTIONS === */
+.sales-playbook .sp-top-objections {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sales-playbook .sp-top-row {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 14px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.sp-top-label {
-  color: #fff;
-  font-size: 0.82rem;
-  font-weight: 500;
-}
-
-.sp-top-count {
-  color: #E9A23B;
-  font-size: 0.82rem;
+.sales-playbook .sp-top-label {
+  color: var(--text-primary);
+  font-size: 13px;
   font-weight: 600;
 }
 
-/* Outcomes Grid */
-.sp-outcomes-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+.sales-playbook .sp-top-count {
+  color: var(--brand-gold);
+  font-size: 14px;
+  font-weight: 800;
 }
 
-.sp-outcome {
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  padding: 10px;
-  text-align: center;
+/* === RESPONSIVE === */
+@media (min-width: 768px) {
+  .sales-playbook {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .sales-playbook .sp-hero-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-.sp-outcome-icon {
-  font-size: 1.2rem;
-  display: block;
-  margin-bottom: 4px;
+@media (max-width: 480px) {
+  .sales-playbook {
+    padding: 16px;
+    padding-top: 72px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sales-playbook .sp-accordion-header {
+    padding: 16px;
+  }
+
+  .sales-playbook .sp-accordion-body {
+    padding: 0 16px 16px;
+  }
 }
 
-.sp-outcome-count {
-  color: #fff;
-  font-size: 1.1rem;
-  font-weight: 700;
-  display: block;
-}
-
-.sp-outcome-label {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.65rem;
-  display: block;
-  margin-top: 2px;
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  .sales-playbook .sp-spinner { animation: none; }
+  .sales-playbook .sp-hero::before { animation: none; }
+  .sales-playbook *,
+  .sales-playbook *::before,
+  .sales-playbook *::after {
+    transition-duration: 0.01ms !important;
+  }
 }

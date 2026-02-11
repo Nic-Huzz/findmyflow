@@ -1,5 +1,5 @@
 # FindMyFlow Priority Hierarchy & Test Milestones
-**Date:** 2026-01-29
+**Date:** 2026-01-29 (Updated: 2026-02-11)
 **Status:** Active Planning Document
 **Purpose:** Stop scope creep. Define testable "done" gates.
 
@@ -18,73 +18,76 @@ You have:
 
 ---
 
-## What's Actually BUILT (from CLAUDE.md + git status)
+## What's BUILT
 
 ### Core Platform ✅
 - 10-Stage System (Flow Finder → Tracking)
 - 34 flow components
 - 7-Day Challenge with quest cards, filters, leaderboard
-- Zarlo AI widget
-- Flow Compass (N/E/S/W)
-- Groan Matrix (5 visibility layers)
-- Weekly Planning (4-phase cycle)
+- Challenge layout: sub-tabs below artifact progress, HorizontalFlowRiver in Tracker tab, leaderboard button
+- Weekly Planning (4-phase cycle) + skip for new users (auto-skip "Review Last Week" with 0 data)
+- Zarlo AI widget (streaming, context-aware)
+- Flow Compass (N/E/S/W) — restyled: purple gradient hero, white project cards, gold CTAs, project selector
+- Groan Matrix (5 visibility layers, scary/wahoo scoring)
+- Push Notifications (timezone-aware, 8am/12pm/6pm scheduling)
+- MindSpace (/mind-space) — paste AI conversations for fast-track flow discovery
+
+### User Hub & Identity ✅
+- /me page hub: hero cards, HorizontalFlowRiver, stats rings, inline SeeYourFlow mapper (one-time)
+- Hero Command Center (/hero-profile): identity triad, project expression cards, play-list progress
+- Essence Profile (/archetypes/essence): archetype profile, strengths, shadow, integration
+- Animated protective archetype icons
+- Library of Answers (/library): three GradientWheel visualizations with lit segment labels
+- Discovery Project for Vibe Seekers (stage 0)
+- Flow Finder universalized (user-level completions, not project-specific)
+- Design system guide (docs/page-component-design-guide.md)
 
 ### CRM ✅
-- 3 towers (Attract, Nurture, Tools)
-- 34 pages, 42 components
+- 3 towers (Attract, Nurture, Tools) — 34 pages, 42 components
 - Content Generator + Planning
 - Weekly Planning Session
-- Business Flywheel System (4 phases, auto-detection)
-- Email Sequences with step editor
-- CSV Import Wizard (6-step)
-- Warm Lead → Contact promotion
+- Business Flywheel System (4 phases, auto-detection, dashboard widget)
+- Email Sequences with step editor + copy-to-clipboard + PromptGenerator
+- CSV Import Wizard (6-step, Contacts + Deals, auto-mapping, validation)
+- Contacts: full overhaul with deal creation, outreach columns (status, platform, priority, temperature)
+- Warm Leads fully merged into Contacts (old table deprecated)
+- Warm Outreach page = filtered view of contacts with outreach_status
+- PromptGenerator in Pages, Email Sequences, Warm Outreach (7 templates)
+- Lead capture email notifications via Resend
+- Lead Scoring (PTUF sliders) — LeadScoreSliders.jsx
+- 15 Hormozi Scripts + ScriptsModal.jsx with smart objection-based suggestions
+- DailyActions integration (today's content + stale leads)
+- ExecutionReview → WeeklyPlanningFlow merge
 - Generated Assets Library
+- CRM design overhaul (consistent styling, design guide)
+- CRM audit — 7 migrations, bug fixes, pull-to-refresh
 
 ### Money Model ✅
-- 6 flows using MoneyModelFlowBase
-- Grand Slam Offer Builder
+- 6 flows using MoneyModelFlowBase + Money Model Guide flow UX
+- Grand Slam Offer Builder (redesigned)
 - Funnel Calculator (Stage 8)
 
 ### Onboarding ✅
 - QuickCapture (5-step)
-- HomeFirstTime flow
-- SeeYourFlow journey mapping
+- HomeFirstTime flow (with persona branching)
+- ExistingProjectFlow (upsert fix, Q1-Q3 data passthrough)
+- SeeYourFlow journey mapping (inline on /me, one-time)
+
+### Landing Page ✅
+- Story-driven structure (method loop, compounding graph)
+- Founder journey content
+- Tab locking for user testing (Play, Healing, Bonus)
+
+### Infrastructure ✅
+- Theme/design system established — purple→gold ombre, design guide
+- WheelPicker UX (info step + exampleJobs on all 12 segments)
+- Skills taxonomy review + proposal doc created
+- Quest completion scoring sync fixes
+- Archetype image compression (WebP + preload)
 
 ---
 
-## What's In Progress (Recent Focus)
-
-| Doc | Focus | Status |
-|-----|-------|--------|
-| `landing-page-analysis-2025-01-27.md` | Story-driven landing page restructure | ✅ Implemented |
-| `hero-journey-game-design.md` | Ready Player One narrative layer | Design doc complete |
-| `income-calculator-and-ecosystem-plan.md` | Business Flywheel System | ✅ Implemented (BusinessSystems.jsx) |
-| `founder-journey-discovery.md` | Nic's 5-year journey as teachable content | Research captured |
-
----
-
-## What's NOT Built (From follow-up-tasks.md)
-
-### V1 Launch Blockers (Tasks 1-6)
-- [x] Lead Scoring (PTUF sliders) ✅ Built - LeadScoreSliders.jsx
-- [x] 15 Hormozi Scripts in database ✅ Built - scripts lib
-- [x] Scripts Modal on deal cards ✅ Built - ScriptsModal.jsx with smart suggestions
-- [ ] Theme alignment (dark→light?)
-- [ ] Offer Builder v2 route integration
-- [ ] Integration testing
-
-### High Priority Post-Launch (Tasks 7-16)
-- Workshop lead magnet question flow
-- Zarlo "Ask Experts" section
-- "How Hard Are You to Replace?" module
-- Building in Public Fantasy League
-- Play Profile
-- Shadow Work in Healing
-- Memory Reconsolidation
-
----
-
-## THE HIERARCHY: 5 Testable Milestones
+## 5 Testable Milestones
 
 ### 🎯 Milestone 1: "Strangers Can Use It"
 **Goal:** The core loop works for a new user with zero hand-holding.
@@ -98,7 +101,7 @@ You have:
 | Mind Space (fast-track) | ✅ Built 2026-01-30 | /mind-space - paste AI conversations |
 | First quest assigned | ✅ Works | - |
 | Zarlo responds helpfully | ✅ Works | - |
-| User knows what to do next | ❓ Unclear | Test with users |
+| User knows what to do next | ⚠️ Improved | /me page shows Today's Quest + next stage. Test with users |
 
 **DONE WHEN:** 5/5 testers complete Flow Finder without asking "what now?"
 
@@ -149,8 +152,8 @@ You have:
 | Sales scripts available | ✅ Built | ScriptsModal.jsx with smart objection-based suggestions |
 | Business Flywheel checklist | ✅ Built | BusinessSystems.jsx with 4 phases, auto-detection |
 | Email Sequences with steps | ✅ Built | Full CRUD + PromptGenerator |
-| CSV Import for bulk data | ✅ Built | 6-step wizard, 3 tables |
-| Warm → Contact promotion | ✅ Built | Checkbox promotes leads to contacts |
+| CSV Import for bulk data | ✅ Built | 6-step wizard, Contacts + Deals |
+| Contacts + Outreach system | ✅ Built | Full overhaul, outreach columns, deal creation |
 | User follows up on leads | ❓ Unknown | Test with real user |
 
 **DONE WHEN:** 1 user makes an actual sale using CRM guidance.
@@ -173,62 +176,49 @@ You have:
 
 ---
 
-## PRIORITY ORDER: What To Build Now
+## STILL TO BUILD (Priority Order)
 
-### TIER 1: Landing Page & Onboarding (Milestone 1)
-**Why:** Can't test anything if strangers bounce.
-
-| Task | Effort | Impact |
-|------|--------|--------|
-| Implement story-driven landing page structure | 1-2 days | HIGH |
-| Add founder journey content (earthquake, core insight) | 0.5 day | HIGH |
-| Add post-Flow Finder CTA guidance | 0.5 day | HIGH |
-
-### TIER 2: User Testing Infrastructure
+### TIER 1: User Testing (Milestone 1)
 **Why:** You need feedback loops, not more features.
 
 | Task | Effort | Impact |
 |------|--------|--------|
-| Create testing checklist for Milestone 1 | 2 hours | HIGH |
+| Create Milestone 1 test script (what to ask, what to observe) | 2 hours | HIGH |
 | Recruit 5 testers (Sam, Flynn, Josh, etc.) | 1 day | HIGH |
 | Set up feedback collection (form/Notion/Zarlo?) | 0.5 day | MEDIUM |
+| Get 3+ testers through Flow Finder | 1 day | HIGH |
+| Collect + analyze feedback | 1 day | HIGH |
+| Fix what actually breaks | TBD | HIGH |
 
-### TIER 3: CRM Polish (Milestone 4)
-**Why:** You mentioned CRM update as priority in your task list.
+---
 
-| Task | Effort | Impact | Status |
-|------|--------|--------|--------|
-| Lead Scoring (PTUF sliders) | 1-2 days | HIGH | ✅ Built |
-| DailyActions integration | 1 day | MEDIUM | ✅ Built |
-| Scripts database + modal | 1-2 days | MEDIUM | ✅ Built |
-| **Weekly Planning Merge** | | | |
-| ExecutionReview component | Small | HIGH | ✅ Built |
-| Integrate into WeeklyPlanningFlow | Small | HIGH | ✅ Built |
-| **NEW: Business Flywheel System** | | | |
-| Finalize phase checklist items | - | HIGH | ✅ Built |
-| Database tables (ecosystem_system_progress) | Small | HIGH | ✅ Built |
-| Config files (ecosystemConfig.js, ecosystemService.js) | Small | HIGH | ✅ Built |
-| BusinessSystems page (Tools tab) | Medium | HIGH | ✅ Built |
-| EcosystemStatusWidget (Dashboard) | Small | HIGH | ✅ Built |
-| Auto-activation on contact status change | Small | MEDIUM | ✅ Built |
-| **NEW: CSV Import** | | | |
-| CSV Import Wizard (6-step) | Medium | HIGH | ✅ Built |
-| Import to Contacts, Warm Leads, Deals | Medium | HIGH | ✅ Built |
-| Auto-mapping + validation | Small | HIGH | ✅ Built |
-| **NEW: Mindset Stage** | | | |
-| Add 'Mindset' stage to Business tab | Modules to set users up for success | Medium | ⬜ Not started |
-| **NEW: Financial Security Tools** | | | |
+### TIER 2: CRM & Business Polish (Milestone 1 & 4)
+**Why:** Remaining polish for first impressions and CRM execution.
+
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| **Business Tab** | | | |
+| Skills taxonomy: approve changes | Expressing→Performing, Connecting→Gathering, etc. | - | ⬜ Decision needed |
+| Skills taxonomy: implement | Update wheelTaxonomy.js | Small | ⬜ After approval |
+| Play List Finder: create flow | 4-question flow (role models, no fear, lost in time, groan zone) | Medium | ⬜ Not started |
+| Play List Finder: Mind Space integration | Mind Space first → Play List Finder for depth | Small | ⬜ Not started |
+| **CRM Remaining** | | | |
+| Mindset stage in Business tab | Modules to set users up for success | Medium | ⬜ Not started |
 | Runway Calculator | Savings ÷ expenses = weeks of runway | Small | ⬜ Not started |
 | Income Bridge Tracker | Track side income vs job income progress | Medium | ⬜ Not started |
-| **Polish & Integration** | | | |
-| Custom toolbar icons | Replace emoji icons in BottomToolbar with custom image assets (Home, Let's Play, Compass, Profile) | Small | ⬜ Not started |
-| Weekly Plan → DailyActions tighter connection | ? | HIGH | 🔍 To assess |
-| UX polish on existing features | ? | MEDIUM | 🔍 To assess |
-| Missing pieces from user testing | ? | HIGH | 🔍 To assess |
+| Custom toolbar icons | Replace emoji icons with custom image assets | Small | ⬜ Not started |
+| Weekly Plan → DailyActions tighter connection | Improve handoff | HIGH | 🔍 To assess |
+| UX polish on existing features | - | MEDIUM | 🔍 To assess |
 
-#### Flywheel System Overview
+**See:** `docs/skills-taxonomy-expansion-proposal.md` for full proposal on 4-segment expansion.
 
-The Business Flywheel helps users BUILD systems and EXECUTE them consistently:
+**Play List Finder Questions (Proposed):**
+1. "Who are people whose work or life makes you think 'I'd love to do that'?" (up to 5 with activity)
+2. "If you had zero fear of failure, judgment, or rejection - what would you spend your days doing?"
+3. "What activities make you completely lose track of time?"
+4. "What activities sound fun but make you nervous just thinking about doing them?" (Groan Zone)
+
+#### Flywheel System Reference
 
 ```
 ATTRACT (Always Running)     NURTURE (Always Running)
@@ -246,66 +236,47 @@ DELIVER (Per Client)         RETAIN (Per Client Lifecycle)
 └── Feedback form            └── Re-engagement sequence
 ```
 
-**Dashboard shows:** Phase completion % + "Complete setup in Tools →"
-**Tools tab shows:** Full checklist with links to create each item
-**Automatic activation:** DELIVER activates when contact → 'active', RETAIN when → 'completed'
+See `income-calculator-and-ecosystem-plan.md` for full details.
 
-See `income-calculator-and-ecosystem-plan.md` for full details + checklist items to review.
+---
 
-### TIER 3.5: Business Tab Updates (Milestone 1)
-**Why:** Flow Finder is first experience - skills taxonomy and discovery need to resonate.
-
-| Task | Description | Effort | Status |
-|------|-------------|--------|--------|
-| **Skills Taxonomy Expansion** | | | |
-| Review taxonomy gaps | Physical/Performing, Hosting, Curating, Protecting | - | ✅ Analyzed |
-| Proposal doc | 4 segments to expand (keep 12 total) | - | ✅ Created |
-| Approve changes | Expressing→Performing, Connecting→Gathering, etc. | - | ⬜ Decision needed |
-| Implement changes | Update wheelTaxonomy.js | Small | ⬜ After approval |
-| **WheelPicker UX Improvement** | | | |
-| Add info step before proficiency | Show "covers" + "example jobs" | Small | ✅ Built |
-| Add exampleJobs to all 12 segments | Help users identify with skills | Small | ✅ Built |
-| **Play List Finder Flow** | | | |
-| Create 4-question flow | Role models, No fear fantasy, Lost in time, Groan zone | Medium | ⬜ Not started |
-| Integrate with Mind Space | Mind Space first → Play List Finder for depth | Small | ⬜ Not started |
-
-**See:** `docs/skills-taxonomy-expansion-proposal.md` for full proposal on 4-segment expansion.
-
-**Play List Finder Questions (Proposed):**
-1. "Who are people whose work or life makes you think 'I'd love to do that'?" (up to 5 with activity)
-2. "If you had zero fear of failure, judgment, or rejection - what would you spend your days doing?"
-3. "What activities make you completely lose track of time?"
-4. "What activities sound fun but make you nervous just thinking about doing them?" (Groan Zone)
-
-### TIER 4: Healing Tab Updates (Milestone 5)
+### TIER 3: Healing Tab (Milestone 5)
 **Why:** The unique value prop - NS work → business action. Currently locked for testing.
 
 | Task | Description | Effort | Status |
 |------|-------------|--------|--------|
-| **NEW: Protective Archetype Flow** | | | |
-| Protective Archetype Identification | Flow to identify user's dominant protective pattern (Perfectionist, People Pleaser, Controller, Performer, Ghost) | Medium | ⬜ Not started |
-| Archetype Deep Dive Cards | Educational content for each archetype: origin, triggers, costs, gifts | Small | ⬜ Not started |
-| Archetype → Groan Connection | Link identified archetype to relevant courage challenges | Small | ⬜ Not started |
-| Archetype Journal Prompts | Reflection questions specific to each protective pattern | Small | ⬜ Not started |
-| Shadow Work Flow | Deep dive into shadow aspects/parts work | Medium | ⬜ Not started |
+| **Nervous System Flow Updates** | | | |
+| Tangible visibility question | Change from abstract "how many people" to a single event/moment (speaking gig, live video, sales call) | Small | ⬜ Not started |
+| Tangible money question | Change from annual income to a single deal amount | Small | ⬜ Not started |
+| Update sway tests + binary search | All downstream screens reference new tangible framing | Small | ⬜ Not started |
+| Update AI mirror prompt | Edge function prompt needs new context framing | Small | ⬜ Not started |
+| **Healing Compass Flows** | | | |
+| Rename current flow → "Healing Compass Safety Contracts" | Existing 7-question origin-tracing flow keeps its logic, just gets renamed | Small | ⬜ Not started |
+| New: Healing Compass Emotional Needs | New Healing Compass flow (structure TBD) | Medium | ⬜ Not started |
+| **New Flows** | | | |
+| Matrix Codes flow | New flow (details TBD) | Medium | ⬜ Not started |
+| Shadow Work Workshop | New deep-dive workshop flow | Medium | ⬜ Not started |
+| **Existing Items** | | | |
+| Protective Archetype Identification | Flow to identify user's dominant protective pattern | Medium | ⬜ Not started |
+| Archetype Deep Dive Cards | Educational content for each archetype | Small | ⬜ Not started |
+| Archetype → Groan Connection | Link identified archetype to courage challenges | Small | ⬜ Not started |
 | Memory Reconsolidation | Rewiring traumatic memories safely | Medium | ⬜ Not started |
-| Update Healing Compass | Improvements to existing flow | Small | ⬜ Not started |
-| Update Nervous System Flow | Improvements to existing flow | Small | ⬜ Not started |
 | Healing Book Assessment | Track books read + accountability | Small | ⬜ Not started |
-| **NEW: Recognise Tab Enhancements** | | | |
+| **Recognise Tab Enhancements** | | | |
 | Essence count question | "How many times did your essence show up today?" | Small | ⬜ Not started |
 | Protective count question | "How many times did your protective voice show up today?" | Small | ⬜ Not started |
-| Essence vs Protective % graph | Add % graph slide to results to visualize essence:protective ratio over time | Medium | ⬜ Not started |
-| **NEW: From Founder Journey** | | | |
-| Earthquake Inventory | Healing flow for grief of traditional path ("I was lied to") | Medium | ⬜ Not started |
+| Essence vs Protective % graph | Visualize essence:protective ratio over time | Medium | ⬜ Not started |
+| **From Founder Journey** | | | |
+| Earthquake Inventory | Healing flow for grief of traditional path | Medium | ⬜ Not started |
 | Relationship Audit | Reflection on who supports new vs old you | Small | ⬜ Not started |
-| Purgatory Acknowledgment | One-time card about identity conflict with old relationships | Small | ⬜ Not started |
+| **Unlock** | | | |
+| Unlock Healing Tab | Remove lock from Challenge.jsx, test all 21+ quests | Small | ⬜ After above items |
 
-**Note:** These unlock after Milestone 4 (CRM drives action) - healing tab currently locked for user testing.
+**Note:** Healing tab currently locked for user testing.
 
 ---
 
-### TIER 5: Groan & Identity System (Milestone 2 & 5)
+### TIER 4: Groan & Identity System (Milestone 2 & 5)
 **Why:** Core to the transformation - building "I do scary things" identity. From founder journey insights.
 
 | Task | Description | Effort | Status |
@@ -325,7 +296,7 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 
 ---
 
-### TIER 6: Game Layer (Milestone 2)
+### TIER 5: Game Layer (Milestone 2)
 **Why:** Hero Journey doc is beautiful but won't help if core loop doesn't retain.
 
 | Task | Effort | Impact |
@@ -336,7 +307,7 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 
 ---
 
-### TIER 7: Octalysis Gamification (Milestone 2+)
+### TIER 6: Octalysis Gamification (Milestone 2+)
 **Why:** Retention and engagement layer. Once core loop validated, these features keep users coming back and deepen the experience.
 **Reference:** `docs/octalysis-future-features.md` (full specs), `docs/octalysis-application-analysis.md` (scoring)
 
@@ -353,7 +324,7 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 | CD7 Curiosity | 5 | 7 | Easter Egg achievements, Zarlo Curiosity Hooks |
 | CD8 Loss | 5 | 5 | Intentional ceiling — wellness app, no anxiety mechanics |
 
-#### Phase 1: Quick Wins (Current Sprint)
+#### Phase 1: Quick Wins
 | Task | Drives | Effort | Status |
 |------|--------|--------|--------|
 | Community Impact Widget | CD1, CD5 | Small | ⬜ Not started |
@@ -411,56 +382,6 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 
 ---
 
-## WHAT TO DEPRIORITIZE (For Now)
-
-### Park These Ideas (Exciting but not now):
-- Fantasy league / team battles → Needs users first
-- Income Calculator → Good for marketing, not core loop
-- Ready Player One command center → Cool, but premature
-- Physical merchandise / NFC badges → Way too early
-- Seasonal events → Need base users first
-- Clawdbot / AI agent → Nice-to-have
-- Paid-to-learn marketplace → Future feature
-- "How hard are you to replace" module → After core works
-
-### These Can Wait:
-- Baby photos feature
-- Curiosity of the day
-- Feature voting system
-- Neural network rename
-
----
-
-## YOUR ACTION PLAN: This Week
-
-### ✅ COMPLETED
-- [x] Landing page story structure (method loop, compounding graph)
-- [x] Mind Space fast-track feature
-- [x] Lead Scoring sliders (PTUF)
-- [x] Scripts database + modal
-- [x] DailyActions integration
-- [x] ExecutionReview → WeeklyPlanningFlow merge
-- [x] Tab locking for user testing (Play, Healing, Bonus)
-- [x] Business Flywheel System (4 phases, 19 items, auto-detection)
-- [x] Database migration (ecosystem_system_progress table)
-- [x] Config files (ecosystemConfig.js, ecosystemService.js)
-- [x] BusinessSystems page in Tools tab
-- [x] EcosystemStatusWidget on Dashboard
-- [x] Email Sequences step editor + copy-to-clipboard
-- [x] PromptGenerator expansion (Pages, Email Sequences, Warm Outreach)
-- [x] Warm Lead → Contact promotion
-- [x] CSV Import Wizard (6-step, 3 tables, auto-mapping, validation)
-
-### ⬜ NEXT: User Testing
-- [ ] Create Milestone 1 test script (what to ask, what to observe)
-- [ ] Message 5 testers with clear ask
-- [ ] Set up simple feedback form
-- [ ] Get 3+ testers through Flow Finder
-- [ ] Collect feedback
-- [ ] Identify what actually breaks
-
----
-
 ## Decision Framework: Should I Build This?
 
 ```
@@ -469,7 +390,7 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 │                                                                   │
 │ Q1: Does it help achieve Milestone 1-5?                          │
 │     YES → Continue                                                │
-│     NO → Park it in future-features.md                           │
+│     NO → Park it in Ideas Parking Lot                            │
 │                                                                   │
 │ Q2: Is there a SIMPLER way to test this hypothesis?              │
 │     YES → Do the simpler thing first                             │
@@ -487,7 +408,31 @@ See `income-calculator-and-ecosystem-plan.md` for full details + checklist items
 
 ---
 
-## Summary: The Brutal Truth
+## Ideas Parking Lot
+
+Move exciting-but-premature ideas here instead of building them:
+
+| Idea | Why It's Parked | Revisit When |
+|------|-----------------|--------------|
+| Fantasy league / team battles | Need users to compete | After Milestone 2 |
+| Income Calculator | Marketing tool, not core loop | After Milestone 1 |
+| Ready Player One UI | Partially addressed via Hero Command Center (/hero-profile) | After Milestone 2 |
+| Physical badges / NFC | Cool but no users | After 100+ active users |
+| Clawdbot / AI agent | Nice-to-have automation | After Milestone 4 |
+| Workshop lead magnet question flow | Lead magnet creation flow for workshops | After Milestone 3 |
+| Zarlo "Ask Experts" section | Expert knowledge integration in Zarlo AI | After Milestone 2 |
+| Play Profile | User play/fun identity profile (distinct from Play List Finder) | After Milestone 2 |
+| Seasonal events | Need base users first | After Milestone 2 |
+| Paid-to-learn marketplace | Future feature | After Milestone 4 |
+| "How hard are you to replace" module | After core works | After Milestone 3 |
+| Baby photos feature | Fun but not core | After Milestone 2 |
+| Curiosity of the day | Engagement extra | After Milestone 2 |
+| Feature voting system | Need users first | After Milestone 2 |
+| Neural network rename | Low priority rename | When convenient |
+
+---
+
+## Summary
 
 **You have ENOUGH features.** The app is feature-rich.
 
@@ -509,20 +454,6 @@ What you don't have:
 | 5 | 1 user connects healing work to business action |
 
 **Once you hit Milestone 1, you've earned the right to build more.**
-
----
-
-## Ideas Parking Lot
-
-Move exciting-but-premature ideas here instead of building them:
-
-| Idea | Why It's Parked | Revisit When |
-|------|-----------------|--------------|
-| Fantasy league | Need users to compete | After Milestone 2 |
-| Income Calculator | Marketing tool, not core | After Milestone 1 |
-| Ready Player One UI | Narrative layer, not functionality | After Milestone 2 |
-| Physical badges | Cool but no users | After 100+ active users |
-| Clawdbot | Nice-to-have automation | After Milestone 4 |
 
 ---
 

@@ -277,6 +277,114 @@
   transform: scale(0.98);
 }
 
+/* === NEXT STEPS CARD === */
+.execute-page .next-steps-card {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.execute-page .next-steps-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, var(--brand-purple), var(--brand-gold));
+  border-radius: 24px 0 0 24px;
+}
+
+.execute-page .next-steps-header {
+  margin-bottom: 12px;
+}
+
+.execute-page .next-steps-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--brand-purple);
+}
+
+.execute-page .next-steps-group {
+  margin-bottom: 12px;
+}
+
+.execute-page .next-steps-group:last-of-type {
+  margin-bottom: 16px;
+}
+
+.execute-page .next-steps-offer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.execute-page .next-steps-offer-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.execute-page .next-steps-phase {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  padding-left: 22px;
+}
+
+.execute-page .next-steps-task {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  margin-bottom: 6px;
+}
+
+.execute-page .next-steps-task:last-child {
+  margin-bottom: 0;
+}
+
+.execute-page .next-steps-task:hover {
+  background: #f0f0f5;
+  border-color: var(--brand-purple);
+}
+
+.execute-page .next-steps-task:active {
+  transform: scale(0.98);
+}
+
+.execute-page .next-steps-view-all {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--brand-purple);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 8px 0 0;
+  text-align: center;
+  font-family: inherit;
+}
+
+.execute-page .next-steps-view-all:hover {
+  text-decoration: underline;
+}
+
 /* === PHASE TABS === */
 .execute-page .phase-tabs {
   display: flex;

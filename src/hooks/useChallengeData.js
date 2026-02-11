@@ -728,23 +728,25 @@ export function useChallengeData() {
   }
 
   // Check Flow Finder completion (user-level, not project-level)
+  // Considers both traditional Flow Finder (4 individual flows) and Mind Space as valid paths
   const checkFlowFinderComplete = async () => {
     if (!user?.id) return
 
     try {
-      // Check if all 4 Flow Finder flows are complete (user-level, no project_id)
       const flowFinderFlows = ['nikigai_skills', 'nikigai_problems', 'nikigai_persona', 'nikigai_integration']
 
       const { data, error } = await supabase
         .from('flow_sessions')
-        .select('flow_type')
+        .select('flow_type, status')
         .eq('user_id', user.id)
-        .in('flow_type', flowFinderFlows)
+        .in('flow_type', [...flowFinderFlows, 'mind_space'])
 
       if (!error && data) {
         const completedFlows = [...new Set(data.map(d => d.flow_type))]
-        const allComplete = flowFinderFlows.every(f => completedFlows.includes(f))
-        setFlowFinderComplete(allComplete)
+        // Complete if all 4 traditional flows done OR Mind Space completed
+        const traditionalComplete = flowFinderFlows.every(f => completedFlows.includes(f))
+        const mindSpaceComplete = data.some(d => d.flow_type === 'mind_space' && d.status === 'completed')
+        setFlowFinderComplete(traditionalComplete || mindSpaceComplete)
       } else {
         setFlowFinderComplete(false)
       }
@@ -1371,14 +1373,31 @@ export function useChallengeData() {
     return false
   }
 
-  const getArtifactProgress = (category) => {
+  const getArtifactProgress = (category, stageFilter = null) => {
     if (!challengeData) return null
 
     const artifact = challengeData.artifacts.find(a => a.category === category)
     if (!artifact) return null
 
     const unlocked = progress?.[`${artifact.id}_unlocked`] || false
-    const validQuestIds = getValidQuestIds(category)
+    let validQuestIds = getValidQuestIds(category)
+
+    // If a specific stage is requested, bypass getValidQuestIds stage restriction
+    // and filter directly from all quests for this stage (persona filter still applied)
+    if (stageFilter !== null && category === 'Business') {
+      const userPersonaNormalized = normalizePersona(userData?.persona)
+      validQuestIds = challengeData.quests
+        .filter(q => {
+          if (q.archived) return false
+          if (q.category !== category) return false
+          if (q.persona_specific && userPersonaNormalized) {
+            const normalizedQuestPersonas = q.persona_specific.map(p => normalizePersona(p))
+            if (!normalizedQuestPersonas.includes(userPersonaNormalized)) return false
+          }
+          return Number(q.stage_required) === Number(stageFilter)
+        })
+        .map(q => q.id)
+    }
 
     // Get current week start for filtering
     const weekStart = new Date(getWeekStart() + 'T00:00:00')

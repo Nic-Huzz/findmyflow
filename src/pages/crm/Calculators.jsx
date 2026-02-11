@@ -18,7 +18,6 @@ const CALCULATORS = [
     description: 'Calculate your optimal pricing based on income goals, capacity, and conversion rates. Based on Alex Hormozi\'s $100M Offers framework.',
     path: '/crm/ptuf',
     features: ['Income goal planning', 'Capacity analysis', 'Price optimization'],
-    color: '#10b981',
   },
   {
     id: 'ltv',
@@ -28,7 +27,6 @@ const CALCULATORS = [
     description: 'Calculate the total value of a customer across all revenue streams - initial sale, upsells, downsells, and continuity.',
     path: '/crm/ltv',
     features: ['Multi-product revenue', 'Continuity modeling', 'Referral value'],
-    color: '#8b5cf6',
   },
   {
     id: 'cac',
@@ -38,7 +36,6 @@ const CALCULATORS = [
     description: 'Track marketing spend by channel and calculate your cost per customer. See your LTV:CAC ratio to ensure profitable growth.',
     path: '/crm/cac',
     features: ['Channel tracking', 'LTV:CAC ratio', 'ROI analysis'],
-    color: '#f59e0b',
   },
 ]
 
@@ -58,7 +55,6 @@ export default function Calculators() {
 
   async function loadStats() {
     try {
-      // Check for saved calculator data
       const [ptufResult, ltvResult, cacResult] = await Promise.all([
         supabase
           .from('ptuf_calculations')
@@ -97,66 +93,77 @@ export default function Calculators() {
     navigate(calculator.path)
   }
 
+  if (loading) {
+    return (
+      <div className="calculators-page">
+        <div className="calc-hub-toolbar">
+          <button className="calc-hub-back" onClick={() => navigate('/crm/tools')}>←</button>
+          <h2 className="calc-hub-toolbar-title">Calculators</h2>
+        </div>
+        <div className="calc-hub-loading">
+          <div className="calc-hub-spinner" />
+          <p>Loading calculators...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="calculators-page">
-      <header className="calculators-header">
-        <button className="back-btn" onClick={() => navigate('/crm/tools')}>
-          <span className="back-arrow">←</span> Tools
-        </button>
-        <div className="header-content">
-          <h1>Calculators</h1>
-          <p className="header-subtitle">Business metrics powered by Hormozi frameworks</p>
-        </div>
-      </header>
-
-      <div className="calculators-intro">
-        <div className="intro-icon">🧮</div>
-        <p>
-          These calculators help you understand your business numbers and make data-driven decisions.
-          They auto-populate from your challenge data when available.
-        </p>
+      {/* TOOLBAR */}
+      <div className="calc-hub-toolbar">
+        <button className="calc-hub-back" onClick={() => navigate('/crm/tools')}>←</button>
+        <h2 className="calc-hub-toolbar-title">Calculators</h2>
       </div>
 
-      <div className="calculators-grid">
+      {/* HERO */}
+      <div className="calc-hub-hero">
+        <span className="calc-hub-hero-label">Business Metrics</span>
+        <h2 className="calc-hub-hero-title">Your Numbers</h2>
+        <p className="calc-hub-hero-sub">Data-driven decisions powered by Hormozi frameworks. Auto-populates from your challenge data.</p>
+      </div>
+
+      {/* CALCULATOR CARDS */}
+      <div className="calc-hub-grid">
         {CALCULATORS.map(calc => (
           <div
             key={calc.id}
-            className="calculator-card"
+            className="calc-hub-card"
             onClick={() => handleCardClick(calc)}
-            style={{ '--card-color': calc.color }}
           >
-            <div className="calc-card-header">
-              <span className="calc-icon">{calc.icon}</span>
+            <div className="calc-hub-card-top">
+              <span className="calc-hub-card-icon">{calc.icon}</span>
               {stats[calc.id] && (
-                <span className="calc-badge saved">Saved</span>
+                <span className="calc-hub-badge">Saved</span>
               )}
             </div>
 
-            <h3 className="calc-title">{calc.title}</h3>
-            <span className="calc-subtitle">{calc.subtitle}</span>
+            <h3 className="calc-hub-card-title">{calc.title}</h3>
+            <span className="calc-hub-card-eyebrow">{calc.subtitle}</span>
 
-            <p className="calc-description">{calc.description}</p>
+            <p className="calc-hub-card-desc">{calc.description}</p>
 
-            <ul className="calc-features">
+            <ul className="calc-hub-features">
               {calc.features.map((feature, i) => (
                 <li key={i}>
-                  <span className="feature-check">✓</span>
+                  <span className="calc-hub-check">✓</span>
                   {feature}
                 </li>
               ))}
             </ul>
 
-            <div className="calc-action">
+            <div className="calc-hub-card-action">
               <span>Open Calculator</span>
-              <span className="calc-arrow">→</span>
+              <span className="calc-hub-arrow">→</span>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="calculators-tip">
-        <div className="tip-icon">💡</div>
-        <div className="tip-content">
+      {/* TIP */}
+      <div className="calc-hub-tip">
+        <div className="calc-hub-tip-icon">💡</div>
+        <div className="calc-hub-tip-body">
           <strong>Pro Tip</strong>
           <p>Complete your offer flows first - the calculators will auto-populate with your pricing data for accurate projections.</p>
         </div>

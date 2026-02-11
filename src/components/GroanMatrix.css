@@ -120,6 +120,17 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.groan-essence-info {
+  font-size: 0.8rem;
+  color: #999;
+  cursor: help;
+  text-transform: none;
+  position: relative;
   margin-top: 0.25rem;
 }
 
@@ -791,4 +802,69 @@
   .groan-sp-mobile {
     display: block;
   }
+}
+
+/* ============================================================
+   LOCKED LAYER STYLES
+   ============================================================ */
+
+/* Desktop: locked header cell */
+.groan-header-cell.locked {
+  opacity: 0.5;
+  background: linear-gradient(135deg, #f1f1f1 0%, #e5e5e5 100%);
+}
+
+.groan-header-cell.locked .groan-layer-label {
+  color: #999;
+}
+
+.groan-header-cell.locked .groan-layer-fear {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Desktop: locked cell */
+.groan-matrix-cell.locked {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(0, 0, 0, 0.02),
+    rgba(0, 0, 0, 0.02) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+}
+
+.groan-cell-locked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 60px;
+}
+
+.groan-cell-locked-icon {
+  font-size: 1.25rem;
+  opacity: 0.6;
+}
+
+/* Mobile: locked section */
+.groan-mobile-section.locked {
+  opacity: 0.55;
+}
+
+.groan-mobile-section.locked .groan-mobile-layer-header {
+  opacity: 0.7;
+}
+
+.groan-mobile-locked-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: #999;
+  font-size: 0.85rem;
+  font-style: italic;
 }

@@ -56,6 +56,8 @@ export default function Execute() {
     addTask,
     frameworks,
     frameworkProgress,
+    implTasks,
+    completeImplTask,
     showLevelUp,
     floatingPoints,
     toast,
@@ -219,6 +221,13 @@ export default function Execute() {
     }
   }
 
+  async function handleImplTaskClick(task, e) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const position = { left: rect.right - 60, top: rect.top + rect.height / 2 }
+    const success = await completeImplTask(task, position)
+    if (success) loadQuickStats()
+  }
+
   async function handleAddTask(taskData = null) {
     const title = taskData?.title || newTaskTitle.trim()
     if (!title) return
@@ -336,6 +345,59 @@ export default function Execute() {
         <button className="plan-week-cta" onClick={() => setShowPlanningFlow(true)}>
           📋 Plan Your Week →
         </button>
+      )}
+
+      {/* Next Steps — Implementation Tasks */}
+      {implTasks.length > 0 && (
+        <div className="next-steps-card">
+          <div className="next-steps-header">
+            <span className="next-steps-label">Next Steps</span>
+          </div>
+
+          {Object.values(
+            implTasks.reduce((groups, task) => {
+              if (!groups[task.implId]) {
+                groups[task.implId] = {
+                  implId: task.implId,
+                  implName: task.implName,
+                  categoryIcon: task.categoryIcon,
+                  phaseName: task.phaseName,
+                  tasks: [],
+                }
+              }
+              groups[task.implId].tasks.push(task)
+              return groups
+            }, {})
+          ).map(group => (
+            <div key={group.implId} className="next-steps-group">
+              <div className="next-steps-offer">
+                <span>{group.categoryIcon}</span>
+                <span className="next-steps-offer-name">{group.implName}</span>
+              </div>
+              <div className="next-steps-phase">{group.phaseName}</div>
+              {group.tasks.map(task => (
+                <div
+                  key={`${task.phaseIndex}-${task.taskIndex}`}
+                  className="next-steps-task"
+                  onClick={(e) => handleImplTaskClick(task, e)}
+                >
+                  <div className="task-checkbox"></div>
+                  <div className="task-content">
+                    <span className="task-title">{task.title}</span>
+                    <span className="task-meta">15 pts</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+
+          <button
+            className="next-steps-view-all"
+            onClick={() => navigate('/crm/implementations')}
+          >
+            View All Checklists →
+          </button>
+        </div>
       )}
 
       {/* Phase Tabs */}

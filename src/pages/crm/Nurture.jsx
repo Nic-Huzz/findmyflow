@@ -45,14 +45,6 @@ const CARDS = [
     path: '/crm/ascension',
     statsKey: 'ascension',
   },
-  {
-    id: 'execute',
-    icon: '⚡',
-    title: 'Execute',
-    description: 'Daily action hub',
-    path: '/crm/execute',
-    statsKey: 'execute',
-  },
 ]
 
 function formatStat(key, value) {

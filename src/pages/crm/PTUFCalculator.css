@@ -1,239 +1,464 @@
-/* PTUF Calculator Styles - Light Theme Following Design Guide */
-@import '../../styles/crm-base.css';
+/**
+ * PTUFCalculator.css — /crm/ptuf
+ * Price To Unit Formula calculator
+ */
 
-/* CSS Variables */
+/* === ROOT === */
 .ptuf-calculator {
-  --purple: #5e17eb;
-  --purple-light: #7c3aed;
-  --gold: #E9A23B;
-  --warm-gray: #f8f9fa;
-  --soft-gray: #e9ecef;
-  --text-primary: #212529;
-  --text-secondary: #495057;
-  --text-muted: #6c757d;
-  --border-color: #dee2e6;
-  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-card-hover: 0 16px 40px rgba(94, 23, 235, 0.12);
-}
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
 
-.ptuf-calculator {
   min-height: 100vh;
-  padding: 24px;
+  background: linear-gradient(
+    180deg,
+    rgba(94, 23, 235, 0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233, 162, 59, 0.04) 100%
+  );
+  padding: 24px 20px;
+  padding-top: 80px;
   padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
   color: var(--text-primary);
+  overflow-x: hidden;
 }
 
-.ptuf-header {
+/* === LOADING STATE === */
+.ptuf-calculator .ptuf-loading {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.ptuf-calculator .back-btn {
-  background: #ffffff;
-  border: 1px solid var(--border-color);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
   color: var(--text-secondary);
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: all 0.2s;
 }
 
-.ptuf-calculator .back-btn:hover {
-  background: var(--soft-gray);
-  border-color: var(--purple);
-  color: var(--purple);
+.ptuf-calculator .ptuf-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e9ecef;
+  border-top-color: var(--brand-purple);
+  border-radius: 50%;
+  animation: ptufSpin 0.8s linear infinite;
 }
 
-.ptuf-calculator .header-content h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  background: linear-gradient(135deg, #5e17eb, #7c3aed);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+@keyframes ptufSpin {
+  to { transform: rotate(360deg); }
 }
 
-.ptuf-header .header-content p {
-  color: var(--text-muted);
-  margin: 0;
-  font-size: 0.875rem;
-}
-
-/* Grid Layout */
-.ptuf-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  margin-bottom: 24px;
-}
-
-/* Input Cards */
-.ptuf-card {
+/* === TOOLBAR === */
+.ptuf-calculator .ptuf-toolbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
   background: #ffffff;
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--shadow-card);
-  transition: all 0.3s ease;
-}
-
-.ptuf-card:hover {
-  box-shadow: var(--shadow-card-hover);
-}
-
-.ptuf-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 16px 0;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
-.ptuf-card h3 span {
-  font-size: 1.25rem;
+.ptuf-calculator .ptuf-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--brand-purple);
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
 }
 
-.ptuf-input-group {
+.ptuf-calculator .ptuf-toolbar-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* === DARK HERO CARD === */
+.ptuf-calculator .ptuf-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+}
+
+.ptuf-calculator .ptuf-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
+  animation: ptufGlow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.ptuf-calculator .ptuf-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -30px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(94, 23, 235, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes ptufGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.ptuf-calculator .ptuf-hero-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.ptuf-calculator .ptuf-hero-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin: 0 0 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.ptuf-calculator .ptuf-hero-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero Stats Grid */
+.ptuf-calculator .ptuf-hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.ptuf-calculator .ptuf-hero-stat {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 14px 12px;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+.ptuf-calculator .ptuf-hero-stat-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.ptuf-calculator .ptuf-hero-stat-value.gold {
+  color: var(--brand-gold);
+}
+
+.ptuf-calculator .ptuf-hero-stat-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+}
+
+/* === SECTIONS CONTAINER === */
+.ptuf-calculator .ptuf-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 16px;
 }
 
-.ptuf-input-group:last-child {
-  margin-bottom: 0;
+/* === WHITE CARD === */
+.ptuf-calculator .ptuf-card {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 16px;
 }
 
-.ptuf-input-group label {
-  display: block;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  margin-bottom: 6px;
+/* === SECTION HEADER (eyebrow) === */
+.ptuf-calculator .ptuf-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
-.ptuf-input-group input {
-  width: 100%;
-  padding: 12px 16px;
-  background: var(--warm-gray);
-  border: 1px solid var(--border-color);
+.ptuf-calculator .ptuf-section-icon {
+  width: 32px; height: 32px;
   border-radius: 10px;
-  font-size: 1rem;
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+
+.ptuf-calculator .ptuf-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--brand-purple);
+}
+
+/* === FORM FIELDS === */
+.ptuf-calculator .ptuf-field {
+  margin-bottom: 16px;
+}
+
+.ptuf-calculator .ptuf-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.ptuf-calculator .ptuf-field input {
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.ptuf-calculator .ptuf-field input:focus {
+  outline: none;
+  border-color: var(--brand-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+/* Input with prefix/suffix */
+.ptuf-calculator .ptuf-input-wrap {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.ptuf-calculator .ptuf-input-wrap:focus-within {
+  border-color: var(--brand-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.ptuf-calculator .ptuf-input-affix {
+  padding: 14px 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.ptuf-calculator .ptuf-input-wrap input {
+  border: none;
+  background: transparent;
+  padding: 14px 16px;
+  font-size: 16px;
   color: var(--text-primary);
   font-family: inherit;
+  flex: 1;
+  min-width: 0;
 }
 
-.ptuf-input-group input:focus {
+.ptuf-calculator .ptuf-input-wrap.prefix input {
+  padding-left: 0;
+}
+
+.ptuf-calculator .ptuf-input-wrap.suffix input {
+  padding-right: 0;
+}
+
+.ptuf-calculator .ptuf-input-wrap input:focus {
   outline: none;
-  border-color: var(--purple);
-  box-shadow: 0 0 0 3px rgba(94, 23, 235, 0.1);
+  box-shadow: none;
 }
 
-.ptuf-input-group .input-hint {
-  font-size: 0.7rem;
+/* === INLINE RESULTS (below inputs) === */
+.ptuf-calculator .ptuf-inline-results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
+  margin-top: 16px;
+}
+
+.ptuf-calculator .ptuf-inline-result {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.ptuf-calculator .ptuf-inline-result span {
+  color: var(--text-secondary);
+}
+
+.ptuf-calculator .ptuf-inline-result strong {
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.ptuf-calculator .ptuf-inline-result strong.positive {
+  color: #10b981;
+}
+
+.ptuf-calculator .ptuf-inline-result strong.warning {
+  color: #f59e0b;
+}
+
+/* === ACTIONS GRID === */
+.ptuf-calculator .ptuf-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ptuf-calculator .ptuf-action-item {
+  text-align: center;
+  padding: 16px 8px;
+  background: #f8f9fa;
+  border-radius: 16px;
+}
+
+.ptuf-calculator .ptuf-action-number {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--brand-purple);
+}
+
+.ptuf-calculator .ptuf-action-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   color: var(--text-muted);
   margin-top: 4px;
 }
 
-/* Results Card */
-.ptuf-results {
-  background: #ffffff;
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: var(--shadow-card);
+/* === CAPACITY BAR === */
+.ptuf-calculator .ptuf-capacity {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
 }
 
-.ptuf-results h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0 0 20px 0;
+.ptuf-calculator .ptuf-capacity-bar {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
 }
 
-.ptuf-result-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
+.ptuf-calculator .ptuf-capacity-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
 }
 
-.ptuf-result-item {
-  text-align: center;
-  padding: 16px;
-  background: var(--warm-gray);
-  border-radius: 12px;
+.ptuf-calculator .ptuf-capacity.under .ptuf-capacity-fill {
+  background: linear-gradient(90deg, #10b981, #34d399);
 }
 
-.ptuf-result-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--purple);
-  margin-bottom: 4px;
+.ptuf-calculator .ptuf-capacity.over .ptuf-capacity-fill {
+  background: linear-gradient(90deg, #ef4444, #f87171);
 }
 
-.ptuf-result-label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Highlight Result */
-.ptuf-result-highlight {
-  background: linear-gradient(135deg, rgba(94, 23, 235, 0.1), rgba(124, 58, 237, 0.05));
-  border: 2px solid var(--purple);
-  grid-column: 1 / -1;
-  padding: 20px;
-}
-
-.ptuf-result-highlight .ptuf-result-value {
-  font-size: 2rem;
-  color: var(--purple);
-}
-
-/* Info Box */
-.ptuf-info {
-  background: rgba(94, 23, 235, 0.05);
-  border: 1px solid rgba(94, 23, 235, 0.2);
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 24px;
-}
-
-.ptuf-info h4 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--purple);
-  margin: 0 0 8px 0;
-}
-
-.ptuf-info p {
-  font-size: 0.85rem;
+.ptuf-calculator .ptuf-capacity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
   color: var(--text-secondary);
-  margin: 0;
-  line-height: 1.5;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+.ptuf-calculator .ptuf-capacity-warn {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ef4444;
+}
+
+/* === RESPONSIVE === */
+@media (min-width: 768px) {
+  .ptuf-calculator {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .ptuf-calculator .ptuf-hero-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
   .ptuf-calculator {
     padding: 16px;
+    padding-top: 72px;
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   }
 
-  .ptuf-header {
-    flex-direction: column;
+  .ptuf-calculator .ptuf-actions-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
   }
+}
 
-  .ptuf-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .ptuf-result-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  .ptuf-calculator .ptuf-spinner { animation: none; }
+  .ptuf-calculator .ptuf-hero::before { animation: none; }
+  .ptuf-calculator *,
+  .ptuf-calculator *::before,
+  .ptuf-calculator *::after {
+    transition-duration: 0.01ms !important;
   }
 }

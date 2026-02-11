@@ -4,6 +4,8 @@
  * Tracks: Lead → Attraction → Core → Upsell/Downsell → Continuity
  */
 import { supabase } from '../supabaseClient'
+import { fetchImplementationsByCategory, CATEGORY_TO_FLOW_TYPE } from './implementationService'
+import { getOfferChecklist } from '../implementationChecklists'
 
 // Default value ladder rungs (used when no custom data)
 export const VALUE_LADDER_RUNGS = [
@@ -173,6 +175,127 @@ export async function fetchUserValueLadder(userId) {
       hasMoneyModels: false,
       sources: {}
     }
+  }
+}
+
+/**
+ * Fetch project-specific value ladder from offer_implementations
+ * Uses implementation checklists for display names and progress tracking
+ */
+export async function fetchProjectValueLadder(userId, projectId) {
+  try {
+    const { data: grouped, error } = await fetchImplementationsByCategory(userId, projectId)
+
+    if (error) {
+      console.error('Error fetching project implementations:', error)
+      return { ladder: VALUE_LADDER_RUNGS, completeness: 0, implementations: {} }
+    }
+
+    // For each category, take the first implementation and enrich with checklist data
+    const categories = ['attraction', 'upsell', 'downsell', 'continuity']
+    const implMap = {}
+
+    for (const cat of categories) {
+      const impl = grouped[cat]?.[0]
+      if (!impl) continue
+
+      const flowType = CATEGORY_TO_FLOW_TYPE[cat]
+      const checklist = flowType ? await getOfferChecklist(flowType, impl.offer_type) : null
+
+      const completedCount = impl.completed_tasks?.length || 0
+      const totalTasks = impl.total_tasks || 0
+      let progressPct = 0
+      if (impl.status === 'completed') {
+        progressPct = 100
+      } else if (totalTasks > 0) {
+        progressPct = Math.round((completedCount / totalTasks) * 100)
+      }
+
+      implMap[cat] = {
+        id: impl.id,
+        status: impl.status,
+        offer_type: impl.offer_type,
+        progress: progressPct,
+        checklistName: checklist?.name || impl.offer_type?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        checklistSummary: checklist?.summary || null,
+      }
+    }
+
+    const ladder = [
+      {
+        id: 'lead',
+        label: 'Lead',
+        customLabel: null,
+        color: '#6b7280',
+        icon: '👤',
+        price: 0,
+        description: 'Captured leads',
+      },
+      {
+        id: 'attraction',
+        label: 'Attraction Offer',
+        customLabel: implMap.attraction?.checklistName || null,
+        description: implMap.attraction?.checklistSummary || 'Free/low-cost entry offer',
+        color: '#3b82f6',
+        icon: '🎁',
+        price: 0,
+        implementation: implMap.attraction || null,
+      },
+      {
+        id: 'core',
+        label: 'Core Offer',
+        customLabel: null,
+        color: '#10b981',
+        icon: '💎',
+        price: 0,
+        description: 'Main product/service',
+      },
+      {
+        id: 'upsell',
+        label: 'Upsell',
+        customLabel: implMap.upsell?.checklistName || null,
+        description: implMap.upsell?.checklistSummary || 'Premium upgrade',
+        color: '#8b5cf6',
+        icon: '🚀',
+        price: 0,
+        implementation: implMap.upsell || null,
+      },
+      {
+        id: 'downsell',
+        label: 'Downsell',
+        customLabel: implMap.downsell?.checklistName || null,
+        description: implMap.downsell?.checklistSummary || 'Alternative for non-buyers',
+        color: '#f59e0b',
+        icon: '💰',
+        price: 0,
+        implementation: implMap.downsell || null,
+      },
+      {
+        id: 'continuity',
+        label: 'Continuity',
+        customLabel: implMap.continuity?.checklistName || null,
+        description: implMap.continuity?.checklistSummary || 'Recurring subscription',
+        color: '#ec4899',
+        icon: '🔄',
+        price: 0,
+        isRecurring: true,
+        implementation: implMap.continuity || null,
+      },
+    ]
+
+    // Completeness: count of categories with an implementation
+    const filledCount = categories.filter(c => implMap[c]).length
+    // lead + core always count as "present" so 2 + filledCount out of 6
+    const completeness = Math.round(((2 + filledCount) / 6) * 100)
+
+    return {
+      ladder,
+      completeness,
+      implementations: implMap,
+    }
+  } catch (err) {
+    console.error('Error fetching project value ladder:', err)
+    return { ladder: VALUE_LADDER_RUNGS, completeness: 0, implementations: {} }
   }
 }
 

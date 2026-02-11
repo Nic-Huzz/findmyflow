@@ -9,6 +9,7 @@ import { useAuth } from '../../auth/AuthProvider'
 import {
   VALUE_LADDER_RUNGS,
   fetchUserValueLadder,
+  fetchProjectValueLadder,
   fetchCustomerAscensions,
   getValueLadderStats,
   fetchAscensionTriggers,
@@ -20,6 +21,7 @@ import {
   getRetentionStats,
   updateContinuityStatus,
 } from '../../lib/crm/ascensionService'
+import { ProjectSwitcher } from '../../components/crm'
 import './AscensionEngine.css'
 
 export default function AscensionEngine() {
@@ -40,27 +42,43 @@ export default function AscensionEngine() {
   const [userLadder, setUserLadder] = useState(null)
   const [ladderCompleteness, setLadderCompleteness] = useState(0)
 
+  // Project switcher
+  const [currentProject, setCurrentProject] = useState(() => {
+    const saved = localStorage.getItem('crm_current_project')
+    return saved ? JSON.parse(saved) : null
+  })
+
   // UI states
   const [selectedCustomer, setSelectedCustomer] = useState(null)
   const [editingTrigger, setEditingTrigger] = useState(null)
+
+  // Persist project selection
+  useEffect(() => {
+    if (currentProject) {
+      localStorage.setItem('crm_current_project', JSON.stringify(currentProject))
+    }
+  }, [currentProject])
 
   useEffect(() => {
     if (user?.id) {
       loadData()
     }
-  }, [user?.id])
+  }, [user?.id, currentProject?.id])
 
   async function loadData() {
     setLoading(true)
     try {
+      const projectId = currentProject?.id || null
       const [statsResult, customersResult, triggersResult, tasksResult, continuityResult, retentionResult, ladderResult] = await Promise.all([
-        getValueLadderStats(user.id),
-        fetchCustomerAscensions(user.id, { limit: 50 }),
-        fetchAscensionTriggers(user.id),
-        fetchPendingAscensionTasks(user.id),
+        getValueLadderStats(user.id, projectId),
+        fetchCustomerAscensions(user.id, { limit: 50, projectId }),
+        fetchAscensionTriggers(user.id, projectId),
+        fetchPendingAscensionTasks(user.id, { projectId }),
         fetchContinuityCustomers(user.id),
         getRetentionStats(user.id),
-        fetchUserValueLadder(user.id),
+        projectId
+          ? fetchProjectValueLadder(user.id, projectId)
+          : fetchUserValueLadder(user.id),
       ])
 
       setLadderStats(statsResult)
@@ -74,8 +92,8 @@ export default function AscensionEngine() {
 
       // Create default triggers if none exist
       if (triggersResult.data?.length === 0) {
-        await createDefaultTriggers(user.id)
-        const { data: newTriggers } = await fetchAscensionTriggers(user.id)
+        await createDefaultTriggers(user.id, projectId)
+        const { data: newTriggers } = await fetchAscensionTriggers(user.id, projectId)
         setTriggers(newTriggers || [])
       }
     } catch (err) {
@@ -108,6 +126,13 @@ export default function AscensionEngine() {
           <button className="ae-toolbar-back" onClick={() => navigate('/crm/nurture')}>←</button>
           <h2 className="ae-toolbar-title">Ascension Engine</h2>
         </div>
+        <div className="ae-project-bar">
+          <ProjectSwitcher
+            userId={user?.id}
+            currentProject={currentProject}
+            onProjectChange={setCurrentProject}
+          />
+        </div>
         <div className="ae-loading">
           <div className="ae-spinner"></div>
           <p>Loading Ascension Engine...</p>
@@ -124,6 +149,15 @@ export default function AscensionEngine() {
           ←
         </button>
         <h2 className="ae-toolbar-title">Ascension Engine</h2>
+      </div>
+
+      {/* Project Switcher */}
+      <div className="ae-project-bar">
+        <ProjectSwitcher
+          userId={user?.id}
+          currentProject={currentProject}
+          onProjectChange={setCurrentProject}
+        />
       </div>
 
       {/* Dark Hero Stats Card */}
@@ -216,6 +250,7 @@ export default function AscensionEngine() {
             customers={customers}
             userLadder={userLadder}
             completeness={ladderCompleteness}
+            navigate={navigate}
           />
         )}
 
@@ -252,9 +287,15 @@ export default function AscensionEngine() {
 // ============================================
 // VALUE LADDER VIEW
 // ============================================
-function ValueLadderView({ stats, customers, userLadder, completeness }) {
+function ValueLadderView({ stats, customers, userLadder, completeness, navigate }) {
   // Use custom ladder if available, otherwise default
   const ladder = userLadder || VALUE_LADDER_RUNGS
+
+  function handleRungClick(rung) {
+    if (rung.implementation?.id) {
+      navigate(`/crm/implementations?id=${rung.implementation.id}`)
+    }
+  }
 
   return (
     <div className="value-ladder-view">
@@ -284,14 +325,19 @@ function ValueLadderView({ stats, customers, userLadder, completeness }) {
               ? stats.ascensionRates?.[`${prevRung.id}_to_${rung.id}`]
               : null
             const hasCustomData = rung.customLabel || rung.price > 0
+            const impl = rung.implementation
+            const isClickable = !!impl?.id
 
             return (
               <div
                 key={rung.id}
-                className={`ladder-rung ${hasCustomData ? 'has-data' : ''}`}
+                className={`ladder-rung ${hasCustomData ? 'has-data' : ''} ${impl ? 'has-impl' : ''} ${!impl && !hasCustomData && ['attraction', 'upsell', 'downsell', 'continuity'].includes(rung.id) ? 'no-impl' : ''}`}
                 style={{ '--rung-color': rung.color }}
+                onClick={() => isClickable && handleRungClick(rung)}
+                role={isClickable ? 'button' : undefined}
+                tabIndex={isClickable ? 0 : undefined}
               >
-                <div className="rung-card">
+                <div className={`rung-card ${isClickable ? 'clickable' : ''}`}>
                   <div className="rung-card-top">
                     <span className="rung-icon">{rung.icon}</span>
                     <div className="rung-info">
@@ -303,6 +349,11 @@ function ValueLadderView({ stats, customers, userLadder, completeness }) {
                       )}
                     </div>
                     <div className="rung-numbers">
+                      {impl && (
+                        <span className={`impl-status-badge ${impl.status}`}>
+                          {impl.status === 'completed' ? '100%' : `${impl.progress}%`}
+                        </span>
+                      )}
                       {rung.price > 0 && (
                         <span className="rung-price">
                           ${rung.price.toLocaleString()}{rung.isRecurring ? '/mo' : ''}
@@ -313,7 +364,18 @@ function ValueLadderView({ stats, customers, userLadder, completeness }) {
                       )}
                     </div>
                   </div>
-                  {(stats || hasCustomData) && (
+                  {/* Implementation progress bar */}
+                  {impl && (
+                    <div className="rung-impl-progress">
+                      <div className="impl-progress-bar">
+                        <div
+                          className={`impl-progress-fill ${impl.status}`}
+                          style={{ width: `${impl.status === 'completed' ? 100 : impl.progress}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  )}
+                  {(stats || hasCustomData || impl) && (
                     <div className="rung-card-bottom">
                       {stats && (
                         <span className="rung-count">
@@ -327,9 +389,18 @@ function ValueLadderView({ stats, customers, userLadder, completeness }) {
                           {rung.magnetType && <span className="detail-badge">📋 {rung.magnetType}</span>}
                         </div>
                       )}
+                      {impl && !hasCustomData && (
+                        <span className="impl-offer-type">{impl.offer_type?.replace(/_/g, ' ')}</span>
+                      )}
                       {ascensionRate !== null && ascensionRate > 0 && (
                         <span className="ascension-rate">↑ {ascensionRate}%</span>
                       )}
+                    </div>
+                  )}
+                  {/* Empty state for offer rungs with no implementation */}
+                  {!impl && !hasCustomData && ['attraction', 'upsell', 'downsell', 'continuity'].includes(rung.id) && (
+                    <div className="rung-card-bottom">
+                      <span className="rung-empty-hint">Not started yet</span>
                     </div>
                   )}
                 </div>

@@ -455,6 +455,62 @@ export function isTaskCompleted(completedTasks, phaseIndex, taskIndex) {
   )
 }
 
+/**
+ * Get the next uncompleted tasks across active implementations
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {number} tasksPerImpl - Max tasks to surface per implementation
+ * @returns {Promise<Array>} Flat list of next tasks grouped by implementation
+ */
+export async function getNextImplementationTasks(userId, projectId, tasksPerImpl = 2) {
+  const { data: impls } = await supabase
+    .from('offer_implementations')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('project_id', projectId)
+    .neq('status', 'completed')
+    .order('created_at')
+
+  if (!impls?.length) return []
+
+  const categoryOrder = ['attraction', 'upsell', 'downsell', 'continuity']
+  const sorted = [...impls].sort((a, b) =>
+    categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category)
+  )
+
+  const results = []
+
+  for (const impl of sorted) {
+    const withProgress = await getImplementationWithProgress(impl)
+    const checklist = withProgress.checklist?.implementation_checklist || []
+    const completedTasks = impl.completed_tasks || []
+    const catInfo = CATEGORY_INFO[impl.category]
+    let count = 0
+
+    for (let pi = 0; pi < checklist.length && count < tasksPerImpl; pi++) {
+      const phase = checklist[pi]
+      for (let ti = 0; ti < phase.tasks.length && count < tasksPerImpl; ti++) {
+        if (!isTaskCompleted(completedTasks, pi, ti)) {
+          results.push({
+            implId: impl.id,
+            implName: withProgress.checklist?.name || impl.offer_type,
+            category: impl.category,
+            categoryIcon: catInfo?.icon || '📋',
+            phaseName: phase.phase,
+            phaseIndex: pi,
+            taskIndex: ti,
+            title: phase.tasks[ti].task,
+            description: phase.tasks[ti].description,
+          })
+          count++
+        }
+      }
+    }
+  }
+
+  return results
+}
+
 export default {
   IMPLEMENTATION_STATUS,
   CATEGORY_INFO,
@@ -469,5 +525,6 @@ export default {
   deleteImplementation,
   getImplementationWithProgress,
   getImplementationStats,
+  getNextImplementationTasks,
   isTaskCompleted
 }

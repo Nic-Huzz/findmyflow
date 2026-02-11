@@ -13,7 +13,6 @@ import { supabase } from '../../lib/supabaseClient'
 import { fetchLaunchReadiness } from '../../lib/crm/challengeDataService'
 import './CACTracker.css'
 
-// Map Core Four strategy choices to channel IDs
 const CORE_FOUR_CHANNEL_MAP = {
   'warm_outreach': 'referral',
   'cold_outreach': 'email',
@@ -40,7 +39,7 @@ export default function CACTracker() {
   const { user } = useAuth()
 
   const [loadingDefaults, setLoadingDefaults] = useState(true)
-  const [focusedChannel, setFocusedChannel] = useState(null) // From Core Four
+  const [focusedChannel, setFocusedChannel] = useState(null)
   const [dataSource, setDataSource] = useState(null)
 
   const [timeframe, setTimeframe] = useState('month')
@@ -50,9 +49,8 @@ export default function CACTracker() {
       [ch.id]: { spend: 0, leads: 0, customers: 0 }
     }), {})
   )
-  const [ltv, setLtv] = useState(1500) // Average LTV for ratio calculation
+  const [ltv, setLtv] = useState(1500)
 
-  // Pre-populate from challenge data
   useEffect(() => {
     if (!user) {
       setLoadingDefaults(false)
@@ -63,7 +61,6 @@ export default function CACTracker() {
       try {
         const sources = []
 
-        // Fetch Core Four strategy and offer data for LTV estimate
         const [leadsStrategy, launchReadiness, continuityData] = await Promise.all([
           supabase
             .from('leads_assessments')
@@ -82,7 +79,6 @@ export default function CACTracker() {
             .maybeSingle()
         ])
 
-        // Set focused channel from Core Four
         if (leadsStrategy?.data?.chosen_strategy) {
           const channelId = CORE_FOUR_CHANNEL_MAP[leadsStrategy.data.chosen_strategy]
           if (channelId) {
@@ -91,7 +87,6 @@ export default function CACTracker() {
           }
         }
 
-        // Estimate LTV from launch readiness + continuity data
         const corePrice = parseFloat(launchReadiness?.pricing_data?.coreOfferPrice) || 0
         const monthlyPrice = parseFloat(continuityData?.data?.monthly_price) || 0
         const months = parseFloat(continuityData?.data?.avg_retention_months) || 6
@@ -114,7 +109,6 @@ export default function CACTracker() {
     loadDefaults()
   }, [user])
 
-  // Calculate totals and metrics
   const calculations = useMemo(() => {
     let totalSpend = 0
     let totalLeads = 0
@@ -146,7 +140,6 @@ export default function CACTracker() {
     const overallConversion = totalLeads > 0 ? (totalCustomers / totalLeads) * 100 : 0
     const ltvCacRatio = blendedCAC > 0 ? ltv / blendedCAC : 0
 
-    // Payback period (months)
     const avgMonthlyRevenue = ltv / 12
     const paybackMonths = avgMonthlyRevenue > 0 ? blendedCAC / avgMonthlyRevenue : 0
 
@@ -174,111 +167,114 @@ export default function CACTracker() {
   }
 
   function getLtvCacStatus(ratio) {
-    if (ratio >= 5) return { label: 'Excellent', class: 'excellent' }
-    if (ratio >= 3) return { label: 'Healthy', class: 'healthy' }
-    if (ratio >= 1) return { label: 'Break-even', class: 'warning' }
-    return { label: 'Losing Money', class: 'danger' }
+    if (ratio >= 5) return { label: 'Excellent', cls: 'excellent' }
+    if (ratio >= 3) return { label: 'Healthy', cls: 'healthy' }
+    if (ratio >= 1) return { label: 'Break-even', cls: 'warning' }
+    return { label: 'Losing Money', cls: 'danger' }
   }
+
+  if (loadingDefaults) {
+    return (
+      <div className="cac-tracker">
+        <div className="cac-toolbar">
+          <button className="cac-back" onClick={() => navigate('/crm/tools/calculators')}>←</button>
+          <h2 className="cac-toolbar-title">CAC Tracker</h2>
+        </div>
+        <div className="cac-loading">
+          <div className="cac-spinner" />
+          <p>Loading your data...</p>
+        </div>
+      </div>
+    )
+  }
+
+  const ratioStatus = getLtvCacStatus(calculations.ltvCacRatio)
 
   return (
     <div className="cac-tracker">
-      <header className="cac-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="header-content">
-          <h1>CAC Tracker</h1>
-          <p>Customer Acquisition Cost by Channel</p>
-        </div>
-        {loadingDefaults && (
-          <div className="data-source-badge loading">Loading...</div>
-        )}
-        {!loadingDefaults && dataSource && (
-          <div className="data-source-badge">
-            From: {dataSource}
+      {/* TOOLBAR */}
+      <div className="cac-toolbar">
+        <button className="cac-back" onClick={() => navigate('/crm/tools/calculators')}>←</button>
+        <h2 className="cac-toolbar-title">CAC Tracker</h2>
+      </div>
+
+      {/* HERO — Summary Stats */}
+      <div className="cac-hero">
+        <span className="cac-hero-label">Customer Acquisition Cost</span>
+        <h2 className="cac-hero-title">${calculations.blendedCAC.toFixed(2)}</h2>
+        <p className="cac-hero-sub">Blended CAC{dataSource ? ` — from: ${dataSource}` : ''}</p>
+        <div className="cac-hero-stats">
+          <div className="cac-hero-stat">
+            <span className="cac-hero-stat-value">${calculations.totalSpend.toLocaleString()}</span>
+            <span className="cac-hero-stat-label">Total Spend</span>
           </div>
-        )}
-        <div className="timeframe-toggle">
-          <button
-            className={timeframe === 'month' ? 'active' : ''}
-            onClick={() => setTimeframe('month')}
-          >
-            Month
-          </button>
-          <button
-            className={timeframe === 'quarter' ? 'active' : ''}
-            onClick={() => setTimeframe('quarter')}
-          >
-            Quarter
-          </button>
-          <button
-            className={timeframe === 'year' ? 'active' : ''}
-            onClick={() => setTimeframe('year')}
-          >
-            Year
-          </button>
-        </div>
-      </header>
-
-      {/* Summary Cards */}
-      <div className="cac-summary">
-        <div className="summary-card">
-          <span className="summary-label">Total Spend</span>
-          <span className="summary-value">${calculations.totalSpend.toLocaleString()}</span>
-        </div>
-        <div className="summary-card">
-          <span className="summary-label">Blended CPL</span>
-          <span className="summary-value">${calculations.blendedCPL.toFixed(2)}</span>
-        </div>
-        <div className="summary-card primary">
-          <span className="summary-label">Blended CAC</span>
-          <span className="summary-value">${calculations.blendedCAC.toFixed(2)}</span>
-        </div>
-        <div className={`summary-card ${getLtvCacStatus(calculations.ltvCacRatio).class}`}>
-          <span className="summary-label">LTV:CAC Ratio</span>
-          <span className="summary-value">{calculations.ltvCacRatio.toFixed(1)}:1</span>
-          <span className="summary-status">{getLtvCacStatus(calculations.ltvCacRatio).label}</span>
+          <div className="cac-hero-stat">
+            <span className="cac-hero-stat-value">${calculations.blendedCPL.toFixed(2)}</span>
+            <span className="cac-hero-stat-label">Blended CPL</span>
+          </div>
+          <div className="cac-hero-stat">
+            <span className={`cac-hero-stat-value ${ratioStatus.cls}`}>{calculations.ltvCacRatio.toFixed(1)}:1</span>
+            <span className="cac-hero-stat-label">LTV:CAC</span>
+          </div>
+          <div className="cac-hero-stat">
+            <span className="cac-hero-stat-value">{calculations.paybackMonths.toFixed(1)} mo</span>
+            <span className="cac-hero-stat-label">Payback</span>
+          </div>
         </div>
       </div>
 
-      {/* LTV Input */}
-      <div className="ltv-input-row">
-        <label>Your Average LTV (for ratio calculation)</label>
-        <div className="input-with-prefix">
-          <span>$</span>
-          <input
-            type="number"
-            value={ltv}
-            onChange={e => setLtv(parseInt(e.target.value) || 0)}
-          />
+      {/* TIMEFRAME + LTV INPUT */}
+      <div className="cac-card">
+        <div className="cac-controls-row">
+          <div className="cac-timeframe">
+            {['month', 'quarter', 'year'].map(t => (
+              <button
+                key={t}
+                className={`cac-timeframe-btn ${timeframe === t ? 'active' : ''}`}
+                onClick={() => setTimeframe(t)}
+              >
+                {t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+          <div className="cac-ltv-input">
+            <label>Your LTV</label>
+            <div className="cac-input-wrap prefix">
+              <span className="cac-input-affix">$</span>
+              <input
+                type="number"
+                value={ltv}
+                onChange={e => setLtv(parseInt(e.target.value) || 0)}
+              />
+            </div>
+          </div>
         </div>
-        <span className="payback-info">
-          Payback Period: <strong>{calculations.paybackMonths.toFixed(1)} months</strong>
-        </span>
       </div>
 
-      {/* Channel Input Grid */}
-      <section className="channels-section">
-        <h2>Channel Breakdown</h2>
-        <div className="channels-grid">
+      {/* CHANNEL INPUT CARDS */}
+      <div className="cac-card">
+        <div className="cac-section-header">
+          <div className="cac-section-icon">📊</div>
+          <span className="cac-section-title">Channel Breakdown</span>
+        </div>
+        <div className="cac-channels">
           {CHANNELS.map(channel => (
             <div
               key={channel.id}
-              className={`channel-card ${focusedChannel === channel.id ? 'focused' : ''}`}
-              style={{ '--channel-color': channel.color }}
+              className={`cac-channel ${focusedChannel === channel.id ? 'focused' : ''}`}
             >
-              <div className="channel-header">
-                <span className="channel-icon">{channel.icon}</span>
-                <span className="channel-name">{channel.name}</span>
+              <div className="cac-channel-head">
+                <span className="cac-channel-icon">{channel.icon}</span>
+                <span className="cac-channel-name">{channel.name}</span>
                 {focusedChannel === channel.id && (
-                  <span className="focus-badge">Core Four Focus</span>
+                  <span className="cac-focus-badge">Core Four</span>
                 )}
               </div>
-              <div className="channel-inputs">
-                <div className="input-group">
+              <div className="cac-channel-inputs">
+                <div className="cac-mini-field">
                   <label>Spend</label>
-                  <div className="input-with-prefix small">
-                    <span>$</span>
+                  <div className="cac-input-wrap prefix small">
+                    <span className="cac-input-affix">$</span>
                     <input
                       type="number"
                       value={channelData[channel.id].spend || ''}
@@ -287,7 +283,7 @@ export default function CACTracker() {
                     />
                   </div>
                 </div>
-                <div className="input-group">
+                <div className="cac-mini-field">
                   <label>Leads</label>
                   <input
                     type="number"
@@ -296,7 +292,7 @@ export default function CACTracker() {
                     placeholder="0"
                   />
                 </div>
-                <div className="input-group">
+                <div className="cac-mini-field">
                   <label>Customers</label>
                   <input
                     type="number"
@@ -307,7 +303,7 @@ export default function CACTracker() {
                 </div>
               </div>
               {(channelData[channel.id].spend > 0 || channelData[channel.id].customers > 0) && (
-                <div className="channel-metrics">
+                <div className="cac-channel-metrics">
                   <span>CPL: ${channelData[channel.id].leads > 0 ? (channelData[channel.id].spend / channelData[channel.id].leads).toFixed(2) : '—'}</span>
                   <span>CAC: ${channelData[channel.id].customers > 0 ? (channelData[channel.id].spend / channelData[channel.id].customers).toFixed(2) : '—'}</span>
                 </div>
@@ -315,91 +311,78 @@ export default function CACTracker() {
             </div>
           ))}
         </div>
-      </section>
+      </div>
 
-      {/* Results Table */}
+      {/* RESULTS TABLE */}
       {calculations.channelMetrics.length > 0 && (
-        <section className="results-section">
-          <h2>Channel Performance</h2>
-          <div className="results-table-wrapper">
-            <table className="results-table">
+        <div className="cac-card">
+          <div className="cac-section-header">
+            <div className="cac-section-icon">📈</div>
+            <span className="cac-section-title">Channel Performance</span>
+          </div>
+          <div className="cac-table-wrap">
+            <table className="cac-table">
               <thead>
                 <tr>
                   <th>Channel</th>
                   <th>Spend</th>
-                  <th>Leads</th>
-                  <th>Customers</th>
-                  <th>CPL</th>
                   <th>CAC</th>
-                  <th>Conv %</th>
                   <th>LTV:CAC</th>
                 </tr>
               </thead>
               <tbody>
                 {calculations.channelMetrics
                   .sort((a, b) => b.ltvCacRatio - a.ltvCacRatio)
-                  .map(channel => (
-                    <tr key={channel.id}>
-                      <td>
-                        <span className="channel-badge" style={{ background: channel.color }}>
-                          {channel.icon} {channel.name}
-                        </span>
-                      </td>
-                      <td>${channel.spend.toLocaleString()}</td>
-                      <td>{channel.leads}</td>
-                      <td>{channel.customers}</td>
-                      <td>${channel.cpl.toFixed(2)}</td>
-                      <td>${channel.cac.toFixed(2)}</td>
-                      <td>{channel.conversionRate.toFixed(1)}%</td>
-                      <td className={getLtvCacStatus(channel.ltvCacRatio).class}>
-                        {channel.ltvCacRatio.toFixed(1)}:1
-                      </td>
-                    </tr>
-                  ))}
+                  .map(channel => {
+                    const status = getLtvCacStatus(channel.ltvCacRatio)
+                    return (
+                      <tr key={channel.id}>
+                        <td>
+                          <span className="cac-table-channel">
+                            {channel.icon} {channel.name}
+                          </span>
+                        </td>
+                        <td>${channel.spend.toLocaleString()}</td>
+                        <td>${channel.cac.toFixed(2)}</td>
+                        <td className={status.cls}>{channel.ltvCacRatio.toFixed(1)}:1</td>
+                      </tr>
+                    )
+                  })}
               </tbody>
-              <tfoot>
-                <tr>
-                  <td><strong>Total/Blended</strong></td>
-                  <td><strong>${calculations.totalSpend.toLocaleString()}</strong></td>
-                  <td><strong>{calculations.totalLeads}</strong></td>
-                  <td><strong>{calculations.totalCustomers}</strong></td>
-                  <td><strong>${calculations.blendedCPL.toFixed(2)}</strong></td>
-                  <td><strong>${calculations.blendedCAC.toFixed(2)}</strong></td>
-                  <td><strong>{calculations.overallConversion.toFixed(1)}%</strong></td>
-                  <td className={getLtvCacStatus(calculations.ltvCacRatio).class}>
-                    <strong>{calculations.ltvCacRatio.toFixed(1)}:1</strong>
-                  </td>
-                </tr>
-              </tfoot>
             </table>
           </div>
-        </section>
+        </div>
       )}
 
-      {/* Recommendations */}
-      <section className="recommendations">
-        <h2>💡 Recommendations</h2>
-        <div className="rec-cards">
-          {calculations.ltvCacRatio < 3 && (
-            <div className="rec-card warning">
-              <strong>Improve LTV:CAC Ratio</strong>
-              <p>Your ratio of {calculations.ltvCacRatio.toFixed(1)}:1 is below the healthy 3:1 target. Consider raising prices, improving retention, or reducing acquisition costs.</p>
-            </div>
-          )}
-          {calculations.paybackMonths > 12 && (
-            <div className="rec-card warning">
-              <strong>Long Payback Period</strong>
-              <p>At {calculations.paybackMonths.toFixed(1)} months to payback, you need significant cash reserves. Focus on improving front-end offer conversions.</p>
-            </div>
-          )}
-          {calculations.channelMetrics.some(ch => ch.ltvCacRatio >= 5) && (
-            <div className="rec-card success">
-              <strong>Scale Top Performers</strong>
-              <p>You have channels with 5:1+ LTV:CAC. Consider increasing budget on {calculations.channelMetrics.filter(ch => ch.ltvCacRatio >= 5).map(ch => ch.name).join(', ')}.</p>
-            </div>
-          )}
+      {/* RECOMMENDATIONS */}
+      {(calculations.ltvCacRatio < 3 || calculations.paybackMonths > 12 || calculations.channelMetrics.some(ch => ch.ltvCacRatio >= 5)) && (
+        <div className="cac-card">
+          <div className="cac-section-header">
+            <div className="cac-section-icon">💡</div>
+            <span className="cac-section-title">Recommendations</span>
+          </div>
+          <div className="cac-recs">
+            {calculations.ltvCacRatio < 3 && calculations.ltvCacRatio > 0 && (
+              <div className="cac-rec warning">
+                <strong>Improve LTV:CAC Ratio</strong>
+                <p>Your ratio of {calculations.ltvCacRatio.toFixed(1)}:1 is below the healthy 3:1 target. Consider raising prices, improving retention, or reducing acquisition costs.</p>
+              </div>
+            )}
+            {calculations.paybackMonths > 12 && (
+              <div className="cac-rec warning">
+                <strong>Long Payback Period</strong>
+                <p>At {calculations.paybackMonths.toFixed(1)} months, you need significant cash reserves. Focus on improving front-end conversions.</p>
+              </div>
+            )}
+            {calculations.channelMetrics.some(ch => ch.ltvCacRatio >= 5) && (
+              <div className="cac-rec success">
+                <strong>Scale Top Performers</strong>
+                <p>Channels with 5:1+ ratio: {calculations.channelMetrics.filter(ch => ch.ltvCacRatio >= 5).map(ch => ch.name).join(', ')}. Consider increasing budget.</p>
+              </div>
+            )}
+          </div>
         </div>
-      </section>
+      )}
     </div>
   )
 }

@@ -15,6 +15,10 @@ import {
   getAllFrameworkProgress,
   awardFrameworkCompletion,
 } from '../lib/crm/frameworkService'
+import {
+  getNextImplementationTasks,
+  toggleTaskCompletion,
+} from '../lib/crm/implementationService'
 import { supabase } from '../lib/supabaseClient'
 
 // Points for different task types
@@ -35,6 +39,7 @@ export function useExecute(userId, projectId) {
   const [loading, setLoading] = useState(true)
   const [frameworks, setFrameworks] = useState([])
   const [frameworkProgress, setFrameworkProgress] = useState({})
+  const [implTasks, setImplTasks] = useState([])
   const loadingFrameworks = useRef(false)
 
   const {
@@ -98,13 +103,15 @@ export function useExecute(userId, projectId) {
 
     setLoading(true)
     try {
-      const [tasksResult, statsResult] = await Promise.all([
+      const [tasksResult, statsResult, implTasksResult] = await Promise.all([
         getThisWeekTasks(userId, projectId),
         getQuickStats(userId),
+        projectId ? getNextImplementationTasks(userId, projectId) : Promise.resolve([]),
       ])
 
       setTasks(tasksResult || [])
       setStats(statsResult)
+      setImplTasks(implTasksResult || [])
 
       // Also load frameworks
       loadFrameworks()
@@ -180,6 +187,32 @@ export function useExecute(userId, projectId) {
     return newTask
   }, [userId, projectId])
 
+  // Complete an implementation task
+  const completeImplTask = useCallback(async (task, position = {}) => {
+    const { phaseCompleted, allCompleted, error } = await toggleTaskCompletion(
+      task.implId, userId, task.phaseIndex, task.taskIndex
+    )
+    if (error) return false
+
+    const points = 15
+    celebrateTaskComplete(points, position)
+    await updateUserStats(userId, points)
+    await checkLevelUp(userId, points)
+
+    // Remove completed task from local state
+    setImplTasks(prev => prev.filter(t =>
+      !(t.implId === task.implId && t.phaseIndex === task.phaseIndex && t.taskIndex === task.taskIndex)
+    ))
+
+    // If phase or all completed, reload to surface next phase's tasks
+    if (phaseCompleted || allCompleted) {
+      const fresh = await getNextImplementationTasks(userId, projectId)
+      setImplTasks(fresh || [])
+    }
+
+    return true
+  }, [userId, projectId, celebrateTaskComplete])
+
   // Update user stats (points, streak, execution rate)
   async function updateUserStats(userId, pointsEarned) {
     try {
@@ -254,12 +287,14 @@ export function useExecute(userId, projectId) {
     loading,
     frameworks,
     frameworkProgress,
+    implTasks,
 
     // Actions
     loadData,
     completeTask,
     uncompleteTask,
     addTask,
+    completeImplTask,
     loadFrameworks,
 
     // Celebration state (for rendering overlays)

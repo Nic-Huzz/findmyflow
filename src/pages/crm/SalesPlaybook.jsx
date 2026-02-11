@@ -1,7 +1,6 @@
 /**
- * SalesPlaybook - Library page for all sales frameworks
- * Learn tab: study frameworks at your own pace
- * Track tab: objection stats from logged data
+ * SalesPlaybook.jsx — /crm/sales-playbook
+ * Educational library of Hormozi sales frameworks + objection analytics
  */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -28,28 +27,39 @@ export default function SalesPlaybook() {
 
   return (
     <div className="sales-playbook">
-      {/* Top Toolbar */}
+      {/* TOOLBAR */}
       <div className="sp-toolbar">
-        <button className="back-btn" onClick={() => navigate('/crm/nurture')}>
-          ←
-        </button>
-        <h2 className="toolbar-title">Sales Playbook</h2>
+        <button className="sp-back" onClick={() => navigate('/crm/tools')}>←</button>
+        <h2 className="sp-toolbar-title">Sales Playbook</h2>
       </div>
 
-      <header className="sp-header">
-        <div className="sp-breadcrumb">
-          <button onClick={() => navigate('/crm')}>Home</button>
-          <span>→</span>
-          <button onClick={() => navigate('/crm/nurture')}>Nurture</button>
-          <span>→</span>
-          <span>Playbook</span>
+      {/* HERO */}
+      <div className="sp-hero">
+        <span className="sp-hero-label">Hormozi Frameworks</span>
+        <h2 className="sp-hero-title">Sales Playbook</h2>
+        <p className="sp-hero-sub">Proven closing frameworks and objection handling from $100M+ in sales</p>
+        <div className="sp-hero-stats">
+          <div className="sp-hero-stat">
+            <span className="sp-hero-stat-value">7</span>
+            <span className="sp-hero-stat-label">Frameworks</span>
+          </div>
+          <div className="sp-hero-stat">
+            <span className="sp-hero-stat-value">20+</span>
+            <span className="sp-hero-stat-label">Strategies</span>
+          </div>
+          <div className="sp-hero-stat">
+            <span className="sp-hero-stat-value">6</span>
+            <span className="sp-hero-stat-label">CLOSER Steps</span>
+          </div>
+          <div className="sp-hero-stat">
+            <span className="sp-hero-stat-value">10</span>
+            <span className="sp-hero-stat-label">Principles</span>
+          </div>
         </div>
-        <h1>📚 Sales Playbook</h1>
-        <p className="sp-subtitle">Hormozi frameworks for closing with conviction</p>
-      </header>
+      </div>
 
-      {/* Tabs */}
-      <nav className="sp-tabs">
+      {/* TABS */}
+      <div className="sp-tabs">
         <button
           className={`sp-tab ${activeTab === 'learn' ? 'active' : ''}`}
           onClick={() => { setActiveTab('learn'); hapticLight() }}
@@ -62,7 +72,7 @@ export default function SalesPlaybook() {
         >
           Track
         </button>
-      </nav>
+      </div>
 
       {activeTab === 'learn' ? (
         <LearnTab />
@@ -97,17 +107,17 @@ function LearnTab() {
   return (
     <div className="sp-learn">
       {/* Three Things */}
-      <div className="sp-section">
-        <div className="sp-section-header" onClick={() => toggleSection('three-things')}>
-          <span className="sp-section-icon">🎯</span>
-          <div className="sp-section-info">
-            <span className="sp-section-title">{THREE_THINGS_ON_CALL.title}</span>
-            <span className="sp-section-desc">{THREE_THINGS_ON_CALL.subtitle}</span>
+      <div className="sp-card">
+        <div className="sp-accordion-header" onClick={() => toggleSection('three-things')}>
+          <div className="sp-accordion-icon">🎯</div>
+          <div className="sp-accordion-info">
+            <span className="sp-accordion-title">{THREE_THINGS_ON_CALL.title}</span>
+            <span className="sp-accordion-desc">{THREE_THINGS_ON_CALL.subtitle}</span>
           </div>
-          <span className="sp-expand">{expandedSection === 'three-things' ? '▼' : '▶'}</span>
+          <span className="sp-chevron">{expandedSection === 'three-things' ? '▼' : '▶'}</span>
         </div>
         {expandedSection === 'three-things' && (
-          <div className="sp-section-body">
+          <div className="sp-accordion-body">
             <div className="sp-three-things">
               {THREE_THINGS_ON_CALL.items.map(item => (
                 <div key={item.id} className="sp-thing-card" style={{ borderLeftColor: item.color }}>
@@ -121,17 +131,17 @@ function LearnTab() {
       </div>
 
       {/* Conviction & Tonality */}
-      <div className="sp-section">
-        <div className="sp-section-header" onClick={() => toggleSection('conviction')}>
-          <span className="sp-section-icon">🔥</span>
-          <div className="sp-section-info">
-            <span className="sp-section-title">Conviction & Tonality</span>
-            <span className="sp-section-desc">Mindset principles for closing</span>
+      <div className="sp-card">
+        <div className="sp-accordion-header" onClick={() => toggleSection('conviction')}>
+          <div className="sp-accordion-icon">🔥</div>
+          <div className="sp-accordion-info">
+            <span className="sp-accordion-title">Conviction & Tonality</span>
+            <span className="sp-accordion-desc">Mindset principles for closing</span>
           </div>
-          <span className="sp-expand">{expandedSection === 'conviction' ? '▼' : '▶'}</span>
+          <span className="sp-chevron">{expandedSection === 'conviction' ? '▼' : '▶'}</span>
         </div>
         {expandedSection === 'conviction' && (
-          <div className="sp-section-body">
+          <div className="sp-accordion-body">
             <div className="sp-conviction-cards">
               {CONVICTION_TONALITY.map(card => (
                 <div key={card.id} className="sp-conviction-card">
@@ -148,17 +158,17 @@ function LearnTab() {
       </div>
 
       {/* CLOSER Framework */}
-      <div className="sp-section">
-        <div className="sp-section-header" onClick={() => toggleSection('closer')}>
-          <span className="sp-section-icon">📋</span>
-          <div className="sp-section-info">
-            <span className="sp-section-title">{CLOSER_FRAMEWORK.name}</span>
-            <span className="sp-section-desc">{CLOSER_FRAMEWORK.description}</span>
+      <div className="sp-card">
+        <div className="sp-accordion-header" onClick={() => toggleSection('closer')}>
+          <div className="sp-accordion-icon">📋</div>
+          <div className="sp-accordion-info">
+            <span className="sp-accordion-title">{CLOSER_FRAMEWORK.name}</span>
+            <span className="sp-accordion-desc">{CLOSER_FRAMEWORK.description}</span>
           </div>
-          <span className="sp-expand">{expandedSection === 'closer' ? '▼' : '▶'}</span>
+          <span className="sp-chevron">{expandedSection === 'closer' ? '▼' : '▶'}</span>
         </div>
         {expandedSection === 'closer' && (
-          <div className="sp-section-body">
+          <div className="sp-accordion-body">
             <div className="sp-closer-steps">
               {CLOSER_FRAMEWORK.steps.map(step => (
                 <div key={step.letter} className="sp-closer-step">
@@ -171,7 +181,7 @@ function LearnTab() {
                       <span className="sp-closer-title">{step.title}</span>
                       <span className="sp-closer-desc">{step.description}</span>
                     </div>
-                    <span className="sp-expand-sm">{expandedItem === step.letter ? '▼' : '▶'}</span>
+                    <span className="sp-chevron-sm">{expandedItem === step.letter ? '▼' : '▶'}</span>
                   </div>
                   {expandedItem === step.letter && (
                     <div className="sp-closer-body">
@@ -186,17 +196,17 @@ function LearnTab() {
       </div>
 
       {/* Three Distortions */}
-      <div className="sp-section">
-        <div className="sp-section-header" onClick={() => toggleSection('distortions')}>
-          <span className="sp-section-icon">🛡️</span>
-          <div className="sp-section-info">
-            <span className="sp-section-title">Three Distortions</span>
-            <span className="sp-section-desc">Objection handling framework</span>
+      <div className="sp-card">
+        <div className="sp-accordion-header" onClick={() => toggleSection('distortions')}>
+          <div className="sp-accordion-icon">🛡️</div>
+          <div className="sp-accordion-info">
+            <span className="sp-accordion-title">Three Distortions</span>
+            <span className="sp-accordion-desc">Objection handling framework</span>
           </div>
-          <span className="sp-expand">{expandedSection === 'distortions' ? '▼' : '▶'}</span>
+          <span className="sp-chevron">{expandedSection === 'distortions' ? '▼' : '▶'}</span>
         </div>
         {expandedSection === 'distortions' && (
-          <div className="sp-section-body">
+          <div className="sp-accordion-body">
             {THREE_DISTORTIONS.layers.map(layer => (
               <div key={layer.id} className="sp-distortion-layer">
                 <div className="sp-layer-header">
@@ -215,7 +225,7 @@ function LearnTab() {
                             className={`sp-copy-btn ${copiedId === strategy.id ? 'copied' : ''}`}
                             onClick={() => copyText(strategy.fullScript, strategy.id)}
                           >
-                            {copiedId === strategy.id ? '✓' : '📋'}
+                            {copiedId === strategy.id ? '✓ Copied' : '📋 Copy'}
                           </button>
                         </div>
                         <p className="sp-strategy-text">{strategy.shortScript}</p>
@@ -230,26 +240,26 @@ function LearnTab() {
       </div>
 
       {/* Nine Things */}
-      <div className="sp-section">
-        <div className="sp-section-header" onClick={() => toggleSection('nine-things')}>
-          <span className="sp-section-icon">🏆</span>
-          <div className="sp-section-info">
-            <span className="sp-section-title">9 Things Best Salespeople Do</span>
-            <span className="sp-section-desc">Habits of top closers</span>
+      <div className="sp-card">
+        <div className="sp-accordion-header" onClick={() => toggleSection('nine-things')}>
+          <div className="sp-accordion-icon">🏆</div>
+          <div className="sp-accordion-info">
+            <span className="sp-accordion-title">9 Things Best Salespeople Do</span>
+            <span className="sp-accordion-desc">Habits of top closers</span>
           </div>
-          <span className="sp-expand">{expandedSection === 'nine-things' ? '▼' : '▶'}</span>
+          <span className="sp-chevron">{expandedSection === 'nine-things' ? '▼' : '▶'}</span>
         </div>
         {expandedSection === 'nine-things' && (
-          <div className="sp-section-body">
+          <div className="sp-accordion-body">
             <div className="sp-nine-things">
               {NINE_THINGS.map(thing => (
-                <div key={thing.id} className={`sp-thing ${thing.isPhase1 ? 'phase1' : ''}`}>
-                  <div className="sp-thing-header">
-                    <span className="sp-thing-name">{thing.name}</span>
-                    {thing.isPhase1 && <span className="sp-thing-badge">Active</span>}
+                <div key={thing.id} className={`sp-nine-item ${thing.isPhase1 ? 'active' : ''}`}>
+                  <div className="sp-nine-header">
+                    <span className="sp-nine-name">{thing.name}</span>
+                    {thing.isPhase1 && <span className="sp-nine-badge">Active</span>}
                   </div>
-                  <span className="sp-thing-full">{thing.fullName}</span>
-                  <p className="sp-thing-description">{thing.description}</p>
+                  <span className="sp-nine-full">{thing.fullName}</span>
+                  <p className="sp-nine-description">{thing.description}</p>
                 </div>
               ))}
             </div>
@@ -258,17 +268,17 @@ function LearnTab() {
       </div>
 
       {/* Sell the Vacation */}
-      <div className="sp-section">
-        <div className="sp-section-header" onClick={() => toggleSection('vacation')}>
-          <span className="sp-section-icon">🏖️</span>
-          <div className="sp-section-info">
-            <span className="sp-section-title">{SELL_THE_VACATION.title}</span>
-            <span className="sp-section-desc">Outcome-first framing</span>
+      <div className="sp-card">
+        <div className="sp-accordion-header" onClick={() => toggleSection('vacation')}>
+          <div className="sp-accordion-icon">🏖️</div>
+          <div className="sp-accordion-info">
+            <span className="sp-accordion-title">{SELL_THE_VACATION.title}</span>
+            <span className="sp-accordion-desc">Outcome-first framing</span>
           </div>
-          <span className="sp-expand">{expandedSection === 'vacation' ? '▼' : '▶'}</span>
+          <span className="sp-chevron">{expandedSection === 'vacation' ? '▼' : '▶'}</span>
         </div>
         {expandedSection === 'vacation' && (
-          <div className="sp-section-body">
+          <div className="sp-accordion-body">
             <p className="sp-vacation-text">{SELL_THE_VACATION.description}</p>
             <p className="sp-vacation-guidance">{SELL_THE_VACATION.guidance}</p>
           </div>
@@ -276,17 +286,17 @@ function LearnTab() {
       </div>
 
       {/* Key Principles */}
-      <div className="sp-section">
-        <div className="sp-section-header" onClick={() => toggleSection('principles')}>
-          <span className="sp-section-icon">💡</span>
-          <div className="sp-section-info">
-            <span className="sp-section-title">10 Key Principles</span>
-            <span className="sp-section-desc">Core sales beliefs</span>
+      <div className="sp-card">
+        <div className="sp-accordion-header" onClick={() => toggleSection('principles')}>
+          <div className="sp-accordion-icon">💡</div>
+          <div className="sp-accordion-info">
+            <span className="sp-accordion-title">10 Key Principles</span>
+            <span className="sp-accordion-desc">Core sales beliefs</span>
           </div>
-          <span className="sp-expand">{expandedSection === 'principles' ? '▼' : '▶'}</span>
+          <span className="sp-chevron">{expandedSection === 'principles' ? '▼' : '▶'}</span>
         </div>
         {expandedSection === 'principles' && (
-          <div className="sp-section-body">
+          <div className="sp-accordion-body">
             <div className="sp-principles">
               {KEY_PRINCIPLES.map(p => (
                 <div key={p.id} className="sp-principle">
@@ -311,6 +321,7 @@ function TrackTab({ userId }) {
 
   useEffect(() => {
     if (userId) loadStats()
+    else setLoading(false)
   }, [userId])
 
   async function loadStats() {
@@ -332,8 +343,12 @@ function TrackTab({ userId }) {
   return (
     <div className="sp-track">
       {/* Case Study Comparison */}
-      <div className="sp-case-study">
-        <h3>{CASE_STUDY_DATA.title}</h3>
+      <div className="sp-card sp-case-study-card">
+        <div className="sp-section-header">
+          <div className="sp-section-icon">📊</div>
+          <span className="sp-section-title">Framework Results</span>
+        </div>
+        <h3 className="sp-case-title">{CASE_STUDY_DATA.title}</h3>
         <p className="sp-case-subtitle">{CASE_STUDY_DATA.subtitle}</p>
         <div className="sp-metrics-grid">
           {CASE_STUDY_DATA.metrics.map(metric => (
@@ -351,63 +366,79 @@ function TrackTab({ userId }) {
 
       {/* Objection Stats */}
       {!stats ? (
-        <div className="sp-track-empty">
+        <div className="sp-card sp-empty-card">
           <span className="sp-empty-icon">📝</span>
-          <h3>No Objection Data Yet</h3>
-          <p>Log objections during sales calls using the Playbook drawer on deal cards.</p>
+          <h3 className="sp-empty-title">No Objection Data Yet</h3>
+          <p className="sp-empty-text">Log objections during sales calls using the Playbook drawer on deal cards.</p>
         </div>
       ) : (
-        <div className="sp-objection-stats">
-          {/* Summary */}
-          <div className="sp-stats-summary">
-            <div className="sp-stat-card">
-              <span className="sp-stat-value">{stats.totalLogs}</span>
-              <span className="sp-stat-label">Objections Logged</span>
+        <>
+          {/* Summary Stats */}
+          <div className="sp-card">
+            <div className="sp-section-header">
+              <div className="sp-section-icon">📈</div>
+              <span className="sp-section-title">Your Stats</span>
             </div>
-            {stats.strategyEffectiveness?.[0] && (
-              <div className="sp-stat-card">
-                <span className="sp-stat-value">{stats.strategyEffectiveness[0].successRate}%</span>
-                <span className="sp-stat-label">Top Strategy Rate</span>
+            <div className="sp-stats-summary">
+              <div className="sp-stat-tile">
+                <span className="sp-stat-value">{stats.totalLogs}</span>
+                <span className="sp-stat-label">Objections Logged</span>
               </div>
-            )}
+              {stats.strategyEffectiveness?.[0] && (
+                <div className="sp-stat-tile">
+                  <span className="sp-stat-value sp-stat-gold">{stats.strategyEffectiveness[0].successRate}%</span>
+                  <span className="sp-stat-label">Top Strategy Rate</span>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* By Layer */}
-          <div className="sp-stats-section">
-            <h4>By Distortion Layer</h4>
-            <div className="sp-layer-bars">
-              {Object.entries(stats.byLayer).filter(([, count]) => count > 0).map(([layer, count]) => {
-                const percent = Math.round((count / stats.totalLogs) * 100)
-                return (
-                  <div key={layer} className="sp-bar-item">
-                    <div className="sp-bar-header">
-                      <span className="sp-bar-label">{layer.charAt(0).toUpperCase() + layer.slice(1)}</span>
-                      <span className="sp-bar-count">{count} ({percent}%)</span>
+          {/* By Distortion Layer */}
+          {Object.entries(stats.byLayer).some(([, count]) => count > 0) && (
+            <div className="sp-card">
+              <div className="sp-section-header">
+                <div className="sp-section-icon">🛡️</div>
+                <span className="sp-section-title">By Distortion Layer</span>
+              </div>
+              <div className="sp-layer-bars">
+                {Object.entries(stats.byLayer).filter(([, count]) => count > 0).map(([layer, count]) => {
+                  const percent = Math.round((count / stats.totalLogs) * 100)
+                  return (
+                    <div key={layer} className="sp-bar-item">
+                      <div className="sp-bar-header">
+                        <span className="sp-bar-label">{layer.charAt(0).toUpperCase() + layer.slice(1)}</span>
+                        <span className="sp-bar-count">{count} ({percent}%)</span>
+                      </div>
+                      <div className="sp-bar-track">
+                        <div className="sp-bar-fill" style={{ width: `${percent}%` }} />
+                      </div>
                     </div>
-                    <div className="sp-bar-track">
-                      <div className="sp-bar-fill" style={{ width: `${percent}%` }} />
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Top Objections */}
           {stats.topObjections?.length > 0 && (
-            <div className="sp-stats-section">
-              <h4>Most Common Objections</h4>
-              {stats.topObjections.map(([category, count]) => (
-                <div key={category} className="sp-top-category" style={{ marginBottom: 6 }}>
-                  <span className="sp-top-label">
-                    {DISTORTION_REASON_LABELS[category] || category}
-                  </span>
-                  <span className="sp-top-count">{count} times</span>
-                </div>
-              ))}
+            <div className="sp-card">
+              <div className="sp-section-header">
+                <div className="sp-section-icon">🔥</div>
+                <span className="sp-section-title">Most Common Objections</span>
+              </div>
+              <div className="sp-top-objections">
+                {stats.topObjections.map(([category, count]) => (
+                  <div key={category} className="sp-top-row">
+                    <span className="sp-top-label">
+                      {DISTORTION_REASON_LABELS[category] || category}
+                    </span>
+                    <span className="sp-top-count">{count}x</span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   )

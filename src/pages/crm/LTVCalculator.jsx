@@ -25,9 +25,8 @@ export default function LTVCalculator() {
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  // Loading state for pre-population
   const [loadingDefaults, setLoadingDefaults] = useState(true)
-  const [dataSource, setDataSource] = useState(null) // Track where data came from
+  const [dataSource, setDataSource] = useState(null)
 
   // Initial Sale
   const [attractionOffer, setAttractionOffer] = useState(47)
@@ -51,7 +50,6 @@ export default function LTVCalculator() {
   const [referralRate, setReferralRate] = useState(10)
   const [referralsPerCustomer, setReferralsPerCustomer] = useState(0.5)
 
-  // Pre-populate from challenge data on mount
   useEffect(() => {
     if (!user) {
       setLoadingDefaults(false)
@@ -62,7 +60,6 @@ export default function LTVCalculator() {
       try {
         const sources = []
 
-        // Fetch all relevant challenge data in parallel
         const [offerStack, launchReadiness, funnelTrends, upsellData, downsellData, continuityData] = await Promise.all([
           fetchOfferStackData(user.id),
           fetchLaunchReadiness(user.id),
@@ -72,41 +69,34 @@ export default function LTVCalculator() {
           supabase.from('continuity_assessments').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle()
         ])
 
-        // Attraction offer from offer stack
         if (offerStack?.attraction_offer_price) {
           setAttractionOffer(offerStack.attraction_offer_price)
           sources.push('Offer Stack')
         }
 
-        // Core offer from launch readiness
         if (launchReadiness?.pricing_data?.coreOfferPrice) {
           setCoreOffer(launchReadiness.pricing_data.coreOfferPrice)
           sources.push('Launch Readiness')
         }
 
-        // Upsell from upsell assessment
         if (upsellData?.data?.pricing) {
           setUpsellPrice(upsellData.data.pricing)
           sources.push('Upsell Flow')
         }
 
-        // Downsell from downsell assessment
         if (downsellData?.data?.pricing) {
           setDownsellPrice(downsellData.data.pricing)
           sources.push('Downsell Flow')
         }
 
-        // Continuity from continuity assessment
         if (continuityData?.data?.monthly_price) {
           setContinuityPrice(continuityData.data.monthly_price)
           sources.push('Continuity Flow')
         }
 
-        // Conversion rates from funnel metrics (if available)
         if (funnelTrends && funnelTrends.length > 0) {
           const latest = funnelTrends[0]
           if (latest.rates) {
-            // Use actual conversion rates if we have them
             const nurtureToCore = parseFloat(latest.rates.nurtureToCore)
             if (nurtureToCore > 0) {
               setCoreConversion(Math.round(nurtureToCore))
@@ -129,33 +119,26 @@ export default function LTVCalculator() {
   }, [user])
 
   const calculations = useMemo(() => {
-    // Front-end value (per 100 customers at attraction offer)
     const attractionRevenue = attractionOffer * (attractionConversion / 100) * 100
     const coreRevenue = coreOffer * (coreConversion / 100) * 100
     const frontEndTotal = attractionRevenue + coreRevenue
 
-    // Upsell/Downsell value (based on core buyers)
     const coreBuyers = (coreConversion / 100) * 100
     const upsellRevenue = upsellPrice * (upsellRate / 100) * coreBuyers
     const nonUpsellBuyers = coreBuyers * (1 - upsellRate / 100)
     const downsellRevenue = downsellPrice * (downsellRate / 100) * nonUpsellBuyers
 
-    // Continuity value
     const continuityBuyers = coreBuyers * (continuityRate / 100)
     const continuityRevenue = continuityPrice * avgMonths * continuityBuyers
 
-    // Total before referrals
     const directRevenue = frontEndTotal + upsellRevenue + downsellRevenue + continuityRevenue
 
-    // Referral value (recursive)
     const referralMultiplier = 1 / (1 - (referralRate / 100) * referralsPerCustomer)
     const totalWithReferrals = directRevenue * referralMultiplier
 
-    // Per customer metrics
     const ltvPerCustomer = totalWithReferrals / 100
     const avgRevenuePerCoreBuyer = totalWithReferrals / coreBuyers
 
-    // Retention metrics
     const monthlyChurnDecimal = churnRate / 100
     const avgLifetimeMonths = monthlyChurnDecimal > 0 ? 1 / monthlyChurnDecimal : avgMonths
     const annualRetentionRate = Math.pow(1 - monthlyChurnDecimal, 12) * 100
@@ -180,381 +163,244 @@ export default function LTVCalculator() {
       continuityPrice, continuityRate, avgMonths, churnRate,
       referralRate, referralsPerCustomer])
 
+  if (loadingDefaults) {
+    return (
+      <div className="ltv-calculator">
+        <div className="ltv-toolbar">
+          <button className="ltv-back" onClick={() => navigate('/crm/tools/calculators')}>←</button>
+          <h2 className="ltv-toolbar-title">LTV Calculator</h2>
+        </div>
+        <div className="ltv-loading">
+          <div className="ltv-spinner" />
+          <p>Loading your offer data...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="ltv-calculator">
-      <header className="ltv-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="header-content">
-          <h1>LTV Calculator</h1>
-          <p>Customer Lifetime Value Analysis</p>
-        </div>
-      </header>
+      {/* TOOLBAR */}
+      <div className="ltv-toolbar">
+        <button className="ltv-back" onClick={() => navigate('/crm/tools/calculators')}>←</button>
+        <h2 className="ltv-toolbar-title">LTV Calculator</h2>
+      </div>
 
-      {loadingDefaults && (
-        <div className="data-source-banner loading">
-          Loading your offer data...
+      {/* HERO — LTV Summary */}
+      <div className="ltv-hero">
+        <span className="ltv-hero-label">Lifetime Value Analysis</span>
+        <h2 className="ltv-hero-title">${calculations.ltvPerCustomer.toFixed(2)}</h2>
+        <p className="ltv-hero-sub">LTV per lead (100 lead basis){dataSource ? ` — from: ${dataSource}` : ''}</p>
+        <div className="ltv-hero-stats">
+          <div className="ltv-hero-stat">
+            <span className="ltv-hero-stat-value gold">${calculations.avgRevenuePerCoreBuyer.toFixed(0)}</span>
+            <span className="ltv-hero-stat-label">Per Core Buyer</span>
+          </div>
+          <div className="ltv-hero-stat">
+            <span className="ltv-hero-stat-value">{calculations.coreBuyers}</span>
+            <span className="ltv-hero-stat-label">Core Buyers/100</span>
+          </div>
+          <div className="ltv-hero-stat">
+            <span className="ltv-hero-stat-value">{calculations.avgLifetimeMonths.toFixed(1)} mo</span>
+            <span className="ltv-hero-stat-label">Avg Lifetime</span>
+          </div>
+          <div className="ltv-hero-stat">
+            <span className="ltv-hero-stat-value gold">${calculations.totalWithReferrals.toLocaleString()}</span>
+            <span className="ltv-hero-stat-label">Total/100 Leads</span>
+          </div>
         </div>
-      )}
+      </div>
 
-      {!loadingDefaults && dataSource && (
-        <div className="data-source-banner">
-          Pre-populated from: {dataSource}
-        </div>
-      )}
-
-      <div className="ltv-grid">
+      {/* INPUT SECTIONS */}
+      <div className="ltv-sections">
         {/* Front-End Offers */}
-        <section className="ltv-section">
-          <h2>🎯 Front-End Offers</h2>
-          <div className="offer-row">
-            <div className="input-group">
-              <label>Attraction Offer Price</label>
-              <div className="input-with-prefix">
-                <span>$</span>
-                <input
-                  type="number"
-                  value={attractionOffer}
-                  onChange={e => setAttractionOffer(parseInt(e.target.value) || 0)}
-                />
+        <div className="ltv-card">
+          <div className="ltv-section-header">
+            <div className="ltv-section-icon">🎯</div>
+            <span className="ltv-section-title">Front-End Offers</span>
+          </div>
+          <div className="ltv-row">
+            <div className="ltv-field half">
+              <label>Attraction Price</label>
+              <div className="ltv-input-wrap prefix">
+                <span className="ltv-input-affix">$</span>
+                <input type="number" value={attractionOffer} onChange={e => setAttractionOffer(parseInt(e.target.value) || 0)} />
               </div>
             </div>
-            <div className="input-group">
-              <label>Conversion Rate</label>
-              <div className="input-with-suffix">
-                <input
-                  type="number"
-                  value={attractionConversion}
-                  onChange={e => setAttractionConversion(parseInt(e.target.value) || 0)}
-                />
-                <span>%</span>
+            <div className="ltv-field half">
+              <label>Conversion</label>
+              <div className="ltv-input-wrap suffix">
+                <input type="number" value={attractionConversion} onChange={e => setAttractionConversion(parseInt(e.target.value) || 0)} />
+                <span className="ltv-input-affix">%</span>
               </div>
             </div>
           </div>
-          <div className="offer-row">
-            <div className="input-group">
+          <div className="ltv-row">
+            <div className="ltv-field half">
               <label>Core Offer Price</label>
-              <div className="input-with-prefix">
-                <span>$</span>
-                <input
-                  type="number"
-                  value={coreOffer}
-                  onChange={e => setCoreOffer(parseInt(e.target.value) || 0)}
-                />
+              <div className="ltv-input-wrap prefix">
+                <span className="ltv-input-affix">$</span>
+                <input type="number" value={coreOffer} onChange={e => setCoreOffer(parseInt(e.target.value) || 0)} />
               </div>
             </div>
-            <div className="input-group">
-              <label>Conversion Rate</label>
-              <div className="input-with-suffix">
-                <input
-                  type="number"
-                  value={coreConversion}
-                  onChange={e => setCoreConversion(parseInt(e.target.value) || 0)}
-                />
-                <span>%</span>
+            <div className="ltv-field half">
+              <label>Conversion</label>
+              <div className="ltv-input-wrap suffix">
+                <input type="number" value={coreConversion} onChange={e => setCoreConversion(parseInt(e.target.value) || 0)} />
+                <span className="ltv-input-affix">%</span>
               </div>
             </div>
           </div>
-          <div className="section-total">
-            <span>Front-End Revenue (per 100 leads)</span>
+          <div className="ltv-inline-result">
+            <span>Front-End Revenue (per 100)</span>
             <strong>${calculations.frontEndTotal.toLocaleString()}</strong>
           </div>
-        </section>
+        </div>
 
         {/* Upsells & Downsells */}
-        <section className="ltv-section">
-          <h2>⬆️ Upsells & Downsells</h2>
-          <div className="offer-row">
-            <div className="input-group">
+        <div className="ltv-card">
+          <div className="ltv-section-header">
+            <div className="ltv-section-icon">⬆️</div>
+            <span className="ltv-section-title">Upsells & Downsells</span>
+          </div>
+          <div className="ltv-row">
+            <div className="ltv-field half">
               <label>Upsell Price</label>
-              <div className="input-with-prefix">
-                <span>$</span>
-                <input
-                  type="number"
-                  value={upsellPrice}
-                  onChange={e => setUpsellPrice(parseInt(e.target.value) || 0)}
-                />
+              <div className="ltv-input-wrap prefix">
+                <span className="ltv-input-affix">$</span>
+                <input type="number" value={upsellPrice} onChange={e => setUpsellPrice(parseInt(e.target.value) || 0)} />
               </div>
             </div>
-            <div className="input-group">
+            <div className="ltv-field half">
               <label>Take Rate</label>
-              <div className="input-with-suffix">
-                <input
-                  type="number"
-                  value={upsellRate}
-                  onChange={e => setUpsellRate(parseInt(e.target.value) || 0)}
-                />
-                <span>%</span>
+              <div className="ltv-input-wrap suffix">
+                <input type="number" value={upsellRate} onChange={e => setUpsellRate(parseInt(e.target.value) || 0)} />
+                <span className="ltv-input-affix">%</span>
               </div>
             </div>
           </div>
-          <div className="offer-row">
-            <div className="input-group">
+          <div className="ltv-row">
+            <div className="ltv-field half">
               <label>Downsell Price</label>
-              <div className="input-with-prefix">
-                <span>$</span>
-                <input
-                  type="number"
-                  value={downsellPrice}
-                  onChange={e => setDownsellPrice(parseInt(e.target.value) || 0)}
-                />
+              <div className="ltv-input-wrap prefix">
+                <span className="ltv-input-affix">$</span>
+                <input type="number" value={downsellPrice} onChange={e => setDownsellPrice(parseInt(e.target.value) || 0)} />
               </div>
             </div>
-            <div className="input-group">
+            <div className="ltv-field half">
               <label>Take Rate</label>
-              <div className="input-with-suffix">
-                <input
-                  type="number"
-                  value={downsellRate}
-                  onChange={e => setDownsellRate(parseInt(e.target.value) || 0)}
-                />
-                <span>%</span>
+              <div className="ltv-input-wrap suffix">
+                <input type="number" value={downsellRate} onChange={e => setDownsellRate(parseInt(e.target.value) || 0)} />
+                <span className="ltv-input-affix">%</span>
               </div>
             </div>
           </div>
-          <div className="section-total">
+          <div className="ltv-inline-result">
             <span>Upsell/Downsell Revenue</span>
             <strong>${(calculations.upsellRevenue + calculations.downsellRevenue).toLocaleString()}</strong>
           </div>
-        </section>
+        </div>
 
         {/* Continuity */}
-        <section className="ltv-section">
-          <h2>🔄 Continuity</h2>
-          <div className="offer-row">
-            <div className="input-group">
+        <div className="ltv-card">
+          <div className="ltv-section-header">
+            <div className="ltv-section-icon">🔄</div>
+            <span className="ltv-section-title">Continuity</span>
+          </div>
+          <div className="ltv-row">
+            <div className="ltv-field half">
               <label>Monthly Price</label>
-              <div className="input-with-prefix">
-                <span>$</span>
-                <input
-                  type="number"
-                  value={continuityPrice}
-                  onChange={e => setContinuityPrice(parseInt(e.target.value) || 0)}
-                />
+              <div className="ltv-input-wrap prefix">
+                <span className="ltv-input-affix">$</span>
+                <input type="number" value={continuityPrice} onChange={e => setContinuityPrice(parseInt(e.target.value) || 0)} />
               </div>
             </div>
-            <div className="input-group">
+            <div className="ltv-field half">
               <label>Take Rate</label>
-              <div className="input-with-suffix">
-                <input
-                  type="number"
-                  value={continuityRate}
-                  onChange={e => setContinuityRate(parseInt(e.target.value) || 0)}
-                />
-                <span>%</span>
+              <div className="ltv-input-wrap suffix">
+                <input type="number" value={continuityRate} onChange={e => setContinuityRate(parseInt(e.target.value) || 0)} />
+                <span className="ltv-input-affix">%</span>
               </div>
             </div>
           </div>
-          <div className="offer-row">
-            <div className="input-group">
-              <label>Avg Months Retained</label>
-              <input
-                type="number"
-                value={avgMonths}
-                onChange={e => setAvgMonths(parseInt(e.target.value) || 0)}
-              />
+          <div className="ltv-row">
+            <div className="ltv-field half">
+              <label>Avg Months</label>
+              <input type="number" value={avgMonths} onChange={e => setAvgMonths(parseInt(e.target.value) || 0)} />
             </div>
-            <div className="input-group">
-              <label>Monthly Churn %</label>
-              <div className="input-with-suffix">
-                <input
-                  type="number"
-                  value={churnRate}
-                  onChange={e => setChurnRate(parseInt(e.target.value) || 0)}
-                />
-                <span>%</span>
+            <div className="ltv-field half">
+              <label>Monthly Churn</label>
+              <div className="ltv-input-wrap suffix">
+                <input type="number" value={churnRate} onChange={e => setChurnRate(parseInt(e.target.value) || 0)} />
+                <span className="ltv-input-affix">%</span>
               </div>
             </div>
           </div>
-          <div className="section-total">
+          <div className="ltv-inline-result">
             <span>Continuity Revenue</span>
             <strong>${calculations.continuityRevenue.toLocaleString()}</strong>
           </div>
-        </section>
+        </div>
 
         {/* Referrals */}
-        <section className="ltv-section">
-          <h2>🗣️ Referral Value</h2>
-          <div className="offer-row">
-            <div className="input-group">
+        <div className="ltv-card">
+          <div className="ltv-section-header">
+            <div className="ltv-section-icon">🗣️</div>
+            <span className="ltv-section-title">Referral Value</span>
+          </div>
+          <div className="ltv-row">
+            <div className="ltv-field half">
               <label>Customers Who Refer</label>
-              <div className="input-with-suffix">
-                <input
-                  type="number"
-                  value={referralRate}
-                  onChange={e => setReferralRate(parseInt(e.target.value) || 0)}
-                />
-                <span>%</span>
+              <div className="ltv-input-wrap suffix">
+                <input type="number" value={referralRate} onChange={e => setReferralRate(parseInt(e.target.value) || 0)} />
+                <span className="ltv-input-affix">%</span>
               </div>
             </div>
-            <div className="input-group">
-              <label>Referrals Per Referrer</label>
-              <input
-                type="number"
-                step="0.1"
-                value={referralsPerCustomer}
-                onChange={e => setReferralsPerCustomer(parseFloat(e.target.value) || 0)}
-              />
+            <div className="ltv-field half">
+              <label>Referrals/Referrer</label>
+              <input type="number" step="0.1" value={referralsPerCustomer} onChange={e => setReferralsPerCustomer(parseFloat(e.target.value) || 0)} />
             </div>
           </div>
-        </section>
+        </div>
       </div>
 
-      {/* LTV Summary */}
-      <section className="ltv-summary">
-        <h2>💎 Lifetime Value Summary</h2>
-
-        <div className="summary-cards">
-          <div className="summary-card primary">
-            <span className="summary-label">LTV Per Lead</span>
-            <span className="summary-value">${calculations.ltvPerCustomer.toFixed(2)}</span>
-          </div>
-          <div className="summary-card">
-            <span className="summary-label">LTV Per Core Buyer</span>
-            <span className="summary-value">${calculations.avgRevenuePerCoreBuyer.toFixed(2)}</span>
-          </div>
-          <div className="summary-card">
-            <span className="summary-label">Core Buyers (per 100)</span>
-            <span className="summary-value">{calculations.coreBuyers}</span>
-          </div>
-          <div className="summary-card">
-            <span className="summary-label">Avg Lifetime</span>
-            <span className="summary-value">{calculations.avgLifetimeMonths.toFixed(1)} mo</span>
-          </div>
+      {/* REVENUE BREAKDOWN */}
+      <div className="ltv-card">
+        <div className="ltv-section-header">
+          <div className="ltv-section-icon">📊</div>
+          <span className="ltv-section-title">Revenue Breakdown (per 100 leads)</span>
         </div>
-
-        {/* Waterfall Chart */}
-        <div className="waterfall-chart">
-          <h3>Revenue Waterfall (per 100 leads)</h3>
-          <div className="waterfall-container">
-            {(() => {
-              const steps = [
-                { label: 'Attraction', value: calculations.attractionRevenue, color: '#6366f1' },
-                { label: 'Core', value: calculations.coreRevenue, color: '#8b5cf6' },
-                { label: 'Upsells', value: calculations.upsellRevenue, color: '#10b981' },
-                { label: 'Downsells', value: calculations.downsellRevenue, color: '#f59e0b' },
-                { label: 'Continuity', value: calculations.continuityRevenue, color: '#06b6d4' },
-              ]
-              const maxTotal = calculations.totalWithReferrals
-              let runningTotal = 0
-
-              return steps.map((step, index) => {
-                const prevTotal = runningTotal
-                runningTotal += step.value
-                const barBottom = (prevTotal / maxTotal) * 100
-                const barHeight = (step.value / maxTotal) * 100
-
-                return (
-                  <div key={step.label} className="waterfall-column">
-                    <div className="waterfall-value">${step.value.toLocaleString()}</div>
-                    <div className="waterfall-bar-container">
-                      <div
-                        className="waterfall-bar"
-                        style={{
-                          bottom: `${barBottom}%`,
-                          height: `${Math.max(barHeight, 2)}%`,
-                          backgroundColor: step.color,
-                        }}
-                      />
-                      {index > 0 && (
-                        <div
-                          className="waterfall-connector"
-                          style={{ bottom: `${barBottom}%` }}
-                        />
-                      )}
-                    </div>
-                    <div className="waterfall-label">{step.label}</div>
-                    <div className="waterfall-running-total">${runningTotal.toLocaleString()}</div>
-                  </div>
-                )
-              })
-            })()}
-            <div className="waterfall-column total-column">
-              <div className="waterfall-value total-value">${calculations.totalWithReferrals.toLocaleString()}</div>
-              <div className="waterfall-bar-container">
+        <div className="ltv-breakdown">
+          {[
+            { label: 'Attraction', value: calculations.attractionRevenue, color: '#6366f1' },
+            { label: 'Core', value: calculations.coreRevenue, color: '#8b5cf6' },
+            { label: 'Upsells', value: calculations.upsellRevenue, color: '#10b981' },
+            { label: 'Downsells', value: calculations.downsellRevenue, color: '#f59e0b' },
+            { label: 'Continuity', value: calculations.continuityRevenue, color: '#06b6d4' },
+          ].map(item => (
+            <div key={item.label} className="ltv-breakdown-row">
+              <div className="ltv-breakdown-label">
+                <span className="ltv-breakdown-dot" style={{ background: item.color }} />
+                <span>{item.label}</span>
+                <span className="ltv-breakdown-amount">${item.value.toLocaleString()}</span>
+              </div>
+              <div className="ltv-breakdown-bar">
                 <div
-                  className="waterfall-bar total-bar"
-                  style={{ bottom: '0%', height: '100%' }}
+                  className="ltv-breakdown-fill"
+                  style={{
+                    width: `${calculations.totalWithReferrals > 0 ? (item.value / calculations.totalWithReferrals) * 100 : 0}%`,
+                    background: item.color,
+                  }}
                 />
               </div>
-              <div className="waterfall-label">Total</div>
-              <div className="waterfall-running-total">with referrals</div>
             </div>
-          </div>
-        </div>
-
-        {/* Revenue Breakdown */}
-        <div className="revenue-breakdown">
-          <h3>Revenue Breakdown (per 100 leads)</h3>
-          <div className="breakdown-bars">
-            <div className="breakdown-item">
-              <div className="breakdown-label">
-                <span>Attraction Offer</span>
-                <span>${calculations.attractionRevenue.toLocaleString()}</span>
-              </div>
-              <div className="breakdown-bar">
-                <div
-                  className="bar-fill attraction"
-                  style={{ width: `${(calculations.attractionRevenue / calculations.totalWithReferrals) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="breakdown-item">
-              <div className="breakdown-label">
-                <span>Core Offer</span>
-                <span>${calculations.coreRevenue.toLocaleString()}</span>
-              </div>
-              <div className="breakdown-bar">
-                <div
-                  className="bar-fill core"
-                  style={{ width: `${(calculations.coreRevenue / calculations.totalWithReferrals) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="breakdown-item">
-              <div className="breakdown-label">
-                <span>Upsells</span>
-                <span>${calculations.upsellRevenue.toLocaleString()}</span>
-              </div>
-              <div className="breakdown-bar">
-                <div
-                  className="bar-fill upsell"
-                  style={{ width: `${(calculations.upsellRevenue / calculations.totalWithReferrals) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="breakdown-item">
-              <div className="breakdown-label">
-                <span>Downsells</span>
-                <span>${calculations.downsellRevenue.toLocaleString()}</span>
-              </div>
-              <div className="breakdown-bar">
-                <div
-                  className="bar-fill downsell"
-                  style={{ width: `${(calculations.downsellRevenue / calculations.totalWithReferrals) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-            <div className="breakdown-item">
-              <div className="breakdown-label">
-                <span>Continuity</span>
-                <span>${calculations.continuityRevenue.toLocaleString()}</span>
-              </div>
-              <div className="breakdown-bar">
-                <div
-                  className="bar-fill continuity"
-                  style={{ width: `${(calculations.continuityRevenue / calculations.totalWithReferrals) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
-          <div className="total-row">
-            <span>Total Revenue (per 100 leads)</span>
+          ))}
+          <div className="ltv-breakdown-total">
+            <span>Total (with referrals)</span>
             <strong>${calculations.totalWithReferrals.toLocaleString()}</strong>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }

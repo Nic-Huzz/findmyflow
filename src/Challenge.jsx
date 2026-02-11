@@ -25,7 +25,7 @@ import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreAction
 import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
 import { normalizePersona } from './data/personaProfiles'
-import { convertLegacyStage } from './lib/stageConfig'
+import { convertLegacyStage, GROAN_VISIBILITY_LAYERS, getLayerLockStatus, getStageConfig } from './lib/stageConfig'
 import { generateVoiceQuestsForStage } from './lib/voiceQuestConfig'
 import { getScoringCategory } from './lib/scoringCategories'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
@@ -179,6 +179,8 @@ function Challenge() {
   const [groanReflectionStep, setGroanReflectionStep] = useState(false)
   const [groanReflection, setGroanReflection] = useState({ scaryScore: 5, wahooScore: 5, reflection: '' })
   const [groanMatrixKey, setGroanMatrixKey] = useState(0) // Used to force matrix refresh
+  const [customChallengeText, setCustomChallengeText] = useState('')
+  const [groanCellContext, setGroanCellContext] = useState(null) // Cell data when opening popup without a challenge
 
   // Graduation modal state
   const [graduationModal, setGraduationModal] = useState({ isOpen: false, celebration: null })
@@ -924,10 +926,117 @@ function Challenge() {
     }
   }
 
-  // Handler for matrix cell clicks
+  // Handler for matrix cell clicks — opens popup immediately
   const handleMatrixCellClick = (cellData) => {
     if (cellData.challenge) {
       setSelectedGroanChallenge(cellData.challenge)
+      setGroanCellContext(cellData)
+    } else {
+      // No challenge yet — open popup with cell context for creating one
+      setSelectedGroanChallenge(null)
+      setGroanCellContext(cellData)
+    }
+  }
+
+  // Generate challenge via AI from within the popup
+  const handleGenerateFromPopup = async () => {
+    if (!groanCellContext) return
+    setGroanChallengeLoading(true)
+    try {
+      const result = await handleGenerateChallenge(groanCellContext)
+      if (result?.title) {
+        // Fetch the newly created challenge from DB
+        const { data: newChallenges } = await supabase
+          .from('groan_challenges')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+        if (newChallenges?.[0]) {
+          setSelectedGroanChallenge(newChallenges[0])
+        }
+        setGroanMatrixKey(prev => prev + 1)
+      }
+    } catch (err) {
+      console.error('Error generating from popup:', err)
+    } finally {
+      setGroanChallengeLoading(false)
+    }
+  }
+
+  // Handle saving a custom challenge (user-entered text)
+  const handleSaveCustomChallenge = async () => {
+    if (!customChallengeText.trim()) return
+    if (!selectedGroanChallenge && !groanCellContext) return
+    setGroanChallengeLoading(true)
+    try {
+      if (selectedGroanChallenge) {
+        // Update existing challenge with custom text
+        const { error } = await supabase
+          .from('groan_challenges')
+          .update({
+            title: customChallengeText.trim(),
+            description: `Custom challenge: ${customChallengeText.trim()}`,
+          })
+          .eq('id', selectedGroanChallenge.id)
+        if (error) throw error
+        setSelectedGroanChallenge(prev => ({
+          ...prev,
+          title: customChallengeText.trim(),
+          description: `Custom challenge: ${customChallengeText.trim()}`,
+        }))
+      } else {
+        // Create a new challenge from cell context with custom text
+        const ctx = groanCellContext
+        const isSkillProblem = ctx.sourceType === 'skill_x_problem'
+        let saveResult
+        if (isSkillProblem) {
+          saveResult = await createSkillProblemChallenge({
+            userId: user.id,
+            title: customChallengeText.trim(),
+            description: `Custom challenge: ${customChallengeText.trim()}`,
+            skillId: ctx.skillId,
+            skillLabel: ctx.skillLabel,
+            problemId: ctx.problemId,
+            problemLabel: ctx.problemLabel,
+            personaId: ctx.personaId || null,
+            personaLabel: ctx.personaLabel || null,
+            scaryScore: 5,
+            wahooScore: 5,
+          })
+        } else {
+          saveResult = await createGroanChallenge({
+            userId: user.id,
+            title: customChallengeText.trim(),
+            description: `Custom challenge: ${customChallengeText.trim()}`,
+            visibilityLayer: ctx.visibilityLayer,
+            sourceType: ctx.sourceType,
+            sourceId: ctx.sourceId,
+            sourceLabel: ctx.sourceLabel,
+            scaryScore: 5,
+            wahooScore: 5,
+          })
+        }
+        if (saveResult?.error) throw saveResult.error
+        // Fetch the newly created challenge and auto-accept it
+        const { data: newChallenges } = await supabase
+          .from('groan_challenges')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+        if (newChallenges?.[0]) {
+          await acceptGroanChallenge(newChallenges[0].id)
+        }
+        setGroanMatrixKey(prev => prev + 1)
+        // Close modal — challenge is now active on the matrix
+        closeGroanModal()
+      }
+      setCustomChallengeText('')
+    } catch (err) {
+      console.error('Error saving custom challenge:', err)
+    } finally {
+      setGroanChallengeLoading(false)
     }
   }
 
@@ -1036,7 +1145,9 @@ function Challenge() {
   // Close groan modal and reset state
   const closeGroanModal = () => {
     setSelectedGroanChallenge(null)
+    setGroanCellContext(null)
     setGroanReflectionStep(false)
+    setCustomChallengeText('')
   }
 
   // Determine the current viewing stage (needed for Business filtering)
@@ -1050,6 +1161,12 @@ function Challenge() {
   // Check if we're viewing the Groans stage (0.5) in Business tab
   const isGroansStage = activeCategory === 'Business' && viewingStage === 0.5
   const isFlowFinderStage = activeCategory === 'Business' && viewingStage === 0
+
+  // Compute which visibility layers are locked based on progress
+  const layerLockStatus = getLayerLockStatus(
+    flowFinderComplete,
+    selectedProject?.current_stage ?? 0
+  )
 
   // Deep Dive quest IDs for Flow Finder (includes archived flow_finder_skills)
   const DEEP_DIVE_QUEST_IDS = ['flow_finder_skills', 'flow_finder_problems', 'flow_finder_persona', 'flow_finder_integration']
@@ -1258,7 +1375,7 @@ function Challenge() {
   }
 
   const categoryPoints = getCategoryPoints(activeCategory)
-  const artifactProgress = getArtifactProgress(activeCategory)
+  const artifactProgress = getArtifactProgress(activeCategory, activeCategory === 'Business' ? activeStageTab : null)
 
   // ============================================
   // Render: Main Challenge View
@@ -1373,12 +1490,18 @@ function Challenge() {
         {/* Quest Content - only show if not on Leaderboard or Summary tabs */}
         {activeCategory !== 'Leaderboard' && activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
-        {/* Artifact Progress */}
-        {artifactProgress && (
+        {/* Artifact Progress — hidden on Groans/Play tab (both direct and via Business) */}
+        {artifactProgress && activeCategory !== 'Groans' && !isGroansStage && (() => {
+          const stageConfig = activeCategory === 'Business' && activeStageTab !== undefined ? getStageConfig(activeStageTab) : null
+          const artifactName = stageConfig ? `${stageConfig.icon} ${stageConfig.name}` : artifactProgress.name
+          const artifactDesc = stageConfig
+            ? (activeStageTab === 0 ? 'Tasks to find your flow in life' : stageConfig.description)
+            : artifactProgress.description
+          return (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
             <div className="artifact-header">
-              <h3>{artifactProgress.unlocked ? '✅' : '🔒'} {artifactProgress.name}</h3>
-              <p className="artifact-description">{artifactProgress.description}</p>
+              <h3>{artifactProgress.unlocked ? '✅' : ''} {artifactName}</h3>
+              <p className="artifact-description">{artifactDesc}</p>
             </div>
 
             {!artifactProgress.unlocked && (
@@ -1431,7 +1554,8 @@ function Challenge() {
               </div>
             )}
           </div>
-        )}
+          )
+        })()}
 
 
         {/* Sub-tabs: Tasks | Voices (or Deep Dive for Flow Finder) - only for Business, hidden for Groans stage */}
@@ -1460,6 +1584,7 @@ function Challenge() {
               userId={user?.id}
               onCellClick={handleMatrixCellClick}
               onGenerateChallenge={handleGenerateChallenge}
+              layerLockStatus={layerLockStatus}
             />
           </div>
         )}
@@ -1567,6 +1692,7 @@ function Challenge() {
               userId={user?.id}
               onCellClick={handleMatrixCellClick}
               onGenerateChallenge={handleGenerateChallenge}
+              layerLockStatus={layerLockStatus}
             />
           </div>
         )}
@@ -1730,67 +1856,160 @@ function Challenge() {
       )}
 
       {/* Groan Challenge Detail Modal */}
-      {selectedGroanChallenge && (
+      {(selectedGroanChallenge || groanCellContext) && (
         <div className="groan-modal-overlay" onClick={closeGroanModal}>
           <div className="groan-modal" onClick={e => e.stopPropagation()}>
             <button className="groan-modal-close" onClick={closeGroanModal}>×</button>
 
             {!groanReflectionStep ? (
               <>
-                {/* Challenge Overview */}
+                {/* Header with layer badge */}
                 <div className="groan-modal-header">
-                  {selectedGroanChallenge.visibility_layer && (
-                    <span className="groan-modal-layer">{selectedGroanChallenge.visibility_layer.toUpperCase()}</span>
+                  {(selectedGroanChallenge?.visibility_layer || groanCellContext?.visibilityLayer) && (
+                    <span className="groan-modal-layer">
+                      {(selectedGroanChallenge?.visibility_layer || groanCellContext?.visibilityLayer).toUpperCase()}
+                    </span>
                   )}
-                  {selectedGroanChallenge.skill_cluster_id && (
+                  {(selectedGroanChallenge?.skill_cluster_id || groanCellContext?.sourceType === 'skill_x_problem') && (
                     <span className="groan-modal-layer groan-modal-layer-sp">SKILL × PROBLEM</span>
                   )}
-                  <h2>{selectedGroanChallenge.title}</h2>
+
+                  {/* Show challenge title if we have one, otherwise show layer explanation */}
+                  {selectedGroanChallenge ? (
+                    <h2>{selectedGroanChallenge.title}</h2>
+                  ) : (
+                    <h2>
+                      {(() => {
+                        const layerId = groanCellContext?.visibilityLayer
+                        const layerInfo = GROAN_VISIBILITY_LAYERS.find(l => l.id === layerId)
+                        return layerInfo ? `${layerInfo.icon} ${layerInfo.label} Challenge` : 'New Challenge'
+                      })()}
+                    </h2>
+                  )}
                 </div>
 
-                <p className="groan-modal-description">{selectedGroanChallenge.description}</p>
+                {/* Visibility layer selector for Skill × Problem (no layer pre-set) */}
+                {!selectedGroanChallenge && groanCellContext?.sourceType === 'skill_x_problem' && !groanCellContext?.visibilityLayer && (
+                  <div className="groan-layer-selector">
+                    <label className="groan-custom-label">Choose visibility level:</label>
+                    <div className="groan-layer-options">
+                      {GROAN_VISIBILITY_LAYERS.map(layer => {
+                        const isLocked = layerLockStatus[layer.id]?.locked
+                        return (
+                          <button
+                            key={layer.id}
+                            className={`groan-layer-option ${isLocked ? 'locked' : ''}`}
+                            disabled={isLocked}
+                            onClick={() => setGroanCellContext(prev => ({ ...prev, visibilityLayer: layer.id }))}
+                          >
+                            <span className="groan-layer-option-icon">{isLocked ? '🔒' : layer.icon}</span>
+                            <span className="groan-layer-option-label">{layer.label}</span>
+                            {isLocked && <span className="groan-layer-option-lock-msg">{layerLockStatus[layer.id].message}</span>}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
 
-                {selectedGroanChallenge.source_label && (
+                {/* Layer description when no challenge yet */}
+                {!selectedGroanChallenge && groanCellContext?.visibilityLayer && (
+                  <p className="groan-modal-description">
+                    {(() => {
+                      const layerInfo = GROAN_VISIBILITY_LAYERS.find(l => l.id === groanCellContext.visibilityLayer)
+                      return layerInfo?.description || ''
+                    })()}
+                  </p>
+                )}
+
+                {/* Challenge description when we have one */}
+                {selectedGroanChallenge && (
+                  <p className="groan-modal-description">{selectedGroanChallenge.description}</p>
+                )}
+
+                {/* Source label — show skill × problem combo */}
+                {groanCellContext?.sourceType === 'skill_x_problem' && !selectedGroanChallenge && (
+                  <div className="groan-modal-source">
+                    <span className="source-icon">⚡</span>
+                    <span className="source-text">{groanCellContext.skillLabel} × {groanCellContext.problemLabel}</span>
+                  </div>
+                )}
+                {/* Source label — standard */}
+                {groanCellContext?.sourceType !== 'skill_x_problem' && (selectedGroanChallenge?.source_label || groanCellContext?.sourceLabel) && (
                   <div className="groan-modal-source">
                     <span className="source-icon">🎯</span>
-                    <span className="source-text">{selectedGroanChallenge.source_label}</span>
+                    <span className="source-text">{selectedGroanChallenge?.source_label || groanCellContext?.sourceLabel}</span>
+                  </div>
+                )}
+
+                {/* Custom challenge input + Generate AI — shown when layer is selected and no challenge or before accepting */}
+                {(groanCellContext?.visibilityLayer || selectedGroanChallenge) && (!selectedGroanChallenge || (!selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed')) && (
+                  <div className="groan-custom-challenge">
+                    <label className="groan-custom-label">Enter your own here:</label>
+                    <input
+                      type="text"
+                      className="groan-custom-input"
+                      placeholder="Type your own challenge..."
+                      value={customChallengeText}
+                      onChange={(e) => setCustomChallengeText(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && customChallengeText.trim() && handleSaveCustomChallenge()}
+                    />
+                    {customChallengeText.trim() && (
+                      <button
+                        className="groan-btn groan-btn-save-custom"
+                        onClick={handleSaveCustomChallenge}
+                        disabled={groanChallengeLoading}
+                      >
+                        {groanChallengeLoading ? 'Saving...' : '✏️ Use This Challenge'}
+                      </button>
+                    )}
+                    <button
+                      className="groan-btn groan-btn-regenerate"
+                      onClick={selectedGroanChallenge ? handleRegenerateChallenge : handleGenerateFromPopup}
+                      disabled={groanChallengeLoading}
+                    >
+                      {groanChallengeLoading ? 'Generating...' : '✨ Generate with AI'}
+                    </button>
                   </div>
                 )}
 
                 <div className="groan-modal-actions">
-                  {/* Not yet accepted - show Accept + Regenerate */}
-                  {!selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed' && (
+                  {/* Accept — only when we have a challenge that's not yet accepted */}
+                  {selectedGroanChallenge && !selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed' && (
+                    <button
+                      className="groan-btn groan-btn-accept"
+                      onClick={handleAcceptGroanChallenge}
+                      disabled={groanChallengeLoading}
+                    >
+                      {groanChallengeLoading ? 'Accepting...' : '💪 Accept Challenge'}
+                    </button>
+                  )}
+
+                  {/* Accepted - show Complete + Change */}
+                  {selectedGroanChallenge?.accepted_at && selectedGroanChallenge.status !== 'completed' && (
                     <>
                       <button
-                        className="groan-btn groan-btn-accept"
-                        onClick={handleAcceptGroanChallenge}
+                        className="groan-btn groan-btn-complete"
+                        onClick={handleStartCompletion}
                         disabled={groanChallengeLoading}
                       >
-                        {groanChallengeLoading ? 'Accepting...' : '💪 Accept Challenge'}
+                        ✅ I Did It!
                       </button>
                       <button
-                        className="groan-btn groan-btn-regenerate"
-                        onClick={handleRegenerateChallenge}
+                        className="groan-btn groan-btn-change"
+                        onClick={() => {
+                          setCustomChallengeText(selectedGroanChallenge.title || '')
+                          setSelectedGroanChallenge(prev => ({ ...prev, accepted_at: null }))
+                        }}
                         disabled={groanChallengeLoading}
                       >
-                        {groanChallengeLoading ? '...' : '🔄 Regenerate'}
+                        🔄 Change Challenge
                       </button>
                     </>
                   )}
 
-                  {/* Accepted - show Complete */}
-                  {selectedGroanChallenge.accepted_at && selectedGroanChallenge.status !== 'completed' && (
-                    <button
-                      className="groan-btn groan-btn-complete"
-                      onClick={handleStartCompletion}
-                      disabled={groanChallengeLoading}
-                    >
-                      ✅ I Did It!
-                    </button>
-                  )}
-
                   {/* Completed */}
-                  {selectedGroanChallenge.status === 'completed' && (
+                  {selectedGroanChallenge?.status === 'completed' && (
                     <div className="groan-completed-badge">
                       ✅ Challenge Completed
                       {selectedGroanChallenge.scary_score_after && (

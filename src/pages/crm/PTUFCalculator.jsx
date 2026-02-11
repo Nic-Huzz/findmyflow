@@ -63,13 +63,11 @@ export default function PTUFCalculator() {
           getFunnelTrends(user.id, 1)
         ])
 
-        // Core offer from launch readiness
         if (launchReadiness?.pricing_data?.coreOfferPrice) {
           setCoreOfferPrice(launchReadiness.pricing_data.coreOfferPrice)
           sources.push('Launch Readiness')
         }
 
-        // Continuity from continuity assessment
         if (continuityData?.data?.monthly_price) {
           setContinuityPrice(continuityData.data.monthly_price)
           sources.push('Continuity Flow')
@@ -78,7 +76,6 @@ export default function PTUFCalculator() {
           setContinuityMonths(continuityData.data.avg_retention_months)
         }
 
-        // Conversion rates from funnel metrics
         if (funnelTrends && funnelTrends.length > 0) {
           const latest = funnelTrends[0]
           if (latest.rates) {
@@ -104,34 +101,26 @@ export default function PTUFCalculator() {
   }, [user])
 
   const calculations = useMemo(() => {
-    // Basic capacity
     const totalHoursPerYear = hoursPerWeek * weeksPerYear
-    const hoursForClients = totalHoursPerYear * 0.6 // 60% client work
+    const hoursForClients = totalHoursPerYear * 0.6
     const maxClientsPerYear = Math.floor(hoursForClients / (clientHoursPerMonth * 12))
 
-    // Revenue requirements
     const monthlyGoal = annualGoal / 12
     const profitMargin = ((monthlyGoal - monthlyExpenses) / monthlyGoal) * 100
 
-    // LTV calculation
     const ltv = coreOfferPrice + (continuityPrice * continuityMonths)
 
-    // Clients needed
     const clientsNeeded = Math.ceil(annualGoal / ltv)
     const clientsPerMonth = Math.ceil(clientsNeeded / 12)
 
-    // Leads needed (working backwards)
     const leadsPerMonth = Math.ceil(clientsPerMonth / (leadToSale / 100))
     const showsPerMonth = Math.ceil(leadsPerMonth / (showToLead / 100))
 
-    // Can you handle it?
     const capacityUtilization = (clientsNeeded / maxClientsPerYear) * 100
     const isOverCapacity = capacityUtilization > 100
 
-    // Minimum viable price
     const minPrice = Math.ceil(annualGoal / maxClientsPerYear)
 
-    // Hourly equivalent
     const hourlyEquivalent = ltv / (clientHoursPerMonth * continuityMonths)
 
     return {
@@ -151,34 +140,68 @@ export default function PTUFCalculator() {
   }, [annualGoal, monthlyExpenses, hoursPerWeek, weeksPerYear, clientHoursPerMonth,
       coreOfferPrice, continuityPrice, continuityMonths, leadToSale, showToLead])
 
+  if (loadingDefaults) {
+    return (
+      <div className="ptuf-calculator">
+        <div className="ptuf-toolbar">
+          <button className="ptuf-back" onClick={() => navigate('/crm/tools/calculators')}>←</button>
+          <h2 className="ptuf-toolbar-title">PTUF Calculator</h2>
+        </div>
+        <div className="ptuf-loading">
+          <div className="ptuf-spinner" />
+          <p>Loading your data...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="ptuf-calculator">
-      <header className="ptuf-header">
-        <button className="back-btn" onClick={() => navigate('/crm')}>
-          ← Back
-        </button>
-        <div className="header-content">
-          <h1>PTUF Calculator</h1>
-          <p>Price To Unit Formula - Find Your Magic Number</p>
-        </div>
-        {loadingDefaults && (
-          <div className="data-source-badge loading">Loading...</div>
-        )}
-        {!loadingDefaults && dataSource && (
-          <div className="data-source-badge">
-            From: {dataSource}
-          </div>
-        )}
-      </header>
+      {/* TOOLBAR */}
+      <div className="ptuf-toolbar">
+        <button className="ptuf-back" onClick={() => navigate('/crm/tools/calculators')}>←</button>
+        <h2 className="ptuf-toolbar-title">PTUF Calculator</h2>
+      </div>
 
-      <div className="ptuf-grid">
+      {/* HERO — Key Results */}
+      <div className="ptuf-hero">
+        <span className="ptuf-hero-label">Price To Unit Formula</span>
+        <h2 className="ptuf-hero-title">Your Magic Number</h2>
+        {dataSource && (
+          <p className="ptuf-hero-sub">Pre-populated from: {dataSource}</p>
+        )}
+        <div className="ptuf-hero-stats">
+          <div className="ptuf-hero-stat">
+            <span className="ptuf-hero-stat-value gold">${calculations.ltv.toLocaleString()}</span>
+            <span className="ptuf-hero-stat-label">Customer LTV</span>
+          </div>
+          <div className="ptuf-hero-stat">
+            <span className="ptuf-hero-stat-value">{calculations.clientsPerMonth}</span>
+            <span className="ptuf-hero-stat-label">Clients/Month</span>
+          </div>
+          <div className="ptuf-hero-stat">
+            <span className="ptuf-hero-stat-value">{calculations.leadsPerMonth}</span>
+            <span className="ptuf-hero-stat-label">Leads/Month</span>
+          </div>
+          <div className="ptuf-hero-stat">
+            <span className="ptuf-hero-stat-value">${calculations.hourlyEquivalent.toFixed(0)}/hr</span>
+            <span className="ptuf-hero-stat-label">Hourly Equiv</span>
+          </div>
+        </div>
+      </div>
+
+      {/* INPUT SECTIONS */}
+      <div className="ptuf-sections">
         {/* Income Goals */}
-        <section className="ptuf-section">
-          <h2>💰 Income Goals</h2>
-          <div className="input-group">
+        <div className="ptuf-card">
+          <div className="ptuf-section-header">
+            <div className="ptuf-section-icon">💰</div>
+            <span className="ptuf-section-title">Income Goals</span>
+          </div>
+          <div className="ptuf-field">
             <label>Annual Revenue Goal</label>
-            <div className="input-with-prefix">
-              <span>$</span>
+            <div className="ptuf-input-wrap prefix">
+              <span className="ptuf-input-affix">$</span>
               <input
                 type="number"
                 value={annualGoal}
@@ -186,10 +209,10 @@ export default function PTUFCalculator() {
               />
             </div>
           </div>
-          <div className="input-group">
+          <div className="ptuf-field">
             <label>Monthly Expenses</label>
-            <div className="input-with-prefix">
-              <span>$</span>
+            <div className="ptuf-input-wrap prefix">
+              <span className="ptuf-input-affix">$</span>
               <input
                 type="number"
                 value={monthlyExpenses}
@@ -197,22 +220,27 @@ export default function PTUFCalculator() {
               />
             </div>
           </div>
-          <div className="calc-result">
-            <span>Monthly Goal</span>
-            <strong>${calculations.monthlyGoal.toLocaleString()}</strong>
+          <div className="ptuf-inline-results">
+            <div className="ptuf-inline-result">
+              <span>Monthly Goal</span>
+              <strong>${calculations.monthlyGoal.toLocaleString()}</strong>
+            </div>
+            <div className="ptuf-inline-result">
+              <span>Profit Margin</span>
+              <strong className={calculations.profitMargin > 30 ? 'positive' : 'warning'}>
+                {calculations.profitMargin.toFixed(1)}%
+              </strong>
+            </div>
           </div>
-          <div className="calc-result">
-            <span>Profit Margin</span>
-            <strong className={calculations.profitMargin > 30 ? 'positive' : 'warning'}>
-              {calculations.profitMargin.toFixed(1)}%
-            </strong>
-          </div>
-        </section>
+        </div>
 
         {/* Capacity */}
-        <section className="ptuf-section">
-          <h2>⏰ Your Capacity</h2>
-          <div className="input-group">
+        <div className="ptuf-card">
+          <div className="ptuf-section-header">
+            <div className="ptuf-section-icon">⏰</div>
+            <span className="ptuf-section-title">Your Capacity</span>
+          </div>
+          <div className="ptuf-field">
             <label>Hours Per Week (for business)</label>
             <input
               type="number"
@@ -220,7 +248,7 @@ export default function PTUFCalculator() {
               onChange={e => setHoursPerWeek(parseInt(e.target.value) || 0)}
             />
           </div>
-          <div className="input-group">
+          <div className="ptuf-field">
             <label>Working Weeks Per Year</label>
             <input
               type="number"
@@ -228,7 +256,7 @@ export default function PTUFCalculator() {
               onChange={e => setWeeksPerYear(parseInt(e.target.value) || 0)}
             />
           </div>
-          <div className="input-group">
+          <div className="ptuf-field">
             <label>Hours Per Client Per Month</label>
             <input
               type="number"
@@ -236,19 +264,24 @@ export default function PTUFCalculator() {
               onChange={e => setClientHoursPerMonth(parseInt(e.target.value) || 0)}
             />
           </div>
-          <div className="calc-result">
-            <span>Max Clients/Year</span>
-            <strong>{calculations.maxClientsPerYear}</strong>
+          <div className="ptuf-inline-results">
+            <div className="ptuf-inline-result">
+              <span>Max Clients/Year</span>
+              <strong>{calculations.maxClientsPerYear}</strong>
+            </div>
           </div>
-        </section>
+        </div>
 
         {/* Pricing */}
-        <section className="ptuf-section">
-          <h2>💵 Your Pricing</h2>
-          <div className="input-group">
+        <div className="ptuf-card">
+          <div className="ptuf-section-header">
+            <div className="ptuf-section-icon">💵</div>
+            <span className="ptuf-section-title">Your Pricing</span>
+          </div>
+          <div className="ptuf-field">
             <label>Core Offer Price</label>
-            <div className="input-with-prefix">
-              <span>$</span>
+            <div className="ptuf-input-wrap prefix">
+              <span className="ptuf-input-affix">$</span>
               <input
                 type="number"
                 value={coreOfferPrice}
@@ -256,10 +289,10 @@ export default function PTUFCalculator() {
               />
             </div>
           </div>
-          <div className="input-group">
+          <div className="ptuf-field">
             <label>Continuity Price (monthly)</label>
-            <div className="input-with-prefix">
-              <span>$</span>
+            <div className="ptuf-input-wrap prefix">
+              <span className="ptuf-input-affix">$</span>
               <input
                 type="number"
                 value={continuityPrice}
@@ -267,7 +300,7 @@ export default function PTUFCalculator() {
               />
             </div>
           </div>
-          <div className="input-group">
+          <div className="ptuf-field">
             <label>Avg Continuity Months</label>
             <input
               type="number"
@@ -275,104 +308,78 @@ export default function PTUFCalculator() {
               onChange={e => setContinuityMonths(parseInt(e.target.value) || 0)}
             />
           </div>
-          <div className="calc-result highlight">
-            <span>Customer LTV</span>
-            <strong>${calculations.ltv.toLocaleString()}</strong>
-          </div>
-          <div className="calc-result">
-            <span>Hourly Equivalent</span>
-            <strong>${calculations.hourlyEquivalent.toFixed(0)}/hr</strong>
-          </div>
-        </section>
+        </div>
 
-        {/* Conversion */}
-        <section className="ptuf-section">
-          <h2>📊 Conversion Rates</h2>
-          <div className="input-group">
+        {/* Conversion Rates */}
+        <div className="ptuf-card">
+          <div className="ptuf-section-header">
+            <div className="ptuf-section-icon">📊</div>
+            <span className="ptuf-section-title">Conversion Rates</span>
+          </div>
+          <div className="ptuf-field">
             <label>Lead → Sale Rate</label>
-            <div className="input-with-suffix">
+            <div className="ptuf-input-wrap suffix">
               <input
                 type="number"
                 value={leadToSale}
                 onChange={e => setLeadToSale(parseInt(e.target.value) || 0)}
               />
-              <span>%</span>
+              <span className="ptuf-input-affix">%</span>
             </div>
           </div>
-          <div className="input-group">
+          <div className="ptuf-field">
             <label>Show → Lead Rate</label>
-            <div className="input-with-suffix">
+            <div className="ptuf-input-wrap suffix">
               <input
                 type="number"
                 value={showToLead}
                 onChange={e => setShowToLead(parseInt(e.target.value) || 0)}
               />
-              <span>%</span>
+              <span className="ptuf-input-affix">%</span>
             </div>
           </div>
-        </section>
+        </div>
       </div>
 
-      {/* Results Dashboard */}
-      <section className="ptuf-results">
-        <h2>🎯 Your Numbers</h2>
-
-        <div className="results-grid">
-          <div className="result-card">
-            <span className="result-label">Clients Needed/Year</span>
-            <span className="result-value">{calculations.clientsNeeded}</span>
+      {/* DAILY ACTIONS CARD */}
+      <div className="ptuf-card">
+        <div className="ptuf-section-header">
+          <div className="ptuf-section-icon">📋</div>
+          <span className="ptuf-section-title">Daily Actions Required</span>
+        </div>
+        <div className="ptuf-actions-grid">
+          <div className="ptuf-action-item">
+            <span className="ptuf-action-number">{Math.ceil(calculations.showsPerMonth / 20)}</span>
+            <span className="ptuf-action-label">Shows/Day</span>
           </div>
-          <div className="result-card">
-            <span className="result-label">Clients/Month</span>
-            <span className="result-value">{calculations.clientsPerMonth}</span>
+          <div className="ptuf-action-item">
+            <span className="ptuf-action-number">{Math.ceil(calculations.leadsPerMonth / 20)}</span>
+            <span className="ptuf-action-label">Leads/Day</span>
           </div>
-          <div className="result-card">
-            <span className="result-label">Leads/Month</span>
-            <span className="result-value">{calculations.leadsPerMonth}</span>
-          </div>
-          <div className="result-card">
-            <span className="result-label">Shows/Month</span>
-            <span className="result-value">{calculations.showsPerMonth}</span>
+          <div className="ptuf-action-item">
+            <span className="ptuf-action-number">{Math.ceil(calculations.clientsPerMonth / 4)}</span>
+            <span className="ptuf-action-label">Sales/Week</span>
           </div>
         </div>
+      </div>
 
-        {/* Capacity Warning */}
-        <div className={`capacity-indicator ${calculations.isOverCapacity ? 'over' : 'under'}`}>
-          <div className="capacity-bar">
-            <div
-              className="capacity-fill"
-              style={{ width: `${Math.min(100, calculations.capacityUtilization)}%` }}
-            ></div>
-          </div>
-          <div className="capacity-info">
-            <span>Capacity Utilization: {calculations.capacityUtilization.toFixed(0)}%</span>
-            {calculations.isOverCapacity && (
-              <span className="warning-text">
-                ⚠️ Over capacity! Minimum price should be ${calculations.minPrice.toLocaleString()}
-              </span>
-            )}
-          </div>
+      {/* CAPACITY BAR */}
+      <div className={`ptuf-capacity ${calculations.isOverCapacity ? 'over' : 'under'}`}>
+        <div className="ptuf-capacity-bar">
+          <div
+            className="ptuf-capacity-fill"
+            style={{ width: `${Math.min(100, calculations.capacityUtilization)}%` }}
+          />
         </div>
-
-        {/* Action Items */}
-        <div className="action-items">
-          <h3>📋 Daily Actions Required</h3>
-          <div className="action-grid">
-            <div className="action-item">
-              <span className="action-number">{Math.ceil(calculations.showsPerMonth / 20)}</span>
-              <span className="action-label">Shows/Day (20 workdays)</span>
-            </div>
-            <div className="action-item">
-              <span className="action-number">{Math.ceil(calculations.leadsPerMonth / 20)}</span>
-              <span className="action-label">Leads/Day</span>
-            </div>
-            <div className="action-item">
-              <span className="action-number">{Math.ceil(calculations.clientsPerMonth / 4)}</span>
-              <span className="action-label">Sales/Week</span>
-            </div>
-          </div>
+        <div className="ptuf-capacity-info">
+          <span>Capacity: {calculations.capacityUtilization.toFixed(0)}%</span>
+          {calculations.isOverCapacity && (
+            <span className="ptuf-capacity-warn">
+              Over capacity! Min price: ${calculations.minPrice.toLocaleString()}
+            </span>
+          )}
         </div>
-      </section>
+      </div>
     </div>
   )
 }
