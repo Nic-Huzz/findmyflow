@@ -488,7 +488,7 @@ export default function MindSpace() {
         navigate('/persona-identifier')
         break
       case 'done':
-        navigate('/7-day-challenge', { state: { completedMindSpace: true } })
+        navigate('/me')
         break
     }
   }
@@ -1017,7 +1017,7 @@ export default function MindSpace() {
 
                 <button
                   className="primary-button complete-btn"
-                  onClick={() => navigate('/7-day-challenge', { state: { completedMindSpace: true } })}
+                  onClick={() => navigate('/me')}
                 >
                   Complete
                 </button>
