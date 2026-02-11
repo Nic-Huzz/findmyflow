@@ -1,0 +1,753 @@
+/**
+ * AdminDashboard.css — /admin-dashboard
+ * Admin-only user management and nudge dashboard
+ */
+
+/* === ROOT === */
+.admin-dashboard {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(94, 23, 235, 0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233, 162, 59, 0.04) 100%
+  );
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* === LOADING === */
+.admin-dashboard .ad-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+.admin-dashboard .ad-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e9ecef;
+  border-top-color: var(--brand-purple);
+  border-radius: 50%;
+  animation: adSpin 0.8s linear infinite;
+}
+
+@keyframes adSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* === EMPTY / UNAUTHORIZED === */
+.admin-dashboard .ad-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.admin-dashboard .ad-empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.admin-dashboard .ad-empty-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+
+.admin-dashboard .ad-empty-text {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+/* === TOOLBAR === */
+.admin-dashboard .ad-toolbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.admin-dashboard .ad-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--brand-purple);
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.admin-dashboard .ad-toolbar-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* === GOLD CTA === */
+.admin-dashboard .ad-cta {
+  width: 100%;
+  max-width: 300px;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.admin-dashboard .ad-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(233, 162, 59, 0.4);
+}
+
+/* === HERO CARD === */
+.admin-dashboard .ad-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+}
+
+.admin-dashboard .ad-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
+  animation: adGlow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.admin-dashboard .ad-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: -30px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(94, 23, 235, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+@keyframes adGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.admin-dashboard .ad-hero-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.6);
+  display: block;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-dashboard .ad-hero-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  margin: 0 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* === STATS GRID === */
+.admin-dashboard .ad-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.admin-dashboard .ad-stat {
+  text-align: center;
+}
+
+.admin-dashboard .ad-stat-value {
+  display: block;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.admin-dashboard .ad-stat-value.ad-stat-gold {
+  color: var(--brand-gold);
+}
+
+.admin-dashboard .ad-stat-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+  display: block;
+}
+
+/* === CONTROLS === */
+.admin-dashboard .ad-controls {
+  margin-bottom: 16px;
+}
+
+.admin-dashboard .ad-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-dashboard .ad-chip {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.admin-dashboard .ad-chip.active {
+  background: rgba(94, 23, 235, 0.06);
+  border-color: rgba(94, 23, 235, 0.15);
+  color: var(--brand-purple);
+}
+
+.admin-dashboard .ad-search {
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.admin-dashboard .ad-search:focus {
+  outline: none;
+  border-color: var(--brand-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.admin-dashboard .ad-search::placeholder {
+  color: var(--text-muted);
+}
+
+/* === TABLE === */
+.admin-dashboard .ad-table-wrap {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.admin-dashboard .ad-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-dashboard .ad-table thead th {
+  padding: 14px 16px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.admin-dashboard .ad-table thead th:hover {
+  color: var(--brand-purple);
+}
+
+.admin-dashboard .ad-table tbody tr {
+  border-bottom: 1px solid #f1f3f5;
+  transition: background 0.15s;
+}
+
+.admin-dashboard .ad-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.admin-dashboard .ad-table tbody tr:hover {
+  background: rgba(94, 23, 235, 0.02);
+}
+
+.admin-dashboard .ad-table tbody td {
+  padding: 12px 16px;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+/* User cell */
+.admin-dashboard .ad-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-dashboard .ad-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.admin-dashboard .ad-user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-dashboard .ad-user-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-dashboard .ad-user-email {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Stage badge */
+.admin-dashboard .ad-stage-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(94, 23, 235, 0.06);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-purple);
+}
+
+/* Quest count */
+.admin-dashboard .ad-quest-count {
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+/* Activity */
+.admin-dashboard .ad-activity {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* Notification dot */
+.admin-dashboard .ad-notif-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.admin-dashboard .ad-notif-dot.on {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+}
+
+.admin-dashboard .ad-notif-dot.off {
+  background: #dee2e6;
+}
+
+/* Nudge button */
+.admin-dashboard .ad-nudge-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.15s;
+  font-family: inherit;
+}
+
+.admin-dashboard .ad-nudge-btn:hover:not(:disabled) {
+  background: rgba(94, 23, 235, 0.06);
+}
+
+.admin-dashboard .ad-nudge-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* === MODAL === */
+.admin-dashboard .ad-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+  padding-top: 0;
+  z-index: 1000;
+}
+
+.admin-dashboard .ad-modal {
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  background: var(--surface);
+  border-radius: 0 0 24px 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.admin-dashboard .ad-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.admin-dashboard .ad-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.admin-dashboard .ad-modal-close {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-size: 20px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.admin-dashboard .ad-modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.admin-dashboard .ad-nudge-target {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 16px;
+}
+
+.admin-dashboard .ad-field {
+  margin-bottom: 16px;
+}
+
+.admin-dashboard .ad-field label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.admin-dashboard .ad-field input,
+.admin-dashboard .ad-field textarea {
+  width: 100%;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.admin-dashboard .ad-field input:focus,
+.admin-dashboard .ad-field textarea:focus {
+  outline: none;
+  border-color: var(--brand-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.admin-dashboard .ad-field input::placeholder,
+.admin-dashboard .ad-field textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.admin-dashboard .ad-field textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.admin-dashboard .ad-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.admin-dashboard .ad-hint code {
+  background: #f1f3f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Preview */
+.admin-dashboard .ad-preview {
+  margin-top: 16px;
+}
+
+.admin-dashboard .ad-preview-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.admin-dashboard .ad-preview-card {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.admin-dashboard .ad-preview-card strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.admin-dashboard .ad-preview-card p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.admin-dashboard .ad-error {
+  color: #ef4444;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 12px 0 0;
+}
+
+/* Modal actions */
+.admin-dashboard .ad-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid #e9ecef;
+}
+
+.admin-dashboard .ad-cancel {
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  color: var(--text-secondary);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.admin-dashboard .ad-cancel:hover {
+  background: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.admin-dashboard .ad-send {
+  background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+  border: none;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.admin-dashboard .ad-send:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(94, 23, 235, 0.4);
+}
+
+.admin-dashboard .ad-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* === TOAST === */
+.admin-dashboard .ad-toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 1100;
+  animation: adToastIn 0.3s ease-out;
+  font-family: inherit;
+}
+
+@keyframes adToastIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* === RESPONSIVE === */
+@media (min-width: 768px) {
+  .admin-dashboard {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .admin-dashboard .ad-modal-overlay {
+    align-items: center;
+  }
+
+  .admin-dashboard .ad-modal {
+    border-radius: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-dashboard .ad-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .admin-dashboard .ad-hide-mobile {
+    display: none;
+  }
+
+  .admin-dashboard .ad-table thead th,
+  .admin-dashboard .ad-table tbody td {
+    padding: 10px 12px;
+  }
+
+  .admin-dashboard .ad-modal-actions {
+    flex-direction: column;
+  }
+
+  .admin-dashboard .ad-modal-actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-dashboard {
+    padding: 16px;
+    padding-top: 72px;
+  }
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  .admin-dashboard .ad-spinner { animation: none; }
+  .admin-dashboard .ad-hero::before { animation: none; }
+  .admin-dashboard .ad-toast { animation: none; }
+  .admin-dashboard *,
+  .admin-dashboard *::before,
+  .admin-dashboard *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

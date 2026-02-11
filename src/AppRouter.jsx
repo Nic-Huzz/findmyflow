@@ -20,7 +20,7 @@ import MePage from './pages/MePage'
 import Challenge from './Challenge'
 import PublicValidationFlow from './pages/PublicValidationFlow'
 import AuthGate from './AuthGate'
-import { AuthProvider } from './auth/AuthProvider'
+import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
@@ -155,6 +155,7 @@ const CodexEntry = lazyRetry(() => import('./pages/CodexEntry'))
 const ProfileHub = lazyRetry(() => import('./pages/ProfileHub'))
 const UserSettings = lazyRetry(() => import('./pages/UserSettings'))
 const BrandToneDemo = lazyRetry(() => import('./pages/BrandToneDemo'))
+const AdminDashboard = lazyRetry(() => import('./pages/AdminDashboard'))
 import './App.css'
 import './PersonaAssessment.css'
 import './flows/AttractionOfferFlow.css'
@@ -210,10 +211,13 @@ import './flows/PlayListFinderFlow.css'
 import './flows/PersonaIdentifierFlow.css'
 import './components/crm/CSVImport/CSVImportWizard.css'
 import './pages/crm/SalesPlaybook.css'
+import './pages/AdminDashboard.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
   const location = useLocation()
+  const { user } = useAuth()
+  if (!user) return null
   // Hide Zarlo on /try/ routes, landing page, and career clarity quiz
   const isTryRoute = location.pathname.startsWith('/try/')
   const isLandingPage = location.pathname === '/'
@@ -225,6 +229,8 @@ function ConditionalZarlo() {
 
 function ConditionalBottomToolbar() {
   const location = useLocation()
+  const { user } = useAuth()
+  if (!user) return null
   const isPublicRoute = location.pathname.startsWith('/v/') ||
                         location.pathname.startsWith('/try/') ||
                         location.pathname.startsWith('/guidebook') ||
@@ -786,6 +792,13 @@ function AppRouter() {
                 <CRMLayout>
                   <SalesPlaybook />
                 </CRMLayout>
+              </AuthGate>
+            } />
+
+            {/* Admin Dashboard */}
+            <Route path="/admin-dashboard" element={
+              <AuthGate>
+                <AdminDashboard />
               </AuthGate>
             } />
             </Routes>

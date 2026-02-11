@@ -1,11 +1,20 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
+import { fetchStats } from '../lib/adminService'
 import './ProfileHub.css'
 
 const ProfileHub = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    if (!user?.id) return
+    fetchStats()
+      .then(() => setIsAdmin(true))
+      .catch(() => {}) // Not admin — silently ignore
+  }, [user?.id])
 
   const options = [
     {
@@ -31,7 +40,15 @@ const ProfileHub = () => {
       description: 'Update your name, email, and notification preferences',
       path: '/user-settings',
       color: '#6c757d'
-    }
+    },
+    ...(isAdmin ? [{
+      id: 'admin',
+      icon: '🛡️',
+      title: 'Admin Dashboard',
+      description: 'View all users, stats, and send nudges',
+      path: '/admin-dashboard',
+      color: '#dc2626'
+    }] : [])
   ]
 
   return (
