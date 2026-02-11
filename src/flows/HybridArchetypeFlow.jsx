@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import ProtectiveArchetypeIcon from '../components/ProtectiveArchetypeIcon'
 
 const HybridArchetypeFlow = ({
   archetypeType, // 'protective' or 'essence'
@@ -349,6 +350,7 @@ const HybridArchetypeFlow = ({
       color: '#666',
       lineHeight: 1.4,
       fontSize: '15px',
+      fontWeight: 600,
     },
     progressInfo: {
       textAlign: 'center',
@@ -601,11 +603,17 @@ const HybridArchetypeFlow = ({
           />
         ))}
 
-        <img
-          src={`/images/archetypes/${imagePath}/${finalArchetype.image}`}
-          alt={finalArchetype.name}
-          style={styles.celebrationImage}
-        />
+        {archetypeType === 'protective' ? (
+          <div style={{ width: '150px', height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white', borderRadius: '20px', boxShadow: '0 10px 40px rgba(0,0,0,0.3)', marginBottom: '24px', animation: 'celebrationPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
+            <ProtectiveArchetypeIcon archetype={finalArchetype.name} size={120} />
+          </div>
+        ) : (
+          <img
+            src={`/images/archetypes/${imagePath}/${finalArchetype.image}`}
+            alt={finalArchetype.name}
+            style={styles.celebrationImage}
+          />
+        )}
         <div style={styles.celebrationBadge}>
           {archetypeType === 'essence' ? 'Your Essence' : 'Your Pattern'}
         </div>
@@ -653,7 +661,13 @@ const HybridArchetypeFlow = ({
           onMouseEnter={() => setHoveredCard('first')}
           onMouseLeave={() => setHoveredCard(null)}
         >
-          <img src={`/images/archetypes/${imagePath}/${first.image}`} alt={first.name} style={styles.battleImage} />
+          {archetypeType === 'protective' ? (
+            <div style={{ width: '100%', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa', borderRadius: '12px', marginBottom: '12px' }}>
+              <ProtectiveArchetypeIcon archetype={first.name} size={80} />
+            </div>
+          ) : (
+            <img src={`/images/archetypes/${imagePath}/${first.image}`} alt={first.name} style={styles.battleImage} />
+          )}
           <p style={{ ...styles.cardText, textAlign: 'center' }}>{first.description}</p>
         </div>
 
@@ -668,7 +682,13 @@ const HybridArchetypeFlow = ({
           onMouseEnter={() => setHoveredCard('second')}
           onMouseLeave={() => setHoveredCard(null)}
         >
-          <img src={`/images/archetypes/${imagePath}/${second.image}`} alt={second.name} style={styles.battleImage} />
+          {archetypeType === 'protective' ? (
+            <div style={{ width: '100%', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa', borderRadius: '12px', marginBottom: '12px' }}>
+              <ProtectiveArchetypeIcon archetype={second.name} size={80} />
+            </div>
+          ) : (
+            <img src={`/images/archetypes/${imagePath}/${second.image}`} alt={second.name} style={styles.battleImage} />
+          )}
           <p style={{ ...styles.cardText, textAlign: 'center' }}>{second.description}</p>
         </div>
 
@@ -715,11 +735,17 @@ const HybridArchetypeFlow = ({
           {/* Next card preview */}
           {nextArchetype && (
             <div style={styles.nextCard}>
-              <img
-                src={`/images/archetypes/${imagePath}/${nextArchetype.image}`}
-                alt={nextArchetype.name}
-                style={styles.cardImage}
-              />
+              {archetypeType === 'protective' ? (
+                <div style={{ width: '100%', height: '240px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa' }}>
+                  <ProtectiveArchetypeIcon archetype={nextArchetype.name} size={210} />
+                </div>
+              ) : (
+                <img
+                  src={`/images/archetypes/${imagePath}/${nextArchetype.image}`}
+                  alt={nextArchetype.name}
+                  style={styles.cardImage}
+                />
+              )}
               <div style={styles.cardContent}>
                 <p style={styles.cardText}>{nextArchetype.description}</p>
               </div>
@@ -756,11 +782,17 @@ const HybridArchetypeFlow = ({
               <span style={{ ...styles.overlayText, ...styles.overlayTextNo }}>❌ NO</span>
             </div>
 
-            <img
-              src={`/images/archetypes/${imagePath}/${currentArchetype.image}`}
-              alt={currentArchetype.name}
-              style={styles.cardImage}
-            />
+            {archetypeType === 'protective' ? (
+              <div style={{ width: '100%', height: '240px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f8f9fa' }}>
+                <ProtectiveArchetypeIcon archetype={currentArchetype.name} size={210} />
+              </div>
+            ) : (
+              <img
+                src={`/images/archetypes/${imagePath}/${currentArchetype.image}`}
+                alt={currentArchetype.name}
+                style={styles.cardImage}
+              />
+            )}
             <div style={styles.cardContent}>
               <p style={styles.cardText}>{currentArchetype.description}</p>
             </div>

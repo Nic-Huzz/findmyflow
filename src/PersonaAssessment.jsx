@@ -6,6 +6,7 @@ import HybridArchetypeFlow from './flows/HybridArchetypeFlow'
 import { essenceProfiles } from './data/essenceProfiles'
 import { essenceProfiles as essenceProfilesFlat } from './lib/data/essenceProfiles'
 import { protectiveProfiles } from './data/protectiveProfiles'
+import ProtectiveArchetypeIcon from './components/ProtectiveArchetypeIcon'
 import './PersonaAssessment.css'
 
 // Flow stages - Updated for Huzz intro (Dec 2024)
@@ -594,14 +595,7 @@ function PersonaAssessment() {
       <div className="persona-assessment">
         {renderProgress()}
         <div className="reveal-container archetype-reveal">
-          <div className="archetype-image-container">
-            <img
-              src={`/images/archetypes/lead-magnet-protective/${protectiveDisplay?.image || protectiveArchetype?.image || protectiveArchetype?.name?.toLowerCase().replace(/\s+/g, '-') + '.webp'}`}
-              alt={protectiveArchetype?.name}
-              className="archetype-reveal-image"
-              onError={(e) => { e.target.style.display = 'none' }}
-            />
-          </div>
+          <ProtectiveArchetypeIcon archetype={protectiveArchetype?.name} size={160} />
           <div className="reveal-badge protective-badge">Your Protective Pattern</div>
           <h1 className="reveal-name">{protectiveArchetype?.name}</h1>
           <p className="reveal-teaser">

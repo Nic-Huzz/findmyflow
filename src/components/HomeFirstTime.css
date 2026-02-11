@@ -608,7 +608,7 @@ body.onboarding-active nav.bottom-toolbar {
 /* Question Screen */
 .home-first-time.question-screen {
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .home-first-time.question-screen .question-container {
