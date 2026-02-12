@@ -103,7 +103,10 @@ const PublicValidationFlow = () => {
         .eq('is_active', true)
         .single()
 
-      if (flowError) throw new Error('Flow not found')
+      if (flowError) {
+        console.error('Supabase flow query error:', flowError)
+        throw new Error('Flow not found')
+      }
       if (!flowRecord) throw new Error('This validation flow is no longer active')
 
       // Load the JSON flow definition
@@ -827,6 +830,16 @@ const PublicValidationFlow = () => {
         <div className="validation-error">
           <h2>Oops!</h2>
           <p>{error}</p>
+          <button
+            className="validation-next-btn"
+            onClick={() => {
+              setError(null)
+              loadValidationFlow()
+            }}
+            style={{ marginTop: '1rem' }}
+          >
+            Try Again
+          </button>
         </div>
       </div>
     )
