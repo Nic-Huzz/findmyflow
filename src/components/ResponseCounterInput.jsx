@@ -104,7 +104,7 @@ function ResponseCounterInput({
       {/* Action link */}
       {quest.actionLink && (
         <Link to={quest.actionLink} className="response-action-link">
-          {responseCount === 0 ? 'Create Form' : quest.actionLinkText || 'View Responses'}
+          Create / View Form
         </Link>
       )}
 

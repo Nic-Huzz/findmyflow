@@ -76,21 +76,22 @@
 /* Action Link */
 .response-counter-input .response-action-link {
   display: block;
-  padding: 12px 20px;
-  background: rgba(94, 23, 235, 0.08);
-  border: 1px solid rgba(94, 23, 235, 0.2);
-  border-radius: 10px;
-  color: #5e17eb;
-  font-size: 14px;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9375rem;
   font-weight: 600;
   text-align: center;
   text-decoration: none;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .response-counter-input .response-action-link:hover {
-  background: rgba(94, 23, 235, 0.12);
-  border-color: rgba(94, 23, 235, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(94, 23, 235, 0.3);
 }
 
 /* Complete Button */
