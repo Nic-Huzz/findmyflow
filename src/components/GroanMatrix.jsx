@@ -41,7 +41,8 @@ function GroanMatrix({
   onCellClick,
   onGenerateChallenge,
   compact = false,
-  layerLockStatus = {}
+  layerLockStatus = {},
+  flowFinderComplete: flowFinderCompleteProp
 }) {
   const navigate = useNavigate()
   const [activeSourceType, setActiveSourceType] = useState('skill')
@@ -50,8 +51,13 @@ function GroanMatrix({
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [loadingCell, setLoadingCell] = useState(null)
-  const [flowFinderComplete, setFlowFinderComplete] = useState(true)
+  const [flowFinderCompleteInternal, setFlowFinderCompleteInternal] = useState(true)
   const [selectedPersona, setSelectedPersona] = useState(null) // For Skill × Problem tab
+
+  // Use parent's check when available, fall back to internal check.
+  // When rendered from Challenge.jsx, the prop is always final (Challenge shows
+  // a skeleton loader until all checks complete, so GroanMatrix only mounts after).
+  const flowFinderComplete = flowFinderCompleteProp ?? flowFinderCompleteInternal
 
   // Fetch initial data
   useEffect(() => {
@@ -62,11 +68,18 @@ function GroanMatrix({
   const loadData = async () => {
     setLoading(true)
 
-    // Check if Flow Finder is complete
-    const { completed, missing } = await hasCompletedFlowFinder(userId)
-    setFlowFinderComplete(completed)
+    // If parent already confirmed Flow Finder is complete, skip the redundant check.
+    // Otherwise (standalone usage, e.g. /groan-matrix route), verify ourselves.
+    if (flowFinderCompleteProp == null) {
+      const { completed } = await hasCompletedFlowFinder(userId)
+      setFlowFinderCompleteInternal(completed)
 
-    if (!completed) {
+      if (!completed) {
+        setLoading(false)
+        return
+      }
+    } else if (!flowFinderCompleteProp) {
+      // Parent confirmed not complete — show empty state
       setLoading(false)
       return
     }

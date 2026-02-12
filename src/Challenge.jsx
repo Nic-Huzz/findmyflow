@@ -1585,6 +1585,7 @@ function Challenge() {
               onCellClick={handleMatrixCellClick}
               onGenerateChallenge={handleGenerateChallenge}
               layerLockStatus={layerLockStatus}
+              flowFinderComplete={flowFinderComplete}
             />
           </div>
         )}
@@ -1693,6 +1694,7 @@ function Challenge() {
               onCellClick={handleMatrixCellClick}
               onGenerateChallenge={handleGenerateChallenge}
               layerLockStatus={layerLockStatus}
+              flowFinderComplete={flowFinderComplete}
             />
           </div>
         )}
