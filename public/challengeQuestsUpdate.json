@@ -1425,6 +1425,38 @@
       "isExplainer": true
     },
     {
+      "id": "campaign_explainer",
+      "category": "Business",
+      "type": "Campaign",
+      "frequency": "anytime",
+      "stage_required": 6,
+      "name": "Understand Campaign Creation",
+      "description": "Learn how to get your offer in front of the right people using the Core Four",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "campaign_explainer",
+      "flow_route": "/campaign-explainer",
+      "learnMore": "Before diving into campaign quests, understand how lead generation really works.\n\nYou'll learn:\n• The Core Four: Warm Outreach, Cold Outreach, Free Content, Paid Ads\n• How to build a complete funnel from lead magnet to customer\n• Why being visible as the real you is what sells\n• How to plan a 7-day launch sequence\n\nThis 2-minute explainer sets you up for success with all Campaign Creation quests.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
+      "id": "launch_explainer",
+      "category": "Business",
+      "type": "Launch",
+      "frequency": "anytime",
+      "stage_required": 7,
+      "name": "Understand Launch",
+      "description": "Learn what it takes to launch and why commitment is the catalyst",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "launch_explainer",
+      "flow_route": "/launch-explainer",
+      "learnMore": "Before diving into launch quests, understand what this final stage is all about.\n\nYou'll learn:\n• Why launching beats planning every time\n• The four launch activities: Attraction Offer, Daily Implementation, Sales Copy, Post-Launch Review\n• Why a bold public commitment changes everything\n• How to launch one customer at a time\n\nThis 2-minute explainer sets you up for success with all Launch quests.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
       "id": "flow_persona_validation",
       "category": "Business",
       "type": "Validation",

@@ -113,6 +113,8 @@ const ValidationExplainer = lazyRetry(() => import('./flows/ValidationExplainer'
 const ProductExplainer = lazyRetry(() => import('./flows/ProductExplainer'))
 const TestingExplainer = lazyRetry(() => import('./flows/TestingExplainer'))
 const OfferCreationExplainer = lazyRetry(() => import('./flows/OfferCreationExplainer'))
+const CampaignExplainer = lazyRetry(() => import('./flows/CampaignExplainer'))
+const LaunchExplainer = lazyRetry(() => import('./flows/LaunchExplainer'))
 const LetsPlayFlow = lazyRetry(() => import('./flows/LetsPlayFlow'))
 const LetsPlayReviewFlow = lazyRetry(() => import('./flows/LetsPlayReviewFlow'))
 const SelfTestFlow = lazyRetry(() => import('./flows/SelfTestFlow'))
@@ -282,7 +284,9 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/validation-explainer' ||
                         location.pathname === '/product-explainer' ||
                         location.pathname === '/testing-explainer' ||
-                        location.pathname === '/offer-creation-explainer'
+                        location.pathname === '/offer-creation-explainer' ||
+                        location.pathname === '/campaign-explainer' ||
+                        location.pathname === '/launch-explainer'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -581,6 +585,16 @@ function AppRouter() {
             <Route path="/offer-creation-explainer" element={
               <AuthGate>
                 <OfferCreationExplainer />
+              </AuthGate>
+            } />
+            <Route path="/campaign-explainer" element={
+              <AuthGate>
+                <CampaignExplainer />
+              </AuthGate>
+            } />
+            <Route path="/launch-explainer" element={
+              <AuthGate>
+                <LaunchExplainer />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={
