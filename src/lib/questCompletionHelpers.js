@@ -227,6 +227,8 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'play_list_finder': 'play_list_finder',
       'persona_identifier': 'persona_identifier',
       'flow_finder_explainer': 'flow_finder_explainer',
+      'validation_explainer': 'validation_explainer',
+      'product_explainer': 'product_explainer',
       'mind_space': 'mind_space_extraction',  // Matches JSON quest ID
       'milestone_read_money_model': 'milestone_read_money_model'  // Money Model Guide explainer
     };
@@ -262,6 +264,8 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'flow_finder_persona': 4,
       'flow_finder_integration': 4,
       'flow_finder_explainer': 5,
+      'validation_explainer': 5,
+      'product_explainer': 5,
       'play_list_finder': 10,
       'persona_identifier': 10,
       'mind_space_extraction': 10,  // Matches JSON quest ID
@@ -269,6 +273,13 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     };
 
     const points = questPoints[questId] || 5;
+
+    // Stage per quest (default 0 for Flow Finder)
+    const questStages = {
+      'validation_explainer': 1,
+      'product_explainer': 2
+    };
+    const stage = questStages[questId] || 0;
 
     // Create quest completion at user level (challenge_instance_id: null)
     const { error: completionError } = await supabase
@@ -283,7 +294,7 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
         challenge_day: 0,
         reflection_text: `Completed ${flowType} flow`,
         project_id: null,  // User-level, not project-specific
-        stage: 0  // Flow Finder quests are Stage 0
+        stage
       });
 
     if (completionError) {
