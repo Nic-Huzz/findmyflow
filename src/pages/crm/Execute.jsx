@@ -142,6 +142,7 @@ export default function Execute() {
     setWeeklyPlan(plan)
     setShowPlanningFlow(false)
     loadQuickStats()
+    loadData() // Refresh task list with synced weekly plan tasks
   }
 
   // Group manual tasks by phase (exclude framework tasks)

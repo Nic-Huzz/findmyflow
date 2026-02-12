@@ -636,9 +636,9 @@ SUPABASE_ACCESS_TOKEN=your_token npx supabase functions deploy content-generator
 ### Edge Functions
 ```bash
 # From project root
-SUPABASE_ACCESS_TOKEN=sbp_7944efd6f507cccb90784510905d04d3845fd6ef npx supabase functions deploy content-generator
-SUPABASE_ACCESS_TOKEN=sbp_7944efd6f507cccb90784510905d04d3845fd6ef npx supabase functions deploy analyze-metrics-screenshot
-SUPABASE_ACCESS_TOKEN=sbp_7944efd6f507cccb90784510905d04d3845fd6ef npx supabase functions deploy extract-voice-dna
+SUPABASE_ACCESS_TOKEN=$SUPABASE_ACCESS_TOKEN npx supabase functions deploy content-generator
+SUPABASE_ACCESS_TOKEN=$SUPABASE_ACCESS_TOKEN npx supabase functions deploy analyze-metrics-screenshot
+SUPABASE_ACCESS_TOKEN=$SUPABASE_ACCESS_TOKEN npx supabase functions deploy extract-voice-dna
 ```
 
 ### Migrations (Run in Supabase SQL Editor)

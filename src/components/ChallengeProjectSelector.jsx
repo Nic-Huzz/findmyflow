@@ -168,7 +168,7 @@ function ChallengeProjectSelector({ onSelect, currentProjectId }) {
               <div className="project-info">
                 <h3>{project.name}</h3>
                 {project.description && (
-                  <p className="project-description">{project.description}</p>
+                  <p className="project-description">{project.description.replace(/_/g, ' ')}</p>
                 )}
               </div>
 

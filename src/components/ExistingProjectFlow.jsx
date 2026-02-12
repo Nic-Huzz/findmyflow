@@ -18,7 +18,7 @@
  * Updated: Dec 2024 - Simplified to 6 steps, added seed cluster capture
  */
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { createExistingProject } from '../lib/projectCreation'
@@ -47,6 +47,17 @@ const STAGE_OPTIONS = [
   { value: 'ready_to_launch_campaign', label: 'Ready to launch major campaign', stage: STAGES.LAUNCH }
 ]
 
+const SETUP_MESSAGES = [
+  'Setting up your command centre',
+  'Preparing your flow map',
+  'Building your challenge dashboard',
+  'Calibrating your stage progression',
+  'Loading your quest engine',
+  'Activating your growth tracker',
+  'Connecting your CRM tower',
+  'Powering up Zarlo AI'
+]
+
 function ExistingProjectFlow({ onComplete, onBack, onboardingData }) {
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -54,6 +65,35 @@ function ExistingProjectFlow({ onComplete, onBack, onboardingData }) {
   const [stage, setStage] = useState(FLOW_STAGES.NAME)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  // Rotating setup messages
+  const [setupMessageIndex, setSetupMessageIndex] = useState(0)
+  const [messageFading, setMessageFading] = useState(false)
+  const setupIntervalRef = useRef(null)
+
+  useEffect(() => {
+    if (stage === FLOW_STAGES.SAVING) {
+      setSetupMessageIndex(0)
+      setMessageFading(false)
+      setupIntervalRef.current = setInterval(() => {
+        setMessageFading(true)
+        setTimeout(() => {
+          setSetupMessageIndex(prev => (prev + 1) % SETUP_MESSAGES.length)
+          setMessageFading(false)
+        }, 300)
+      }, 2500)
+    } else {
+      if (setupIntervalRef.current) {
+        clearInterval(setupIntervalRef.current)
+        setupIntervalRef.current = null
+      }
+    }
+    return () => {
+      if (setupIntervalRef.current) {
+        clearInterval(setupIntervalRef.current)
+      }
+    }
+  }, [stage])
 
   // Form state
   const [projectData, setProjectData] = useState({
@@ -463,8 +503,10 @@ function ExistingProjectFlow({ onComplete, onBack, onboardingData }) {
       {stage === FLOW_STAGES.SAVING && (
         <div className="flow-step saving-step">
           <div className="loading-spinner" />
-          <h2>Setting up your business...</h2>
-          <p>Creating {projectData.name}</p>
+          <h2>Creating {projectData.name}</h2>
+          <p className={`setup-message${messageFading ? ' fading' : ''}`}>
+            {SETUP_MESSAGES[setupMessageIndex]}...
+          </p>
         </div>
       )}
 

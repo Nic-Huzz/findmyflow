@@ -243,9 +243,9 @@ const LandingPage = () => {
                 <p>Big dreams, endless ideas — but no clear path to make them real.</p>
               </div>
               <div className="symptom-card">
-                <div className="symptom-icon">😰</div>
-                <h3>Visibility Paralysis</h3>
-                <p>Fear of judgement keeps you invisible — even when you're ready to share.</p>
+                <div className="symptom-icon">😔</div>
+                <h3>Talents Going to Waste</h3>
+                <p>You finish each day feeling unfulfilled — like your best gifts are gathering dust.</p>
               </div>
               <div className="symptom-card">
                 <div className="symptom-icon">🚫</div>
@@ -253,9 +253,9 @@ const LandingPage = () => {
                 <p>You have skills and passion, but no system to turn them into income.</p>
               </div>
               <div className="symptom-card">
-                <div className="symptom-icon">😶</div>
-                <h3>Hiding Your Real Self</h3>
-                <p>Fear of being truly seen keeps you playing small and staying quiet.</p>
+                <div className="symptom-icon">😰</div>
+                <h3>Visibility Paralysis</h3>
+                <p>Fear of judgement keeps you invisible — even when you're ready to share.</p>
               </div>
             </div>
           </div>
@@ -1176,6 +1176,81 @@ const LandingPage = () => {
               <li><strong>Business</strong> creates <strong>Service</strong> — your gift reaches people</li>
               <li><strong>Service</strong> unlocks <strong>Your Flow</strong> — your unique life adventure</li>
             </ul>
+          </div>
+
+          {/* What's Included Checklist */}
+          <div className="included-section">
+            <h3 className="section-heading">Everything That's Included</h3>
+            <p className="section-subheading">
+              One platform. Every tool you need to go from stuck to monetising your mission.
+            </p>
+
+            <div className="included-grid">
+              <div className="included-category">
+                <h4 className="included-category-title">Discovery</h4>
+                <ul className="included-list">
+                  <li><span className="included-check">&#10003;</span>Flow Finder — discover your skills, problems & ideal persona</li>
+                  <li><span className="included-check">&#10003;</span>Essence Archetype Profile — your unique character strengths</li>
+                  <li><span className="included-check">&#10003;</span>Protective Pattern Profile — the armour blocking your gifts</li>
+                  <li><span className="included-check">&#10003;</span>Career Clarity Quiz — job vs. your own thing</li>
+                  <li><span className="included-check">&#10003;</span>Library of Answers — visual map of everything you've uncovered</li>
+                </ul>
+              </div>
+
+              <div className="included-category">
+                <h4 className="included-category-title">Building</h4>
+                <ul className="included-list">
+                  <li><span className="included-check">&#10003;</span>$100M Offer Builder — create an offer people can't refuse</li>
+                  <li><span className="included-check">&#10003;</span>Grand Slam Matrix — evaluate and stack your offers</li>
+                  <li><span className="included-check">&#10003;</span>Lead Magnet & Product Selection flows</li>
+                  <li><span className="included-check">&#10003;</span>Funnel Builder & Calculator — plan and track your pipeline</li>
+                  <li><span className="included-check">&#10003;</span>Income Calculator — model your revenue streams</li>
+                </ul>
+              </div>
+
+              <div className="included-category">
+                <h4 className="included-category-title">Healing & Growth</h4>
+                <ul className="included-list">
+                  <li><span className="included-check">&#10003;</span>Groan Matrix — courage challenges across 5 visibility layers</li>
+                  <li><span className="included-check">&#10003;</span>Healing Compass — go to the root of what's holding you back</li>
+                  <li><span className="included-check">&#10003;</span>Nervous System Flow — regulate before you take action</li>
+                  <li><span className="included-check">&#10003;</span>Flow Compass — daily energy tracking (N/E/S/W directions)</li>
+                  <li><span className="included-check">&#10003;</span>Journey Mapping — see how far you've come</li>
+                </ul>
+              </div>
+
+              <div className="included-category">
+                <h4 className="included-category-title">Gamified System</h4>
+                <ul className="included-list">
+                  <li><span className="included-check">&#10003;</span>7-Day Challenge — daily quests tailored to your stage</li>
+                  <li><span className="included-check">&#10003;</span>Weekly Planning — 4-phase cycle (Push, Flow, Rest, Launch)</li>
+                  <li><span className="included-check">&#10003;</span>Points, Streaks & Leaderboard — stay motivated</li>
+                  <li><span className="included-check">&#10003;</span>Hero Profile & Level System — track your transformation</li>
+                  <li><span className="included-check">&#10003;</span>Stage Progression — 10 stages from discovery to scaling</li>
+                </ul>
+              </div>
+
+              <div className="included-category">
+                <h4 className="included-category-title">CRM Command Center</h4>
+                <ul className="included-list">
+                  <li><span className="included-check">&#10003;</span>AI Content Generator — create posts, emails & pages</li>
+                  <li><span className="included-check">&#10003;</span>Contact Management — track leads, deals & outreach</li>
+                  <li><span className="included-check">&#10003;</span>Email Sequences — nurture campaigns with copy-to-clipboard</li>
+                  <li><span className="included-check">&#10003;</span>Sales Scripts — 15 proven Hormozi-style scripts</li>
+                  <li><span className="included-check">&#10003;</span>Business Systems — flywheel checklist to systemise growth</li>
+                </ul>
+              </div>
+
+              <div className="included-category">
+                <h4 className="included-category-title">AI Co-Founder</h4>
+                <ul className="included-list">
+                  <li><span className="included-check">&#10003;</span>Zarlo — AI assistant on every page, knows your context</li>
+                  <li><span className="included-check">&#10003;</span>Guided Flows — AI-powered conversations that extract your answers</li>
+                  <li><span className="included-check">&#10003;</span>Smart Prompts — 7 templates for content, outreach & strategy</li>
+                  <li><span className="included-check">&#10003;</span>Personalised Recommendations — based on your stage & data</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           {/* Game Story - The Lore */}

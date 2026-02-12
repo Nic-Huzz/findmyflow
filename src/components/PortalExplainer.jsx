@@ -9,7 +9,7 @@ function PortalExplainer({ onClose }) {
       title: "Welcome to Your Flow Portal! 🌊",
       content: (
         <>
-          <p>Over the next 7 days, you'll complete quests across five tabs to help you find your flow and amplify your impact.</p>
+          <p>Over the next 7 days, you'll complete quests across four tabs to help you find your flow and amplify your impact.</p>
           <p>Let's take a quick tour to show you how everything works!</p>
         </>
       )

@@ -521,3 +521,42 @@
     align-items: center;
   }
 }
+
+/* Validation Explainer - Step cards */
+.validation-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.validation-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.validation-step .step-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.validation-step .step-info h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #E9A23B;
+  margin: 0 0 4px;
+}
+
+.validation-step .step-info p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.4;
+}

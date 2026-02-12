@@ -9,6 +9,7 @@ import {
   uncompleteTask as uncompleteTaskHelper,
   getThisWeekTasks,
   getQuickStats,
+  TASK_POINTS,
 } from '../lib/executeHelpers'
 import {
   getActiveFrameworks,
@@ -21,14 +22,7 @@ import {
 } from '../lib/crm/implementationService'
 import { supabase } from '../lib/supabaseClient'
 
-// Points for different task types
-const TASK_POINTS = {
-  build: 10,
-  launch: 15,
-  deliver: 10,
-  recap: 5,
-  custom: 10,
-}
+// TASK_POINTS imported from executeHelpers
 
 /**
  * Hook for managing Execute system with celebrations

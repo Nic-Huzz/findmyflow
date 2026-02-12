@@ -11,6 +11,7 @@ import {
   getThisWeekTasks,
   getStuckTasks
 } from './executeHelpers'
+import { getObjectionStats } from './crm/objectionService'
 
 // Nudge rules with triggers and cooldowns
 const NUDGE_RULES = [
@@ -144,6 +145,69 @@ const NUDGE_RULES = [
       return null
     },
     cooldown: 12 * 60 * 60 * 1000 // Twice per day max
+  },
+
+  // --- Sales-specific nudges ---
+
+  {
+    id: 'deal_booked_prep',
+    check: async (userId, context) => {
+      const { bookedDeals } = context
+      if (bookedDeals && bookedDeals.length > 0) {
+        return {
+          trigger_type: 'deal_booked_prep',
+          message: 'You have a booked call! Review the CLOSER framework to prepare.',
+          action_type: 'open_playbook_section',
+          action_data: { highlight: 'closer' }
+        }
+      }
+      return null
+    },
+    cooldown: 12 * 60 * 60 * 1000 // 12 hours
+  },
+
+  {
+    id: 'deal_stale_bamfam',
+    check: async (userId, context) => {
+      const { staleFollowUps } = context
+      if (staleFollowUps && staleFollowUps.length > 0) {
+        return {
+          trigger_type: 'deal_stale_bamfam',
+          message: 'A follow-up is going cold. Use the BAMFAM technique to re-engage.',
+          action_type: 'open_playbook_section',
+          action_data: { highlight: 'nine-things' }
+        }
+      }
+      return null
+    },
+    cooldown: 3 * 24 * 60 * 60 * 1000 // 3 days
+  },
+
+  {
+    id: 'top_objection_coach',
+    check: async (userId, context) => {
+      // Lazy-load objection stats only when we need them
+      let objStats = context.objectionStats
+      if (objStats === undefined) {
+        objStats = await getObjectionStats(userId)
+      }
+
+      if (!objStats || !objStats.topObjections) return null
+
+      // Check if any single category has 3+ occurrences
+      const frequentObjection = objStats.topObjections.find(([, count]) => count >= 3)
+      if (frequentObjection) {
+        const [category, count] = frequentObjection
+        return {
+          trigger_type: 'top_objection_coach',
+          message: `You're hitting "${category}" objections often (${count}x). Review Three Distortions for a reframe.`,
+          action_type: 'open_playbook_section',
+          action_data: { highlight: 'three-distortions' }
+        }
+      }
+      return null
+    },
+    cooldown: 7 * 24 * 60 * 60 * 1000 // 7 days
   }
 ]
 
@@ -178,11 +242,28 @@ export async function checkForNudges(userId, isFirstLoginToday = false) {
  * Gather all context needed for nudge decisions
  */
 async function gatherNudgeContext(userId, isFirstLoginToday) {
-  const [weekTasks, funnelMetrics, pendingImprovements, stuckTasks] = await Promise.all([
+  // Fetch sales-related context alongside existing data
+  const threeDaysAgo = new Date()
+  threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
+
+  const [weekTasks, funnelMetrics, pendingImprovements, stuckTasks, bookedDealsResult, staleFollowUpsResult] = await Promise.all([
     getThisWeekTasks(userId),
     getLatestFunnelMetrics(userId),
     getPendingImprovements(userId),
-    getStuckTasks(userId)
+    getStuckTasks(userId),
+    supabase
+      .from('sales_deals')
+      .select('id, contact_name, status')
+      .eq('user_id', userId)
+      .eq('status', 'booked')
+      .limit(5),
+    supabase
+      .from('sales_deals')
+      .select('id, contact_name, status, updated_at')
+      .eq('user_id', userId)
+      .eq('status', 'follow_up')
+      .lt('updated_at', threeDaysAgo.toISOString())
+      .limit(5),
   ])
 
   const completedTasks = weekTasks.filter(t => t.completed).length
@@ -197,7 +278,10 @@ async function gatherNudgeContext(userId, isFirstLoginToday) {
     funnelHealth: calculateFunnelHealth(funnelMetrics),
     pendingImprovements,
     stuckTasks,
-    isFirstLoginToday
+    isFirstLoginToday,
+    bookedDeals: bookedDealsResult.data || [],
+    staleFollowUps: staleFollowUpsResult.data || [],
+    // objectionStats left undefined — lazy-loaded by top_objection_coach rule
   }
 }
 
@@ -241,6 +325,11 @@ export function getNudgeActionHandler(actionType, actionData) {
       route: null,
       callback: 'highlightTask',
       data: actionData
+    },
+    open_playbook_section: {
+      label: 'Review now',
+      route: `/crm/sales-playbook?highlight=${actionData.highlight || 'closer'}`,
+      callback: null
     }
   }
 

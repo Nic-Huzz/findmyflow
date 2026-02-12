@@ -113,6 +113,11 @@ export default function SelfTestFlow() {
 
   const { saveProgress } = useAutoSave('self_test', user?.id)
 
+  // Scroll to top on step/sub-step changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step, preActionSubStep])
+
   // Check for ?results=true to show saved results directly
   useEffect(() => {
     const loadSavedResults = async () => {
@@ -528,9 +533,9 @@ export default function SelfTestFlow() {
           <p className="time-icon">{'🔬'}</p>
           <h1 className="welcome-greeting">Play-list Self-Trial</h1>
           <div className="welcome-message animated-text">
-            <p>Before you help someone else, prove to yourself that your skill works.</p>
-            <p>Pick a skill. Pick a problem <strong>you</strong> have. Apply it to yourself.</p>
-            <p>If it works for you, it'll work for others.</p>
+            <p>You know that skill you've been sharpening? Time to point it at yourself.</p>
+            <p>Pick a skill. Pick a problem <strong>you're</strong> actually dealing with. Use one to solve the other.</p>
+            <p>Your best proof of concept is you.</p>
           </div>
           <button className="primary-button" onClick={() => setStep(1)}>
             Let's Test It
@@ -678,10 +683,6 @@ export default function SelfTestFlow() {
               <div className="question-number">You're all set!</div>
               <h2 className="question-text">Time to Test</h2>
               <p className="question-subtext">Go test it on yourself and come back to reflect</p>
-
-              <button className="primary-button" style={{ marginTop: '32px' }} onClick={handleCommit} disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : 'Go Test It!'}
-              </button>
             </div>
           )}
         </div>
@@ -699,9 +700,14 @@ export default function SelfTestFlow() {
             </button>
           )}
           {preActionSubStep === 'done' && (
-            <button className="go-back-link" onClick={handleBack}>
-              Go back
-            </button>
+            <>
+              <button className="primary-button" onClick={handleCommit} disabled={isSubmitting}>
+                {isSubmitting ? 'Saving...' : 'Go Test It!'}
+              </button>
+              <button className="go-back-link" onClick={handleBack}>
+                Go back
+              </button>
+            </>
           )}
         </div>
       </div>

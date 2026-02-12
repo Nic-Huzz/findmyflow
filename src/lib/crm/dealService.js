@@ -511,6 +511,69 @@ export async function deleteDeal(dealId, userId) {
   return { error: null }
 }
 
+// Get sales metrics for the playbook dashboard
+export async function getSalesMetrics(userId) {
+  const { data, error } = await fetchDeals(userId)
+
+  if (error || !data) {
+    return { dealCount: 0, metrics: null }
+  }
+
+  const dealCount = data.length
+  if (dealCount === 0) {
+    return { dealCount: 0, metrics: null }
+  }
+
+  // Normalize legacy stages
+  const deals = data.map(d => ({
+    ...d,
+    status: LEGACY_STAGE_MAP[d.status] || d.status,
+  }))
+
+  // Stage counts — only count deals that actually reached the booking stage
+  const bookedOrBeyond = deals.filter(d =>
+    ['booked', 'showed', 'pitched', 'follow_up', 'won', 'delivering', 'completed'].includes(d.status)
+    || d.meeting_showed !== null
+  )
+  const showed = deals.filter(d => d.meeting_showed === true)
+  const pitched = deals.filter(d =>
+    ['pitched', 'follow_up', 'won', 'delivering', 'completed'].includes(d.status)
+  )
+  const won = deals.filter(d => ['won', 'delivering', 'completed'].includes(d.status))
+
+  const showRate = bookedOrBeyond.length > 0
+    ? Math.round((showed.length / bookedOrBeyond.length) * 100)
+    : null
+
+  const closeRate = pitched.length > 0
+    ? Math.round((won.length / pitched.length) * 100)
+    : null
+
+  const cashCollected = won.reduce((sum, d) => sum + (d.value || 0), 0)
+
+  const avgDealSize = won.length > 0
+    ? Math.round(cashCollected / won.length)
+    : null
+
+  const activeStages = ['lead', 'qualified', 'booked', 'showed', 'pitched', 'follow_up']
+  const pipelineValue = deals
+    .filter(d => activeStages.includes(d.status))
+    .reduce((sum, d) => sum + (d.value || 0), 0)
+
+  return {
+    dealCount,
+    metrics: {
+      showRate,
+      closeRate,
+      cashCollected,
+      avgDealSize,
+      pipelineValue,
+      totalDeals: dealCount,
+      wonDeals: won.length,
+    },
+  }
+}
+
 // Calculate revenue stats
 export function calculateRevenueStats(deals, monthlyGoal = 5000) {
   const now = new Date()

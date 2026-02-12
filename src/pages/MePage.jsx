@@ -65,6 +65,16 @@ export default function MePage() {
     refresh: refreshHero,
   } = useHeroProfile(user?.id, user?.email)
 
+  // First-visit welcome card
+  const [showWelcome, setShowWelcome] = useState(() => {
+    if (!user?.id) return false
+    return !localStorage.getItem(`me_page_visited_${user.id}`)
+  })
+  const dismissWelcome = () => {
+    localStorage.setItem(`me_page_visited_${user.id}`, 'true')
+    setShowWelcome(false)
+  }
+
   // Inline state
   const [stageProgress, setStageProgress] = useState(undefined) // undefined = not loaded, null = no row
   const [streakCount, setStreakCount] = useState(0)
@@ -400,6 +410,22 @@ export default function MePage() {
           </div>
         </div>
       </section>
+
+      {/* Welcome card — first visit only */}
+      {showWelcome && (
+        <section className="welcome-banner">
+          <div className="welcome-banner-inner">
+            <div className="welcome-banner-icon">🏠</div>
+            <h2 className="welcome-banner-title">Welcome to your home base</h2>
+            <p className="welcome-banner-text">
+              This is where your whole journey lives — your flow river, quests, hero profile, and progress. Come back here anytime to see how far you've come.
+            </p>
+            <button className="welcome-banner-cta" onClick={dismissWelcome}>
+              Got it, let's go <span>→</span>
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* ============================================================
          SECTION 2: YOUR FLOW JOURNEY

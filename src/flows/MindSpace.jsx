@@ -476,6 +476,9 @@ export default function MindSpace() {
     }
   }
 
+  // Hide "go deeper" options if user hasn't visited /me yet (prevents navigation leaks)
+  const hasVisitedMe = Boolean(user?.id && localStorage.getItem(`me_page_visited_${user.id}`))
+
   const handleNextChoice = (choice) => {
     switch (choice) {
       case 'skills':
@@ -953,7 +956,7 @@ export default function MindSpace() {
               <div className="nav-buttons" style={{ marginTop: '24px' }}>
                 <button
                   className="secondary-button"
-                  onClick={() => navigate('/7-day-challenge')}
+                  onClick={() => navigate('/me')}
                 >
                   Back
                 </button>
@@ -977,50 +980,56 @@ export default function MindSpace() {
             ) : (
               <>
                 <div className="next-question">
-                  <h3>Does this capture everything?</h3>
-                  <p>You can go deeper on any area, or proceed to validation.</p>
+                  <h3>{hasVisitedMe ? 'Does this capture everything?' : 'Extraction Complete!'}</h3>
+                  <p>{hasVisitedMe ? 'You can go deeper on any area, or proceed to validation.' : 'Your skills, problems, and people have been saved. Head to your home base to see your full journey.'}</p>
                 </div>
 
                 <div className="next-options">
-                  <button className="option-btn" onClick={() => handleNextChoice('skills')}>
-                    <span className="option-icon">💡</span>
-                    <span className="option-text">
-                      <strong>Skills feel incomplete</strong>
-                      <span>Explore deeper in Playlist Finder</span>
-                    </span>
-                  </button>
+                  {hasVisitedMe && (
+                    <>
+                      <button className="option-btn" onClick={() => handleNextChoice('skills')}>
+                        <span className="option-icon">💡</span>
+                        <span className="option-text">
+                          <strong>Skills feel incomplete</strong>
+                          <span>Explore deeper in Playlist Finder</span>
+                        </span>
+                      </button>
 
-                  <button className="option-btn" onClick={() => handleNextChoice('problems')}>
-                    <span className="option-icon">🎯</span>
-                    <span className="option-text">
-                      <strong>Problems feel incomplete</strong>
-                      <span>Explore deeper in Problems Discovery</span>
-                    </span>
-                  </button>
+                      <button className="option-btn" onClick={() => handleNextChoice('problems')}>
+                        <span className="option-icon">🎯</span>
+                        <span className="option-text">
+                          <strong>Problems feel incomplete</strong>
+                          <span>Explore deeper in Problems Discovery</span>
+                        </span>
+                      </button>
 
-                  <button className="option-btn" onClick={() => handleNextChoice('people')}>
-                    <span className="option-icon">👥</span>
-                    <span className="option-text">
-                      <strong>People feel incomplete</strong>
-                      <span>Explore deeper in Persona Identifier</span>
-                    </span>
-                  </button>
+                      <button className="option-btn" onClick={() => handleNextChoice('people')}>
+                        <span className="option-icon">👥</span>
+                        <span className="option-text">
+                          <strong>People feel incomplete</strong>
+                          <span>Explore deeper in Persona Identifier</span>
+                        </span>
+                      </button>
+                    </>
+                  )}
 
                   <button className="option-btn primary" onClick={() => handleNextChoice('done')}>
                     <span className="option-icon">🚀</span>
                     <span className="option-text">
-                      <strong>Looks good!</strong>
-                      <span>Proceed to Stage 1: Validation</span>
+                      <strong>{hasVisitedMe ? 'Looks good!' : 'Go to your home base'}</strong>
+                      <span>{hasVisitedMe ? 'Proceed to Stage 1: Validation' : 'See your journey, quests, and hero profile'}</span>
                     </span>
                   </button>
                 </div>
 
-                <button
-                  className="primary-button complete-btn"
-                  onClick={() => navigate('/me')}
-                >
-                  Complete
-                </button>
+                {hasVisitedMe && (
+                  <button
+                    className="primary-button complete-btn"
+                    onClick={() => navigate('/me')}
+                  >
+                    Complete
+                  </button>
+                )}
               </>
             )}
           </div>

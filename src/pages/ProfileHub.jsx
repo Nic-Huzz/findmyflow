@@ -34,6 +34,14 @@ const ProfileHub = () => {
       color: '#E9A23B'
     },
     {
+      id: 'crm',
+      icon: '🏰',
+      title: 'CRM Command Center',
+      description: 'Manage your marketing, sales, and business tools',
+      path: '/crm',
+      color: '#7c3aed'
+    },
+    {
       id: 'settings',
       icon: '⚙️',
       title: 'User Settings',

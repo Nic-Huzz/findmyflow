@@ -66,6 +66,11 @@ export default function LetsPlayReviewFlow() {
 
   const { loadProgress, clearProgress } = useAutoSave('lets_play', user?.id)
 
+  // Scroll to top on step changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step])
+
   // Load pending Let's Play completions that need review
   useEffect(() => {
     const init = async () => {

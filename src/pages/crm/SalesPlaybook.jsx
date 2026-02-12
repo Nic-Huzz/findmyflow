@@ -2,8 +2,8 @@
  * SalesPlaybook.jsx — /crm/sales-playbook
  * Educational library of Hormozi sales frameworks + objection analytics
  */
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import {
   THREE_DISTORTIONS,
@@ -12,18 +12,35 @@ import {
   CONVICTION_TONALITY,
   THREE_THINGS_ON_CALL,
   SELL_THE_VACATION,
-  CASE_STUDY_DATA,
   KEY_PRINCIPLES,
   DISTORTION_REASON_LABELS,
 } from '../../data/salesPlaybook'
 import { getObjectionStats } from '../../lib/crm/objectionService'
+import { getSalesMetrics } from '../../lib/crm/dealService'
 import { hapticLight } from '../../lib/haptics'
 import './SalesPlaybook.css'
 
 export default function SalesPlaybook() {
   const { user } = useAuth()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const highlightParam = searchParams.get('highlight')
+
+  // If highlight param targets learn tab content, default to learn tab
   const [activeTab, setActiveTab] = useState('learn')
+
+  // Clear highlight param after it's been consumed
+  useEffect(() => {
+    if (highlightParam) {
+      // Keep on learn tab (highlight targets accordion sections)
+      setActiveTab('learn')
+      // Clean up URL after a delay so the animation can play
+      const timer = setTimeout(() => {
+        setSearchParams({}, { replace: true })
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [highlightParam])
 
   return (
     <div className="sales-playbook">
@@ -75,7 +92,7 @@ export default function SalesPlaybook() {
       </div>
 
       {activeTab === 'learn' ? (
-        <LearnTab />
+        <LearnTab highlight={highlightParam} />
       ) : (
         <TrackTab userId={user?.id} />
       )}
@@ -86,10 +103,48 @@ export default function SalesPlaybook() {
 // ============================================
 // LEARN TAB
 // ============================================
-function LearnTab() {
+// Section ID mapping for highlight query param
+const SECTION_IDS = {
+  'three-things': 'three-things',
+  'conviction': 'conviction',
+  'closer': 'closer',
+  'distortions': 'distortions',
+  'three-distortions': 'distortions',
+  'nine-things': 'nine-things',
+  'vacation': 'vacation',
+  'principles': 'principles',
+}
+
+function LearnTab({ highlight }) {
   const [expandedSection, setExpandedSection] = useState(null)
   const [expandedItem, setExpandedItem] = useState(null)
   const [copiedId, setCopiedId] = useState(null)
+  const [highlightedSection, setHighlightedSection] = useState(null)
+  const sectionRefs = useRef({})
+
+  // Handle highlight from nudge navigation
+  useEffect(() => {
+    if (!highlight) return
+
+    const sectionId = SECTION_IDS[highlight]
+    if (!sectionId) return
+
+    // Auto-expand the section
+    setExpandedSection(sectionId)
+    setHighlightedSection(sectionId)
+
+    // Scroll into view after render
+    requestAnimationFrame(() => {
+      const el = sectionRefs.current[sectionId]
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    })
+
+    // Remove highlight pulse after animation
+    const timer = setTimeout(() => setHighlightedSection(null), 2500)
+    return () => clearTimeout(timer)
+  }, [highlight])
 
   function copyText(text, id) {
     navigator.clipboard.writeText(text)
@@ -107,7 +162,7 @@ function LearnTab() {
   return (
     <div className="sp-learn">
       {/* Three Things */}
-      <div className="sp-card">
+      <div className={`sp-card ${highlightedSection === 'three-things' ? 'sp-highlight-pulse' : ''}`} ref={el => sectionRefs.current['three-things'] = el}>
         <div className="sp-accordion-header" onClick={() => toggleSection('three-things')}>
           <div className="sp-accordion-icon">🎯</div>
           <div className="sp-accordion-info">
@@ -131,7 +186,7 @@ function LearnTab() {
       </div>
 
       {/* Conviction & Tonality */}
-      <div className="sp-card">
+      <div className={`sp-card ${highlightedSection === 'conviction' ? 'sp-highlight-pulse' : ''}`} ref={el => sectionRefs.current['conviction'] = el}>
         <div className="sp-accordion-header" onClick={() => toggleSection('conviction')}>
           <div className="sp-accordion-icon">🔥</div>
           <div className="sp-accordion-info">
@@ -158,7 +213,7 @@ function LearnTab() {
       </div>
 
       {/* CLOSER Framework */}
-      <div className="sp-card">
+      <div className={`sp-card ${highlightedSection === 'closer' ? 'sp-highlight-pulse' : ''}`} ref={el => sectionRefs.current['closer'] = el}>
         <div className="sp-accordion-header" onClick={() => toggleSection('closer')}>
           <div className="sp-accordion-icon">📋</div>
           <div className="sp-accordion-info">
@@ -196,7 +251,7 @@ function LearnTab() {
       </div>
 
       {/* Three Distortions */}
-      <div className="sp-card">
+      <div className={`sp-card ${highlightedSection === 'distortions' ? 'sp-highlight-pulse' : ''}`} ref={el => sectionRefs.current['distortions'] = el}>
         <div className="sp-accordion-header" onClick={() => toggleSection('distortions')}>
           <div className="sp-accordion-icon">🛡️</div>
           <div className="sp-accordion-info">
@@ -240,7 +295,7 @@ function LearnTab() {
       </div>
 
       {/* Nine Things */}
-      <div className="sp-card">
+      <div className={`sp-card ${highlightedSection === 'nine-things' ? 'sp-highlight-pulse' : ''}`} ref={el => sectionRefs.current['nine-things'] = el}>
         <div className="sp-accordion-header" onClick={() => toggleSection('nine-things')}>
           <div className="sp-accordion-icon">🏆</div>
           <div className="sp-accordion-info">
@@ -268,7 +323,7 @@ function LearnTab() {
       </div>
 
       {/* Sell the Vacation */}
-      <div className="sp-card">
+      <div className={`sp-card ${highlightedSection === 'vacation' ? 'sp-highlight-pulse' : ''}`} ref={el => sectionRefs.current['vacation'] = el}>
         <div className="sp-accordion-header" onClick={() => toggleSection('vacation')}>
           <div className="sp-accordion-icon">🏖️</div>
           <div className="sp-accordion-info">
@@ -286,7 +341,7 @@ function LearnTab() {
       </div>
 
       {/* Key Principles */}
-      <div className="sp-card">
+      <div className={`sp-card ${highlightedSection === 'principles' ? 'sp-highlight-pulse' : ''}`} ref={el => sectionRefs.current['principles'] = el}>
         <div className="sp-accordion-header" onClick={() => toggleSection('principles')}>
           <div className="sp-accordion-icon">💡</div>
           <div className="sp-accordion-info">
@@ -316,18 +371,24 @@ function LearnTab() {
 // TRACK TAB
 // ============================================
 function TrackTab({ userId }) {
+  const navigate = useNavigate()
   const [stats, setStats] = useState(null)
+  const [salesMetrics, setSalesMetrics] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (userId) loadStats()
+    if (userId) loadData()
     else setLoading(false)
   }, [userId])
 
-  async function loadStats() {
+  async function loadData() {
     setLoading(true)
-    const result = await getObjectionStats(userId)
-    setStats(result)
+    const [objectionResult, metricsResult] = await Promise.all([
+      getObjectionStats(userId),
+      getSalesMetrics(userId),
+    ])
+    setStats(objectionResult)
+    setSalesMetrics(metricsResult)
     setLoading(false)
   }
 
@@ -342,27 +403,8 @@ function TrackTab({ userId }) {
 
   return (
     <div className="sp-track">
-      {/* Case Study Comparison */}
-      <div className="sp-card sp-case-study-card">
-        <div className="sp-section-header">
-          <div className="sp-section-icon">📊</div>
-          <span className="sp-section-title">Framework Results</span>
-        </div>
-        <h3 className="sp-case-title">{CASE_STUDY_DATA.title}</h3>
-        <p className="sp-case-subtitle">{CASE_STUDY_DATA.subtitle}</p>
-        <div className="sp-metrics-grid">
-          {CASE_STUDY_DATA.metrics.map(metric => (
-            <div key={metric.label} className="sp-metric-card">
-              <span className="sp-metric-label">{metric.label}</span>
-              <div className="sp-metric-comparison">
-                <span className="sp-metric-before">{metric.before}{metric.unit}</span>
-                <span className="sp-metric-arrow">→</span>
-                <span className="sp-metric-after">{metric.after}{metric.unit}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Sales Metrics Card (replaces hardcoded case study) */}
+      <SalesMetricsCard salesMetrics={salesMetrics} onNavigate={() => navigate('/crm/sales')} />
 
       {/* Objection Stats */}
       {!stats ? (
@@ -439,6 +481,74 @@ function TrackTab({ userId }) {
             </div>
           )}
         </>
+      )}
+    </div>
+  )
+}
+
+// ============================================
+// SALES METRICS CARD (3 states)
+// ============================================
+function SalesMetricsCard({ salesMetrics, onNavigate }) {
+  if (!salesMetrics || salesMetrics.dealCount === 0 || !salesMetrics.metrics) {
+    // Empty state
+    return (
+      <div className="sp-card sp-metrics-empty">
+        <span className="sp-empty-icon">📊</span>
+        <h3 className="sp-empty-title">Your Sales Metrics</h3>
+        <p className="sp-empty-text">Add your first deal to start tracking real performance data.</p>
+        <button className="sp-metrics-cta" onClick={onNavigate}>
+          Go to Pipeline
+        </button>
+      </div>
+    )
+  }
+
+  const { metrics, dealCount } = salesMetrics
+  const isBuilding = dealCount < 5
+
+  // Format currency
+  const fmtCurrency = (val) => {
+    if (val == null) return '—'
+    if (val >= 1000) return `$${(val / 1000).toFixed(val >= 10000 ? 0 : 1)}k`
+    return `$${val}`
+  }
+
+  const tiles = [
+    { label: 'Show Rate', value: metrics.showRate != null ? `${metrics.showRate}%` : '—', gold: false },
+    { label: 'Close Rate', value: metrics.closeRate != null ? `${metrics.closeRate}%` : '—', gold: false },
+    { label: 'Cash Collected', value: fmtCurrency(metrics.cashCollected), gold: true },
+    { label: 'Avg Deal Size', value: fmtCurrency(metrics.avgDealSize), gold: false },
+  ]
+
+  return (
+    <div className={`sp-card sp-case-study-card ${isBuilding ? 'sp-metrics-building' : ''}`}>
+      <div className="sp-section-header">
+        <div className="sp-section-icon">📊</div>
+        <span className="sp-section-title">Your Sales Metrics</span>
+      </div>
+      <h3 className="sp-case-title">
+        {metrics.totalDeals} Deal{metrics.totalDeals !== 1 ? 's' : ''} Tracked
+      </h3>
+      <p className="sp-case-subtitle">
+        {metrics.wonDeals} won · Pipeline: {fmtCurrency(metrics.pipelineValue)}
+      </p>
+
+      <div className="sp-metrics-grid">
+        {tiles.map(tile => (
+          <div key={tile.label} className="sp-metric-card">
+            <span className="sp-metric-label">{tile.label}</span>
+            <span className={`sp-metric-value ${tile.gold ? 'sp-stat-gold' : ''}`}>
+              {tile.value}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {isBuilding && (
+        <div className="sp-building-banner">
+          Add {5 - dealCount} more deal{5 - dealCount !== 1 ? 's' : ''} for full insights
+        </div>
       )}
     </div>
   )

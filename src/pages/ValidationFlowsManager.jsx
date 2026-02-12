@@ -74,19 +74,42 @@ const ValidationFlowsManager = () => {
   // Taxonomy data for dropdowns
   const [useCustomProblem, setUseCustomProblem] = useState(false)
   const [useCustomPersona, setUseCustomPersona] = useState(false)
+  const [userProblems, setUserProblems] = useState([])
+  const [userPersonas, setUserPersonas] = useState([])
 
-  // Format taxonomy segments for dropdowns
-  const problemOptions = PROBLEM_SEGMENTS.map(s => ({
-    value: s.displayName,
-    label: `${s.icon} ${s.displayName}`,
-    tagline: s.tagline
-  }))
+  // Load user's AI-generated cluster labels for dropdowns
+  useEffect(() => {
+    if (!user?.id) return
+    const loadClusters = async () => {
+      const { data, error } = await supabase
+        .from('nikigai_clusters')
+        .select('cluster_label, cluster_type')
+        .eq('user_id', user.id)
+        .in('cluster_type', ['problems', 'persona'])
+      if (!error && data?.length > 0) {
+        setUserProblems(data.filter(c => c.cluster_type === 'problems').map(c => c.cluster_label))
+        setUserPersonas(data.filter(c => c.cluster_type === 'persona').map(c => c.cluster_label))
+      }
+    }
+    loadClusters()
+  }, [user?.id])
 
-  const personaOptions = PERSONA_SEGMENTS.map(s => ({
-    value: s.displayName,
-    label: `${s.icon} ${s.displayName}`,
-    tagline: s.tagline
-  }))
+  // Use user's clusters if available, fall back to taxonomy
+  const problemOptions = userProblems.length > 0
+    ? userProblems.map(label => ({ value: label, label }))
+    : PROBLEM_SEGMENTS.map(s => ({
+        value: s.displayName,
+        label: `${s.icon} ${s.displayName}`,
+        tagline: s.tagline
+      }))
+
+  const personaOptions = userPersonas.length > 0
+    ? userPersonas.map(label => ({ value: label, label }))
+    : PERSONA_SEGMENTS.map(s => ({
+        value: s.displayName,
+        label: `${s.icon} ${s.displayName}`,
+        tagline: s.tagline
+      }))
 
   useEffect(() => {
     if (user?.id) {
@@ -1387,7 +1410,7 @@ const ValidationFlowsManager = () => {
                             }
                           }}
                         >
-                          <option value="">Select a problem domain...</option>
+                          <option value="">{userProblems.length > 0 ? 'Select from your problems...' : 'Select a problem domain...'}</option>
                           {problemOptions.map((option, idx) => (
                             <option key={idx} value={option.value}>{option.label}</option>
                           ))}
@@ -1410,7 +1433,7 @@ const ValidationFlowsManager = () => {
                             setPlaceholders({ ...placeholders, problemArea: '' })
                           }}
                         >
-                          ← Choose from taxonomy
+                          ← Choose from list
                         </button>
                       </div>
                     )}
@@ -1433,7 +1456,7 @@ const ValidationFlowsManager = () => {
                             }
                           }}
                         >
-                          <option value="">Select a persona type...</option>
+                          <option value="">{userPersonas.length > 0 ? 'Select from your personas...' : 'Select a persona type...'}</option>
                           {personaOptions.map((option, idx) => (
                             <option key={idx} value={option.value}>{option.label}</option>
                           ))}
@@ -1456,7 +1479,7 @@ const ValidationFlowsManager = () => {
                             setPlaceholders({ ...placeholders, audienceDescription: '' })
                           }}
                         >
-                          ← Choose from taxonomy
+                          ← Choose from list
                         </button>
                       </div>
                     )}

@@ -1,14 +1,29 @@
 import React, { lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useNavigationType } from 'react-router-dom'
 
-// Retry wrapper for lazy imports — retries once on chunk load failure
-// (common after deploys when old chunk hashes are invalidated)
+// Retry wrapper for lazy imports — handles stale chunks after deploys
+// When Vite rebuilds, old chunk hashes are invalidated. A full page reload
+// fetches the new index.html with correct chunk references.
 function lazyRetry(importFn) {
   return lazy(() =>
-    importFn().catch(() => {
-      // Wait briefly then retry once
-      return new Promise(resolve => setTimeout(resolve, 1500))
-        .then(() => importFn())
+    importFn().catch((error) => {
+      // Check if we already tried reloading for this deploy
+      const reloadedKey = 'chunk_reload_' + window.location.pathname
+      const alreadyReloaded = sessionStorage.getItem(reloadedKey)
+
+      if (!alreadyReloaded) {
+        // Mark that we're reloading so we don't loop
+        sessionStorage.setItem(reloadedKey, '1')
+        // Full reload fetches new index.html with correct chunk hashes
+        window.location.reload()
+        // Return a never-resolving promise to prevent rendering during reload
+        return new Promise(() => {})
+      }
+
+      // Already reloaded once — clear the flag and let the error bubble
+      // so the ErrorBoundary can show the fallback UI
+      sessionStorage.removeItem(reloadedKey)
+      throw error
     })
   )
 }
@@ -30,6 +45,20 @@ import { initVibeColor } from './hooks/useVibeColor'
 
 // Initialize vibe color before first render (restores saved preference)
 initVibeColor()
+
+// Scroll to top on route changes (PUSH/REPLACE only, not browser back/forward)
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  const navigationType = useNavigationType()
+
+  React.useEffect(() => {
+    if (navigationType !== 'POP') {
+      window.scrollTo(0, 0)
+    }
+  }, [pathname, navigationType])
+
+  return null
+}
 
 // Loading component for Suspense fallback
 function LoadingSpinner() {
@@ -80,6 +109,7 @@ const MindSpace = lazyRetry(() => import('./flows/MindSpace'))
 const PlayListFinderFlow = lazyRetry(() => import('./flows/PlayListFinderFlow'))
 const PersonaIdentifierFlow = lazyRetry(() => import('./flows/PersonaIdentifierFlow'))
 const FlowFinderExplainer = lazyRetry(() => import('./flows/FlowFinderExplainer'))
+const ValidationExplainer = lazyRetry(() => import('./flows/ValidationExplainer'))
 const LetsPlayFlow = lazyRetry(() => import('./flows/LetsPlayFlow'))
 const LetsPlayReviewFlow = lazyRetry(() => import('./flows/LetsPlayReviewFlow'))
 const SelfTestFlow = lazyRetry(() => import('./flows/SelfTestFlow'))
@@ -257,6 +287,7 @@ function AppRouter() {
       <AuthProvider>
         <OnboardingProvider>
         <Router>
+          <ScrollToTop />
           <LocationAwareErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
@@ -523,6 +554,11 @@ function AppRouter() {
             <Route path="/flow-finder-explainer" element={
               <AuthGate>
                 <FlowFinderExplainer />
+              </AuthGate>
+            } />
+            <Route path="/validation-explainer" element={
+              <AuthGate>
+                <ValidationExplainer />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={

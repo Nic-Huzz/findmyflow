@@ -1714,7 +1714,7 @@ function Challenge() {
                     completed={completed}
                     isCompleting={completingQuestId === quest.id}
                     locked={locked}
-                    lockedPrerequisite={locked ? getRequiredQuestName(quest.requires_quest) : null}
+                    lockedPrerequisite={locked ? getRequiredQuestName(quest.requires_quest, quest.id) : null}
                     showStreak={!!quest.maxPerDay}
                     streak={getDailyStreak(quest.id)}
                     dayLabels={getDayLabels()}

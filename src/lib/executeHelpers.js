@@ -518,6 +518,18 @@ export function getAudienceBucket(size) {
 }
 
 // ============================================
+// TASK POINTS BY PHASE
+// ============================================
+
+export const TASK_POINTS = {
+  build: 10,
+  launch: 15,
+  deliver: 10,
+  recap: 5,
+  custom: 10,
+}
+
+// ============================================
 // TASK HELPERS
 // ============================================
 

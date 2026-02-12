@@ -30,6 +30,9 @@ import { cacheBustUrl } from '../lib/fetchJson'
 import { getWeekStartLocal } from '../lib/dateUtils'
 import { getEssenceDisplayName } from '../lib/essencePreferences'
 
+// Default community group — all new challenges auto-join this group
+const DEFAULT_GROUP_ID = 'aaaaaaaa-0000-0000-0000-000000000001'
+
 // Map URL tab params to internal category names
 const TAB_TO_CATEGORY = {
   'quests': 'Business',
@@ -1017,6 +1020,7 @@ export function useChallengeData() {
 
       const sessionId = profileData?.session_id || `session_${Date.now()}`
       const challengeInstanceId = crypto.randomUUID()
+      const effectiveGroupId = groupId || DEFAULT_GROUP_ID
 
       const insertData = {
         user_id: user.id,
@@ -1028,11 +1032,8 @@ export function useChallengeData() {
         last_active_date: new Date().toISOString(),
         persona: stageProgress?.persona || 'vibe_seeker',
         current_stage: project.current_stage ?? 1,
-        project_id: project.id
-      }
-
-      if (groupId) {
-        insertData.group_id = groupId
+        project_id: project.id,
+        group_id: effectiveGroupId
       }
 
       const { data, error } = await supabase
@@ -1046,6 +1047,11 @@ export function useChallengeData() {
         alert('Error starting challenge. Please try again.')
         return
       }
+
+      // Ensure user is a participant in the group
+      await supabase
+        .from('challenge_participants')
+        .upsert({ group_id: effectiveGroupId, user_id: user.id }, { onConflict: 'group_id,user_id' })
 
       setProgress(data)
       setShowOnboarding(false)
@@ -1084,6 +1090,7 @@ export function useChallengeData() {
       }
 
       const challengeInstanceId = crypto.randomUUID()
+      const effectiveGroupId = groupId || DEFAULT_GROUP_ID
 
       const insertData = {
         user_id: user.id,
@@ -1094,11 +1101,8 @@ export function useChallengeData() {
         challenge_start_date: new Date().toISOString(),
         last_active_date: new Date().toISOString(),
         persona: userPersona,
-        current_stage: userStage
-      }
-
-      if (groupId) {
-        insertData.group_id = groupId
+        current_stage: userStage,
+        group_id: effectiveGroupId
       }
 
       const { data, error } = await supabase
@@ -1112,6 +1116,11 @@ export function useChallengeData() {
         alert('Error starting challenge. Please try again.')
         return
       }
+
+      // Ensure user is a participant in the group
+      await supabase
+        .from('challenge_participants')
+        .upsert({ group_id: effectiveGroupId, user_id: user.id }, { onConflict: 'group_id,user_id' })
 
       setProgress(data)
       setShowOnboarding(false)
@@ -1199,12 +1208,37 @@ export function useChallengeData() {
     return completions.some(c => c.quest_id === questId)
   }
 
+  // Check if a parent trial has a pending review/reflection
+  const hasPendingTrial = (parentQuestId, pendingPhase) => {
+    return completions.some(c => {
+      if (c.quest_id !== parentQuestId) return false
+      try {
+        const data = JSON.parse(c.reflection_text)
+        return data.phase === pendingPhase
+      } catch {
+        return false
+      }
+    })
+  }
+
   const isQuestLocked = (quest) => {
+    // Dynamic lock: review quests need a pending parent trial
+    if (quest.id === 'lets_play_review') {
+      return !hasPendingTrial('lets_play', 'pending_review')
+    }
+    if (quest.id === 'self_test_review') {
+      return !hasPendingTrial('self_test', 'pending_reflection')
+    }
+
     if (!quest.requires_quest) return false
     return !isQuestEverCompleted(quest.requires_quest)
   }
 
-  const getRequiredQuestName = (questId) => {
+  const getRequiredQuestName = (questId, forQuestId) => {
+    // Dynamic lock names for review quests
+    if (forQuestId === 'lets_play_review') return 'Let\'s Play Peer-Trial'
+    if (forQuestId === 'self_test_review') return 'Play-list Self-Trial'
+
     const quest = challengeData?.quests?.find(q => q.id === questId)
     return quest?.name || questId
   }

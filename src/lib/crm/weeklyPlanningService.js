@@ -3,6 +3,7 @@
 
 import { supabase } from '../supabaseClient'
 import { getWeekStartLocal as getWeekStart, formatLocalDate } from '../dateUtils'
+import { syncWeeklyPlanToExecute } from './executeSyncService'
 
 // ============================================
 // DATE HELPERS
@@ -105,6 +106,13 @@ export async function saveWeeklyPlan(userId, planData) {
   if (error) {
     console.error('Error saving weekly plan:', error)
     return null
+  }
+
+  // Sync plan tasks into execute_tasks
+  try {
+    await syncWeeklyPlanToExecute(userId, data)
+  } catch (syncErr) {
+    console.warn('Weekly plan saved but execute sync failed:', syncErr)
   }
 
   return data
@@ -232,17 +240,18 @@ export async function calculateExecutionScore(userId, weekStart) {
 
   if (!plan?.tasks || plan.tasks.length === 0) return null
 
-  // Get completed tasks from marketing_tasks for this week
+  // Get completed tasks from execute_tasks for this week
   const weekEnd = new Date(weekStart)
   weekEnd.setDate(weekEnd.getDate() + 7)
 
   const { data: completedTasks } = await supabase
-    .from('marketing_tasks')
+    .from('execute_tasks')
     .select('id')
     .eq('user_id', userId)
+    .eq('source', 'weekly_plan')
     .eq('completed', true)
-    .gte('date', weekStart)
-    .lt('date', weekEnd.toISOString().split('T')[0])
+    .gte('scheduled_date', weekStart)
+    .lt('scheduled_date', weekEnd.toISOString().split('T')[0])
 
   const plannedCount = plan.tasks.reduce((sum, t) => sum + (t.count || 1), 0)
   const completedCount = completedTasks?.length || 0

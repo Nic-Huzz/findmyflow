@@ -341,6 +341,18 @@
   }
 }
 
+.existing-project-flow .setup-message {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  min-height: 1.5em;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+}
+
+.existing-project-flow .setup-message.fading {
+  opacity: 0;
+}
+
 .existing-project-flow .success-icon {
   width: 64px;
   height: 64px;

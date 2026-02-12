@@ -235,6 +235,58 @@
 }
 
 /* ============================================================
+   WELCOME BANNER (first visit)
+   ============================================================ */
+.me-page .welcome-banner {
+  padding: 0 16px 24px;
+}
+.me-page .welcome-banner-inner {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #E9A23B 100%);
+  border-radius: 20px;
+  padding: 28px 24px;
+  text-align: center;
+  animation: welcomeFadeIn 0.5s ease-out;
+}
+.me-page .welcome-banner-icon {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+.me-page .welcome-banner-title {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+.me-page .welcome-banner-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+.me-page .welcome-banner-cta {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 10px 24px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.me-page .welcome-banner-cta:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+.me-page .welcome-banner-cta span {
+  margin-left: 4px;
+}
+@keyframes welcomeFadeIn {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
    SECTION 2: YOUR FLOW JOURNEY
    ============================================================ */
 .me-page .journey-section {

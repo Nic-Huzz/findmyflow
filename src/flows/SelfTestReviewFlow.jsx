@@ -76,6 +76,11 @@ export default function SelfTestReviewFlow() {
 
   const { loadProgress, clearProgress } = useAutoSave('self_test', user?.id)
 
+  // Scroll to top on step changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step])
+
   // Check for ?results=true to show saved results directly
   useEffect(() => {
     const loadSavedResults = async () => {

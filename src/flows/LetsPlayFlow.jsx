@@ -137,6 +137,11 @@ export default function LetsPlayFlow() {
 
   const { saveProgress } = useAutoSave('lets_play', user?.id)
 
+  // Scroll to top on step/sub-step changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [step, preActionSubStep])
+
   // Fetch Flow Finder data and check for saved progress
   useEffect(() => {
     const init = async () => {
@@ -633,10 +638,6 @@ export default function LetsPlayFlow() {
               <div className="question-number">You're all set!</div>
               <h2 className="question-text">Time to Play</h2>
               <p className="question-subtext">Go help someone and come back to reflect</p>
-
-              <button className="primary-button" style={{ marginTop: '32px' }} onClick={handleGoPlay} disabled={isSubmitting}>
-                {isSubmitting ? 'Saving...' : 'Go Play!'}
-              </button>
             </div>
           )}
         </div>
@@ -654,9 +655,14 @@ export default function LetsPlayFlow() {
             </button>
           )}
           {preActionSubStep === 'done' && (
-            <button className="go-back-link" onClick={handleBack}>
-              Go back
-            </button>
+            <>
+              <button className="primary-button" onClick={handleGoPlay} disabled={isSubmitting}>
+                {isSubmitting ? 'Saving...' : 'Go Play!'}
+              </button>
+              <button className="go-back-link" onClick={handleBack}>
+                Go back
+              </button>
+            </>
           )}
         </div>
       </div>

@@ -92,6 +92,11 @@ function PersonaSelectionFlow() {
   const [protectiveVoice, setProtectiveVoice] = useState(null)
   const [preActionStep, setPreActionStep] = useState('feeling') // feeling | layer | voice | essence
 
+  // Scroll to top on stage/step changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [stage, preActionStep])
+
   // Load Nikigai clusters on mount
   useEffect(() => {
     if (user) {

@@ -3,6 +3,7 @@
 
 import { supabase } from '../supabaseClient'
 import { getPlanningWeekStart, getCurrentWeekPlan } from './weeklyPlanningService'
+import { syncContentPlanToExecute } from './executeSyncService'
 
 // ============================================
 // PHASE → CONTENT TYPE MAPPING
@@ -140,6 +141,13 @@ export async function createContentPlan(userId, items) {
     return null
   }
 
+  // Sync scheduled content items into execute_tasks
+  try {
+    await syncContentPlanToExecute(userId, weekStart, itemsToInsert)
+  } catch (syncErr) {
+    console.warn('Content plan saved but execute sync failed:', syncErr)
+  }
+
   return getCurrentContentPlan(userId)
 }
 
@@ -183,6 +191,22 @@ export async function updateContentPlan(userId, planId, items) {
     .from('crm_content_plans')
     .update({ updated_at: new Date().toISOString() })
     .eq('id', planId)
+
+  // Sync scheduled content items into execute_tasks
+  try {
+    // Get the plan's week_start for the sync
+    const { data: planRow } = await supabase
+      .from('crm_content_plans')
+      .select('week_start')
+      .eq('id', planId)
+      .single()
+
+    if (planRow?.week_start) {
+      await syncContentPlanToExecute(userId, planRow.week_start, itemsToInsert)
+    }
+  } catch (syncErr) {
+    console.warn('Content plan updated but execute sync failed:', syncErr)
+  }
 
   return getCurrentContentPlan(userId)
 }

@@ -859,6 +859,79 @@
   font-weight: 800;
 }
 
+/* === SALES METRICS CARD STATES === */
+
+/* Empty state */
+.sales-playbook .sp-metrics-empty {
+  padding: 48px 24px;
+  text-align: center;
+}
+
+/* CTA button (gold) */
+.sales-playbook .sp-metrics-cta {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--brand-gold) 0%, #d4891f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.2px;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+}
+
+.sales-playbook .sp-metrics-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
+}
+
+.sales-playbook .sp-metrics-cta:active {
+  transform: translateY(0);
+}
+
+/* Metric value (single, not comparison) */
+.sales-playbook .sp-metric-value {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+/* Building state info banner */
+.sales-playbook .sp-building-banner {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: rgba(94, 23, 235, 0.05);
+  border: 1px dashed rgba(94, 23, 235, 0.15);
+  border-radius: 12px;
+  color: var(--brand-purple);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Building state card subtle border */
+.sales-playbook .sp-metrics-building {
+  border-color: rgba(94, 23, 235, 0.12);
+}
+
+/* === HIGHLIGHT PULSE (nudge navigation) === */
+.sales-playbook .sp-highlight-pulse {
+  animation: spHighlightPulse 2.5s ease-out;
+}
+
+@keyframes spHighlightPulse {
+  0% { box-shadow: 0 0 0 0 rgba(233, 162, 59, 0.6); border-color: var(--brand-gold); }
+  30% { box-shadow: 0 0 0 6px rgba(233, 162, 59, 0.2); border-color: var(--brand-gold); }
+  100% { box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05); border-color: #e9ecef; }
+}
+
 /* === RESPONSIVE === */
 @media (min-width: 768px) {
   .sales-playbook {
@@ -891,6 +964,7 @@
 @media (prefers-reduced-motion: reduce) {
   .sales-playbook .sp-spinner { animation: none; }
   .sales-playbook .sp-hero::before { animation: none; }
+  .sales-playbook .sp-highlight-pulse { animation: none; }
   .sales-playbook *,
   .sales-playbook *::before,
   .sales-playbook *::after {
