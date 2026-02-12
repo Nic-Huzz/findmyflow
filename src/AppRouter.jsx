@@ -110,6 +110,9 @@ const PlayListFinderFlow = lazyRetry(() => import('./flows/PlayListFinderFlow'))
 const PersonaIdentifierFlow = lazyRetry(() => import('./flows/PersonaIdentifierFlow'))
 const FlowFinderExplainer = lazyRetry(() => import('./flows/FlowFinderExplainer'))
 const ValidationExplainer = lazyRetry(() => import('./flows/ValidationExplainer'))
+const ProductExplainer = lazyRetry(() => import('./flows/ProductExplainer'))
+const TestingExplainer = lazyRetry(() => import('./flows/TestingExplainer'))
+const OfferCreationExplainer = lazyRetry(() => import('./flows/OfferCreationExplainer'))
 const LetsPlayFlow = lazyRetry(() => import('./flows/LetsPlayFlow'))
 const LetsPlayReviewFlow = lazyRetry(() => import('./flows/LetsPlayReviewFlow'))
 const SelfTestFlow = lazyRetry(() => import('./flows/SelfTestFlow'))
@@ -276,7 +279,10 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/lets-play-review' ||
                         location.pathname === '/self-test' ||
                         location.pathname === '/self-test-review' ||
-                        location.pathname === '/validation-explainer'
+                        location.pathname === '/validation-explainer' ||
+                        location.pathname === '/product-explainer' ||
+                        location.pathname === '/testing-explainer' ||
+                        location.pathname === '/offer-creation-explainer'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -560,6 +566,21 @@ function AppRouter() {
             <Route path="/validation-explainer" element={
               <AuthGate>
                 <ValidationExplainer />
+              </AuthGate>
+            } />
+            <Route path="/product-explainer" element={
+              <AuthGate>
+                <ProductExplainer />
+              </AuthGate>
+            } />
+            <Route path="/testing-explainer" element={
+              <AuthGate>
+                <TestingExplainer />
+              </AuthGate>
+            } />
+            <Route path="/offer-creation-explainer" element={
+              <AuthGate>
+                <OfferCreationExplainer />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={

@@ -1,5 +1,10 @@
 /* Validation Flows Manager - Modern Redesign */
-/* Note: Uses .dashboard-container from Profile.css for sidebar layout */
+
+/* Override sidebar layout - this page uses bottom toolbar instead */
+.validation-flows-page .main-content {
+  margin-left: 0;
+  padding: 24px 20px;
+}
 
 /* ============ PAGE HEADER ============ */
 .dashboard-container .manager-header {

@@ -29,7 +29,7 @@ import '../Profile.css'
 
 const ValidationFlowsManager = () => {
   const navigate = useNavigate()
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   const [flows, setFlows] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedFlow, setSelectedFlow] = useState(null)
@@ -44,7 +44,6 @@ const ValidationFlowsManager = () => {
     audienceDescription: ''
   })
   const [copiedToken, setCopiedToken] = useState(null)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [previewFlow, setPreviewFlow] = useState(null)
   const [previewSteps, setPreviewSteps] = useState([])
   const [previewLoading, setPreviewLoading] = useState(false)
@@ -432,9 +431,6 @@ const ValidationFlowsManager = () => {
     URL.revokeObjectURL(link.href)
   }
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
 
   // Preview flow
   const handlePreviewFlow = async (flow) => {
@@ -712,58 +708,7 @@ const ValidationFlowsManager = () => {
   }
 
   return (
-    <div className="dashboard-container">
-      {/* Mobile Top Bar */}
-      <div className="mobile-topbar">
-        <div className="topbar-content">
-          <div className="topbar-logo">FindMyFlow</div>
-          <button className="hamburger-btn" onClick={toggleSidebar}>
-            ☰
-          </button>
-        </div>
-      </div>
-
-      {/* Sidebar Overlay for Mobile */}
-      {sidebarOpen && (
-        <div className="sidebar-overlay" onClick={toggleSidebar}></div>
-      )}
-
-      {/* Sidebar */}
-      <div className={`sidebar ${sidebarOpen ? '' : 'mobile-hidden'}`}>
-        <div className="logo">FindMyFlow</div>
-
-        <div className="user-profile">
-          <div className="user-avatar">{getUserInitials(user?.email)}</div>
-          <div className="user-name">{user?.email?.split('@')[0] || 'User'}</div>
-          <div className="user-email">{user?.email}</div>
-        </div>
-
-        <ul className="nav-menu">
-          <li className="nav-item" onClick={() => { navigate('/me'); setSidebarOpen(false); }}>
-            📊 Dashboard
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/archetypes'); setSidebarOpen(false); }}>
-            ✨ Archetypes
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/7-day-challenge'); setSidebarOpen(false); }}>
-            📈 7-Day Challenge
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/flow-compass'); setSidebarOpen(false); }}>
-            🧭 Flow Compass
-          </li>
-          <li className="nav-item active" onClick={() => setSidebarOpen(false)}>
-            🔗 Validation Flows
-          </li>
-          <li className="nav-item" onClick={() => { navigate('/feedback'); setSidebarOpen(false); }}>
-            💬 Give Feedback
-          </li>
-        </ul>
-
-        <div className="signout-link" onClick={signOut}>
-          Sign Out
-        </div>
-      </div>
-
+    <div className="dashboard-container validation-flows-page">
       {/* Main Content */}
       <div className="main-content">
         <div className="manager-header">
