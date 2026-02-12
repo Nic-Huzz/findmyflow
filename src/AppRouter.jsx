@@ -275,7 +275,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/lets-play' ||
                         location.pathname === '/lets-play-review' ||
                         location.pathname === '/self-test' ||
-                        location.pathname === '/self-test-review'
+                        location.pathname === '/self-test-review' ||
+                        location.pathname === '/validation-explainer'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
