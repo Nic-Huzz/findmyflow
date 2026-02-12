@@ -170,10 +170,9 @@ function WheelPicker({ type, max = 3, selected = [], onSelect }) {
 
             <div className="segment-info-content">
               <div className="info-section">
-                <h4>This covers:</h4>
-                <div className="keyword-tags">
-                  {segment?.keywords?.map((keyword, idx) => (
-                    <span key={idx} className="keyword-tag">{keyword}</span>
+                <div className="recognition-phrases">
+                  {segment?.recognitionPhrases?.map((phrase, idx) => (
+                    <p key={idx} className="recognition-phrase">{phrase}</p>
                   ))}
                 </div>
               </div>

@@ -1762,8 +1762,14 @@ function WeeklyPlanningFlow({ onComplete, existingPlan = null }) {
   // Single step = always the final step
   const isSummaryStep = step === 1
 
+  // Wait for skip-check to resolve before rendering anything visible
+  // This prevents the flow check-in from flashing on screen for users who will be auto-skipped
+  if (!lastWeekChecked || loadingProjects) {
+    return null
+  }
+
   // If no projects and done loading, show empty state prompting Mind Space
-  if (!loadingProjects && projects.length === 0) {
+  if (projects.length === 0) {
     return (
       <div className="weekly-planning-flow">
         <div className="planning-empty-state">
