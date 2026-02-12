@@ -56,6 +56,11 @@ function PersonaAssessment() {
   const [error, setError] = useState(null)
   const [isSavingUserData, setIsSavingUserData] = useState(false)
 
+  // Scroll to top on every stage change
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [stage])
+
   // Load assessment JSON
   useEffect(() => {
     const loadAssessment = async () => {
