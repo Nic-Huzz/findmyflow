@@ -26,10 +26,10 @@ const MAIN_NAV_ITEMS = [
     path: '/7-day-challenge'
   },
   {
-    id: 'compass',
-    label: 'Compass',
-    icon: '🧭',
-    path: '/flow-compass'
+    id: 'newsfeed',
+    label: 'Newsfeed',
+    icon: '🎪',
+    path: '/newsfeed'
   },
   {
     id: 'profile',

@@ -70,13 +70,9 @@ export const STAGE_CONFIG = {
     icon: '🔍',
     color: '#7d36c4', // purple→gold ombre
     requiredFlows: ['persona_selection'],
-    milestones: ['validation_form_sent', 'validation_responses_3'],
-    groanChallenge: {
-      id: 'groan_stage_1_validation',
-      name: 'Validation Groan',
-      fear: 'Fear of rejection when asking for feedback',
-      description: 'Reach out to someone and ask for honest feedback on your idea, even though you fear they might reject it or say it\'s not good enough.'
-    },
+    requiredQuests: ['self_test', 'self_test_review'],
+    milestones: [],
+    groanChallenge: null,
     voicePrompts: {
       essenceAction: 'ask for the validation to be complete',
       protectiveBlock: 'stop you from sending the validation form today',
@@ -90,19 +86,12 @@ export const STAGE_CONFIG = {
     id: 2,
     name: 'Product Creation',
     shortName: 'Product',
-    description: 'Build your core product, lead magnet, and value proposition',
+    description: 'Build your core product and value proposition',
     icon: '🛠️',
     color: '#8c45b0', // purple→gold ombre
-    requiredFlows: ['100m_offer', 'lead_magnet_selection', 'product_selection'],
-    milestones: [
-      'lead_magnet_created'
-    ],
-    groanChallenge: {
-      id: 'groan_stage_2_creation',
-      name: 'Creation Groan',
-      fear: 'Fear of imperfection / shipping before it\'s ready',
-      description: 'Ship something (a page, a product, content) before you feel it\'s 100% ready. Your essence knows it\'s good enough, but your body fears judgment.'
-    },
+    requiredFlows: ['100m_offer', 'product_selection'],
+    milestones: [],
+    groanChallenge: null,
     voicePrompts: {
       essenceAction: 'show-up in the product creation process',
       protectiveBlock: 'stop you from making progress with your product process',
@@ -121,12 +110,7 @@ export const STAGE_CONFIG = {
     color: '#9c559d', // purple→gold ombre
     requiredFlows: ['mvp_readiness', 'feedback_analysis'],
     milestones: ['feedback_form_sent'],
-    groanChallenge: {
-      id: 'groan_stage_3_testing',
-      name: 'Testing Groan',
-      fear: 'Fear of hearing negative feedback',
-      description: 'Ask a tester to be brutally honest about what\'s NOT working. Sit with the discomfort of criticism without defending or explaining.'
-    },
+    groanChallenge: null,
     voicePrompts: {
       essenceAction: 'show up in the testing process',
       protectiveBlock: 'show up in the testing process',
@@ -144,24 +128,8 @@ export const STAGE_CONFIG = {
     icon: '💰',
     color: '#ab6489', // purple→gold ombre
     requiredFlows: ['attraction_offer', 'upsell_offer', 'downsell_offer', 'continuity_offer'],
-    milestones: [
-      'decide_acquisition',
-      'decide_upsell',
-      'decide_downsell',
-      'decide_continuity',
-      'create_acquisition_offer',
-      'create_upsell_offer',
-      'create_downsell_offer',
-      'create_continuity_offer',
-      'product_suite_mapped',
-      'money_model_stack_complete'
-    ],
-    groanChallenge: {
-      id: 'groan_stage_4_money',
-      name: 'Money Groan',
-      fear: 'Fear of charging money / being "salesy"',
-      description: 'Tell someone your price confidently without apologizing, discounting, or over-explaining. Own your value even when it feels uncomfortable.'
-    },
+    milestones: [],
+    groanChallenge: null,
     voicePrompts: {
       essenceAction: 'show up in the money model process',
       protectiveBlock: 'show up in the money model process',
@@ -178,18 +146,9 @@ export const STAGE_CONFIG = {
     description: 'Build your irresistible Grand Slam offer with bonuses, guarantee, and scarcity',
     icon: '🎯',
     color: '#bb7476', // purple→gold ombre
-    requiredFlows: ['offer_builder_v2'],
-    milestones: [
-      'grand_slam_bonuses_created',
-      'grand_slam_guarantee_created',
-      'grand_slam_scarcity_created'
-    ],
-    groanChallenge: {
-      id: 'groan_stage_5_offer',
-      name: 'Offer Groan',
-      fear: 'Fear of making your offer too good / giving away too much',
-      description: 'Add one more bonus or strengthen your guarantee beyond what feels comfortable. Your essence knows abundance attracts abundance, but your body fears you\'re giving away your value.'
-    },
+    requiredFlows: ['grand_slam_offer', 'offer_stack_builder'],
+    milestones: [],
+    groanChallenge: null,
     voicePrompts: {
       essenceAction: 'show up in the offer creation process',
       protectiveBlock: 'show up in the offer creation process',
@@ -206,14 +165,9 @@ export const STAGE_CONFIG = {
     description: 'Create your lead generation strategy and marketing assets',
     icon: '📢',
     color: '#ca8362', // purple→gold ombre
-    requiredFlows: ['leads_strategy'],
-    milestones: ['launch_sequence_planned'],
-    groanChallenge: {
-      id: 'groan_stage_6_campaign',
-      name: 'Campaign Groan',
-      fear: 'Fear of public visibility',
-      description: 'Put yourself out there publicly in a way that feels exposing - a video, a post, an interview. Let the world see the real you, not the polished version.'
-    },
+    requiredFlows: ['leads_strategy', 'funnel_builder', 'launch_readiness'],
+    milestones: [],
+    groanChallenge: null,
     voicePrompts: {
       essenceAction: 'show up in the campaign creation process',
       protectiveBlock: 'show up in the campaign creation process',
@@ -234,13 +188,8 @@ export const STAGE_CONFIG = {
     icon: '🚀',
     color: '#da934f', // purple→gold ombre
     requiredFlows: [],
-    milestones: ['acquisition_offer_launched', 'post_launch_review'],
-    groanChallenge: {
-      id: 'groan_stage_7_launch',
-      name: 'Launch Groan',
-      fear: 'Fear of failure after going "all in"',
-      description: 'Make a bold, public commitment to your launch with a specific date. Announce it to your audience. No backing out, no moving the goalposts.'
-    },
+    milestones: ['attraction_offer_launched'],
+    groanChallenge: null,
     voicePrompts: {
       essenceAction: 'commit boldly despite uncertainty',
       protectiveBlock: 'delay your commitment',
@@ -271,8 +220,11 @@ export const STAGE_CONFIG = {
     tabLabel: 'Tracking',
     upsellPrompt: null,
     externalLink: {
-      name: 'Analytics Dashboard',
-      description: 'Advanced funnel analytics and reporting'
+      name: 'Command Center',
+      description: 'CRM for managing contacts, content, and sales',
+      route: '/crm',
+      locked: true,
+      lockedMessage: 'Coming soon'
     },
     alwaysAccessible: true // Can be accessed at any stage
   }

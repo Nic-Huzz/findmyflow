@@ -302,6 +302,12 @@ export {
   deleteObjectionLog,
 } from './objectionService'
 
+// P&L Service (Financial Tracking)
+export {
+  fetchProjectPnL,
+  aggregatePnL,
+} from './pnlService'
+
 // CLOSER Script System (Sales Playbook)
 export {
   fetchCloserScript,

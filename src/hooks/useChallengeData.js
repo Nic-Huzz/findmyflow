@@ -107,9 +107,10 @@ export function useChallengeData() {
   const [activeStageTab, setActiveStageTab] = useState(1)
   const [projectStage, setProjectStage] = useState(1)
 
-  // Sub-Tab State (for Business and Healing tabs)
+  // Sub-Tab State (for Business, Healing, and Bonus tabs)
   const [businessSubTab, setBusinessSubTab] = useState('tasks') // 'tasks' | 'voices'
   const [healingSubTab, setHealingSubTab] = useState('daily') // 'daily' | 'weekly'
+  const [bonusSubTab, setBonusSubTab] = useState('tasks') // 'tasks' | 'content'
 
   // User Archetypes (for personalized voice quests)
   const [userArchetypes, setUserArchetypes] = useState({ essence: null, protective: null })
@@ -1905,11 +1906,13 @@ export function useChallengeData() {
     projectStage,
     setProjectStage,
 
-    // Sub-Tabs (Business and Healing)
+    // Sub-Tabs (Business, Healing, and Bonus)
     businessSubTab,
     setBusinessSubTab,
     healingSubTab,
     setHealingSubTab,
+    bonusSubTab,
+    setBonusSubTab,
 
     // User Archetypes (for personalized voice quests)
     userArchetypes,

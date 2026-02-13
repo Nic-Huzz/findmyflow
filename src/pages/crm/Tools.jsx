@@ -46,6 +46,14 @@ const CARDS = [
     statsKey: 'calculators',
   },
   {
+    id: 'expenses',
+    icon: '💸',
+    title: 'Expenses',
+    description: 'Track costs by project',
+    path: '/crm/tools/expenses',
+    statsKey: 'expenses',
+  },
+  {
     id: 'scripts',
     icon: '📜',
     title: 'Sales Scripts',

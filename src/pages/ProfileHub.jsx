@@ -42,6 +42,14 @@ const ProfileHub = () => {
       color: '#7c3aed'
     },
     {
+      id: 'league',
+      icon: '🏆',
+      title: 'Fantasy League',
+      description: 'Join a squad, compete in head-to-head matchups, and climb the standings',
+      path: '/league',
+      color: '#E9A23B'
+    },
+    {
       id: 'settings',
       icon: '⚙️',
       title: 'User Settings',

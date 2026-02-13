@@ -1,0 +1,631 @@
+/**
+ * Expenses.css — /crm/tools/expenses
+ * Project expense tracker
+ */
+
+/* === ROOT === */
+.expenses-page {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(94, 23, 235, 0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233, 162, 59, 0.04) 100%
+  );
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--text-primary);
+}
+
+/* === LOADING === */
+.expenses-page .expenses-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
+
+.expenses-page .expenses-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e9ecef;
+  border-top-color: var(--brand-purple);
+  border-radius: 50%;
+  animation: expensesSpin 0.8s linear infinite;
+}
+
+@keyframes expensesSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* === TOOLBAR === */
+.expenses-page .expenses-toolbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.expenses-page .expenses-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--brand-purple);
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.expenses-page .expenses-toolbar-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* === MONTH NAVIGATION === */
+.expenses-page .expenses-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.expenses-page .expenses-month-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e9ecef;
+  background: var(--surface);
+  color: var(--brand-purple);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.expenses-page .expenses-month-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.expenses-page .expenses-month-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+  min-width: 160px;
+  text-align: center;
+}
+
+/* === PROJECT FILTER === */
+.expenses-page .expenses-project-filter {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+}
+
+.expenses-page .expenses-project-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.expenses-page .expenses-filter-pill {
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 1px solid #e9ecef;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.expenses-page .expenses-filter-pill.active {
+  background: var(--brand-purple);
+  border-color: var(--brand-purple);
+  color: #ffffff;
+}
+
+/* === SUMMARY CARD === */
+.expenses-page .expenses-summary {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 16px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+}
+
+.expenses-page .expenses-summary::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233, 162, 59, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.expenses-page .expenses-summary-total {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.expenses-page .expenses-summary-value {
+  display: block;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.expenses-page .expenses-summary-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+.expenses-page .expenses-summary-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.expenses-page .expenses-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.expenses-page .expenses-summary-icon {
+  font-size: 14px;
+}
+
+.expenses-page .expenses-summary-type {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.expenses-page .expenses-summary-amount {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* === EXPENSE GROUPS === */
+.expenses-page .expenses-group {
+  background: var(--surface);
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+}
+
+.expenses-page .expenses-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.expenses-page .expenses-group-total {
+  color: var(--brand-purple);
+}
+
+.expenses-page .expense-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.expenses-page .expense-row:first-of-type {
+  border-top: none;
+}
+
+.expenses-page .expense-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.expenses-page .expense-row-category {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.expenses-page .expense-row-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.expenses-page .expense-row-project {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-purple);
+}
+
+.expenses-page .expense-row-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.expenses-page .expense-row-amount {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.expenses-page .expense-recurring-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 100px;
+  background: rgba(94, 23, 235, 0.1);
+  color: var(--brand-purple);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.expenses-page .expense-delete-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #f8f9fa;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.expenses-page .expense-delete-btn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+/* === EMPTY STATE === */
+.expenses-page .expenses-empty {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--surface);
+  border: 2px dashed #dee2e6;
+  border-radius: 24px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+/* === ADD CTA === */
+.expenses-page .expenses-add-cta {
+  width: 100%;
+  padding: 16px;
+  background: var(--brand-gold);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+  transition: all 0.2s;
+}
+
+.expenses-page .expenses-add-cta:active {
+  transform: scale(0.98);
+}
+
+/* === MODAL === */
+.expenses-page .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1100;
+  backdrop-filter: blur(8px);
+  animation: expensesFadeIn 0.2s ease;
+}
+
+@keyframes expensesFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.expenses-page .expenses-modal {
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: expensesSlideUp 0.3s ease;
+}
+
+@keyframes expensesSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.expenses-page .expenses-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.expenses-page .expenses-modal-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.expenses-page .expenses-modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f8f9fa;
+  color: var(--text-secondary);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Type pills */
+.expenses-page .expenses-type-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.expenses-page .expenses-type-pill {
+  padding: 8px 14px;
+  border-radius: 100px;
+  border: 1px solid #e9ecef;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.expenses-page .expenses-type-pill.active {
+  background: var(--brand-purple);
+  border-color: var(--brand-purple);
+  color: #ffffff;
+}
+
+/* Fields */
+.expenses-page .expenses-field {
+  margin-bottom: 16px;
+}
+
+.expenses-page .expenses-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.expenses-page .expenses-field input,
+.expenses-page .expenses-field select {
+  width: 100%;
+  background: #f5f5f7;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 15px;
+  color: var(--text-primary);
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.expenses-page .expenses-field input:focus,
+.expenses-page .expenses-field select:focus {
+  outline: none;
+  border-color: var(--brand-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.expenses-page .expenses-amount-wrap {
+  display: flex;
+  align-items: center;
+  background: #f5f5f7;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+
+.expenses-page .expenses-amount-wrap:focus-within {
+  border-color: var(--brand-purple);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(94, 23, 235, 0.1);
+}
+
+.expenses-page .expenses-amount-prefix {
+  padding: 12px 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.expenses-page .expenses-amount-wrap input {
+  border: none;
+  background: transparent;
+  padding: 12px 16px 12px 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.expenses-page .expenses-amount-wrap input:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* Toggle */
+.expenses-page .expenses-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.expenses-page .expenses-toggle {
+  width: 48px;
+  height: 28px;
+  border-radius: 100px;
+  border: none;
+  background: #dee2e6;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.expenses-page .expenses-toggle.on {
+  background: var(--brand-purple);
+}
+
+.expenses-page .expenses-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.expenses-page .expenses-toggle.on .expenses-toggle-knob {
+  transform: translateX(20px);
+}
+
+/* Save button */
+.expenses-page .expenses-save-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--brand-gold);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+  transition: all 0.2s;
+}
+
+.expenses-page .expenses-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.expenses-page .expenses-save-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  .expenses-page {
+    padding: 16px;
+    padding-top: 76px;
+    padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (min-width: 768px) {
+  .expenses-page .modal-overlay {
+    align-items: center;
+  }
+
+  .expenses-page .expenses-modal {
+    border-radius: 24px;
+    max-height: 70vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expenses-page *,
+  .expenses-page *::before,
+  .expenses-page *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

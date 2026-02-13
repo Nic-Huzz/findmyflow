@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS stage_graduation_history (
   graduated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
-CREATE INDEX idx_stage_grad_user ON stage_graduation_history(user_id);
-CREATE INDEX idx_stage_grad_project ON stage_graduation_history(project_id);
-CREATE INDEX idx_stage_grad_date ON stage_graduation_history(graduated_at);
+CREATE INDEX IF NOT EXISTS idx_stage_grad_user ON stage_graduation_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_stage_grad_project ON stage_graduation_history(project_id);
+CREATE INDEX IF NOT EXISTS idx_stage_grad_date ON stage_graduation_history(graduated_at);
 
 -- 2. RLS
 ALTER TABLE stage_graduation_history ENABLE ROW LEVEL SECURITY;

@@ -120,6 +120,15 @@ function ChallengeHeader({
                 >
                   🔔 Notifications
                 </button>
+                <button
+                  className="settings-menu-item"
+                  onClick={() => {
+                    navigate('/league')
+                    setShowSettingsMenu(false)
+                  }}
+                >
+                  🏆 Fantasy League
+                </button>
               </div>
             )}
           </div>

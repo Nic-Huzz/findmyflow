@@ -2,7 +2,7 @@
  * Execute - Weekly Task Management & Execution Tracking
  * Phase-based task system with gamification
  */
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
 import { useExecute } from '../../hooks/useExecute'
@@ -41,6 +41,8 @@ export default function Execute() {
   const [quickStats, setQuickStats] = useState(null)
   const [improvements, setImprovements] = useState([])
   const [showTaskMenu, setShowTaskMenu] = useState(false)
+  const [hoursPickerTaskId, setHoursPickerTaskId] = useState(null)
+  const hoursTimerRef = useRef(null)
 
   // Weekly Planning
   const [showPlanningFlow, setShowPlanningFlow] = useState(false)
@@ -138,6 +140,30 @@ export default function Execute() {
     setWeeklyPlan(plan)
   }
 
+  const dismissHoursPicker = useCallback(() => {
+    setHoursPickerTaskId(null)
+    if (hoursTimerRef.current) {
+      clearTimeout(hoursTimerRef.current)
+      hoursTimerRef.current = null
+    }
+  }, [])
+
+  // Clean up hours picker timer on unmount
+  useEffect(() => {
+    return () => {
+      if (hoursTimerRef.current) clearTimeout(hoursTimerRef.current)
+    }
+  }, [])
+
+  async function saveHours(taskId, hours) {
+    dismissHoursPicker()
+    await supabase
+      .from('execute_tasks')
+      .update({ estimated_hours: hours })
+      .eq('id', taskId)
+    loadQuickStats()
+  }
+
   function handlePlanComplete(plan) {
     setWeeklyPlan(plan)
     setShowPlanningFlow(false)
@@ -216,9 +242,15 @@ export default function Execute() {
 
     if (task.completed) {
       await uncompleteTask(task.id)
+      dismissHoursPicker()
     } else {
-      await completeTask(task.id, task.phase, position)
-      loadQuickStats() // Refresh stats
+      const success = await completeTask(task.id, task.phase, position)
+      loadQuickStats()
+      if (success) {
+        setHoursPickerTaskId(task.id)
+        if (hoursTimerRef.current) clearTimeout(hoursTimerRef.current)
+        hoursTimerRef.current = setTimeout(dismissHoursPicker, 5000)
+      }
     }
   }
 
@@ -300,6 +332,15 @@ export default function Execute() {
             <span className="execute-hero-value">{quickStats?.streak || 0}</span>
             <span className="execute-hero-label">Streak</span>
           </div>
+          {quickStats?.hoursThisWeek > 0 && (
+            <>
+              <div className="execute-hero-divider"></div>
+              <div className="execute-hero-stat">
+                <span className="execute-hero-value">{quickStats.hoursThisWeek}h</span>
+                <span className="execute-hero-label">Hours</span>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -478,20 +519,36 @@ export default function Execute() {
         ) : (
           <div className="tasks">
             {tasksByPhase[activePhase]?.map(task => (
-              <div
-                key={task.id}
-                className={`task-item ${task.completed ? 'completed' : ''}`}
-                onClick={(e) => handleTaskClick(task, e)}
-              >
-                <div className={`task-checkbox ${task.completed ? 'checked' : ''}`}>
-                  {task.completed && '✓'}
+              <div key={task.id} className="task-item-wrap">
+                <div
+                  className={`task-item ${task.completed ? 'completed' : ''}`}
+                  onClick={(e) => handleTaskClick(task, e)}
+                >
+                  <div className={`task-checkbox ${task.completed ? 'checked' : ''}`}>
+                    {task.completed && '✓'}
+                  </div>
+                  <div className="task-content">
+                    <span className="task-title">{task.title}</span>
+                    <span className="task-meta">
+                      {task.category} · {task.points || 10} pts
+                      {task.estimated_hours ? ` · ${task.estimated_hours}h` : ''}
+                    </span>
+                  </div>
                 </div>
-                <div className="task-content">
-                  <span className="task-title">{task.title}</span>
-                  <span className="task-meta">
-                    {task.category} · {task.points || 10} pts
-                  </span>
-                </div>
+                {hoursPickerTaskId === task.id && (
+                  <div className="hours-picker">
+                    <span className="hours-picker-label">How long?</span>
+                    {[0.5, 1, 2, 3, 4].map(h => (
+                      <button
+                        key={h}
+                        className="hours-pill"
+                        onClick={() => saveHours(task.id, h)}
+                      >
+                        {h === 4 ? '4+' : h}h
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

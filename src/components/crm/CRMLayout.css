@@ -8,7 +8,7 @@
 }
 
 /* Ensure nudge doesn't interfere with page content */
-.crm-layout > *:not(.coach-nudge) {
+.crm-layout > *:not(.coach-nudge):not(.tour-overlay) {
   position: relative;
   z-index: 1;
 }

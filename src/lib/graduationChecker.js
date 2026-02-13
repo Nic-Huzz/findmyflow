@@ -537,6 +537,41 @@ const checkProjectMilestones = async (userId, projectId, milestonesRequired = []
 };
 
 /**
+ * Check if project has completed required quests for a stage
+ * Uses quest_completions table (for quests that don't create flow_sessions)
+ * @param {string} userId - User ID
+ * @param {string} projectId - Project ID
+ * @param {string[]} questsRequired - Array of required quest IDs
+ */
+const checkProjectQuestsCompleted = async (userId, projectId, questsRequired = []) => {
+  if (!questsRequired || questsRequired.length === 0) {
+    return { allCompleted: true, completedQuests: [] };
+  }
+
+  try {
+    const { data: completedQuests, error } = await supabase
+      .from('quest_completions')
+      .select('quest_id')
+      .eq('user_id', userId)
+      .eq('project_id', projectId)
+      .in('quest_id', questsRequired);
+
+    if (error) {
+      console.warn('Quest completion check error:', error.message);
+      return { allCompleted: false, completedQuests: [] };
+    }
+
+    const completedIds = [...new Set(completedQuests?.map(q => q.quest_id) || [])];
+    const allCompleted = questsRequired.every(q => completedIds.includes(q));
+
+    return { allCompleted, completedQuests: completedIds };
+  } catch (error) {
+    console.warn('Error checking project quests:', error);
+    return { allCompleted: false, completedQuests: [] };
+  }
+};
+
+/**
  * Check if stage-specific groan challenge is completed within current challenge
  * @param {string} userId - User ID
  * @param {string} projectId - Project ID
@@ -580,16 +615,16 @@ const checkStageGroanChallenge = async (userId, projectId, stageNumber, challeng
 
 /**
  * Check if a project is eligible to graduate to the next stage
- * Called after each quest completion
+ * Called after each quest completion and on Challenge page mount
  *
- * Requirements for graduation (no streak required):
- * - All required flows for the stage completed
- * - All required milestones for the stage completed
- * - Stage-specific groan challenge completed (within current challenge instance)
+ * Requirements for graduation (all must pass):
+ * - All required flows for the stage completed (via flow_sessions)
+ * - All required milestones for the stage completed (via milestone_completions)
+ * - All required quests for the stage completed (via quest_completions)
  *
  * @param {string} userId - User ID
  * @param {string} projectId - Project ID
- * @param {string} challengeInstanceId - Current challenge instance ID
+ * @param {string} challengeInstanceId - Current challenge instance ID (legacy, unused)
  */
 export const checkProjectGraduationEligibility = async (userId, projectId, challengeInstanceId) => {
   try {
@@ -635,17 +670,16 @@ export const checkProjectGraduationEligibility = async (userId, projectId, chall
       stageConfig.milestones
     );
 
-    const groanCheck = await checkStageGroanChallenge(
+    const questsCheck = await checkProjectQuestsCompleted(
       userId,
       projectId,
-      currentStage,
-      challengeInstanceId
+      stageConfig.requiredQuests
     );
 
     const checks = {
       flows_completed: flowsCheck.allCompleted,
       milestones_completed: milestonesCheck.allCompleted,
-      groan_challenge_completed: groanCheck.completed
+      quests_completed: questsCheck.allCompleted
     };
 
     // All checks must pass
@@ -659,7 +693,7 @@ export const checkProjectGraduationEligibility = async (userId, projectId, chall
       checks,
       completed_flows: flowsCheck.completedFlows,
       completed_milestones: milestonesCheck.completedMilestones,
-      groan_challenge_id: groanCheck.groanChallengeId,
+      completed_quests: questsCheck.completedQuests,
       current_stage: currentStage,
       stage_name: stageConfig.name,
       next_stage: nextStage,

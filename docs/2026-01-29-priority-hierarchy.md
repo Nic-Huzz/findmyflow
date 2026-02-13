@@ -429,6 +429,7 @@ Move exciting-but-premature ideas here instead of building them:
 | Curiosity of the day | Engagement extra | After Milestone 2 |
 | Feature voting system | Need users first | After Milestone 2 |
 | Neural network rename | Low priority rename | When convenient |
+| FindMyFlow API + Claude Code MCP | API layer so users can connect their FindMyFlow account to Claude Code (MCP server). Query flow data, quest history, shadow/archetype profiles, groan progress via natural language. Power users could do shadow work, review healing insights, or get Zarlo-style guidance through their terminal. | After Milestone 2 |
 
 ---
 

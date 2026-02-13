@@ -169,12 +169,15 @@ export async function getQuickStats(userId) {
   // Get tasks for this week
   const { data: tasks } = await supabase
     .from('execute_tasks')
-    .select('completed')
+    .select('completed, estimated_hours')
     .eq('user_id', userId)
     .gte('scheduled_date', weekStart)
 
   const tasksCompleted = tasks?.filter(t => t.completed).length || 0
   const totalTasks = tasks?.length || 0
+  const hoursThisWeek = tasks
+    ?.filter(t => t.completed && t.estimated_hours)
+    .reduce((sum, t) => sum + t.estimated_hours, 0) || 0
   const executionRate = totalTasks > 0
     ? Math.round((tasksCompleted / totalTasks) * 100)
     : 0
@@ -190,6 +193,7 @@ export async function getQuickStats(userId) {
     executionRate,
     tasksCompleted,
     totalTasks,
+    hoursThisWeek,
     streak: stats?.current_streak || 0
   }
 }

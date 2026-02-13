@@ -24,10 +24,12 @@ import PostActionModal, { POST_ACTION_MILESTONE_IDS } from './components/PostAct
 import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreActionModal'
 import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
+import { useLeagueData } from './hooks/useLeagueData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage, GROAN_VISIBILITY_LAYERS, getLayerLockStatus, getStageConfig } from './lib/stageConfig'
 import { generateVoiceQuestsForStage } from './lib/voiceQuestConfig'
 import { getScoringCategory } from './lib/scoringCategories'
+import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import './Challenge.css'
 
@@ -109,6 +111,8 @@ function Challenge() {
     setBusinessSubTab,
     healingSubTab,
     setHealingSubTab,
+    bonusSubTab,
+    setBonusSubTab,
     userArchetypes,
     weeklyPlan,
     showWeeklyPlanning,
@@ -153,6 +157,12 @@ function Challenge() {
     handleStreakUpdate,
     checkAndGraduateProject
   } = useChallengeData()
+
+  // League data for nudge banner + content challenges
+  const {
+    leagueExists, isOnTeam, league, userTeam, teams,
+    getCurrentWeek, reloadContent, contentSubmissions
+  } = useLeagueData()
 
   // State for tracking recently completed quest for animation
   const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
@@ -1403,10 +1413,24 @@ function Challenge() {
         weeklyPoints={currentWeeklyPoints}
       />
 
+      {/* Fantasy League nudge — show if league exists and user not on a team */}
+      {leagueExists && !isOnTeam && (
+        <Link to="/league" className="league-nudge-banner" style={{
+          display: 'flex', alignItems: 'center', gap: '10px',
+          background: 'linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06))',
+          border: '1px solid rgba(94,23,235,0.12)',
+          borderRadius: '14px', padding: '12px 16px',
+          marginBottom: '12px', textDecoration: 'none', color: '#5e17eb',
+          fontSize: '14px', fontWeight: 700, transition: 'all 0.2s',
+        }}>
+          🏆 Fantasy League is live! Join a squad →
+        </Link>
+      )}
+
       <div className="challenge-tabs">
         {categories.map(category => {
-          // Lock Healing and Bonus tabs for testing
-          const isLocked = category === 'Healing' || category === 'Bonus'
+          // Lock Healing tab for testing
+          const isLocked = category === 'Healing'
           return (
             <button
               key={category}
@@ -1742,8 +1766,26 @@ function Challenge() {
           </div>
         )}
 
-        {/* Bonus Quests */}
-        {activeCategory === 'Bonus' && filteredQuests.length > 0 && (
+        {/* Bonus Sub-Tabs: Tasks | Content */}
+        {activeCategory === 'Bonus' && (
+          <div className="business-sub-tabs">
+            <button
+              className={`sub-tab ${bonusSubTab === 'tasks' ? 'active' : ''}`}
+              onClick={() => setBonusSubTab('tasks')}
+            >
+              Tasks
+            </button>
+            <button
+              className={`sub-tab ${bonusSubTab === 'content' ? 'active' : ''}`}
+              onClick={() => setBonusSubTab('content')}
+            >
+              Content
+            </button>
+          </div>
+        )}
+
+        {/* Bonus Quests — Tasks sub-tab */}
+        {activeCategory === 'Bonus' && bonusSubTab === 'tasks' && filteredQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Bonus Quests</h2>
             <div className="quest-grid">
@@ -1779,6 +1821,21 @@ function Challenge() {
               })}
             </div>
           </div>
+        )}
+
+        {/* Bonus — Content sub-tab */}
+        {activeCategory === 'Bonus' && bonusSubTab === 'content' && (
+          <ContentChallenges
+            leagueId={league?.id}
+            userId={user?.id}
+            teamId={userTeam?.id}
+            weekNumber={getCurrentWeek?.()}
+            leagueStatus={league?.status}
+            isOnTeam={isOnTeam}
+            teams={teams}
+            contentSubmissions={contentSubmissions}
+            onSubmitted={reloadContent}
+          />
         )}
 
         {/* Tracker Quests */}

@@ -110,7 +110,7 @@ export default function PullToRefresh({ onRefresh, children, disabled = false })
       {/* Content */}
       <div
         className="pull-content"
-        style={{ transform: `translateY(${pullDistance}px)` }}
+        style={pullDistance > 0 ? { transform: `translateY(${pullDistance}px)` } : undefined}
       >
         {children}
       </div>

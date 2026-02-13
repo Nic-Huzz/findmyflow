@@ -359,6 +359,14 @@
   color: var(--green);
 }
 
+.reports-page .stat-box .stat-value.positive {
+  color: var(--green);
+}
+
+.reports-page .stat-box .stat-value.negative {
+  color: #ef4444;
+}
+
 .reports-page .stat-box .stat-label {
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -838,6 +846,65 @@
     width: 100%;
     justify-content: center;
   }
+}
+
+/* P&L Section */
+.pnl-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.pnl-project-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f5f5f7;
+  border-radius: 12px;
+  padding: 12px 16px;
+}
+
+.pnl-project-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1a1a2e;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pnl-project-nums {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.pnl-project-sep {
+  width: 1px;
+  height: 16px;
+  background: #ddd;
+}
+
+.pnl-project-profit {
+  font-weight: 700;
+}
+
+.pnl-project-profit.positive {
+  color: #10b981;
+}
+
+.pnl-project-profit.negative {
+  color: #ef4444;
+}
+
+.pnl-project-hours {
+  color: #888;
+  font-size: 0.8rem;
 }
 
 /* Print Styles for PDF Export */

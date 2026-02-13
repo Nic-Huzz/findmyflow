@@ -41,6 +41,10 @@ export default function CACTracker() {
   const [loadingDefaults, setLoadingDefaults] = useState(true)
   const [focusedChannel, setFocusedChannel] = useState(null)
   const [dataSource, setDataSource] = useState(null)
+  const [projects, setProjects] = useState([])
+  const [selectedProject, setSelectedProject] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [savedMonth, setSavedMonth] = useState(null)
 
   const [timeframe, setTimeframe] = useState('month')
   const [channelData, setChannelData] = useState(
@@ -107,6 +111,20 @@ export default function CACTracker() {
     }
 
     loadDefaults()
+
+    // Load projects
+    async function loadProjects() {
+      const { data } = await supabase
+        .from('user_projects')
+        .select('id, name')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+      if (data?.length > 0) {
+        setProjects(data)
+        setSelectedProject(data[0].id)
+      }
+    }
+    loadProjects()
   }, [user])
 
   const calculations = useMemo(() => {
@@ -155,6 +173,91 @@ export default function CACTracker() {
       paybackMonths,
     }
   }, [channelData, ltv])
+
+  // Load saved marketing expenses when project selected
+  useEffect(() => {
+    if (!user || !selectedProject) return
+
+    async function loadSaved() {
+      const now = new Date()
+      const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
+      const { data } = await supabase
+        .from('project_expenses')
+        .select('*')
+        .eq('project_id', selectedProject)
+        .eq('month', month)
+        .eq('expense_type', 'marketing')
+        .eq('user_id', user.id)
+
+      if (data?.length > 0) {
+        setChannelData(prev => {
+          const restored = { ...prev }
+          data.forEach(exp => {
+            if (restored[exp.category]) {
+              restored[exp.category] = { ...restored[exp.category], spend: exp.amount || 0 }
+            }
+          })
+          return restored
+        })
+        setSavedMonth(month)
+      }
+    }
+    loadSaved()
+  }, [user, selectedProject])
+
+  async function handleSaveToProject() {
+    if (!selectedProject || saving) return
+    setSaving(true)
+
+    try {
+      const now = new Date()
+      const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
+
+      // Delete existing marketing expenses for this project+month
+      const { error: delError } = await supabase
+        .from('project_expenses')
+        .delete()
+        .eq('project_id', selectedProject)
+        .eq('month', month)
+        .eq('expense_type', 'marketing')
+        .eq('user_id', user.id)
+
+      if (delError) {
+        console.error('Error clearing old expenses:', delError)
+        return
+      }
+
+      // Insert channels with spend > 0
+      const rows = CHANNELS
+        .filter(ch => channelData[ch.id].spend > 0)
+        .map(ch => ({
+          user_id: user.id,
+          project_id: selectedProject,
+          expense_type: 'marketing',
+          category: ch.id,
+          description: ch.name,
+          amount: channelData[ch.id].spend,
+          month,
+          is_recurring: false,
+        }))
+
+      if (rows.length > 0) {
+        const { error: insError } = await supabase.from('project_expenses').insert(rows)
+        if (insError) {
+          console.error('Error saving expenses:', insError)
+          return
+        }
+      }
+
+      setSavedMonth(month)
+    } catch (err) {
+      console.error('Save to project failed:', err)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const hasSpend = Object.values(channelData).some(ch => ch.spend > 0)
 
   function updateChannel(channelId, field, value) {
     setChannelData(prev => ({
@@ -381,6 +484,34 @@ export default function CACTracker() {
               </div>
             )}
           </div>
+        </div>
+      )}
+      {/* Save to Project */}
+      {projects.length > 0 && (
+        <div className="cac-card cac-save-section">
+          <div className="cac-section-header">
+            <div className="cac-section-icon">💾</div>
+            <span className="cac-section-title">Save to Project</span>
+          </div>
+          <select
+            className="cac-project-select"
+            value={selectedProject}
+            onChange={e => setSelectedProject(e.target.value)}
+          >
+            {projects.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
+          <button
+            className="cac-save-btn"
+            onClick={handleSaveToProject}
+            disabled={!hasSpend || !selectedProject || saving}
+          >
+            {saving ? 'Saving...' : savedMonth ? 'Update Expenses' : 'Save to Project'}
+          </button>
+          {savedMonth && (
+            <p className="cac-saved-note">Saved for {new Date(savedMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+          )}
         </div>
       )}
     </div>

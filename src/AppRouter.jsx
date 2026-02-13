@@ -168,6 +168,7 @@ const WarmOutreach = lazyRetry(() => import('./pages/crm/WarmOutreach'))
 const BusinessSystems = lazyRetry(() => import('./pages/crm/BusinessSystems'))
 const DataImport = lazyRetry(() => import('./pages/crm/DataImport'))
 const SalesPlaybook = lazyRetry(() => import('./pages/crm/SalesPlaybook'))
+const Expenses = lazyRetry(() => import('./pages/crm/Expenses'))
 
 // Lazy-loaded pages - Other
 const MoneyModelGuide = lazyRetry(() => import('./MoneyModelGuide'))
@@ -197,6 +198,7 @@ const ContentReview = lazyRetry(() => import('./pages/ContentReview'))
 const LeagueOverview = lazyRetry(() => import('./pages/league/LeagueOverview'))
 const ContentSubmit = lazyRetry(() => import('./pages/league/ContentSubmit'))
 const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
+const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
 
 import './App.css'
 import './PersonaAssessment.css'
@@ -253,11 +255,13 @@ import './flows/PlayListFinderFlow.css'
 import './flows/PersonaIdentifierFlow.css'
 import './components/crm/CSVImport/CSVImportWizard.css'
 import './pages/crm/SalesPlaybook.css'
+import './pages/crm/Expenses.css'
 import './pages/AdminDashboard.css'
 import './pages/ContentReview.css'
 import './pages/league/LeagueOverview.css'
 import './pages/league/ContentSubmit.css'
 import './pages/league/LeagueAdmin.css'
+import './pages/league/NewsfeedPage.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -767,6 +771,11 @@ function AppRouter() {
                 <CRMLayout><BusinessSystems /></CRMLayout>
               </AuthGate>
             } />
+            <Route path="/crm/tools/expenses" element={
+              <AuthGate>
+                <CRMLayout><Expenses /></CRMLayout>
+              </AuthGate>
+            } />
             <Route path="/crm/import" element={
               <AuthGate>
                 <DataImport />
@@ -893,6 +902,13 @@ function AppRouter() {
             <Route path="/league/admin" element={
               <AuthGate>
                 <LeagueAdmin />
+              </AuthGate>
+            } />
+
+            {/* League Newsfeed */}
+            <Route path="/newsfeed" element={
+              <AuthGate>
+                <NewsfeedPage />
               </AuthGate>
             } />
 

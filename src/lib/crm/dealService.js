@@ -208,6 +208,11 @@ export async function createDeal(userId, dealData) {
     }, 'opportunity')
   }
 
+  // Auto-track cross-project contact journeys
+  if (data?.contact_id && data?.project_id) {
+    trackContactJourney(userId, data.contact_id, data.project_id)
+  }
+
   return { data, error: null }
 }
 
@@ -757,5 +762,38 @@ export async function getDealOutcomeStats(userId) {
       fit: fitIssues,
     },
     competitorsMentioned: [...new Set(competitors)],
+  }
+}
+
+// --- Contact Journey Auto-Tracking ---
+
+/**
+ * When a deal is created for a contact who has deals in other projects,
+ * auto-insert a cross-sell journey record. Silent background operation.
+ */
+async function trackContactJourney(userId, contactId, newProjectId) {
+  try {
+    const { data: existingDeals } = await supabase
+      .from('sales_deals')
+      .select('project_id, created_at')
+      .eq('user_id', userId)
+      .eq('contact_id', contactId)
+      .neq('project_id', newProjectId)
+      .not('project_id', 'is', null)
+      .order('created_at', { ascending: true })
+      .limit(1)
+
+    if (!existingDeals?.length) return
+
+    await supabase.from('contact_journeys').insert({
+      user_id: userId,
+      contact_id: contactId,
+      from_project_id: existingDeals[0].project_id,
+      to_project_id: newProjectId,
+      journey_type: 'cross_sell',
+    })
+  } catch (err) {
+    // Silent - don't break deal creation for journey tracking
+    console.error('Contact journey tracking error:', err)
   }
 }

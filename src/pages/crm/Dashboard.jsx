@@ -270,9 +270,9 @@ export default function Dashboard() {
             </button>
 
             {/* Tools */}
-            <button className="hq-action-card" onClick={() => handleActionClick('/crm/contacts')}>
-              <span className="hq-action-icon">👤</span>
-              <span className="hq-action-label">Contacts</span>
+            <button className="hq-action-card" onClick={() => handleActionClick('/7-day-challenge')}>
+              <span className="hq-action-icon">🏆</span>
+              <span className="hq-action-label">Business Tab</span>
             </button>
 
             <button className="hq-action-card" onClick={() => handleActionClick('/crm/analytics')}>

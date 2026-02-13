@@ -21,6 +21,8 @@ import {
   getMergedFunnelMetrics,
   getLastSyncTime,
   forceCRMSync,
+  fetchProjectPnL,
+  aggregatePnL,
 } from '../../lib/crm'
 import './Reports.css'
 
@@ -44,6 +46,7 @@ export default function Reports() {
   const [funnelMetrics, setFunnelMetrics] = useState(null)
   const [lastSyncTime, setLastSyncTime] = useState(null)
   const [syncing, setSyncing] = useState(false)
+  const [pnlData, setPnlData] = useState([])
 
   // Get current period range based on view mode
   const periodRange = useMemo(() => {
@@ -79,6 +82,12 @@ export default function Reports() {
         if (platforms.data) setPlatformBreakdown(platforms.data)
         if (funnel.data) setFunnelMetrics(funnel.data)
         if (syncTime) setLastSyncTime(syncTime)
+
+        // Fetch P&L for current month (week view shows current month P&L)
+        const now = new Date()
+        const pnlMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
+        const pnl = await fetchProjectPnL(user.id, pnlMonth)
+        setPnlData(pnl)
       } else {
         // Month mode
         const [marketing, lastMarketing, sales, stats, top, platforms, syncTime] = await Promise.all([
@@ -100,6 +109,13 @@ export default function Reports() {
         if (syncTime) setLastSyncTime(syncTime)
         // Funnel metrics are weekly, so we show null for month view
         setFunnelMetrics(null)
+
+        // Fetch P&L for the selected month
+        const d = new Date()
+        d.setMonth(d.getMonth() + monthOffset)
+        const pnlMonth = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`
+        const pnl = await fetchProjectPnL(user.id, pnlMonth)
+        setPnlData(pnl)
       }
     } catch (err) {
       console.error('Error loading reports:', err)
@@ -227,6 +243,23 @@ export default function Reports() {
       rows.push(['Downsells', funnelMetrics.downsell || 0])
       rows.push(['Continuity', funnelMetrics.continuity || 0])
       rows.push(['Funnel Revenue', `$${(funnelMetrics.total_revenue || 0).toLocaleString()}`])
+    }
+
+    // Add P&L if available
+    if (pnlData.length > 0) {
+      const totals = aggregatePnL(pnlData)
+      rows.push([''])
+      rows.push(['Profit & Loss'])
+      rows.push(['Total Revenue', `$${totals.revenue.toLocaleString()}`])
+      rows.push(['Total Expenses', `$${totals.expenses.toLocaleString()}`])
+      rows.push(['Net Profit', `$${totals.profit.toLocaleString()}`])
+      rows.push(['Total Hours', totals.totalHours])
+      rows.push(['$/Hour', totals.profitPerHour > 0 ? `$${totals.profitPerHour}` : 'N/A'])
+      rows.push([''])
+      rows.push(['Project', 'Revenue', 'Expenses', 'Profit', 'Hours'])
+      pnlData.forEach(p => {
+        rows.push([p.projectName, `$${p.revenue}`, `$${p.expenses}`, `$${p.profit}`, p.totalHours])
+      })
     }
 
     // Add platform breakdown if available
@@ -439,6 +472,61 @@ export default function Reports() {
           </div>
         </section>
       )}
+
+      {/* Profit & Loss */}
+      {pnlData.length > 0 && (() => {
+        const totals = aggregatePnL(pnlData)
+        return (
+          <section className="reports-section">
+            <h2>Profit & Loss</h2>
+            <div className="stats-grid">
+              <div className="stat-box">
+                <span className="stat-value">${totals.revenue.toLocaleString()}</span>
+                <span className="stat-label">Revenue</span>
+              </div>
+              <div className="stat-box">
+                <span className="stat-value">${totals.expenses.toLocaleString()}</span>
+                <span className="stat-label">Expenses</span>
+              </div>
+              <div className={`stat-box ${totals.profit >= 0 ? 'highlight' : ''}`}>
+                <span className={`stat-value ${totals.profit >= 0 ? 'positive' : 'negative'}`}>
+                  ${Math.abs(totals.profit).toLocaleString()}
+                </span>
+                <span className="stat-label">Net {totals.profit >= 0 ? 'Profit' : 'Loss'}</span>
+              </div>
+              <div className="stat-box">
+                <span className="stat-value">
+                  {totals.totalHours > 0 ? `$${totals.profitPerHour}` : '—'}
+                </span>
+                <span className="stat-label">$/Hour</span>
+              </div>
+            </div>
+
+            {/* Per-project breakdown */}
+            {pnlData.length > 1 && (
+              <div className="pnl-projects">
+                {pnlData.map(p => (
+                  <div key={p.projectId} className="pnl-project-card">
+                    <span className="pnl-project-name">{p.projectName}</span>
+                    <div className="pnl-project-nums">
+                      <span className="pnl-project-revenue">${p.revenue.toLocaleString()}</span>
+                      <span className="pnl-project-sep">-</span>
+                      <span className="pnl-project-expense">${p.expenses.toLocaleString()}</span>
+                      <span className="pnl-project-sep">=</span>
+                      <span className={`pnl-project-profit ${p.profit >= 0 ? 'positive' : 'negative'}`}>
+                        ${Math.abs(p.profit).toLocaleString()}
+                      </span>
+                      {p.totalHours > 0 && (
+                        <span className="pnl-project-hours">{p.totalHours}h</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )
+      })()}
 
       {/* Funnel Metrics (Week view only) */}
       {funnelMetrics && viewMode === 'week' && (
