@@ -1,0 +1,85 @@
+name: Sync Content Drafts
+
+on:
+  push:
+    branches: [main]
+    paths: ['content-drafts/**/*.md']
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Find changed drafts
+        id: changed
+        run: |
+          files=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'content-drafts/**/*.md')
+          if [ -z "$files" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            echo "$files" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Sync to Supabase
+        if: steps.changed.outputs.skip == 'false'
+        env:
+          CHANGED_FILES: ${{ steps.changed.outputs.files }}
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          echo "$CHANGED_FILES" | while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            [ ! -f "$file" ] && continue
+
+            # Parse frontmatter (between --- markers)
+            title=$(sed -n '/^---$/,/^---$/{ /^title:/{ s/^title: *//; s/^"//; s/"$//; p; } }' "$file")
+            project=$(sed -n '/^---$/,/^---$/{ /^project:/{ s/^project: *//; s/^"//; s/"$//; p; } }' "$file")
+            subject=$(sed -n '/^---$/,/^---$/{ /^subject_line:/{ s/^subject_line: *//; s/^"//; s/"$//; p; } }' "$file")
+            audience=$(sed -n '/^---$/,/^---$/{ /^audience:/{ s/^audience: *//; s/^"//; s/"$//; p; } }' "$file")
+
+            # Body = everything after second ---
+            body=$(awk 'BEGIN{n=0} n<2 && /^---$/{n++; next} n>=2{print}' "$file")
+
+            source_file="${file#content-drafts/}"
+
+            [ -z "$title" ] && echo "SKIP: $file (no title)" && continue
+
+            payload=$(jq -n \
+              --arg sf "$source_file" \
+              --arg t "$title" \
+              --arg b "$body" \
+              --arg p "$project" \
+              --arg sl "$subject" \
+              --arg a "${audience:-external}" \
+              '{
+                p_source_file: $sf,
+                p_title: $t,
+                p_body_markdown: $b,
+                p_project: (if $p == "" then null else $p end),
+                p_subject_line: (if $sl == "" then null else $sl end),
+                p_audience: $a
+              }')
+
+            echo "Syncing: $source_file"
+            result=$(curl -s -w "\n%{http_code}" -X POST \
+              "${SUPABASE_URL}/rest/v1/rpc/upsert_content_draft" \
+              -H "apikey: ${SUPABASE_KEY}" \
+              -H "Authorization: Bearer ${SUPABASE_KEY}" \
+              -H "Content-Type: application/json" \
+              -d "$payload")
+
+            http_code=$(echo "$result" | tail -n1)
+            response=$(echo "$result" | sed '$d')
+            echo "  -> $http_code: $response"
+
+            if [ "$http_code" != "200" ]; then
+              echo "ERROR: Failed to sync $source_file"
+              exit 1
+            fi
+          done
