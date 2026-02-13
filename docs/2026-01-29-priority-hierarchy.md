@@ -429,6 +429,7 @@ Move exciting-but-premature ideas here instead of building them:
 | Curiosity of the day | Engagement extra | After Milestone 2 |
 | Feature voting system | Need users first | After Milestone 2 |
 | Neural network rename | Low priority rename | When convenient |
+| Voice Intelligence (auto-pattern detection) | After N corrections in same category, auto-generate voice rules. Confidence scoring per category. Before/After examples on Voice tab. Concrete correction examples baked into Sol prompts. Needs enough corrections data to be meaningful. | After Approach B (Voice Smart Bridge) validated |
 | FindMyFlow API + Claude Code MCP | API layer so users can connect their FindMyFlow account to Claude Code (MCP server). Query flow data, quest history, shadow/archetype profiles, groan progress via natural language. Power users could do shadow work, review healing insights, or get Zarlo-style guidance through their terminal. | After Milestone 2 |
 
 ---
