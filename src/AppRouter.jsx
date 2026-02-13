@@ -191,6 +191,13 @@ const ProfileHub = lazyRetry(() => import('./pages/ProfileHub'))
 const UserSettings = lazyRetry(() => import('./pages/UserSettings'))
 const BrandToneDemo = lazyRetry(() => import('./pages/BrandToneDemo'))
 const AdminDashboard = lazyRetry(() => import('./pages/AdminDashboard'))
+const ContentReview = lazyRetry(() => import('./pages/ContentReview'))
+
+// Lazy-loaded pages - Fantasy League
+const LeagueOverview = lazyRetry(() => import('./pages/league/LeagueOverview'))
+const ContentSubmit = lazyRetry(() => import('./pages/league/ContentSubmit'))
+const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
+
 import './App.css'
 import './PersonaAssessment.css'
 import './flows/AttractionOfferFlow.css'
@@ -247,6 +254,10 @@ import './flows/PersonaIdentifierFlow.css'
 import './components/crm/CSVImport/CSVImportWizard.css'
 import './pages/crm/SalesPlaybook.css'
 import './pages/AdminDashboard.css'
+import './pages/ContentReview.css'
+import './pages/league/LeagueOverview.css'
+import './pages/league/ContentSubmit.css'
+import './pages/league/LeagueAdmin.css'
 
 // Conditionally render widgets (hide on some public routes)
 function ConditionalZarlo() {
@@ -286,7 +297,8 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/testing-explainer' ||
                         location.pathname === '/offer-creation-explainer' ||
                         location.pathname === '/campaign-explainer' ||
-                        location.pathname === '/launch-explainer'
+                        location.pathname === '/launch-explainer' ||
+                        location.pathname.startsWith('/league')
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -867,10 +879,34 @@ function AppRouter() {
               </AuthGate>
             } />
 
+            {/* Fantasy League */}
+            <Route path="/league" element={
+              <AuthGate>
+                <LeagueOverview />
+              </AuthGate>
+            } />
+            <Route path="/league/submit" element={
+              <AuthGate>
+                <ContentSubmit />
+              </AuthGate>
+            } />
+            <Route path="/league/admin" element={
+              <AuthGate>
+                <LeagueAdmin />
+              </AuthGate>
+            } />
+
             {/* Admin Dashboard */}
             <Route path="/admin-dashboard" element={
               <AuthGate>
                 <AdminDashboard />
+              </AuthGate>
+            } />
+
+            {/* Content Review */}
+            <Route path="/content-review" element={
+              <AuthGate>
+                <ContentReview />
               </AuthGate>
             } />
             </Routes>
