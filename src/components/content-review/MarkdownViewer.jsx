@@ -17,6 +17,14 @@ export default function MarkdownViewer({ draft, comments, onAddComment }) {
     clearSelection()
   }
 
+  // On mobile, popoverPosition = { mobile: true } — no inline styles needed
+  // On desktop, popoverPosition = { top, left } — position absolutely
+  const popoverStyle = popoverPosition?.mobile
+    ? {}
+    : popoverPosition
+      ? { top: popoverPosition.top, left: popoverPosition.left }
+      : {}
+
   return (
     <div className="cr-viewer">
       <div className="cr-viewer-header">
@@ -41,7 +49,7 @@ export default function MarkdownViewer({ draft, comments, onAddComment }) {
       {selection && popoverPosition && (
         <CommentPopover
           key={`${selection.startOffset}-${selection.endOffset}`}
-          position={popoverPosition}
+          style={popoverStyle}
           selectedText={selection.text}
           onSave={handleSave}
           onCancel={clearSelection}

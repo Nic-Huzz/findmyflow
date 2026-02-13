@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 const QUICK_REACTIONS = [
   { id: 'too_formal', label: 'too formal', defaultCategory: 'tone' },
@@ -11,13 +11,21 @@ const QUICK_REACTIONS = [
 
 const CATEGORIES = ['tone', 'word_choice', 'structure', 'content', 'brand']
 
-export default function CommentPopover({ position, selectedText, onSave, onCancel, onMouseEnter, onMouseLeave }) {
-  // Lock selection on touch devices too (onMouseEnter doesn't fire on mobile)
-  const handleTouchStart = () => onMouseEnter?.()
-
+export default function CommentPopover({ style, selectedText, onSave, onCancel, onMouseEnter, onMouseLeave }) {
   const [quickReaction, setQuickReaction] = useState(null)
   const [category, setCategory] = useState(null)
   const [comment, setComment] = useState('')
+  const popoverRef = useRef(null)
+
+  // Lock selection when interacting with popover (works for both mouse and touch)
+  useEffect(() => {
+    const el = popoverRef.current
+    if (!el) return
+
+    const lock = () => onMouseEnter?.()
+    el.addEventListener('touchstart', lock, { passive: true })
+    return () => el.removeEventListener('touchstart', lock)
+  }, [onMouseEnter])
 
   const handleQuickReaction = (reaction) => {
     setQuickReaction(reaction.id === quickReaction ? null : reaction.id)
@@ -38,11 +46,11 @@ export default function CommentPopover({ position, selectedText, onSave, onCance
 
   return (
     <div
+      ref={popoverRef}
       className="cr-popover"
-      style={{ top: position.top, left: position.left }}
+      style={style}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onTouchStart={handleTouchStart}
     >
       <div className="cr-popover-selected">"{selectedText.length > 60 ? selectedText.slice(0, 60) + '...' : selectedText}"</div>
 

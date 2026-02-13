@@ -29,39 +29,41 @@ export function useTextSelection(containerRef) {
       if (!text) return
 
       // Calculate offsets relative to the rendered DOM content.
-      // Note: these are DOM text offsets, not markdown source offsets.
-      // This is intentional — we use them for ordering/display in the UI,
-      // and the highlighted_text field stores the actual selected text for matching.
       const preRange = document.createRange()
       preRange.selectNodeContents(container)
       preRange.setEnd(range.startContainer, range.startOffset)
       const startOffset = preRange.toString().length
-
       const endOffset = startOffset + text.length
 
-      // Position popover near selection with edge clamping
+      // Position popover near selection
       const rect = range.getBoundingClientRect()
       const containerRect = container.getBoundingClientRect()
-      const popoverWidth = 320
+      const isMobile = window.innerWidth <= 768
 
-      let left = rect.left - containerRect.left + rect.width / 2 - popoverWidth / 2
-      // Clamp to container edges
-      left = Math.max(0, Math.min(left, containerRect.width - popoverWidth))
+      if (isMobile) {
+        // Mobile: popover is a fixed bottom sheet, no positioning needed
+        setPopoverPosition({ mobile: true })
+      } else {
+        // Desktop: position below selection with edge clamping
+        const popoverWidth = 320
+        let left = rect.left - containerRect.left + rect.width / 2 - popoverWidth / 2
+        left = Math.max(0, Math.min(left, containerRect.width - popoverWidth))
 
-      setSelection({
-        text,
-        startOffset,
-        endOffset,
-      })
+        // Vertical: prefer below selection, but flip above if near container bottom
+        const spaceBelow = containerRect.bottom - rect.bottom
+        const top = spaceBelow < 200
+          ? rect.top - containerRect.top + container.scrollTop - 8
+          : rect.bottom - containerRect.top + container.scrollTop + 8
 
-      setPopoverPosition({
-        top: rect.bottom - containerRect.top + 8,
-        left,
-      })
+        setPopoverPosition({ top, left, above: spaceBelow < 200 })
+      }
+
+      setSelection({ text, startOffset, endOffset })
     }, 10)
   }, [containerRef])
 
   const clearSelection = useCallback(() => {
+    isSelectingRef.current = false // Bug fix: always reset lock on clear
     setSelection(null)
     setPopoverPosition(null)
     window.getSelection()?.removeAllRanges()
