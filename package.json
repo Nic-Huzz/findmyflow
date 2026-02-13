@@ -33,7 +33,9 @@
     "papaparse": "^5.5.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^7.9.4",
+    "remark-gfm": "^4.0.1",
     "remotion": "^4.0.419"
   },
   "devDependencies": {
