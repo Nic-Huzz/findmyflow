@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import {
@@ -6,6 +6,7 @@ import {
   fetchDraftWithComments,
   fetchCommentCounts,
   createComment,
+  updateCommentStatus,
 } from '../lib/contentReviewService'
 import DraftList from '../components/content-review/DraftList'
 import MarkdownViewer from '../components/content-review/MarkdownViewer'
@@ -17,6 +18,7 @@ export default function ContentReview() {
   const { user } = useAuth()
   const navigate = useNavigate()
 
+  const [authorized, setAuthorized] = useState(null) // null = checking
   const [tab, setTab] = useState('drafts') // 'drafts' | 'voice'
   const [drafts, setDrafts] = useState([])
   const [commentCounts, setCommentCounts] = useState({})
@@ -25,24 +27,33 @@ export default function ContentReview() {
   const [comments, setComments] = useState([])
   const [loading, setLoading] = useState(true)
   const [showComments, setShowComments] = useState(false) // mobile sheet
+  const initialLoadDone = useRef(false)
 
   const loadDrafts = useCallback(async () => {
     try {
-      const [draftsData, countsData] = await Promise.all([
-        fetchDrafts(),
-        fetchCommentCounts(),
-      ])
+      // Fetch drafts first — this is the auth gate (RLS blocks non-admins)
+      const draftsData = await fetchDrafts()
       setDrafts(draftsData)
-      setCommentCounts(countsData)
-      if (!selectedDraftId && draftsData.length > 0) {
+      setAuthorized(true)
+      if (!initialLoadDone.current && draftsData.length > 0) {
         setSelectedDraftId(draftsData[0].id)
+        initialLoadDone.current = true
+      }
+      // Comment counts are non-critical — don't let failures block the page
+      try {
+        const countsData = await fetchCommentCounts()
+        setCommentCounts(countsData)
+      } catch (countErr) {
+        console.error('Failed to load comment counts:', countErr)
       }
     } catch (err) {
+      // RLS will block non-admins — treat permission errors as unauthorized
       console.error('Failed to load drafts:', err)
+      setAuthorized(false)
     } finally {
       setLoading(false)
     }
-  }, [selectedDraftId])
+  }, [])
 
   const loadDraft = useCallback(async (draftId) => {
     try {
@@ -61,6 +72,23 @@ export default function ContentReview() {
   useEffect(() => {
     if (selectedDraftId) loadDraft(selectedDraftId)
   }, [selectedDraftId, loadDraft])
+
+  const handleStatusChange = async (commentId, status, resolvedText) => {
+    try {
+      const updated = await updateCommentStatus(commentId, status, resolvedText)
+      setComments(prev => prev.map(c => c.id === commentId ? updated : c))
+      // Update counts
+      setCommentCounts(prev => {
+        const draftCounts = { ...(prev[selectedDraftId] || { total: 0, pending: 0 }) }
+        if (status === 'resolved' || status === 'rejected') {
+          draftCounts.pending = Math.max(0, draftCounts.pending - 1)
+        }
+        return { ...prev, [selectedDraftId]: draftCounts }
+      })
+    } catch (err) {
+      console.error('Failed to update comment:', err)
+    }
+  }
 
   const handleAddComment = async (commentData) => {
     try {
@@ -85,7 +113,27 @@ export default function ContentReview() {
   if (loading) {
     return (
       <div className="cr-page">
-        <div className="cr-loading">Loading content...</div>
+        <div className="cr-loading">
+          <div className="cr-spinner" />
+          <span>Verifying access...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (authorized === false) {
+    return (
+      <div className="cr-page">
+        <div className="cr-loading">
+          <span className="cr-loading-lock">&#128274;</span>
+          <span className="cr-loading-title">Not authorized</span>
+          <button
+            className="cr-btn cr-btn--save"
+            onClick={() => navigate('/me')}
+          >
+            Go to Dashboard
+          </button>
+        </div>
       </div>
     )
   }
@@ -139,6 +187,7 @@ export default function ContentReview() {
           {/* Comments - sidebar on desktop, bottom sheet on mobile */}
           <CommentsPanel
             comments={comments}
+            onStatusChange={handleStatusChange}
             isSheet={false}
           />
 
@@ -153,6 +202,7 @@ export default function ContentReview() {
           {showComments && (
             <CommentsPanel
               comments={comments}
+              onStatusChange={handleStatusChange}
               isSheet={true}
               onClose={() => setShowComments(false)}
             />

@@ -61,7 +61,7 @@ export default function VoiceDashboard() {
                 <div className="cr-voice-correction-from">"{c.original}"</div>
                 <div className="cr-voice-correction-arrow">&rarr;</div>
                 <div className="cr-voice-correction-to">"{c.corrected}"</div>
-                <span className="cr-chip cr-chip--sm">{c.category?.replace('_', ' ')}</span>
+                <span className="cr-chip cr-chip--sm">{c.category?.replaceAll('_', ' ')}</span>
               </div>
             ))}
           </div>

@@ -40,6 +40,7 @@ export default function MarkdownViewer({ draft, comments, onAddComment }) {
 
       {selection && popoverPosition && (
         <CommentPopover
+          key={`${selection.startOffset}-${selection.endOffset}`}
           position={popoverPosition}
           selectedText={selection.text}
           onSave={handleSave}

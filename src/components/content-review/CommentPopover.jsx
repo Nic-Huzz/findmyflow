@@ -12,6 +12,9 @@ const QUICK_REACTIONS = [
 const CATEGORIES = ['tone', 'word_choice', 'structure', 'content', 'brand']
 
 export default function CommentPopover({ position, selectedText, onSave, onCancel, onMouseEnter, onMouseLeave }) {
+  // Lock selection on touch devices too (onMouseEnter doesn't fire on mobile)
+  const handleTouchStart = () => onMouseEnter?.()
+
   const [quickReaction, setQuickReaction] = useState(null)
   const [category, setCategory] = useState(null)
   const [comment, setComment] = useState('')
@@ -39,6 +42,7 @@ export default function CommentPopover({ position, selectedText, onSave, onCance
       style={{ top: position.top, left: position.left }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onTouchStart={handleTouchStart}
     >
       <div className="cr-popover-selected">"{selectedText.length > 60 ? selectedText.slice(0, 60) + '...' : selectedText}"</div>
 
@@ -66,7 +70,7 @@ export default function CommentPopover({ position, selectedText, onSave, onCance
               className={`cr-chip cr-chip--cat ${category === c ? 'cr-chip--active' : ''}`}
               onClick={() => setCategory(c)}
             >
-              {c.replace('_', ' ')}
+              {c.replaceAll('_', ' ')}
             </button>
           ))}
         </div>

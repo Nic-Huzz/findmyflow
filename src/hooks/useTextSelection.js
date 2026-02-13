@@ -28,7 +28,10 @@ export function useTextSelection(containerRef) {
       const text = sel.toString().trim()
       if (!text) return
 
-      // Calculate offsets relative to the markdown content
+      // Calculate offsets relative to the rendered DOM content.
+      // Note: these are DOM text offsets, not markdown source offsets.
+      // This is intentional — we use them for ordering/display in the UI,
+      // and the highlighted_text field stores the actual selected text for matching.
       const preRange = document.createRange()
       preRange.selectNodeContents(container)
       preRange.setEnd(range.startContainer, range.startOffset)
@@ -36,9 +39,14 @@ export function useTextSelection(containerRef) {
 
       const endOffset = startOffset + text.length
 
-      // Position popover near selection
+      // Position popover near selection with edge clamping
       const rect = range.getBoundingClientRect()
       const containerRect = container.getBoundingClientRect()
+      const popoverWidth = 320
+
+      let left = rect.left - containerRect.left + rect.width / 2 - popoverWidth / 2
+      // Clamp to container edges
+      left = Math.max(0, Math.min(left, containerRect.width - popoverWidth))
 
       setSelection({
         text,
@@ -48,7 +56,7 @@ export function useTextSelection(containerRef) {
 
       setPopoverPosition({
         top: rect.bottom - containerRect.top + 8,
-        left: Math.max(0, rect.left - containerRect.left + rect.width / 2 - 150),
+        left,
       })
     }, 10)
   }, [containerRef])

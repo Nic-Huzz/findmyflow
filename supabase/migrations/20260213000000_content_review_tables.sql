@@ -90,9 +90,16 @@ create policy "Admins can update voice_taste_config"
   on voice_taste_config for update
   using (exists (select 1 from admin_users where user_id = auth.uid()));
 
+create policy "Admins can insert voice_taste_config"
+  on voice_taste_config for insert
+  with check (exists (select 1 from admin_users where user_id = auth.uid()));
+
 -- Auto-extraction trigger: when comment resolved, append correction to voice_taste_config
 create or replace function append_voice_correction()
-returns trigger as $$
+returns trigger
+security definer
+set search_path = public
+as $$
 begin
   if NEW.status = 'resolved' and NEW.resolved_text is not null and OLD.status != 'resolved' then
     update voice_taste_config

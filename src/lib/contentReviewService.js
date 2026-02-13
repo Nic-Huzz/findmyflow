@@ -5,7 +5,7 @@ import { supabase } from './supabaseClient'
 export async function fetchDrafts() {
   const { data, error } = await supabase
     .from('content_drafts')
-    .select('id, title, status, created_by, created_at, updated_at')
+    .select('id, title, status, project, created_by, created_at, updated_at')
     .order('created_at', { ascending: false })
 
   if (error) throw error
@@ -36,7 +36,8 @@ export async function fetchDraftWithComments(draftId) {
 }
 
 export async function fetchCommentCounts() {
-  // Get pending comment counts per draft for sidebar badges
+  // Get comment counts per draft for sidebar badges.
+  // Only selects the two columns needed to minimize data transfer.
   const { data, error } = await supabase
     .from('content_comments')
     .select('draft_id, status')
@@ -98,10 +99,10 @@ export async function fetchVoiceConfig() {
     .from('voice_taste_config')
     .select('*')
     .is('owner_id', null)  // Phase 1: Huzz only
-    .single()
+    .maybeSingle()
 
   if (error) throw error
-  return data
+  return data // null if no row exists
 }
 
 export async function updateVoiceConfig(id, updates) {

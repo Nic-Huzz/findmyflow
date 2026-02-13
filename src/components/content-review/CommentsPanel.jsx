@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const STATUS_COLORS = {
   pending: '#ffdd27',
   resolved: '#22c55e',
@@ -24,7 +26,27 @@ function timeAgo(dateStr) {
 }
 
 export default function CommentsPanel({ comments, onStatusChange, isSheet, onClose }) {
+  const [resolvingId, setResolvingId] = useState(null)
+  const [resolvedText, setResolvedText] = useState('')
   const pendingCount = comments.filter(c => c.status === 'pending').length
+
+  const handleResolve = (commentId) => {
+    if (resolvingId === commentId) {
+      // Submit the resolution
+      onStatusChange(commentId, 'resolved', resolvedText.trim() || null)
+      setResolvingId(null)
+      setResolvedText('')
+    } else {
+      // Open the resolve input
+      setResolvingId(commentId)
+      setResolvedText('')
+    }
+  }
+
+  const handleCancelResolve = () => {
+    setResolvingId(null)
+    setResolvedText('')
+  }
 
   return (
     <div className={`cr-comments ${isSheet ? 'cr-comments--sheet' : ''}`}>
@@ -34,7 +56,7 @@ export default function CommentsPanel({ comments, onStatusChange, isSheet, onClo
           <span className="cr-comments-badge">{pendingCount} pending</span>
         )}
         {isSheet && (
-          <button className="cr-comments-close" onClick={onClose}>x</button>
+          <button className="cr-comments-close" onClick={() => onClose?.()}>x</button>
         )}
       </div>
 
@@ -51,7 +73,7 @@ export default function CommentsPanel({ comments, onStatusChange, isSheet, onClo
 
               <div className="cr-comment-meta">
                 {c.quick_reaction && (
-                  <span className="cr-chip cr-chip--sm">{c.quick_reaction.replace('_', ' ')}</span>
+                  <span className="cr-chip cr-chip--sm">{c.quick_reaction.replaceAll('_', ' ')}</span>
                 )}
                 <span className="cr-chip cr-chip--cat cr-chip--sm">{CATEGORY_LABELS[c.category]}</span>
                 <span className="cr-comment-time">{timeAgo(c.created_at)}</span>
@@ -71,7 +93,43 @@ export default function CommentsPanel({ comments, onStatusChange, isSheet, onClo
                   style={{ background: STATUS_COLORS[c.status] }}
                 />
                 <span>{c.status}</span>
+                {c.status === 'pending' && onStatusChange && (
+                  <span className="cr-comment-actions">
+                    <button
+                      className="cr-comment-action cr-comment-action--resolve"
+                      onClick={() => handleResolve(c.id)}
+                      title={resolvingId === c.id ? 'Submit correction' : 'Resolve'}
+                    >
+                      &#10003;
+                    </button>
+                    <button
+                      className="cr-comment-action cr-comment-action--reject"
+                      onClick={() => {
+                        if (resolvingId === c.id) handleCancelResolve()
+                        else onStatusChange(c.id, 'rejected')
+                      }}
+                      title={resolvingId === c.id ? 'Cancel' : 'Reject'}
+                    >
+                      &#10005;
+                    </button>
+                  </span>
+                )}
               </div>
+
+              {resolvingId === c.id && (
+                <div className="cr-comment-resolve-input">
+                  <input
+                    type="text"
+                    className="cr-popover-input"
+                    placeholder="Corrected text (for voice learning)"
+                    value={resolvedText}
+                    onChange={e => setResolvedText(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter') handleResolve(c.id) }}
+                    autoFocus
+                  />
+                  <p className="cr-comments-hint">Enter what the text should be, then click &#10003; again</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
