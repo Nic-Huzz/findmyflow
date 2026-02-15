@@ -25,7 +25,8 @@ export const SCORING_CATEGORIES = {
   'Weekly': 'healing',
 
   // Courage score
-  'Groans': 'courage'
+  'Groans': 'courage',
+  'Voices': 'courage'
 }
 
 /**
