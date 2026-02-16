@@ -1,0 +1,145 @@
+/* SplinterVisualization — reusable SVG splinter component */
+
+.splinter-vis {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splinter-vis--standalone {
+  width: 280px;
+  height: 280px;
+  margin: 0 auto;
+}
+
+.splinter-vis--compact.splinter-vis--standalone {
+  width: 100px;
+  height: 100px;
+}
+
+.splinter-vis__svg {
+  display: block;
+}
+
+/* Body mode sizing */
+.splinter-vis:not(.splinter-vis--standalone) .splinter-vis__svg {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.splinter-vis--compact:not(.splinter-vis--standalone) .splinter-vis__svg {
+  max-width: 120px;
+}
+
+/* Ambient rings (standalone mode) */
+.splinter-vis__rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.splinter-vis__ring {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 2px solid rgba(239, 68, 68, 0.12);
+  animation: splinter-ring-pulse 3s ease-in-out infinite;
+}
+
+.splinter-vis__ring--outer {
+  width: 240px;
+  height: 240px;
+  animation-delay: 0.5s;
+}
+
+@keyframes splinter-ring-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+/* ===== Movement Animations ===== */
+
+.splinter-anim-pulse {
+  animation: splinter-pulse 2s ease-in-out infinite;
+}
+
+.splinter-anim-spin {
+  animation: splinter-spin 4s linear infinite;
+}
+
+.splinter-anim-expand {
+  animation: splinter-expand 3s ease-in-out infinite;
+}
+
+.splinter-anim-contract {
+  animation: splinter-contract 3s ease-in-out infinite;
+}
+
+.splinter-anim-vibrate {
+  animation: splinter-vibrate 0.3s linear infinite;
+}
+
+@keyframes splinter-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+@keyframes splinter-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes splinter-expand {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+@keyframes splinter-contract {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.8); }
+}
+
+@keyframes splinter-vibrate {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, 2px); }
+}
+
+/* ===== Morph Transition ===== */
+
+.splinter-vis__morphing {
+  transition: all 2s ease-in-out;
+}
+
+/* ===== Mobile performance ===== */
+
+@media (max-width: 480px) {
+  .splinter-vis--standalone {
+    width: 220px;
+    height: 220px;
+  }
+
+  .splinter-vis__ring {
+    width: 160px;
+    height: 160px;
+  }
+
+  .splinter-vis__ring--outer {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* Simplify filters on mobile for performance */
+  .splinter-vis__shape {
+    will-change: transform;
+  }
+}

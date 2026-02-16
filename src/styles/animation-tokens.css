@@ -1,0 +1,198 @@
+/* ============================================================
+   Animation Tokens — FindMyFlow Design System
+   Apple-crisp feel: 200-400ms, ease-out, fast and precise.
+   Pure CSS, zero dependencies.
+   ============================================================ */
+
+:root {
+  /* Durations */
+  --anim-fast: 150ms;
+  --anim-normal: 250ms;
+  --anim-slow: 350ms;
+  --anim-page: 300ms;
+
+  /* Easings */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);       /* Apple decelerate */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* Slight overshoot */
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+
+  /* Stagger */
+  --stagger-base: 50ms;
+
+  /* Transform values */
+  --translate-enter: 12px;
+  --scale-enter: 0.97;
+}
+
+/* ============================================================
+   Page Enter — applied via AnimatedOutlet on route changes
+   ============================================================ */
+.page-enter {
+  animation: pageEnterAnim var(--anim-page) var(--ease-out) both;
+}
+
+@keyframes pageEnterAnim {
+  from {
+    opacity: 0;
+    transform: translateY(var(--translate-enter));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   Content Enter — fade-up when loading → content
+   Add this class to the main content div after loading completes
+   ============================================================ */
+.content-enter {
+  animation: contentEnterAnim var(--anim-normal) var(--ease-out) both;
+}
+
+@keyframes contentEnterAnim {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   Reveal Classes — scroll-triggered via useReveal hook
+   Elements start hidden, get .revealed when in viewport
+   ============================================================ */
+.reveal-fade-up {
+  opacity: 0;
+  transform: translateY(var(--translate-enter));
+  transition: opacity var(--anim-slow) var(--ease-out),
+              transform var(--anim-slow) var(--ease-out);
+}
+
+.reveal-fade-up.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(var(--scale-enter));
+  transition: opacity var(--anim-slow) var(--ease-out),
+              transform var(--anim-slow) var(--ease-out);
+}
+
+.reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================================
+   Nested reveals — when inside a content-enter parent,
+   the parent already handles opacity. Child only slides up
+   to avoid double-fade (opacity 0 × opacity 0 = mushy).
+   ============================================================ */
+.content-enter .reveal-fade-up {
+  opacity: 1;
+}
+
+.content-enter .reveal-fade-up:not(.revealed) {
+  transform: translateY(var(--translate-enter));
+}
+
+.content-enter .reveal-scale {
+  opacity: 1;
+}
+
+.content-enter .reveal-scale:not(.revealed) {
+  transform: scale(var(--scale-enter));
+}
+
+/* ============================================================
+   Avatar Scale-In — one-time pop on mount
+   ============================================================ */
+@keyframes flowScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.flow-scale-in {
+  animation: flowScaleIn var(--anim-slow) var(--ease-spring) both;
+}
+
+/* ============================================================
+   Branded Spinner — replaces emoji loading spinner
+   Purple→gold gradient ring, 0.9s rotation.
+   200ms fade-in delay so fast navigations show nothing.
+   ============================================================ */
+.app-loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  opacity: 0;
+  animation: spinnerFadeIn 0s var(--anim-normal) forwards;
+}
+
+@keyframes spinnerFadeIn {
+  to { opacity: 1; }
+}
+
+.app-spinner-ring {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #e9ecef;
+  border-top-color: #5e17eb;
+  border-right-color: #E9A23B;
+  animation: spinnerRotate 0.9s linear infinite;
+}
+
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   Reduced Motion — respects user preference
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --anim-fast: 0ms;
+    --anim-normal: 0ms;
+    --anim-slow: 0ms;
+    --anim-page: 0ms;
+    --stagger-base: 0ms;
+    --translate-enter: 0px;
+  }
+
+  .page-enter,
+  .content-enter,
+  .flow-scale-in {
+    animation: none;
+  }
+
+  .reveal-fade-up,
+  .reveal-scale {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal-fade-up.revealed,
+  .reveal-scale.revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .app-spinner-ring {
+    animation-duration: 1.5s;
+  }
+}

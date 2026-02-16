@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRevealAll } from '../hooks/useReveal'
 import { supabase } from '../lib/supabaseClient'
@@ -21,9 +21,7 @@ const STEPS = [
 export default function FantasyLeagueLanding() {
   const navigate = useNavigate()
   const revealRef = useRevealAll()
-  const heroRef = useRef(null)
   const [headerSolid, setHeaderSolid] = useState(false)
-  const [stickyVisible, setStickyVisible] = useState(false)
   const [formData, setFormData] = useState({ name: '', whatsapp: '', team_readiness: '', team_name: '' })
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -34,16 +32,6 @@ export default function FantasyLeagueLanding() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([e]) => setStickyVisible(!e.isIntersecting),
-      { threshold: 0 }
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [])
 
   const scrollToSignup = () => {
     document.getElementById('signup')?.scrollIntoView({ behavior: 'smooth' })
@@ -62,9 +50,17 @@ export default function FantasyLeagueLanding() {
         },
         { onConflict: 'whatsapp' }
       )
-      if (error) console.warn('Signup save failed:', error)
+      if (error) {
+        console.warn('Signup save failed:', error)
+        alert('Something went wrong — please try again.')
+        setSubmitting(false)
+        return
+      }
     } catch (err) {
       console.warn('Signup error:', err)
+      alert('Something went wrong — please try again.')
+      setSubmitting(false)
+      return
     }
     setSubmitted(true)
     setSubmitting(false)
@@ -85,7 +81,7 @@ export default function FantasyLeagueLanding() {
       </header>
 
       {/* HERO */}
-      <section className="flp-hero" ref={heroRef}>
+      <section className="flp-hero">
         <div className="flp-hero-glow" aria-hidden="true" />
         <div className="flp-container flp-hero-inner">
           <p className="flp-eyebrow">SEASON 1 &middot; FREE TRIAL</p>
@@ -108,23 +104,23 @@ export default function FantasyLeagueLanding() {
       {/* WHY IT WORKS */}
       <section className="flp-section">
         <div className="flp-container">
-          <p className="flp-label reveal-fade-up">WHY IT WORKS</p>
-          <h2 className="flp-h2 reveal-fade-up">Making accountability fun.</h2>
-          <p className="flp-sub reveal-fade-up">
+          <p className="flp-label reveal-blur-up">WHY IT WORKS</p>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>Making accountability fun.</h2>
+          <p className="flp-sub reveal-blur-up" style={{ transitionDelay: '150ms' }}>
             You want to do these things anyway. This just makes it more fun.
           </p>
           <div className="flp-sells-grid">
-            <div className="flp-sell reveal-fade-up" style={{ transitionDelay: '0ms' }}>
+            <div className="flp-sell reveal-slide-left" style={{ transitionDelay: '0ms' }}>
               <div className="flp-sell-icon">{'\u{1F3AF}'}</div>
               <h3 className="flp-sell-title">Score points for what you're already doing</h3>
               <p className="flp-sell-desc">Now every action earns points for your team.</p>
             </div>
-            <div className="flp-sell reveal-fade-up" style={{ transitionDelay: '100ms' }}>
+            <div className="flp-sell reveal-fade-up" style={{ transitionDelay: '120ms' }}>
               <div className="flp-sell-icon">{'\u{1F91D}'}</div>
               <h3 className="flp-sell-title">Be on a team with friends</h3>
               <p className="flp-sell-desc">When they're counting on you, procrastinating stops working.</p>
             </div>
-            <div className="flp-sell reveal-fade-up" style={{ transitionDelay: '200ms' }}>
+            <div className="flp-sell reveal-slide-right" style={{ transitionDelay: '240ms' }}>
               <div className="flp-sell-icon">{'\u{1F525}'}</div>
               <h3 className="flp-sell-title">Compete head-to-head each week</h3>
               <p className="flp-sell-desc">Your team vs another. Who doesn't love to win?</p>
@@ -137,28 +133,28 @@ export default function FantasyLeagueLanding() {
       <section className="flp-origin">
         <div className="flp-container flp-origin-inner">
           <div className="flp-origin-text">
-            <p className="flp-label flp-label--left reveal-fade-up">WHAT MAKES THIS DIFFERENT</p>
-            <p className="flp-origin-line reveal-fade-up">In 2020, I realised a corporate job wasn't for me.</p>
-            <p className="flp-origin-line flp-origin-bold reveal-fade-up">Three years later? I was still in the same job.</p>
-            <p className="flp-origin-line reveal-fade-up">It wasn't from a lack of clarity.</p>
-            <p className="flp-origin-line reveal-fade-up">It wasn't from a lack of education &mdash; I'd spent $30,000 on 52 courses.</p>
-            <p className="flp-origin-line reveal-fade-up">It wasn't from a lack of will.</p>
-            <p className="flp-origin-line flp-origin-bold reveal-fade-up">It was because I didn't feel safe.</p>
-            <p className="flp-origin-line flp-origin-muted reveal-fade-up">Scared of judgement. Scared of failing. Scared I wasn't good enough.</p>
+            <p className="flp-label flp-label--left reveal-slide-left">WHAT MAKES THIS DIFFERENT</p>
+            <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '60ms' }}>In 2020, I realised a corporate job wasn't for me.</p>
+            <p className="flp-origin-line flp-origin-bold reveal-slide-left" style={{ transitionDelay: '120ms' }}>Three years later? I was still in the same job.</p>
+            <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '180ms' }}>It wasn't from a lack of clarity.</p>
+            <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '240ms' }}>It wasn't from a lack of education &mdash; I'd spent $30,000 on 52 courses.</p>
+            <p className="flp-origin-line reveal-slide-left" style={{ transitionDelay: '300ms' }}>It wasn't from a lack of will.</p>
+            <p className="flp-origin-line flp-origin-bold reveal-slide-left" style={{ transitionDelay: '360ms' }}>It was because I didn't feel safe.</p>
+            <p className="flp-origin-line flp-origin-muted reveal-slide-left" style={{ transitionDelay: '420ms' }}>Scared of judgement. Scared of failing. Scared I wasn't good enough.</p>
           </div>
           <div className="flp-origin-turn">
-            <p className="flp-origin-line reveal-fade-up">In 2023, fed up, I challenged myself to do one thing a week that terrified me.</p>
-            <div className="flp-origin-results reveal-fade-up">
+            <p className="flp-origin-line reveal-slide-right" style={{ transitionDelay: '0ms' }}>In 2023, fed up, I challenged myself to do one thing a week that terrified me.</p>
+            <div className="flp-origin-results reveal-blur-up" style={{ transitionDelay: '120ms' }}>
               <p><strong>Within 5 weeks:</strong> living in Bali.</p>
               <p><strong>Within 3 months:</strong> quit my job.</p>
               <p><strong>Within 5 months:</strong> funding my life through hosting silent discos.</p>
             </div>
           </div>
-          <blockquote className="flp-origin-quote reveal-scale">
+          <blockquote className="flp-origin-quote reveal-slide-right" style={{ transitionDelay: '0ms' }}>
             <div className="flp-quote-mark" aria-hidden="true">&ldquo;</div>
             <p>We don't rise to the level of our ambitions &mdash; we fall to the level of what feels safe.</p>
           </blockquote>
-          <p className="flp-origin-close reveal-fade-up">
+          <p className="flp-origin-close reveal-blur-up">
             This game merges business actions with accountability to do things outside your comfort zone &mdash; and the healing work to remove the fear at the source.
           </p>
         </div>
@@ -167,11 +163,9 @@ export default function FantasyLeagueLanding() {
       {/* CATEGORIES */}
       <section className="flp-section flp-section--warm">
         <div className="flp-container">
-          <p className="flp-label reveal-fade-up">5 CATEGORIES</p>
-          <h2 className="flp-h2 reveal-fade-up">Win 3 to take the week.</h2>
-          <p className="flp-sub reveal-fade-up">
-            A team of business machines loses to a balanced team. All wheels need to turn.
-          </p>
+          <p className="flp-label reveal-blur-up">CATEGORIES</p>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>5 Categories Designed To Scale Your Impact & Income.</h2>
+          <div className="flp-sub-spacer" />
           <div className="flp-cat-grid">
             {CATEGORIES.map((cat, i) => (
               <div
@@ -187,11 +181,13 @@ export default function FantasyLeagueLanding() {
           </div>
 
           {/* SCORECARD */}
+          <h3 className="flp-sc-title reveal-blur-up" style={{ transitionDelay: '300ms' }}>Example Scoreboard</h3>
+          <p className="flp-sc-subtitle reveal-blur-up" style={{ transitionDelay: '320ms' }}>Score more in 3 categories to win the week.</p>
           <div className="flp-scorecard reveal-scale" style={{ transitionDelay: '350ms' }}>
             <div className="flp-sc-header">
-              <span className="flp-sc-team">Comfort Crushers</span>
+              <span className="flp-sc-team">Team A: Comfort Crushers</span>
               <span className="flp-sc-vs">VS</span>
-              <span className="flp-sc-team">Flow Finders</span>
+              <span className="flp-sc-team">Team B: Flow Finders</span>
             </div>
             {[
               { emoji: '\u{1F4CA}', name: 'Business', left: 82, right: 71 },
@@ -216,14 +212,14 @@ export default function FantasyLeagueLanding() {
       {/* SEASON DETAILS */}
       <section className="flp-section">
         <div className="flp-container">
-          <p className="flp-label reveal-fade-up">SEASON 1</p>
-          <h2 className="flp-h2 reveal-fade-up">Season 1 Details</h2>
+          <p className="flp-label reveal-blur-up">SEASON 1</p>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>Season 1 Details</h2>
           <div className="flp-details-grid">
             {[
               { emoji: '\u{1F4C5}', label: 'Duration', value: '4 weeks' },
               { emoji: '\u{1F465}', label: 'Players', value: '12 (4 teams of 3)' },
               { emoji: '\u{1F4F1}', label: 'Platform', value: 'Find My Flow app' },
-              { emoji: '\u{1F3C6}', label: 'Prize', value: 'Bragging rights (TBC)' },
+              { emoji: '\u{1F3C6}', label: 'Prize', value: 'Bragging rights' },
             ].map((item, i) => (
               <div key={item.label} className="flp-detail reveal-fade-up" style={{ transitionDelay: `${i * 80}ms` }}>
                 <div className="flp-detail-emoji">{item.emoji}</div>
@@ -232,7 +228,7 @@ export default function FantasyLeagueLanding() {
               </div>
             ))}
           </div>
-          <div className="flp-timeline reveal-fade-up">
+          <div className="flp-timeline reveal-slide-left" style={{ transitionDelay: '100ms' }}>
             {[
               { week: 'Week 1', desc: 'vs Team B' },
               { week: 'Week 2', desc: 'vs Team C' },
@@ -251,14 +247,14 @@ export default function FantasyLeagueLanding() {
       {/* HOW IT WORKS */}
       <section className="flp-section">
         <div className="flp-container">
-          <p className="flp-label reveal-fade-up">HOW IT WORKS</p>
-          <h2 className="flp-h2 reveal-fade-up">Recruit. Sign up. Compete.</h2>
+          <p className="flp-label reveal-blur-up">HOW IT WORKS</p>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>Recruit. Sign up. Compete.</h2>
           <div className="flp-steps-grid">
             {STEPS.map((step, i) => (
               <div
                 key={i}
-                className="flp-step reveal-fade-up"
-                style={{ transitionDelay: `${i * 100}ms` }}
+                className={`flp-step ${i % 2 === 0 ? 'reveal-slide-left' : 'reveal-slide-right'}`}
+                style={{ transitionDelay: `${i * 150}ms` }}
               >
                 <span className="flp-step-num">{i + 1}</span>
                 <h3 className="flp-step-title">{step.title}</h3>
@@ -270,14 +266,14 @@ export default function FantasyLeagueLanding() {
       </section>
 
       {/* SIGN UP */}
-      <section className="flp-section flp-section--warm" id="signup">
+      <section className="flp-section flp-section--warm flp-signup-section" id="signup">
         <div className="flp-container">
-          <p className="flp-label reveal-fade-up">JOIN SEASON 1</p>
-          <h2 className="flp-h2 reveal-fade-up">Grab your spot.</h2>
-          <p className="flp-sub reveal-fade-up">12 spots. Free. Starts Monday.</p>
+          <p className="flp-label reveal-blur-up">JOIN SEASON 1</p>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>Grab your spot.</h2>
+          <p className="flp-sub reveal-blur-up" style={{ transitionDelay: '150ms' }}>12 spots. Free. Starts Monday.</p>
 
           {!submitted ? (
-            <form className="flp-signup-form reveal-scale" onSubmit={handleSubmit}>
+            <form className="flp-signup-form reveal-blur-up" style={{ transitionDelay: '250ms' }} onSubmit={handleSubmit}>
               <input
                 className="flp-field"
                 type="text"
@@ -333,8 +329,8 @@ export default function FantasyLeagueLanding() {
           ) : (
             <div className="flp-success-light reveal-scale">
               <div className="flp-success-emoji">{'\u{1F3C6}'}</div>
-              <h3 className="flp-success-light-h3">You're in.</h3>
-              <p className="flp-success-light-p">Check your WhatsApp for team draft details.</p>
+              <h3 className="flp-success-light-h3">Registration received.</h3>
+              <p className="flp-success-light-p">You'll hear from Nic shortly.</p>
             </div>
           )}
         </div>
@@ -343,14 +339,16 @@ export default function FantasyLeagueLanding() {
       {/* SNEAK PEEK */}
       <section className="flp-section">
         <div className="flp-container">
-          <p className="flp-label reveal-fade-up">SNEAK PEEK</p>
-          <h2 className="flp-h2 reveal-fade-up">Inside the app.</h2>
-          <div className="flp-preview reveal-scale">
+          <p className="flp-label reveal-blur-up">SNEAK PEEK</p>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>Inside the app.</h2>
+          <div className="flp-preview reveal-blur-up" style={{ transitionDelay: '200ms' }}>
             <img
               src="/images/app-preview.png"
               alt="Find My Flow app showing gamified challenge dashboard with leaderboard, categories, and quest progress"
               className="flp-preview-img"
               loading="lazy"
+              width={393}
+              height={793}
             />
           </div>
         </div>
@@ -359,20 +357,20 @@ export default function FantasyLeagueLanding() {
       {/* THE ASK */}
       <section className="flp-section flp-section--warm">
         <div className="flp-container">
-          <p className="flp-label reveal-fade-up">THE ASK</p>
-          <h2 className="flp-h2 reveal-fade-up">In exchange for making this free.</h2>
+          <p className="flp-label reveal-blur-up">THE ASK</p>
+          <h2 className="flp-h2 reveal-blur-up" style={{ transitionDelay: '80ms' }}>In exchange for making this free.</h2>
           <div className="flp-ask-grid">
-            <div className="flp-ask reveal-fade-up" style={{ transitionDelay: '0ms' }}>
+            <div className="flp-ask reveal-slide-left" style={{ transitionDelay: '0ms' }}>
               <div className="flp-ask-icon">{'\u{1F4AC}'}</div>
               <h3 className="flp-ask-title">Feedback</h3>
               <p className="flp-ask-desc">Tell me what works, what doesn't, and what you wish existed.</p>
             </div>
-            <div className="flp-ask reveal-fade-up" style={{ transitionDelay: '100ms' }}>
+            <div className="flp-ask reveal-fade-up" style={{ transitionDelay: '120ms' }}>
               <div className="flp-ask-icon">{'\u{2B50}'}</div>
               <h3 className="flp-ask-title">Testimonials</h3>
               <p className="flp-ask-desc">If it changes something for you, let me share your words.</p>
             </div>
-            <div className="flp-ask reveal-fade-up" style={{ transitionDelay: '200ms' }}>
+            <div className="flp-ask reveal-slide-right" style={{ transitionDelay: '240ms' }}>
               <div className="flp-ask-icon">{'\u{1F4E3}'}</div>
               <h3 className="flp-ask-title">Tell your friends</h3>
               <p className="flp-ask-desc">If you love it, spread the word. That's how this grows.</p>
@@ -388,12 +386,6 @@ export default function FantasyLeagueLanding() {
         </div>
       </footer>
 
-      {/* STICKY MOBILE CTA */}
-      <div className={`flp-sticky${stickyVisible ? ' flp-sticky--show' : ''}`}>
-        <button className="flp-cta flp-sticky-btn" onClick={scrollToSignup}>
-          Join Season 1 &rarr;
-        </button>
-      </div>
     </div>
   )
 }
