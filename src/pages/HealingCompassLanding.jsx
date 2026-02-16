@@ -40,6 +40,7 @@ export default function HealingCompassLanding() {
   const [letterPhotoPreview, setLetterPhotoPreview] = useState(null)
   const [photoUploading, setPhotoUploading] = useState(false)
   const [letterPhotoUrl, setLetterPhotoUrl] = useState(null)
+  const [inputFocused, setInputFocused] = useState(false)
   const photoInputRef = useRef(null)
 
   useEffect(() => { document.title = 'Your Healing Compass — Workshop Results' }, [])
@@ -308,6 +309,9 @@ export default function HealingCompassLanding() {
               value={answers.action}
               onChange={e => set('action', e.target.value)}
               rows={3}
+              autoCapitalize="sentences"
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
             />
           </div>
         </div>
@@ -400,6 +404,9 @@ export default function HealingCompassLanding() {
               placeholder="e.g. Radiant Rebel, Wild Alchemist, or your own..."
               value={answers.essenceArchetype || ''}
               onChange={e => set('essenceArchetype', e.target.value)}
+              autoCapitalize="words"
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
             />
           </div>
         </div>
@@ -420,8 +427,12 @@ export default function HealingCompassLanding() {
                 type="text"
                 className="hcl-letter-name-input"
                 placeholder="your name"
+                autoCapitalize="words"
+                autoComplete="name"
                 value={name}
                 onChange={e => setName(e.target.value)}
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setInputFocused(false)}
               />
               ,
             </p>
@@ -543,6 +554,9 @@ export default function HealingCompassLanding() {
               value={answers.newBelief}
               onChange={e => set('newBelief', e.target.value)}
               rows={3}
+              autoCapitalize="sentences"
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
             />
           </div>
         </div>
@@ -564,10 +578,16 @@ export default function HealingCompassLanding() {
               <div className="hcl-email-form reveal-fade-up">
                 <input
                   type="email"
+                  inputMode="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  autoComplete="email"
                   className="hcl-email-input"
                   placeholder="your@email.com"
                   value={email}
                   onChange={e => { setEmail(e.target.value); setError('') }}
+                  onFocus={() => setInputFocused(true)}
+                  onBlur={() => setInputFocused(false)}
                 />
                 <button
                   className="hcl-cta-gold"
@@ -614,7 +634,7 @@ export default function HealingCompassLanding() {
       </footer>
 
       {/* ===== STICKY MOBILE CTA ===== */}
-      {allSelectionsComplete && !submitted && (
+      {allSelectionsComplete && !submitted && !inputFocused && (
         <div className={`hcl-sticky-cta${stickyVisible ? ' hcl-sticky-cta--visible' : ''}`}>
           <button
             className="hcl-cta-gold hcl-sticky-btn"
