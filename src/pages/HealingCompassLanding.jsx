@@ -41,6 +41,7 @@ export default function HealingCompassLanding() {
   const [photoUploading, setPhotoUploading] = useState(false)
   const [letterPhotoUrl, setLetterPhotoUrl] = useState(null)
   const [inputFocused, setInputFocused] = useState(false)
+  const [selectedArchetypes, setSelectedArchetypes] = useState([])
   const photoInputRef = useRef(null)
 
   useEffect(() => { document.title = 'Your Healing Compass — Workshop Results' }, [])
@@ -380,22 +381,33 @@ export default function HealingCompassLanding() {
             Use these as inspiration, or name your own.
           </p>
 
-          <div className="hcl-archetypes-grid">
-            {workshopArchetypes.map(arch => (
-              <div
-                key={arch.name}
-                className="hcl-archetype-card hcl-archetype-card--inspiration reveal-fade-up"
-              >
-                <span className="hcl-arch-group">{arch.group}</span>
-                <span className="hcl-arch-name">{arch.name}</span>
-                <p className="hcl-arch-essence">{arch.essence}</p>
-              </div>
-            ))}
+          <p className="hcl-tap-hint reveal-fade-up">Tap any that resonate</p>
+          <div className="hcl-archetypes-grid reveal-fade-up">
+            {workshopArchetypes.map(arch => {
+              const isSelected = selectedArchetypes.includes(arch.name)
+              return (
+                <button
+                  key={arch.name}
+                  className={`hcl-archetype-card${isSelected ? ' hcl-archetype-card--selected' : ''}`}
+                  onClick={() => {
+                    const next = isSelected
+                      ? selectedArchetypes.filter(n => n !== arch.name)
+                      : [...selectedArchetypes, arch.name]
+                    setSelectedArchetypes(next)
+                    set('essenceArchetype', next.join(' + ') || '')
+                  }}
+                >
+                  {isSelected && <span className="hcl-card-check">✓</span>}
+                  <span className="hcl-arch-name">{arch.name}</span>
+                  <p className="hcl-arch-essence">{arch.essence}</p>
+                </button>
+              )
+            })}
           </div>
 
           <div className="hcl-archetype-input-wrap reveal-fade-up">
             <label className="hcl-archetype-input-label" htmlFor="archetype-input">
-              What's your essence archetype?
+              Customise your archetype name
             </label>
             <input
               id="archetype-input"

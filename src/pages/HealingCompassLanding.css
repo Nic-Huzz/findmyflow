@@ -494,12 +494,35 @@
   border-top: 1px solid rgba(233, 162, 59, 0.2);
 }
 
-.hcl .hcl-archetype-card--inspiration {
+.hcl .hcl-archetype-card {
+  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
   padding: 1.25rem;
   background: rgba(255, 255, 255, 0.03);
   text-align: left;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  color: inherit;
+}
+
+@media (hover: hover) {
+  .hcl .hcl-archetype-card:hover {
+    border-color: rgba(233, 162, 59, 0.3);
+    background: rgba(233, 162, 59, 0.04);
+    transform: translateY(-2px);
+  }
+}
+
+.hcl .hcl-archetype-card:active {
+  transform: scale(0.97);
+}
+
+.hcl .hcl-archetype-card--selected {
+  border-color: var(--hcl-gold) !important;
+  background: rgba(233, 162, 59, 0.08) !important;
+  box-shadow: 0 0 24px var(--hcl-gold-glow);
 }
 
 /* ============ ARCHETYPE TEXT INPUT ============ */
