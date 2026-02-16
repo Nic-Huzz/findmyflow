@@ -28,15 +28,20 @@ function lazyRetry(importFn) {
   )
 }
 
-// Static imports - Core infrastructure and frequently accessed pages
+// Static imports - Core infrastructure
 import LandingPage from './pages/LandingPage'
 import PersonaAssessment from './PersonaAssessment'
-import MePage from './pages/MePage'
-import Challenge from './Challenge'
 import PublicValidationFlow from './pages/PublicValidationFlow'
+
+// Lazy-load heavy pages — preloaded after initial render (see useEffect below)
+const MePage = lazyRetry(() => import('./pages/MePage'))
+const Challenge = lazyRetry(() => import('./Challenge'))
+
+import { preloadMePage, preloadChallenge } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
+import AnimatedOutlet from './components/AnimatedOutlet'
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
 import { OnboardingProvider } from './context/OnboardingContext'
@@ -60,20 +65,31 @@ function ScrollToTop() {
   return null
 }
 
-// Loading component for Suspense fallback
+// Preload core pages after initial render so they're ready when user navigates.
+// Uses requestIdleCallback where available, falls back to setTimeout.
+function PreloadCoreRoutes() {
+  React.useEffect(() => {
+    const preload = () => {
+      preloadMePage()
+      preloadChallenge()
+    }
+    const id = typeof requestIdleCallback === 'function'
+      ? requestIdleCallback(preload)
+      : setTimeout(preload, 2000)
+    return () => {
+      typeof cancelIdleCallback === 'function'
+        ? cancelIdleCallback(id)
+        : clearTimeout(id)
+    }
+  }, [])
+  return null
+}
+
+// Branded loading spinner (purple→gold ring, delayed fade-in)
 function LoadingSpinner() {
   return (
-    <div style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '60vh',
-      color: '#5e17eb'
-    }}>
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⏳</div>
-        <div>Loading...</div>
-      </div>
+    <div className="app-loading-spinner">
+      <div className="app-spinner-ring" />
     </div>
   )
 }
@@ -129,6 +145,9 @@ const PublicMoneyModelFlow = lazyRetry(() => import('./flows/PublicMoneyModelFlo
 const PublicNervousSystemFlow = lazyRetry(() => import('./flows/PublicNervousSystemFlow'))
 const PublicOfferAuditFlow = lazyRetry(() => import('./flows/PublicOfferAuditFlow'))
 const CareerClarityQuiz = lazyRetry(() => import('./flows/CareerClarityQuiz'))
+const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
+const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
+const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLanding'))
 
 // Lazy-loaded flows - Setup & Training
 const BusinessBaselineFlow = lazyRetry(() => import('./flows/BusinessBaselineFlow'))
@@ -250,6 +269,9 @@ import './components/VibeColorPicker.css'
 import './pages/Codex.css'
 import './pages/LandingPage.css'
 import './flows/CareerClarityQuiz.css'
+import './flows/EarthquakeQuiz.css'
+import './pages/FantasyLeagueLanding.css'
+import './pages/HealingCompassLanding.css'
 import './flows/MindSpace.css'
 import './flows/PlayListFinderFlow.css'
 import './flows/PersonaIdentifierFlow.css'
@@ -268,12 +290,14 @@ function ConditionalZarlo() {
   const location = useLocation()
   const { user } = useAuth()
   if (!user) return null
-  // Hide Zarlo on /try/ routes, landing page, and career clarity quiz
+  // Hide Zarlo on /try/ routes, landing page, career clarity quiz, and fantasy LP
   const isTryRoute = location.pathname.startsWith('/try/')
   const isLandingPage = location.pathname === '/'
   const isCareerClarity = location.pathname === '/career-clarity'
+  const isFantasyLP = location.pathname === '/fantasy'
+  const isHealingWorkshopLP = location.pathname === '/healing-compass-workshop'
 
-  if (isTryRoute || isLandingPage || isCareerClarity) return null
+  if (isTryRoute || isLandingPage || isCareerClarity || isFantasyLP || isHealingWorkshopLP) return null
   return <ZarloWidget />
 }
 
@@ -302,7 +326,10 @@ function ConditionalBottomToolbar() {
                         location.pathname === '/offer-creation-explainer' ||
                         location.pathname === '/campaign-explainer' ||
                         location.pathname === '/launch-explainer' ||
-                        location.pathname.startsWith('/league')
+                        location.pathname === '/fantasy' ||
+                        location.pathname === '/healing-compass-workshop' ||
+                        location.pathname.startsWith('/league') ||
+                        location.pathname === '/content-review'
 
   if (isPublicRoute) return null
   return <BottomToolbar />
@@ -315,9 +342,10 @@ function AppRouter() {
         <OnboardingProvider>
         <Router>
           <ScrollToTop />
+          <PreloadCoreRoutes />
           <LocationAwareErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
-            <Routes>
+            <AnimatedOutlet><Routes>
               {/* Landing Page - Public */}
               <Route path="/" element={<LandingPage />} />
 
@@ -448,6 +476,13 @@ function AppRouter() {
             <Route path="/try/offer/:flowType" element={<PublicMoneyModelFlow />} />
             <Route path="/try/nervous-system" element={<PublicNervousSystemFlow />} />
             <Route path="/try/flow-audit" element={<PublicOfferAuditFlow />} />
+            <Route path="/try/earthquake" element={<EarthquakeQuiz />} />
+
+            {/* Fantasy League Landing Page - Public */}
+            <Route path="/fantasy" element={<FantasyLeagueLanding />} />
+
+            {/* Healing Compass Workshop Landing - Public */}
+            <Route path="/healing-compass-workshop" element={<HealingCompassLanding />} />
 
             <Route path="/me" element={
               <AuthGate>
@@ -925,7 +960,7 @@ function AppRouter() {
                 <ContentReview />
               </AuthGate>
             } />
-            </Routes>
+            </Routes></AnimatedOutlet>
           </Suspense>
           <ConditionalBottomToolbar />
           <ConditionalZarlo />

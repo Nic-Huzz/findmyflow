@@ -1,0 +1,931 @@
+/* ============================================================
+   HEALING COMPASS WORKSHOP LANDING PAGE
+   Scoped to .hcl to prevent conflicts.
+   Design: purple→gold gradient, dark/light alternating sections.
+   ============================================================ */
+
+/* ============ CUSTOM PROPERTIES ============ */
+.hcl {
+  --hcl-purple: #5e17eb;
+  --hcl-purple-dark: #4a0ea8;
+  --hcl-gold: #E9A23B;
+  --hcl-gold-glow: rgba(233, 162, 59, 0.25);
+  --hcl-cream: #faf8f5;
+  --hcl-dark: #0a0118;
+  --hcl-dark-mid: #120225;
+  --hcl-spring: cubic-bezier(0.16, 1, 0.3, 1);
+
+  min-height: 100vh;
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* ============ CONTAINER ============ */
+.hcl .hcl-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ============ SECTION BASES ============ */
+.hcl .hcl-section-dark {
+  background: var(--hcl-dark);
+  color: white;
+  padding: 5rem 0;
+}
+
+.hcl .hcl-section-light {
+  background: linear-gradient(180deg, #ffffff 0%, var(--hcl-cream) 100%);
+  color: #1a1a2e;
+  padding: 5rem 0;
+}
+
+/* ============ TYPOGRAPHY ============ */
+.hcl .hcl-section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--hcl-gold);
+  margin-bottom: 0.5rem;
+}
+
+.hcl .hcl-section-label--dark {
+  color: var(--hcl-purple);
+}
+
+.hcl .hcl-section-heading {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.hcl .hcl-section-heading--dark {
+  color: #1a1a2e;
+}
+
+.hcl .hcl-section-desc {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  opacity: 0.85;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hcl .hcl-section-desc--dark {
+  color: #4a4a5a;
+}
+
+/* ============ REVEAL ANIMATIONS ============ */
+.hcl .reveal-fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s var(--hcl-spring);
+}
+
+.hcl .reveal-fade-up.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hcl .reveal-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.6s ease, transform 0.6s var(--hcl-spring);
+}
+
+.hcl .reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============ VALIDATION PULSE ============ */
+.hcl .hcl-pulse {
+  animation: hcl-pulse-glow 2s ease;
+}
+
+@keyframes hcl-pulse-glow {
+  0%, 100% { box-shadow: none; }
+  25%, 75% { box-shadow: 0 0 0 4px var(--hcl-gold-glow), 0 0 30px var(--hcl-gold-glow); }
+  50% { box-shadow: 0 0 0 6px var(--hcl-gold-glow), 0 0 40px var(--hcl-gold-glow); }
+}
+
+/* ============ HERO ============ */
+.hcl .hcl-hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(160deg, var(--hcl-dark) 0%, var(--hcl-purple-dark) 50%, var(--hcl-dark) 100%);
+  overflow: hidden;
+}
+
+.hcl .hcl-hero-glow {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(94, 23, 235, 0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hcl .hcl-hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem 4rem;
+}
+
+.hcl .hcl-hero-label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  color: var(--hcl-gold);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.hcl .hcl-hero-headline {
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+  background: linear-gradient(135deg, #fff 30%, var(--hcl-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hcl .hcl-hero-sub {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.hcl .hcl-scroll-hint {
+  margin-top: 3rem;
+}
+
+.hcl .hcl-scroll-arrow {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-right: 2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  transform: rotate(45deg);
+  animation: hcl-bounce 2s infinite;
+}
+
+@keyframes hcl-bounce {
+  0%, 100% { transform: rotate(45deg) translate(0, 0); opacity: 0.3; }
+  50% { transform: rotate(45deg) translate(5px, 5px); opacity: 0.7; }
+}
+
+/* ============ EMOTIONAL SPLINTERS ============ */
+.hcl .hcl-splinter-text {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  max-width: 600px;
+  color: #3a3a4a;
+}
+
+.hcl .hcl-splinter-text p {
+  margin-bottom: 1rem;
+}
+
+.hcl .hcl-splinter-text em {
+  color: var(--hcl-purple);
+  font-style: italic;
+}
+
+.hcl .hcl-splinter-chain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.hcl .hcl-chain-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  border: 1px solid #e8e8f0;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  min-width: 130px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.hcl .hcl-chain-icon {
+  font-size: 1.5rem;
+}
+
+.hcl .hcl-chain-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3a3a4a;
+}
+
+.hcl .hcl-chain-arrow {
+  font-size: 1.5rem;
+  color: var(--hcl-purple);
+  font-weight: 700;
+}
+
+/* ============ TAP HINT ============ */
+.hcl .hcl-tap-hint {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--hcl-gold);
+  opacity: 0.7;
+}
+
+/* ============ CARD BASE ============ */
+.hcl .hcl-card {
+  position: relative;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  transition: all 0.3s var(--hcl-spring);
+  background: rgba(255, 255, 255, 0.04);
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  color: inherit;
+}
+
+.hcl .hcl-card:hover {
+  border-color: rgba(233, 162, 59, 0.3);
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-2px);
+}
+
+.hcl .hcl-card:active {
+  transform: scale(0.98);
+}
+
+.hcl .hcl-card--selected {
+  border-color: var(--hcl-gold) !important;
+  background: rgba(233, 162, 59, 0.08) !important;
+  box-shadow: 0 0 24px var(--hcl-gold-glow);
+}
+
+.hcl .hcl-card-check {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: var(--hcl-gold);
+  color: var(--hcl-dark);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: hcl-pop 0.3s var(--hcl-spring);
+}
+
+/* ============ EMOTIONAL NEEDS ============ */
+.hcl .hcl-needs-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.hcl .hcl-needs-group-label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--hcl-gold);
+  margin-bottom: 0.75rem;
+  opacity: 0.8;
+}
+
+.hcl .hcl-needs-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.hcl .hcl-need-name {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.hcl .hcl-need-subtitle {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--hcl-gold);
+  margin-bottom: 0.75rem;
+  opacity: 0.8;
+}
+
+.hcl .hcl-need-desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* ============ ACTION COMMITMENT ============ */
+.hcl .hcl-action-input-wrap {
+  max-width: 600px;
+}
+
+.hcl .hcl-action-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 1rem;
+  font-family: inherit;
+  line-height: 1.6;
+  border: 2px solid #e0e0ea;
+  border-radius: 0.75rem;
+  background: white;
+  color: #1a1a2e;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.hcl .hcl-action-input:focus {
+  outline: none;
+  border-color: var(--hcl-purple);
+}
+
+.hcl .hcl-action-input::placeholder {
+  color: #aaa;
+}
+
+/* ============ PROTECTIVE PATTERNS ============ */
+.hcl .hcl-patterns-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.hcl .hcl-pattern-name {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hcl .hcl-pattern-desc {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* ============ 4R'S ============ */
+.hcl .hcl-4r-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.hcl .hcl-4r-card {
+  background: white;
+  border: 1px solid #e8e8f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.hcl .hcl-4r-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--hcl-purple), var(--hcl-purple-dark));
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.hcl .hcl-4r-name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--hcl-purple);
+  margin-bottom: 0.5rem;
+}
+
+.hcl .hcl-4r-desc {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #5a5a6a;
+  margin: 0;
+}
+
+/* ============ ARCHETYPES ============ */
+.hcl .hcl-archetypes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.hcl .hcl-arch-group {
+  display: inline-block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--hcl-gold);
+  background: rgba(233, 162, 59, 0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.hcl .hcl-arch-name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.hcl .hcl-arch-essence {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.hcl .hcl-arch-poetic {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--hcl-gold);
+  font-style: italic;
+  margin: 0.75rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(233, 162, 59, 0.2);
+}
+
+.hcl .hcl-archetype-card--inspiration {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+}
+
+/* ============ ARCHETYPE TEXT INPUT ============ */
+.hcl .hcl-archetype-input-wrap {
+  max-width: 500px;
+  margin: 2.5rem auto 0;
+  text-align: center;
+}
+
+.hcl .hcl-archetype-input-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--hcl-gold);
+  margin-bottom: 0.75rem;
+}
+
+.hcl .hcl-archetype-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  font-size: 1.1rem;
+  font-family: inherit;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hcl .hcl-archetype-input:focus {
+  border-color: var(--hcl-gold);
+}
+
+.hcl .hcl-archetype-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.95rem;
+}
+
+/* ============ FUTURE SELF LETTER ============ */
+.hcl .hcl-letter-section {
+  background: linear-gradient(160deg, var(--hcl-dark-mid) 0%, #1a0a30 50%, #2a1520 100%);
+  padding: 5rem 0;
+  color: white;
+}
+
+.hcl .hcl-letter {
+  max-width: 600px;
+  margin: 2rem auto 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.25rem;
+  padding: 2.5rem 2rem;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.hcl .hcl-letter-line {
+  margin-bottom: 1.25rem;
+}
+
+.hcl .hcl-letter-name-input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-family: inherit;
+  font-size: 1.05rem;
+  padding: 0.1rem 0.25rem;
+  width: 160px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hcl .hcl-letter-name-input:focus {
+  border-bottom-color: var(--hcl-gold);
+}
+
+.hcl .hcl-letter-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+  font-style: italic;
+}
+
+.hcl .hcl-letter-fill {
+  color: rgba(233, 162, 59, 0.5);
+  font-style: italic;
+}
+
+.hcl .hcl-letter-fill--active {
+  color: var(--hcl-gold);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.hcl .hcl-letter-sign {
+  margin-top: 2rem;
+  font-style: italic;
+}
+
+.hcl .hcl-letter-sign-name {
+  font-weight: 600;
+  font-style: normal;
+  color: var(--hcl-gold);
+}
+
+/* ============ PHOTO UPLOAD ============ */
+.hcl .hcl-photo-upload {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.hcl .hcl-photo-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 2rem;
+  border: 2px dashed rgba(233, 162, 59, 0.35);
+  border-radius: 1.25rem;
+  background: rgba(233, 162, 59, 0.05);
+  cursor: pointer;
+  transition: all 0.3s var(--hcl-spring);
+}
+
+.hcl .hcl-photo-dropzone:hover {
+  border-color: var(--hcl-gold);
+  background: rgba(233, 162, 59, 0.1);
+  transform: translateY(-2px);
+}
+
+.hcl .hcl-photo-icon {
+  font-size: 2.5rem;
+}
+
+.hcl .hcl-photo-cta {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--hcl-gold);
+}
+
+.hcl .hcl-photo-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.hcl .hcl-photo-input-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.hcl .hcl-photo-preview-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.hcl .hcl-photo-preview {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 1rem;
+  border: 2px solid var(--hcl-gold);
+  box-shadow: 0 0 24px var(--hcl-gold-glow);
+}
+
+.hcl .hcl-photo-uploading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(10, 1, 24, 0.8);
+  color: var(--hcl-gold);
+  padding: 0.5rem 1.25rem;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.hcl .hcl-photo-remove {
+  display: block;
+  margin: 1rem auto 0;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.4rem 1.25rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hcl .hcl-photo-remove:hover {
+  border-color: rgba(255, 100, 100, 0.5);
+  color: #ff6b6b;
+}
+
+/* ============ EMAIL FORM ============ */
+.hcl .hcl-email-section {
+  padding: 5rem 0;
+}
+
+.hcl .hcl-email-section .hcl-section-desc {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hcl .hcl-email-form {
+  display: flex;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 2rem auto 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.hcl .hcl-email-input {
+  flex: 1;
+  padding: 0.9rem 1.25rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 60px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hcl .hcl-email-input:focus {
+  border-color: var(--hcl-gold);
+}
+
+.hcl .hcl-email-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ============ GOLD CTA ============ */
+.hcl .hcl-cta-gold {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--hcl-gold), #d4882f);
+  color: var(--hcl-dark);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.9rem 2rem;
+  border-radius: 60px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hcl .hcl-cta-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(233, 162, 59, 0.3);
+}
+
+.hcl .hcl-cta-gold:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============ ERROR / VALIDATION ============ */
+.hcl .hcl-error {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.hcl .hcl-validation-hint {
+  color: var(--hcl-gold);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+/* ============ SUCCESS ============ */
+.hcl .hcl-success {
+  padding: 2rem 0;
+}
+
+.hcl .hcl-success-check {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--hcl-gold), #d4882f);
+  color: var(--hcl-dark);
+  font-size: 2rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  animation: hcl-pop 0.5s var(--hcl-spring);
+}
+
+@keyframes hcl-pop {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+/* ============ FOOTER ============ */
+.hcl .hcl-footer {
+  background: var(--hcl-dark);
+  padding: 3rem 0;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hcl .hcl-footer-brand {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.hcl .hcl-footer-tagline {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============ STICKY CTA ============ */
+.hcl .hcl-sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.75rem 1rem;
+  background: rgba(10, 1, 24, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(233, 162, 59, 0.2);
+  text-align: center;
+  z-index: 100;
+  transform: translateY(100%);
+  transition: transform 0.3s var(--hcl-spring);
+}
+
+.hcl .hcl-sticky-cta--visible {
+  transform: translateY(0);
+}
+
+.hcl .hcl-sticky-btn {
+  width: 100%;
+  max-width: 360px;
+  padding: 0.85rem 2rem;
+}
+
+/* ============ MOBILE ============ */
+@media (max-width: 768px) {
+  .hcl .hcl-container {
+    padding: 0 1.25rem;
+  }
+
+  .hcl .hcl-section-dark,
+  .hcl .hcl-section-light,
+  .hcl .hcl-letter-section,
+  .hcl .hcl-email-section {
+    padding: 3.5rem 0;
+  }
+
+  .hcl .hcl-hero {
+    min-height: 80vh;
+  }
+
+  .hcl .hcl-hero-content {
+    padding: 5rem 1.5rem 3rem;
+  }
+
+  .hcl .hcl-needs-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .hcl .hcl-patterns-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hcl .hcl-4r-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .hcl .hcl-archetypes-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .hcl .hcl-email-form {
+    flex-direction: column;
+  }
+
+  .hcl .hcl-email-input {
+    width: 100%;
+  }
+
+  .hcl .hcl-letter {
+    padding: 2rem 1.5rem;
+  }
+
+  .hcl .hcl-splinter-chain {
+    gap: 0.5rem;
+  }
+
+  .hcl .hcl-chain-step {
+    min-width: 90px;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hcl .hcl-4r-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hcl .hcl-archetypes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hcl .hcl-chain-arrow {
+    display: none;
+  }
+
+  .hcl .hcl-splinter-chain {
+    flex-direction: column;
+  }
+}

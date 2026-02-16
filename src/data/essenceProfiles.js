@@ -17,7 +17,7 @@ const essenceProfiles = {
         "Billie Eilish",
         "Katniss Everdeen (Hunger Games)"
       ],
-      "vision_in_action": "You turn chaos into clarity, sparing revolutions with nothing but your voice."
+      "vision_in_action": "You turn chaos into clarity, sparking revolutions with nothing but your voice."
     },
     {
       "name": "Compassionate Leader",
@@ -59,7 +59,7 @@ const essenceProfiles = {
     },
     {
       "name": "Mystic Messenger",
-    "group": "Transmmuter",
+    "group": "Transmuter",
       "essence": "Inner knowing, intuitive depth, unseen truth.",
       "poetic_line": "You are the still point in the storm, the one who hears what others can't name and makes it make sense.",
       "poetic_vision": "What if your content felt like transmission, not explanation? What if your words whispered straight into the soul of your people?\n\nYou don't need to convince you just need to channel.",
