@@ -250,6 +250,24 @@
   color: #fbbf24;
 }
 
+/* ============ GO BACK LINK ============ */
+
+.offer-builder-flow .go-back-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 0;
+  margin-top: 12px;
+  transition: color 0.2s ease;
+}
+
+.offer-builder-flow .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .offer-builder-flow .attribution-text {
   margin-top: 24px;
   font-size: 14px;

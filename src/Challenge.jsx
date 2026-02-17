@@ -33,6 +33,7 @@ import { getScoringCategory } from './lib/scoringCategories'
 import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
 import SplinterCheckin from './components/SplinterCheckin'
+import { preloadChallengeFlows } from './lib/preloadRoutes'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -248,6 +249,9 @@ function Challenge() {
     }
     return () => document.body.classList.remove('hide-bottom-toolbar')
   }, [showProjectSelector])
+
+  // Preload flow chunks on idle so "Start" taps are instant
+  useEffect(() => { preloadChallengeFlows() }, [])
 
   // Morning reconnect quest IDs that can be hidden if not planned
   const MORNING_RECONNECT_QUEST_IDS = [
