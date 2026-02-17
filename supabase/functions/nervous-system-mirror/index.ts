@@ -88,7 +88,7 @@ serve(async (req) => {
       belief_test_results // Object of { contract: 'yes'/'no' }
     } = body
 
-    if (!impact_goal || !income_goal || !belief_test_results) {
+    if (!impact_goal || !belief_test_results) {
       throw new Error('Missing required fields')
     }
 
@@ -100,15 +100,17 @@ serve(async (req) => {
     // Build the prompt for Claude
     const userPrompt = `Generate a personalized nervous system reflection based on this data:
 
-**Goals:**
-- Impact goal: ${impact_goal} people
-- Income goal: ${income_goal}/year
+**Visibility Edge:**
+- Scariest action: "${impact_goal}"
+- Sway test result: ${nervous_system_impact_limit}
+
+**Money Edge:**
+- Breakthrough deal amount: ${income_goal}
+- Earning edge from sway test: ${nervous_system_income_limit}
+
+**Context:**
 - Mission: ${positive_change}
 - Current struggle: ${struggle_area}
-
-**Discovered Safety Edges:**
-- Being seen limit: ${nervous_system_impact_limit} people
-- Earning limit: ${nervous_system_income_limit}/year
 
 **Belief Test Results:**
 - "I feel safe pursuing my ambition": ${triage_safe_pursuing}
@@ -198,7 +200,7 @@ IMPORTANT:
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-5-haiku-20241022',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 2048,
         system: SYSTEM_PROMPT,
         tools: tools,

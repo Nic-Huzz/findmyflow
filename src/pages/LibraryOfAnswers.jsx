@@ -1446,49 +1446,98 @@ function LibraryOfAnswers() {
           )}
         </div>
 
-        {/* Healing Compass */}
-        <div className="subsection">
-          <h3>Healing Compass</h3>
-          {healingEntries.length === 0 ? (
-            <p className="empty-text">
-              No healing compass entries yet.{' '}
-              <Link to="/healing-compass">Start Healing Journey</Link>
-            </p>
-          ) : (
-            <div className="cards-grid">
-              {healingEntries.map(entry => (
-                <Link
-                  key={entry.id}
-                  to="/healing-compass?results=true"
-                  className="offer-card-v2 offer-card-link"
-                >
-                  <div className="offer-card-content">
-                    <h4 className="offer-title">
-                      {entry.selected_safety_contract || 'Safety Contract'}
-                    </h4>
-                    {entry.limiting_impact && (
-                      <p className="offer-description">{entry.limiting_impact}</p>
-                    )}
-                    {entry.past_event_emotions && (
-                      <p className="offer-description" style={{ marginTop: '8px', fontStyle: 'italic' }}>
-                        Core emotion: {entry.past_event_emotions}
-                      </p>
-                    )}
-                    <div className="offer-tags">
-                      {entry.challenge_enrollment_consent && (
-                        <span className="offer-tag offer-tag-confidence">
-                          {entry.challenge_enrollment_consent === 'book_session' ? 'Session booked' : 'Enrolled'}
-                        </span>
-                      )}
-                      <span className="offer-tag offer-tag-date">{formatDate(entry.created_at)}</span>
-                    </div>
-                  </div>
-                  <span className="offer-view-icon">→</span>
-                </Link>
-              ))}
+        {/* Limiting Belief Rewire (flow_version = 2) */}
+        {(() => {
+          const rewireEntries = healingEntries.filter(e => e.flow_version === 2)
+          return (
+            <div className="subsection">
+              <h3>Limiting Belief Rewire</h3>
+              {rewireEntries.length === 0 ? (
+                <p className="empty-text">
+                  No limiting belief rewire entries yet.{' '}
+                  <Link to="/limiting-belief-rewire">Start Rewiring</Link>
+                </p>
+              ) : (
+                <div className="cards-grid">
+                  {rewireEntries.map(entry => (
+                    <Link
+                      key={entry.id}
+                      to="/limiting-belief-rewire?results=true"
+                      className="offer-card-v2 offer-card-link"
+                    >
+                      <div className="offer-card-content">
+                        <h4 className="offer-title">
+                          {entry.selected_safety_contract || 'Safety Contract'}
+                        </h4>
+                        {entry.limiting_impact && (
+                          <p className="offer-description">{entry.limiting_impact}</p>
+                        )}
+                        {entry.past_event_emotions && (
+                          <p className="offer-description" style={{ marginTop: '8px', fontStyle: 'italic' }}>
+                            Core emotion: {entry.past_event_emotions}
+                          </p>
+                        )}
+                        <div className="offer-tags">
+                          {entry.challenge_enrollment_consent && (
+                            <span className="offer-tag offer-tag-confidence">
+                              {entry.challenge_enrollment_consent === 'book_session' ? 'Session booked' : 'Enrolled'}
+                            </span>
+                          )}
+                          <span className="offer-tag offer-tag-date">{formatDate(entry.created_at)}</span>
+                        </div>
+                      </div>
+                      <span className="offer-view-icon">→</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          )
+        })()}
+
+        {/* Healing Compass (flow_version != 2, i.e. V3 or older) */}
+        {(() => {
+          const compassEntries = healingEntries.filter(e => e.flow_version !== 2)
+          return (
+            <div className="subsection">
+              <h3>Healing Compass</h3>
+              {compassEntries.length === 0 ? (
+                <p className="empty-text">
+                  No healing compass entries yet.{' '}
+                  <Link to="/healing-compass">Start Healing Journey</Link>
+                </p>
+              ) : (
+                <div className="cards-grid">
+                  {compassEntries.map(entry => (
+                    <Link
+                      key={entry.id}
+                      to="/healing-compass?results=true"
+                      className="offer-card-v2 offer-card-link"
+                    >
+                      <div className="offer-card-content">
+                        <h4 className="offer-title">
+                          {entry.primary_need || entry.selected_safety_contract || 'Healing Entry'}
+                        </h4>
+                        {entry.action_text && (
+                          <p className="offer-description">{entry.action_text}</p>
+                        )}
+                        {entry.splinter_location && (
+                          <p className="offer-description" style={{ marginTop: '8px', fontStyle: 'italic' }}>
+                            Splinter: {entry.splinter_location}
+                          </p>
+                        )}
+                        <div className="offer-tags">
+                          <span className="offer-tag offer-tag-date">{formatDate(entry.created_at)}</span>
+                        </div>
+                      </div>
+                      <span className="offer-view-icon">→</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })()}
       </div>
     )
   }

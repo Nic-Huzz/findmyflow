@@ -16,17 +16,17 @@ export default function NervousSystemFlow() {
   const [currentScreen, setCurrentScreen] = useState('time_check')
   const [viewingResults, setViewingResults] = useState(false)
   const [responses, setResponses] = useState({
-    impact_goal: '',
-    income_goal: '',
+    visibility_action: '',      // Scary visible action text (e.g. "Go live on camera")
+    visibility_layer: '',       // Which layer: screen/live/money/vulnerable/authority/custom
+    deal_amount: '',            // Breakthrough deal amount (e.g. "$5,000")
     positive_change: '',
     struggle_area: '',
     calibration_complete: false,
     yes_direction: '',
     no_direction: '',
     // Triage test responses
-    test1_initial: null, // YES/NO for initial impact goal
-    test1_refinements: [], // Array of {amount, response} for binary search
-    test2_initial: null, // YES/NO for initial income goal
+    test1_visibility_safe: null, // YES/NO — simple check on visibility action
+    test2_initial: null, // YES/NO for initial deal amount
     test2_refinements: [], // Array of {amount, response} for binary search
     test3_safe_pursuing: null, // YES/NO
     test4_self_sabotage: null, // YES/NO
@@ -34,7 +34,6 @@ export default function NervousSystemFlow() {
     // Contract testing
     contracts_tested: {}, // { contract: 'yes'/'no' }
     // Final calculated edges
-    being_seen_edge: null,
     earning_edge: null
   })
   const [safetyContracts, setSafetyContracts] = useState([])
@@ -42,6 +41,8 @@ export default function NervousSystemFlow() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [reflection, setReflection] = useState(null)
   const [showCalibrationVideo, setShowCalibrationVideo] = useState(false)
+  const [showCustomVisibility, setShowCustomVisibility] = useState(false)
+  const [customVisibilityText, setCustomVisibilityText] = useState('')
 
   // Auto-save state
   const [showResumePrompt, setShowResumePrompt] = useState(false)
@@ -69,11 +70,10 @@ export default function NervousSystemFlow() {
           // Populate responses state
           setResponses(prev => ({
             ...prev,
-            impact_goal: saved.impact_goal || '',
-            income_goal: saved.income_goal || '',
+            visibility_action: saved.impact_goal || '',
+            deal_amount: saved.income_goal || '',
             positive_change: saved.positive_change || '',
             struggle_area: saved.current_struggle || '',
-            being_seen_edge: saved.being_seen_edge,
             earning_edge: saved.earning_edge,
             contracts_tested: saved.belief_test_results || {}
           }))
@@ -122,19 +122,13 @@ export default function NervousSystemFlow() {
     saveProgress(progressData)
   }, [currentScreen, responses, user, saveProgress])
 
-  // Binary search state for Test 1 (impact)
-  const [test1CurrentAmount, setTest1CurrentAmount] = useState(null)
-  const [test1Iteration, setTest1Iteration] = useState(0)
-  const [test1LastYes, setTest1LastYes] = useState(0)
-  const [test1LastNo, setTest1LastNo] = useState(null)
-
-  // Binary search state for Test 2 (income)
+  // Binary search state for Test 2 (deal amount)
   const [test2CurrentAmount, setTest2CurrentAmount] = useState(null)
   const [test2Iteration, setTest2Iteration] = useState(0)
   const [test2LastYes, setTest2LastYes] = useState(0)
   const [test2LastNo, setTest2LastNo] = useState(null)
 
-  const totalScreens = 22 // Total number of progress dots (added subconscious + calibration-directions)
+  const totalScreens = 21 // Total number of progress dots
   const currentScreenIndex = getScreenIndex(currentScreen)
 
   // Go back handler
@@ -202,18 +196,17 @@ export default function NervousSystemFlow() {
       'calibration-directions': 7,
       'triage-intro': 8,
       'test1-initial': 9,
-      'test1-refine': 10,
-      'test2-initial': 11,
-      'test2-refine': 12,
-      'test3': 13,
-      'test4': 14,
-      'test5': 15,
-      'contracts-intro': 16,
-      'contracts-test': 17,
-      'mirror-intro': 18,
-      'mirror-processing': 19,
-      'mirror-reflection': 20,
-      'success': 21
+      'test2-initial': 10,
+      'test2-refine': 11,
+      'test3': 12,
+      'test4': 13,
+      'test5': 14,
+      'contracts-intro': 15,
+      'contracts-test': 16,
+      'mirror-intro': 17,
+      'mirror-processing': 18,
+      'mirror-reflection': 19,
+      'success': 20
     }
     return screenMap[screen] || 0
   }
@@ -250,85 +243,15 @@ export default function NervousSystemFlow() {
     return uniqueContracts.slice(0, 7)
   }
 
-  // Binary search for Test 1 (visibility edge)
+  // Test 1 — simple YES/NO on visibility action (no binary search)
   const handleTest1Response = (response) => {
-    const goalNumber = parseInt(responses.impact_goal.replace(/[^0-9]/g, ''))
-
-    if (currentScreen === 'test1-initial') {
-      if (response === 'no') {
-        // Start binary search downward
-        const halfAmount = Math.floor(goalNumber / 2)
-        setTest1CurrentAmount(halfAmount)
-        setTest1LastNo(goalNumber)
-        setTest1Iteration(1)
-        setResponses(prev => ({
-          ...prev,
-          test1_initial: 'no',
-          test1_refinements: [{ amount: halfAmount, response: null }]
-        }))
-        setCurrentScreen('test1-refine')
-      } else {
-        // They feel safe at their goal, double it to find the upper limit
-        const doubledAmount = goalNumber * 2
-        setTest1CurrentAmount(doubledAmount)
-        setTest1LastYes(goalNumber)
-        setTest1Iteration(1)
-        setResponses(prev => ({
-          ...prev,
-          test1_initial: 'yes',
-          test1_refinements: [{ amount: doubledAmount, response: null }]
-        }))
-        setCurrentScreen('test1-refine')
-      }
-    } else if (currentScreen === 'test1-refine') {
-      // Binary search logic
-      const newRefinements = [...responses.test1_refinements]
-      newRefinements[newRefinements.length - 1].response = response
-
-      if (response === 'yes') {
-        setTest1LastYes(test1CurrentAmount)
-      } else {
-        setTest1LastNo(test1CurrentAmount)
-      }
-
-      // Check if we should continue or stop
-      if (test1Iteration >= 3 || (test1LastNo && test1LastYes && test1LastNo - test1LastYes <= goalNumber * 0.1)) {
-        // Stop: we've found the edge
-        const edge = test1LastYes
-        setResponses(prev => ({
-          ...prev,
-          test1_refinements: newRefinements,
-          being_seen_edge: edge
-        }))
-        setCurrentScreen('test2-initial')
-      } else {
-        // Continue binary search
-        let nextAmount
-        if (response === 'yes' && test1LastNo) {
-          // Try midpoint between current YES and last NO
-          nextAmount = Math.floor((test1CurrentAmount + test1LastNo) / 2)
-        } else if (response === 'no') {
-          // Try midpoint between last YES and current NO
-          nextAmount = Math.floor((test1LastYes + test1CurrentAmount) / 2)
-        } else {
-          // First YES, try doubling
-          nextAmount = test1CurrentAmount * 2
-        }
-
-        setTest1CurrentAmount(nextAmount)
-        setTest1Iteration(test1Iteration + 1)
-        newRefinements.push({ amount: nextAmount, response: null })
-        setResponses(prev => ({
-          ...prev,
-          test1_refinements: newRefinements
-        }))
-      }
-    }
+    setResponses(prev => ({ ...prev, test1_visibility_safe: response }))
+    setCurrentScreen('test2-initial')
   }
 
-  // Binary search for Test 2 (income edge)
+  // Binary search for Test 2 (deal amount edge)
   const handleTest2Response = (response) => {
-    const goalNumber = parseInt(responses.income_goal.replace(/[^0-9]/g, ''))
+    const goalNumber = parseInt(responses.deal_amount.replace(/[^0-9]/g, ''))
 
     if (currentScreen === 'test2-initial') {
       if (response === 'no') {
@@ -424,22 +347,23 @@ export default function NervousSystemFlow() {
     try {
       // Validate required data
       console.log('🔍 Checking edge data:', {
-        being_seen_edge: responses.being_seen_edge,
+        visibility_action: responses.visibility_action,
+        test1_visibility_safe: responses.test1_visibility_safe,
         earning_edge: responses.earning_edge,
         all_responses: responses
       })
 
-      if (!responses.being_seen_edge || !responses.earning_edge) {
-        const errorMsg = `Missing nervous system edge data. being_seen_edge=${responses.being_seen_edge}, earning_edge=${responses.earning_edge}`
+      if (!responses.visibility_action || !responses.earning_edge) {
+        const errorMsg = `Missing nervous system edge data. visibility_action=${responses.visibility_action}, earning_edge=${responses.earning_edge}`
         console.error('❌ Validation failed:', errorMsg)
         throw new Error(errorMsg)
       }
 
       const requestBody = {
-        impact_goal: responses.impact_goal,
-        nervous_system_impact_limit: `${responses.being_seen_edge} people`,
-        income_goal: responses.income_goal,
-        nervous_system_income_limit: `$${responses.earning_edge.toLocaleString()}`,
+        impact_goal: responses.visibility_action,
+        nervous_system_impact_limit: `${responses.test1_visibility_safe === 'yes' ? 'Feels safe' : 'Does NOT feel safe'} — "${responses.visibility_action}"`,
+        income_goal: responses.deal_amount,
+        nervous_system_income_limit: `$${responses.earning_edge.toLocaleString()} per deal`,
         positive_change: responses.positive_change,
         struggle_area: responses.struggle_area,
         triage_safe_pursuing: responses.test3_safe_pursuing,
@@ -494,11 +418,11 @@ export default function NervousSystemFlow() {
   const completeFlow = async () => {
     try {
       // Validate required data
-      if (!responses.being_seen_edge || !responses.earning_edge) {
+      if (!responses.visibility_action || !responses.earning_edge) {
         throw new Error('Missing nervous system edge data. Please complete the flow.')
       }
 
-      // Extract YES contracts for Healing Compass
+      // Extract YES contracts for Limiting Belief Rewire
       const yesContracts = Object.entries(responses.contracts_tested)
         .filter(([_, response]) => response === 'yes')
         .map(([contract]) => contract)
@@ -509,10 +433,10 @@ export default function NervousSystemFlow() {
           user_id: user.id,
           user_email: user.email,
           user_name: user.user_metadata?.name || 'Anonymous',
-          impact_goal: responses.impact_goal,
-          income_goal: responses.income_goal,
-          nervous_system_impact_limit: `${responses.being_seen_edge} people`,
-          nervous_system_income_limit: `$${responses.earning_edge.toLocaleString()}`,
+          impact_goal: responses.visibility_action,
+          income_goal: responses.deal_amount,
+          nervous_system_impact_limit: `${responses.test1_visibility_safe === 'yes' ? 'Safe' : 'Unsafe'}: ${responses.visibility_action}`,
+          nervous_system_income_limit: `$${responses.earning_edge.toLocaleString()} per deal`,
           positive_change: responses.positive_change,
           current_struggle: responses.struggle_area,
           belief_test_results: responses.contracts_tested,
@@ -524,7 +448,7 @@ export default function NervousSystemFlow() {
           core_fear: reflection?.core_fear,
           fear_interpretation: reflection?.fear_interpretation,
           rewiring_needed: reflection?.rewiring_needed,
-          being_seen_edge: responses.being_seen_edge,
+          being_seen_edge: responses.test1_visibility_safe === 'yes' ? 1 : 0,
           earning_edge: responses.earning_edge
         })
 
@@ -547,9 +471,17 @@ export default function NervousSystemFlow() {
     }
   }
 
-  // Format numbers nicely
-  const formatPeople = (num) => num >= 1000000 ? `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M` : num >= 1000 ? `${(num / 1000).toFixed(0)}K` : num
+  // Format money nicely
   const formatMoney = (num) => num >= 1000000 ? `$${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M` : num >= 1000 ? `$${(num / 1000).toFixed(0)}K` : `$${num}`
+
+  // Parse markdown bold/italic to HTML
+  const parseMarkdown = (text) => {
+    if (!text) return ''
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fbbf24">$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em style="color:#fbbf24">$1</em>')
+      .replace(/\n/g, '<br/>')
+  }
 
   // Render functions for each screen
   const renderTimeCheck = () => {
@@ -594,18 +526,18 @@ export default function NervousSystemFlow() {
 
         {/* Resume Prompt - shown if saved progress exists */}
         {showResumePrompt && savedProgressData && (
-          <div className="resume-prompt">
-            <p className="resume-title">Welcome back!</p>
-            <p className="resume-info">
+          <div className="ns-hc-resume-prompt">
+            <p className="ns-hc-resume-title">Welcome back!</p>
+            <p className="ns-hc-resume-info">
               You have saved progress at <strong>{getScreenDisplayName(savedProgressData.currentScreen)}</strong>
               <br />
-              <span className="resume-time">Last saved {getTimeSinceSave()}</span>
+              <span className="ns-hc-resume-time">Last saved {getTimeSinceSave()}</span>
             </p>
-            <div className="resume-actions">
-              <button className="primary-button" onClick={handleResumeProgress}>
+            <div className="ns-hc-resume-actions">
+              <button className="ns-hc-primary-button" style={{ margin: 0, maxWidth: '280px' }} onClick={handleResumeProgress}>
                 Continue Where I Left Off
               </button>
-              <button className="primary-button" onClick={handleStartFresh} style={{ background: 'rgba(255, 255, 255, 0.1)', boxShadow: 'none' }}>
+              <button className="ns-hc-secondary-button" style={{ margin: '12px 0 0 0', maxWidth: '280px' }} onClick={handleStartFresh}>
                 Start Fresh
               </button>
             </div>
@@ -679,61 +611,102 @@ export default function NervousSystemFlow() {
     </div>
   )
 
+  const VISIBILITY_OPTIONS = [
+    { layer: 'screen', icon: '📱', label: 'Post content with my face showing', fear: 'Being seen online' },
+    { layer: 'live', icon: '⚡', label: 'Go live on camera or speak on stage', fear: 'Real-time judgment' },
+    { layer: 'money', icon: '💰', label: 'Ask someone to pay me', fear: 'Am I worth it?' },
+    { layer: 'vulnerable', icon: '💗', label: 'Share my real story publicly', fear: 'Rejected for real self' },
+    { layer: 'authority', icon: '👑', label: 'Claim expertise in my field', fear: 'Imposter syndrome' },
+  ]
+
   const renderQ1 = () => (
     <div className="ns-hc-container ns-hc-question-container">
       <div className="ns-hc-question-number">Question 1 of 4</div>
-      <h2 className="ns-hc-question-text">In your most audacious ambitions, how many people do you hope to impact?</h2>
+      <h2 className="ns-hc-question-text">What feels scariest to do right now?</h2>
+      <p className="ns-hc-question-subtext">Pick the action that makes your body tense up the most</p>
 
-      <div className="ns-hc-horizontal-options">
-        {['100+', '1,000+', '10,000+', '100,000+'].map(option => (
+      <div className="ns-hc-contract-list">
+        {VISIBILITY_OPTIONS.map(opt => (
           <button
-            key={option}
-            className={`ns-hc-horizontal-option ${responses.impact_goal === option ? 'selected' : ''}`}
-            onClick={() => setResponses(prev => ({ ...prev, impact_goal: option }))}
+            key={opt.layer}
+            className={`ns-hc-contract-option ${responses.visibility_layer === opt.layer ? 'selected' : ''}`}
+            onClick={() => {
+              setShowCustomVisibility(false)
+              setResponses(prev => ({ ...prev, visibility_action: opt.label, visibility_layer: opt.layer }))
+            }}
           >
-            {option}
+            <span style={{ marginRight: 8 }}>{opt.icon}</span> {opt.label}
           </button>
         ))}
+        <button
+          className={`ns-hc-contract-option ${responses.visibility_layer === 'custom' ? 'selected' : ''}`}
+          onClick={() => {
+            setShowCustomVisibility(true)
+            setResponses(prev => ({ ...prev, visibility_layer: 'custom', visibility_action: customVisibilityText }))
+          }}
+        >
+          ✏️ Enter your own
+        </button>
       </div>
 
-      <button
-        className="ns-hc-primary-button"
-        onClick={() => setCurrentScreen('q2')}
-        disabled={!responses.impact_goal}
-        style={{ opacity: responses.impact_goal ? 1 : 0.5 }}
-      >
-        Continue
-      </button>
-      <BackButton fromScreen="q1" />
+      {showCustomVisibility && (
+        <div className="ns-hc-text-input-container" style={{ marginTop: 0 }}>
+          <textarea
+            className="ns-hc-text-area"
+            placeholder="e.g. Record a video of myself teaching, pitch to a room of investors..."
+            value={customVisibilityText}
+            onChange={(e) => {
+              setCustomVisibilityText(e.target.value)
+              setResponses(prev => ({ ...prev, visibility_action: e.target.value }))
+            }}
+            rows={2}
+          />
+        </div>
+      )}
+
+      <div className="ns-hc-sticky-nav">
+        <button
+          className="ns-hc-primary-button"
+          onClick={() => setCurrentScreen('q2')}
+          disabled={!responses.visibility_action.trim()}
+          style={{ opacity: responses.visibility_action.trim() ? 1 : 0.5 }}
+        >
+          Continue
+        </button>
+        <BackButton fromScreen="q1" />
+      </div>
     </div>
   )
 
   const renderQ2 = () => (
     <div className="ns-hc-container ns-hc-question-container">
       <div className="ns-hc-question-number">Question 2 of 4</div>
-      <h2 className="ns-hc-question-text">In your most audacious ambitions, how much would you be earning per year?</h2>
+      <h2 className="ns-hc-question-text">What single deal amount would feel like a breakthrough?</h2>
+      <p className="ns-hc-question-subtext">Not annual income — one sale, one client, one deal</p>
 
       <div className="ns-hc-horizontal-options">
-        {['$100,000+', '$500,000+', '$1,000,000+'].map(option => (
+        {['$500', '$1,000', '$5,000', '$10,000', '$25,000+'].map(option => (
           <button
             key={option}
-            className={`ns-hc-horizontal-option ${responses.income_goal === option ? 'selected' : ''}`}
-            onClick={() => setResponses(prev => ({ ...prev, income_goal: option }))}
+            className={`ns-hc-horizontal-option ${responses.deal_amount === option ? 'selected' : ''}`}
+            onClick={() => setResponses(prev => ({ ...prev, deal_amount: option }))}
           >
             {option}
           </button>
         ))}
       </div>
 
-      <button
-        className="ns-hc-primary-button"
-        onClick={() => setCurrentScreen('q3')}
-        disabled={!responses.income_goal}
-        style={{ opacity: responses.income_goal ? 1 : 0.5 }}
-      >
-        Continue
-      </button>
-      <BackButton fromScreen="q2" />
+      <div className="ns-hc-sticky-nav">
+        <button
+          className="ns-hc-primary-button"
+          onClick={() => setCurrentScreen('q3')}
+          disabled={!responses.deal_amount}
+          style={{ opacity: responses.deal_amount ? 1 : 0.5 }}
+        >
+          Continue
+        </button>
+        <BackButton fromScreen="q2" />
+      </div>
     </div>
   )
 
@@ -752,15 +725,17 @@ export default function NervousSystemFlow() {
         />
       </div>
 
-      <button
-        className="ns-hc-primary-button"
-        onClick={() => setCurrentScreen('q4')}
-        disabled={!responses.positive_change.trim()}
-        style={{ opacity: responses.positive_change.trim() ? 1 : 0.5 }}
-      >
-        Continue
-      </button>
-      <BackButton fromScreen="q3" />
+      <div className="ns-hc-sticky-nav">
+        <button
+          className="ns-hc-primary-button"
+          onClick={() => setCurrentScreen('q4')}
+          disabled={!responses.positive_change.trim()}
+          style={{ opacity: responses.positive_change.trim() ? 1 : 0.5 }}
+        >
+          Continue
+        </button>
+        <BackButton fromScreen="q3" />
+      </div>
     </div>
   )
 
@@ -779,15 +754,17 @@ export default function NervousSystemFlow() {
         />
       </div>
 
-      <button
-        className="ns-hc-primary-button"
-        onClick={() => setCurrentScreen('subconscious-power')}
-        disabled={!responses.struggle_area.trim()}
-        style={{ opacity: responses.struggle_area.trim() ? 1 : 0.5 }}
-      >
-        Continue
-      </button>
-      <BackButton fromScreen="q4" />
+      <div className="ns-hc-sticky-nav">
+        <button
+          className="ns-hc-primary-button"
+          onClick={() => setCurrentScreen('subconscious-power')}
+          disabled={!responses.struggle_area.trim()}
+          style={{ opacity: responses.struggle_area.trim() ? 1 : 0.5 }}
+        >
+          Continue
+        </button>
+        <BackButton fromScreen="q4" />
+      </div>
     </div>
   )
 
@@ -937,56 +914,27 @@ export default function NervousSystemFlow() {
   )
 
   const renderTriageIntro = () => (
-    <div className="ns-hc-container ns-hc-welcome-container">
+    <div className="ns-hc-container ns-hc-question-container">
       <h1 className="ns-hc-welcome-greeting">Let's Find Your Edge</h1>
-      <div className="ns-hc-welcome-message animated-text">
+      <div className="ns-hc-welcome-message animated-text" style={{ textAlign: 'left' }}>
         <p>Now let's see where your system feels safe — and where it contracts.</p>
         <p>I'm going to give you <strong>5 statements to test</strong> using the sway test.</p>
         <p>Say each one out loud, notice your body's response, and let me know: <strong>YES or NO?</strong></p>
       </div>
 
-      <button className="ns-hc-primary-button" onClick={() => {
-        setCurrentScreen('test1-initial')
-        // Initialize test 1 with the impact goal
-        const goalNumber = parseInt(responses.impact_goal.replace(/[^0-9]/g, ''))
-        setTest1CurrentAmount(goalNumber)
-      }}>
-        Ready
-      </button>
+      <div className="ns-hc-sticky-nav">
+        <button className="ns-hc-primary-button" onClick={() => setCurrentScreen('test1-initial')}>
+          Ready
+        </button>
+      </div>
     </div>
   )
 
-  const renderTest1Initial = () => {
-    const goalNumber = parseInt(responses.impact_goal.replace(/[^0-9]/g, ''))
-    return (
-      <div className="ns-hc-container ns-hc-question-container">
-        <div className="ns-hc-question-number">Statement 1 of 5</div>
-        <h2 className="ns-hc-question-text">"I feel safe being seen by {formatPeople(goalNumber)} people"</h2>
-        <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
-
-        <div className="ns-hc-horizontal-options">
-          <button
-            className="ns-hc-horizontal-option"
-            onClick={() => handleTest1Response('yes')}
-          >
-            YES
-          </button>
-          <button
-            className="ns-hc-horizontal-option"
-            onClick={() => handleTest1Response('no')}
-          >
-            NO
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  const renderTest1Refine = () => (
+  const renderTest1Initial = () => (
     <div className="ns-hc-container ns-hc-question-container">
-      <div className="ns-hc-question-number">Statement 1 of 5 - Refining (Step {test1Iteration + 1} of 4)</div>
-      <h2 className="ns-hc-question-text">"I feel safe being seen by {formatPeople(test1CurrentAmount)} people"</h2>
-      <p className="ns-hc-question-subtext">Testing to find your exact edge</p>
+      <div className="ns-hc-question-number">Statement 1 of 5</div>
+      <h2 className="ns-hc-question-text">"I feel safe to <span className="ns-hc-highlight">{(responses.visibility_action || 'take this action').toLowerCase()}</span>"</h2>
+      <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
 
       <div className="ns-hc-horizontal-options">
         <button
@@ -1006,11 +954,11 @@ export default function NervousSystemFlow() {
   )
 
   const renderTest2Initial = () => {
-    const goalNumber = parseInt(responses.income_goal.replace(/[^0-9]/g, ''))
+    const goalNumber = parseInt(responses.deal_amount.replace(/[^0-9]/g, ''))
     return (
       <div className="ns-hc-container ns-hc-question-container">
         <div className="ns-hc-question-number">Statement 2 of 5</div>
-        <h2 className="ns-hc-question-text">"I feel safe earning over {formatMoney(goalNumber)}/year"</h2>
+        <h2 className="ns-hc-question-text">"I feel safe charging someone {formatMoney(goalNumber)}"</h2>
         <p className="ns-hc-question-subtext">Stand up, say it out loud, and notice your body's response</p>
 
         <div className="ns-hc-horizontal-options">
@@ -1040,8 +988,8 @@ export default function NervousSystemFlow() {
   const renderTest2Refine = () => (
     <div className="ns-hc-container ns-hc-question-container">
       <div className="ns-hc-question-number">Statement 2 of 5 - Refining (Step {test2Iteration + 1} of 4)</div>
-      <h2 className="ns-hc-question-text">"I feel safe earning over {formatMoney(test2CurrentAmount)}/year"</h2>
-      <p className="ns-hc-question-subtext">Testing to find your exact edge</p>
+      <h2 className="ns-hc-question-text">"I feel safe charging someone {formatMoney(test2CurrentAmount)}"</h2>
+      <p className="ns-hc-question-subtext">Testing to find your exact deal amount edge</p>
 
       <div className="ns-hc-horizontal-options">
         <button
@@ -1197,7 +1145,7 @@ export default function NervousSystemFlow() {
   )
 
   const renderMirrorIntro = () => (
-    <div className="ns-hc-container ns-hc-welcome-container">
+    <div className="ns-hc-container ns-hc-question-container">
       <h1 className="ns-hc-welcome-greeting">The Mirror</h1>
       <div className="ns-hc-welcome-message animated-text">
         <p>Now let's reflect back what your nervous system just revealed.</p>
@@ -1205,9 +1153,11 @@ export default function NervousSystemFlow() {
         <p>Understanding your protective pattern is the first step to expanding beyond it.</p>
       </div>
 
-      <button className="ns-hc-primary-button" onClick={generateMirrorReflection}>
-        Show Me
-      </button>
+      <div className="ns-hc-sticky-nav">
+        <button className="ns-hc-primary-button" onClick={generateMirrorReflection}>
+          Show Me
+        </button>
+      </div>
     </div>
   )
 
@@ -1230,23 +1180,23 @@ export default function NervousSystemFlow() {
         {/* Pattern Archetype */}
         <div className="ns-hc-result-box" style={{ background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05))', borderColor: 'rgba(251, 191, 36, 0.3)' }}>
           <h3 style={{ fontSize: 22 }}>🌟 {reflection.archetype_name}</h3>
-          <p style={{ fontSize: 15, marginTop: 12 }}>{reflection.archetype_description}</p>
+          <p style={{ fontSize: 15, marginTop: 12 }} dangerouslySetInnerHTML={{ __html: parseMarkdown(reflection.archetype_description) }} />
         </div>
 
         {/* Safety Zones vs Contraction Zones */}
         {reflection.safety_edges_summary && (
           <div className="ns-hc-result-box">
             <h3>🎯 Your Safety Zones vs. Contraction Zones</h3>
-            <p style={{ marginTop: 12, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{reflection.safety_edges_summary}</p>
+            <p style={{ marginTop: 12, lineHeight: 1.7 }} dangerouslySetInnerHTML={{ __html: parseMarkdown(reflection.safety_edges_summary) }} />
           </div>
         )}
 
         {/* Current Limits */}
         <div className="ns-hc-result-box">
-          <h3>📊 Your Nervous System Limits:</h3>
+          <h3>📊 Your Nervous System Edges:</h3>
           <div style={{ marginTop: 12, paddingLeft: 8 }}>
-            <p>💰 Earning up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)}/year</strong></p>
-            <p>👥 Being visible to about <strong style={{ color: '#fbbf24' }}>{formatPeople(responses.being_seen_edge)} people</strong></p>
+            <p>{responses.test1_visibility_safe === 'yes' ? '✅' : '🚫'} <strong style={{ color: '#fbbf24' }}>{responses.visibility_action || 'Visibility action'}</strong> — {responses.test1_visibility_safe === 'yes' ? 'feels safe' : 'triggers contraction'}</p>
+            <p>💰 Charging up to <strong style={{ color: '#fbbf24' }}>{formatMoney(responses.earning_edge)} per deal</strong></p>
           </div>
         </div>
 
@@ -1254,7 +1204,7 @@ export default function NervousSystemFlow() {
         <div className="ns-hc-result-box" style={{ background: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.3)' }}>
           <h3 style={{ color: '#fca5a5' }}>🔍 Primary Limiting Belief:</h3>
           <p style={{ marginTop: 12, fontStyle: 'italic' }}>"{reflection.core_fear}"</p>
-          <p style={{ marginTop: 12, fontSize: 14, opacity: 0.85 }}>{reflection.fear_interpretation}</p>
+          <p style={{ marginTop: 12, fontSize: 14, opacity: 0.85 }} dangerouslySetInnerHTML={{ __html: parseMarkdown(reflection.fear_interpretation) }} />
         </div>
 
         {/* All Active Safety Contracts */}
@@ -1294,7 +1244,7 @@ export default function NervousSystemFlow() {
         {/* What Needs Rewiring */}
         <div className="ns-hc-result-box" style={{ background: 'rgba(139, 92, 246, 0.05)', borderColor: 'rgba(139, 92, 246, 0.3)' }}>
           <h3 style={{ color: '#c4b5fd' }}>✨ What Needs Rewiring:</h3>
-          <p style={{ marginTop: 12, whiteSpace: 'pre-line' }}>{reflection.rewiring_needed}</p>
+          <p style={{ marginTop: 12 }} dangerouslySetInnerHTML={{ __html: parseMarkdown(reflection.rewiring_needed) }} />
         </div>
 
         {/* Full Reflection Narrative */}
@@ -1305,8 +1255,11 @@ export default function NervousSystemFlow() {
               style={{ marginTop: 16, lineHeight: 1.8, fontSize: 15 }}
               dangerouslySetInnerHTML={{
                 __html: reflection.full_reflection
-                  .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                  .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                  .replace(/^### (.+)$/gm, '<h5 style="margin:20px 0 8px;font-size:15px;color:white">$1</h5>')
+                  .replace(/^## (.+)$/gm, '<h4 style="margin:24px 0 8px;font-size:17px;color:white">$1</h4>')
+                  .replace(/^# (.+)$/gm, '<h3 style="margin:24px 0 8px;font-size:19px;color:white">$1</h3>')
+                  .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fbbf24">$1</strong>')
+                  .replace(/\*(.*?)\*/g, '<em style="color:#fbbf24">$1</em>')
                   .replace(/\n\n/g, '</p><p style="margin-top: 16px;">')
                   .replace(/\n/g, '<br/>')
                   .replace(/^/, '<p>')
@@ -1334,7 +1287,7 @@ export default function NervousSystemFlow() {
       <h1 className="ns-hc-welcome-greeting">✓ Nervous System Mapped!</h1>
       <div className="ns-hc-welcome-message">
         <p>You've identified the safety contracts limiting your flow.</p>
-        <p>The next step is to <strong>heal the root cause</strong> through the Healing Compass.</p>
+        <p>The next step is to <strong>rewire the limiting beliefs</strong> holding you back.</p>
       </div>
 
       <FlowFeedback
@@ -1342,8 +1295,8 @@ export default function NervousSystemFlow() {
         userId={user?.id}
       />
 
-      <button className="ns-hc-primary-button" onClick={() => navigate('/healing-compass')} style={{ marginTop: '24px' }}>
-        Proceed to Healing Compass
+      <button className="ns-hc-primary-button" onClick={() => navigate('/limiting-belief-rewire')} style={{ marginTop: '24px' }}>
+        Proceed to Limiting Belief Rewire
       </button>
       <button className="ns-hc-secondary-button" onClick={() => navigate('/7-day-challenge')}>
         Return to 7-Day Challenge
@@ -1382,7 +1335,6 @@ export default function NervousSystemFlow() {
       {currentScreen === 'calibration-directions' && renderCalibrationDirections()}
       {currentScreen === 'triage-intro' && renderTriageIntro()}
       {currentScreen === 'test1-initial' && renderTest1Initial()}
-      {currentScreen === 'test1-refine' && renderTest1Refine()}
       {currentScreen === 'test2-initial' && renderTest2Initial()}
       {currentScreen === 'test2-refine' && renderTest2Refine()}
       {currentScreen === 'test3' && renderTest3()}

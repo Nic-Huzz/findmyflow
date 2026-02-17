@@ -1,7 +1,19 @@
 # FindMyFlow Priority Hierarchy & Test Milestones
-**Date:** 2026-01-29 (Updated: 2026-02-11)
+**Date:** 2026-01-29 (Updated: 2026-02-13)
 **Status:** Active Planning Document
 **Purpose:** Stop scope creep. Define testable "done" gates.
+
+---
+
+## Next 5 Things (This Sprint)
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | **Earthquake Quiz** — Build lead magnet at `/try/earthquake` (9 questions, email gate, share cards) | ⬜ |
+| 2 | **Fantasy League landing page** — Public-facing page for the Fantasy League concept | ⬜ |
+| 3 | **Healing challenges confirmed** — Validate and lock healing tab quest list | ⬜ |
+| 4 | **Content templates created** — Finalise content generation templates for CRM | ⬜ |
+| 5 | **Resend feature working** — Newsletter sending pipeline end-to-end via Resend | ⬜ |
 
 ---
 
@@ -192,6 +204,62 @@ You have:
 
 ---
 
+### TIER 1.5: Bug Fixes + User Acquisition (Milestone 1 & 2)
+**Why:** Real bugs in the challenge system will break testers' experience. Acquisition infrastructure needed to get users in the door.
+
+#### Challenge System Bugs (from ClawdBot `research/findmyflow-challenge-audit.md`)
+
+| Bug | Severity | File | Description |
+|-----|----------|------|-------------|
+| ~~`handleQuestComplete` stale closure~~ | ~~🔴 Critical~~ | Challenge.jsx ~L760 | ✅ Fixed — now passes `freshCompletions` to `getTabCompletionStatus` |
+| `getWeekStart()` mutates Date | 🔴 Critical | WeeklyPlanningFlow.jsx ~L355 | `now.setDate(diff)` mutates shared Date object, corrupts downstream date calculations. **Still present.** |
+| ~~Double-completion race condition~~ | ~~🔴 Critical~~ | Challenge.jsx ~L314 | ✅ Fixed — `completingQuestId` state guards against double-clicks |
+| ~~`loadLeaderboard` stale closure~~ | ~~🔴 Critical~~ | useChallengeData.js ~L527 | ✅ Fixed — `progress.group_id` properly accessed in loading chain |
+| `advanceDay` no optimistic concurrency | 🟡 Medium | useChallengeData.js ~L310 | Two tabs can double-advance day (both fire notifications for same day) |
+| `challenge_progress.update` no-match handling | 🟡 Medium | Challenge.jsx ~L668 | If challenge completed/archived between load and quest complete, shows generic error |
+| `lastWeekStats` hardcoded points | 🟡 Medium | WeeklyPlanningFlow.jsx ~L333 | Uses `questCount * 10` instead of actual `points_earned` column — shows inaccurate totals |
+| Loading state race (Promise.all) | 🟡 Medium | useChallengeData.js ~L1666 | `setLoading(false)` fires when first promise resolves, not when all 10+ parallel loads complete |
+| Missing useEffect dependencies | 🟡 Medium | useChallengeData.js ~L1666 | Functions reference `progress` via closures but only depend on `[user]` — produce incorrect results on first render |
+| Realtime subscription leak | 🟡 Medium | useChallengeData.js ~L1700 | Rapid `leaderboardView` toggling accumulates channel subscriptions — use `removeChannel()` in cleanup |
+| ValidationFlows crash on unknown type | 🟡 Medium | ValidationFlowsManager.jsx ~L120 | `flowConfig` undefined if `selectedFlowType` not 'validation' or 'testing' — crashes on `createValidationFlow` |
+| WeeklyPlanning save stuck loading | 🟡 Medium | WeeklyPlanningFlow.jsx ~L534 | `setSaving(false)` missing on success path — button stays in loading state if component doesn't unmount |
+| Streak day skip | 🟢 Minor | useChallengeData.js ~L1609 | `getConsecutiveStreakDays` can skip a day in backward walk when no completions today — reports shorter streak |
+
+#### User Acquisition Infrastructure
+
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| **Earthquake Quiz** | | | |
+| Build Earthquake Quiz | 9-question lead magnet at `/try/earthquake`. Detects Protective Voice, awakening stage, block type. Email gate before full results. | Medium | ⬜ Specced |
+| Shareable results card | Instagram/Twitter/LinkedIn share card from quiz results | Small | ⬜ Specced |
+| Wire email capture | Quiz results → `external_contacts` or `public_leads` with tags | Small | ⬜ Not started |
+| **Monetisation** | | | |
+| Set up Stripe | Even just $10/mo tier to start collecting revenue | Small | ⬜ Not started |
+| Pricing gate | Free quiz + 7-day trial → paywall at Day 8 | Medium | ⬜ Not started |
+| **AI Discoverability** | | | |
+| Add `llms.txt` | AI-readable site description at root domain (like robots.txt for LLMs) | Small | ⬜ Specced |
+| Add JSON-LD schema markup | FAQ + SoftwareApplication schema on landing page | Small | ⬜ Specced |
+| Create `/methodology` page | Dense, crawlable framework content (5 Voices, Flow Equation, 4 R's) for AI + SEO | Medium | ⬜ Not started |
+| **Analytics** | | | |
+| Set up web analytics | Vercel Analytics (enabled) or Plausible ($9/mo) | Small | ✅ Vercel done |
+| UTM tracking verification | Test `?utm_source=reddit` flows through to Supabase events | Small | ⬜ Not started |
+| Conversion goals | Quiz start → quiz complete → email capture → signup | Small | ⬜ Not started |
+| **Landing Page Narrative** | | | |
+| Change CTA | "Join Waiting List" → "Discover What's Blocking You" → `/try/earthquake` | Small | ⬜ Not started |
+| Protective Voices section | Scroll-stopping "Meet the 5 voices keeping you small" with archetype cards | Medium | ⬜ Specced |
+| Caged Creator "Is This You?" upgrade | 10+ courses, Notion tracker, Sunday dread, intellectually isolated | Small | ⬜ Specced |
+| Matrix framing hero | "You were born with powers. The Matrix suppressed them." | Small | ⬜ Specced |
+| Founder line | "I was the Caged Creator. Now I help other heroes escape." | Small | ⬜ Not started |
+| Journey Map visual | Matrix → Awakening → Training → Becoming | Medium | ⬜ Not started |
+
+**See:** ClawdBot repo `findmyflow-implementation/earthquake-quiz-spec.md` for full quiz spec.
+**See:** ClawdBot repo `findmyflow-implementation/ai-discoverability.md` for full AI discoverability strategy.
+**See:** ClawdBot repo `findmyflow-docs/MARKETING-LAUNCH-PLAN.md` for 30/90 day launch plan.
+**See:** ClawdBot repo `findmyflow-docs/storytelling-touchpoints.md` for narrative arc spec.
+**See:** ClawdBot repo `findmyflow-docs/landing-page-copy-v1.md` for landing page copy draft.
+
+---
+
 ### TIER 2: CRM & Business Polish (Milestone 1 & 4)
 **Why:** Remaining polish for first impressions and CRM execution.
 
@@ -204,13 +272,33 @@ You have:
 | Play List Finder: Mind Space integration | Mind Space first → Play List Finder for depth | Small | ⬜ Not started |
 | **CRM Remaining** | | | |
 | Mindset stage in Business tab | Modules to set users up for success | Medium | ⬜ Not started |
-| Runway Calculator | Savings ÷ expenses = weeks of runway | Small | ⬜ Not started |
-| Income Bridge Tracker | Track side income vs job income progress | Medium | ⬜ Not started |
+| **Leap Prep Suite** | Runway Calculator + First $1,000 Challenge + Leap Readiness Dashboard | | |
+| Runway Calculator | Location-based (8 nomad hotspots × 3 lifestyle tiers), runway health colors, "with side income" projection | Medium | ⬜ Specced |
+| First $1,000 Challenge | 30-day structured challenge (4 weeks): Discover Offer → First Client → Deliver & Stack → Scale to $1K. Maps to existing quest system. Completion tiers with badges. | Medium | ⬜ Specced |
+| Leap Readiness Dashboard | Weighted % score: Financial Safety (35%), Offer Validation (25%), Nervous System (20%), Support System (10%), Clarity (10%). Pulls from existing data sources. Circular progress ring + dimension bars. | Medium | ⬜ Specced |
+| Shareable Leap Artifacts | Share cards for runway result, readiness score, first $1K earned | Small | ⬜ Not started |
+| **Implementation Specs (from ClawdBot repo)** | | | |
+| Category Tracking | Per-category progress indicators on challenge tab headers. Aggregates `quest_completions` — no new tables needed. | Small | ⬜ Specced |
+| Knowledge Score System | Business Core Score + Healing Score — tracks how well AI knows user. Two compact rings on `/me` page. Feeds Zarlo personalisation + CRM actions. New `user_knowledge_scores` + `knowledge_score_events` tables. | Medium | ⬜ Specced |
+| Admin Dashboard | User stats, stage distribution, challenge metrics, user list/detail views. Needs `is_admin` column, admin RLS, `/admin/*` routes. | Medium | ⬜ Specced |
+| Auto Notifications (behaviour-triggered) | Trigger emails/push from user events (onboarding, streaks, inactivity, graduations, deal stalls). Overlaps with Content Engine Phase 1B — implement together. | Medium | ⬜ Specced |
 | Custom toolbar icons | Replace emoji icons with custom image assets | Small | ⬜ Not started |
 | Weekly Plan → DailyActions tighter connection | Improve handoff | HIGH | 🔍 To assess |
 | UX polish on existing features | - | MEDIUM | 🔍 To assess |
+| **CRM Content Engine** | AI-powered content drafting + sending pipeline (4 phases) | | |
+| Phase 1A: Newsletter infrastructure | Resend setup, `external_contacts` + `content_drafts` + `newsletter_sends` tables, /draft review page, contact import (program/event/Substack ~350+), Sol drafting workflow | Medium | ⬜ Specced |
+| Phase 1A: Voice learning loop | `voice_taste_config` table, correction tracking (tone/word_choice/structure/content/brand), progressive voice refinement from Huzz's edits | Medium | ⬜ Specced |
+| Phase 1B: CRM intelligence | Sol reads all FMF user data, auto-triggered emails + push (onboarding, streaks, inactivity, graduations, deal stalls, weekly digest), smart segmentation queries, personalisation variables (30+ tokens) | Large | ⬜ Specced |
+| Phase 2: Multi-tenant | `owner_id` on all content engine tables, RLS policies, creator onboarding (voice capture → storybank → brand prefs → audience → first draft test), per-creator Resend domains | Large | ⬜ Specced |
+| Phase 3: ClawdBot upsell | Creator gets own AI assistant — auto-triggers, Telegram/WhatsApp alerts, proactive insights, multi-channel content, Stripe billing ($29-79/mo tiers) | Large | ⬜ Specced |
 
 **See:** `docs/skills-taxonomy-expansion-proposal.md` for full proposal on 4-segment expansion.
+**See:** ClawdBot repo `findmyflow/implementation/runway-calculator-spec.md` for full Leap Prep spec (Runway Calculator, First $1K Challenge, Leap Readiness Dashboard, Environment Audit, schema additions).
+**See:** ClawdBot repo `findmyflow/implementation/crm-content-engine-spec.md` for full Content Engine spec (4 phases, schema, triggers, segmentation, voice learning, creator onboarding, ClawdBot upsell).
+**See:** ClawdBot repo `findmyflow-implementation/01-category-tracking.md` for Category Tracking spec (with code).
+**See:** ClawdBot repo `findmyflow-implementation/02-knowledge-score.md` for Knowledge Score spec (scoring tables, thresholds, schema).
+**See:** ClawdBot repo `findmyflow-implementation/05-admin-dashboard.md` for Admin Dashboard spec.
+**See:** ClawdBot repo `findmyflow-implementation/06-auto-notifications.md` for Auto Notifications spec (overlaps with Content Engine Phase 1B).
 
 **Play List Finder Questions (Proposed):**
 1. "Who are people whose work or life makes you think 'I'd love to do that'?" (up to 5 with activity)
@@ -246,12 +334,12 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 | Task | Description | Effort | Status |
 |------|-------------|--------|--------|
 | **Nervous System Flow Updates** | | | |
-| Tangible visibility question | Change from abstract "how many people" to a single event/moment (speaking gig, live video, sales call) | Small | ⬜ Not started |
-| Tangible money question | Change from annual income to a single deal amount | Small | ⬜ Not started |
-| Update sway tests + binary search | All downstream screens reference new tangible framing | Small | ⬜ Not started |
-| Update AI mirror prompt | Edge function prompt needs new context framing | Small | ⬜ Not started |
+| Tangible visibility question | Changed to 5 Groan Matrix visibility layers + "enter your own" | Small | ✅ Done 2026-02-17 |
+| Tangible money question | Changed to single deal amount ($500–$25K+) | Small | ✅ Done 2026-02-17 |
+| Update sway tests + binary search | Test 1 simplified to YES/NO, Test 2 reframed to per-deal binary search | Small | ✅ Done 2026-02-17 |
+| Update AI mirror prompt | Edge function updated + deployed, markdown rendering on results | Small | ✅ Done 2026-02-17 |
 | **Healing Compass Flows** | | | |
-| Rename current flow → "Healing Compass Safety Contracts" | Existing 7-question origin-tracing flow keeps its logic, just gets renamed | Small | ⬜ Not started |
+| Rename current flow → "Limiting Belief Rewire" | Extracted V2 as `/limiting-belief-rewire`, weekly repeatable, gated behind NS completion, Library of Answers split | Small | ✅ Done 2026-02-17 |
 | New: Healing Compass Emotional Needs | New Healing Compass flow (structure TBD) | Medium | ⬜ Not started |
 | **New Flows** | | | |
 | Matrix Codes flow | New flow (details TBD) | Medium | ⬜ Not started |
@@ -262,6 +350,13 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 | Archetype → Groan Connection | Link identified archetype to courage challenges | Small | ⬜ Not started |
 | Memory Reconsolidation | Rewiring traumatic memories safely | Medium | ⬜ Not started |
 | Healing Book Assessment | Track books read + accountability | Small | ⬜ Not started |
+| **Environment Audit (Recognised Voices)** | | | |
+| Map Your Environment quest | Rate 6 areas (Home, Work, Friends, Social, Routine, Location) — Protective Voice vs Essence | Small | ⬜ Specced |
+| Spot the Reinforcers quest | Name 3 things keeping Protective Voice alive | Small | ⬜ Specced |
+| Design One Change quest | Pick lowest-scoring area, commit to one shift this week | Small | ⬜ Specced |
+| The Permission Test quest | 30 min in your most-yourself place, body awareness reflection | Small | ⬜ Specced |
+| **Explainer Quests** | | | |
+| Explainer quest system | Short educational quests that teach framework concepts (5 Voices, Flow Equation, 4 R's) before asking users to do the work. Onboards users into language. | Medium | ⬜ Specced |
 | **Recognise Tab Enhancements** | | | |
 | Essence count question | "How many times did your essence show up today?" | Small | ⬜ Not started |
 | Protective count question | "How many times did your protective voice show up today?" | Small | ⬜ Not started |
@@ -272,6 +367,7 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 | **Unlock** | | | |
 | Unlock Healing Tab | Remove lock from Challenge.jsx, test all 21+ quests | Small | ⬜ After above items |
 
+**See:** ClawdBot repo `findmyflow-implementation/03-explainer-quests.md` for Explainer Quests spec.
 **Note:** Healing tab currently locked for user testing.
 
 ---
@@ -296,14 +392,24 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 
 ---
 
-### TIER 5: Game Layer (Milestone 2)
+### TIER 5: Game Layer + Assessments (Milestone 2)
 **Why:** Hero Journey doc is beautiful but won't help if core loop doesn't retain.
 
-| Task | Effort | Impact |
-|------|--------|--------|
-| Update copy with hero language (no structural change) | 1 day | MEDIUM |
-| Add Nemesis language to protective patterns | 0.5 day | MEDIUM |
-| Power meter visualization | 1 day | LOW |
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| **Hero Language** | | | |
+| Update copy with hero language | No structural change — quest cards, stage names, Zarlo voice | Small | ⬜ Not started |
+| Add Nemesis language to protective patterns | Protective Voice → Nemesis framing | Small | ⬜ Not started |
+| Power meter visualization | Visual representation of essence vs protective energy | Small | ⬜ Not started |
+| **Narrative Features** | | | |
+| The Codex | Hero Journey content system — Part 22 spec + content files already created | Medium | ⬜ Not started |
+| Three Keys Gate System | Copper/Jade/Crystal progression milestones — lock content behind earned keys | Medium | ⬜ Not started |
+| Time-Relative Flow Map | Temporal visualization of journey — shows how flow/compass data changes over time, not just current state | Medium | ⬜ Specced |
+| **Assessments** | | | |
+| Founder DNA / Flow Type Assessment | Game-based: pick 3-5 games you love → map to Flow Type (5 dimensions) → Founder DNA sliders (Builder↔Performer, Technical↔Creative, Solo↔Social) → Fuel Awareness (pain vs love). Full game library (~40-60 options). | Medium | ⬜ Specced |
+
+**See:** ClawdBot repo `findmyflow-implementation/04-time-relative-flow-map.md` for Time-Relative Flow Map spec.
+**See:** ClawdBot repo `findmyflow-founder-dna-spec.md` for full Founder DNA / Flow Type assessment spec.
 
 ---
 
@@ -382,6 +488,43 @@ See `income-calculator-and-ecosystem-plan.md` for full details.
 
 ---
 
+### TIER 7: Marketing & Growth (Milestone 1+)
+**Why:** Features mean nothing without users. These are the distribution channels.
+
+| Task | Description | Effort | Status |
+|------|-------------|--------|--------|
+| **Newsletter (via Resend)** | | | |
+| ~~Set up Resend~~ | ~~Domain verification, API key~~ | ~~Small~~ | ✅ Done |
+| Import subscriber list | Program participants + event attendees + Substack (~350+) into `external_contacts` | Small | ⬜ Not started |
+| Welcome back email | "I built the thing I wish existed 3 years ago" — re-engage existing subscribers | Small | ⬜ After import |
+| **Reddit** | | | |
+| Create Reddit account | Personal username (not branded), e.g. `huzz_flow` or `nichuzz` | Small | ⬜ Blocked on Huzz |
+| Week 1: Karma building | Pure value comments in r/findapath, r/careerguidance, r/decidingtobebetter — zero FMF mentions | Ongoing | ⬜ After account |
+| Week 2: Framework drops | "5 Protective Voices" post in r/DecidingToBeBetter, NS reframe comments | Ongoing | ⬜ After Week 1 |
+| Week 3: Soft mentions | Only when someone explicitly asks for a tool/resource | Ongoing | ⬜ After Week 2 |
+| Week 4: First link drop | Earthquake Quiz with UTM tracking | Ongoing | ⬜ After Week 3 |
+| Live thread tracker | Sol monitors new posts daily, drafts comment strategies | Medium | ⬜ Specced |
+| **Blog / Content Hub** | | | |
+| "Why 10 Courses Didn't Fix Your Career" | DAM intercept — targets course-buyers searching for solutions | Medium | ⬜ Not started |
+| "The 5 Voices Keeping You Stuck" | Framework content — targets self-awareness seekers | Medium | ⬜ Not started |
+| "Career Clarity Isn't an Information Problem" | Positioning content — nervous system angle | Medium | ⬜ Not started |
+| "The Pathless Path Gave You Language. Here's the System." | DAM intercept — targets Paul Millerd readers | Medium | ⬜ Not started |
+| "The Caged Creator: When Success Feels Hollow" | Persona content — targets high-achievers | Medium | ⬜ Not started |
+| **Category Design** | | | |
+| Lock one-sentence strategy | Define the category FindMyFlow creates | Small | ⬜ Decision needed |
+| Name the category | "Alternate Life Path Accelerator" or alternatives | Small | ⬜ Decision needed |
+| "School Broke You" manifesto | Lightning Strike content for category creation | Medium | ⬜ Not started |
+| **Outreach** | | | |
+| Paul Millerd outreach | "The Pathless Path gave you language. FindMyFlow gives you the system." | Small | ⬜ Not started |
+| Product Hunt launch | Prep listing, screenshots, copy | Medium | ⬜ Not started |
+| Podcast guest pitches | Modern Wisdom, creator-economy pods | Small | ⬜ Not started |
+
+**See:** ClawdBot repo `findmyflow-implementation/reddit-strategy.md` for full Reddit strategy (18 target subreddits across 3 tiers).
+**See:** ClawdBot repo `findmyflow-implementation/reddit-thread-tracker.md` for live thread monitoring system.
+**See:** ClawdBot repo `research/findmyflow-category-pirates-analysis.md` for Category Pirates framework applied to FMF.
+
+---
+
 ## Decision Framework: Should I Build This?
 
 ```
@@ -414,11 +557,11 @@ Move exciting-but-premature ideas here instead of building them:
 
 | Idea | Why It's Parked | Revisit When |
 |------|-----------------|--------------|
-| Fantasy league / team battles | Need users to compete | After Milestone 2 |
+| Fantasy league / team battles | Full spec written (ClawdBot repo `findmyflow/fantasy-league-spec.md` + `fantasy-league-content-system.md`). Need users to compete. | After Milestone 2 |
 | Income Calculator | Marketing tool, not core loop | After Milestone 1 |
 | Ready Player One UI | Partially addressed via Hero Command Center (/hero-profile) | After Milestone 2 |
 | Physical badges / NFC | Cool but no users | After 100+ active users |
-| Clawdbot / AI agent | Nice-to-have automation | After Milestone 4 |
+| Clawdbot / AI agent | Specced as CRM Content Engine (Tier 2) — Phase 3 upsell is post-validation | Phase 1A/1B: Tier 2. Phase 3: After Milestone 4 |
 | Workshop lead magnet question flow | Lead magnet creation flow for workshops | After Milestone 3 |
 | Zarlo "Ask Experts" section | Expert knowledge integration in Zarlo AI | After Milestone 2 |
 | Play Profile | User play/fun identity profile (distinct from Play List Finder) | After Milestone 2 |
@@ -430,7 +573,9 @@ Move exciting-but-premature ideas here instead of building them:
 | Feature voting system | Need users first | After Milestone 2 |
 | Neural network rename | Low priority rename | When convenient |
 | Voice Intelligence (auto-pattern detection) | After N corrections in same category, auto-generate voice rules. Confidence scoring per category. Before/After examples on Voice tab. Concrete correction examples baked into Sol prompts. Needs enough corrections data to be meaningful. | After Approach B (Voice Smart Bridge) validated |
-| FindMyFlow API + Claude Code MCP | API layer so users can connect their FindMyFlow account to Claude Code (MCP server). Query flow data, quest history, shadow/archetype profiles, groan progress via natural language. Power users could do shadow work, review healing insights, or get Zarlo-style guidance through their terminal. | After Milestone 2 |
+| FindMyFlow API + Claude Code MCP | Full spec written (ClawdBot repo `findmyflow-implementation/07-api-mcp-data-sync.md`). API layer so users can connect their FindMyFlow account to Claude Code (MCP server). Query flow data, quest history, shadow/archetype profiles, groan progress via natural language. | After Milestone 2 |
+| AI Quest Generator | Personalised daily quests based on stage + voice + activity. Requires Knowledge Score data. | After Milestone 2 |
+| Voice Progress Bar | Visual feedback on inner work progress | After Milestone 2 |
 
 ---
 
@@ -460,3 +605,41 @@ What you don't have:
 ---
 
 *Remember: Building is the easy part. Validating is hard. Stop avoiding the hard part.*
+
+---
+
+## ClawdBot Repo Reference Index
+
+All specs and research docs in `Nic-Huzz/ClawdBot` that relate to FindMyFlow:
+
+**Implementation Specs:**
+- `findmyflow/implementation/runway-calculator-spec.md` — Leap Prep Suite (Runway Calculator, First $1K Challenge, Leap Readiness Dashboard, Environment Audit)
+- `findmyflow/implementation/crm-content-engine-spec.md` — CRM Content Engine (4 phases, schema, voice learning, ClawdBot upsell)
+- `findmyflow-implementation/earthquake-quiz-spec.md` — Earthquake Quiz lead magnet (9 questions, email gate, share cards)
+- `findmyflow-implementation/ai-discoverability.md` — AI SEO strategy (llms.txt, JSON-LD, /methodology page)
+- `findmyflow-implementation/01-category-tracking.md` — Per-category progress indicators
+- `findmyflow-implementation/02-knowledge-score.md` — Business + Healing knowledge scores
+- `findmyflow-implementation/03-explainer-quests.md` — Educational framework quests
+- `findmyflow-implementation/04-time-relative-flow-map.md` — Temporal journey visualization
+- `findmyflow-implementation/05-admin-dashboard.md` — Admin panel spec
+- `findmyflow-implementation/06-auto-notifications.md` — Behaviour-triggered emails/push
+- `findmyflow-implementation/07-api-mcp-data-sync.md` — FindMyFlow API + MCP integration
+- `findmyflow-implementation/reddit-strategy.md` — Reddit launch strategy (18 subreddits, 4-week plan)
+- `findmyflow-implementation/reddit-thread-tracker.md` — Live thread monitoring system
+- `findmyflow-founder-dna-spec.md` — Flow Type + Founder DNA game-based assessment
+
+**Marketing & Content:**
+- `findmyflow-docs/ACTIONS.md` — Living action list (tasks, blockers, done items)
+- `findmyflow-docs/MARKETING-LAUNCH-PLAN.md` — 30/90 day launch plan with weekly breakdown
+- `findmyflow-docs/storytelling-touchpoints.md` — Narrative arc (Landing → Onboarding → First Sign-in → Challenge)
+- `findmyflow-docs/landing-page-copy-v1.md` — Full landing page copy draft (Matrix framing)
+- `findmyflow/fantasy-league-spec.md` — Fantasy league spec
+- `findmyflow/fantasy-league-content-system.md` — Fantasy league content integration
+
+**Research & Analysis:**
+- `research/findmyflow-category-pirates-analysis.md` — Category Pirates framework applied to FMF
+- `research/findmyflow-challenge-audit.md` — 12+ challenge system bugs with file/line references
+- `research/findmyflow-features-plan.md` — Feature plan (Knowledge Score, admin, notifications)
+- `content/huzz-storybank.md` — Reusable stories from Substack (origin, splinter, proof stories)
+- `content/huzz-voice-analysis.md` — Voice reference for content generation
+- `projects/findmyflow/PHILOSOPHY.md` — "Life is a message" philosophy doc

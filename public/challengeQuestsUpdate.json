@@ -468,6 +468,20 @@
       "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a muscle-testing practice) to identify exactly where those boundaries are empowering you to consciously expand them.\n\nThe flow takes about 10 minutes and since you'll be sway-testing it's recommended you do it at home."
     },
     {
+      "id": "recognise_limiting_belief_rewire",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "weekly",
+      "name": "Limiting Belief Rewire",
+      "description": "Trace a safety contract back to its origin and remove the emotional splinter driving it",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "limiting_belief_rewire",
+      "flow_route": "/limiting-belief-rewire",
+      "requires_quest": "recognise_nervous_system",
+      "learnMore": "In the Nervous System Map, you identified limiting beliefs your body holds around visibility and money.\n\nThe Limiting Belief Rewire traces one of those safety contracts back to the original experience that created it — the emotional splinter.\n\nBy revisiting the origin with compassion, you can finally release the pattern at its root rather than fighting the symptoms.\n\nThis flow takes about 10-15 minutes. Find a quiet, safe space where you can be emotionally present."
+    },
+    {
       "id": "what_is_healing_explainer",
       "category": "Healing",
       "type": "Recognise",

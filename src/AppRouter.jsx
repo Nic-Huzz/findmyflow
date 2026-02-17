@@ -142,6 +142,7 @@ const SelfTestReviewFlow = lazyRetry(() => import('./flows/SelfTestReviewFlow'))
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
 const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
+const ShadowWorkFlow = lazyRetry(() => import('./flows/ShadowWorkFlow'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
@@ -531,6 +532,11 @@ function AppRouter() {
             <Route path="/limiting-belief-rewire" element={
               <AuthGate>
                 <LimitingBeliefRewire />
+              </AuthGate>
+            } />
+            <Route path="/shadow-work" element={
+              <AuthGate>
+                <ShadowWorkFlow />
               </AuthGate>
             } />
             <Route path="/nervous-system" element={

@@ -9,7 +9,23 @@
 
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import {
+  preloadMePage,
+  preloadChallenge,
+  preloadFlowCompass,
+  preloadProfileHub,
+  preloadCRMDashboard,
+} from '../lib/preloadRoutes'
 import './BottomToolbar.css'
+
+// Map nav paths to their preload functions
+const PRELOAD_MAP = {
+  '/me': preloadMePage,
+  '/7-day-challenge': preloadChallenge,
+  '/flow-compass': preloadFlowCompass,
+  '/profile-hub': preloadProfileHub,
+  '/crm': preloadCRMDashboard,
+}
 
 // Main app navigation items
 const MAIN_NAV_ITEMS = [
@@ -26,10 +42,10 @@ const MAIN_NAV_ITEMS = [
     path: '/7-day-challenge'
   },
   {
-    id: 'newsfeed',
-    label: 'Newsfeed',
-    icon: '🎪',
-    path: '/newsfeed'
+    id: 'compass',
+    label: 'Compass',
+    icon: '🧭',
+    path: '/flow-compass'
   },
   {
     id: 'profile',
@@ -83,11 +99,15 @@ const HIDDEN_ROUTES = [
   '/weekly-planning', // Full-screen planning flow
   '/nikigai/', // Flow finder flows
   '/flow-finder-explainer', // Flow Finder framework explainer
+  '/what-is-healing-explainer', // Healing explainer
+  '/emotional-splinter-explainer', // Emotional splinter explainer
+  '/how-do-we-heal-explainer', // How do we heal explainer
   '/play-list-finder', // Quick skills discovery
   '/persona-identifier', // Quick persona discovery
   '/mind-space', // Mind space extraction
   '/nervous-system',
   '/healing-compass',
+  '/limiting-belief-rewire',
   '/attraction-offer',
   '/upsell-offer',
   '/downsell-offer',
@@ -104,7 +124,6 @@ const HIDDEN_ROUTES = [
   '/report-card',
   '/mvp-readiness',
   '/feedback-analysis',
-  '/validation-flows', // Validation flows manager
   '/archetypes/', // Essence and Shadow deep dive pages
   '/crm/import' // CSV import wizard has bottom action buttons
 ]
@@ -201,6 +220,8 @@ function BottomToolbar() {
           key={item.id}
           className={`toolbar-item ${isActive(item) ? 'active' : ''} ${item.isReturn ? 'return-item' : ''} ${item.isLaunch ? 'launch-item' : ''}`}
           onClick={() => navigate(item.path)}
+          onMouseEnter={() => PRELOAD_MAP[item.path]?.()}
+          onTouchStart={() => PRELOAD_MAP[item.path]?.()}
           aria-label={item.label}
           aria-current={isActive(item) ? 'page' : undefined}
         >
