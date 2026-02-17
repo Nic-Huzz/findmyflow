@@ -9,6 +9,7 @@ import { useLeagueData } from '../../hooks/useLeagueData'
 import { createTeam, joinTeam } from '../../lib/league/leagueService'
 import { FANTASY_CATEGORIES, CATEGORY_KEYS, LEAGUE_STATUSES } from '../../lib/league/leagueConfig'
 import { hapticLight, hapticSuccess } from '../../lib/haptics'
+import LeagueLeaderboard from '../../components/league/LeagueLeaderboard'
 import './LeagueOverview.css'
 
 export default function LeagueOverview() {
@@ -19,11 +20,11 @@ export default function LeagueOverview() {
   const {
     loading, league, teams, userTeam, standings, matchups,
     isOnTeam, leagueExists, reloadTeams, getCurrentWeek, getWeekMatchups,
+    getWeekDateRange, fetchLiveTeamScores, memberNames,
   } = useLeagueData()
 
   // UI State
   const [activeTab, setActiveTab] = useState('standings') // standings | schedule | rules
-  const [expandedTeam, setExpandedTeam] = useState(null)
   const [showJoinModal, setShowJoinModal] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [joinCode, setJoinCode] = useState('')
@@ -200,6 +201,27 @@ export default function LeagueOverview() {
         )}
       </div>
 
+      {/* View Matchup card */}
+      {isOnTeam && currentWeek > 0 && (
+        <div
+          className="league-matchup-card"
+          onClick={() => { hapticLight(); navigate('/league/matchup') }}
+          style={{
+            background: 'linear-gradient(135deg, rgba(94,23,235,0.06), rgba(233,162,59,0.06))',
+            border: '1px solid rgba(94,23,235,0.12)',
+            borderRadius: '14px', padding: '14px 18px',
+            margin: '0 16px 16px', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            transition: 'all 0.2s',
+          }}
+        >
+          <span style={{ fontWeight: 700, color: '#5e17eb', fontSize: '0.9rem' }}>
+            ⚔️ View This Week's Matchup
+          </span>
+          <span style={{ color: '#9ca3af', fontSize: '0.85rem' }}>→</span>
+        </div>
+      )}
+
       {/* Tab Navigation */}
       <div className="lo-tabs">
         {['standings', 'schedule', 'rules'].map(tab => (
@@ -213,101 +235,20 @@ export default function LeagueOverview() {
         ))}
       </div>
 
-      {/* Content Submission Link */}
-      {isOnTeam && league.status === 'active' && (
-        <button
-          className="lo-content-link"
-          onClick={() => navigate('/league/submit')}
-        >
-          ⭐ Submit Content for Bonus Points <span>→</span>
-        </button>
-      )}
-
       {/* Tab Content */}
       {activeTab === 'standings' && (
-        <section className="lo-section">
-          <div className="lo-section-header">
-            <div className="lo-section-icon">🏆</div>
-            <span className="lo-section-title">
-              {league.status === 'upcoming' ? 'Teams' : 'Standings'}
-            </span>
-          </div>
-
-          {(league.status === 'upcoming' ? teams : standings).length === 0 ? (
-            <div className="lo-card">
-              <p style={{ color: 'var(--text-secondary)', textAlign: 'center' }}>
-                No teams formed yet. Be the first to create one!
-              </p>
-            </div>
-          ) : (
-            (league.status === 'upcoming' ? teams.map((t, i) => ({
-              teamId: t.id, teamName: t.name, inviteCode: t.invite_code,
-              memberCount: (t.fantasy_team_members || []).length,
-              matchPoints: 0, wins: 0, draws: 0, losses: 0,
-              categoryWins: 0, totalRawPoints: 0,
-              memberUserIds: (t.fantasy_team_members || []).map(m => m.user_id),
-            })) : standings).map((team, index) => (
-              <div
-                key={team.teamId}
-                className={`lo-card accented ${expandedTeam === team.teamId ? 'expanded' : ''} ${
-                  userTeam?.id === team.teamId ? 'my-team' : ''
-                }`}
-              >
-                <div
-                  className="lo-team-header"
-                  onClick={() => {
-                    hapticLight()
-                    setExpandedTeam(expandedTeam === team.teamId ? null : team.teamId)
-                  }}
-                >
-                  <div className="lo-team-rank">
-                    {league.status !== 'upcoming' ? (
-                      <span className={`lo-rank-num ${index < 1 ? 'gold' : ''}`}>
-                        #{index + 1}
-                      </span>
-                    ) : null}
-                    <div className="lo-team-info">
-                      <span className="lo-team-name">{team.teamName}</span>
-                      <span className="lo-team-meta">
-                        {team.memberCount}/3 players
-                        {league.status !== 'upcoming' && ` • ${team.wins}W ${team.draws}D ${team.losses}L`}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="lo-team-points">
-                    {league.status !== 'upcoming' && (
-                      <span className="lo-points-value">{team.matchPoints} pts</span>
-                    )}
-                    <span className="lo-expand-chevron">
-                      {expandedTeam === team.teamId ? '▲' : '▼'}
-                    </span>
-                  </div>
-                </div>
-
-                {expandedTeam === team.teamId && (
-                  <div className="lo-team-detail">
-                    <div className="lo-team-code">
-                      Code: <strong>{team.inviteCode}</strong>
-                    </div>
-                    {league.status !== 'upcoming' && (
-                      <div className="lo-category-scores">
-                        {/* Category breakdown from latest matchup would go here */}
-                        <div className="lo-stat-row">
-                          <span>Category Wins</span>
-                          <strong>{team.categoryWins}</strong>
-                        </div>
-                        <div className="lo-stat-row">
-                          <span>Total Raw Points</span>
-                          <strong>{team.totalRawPoints}</strong>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-        </section>
+        <LeagueLeaderboard
+          standings={standings}
+          matchups={matchups}
+          userTeam={userTeam}
+          league={league}
+          teams={teams}
+          getCurrentWeek={getCurrentWeek}
+          getWeekMatchups={getWeekMatchups}
+          getWeekDateRange={getWeekDateRange}
+          fetchLiveTeamScores={fetchLiveTeamScores}
+          memberNames={memberNames}
+        />
       )}
 
       {activeTab === 'schedule' && (

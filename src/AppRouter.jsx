@@ -131,6 +131,9 @@ const TestingExplainer = lazyRetry(() => import('./flows/TestingExplainer'))
 const OfferCreationExplainer = lazyRetry(() => import('./flows/OfferCreationExplainer'))
 const CampaignExplainer = lazyRetry(() => import('./flows/CampaignExplainer'))
 const LaunchExplainer = lazyRetry(() => import('./flows/LaunchExplainer'))
+const WhatIsHealingExplainer = lazyRetry(() => import('./flows/WhatIsHealingExplainer'))
+const HowDoWeHealExplainer = lazyRetry(() => import('./flows/HowDoWeHealExplainer'))
+const EmotionalSplinterExplainer = lazyRetry(() => import('./flows/EmotionalSplinterExplainer'))
 const LetsPlayFlow = lazyRetry(() => import('./flows/LetsPlayFlow'))
 const LetsPlayReviewFlow = lazyRetry(() => import('./flows/LetsPlayReviewFlow'))
 const SelfTestFlow = lazyRetry(() => import('./flows/SelfTestFlow'))
@@ -138,6 +141,7 @@ const SelfTestReviewFlow = lazyRetry(() => import('./flows/SelfTestReviewFlow'))
 
 // Lazy-loaded flows - Healing & Nervous System
 const HealingCompass = lazyRetry(() => import('./flows/HealingCompass'))
+const LimitingBeliefRewire = lazyRetry(() => import('./flows/LimitingBeliefRewire'))
 const NervousSystemFlow = lazyRetry(() => import('./flows/NervousSystemFlow'))
 
 // Lazy-loaded flows - Public Lead Magnets (no auth required)
@@ -146,6 +150,7 @@ const PublicNervousSystemFlow = lazyRetry(() => import('./flows/PublicNervousSys
 const PublicOfferAuditFlow = lazyRetry(() => import('./flows/PublicOfferAuditFlow'))
 const CareerClarityQuiz = lazyRetry(() => import('./flows/CareerClarityQuiz'))
 const EarthquakeQuiz = lazyRetry(() => import('./flows/EarthquakeQuiz'))
+const OldLandingPage = lazyRetry(() => import('./pages/OldLandingPage'))
 const FantasyLeagueLanding = lazyRetry(() => import('./pages/FantasyLeagueLanding'))
 const HealingCompassLanding = lazyRetry(() => import('./pages/HealingCompassLanding'))
 
@@ -215,6 +220,8 @@ const ContentReview = lazyRetry(() => import('./pages/ContentReview'))
 
 // Lazy-loaded pages - Fantasy League
 const LeagueOverview = lazyRetry(() => import('./pages/league/LeagueOverview'))
+const WeekMatchups = lazyRetry(() => import('./pages/league/WeekMatchups'))
+const MatchupDetails = lazyRetry(() => import('./pages/league/MatchupDetails'))
 const ContentSubmit = lazyRetry(() => import('./pages/league/ContentSubmit'))
 const LeagueAdmin = lazyRetry(() => import('./pages/league/LeagueAdmin'))
 const NewsfeedPage = lazyRetry(() => import('./pages/league/NewsfeedPage'))
@@ -281,6 +288,8 @@ import './pages/crm/Expenses.css'
 import './pages/AdminDashboard.css'
 import './pages/ContentReview.css'
 import './pages/league/LeagueOverview.css'
+import './pages/league/WeekMatchups.css'
+import './pages/league/MatchupDetails.css'
 import './pages/league/ContentSubmit.css'
 import './pages/league/LeagueAdmin.css'
 import './pages/league/NewsfeedPage.css'
@@ -292,7 +301,7 @@ function ConditionalZarlo() {
   if (!user) return null
   // Hide Zarlo on /try/ routes, landing page, career clarity quiz, and fantasy LP
   const isTryRoute = location.pathname.startsWith('/try/')
-  const isLandingPage = location.pathname === '/'
+  const isLandingPage = location.pathname === '/' || location.pathname === '/old-landing-page'
   const isCareerClarity = location.pathname === '/career-clarity'
   const isFantasyLP = location.pathname === '/fantasy'
   const isHealingWorkshopLP = location.pathname === '/healing-compass-workshop'
@@ -348,6 +357,7 @@ function AppRouter() {
             <AnimatedOutlet><Routes>
               {/* Landing Page - Public */}
               <Route path="/" element={<LandingPage />} />
+              <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
 
               {/* Signup/Onboarding */}
               <Route path="/get-started" element={<PersonaAssessment />} />
@@ -518,6 +528,11 @@ function AppRouter() {
                 <HealingCompass />
               </AuthGate>
             } />
+            <Route path="/limiting-belief-rewire" element={
+              <AuthGate>
+                <LimitingBeliefRewire />
+              </AuthGate>
+            } />
             <Route path="/nervous-system" element={
               <AuthGate>
                 <NervousSystemFlow />
@@ -646,6 +661,21 @@ function AppRouter() {
             <Route path="/launch-explainer" element={
               <AuthGate>
                 <LaunchExplainer />
+              </AuthGate>
+            } />
+            <Route path="/what-is-healing-explainer" element={
+              <AuthGate>
+                <WhatIsHealingExplainer />
+              </AuthGate>
+            } />
+            <Route path="/emotional-splinter-explainer" element={
+              <AuthGate>
+                <EmotionalSplinterExplainer />
+              </AuthGate>
+            } />
+            <Route path="/how-do-we-heal-explainer" element={
+              <AuthGate>
+                <HowDoWeHealExplainer />
               </AuthGate>
             } />
             <Route path="/settings/notifications" element={
@@ -924,6 +954,16 @@ function AppRouter() {
             } />
 
             {/* Fantasy League */}
+            <Route path="/league/week" element={
+              <AuthGate>
+                <WeekMatchups />
+              </AuthGate>
+            } />
+            <Route path="/league/matchup" element={
+              <AuthGate>
+                <MatchupDetails />
+              </AuthGate>
+            } />
             <Route path="/league" element={
               <AuthGate>
                 <LeagueOverview />

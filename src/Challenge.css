@@ -111,104 +111,165 @@
   white-space: nowrap;
 }
 
-/* Rank Badge */
-.rank-badge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(245, 158, 11, 0.2));
-  border: 1px solid rgba(251, 191, 36, 0.4);
-  padding: 0.5rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #fbbf24;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.rank-badge:hover {
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.4), rgba(245, 158, 11, 0.3));
-  transform: scale(1.05);
-}
-
-/* Hero Stats - Large Rank + Score Display */
-.challenge-hero-stats {
+/* ─── Team Matchup Banner ─── */
+.challenge-matchup-banner {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1rem;
-  transition: all 0.2s ease;
-}
-
-.challenge-hero-stats:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.02);
-}
-
-.hero-rank {
-  display: flex;
-  align-items: center;
   gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
 }
 
-.hero-rank-trophy {
-  font-size: 2rem;
+.challenge-matchup-banner:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
-.hero-rank-number {
-  font-size: 2rem;
-  font-weight: 800;
+.challenge-matchup-team-name {
   color: #fbbf24;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: 700;
 }
 
-.hero-divider {
-  width: 2px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 1px;
+.challenge-matchup-pill {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
 }
 
-.hero-points {
+.challenge-matchup-pill .winning { color: #34d399; }
+.challenge-matchup-pill .losing { color: #f87171; }
+
+.challenge-matchup-vs {
+  opacity: 0.5;
+  font-size: 0.7rem;
+}
+
+/* ─── Total Points Row ─── */
+.challenge-total-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 0.25rem;
 }
 
-.hero-points-value {
-  font-size: 2rem;
+.challenge-total-value {
+  font-size: 1.8rem;
   font-weight: 800;
   line-height: 1;
 }
 
-.hero-points-label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  opacity: 0.8;
+.challenge-total-label {
+  font-size: 0.75rem;
+  opacity: 0.7;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.hero-streak {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ─── Category Bars Grid ─── */
+.challenge-bars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 0.75rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 14px;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.5rem;
+  transition: opacity 0.3s ease;
 }
 
-.hero-streak-row {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
+/* Center the 5th (last) bar when odd count */
+.challenge-bars-grid .challenge-bar-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  max-width: 50%;
+  justify-self: center;
 }
 
+.challenge-bars-grid.loading {
+  opacity: 0.6;
+  animation: barsPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes barsPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+}
+
+.challenge-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.challenge-bar-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  width: 1.1rem;
+  text-align: center;
+}
+
+.challenge-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.challenge-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.challenge-bar-value {
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 1.5rem;
+  text-align: right;
+}
+
+/* W/L colors */
+.challenge-bar-fill.win { background: #10b981; }
+.challenge-bar-fill.lose { background: #ef4444; }
+.challenge-bar-value.win { color: #34d399; }
+.challenge-bar-value.lose { color: #f87171; }
+
+/* Category color fallbacks (solo / no-league mode) */
+.challenge-bar-fill.cat-business_efficiency { background: #5e17eb; }
+.challenge-bar-fill.cat-play_list { background: #E9A23B; }
+.challenge-bar-fill.cat-healing { background: #10b981; }
+.challenge-bar-fill.cat-voice { background: #8B5CF6; }
+.challenge-bar-fill.cat-bonus { background: #3B82F6; }
+
+/* ─── Streak badge (in bottom row) ─── */
+.streak-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 0.35rem 0.75rem;
+}
+
+.streak-badge-num {
+  color: #fbbf24;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* Flame animations (kept from old hero-streak) */
 .hero-streak-flame {
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 1;
   transition: all 0.3s ease;
 }
@@ -234,22 +295,6 @@
 @keyframes flamePulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
-}
-
-.hero-streak-value {
-  font-size: 2rem;
-  font-weight: 800;
-  line-height: 1;
-  color: #fbbf24;
-}
-
-.hero-streak-label {
-  font-size: 0.65rem;
-  font-weight: 500;
-  opacity: 0.8;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  white-space: nowrap;
 }
 
 /* Leaderboard Button */
@@ -468,7 +513,16 @@
 /* Stage Tabs Wrapper (for project-based challenges) */
 .stage-tabs-wrapper {
   padding: 0.25rem 1.5rem 0;
+  margin-top: 12px;
   background: transparent;
+}
+
+/* Healing frequency tabs — tighten spacing but keep room for progress line */
+.healing-frequency-tabs .stage-tabs {
+  padding: 4px 8px 12px 8px;
+}
+.healing-frequency-tabs {
+  margin-bottom: 8px;
 }
 
 .selected-project-info {
@@ -659,6 +713,14 @@
 
 .challenge-container .progress-bar-fill.weekly {
   background: linear-gradient(90deg, #ffdd27 0%, #ffc107 100%);
+}
+
+.challenge-container .progress-bar-fill.deepdive {
+  background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 100%);
+}
+
+.challenge-container .progress-bar-fill.explainer {
+  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
 }
 
 .artifact-unlocked-message {
@@ -3455,4 +3517,30 @@
   margin-top: 0.5rem;
   font-size: 0.85rem;
   opacity: 0.9;
+}
+
+/* ─── Weekly Recap Card ─── */
+.weekly-recap-card {
+  background: white;
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 12px;
+  border: 1px solid rgba(94, 23, 235, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.recap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.recap-title { font-size: 0.85rem; font-weight: 700; color: #374151; }
+.recap-dismiss { background: none; border: none; font-size: 1.2rem; color: #9ca3af; cursor: pointer; padding: 0 4px; line-height: 1; }
+.recap-result-text { font-size: 0.9rem; font-weight: 700; color: #1f2937; }
+.recap-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.5rem 0; }
+.recap-cat-pill { font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: #f3f4f6; }
+.recap-cat-pill.won { color: #10b981; }
+.recap-cat-pill.lost { color: #ef4444; }
+.recap-best { font-size: 0.8rem; color: #6b7280; margin-bottom: 0.25rem; }
+.recap-next { font-size: 0.8rem; font-weight: 600; color: #5e17eb; margin-bottom: 0.5rem; }
+.recap-cta {
+  background: linear-gradient(135deg, #5e17eb, #8b5cf6);
+  color: white; border: none; padding: 0.5rem 1rem;
+  border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; width: 100%;
 }

@@ -4,7 +4,8 @@ import { supabase } from './lib/supabaseClient'
 import { sanitizeText } from './lib/sanitize'
 import { trackGroanCompleted } from './lib/analytics'
 import confetti from 'canvas-confetti'
-import { triggerSideCannons } from './components/Celebrations'
+import { triggerSideCannons, MicroToast } from './components/Celebrations'
+import WeeklyRecapCard from './components/WeeklyRecapCard'
 import GraduationModal from './components/GraduationModal'
 import NotificationPrompt from './components/NotificationPrompt'
 import PortalExplainer from './components/PortalExplainer'
@@ -12,8 +13,7 @@ import ChallengeProjectSelector from './components/ChallengeProjectSelector'
 import ChallengeStageTabs from './components/ChallengeStageTabs'
 import ChallengeHeader from './components/ChallengeHeader'
 import ChallengeOnboarding from './components/ChallengeOnboarding'
-import ChallengeLeaderboard from './components/ChallengeLeaderboard'
-import ChallengeFilters from './components/ChallengeFilters'
+import './components/ChallengeFilters.css' // R-type chips + frequency tabs styles (used inline now)
 import QuestCard from './components/QuestCard'
 import HorizontalFlowRiver from './components/HorizontalFlowRiver'
 import GroansSummary from './components/GroansSummary'
@@ -25,12 +25,14 @@ import PreActionModal, { PRE_ACTION_MILESTONE_IDS } from './components/PreAction
 import { createGroanChallenge, createSkillProblemChallenge, acceptGroanChallenge, completeGroanChallenge } from './lib/crm'
 import { useChallengeData } from './hooks/useChallengeData'
 import { useLeagueData } from './hooks/useLeagueData'
+import { useMatchupData } from './hooks/useMatchupData'
 import { normalizePersona } from './data/personaProfiles'
 import { convertLegacyStage, GROAN_VISIBILITY_LAYERS, getLayerLockStatus, getStageConfig } from './lib/stageConfig'
 import { generateVoiceQuestsForStage } from './lib/voiceQuestConfig'
 import { getScoringCategory } from './lib/scoringCategories'
 import ContentChallenges from './components/ContentChallenges'
 import WhatsAppErrorButton from './components/WhatsAppErrorButton'
+import SplinterCheckin from './components/SplinterCheckin'
 import './Challenge.css'
 
 // Confetti celebration for quest completion
@@ -91,13 +93,13 @@ function Challenge() {
     leaderboard,
     leaderboardView,
     setLeaderboardView,
-    userRank,
     currentWeeklyPoints,
     loadUserScores,
     nervousSystemComplete,
     safetyContracts,
     healingCompassComplete,
     pastParallelStory,
+    healingCompassId,
     flowFinderComplete,
     validationResponseCounts,
     loadValidationResponseCounts,
@@ -160,9 +162,17 @@ function Challenge() {
 
   // League data for nudge banner + content challenges
   const {
-    leagueExists, isOnTeam, league, userTeam, teams,
-    getCurrentWeek, reloadContent, contentSubmissions
+    leagueExists, isOnTeam, league, userTeam, teams, standings,
+    getCurrentWeek, getWeekMatchups, fetchLiveTeamScores,
+    reloadContent, contentSubmissions
   } = useLeagueData()
+
+  // Fantasy category scores + opponent matchup data for header
+  const { categoryScores, matchupData, matchupLoading, flipEvent, clearFlipEvent, recapData } = useMatchupData({
+    completions,
+    userTeam, league, teams,
+    getCurrentWeek, getWeekMatchups, fetchLiveTeamScores,
+  })
 
   // State for tracking recently completed quest for animation
   const [justCompletedQuestId, setJustCompletedQuestId] = useState(null)
@@ -181,6 +191,7 @@ function Challenge() {
 
   // State for POST-ACTION modal (3% reflection after completing milestones)
   const [postActionQuest, setPostActionQuest] = useState(null)
+  const [splinterCheckinData, setSplinterCheckinData] = useState(null)
 
   // State for PRE-ACTION modal (resistance capture before starting milestones)
   const [preActionQuest, setPreActionQuest] = useState(null)
@@ -804,6 +815,15 @@ function Challenge() {
         setPostActionQuest(quest)
       }
 
+      // Trigger Splinter Check-in after non-gateway Healing quest completions
+      if (quest.category === 'Healing' && quest.healing_checkin && healingCompassId) {
+        loadLatestSplinterState(user.id, healingCompassId).then(splinterState => {
+          if (splinterState) {
+            setSplinterCheckinData({ ...splinterState, questId: quest.id })
+          }
+        })
+      }
+
       // Check for tab completion bonus (skip for user-level Healing — bonus writes to challenge_progress)
       // Use freshCompletions + updatedProgress to avoid stale closure values
       if (quest.category !== 'Healing') {
@@ -847,6 +867,40 @@ function Challenge() {
       alert('Error completing quest. Please try again.')
     } finally {
       setCompletingQuestId(null)
+    }
+  }
+
+  // Load latest splinter state for check-in modal (checks healing_checkins first, falls back to compass response)
+  const loadLatestSplinterState = async (userId, compassId) => {
+    try {
+      // Check for most recent check-in first
+      const { data: checkin } = await supabase
+        .from('healing_checkins')
+        .select('splinter_location, splinter_shape, splinter_size, splinter_color, splinter_texture, splinter_movement, need_intensity')
+        .eq('healing_compass_id', compassId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (checkin) {
+        return { ...checkin, healingCompassId: compassId }
+      }
+
+      // Fall back to original compass response
+      const { data: compass } = await supabase
+        .from('healing_compass_responses')
+        .select('splinter_location, splinter_shape, splinter_size, splinter_color, splinter_texture, splinter_movement, need_ratings, primary_need')
+        .eq('id', compassId)
+        .maybeSingle()
+
+      if (compass) {
+        const primaryRating = compass.need_ratings?.[compass.primary_need]
+        return { ...compass, need_intensity: primaryRating || 5, healingCompassId: compassId }
+      }
+      return null
+    } catch (err) {
+      console.error('Error loading splinter state:', err)
+      return null
     }
   }
 
@@ -1392,26 +1446,43 @@ function Challenge() {
   // ============================================
 
   return (
-    <div className="challenge-container">
+    <div className="challenge-container content-enter">
       {showExplainer && <PortalExplainer onClose={handleCloseExplainer} />}
       <NotificationPrompt />
       <ChallengeHeader
-        progress={progress}
-        userRank={userRank}
-        userData={userData}
         navigate={navigate}
         settingsMenuRef={settingsMenuRef}
         showSettingsMenu={showSettingsMenu}
         setShowSettingsMenu={setShowSettingsMenu}
         handleOpenExplainer={handleOpenExplainer}
-        onLeaderboardClick={() => setActiveCategory('Leaderboard')}
+        onLeaderboardClick={() => navigate('/league/week')}
         streakDays={getConsecutiveStreakDays()}
-        weekLabel={getWeekLabel()}
         weekType={weeklyPlan?.week_type}
-        weeklyPlan={weeklyPlan}
-        onEditPlan={weeklyPlan ? () => setShowWeeklyPlanning(true) : null}
         weeklyPoints={currentWeeklyPoints}
+        matchupData={matchupData}
+        categoryScores={categoryScores}
+        matchupLoading={matchupLoading}
       />
+
+      {/* W/L flip toast */}
+      {flipEvent?.type === 'win' && (
+        <MicroToast
+          message={`You overtook them in ${flipEvent.categories.join(' & ')}!`}
+          duration={3000}
+          onComplete={clearFlipEvent}
+        />
+      )}
+
+      {/* Weekly recap card */}
+      {recapData && isOnTeam && (
+        <WeeklyRecapCard
+          lastWeekMatchup={recapData.matchup}
+          userTeamId={recapData.userTeamId}
+          opponentName={recapData.opponentName}
+          currentOpponentName={matchupData?.opponentName}
+          currentWeek={getCurrentWeek?.() || 0}
+        />
+      )}
 
       {/* Fantasy League nudge — show if league exists and user not on a team */}
       {leagueExists && !isOnTeam && (
@@ -1427,17 +1498,16 @@ function Challenge() {
         </Link>
       )}
 
-      <div className="challenge-tabs">
+      <div className="challenge-tabs stagger-children">
         {categories.map(category => {
-          // Lock Healing tab for testing
-          const isLocked = category === 'Healing'
+          const isLocked = false // TODO: restore → category === 'Healing' && !healingCompassComplete
           return (
             <button
               key={category}
               className={`challenge-tab ${activeCategory === category ? 'active' : ''} ${isLocked ? 'locked' : ''}`}
               onClick={() => !isLocked && setActiveCategory(category)}
               disabled={isLocked}
-              title={isLocked ? 'Coming soon' : undefined}
+              title={isLocked ? 'Complete the Healing Compass to unlock' : undefined}
             >
               {category}
               {isLocked && <span className="lock-icon">🔒</span>}
@@ -1482,18 +1552,45 @@ function Challenge() {
         </div>
       )}
 
+      {/* Frequency tabs for Healing — uses same stage-tab styling as Business */}
+      {activeCategory === 'Healing' && (
+        <div className="stage-tabs-wrapper">
+          <div className="stage-tabs-container healing-frequency-tabs">
+            <div className="stage-tabs">
+              {[
+                { id: 'daily', label: 'Daily', icon: '☀️', color: '#5e17eb' },
+                { id: 'weekly', label: 'Weekly', icon: '📅', color: '#7c3aed' },
+                { id: 'deepdive', label: 'Deep Dive', icon: '🌊', color: '#9b59b6' },
+                { id: 'explainer', label: 'Explainers', icon: '📖', color: '#c27aed' },
+                { id: 'all', label: 'All', icon: '📋', color: '#E9A23B' }
+              ].map(tab => {
+                const isActive = activeFrequencyFilter === tab.id
+                const activeStyles = isActive ? {
+                  background: tab.color,
+                  borderColor: tab.color,
+                  color: 'white'
+                } : {}
+                return (
+                  <button
+                    key={tab.id}
+                    className={`stage-tab available ${isActive ? 'active' : ''}`}
+                    onClick={() => setActiveFrequencyFilter(tab.id)}
+                    style={{ '--stage-color': tab.color, ...activeStyles }}
+                  >
+                    <span className="tab-icon">{tab.icon}</span>
+                    <span className="tab-label">{tab.label}</span>
+                  </button>
+                )
+              })}
+            </div>
+            <div className="progress-line">
+              <div className="progress-fill" style={{ width: '100%' }} />
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="challenge-content">
-        {/* Leaderboard */}
-        {activeCategory === 'Leaderboard' && (
-          <ChallengeLeaderboard
-            leaderboard={leaderboard}
-            leaderboardView={leaderboardView}
-            setLeaderboardView={setLeaderboardView}
-            groupCode={groupCode}
-          />
-        )}
-
         {/* Groans Summary */}
         {activeCategory === 'GroansSummary' && (
           <GroansSummary
@@ -1511,15 +1608,28 @@ function Challenge() {
           />
         )}
 
-        {/* Quest Content - only show if not on Leaderboard or Summary tabs */}
-        {activeCategory !== 'Leaderboard' && activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
+        {/* Quest Content - only show if not on Summary tabs */}
+        {activeCategory !== 'GroansSummary' && activeCategory !== 'HealingSummary' && (
           <>
         {/* Artifact Progress — hidden on Groans/Play tab (both direct and via Business) */}
         {artifactProgress && activeCategory !== 'Groans' && !isGroansStage && (() => {
           const stageConfig = activeCategory === 'Business' && activeStageTab !== undefined ? getStageConfig(activeStageTab) : null
-          const artifactName = stageConfig ? `${stageConfig.icon} ${stageConfig.name}` : artifactProgress.name
-          const artifactDesc = stageConfig
-            ? (activeStageTab === 0 ? 'Tasks to find your flow in life' : stageConfig.description)
+
+          // Healing: per-frequency title and description
+          const healingFreqMeta = {
+            daily: { name: '☀️ Daily Healing', desc: 'Small daily practices to build awareness and release tension.' },
+            weekly: { name: '📅 Weekly Healing', desc: 'Deeper weekly practices to process patterns and triggers.' },
+            deepdive: { name: '🌊 Deep Dive', desc: 'One-time flows to map your nervous system and find the wound.' },
+            explainer: { name: '📖 Explainers', desc: 'Understand the foundations of healing, emotional splinters, and the Four R\'s.' },
+            all: { name: '🧘 Healing Mastery', desc: 'Your combined healing progress across all practices.' }
+          }
+          const healingMeta = activeCategory === 'Healing' ? healingFreqMeta[activeFrequencyFilter] : null
+
+          const artifactName = healingMeta ? healingMeta.name
+            : stageConfig ? `${stageConfig.icon} ${stageConfig.name}`
+            : artifactProgress.name
+          const artifactDesc = healingMeta ? healingMeta.desc
+            : stageConfig ? (activeStageTab === 0 ? 'Tasks to find your flow in life' : stageConfig.description)
             : artifactProgress.description
           return (
           <div className={`artifact-progress ${artifactProgress.unlocked ? 'unlocked' : ''}`}>
@@ -1530,7 +1640,53 @@ function Challenge() {
 
             {!artifactProgress.unlocked && (
               <div className="artifact-bars">
-                {(activeCategory === 'Groans' || activeCategory === 'Healing') && artifactProgress.frequencyCategories ? (
+                {activeCategory === 'Healing' && artifactProgress.frequencyCategories ? (
+                  (() => {
+                    // Show per-tab progress bar based on selected frequency
+                    const freqMap = { daily: 'Daily', weekly: 'Weekly', deepdive: 'Deep Dive', explainer: 'Explainer' }
+                    const iconMap = { Daily: '☀️', Weekly: '📅', 'Deep Dive': '🌊', Explainer: '📖' }
+
+                    if (activeFrequencyFilter === 'all') {
+                      // Combined total across all frequencies
+                      const totalCurrent = Object.values(artifactProgress.frequencyCategories)
+                        .reduce((sum, f) => sum + (f.currentPoints || 0), 0)
+                      const totalRequired = Object.values(artifactProgress.frequencyCategories)
+                        .reduce((sum, f) => sum + (f.pointsRequired || 0), 0)
+                      return (
+                        <div className="progress-bar-container">
+                          <div className="progress-bar-label">
+                            <span>📋 All Progress</span>
+                            <span>{totalCurrent}/{totalRequired}</span>
+                          </div>
+                          <div className="progress-bar">
+                            <div
+                              className="progress-bar-fill"
+                              style={{ width: `${Math.min((totalCurrent / totalRequired) * 100, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    const freqKey = freqMap[activeFrequencyFilter]
+                    const freqData = freqKey && artifactProgress.frequencyCategories[freqKey]
+                    if (!freqData) return null
+                    return (
+                      <div className="progress-bar-container">
+                        <div className="progress-bar-label">
+                          <span>{iconMap[freqKey] || '📋'} {freqKey}</span>
+                          <span>{freqData.currentPoints}/{freqData.pointsRequired}</span>
+                        </div>
+                        <div className="progress-bar">
+                          <div
+                            className={`progress-bar-fill ${activeFrequencyFilter}`}
+                            style={{ width: `${Math.min((freqData.currentPoints / freqData.pointsRequired) * 100, 100)}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    )
+                  })()
+                ) : activeCategory === 'Groans' && artifactProgress.frequencyCategories ? (
                   <>
                     {Object.entries(artifactProgress.frequencyCategories).map(([freqType, freqData]) => (
                       <div key={freqType} className="progress-bar-container">
@@ -1618,13 +1774,20 @@ function Challenge() {
         {activeCategory === 'Healing' && displayQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Healing</h2>
-            <ChallengeFilters
-              activeCategory={activeCategory}
-              activeFrequencyFilter={activeFrequencyFilter}
-              setActiveFrequencyFilter={setActiveFrequencyFilter}
-              activeRTypeFilter={activeRTypeFilter}
-              setActiveRTypeFilter={setActiveRTypeFilter}
-            />
+            {/* R-type chips only — frequency tabs are above the progress bar */}
+            {activeFrequencyFilter !== 'deepdive' && activeFrequencyFilter !== 'explainer' && (
+              <div className="rtype-filters">
+                {['All', 'Recognise', 'Release', 'Rewire', 'Reconnect'].map(rType => (
+                  <button
+                    key={rType}
+                    className={`filter-chip ${activeRTypeFilter === rType ? 'active' : ''}`}
+                    onClick={() => setActiveRTypeFilter(rType)}
+                  >
+                    {rType}
+                  </button>
+                ))}
+              </div>
+            )}
             <div className="quest-search">
               <input
                 type="text"
@@ -1661,14 +1824,11 @@ function Challenge() {
                   <div className="quest-grid">
                     {rTypeQuests.map(quest => {
                       const completed = isQuestCompletedToday(quest.id, quest)
-                      const isHealingCompass = quest.id === 'recognise_healing_compass'
                       const isReleaseDailyChallenge = quest.id === 'release_daily_challenge'
 
                       // Determine lock state and message
-                      const isLocked = (isHealingCompass || isReleaseDailyChallenge) && !nervousSystemComplete
-                      const lockMessage = isReleaseDailyChallenge
-                        ? 'Complete the "Nervous System Calibration" to unlock daily release challenges'
-                        : 'Complete the "Map the Boundaries of Your Nervous System" challenge above to unlock'
+                      const isLocked = isReleaseDailyChallenge && !nervousSystemComplete
+                      const lockMessage = 'Complete the "Nervous System Calibration" to unlock daily release challenges'
 
                       return (
                         <QuestCard
@@ -1726,7 +1886,7 @@ function Challenge() {
         {/* Business Quests - Regular stages */}
         {activeCategory === 'Business' && !isGroansStage && filteredQuests.length > 0 && (
           <div className="quest-section">
-            <div className="quest-grid">
+            <div className="quest-grid stagger-children-fast">
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
                 const locked = isQuestLocked(quest)
@@ -1788,7 +1948,7 @@ function Challenge() {
         {activeCategory === 'Bonus' && bonusSubTab === 'tasks' && filteredQuests.length > 0 && (
           <div className="quest-section">
             <h2 className="section-title">Bonus Quests</h2>
-            <div className="quest-grid">
+            <div className="quest-grid stagger-children-fast">
               {filteredQuests.map(quest => {
                 const completed = isQuestCompletedToday(quest.id, quest)
 
@@ -1835,6 +1995,9 @@ function Challenge() {
             teams={teams}
             contentSubmissions={contentSubmissions}
             onSubmitted={reloadContent}
+            standings={standings}
+            userTeam={userTeam}
+            userData={userData}
           />
         )}
 
@@ -1847,7 +2010,7 @@ function Challenge() {
                 <p>Track your flow activities here.</p>
               </div>
             ) : (
-              <div className="quest-grid">
+              <div className="quest-grid stagger-children-fast">
                 {filteredQuests.map(quest => {
                   const completed = isQuestCompletedToday(quest.id, quest)
 
@@ -2191,6 +2354,16 @@ function Challenge() {
         celebration={graduationModal.celebration}
         onClose={() => setGraduationModal({ isOpen: false, celebration: null })}
       />
+
+      {/* Splinter Check-in modal (after Healing quest completion) */}
+      {splinterCheckinData && (
+        <SplinterCheckin
+          userId={user?.id}
+          healingCompassId={splinterCheckinData.healingCompassId}
+          previousSplinter={splinterCheckinData}
+          onClose={() => setSplinterCheckinData(null)}
+        />
+      )}
       </div>
     </div>
   )

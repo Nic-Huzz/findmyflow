@@ -1,0 +1,141 @@
+/* MatchupDetails — /league/matchup */
+
+.matchup-details-page {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    rgba(94, 23, 235, 0.04) 0%,
+    #fafafa 25%,
+    #fafafa 75%,
+    rgba(233, 162, 59, 0.04) 100%
+  );
+  padding-top: 72px;
+  padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  color: var(--text-primary);
+}
+
+/* === TOOLBAR (design-guide pattern) === */
+.matchup-toolbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.matchup-back {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--brand-purple);
+  cursor: pointer;
+  padding: 8px;
+  margin: -8px;
+  line-height: 1;
+}
+
+.matchup-toolbar-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+/* === SCOREBOARD === */
+.matchup-scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1.25rem 1rem 1rem;
+}
+
+.matchup-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.matchup-team-name { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); }
+.matchup-team-score { font-size: 2.5rem; font-weight: 900; color: var(--text-secondary); }
+.matchup-team-score.winning { color: #10b981; }
+.matchup-vs-label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+
+/* === CATEGORY BARS === */
+.matchup-categories { padding: 0 1rem; margin-bottom: 1.5rem; }
+.matchup-categories.loading { opacity: 0.6; animation: barsPulse 1.5s ease-in-out infinite; }
+
+@keyframes barsPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+}
+
+.matchup-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.matchup-cat-score { font-size: 0.9rem; font-weight: 800; min-width: 2rem; text-align: center; color: var(--text-secondary); }
+.matchup-cat-score.win { color: #10b981; }
+.matchup-cat-score.lose { color: #ef4444; }
+
+.matchup-cat-bar-container { flex: 1; display: flex; flex-direction: column; gap: 0.15rem; }
+.matchup-cat-label { font-size: 0.7rem; font-weight: 600; color: var(--text-secondary); text-align: center; }
+
+.matchup-cat-bar-track {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.matchup-cat-bar-fill-left, .matchup-cat-bar-fill-right {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.matchup-cat-bar-fill-left.win { background: #10b981; }
+.matchup-cat-bar-fill-left.lose { background: #ef4444; }
+.matchup-cat-bar-fill-right.win { background: #10b981; opacity: 0.5; }
+.matchup-cat-bar-fill-right.lose { background: #ef4444; opacity: 0.5; }
+
+/* === ROSTERS === */
+.matchup-rosters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 0 1rem; }
+.matchup-roster h3 { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); margin: 0 0 0.5rem; }
+.matchup-roster-member { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-secondary); padding: 0.25rem 0; }
+.matchup-roster-name { flex: 1; }
+.matchup-roster-pts { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+.matchup-you-badge { background: var(--brand-purple); color: white; font-size: 0.6rem; font-weight: 700; padding: 1px 6px; border-radius: 4px; }
+
+/* === EMPTY STATE === */
+.matchup-empty { text-align: center; padding: 3rem 1rem; color: var(--text-secondary); }
+.matchup-cta {
+  background: linear-gradient(135deg, var(--brand-purple), var(--brand-gold));
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}

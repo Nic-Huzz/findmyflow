@@ -1,9 +1,12 @@
 /**
  * ChallengeHeader - Header component for the Challenge page
  *
- * Displays total points, day counter, badges, and settings menu.
- * Updated to show "Week of X" format for weekly planning system.
+ * Shows fantasy category scores as mini progress bars with green/red W/L
+ * coloring when in an active matchup, or category colors when solo.
+ * Team matchup banner replaces old rank display.
  */
+import { FANTASY_CATEGORIES, CATEGORY_KEYS } from '../lib/league/leagueConfig'
+import { useScoreAnimation } from '../hooks/useScoreAnimation'
 
 // Week type display info
 const WEEK_TYPES = {
@@ -13,16 +16,16 @@ const WEEK_TYPES = {
   launch: { label: 'Launch', icon: '🎯', color: '#f59e0b' }
 }
 
-// Days of week for groan display
-const DAYS_SHORT = {
-  monday: 'Mon', tuesday: 'Tue', wednesday: 'Wed',
-  thursday: 'Thu', friday: 'Fri', saturday: 'Sat', sunday: 'Sun'
+// Lighter variants for category score text in solo mode
+const CATEGORY_TEXT_COLORS = {
+  business_efficiency: '#a78bfa',
+  play_list: '#E9A23B',
+  healing: '#34d399',
+  voice: '#c4b5fd',
+  bonus: '#93c5fd',
 }
 
 function ChallengeHeader({
-  progress,
-  userRank,
-  userData,
   navigate,
   settingsMenuRef,
   showSettingsMenu,
@@ -30,11 +33,11 @@ function ChallengeHeader({
   handleOpenExplainer,
   onLeaderboardClick,
   streakDays = 0,
-  weekLabel = null,
   weekType = null,
-  weeklyPlan = null,
-  onEditPlan = null,
-  weeklyPoints = 0
+  weeklyPoints = 0,
+  matchupData = null,
+  categoryScores = null,
+  matchupLoading = false,
 }) {
   // Flame size based on streak length
   const getFlameClass = () => {
@@ -47,34 +50,114 @@ function ChallengeHeader({
 
   const weekTypeInfo = weekType ? WEEK_TYPES[weekType] : null
 
+  // Animated numbers — displayed values count up/down, bar widths snap via CSS transition
+  const animatedCategoryScores = useScoreAnimation(categoryScores)
+  const animatedWeeklyPoints = useScoreAnimation({ pts: weeklyPoints })
+
+  // Build bar data from either matchup (green/red) or solo (category colors)
+  const bars = CATEGORY_KEYS.map(key => {
+    const cat = FANTASY_CATEGORIES[key]
+    const matchCat = matchupData?.categories?.find(c => c.key === key)
+
+    if (matchCat) {
+      // Matchup mode: bar width = myScore / (myScore + oppScore)
+      const total = matchCat.score + matchCat.oppScore
+      const pct = total > 0 ? Math.round((matchCat.score / total) * 100) : 50
+      const tied = matchCat.score === matchCat.oppScore
+      const displayScore = animatedCategoryScores?.[key] ?? matchCat.score
+      return {
+        key,
+        icon: cat.icon,
+        score: displayScore,       // animated for display
+        pct,                       // raw for bar width (CSS transitions handle the slide)
+        colorClass: tied ? '' : matchCat.winning ? 'win' : 'lose',
+        colorStyle: tied ? cat.color : null,
+        textColor: tied ? CATEGORY_TEXT_COLORS[key] : null,
+      }
+    }
+
+    // Solo mode: bar width = score / max(scores)
+    const score = categoryScores?.[key] || 0
+    const displayScore = animatedCategoryScores?.[key] || 0
+    const maxScore = categoryScores
+      ? Math.max(...Object.values(categoryScores), 1)
+      : 1
+    return {
+      key,
+      icon: cat.icon,
+      score: displayScore,       // animated for display
+      pct: Math.round((score / maxScore) * 100),  // raw for bar width
+      colorClass: `cat-${key}`,
+      colorStyle: null,
+      textColor: CATEGORY_TEXT_COLORS[key],
+    }
+  })
+
   return (
     <header className="challenge-header">
       <h1>Gamify Your Ambitions</h1>
 
-      {/* Hero Section: Rank + Score + Streak - Large prominent display */}
-      <div className="challenge-hero-stats" onClick={onLeaderboardClick} style={{ cursor: 'pointer' }}>
-        <div className="hero-rank">
-          <span className="hero-rank-trophy">🏆</span>
-          <span className="hero-rank-number">#{userRank || '-'}</span>
+      {/* Team matchup banner — taps to matchup details page */}
+      {matchupData && (
+        <div
+          className="challenge-matchup-banner"
+          onClick={() => navigate('/league/matchup')}
+          style={{ cursor: 'pointer' }}
+        >
+          <span className="challenge-matchup-team-name">Your Team</span>
+          <span className="challenge-matchup-pill">
+            <span className={matchupData.myWins > matchupData.oppWins ? 'winning' : matchupData.myWins < matchupData.oppWins ? 'losing' : ''}>
+              {matchupData.myWins}
+            </span>
+            -
+            <span className={matchupData.oppWins > matchupData.myWins ? 'winning' : matchupData.oppWins < matchupData.myWins ? 'losing' : ''}>
+              {matchupData.oppWins}
+            </span>
+          </span>
+          <span className="challenge-matchup-vs">vs</span>
+          <span>{matchupData.opponentName}</span>
         </div>
-        <div className="hero-divider" />
-        <div className="hero-points">
-          <span className="hero-points-value">{weeklyPoints}</span>
-          <span className="hero-points-label">points</span>
-        </div>
-        <div className="hero-divider" />
-        <div className="hero-streak">
-          <div className="hero-streak-row">
-            <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
-            <span className="hero-streak-value">{streakDays}</span>
-          </div>
-          <span className="hero-streak-label">day streak</span>
-        </div>
+      )}
+
+      {/* Total points */}
+      <div className="challenge-total-row">
+        <span className="challenge-total-value">{animatedWeeklyPoints.pts ?? weeklyPoints}</span>
+        <span className="challenge-total-label">
+          {matchupData ? 'total pts' : 'weekly pts'}
+        </span>
       </div>
 
-      {/* Row 2: Quick actions - Voices, Settings, Edit, Flow */}
+      {/* Category bars grid */}
+      <div className={`challenge-bars-grid${matchupLoading ? ' loading' : ''}`}>
+        {bars.map(bar => (
+          <div key={bar.key} className="challenge-bar-item">
+            <span className="challenge-bar-icon">{bar.icon}</span>
+            <div className="challenge-bar-track">
+              <div
+                className={`challenge-bar-fill ${bar.colorClass}`}
+                style={{
+                  width: `${bar.pct}%`,
+                  ...(bar.colorStyle ? { background: bar.colorStyle } : {}),
+                }}
+              />
+            </div>
+            <span
+              className={`challenge-bar-value ${bar.colorClass}`}
+              style={bar.textColor ? { color: bar.textColor } : undefined}
+            >
+              {bar.score}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom row: Streak + actions */}
       <div className="challenge-header-top">
         <div className="challenge-header-badges">
+          <div className="streak-badge">
+            <span className={`hero-streak-flame ${getFlameClass()}`}>🔥</span>
+            <span className="streak-badge-num">{streakDays}</span>
+          </div>
           <div
             className="challenge-day archetype-badge"
             title="View leaderboard"
