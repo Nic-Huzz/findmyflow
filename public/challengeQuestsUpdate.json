@@ -144,7 +144,8 @@
       "points": 3,
       "inputType": "text",
       "placeholder": "What 'fast-food' joy do you usually default to and what was the 'nutritious' joy you chose instead?",
-      "learnMore": "Fast-food joy is anything where you feel good in the moment, but leaves you feeling lower after. Think: drinking alcohol, eating high-sugar foods, scrolling social media, watching netflix.\n\nNutritious joy is anything where you suffer but it leaves you feeling better after. Think: purposeful work, going to the gym, vulnerable conversations with friends/family, learning something new.\n\nThe more you choose nutritious joy, the less you'll crave the fast-food hits. You're literally rewiring your brain's reward system."
+      "learnMore": "Fast-food joy is anything where you feel good in the moment, but leaves you feeling lower after. Think: drinking alcohol, eating high-sugar foods, scrolling social media, watching netflix.\n\nNutritious joy is anything where you suffer but it leaves you feeling better after. Think: purposeful work, going to the gym, vulnerable conversations with friends/family, learning something new.\n\nThe more you choose nutritious joy, the less you'll crave the fast-food hits. You're literally rewiring your brain's reward system.",
+      "healing_checkin": true
     },
     {
       "id": "rewire_future_successful_you",
@@ -155,7 +156,8 @@
       "description": "What's something you weren't going to do today, but it's something future successful you would have done so you did it",
       "points": 5,
       "inputType": "text",
-      "placeholder": "What did you do that future successful you would have done?"
+      "placeholder": "What did you do that future successful you would have done?",
+      "healing_checkin": true
     },
     {
       "id": "rewire_protective_to_essence",
@@ -180,7 +182,8 @@
       "points": 3,
       "inputType": "text",
       "placeholder": "What event this week was a Hell Yea for you?",
-      "learnMore": "What's the difference between an A-grade actor and a C-grade actor who started with the same talent? One said yes to any opportunity and found themselves too busy to say yes to the \"hell yea\" ones when they did come and one said yes to only \"Hell Yea\" opportunities which led to more hell yeas.\n\nBy bringing awareness to what a \"hell yea\" is for you also shows what you're interested in and what you want to be doing."
+      "learnMore": "What's the difference between an A-grade actor and a C-grade actor who started with the same talent? One said yes to any opportunity and found themselves too busy to say yes to the \"hell yea\" ones when they did come and one said yes to only \"Hell Yea\" opportunities which led to more hell yeas.\n\nBy bringing awareness to what a \"hell yea\" is for you also shows what you're interested in and what you want to be doing.",
+      "healing_checkin": true
     },
     {
       "id": "rewire_3_percent_better",
@@ -217,7 +220,8 @@
       "name": "Meditation",
       "description": "Establish connection with your essence voice and drop into a meditation",
       "points": 5,
-      "inputType": "checkbox"
+      "inputType": "checkbox",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_morning_dance",
@@ -227,7 +231,8 @@
       "name": "Rise & Vibe Dance",
       "description": "Play one of your favourite bangers and get your dance on. Rate how you feel out of 10 before and after.",
       "points": 3,
-      "inputType": "checkbox"
+      "inputType": "checkbox",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_morning_breathwork",
@@ -237,7 +242,8 @@
       "name": "Breathwork",
       "description": "Complete breathwork and breath life into your essence voice",
       "points": 5,
-      "inputType": "checkbox"
+      "inputType": "checkbox",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_self_identified",
@@ -248,7 +254,8 @@
       "description": "Do something that reconnects you to YOU. Your choice, your ritual, your essence.",
       "points": 3,
       "inputType": "text",
-      "placeholder": "What did you do to reconnect today?"
+      "placeholder": "What did you do to reconnect today?",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_daily_prayer",
@@ -260,7 +267,8 @@
       "points": 4,
       "inputType": "text",
       "placeholder": "What did you pray for or express gratitude about today?",
-      "learnMore": "Whether you believe in prayer or not, what I've found is when you do pray and ask for things, every opportunity or serendipity that follows has a sense of magic.\n\nIt leads you to ask \"Is this an answer to my prayer?\". I've found it leads me to remain open to any or all experiences and ensures I don't simply dismiss something prematurely."
+      "learnMore": "Whether you believe in prayer or not, what I've found is when you do pray and ask for things, every opportunity or serendipity that follows has a sense of magic.\n\nIt leads you to ask \"Is this an answer to my prayer?\". I've found it leads me to remain open to any or all experiences and ensures I don't simply dismiss something prematurely.",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_weekly_task",
@@ -271,7 +279,8 @@
       "description": "Choose a weekly reconnection practice that deeply resonates with you. Make it meaningful.",
       "points": 4,
       "inputType": "text",
-      "placeholder": "What was your reconnection practice this week?"
+      "placeholder": "What was your reconnection practice this week?",
+      "healing_checkin": true
     },
     {
       "id": "reconnect_remove_negative",
@@ -283,7 +292,8 @@
       "points": 6,
       "inputType": "text",
       "placeholder": "What negative environment did you address?",
-      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish\u2014it's essential."
+      "learnMore": "When you put hot water and cold water in the same glass, the temperature meets in the middle. Human's are the same, this is why we become the average of our 5 closest friends and why the content we consume shapes our worldview. Sometimes the most impactful thing you can do is remove yourself from spaces, people, or situations that drain your energy or require you to be someone you're not. This might mean unfollowing accounts, leaving a group, setting a boundary with a friend, or quitting a role. Protecting your energy is not selfish\u2014it's essential.",
+      "healing_checkin": true
     },
     {
       "id": "groan_challenge",
@@ -401,7 +411,8 @@
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation?",
-      "learnMore": "A love response is anything above 'courage' on the emotional frequency scale.\n\nIt includes:\nWillingness: 'Expressing feelings without blame'.\nAcceptance: 'Making decisions from clarity, not emotion'.\nPeace: 'Seeing innocence in others, even in conflict'.\n\nThis is important because we attract what we are. If we find ourselves responding from anger throughout the day we will attract more anger. If we show up from these higher states we will attract more of them.\n\nTracking these moments builds awareness and accountability."
+      "learnMore": "A love response is anything above 'courage' on the emotional frequency scale.\n\nIt includes:\nWillingness: 'Expressing feelings without blame'.\nAcceptance: 'Making decisions from clarity, not emotion'.\nPeace: 'Seeing innocence in others, even in conflict'.\n\nThis is important because we attract what we are. If we find ourselves responding from anger throughout the day we will attract more anger. If we show up from these higher states we will attract more of them.\n\nTracking these moments builds awareness and accountability.",
+      "healing_checkin": true
     },
     {
       "id": "recognise_negative_frequency",
@@ -413,7 +424,8 @@
       "points": 3,
       "inputType": "text",
       "placeholder": "What was the situation? What caused you to be triggered?",
-      "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future."
+      "learnMore": "A fear response is anything below 'courage' on the emotional frequency scale.\n\nIt includes Anger: 'Blaming or pointing out what others did wrong'.\nFear: 'Hesitating or avoiding taking action'.\nShame: 'Going quiet / withdrawing emotionally or physically'.\n\nThis is important because we attract more of what we are. If we show up from fear we limit our growth and opportunities that align with what we love.\n\nTracking these moments builds awareness about what's causing us to react from fear and build accountability to show up from love in the future.",
+      "healing_checkin": true
     },
     {
       "id": "recognise_trigger_pattern",
@@ -425,20 +437,8 @@
       "points": 4,
       "inputType": "text",
       "placeholder": "What patterns did you notice in your triggers this week?",
-      "learnMore": "Our triggers are consistent \u2014 the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions."
-    },
-    {
-      "id": "recognise_nervous_system",
-      "category": "Healing",
-      "type": "Recognise",
-      "frequency": "deepdive",
-      "name": "Map The Boundaries Of Your Nervous System",
-      "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
-      "points": 6,
-      "inputType": "flow",
-      "flow_id": "nervous_system",
-      "flow_route": "/nervous-system",
-      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a muscle-testing practice) to identify exactly where those boundaries are empowering you to consciously expand them.\n\nThe flow takes about 10 minutes and since you'll be sway-testing it's recommended you do it at home."
+      "learnMore": "Our triggers are consistent \u2014 the same situations tend to activate us again and again. By tracking weekly patterns, you build a map of your emotional landscape.\n\nOnce you can see the pattern, you can prepare for it, heal the root cause, or change the situation entirely.\n\nCommon pattern categories: Work deadlines, relationship dynamics, money conversations, self-criticism, social situations, family interactions.",
+      "healing_checkin": true
     },
     {
       "id": "recognise_healing_compass",
@@ -454,6 +454,65 @@
       "learnMore": "The Healing Compass is a reflective process that helps you trace your protective patterns back to their origin.\n\nYour protective voice developed as a survival mechanism\u2014understanding the original wound allows you to heal it at the root, rather than just managing symptoms.\n\nThis process typically takes 10-15 minutes and will help you gain clarity on why certain patterns keep showing up in your life and what you need to heal to stop them."
     },
     {
+      "id": "recognise_nervous_system",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "deepdive",
+      "name": "Map The Boundaries Of Your Nervous System",
+      "description": "Identify how much money your nervous system feels safe earning before it self-sabotages",
+      "points": 6,
+      "inputType": "flow",
+      "flow_id": "nervous_system",
+      "flow_route": "/nervous-system",
+      "requires_quest": "recognise_healing_compass",
+      "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a muscle-testing practice) to identify exactly where those boundaries are empowering you to consciously expand them.\n\nThe flow takes about 10 minutes and since you'll be sway-testing it's recommended you do it at home."
+    },
+    {
+      "id": "what_is_healing_explainer",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "explainer",
+      "name": "What is Healing?",
+      "description": "Understand what healing really means and why emotional splinters keep us from being ourselves",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "what_is_healing_explainer",
+      "flow_route": "/what-is-healing-explainer",
+      "learnMore": "Before diving into the healing quests, it helps to understand what healing actually is.\n\nThis explainer walks you through the concept of emotional splinters — the micro-traumas that silently shape our behaviour — and reframes healing as removing fear so you can show up as your loving, playful, carefree self once again.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
+      "id": "emotional_splinter_explainer",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "explainer",
+      "name": "What is an Emotional Splinter?",
+      "description": "Learn about Big T and Little T trauma, how your brain creates protective stories, and what an emotional splinter really is",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "emotional_splinter_explainer",
+      "flow_route": "/emotional-splinter-explainer",
+      "learnMore": "This deep dive explains how 'emotion' is energy-in-motion and trauma is what happens when that energy gets frozen.\n\nYou'll learn about Big T vs Little T trauma, how the amygdala and prefrontal cortex miscommunicate to create limiting stories, and how these unprocessed emotions create protective patterns like The Ghost, The People Pleaser, and The Controller.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
+      "id": "how_do_we_heal_explainer",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "explainer",
+      "name": "How Do We Heal?",
+      "description": "Discover the Four R's framework — Recognise, Release, Rewire, Reconnect — and the healing modalities that map to each",
+      "points": 5,
+      "inputType": "flow",
+      "flow_id": "how_do_we_heal_explainer",
+      "flow_route": "/how-do-we-heal-explainer",
+      "learnMore": "This explainer introduces the Four R's healing framework:\n\n1. Recognise — your emotional splinters and protective patterns\n2. Release — the frozen emotions (micro-traumas)\n3. Rewire — the beliefs your splinters created\n4. Reconnect — to the loving, playful, carefree version of you\n\nYou'll also see how every healing modality maps to these four R's.",
+      "isPrimary": true,
+      "isExplainer": true
+    },
+    {
       "id": "release_daily_challenge",
       "category": "Healing",
       "type": "Release",
@@ -462,7 +521,8 @@
       "description": "Check the group chat to see the daily release challenge for the day.",
       "points": 7,
       "inputType": "text",
-      "placeholder": "What came up for you in this process today?"
+      "placeholder": "What came up for you in this process today?",
+      "healing_checkin": true
     },
     {
       "id": "release_negative_charge",
@@ -474,7 +534,8 @@
       "points": 5,
       "inputType": "text",
       "placeholder": "What emotion were you feeling and how did you release it?",
-      "learnMore": "Emotions are energy in motion\u2014 see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'."
+      "learnMore": "Emotions are energy in motion\u2014 see them as a song. When we suppress them, it's like clicking pause in the middle of the song. They get stored in the body and create tension, anxiety and if intense enough, trauma.\n\nRelease practices include anything that allow you to experience the emotion and process it so the 'song finishes'. Examples include: running, journaling, breathwork, movement, crying, shaking, screaming (into a pillow), or simply allowing yourself to feel without judgment.\n\nThe goal isn't to 'fix' the emotion but to experience it. Doing any of these practises for 90 seconds is often enough for the emotion to pass through you and the 'song to finish'.",
+      "healing_checkin": true
     },
     {
       "id": "release_weekly_big",
@@ -486,7 +547,8 @@
       "points": 8,
       "inputType": "text",
       "placeholder": "What came up in the session? What did you process and release?",
-      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions\u2014trust the process and let your body lead."
+      "learnMore": "Extended release practices (30+ minutes) allow you to access and clear deeper layers of stored emotion and trauma.\n\nOptions include: conscious-connected breathwork, somatic experiencing, rage rituals, ecstatic dance, or guided emotional release sessions.\n\nThese practices often bring up unexpected emotions\u2014trust the process and let your body lead.",
+      "healing_checkin": true
     },
     {
       "id": "recognise_flow_update",
@@ -1913,9 +1975,17 @@
         "Weekly": {
           "pointsRequired": 42,
           "currentPoints": 0
+        },
+        "Deep Dive": {
+          "pointsRequired": 11,
+          "currentPoints": 0
+        },
+        "Explainer": {
+          "pointsRequired": 15,
+          "currentPoints": 0
         }
       },
-      "totalRequired": 87,
+      "totalRequired": 113,
       "image": "/images/artifacts/healing-mastery.png"
     },
     {
