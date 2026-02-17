@@ -405,7 +405,7 @@ export default function PublicNervousSystemFlow() {
   const renderTimeCheck = () => (
     <div className="container welcome-container">
       <h1 className="welcome-greeting">Nervous System Map</h1>
-      <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+      <div className="welcome-message" style={{ textAlign: 'center' }}>
         <p><span className="time-icon">⏱️</span></p>
         <p><strong>This flow takes about 5-10 minutes</strong></p>
         <p style={{ color: 'rgba(255,255,255,0.7)' }}>4 questions to map your nervous system boundaries.</p>

@@ -291,7 +291,7 @@ export default function LetsPlayReviewFlow() {
         <div className="welcome-container">
           <p className="time-icon">📝</p>
           <h1 className="welcome-greeting">Review Your Peer-Trial</h1>
-          <div className="welcome-message animated-text">
+          <div className="welcome-message">
             <p>You've helped someone. Now let's reflect on what happened.</p>
             <p>This is how you learn what works and what doesn't.</p>
           </div>

@@ -332,7 +332,7 @@ export default function LimitingBeliefRewire() {
       {/* Normal time check content - shown if no resume prompt */}
       {!showResumePrompt && (
         <>
-          <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+          <div className="welcome-message" style={{ textAlign: 'center' }}>
             <p><span className="time-icon">⏱️</span></p>
             <p><strong>This flow takes about 10-15 minutes</strong></p>
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>7 questions to trace and heal a limiting belief.</p>

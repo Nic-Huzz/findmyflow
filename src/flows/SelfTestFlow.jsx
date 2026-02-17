@@ -532,7 +532,7 @@ export default function SelfTestFlow() {
         <div className="welcome-container">
           <p className="time-icon">{'🔬'}</p>
           <h1 className="welcome-greeting">Play-list Self-Trial</h1>
-          <div className="welcome-message animated-text">
+          <div className="welcome-message">
             <p>You know that skill you've been sharpening? Time to point it at yourself.</p>
             <p>Pick a skill. Pick a problem <strong>you're</strong> actually dealing with. Use one to solve the other.</p>
             <p>Your best proof of concept is you.</p>

@@ -621,7 +621,7 @@ export default function HealingCompass() {
 
       {!showResumePrompt && (
         <>
-          <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+          <div className="welcome-message" style={{ textAlign: 'center' }}>
             <p><span className="time-icon">⏱️</span></p>
             <p><strong>This flow takes about 8-12 minutes</strong></p>
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>6 steps to understand what you need, what's stopping you, and where it lives in your body.</p>

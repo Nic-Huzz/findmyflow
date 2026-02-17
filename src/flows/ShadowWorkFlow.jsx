@@ -488,7 +488,7 @@ export default function ShadowWorkFlow() {
       {/* Normal start */}
       {!showResumePrompt && !weeklyLock?.completed && (
         <>
-          <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+          <div className="welcome-message" style={{ textAlign: 'center' }}>
             <p><span className="time-icon">&#9201;</span></p>
             <p><strong>This flow takes about 15-20 minutes</strong></p>
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>14 steps to uncover the parts of yourself you've been hiding, trace them to their origin, and bring them into the light.</p>

@@ -471,7 +471,7 @@ export default function LetsPlayFlow() {
         <div className="welcome-container">
           <p className="time-icon">🎮</p>
           <h1 className="welcome-greeting">Let's Play Peer-Trial</h1>
-          <div className="welcome-message animated-text">
+          <div className="welcome-message">
             <p>Most people waste time writing out business plans and overplanning.</p>
             <p>But the best way to build a business? <strong>Start delivering value</strong>, getting feedback and improving over time.</p>
             <p>That's it. That's the game.</p>

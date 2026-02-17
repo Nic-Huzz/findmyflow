@@ -604,7 +604,7 @@ function MoneyModelFlowBase({ config, welcomeContent }) {
           {/* Normal time check content - shown if no resume prompt */}
           {!showResumePrompt && (
             <>
-              <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+              <div className="welcome-message" style={{ textAlign: 'center' }}>
                 <p><span className="time-icon">⏱️</span></p>
                 <p><strong>This flow takes about {config.timeEstimate || '3 minutes'}</strong></p>
                 <p style={{ color: 'rgba(255,255,255,0.7)' }}>{config.timeCheckMessage || "10 quick questions to find your best strategy."}</p>

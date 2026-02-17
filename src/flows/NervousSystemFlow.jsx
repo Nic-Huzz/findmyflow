@@ -547,7 +547,7 @@ export default function NervousSystemFlow() {
         {/* Normal time check content - shown if no resume prompt */}
         {!showResumePrompt && (
           <>
-            <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+            <div className="welcome-message" style={{ textAlign: 'center' }}>
               <p><span className="time-icon">⏱️</span></p>
               <p><strong>This flow takes about 5-10 minutes</strong></p>
               <p style={{ color: 'rgba(255,255,255,0.7)' }}>4 questions to map your nervous system boundaries.</p>

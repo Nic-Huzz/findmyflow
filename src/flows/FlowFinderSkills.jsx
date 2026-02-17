@@ -598,7 +598,7 @@ export default function FlowFinderSkills() {
         {/* Normal time check content - shown if no resume prompt */}
         {!showResumePrompt && (
           <>
-            <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
+            <div className="welcome-message" style={{ textAlign: 'center' }}>
               <p><span className="time-icon">⏱️</span></p>
               <p><strong>This flow takes about 15-20 minutes</strong></p>
               <p style={{ color: 'rgba(255,255,255,0.7)' }}>5 questions about different periods of your life, with AI analysis between sections.</p>

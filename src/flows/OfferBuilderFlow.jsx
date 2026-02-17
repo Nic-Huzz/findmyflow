@@ -1155,11 +1155,12 @@ function OfferBuilderFlow() {
     )
   }
 
-  // TIME CHECK STAGE
-  if (stage === STAGES.TIME_CHECK) {
+
+
+  // WELCOME STAGE
+  if (stage === STAGES.WELCOME) {
     // Show resume prompt if there's saved progress
     if (showResumePrompt && savedProgressData) {
-      const savedDate = new Date(savedProgressData.savedAt)
       const timeAgo = Math.round((Date.now() - savedProgressData.savedAt) / (1000 * 60 * 60))
 
       return (
@@ -1195,37 +1196,6 @@ function OfferBuilderFlow() {
       )
     }
 
-    return (
-      <div className="offer-builder-flow">
-        <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
-        <div className="welcome-container">
-          <h1 className="welcome-greeting">Offer Builder</h1>
-          <div className="welcome-message animated-text" style={{ textAlign: 'center' }}>
-            <p><span className="time-icon">⏱️</span></p>
-            <p><strong>This flow takes about 5-8 minutes</strong></p>
-            <p style={{ color: 'rgba(255,255,255,0.7)' }}>Design an offer so good people feel silly saying no.</p>
-            <p>We'll use your validation insights to get you started.</p>
-          </div>
-          <button
-            className="primary-button glow-button"
-            onClick={() => setStage(STAGES.WELCOME)}
-          >
-            I'm Ready to Build
-          </button>
-          <button
-            className="secondary-button"
-            onClick={() => navigate('/7-day-challenge')}
-            style={{ marginTop: '12px' }}
-          >
-            Come Back Later
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // WELCOME STAGE
-  if (stage === STAGES.WELCOME) {
     return (
       <div className="offer-builder-flow">
         <ProgressDots stageGroups={STAGE_GROUPS} currentStage={stage} />
