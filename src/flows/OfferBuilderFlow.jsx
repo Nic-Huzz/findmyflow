@@ -1232,7 +1232,7 @@ function OfferBuilderFlow() {
         <div className="welcome-container">
           <div className="welcome-content">
             <h1 className="welcome-greeting">Offer Builder</h1>
-            <div className="welcome-message animated-text">
+            <div className="welcome-message">
               <p><strong>Ready to create an offer so good people feel silly saying no?</strong></p>
               <p>Great offers aren't built on hope—they're engineered from deep customer understanding.</p>
               <p>We'll start with the persona you validated, let you refine based on feedback, then build out your niche, solution, and MVP.</p>
