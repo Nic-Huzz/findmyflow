@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Challenge Header — Option A with W/L Colors</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #1a1a2e;
+    color: #fff;
+    padding: 2rem 1rem;
+  }
+
+  h2.section-title {
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #a78bfa;
+    margin: 2.5rem 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  h2.section-title:first-of-type { margin-top: 0; }
+
+  .mockup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .mockup-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mockup-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #a78bfa;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Phone frame */
+  .phone-frame {
+    width: 375px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  /* ─── Shared header base ─── */
+  .header {
+    background: linear-gradient(135deg, #5e17eb 0%, #8b5cf6 100%);
+    color: white;
+    padding: 1.25rem 1rem 1rem;
+    border-radius: 0 0 24px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .header-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ─── Team matchup banner ─── */
+  .team-matchup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .team-matchup .team-name {
+    color: #fbbf24;
+    font-weight: 700;
+  }
+  .team-matchup .vs {
+    opacity: 0.5;
+    font-size: 0.7rem;
+  }
+  .team-matchup .score-pill {
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+  .team-matchup .winning { color: #34d399; }
+  .team-matchup .losing { color: #f87171; }
+
+  /* ─── Streak + actions row ─── */
+  .bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .streak-badge .flame {
+    font-size: 1rem;
+    animation: flamePulse 1s ease-in-out infinite;
+  }
+  @keyframes flamePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  .streak-badge .streak-num {
+    color: #fbbf24;
+    font-size: 1rem;
+  }
+  .action-pill {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .action-pill:hover { background: rgba(255,255,255,0.25); }
+
+  /* Week type badge */
+  .week-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ef4444;
+    border-radius: 20px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Total points (compact) */
+  .total-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .total-value {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .total-label {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ─── Placeholder body ─── */
+  .body-placeholder {
+    padding: 1rem;
+    min-height: 60px;
+  }
+  .body-placeholder .tab-row {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+  }
+  .body-placeholder .tab {
+    background: #e2e8f0;
+    color: #64748b;
+    border-radius: 20px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .body-placeholder .tab.active {
+    background: #5e17eb;
+    color: white;
+  }
+
+  /* ═══════════════════════════════════════
+     Mini Progress Bars
+     ═══════════════════════════════════════ */
+  .bars-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem 0.75rem;
+    background: rgba(0,0,0,0.15);
+    border-radius: 14px;
+    padding: 0.65rem 0.75rem;
+  }
+  .bars-grid.odd-last .bar-item:last-child {
+    grid-column: 1 / -1;
+    max-width: 50%;
+    justify-self: center;
+  }
+  .bar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .bar-icon {
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    width: 1.1rem;
+    text-align: center;
+  }
+  .bar-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+  }
+  .bar-value {
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 1.5rem;
+    text-align: right;
+  }
+
+  /* W/L colors */
+  .bar-fill.win { background: #10b981; }
+  .bar-fill.lose { background: #ef4444; }
+  .bar-value.win { color: #34d399; }
+  .bar-value.lose { color: #f87171; }
+
+  /* No-league fallback category colors */
+  .bar-fill.cat-business { background: #5e17eb; }
+  .bar-fill.cat-playlist { background: #E9A23B; }
+  .bar-fill.cat-healing { background: #10b981; }
+  .bar-fill.cat-voice { background: #8B5CF6; }
+  .bar-fill.cat-bonus { background: #3B82F6; }
+  .bar-value.cat-business { color: #a78bfa; }
+  .bar-value.cat-playlist { color: #E9A23B; }
+  .bar-value.cat-healing { color: #34d399; }
+  .bar-value.cat-voice { color: #c4b5fd; }
+  .bar-value.cat-bonus { color: #93c5fd; }
+
+  /* ═══════════════════════════════════════
+     Responsive
+     ═══════════════════════════════════════ */
+  @media (max-width: 860px) {
+    .mockup-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h2 class="section-title">Close Matchup — 3 wins, 2 losses</h2>
+<div class="mockup-grid">
+  <div class="mockup-wrapper">
+    <div class="mockup-label">Leading the matchup</div>
+    <div class="phone-frame">
+      <div class="header">
+        <div class="header-title">Gamify Your Ambitions</div>
+
+        <div class="team-matchup">
+          <span class="team-name">Your Team</span>
+          <span class="score-pill"><span class="winning">3</span>-<span class="losing">2</span></span>
+          <span class="vs">vs</span>
+          <span>Flow Warriors</span>
+        </div>
+
+        <div class="total-row">
+          <span class="total-value">127</span>
+          <span class="total-label">total pts</span>
+        </div>
+
+        <!-- W: Business 38>32, Healing 30>22, Voice 20>18 | L: Play-List 25<35, Bonus 14<28 -->
+        <div class="bars-grid odd-last">
+          <div class="bar-item">
+            <span class="bar-icon">💼</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:75%"></div></div>
+            <span class="bar-value win">38</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎮</span>
+            <div class="bar-track"><div class="bar-fill lose" style="width:50%"></div></div>
+            <span class="bar-value lose">25</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">💚</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:60%"></div></div>
+            <span class="bar-value win">30</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎭</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:40%"></div></div>
+            <span class="bar-value win">20</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">⭐</span>
+            <div class="bar-track"><div class="bar-fill lose" style="width:28%"></div></div>
+            <span class="bar-value lose">14</span>
+          </div>
+        </div>
+
+        <div class="bottom-row">
+          <div class="streak-badge">
+            <span class="flame">🔥</span>
+            <span class="streak-num">5</span>
+          </div>
+          <div class="action-pill">🏆 Leaderboard</div>
+          <div class="action-pill">⚙️</div>
+          <div class="week-type">🔥 Push</div>
+        </div>
+      </div>
+      <div class="body-placeholder">
+        <div class="tab-row">
+          <div class="tab active">Business</div>
+          <div class="tab">Play-List</div>
+          <div class="tab">Healing</div>
+          <div class="tab">Voice</div>
+          <div class="tab">Bonus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dominating 5-0 -->
+  <div class="mockup-wrapper">
+    <div class="mockup-label">Dominating — all green</div>
+    <div class="phone-frame">
+      <div class="header">
+        <div class="header-title">Gamify Your Ambitions</div>
+        <div class="team-matchup">
+          <span class="team-name">Your Team</span>
+          <span class="score-pill"><span class="winning">5</span>-<span class="losing">0</span></span>
+          <span class="vs">vs</span>
+          <span>The Grinders</span>
+        </div>
+        <div class="total-row">
+          <span class="total-value">214</span>
+          <span class="total-label">total pts</span>
+        </div>
+        <div class="bars-grid odd-last">
+          <div class="bar-item">
+            <span class="bar-icon">💼</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:90%"></div></div>
+            <span class="bar-value win">56</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎮</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:72%"></div></div>
+            <span class="bar-value win">40</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">💚</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:80%"></div></div>
+            <span class="bar-value win">45</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎭</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:68%"></div></div>
+            <span class="bar-value win">38</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">⭐</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:62%"></div></div>
+            <span class="bar-value win">35</span>
+          </div>
+        </div>
+        <div class="bottom-row">
+          <div class="streak-badge">
+            <span class="flame">🔥</span>
+            <span class="streak-num">12</span>
+          </div>
+          <div class="action-pill">🏆 Leaderboard</div>
+          <div class="action-pill">⚙️</div>
+          <div class="week-type">🔥 Push</div>
+        </div>
+      </div>
+      <div class="body-placeholder">
+        <div class="tab-row">
+          <div class="tab active">Business</div>
+          <div class="tab">Play-List</div>
+          <div class="tab">Healing</div>
+          <div class="tab">Voice</div>
+          <div class="tab">Bonus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════ -->
+
+<h2 class="section-title">Losing badly — 1 win, 4 losses</h2>
+<div class="mockup-grid">
+  <div class="mockup-wrapper">
+    <div class="mockup-label">Behind — mostly red</div>
+    <div class="phone-frame">
+      <div class="header">
+        <div class="header-title">Gamify Your Ambitions</div>
+        <div class="team-matchup">
+          <span class="team-name">Your Team</span>
+          <span class="score-pill"><span class="losing">1</span>-<span class="winning">4</span></span>
+          <span class="vs">vs</span>
+          <span>The Grinders</span>
+        </div>
+        <div class="total-row">
+          <span class="total-value">68</span>
+          <span class="total-label">total pts</span>
+        </div>
+        <div class="bars-grid odd-last">
+          <div class="bar-item">
+            <span class="bar-icon">💼</span>
+            <div class="bar-track"><div class="bar-fill lose" style="width:35%"></div></div>
+            <span class="bar-value lose">18</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎮</span>
+            <div class="bar-track"><div class="bar-fill lose" style="width:22%"></div></div>
+            <span class="bar-value lose">12</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">💚</span>
+            <div class="bar-track"><div class="bar-fill win" style="width:45%"></div></div>
+            <span class="bar-value win">22</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎭</span>
+            <div class="bar-track"><div class="bar-fill lose" style="width:18%"></div></div>
+            <span class="bar-value lose">10</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">⭐</span>
+            <div class="bar-track"><div class="bar-fill lose" style="width:12%"></div></div>
+            <span class="bar-value lose">6</span>
+          </div>
+        </div>
+        <div class="bottom-row">
+          <div class="streak-badge">
+            <span class="flame">🔥</span>
+            <span class="streak-num">2</span>
+          </div>
+          <div class="action-pill">🏆 Leaderboard</div>
+          <div class="action-pill">⚙️</div>
+          <div class="week-type" style="background:#3b82f6;">🌊 Flow</div>
+        </div>
+      </div>
+      <div class="body-placeholder">
+        <div class="tab-row">
+          <div class="tab active">Business</div>
+          <div class="tab">Play-List</div>
+          <div class="tab">Healing</div>
+          <div class="tab">Voice</div>
+          <div class="tab">Bonus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No league — category colors fallback -->
+  <div class="mockup-wrapper">
+    <div class="mockup-label">No league — category colors</div>
+    <div class="phone-frame">
+      <div class="header">
+        <div class="header-title">Gamify Your Ambitions</div>
+
+        <!-- No matchup banner — just total + bars -->
+        <div class="total-row" style="margin-top: 0;">
+          <span class="total-value">94</span>
+          <span class="total-label">weekly pts</span>
+        </div>
+
+        <div class="bars-grid odd-last">
+          <div class="bar-item">
+            <span class="bar-icon">💼</span>
+            <div class="bar-track"><div class="bar-fill cat-business" style="width:60%"></div></div>
+            <span class="bar-value cat-business">30</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎮</span>
+            <div class="bar-track"><div class="bar-fill cat-playlist" style="width:36%"></div></div>
+            <span class="bar-value cat-playlist">18</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">💚</span>
+            <div class="bar-track"><div class="bar-fill cat-healing" style="width:44%"></div></div>
+            <span class="bar-value cat-healing">22</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">🎭</span>
+            <div class="bar-track"><div class="bar-fill cat-voice" style="width:28%"></div></div>
+            <span class="bar-value cat-voice">14</span>
+          </div>
+          <div class="bar-item">
+            <span class="bar-icon">⭐</span>
+            <div class="bar-track"><div class="bar-fill cat-bonus" style="width:20%"></div></div>
+            <span class="bar-value cat-bonus">10</span>
+          </div>
+        </div>
+
+        <div class="bottom-row">
+          <div class="streak-badge">
+            <span class="flame">🔥</span>
+            <span class="streak-num">7</span>
+          </div>
+          <div class="action-pill">🏆 Leaderboard</div>
+          <div class="action-pill">⚙️</div>
+          <div class="week-type">🔥 Push</div>
+        </div>
+      </div>
+      <div class="body-placeholder">
+        <div class="tab-row">
+          <div class="tab active">Business</div>
+          <div class="tab">Play-List</div>
+          <div class="tab">Healing</div>
+          <div class="tab">Voice</div>
+          <div class="tab">Bonus</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

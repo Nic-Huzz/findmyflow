@@ -18,11 +18,11 @@ function buildAnalysisPrompt(voiceData: any) {
   const {
     originStory,
     audienceDescription,
-    successStory,
     uniqueApproach,
     preferences,
     catchphrases,
-    contentSamples
+    contentSamples,
+    voiceInfluences
   } = voiceData
 
   const hasSamples = contentSamples && contentSamples.length > 0 && contentSamples.some((s: string) => s.trim().length > 0)
@@ -30,11 +30,24 @@ function buildAnalysisPrompt(voiceData: any) {
   let samplesSection = ''
   if (hasSamples) {
     samplesSection = `
-ACTUAL CONTENT SAMPLES (analyze these for patterns):
+ACTUAL CONTENT SAMPLES (THIS IS THE MOST IMPORTANT DATA — analyze these deeply for voice patterns):
 ${contentSamples.filter((s: string) => s.trim()).map((s: string, i: number) => `
 Sample ${i + 1}:
 "${s}"
 `).join('\n')}
+
+These samples are the ground truth for this person's voice. Everything else is supplementary context.
+`
+  }
+
+  const influences = voiceInfluences || []
+  let influenceSection = ''
+  if (influences.length > 0) {
+    influenceSection = `
+VOICE INFLUENCES (writers/creators they admire):
+${influences.map((inf: any) => `- ${inf.name}: "${inf.description || ''}"`).join('\n')}
+
+Consider how these influences shape their natural voice.
 `
   }
 
@@ -42,14 +55,15 @@ Sample ${i + 1}:
 
 USER INPUTS:
 
+${samplesSection}
+
+${influenceSection}
+
 ORIGIN STORY (how they describe their journey):
 "${originStory || 'Not provided'}"
 
 AUDIENCE DESCRIPTION (how they describe their ideal client):
 "${audienceDescription || 'Not provided'}"
-
-SUCCESS STORY (how they share wins):
-"${successStory || 'Not provided'}"
 
 UNIQUE APPROACH (their contrarian view):
 "${uniqueApproach || 'Not provided'}"
@@ -63,8 +77,6 @@ STYLE PREFERENCES (sliders 0-100):
 
 CATCHPHRASES/SIGNATURE EXPRESSIONS:
 ${catchphrases && catchphrases.length > 0 ? catchphrases.map((p: string) => `- "${p}"`).join('\n') : 'None provided'}
-
-${samplesSection}
 
 TASK: Create a comprehensive voice profile that captures this person's unique communication style.
 
@@ -151,18 +163,33 @@ async function analyzeVoice(voiceData: any) {
 async function saveProfile(userId: string, voiceData: any, analysisResult: any) {
   const supabase = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!)
 
+  // Fetch existing dos/donts to merge (preserves corrections from content review)
+  const { data: existing } = await supabase
+    .from('voice_profiles')
+    .select('detected_patterns')
+    .eq('user_id', userId)
+    .maybeSingle()
+  const existingDos = existing?.detected_patterns?.voice_dos || []
+  const existingDonts = existing?.detected_patterns?.voice_donts || []
+  const newDos = analysisResult.doAndDont?.do || []
+  const newDonts = analysisResult.doAndDont?.dont || []
+
   const profileData = {
     user_id: userId,
-    voice_type: analysisResult.voiceType,
+    voice_name: analysisResult.voiceType || 'My Voice',
     voice_summary: analysisResult.summary,
-    voice_traits: analysisResult.traits,
-    writing_patterns: analysisResult.patterns,
-    do_and_dont: analysisResult.doAndDont,
-    sample_output: analysisResult.sampleOutput,
+    // Store AI analysis in detected_patterns JSONB (matches buildVoiceInstructions schema)
+    // Merge new AI dos/donts with existing ones (de-duplicated)
+    detected_patterns: {
+      ...analysisResult.patterns,
+      voice_dos: [...new Set([...existingDos, ...newDos])],
+      voice_donts: [...new Set([...existingDonts, ...newDonts])],
+      traits: analysisResult.traits,
+      sample_output: analysisResult.sampleOutput,
+    },
     // Store raw input data
     origin_story: voiceData.originStory,
     audience_description: voiceData.audienceDescription,
-    success_story: voiceData.successStory,
     unique_approach: voiceData.uniqueApproach,
     // Style preferences
     sentence_length: voiceData.preferences?.sentenceLength || 50,
@@ -173,6 +200,7 @@ async function saveProfile(userId: string, voiceData: any, analysisResult: any) 
     // Extras
     catchphrases: voiceData.catchphrases || [],
     content_samples: voiceData.contentSamples || [],
+    voice_influences: voiceData.voiceInfluences || [],
     is_template: false,
     updated_at: new Date().toISOString()
   }
@@ -202,12 +230,27 @@ serve(async (req) => {
   }
 
   try {
-    const body = await req.json()
-    const { userId, voiceData } = body
-
-    if (!userId) {
-      throw new Error('userId is required')
+    // Verify the authenticated user matches the requested userId
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Missing Authorization header' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
+    const supabaseAuth = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!)
+    const token = authHeader.replace('Bearer ', '')
+    const { data: { user: authUser }, error: authError } = await supabaseAuth.auth.getUser(token)
+    if (authError || !authUser) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const body = await req.json()
+    const { voiceData } = body
+    const userId = authUser.id // Use authenticated user ID, not client-provided
 
     if (!voiceData) {
       throw new Error('voiceData is required')

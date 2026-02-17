@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Option B — Swipeable Story Cards</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #0a0a1a;
+  color: white;
+}
+
+.content-submit {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.6);
+  --text-muted: rgba(255,255,255,0.35);
+  --surface: rgba(255,255,255,0.06);
+  --winning-green: #10b981;
+
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0f0826 0%, #0a0a1a 40%, #0a0a1a 100%);
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Toolbar */
+.cs-toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px;
+  background: rgba(10,10,26,0.85);
+  backdrop-filter: blur(20px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  z-index: 100;
+}
+.cs-back {
+  position: absolute; left: 16px; background: none; border: none;
+  font-size: 1.5rem; color: var(--brand-gold); cursor: pointer;
+  padding: 8px; margin: -8px; line-height: 1;
+}
+.cs-toolbar-title {
+  font-size: 16px; font-weight: 800; color: white;
+  margin: 0; letter-spacing: -0.2px;
+}
+.cs-pts-total {
+  position: absolute; right: 16px;
+  font-size: 13px; font-weight: 800; color: var(--brand-gold);
+}
+
+/* Score strip under toolbar */
+.cs-score-strip {
+  position: fixed; top: 56px; left: 0; right: 0;
+  height: 4px; background: rgba(255,255,255,0.06); z-index: 99;
+}
+.cs-score-strip-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-purple), var(--brand-gold));
+  border-radius: 0 2px 2px 0;
+  transition: width 0.4s ease-out;
+}
+
+/* Horizontal scroll container */
+.cs-scroll {
+  display: flex;
+  gap: 16px;
+  padding: 80px 20px 32px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.cs-scroll::-webkit-scrollbar { display: none; }
+
+/* Story Card */
+.cs-story {
+  flex-shrink: 0;
+  width: calc(100vw - 48px);
+  max-width: 380px;
+  min-height: calc(100vh - 140px);
+  border-radius: 32px;
+  padding: 28px 24px;
+  scroll-snap-align: center;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cs-story.purple {
+  background: linear-gradient(170deg, #5e17eb 0%, #3b0d99 40%, #1a0744 100%);
+}
+.cs-story.gold {
+  background: linear-gradient(170deg, #c78520 0%, #8B5A10 40%, #3d2606 100%);
+}
+.cs-story.green {
+  background: linear-gradient(170deg, #10b981 0%, #065f42 40%, #022c1f 100%);
+}
+.cs-story.dark {
+  background: linear-gradient(170deg, #2d1b69 0%, #1a0e3e 40%, #0a0620 100%);
+}
+.cs-story.fire {
+  background: linear-gradient(170deg, #dc2626 0%, #991b1b 40%, #450a0a 100%);
+}
+
+/* Orb effects */
+.cs-story::before {
+  content: ''; position: absolute;
+  top: -60px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cs-story::after {
+  content: ''; position: absolute;
+  bottom: -80px; left: -40px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cs-story-top {
+  position: relative; z-index: 1;
+  margin-bottom: auto;
+}
+
+.cs-story-pts {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.12);
+  padding: 6px 14px; border-radius: 100px;
+  font-size: 13px; font-weight: 800; color: white;
+  margin-bottom: 20px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.cs-story-pts .star { color: var(--brand-gold); }
+
+.cs-story-icon { font-size: 48px; margin-bottom: 16px; display: block; }
+
+.cs-story-title {
+  font-size: 26px; font-weight: 900; letter-spacing: -0.5px;
+  line-height: 1.15; margin-bottom: 10px;
+}
+.cs-story-desc {
+  font-size: 15px; line-height: 1.5;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 24px;
+}
+
+/* Template content area */
+.cs-story-template {
+  position: relative; z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cs-tmpl-box {
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 20px;
+  font-size: 15px; line-height: 1.65;
+  color: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  flex: 1;
+}
+.cs-tmpl-box .hl { color: var(--brand-gold); font-weight: 700; }
+.cs-tmpl-box .wh { color: white; font-weight: 700; }
+
+.cs-tmpl-source {
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  margin-top: 8px; display: flex; align-items: center; gap: 4px;
+}
+.cs-tmpl-source .dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--winning-green); display: inline-block;
+}
+
+/* Bottom actions */
+.cs-story-bottom {
+  position: relative; z-index: 1;
+  margin-top: 20px;
+  display: flex; gap: 10px;
+}
+
+.cs-story-cta {
+  flex: 1;
+  background: white;
+  color: #1a1a2e;
+  border: none; padding: 16px;
+  border-radius: 16px;
+  font-size: 16px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform 0.2s;
+}
+.cs-story-cta:hover { transform: translateY(-2px); }
+
+.cs-story-cta.completed {
+  background: var(--winning-green);
+  color: white;
+}
+
+.cs-story-share {
+  width: 52px; height: 52px; flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white;
+  backdrop-filter: blur(8px);
+}
+
+/* Completed overlay */
+.cs-story-check {
+  position: absolute; top: 20px; right: 20px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--winning-green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; color: white;
+  box-shadow: 0 4px 16px rgba(16,185,129,0.4);
+  z-index: 3;
+}
+
+/* Scroll indicator dots */
+.cs-dots {
+  display: flex; justify-content: center; gap: 6px;
+  padding: 16px 0 32px;
+}
+.cs-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+.cs-dot.active {
+  width: 20px; border-radius: 3px;
+  background: var(--brand-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="content-submit">
+  <div class="cs-toolbar">
+    <button class="cs-back">&#8592;</button>
+    <h2 class="cs-toolbar-title">Bonus Content</h2>
+    <span class="cs-pts-total">8 / 32 pts</span>
+  </div>
+  <div class="cs-score-strip">
+    <div class="cs-score-strip-fill" style="width: 25%"></div>
+  </div>
+
+  <div class="cs-scroll">
+
+    <!-- 1. Share Leaderboard (COMPLETED) -->
+    <div class="cs-story purple">
+      <div class="cs-story-check">&#10003;</div>
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +2 pts &middot; Earned</span>
+        <span class="cs-story-icon">&#128202;</span>
+        <h2 class="cs-story-title">Share the<br>Leaderboard</h2>
+        <p class="cs-story-desc">Post your league standings to your story or feed</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          &#127942; <span class="wh">Flow Warriors</span> are sitting at <span class="hl">#1</span> with 6 pts after Week 1!<br><br>
+          We're competing in the FindMyFlow Fantasy League — personal development meets fantasy sports &#128293;<br><br>
+          Think you can beat us? &#128170;
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> Auto-filled from standings</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta completed">&#10003; Submitted</button>
+      </div>
+    </div>
+
+    <!-- 2. Comment & Engage -->
+    <div class="cs-story gold">
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +2 pts</span>
+        <span class="cs-story-icon">&#128172;</span>
+        <h2 class="cs-story-title">Comment &<br>Engage</h2>
+        <p class="cs-story-desc">Engage with 3 league players — comment, DM, or reply to their content</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          Engaged with <span class="hl">Alex</span>, <span class="hl">Jordan</span>, and <span class="hl">Sam</span> this week &#128170;<br><br>
+          <span class="wh">Alex</span> is crushing Business quests (42 pts!), <span class="wh">Jordan</span> posted amazing groan proof, and <span class="wh">Sam</span> just levelled up in Healing.<br><br>
+          This league is fire &#128293;
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> Names from your league</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta">Copy & Share &#128203;</button>
+        <button class="cs-story-share">&#128279;</button>
+      </div>
+    </div>
+
+    <!-- 3. Accountability Post -->
+    <div class="cs-story green">
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +4 pts</span>
+        <span class="cs-story-icon">&#128221;</span>
+        <h2 class="cs-story-title">Accountability<br>Post</h2>
+        <p class="cs-story-desc">Share your weekly plan or goals publicly</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          &#128640; Week 2 Goals (Flow Week):<br><br>
+          &#9989; Complete <span class="hl">Attraction Offer</span> flow<br>
+          &#9989; Finish 3 <span class="hl">Groans</span> courage challenges<br>
+          &#9989; Record 5 <span class="hl">Compass</span> check-ins<br><br>
+          Playing with <span class="wh">Flow Warriors</span> in the FindMyFlow Fantasy League &#127942;
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> From your weekly plan</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta">Copy & Share &#128203;</button>
+        <button class="cs-story-share">&#128279;</button>
+      </div>
+    </div>
+
+    <!-- 4. Shout Out Teammate -->
+    <div class="cs-story purple">
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +4 pts</span>
+        <span class="cs-story-icon">&#128588;</span>
+        <h2 class="cs-story-title">Shout Out a<br>Teammate</h2>
+        <p class="cs-story-desc">Celebrate a teammate with a public shout-out post</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          Huge shoutout to <span class="hl">Alex</span> &#128079;&#128079;&#128079;<br><br>
+          This week they scored <span class="wh">54 pts</span> for our squad and absolutely dominated the Business category.<br><br>
+          That's what showing up looks like. Let's go <span class="hl">Flow Warriors</span>! &#128170;&#127942;
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> Top teammate this week</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta">Copy & Share &#128203;</button>
+        <button class="cs-story-share">&#128279;</button>
+      </div>
+    </div>
+
+    <!-- 5. Hero Profile -->
+    <div class="cs-story dark">
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +4 pts</span>
+        <span class="cs-story-icon">&#129464;</span>
+        <h2 class="cs-story-title">Share Your<br>Hero Profile</h2>
+        <p class="cs-story-desc">Share your archetype to your story or feed</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          I'm <span class="hl">The Architect</span> &#127983;&#65039;<br><br>
+          My superpower: turning messy ideas into structured systems that actually work.<br><br>
+          Discovered through <span class="wh">FindMyFlow</span> — what's your archetype?<br><br>
+          &#128073; findmyflow.nichuzz.com/hero-profile
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> From your hero profile</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta">Copy & Share &#128203;</button>
+        <button class="cs-story-share">&#128279;</button>
+      </div>
+    </div>
+
+    <!-- 6. Carousel -->
+    <div class="cs-story gold">
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +8 pts</span>
+        <span class="cs-story-icon">&#127904;</span>
+        <h2 class="cs-story-title">Carousel<br>Highlights</h2>
+        <p class="cs-story-desc">Create a carousel post highlighting your week</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          <span class="wh">Slide 1:</span> "My Week 2 in FindMyFlow &#128640;"<br><br>
+          <span class="wh">Slide 2:</span> Completed <span class="hl">7 quests</span> across Business & Groans<br><br>
+          <span class="wh">Slide 3:</span> My courage challenge: <span class="hl">"Recorded a video pitch"</span><br><br>
+          <span class="wh">Slide 4:</span> Compass: 4 Flow, 2 Redirect, 1 Rest<br><br>
+          <span class="wh">Slide 5:</span> "Join the Fantasy League!"
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> From your week's activity</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta">Copy All Slides &#128203;</button>
+        <button class="cs-story-share">&#128279;</button>
+      </div>
+    </div>
+
+    <!-- 7. Play-List Proof -->
+    <div class="cs-story fire">
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +8 pts</span>
+        <span class="cs-story-icon">&#127917;</span>
+        <h2 class="cs-story-title">Play-List<br>Proof</h2>
+        <p class="cs-story-desc">Share evidence of a courage challenge you completed</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          Just did the scary thing &#128561;&#10024;<br><br>
+          Challenge: <span class="hl">"Record a video pitching my offer to a stranger"</span><br><br>
+          Visibility layer: <span class="wh">Money</span><br>
+          Scary: 8/10 | Wahoo: 9/10<br><br>
+          The Play-List is about doing things that scare AND excite you &#128170;
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> From your latest groan challenge</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta">Copy & Share &#128203;</button>
+        <button class="cs-story-share">&#128279;</button>
+      </div>
+    </div>
+
+    <!-- 8. Offer in the Wild -->
+    <div class="cs-story dark">
+      <div class="cs-story-top">
+        <span class="cs-story-pts"><span class="star">&#11088;</span> +10 pts</span>
+        <span class="cs-story-icon">&#127919;</span>
+        <h2 class="cs-story-title">Offer in<br>the Wild</h2>
+        <p class="cs-story-desc">Show proof of your offer out there — a screenshot, DM, or conversation</p>
+      </div>
+      <div class="cs-story-template">
+        <div class="cs-tmpl-box">
+          Your offer: <span class="hl">"90-Day Career Pivot Programme"</span><br><br>
+          Target: <span class="wh">Burnt-out corporate professionals</span><br><br>
+          Share a screenshot, DM, or link showing your offer in action — a real conversation, a landing page visit, or someone asking about it.<br><br>
+          <em style="color:rgba(255,255,255,0.4)">This one can't be auto-generated — it's YOUR proof &#128170;</em>
+        </div>
+        <span class="cs-tmpl-source"><span class="dot"></span> Offer context from your flows</span>
+      </div>
+      <div class="cs-story-bottom">
+        <button class="cs-story-cta">Submit Proof &#128247;</button>
+        <button class="cs-story-share">&#128279;</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scroll dots -->
+  <div class="cs-dots">
+    <div class="cs-dot active"></div>
+    <div class="cs-dot"></div>
+    <div class="cs-dot"></div>
+    <div class="cs-dot"></div>
+    <div class="cs-dot"></div>
+    <div class="cs-dot"></div>
+    <div class="cs-dot"></div>
+    <div class="cs-dot"></div>
+  </div>
+
+</div>
+
+</body>
+</html>

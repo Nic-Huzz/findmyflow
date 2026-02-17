@@ -135,17 +135,44 @@ export async function mapAllToWheelSegments(parsedData) {
  * Build the prompt for Haiku mapping
  */
 function buildMappingPrompt(parsedData) {
-  const skillCategories = Object.entries(SEGMENT_DISPLAY.skills)
-    .map(([id, info]) => `- ${id}: ${info.description}`)
-    .join('\n')
+  const skillCategories = `- clarifying: Making complex ideas simple, teaching, explaining, translating jargon (NOT diagnosing patterns — that's analyzing)
+- analyzing: Diagnosing patterns, reading data/people, spotting what others miss (NOT planning/strategy — that's strategizing)
+- strategizing: High-level planning, frameworks, models, game theory, vision (NOT making things — that's building)
+- organizing: Building processes, workflows, operations, logistics (NOT creating frameworks — that's strategizing)
+- building: Engineering, coding, prototyping, making tangible functional things (NOT designing experiences)
+- designing: Shaping how things feel, UX, experience architecture, facilitation design (NOT inventing new ideas — that's creating)
+- creating: Generating genuinely new/original ideas, invention, IP creation (NOT crafting experiences — that's designing)
+- expressing: Storytelling, narrative, voice, presentation, mythic framing, writing
+- connecting: Bringing people together, facilitation, community building, bridge-building
+- influencing: Persuasion, leadership, moving people to action, catalyzing change
+- nurturing: Coaching, mentoring, healing, somatic work, holding space, supporting growth
+- synthesizing: Connecting dots across domains, integrating disciplines, big-picture wisdom`
 
-  const problemCategories = Object.entries(SEGMENT_DISPLAY.problems)
-    .map(([id, info]) => `- ${id}: ${info.description}`)
-    .join('\n')
+  const problemCategories = `- personal_mastery: Self-improvement, habits, unlocking potential, growth roadmaps (NOT identity/expression — that's creative_expression)
+- creative_expression: Authenticity, self-expression, identity, feeling alive, being seen (NOT self-improvement — that's personal_mastery)
+- mental_wellbeing: Mental health, emotional balance, healing trauma, nervous system regulation (NOT growth — that's personal_mastery)
+- economic_freedom: Money, business, career, under-earning, pricing, financial sustainability
+- intimate_bonds: Relationships, love, family connection, partnership, meaningful bonds
+- service_care: Helping others, accessibility, gatekeeping, lowering barriers to entry
+- cultural_movements: Cultural shifts, thought leadership, movement-making
+- local_impact: Community belonging, local contribution
+- physical_vitality: Body, health, energy, fitness
+- human_progress: Innovation, technology, science, advancement
+- social_justice: Fairness, equity, rights
+- planetary_health: Environment, sustainability`
 
-  const personaCategories = Object.entries(SEGMENT_DISPLAY.personas)
-    .map(([id, info]) => `- ${id}: ${info.description}`)
-    .join('\n')
+  const personaCategories = `- seekers: Lost, seeking direction/purpose/meaning, early in journey (NOT intellectually curious — that's explorers)
+- explorers: Freedom-seeking, curious, rational, skeptical, needs proof before feeling (NOT lost/directionless — that's seekers)
+- creators: Artistic, expressive, identity through creation (NOT entrepreneurial/startup — that's builders)
+- builders: Entrepreneurial, launching, making, startup-minded (NOT artistic/expressive — that's creators)
+- healers: Recovering, processing, actively in healing work, burnt-out
+- teachers: Learning-focused, developing skills, knowledge-seeking, mentoring beginners
+- visionaries: Impact-driven, mission-focused, movement-making, facilitating systemic change
+- achievers: Goal-driven, ambitious, high-performance, success-oriented but seeking more
+- connectors: Seeking belonging, community, lonely, isolated
+- nurturers: Caring, supportive, family-oriented, caregiver
+- challengers: Truth-telling, courageous, questioning, disruptive
+- protectors: Security-focused, risk-aware, stability-seeking`
 
   const skillsList = parsedData.skills
     .map((s, i) => `${i}. "${s.name}" (${s.category || 'uncategorized'}) - ${s.evidence}`)
@@ -190,7 +217,9 @@ Return JSON in this exact format:
   "personas": ["category_id", "category_id", ...]
 }
 
-Use only the category IDs listed above. Match based on semantic meaning, not just keywords.`
+IMPORTANT: Use the EVIDENCE field as the primary signal for mapping, not just the item name.
+Spread items across categories — if 2+ items already map to one category, strongly prefer a different one.
+Use only the category IDs listed above.`
 }
 
 /**
@@ -203,27 +232,27 @@ function fallbackMap(item, type) {
     skills: {
       clarifying: ['teach', 'explain', 'simplify', 'translate', 'communicate'],
       analyzing: ['analyze', 'pattern', 'data', 'research', 'diagnose'],
-      strategizing: ['strategy', 'plan', 'framework', 'model', 'vision', 'strategic'],
+      strategizing: ['strategy', 'plan', 'framework', 'model', 'vision', 'strategic', 'productiz'],
       organizing: ['system', 'process', 'organize', 'structure', 'workflow'],
-      building: ['build', 'code', 'engineer', 'develop', 'technical', 'architect'],
-      designing: ['design', 'experience', 'ux', 'visual', 'aesthetic'],
+      building: ['build', 'code', 'engineer', 'develop', 'technical', 'architect', 'prototype', 'product', 'ai prompt', 'ai system', 'prompt'],
+      designing: ['design', 'experience', 'ux', 'visual', 'aesthetic', 'gamification', 'architecture'],
       creating: ['creative', 'create', 'art', 'innovate', 'ideate'],
-      expressing: ['story', 'narrative', 'voice', 'present', 'speak'],
-      connecting: ['connect', 'facilitate', 'collaborate', 'network', 'bridge'],
+      expressing: ['story', 'narrative', 'voice', 'present', 'speak', 'mythic', 'framing', 'writing'],
+      connecting: ['connect', 'facilitate', 'collaborate', 'network', 'bridge', 'community', 'choreography'],
       influencing: ['influence', 'persuade', 'lead', 'motivate', 'inspire'],
       nurturing: ['nurture', 'coach', 'mentor', 'support', 'heal', 'somatic', 'guide'],
-      synthesizing: ['synthesize', 'integrate', 'holistic', 'big picture', 'wisdom']
+      synthesizing: ['synthesize', 'integrate', 'holistic', 'big picture', 'wisdom', 'cross-discipline', 'pattern recognition', 'across disciplines', 'connecting dots']
     },
     problems: {
       physical_vitality: ['health', 'body', 'fitness', 'energy', 'physical'],
-      mental_wellbeing: ['mental', 'mind', 'anxiety', 'healing', 'emotional', 'wellbeing', 'heavy', 'serious'],
+      mental_wellbeing: ['mental', 'mind', 'anxiety', 'healing', 'emotional', 'wellbeing', 'heavy', 'serious', 'clinical'],
       personal_mastery: ['growth', 'mastery', 'potential', 'evolution', 'transform', 'patterns', 'sabotage', 'maps'],
-      intimate_bonds: ['relationship', 'love', 'intimacy', 'partner', 'family'],
-      service_care: ['help', 'serve', 'care', 'support', 'give'],
-      creative_expression: ['creative', 'express', 'voice', 'authentic', 'identity', 'playful', 'essence', 'alive', 'disconnected', 'blocked'],
+      intimate_bonds: ['relationship', 'love', 'intimacy', 'partner', 'family', 'connection', 'scatter', 'belong'],
+      service_care: ['help', 'serve', 'care', 'support', 'give', 'gatekep', 'beginner', 'barrier'],
+      creative_expression: ['creative', 'express', 'voice', 'authentic', 'identity', 'playful', 'essence', 'alive', 'disconnected', 'blocked', 'suppress', 'seen', 'safe'],
       local_impact: ['community', 'local', 'neighborhood', 'belonging'],
       cultural_movements: ['culture', 'movement', 'trend', 'shift', 'influence'],
-      economic_freedom: ['money', 'income', 'business', 'earn', 'wealth', 'financial', 'under-earn', 'value'],
+      economic_freedom: ['money', 'income', 'business', 'earn', 'wealth', 'financial', 'under-earn', 'value', 'shipping', 'focus', 'projects', 'spread'],
       social_justice: ['justice', 'equity', 'fairness', 'rights'],
       planetary_health: ['environment', 'climate', 'sustainability', 'planet'],
       human_progress: ['innovation', 'technology', 'future', 'progress', 'science']
@@ -232,13 +261,13 @@ function fallbackMap(item, type) {
       seekers: ['seeker', 'seeking', 'lost', 'direction', 'purpose', 'meaning', 'clarity'],
       builders: ['builder', 'building', 'entrepreneur', 'maker', 'founder', 'startup'],
       healers: ['healing', 'healer', 'recovery', 'trauma', 'wellness', 'therapy', 'burnt-out', 'burnout'],
-      teachers: ['learning', 'student', 'education', 'knowledge', 'skill'],
+      teachers: ['learning', 'student', 'education', 'knowledge', 'skill', 'beginner', 'believe', 'first step', 'mentoring'],
       connectors: ['lonely', 'isolated', 'belonging', 'community', 'tribe', 'connection'],
       achievers: ['success', 'goals', 'ambitious', 'driven', 'performance', 'results'],
-      explorers: ['adventure', 'freedom', 'explore', 'curious', 'discovery', 'rational', 'skeptical'],
-      visionaries: ['vision', 'impact', 'change', 'mission', 'legacy', 'transform', 'movement', 'facilitator', 'leader'],
+      explorers: ['adventure', 'freedom', 'explore', 'curious', 'discovery', 'rational', 'skeptical', 'proof', 'science', 'framework'],
+      visionaries: ['vision', 'impact', 'change', 'mission', 'legacy', 'transform', 'movement', 'facilitator', 'leader', 'emerging'],
       protectors: ['security', 'safety', 'protect', 'stability', 'risk'],
-      creators: ['creative', 'artist', 'expression', 'design', 'content', 'craft'],
+      creators: ['creative', 'artist', 'expression', 'design', 'content', 'craft', 'young', 'stuck', 'expectations'],
       nurturers: ['caring', 'support', 'family', 'parent', 'caregiver', 'empathy'],
       challengers: ['truth', 'challenge', 'question', 'rebel', 'disrupt', 'courage']
     }

@@ -15,16 +15,17 @@ export default function VoiceProfileCard({ profile, onEdit, onStartFresh, onDone
 
   // Determine if this is a template-based or custom profile
   const isTemplate = profile.is_template || profile.template_id
-  const voiceType = profile.voice_type || profile.voiceType || 'Custom Voice'
+  const dp = profile.detected_patterns || {}
+  const voiceType = profile.voice_type || profile.voiceType || profile.voice_name || 'Custom Voice'
 
-  // Extract traits
-  const traits = profile.traits || profile.voice_traits || []
+  // Extract traits (top-level from fresh response, or from detected_patterns for DB-loaded)
+  const traits = profile.traits || profile.voice_traits || dp.traits || []
 
-  // Extract patterns
-  const patterns = profile.patterns || profile.writing_patterns || {}
+  // Extract patterns (top-level from fresh response, or detected_patterns IS the patterns object for DB)
+  const patterns = profile.patterns || profile.writing_patterns || dp
 
   // Extract sample
-  const sampleOutput = profile.sample_output || profile.sampleOutput || null
+  const sampleOutput = profile.sample_output || profile.sampleOutput || dp.sample_output || null
 
   // Extract summary
   const summary = profile.summary || profile.voice_summary ||

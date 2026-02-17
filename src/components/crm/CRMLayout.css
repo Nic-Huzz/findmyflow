@@ -7,6 +7,11 @@
   min-height: 100vh;
 }
 
+/* Skip global page-enter animation — CRM has its own PageTransition */
+.crm-layout .page-enter {
+  animation: none;
+}
+
 /* Ensure nudge doesn't interfere with page content */
 .crm-layout > *:not(.coach-nudge):not(.tour-overlay) {
   position: relative;

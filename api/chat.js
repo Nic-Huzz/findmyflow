@@ -110,7 +110,7 @@ export default async function handler(req, res) {
     }
 
     // 3. Input Validation
-    const { messages, model = 'claude-3-haiku-20240307', max_tokens = 1024, system } = req.body
+    const { messages, model = 'claude-haiku-4-5-20251001', max_tokens = 1024, system } = req.body
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Messages array is required' })

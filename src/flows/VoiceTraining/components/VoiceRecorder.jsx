@@ -29,6 +29,14 @@ export default function VoiceRecorder({
   const analyserRef = useRef(null)
   const animationRef = useRef(null)
   const canvasRef = useRef(null)
+  const existingTextRef = useRef(existingText)
+  const onTranscriptRef = useRef(onTranscript)
+  const isRecordingRef = useRef(isRecording)
+
+  // Keep refs in sync without tearing down SpeechRecognition
+  useEffect(() => { existingTextRef.current = existingText }, [existingText])
+  useEffect(() => { onTranscriptRef.current = onTranscript }, [onTranscript])
+  useEffect(() => { isRecordingRef.current = isRecording }, [isRecording])
 
   useEffect(() => {
     if (!SpeechRecognition) {
@@ -36,7 +44,7 @@ export default function VoiceRecorder({
       return
     }
 
-    // Initialize speech recognition
+    // Initialize speech recognition once
     const recognition = new SpeechRecognition()
     recognition.continuous = true
     recognition.interimResults = true
@@ -58,10 +66,11 @@ export default function VoiceRecorder({
       setInterimTranscript(interim)
 
       if (finalTranscript) {
-        // Append to existing text with proper spacing
-        const separator = existingText && !existingText.endsWith(' ') ? ' ' : ''
-        const newText = existingText + separator + finalTranscript
-        onTranscript(newText.trim())
+        // Append to existing text with proper spacing (read from ref for latest value)
+        const current = existingTextRef.current
+        const separator = current && !current.endsWith(' ') ? ' ' : ''
+        const newText = current + separator + finalTranscript
+        onTranscriptRef.current(newText.trim())
       }
     }
 
@@ -80,7 +89,7 @@ export default function VoiceRecorder({
 
     recognition.onend = () => {
       // Auto-restart if still supposed to be recording
-      if (isRecording && recognitionRef.current) {
+      if (isRecordingRef.current && recognitionRef.current) {
         try {
           recognition.start()
         } catch (e) {
@@ -99,7 +108,7 @@ export default function VoiceRecorder({
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [existingText, onTranscript, isRecording])
+  }, [])
 
   // Audio visualization
   useEffect(() => {

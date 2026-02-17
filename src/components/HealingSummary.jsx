@@ -11,6 +11,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../auth/AuthProvider'
+import SplinterVisualization from './SplinterVisualization'
 import './HealingSummary.css'
 
 function HealingSummary({ onBack, progress }) {
@@ -30,6 +31,7 @@ function HealingSummary({ onBack, progress }) {
   // Flow data from NS and Healing Compass
   const [nervousSystemData, setNervousSystemData] = useState(null)
   const [healingCompassData, setHealingCompassData] = useState(null)
+  const [checkinTimeline, setCheckinTimeline] = useState([])
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -58,6 +60,16 @@ function HealingSummary({ onBack, progress }) {
 
         if (hcData && hcData.length > 0) {
           setHealingCompassData(hcData[0])
+
+          // Fetch check-in timeline for v2 compass
+          if (hcData[0].flow_version === 2) {
+            const { data: checkins } = await supabase
+              .from('healing_checkins')
+              .select('*')
+              .eq('healing_compass_id', hcData[0].id)
+              .order('created_at', { ascending: true })
+            if (checkins) setCheckinTimeline(checkins)
+          }
         }
 
         // Fetch all healing-related quest completions
@@ -347,24 +359,117 @@ function HealingSummary({ onBack, progress }) {
         <div className="summary-section">
           <h3>Healing Compass</h3>
           {healingCompassData ? (
-            <div className="flow-data">
-              <div className="flow-data-row full-width">
-                <span className="flow-data-icon">🎯</span>
-                <div className="flow-data-content">
-                  <span className="flow-data-label">Safety Contract Being Healed</span>
-                  <span className="flow-data-value highlight">{healingCompassData.selected_safety_contract}</span>
-                </div>
+            healingCompassData.flow_version === 2 ? (
+              <div className="flow-data">
+                {/* V2: Needs-based with splinter */}
+                {healingCompassData.primary_need && (
+                  <div className="flow-data-row">
+                    <span className="flow-data-icon">🎯</span>
+                    <div className="flow-data-content">
+                      <span className="flow-data-label">Primary Need</span>
+                      <span className="flow-data-value highlight" style={{ textTransform: 'capitalize' }}>
+                        {healingCompassData.primary_need.replace('_', ' ')}
+                        {healingCompassData.need_ratings?.[healingCompassData.primary_need] && (
+                          <> — {healingCompassData.need_ratings[healingCompassData.primary_need]}/10</>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {healingCompassData.action_text && (
+                  <div className="flow-data-row full-width">
+                    <span className="flow-data-icon">💪</span>
+                    <div className="flow-data-content">
+                      <span className="flow-data-label">The Action</span>
+                      <span className="flow-data-value">{healingCompassData.action_text}</span>
+                    </div>
+                  </div>
+                )}
+                {healingCompassData.protective_pattern && (
+                  <div className="flow-data-row">
+                    <span className="flow-data-icon">🛡️</span>
+                    <div className="flow-data-content">
+                      <span className="flow-data-label">Protective Pattern</span>
+                      <span className="flow-data-value" style={{ textTransform: 'capitalize' }}>
+                        {healingCompassData.protective_pattern.replace('_', ' ')}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {healingCompassData.splinter_location && (
+                  <div className="flow-data-row full-width">
+                    <span className="flow-data-icon">🔮</span>
+                    <div className="flow-data-content">
+                      <span className="flow-data-label">Your Splinter</span>
+                      <div style={{ marginTop: 12, display: 'flex', justifyContent: 'center' }}>
+                        <SplinterVisualization
+                          location={healingCompassData.splinter_location}
+                          shape={healingCompassData.splinter_shape}
+                          size={healingCompassData.splinter_size}
+                          color={healingCompassData.splinter_color}
+                          texture={healingCompassData.splinter_texture}
+                          movement={healingCompassData.splinter_movement}
+                          animate
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {/* Check-in timeline */}
+                {checkinTimeline.length > 0 && (
+                  <div className="flow-data-row full-width">
+                    <span className="flow-data-icon">📈</span>
+                    <div className="flow-data-content">
+                      <span className="flow-data-label">Check-in Timeline ({checkinTimeline.length})</span>
+                      <div className="checkin-timeline">
+                        {checkinTimeline.map((ci, i) => (
+                          <div key={ci.id} className="checkin-timeline-entry">
+                            <div className="checkin-timeline-dot" />
+                            <div className="checkin-timeline-info">
+                              <span className="checkin-timeline-date">
+                                {new Date(ci.created_at).toLocaleDateString()}
+                              </span>
+                              <span className="checkin-timeline-intensity">
+                                Intensity: {ci.need_intensity}/10
+                              </span>
+                            </div>
+                            <SplinterVisualization
+                              location={ci.splinter_location}
+                              shape={ci.splinter_shape}
+                              size={ci.splinter_size}
+                              color={ci.splinter_color}
+                              texture={ci.splinter_texture}
+                              movement={ci.splinter_movement}
+                              compact
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              {healingCompassData.past_event_emotions && (
-                <div className="flow-data-row">
-                  <span className="flow-data-icon">💔</span>
+            ) : (
+              <div className="flow-data">
+                {/* V1: Legacy display */}
+                <div className="flow-data-row full-width">
+                  <span className="flow-data-icon">🎯</span>
                   <div className="flow-data-content">
-                    <span className="flow-data-label">Emotions From Past</span>
-                    <span className="flow-data-value">{healingCompassData.past_event_emotions}</span>
+                    <span className="flow-data-label">Safety Contract Being Healed</span>
+                    <span className="flow-data-value highlight">{healingCompassData.selected_safety_contract}</span>
                   </div>
                 </div>
-              )}
-            </div>
+                {healingCompassData.past_event_emotions && (
+                  <div className="flow-data-row">
+                    <span className="flow-data-icon">💔</span>
+                    <div className="flow-data-content">
+                      <span className="flow-data-label">Emotions From Past</span>
+                      <span className="flow-data-value">{healingCompassData.past_event_emotions}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
           ) : (
             <p className="empty-hint">Complete the Healing Compass to identify the wound you're healing</p>
           )}

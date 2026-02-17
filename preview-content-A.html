@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Option A — Template Cards</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #fafafa;
+}
+
+.content-submit {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --winning-green: #10b981;
+
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: 120px;
+  color: var(--text-primary);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Toolbar */
+.cs-toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 16px; border-bottom: 1px solid #dee2e6;
+  z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.cs-back {
+  position: absolute; left: 16px; background: none; border: none;
+  font-size: 1.5rem; color: var(--brand-purple); cursor: pointer;
+  padding: 8px; margin: -8px; line-height: 1;
+}
+.cs-toolbar-title { font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.3px; }
+
+/* Week progress hero */
+.cs-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px; padding: 24px; margin-bottom: 20px;
+  color: white; position: relative; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94,23,235,0.3);
+}
+.cs-hero::before {
+  content: ''; position: absolute; top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  animation: csGlow 4s ease-in-out infinite; pointer-events: none;
+}
+@keyframes csGlow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+.cs-hero-eyebrow {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: rgba(255,255,255,0.6);
+  display: block; margin-bottom: 10px; position: relative; z-index: 1;
+}
+.cs-hero-title {
+  font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
+  margin: 0 0 4px; position: relative; z-index: 1;
+}
+.cs-hero-sub {
+  font-size: 14px; color: rgba(255,255,255,0.65);
+  margin: 0 0 16px; position: relative; z-index: 1;
+}
+.cs-hero-progress {
+  display: flex; align-items: center; gap: 12px;
+  position: relative; z-index: 1;
+}
+.cs-progress-track {
+  flex: 1; height: 6px; background: rgba(255,255,255,0.15);
+  border-radius: 3px; overflow: hidden;
+}
+.cs-progress-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--brand-gold), #f5c55a);
+  transition: width 0.4s ease-out;
+}
+.cs-progress-label {
+  font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.8);
+  flex-shrink: 0;
+}
+
+/* Section label */
+.cs-section-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--brand-purple);
+  margin-bottom: 12px; display: block;
+}
+
+/* Template Card */
+.cs-card {
+  background: var(--surface); border: 1px solid #e9ecef;
+  border-radius: 24px; padding: 0; margin-bottom: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  overflow: hidden; position: relative;
+}
+.cs-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(180deg, var(--brand-purple), #10b981, var(--brand-gold));
+  border-radius: 24px 0 0 24px; z-index: 2;
+}
+.cs-card.completed {
+  border-color: rgba(16,185,129,0.2);
+}
+.cs-card.completed::before {
+  background: var(--winning-green);
+}
+
+.cs-card-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px 20px 18px 24px; cursor: pointer; user-select: none;
+}
+.cs-card-icon {
+  width: 44px; height: 44px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+  background: rgba(94,23,235,0.06);
+}
+.cs-card.completed .cs-card-icon { background: rgba(16,185,129,0.08); }
+
+.cs-card-info { flex: 1; min-width: 0; }
+.cs-card-title {
+  font-size: 15px; font-weight: 800; color: var(--text-primary);
+  letter-spacing: -0.2px; margin-bottom: 2px;
+}
+.cs-card-meta {
+  font-size: 12px; color: var(--text-muted);
+  display: flex; align-items: center; gap: 6px;
+}
+.cs-pts-badge {
+  display: inline-flex; align-items: center;
+  background: rgba(233,162,59,0.1); color: #c78520;
+  padding: 2px 8px; border-radius: 100px;
+  font-size: 11px; font-weight: 800;
+}
+.cs-card-chevron { font-size: 10px; color: var(--text-muted); flex-shrink: 0; }
+
+/* Completed check */
+.cs-check {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--winning-green); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800; flex-shrink: 0;
+}
+
+/* Expanded content */
+.cs-card-body {
+  padding: 0 20px 20px 24px;
+  border-top: 1px solid #f1f3f5;
+  display: none;
+}
+.cs-card.expanded .cs-card-body { display: block; }
+.cs-card.expanded .cs-card-chevron { transform: rotate(180deg); }
+
+.cs-template-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--brand-purple);
+  margin: 16px 0 8px; display: block;
+}
+.cs-template-box {
+  background: #f8f9fa; border: 1px solid #e9ecef;
+  border-radius: 16px; padding: 16px;
+  font-size: 14px; line-height: 1.6; color: var(--text-primary);
+  position: relative;
+}
+.cs-template-box .cs-highlight {
+  color: var(--brand-purple); font-weight: 700;
+}
+.cs-template-box .cs-gold {
+  color: #c78520; font-weight: 700;
+}
+
+.cs-edit-hint {
+  font-size: 12px; color: var(--text-muted);
+  margin-top: 8px; font-style: italic;
+}
+
+.cs-actions {
+  display: flex; gap: 8px; margin-top: 14px;
+}
+.cs-copy-btn {
+  flex: 1;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e; border: none; padding: 14px;
+  border-radius: 14px; font-size: 15px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+  transition: transform 0.2s;
+}
+.cs-copy-btn:hover { transform: translateY(-2px); }
+
+.cs-share-btn {
+  width: 48px; height: 48px; flex-shrink: 0;
+  background: rgba(94,23,235,0.06); border: 1px solid rgba(94,23,235,0.12);
+  border-radius: 14px; font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s;
+}
+.cs-share-btn:hover { background: rgba(94,23,235,0.1); }
+
+/* Link field */
+.cs-link-field {
+  margin-top: 12px;
+}
+.cs-link-field label {
+  font-size: 12px; font-weight: 700; color: var(--text-secondary);
+  display: block; margin-bottom: 6px;
+}
+.cs-link-field input {
+  width: 100%; background: #f8f9fa; border: 2px solid #e9ecef;
+  border-radius: 12px; padding: 12px 14px; font-size: 14px;
+  font-family: inherit; color: var(--text-primary); transition: all 0.2s;
+}
+.cs-link-field input:focus {
+  outline: none; border-color: var(--brand-purple);
+  background: #fff; box-shadow: 0 0 0 4px rgba(94,23,235,0.1);
+}
+.cs-link-field .cs-auto-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700; color: var(--winning-green);
+  margin-top: 4px;
+}
+
+/* Tier separator */
+.cs-tier {
+  display: flex; align-items: center; gap: 12px;
+  margin: 20px 0 12px;
+}
+.cs-tier-line { flex: 1; height: 1px; background: #e9ecef; }
+.cs-tier-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-hero::before { animation: none; }
+  * { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="content-submit">
+  <div class="cs-toolbar">
+    <button class="cs-back">&#8592;</button>
+    <h2 class="cs-toolbar-title">Bonus Content</h2>
+  </div>
+
+  <!-- Hero -->
+  <div class="cs-hero">
+    <span class="cs-hero-eyebrow">Week 2 &middot; Bonus Category</span>
+    <h2 class="cs-hero-title">Earn Bonus Points</h2>
+    <p class="cs-hero-sub">Share content, earn points for your squad</p>
+    <div class="cs-hero-progress">
+      <div class="cs-progress-track">
+        <div class="cs-progress-fill" style="width: 25%"></div>
+      </div>
+      <span class="cs-progress-label">8 / 32 pts</span>
+    </div>
+  </div>
+
+  <!-- Quick Wins (2 pts) -->
+  <div class="cs-tier">
+    <span class="cs-tier-label">Quick Wins</span>
+    <div class="cs-tier-line"></div>
+  </div>
+
+  <!-- Share Leaderboard — COMPLETED -->
+  <div class="cs-card completed">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#128202;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Share the Leaderboard</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+2 pts</span>
+          <span>Approved</span>
+        </div>
+      </div>
+      <div class="cs-check">&#10003;</div>
+    </div>
+  </div>
+
+  <!-- Comment & Engage -->
+  <div class="cs-card expanded">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#128172;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Comment & Engage</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+2 pts</span>
+          <span>Engage with 3 league players</span>
+        </div>
+      </div>
+      <span class="cs-card-chevron">&#9660;</span>
+    </div>
+    <div class="cs-card-body">
+      <span class="cs-template-label">Auto-Generated Template</span>
+      <div class="cs-template-box">
+        Engaged with <span class="cs-highlight">Alex</span>, <span class="cs-highlight">Jordan</span>, and <span class="cs-highlight">Sam</span> this week &#128170;<br><br>
+        <span class="cs-gold">Alex</span> is crushing Business quests (42 pts!), <span class="cs-gold">Jordan</span> posted an amazing groan challenge proof, and <span class="cs-gold">Sam</span> just levelled up in Healing. This league is fire &#128293;
+      </div>
+      <p class="cs-edit-hint">Tap to edit before sharing</p>
+      <div class="cs-actions">
+        <button class="cs-copy-btn" onclick="alert('Copied to clipboard!')">Copy Text <span>&#128203;</span></button>
+        <button class="cs-share-btn">&#128279;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earn More (4 pts) -->
+  <div class="cs-tier">
+    <span class="cs-tier-label">Earn More</span>
+    <div class="cs-tier-line"></div>
+  </div>
+
+  <!-- Accountability Post -->
+  <div class="cs-card">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#128221;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Accountability Post</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+4 pts</span>
+          <span>Share your weekly goals</span>
+        </div>
+      </div>
+      <span class="cs-card-chevron">&#9660;</span>
+    </div>
+    <div class="cs-card-body">
+      <span class="cs-template-label">Auto-Generated Template</span>
+      <div class="cs-template-box">
+        &#128640; Week 2 Goals (Flow Week):<br><br>
+        &#9989; Complete <span class="cs-highlight">Attraction Offer</span> flow<br>
+        &#9989; Finish 3 <span class="cs-highlight">Groans</span> courage challenges<br>
+        &#9989; Record 5 <span class="cs-highlight">Compass</span> check-ins<br><br>
+        Playing with <span class="cs-gold">Flow Warriors</span> in the FindMyFlow Fantasy League &#127942;
+      </div>
+      <p class="cs-edit-hint">Pulled from your weekly plan — tap to edit</p>
+      <div class="cs-link-field">
+        <label>Link to your post (optional)</label>
+        <input type="url" placeholder="https://instagram.com/p/..." />
+      </div>
+      <div class="cs-actions">
+        <button class="cs-copy-btn">Copy & Share <span>&rarr;</span></button>
+        <button class="cs-share-btn">&#128279;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shout Out a Teammate -->
+  <div class="cs-card">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#128588;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Shout Out a Teammate</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+4 pts</span>
+          <span>Celebrate a teammate publicly</span>
+        </div>
+      </div>
+      <span class="cs-card-chevron">&#9660;</span>
+    </div>
+    <div class="cs-card-body">
+      <span class="cs-template-label">Auto-Generated Template</span>
+      <div class="cs-template-box">
+        Huge shoutout to <span class="cs-highlight">Alex</span> &#128079;&#128079;&#128079;<br><br>
+        This week they scored <span class="cs-gold">54 pts</span> for our squad and absolutely dominated the Business category. That's what showing up looks like.<br><br>
+        Let's go <span class="cs-gold">Flow Warriors</span>! &#128170;&#127942;
+      </div>
+      <p class="cs-edit-hint">Based on your top teammate this week — tap to edit</p>
+      <div class="cs-actions">
+        <button class="cs-copy-btn">Copy & Share <span>&rarr;</span></button>
+        <button class="cs-share-btn">&#128279;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Hero Profile -->
+  <div class="cs-card">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#129464;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Share Your Hero Profile</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+4 pts</span>
+          <span>Share your archetype</span>
+        </div>
+      </div>
+      <span class="cs-card-chevron">&#9660;</span>
+    </div>
+    <div class="cs-card-body">
+      <span class="cs-template-label">Auto-Generated Template</span>
+      <div class="cs-template-box">
+        I'm <span class="cs-highlight">The Architect</span> &#127983;&#65039;<br><br>
+        My superpower: turning messy ideas into structured systems that actually work.<br><br>
+        Discovered through <span class="cs-gold">FindMyFlow</span> — a personal development app helping burnt-out professionals find their ideal career.<br><br>
+        What's your archetype? &#128073; findmyflow.nichuzz.com/hero-profile
+      </div>
+      <div class="cs-link-field">
+        <label>Link (auto-filled)</label>
+        <input type="url" value="https://findmyflow.nichuzz.com/hero-profile" />
+        <span class="cs-auto-tag">&#9889; Auto-filled from your profile</span>
+      </div>
+      <div class="cs-actions">
+        <button class="cs-copy-btn">Copy & Share <span>&rarr;</span></button>
+        <button class="cs-share-btn">&#128279;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Big Points (8-10 pts) -->
+  <div class="cs-tier">
+    <span class="cs-tier-label">Big Points</span>
+    <div class="cs-tier-line"></div>
+  </div>
+
+  <!-- Carousel Highlights -->
+  <div class="cs-card">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#127904;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Carousel Highlights</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+8 pts</span>
+          <span>Create a carousel post</span>
+        </div>
+      </div>
+      <span class="cs-card-chevron">&#9660;</span>
+    </div>
+    <div class="cs-card-body">
+      <span class="cs-template-label">Suggested Slides</span>
+      <div class="cs-template-box">
+        <strong>Slide 1:</strong> "My Week 2 in FindMyFlow &#128640;"<br><br>
+        <strong>Slide 2:</strong> Completed <span class="cs-highlight">7 quests</span> across Business & Groans<br><br>
+        <strong>Slide 3:</strong> My courage challenge: <span class="cs-gold">"Recorded a video of my offer pitch"</span><br><br>
+        <strong>Slide 4:</strong> Compass check-in: 4 Flow &#127793;, 2 Redirect &#128309;, 1 Rest &#128308;<br><br>
+        <strong>Slide 5:</strong> CTA — "Join the Fantasy League!"
+      </div>
+      <p class="cs-edit-hint">Slides generated from your week's activity</p>
+      <div class="cs-actions">
+        <button class="cs-copy-btn">Copy All Slides <span>&#128203;</span></button>
+        <button class="cs-share-btn">&#128279;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Play-List Proof -->
+  <div class="cs-card">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#127917;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Play-List Proof</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+8 pts</span>
+          <span>Share courage challenge evidence</span>
+        </div>
+      </div>
+      <span class="cs-card-chevron">&#9660;</span>
+    </div>
+    <div class="cs-card-body">
+      <span class="cs-template-label">Auto-Generated Template</span>
+      <div class="cs-template-box">
+        Just did the scary thing &#128561;&#10024;<br><br>
+        Challenge: <span class="cs-highlight">"Record a video pitching my offer to a stranger"</span><br>
+        Visibility layer: <span class="cs-gold">Money</span><br>
+        Scary score: 8/10 | Wahoo score: 9/10<br><br>
+        The Play-List is about doing the things that scare you AND excite you. This one was both &#128170;
+      </div>
+      <p class="cs-edit-hint">Pulled from your latest completed groan challenge</p>
+      <div class="cs-actions">
+        <button class="cs-copy-btn">Copy & Share <span>&rarr;</span></button>
+        <button class="cs-share-btn">&#128279;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offer in the Wild -->
+  <div class="cs-card">
+    <div class="cs-card-header" onclick="this.parentElement.classList.toggle('expanded')">
+      <div class="cs-card-icon">&#127919;</div>
+      <div class="cs-card-info">
+        <div class="cs-card-title">Offer in the Wild</div>
+        <div class="cs-card-meta">
+          <span class="cs-pts-badge">+10 pts</span>
+          <span>Proof of your offer out there</span>
+        </div>
+      </div>
+      <span class="cs-card-chevron">&#9660;</span>
+    </div>
+    <div class="cs-card-body">
+      <span class="cs-template-label">Your Offer Context</span>
+      <div class="cs-template-box">
+        Your current offer: <span class="cs-highlight">"90-Day Career Pivot Programme"</span><br>
+        Target persona: <span class="cs-gold">Burnt-out corporate professionals</span><br><br>
+        Share a screenshot, DM, or link showing your offer in action — a real conversation, a landing page visit, or someone asking about it.
+      </div>
+      <div class="cs-link-field">
+        <label>Link or screenshot URL</label>
+        <input type="url" placeholder="Paste link to your evidence..." />
+      </div>
+      <div class="cs-actions">
+        <button class="cs-copy-btn">Submit for Review <span>&rarr;</span></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

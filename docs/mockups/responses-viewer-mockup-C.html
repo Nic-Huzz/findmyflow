@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option C: Compact Accordion</title>
+<style>
+  /*
+   * OPTION C: Compact Accordion
+   *
+   * Philosophy: Minimal vertical footprint. Header + stats in one compact
+   * hero. Devices + drop-off collapse into accordions. Everything above
+   * the fold. The focus is on the tab content (Overview/Deep Dive) which
+   * gets the most space.
+   *
+   * Pros: Less scroll, data-dense, gets to the content faster
+   * Cons: Hides detail behind accordions, feels more utilitarian
+   */
+
+  :root {
+    --brand-purple: #5e17eb;
+    --brand-gold: #E9A23B;
+    --text-primary: #1a1a2e;
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
+    --surface: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+    min-height: 100vh;
+    padding: 20px;
+    padding-bottom: 100px;
+    color: var(--text-primary);
+  }
+
+  .container { max-width: 500px; margin: 0 auto; }
+
+  /* === COMPACT HEADER === */
+  .compact-header {
+    background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+    border-radius: 24px;
+    padding: 20px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(94, 23, 235, 0.3);
+    color: white;
+  }
+
+  .compact-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -20px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(233, 162, 59, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .compact-header > * { position: relative; z-index: 1; }
+
+  /* Header row: back, title, actions, close */
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .h-back {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 10px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .h-title {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .h-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .h-action-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .h-action-btn.gold-btn {
+    background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+    border: none;
+    color: var(--text-primary);
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(233, 162, 59, 0.3);
+  }
+
+  .h-close {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    border-radius: 10px;
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* Period tabs - inline compact */
+  .h-periods {
+    display: flex;
+    gap: 3px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 14px;
+  }
+
+  .h-period {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .h-period.active {
+    background: rgba(255,255,255,0.12);
+    color: white;
+  }
+
+  /* Stats - single row of 4 */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .mini-stat {
+    text-align: center;
+    padding: 8px 4px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mini-stat.gold {
+    background: rgba(233, 162, 59, 0.12);
+    border-color: rgba(233, 162, 59, 0.2);
+  }
+
+  .mini-num {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .mini-stat.gold .mini-num { color: #fbbf24; }
+
+  .mini-num .sm { font-size: 11px; font-weight: 500; opacity: 0.5; }
+
+  .mini-label {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+
+  /* === ACCORDION SECTIONS === */
+  .accordion {
+    background: var(--surface);
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .accordion-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .accordion-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .accordion-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+
+  .accordion-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .accordion-summary {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .accordion-chevron {
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+  }
+
+  .accordion.open .accordion-chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    padding: 0 18px 16px;
+    display: none;
+  }
+
+  .accordion.open .accordion-body { display: block; }
+
+  /* Accordion content styles */
+  .acc-device-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .acc-device {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border-radius: 12px;
+  }
+
+  .acc-device-icon { font-size: 18px; }
+  .acc-device-num {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .acc-device-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+  }
+
+  .acc-funnel-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .acc-funnel-q {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-secondary);
+    width: 24px;
+  }
+
+  .acc-funnel-track {
+    flex: 1;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .acc-funnel-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ef4444, #fb923c);
+    border-radius: 4px;
+  }
+
+  .acc-funnel-count {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    width: 40px;
+    text-align: right;
+  }
+
+  /* === TAB STRIP === */
+  .tab-strip {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    background: var(--surface);
+    border: 1px solid #e9ecef;
+    border-radius: 16px;
+    padding: 6px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  }
+
+  .strip-tab {
+    flex: 1;
+    padding: 10px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .strip-tab.active {
+    background: linear-gradient(135deg, var(--brand-purple), #7c3aed);
+    color: white;
+    box-shadow: 0 4px 12px rgba(94, 23, 235, 0.25);
+  }
+
+  .strip-tab.gold-strip {
+    background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+    color: var(--text-primary);
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(233, 162, 59, 0.25);
+  }
+
+  /* === CONTENT AREA === */
+  .content-area {
+    background: var(--surface);
+    border: 1px solid #e9ecef;
+    border-radius: 24px;
+    padding: 24px;
+    min-height: 150px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  /* === LABEL === */
+  .mockup-label {
+    text-align: center;
+    padding: 12px;
+    background: var(--brand-purple);
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="mockup-label">Option C: Compact Accordion</div>
+
+  <!-- Compact header with everything -->
+  <div class="compact-header">
+    <div class="header-top">
+      <button class="h-back">&larr;</button>
+      <span class="h-title">Conscious leaders under-earn a...</span>
+      <div class="h-actions">
+        <button class="h-action-btn">In-progress</button>
+        <button class="h-action-btn gold-btn">Export</button>
+      </div>
+      <button class="h-close">&times;</button>
+    </div>
+
+    <div class="h-periods">
+      <button class="h-period">7 days</button>
+      <button class="h-period active">30 days</button>
+      <button class="h-period">All time</button>
+    </div>
+
+    <div class="stats-strip">
+      <div class="mini-stat">
+        <div class="mini-num">12</div>
+        <div class="mini-label">Started</div>
+      </div>
+      <div class="mini-stat gold">
+        <div class="mini-num">8</div>
+        <div class="mini-label">Done</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-num">67%</div>
+        <div class="mini-label">Rate</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-num">3.2<span class="sm">m</span></div>
+        <div class="mini-label">Avg</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordions for detail sections -->
+  <div class="accordion open">
+    <button class="accordion-trigger">
+      <div class="accordion-left">
+        <span class="accordion-icon">📱</span>
+        <span class="accordion-title">Devices</span>
+      </div>
+      <span class="accordion-summary">50/50 split</span>
+      <span class="accordion-chevron">&#9662;</span>
+    </button>
+    <div class="accordion-body">
+      <div class="acc-device-row">
+        <div class="acc-device">
+          <span class="acc-device-icon">📱</span>
+          <div>
+            <div class="acc-device-num">6</div>
+            <div class="acc-device-label">Mobile</div>
+          </div>
+        </div>
+        <div class="acc-device">
+          <span class="acc-device-icon">💻</span>
+          <div>
+            <div class="acc-device-num">6</div>
+            <div class="acc-device-label">Desktop</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-trigger">
+      <div class="accordion-left">
+        <span class="accordion-icon">📉</span>
+        <span class="accordion-title">Drop-off Points</span>
+      </div>
+      <span class="accordion-summary">4 left total</span>
+      <span class="accordion-chevron">&#9662;</span>
+    </button>
+    <div class="accordion-body">
+      <div class="acc-funnel-item">
+        <span class="acc-funnel-q">Q1</span>
+        <div class="acc-funnel-track"><div class="acc-funnel-fill" style="width: 25%"></div></div>
+        <span class="acc-funnel-count">1 left</span>
+      </div>
+      <div class="acc-funnel-item">
+        <span class="acc-funnel-q">Q3</span>
+        <div class="acc-funnel-track"><div class="acc-funnel-fill" style="width: 50%"></div></div>
+        <span class="acc-funnel-count">2 left</span>
+      </div>
+      <div class="acc-funnel-item">
+        <span class="acc-funnel-q">Q5</span>
+        <div class="acc-funnel-track"><div class="acc-funnel-fill" style="width: 25%"></div></div>
+        <span class="acc-funnel-count">1 left</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab strip -->
+  <div class="tab-strip">
+    <button class="strip-tab active">Overview</button>
+    <button class="strip-tab">Deep Dive</button>
+    <button class="strip-tab gold-strip">Answers</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content-area">
+    Timeline, funnel viz, geo breakdown...
+  </div>
+</div>
+
+<script>
+  // Simple accordion toggle for the mockup
+  document.querySelectorAll('.accordion-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.accordion').classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>

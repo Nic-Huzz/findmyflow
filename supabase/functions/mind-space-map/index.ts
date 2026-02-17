@@ -41,16 +41,16 @@ serve(async (req) => {
     }
 
     const systemPrompt = `You are a precise classifier that maps items to predefined categories.
-Your job is to identify which category best matches each item based on semantic meaning.
 
 RULES:
-1. Match based on semantic meaning and intent, not just keywords
+1. Match based on semantic meaning and the EVIDENCE provided, not just keywords
 2. Each item gets exactly ONE category
 3. Use only the category IDs provided - do not invent new ones
-4. Return ONLY valid JSON, no explanation or commentary
-5. For skills, consider the CATEGORY hint provided (Strategic, Creative, Technical, etc.)
+4. SPREAD items across categories — avoid mapping 3+ items to the same category unless truly warranted
+5. For skills, consider the CATEGORY hint (Strategic, Creative, Technical, etc.)
 6. For problems, consider the emotional core and who it affects
-7. For personas, consider the archetype and journey stage they represent`
+7. For personas, consider the archetype and journey stage they represent
+8. Return ONLY valid JSON, no explanation or commentary`
 
     // Call Claude Haiku API
     const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
@@ -61,8 +61,9 @@ RULES:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 500,
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 1500,
+        temperature: 0.3,
         system: systemPrompt,
         messages: [{ role: 'user', content: prompt }],
       }),

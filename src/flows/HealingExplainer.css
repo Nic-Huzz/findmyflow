@@ -1,0 +1,248 @@
+/**
+ * HealingExplainer.css
+ * Styles for healing explainer slides — Money Model intro style
+ */
+
+.healing-explainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+  color: white;
+  position: relative;
+}
+
+/* Progress dots */
+.healing-explainer .slide-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0;
+}
+
+.healing-explainer .slide-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.healing-explainer .slide-dot.active {
+  background: #ffdd27;
+  box-shadow: 0 0 10px rgba(255, 221, 39, 0.6);
+  transform: scale(1.2);
+}
+
+.healing-explainer .slide-dot.completed {
+  background: rgba(255, 221, 39, 0.5);
+}
+
+/* Welcome container override for slide content */
+.healing-explainer .welcome-container {
+  animation: healingSlideIn 0.4s ease;
+}
+
+/* Tighter paragraph spacing */
+.healing-explainer .welcome-message p {
+  margin: 0 0 10px;
+}
+
+/* Vertically center text content between dots and buttons */
+.healing-explainer .welcome-message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Slide heading — for titled slides like Big T / Little T */
+.healing-explainer .slide-heading {
+  font-size: 22px;
+  font-weight: 700;
+  color: #E9A23B;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+/* Emphasis box — subtle background for key statements */
+.healing-explainer .emphasis {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 18px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Large emphasis — bigger text for single-line statements */
+.healing-explainer .emphasis-lg {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin: 20px 0;
+  font-size: 22px;
+  line-height: 1.6;
+  color: white;
+}
+
+/* Step list — for brain biology, protective patterns, Four R's */
+.healing-explainer .step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.healing-explainer .step-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.healing-explainer .step-item .item-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.healing-explainer .step-item h4 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #E9A23B;
+  margin: 0;
+}
+
+.healing-explainer .step-item .item-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Four R's modality grid */
+.healing-explainer .four-rs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.healing-explainer .r-column {
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.healing-explainer .r-column h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #E9A23B;
+  margin: 0 0 10px;
+}
+
+.healing-explainer .r-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.healing-explainer .r-column li {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.3;
+}
+
+/* Italic quotes */
+.healing-explainer .quote-lines {
+  margin: 16px 0;
+}
+
+.healing-explainer .quote-lines p {
+  margin: 0 0 6px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Back link — reset button defaults and style as subtle text link */
+.healing-explainer .go-back-link {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.healing-explainer .go-back-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Slide animation */
+@keyframes healingSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .healing-explainer {
+    padding: 16px;
+  }
+
+  .healing-explainer .welcome-greeting {
+    font-size: 24px;
+  }
+
+  .healing-explainer .emphasis {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
+
+  .healing-explainer .emphasis-lg {
+    font-size: 18px;
+    padding: 16px 20px;
+  }
+
+  .healing-explainer .four-rs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* iOS Safe Area */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .healing-explainer {
+    padding-top: calc(20px + env(safe-area-inset-top));
+  }
+}

@@ -592,7 +592,7 @@ For tweets, use:
 // Model selection for cost optimization
 const MODELS = {
   sonnet: 'claude-sonnet-4-20250514',
-  haiku: 'claude-3-5-haiku-20241022'
+  haiku: 'claude-haiku-4-5-20251001'
 }
 
 // Generate content using Claude

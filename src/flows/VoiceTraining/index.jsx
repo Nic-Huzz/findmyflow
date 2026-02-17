@@ -3,28 +3,37 @@
  * Captures user's unique voice through contextual questions + content analysis
  *
  * Two paths:
- * 1. Quick Path: Select a voice template
+ * 1. Quick Path: Select a voice template (pre-fills influences + preferences)
  * 2. Full Path: 7-step voice training journey
+ *
+ * Step order (Smart Bridge):
+ * 1. Your Writing (samples) — was Step 6
+ * 2. Your Influences (NEW)
+ * 3. Your Story — was Step 1
+ * 4. Your People — was Step 2
+ * 5. Your Difference — was Step 4
+ * 6. Your Style (sliders demoted) — was Step 5
+ * 7. Voice Generation — unchanged
  *
  * Features:
  * - Auto-save progress to localStorage
  * - Step transition animations
- * - Voice preview at Step 4
+ * - Voice preview at generation
  */
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
-import { fetchVoiceProfile, saveVoiceTemplate } from '../../lib/voiceProfile'
+import { fetchVoiceProfile, saveVoiceTemplate, VOICE_TEMPLATES } from '../../lib/voiceProfile'
 
 // Components
 import Welcome from './components/Welcome'
 import VoiceTemplates from './components/VoiceTemplates'
-import Step1_Origin from './components/Step1_Origin'
-import Step2_Audience from './components/Step2_Audience'
-import Step3_Wins from './components/Step3_Wins'
-import Step4_Difference from './components/Step4_Difference'
-import Step5_Preferences from './components/Step5_Preferences'
-import Step6_Samples from './components/Step6_Samples'
+import Step1_Writing from './components/Step1_Writing'
+import Step2_Influences from './components/Step2_Influences'
+import Step3_Story from './components/Step3_Story'
+import Step4_Audience from './components/Step4_Audience'
+import Step5_Difference from './components/Step5_Difference'
+import Step6_Style from './components/Step6_Style'
 import Step7_Generation from './components/Step7_Generation'
 import VoiceProfileCard from './components/VoiceProfileCard'
 
@@ -47,12 +56,12 @@ const STAGES = {
 }
 
 const STEP_LABELS = {
-  [STAGES.STEP_1]: { num: 1, title: 'Your Story' },
-  [STAGES.STEP_2]: { num: 2, title: 'Your People' },
-  [STAGES.STEP_3]: { num: 3, title: 'Your Wins' },
-  [STAGES.STEP_4]: { num: 4, title: 'Your Difference' },
-  [STAGES.STEP_5]: { num: 5, title: 'Your Style' },
-  [STAGES.STEP_6]: { num: 6, title: 'Content Samples' },
+  [STAGES.STEP_1]: { num: 1, title: 'Your Writing' },
+  [STAGES.STEP_2]: { num: 2, title: 'Your Influences' },
+  [STAGES.STEP_3]: { num: 3, title: 'Your Story' },
+  [STAGES.STEP_4]: { num: 4, title: 'Your People' },
+  [STAGES.STEP_5]: { num: 5, title: 'Your Difference' },
+  [STAGES.STEP_6]: { num: 6, title: 'Your Style' },
   [STAGES.STEP_7]: { num: 7, title: 'Voice Generation' }
 }
 
@@ -60,7 +69,6 @@ const STEP_LABELS = {
 const DEFAULT_VOICE_DATA = {
   originStory: '',
   audienceDescription: '',
-  successStory: '',
   uniqueApproach: '',
   preferences: {
     sentenceLength: 50,
@@ -71,6 +79,7 @@ const DEFAULT_VOICE_DATA = {
   },
   catchphrases: [],
   contentSamples: [],
+  voiceInfluences: [],
   skipSamples: false
 }
 
@@ -177,19 +186,34 @@ export default function VoiceTraining() {
     setVoiceData(prev => ({ ...prev, ...updates }))
   }
 
-  // Handle template selection (quick path)
-  const handleTemplateSelect = async (templateId) => {
-    setLoading(true)
-    const { data, error } = await saveVoiceTemplate(user.id, templateId)
+  // Handle template selection — pre-fills influences + preferences, jumps to Step 1
+  const handleTemplateSelect = (templateId) => {
+    const template = VOICE_TEMPLATES[templateId]
+    if (!template) return
 
-    if (!error && data) {
-      setExistingProfile(data)
-      setGeneratedProfile(data)
-      clearSavedProgress()
-      animateToStage(STAGES.COMPLETE)
-    }
+    // Pre-fill influences from template inspiration
+    const influenceNames = (template.inspiration || '').split(', ').filter(Boolean)
+    const influences = influenceNames.map(name => ({
+      name,
+      description: template.description || '',
+      snippets: [],
+      confirmed: false
+    }))
 
-    setLoading(false)
+    updateVoiceData({
+      voiceInfluences: influences,
+      preferences: {
+        sentenceLength: template.settings?.sentence_length ?? 50,
+        emojiUsage: template.settings?.emoji_usage ?? 40,
+        humorLevel: template.settings?.humor_level ?? 50,
+        formalityLevel: template.settings?.formality_level ?? 40,
+        vulnerabilityLevel: template.settings?.vulnerability_level ?? 50
+      },
+      catchphrases: template.signature_phrases || []
+    })
+
+    // Jump to step 1 (writing) — user still provides their own samples
+    animateToStage(STAGES.STEP_1)
   }
 
   // Animate stage transition
@@ -275,7 +299,6 @@ export default function VoiceTraining() {
       setVoiceData({
         originStory: existingProfile.origin_story || '',
         audienceDescription: existingProfile.audience_description || '',
-        successStory: existingProfile.success_story || '',
         uniqueApproach: existingProfile.unique_approach || '',
         preferences: {
           sentenceLength: existingProfile.sentence_length || 50,
@@ -286,6 +309,7 @@ export default function VoiceTraining() {
         },
         catchphrases: existingProfile.catchphrases || [],
         contentSamples: existingProfile.content_samples || [],
+        voiceInfluences: existingProfile.voice_influences || [],
         skipSamples: false
       })
     }
@@ -382,15 +406,31 @@ export default function VoiceTraining() {
         )}
 
         {stage === STAGES.STEP_1 && (
-          <Step1_Origin
+          <Step1_Writing
+            samples={voiceData.contentSamples}
+            onChangeSamples={(samples) => updateVoiceData({ contentSamples: samples })}
+            onContinue={goNext}
+          />
+        )}
+
+        {stage === STAGES.STEP_2 && (
+          <Step2_Influences
+            influences={voiceData.voiceInfluences}
+            onChangeInfluences={(influences) => updateVoiceData({ voiceInfluences: influences })}
+            onContinue={goNext}
+          />
+        )}
+
+        {stage === STAGES.STEP_3 && (
+          <Step3_Story
             value={voiceData.originStory}
             onChange={(value) => updateVoiceData({ originStory: value })}
             onContinue={goNext}
           />
         )}
 
-        {stage === STAGES.STEP_2 && (
-          <Step2_Audience
+        {stage === STAGES.STEP_4 && (
+          <Step4_Audience
             value={voiceData.audienceDescription}
             onChange={(value) => updateVoiceData({ audienceDescription: value })}
             userId={user?.id}
@@ -398,16 +438,8 @@ export default function VoiceTraining() {
           />
         )}
 
-        {stage === STAGES.STEP_3 && (
-          <Step3_Wins
-            value={voiceData.successStory}
-            onChange={(value) => updateVoiceData({ successStory: value })}
-            onContinue={goNext}
-          />
-        )}
-
-        {stage === STAGES.STEP_4 && (
-          <Step4_Difference
+        {stage === STAGES.STEP_5 && (
+          <Step5_Difference
             value={voiceData.uniqueApproach}
             onChange={(value) => updateVoiceData({ uniqueApproach: value })}
             onContinue={goNext}
@@ -415,24 +447,12 @@ export default function VoiceTraining() {
           />
         )}
 
-        {stage === STAGES.STEP_5 && (
-          <Step5_Preferences
+        {stage === STAGES.STEP_6 && (
+          <Step6_Style
             preferences={voiceData.preferences}
             catchphrases={voiceData.catchphrases}
             onChangePreferences={(prefs) => updateVoiceData({ preferences: prefs })}
             onChangeCatchphrases={(phrases) => updateVoiceData({ catchphrases: phrases })}
-            onContinue={goNext}
-          />
-        )}
-
-        {stage === STAGES.STEP_6 && (
-          <Step6_Samples
-            samples={voiceData.contentSamples}
-            onChangeSamples={(samples) => updateVoiceData({ contentSamples: samples })}
-            onSkip={() => {
-              updateVoiceData({ skipSamples: true })
-              goNext()
-            }}
             onContinue={goNext}
           />
         )}

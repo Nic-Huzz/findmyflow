@@ -182,11 +182,11 @@ export async function fetchVoiceInsights(userId) {
       .select(`
         origin_story,
         audience_description,
-        success_story,
         unique_approach,
         catchphrases,
         content_samples,
-        voice_summary
+        voice_summary,
+        voice_influences
       `)
       .eq('user_id', userId)
       .maybeSingle()
@@ -204,11 +204,11 @@ export async function fetchVoiceInsights(userId) {
     return {
       origin_story: data.origin_story,
       audience_description: data.audience_description,
-      client_wins: data.success_story, // Renamed for clarity
-      contrarian_takes: data.unique_approach, // Renamed for clarity
+      contrarian_takes: data.unique_approach,
       signature_phrases: data.catchphrases || [],
       content_examples: data.content_samples || [],
-      voice_summary: data.voice_summary
+      voice_summary: data.voice_summary,
+      voice_influences: data.voice_influences || []
     }
   } catch (err) {
     console.log('Error fetching voice insights:', err)
@@ -503,10 +503,10 @@ USER PROFILE (from FlowFinder):
     parts.push(`
 VOICE & STORY CONTEXT:
 ${context.voice.origin_story ? `- Origin Story: ${context.voice.origin_story}` : ''}
-${context.voice.client_wins ? `- Client Success Story: ${context.voice.client_wins}` : ''}
 ${context.voice.contrarian_takes ? `- Unique Perspective/Contrarian Takes: ${context.voice.contrarian_takes}` : ''}
 ${context.voice.audience_description ? `- How they describe their audience: ${context.voice.audience_description}` : ''}
 ${context.voice.signature_phrases?.length > 0 ? `- Signature Phrases: ${context.voice.signature_phrases.join(', ')}` : ''}
+${context.voice.voice_influences?.length > 0 ? `- Voice Influences: ${context.voice.voice_influences.map(i => i.name).join(', ')}` : ''}
 ${context.voice.voice_summary ? `- Voice Summary: ${context.voice.voice_summary}` : ''}
     `.trim())
   }

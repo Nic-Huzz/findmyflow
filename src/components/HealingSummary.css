@@ -475,3 +475,46 @@
     font-size: 0.65rem;
   }
 }
+
+/* ===== Check-in Timeline ===== */
+.healing-summary .checkin-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.healing-summary .checkin-timeline-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.12);
+}
+
+.healing-summary .checkin-timeline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #8b5cf6;
+  flex-shrink: 0;
+}
+
+.healing-summary .checkin-timeline-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.healing-summary .checkin-timeline-date {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.healing-summary .checkin-timeline-intensity {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}

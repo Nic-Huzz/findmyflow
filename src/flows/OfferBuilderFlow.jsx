@@ -48,7 +48,7 @@ const STAGES = {
 }
 
 const STAGE_GROUPS = [
-  { id: 'welcome', label: 'Welcome', stages: [STAGES.TIME_CHECK, STAGES.WELCOME, STAGES.PERSONA_SELECT] },
+  { id: 'welcome', label: 'Welcome', stages: [STAGES.WELCOME, STAGES.PERSONA_SELECT] },
   { id: 'review', label: 'Review', stages: [STAGES.REVIEW_ANSWERS] },
   { id: 'niche', label: 'Niche', stages: [STAGES.Q6, STAGES.Q7] },
   { id: 'solutions', label: 'Solutions', stages: [STAGES.Q8] },
@@ -233,7 +233,7 @@ function OfferBuilderFlow() {
   const { projectId } = useProjectId()
   const showResults = searchParams.get('results') === 'true'
 
-  const [stage, setStage] = useState(STAGES.TIME_CHECK)
+  const [stage, setStage] = useState(STAGES.WELCOME)
   const [questionsData, setQuestionsData] = useState(null)
   const [answers, setAnswers] = useState({})
   const [currentTextInput, setCurrentTextInput] = useState('')
@@ -594,7 +594,7 @@ function OfferBuilderFlow() {
   useEffect(() => {
     if (user && !showResults) {
       const saved = loadProgress()
-      if (saved && saved.stage && saved.stage !== STAGES.TIME_CHECK && saved.stage !== STAGES.SUCCESS) {
+      if (saved && saved.stage && saved.stage !== STAGES.WELCOME && saved.stage !== STAGES.TIME_CHECK && saved.stage !== STAGES.SUCCESS) {
         setSavedProgressData(saved)
         setShowResumePrompt(true)
       }
@@ -603,7 +603,7 @@ function OfferBuilderFlow() {
 
   // Auto-save progress on state changes (only after passing time check)
   useEffect(() => {
-    if (!user || stage === STAGES.TIME_CHECK || stage === STAGES.SUCCESS) return
+    if (!user || stage === STAGES.WELCOME || stage === STAGES.TIME_CHECK || stage === STAGES.SUCCESS) return
 
     const progressData = {
       stage,
@@ -1135,8 +1135,8 @@ function OfferBuilderFlow() {
 
   // ============ RENDER ============
 
-  // Loading state
-  if (!questionsData) {
+  // Loading state — only block stages that need questionsData (not welcome/time_check)
+  if (!questionsData && stage !== STAGES.WELCOME && stage !== STAGES.TIME_CHECK) {
     return (
       <div className="offer-builder-flow">
         <div className="loading-state">
@@ -1241,6 +1241,9 @@ function OfferBuilderFlow() {
           </div>
           <button className="primary-button" onClick={() => setStage(STAGES.PERSONA_SELECT)}>
             Start Building
+          </button>
+          <button className="go-back-link" onClick={() => navigate('/7-day-challenge')}>
+            ← Go Back
           </button>
           <p className="attribution-text">Based on Alex Hormozi's $100M Offers framework</p>
         </div>

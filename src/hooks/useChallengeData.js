@@ -100,6 +100,7 @@ export function useChallengeData() {
   const [safetyContracts, setSafetyContracts] = useState([])
   const [healingCompassComplete, setHealingCompassComplete] = useState(false)
   const [pastParallelStory, setPastParallelStory] = useState(null)
+  const [healingCompassId, setHealingCompassId] = useState(null)
   const [flowFinderComplete, setFlowFinderComplete] = useState(false)
 
   // Project-Based State
@@ -712,22 +713,35 @@ export function useChallengeData() {
     try {
       const { data, error } = await supabase
         .from('healing_compass_responses')
-        .select('past_parallel_story')
+        .select('id, past_parallel_story, flow_version, primary_need, splinter_location')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
 
       if (!error && data && data.length > 0) {
-        setHealingCompassComplete(true)
-        setPastParallelStory(data[0].past_parallel_story)
+        const row = data[0]
+        // v1: has past_parallel_story | v2: has flow_version=2 + primary_need + splinter_location
+        const v1Complete = !!row.past_parallel_story
+        const v2Complete = row.flow_version === 2 && !!row.primary_need && !!row.splinter_location
+        if (v1Complete || v2Complete) {
+          setHealingCompassComplete(true)
+          setPastParallelStory(row.past_parallel_story)
+          setHealingCompassId(row.id)
+        } else {
+          setHealingCompassComplete(false)
+          setPastParallelStory(null)
+          setHealingCompassId(null)
+        }
       } else {
         setHealingCompassComplete(false)
         setPastParallelStory(null)
+        setHealingCompassId(null)
       }
     } catch (error) {
       console.error('Error checking healing compass completion:', error)
       setHealingCompassComplete(false)
       setPastParallelStory(null)
+      setHealingCompassId(null)
     }
   }
 
@@ -1449,12 +1463,18 @@ export function useChallengeData() {
       })
 
       Object.entries(artifact.frequencyCategories).forEach(([freqType, freqData]) => {
-        // freqType is 'Daily' or 'Weekly', quest.frequency is 'daily' or 'weekly'
-        // Filter by current week only
+        // freqType is 'Daily', 'Weekly', or 'Deep Dive'; quest.frequency is 'daily', 'weekly', or 'deepdive'
+        // Normalize: strip spaces so "Deep Dive" → "deepdive" matches quest frequency "deepdive"
+        const normalizedFreqType = freqType.toLowerCase().replace(/\s+/g, '')
+        const isOneTime = normalizedFreqType === 'deepdive' || normalizedFreqType === 'explainer'
+
         const freqCompletions = completions.filter(c => {
           if (c.quest_category !== category || !validQuestIds.includes(c.quest_id)) return false
-          if (questFrequencyMap[c.quest_id]?.toLowerCase() !== freqType.toLowerCase()) return false
-          // Only count completions from current week
+          const questFreq = questFrequencyMap[c.quest_id]?.toLowerCase().replace(/\s+/g, '')
+          if (questFreq !== normalizedFreqType) return false
+          // Deep dive and explainer quests are one-time — count regardless of week
+          if (isOneTime) return true
+          // Daily/Weekly: only count completions from current week
           const completionDate = new Date(c.completed_at)
           return completionDate >= weekStart
         })
@@ -1892,6 +1912,7 @@ export function useChallengeData() {
     safetyContracts,
     healingCompassComplete,
     pastParallelStory,
+    healingCompassId,
     flowFinderComplete,
 
     // Validation Response Counts (for response_counter quests)

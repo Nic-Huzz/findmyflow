@@ -12,6 +12,7 @@ import DraftList from '../components/content-review/DraftList'
 import MarkdownViewer from '../components/content-review/MarkdownViewer'
 import CommentsPanel from '../components/content-review/CommentsPanel'
 import VoiceDashboard from '../components/content-review/VoiceDashboard'
+import SendPanel from '../components/content-review/SendPanel'
 import './ContentReview.css'
 
 export default function ContentReview() {
@@ -110,6 +111,11 @@ export default function ContentReview() {
     }
   }
 
+  const handleDraftStatusChange = () => {
+    if (selectedDraftId) loadDraft(selectedDraftId)
+    loadDrafts()
+  }
+
   if (loading) {
     return (
       <div className="cr-page">
@@ -175,11 +181,19 @@ export default function ContentReview() {
 
           {/* Main content */}
           {currentDraft ? (
-            <MarkdownViewer
-              draft={currentDraft}
-              comments={comments}
-              onAddComment={handleAddComment}
-            />
+            <div className="cr-viewer-wrapper">
+              <MarkdownViewer
+                draft={currentDraft}
+                comments={comments}
+                onAddComment={handleAddComment}
+              />
+              {['review', 'approved', 'sending', 'sent'].includes(currentDraft.status) && (
+                <SendPanel
+                  draft={currentDraft}
+                  onStatusChange={handleDraftStatusChange}
+                />
+              )}
+            </div>
           ) : (
             <div className="cr-viewer-empty">Select a draft to review</div>
           )}

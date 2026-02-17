@@ -369,12 +369,12 @@ const PublicValidationFlow = () => {
       if (expectedInput.type === 'text_list') {
         answerValue = textListAnswers
         if (textListAnswers.length < (expectedInput.min_items || 0)) {
-          alert(`Please provide at least ${expectedInput.min_items} answers`)
+          showAutoSaveToast(`Please provide at least ${expectedInput.min_items} answers`)
           return
         }
       } else if (expectedInput.type === 'email') {
         if (!currentAnswer || !currentAnswer.includes('@')) {
-          alert('Please enter a valid email address')
+          showAutoSaveToast('Please enter a valid email address')
           return
         }
         // Update session with email
@@ -384,7 +384,7 @@ const PublicValidationFlow = () => {
           .eq('id', sessionId)
       } else if (expectedInput.type === 'name_email') {
         if (!currentAnswer || !currentAnswer.includes('@')) {
-          alert('Please enter a valid email address')
+          showAutoSaveToast('Please enter a valid email address')
           return
         }
         // Update session with name and email
@@ -398,7 +398,7 @@ const PublicValidationFlow = () => {
         // Store combined answer
         answerValue = { name: nameInput.trim(), email: currentAnswer }
       } else if (!currentAnswer && expectedInput.type !== 'single_select') {
-        alert('Please provide an answer before continuing')
+        showAutoSaveToast('Please provide an answer before continuing')
         return
       }
 
@@ -525,7 +525,7 @@ const PublicValidationFlow = () => {
   const showAutoSaveToast = (message = 'Progress saved') => {
     setToastMessage(message)
     setShowToast(true)
-    setTimeout(() => setShowToast(false), 2000)
+    setTimeout(() => setShowToast(false), 2500)
   }
 
   // Handle skip with reason
@@ -543,9 +543,40 @@ const PublicValidationFlow = () => {
     showAutoSaveToast('Skipped')
     setShowSkipDropdown(false)
 
+    const nextIndex = currentStepIndex + 1
+    const newHistory = [...stepHistory, currentStepIndex]
+
+    // Check if skipping past the last step
+    if (nextIndex >= flowData.steps.length) {
+      await supabase
+        .from('validation_sessions')
+        .update({
+          completed_at: new Date().toISOString(),
+          is_completed: true,
+          last_step_index: flowData.steps.length
+        })
+        .eq('id', sessionId)
+      sessionStorage.removeItem(`validation_session_${shareToken}`)
+      clearLocalProgress()
+    } else {
+      // Update session with current step (for drop-off tracking)
+      await supabase
+        .from('validation_sessions')
+        .update({
+          last_step_index: nextIndex,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', sessionId)
+
+      // Save progress locally
+      const newSavedAnswers = { ...savedAnswers, [currentStep.id]: { skipped: true, reason } }
+      setSavedAnswers(newSavedAnswers)
+      saveProgressLocally(nextIndex, newSavedAnswers, newHistory, responseSummary)
+    }
+
     // Move to next step
-    setStepHistory(prev => [...prev, currentStepIndex])
-    setCurrentStepIndex(prev => prev + 1)
+    setStepHistory(newHistory)
+    setCurrentStepIndex(nextIndex)
     setCurrentAnswer('')
     setNameInput('')
     setTextListAnswers([])
@@ -554,7 +585,7 @@ const PublicValidationFlow = () => {
   // Voice input handlers
   const startVoiceRecording = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert('Voice input is not supported in your browser. Try Chrome or Edge.')
+      showAutoSaveToast('Voice input not supported in this browser')
       return
     }
 
@@ -613,7 +644,7 @@ const PublicValidationFlow = () => {
   const renderProgressBar = () => {
     if (!flowData) return null
     const totalSteps = flowData.steps.length
-    const progressPercent = ((currentStepIndex) / totalSteps) * 100
+    const progressPercent = ((currentStepIndex + 1) / totalSteps) * 100
 
     return (
       <div className="validation-progress-section">

@@ -5,6 +5,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthProvider'
+import { useReveal } from '../../hooks/useReveal'
 import {
   fetchDeals,
   calculateRevenueStats,
@@ -129,6 +130,9 @@ export default function Dashboard() {
     }).length
   }, [deals])
 
+  const dailyActionsRef = useReveal()
+  const ecosystemRef = useReveal()
+
   if (loading) {
     return <DashboardSkeleton />
   }
@@ -142,7 +146,7 @@ export default function Dashboard() {
 
   return (
     <PullToRefresh onRefresh={loadDashboardData}>
-      <div className="hq-dashboard">
+      <div className="hq-dashboard content-enter">
         {/* Header */}
         <header className="hq-header">
           <h1 className="hq-title">Your HQ</h1>
@@ -234,12 +238,12 @@ export default function Dashboard() {
         </div>
 
         {/* Daily Actions */}
-        <section className="hq-section">
+        <section className="hq-section reveal-fade-up" ref={dailyActionsRef}>
           <DailyActions userId={user?.id} />
         </section>
 
         {/* Business Systems Setup */}
-        <section className="hq-section">
+        <section className="hq-section reveal-fade-up" ref={ecosystemRef}>
           <EcosystemStatusWidget userId={user?.id} />
         </section>
 

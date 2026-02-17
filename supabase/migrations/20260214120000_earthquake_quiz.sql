@@ -35,7 +35,7 @@ CREATE TABLE earthquake_quiz_leads (
 -- Index for email lookups and dedup
 CREATE INDEX idx_earthquake_email ON earthquake_quiz_leads(email);
 
--- RLS: anon users can insert (public quiz), no read/update/delete for anon
+-- RLS: anyone can insert (public quiz), no read/update/delete for anon
 ALTER TABLE earthquake_quiz_leads ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "anon_insert" ON earthquake_quiz_leads
-  FOR INSERT TO anon WITH CHECK (true);
+CREATE POLICY "anyone_can_insert" ON earthquake_quiz_leads
+  FOR INSERT TO public WITH CHECK (true);

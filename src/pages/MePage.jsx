@@ -17,6 +17,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { useHeroProfile } from '../hooks/useHeroProfile'
 import { getLevel, getLevelNumber, getLevelProgress, getLevelMaxXP } from '../lib/crm/statsService'
 import { getStageDisplayName } from '../lib/stageConfig'
+import { useReveal } from '../hooks/useReveal'
 import VibeColorPicker from '../components/VibeColorPicker'
 import HorizontalFlowRiver from '../components/HorizontalFlowRiver'
 import HomeFirstTime from '../components/HomeFirstTime'
@@ -339,6 +340,10 @@ export default function MePage() {
     return timeline
   }, [flowEntries, projectQuestCompletions, questData, groanChallenges, stageGraduations])
 
+  // Scroll-reveal refs for below-the-fold sections
+  const journeyRevealRef = useReveal()
+  const questRevealRef = useReveal()
+
   // First-time onboarding gate — check BEFORE hero loading to avoid unnecessary waits
   if (stageProgress !== undefined && (stageProgress === null || !stageProgress.onboarding_v2_completed)) {
     return <HomeFirstTime />
@@ -348,18 +353,15 @@ export default function MePage() {
   if (heroLoading || stageProgress === undefined) {
     return (
       <div className="me-page">
-        <div className="me-loading">
-          <div className="me-loading-inner">
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⏳</div>
-            <div>Loading...</div>
-          </div>
+        <div className="app-loading-spinner">
+          <div className="app-spinner-ring" />
         </div>
       </div>
     )
   }
 
   return (
-    <div className="me-page">
+    <div className="me-page content-enter">
       {/* ============================================================
          SECTION 1: HERO IDENTITY
          ============================================================ */}
@@ -375,7 +377,7 @@ export default function MePage() {
           </div>
         </div>
 
-        <div className="hero-avatar-container">
+        <div className="hero-avatar-container flow-scale-in">
           <div className="avatar-ring-bg" />
           <div className="avatar-ring-inner">
             {archetypes?.essence?.image ? (
@@ -389,7 +391,7 @@ export default function MePage() {
         <h1 className="hero-name">{archetypes?.essence?.name || 'Hero'}</h1>
         <p className="hero-tagline">{archetypes?.essence?.visionInAction || 'Discovering your flow'}</p>
 
-        <div className="hero-badges">
+        <div className="hero-badges stagger-children">
           <div className={`badge streak ${isFirstTime ? 'empty' : ''}`}>
             <span>🔥</span>
             <span>{streakCount} Day Streak</span>
@@ -430,7 +432,7 @@ export default function MePage() {
       {/* ============================================================
          SECTION 2: YOUR FLOW JOURNEY
          ============================================================ */}
-      <section className="journey-section">
+      <section className="journey-section reveal-fade-up" ref={journeyRevealRef}>
         <div className="flow-journey">
           <div className="fj-top">
             <div className="fj-header">
@@ -523,7 +525,7 @@ export default function MePage() {
           </div>
 
           {/* Stats rings */}
-          <div className="fj-stats">
+          <div className="fj-stats stagger-children">
             <StatRing
               value={streakCount}
               label="Streak"
@@ -580,7 +582,7 @@ export default function MePage() {
       {/* ============================================================
          SECTION 3: TODAY'S QUEST
          ============================================================ */}
-      <section className="quest-section">
+      <section className="quest-section reveal-fade-up" ref={questRevealRef}>
         <div className="quest-banner">
           <div className="quest-eyebrow">
             <span className="quest-label">Today's Quest</span>

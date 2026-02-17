@@ -13,7 +13,9 @@ import {
   getMatchups,
   getContentSubmissions,
 } from '../lib/league/leagueService'
-import { calculateLeagueStandings } from '../lib/league/leagueScoring'
+import { calculateLeagueStandings, calculateTeamScores } from '../lib/league/leagueScoring'
+import { formatLocalDate } from '../lib/dateUtils'
+import { supabase } from '../lib/supabaseClient'
 
 export function useLeagueData() {
   const { user } = useAuth()
@@ -27,6 +29,7 @@ export function useLeagueData() {
   const [matchups, setMatchups] = useState([])
   const [contentSubmissions, setContentSubmissions] = useState([])
   const [error, setError] = useState(null)
+  const [memberNames, setMemberNames] = useState({})
 
   // Derived
   const isOnTeam = !!userTeam
@@ -68,7 +71,23 @@ export function useLeagueData() {
       setMatchups(matchupsData)
       setStandings(standingsData)
 
-      // 3. Load content submissions if user is on a team
+      // 3. Load member display names
+      const allMemberIds = (teamsData || []).flatMap(t =>
+        (t.fantasy_team_members || []).map(m => m.user_id)
+      )
+      if (allMemberIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, email')
+          .in('id', allMemberIds)
+        const nameMap = {}
+        ;(profiles || []).forEach(p => {
+          nameMap[p.id] = p.email?.split('@')[0] || 'Player'
+        })
+        setMemberNames(nameMap)
+      }
+
+      // 4. Load content submissions if user is on a team
       if (userTeamData) {
         const subs = await getContentSubmissions(leagueData.id, { userId: user.id })
         setContentSubmissions(subs)
@@ -137,6 +156,41 @@ export function useLeagueData() {
     return matchups.filter(m => m.week_number === weekNumber)
   }, [matchups])
 
+  // Get date range for a specific week number
+  const getWeekDateRange = useCallback((weekNumber) => {
+    if (!league?.start_date) return null
+    const leagueStart = new Date(league.start_date + 'T00:00:00')
+    const weekStart = new Date(leagueStart)
+    weekStart.setDate(leagueStart.getDate() + (weekNumber - 1) * 7)
+    const weekEnd = new Date(weekStart)
+    weekEnd.setDate(weekStart.getDate() + 6)
+    return { start: formatLocalDate(weekStart), end: formatLocalDate(weekEnd) }
+  }, [league?.start_date])
+
+  // Fetch live team scores for a set of member user IDs
+  // Defaults to current week, but accepts an optional weekNumber override
+  const fetchLiveTeamScores = useCallback(async (memberUserIds, weekNumber = null) => {
+    const targetWeek = weekNumber !== null ? weekNumber : getCurrentWeek()
+    if (!targetWeek || !league?.id) return null
+    const range = getWeekDateRange(targetWeek)
+    if (!range) return null
+
+    // Get approved content submissions for this week
+    const { data: contentSubs } = await supabase
+      .from('league_content_submissions')
+      .select('user_id, points_value')
+      .eq('league_id', league.id)
+      .eq('week_number', targetWeek)
+      .eq('status', 'approved')
+
+    const contentPointsByUser = {}
+    ;(contentSubs || []).forEach(sub => {
+      contentPointsByUser[sub.user_id] = (contentPointsByUser[sub.user_id] || 0) + sub.points_value
+    })
+
+    return calculateTeamScores(memberUserIds, range.start, range.end, contentPointsByUser)
+  }, [league?.id, getCurrentWeek, getWeekDateRange])
+
   // Load on mount
   useEffect(() => {
     loadLeagueData()
@@ -167,5 +221,8 @@ export function useLeagueData() {
     // Helpers
     getCurrentWeek,
     getWeekMatchups,
+    getWeekDateRange,
+    fetchLiveTeamScores,
+    memberNames,
   }
 }

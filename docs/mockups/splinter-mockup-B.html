@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Splinter Mockup B — Abstract Standalone</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  /* Large centered splinter display */
+  .splinter-stage {
+    width: 280px;
+    height: 280px;
+    margin: 0 auto 12px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Ambient ring behind the splinter */
+  .ambient-ring {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 2px solid rgba(239, 68, 68, 0.15);
+    animation: ambient-pulse 3s ease-in-out infinite;
+  }
+  .ambient-ring:nth-child(2) {
+    width: 260px;
+    height: 260px;
+    border-color: rgba(239, 68, 68, 0.08);
+    animation-delay: 0.5s;
+  }
+
+  @keyframes ambient-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  /* Location label below splinter */
+  .location-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 32px;
+  }
+  .location-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+  }
+
+  /* Property summary */
+  .property-summary {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 340px;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .property-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+  }
+  .property-row:last-child { border-bottom: none; }
+  .property-label { color: rgba(255,255,255,0.5); }
+  .property-value { color: #fbbf24; font-weight: 600; }
+
+  .note {
+    max-width: 500px;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 24px;
+  }
+
+  /* Splinter animations */
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+  @keyframes vibrate { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2px,1px); } 50% { transform: translate(2px,-1px); } 75% { transform: translate(-1px,2px); } }
+
+  .splinter-svg { animation: pulse 2s ease-in-out infinite; }
+
+  /* Morph demo */
+  .morph-section {
+    max-width: 340px;
+    width: 100%;
+    margin-top: 32px;
+    text-align: center;
+  }
+  .morph-title {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+  }
+  .morph-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+  .morph-stage-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 8px;
+  }
+  .morph-arrow {
+    font-size: 24px;
+    color: rgba(255,255,255,0.2);
+  }
+</style>
+</head>
+<body>
+
+<h1>Your Splinter</h1>
+<p class="subtitle">Option B — Abstract Standalone Display</p>
+
+<div class="splinter-stage">
+  <div class="ambient-ring"></div>
+  <div class="ambient-ring"></div>
+
+  <svg viewBox="0 0 200 200" width="180" height="180" class="splinter-svg" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="6" result="blur" />
+        <feFlood flood-color="#ef4444" flood-opacity="0.5" result="color" />
+        <feComposite in="color" in2="blur" operator="in" result="glow" />
+        <feMerge>
+          <feMergeNode in="glow" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="rough">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
+      </filter>
+      <radialGradient id="inner-glow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#fca5a5" stop-opacity="0.6" />
+        <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    <!-- Ambient inner glow -->
+    <circle cx="100" cy="100" r="50" fill="url(#inner-glow)" opacity="0.4" />
+
+    <!-- Main spike shape — large and prominent -->
+    <g transform="translate(100, 100) scale(0.75)" filter="url(#glow)">
+      <polygon points="0,-50 18,40 -18,40" fill="#ef4444" filter="url(#rough)" />
+      <polygon points="0,-42 12,30 -12,30" fill="#fca5a5" opacity="0.3" />
+      <!-- Secondary small spikes -->
+      <polygon points="20,10 35,30 15,25" fill="#ef4444" opacity="0.5" />
+      <polygon points="-20,10 -35,30 -15,25" fill="#ef4444" opacity="0.5" />
+    </g>
+  </svg>
+</div>
+
+<div class="location-badge">
+  <span class="dot"></span>
+  Located in: Stomach
+</div>
+
+<div class="property-summary">
+  <div class="property-row">
+    <span class="property-label">Shape</span>
+    <span class="property-value">Spike</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Size</span>
+    <span class="property-value">Medium</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Color</span>
+    <span class="property-value">Red</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Texture</span>
+    <span class="property-value">Rough</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Movement</span>
+    <span class="property-value">Pulsing</span>
+  </div>
+</div>
+
+<!-- Morph preview showing healing over time -->
+<div class="morph-section">
+  <div class="morph-title">Healing Over Time</div>
+  <div class="morph-row">
+    <div>
+      <svg viewBox="0 0 80 80" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="g1"><feGaussianBlur stdDeviation="2" result="b"/><feFlood flood-color="#ef4444" flood-opacity="0.5" result="c"/><feComposite in="c" in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g transform="translate(40,40) scale(0.75)" filter="url(#g1)">
+          <polygon points="0,-22 8,18 -8,18" fill="#ef4444" />
+        </g>
+      </svg>
+      <div class="morph-stage-label">Week 1</div>
+    </div>
+    <span class="morph-arrow">&rarr;</span>
+    <div>
+      <svg viewBox="0 0 80 80" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="g2"><feGaussianBlur stdDeviation="2" result="b"/><feFlood flood-color="#f59e0b" flood-opacity="0.4" result="c"/><feComposite in="c" in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g transform="translate(40,40) scale(0.5)" filter="url(#g2)">
+          <polygon points="0,-22 8,18 -8,18" fill="#f59e0b" />
+        </g>
+      </svg>
+      <div class="morph-stage-label">Week 3</div>
+    </div>
+    <span class="morph-arrow">&rarr;</span>
+    <div>
+      <svg viewBox="0 0 80 80" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="g3"><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-color="#34d399" flood-opacity="0.4" result="c"/><feComposite in="c" in2="b" operator="in" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g transform="translate(40,40) scale(0.3)" filter="url(#g3)">
+          <circle cx="0" cy="0" r="14" fill="#34d399" />
+        </g>
+      </svg>
+      <div class="morph-stage-label">Week 6</div>
+    </div>
+  </div>
+</div>
+
+<p class="note">
+  <strong>Concept:</strong> The splinter is displayed as a large abstract shape on a clean stage
+  with ambient rings. Location shown as a badge below. The "Healing Over Time" row
+  previews how the splinter morphs across check-ins (smaller, softer color, rounder shape).
+</p>
+
+</body>
+</html>

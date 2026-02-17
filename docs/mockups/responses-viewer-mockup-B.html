@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Option B: Full-Bleed Dashboard</title>
+<style>
+  /*
+   * OPTION B: Full-Bleed Dashboard
+   *
+   * Philosophy: The entire responses viewer IS the dark hero.
+   * Everything lives on the purple gradient. Stats, controls, funnel,
+   * tabs - all glass morphism cards on the dark surface.
+   * Header is integrated into the hero with frosted glass actions.
+   *
+   * Pros: Immersive, dramatic, feels like a proper analytics dashboard
+   * Cons: Lots of white-on-dark text, harder to read long content
+   */
+
+  :root {
+    --brand-purple: #5e17eb;
+    --brand-gold: #E9A23B;
+    --text-primary: #1a1a2e;
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-hover: rgba(255, 255, 255, 0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0015;
+    min-height: 100vh;
+    color: white;
+  }
+
+  .container { max-width: 500px; margin: 0 auto; }
+
+  /* === FULL BLEED HERO === */
+  .dashboard-surface {
+    background: linear-gradient(180deg, #5e17eb 0%, #3d0f99 40%, #1a0545 100%);
+    min-height: 100vh;
+    padding: 20px;
+    padding-bottom: 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dashboard-surface::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -80px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(233, 162, 59, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .dashboard-surface::after {
+    content: '';
+    position: absolute;
+    bottom: 200px; left: -100px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.3) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .dashboard-surface > * { position: relative; z-index: 1; }
+
+  /* === HEADER === */
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .dash-back {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+  }
+
+  .dash-close {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    width: 40px; height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.7);
+    font-size: 1.2rem;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+  }
+
+  .dash-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+
+  .dash-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* === GLASS CARD === */
+  .glass-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 12px;
+    backdrop-filter: blur(12px);
+  }
+
+  .glass-eyebrow {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 14px;
+  }
+
+  /* === ACTION ROW === */
+  .action-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .glass-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-family: inherit;
+    backdrop-filter: blur(8px);
+  }
+
+  .glass-chip.active {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.25);
+    color: white;
+  }
+
+  .gold-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+    border: none;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-family: inherit;
+    margin-left: auto;
+    box-shadow: 0 4px 16px rgba(233, 162, 59, 0.3);
+  }
+
+  /* === PERIOD TABS === */
+  .period-row {
+    display: flex;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 4px;
+    margin-bottom: 16px;
+  }
+
+  .period-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    padding: 10px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .period-btn.active {
+    background: rgba(255,255,255,0.12);
+    color: white;
+  }
+
+  /* === STATS === */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .stat-tile {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 18px 14px;
+    text-align: center;
+  }
+
+  .stat-tile.highlight {
+    background: rgba(233, 162, 59, 0.1);
+    border-color: rgba(233, 162, 59, 0.2);
+  }
+
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .stat-tile.highlight .stat-num { color: #fbbf24; }
+
+  .stat-sub {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+  }
+
+  .stat-num .small { font-size: 14px; font-weight: 500; opacity: 0.5; }
+
+  .trend-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 8px;
+    margin-top: 8px;
+  }
+
+  .trend-badge.up { color: #4ade80; background: rgba(34, 197, 94, 0.15); }
+
+  /* === DEVICES === */
+  .device-pills {
+    display: flex;
+    gap: 12px;
+  }
+
+  .device-pill {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .device-pill-icon { font-size: 20px; }
+  .device-pill-num {
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .device-pill-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+  }
+
+  /* === DROP-OFF === */
+  .drop-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .drop-q {
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.5);
+    width: 24px;
+  }
+
+  .drop-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .drop-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ef4444, #fb923c);
+    border-radius: 4px;
+  }
+
+  .drop-count {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    width: 45px;
+    text-align: right;
+  }
+
+  /* === TAB SWITCHER === */
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .tab-item {
+    padding: 10px 20px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  .tab-item.active {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.3);
+    color: white;
+  }
+
+  .tab-item.gold-tab {
+    background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+    border: none;
+    color: var(--text-primary);
+    font-weight: 800;
+    margin-left: auto;
+    box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
+  }
+
+  /* === PLACEHOLDER === */
+  .placeholder-area {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.2);
+    font-size: 13px;
+  }
+
+  /* === LABEL === */
+  .mockup-label {
+    text-align: center;
+    padding: 12px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+</style>
+</head>
+<body>
+
+<div class="dashboard-surface">
+  <div class="container">
+    <div class="mockup-label">Option B: Full-Bleed Dashboard</div>
+
+    <!-- Header -->
+    <div class="dash-header">
+      <button class="dash-back">&larr;</button>
+      <span class="dash-title">Responses</span>
+      <button class="dash-close">&times;</button>
+    </div>
+    <div class="dash-subtitle">Conscious leaders under-earn a...</div>
+
+    <!-- Actions -->
+    <div class="action-row">
+      <label class="glass-chip active">
+        <input type="checkbox" checked style="width:13px; height:13px; accent-color: #E9A23B;"> In-progress
+      </label>
+      <button class="gold-chip">Export CSV</button>
+    </div>
+
+    <!-- Period tabs -->
+    <div class="period-row">
+      <button class="period-btn">7 days</button>
+      <button class="period-btn active">30 days</button>
+      <button class="period-btn">All time</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="glass-card" style="padding: 16px;">
+      <div class="stats-row">
+        <div class="stat-tile">
+          <div class="stat-num">12</div>
+          <div class="stat-sub">Started</div>
+          <div class="trend-badge up">+3</div>
+        </div>
+        <div class="stat-tile highlight">
+          <div class="stat-num">8</div>
+          <div class="stat-sub">Completed</div>
+          <div class="trend-badge up">+2</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-num">67%</div>
+          <div class="stat-sub">Completion</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-num">3.2 <span class="small">min</span></div>
+          <div class="stat-sub">Avg. Time</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Devices -->
+    <div class="glass-card">
+      <div class="glass-eyebrow">Devices</div>
+      <div class="device-pills">
+        <div class="device-pill">
+          <span class="device-pill-icon">📱</span>
+          <div>
+            <div class="device-pill-num">6</div>
+            <div class="device-pill-label">Mobile</div>
+          </div>
+        </div>
+        <div class="device-pill">
+          <span class="device-pill-icon">💻</span>
+          <div>
+            <div class="device-pill-num">6</div>
+            <div class="device-pill-label">Desktop</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drop-off -->
+    <div class="glass-card">
+      <div class="glass-eyebrow">Drop-off Points</div>
+      <div class="drop-item">
+        <span class="drop-q">Q1</span>
+        <div class="drop-track"><div class="drop-fill" style="width: 25%"></div></div>
+        <span class="drop-count">1 left</span>
+      </div>
+      <div class="drop-item">
+        <span class="drop-q">Q3</span>
+        <div class="drop-track"><div class="drop-fill" style="width: 50%"></div></div>
+        <span class="drop-count">2 left</span>
+      </div>
+      <div class="drop-item">
+        <span class="drop-q">Q5</span>
+        <div class="drop-track"><div class="drop-fill" style="width: 25%"></div></div>
+        <span class="drop-count">1 left</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button class="tab-item active">Overview</button>
+      <button class="tab-item">Deep Dive</button>
+      <button class="tab-item gold-tab">All Answers</button>
+    </div>
+
+    <div class="glass-card">
+      <div class="placeholder-area">Timeline, funnel viz, geo breakdown...</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

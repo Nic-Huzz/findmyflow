@@ -112,7 +112,7 @@ serve(async (req) => {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 512,
         messages: [{
           role: 'user',
@@ -147,7 +147,7 @@ serve(async (req) => {
     // Ensure proper structure
     const response = {
       meta_skills: result.meta_skills || [],
-      model: 'claude-3-haiku-20240307'
+      model: 'claude-haiku-4-5-20251001'
     }
 
     console.log('✨ Generated meta-skills:', response.meta_skills.length)

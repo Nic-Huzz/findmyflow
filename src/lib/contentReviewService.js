@@ -92,26 +92,19 @@ export async function updateCommentStatus(commentId, status, resolvedText = null
   return data
 }
 
-// ===== VOICE CONFIG =====
+// ===== VOICE PROFILE =====
 
-export async function fetchVoiceConfig() {
+export async function fetchVoiceProfileForDashboard() {
+  // Phase 1: single-user — fetch the logged-in user's voice profile directly
+  // (admin_users table has service_role-only RLS, so we use auth.uid() instead)
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+
   const { data, error } = await supabase
-    .from('voice_taste_config')
+    .from('voice_profiles')
     .select('*')
-    .is('owner_id', null)  // Phase 1: Huzz only
+    .eq('user_id', user.id)
     .maybeSingle()
-
-  if (error) throw error
-  return data // null if no row exists
-}
-
-export async function updateVoiceConfig(id, updates) {
-  const { data, error } = await supabase
-    .from('voice_taste_config')
-    .update({ ...updates, updated_at: new Date().toISOString() })
-    .eq('id', id)
-    .select()
-    .single()
 
   if (error) throw error
   return data

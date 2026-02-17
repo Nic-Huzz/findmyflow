@@ -128,7 +128,7 @@
    POST-ACTION MODAL STYLES
    ======================================== */
 
-.post-action-overlay {
+.post-action-overlay.rc-post-action {
   position: fixed;
   top: 0;
   left: 0;
@@ -148,7 +148,7 @@
   to { opacity: 1; }
 }
 
-.post-action-modal {
+.post-action-modal.rc-post-action {
   background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
   border-radius: 20px;
   padding: 32px;
@@ -322,7 +322,7 @@
 
 /* Responsive */
 @media (max-width: 480px) {
-  .post-action-modal {
+  .post-action-modal.rc-post-action {
     padding: 24px 20px;
     margin: 10px;
   }

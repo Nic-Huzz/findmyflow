@@ -33,11 +33,11 @@ const BODY_LOCATIONS = {
 
 // Size → scale factor
 const SIZE_SCALES = {
-  tiny: 0.3,
-  small: 0.5,
-  medium: 0.75,
-  large: 1.0,
-  massive: 1.4,
+  tiny: 0.5,
+  small: 0.7,
+  medium: 1.0,
+  large: 1.3,
+  massive: 1.7,
 }
 
 // Movement → CSS animation class
@@ -50,15 +50,15 @@ const MOVEMENT_CLASSES = {
   vibrating: 'splinter-anim-vibrate',
 }
 
-// Texture → SVG filter ID
-const TEXTURE_FILTERS = {
-  rough: 'splinter-filter-rough',
-  smooth: 'splinter-filter-smooth',
-  burning: 'splinter-filter-burning',
-  cold: 'splinter-filter-cold',
-  sharp: 'splinter-filter-sharp',
-  heavy: 'splinter-filter-heavy',
-  tight: 'splinter-filter-tight',
+// Texture → CSS filter on the WRAPPER div (not on SVG elements)
+const TEXTURE_CSS = {
+  rough:   'drop-shadow(0 0 4px var(--splinter-color))',
+  smooth:  'drop-shadow(0 0 8px var(--splinter-color))',
+  burning: 'drop-shadow(0 0 10px #ff6600) drop-shadow(0 0 4px #ff6600)',
+  cold:    'drop-shadow(0 0 10px #60a5fa) drop-shadow(0 0 4px #93c5fd)',
+  sharp:   'none',
+  heavy:   'drop-shadow(0 4px 8px rgba(0,0,0,0.6))',
+  tight:   'drop-shadow(0 0 3px var(--splinter-color))',
 }
 
 function renderShape(shape, fillColor) {
@@ -79,16 +79,16 @@ function renderShape(shape, fillColor) {
     case 'void':
       return (
         <>
-          <circle cx="0" cy="0" r="18" fill={fillColor} opacity="0.7" />
+          <circle cx="0" cy="0" r="18" fill={fillColor} />
           <circle cx="0" cy="0" r="10" fill="rgba(0,0,0,0.5)" />
         </>
       )
     case 'cloud':
       return (
         <>
-          <ellipse cx="-8" cy="0" rx="12" ry="10" fill={fillColor} opacity="0.8" />
-          <ellipse cx="8" cy="-4" rx="10" ry="8" fill={fillColor} opacity="0.7" />
-          <ellipse cx="4" cy="6" rx="11" ry="9" fill={fillColor} opacity="0.6" />
+          <ellipse cx="-8" cy="0" rx="12" ry="10" fill={fillColor} />
+          <ellipse cx="8" cy="-4" rx="10" ry="8" fill={fillColor} opacity="0.9" />
+          <ellipse cx="4" cy="6" rx="11" ry="9" fill={fillColor} opacity="0.85" />
         </>
       )
     case 'flame':
@@ -116,9 +116,9 @@ function SplinterVisualization({
   morphFrom = null,
   compact = false,
 }) {
-  const scale = SIZE_SCALES[size] || 0.75
+  const scale = SIZE_SCALES[size] || 1.0
   const movementClass = animate ? (MOVEMENT_CLASSES[movement] || '') : ''
-  const filterId = TEXTURE_FILTERS[texture] || 'splinter-filter-rough'
+  const textureCss = TEXTURE_CSS[texture] || 'none'
   const isMorphing = !!morphFrom
 
   // In body mode, position the splinter on the silhouette
@@ -126,14 +126,15 @@ function SplinterVisualization({
 
   if (showBody) {
     return (
-      <div className={`splinter-vis ${compact ? 'splinter-vis--compact' : ''}`}>
+      <div
+        className={`splinter-vis ${compact ? 'splinter-vis--compact' : ''}`}
+        style={{ '--splinter-color': color, filter: textureCss }}
+      >
         <svg
           viewBox="0 0 300 440"
           className="splinter-vis__svg"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <defs>{renderFilters(color)}</defs>
-
           {/* Body silhouette */}
           <g className="splinter-vis__body" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.2">
             <ellipse cx="150" cy="45" rx="28" ry="34" />
@@ -153,14 +154,11 @@ function SplinterVisualization({
             <path d="M182,420 Q190,430 195,430" />
           </g>
 
-          {/* Splinter */}
-          <g
-            className={`splinter-vis__shape ${movementClass} ${isMorphing ? 'splinter-vis__morphing' : ''}`}
-            transform={`translate(${pos.x}, ${pos.y}) scale(${scale})`}
-            filter={`url(#${filterId})`}
-            style={{ willChange: 'transform' }}
-          >
-            {renderShape(shape, color)}
+          {/* Splinter: outer g = position (baseplate), inner g = animation */}
+          <g transform={`translate(${pos.x}, ${pos.y}) scale(${scale})`}>
+            <g className={`splinter-vis__shape ${movementClass} ${isMorphing ? 'splinter-vis__morphing' : ''}`}>
+              {renderShape(shape, color)}
+            </g>
           </g>
         </svg>
       </div>
@@ -170,15 +168,10 @@ function SplinterVisualization({
   // Abstract standalone mode
   const svgSize = compact ? 100 : 200
   return (
-    <div className={`splinter-vis splinter-vis--standalone ${compact ? 'splinter-vis--compact' : ''}`}>
-      {/* Ambient rings */}
-      {!compact && (
-        <div className="splinter-vis__rings">
-          <div className="splinter-vis__ring" style={{ borderColor: `${color}20` }} />
-          <div className="splinter-vis__ring splinter-vis__ring--outer" style={{ borderColor: `${color}10` }} />
-        </div>
-      )}
-
+    <div
+      className={`splinter-vis splinter-vis--standalone ${compact ? 'splinter-vis--compact' : ''}`}
+      style={{ '--splinter-color': color, filter: textureCss }}
+    >
       <svg
         viewBox="0 0 200 200"
         width={svgSize}
@@ -186,107 +179,18 @@ function SplinterVisualization({
         className="splinter-vis__svg"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <defs>{renderFilters(color)}</defs>
-
-        {/* Inner glow */}
-        <radialGradient id="splinter-inner-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={color} stopOpacity="0.3" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
-        </radialGradient>
-        {!compact && <circle cx="100" cy="100" r="60" fill="url(#splinter-inner-glow)" />}
-
-        <g
-          className={`splinter-vis__shape ${movementClass} ${isMorphing ? 'splinter-vis__morphing' : ''}`}
-          transform={`translate(100, 100) scale(${scale})`}
-          filter={`url(#${filterId})`}
-          style={{ willChange: 'transform' }}
-        >
-          {renderShape(shape, color)}
+        {/* Splinter: outer g = position (baseplate), inner g = animation */}
+        <g transform={`translate(100, 100) scale(${scale})`}>
+          <g className={`splinter-vis__shape ${movementClass} ${isMorphing ? 'splinter-vis__morphing' : ''}`}>
+            {renderShape(shape, color)}
+          </g>
         </g>
       </svg>
     </div>
   )
 }
 
-// SVG filter definitions for each texture
-function renderFilters(color) {
-  return (
-    <>
-      {/* Rough — feTurbulence displacement */}
-      <filter id="splinter-filter-rough" x="-20%" y="-20%" width="140%" height="140%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
-        <feGaussianBlur stdDeviation="0.5" />
-      </filter>
-
-      {/* Smooth — soft blur */}
-      <filter id="splinter-filter-smooth" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
-      </filter>
-
-      {/* Burning — turbulence + warm flood */}
-      <filter id="splinter-filter-burning" x="-30%" y="-30%" width="160%" height="160%">
-        <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="2" result="noise" />
-        <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" result="displaced" />
-        <feGaussianBlur in="displaced" stdDeviation="1.5" result="blur" />
-        <feFlood floodColor="#ff6600" floodOpacity="0.3" result="warm" />
-        <feComposite in="warm" in2="blur" operator="in" result="warmGlow" />
-        <feMerge>
-          <feMergeNode in="warmGlow" />
-          <feMergeNode in="displaced" />
-        </feMerge>
-      </filter>
-
-      {/* Cold — blur + blue tint */}
-      <filter id="splinter-filter-cold" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
-        <feFlood floodColor="#60a5fa" floodOpacity="0.2" result="blue" />
-        <feComposite in="blue" in2="blur" operator="in" result="blueGlow" />
-        <feMerge>
-          <feMergeNode in="blueGlow" />
-          <feMergeNode in="blur" />
-        </feMerge>
-      </filter>
-
-      {/* Sharp — morphology erode for crisp edges */}
-      <filter id="splinter-filter-sharp" x="-10%" y="-10%" width="120%" height="120%">
-        <feMorphology operator="erode" radius="0.5" in="SourceGraphic" result="sharp" />
-        <feGaussianBlur in="sharp" stdDeviation="0.3" />
-      </filter>
-
-      {/* Heavy — drop shadow for weight */}
-      <filter id="splinter-filter-heavy" x="-20%" y="-20%" width="140%" height="160%">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="shadow" />
-        <feOffset in="shadow" dx="0" dy="4" result="offsetShadow" />
-        <feFlood floodColor="rgba(0,0,0,0.4)" result="shadowColor" />
-        <feComposite in="shadowColor" in2="offsetShadow" operator="in" result="darkShadow" />
-        <feMerge>
-          <feMergeNode in="darkShadow" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-
-      {/* Tight — morphology dilate for constricted feel */}
-      <filter id="splinter-filter-tight" x="-10%" y="-10%" width="120%" height="120%">
-        <feMorphology operator="dilate" radius="0.5" in="SourceGraphic" result="dilated" />
-        <feGaussianBlur in="dilated" stdDeviation="0.5" />
-      </filter>
-
-      {/* Glow filter (used by shapes internally) */}
-      <filter id="splinter-glow" x="-40%" y="-40%" width="180%" height="180%">
-        <feGaussianBlur stdDeviation="5" result="blur" />
-        <feFlood floodColor={color} floodOpacity="0.4" result="glowColor" />
-        <feComposite in="glowColor" in2="blur" operator="in" result="glow" />
-        <feMerge>
-          <feMergeNode in="glow" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </>
-  )
-}
-
 // Export constants for use by parent components (body scan step, check-in)
-export { BODY_LOCATIONS, SIZE_SCALES, MOVEMENT_CLASSES, TEXTURE_FILTERS }
+export { BODY_LOCATIONS, SIZE_SCALES, MOVEMENT_CLASSES, TEXTURE_CSS as TEXTURE_FILTERS }
 
 export default SplinterVisualization

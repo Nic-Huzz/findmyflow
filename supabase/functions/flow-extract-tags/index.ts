@@ -70,7 +70,7 @@ Extract relevant tags with categories and confidence scores.`
     console.log('🤖 Calling Claude Haiku for tag extraction...')
 
     const completion = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 512,
       temperature: 0.3, // Lower temp for more consistent tagging
       system: systemPrompt,

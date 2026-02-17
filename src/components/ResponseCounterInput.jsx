@@ -134,8 +134,8 @@ function ResponseCounterInput({
 
       {/* POST-ACTION Modal - Rendered via Portal to escape stacking context */}
       {showPostAction && createPortal(
-        <div className="post-action-overlay" onClick={() => setShowPostAction(false)}>
-          <div className="post-action-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="post-action-overlay rc-post-action" onClick={() => setShowPostAction(false)}>
+          <div className="post-action-modal rc-post-action" onClick={(e) => e.stopPropagation()}>
             <div className="post-action-header">
               <div className="post-action-icon">✅</div>
               <h3 className="post-action-title">Validation Complete!</h3>

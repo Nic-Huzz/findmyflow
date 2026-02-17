@@ -6,14 +6,10 @@ import { VOICE_TEMPLATES } from '../../../lib/voiceProfile'
 
 export default function VoiceTemplates({ onSelectTemplate, onStartFullTraining, onBack }) {
   const [selectedId, setSelectedId] = useState(null)
-  const [loading, setLoading] = useState(false)
 
-  const handleSelect = async () => {
+  const handleSelect = () => {
     if (!selectedId) return
-
-    setLoading(true)
-    await onSelectTemplate(selectedId)
-    setLoading(false)
+    onSelectTemplate(selectedId)
   }
 
   const templates = Object.values(VOICE_TEMPLATES)
@@ -23,8 +19,8 @@ export default function VoiceTemplates({ onSelectTemplate, onStartFullTraining, 
       <div className="vt-step-header">
         <h2>Choose Your Voice Style</h2>
         <p>
-          Pick a voice template that resonates with you. You can customize it later
-          or complete the full voice training for a personalized profile.
+          Pick a starting point that resonates with you. This pre-fills your style
+          preferences — you&apos;ll still add your own writing samples next.
         </p>
       </div>
 
@@ -51,9 +47,9 @@ export default function VoiceTemplates({ onSelectTemplate, onStartFullTraining, 
       <button
         className="vt-continue-btn"
         onClick={handleSelect}
-        disabled={!selectedId || loading}
+        disabled={!selectedId}
       >
-        {loading ? 'Saving...' : selectedId ? `Use "${VOICE_TEMPLATES[selectedId]?.name}" Voice` : 'Select a Voice Template'}
+        {selectedId ? `Start with "${VOICE_TEMPLATES[selectedId]?.name}" style →` : 'Select a Voice Template'}
       </button>
 
       <div style={{ textAlign: 'center', margin: '24px 0 16px', color: '#6c757d' }}>

@@ -61,3 +61,4 @@ jspm_packages/
 # Remotion
 out/
 remotion/public/*.mp3
+.env.pipeline

@@ -463,6 +463,7 @@
 /* Tabs */
 .challenge-tabs {
   display: flex;
+  justify-content: center;
   gap: 0.5rem;
   padding: 1.5rem 1.5rem 0.75rem;
   overflow-x: auto;

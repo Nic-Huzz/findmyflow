@@ -230,7 +230,11 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'validation_explainer': 'validation_explainer',
       'product_explainer': 'product_explainer',
       'mind_space': 'mind_space_extraction',  // Matches JSON quest ID
-      'milestone_read_money_model': 'milestone_read_money_model'  // Money Model Guide explainer
+      'milestone_read_money_model': 'milestone_read_money_model',  // Money Model Guide explainer
+      // Healing explainers
+      'what_is_healing_explainer': 'what_is_healing_explainer',
+      'emotional_splinter_explainer': 'emotional_splinter_explainer',
+      'how_do_we_heal_explainer': 'how_do_we_heal_explainer'
     };
 
     const questId = flowToQuestMap[flowType];
@@ -269,7 +273,11 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
       'play_list_finder': 10,
       'persona_identifier': 10,
       'mind_space_extraction': 10,  // Matches JSON quest ID
-      'milestone_read_money_model': 5  // Money Model Guide explainer
+      'milestone_read_money_model': 5,  // Money Model Guide explainer
+      // Healing explainers
+      'what_is_healing_explainer': 5,
+      'emotional_splinter_explainer': 5,
+      'how_do_we_heal_explainer': 5
     };
 
     const points = questPoints[questId] || 5;
@@ -319,6 +327,87 @@ export const syncFlowFinderWithChallenge = async (userId, flowType) => {
     return { success: true, questId, points };
   } catch (error) {
     console.error('Error in syncFlowFinderWithChallenge:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Sync Healing explainer completion with the challenge system.
+ * Same pattern as syncFlowFinderWithChallenge but uses quest_category: 'Healing'.
+ *
+ * @param {string} userId
+ * @param {string} flowType - One of: 'what_is_healing_explainer', 'emotional_splinter_explainer', 'how_do_we_heal_explainer'
+ */
+export const syncHealingExplainerWithChallenge = async (userId, flowType) => {
+  try {
+    const healingExplainerMap = {
+      'what_is_healing_explainer': 'what_is_healing_explainer',
+      'emotional_splinter_explainer': 'emotional_splinter_explainer',
+      'how_do_we_heal_explainer': 'how_do_we_heal_explainer'
+    };
+
+    const questId = healingExplainerMap[flowType];
+    if (!questId) {
+      console.warn(`Unknown healing explainer type: ${flowType}`);
+      return { success: false, error: 'Unknown flow type' };
+    }
+
+    // Check if already completed at user level
+    const { data: existingCompletion, error: checkError } = await supabase
+      .from('quest_completions')
+      .select('id')
+      .eq('user_id', userId)
+      .is('challenge_instance_id', null)
+      .eq('quest_id', questId)
+      .maybeSingle();
+
+    if (checkError) {
+      console.error('Error checking existing completion:', checkError);
+      return { success: false, error: checkError.message };
+    }
+
+    if (existingCompletion) {
+      return { success: true, skipped: true, reason: 'Already completed' };
+    }
+
+    const points = 5;
+
+    const { error: completionError } = await supabase
+      .from('quest_completions')
+      .insert({
+        user_id: userId,
+        challenge_instance_id: null,
+        quest_id: questId,
+        quest_category: 'Healing',
+        quest_type: 'flow',
+        points_earned: points,
+        challenge_day: 0,
+        reflection_text: `Completed ${flowType}`,
+        project_id: null,
+        stage: 0
+      });
+
+    if (completionError) {
+      console.error('Error creating healing explainer completion:', completionError);
+      return { success: false, error: completionError.message };
+    }
+
+    // Sync to user-level leaderboard - non-blocking
+    try {
+      await syncScoreToLeaderboard(supabase, {
+        userId,
+        questCategory: 'Healing',
+        points,
+        projectId: null,
+        source: `healing_${flowType}`
+      });
+    } catch (leaderboardError) {
+      console.error('Non-critical: Failed to sync to leaderboard:', leaderboardError);
+    }
+
+    return { success: true, questId, points };
+  } catch (error) {
+    console.error('Error in syncHealingExplainerWithChallenge:', error);
     return { success: false, error: error.message };
   }
 };

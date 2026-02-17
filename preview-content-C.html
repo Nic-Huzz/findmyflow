@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Option C — Mission Board</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #fafafa;
+}
+
+.content-submit {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --winning-green: #10b981;
+
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: 120px;
+  color: var(--text-primary);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Toolbar */
+.cs-toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 16px; border-bottom: 1px solid #dee2e6;
+  z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.cs-back {
+  position: absolute; left: 16px; background: none; border: none;
+  font-size: 1.5rem; color: var(--brand-purple); cursor: pointer;
+  padding: 8px; margin: -8px; line-height: 1;
+}
+.cs-toolbar-title { font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.3px; }
+
+/* Points banner */
+.cs-banner {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px; padding: 20px 24px;
+  margin-bottom: 20px; color: white;
+  position: relative; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94,23,235,0.3);
+}
+.cs-banner::before {
+  content: ''; position: absolute; top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cs-banner-row {
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 1;
+}
+.cs-banner-left {}
+.cs-banner-eyebrow {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: rgba(255,255,255,0.6); margin-bottom: 4px;
+}
+.cs-banner-pts {
+  font-size: 28px; font-weight: 900; letter-spacing: -0.5px;
+}
+.cs-banner-pts .gold { color: var(--brand-gold); }
+.cs-banner-right {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.cs-banner-ring {
+  width: 56px; height: 56px; position: relative;
+}
+.cs-banner-ring svg { transform: rotate(-90deg); }
+.cs-banner-ring-label {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: white;
+}
+.cs-banner-ring-text {
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Mission grid */
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cs-mission {
+  background: var(--surface); border: 1px solid #e9ecef;
+  border-radius: 24px; padding: 20px 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  cursor: pointer; transition: all 0.2s;
+  min-height: 180px;
+}
+.cs-mission:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(94,23,235,0.1);
+}
+.cs-mission::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; right: 0; height: 4px;
+  z-index: 2;
+}
+.cs-mission.tier-quick::before { background: var(--brand-purple); }
+.cs-mission.tier-mid::before { background: linear-gradient(90deg, var(--brand-purple), var(--brand-gold)); }
+.cs-mission.tier-big::before { background: var(--brand-gold); }
+
+.cs-mission.completed {
+  border-color: rgba(16,185,129,0.2);
+  background: rgba(16,185,129,0.02);
+}
+.cs-mission.completed::before { background: var(--winning-green); }
+
+.cs-mission-icon { font-size: 32px; margin-bottom: 10px; }
+
+.cs-mission-title {
+  font-size: 13px; font-weight: 800; color: var(--text-primary);
+  letter-spacing: -0.2px; margin-bottom: 6px; line-height: 1.3;
+}
+
+.cs-mission-pts {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; font-weight: 800; padding: 3px 10px;
+  border-radius: 100px; margin-bottom: 8px;
+}
+.cs-mission.tier-quick .cs-mission-pts { background: rgba(94,23,235,0.06); color: var(--brand-purple); }
+.cs-mission.tier-mid .cs-mission-pts { background: rgba(94,23,235,0.06); color: var(--brand-purple); }
+.cs-mission.tier-big .cs-mission-pts { background: rgba(233,162,59,0.1); color: #c78520; }
+.cs-mission.completed .cs-mission-pts { background: rgba(16,185,129,0.08); color: var(--winning-green); }
+
+.cs-mission-auto {
+  font-size: 10px; font-weight: 700; color: var(--winning-green);
+  display: flex; align-items: center; gap: 3px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.cs-mission-manual {
+  font-size: 10px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Completed check */
+.cs-mission-check {
+  position: absolute; top: 12px; right: 12px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--winning-green); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800;
+}
+
+/* Full-width mission (for big ones) */
+.cs-mission.full {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  text-align: left; gap: 16px;
+  min-height: auto; padding: 18px 20px;
+}
+.cs-mission.full .cs-mission-icon { font-size: 28px; margin-bottom: 0; flex-shrink: 0; }
+.cs-mission.full .cs-mission-info { flex: 1; }
+.cs-mission.full .cs-mission-title { margin-bottom: 4px; }
+.cs-mission.full .cs-mission-pts { margin-bottom: 0; }
+.cs-mission.full .cs-mission-right {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+}
+
+/* Expanded detail panel */
+.cs-detail-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+  z-index: 1000; align-items: flex-end; justify-content: center;
+  padding: 1rem;
+}
+.cs-detail-overlay.open { display: flex; }
+
+.cs-detail {
+  width: 100%; max-width: 500px; max-height: 85vh;
+  background: white; border-radius: 24px 24px 0 0;
+  overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.2);
+}
+.cs-detail-header {
+  padding: 24px 24px 16px;
+  display: flex; align-items: flex-start; gap: 14px;
+  border-bottom: 1px solid #e9ecef;
+}
+.cs-detail-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.cs-detail-info { flex: 1; }
+.cs-detail-title { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 4px; }
+.cs-detail-meta { font-size: 13px; color: var(--text-secondary); }
+.cs-detail-close {
+  width: 36px; height: 36px; background: #f8f9fa;
+  border: none; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--text-secondary); cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cs-detail-body { padding: 24px; overflow-y: auto; flex: 1; }
+
+.cs-detail-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--brand-purple);
+  margin-bottom: 10px; display: block;
+}
+
+.cs-detail-tmpl {
+  background: #f8f9fa; border: 1px solid #e9ecef;
+  border-radius: 16px; padding: 18px;
+  font-size: 15px; line-height: 1.65; color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.cs-detail-tmpl .hl { color: var(--brand-purple); font-weight: 700; }
+.cs-detail-tmpl .gd { color: #c78520; font-weight: 700; }
+
+.cs-detail-source {
+  font-size: 11px; color: var(--winning-green); font-weight: 700;
+  display: flex; align-items: center; gap: 4px; margin-bottom: 16px;
+}
+
+.cs-detail-link { margin-bottom: 16px; }
+.cs-detail-link label {
+  display: block; font-size: 13px; font-weight: 700;
+  color: var(--text-secondary); margin-bottom: 6px;
+}
+.cs-detail-link input {
+  width: 100%; background: #f8f9fa; border: 2px solid #e9ecef;
+  border-radius: 12px; padding: 12px 14px; font-size: 14px;
+  font-family: inherit; color: var(--text-primary); transition: all 0.2s;
+}
+.cs-detail-link input:focus {
+  outline: none; border-color: var(--brand-purple);
+  background: #fff; box-shadow: 0 0 0 4px rgba(94,23,235,0.1);
+}
+
+.cs-detail-actions {
+  display: flex; gap: 10px; padding: 20px 24px;
+  border-top: 1px solid #e9ecef;
+}
+.cs-detail-cta {
+  flex: 1;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e; border: none; padding: 16px;
+  border-radius: 14px; font-size: 16px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+  transition: transform 0.2s;
+}
+.cs-detail-cta:hover { transform: translateY(-2px); }
+.cs-detail-share {
+  width: 52px; height: 52px; flex-shrink: 0;
+  background: rgba(94,23,235,0.06); border: 1px solid rgba(94,23,235,0.12);
+  border-radius: 14px; font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+/* Tier headers */
+.cs-tier-header {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--brand-purple);
+  margin-bottom: 10px; display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="content-submit">
+  <div class="cs-toolbar">
+    <button class="cs-back">&#8592;</button>
+    <h2 class="cs-toolbar-title">Bonus Content</h2>
+  </div>
+
+  <!-- Points banner -->
+  <div class="cs-banner">
+    <div class="cs-banner-row">
+      <div class="cs-banner-left">
+        <div class="cs-banner-eyebrow">Week 2 &middot; Bonus</div>
+        <div class="cs-banner-pts"><span class="gold">8</span> / 32 pts</div>
+      </div>
+      <div class="cs-banner-right">
+        <div class="cs-banner-ring">
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4" />
+            <circle cx="28" cy="28" r="24" fill="none" stroke="#E9A23B" stroke-width="4"
+              stroke-dasharray="150.8" stroke-dashoffset="113.1" stroke-linecap="round" />
+          </svg>
+          <span class="cs-banner-ring-label">1/8</span>
+        </div>
+        <span class="cs-banner-ring-text">Done</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Wins -->
+  <span class="cs-tier-header">Quick Wins &middot; 2 pts</span>
+  <div class="cs-grid">
+    <div class="cs-mission completed tier-quick" onclick="document.getElementById('detail-leaderboard').classList.add('open')">
+      <div class="cs-mission-check">&#10003;</div>
+      <span class="cs-mission-icon">&#128202;</span>
+      <div class="cs-mission-title">Share the Leaderboard</div>
+      <span class="cs-mission-pts">&#10003; +2 earned</span>
+    </div>
+    <div class="cs-mission tier-quick" onclick="document.getElementById('detail-engage').classList.add('open')">
+      <span class="cs-mission-icon">&#128172;</span>
+      <div class="cs-mission-title">Comment & Engage</div>
+      <span class="cs-mission-pts">+2 pts</span>
+      <span class="cs-mission-auto">&#9889; Auto-template</span>
+    </div>
+  </div>
+
+  <!-- Earn More -->
+  <span class="cs-tier-header">Earn More &middot; 4 pts</span>
+  <div class="cs-grid">
+    <div class="cs-mission tier-mid" onclick="document.getElementById('detail-accountability').classList.add('open')">
+      <span class="cs-mission-icon">&#128221;</span>
+      <div class="cs-mission-title">Accountability Post</div>
+      <span class="cs-mission-pts">+4 pts</span>
+      <span class="cs-mission-auto">&#9889; Auto-template</span>
+    </div>
+    <div class="cs-mission tier-mid">
+      <span class="cs-mission-icon">&#128588;</span>
+      <div class="cs-mission-title">Shout Out a Teammate</div>
+      <span class="cs-mission-pts">+4 pts</span>
+      <span class="cs-mission-auto">&#9889; Auto-template</span>
+    </div>
+    <div class="cs-mission tier-mid" style="grid-column: 1 / -1">
+      <span class="cs-mission-icon">&#129464;</span>
+      <div class="cs-mission-title">Share Your Hero Profile</div>
+      <span class="cs-mission-pts">+4 pts</span>
+      <span class="cs-mission-auto">&#9889; Auto-template + link</span>
+    </div>
+  </div>
+
+  <!-- Big Points -->
+  <span class="cs-tier-header">Big Points &middot; 8-10 pts</span>
+  <div class="cs-grid">
+    <div class="cs-mission tier-big">
+      <span class="cs-mission-icon">&#127904;</span>
+      <div class="cs-mission-title">Carousel Highlights</div>
+      <span class="cs-mission-pts">+8 pts</span>
+      <span class="cs-mission-auto">&#9889; Auto-slides</span>
+    </div>
+    <div class="cs-mission tier-big">
+      <span class="cs-mission-icon">&#127917;</span>
+      <div class="cs-mission-title">Play-List Proof</div>
+      <span class="cs-mission-pts">+8 pts</span>
+      <span class="cs-mission-auto">&#9889; Auto-template</span>
+    </div>
+    <div class="cs-mission full tier-big">
+      <span class="cs-mission-icon">&#127919;</span>
+      <div class="cs-mission-info">
+        <div class="cs-mission-title">Offer in the Wild</div>
+        <span class="cs-mission-pts">+10 pts</span>
+      </div>
+      <div class="cs-mission-right">
+        <span class="cs-mission-manual">Manual proof</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal: Accountability -->
+<div class="cs-detail-overlay" id="detail-accountability" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cs-detail">
+    <div class="cs-detail-header">
+      <span class="cs-detail-icon">&#128221;</span>
+      <div class="cs-detail-info">
+        <div class="cs-detail-title">Accountability Post</div>
+        <div class="cs-detail-meta">Share your weekly plan or goals publicly</div>
+      </div>
+      <button class="cs-detail-close" onclick="document.getElementById('detail-accountability').classList.remove('open')">&#215;</button>
+    </div>
+    <div class="cs-detail-body">
+      <span class="cs-detail-label">Auto-Generated Template</span>
+      <div class="cs-detail-tmpl">
+        &#128640; Week 2 Goals (Flow Week):<br><br>
+        &#9989; Complete <span class="hl">Attraction Offer</span> flow<br>
+        &#9989; Finish 3 <span class="hl">Groans</span> courage challenges<br>
+        &#9989; Record 5 <span class="hl">Compass</span> check-ins<br><br>
+        Playing with <span class="gd">Flow Warriors</span> in the FindMyFlow Fantasy League &#127942;
+      </div>
+      <span class="cs-detail-source">&#9889; Pulled from your weekly plan</span>
+
+      <span class="cs-detail-label">Post Link (optional)</span>
+      <div class="cs-detail-link">
+        <input type="url" placeholder="https://instagram.com/p/..." />
+      </div>
+    </div>
+    <div class="cs-detail-actions">
+      <button class="cs-detail-cta">Copy & Share <span>&rarr;</span></button>
+      <button class="cs-detail-share">&#128279;</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal: Engage -->
+<div class="cs-detail-overlay" id="detail-engage" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cs-detail">
+    <div class="cs-detail-header">
+      <span class="cs-detail-icon">&#128172;</span>
+      <div class="cs-detail-info">
+        <div class="cs-detail-title">Comment & Engage</div>
+        <div class="cs-detail-meta">Engage with 3 league players</div>
+      </div>
+      <button class="cs-detail-close" onclick="document.getElementById('detail-engage').classList.remove('open')">&#215;</button>
+    </div>
+    <div class="cs-detail-body">
+      <span class="cs-detail-label">Auto-Generated Template</span>
+      <div class="cs-detail-tmpl">
+        Engaged with <span class="hl">Alex</span>, <span class="hl">Jordan</span>, and <span class="hl">Sam</span> this week &#128170;<br><br>
+        <span class="gd">Alex</span> is crushing Business quests (42 pts!), <span class="gd">Jordan</span> posted amazing groan proof, and <span class="gd">Sam</span> just levelled up in Healing.<br><br>
+        This league is fire &#128293;
+      </div>
+      <span class="cs-detail-source">&#9889; Names and stats from your league</span>
+    </div>
+    <div class="cs-detail-actions">
+      <button class="cs-detail-cta">Copy & Share <span>&rarr;</span></button>
+      <button class="cs-detail-share">&#128279;</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal: Leaderboard (completed) -->
+<div class="cs-detail-overlay" id="detail-leaderboard" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="cs-detail">
+    <div class="cs-detail-header">
+      <span class="cs-detail-icon">&#128202;</span>
+      <div class="cs-detail-info">
+        <div class="cs-detail-title">Share the Leaderboard</div>
+        <div class="cs-detail-meta" style="color: #10b981; font-weight: 700">&#10003; Approved &middot; +2 pts earned</div>
+      </div>
+      <button class="cs-detail-close" onclick="document.getElementById('detail-leaderboard').classList.remove('open')">&#215;</button>
+    </div>
+    <div class="cs-detail-body">
+      <span class="cs-detail-label">Your Submission</span>
+      <div class="cs-detail-tmpl">
+        &#127942; Flow Warriors are sitting at <span class="hl">#1</span> with 6 pts after Week 1!<br><br>
+        We're competing in the FindMyFlow Fantasy League — personal development meets fantasy sports &#128293;
+      </div>
+      <span class="cs-detail-source">&#10003; Submitted and approved</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

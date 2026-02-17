@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthProvider'
 import { supabase } from '../lib/supabaseClient'
@@ -11,15 +11,15 @@ import {
   getFlowAnalytics
 } from '../lib/validationFlows'
 import { PROBLEM_SEGMENTS, PERSONA_SEGMENTS } from '../lib/wheelTaxonomy'
-import {
-  ResponseTimeline,
-  FunnelVisualization,
-  GeographicBreakdown,
-  QuestionBreakdown,
-  AnswerClustering,
-  SentimentIndicators,
-  PDFReportGenerator
-} from '../components/AdvancedAnalytics'
+
+// Lazy load heavy analytics components (~940 lines, 7 components)
+const LazyResponseTimeline = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.ResponseTimeline })))
+const LazyFunnelVisualization = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.FunnelVisualization })))
+const LazyGeographicBreakdown = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.GeographicBreakdown })))
+const LazyQuestionBreakdown = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.QuestionBreakdown })))
+const LazyAnswerClustering = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.AnswerClustering })))
+const LazySentimentIndicators = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.SentimentIndicators })))
+const LazyPDFReportGenerator = lazy(() => import('../components/AdvancedAnalytics').then(m => ({ default: m.PDFReportGenerator })))
 import './ValidationFlowsManager.css'
 import '../Profile.css'
 
@@ -200,8 +200,11 @@ const ValidationFlowsManager = () => {
     setAiSummary(null) // Clear previous AI summary
     setAnalyticsLoading(true)
     setActiveAnalyticsTab('overview')
-    const data = await getFlowResponses(flow.id, includeIncomplete)
-    const analyticsData = await getFlowAnalytics(flow.id, timePeriod)
+    // Parallel fetch - responses and analytics at the same time
+    const [data, analyticsData] = await Promise.all([
+      getFlowResponses(flow.id, includeIncomplete),
+      getFlowAnalytics(flow.id, timePeriod)
+    ])
     setResponses(data)
     setAnalytics(analyticsData)
     // Store sessions for geographic and timeline data
@@ -925,52 +928,59 @@ const ValidationFlowsManager = () => {
         {/* Responses Viewer */}
         {selectedFlow && (
           <div className="responses-viewer">
-            <div className="responses-header">
-              <h2>{selectedFlow.flow_name} - Responses</h2>
-              <div className="responses-header-actions">
-                <label className="include-incomplete-toggle" title="Show responses from people who started but didn't finish">
-                  <input
-                    type="checkbox"
-                    checked={includeIncomplete}
-                    onChange={(e) => handleIncludeIncompleteChange(e.target.checked)}
-                  />
-                  <span>Include in-progress</span>
-                </label>
-                <button
-                  className="export-btn"
-                  onClick={exportToCSV}
-                  disabled={responses.length === 0}
-                >
-                  📥 Export CSV
-                </button>
-                <button className="close-btn" onClick={() => setSelectedFlow(null)}>×</button>
-              </div>
+            {/* Toolbar Header */}
+            <div className="rv-toolbar">
+              <button className="rv-back" onClick={() => setSelectedFlow(null)}>&larr;</button>
+              <span className="rv-toolbar-title">Responses</span>
+              <button className="rv-close" onClick={() => setSelectedFlow(null)}>&times;</button>
             </div>
 
-            {/* Enhanced Analytics Dashboard */}
+            {/* Flow Name */}
+            <h2 className="rv-flow-name">{selectedFlow.flow_name}</h2>
+
+            {/* Action Chips */}
+            <div className="rv-action-bar">
+              <label className="rv-chip rv-chip-toggle" title="Show responses from people who started but didn't finish">
+                <input
+                  type="checkbox"
+                  checked={includeIncomplete}
+                  onChange={(e) => handleIncludeIncompleteChange(e.target.checked)}
+                />
+                <span>In-progress</span>
+              </label>
+              <button
+                className="rv-chip rv-chip-gold"
+                onClick={exportToCSV}
+                disabled={responses.length === 0}
+              >
+                Export CSV
+              </button>
+            </div>
+
+            {/* Analytics Hero Card (stats only) */}
             <div className="analytics-dashboard enhanced">
-              {/* Time Period Selector + Refresh */}
-              <div className="analytics-controls">
-                <div className="time-period-tabs">
-                  <button
-                    className={`period-tab ${timePeriod === '7days' ? 'active' : ''}`}
-                    onClick={() => handleTimePeriodChange('7days')}
-                  >
-                    Last 7 days
-                  </button>
-                  <button
-                    className={`period-tab ${timePeriod === '30days' ? 'active' : ''}`}
-                    onClick={() => handleTimePeriodChange('30days')}
-                  >
-                    Last 30 days
-                  </button>
-                  <button
-                    className={`period-tab ${timePeriod === 'all' ? 'active' : ''}`}
-                    onClick={() => handleTimePeriodChange('all')}
-                  >
-                    All time
-                  </button>
-                </div>
+              <div className="rv-hero-eyebrow">Analytics</div>
+
+              {/* Time Period Tabs */}
+              <div className="time-period-tabs">
+                <button
+                  className={`period-tab ${timePeriod === '7days' ? 'active' : ''}`}
+                  onClick={() => handleTimePeriodChange('7days')}
+                >
+                  7 days
+                </button>
+                <button
+                  className={`period-tab ${timePeriod === '30days' ? 'active' : ''}`}
+                  onClick={() => handleTimePeriodChange('30days')}
+                >
+                  30 days
+                </button>
+                <button
+                  className={`period-tab ${timePeriod === 'all' ? 'active' : ''}`}
+                  onClick={() => handleTimePeriodChange('all')}
+                >
+                  All time
+                </button>
                 <button
                   className={`refresh-btn ${analyticsLoading ? 'loading' : ''}`}
                   onClick={refreshAnalytics}
@@ -985,164 +995,54 @@ const ValidationFlowsManager = () => {
                 </button>
               </div>
 
-              {/* Analytics Content */}
+              {/* Stats Grid */}
               {analyticsLoading && !analytics ? (
                 <div className="analytics-loading">
                   <div className="spinner"></div>
                   <p>Loading analytics...</p>
                 </div>
               ) : analytics && (analytics.totalStarted > 0 || analytics.totalCompleted > 0) ? (
-                <>
-                  {/* Core Metrics */}
-                  <div className="analytics-summary">
-                    <div className="analytics-stat" title="Total number of people who started the survey">
-                      <div className="stat-header">
-                        <div className="analytics-value animate-value">
-                          {animatedValues.started ?? analytics.totalStarted ?? 0}
-                        </div>
-                        {analytics.trends && renderTrendIndicator(analytics.trends.startedChange)}
-                      </div>
-                      <div className="analytics-label">Started</div>
-                      {analytics.sparklineData && (
-                        <div className="sparkline-container">
-                          {renderSparkline(analytics.sparklineData)}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="analytics-stat highlight" title="Number of people who completed all questions">
-                      <div className="stat-header">
-                        <div className="analytics-value animate-value">
-                          {animatedValues.completed ?? analytics.totalCompleted ?? 0}
-                        </div>
-                        {analytics.trends && renderTrendIndicator(analytics.trends.completedChange)}
-                      </div>
-                      <div className="analytics-label">Completed</div>
-                    </div>
-
-                    <div className={`analytics-stat completion-rate ${getCompletionRateColor(analytics.completionRate || 0)}`} title="Percentage of starters who completed the survey. Green: 70%+, Yellow: 40-70%, Red: below 40%">
-                      {renderProgressRing(animatedValues.rate ?? analytics.completionRate ?? 0)}
-                      <div className="analytics-label">Completion Rate</div>
-                      {analytics.trends && renderTrendIndicator(analytics.trends.rateChange)}
-                    </div>
-
-                    <div className="analytics-stat" title="Average time to complete the survey">
+                <div className="analytics-summary">
+                  <div className="analytics-stat" title="Total number of people who started the survey">
+                    <div className="stat-header">
                       <div className="analytics-value animate-value">
-                        {animatedValues.time ?? analytics.averageTime ?? 0} <span className="unit">min</span>
+                        {animatedValues.started ?? analytics.totalStarted ?? 0}
                       </div>
-                      <div className="analytics-label">Avg. Time</div>
+                      {analytics.trends && renderTrendIndicator(analytics.trends.startedChange)}
                     </div>
+                    <div className="analytics-label">Started</div>
+                    {analytics.sparklineData && (
+                      <div className="sparkline-container">
+                        {renderSparkline(analytics.sparklineData)}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Device Breakdown */}
-                  {analytics.deviceBreakdown && (analytics.deviceBreakdown.mobile > 0 || analytics.deviceBreakdown.desktop > 0) && (
-                    <div className="analytics-section">
-                      <h4>Device Breakdown</h4>
-                      <div className="device-breakdown">
-                        <div className="device-stat">
-                          <span className="device-icon">📱</span>
-                          <span className="device-count">{analytics.deviceBreakdown.mobile || 0}</span>
-                          <span className="device-label">Mobile</span>
-                        </div>
-                        <div className="device-stat">
-                          <span className="device-icon">💻</span>
-                          <span className="device-count">{analytics.deviceBreakdown.desktop || 0}</span>
-                          <span className="device-label">Desktop</span>
-                        </div>
+                  <div className="analytics-stat highlight" title="Number of people who completed all questions">
+                    <div className="stat-header">
+                      <div className="analytics-value animate-value">
+                        {animatedValues.completed ?? analytics.totalCompleted ?? 0}
                       </div>
+                      {analytics.trends && renderTrendIndicator(analytics.trends.completedChange)}
                     </div>
-                  )}
-
-                  {/* Drop-off Funnel */}
-                  {analytics.dropOffFunnel && Object.keys(analytics.dropOffFunnel).length > 0 && (
-                    <div className="analytics-section">
-                      <h4>Drop-off Points</h4>
-                      <div className="dropoff-funnel">
-                        {Object.entries(analytics.dropOffFunnel)
-                          .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
-                          .map(([step, count]) => (
-                            <div key={step} className="dropoff-item animate-bar">
-                              <span className="dropoff-step">Q{parseInt(step) + 1}</span>
-                              <div className="dropoff-bar-container">
-                                <div
-                                  className="dropoff-bar"
-                                  style={{
-                                    width: `${Math.min(100, (count / Math.max(1, analytics.totalStarted - analytics.totalCompleted)) * 100)}%`
-                                  }}
-                                />
-                              </div>
-                              <span className="dropoff-count">{count} left</span>
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Analytics Tab Switcher */}
-                  <div className="analytics-tab-switcher">
-                    <button
-                      className={`analytics-tab ${activeAnalyticsTab === 'overview' ? 'active' : ''}`}
-                      onClick={() => setActiveAnalyticsTab('overview')}
-                    >
-                      Overview
-                    </button>
-                    <button
-                      className={`analytics-tab ${activeAnalyticsTab === 'deep-dive' ? 'active' : ''}`}
-                      onClick={() => setActiveAnalyticsTab('deep-dive')}
-                    >
-                      Deep Dive
-                    </button>
-                    <div className="tab-actions">
-                      <button
-                        className="question-breakdown-btn"
-                        onClick={() => setShowQuestionBreakdown(true)}
-                      >
-                        View All Answers
-                      </button>
-                      <PDFReportGenerator
-                        flow={selectedFlow}
-                        analytics={analytics}
-                        responses={responses}
-                      />
-                    </div>
+                    <div className="analytics-label">Completed</div>
                   </div>
 
-                  {/* Overview Tab Content */}
-                  {activeAnalyticsTab === 'overview' && (
-                    <div className="analytics-overview-content">
-                      {/* Response Timeline Chart */}
-                      <ResponseTimeline
-                        data={allSessions}
-                        period={timePeriod}
-                      />
+                  <div className={`analytics-stat completion-rate ${getCompletionRateColor(analytics.completionRate || 0)}`} title="Percentage of starters who completed the survey. Green: 70%+, Yellow: 40-70%, Red: below 40%">
+                    {renderProgressRing(animatedValues.rate ?? analytics.completionRate ?? 0)}
+                    <div className="analytics-label">Completion Rate</div>
+                    {analytics.trends && renderTrendIndicator(analytics.trends.rateChange)}
+                  </div>
 
-                      {/* Funnel Visualization */}
-                      <FunnelVisualization
-                        analytics={analytics}
-                        questions={responses?.[0]?.responses?.map(r => r.question_text) || []}
-                      />
-
-                      {/* Geographic Breakdown */}
-                      <GeographicBreakdown sessions={allSessions} />
+                  <div className="analytics-stat" title="Average time to complete the survey">
+                    <div className="analytics-value animate-value">
+                      {animatedValues.time ?? analytics.averageTime ?? 0} <span className="unit">min</span>
                     </div>
-                  )}
-
-                  {/* Deep Dive Tab Content */}
-                  {activeAnalyticsTab === 'deep-dive' && (
-                    <div className="analytics-deep-dive-content">
-                      {/* Sentiment Analysis */}
-                      <SentimentIndicators responses={responses} />
-
-                      {/* Answer Clustering */}
-                      <AnswerClustering
-                        responses={responses}
-                        flowId={selectedFlow?.id}
-                      />
-                    </div>
-                  )}
-                </>
+                    <div className="analytics-label">Avg. Time</div>
+                  </div>
+                </div>
               ) : (
-                /* Enhanced Empty State */
+                /* Empty State */
                 <div className="analytics-empty-state">
                   <div className="empty-illustration">
                     <span className="empty-icon">📊</span>
@@ -1163,6 +1063,117 @@ const ValidationFlowsManager = () => {
                 </div>
               )}
             </div>
+
+            {/* White Cards - outside the hero */}
+            {analytics && (analytics.totalStarted > 0 || analytics.totalCompleted > 0) && (
+              <>
+                {/* Device Breakdown Card */}
+                {analytics.deviceBreakdown && (analytics.deviceBreakdown.mobile > 0 || analytics.deviceBreakdown.desktop > 0) && (
+                  <div className="rv-content-card">
+                    <div className="rv-card-eyebrow">
+                      <span className="rv-card-eyebrow-icon">📱</span>
+                      Devices
+                    </div>
+                    <div className="rv-device-row">
+                      <div className="rv-device-item">
+                        <span className="rv-device-icon">📱</span>
+                        <div className="rv-device-info">
+                          <div className="rv-device-count">{analytics.deviceBreakdown.mobile || 0}</div>
+                          <div className="rv-device-label">Mobile</div>
+                        </div>
+                      </div>
+                      <div className="rv-device-item">
+                        <span className="rv-device-icon">💻</span>
+                        <div className="rv-device-info">
+                          <div className="rv-device-count">{analytics.deviceBreakdown.desktop || 0}</div>
+                          <div className="rv-device-label">Desktop</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Drop-off Funnel Card */}
+                {analytics.dropOffFunnel && Object.keys(analytics.dropOffFunnel).length > 0 && (
+                  <div className="rv-content-card">
+                    <div className="rv-card-eyebrow">
+                      <span className="rv-card-eyebrow-icon">📉</span>
+                      Drop-off Points
+                    </div>
+                    <div className="dropoff-funnel">
+                      {Object.entries(analytics.dropOffFunnel)
+                        .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+                        .map(([step, count]) => (
+                          <div key={step} className="rv-funnel-item animate-bar">
+                            <span className="rv-funnel-step">Q{parseInt(step) + 1}</span>
+                            <div className="rv-funnel-track">
+                              <div
+                                className="rv-funnel-fill"
+                                style={{
+                                  width: `${Math.min(100, (count / Math.max(1, analytics.totalStarted - analytics.totalCompleted)) * 100)}%`
+                                }}
+                              />
+                            </div>
+                            <span className="rv-funnel-count">{count} left</span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab Switcher */}
+                <div className="rv-tab-row">
+                  <button
+                    className={`rv-tab ${activeAnalyticsTab === 'overview' ? 'active' : ''}`}
+                    onClick={() => setActiveAnalyticsTab('overview')}
+                  >
+                    Overview
+                  </button>
+                  <button
+                    className={`rv-tab ${activeAnalyticsTab === 'deep-dive' ? 'active' : ''}`}
+                    onClick={() => setActiveAnalyticsTab('deep-dive')}
+                  >
+                    Deep Dive
+                  </button>
+                  <button
+                    className="rv-tab rv-tab-gold"
+                    onClick={() => setShowQuestionBreakdown(true)}
+                  >
+                    All Answers
+                  </button>
+                  <Suspense fallback={null}>
+                    <LazyPDFReportGenerator
+                      flow={selectedFlow}
+                      analytics={analytics}
+                      responses={responses}
+                    />
+                  </Suspense>
+                </div>
+
+                {/* Tab Content */}
+                {activeAnalyticsTab === 'overview' && (
+                  <div className="rv-content-card rv-tab-content">
+                    <Suspense fallback={<div className="analytics-loading-state"><div className="spinner"></div></div>}>
+                      <LazyResponseTimeline data={allSessions} period={timePeriod} />
+                      <LazyFunnelVisualization
+                        analytics={analytics}
+                        questions={responses?.[0]?.responses?.map(r => r.question_text) || []}
+                      />
+                      <LazyGeographicBreakdown sessions={allSessions} />
+                    </Suspense>
+                  </div>
+                )}
+
+                {activeAnalyticsTab === 'deep-dive' && (
+                  <div className="rv-content-card rv-tab-content">
+                    <Suspense fallback={<div className="analytics-loading-state"><div className="spinner"></div></div>}>
+                      <LazySentimentIndicators responses={responses} />
+                      <LazyAnswerClustering responses={responses} flowId={selectedFlow?.id} />
+                    </Suspense>
+                  </div>
+                )}
+              </>
+            )}
 
             {/* AI Summary Section */}
             <div className="ai-summary-section">
@@ -1620,10 +1631,12 @@ const ValidationFlowsManager = () => {
         {showQuestionBreakdown && (
           <div className="modal-overlay" onClick={() => setShowQuestionBreakdown(false)}>
             <div onClick={(e) => e.stopPropagation()}>
-              <QuestionBreakdown
-                responses={responses}
-                onClose={() => setShowQuestionBreakdown(false)}
-              />
+              <Suspense fallback={<div className="analytics-loading-state"><div className="spinner"></div></div>}>
+                <LazyQuestionBreakdown
+                  responses={responses}
+                  onClose={() => setShowQuestionBreakdown(false)}
+                />
+              </Suspense>
             </div>
           </div>
         )}

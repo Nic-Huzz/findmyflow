@@ -25,6 +25,23 @@ export const PAGE_CONTENT = {
     }
   },
 
+  '/shadow-work': {
+    pageId: 'shadow_work',
+    pageName: 'Shadow Work Workshop',
+    whatIsThis: `This is where you explore the parts of yourself you've suppressed — traits you're ashamed of and authentic parts you've hidden to stay safe. You'll identify your shadows, trace them to root emotions, map the protective archetypes you use as armour, and trace the whole pattern back to its origin.`,
+    whyMatters: `Shadows aren't flaws — they're authentic parts of you that were made to feel unacceptable. By bringing them into the light, you stop them from running the show unconsciously.\n\nThis is deep work. It connects your protective archetypes (from the Nervous System Map) to specific traits and experiences. Once you see the full pattern, healing becomes possible.`,
+    contextualPrompts: [
+      { id: 'what_shadow', label: 'What is a shadow?' },
+      { id: 'how_often', label: 'How often can I do this?' },
+      { id: 'connection', label: 'How does this connect to the NS Map?' }
+    ],
+    faq: {
+      what_shadow: `A shadow is any part of yourself you suppress. We suppress for two reasons:\n\n1. **Society told us it's wrong** — "Don't be too loud," "Don't be too emotional," "That's not professional."\n2. **We got hurt** — You expressed something authentic, got rejected or teased, and your nervous system said "never again."\n\nShadows aren't bad. They're just hidden. And hidden things have power over you — until you bring them into the light.`,
+      how_often: `Once per calendar week (Monday to Sunday). Each session builds on previous ones — you'll explore different shadows each time, building a growing inventory of self-knowledge.\n\nThe goal isn't to "finish" shadow work. It's to keep peeling back layers as you grow.`,
+      connection: `The Nervous System Map shows you your protective archetypes — Ghost, Performer, Controller, Perfectionist, People Pleaser. Shadow Work goes deeper:\n\n• **NS Map** = "I become the Ghost when I feel unsafe"\n• **Shadow Work** = "I become the Ghost specifically to hide my creativity, because I was teased for it in school, and the root emotion is shame"\n\nSame archetypes, much deeper understanding of WHY they show up.`
+    }
+  },
+
   '/healing-compass': {
     pageId: 'healing_compass',
     pageName: 'Healing Compass',

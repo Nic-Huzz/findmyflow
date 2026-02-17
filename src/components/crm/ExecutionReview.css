@@ -11,13 +11,13 @@
   justify-content: center;
   padding: 3rem;
   gap: 1rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #6c757d);
 }
 
 .execution-review-loading .spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid var(--border-color, #e9ecef);
   border-top-color: #5e17eb;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -35,43 +35,40 @@
 .execution-review-header h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary, #212529);
   margin-bottom: 0.5rem;
 }
 
 .execution-review-philosophy {
   font-size: 0.875rem;
   font-style: italic;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #6c757d);
 }
 
 /* Score Card */
 .execution-score-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: white;
   border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color, #e9ecef);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .execution-score-card.excellent {
   border-color: rgba(34, 197, 94, 0.4);
-  background: rgba(34, 197, 94, 0.1);
 }
 
 .execution-score-card.good {
   border-color: rgba(59, 130, 246, 0.4);
-  background: rgba(59, 130, 246, 0.1);
 }
 
 .execution-score-card.needs-work {
   border-color: rgba(251, 191, 36, 0.4);
-  background: rgba(251, 191, 36, 0.1);
 }
 
 .execution-score-card.low {
   border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.1);
 }
 
 .execution-score-header {
@@ -82,22 +79,22 @@
 }
 
 .execution-score-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary, #6c757d);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .execution-week-label {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary, #adb5bd);
 }
 
 .execution-score-value {
   font-size: 3.5rem;
   font-weight: 800;
-  color: white;
+  color: var(--text-primary, #212529);
   line-height: 1;
   margin-bottom: 0.25rem;
 }
@@ -109,13 +106,13 @@
 
 .execution-score-detail {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #6c757d);
   margin-bottom: 1rem;
 }
 
 .execution-score-bar {
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border-color, #e9ecef);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 1rem;
@@ -134,23 +131,25 @@
 
 .execution-score-message {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #6c757d);
   margin: 0;
   line-height: 1.5;
 }
 
 /* Task Breakdown */
 .execution-breakdown {
-  background: rgba(255, 255, 255, 0.03);
+  background: white;
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color, #e9ecef);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .execution-breakdown h3 {
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-primary, #212529);
   margin-bottom: 0.75rem;
 }
 
@@ -165,7 +164,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-color, #e9ecef);
 }
 
 .execution-breakdown-item:last-child {
@@ -174,7 +173,7 @@
 
 .execution-breakdown-type {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-primary, #212529);
 }
 
 .execution-breakdown-stats {
@@ -182,7 +181,7 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #6c757d);
 }
 
 .execution-breakdown-rate {
@@ -192,18 +191,20 @@
   font-size: 0.75rem;
 }
 
-.execution-breakdown-rate.excellent { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
-.execution-breakdown-rate.good { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-.execution-breakdown-rate.needs-work { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
-.execution-breakdown-rate.low { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.execution-breakdown-rate.excellent { background: rgba(34, 197, 94, 0.15); color: #16a34a; }
+.execution-breakdown-rate.good { background: rgba(59, 130, 246, 0.15); color: #2563eb; }
+.execution-breakdown-rate.needs-work { background: rgba(251, 191, 36, 0.15); color: #d97706; }
+.execution-breakdown-rate.low { background: rgba(239, 68, 68, 0.15); color: #dc2626; }
 
 /* No Data State */
 .execution-no-data {
   text-align: center;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: white;
   border-radius: 16px;
   margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color, #e9ecef);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .execution-no-data-icon {
@@ -215,13 +216,13 @@
 .execution-no-data h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary, #212529);
   margin-bottom: 0.5rem;
 }
 
 .execution-no-data p {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #6c757d);
   margin: 0;
 }
 
@@ -243,18 +244,19 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.3);
 }
 
 .execution-primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(233, 162, 59, 0.4);
+  box-shadow: 0 6px 20px rgba(233, 162, 59, 0.4);
 }
 
 .execution-skip-btn {
   width: 100%;
   padding: 0.75rem;
   background: transparent;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary, #adb5bd);
   border: none;
   font-size: 0.875rem;
   cursor: pointer;
@@ -262,5 +264,5 @@
 }
 
 .execution-skip-btn:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary, #6c757d);
 }

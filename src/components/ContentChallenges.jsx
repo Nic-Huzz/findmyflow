@@ -4,12 +4,17 @@
  * Renders 8 content challenge types inside the Bonus tab's "Content" sub-tab.
  * URL-based challenges open an inline URL input.
  * "Comment & Engage" uses a player picker (select 3 league players).
+ * Challenges with a templateType show a "Template" button that opens
+ * a shareable image modal (ContentTemplateModal).
  */
 import { useState, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { CONTENT_POINT_VALUES } from '../lib/league/leagueConfig'
 import { submitContent } from '../lib/league/leagueService'
 import { supabase } from '../lib/supabaseClient'
+import { essenceProfiles } from '../data/essenceProfiles'
+import { getEssenceImagePath } from '../lib/essencePreferences'
+import ContentTemplateModal from './ContentTemplateModal'
 import './ContentChallenges.css'
 
 const CONTENT_TYPES = Object.entries(CONTENT_POINT_VALUES)
@@ -24,11 +29,16 @@ export default function ContentChallenges({
   teams,
   contentSubmissions,
   onSubmitted,
+  // Template data props — passed from Challenge.jsx
+  standings,
+  userTeam,
+  userData,
 }) {
   const [expandedCard, setExpandedCard] = useState(null)
   const [urlInput, setUrlInput] = useState('')
   const [selectedPlayers, setSelectedPlayers] = useState(new Set())
   const [submitting, setSubmitting] = useState(false)
+  const [activeTemplate, setActiveTemplate] = useState(null) // { type, data }
 
   // Build a map of content_type → latest submission this week
   const submissionMap = useMemo(() => {
@@ -118,7 +128,7 @@ export default function ContentChallenges({
     if (!urlInput.trim()) return
     setSubmitting(true)
     try {
-      await submitContent({
+      const submission = await submitContent({
         leagueId,
         userId,
         teamId,
@@ -130,6 +140,13 @@ export default function ContentChallenges({
       setExpandedCard(null)
       setUrlInput('')
       onSubmitted?.()
+
+      // Fire-and-forget: scrape OG metadata in the background
+      if (submission?.id) {
+        supabase.functions.invoke('scrape-og-metadata', {
+          body: { submissionId: submission.id },
+        }).catch(err => console.warn('OG scrape failed (non-critical):', err))
+      }
     } catch (err) {
       console.error('Error submitting content:', err)
       alert('Error submitting. Please try again.')
@@ -184,6 +201,92 @@ export default function ContentChallenges({
     )
   }
 
+  // Build template data for the active template type
+  const openTemplate = (templateType) => {
+    const baseData = { weekNumber, teamName: userTeam?.name || 'My Team' }
+
+    switch (templateType) {
+      case 'leaderboard':
+        setActiveTemplate({
+          type: 'leaderboard',
+          data: {
+            ...baseData,
+            standings: (standings || []).map(s => ({
+              id: s.team_id,
+              name: s.team_name || s.name || 'Team',
+              wins: s.wins ?? 0,
+              draws: s.draws ?? 0,
+              losses: s.losses ?? 0,
+              points: s.match_points ?? s.points ?? 0,
+            })),
+            userTeamId: userTeam?.id,
+          },
+        })
+        break
+
+      case 'hero': {
+        const archetypeProfile = essenceProfiles.essence_archetypes.find(
+          a => a.name === userData?.essence_archetype
+        )
+        const imagePath = getEssenceImagePath(userData)
+        setActiveTemplate({
+          type: 'hero',
+          data: {
+            ...baseData,
+            userName: userData?.user_name || userData?.persona || 'Hero',
+            archetype: userData?.custom_essence_name || userData?.essence_archetype || 'The Explorer',
+            imagePath,
+            superpower: archetypeProfile?.superpower || '',
+            poeticLine: archetypeProfile?.poetic_line || '',
+            poeticVision: archetypeProfile?.poetic_vision || '',
+            characters: archetypeProfile?.characters || [],
+          },
+        })
+        break
+      }
+
+      case 'scorecard':
+        setActiveTemplate({
+          type: 'scorecard',
+          data: {
+            ...baseData,
+            opponentName: 'Opponent',
+            score: '0 – 0',
+            categories: [],
+          },
+        })
+        break
+
+      case 'intentions':
+        setActiveTemplate({
+          type: 'intentions',
+          data: {
+            ...baseData,
+            weekType: 'Flow',
+            weekDesc: 'Balanced productivity',
+            goals: [],
+          },
+        })
+        break
+
+      case 'courage':
+        setActiveTemplate({
+          type: 'courage',
+          data: {
+            ...baseData,
+            challengeText: 'Share a courage challenge you completed',
+            visibilityLayer: 'Screen',
+            scaryScore: 0,
+            wahooScore: 0,
+          },
+        })
+        break
+
+      default:
+        return
+    }
+  }
+
   return (
     <div className="content-challenges">
       <h2 className="section-title">Content Challenges</h2>
@@ -215,6 +318,15 @@ export default function ContentChallenges({
 
               {isExpanded && !isBlocked && config.submissionType === 'url' && (
                 <div className="content-card-form">
+                  {config.templateType && (
+                    <button
+                      className="content-template-btn"
+                      onClick={(e) => { e.stopPropagation(); openTemplate(config.templateType) }}
+                    >
+                      <span className="content-template-icon">🎨</span>
+                      Get Template Image
+                    </button>
+                  )}
                   <input
                     type="text"
                     className="content-url-input"
@@ -275,6 +387,14 @@ export default function ContentChallenges({
           )
         })}
       </div>
+
+      {activeTemplate && (
+        <ContentTemplateModal
+          templateType={activeTemplate.type}
+          data={activeTemplate.data}
+          onClose={() => setActiveTemplate(null)}
+        />
+      )}
     </div>
   )
 }

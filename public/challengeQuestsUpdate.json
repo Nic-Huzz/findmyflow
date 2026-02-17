@@ -468,6 +468,19 @@
       "learnMore": "Your nervous system has invisible boundaries around money, visibility, and success.\n\nWhen you approach these edges, your body creates resistance through self-sabotage, procrastination, or fear.\n\nThis flow uses sway testing (a muscle-testing practice) to identify exactly where those boundaries are empowering you to consciously expand them.\n\nThe flow takes about 10 minutes and since you'll be sway-testing it's recommended you do it at home."
     },
     {
+      "id": "recognise_shadow_work",
+      "category": "Healing",
+      "type": "Recognise",
+      "frequency": "deepdive",
+      "name": "Shadow Work Workshop",
+      "description": "Discover the hidden parts of yourself and trace them to their origin",
+      "points": 8,
+      "inputType": "flow",
+      "flow_id": "shadow_work",
+      "flow_route": "/shadow-work",
+      "learnMore": "Shadow work is the process of exploring parts of yourself you've suppressed — both traits you're ashamed of and authentic parts you've hidden to stay safe.\n\nWe suppress for two reasons: society told us it was wrong, or we were hurt when we expressed it. Either way, those parts didn't go away — they became shadows.\n\nThis flow takes about 15-20 minutes and guides you through identifying your shadows, tracing them to their root emotions, mapping the protective archetypes you use as armour, and discovering the origin story behind it all.\n\nYou can complete this once per week to explore different shadows each time."
+    },
+    {
       "id": "recognise_limiting_belief_rewire",
       "category": "Healing",
       "type": "Recognise",

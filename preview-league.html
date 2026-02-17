@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Fantasy League — FindMyFlow Preview</title>
+<style>
+/* === Reset === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #fafafa;
+}
+
+/* =============================================
+   LeagueOverview.css (lo- classes)
+   ============================================= */
+.league-overview {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: 120px;
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+.league-overview .lo-toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px; background: #ffffff;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #dee2e6;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.league-overview .lo-back {
+  position: absolute; left: 16px;
+  background: none; border: none;
+  font-size: 1.5rem; color: var(--brand-purple);
+  cursor: pointer; padding: 8px; margin: -8px; line-height: 1;
+}
+.league-overview .lo-toolbar-title {
+  font-size: 18px; font-weight: 800;
+  color: var(--text-primary); margin: 0; letter-spacing: -0.3px;
+}
+
+.league-overview .lo-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px; padding: 28px 24px;
+  margin-bottom: 16px; color: white;
+  position: relative; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94,23,235,0.3);
+}
+.league-overview .lo-hero::before {
+  content: ''; position: absolute; top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  animation: loGlow 4s ease-in-out infinite; pointer-events: none;
+}
+.league-overview .lo-hero::after {
+  content: ''; position: absolute; bottom: -60px; left: -30px;
+  width: 140px; height: 140px;
+  background: radial-gradient(circle, rgba(94,23,235,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+@keyframes loGlow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+.league-overview .lo-hero-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: rgba(255,255,255,0.6);
+  display: block; margin-bottom: 12px; position: relative; z-index: 1;
+}
+.league-overview .lo-hero-title {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.3px;
+  margin: 0 0 6px; position: relative; z-index: 1;
+}
+.league-overview .lo-hero-sub {
+  font-size: 14px; color: rgba(255,255,255,0.65);
+  margin: 0 0 20px; position: relative; z-index: 1;
+}
+.league-overview .lo-my-team-badge {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.12); border-radius: 12px;
+  padding: 12px 16px; font-size: 14px; position: relative; z-index: 1;
+}
+.league-overview .lo-share-btn {
+  background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+  color: white; padding: 6px 14px; border-radius: 100px;
+  font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
+}
+
+.league-overview .lo-tabs {
+  display: flex; gap: 8px; margin-bottom: 16px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.league-overview .lo-tab {
+  flex-shrink: 0; padding: 8px 20px;
+  background: var(--surface); border: 1px solid #e9ecef;
+  border-radius: 100px; font-size: 13px; font-weight: 700;
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.2s; white-space: nowrap; font-family: inherit;
+}
+.league-overview .lo-tab.active {
+  background: rgba(94,23,235,0.06);
+  border-color: rgba(94,23,235,0.15);
+  color: var(--brand-purple);
+}
+
+.league-overview .lo-content-link {
+  width: 100%; background: rgba(59,130,246,0.06);
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 14px; padding: 14px 20px;
+  font-size: 14px; font-weight: 700; color: #3B82F6;
+  cursor: pointer; text-align: left;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; font-family: inherit; transition: all 0.2s;
+}
+
+.league-overview .lo-cta {
+  width: 100%;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e; border: none;
+  padding: 16px; border-radius: 14px;
+  font-size: 16px; font-weight: 800; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-family: inherit; position: relative; z-index: 1;
+}
+
+/* Schedule/Rules card */
+.league-overview .lo-section { margin-bottom: 16px; }
+.league-overview .lo-card {
+  background: var(--surface); border: 1px solid #e9ecef;
+  border-radius: 24px; padding: 20px 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  overflow: hidden; position: relative; margin-bottom: 12px;
+}
+.league-overview .lo-rules-title { font-size: 18px; font-weight: 800; margin: 0 0 16px; letter-spacing: -0.3px; }
+.league-overview .lo-rules-subtitle { font-size: 14px; font-weight: 800; margin: 20px 0 12px; color: var(--brand-purple); text-transform: uppercase; letter-spacing: 0.5px; }
+.league-overview .lo-rules-list { display: flex; flex-direction: column; gap: 16px; }
+.league-overview .lo-rule { display: flex; align-items: flex-start; gap: 14px; }
+.league-overview .lo-rule-num { width: 28px; height: 28px; flex-shrink: 0; background: linear-gradient(135deg, var(--brand-purple), #7c3aed); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; }
+.league-overview .lo-rule strong { font-size: 14px; font-weight: 800; display: block; margin-bottom: 4px; }
+.league-overview .lo-rule p { font-size: 13px; color: var(--text-secondary); line-height: 1.4; margin: 0; }
+.league-overview .lo-categories-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.league-overview .lo-category-pill { display: flex; align-items: center; gap: 6px; padding: 6px 14px; border: 2px solid; border-radius: 100px; font-size: 13px; font-weight: 700; }
+.league-overview .lo-cat-icon { font-size: 14px; }
+.league-overview .lo-cat-label { color: var(--text-primary); }
+
+/* Week/schedule */
+.league-overview .lo-week-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.league-overview .lo-week-label { font-size: 15px; font-weight: 800; color: var(--text-primary); }
+.league-overview .lo-week-badge { font-size: 11px; font-weight: 700; background: rgba(94,23,235,0.08); color: var(--brand-purple); padding: 4px 10px; border-radius: 100px; }
+.league-overview .lo-no-matchups { font-size: 13px; color: var(--text-muted); text-align: center; padding: 8px 0; }
+.league-overview .lo-matchup-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f3f5; }
+.league-overview .lo-matchup-row:last-child { border-bottom: none; }
+.league-overview .lo-matchup-team { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.league-overview .lo-matchup-team:last-child { text-align: right; align-items: flex-end; }
+.league-overview .lo-matchup-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.league-overview .lo-matchup-team.winner .lo-matchup-name { color: var(--brand-gold); }
+.league-overview .lo-matchup-score { font-size: 12px; color: var(--text-muted); }
+.league-overview .lo-matchup-vs { font-size: 13px; font-weight: 700; color: var(--text-muted); padding: 0 16px; min-width: 60px; text-align: center; }
+
+@media (min-width: 768px) { .league-overview { max-width: 700px; margin: 0 auto; } }
+@media (max-width: 480px) { .league-overview { padding: 16px; padding-top: 72px; } }
+
+/* =============================================
+   LeagueLeaderboard.css (ll- classes)
+   ============================================= */
+.league-leaderboard {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --winning-green: #10b981;
+}
+
+.league-leaderboard .ll-section-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--brand-purple); margin-bottom: 12px; }
+
+/* Hero Matchup */
+.league-leaderboard .ll-matchup-hero {
+  background: linear-gradient(135deg, #5e17eb 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px; padding: 24px 20px; margin-bottom: 16px;
+  color: white; position: relative; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94,23,235,0.3);
+}
+.league-leaderboard .ll-matchup-hero::before { content: ''; position: absolute; top: -40px; right: -20px; width: 180px; height: 180px; background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%); animation: llGlow 4s ease-in-out infinite; pointer-events: none; }
+.league-leaderboard .ll-matchup-hero::after { content: ''; position: absolute; bottom: -60px; left: -30px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(94,23,235,0.25) 0%, transparent 70%); pointer-events: none; }
+@keyframes llGlow { 0%,100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+.league-leaderboard .ll-hero-eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.6); display: flex; align-items: center; gap: 8px; margin-bottom: 16px; position: relative; z-index: 1; }
+.league-leaderboard .ll-live-badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #ffffff; background: var(--winning-green); padding: 2px 8px; border-radius: 100px; animation: llPulse 2s ease-in-out infinite; }
+@keyframes llPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+.league-leaderboard .ll-hero-teams { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; position: relative; z-index: 1; }
+.league-leaderboard .ll-hero-team-name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; flex: 1; }
+.league-leaderboard .ll-hero-team-name:last-child { text-align: right; }
+.league-leaderboard .ll-hero-vs { font-size: 12px; font-weight: 800; color: rgba(255,255,255,0.4); padding: 0 12px; flex-shrink: 0; }
+
+.league-leaderboard .ll-hero-categories { position: relative; z-index: 1; }
+.league-leaderboard .ll-cat-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.league-leaderboard .ll-cat-row:last-child { border-bottom: none; }
+.league-leaderboard .ll-cat-score { font-size: 16px; font-weight: 800; min-width: 36px; color: rgba(255,255,255,0.85); }
+.league-leaderboard .ll-cat-score:first-child { text-align: left; }
+.league-leaderboard .ll-cat-score:last-child { text-align: right; }
+.league-leaderboard .ll-cat-score.ll-winning { color: var(--winning-green); }
+.league-leaderboard .ll-cat-label { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.5); text-align: center; flex: 1; }
+.league-leaderboard .ll-hero-result { text-align: center; margin-top: 12px; position: relative; z-index: 1; }
+.league-leaderboard .ll-result-text { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.7); }
+
+/* Week Nav */
+.league-leaderboard .ll-week-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 0 0 16px; }
+.league-leaderboard .ll-week-arrow { min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; background: var(--surface); border: 1px solid #e9ecef; border-radius: 12px; font-size: 18px; color: var(--brand-purple); cursor: pointer; font-family: inherit; transition: all 0.2s; }
+.league-leaderboard .ll-week-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+.league-leaderboard .ll-week-center { display: flex; align-items: center; gap: 8px; }
+.league-leaderboard .ll-week-label { font-size: 16px; font-weight: 800; color: var(--text-primary); }
+.league-leaderboard .ll-current-badge { font-size: 11px; font-weight: 700; background: rgba(94,23,235,0.08); color: var(--brand-purple); padding: 4px 10px; border-radius: 100px; }
+
+/* Mini Matchups */
+.league-leaderboard .ll-mini-matchups { margin-bottom: 20px; }
+.league-leaderboard .ll-mini-matchup { background: var(--surface); border: 1px solid #e9ecef; border-radius: 16px; margin-bottom: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+.league-leaderboard .ll-mini-header { display: flex; align-items: center; padding: 14px 16px; cursor: pointer; user-select: none; gap: 8px; }
+.league-leaderboard .ll-mini-name { flex: 1; font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.league-leaderboard .ll-mini-name:nth-child(3) { text-align: right; }
+.league-leaderboard .ll-mini-name.ll-mini-winner { color: var(--brand-gold); }
+.league-leaderboard .ll-mini-score { font-size: 13px; font-weight: 800; color: var(--text-muted); min-width: 48px; text-align: center; flex-shrink: 0; }
+.league-leaderboard .ll-mini-chevron { font-size: 10px; color: var(--text-muted); flex-shrink: 0; min-width: 16px; text-align: center; }
+
+/* Standings */
+.league-leaderboard .ll-standings { margin-bottom: 8px; }
+.league-leaderboard .ll-team-row { background: var(--surface); border: 1px solid #e9ecef; border-radius: 24px; margin-bottom: 10px; overflow: hidden; position: relative; box-shadow: 0 4px 24px rgba(0,0,0,0.05); }
+.league-leaderboard .ll-team-row::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, var(--brand-purple), #10b981, var(--brand-gold)); border-radius: 24px 0 0 24px; z-index: 2; }
+.league-leaderboard .ll-team-row--mine { border-color: rgba(94,23,235,0.2); box-shadow: 0 4px 24px rgba(94,23,235,0.08); }
+.league-leaderboard .ll-team-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px 18px 24px; cursor: pointer; user-select: none; }
+.league-leaderboard .ll-team-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.league-leaderboard .ll-rank { font-size: 18px; font-weight: 800; min-width: 28px; flex-shrink: 0; }
+.league-leaderboard .ll-team-info { display: flex; flex-direction: column; min-width: 0; }
+.league-leaderboard .ll-team-name { font-size: 16px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.league-leaderboard .ll-team-record { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.league-leaderboard .ll-team-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.league-leaderboard .ll-match-pts { font-size: 22px; font-weight: 800; color: var(--brand-purple); }
+.league-leaderboard .ll-chevron { font-size: 10px; color: var(--text-muted); }
+
+/* Team detail (expanded) */
+.league-leaderboard .ll-team-detail { padding: 0 20px 20px 24px; border-top: 1px solid #f1f3f5; }
+.league-leaderboard .ll-category-bars { padding-top: 16px; }
+.league-leaderboard .ll-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.league-leaderboard .ll-bar-row:last-child { margin-bottom: 0; }
+.league-leaderboard .ll-bar-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); min-width: 110px; flex-shrink: 0; white-space: nowrap; }
+.league-leaderboard .ll-bar-track { flex: 1; height: 8px; background: #f1f3f5; border-radius: 4px; overflow: hidden; }
+.league-leaderboard .ll-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease-out; }
+.league-leaderboard .ll-bar-value { font-size: 14px; font-weight: 800; color: var(--text-primary); min-width: 32px; text-align: right; }
+
+.league-leaderboard .ll-members { margin-top: 16px; padding-top: 16px; border-top: 1px solid #f1f3f5; }
+.league-leaderboard .ll-members-title { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-muted); margin-bottom: 10px; }
+.league-leaderboard .ll-member-row { display: flex; align-items: baseline; font-size: 14px; margin-bottom: 6px; }
+.league-leaderboard .ll-member-name { font-weight: 600; color: var(--text-primary); flex-shrink: 0; }
+.league-leaderboard .ll-member-dots { flex: 1; border-bottom: 1px dotted var(--text-muted); margin: 0 8px; min-width: 20px; position: relative; top: -3px; }
+.league-leaderboard .ll-member-pts { font-weight: 800; color: var(--brand-purple); flex-shrink: 0; }
+
+.league-leaderboard .ll-team-stat { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f3f5; font-size: 14px; color: var(--text-secondary); }
+.league-leaderboard .ll-team-stat strong { color: var(--text-primary); font-weight: 800; }
+
+@media (max-width: 480px) {
+  .league-leaderboard .ll-bar-label { min-width: 85px; font-size: 11px; }
+  .league-leaderboard .ll-hero-team-name { font-size: 15px; }
+  .league-leaderboard .ll-cat-label { font-size: 11px; }
+}
+
+/* === Tab switching helper === */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="league-overview">
+  <!-- Toolbar -->
+  <div class="lo-toolbar">
+    <button class="lo-back" onclick="alert('Would navigate back to /7-day-challenge')">&#8592;</button>
+    <h2 class="lo-toolbar-title">Fantasy League</h2>
+  </div>
+
+  <!-- Hero Card -->
+  <div class="lo-hero">
+    <span class="lo-hero-label">Week 2</span>
+    <h2 class="lo-hero-title">FindMyFlow League S1</h2>
+    <p class="lo-hero-sub">4-week season &bull; 4 teams competing</p>
+
+    <div class="lo-my-team-badge">
+      <span>Your squad: <strong>Flow Warriors</strong></span>
+      <button class="lo-share-btn">Share Code</button>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="lo-tabs">
+    <button class="lo-tab active" id="btn-standings" onclick="switchTab('standings')">Standings</button>
+    <button class="lo-tab" id="btn-schedule" onclick="switchTab('schedule')">Schedule</button>
+    <button class="lo-tab" id="btn-rules" onclick="switchTab('rules')">Rules</button>
+  </div>
+
+  <!-- ==========================================
+       STANDINGS TAB (LeagueLeaderboard)
+       ========================================== -->
+  <div class="tab-content active" id="tab-standings">
+    <div class="league-leaderboard">
+
+      <!-- Hero Matchup Card -->
+      <div class="ll-matchup-hero">
+        <span class="ll-hero-eyebrow">
+          YOUR MATCHUP &middot; WEEK 2
+          <span class="ll-live-badge">LIVE</span>
+        </span>
+        <div class="ll-hero-teams">
+          <span class="ll-hero-team-name">Flow Warriors</span>
+          <span class="ll-hero-vs">VS</span>
+          <span class="ll-hero-team-name">Groan Crushers</span>
+        </div>
+        <div class="ll-hero-categories">
+          <div class="ll-cat-row">
+            <span class="ll-cat-score ll-winning">42</span>
+            <span class="ll-cat-label">&#128188; Business</span>
+            <span class="ll-cat-score">38</span>
+          </div>
+          <div class="ll-cat-row">
+            <span class="ll-cat-score">27</span>
+            <span class="ll-cat-label">&#127918; Play-List</span>
+            <span class="ll-cat-score ll-winning">31</span>
+          </div>
+          <div class="ll-cat-row">
+            <span class="ll-cat-score ll-winning">35</span>
+            <span class="ll-cat-label">&#128154; Healing</span>
+            <span class="ll-cat-score">22</span>
+          </div>
+          <div class="ll-cat-row">
+            <span class="ll-cat-score ll-winning">18</span>
+            <span class="ll-cat-label">&#127917; Voice</span>
+            <span class="ll-cat-score">12</span>
+          </div>
+          <div class="ll-cat-row">
+            <span class="ll-cat-score">8</span>
+            <span class="ll-cat-label">&#11088; Bonus</span>
+            <span class="ll-cat-score ll-winning">14</span>
+          </div>
+        </div>
+        <div class="ll-hero-result">
+          <span class="ll-result-text">Live: 3 &ndash; 2</span>
+        </div>
+      </div>
+
+      <!-- Week Navigator -->
+      <div class="ll-week-nav">
+        <button class="ll-week-arrow" onclick="alert('Previous week')">&#8592;</button>
+        <div class="ll-week-center">
+          <span class="ll-week-label">Week 2</span>
+          <span class="ll-current-badge">Current</span>
+        </div>
+        <button class="ll-week-arrow" onclick="alert('Next week')">&#8594;</button>
+      </div>
+
+      <!-- Mini Matchups -->
+      <div class="ll-mini-matchups">
+        <span class="ll-section-label">MATCHUPS</span>
+
+        <div class="ll-mini-matchup">
+          <div class="ll-mini-header">
+            <span class="ll-mini-name ll-mini-winner">Flow Warriors</span>
+            <span class="ll-mini-score">3 &ndash; 2</span>
+            <span class="ll-mini-name">Groan Crushers</span>
+            <span class="ll-mini-chevron">&#9660;</span>
+          </div>
+        </div>
+
+        <div class="ll-mini-matchup">
+          <div class="ll-mini-header">
+            <span class="ll-mini-name">Courage Club</span>
+            <span class="ll-mini-score">vs</span>
+            <span class="ll-mini-name">Healing Heroes</span>
+            <span class="ll-mini-chevron">&#9660;</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standings Table -->
+      <div class="ll-standings">
+        <span class="ll-section-label">STANDINGS</span>
+
+        <!-- Team 1 (user's team, expanded) -->
+        <div class="ll-team-row ll-team-row--mine ll-team-row--expanded">
+          <div class="ll-team-header">
+            <div class="ll-team-left">
+              <span class="ll-rank">&#129351;</span>
+              <div class="ll-team-info">
+                <span class="ll-team-name">Flow Warriors</span>
+                <span class="ll-team-record">3/3 players &middot; 2W 0D 0L</span>
+              </div>
+            </div>
+            <div class="ll-team-right">
+              <span class="ll-match-pts">6 pts</span>
+              <span class="ll-chevron">&#9650;</span>
+            </div>
+          </div>
+          <div class="ll-team-detail">
+            <div class="ll-category-bars">
+              <div class="ll-bar-row">
+                <span class="ll-bar-label">&#128188; Business</span>
+                <div class="ll-bar-track"><div class="ll-bar-fill" style="width:85%; background-color:#5e17eb"></div></div>
+                <span class="ll-bar-value">42</span>
+              </div>
+              <div class="ll-bar-row">
+                <span class="ll-bar-label">&#127918; Play-List</span>
+                <div class="ll-bar-track"><div class="ll-bar-fill" style="width:55%; background-color:#E9A23B"></div></div>
+                <span class="ll-bar-value">27</span>
+              </div>
+              <div class="ll-bar-row">
+                <span class="ll-bar-label">&#128154; Healing</span>
+                <div class="ll-bar-track"><div class="ll-bar-fill" style="width:70%; background-color:#10b981"></div></div>
+                <span class="ll-bar-value">35</span>
+              </div>
+              <div class="ll-bar-row">
+                <span class="ll-bar-label">&#127917; Voice</span>
+                <div class="ll-bar-track"><div class="ll-bar-fill" style="width:36%; background-color:#8B5CF6"></div></div>
+                <span class="ll-bar-value">18</span>
+              </div>
+              <div class="ll-bar-row">
+                <span class="ll-bar-label">&#11088; Bonus</span>
+                <div class="ll-bar-track"><div class="ll-bar-fill" style="width:16%; background-color:#3B82F6"></div></div>
+                <span class="ll-bar-value">8</span>
+              </div>
+            </div>
+
+            <div class="ll-members">
+              <span class="ll-members-title">THIS WEEK'S CONTRIBUTIONS</span>
+              <div class="ll-member-row">
+                <span class="ll-member-name">Nic</span>
+                <span class="ll-member-dots"></span>
+                <span class="ll-member-pts">54 pts</span>
+              </div>
+              <div class="ll-member-row">
+                <span class="ll-member-name">Alex</span>
+                <span class="ll-member-dots"></span>
+                <span class="ll-member-pts">42 pts</span>
+              </div>
+              <div class="ll-member-row">
+                <span class="ll-member-name">Jordan</span>
+                <span class="ll-member-dots"></span>
+                <span class="ll-member-pts">34 pts</span>
+              </div>
+            </div>
+
+            <div class="ll-team-stat">
+              <span>Category Wins</span>
+              <strong>7</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team 2 -->
+        <div class="ll-team-row">
+          <div class="ll-team-header">
+            <div class="ll-team-left">
+              <span class="ll-rank">&#129352;</span>
+              <div class="ll-team-info">
+                <span class="ll-team-name">Groan Crushers</span>
+                <span class="ll-team-record">3/3 players &middot; 1W 1D 0L</span>
+              </div>
+            </div>
+            <div class="ll-team-right">
+              <span class="ll-match-pts">4 pts</span>
+              <span class="ll-chevron">&#9660;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team 3 -->
+        <div class="ll-team-row">
+          <div class="ll-team-header">
+            <div class="ll-team-left">
+              <span class="ll-rank">&#129353;</span>
+              <div class="ll-team-info">
+                <span class="ll-team-name">Courage Club</span>
+                <span class="ll-team-record">2/3 players &middot; 0W 1D 1L</span>
+              </div>
+            </div>
+            <div class="ll-team-right">
+              <span class="ll-match-pts">1 pts</span>
+              <span class="ll-chevron">&#9660;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team 4 -->
+        <div class="ll-team-row">
+          <div class="ll-team-header">
+            <div class="ll-team-left">
+              <span class="ll-rank">#4</span>
+              <div class="ll-team-info">
+                <span class="ll-team-name">Healing Heroes</span>
+                <span class="ll-team-record">3/3 players &middot; 0W 0D 2L</span>
+              </div>
+            </div>
+            <div class="ll-team-right">
+              <span class="ll-match-pts">0 pts</span>
+              <span class="ll-chevron">&#9660;</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       SCHEDULE TAB
+       ========================================== -->
+  <div class="tab-content" id="tab-schedule">
+    <section class="lo-section">
+      <div class="lo-card">
+        <div class="lo-week-header">
+          <span class="lo-week-label">Week 1</span>
+        </div>
+        <div class="lo-matchup-row">
+          <div class="lo-matchup-team winner">
+            <span class="lo-matchup-name">Flow Warriors</span>
+            <span class="lo-matchup-score">4</span>
+          </div>
+          <span class="lo-matchup-vs">3 - 0</span>
+          <div class="lo-matchup-team">
+            <span class="lo-matchup-name">Healing Heroes</span>
+            <span class="lo-matchup-score">1</span>
+          </div>
+        </div>
+        <div class="lo-matchup-row">
+          <div class="lo-matchup-team">
+            <span class="lo-matchup-name">Groan Crushers</span>
+            <span class="lo-matchup-score">2</span>
+          </div>
+          <span class="lo-matchup-vs">1 - 1</span>
+          <div class="lo-matchup-team">
+            <span class="lo-matchup-name">Courage Club</span>
+            <span class="lo-matchup-score">2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lo-card">
+        <div class="lo-week-header">
+          <span class="lo-week-label">Week 2</span>
+          <span class="lo-week-badge">Current</span>
+        </div>
+        <div class="lo-matchup-row">
+          <div class="lo-matchup-team">
+            <span class="lo-matchup-name">Flow Warriors</span>
+          </div>
+          <span class="lo-matchup-vs">vs</span>
+          <div class="lo-matchup-team">
+            <span class="lo-matchup-name">Groan Crushers</span>
+          </div>
+        </div>
+        <div class="lo-matchup-row">
+          <div class="lo-matchup-team">
+            <span class="lo-matchup-name">Courage Club</span>
+          </div>
+          <span class="lo-matchup-vs">vs</span>
+          <div class="lo-matchup-team">
+            <span class="lo-matchup-name">Healing Heroes</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lo-card">
+        <div class="lo-week-header">
+          <span class="lo-week-label">Week 3</span>
+        </div>
+        <p class="lo-no-matchups">Matchups TBD</p>
+      </div>
+
+      <div class="lo-card">
+        <div class="lo-week-header">
+          <span class="lo-week-label">Week 4</span>
+        </div>
+        <p class="lo-no-matchups">Matchups TBD</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==========================================
+       RULES TAB
+       ========================================== -->
+  <div class="tab-content" id="tab-rules">
+    <section class="lo-section">
+      <div class="lo-card">
+        <h3 class="lo-rules-title">How It Works</h3>
+        <div class="lo-rules-list">
+          <div class="lo-rule">
+            <span class="lo-rule-num">1</span>
+            <div>
+              <strong>Form a Squad</strong>
+              <p>Teams of 3 players. Create a team or join with an invite code.</p>
+            </div>
+          </div>
+          <div class="lo-rule">
+            <span class="lo-rule-num">2</span>
+            <div>
+              <strong>Compete Weekly</strong>
+              <p>Head-to-head matchups each week. Your team's combined quest scores compete across 5 categories.</p>
+            </div>
+          </div>
+          <div class="lo-rule">
+            <span class="lo-rule-num">3</span>
+            <div>
+              <strong>Win Categories</strong>
+              <p>Win 3+ of 5 categories = Win (3 pts). Tie 2-2 = Draw (1 pt each). Win 0-1 = Loss (0 pts).</p>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="lo-rules-subtitle">5 Scoring Categories</h4>
+        <div class="lo-categories-grid">
+          <div class="lo-category-pill" style="border-color: #5e17eb">
+            <span class="lo-cat-icon">&#128188;</span>
+            <span class="lo-cat-label">Business</span>
+          </div>
+          <div class="lo-category-pill" style="border-color: #E9A23B">
+            <span class="lo-cat-icon">&#127918;</span>
+            <span class="lo-cat-label">Play-List</span>
+          </div>
+          <div class="lo-category-pill" style="border-color: #10b981">
+            <span class="lo-cat-icon">&#128154;</span>
+            <span class="lo-cat-label">Healing</span>
+          </div>
+          <div class="lo-category-pill" style="border-color: #8B5CF6">
+            <span class="lo-cat-icon">&#127917;</span>
+            <span class="lo-cat-label">Voice</span>
+          </div>
+          <div class="lo-category-pill" style="border-color: #3B82F6">
+            <span class="lo-cat-icon">&#11088;</span>
+            <span class="lo-cat-label">Bonus</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<script>
+function switchTab(tab) {
+  // Remove active from all tabs and content
+  document.querySelectorAll('.lo-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  // Activate selected
+  document.getElementById('btn-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+</script>
+
+</body>
+</html>

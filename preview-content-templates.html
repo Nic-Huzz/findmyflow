@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Content Templates — Shareable Image Cards</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #fafafa;
+}
+
+.content-submit {
+  --brand-purple: #5e17eb;
+  --brand-gold: #E9A23B;
+  --text-primary: #1a1a2e;
+  --text-secondary: #6c757d;
+  --text-muted: #adb5bd;
+  --surface: #ffffff;
+  --winning-green: #10b981;
+
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(94,23,235,0.04) 0%, #fafafa 25%, #fafafa 75%, rgba(233,162,59,0.04) 100%);
+  padding: 24px 20px;
+  padding-top: 80px;
+  padding-bottom: 120px;
+  color: var(--text-primary);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Toolbar */
+.cs-toolbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 16px; border-bottom: 1px solid #dee2e6;
+  z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.cs-back {
+  position: absolute; left: 16px; background: none; border: none;
+  font-size: 1.5rem; color: var(--brand-purple); cursor: pointer;
+  padding: 8px; margin: -8px; line-height: 1;
+}
+.cs-toolbar-title { font-size: 18px; font-weight: 800; margin: 0; letter-spacing: -0.3px; }
+
+/* Hero */
+.cs-hero {
+  background: linear-gradient(135deg, var(--brand-purple) 0%, #7c3aed 50%, #4c1d95 100%);
+  border-radius: 24px; padding: 24px; margin-bottom: 20px;
+  color: white; position: relative; overflow: hidden;
+  box-shadow: 0 8px 32px rgba(94,23,235,0.3);
+}
+.cs-hero::before {
+  content: ''; position: absolute; top: -40px; right: -20px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cs-hero-eyebrow {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: rgba(255,255,255,0.6);
+  display: block; margin-bottom: 10px; position: relative; z-index: 1;
+}
+.cs-hero-title {
+  font-size: 20px; font-weight: 800; letter-spacing: -0.3px;
+  margin: 0 0 4px; position: relative; z-index: 1;
+}
+.cs-hero-sub {
+  font-size: 14px; color: rgba(255,255,255,0.65);
+  margin: 0; position: relative; z-index: 1;
+}
+
+/* Challenge list */
+.cs-section-label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--brand-purple);
+  margin-bottom: 10px; display: block;
+}
+
+.cs-challenge {
+  background: var(--surface); border: 1px solid #e9ecef;
+  border-radius: 24px; margin-bottom: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  overflow: hidden; position: relative;
+}
+.cs-challenge::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 5px;
+  background: linear-gradient(180deg, var(--brand-purple), #10b981, var(--brand-gold));
+  border-radius: 24px 0 0 24px; z-index: 2;
+}
+.cs-challenge.completed { border-color: rgba(16,185,129,0.2); }
+.cs-challenge.completed::before { background: var(--winning-green); }
+
+.cs-challenge-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 16px 16px 22px;
+}
+.cs-challenge-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+  background: rgba(94,23,235,0.06);
+}
+.cs-challenge.completed .cs-challenge-icon { background: rgba(16,185,129,0.06); }
+
+.cs-challenge-info { flex: 1; min-width: 0; }
+.cs-challenge-title { font-size: 14px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 2px; }
+.cs-challenge-meta { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+.cs-pts { display: inline-flex; background: rgba(233,162,59,0.1); color: #c78520; padding: 2px 8px; border-radius: 100px; font-size: 11px; font-weight: 800; }
+.cs-pts.earned { background: rgba(16,185,129,0.08); color: var(--winning-green); }
+
+/* Template button */
+.cs-tmpl-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(94,23,235,0.06); border: 1px solid rgba(94,23,235,0.12);
+  border-radius: 12px; padding: 8px 14px;
+  font-size: 12px; font-weight: 800; color: var(--brand-purple);
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+  flex-shrink: 0; white-space: nowrap;
+}
+.cs-tmpl-btn:hover { background: rgba(94,23,235,0.1); }
+.cs-tmpl-btn .tmpl-icon { font-size: 14px; }
+
+.cs-check {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--winning-green); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; flex-shrink: 0;
+}
+
+/* No-template variant */
+.cs-submit-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(233,162,59,0.08); border: 1px solid rgba(233,162,59,0.15);
+  border-radius: 12px; padding: 8px 14px;
+  font-size: 12px; font-weight: 800; color: #c78520;
+  cursor: pointer; font-family: inherit; transition: all 0.2s;
+  flex-shrink: 0; white-space: nowrap;
+}
+
+/* Tier divider */
+.cs-tier { display: flex; align-items: center; gap: 12px; margin: 18px 0 10px; }
+.cs-tier-line { flex: 1; height: 1px; background: #e9ecef; }
+.cs-tier-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-muted); }
+
+/* ================================================
+   TEMPLATE POPUP (image preview + download)
+   ================================================ */
+.tmpl-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(12px);
+  z-index: 1000; align-items: center; justify-content: center;
+  padding: 24px; flex-direction: column;
+}
+.tmpl-overlay.open { display: flex; }
+
+.tmpl-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); border: none;
+  color: white; font-size: 22px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.tmpl-preview {
+  width: 324px; /* 1080 * 0.3 */
+  height: 405px; /* 1350 * 0.3 */
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  position: relative;
+}
+/* Cards render at 1080x1350 (IG carousel) then scale to fit popup */
+.tmpl-preview > div {
+  width: 1080px; height: 1350px;
+  transform: scale(0.3);
+  transform-origin: top left;
+}
+
+.tmpl-actions {
+  display: flex; gap: 10px; margin-top: 20px; width: 324px;
+}
+.tmpl-download {
+  flex: 1;
+  background: linear-gradient(135deg, var(--brand-gold), #f5c55a);
+  color: #1a1a2e; border: none; padding: 16px;
+  border-radius: 14px; font-size: 16px; font-weight: 800;
+  cursor: pointer; font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(233,162,59,0.3);
+  transition: transform 0.2s;
+}
+.tmpl-download:hover { transform: translateY(-2px); }
+.tmpl-share-btn {
+  width: 52px; flex-shrink: 0;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 14px; font-size: 22px; color: white;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; backdrop-filter: blur(8px);
+}
+.tmpl-hint {
+  font-size: 12px; color: rgba(255,255,255,0.4); text-align: center;
+  margin-top: 12px;
+}
+
+/* ================================================
+   SHAREABLE IMAGE TEMPLATES
+   All rendered as HTML, would be captured with
+   html2canvas in production
+   ================================================ */
+
+/* --- LEADERBOARD CARD --- */
+.img-leaderboard {
+  background: linear-gradient(160deg, #5e17eb 0%, #7c3aed 40%, #4c1d95 100%);
+  padding: 80px 64px; color: white;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.img-leaderboard::before {
+  content: ''; position: absolute; top: -120px; right: -80px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(233,162,59,0.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-leaderboard::after {
+  content: ''; position: absolute; bottom: -200px; left: -100px;
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(233,162,59,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-lb-eyebrow {
+  font-size: 28px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 5px; color: var(--brand-gold);
+  margin-bottom: 20px; position: relative; z-index: 1;
+}
+.img-lb-title {
+  font-size: 64px; font-weight: 900; letter-spacing: -1.5px;
+  margin-bottom: 8px; position: relative; z-index: 1;
+}
+.img-lb-week {
+  font-size: 36px; color: rgba(255,255,255,0.5); font-weight: 600;
+  margin-bottom: 56px; position: relative; z-index: 1;
+}
+.img-lb-teams {
+  flex: 1; display: flex; flex-direction: column; gap: 20px;
+  position: relative; z-index: 1;
+}
+.img-lb-team {
+  display: flex; align-items: center; gap: 28px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 36px; padding: 36px 40px;
+  border: 2px solid rgba(255,255,255,0.06);
+}
+.img-lb-team.mine {
+  background: rgba(233,162,59,0.15);
+  border-color: rgba(233,162,59,0.35);
+  box-shadow: 0 0 40px rgba(233,162,59,0.1);
+}
+.img-lb-rank { font-size: 48px; min-width: 60px; }
+.img-lb-name { flex: 1; font-size: 40px; font-weight: 800; letter-spacing: -0.5px; }
+.img-lb-record { font-size: 30px; color: rgba(255,255,255,0.5); font-weight: 600; }
+.img-lb-pts { font-size: 48px; font-weight: 900; color: var(--brand-gold); }
+.img-lb-team.mine .img-lb-pts { color: #f5c55a; text-shadow: 0 0 20px rgba(233,162,59,0.4); }
+
+.img-lb-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 48px; padding-top: 36px;
+  border-top: 2px solid rgba(233,162,59,0.2);
+  position: relative; z-index: 1;
+}
+.img-lb-brand { font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.3); letter-spacing: 3px; }
+.img-lb-cta { font-size: 28px; font-weight: 700; color: var(--brand-gold); }
+
+/* --- HERO PROFILE CARD --- */
+.img-hero {
+  background: linear-gradient(160deg, #1a0744 0%, #2d1b69 40%, #0f0826 100%);
+  padding: 80px 64px; color: white;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.img-hero::before {
+  content: ''; position: absolute; top: 25%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(233,162,59,0.15) 0%, rgba(94,23,235,0.2) 40%, transparent 70%);
+  pointer-events: none;
+}
+.img-hero-eyebrow {
+  font-size: 28px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 5px; color: var(--brand-gold);
+  margin-bottom: 48px; position: relative; z-index: 1;
+}
+.img-hero-archetype {
+  font-size: 140px; text-align: center; margin-bottom: 28px;
+  position: relative; z-index: 1;
+  filter: drop-shadow(0 8px 40px rgba(233,162,59,0.3));
+}
+.img-hero-name {
+  font-size: 72px; font-weight: 900; text-align: center;
+  letter-spacing: -1.5px; margin-bottom: 12px;
+  position: relative; z-index: 1;
+}
+.img-hero-subtitle {
+  font-size: 36px; text-align: center; color: var(--brand-gold);
+  font-weight: 700; margin-bottom: 56px;
+  position: relative; z-index: 1;
+}
+.img-hero-strengths {
+  flex: 1; display: flex; flex-direction: column; gap: 20px;
+  position: relative; z-index: 1;
+}
+.img-hero-strength {
+  display: flex; align-items: center; gap: 24px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 32px; padding: 32px 36px;
+  border: 2px solid rgba(233,162,59,0.12);
+}
+.img-hero-strength-icon { font-size: 44px; }
+.img-hero-strength-text { font-size: 36px; font-weight: 700; color: rgba(255,255,255,0.85); }
+.img-hero-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 48px; padding-top: 36px;
+  border-top: 2px solid rgba(233,162,59,0.2);
+  position: relative; z-index: 1;
+}
+.img-hero-brand { font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.3); letter-spacing: 3px; }
+.img-hero-cta { font-size: 28px; font-weight: 700; color: var(--brand-gold); }
+
+/* --- SCORECARD CARD --- */
+.img-scorecard {
+  background: linear-gradient(150deg, #5e17eb 0%, #7c3aed 45%, #4c1d95 100%);
+  padding: 80px 64px; color: white;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.img-scorecard::before {
+  content: ''; position: absolute; top: -100px; right: -60px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(233,162,59,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-scorecard::after {
+  content: ''; position: absolute; bottom: -150px; left: -80px;
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(233,162,59,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-sc-eyebrow {
+  font-size: 28px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 5px; color: var(--brand-gold);
+  margin-bottom: 20px; position: relative; z-index: 1;
+}
+.img-sc-team {
+  font-size: 56px; font-weight: 900; letter-spacing: -1px;
+  margin-bottom: 4px; position: relative; z-index: 1;
+}
+.img-sc-week {
+  font-size: 32px; color: rgba(255,255,255,0.5); font-weight: 600;
+  margin-bottom: 48px; position: relative; z-index: 1;
+}
+.img-sc-result {
+  text-align: center; padding: 40px;
+  background: rgba(255,255,255,0.06); border-radius: 40px;
+  border: 2px solid rgba(233,162,59,0.15);
+  margin-bottom: 40px; position: relative; z-index: 1;
+}
+.img-sc-vs-row {
+  display: flex; align-items: center; justify-content: center; gap: 36px;
+  margin-bottom: 16px;
+}
+.img-sc-vs-team { font-size: 40px; font-weight: 800; }
+.img-sc-vs-label { font-size: 28px; font-weight: 800; color: rgba(233,162,59,0.5); }
+.img-sc-score {
+  font-size: 72px; font-weight: 900; color: var(--brand-gold);
+  letter-spacing: -1px; text-shadow: 0 0 30px rgba(233,162,59,0.3);
+}
+
+.img-sc-bars {
+  flex: 1; display: flex; flex-direction: column; gap: 24px;
+  position: relative; z-index: 1;
+}
+.img-sc-bar-row { display: flex; align-items: center; gap: 24px; }
+.img-sc-bar-label { font-size: 30px; font-weight: 700; color: rgba(255,255,255,0.6); min-width: 220px; }
+.img-sc-bar-track { flex: 1; height: 20px; background: rgba(255,255,255,0.08); border-radius: 10px; overflow: hidden; }
+.img-sc-bar-fill { height: 100%; border-radius: 10px; }
+.img-sc-bar-val { font-size: 36px; font-weight: 800; min-width: 60px; text-align: right; }
+.img-sc-bar-won { color: var(--brand-gold); }
+
+.img-sc-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 40px; padding-top: 32px;
+  border-top: 2px solid rgba(233,162,59,0.2);
+  position: relative; z-index: 1;
+}
+.img-sc-brand { font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.3); letter-spacing: 3px; }
+.img-sc-cta { font-size: 28px; font-weight: 700; color: var(--brand-gold); }
+
+/* --- WEEKLY INTENTIONS CARD --- */
+.img-intentions {
+  background: linear-gradient(170deg, #5e17eb 0%, #6d26d7 35%, #4c1d95 100%);
+  padding: 80px 64px; color: white;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.img-intentions::before {
+  content: ''; position: absolute; bottom: -150px; right: -80px;
+  width: 550px; height: 550px;
+  background: radial-gradient(circle, rgba(233,162,59,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-intentions::after {
+  content: ''; position: absolute; top: -100px; left: -50px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(233,162,59,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-int-eyebrow {
+  font-size: 28px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 5px; color: var(--brand-gold);
+  margin-bottom: 20px; position: relative; z-index: 1;
+}
+.img-int-title {
+  font-size: 64px; font-weight: 900; letter-spacing: -1.5px;
+  margin-bottom: 8px; position: relative; z-index: 1;
+}
+.img-int-week {
+  font-size: 32px; color: rgba(255,255,255,0.5); font-weight: 600;
+  margin-bottom: 56px; position: relative; z-index: 1;
+}
+.img-int-goals {
+  flex: 1; display: flex; flex-direction: column; gap: 24px;
+  position: relative; z-index: 1;
+}
+.img-int-goal {
+  display: flex; align-items: flex-start; gap: 28px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 36px; padding: 36px 40px;
+  border: 2px solid rgba(255,255,255,0.06);
+}
+.img-int-goal-check {
+  width: 52px; height: 52px; border-radius: 14px;
+  border: 3px solid rgba(255,255,255,0.3);
+  flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.img-int-goal-check.done {
+  background: var(--brand-gold); border-color: var(--brand-gold); color: #1a1a2e;
+  box-shadow: 0 0 24px rgba(233,162,59,0.3);
+}
+.img-int-goal-text { font-size: 36px; font-weight: 700; line-height: 1.4; color: rgba(255,255,255,0.9); }
+.img-int-goal-stage { font-size: 26px; color: rgba(233,162,59,0.5); margin-top: 4px; }
+
+.img-int-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 48px; padding-top: 36px;
+  border-top: 2px solid rgba(233,162,59,0.2);
+  position: relative; z-index: 1;
+}
+.img-int-brand { font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.3); letter-spacing: 3px; }
+.img-int-squad { font-size: 28px; font-weight: 700; color: var(--brand-gold); }
+
+/* --- COURAGE CHALLENGE (PLAY-LIST) CARD --- */
+.img-courage {
+  background: linear-gradient(140deg, #4c1d95 0%, #5e17eb 40%, #7c3aed 100%);
+  padding: 80px 64px; color: white;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.img-courage::before {
+  content: ''; position: absolute; top: -80px; left: -50px;
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(233,162,59,0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-courage::after {
+  content: ''; position: absolute; bottom: -120px; right: -60px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(233,162,59,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.img-cg-eyebrow {
+  font-size: 28px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 5px; color: var(--brand-gold);
+  margin-bottom: 56px; position: relative; z-index: 1;
+}
+.img-cg-emoji { font-size: 120px; text-align: center; margin-bottom: 40px; position: relative; z-index: 1; }
+.img-cg-title {
+  font-size: 52px; font-weight: 900; text-align: center;
+  letter-spacing: -0.5px; margin-bottom: 16px;
+  position: relative; z-index: 1; line-height: 1.3;
+}
+.img-cg-layer {
+  font-size: 32px; text-align: center; color: var(--brand-gold);
+  font-weight: 700; margin-bottom: 56px;
+  position: relative; z-index: 1; opacity: 0.7;
+}
+.img-cg-scores {
+  display: flex; gap: 28px; justify-content: center;
+  margin-bottom: auto; position: relative; z-index: 1;
+}
+.img-cg-score-box {
+  flex: 1; max-width: 340px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 36px; padding: 40px;
+  text-align: center;
+  border: 2px solid rgba(233,162,59,0.15);
+}
+.img-cg-score-val {
+  font-size: 80px; font-weight: 900; display: block; margin-bottom: 8px;
+  color: var(--brand-gold); text-shadow: 0 0 30px rgba(233,162,59,0.3);
+}
+.img-cg-score-label { font-size: 26px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: rgba(255,255,255,0.5); }
+.img-cg-quote {
+  font-size: 36px; font-style: italic; text-align: center;
+  color: rgba(255,255,255,0.5); line-height: 1.5;
+  margin-top: 56px;
+  position: relative; z-index: 1;
+}
+.img-cg-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 48px; padding-top: 36px;
+  border-top: 2px solid rgba(233,162,59,0.2);
+  position: relative; z-index: 1;
+}
+.img-cg-brand { font-size: 28px; font-weight: 800; color: rgba(255,255,255,0.3); letter-spacing: 3px; }
+.img-cg-cta { font-size: 28px; font-weight: 700; color: var(--brand-gold); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0.01ms !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="content-submit">
+  <div class="cs-toolbar">
+    <button class="cs-back">&#8592;</button>
+    <h2 class="cs-toolbar-title">Bonus Content</h2>
+  </div>
+
+  <!-- Hero -->
+  <div class="cs-hero">
+    <span class="cs-hero-eyebrow">Week 2 &middot; Bonus Category</span>
+    <h2 class="cs-hero-title">Share & Earn Points</h2>
+    <p class="cs-hero-sub">Tap "Template" to get a shareable image with your data</p>
+  </div>
+
+  <!-- Quick Wins -->
+  <div class="cs-tier">
+    <span class="cs-tier-label">Quick Wins</span>
+    <div class="cs-tier-line"></div>
+  </div>
+
+  <div class="cs-challenge completed">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#128202;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Share the Leaderboard</div>
+        <div class="cs-challenge-meta"><span class="cs-pts earned">+2 earned</span></div>
+      </div>
+      <div class="cs-check">&#10003;</div>
+    </div>
+  </div>
+
+  <div class="cs-challenge">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#128172;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Comment & Engage</div>
+        <div class="cs-challenge-meta"><span class="cs-pts">+2 pts</span> <span>3 league players</span></div>
+      </div>
+      <button class="cs-submit-btn">Submit &#8594;</button>
+    </div>
+  </div>
+
+  <!-- Earn More -->
+  <div class="cs-tier">
+    <span class="cs-tier-label">Earn More</span>
+    <div class="cs-tier-line"></div>
+  </div>
+
+  <div class="cs-challenge">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#128221;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Accountability Post</div>
+        <div class="cs-challenge-meta"><span class="cs-pts">+4 pts</span></div>
+      </div>
+      <button class="cs-tmpl-btn" onclick="openTemplate('intentions')"><span class="tmpl-icon">&#127912;</span> Template</button>
+    </div>
+  </div>
+
+  <div class="cs-challenge">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#128588;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Shout Out a Teammate</div>
+        <div class="cs-challenge-meta"><span class="cs-pts">+4 pts</span></div>
+      </div>
+      <button class="cs-tmpl-btn" onclick="openTemplate('scorecard')"><span class="tmpl-icon">&#127912;</span> Template</button>
+    </div>
+  </div>
+
+  <div class="cs-challenge">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#129464;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Share Hero Profile</div>
+        <div class="cs-challenge-meta"><span class="cs-pts">+4 pts</span></div>
+      </div>
+      <button class="cs-tmpl-btn" onclick="openTemplate('hero')"><span class="tmpl-icon">&#127912;</span> Template</button>
+    </div>
+  </div>
+
+  <!-- Big Points -->
+  <div class="cs-tier">
+    <span class="cs-tier-label">Big Points</span>
+    <div class="cs-tier-line"></div>
+  </div>
+
+  <div class="cs-challenge">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#127904;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Carousel Highlights</div>
+        <div class="cs-challenge-meta"><span class="cs-pts">+8 pts</span></div>
+      </div>
+      <button class="cs-submit-btn">Submit &#8594;</button>
+    </div>
+  </div>
+
+  <div class="cs-challenge">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#127917;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Play-List Proof</div>
+        <div class="cs-challenge-meta"><span class="cs-pts">+8 pts</span></div>
+      </div>
+      <button class="cs-tmpl-btn" onclick="openTemplate('courage')"><span class="tmpl-icon">&#127912;</span> Template</button>
+    </div>
+  </div>
+
+  <div class="cs-challenge">
+    <div class="cs-challenge-row">
+      <div class="cs-challenge-icon">&#127919;</div>
+      <div class="cs-challenge-info">
+        <div class="cs-challenge-title">Offer in the Wild</div>
+        <div class="cs-challenge-meta"><span class="cs-pts">+10 pts</span></div>
+      </div>
+      <button class="cs-submit-btn">Submit &#8594;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     TEMPLATE POPUPS
+     ================================================ -->
+
+<!-- LEADERBOARD -->
+<div class="tmpl-overlay" id="tmpl-leaderboard" onclick="if(event.target===this)this.classList.remove('open')">
+  <button class="tmpl-close" onclick="this.parentElement.classList.remove('open')">&#215;</button>
+  <div class="tmpl-preview">
+    <div class="img-leaderboard">
+      <div class="img-lb-eyebrow">Fantasy League Standings</div>
+      <div class="img-lb-title">FindMyFlow League S1</div>
+      <div class="img-lb-week">After Week 2</div>
+      <div class="img-lb-teams">
+        <div class="img-lb-team mine">
+          <span class="img-lb-rank">&#129351;</span>
+          <div style="flex:1">
+            <div class="img-lb-name">Flow Warriors</div>
+            <div class="img-lb-record">2W 0D 0L</div>
+          </div>
+          <span class="img-lb-pts">6</span>
+        </div>
+        <div class="img-lb-team">
+          <span class="img-lb-rank">&#129352;</span>
+          <div style="flex:1">
+            <div class="img-lb-name">Groan Crushers</div>
+            <div class="img-lb-record">1W 1D 0L</div>
+          </div>
+          <span class="img-lb-pts">4</span>
+        </div>
+        <div class="img-lb-team">
+          <span class="img-lb-rank">&#129353;</span>
+          <div style="flex:1">
+            <div class="img-lb-name">Courage Club</div>
+            <div class="img-lb-record">0W 1D 1L</div>
+          </div>
+          <span class="img-lb-pts">1</span>
+        </div>
+        <div class="img-lb-team">
+          <span class="img-lb-rank">#4</span>
+          <div style="flex:1">
+            <div class="img-lb-name">Healing Heroes</div>
+            <div class="img-lb-record">0W 0D 2L</div>
+          </div>
+          <span class="img-lb-pts">0</span>
+        </div>
+      </div>
+      <div class="img-lb-footer">
+        <span class="img-lb-brand">FINDMYFLOW</span>
+        <span class="img-lb-cta">findmyflow.nichuzz.com</span>
+      </div>
+    </div>
+  </div>
+  <div class="tmpl-actions">
+    <button class="tmpl-download">Download Image &#11015;&#65039;</button>
+    <button class="tmpl-share-btn">&#128279;</button>
+  </div>
+  <p class="tmpl-hint">Save to camera roll, then share to your story</p>
+</div>
+
+<!-- HERO PROFILE -->
+<div class="tmpl-overlay" id="tmpl-hero" onclick="if(event.target===this)this.classList.remove('open')">
+  <button class="tmpl-close" onclick="this.parentElement.classList.remove('open')">&#215;</button>
+  <div class="tmpl-preview">
+    <div class="img-hero">
+      <div class="img-hero-eyebrow">My Hero Profile</div>
+      <div class="img-hero-archetype">&#127983;&#65039;</div>
+      <div class="img-hero-name">The Architect</div>
+      <div class="img-hero-subtitle">Builder &middot; Systems Thinker &middot; Strategist</div>
+      <div class="img-hero-strengths">
+        <div class="img-hero-strength">
+          <span class="img-hero-strength-icon">&#128161;</span>
+          <span class="img-hero-strength-text">Turns messy ideas into structured systems</span>
+        </div>
+        <div class="img-hero-strength">
+          <span class="img-hero-strength-icon">&#127919;</span>
+          <span class="img-hero-strength-text">Sees the blueprint others can't</span>
+        </div>
+        <div class="img-hero-strength">
+          <span class="img-hero-strength-icon">&#128170;</span>
+          <span class="img-hero-strength-text">Builds things that last</span>
+        </div>
+      </div>
+      <div class="img-hero-footer">
+        <span class="img-hero-brand">FINDMYFLOW</span>
+        <span class="img-hero-cta">What's your archetype?</span>
+      </div>
+    </div>
+  </div>
+  <div class="tmpl-actions">
+    <button class="tmpl-download">Download Image &#11015;&#65039;</button>
+    <button class="tmpl-share-btn">&#128279;</button>
+  </div>
+  <p class="tmpl-hint">Save to camera roll, then share to your story</p>
+</div>
+
+<!-- SCORECARD -->
+<div class="tmpl-overlay" id="tmpl-scorecard" onclick="if(event.target===this)this.classList.remove('open')">
+  <button class="tmpl-close" onclick="this.parentElement.classList.remove('open')">&#215;</button>
+  <div class="tmpl-preview">
+    <div class="img-scorecard">
+      <div class="img-sc-eyebrow">Team Scorecard</div>
+      <div class="img-sc-team">Flow Warriors</div>
+      <div class="img-sc-week">Week 2 &middot; vs Groan Crushers</div>
+      <div class="img-sc-result">
+        <div class="img-sc-vs-row">
+          <span class="img-sc-vs-team">Flow Warriors</span>
+          <span class="img-sc-vs-label">VS</span>
+          <span class="img-sc-vs-team">Groan Crushers</span>
+        </div>
+        <div class="img-sc-score">3 &ndash; 2</div>
+      </div>
+      <div class="img-sc-bars">
+        <div class="img-sc-bar-row">
+          <span class="img-sc-bar-label">&#128188; Business</span>
+          <div class="img-sc-bar-track"><div class="img-sc-bar-fill" style="width:85%; background:#5e17eb"></div></div>
+          <span class="img-sc-bar-val img-sc-bar-won">42</span>
+        </div>
+        <div class="img-sc-bar-row">
+          <span class="img-sc-bar-label">&#127918; Play-List</span>
+          <div class="img-sc-bar-track"><div class="img-sc-bar-fill" style="width:55%; background:rgba(233,162,59,0.7)"></div></div>
+          <span class="img-sc-bar-val">27</span>
+        </div>
+        <div class="img-sc-bar-row">
+          <span class="img-sc-bar-label">&#128154; Healing</span>
+          <div class="img-sc-bar-track"><div class="img-sc-bar-fill" style="width:70%; background:rgba(255,255,255,0.5)"></div></div>
+          <span class="img-sc-bar-val img-sc-bar-won">35</span>
+        </div>
+        <div class="img-sc-bar-row">
+          <span class="img-sc-bar-label">&#127917; Voice</span>
+          <div class="img-sc-bar-track"><div class="img-sc-bar-fill" style="width:36%; background:rgba(233,162,59,0.5)"></div></div>
+          <span class="img-sc-bar-val img-sc-bar-won">18</span>
+        </div>
+        <div class="img-sc-bar-row">
+          <span class="img-sc-bar-label">&#11088; Bonus</span>
+          <div class="img-sc-bar-track"><div class="img-sc-bar-fill" style="width:16%; background:rgba(255,255,255,0.3)"></div></div>
+          <span class="img-sc-bar-val">8</span>
+        </div>
+      </div>
+      <div class="img-sc-footer">
+        <span class="img-sc-brand">FINDMYFLOW</span>
+        <span class="img-sc-cta">Fantasy League S1</span>
+      </div>
+    </div>
+  </div>
+  <div class="tmpl-actions">
+    <button class="tmpl-download">Download Image &#11015;&#65039;</button>
+    <button class="tmpl-share-btn">&#128279;</button>
+  </div>
+  <p class="tmpl-hint">Save to camera roll, then share to your story</p>
+</div>
+
+<!-- WEEKLY INTENTIONS -->
+<div class="tmpl-overlay" id="tmpl-intentions" onclick="if(event.target===this)this.classList.remove('open')">
+  <button class="tmpl-close" onclick="this.parentElement.classList.remove('open')">&#215;</button>
+  <div class="tmpl-preview">
+    <div class="img-intentions">
+      <div class="img-int-eyebrow">My Weekly Intentions</div>
+      <div class="img-int-title">Week 2 Goals</div>
+      <div class="img-int-week">Flow Week &middot; Balanced productivity</div>
+      <div class="img-int-goals">
+        <div class="img-int-goal">
+          <div class="img-int-goal-check done">&#10003;</div>
+          <div>
+            <div class="img-int-goal-text">Complete Attraction Offer flow</div>
+            <div class="img-int-goal-stage">Stage 3 &middot; Business</div>
+          </div>
+        </div>
+        <div class="img-int-goal">
+          <div class="img-int-goal-check"></div>
+          <div>
+            <div class="img-int-goal-text">Finish 3 courage challenges</div>
+            <div class="img-int-goal-stage">Groans &middot; Play-List</div>
+          </div>
+        </div>
+        <div class="img-int-goal">
+          <div class="img-int-goal-check"></div>
+          <div>
+            <div class="img-int-goal-text">Record 5 compass check-ins</div>
+            <div class="img-int-goal-stage">Tracker &middot; Flow Compass</div>
+          </div>
+        </div>
+        <div class="img-int-goal">
+          <div class="img-int-goal-check"></div>
+          <div>
+            <div class="img-int-goal-text">Share hero profile to story</div>
+            <div class="img-int-goal-stage">Bonus &middot; Content</div>
+          </div>
+        </div>
+      </div>
+      <div class="img-int-footer">
+        <span class="img-int-brand">FINDMYFLOW</span>
+        <span class="img-int-squad">&#127942; Flow Warriors</span>
+      </div>
+    </div>
+  </div>
+  <div class="tmpl-actions">
+    <button class="tmpl-download">Download Image &#11015;&#65039;</button>
+    <button class="tmpl-share-btn">&#128279;</button>
+  </div>
+  <p class="tmpl-hint">Save to camera roll, then share to your story</p>
+</div>
+
+<!-- COURAGE CHALLENGE -->
+<div class="tmpl-overlay" id="tmpl-courage" onclick="if(event.target===this)this.classList.remove('open')">
+  <button class="tmpl-close" onclick="this.parentElement.classList.remove('open')">&#215;</button>
+  <div class="tmpl-preview">
+    <div class="img-courage">
+      <div class="img-cg-eyebrow">Play-List &middot; Courage Challenge</div>
+      <div class="img-cg-emoji">&#128561;&#10024;</div>
+      <div class="img-cg-title">"Recorded a video pitching my offer to a stranger"</div>
+      <div class="img-cg-layer">Visibility Layer: Money</div>
+      <div class="img-cg-scores">
+        <div class="img-cg-score-box">
+          <span class="img-cg-score-val">8</span>
+          <span class="img-cg-score-label">Scary</span>
+        </div>
+        <div class="img-cg-score-box">
+          <span class="img-cg-score-val">9</span>
+          <span class="img-cg-score-label">Wahoo</span>
+        </div>
+      </div>
+      <div class="img-cg-quote">"The things that scare you AND excite you are where growth lives"</div>
+      <div class="img-cg-footer">
+        <span class="img-cg-brand">FINDMYFLOW</span>
+        <span class="img-cg-cta">Play-List &#127917;</span>
+      </div>
+    </div>
+  </div>
+  <div class="tmpl-actions">
+    <button class="tmpl-download">Download Image &#11015;&#65039;</button>
+    <button class="tmpl-share-btn">&#128279;</button>
+  </div>
+  <p class="tmpl-hint">Save to camera roll, then share to your story</p>
+</div>
+
+<script>
+function openTemplate(id) {
+  document.getElementById('tmpl-' + id).classList.add('open');
+}
+</script>
+
+</body>
+</html>

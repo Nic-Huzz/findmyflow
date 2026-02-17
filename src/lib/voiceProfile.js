@@ -334,101 +334,106 @@ export async function hasVoiceProfile(userId) {
 
 /**
  * Build voice instructions for AI prompt
+ * Hierarchy: samples > corrections > influences > rules > sliders
  */
 export function buildVoiceInstructions(voiceProfile) {
   if (!voiceProfile) return ''
+  const sections = []
 
-  const sentenceDesc = voiceProfile.sentence_length < 35
-    ? 'short and punchy'
-    : voiceProfile.sentence_length > 65
-      ? 'flowing and detailed'
-      : 'medium length'
+  sections.push('VOICE PROFILE - Write exactly like this person:')
+  if (voiceProfile.voice_summary || voiceProfile.voice_name) {
+    sections.push(`Voice: ${voiceProfile.voice_summary || voiceProfile.voice_name}`)
+  }
 
-  const emojiDesc = voiceProfile.emoji_usage < 30
-    ? 'rarely use emojis'
-    : voiceProfile.emoji_usage > 60
-      ? 'use emojis liberally'
-      : 'use emojis sparingly'
+  // 1. Voice Identity — influences (highest conceptual weight)
+  const influences = voiceProfile.voice_influences || []
+  if (influences.length > 0) {
+    let influenceText = '## Voice Identity\nWrite in a style that blends:'
+    influences.forEach(inf => {
+      influenceText += `\n- ${inf.name}: ${inf.description}`
+    })
+    sections.push(influenceText)
+  }
 
-  const formalityDesc = voiceProfile.formality_level < 35
-    ? 'very casual and conversational'
-    : voiceProfile.formality_level > 65
-      ? 'professional and polished'
-      : 'casual-professional blend'
+  // 2. Writing samples — few-shot examples (HIGHEST practical weight)
+  const samples = voiceProfile.content_samples || []
+  if (samples.length > 0) {
+    let samplesText = '## How They Actually Write (Study These Carefully)\n'
+    samplesText += 'Match the energy, sentence structure, vocabulary, and personality:'
+    samples.slice(0, 5).forEach((s, i) => {
+      samplesText += `\n\n--- Sample ${i + 1} ---\n${s.slice(0, 2000)}`
+    })
+    sections.push(samplesText)
+  }
 
-  const vulnerabilityDesc = voiceProfile.vulnerability_level > 60
-    ? 'openly share personal struggles and lessons'
-    : voiceProfile.vulnerability_level < 40
-      ? 'keep it professional, limited personal sharing'
-      : 'share selectively when relevant'
+  // 3. Corrections — "do this, not that"
+  const corrections = voiceProfile.corrections || []
+  if (corrections.length > 0) {
+    let correctionsText = '## Voice Corrections (Do This, Not That)'
+    corrections.slice(-20).forEach(c => {
+      correctionsText += `\n- Don't say "${c.original}" → say "${c.corrected}" (${c.category})`
+    })
+    sections.push(correctionsText)
+  }
 
-  let instructions = `
-VOICE PROFILE - Write exactly like this person:
-
-Voice: ${voiceProfile.voice_summary || voiceProfile.voice_name}
-
-Style Guidelines:
-- Sentences: ${sentenceDesc}
-- Emojis: ${emojiDesc}
-- Tone: ${formalityDesc}
-- Vulnerability: ${vulnerabilityDesc}
-- Humor: ${voiceProfile.humor_level > 60 ? 'playful and witty' : voiceProfile.humor_level < 30 ? 'serious and direct' : 'light touches of humor'}
-`
-
-  // Add detected patterns from Voice DNA extraction
+  // 4. Voice rules — dos/donts/catchphrases/patterns
   const patterns = voiceProfile.detected_patterns || {}
 
-  if (patterns.hook_styles?.length > 0) {
-    instructions += `
-How they START content: ${patterns.hook_styles.join(', ')}
-`
-  }
-
-  if (patterns.closing_styles?.length > 0) {
-    instructions += `
-How they END content: ${patterns.closing_styles.join(', ')}
-`
-  }
-
   if (patterns.voice_dos?.length > 0) {
-    instructions += `
-DO these when writing in their voice:
-${patterns.voice_dos.map(d => `• ${d}`).join('\n')}
-`
+    let dosText = '## DO These When Writing:'
+    patterns.voice_dos.forEach(d => { dosText += `\n• ${d}` })
+    sections.push(dosText)
   }
 
   if (patterns.voice_donts?.length > 0) {
-    instructions += `
-DON'T do these (violates their voice):
-${patterns.voice_donts.map(d => `• ${d}`).join('\n')}
-`
+    let dontsText = '## DON\'T Do These (Violates Their Voice):'
+    patterns.voice_donts.forEach(d => { dontsText += `\n• ${d}` })
+    sections.push(dontsText)
   }
 
   if (voiceProfile.catchphrases?.length > 0) {
-    instructions += `
-Signature phrases to naturally work in (don't force, use when fitting):
-${voiceProfile.catchphrases.join(', ')}
-`
+    sections.push(`## Signature Phrases (use naturally, don't force):\n${voiceProfile.catchphrases.join(', ')}`)
+  }
+
+  const hookStyles = patterns.hook_styles || (patterns.hookStyle ? [patterns.hookStyle] : patterns.hook_style ? [patterns.hook_style] : [])
+  if (hookStyles.length > 0) {
+    sections.push(`How they START content: ${hookStyles.join(', ')}`)
+  }
+
+  const closingStyles = patterns.closing_styles || (patterns.closingStyle ? [patterns.closingStyle] : patterns.closing_style ? [patterns.closing_style] : [])
+  if (closingStyles.length > 0) {
+    sections.push(`How they END content: ${closingStyles.join(', ')}`)
   }
 
   if (voiceProfile.origin_story) {
-    instructions += `
-Their background (for context): ${voiceProfile.origin_story.slice(0, 200)}...
-`
+    const story = voiceProfile.origin_story
+    sections.push(`Background (for context): ${story.length > 200 ? story.slice(0, 200) + '...' : story}`)
   }
 
-  if (voiceProfile.content_samples?.length > 0) {
-    instructions += `
-Example of their actual writing style:
-"${voiceProfile.content_samples[0].slice(0, 300)}..."
-`
+  // 5. Sliders — only as final fine-tuning "Style Notes"
+  const sliderNotes = []
+  if (voiceProfile.sentence_length < 35) sliderNotes.push('Keep sentences short and punchy')
+  else if (voiceProfile.sentence_length > 65) sliderNotes.push('Use flowing, detailed sentences')
+
+  if (voiceProfile.emoji_usage < 30) sliderNotes.push('Rarely use emojis')
+  else if (voiceProfile.emoji_usage > 60) sliderNotes.push('Use emojis liberally')
+
+  if (voiceProfile.formality_level < 35) sliderNotes.push('Very casual and conversational')
+  else if (voiceProfile.formality_level > 65) sliderNotes.push('Professional and polished')
+
+  if (voiceProfile.vulnerability_level > 60) sliderNotes.push('Openly share personal struggles')
+  else if (voiceProfile.vulnerability_level < 40) sliderNotes.push('Keep it professional, limited personal sharing')
+
+  if (voiceProfile.humor_level > 60) sliderNotes.push('Playful and witty')
+  else if (voiceProfile.humor_level < 30) sliderNotes.push('Serious and direct')
+
+  if (sliderNotes.length > 0) {
+    sections.push(`## Style Notes\n${sliderNotes.map(n => `- ${n}`).join('\n')}`)
   }
 
-  instructions += `
-CRITICAL: Sound like THIS specific person, not a generic marketer or AI. Match their unique voice.
-`
+  sections.push('CRITICAL: Sound like THIS specific person, not a generic marketer or AI. Match their unique voice.')
 
-  return instructions.trim()
+  return sections.join('\n\n')
 }
 
 /**

@@ -18,7 +18,7 @@ const corsHeaders = {
 // Model selection - use Haiku for faster, cheaper generations
 const MODELS = {
   sonnet: 'claude-sonnet-4-20250514',
-  haiku: 'claude-3-5-haiku-20241022'
+  haiku: 'claude-haiku-4-5-20251001'
 }
 
 // Task type configurations for token limits

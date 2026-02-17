@@ -1,0 +1,305 @@
+/* Shadow Work Flow — .sw- prefixed additions */
+/* Base styles from NervousSystemHealingCompass.css */
+
+/* Shadow trait card — shown in steps 4/6/8 */
+.sw-shadow-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.sw-shadow-card-number {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 6px;
+}
+
+.sw-shadow-card-trait {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.sw-shadow-card .sw-annotation {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 4px;
+}
+
+.sw-shadow-card .sw-annotation strong {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Shadow trait input list — step 3 */
+.sw-shadow-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.sw-shadow-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.sw-shadow-input-row textarea {
+  flex: 1;
+  min-height: 60px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 14px;
+  color: white;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.sw-shadow-input-row textarea::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.sw-shadow-input-row textarea:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sw-remove-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 18px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 12px;
+}
+
+.sw-remove-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #ef4444;
+}
+
+/* Add another shadow button */
+.sw-add-shadow-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sw-add-shadow-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(251, 191, 36, 0.4);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.sw-add-shadow-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Root emotion selector (step 6) */
+.sw-emotion-selector {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.sw-emotion-btn {
+  flex: 1;
+  padding: 10px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.sw-emotion-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.sw-emotion-btn.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+/* Archetype selector in shadow cards (step 8) */
+.sw-archetype-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.sw-archetype-btn {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sw-archetype-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.sw-archetype-btn.selected {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+/* Mirror moment text (step 13) */
+.sw-mirror-text {
+  font-size: 18px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  padding: 24px;
+  background: rgba(251, 191, 36, 0.06);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: 16px;
+  margin: 24px 0;
+}
+
+.sw-mirror-text strong {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+/* Guided prompts below inputs */
+.sw-guided-prompts {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sw-guided-prompt {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  padding-left: 12px;
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Timeline emotion dropdown */
+.sw-emotion-dropdown {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  font-family: inherit;
+  margin-top: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.sw-emotion-dropdown option {
+  background: #4a0ea8;
+  color: white;
+}
+
+.sw-emotion-dropdown:focus {
+  outline: none;
+  border-color: rgba(251, 191, 36, 0.8);
+}
+
+/* Archetype teach cards (step 7) */
+.sw-archetype-teach-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.sw-archetype-teach-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.sw-archetype-teach-card .sw-at-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.sw-archetype-teach-card .sw-at-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  display: block;
+}
+
+.sw-archetype-teach-card .sw-at-lie {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sw-emotion-selector {
+    flex-direction: column;
+  }
+
+  .sw-archetype-selector {
+    flex-direction: column;
+  }
+
+  .sw-archetype-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

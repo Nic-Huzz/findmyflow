@@ -10,6 +10,7 @@ export const CONTENT_POINT_VALUES = {
     icon: '📊',
     description: 'Post your league standings to your story or feed',
     submissionType: 'url',
+    templateType: 'leaderboard',
   },
   comment_engage: {
     label: 'Comment & Engage',
@@ -24,6 +25,7 @@ export const CONTENT_POINT_VALUES = {
     icon: '📝',
     description: 'Share your weekly plan or goals publicly',
     submissionType: 'url',
+    templateType: 'intentions',
   },
   shoutout_teammate: {
     label: 'Shout Out a Teammate',
@@ -31,6 +33,7 @@ export const CONTENT_POINT_VALUES = {
     icon: '🙌',
     description: 'Celebrate a teammate with a public shout-out post',
     submissionType: 'url',
+    templateType: 'scorecard',
   },
   share_hero_profile: {
     label: 'Share Your Hero Profile',
@@ -38,6 +41,7 @@ export const CONTENT_POINT_VALUES = {
     icon: '🦸',
     description: 'Share your hero profile to your story or feed',
     submissionType: 'url',
+    templateType: 'hero',
   },
   carousel_highlights: {
     label: 'Carousel Highlights',
@@ -51,6 +55,14 @@ export const CONTENT_POINT_VALUES = {
     points: 8,
     icon: '🎭',
     description: 'Share evidence of a courage challenge you completed',
+    submissionType: 'url',
+    templateType: 'courage',
+  },
+  customise_hero: {
+    label: 'Customise Your Hero Profile',
+    points: 10,
+    icon: '🦸',
+    description: 'Personalise your hero profile — name, image, superpower, or vision',
     submissionType: 'url',
   },
   offer_in_wild: {
@@ -66,7 +78,7 @@ export const CONTENT_POINT_VALUES = {
 export const FANTASY_CATEGORIES = {
   business_efficiency: {
     key: 'business_efficiency',
-    label: 'Business Efficiency',
+    label: 'Business',
     icon: '💼',
     color: '#5e17eb',
     dbFilter: ['Business', 'Flow Finder'],

@@ -1019,6 +1019,14 @@
   }
 }
 
+/* === VIEWER WRAPPER (viewer + send panel) === */
+.cr-viewer-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
 /* === REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
   .cr-spinner { animation: none; }

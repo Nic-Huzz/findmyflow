@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Splinter Mockup A — Body Silhouette</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #4a0ea8 0%, #5e17eb 50%, #7c3aed 100%);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  .splinter-container {
+    position: relative;
+    width: 300px;
+    height: 440px;
+    margin: 0 auto 32px;
+  }
+
+  /* Body silhouette — gender-neutral outline */
+  .body-silhouette {
+    width: 100%;
+    height: 100%;
+    opacity: 0.25;
+  }
+
+  /* Splinter positioned on body */
+  .splinter-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  /* Property summary */
+  .property-summary {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 20px;
+    max-width: 340px;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+  .property-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 14px;
+  }
+  .property-row:last-child { border-bottom: none; }
+  .property-label { color: rgba(255,255,255,0.5); }
+  .property-value { color: #fbbf24; font-weight: 600; }
+
+  .note {
+    max-width: 500px;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 24px;
+  }
+
+  /* Splinter shape animations */
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes vibrate { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2px,1px); } 50% { transform: translate(2px,-1px); } 75% { transform: translate(-1px,2px); } }
+
+  .splinter-shape { animation: pulse 2s ease-in-out infinite; }
+
+  /* Tappable zone highlight */
+  .zone-highlight {
+    fill: rgba(251, 191, 36, 0.08);
+    stroke: rgba(251, 191, 36, 0.25);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .zone-highlight:hover {
+    fill: rgba(251, 191, 36, 0.15);
+    stroke: rgba(251, 191, 36, 0.5);
+  }
+  .zone-highlight.selected {
+    fill: rgba(251, 191, 36, 0.2);
+    stroke: #fbbf24;
+    stroke-dasharray: none;
+  }
+</style>
+</head>
+<body>
+
+<h1>Your Splinter</h1>
+<p class="subtitle">Option A — Body Silhouette with Positioned Splinter</p>
+
+<div class="splinter-container">
+  <svg viewBox="0 0 300 440" class="body-silhouette" xmlns="http://www.w3.org/2000/svg">
+    <!-- Gender-neutral body outline -->
+    <g fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Head -->
+      <ellipse cx="150" cy="45" rx="28" ry="34" />
+      <!-- Neck -->
+      <line x1="140" y1="78" x2="140" y2="100" />
+      <line x1="160" y1="78" x2="160" y2="100" />
+      <!-- Shoulders -->
+      <path d="M140,100 Q120,100 90,120" />
+      <path d="M160,100 Q180,100 210,120" />
+      <!-- Torso -->
+      <path d="M90,120 L85,200 Q85,215 100,220" />
+      <path d="M210,120 L215,200 Q215,215 200,220" />
+      <!-- Hips -->
+      <path d="M100,220 Q100,240 110,260" />
+      <path d="M200,220 Q200,240 190,260" />
+      <!-- Arms -->
+      <path d="M90,120 Q70,160 65,200 Q62,215 60,230" />
+      <path d="M210,120 Q230,160 235,200 Q238,215 240,230" />
+      <!-- Legs -->
+      <path d="M110,260 Q115,320 120,380 Q122,400 118,420" />
+      <path d="M190,260 Q185,320 180,380 Q178,400 182,420" />
+      <!-- Feet -->
+      <path d="M118,420 Q110,430 105,430" />
+      <path d="M182,420 Q190,430 195,430" />
+      <!-- Center line (chest to belly) -->
+      <line x1="150" y1="100" x2="150" y2="260" stroke-opacity="0.15" stroke-dasharray="4 4" />
+    </g>
+
+    <!-- Tappable body zones (hidden labels, interactive) -->
+    <g class="body-zones">
+      <rect class="zone-highlight" x="120" y="10" width="60" height="70" rx="20" title="Head" />
+      <rect class="zone-highlight" x="100" y="90" width="100" height="60" rx="8" title="Chest" />
+      <rect class="zone-highlight selected" x="110" y="155" width="80" height="50" rx="8" title="Stomach" />
+      <rect class="zone-highlight" x="100" y="210" width="100" height="55" rx="8" title="Hips" />
+      <rect class="zone-highlight" x="60" y="120" width="35" height="80" rx="8" title="Left Arm" />
+      <rect class="zone-highlight" x="205" y="120" width="35" height="80" rx="8" title="Right Arm" />
+      <rect class="zone-highlight" x="110" y="270" width="80" height="70" rx="8" title="Thighs" />
+    </g>
+
+    <!-- Splinter rendered at "Stomach" position -->
+    <g class="splinter-shape" transform="translate(150, 180)">
+      <!-- Spike shape -->
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feFlood flood-color="#ef4444" flood-opacity="0.6" result="color" />
+          <feComposite in="color" in2="blur" operator="in" result="glow" />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter id="rough">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
+        </filter>
+      </defs>
+      <polygon
+        points="0,-22 8,18 -8,18"
+        fill="#ef4444"
+        filter="url(#glow)"
+        opacity="0.9"
+        transform="scale(0.75)"
+      />
+      <polygon
+        points="0,-18 5,12 -5,12"
+        fill="#fca5a5"
+        opacity="0.4"
+        transform="scale(0.75)"
+      />
+    </g>
+  </svg>
+</div>
+
+<div class="property-summary">
+  <div class="property-row">
+    <span class="property-label">Location</span>
+    <span class="property-value">Stomach</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Shape</span>
+    <span class="property-value">Spike</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Size</span>
+    <span class="property-value">Medium</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Color</span>
+    <span class="property-value">Red</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Texture</span>
+    <span class="property-value">Rough</span>
+  </div>
+  <div class="property-row">
+    <span class="property-label">Movement</span>
+    <span class="property-value">Pulsing</span>
+  </div>
+</div>
+
+<p class="note">
+  <strong>Concept:</strong> The splinter is positioned on a gender-neutral body silhouette.
+  Users tap a zone to place it. Dashed highlight shows the selected zone.
+  The splinter pulses at the stomach location with a red glow filter.
+</p>
+
+</body>
+</html>
