@@ -1,4 +1,23 @@
 User-agent: *
 Allow: /
 
+# AI Agent Discovery
+# llms.txt: Platform overview for AI agents
+# llms-full.txt: Complete agent guide with scoring logic and recommendations
+User-agent: ChatGPT-User
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: ClaudeBot
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Anthropic-AI
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: GPTBot
+Allow: /llms.txt
+Allow: /llms-full.txt
+
 Sitemap: https://findmyflow.nichuzz.com/sitemap.xml

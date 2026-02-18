@@ -184,7 +184,7 @@
 "not_enough_leads": 4,
 "leads_dont_trust_me_yet": 3,
 "slow_or_unclear_sales_cycle": 2,
-"price_sensitive": 1,
+"leads_are_price_sensitive": 1,
 "low_quality_leads": 1,
 "none_of_the_above": 0
 },

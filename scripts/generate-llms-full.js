@@ -115,16 +115,20 @@ function generateFlowHeader(flow, context) {
       lines.push('');
     }
     if (context.when_to_use) {
-      lines.push('**When to use this flow:**');
-      for (const item of context.when_to_use) {
-        lines.push(`- ${item}`);
+      if (Array.isArray(context.when_to_use)) {
+        lines.push('**When to use this flow:**');
+        for (const item of context.when_to_use) lines.push(`- ${item}`);
+      } else {
+        lines.push(`**When to use this flow:** ${context.when_to_use}`);
       }
       lines.push('');
     }
     if (context.when_not_to_use) {
-      lines.push('**When NOT to use this flow:**');
-      for (const item of context.when_not_to_use) {
-        lines.push(`- ${item}`);
+      if (Array.isArray(context.when_not_to_use)) {
+        lines.push('**When NOT to use this flow:**');
+        for (const item of context.when_not_to_use) lines.push(`- ${item}`);
+      } else {
+        lines.push(`**When NOT to use this flow:** ${context.when_not_to_use}`);
       }
       lines.push('');
     }
@@ -141,10 +145,17 @@ function generateQuestionsSection(questions, context) {
   lines.push('');
 
   // Build a lookup from context.questions keyed by question id
+  // Supports both array [{id, ...}] and object {"q1_foo": {...}} formats
   const contextMap = {};
   if (context && context.questions) {
-    for (const qCtx of context.questions) {
-      if (qCtx.id) contextMap[qCtx.id] = qCtx;
+    if (Array.isArray(context.questions)) {
+      for (const qCtx of context.questions) {
+        if (qCtx.id) contextMap[qCtx.id] = qCtx;
+      }
+    } else {
+      for (const [id, qCtx] of Object.entries(context.questions)) {
+        contextMap[id] = { id, ...qCtx };
+      }
     }
   }
 
@@ -256,8 +267,16 @@ function generateDisqualifiers(offers) {
   return lines.join('\n');
 }
 
-function generateOutcomes(offers, checklists) {
+function generateOutcomes(offers, checklists, context) {
   if (!offers.length) return '';
+
+  // Build outcome context lookup from agent context file
+  const outcomeCtx = {};
+  if (context && context.outcomes) {
+    for (const [id, data] of Object.entries(context.outcomes)) {
+      outcomeCtx[id] = data;
+    }
+  }
 
   const lines = [];
   lines.push('### Possible Outcomes');
@@ -272,8 +291,21 @@ function generateOutcomes(offers, checklists) {
       lines.push('');
     }
 
+    // Merge hand-authored agent context for this outcome
+    const oCtx = outcomeCtx[offer.id];
+    if (oCtx) {
+      if (oCtx.best_for) {
+        lines.push(`**Best for:** ${oCtx.best_for}`);
+        lines.push('');
+      }
+      if (oCtx.tell_the_user) {
+        lines.push(`**Tell the user:** ${oCtx.tell_the_user}`);
+        lines.push('');
+      }
+    }
+
     if (offer.best_for && offer.best_for.length) {
-      lines.push('**Best for:**');
+      lines.push('**Ideal scenarios:**');
       for (const item of offer.best_for) {
         lines.push(`- ${item}`);
       }
@@ -318,8 +350,8 @@ function generateOutcomes(offers, checklists) {
           lines.push(
             `**First actions (${firstPhase.phase}):**`
           );
-          for (const task of firstPhase.tasks.slice(0, 3)) {
-            lines.push(`1. **${task.task}** — ${task.description}`);
+          for (const [i, task] of firstPhase.tasks.slice(0, 3).entries()) {
+            lines.push(`${i + 1}. **${task.task}** — ${task.description}`);
           }
           lines.push('');
         }
@@ -392,7 +424,7 @@ function main() {
     flowSections.push(generateQuestionsSection(questions, context));
     flowSections.push(generateScoringMatrix(questions, offers));
     flowSections.push(generateDisqualifiers(offers));
-    flowSections.push(generateOutcomes(offers, checklistsRaw));
+    flowSections.push(generateOutcomes(offers, checklistsRaw, context));
 
     sections.push(flowSections.filter(Boolean).join('\n'));
   }
