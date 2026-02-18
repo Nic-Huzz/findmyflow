@@ -3,6 +3,11 @@
  *
  * Handles all quest types: text, dropdown, checkbox, flow, conversation_log,
  * milestone, flow_compass, and groan reflections.
+ *
+ * WARNING: Flow quest buttons MUST use plain <a href>, NOT React Router <Link>.
+ * React Router wraps <Link> in startTransition which silently prevents lazy
+ * chunks from rendering. This was a multi-day debugging nightmare — do not
+ * change flow links back to <Link> or navigate().
  */
 
 import { memo } from 'react'
