@@ -1,0 +1,65 @@
+{
+  "purpose": "Determines which upsell strategy will maximize revenue after the initial sale — whether to use a simple add-on (Classic), a consultative approach (Menu), price anchoring psychology (Anchor), or purchase-credit loyalty (Rollover). The upsell is where most profit is actually made.",
+  "when_to_use": "When the user wants to increase average order value, has an existing product and wants to sell more to current customers, asks about upsells or increasing revenue per customer, or has dormant/upset customers they want to re-engage.",
+  "when_not_to_use": "When the user doesn't have a core offer yet (use Attraction Offer first), wants to recover lost sales from people who said no (use Downsell), or needs recurring revenue (use Continuity). If they have no customers at all, they need leads first.",
+  "questions": {
+    "q1_customer_base_size": {
+      "agent_context": "This fundamentally shapes which strategies are available. Rollover Upsell is hard-disqualified for new businesses with few customers because the entire strategy depends on crediting previous purchase history — you need a history to credit. Established and dormant customer bases score highest for Rollover (+4 each) because those are exactly the customers you can re-engage with purchase credits. Classic Upsell is the most forgiving, scoring well across all customer base sizes (+2 to +3), making it the default for newer businesses. Menu Upsell favors growing/established bases (+4 each) because you need enough customers to justify building a prescription framework.",
+      "if_unknown": "Ask: 'How many customers have bought from you so far? Are most of them active, or do you have past customers who haven't purchased recently?' If the answer is fewer than 10, they're a new business. If they mention people who 'used to buy', that's dormant."
+    },
+    "q2_product_portfolio": {
+      "agent_context": "Product variety is a hard constraint for Menu Upsell — a single product disqualifies it entirely (-3 score) because you literally cannot prescribe from a menu of one. Menu Upsell and Rollover both peak at 4-10+ products (+4) because variety enables meaningful recommendations and upgrade paths. Classic Upsell peaks at 2-3 products (+4) because it's designed for simplicity — just add one more thing. Anchor Upsell needs at least 2-3 tiers (+3) to create the premium-vs-main contrast. If someone has a single product, Classic Upsell is nearly always the answer.",
+      "if_unknown": "Ask: 'How many different products or service levels do you currently sell? Just one main thing, or do you have multiple options at different price points?'"
+    },
+    "q3_average_order_value": {
+      "agent_context": "Price point determines which psychological mechanisms work. Anchor Upsell is hard-disqualified under $50 because creating a credible 5-10x premium tier on a $30 product is nearly impossible — a $300 'premium' version of a $30 ebook feels absurd. Anchor and Rollover both peak at $1,000-$5,000+ (+4) where the price anchoring psychology and purchase-credit math become powerful. Classic Upsell works best in the $50-$200 mid-range (+4) where add-ons feel like no-brainers. Menu Upsell spans the $200-$5,000 range well (+4) because those price points justify a consultative conversation.",
+      "if_unknown": "Ask: 'What does a typical customer pay you per purchase? Are we talking $50, $500, $5,000?' The range matters more than the exact number."
+    },
+    "q4_upsell_infrastructure": {
+      "agent_context": "Card-on-file capability is the friction factor that makes or breaks upsell conversion rates. All four strategies score highest with card-on-file (+3 to +4) because one-click purchasing is the difference between 80% take rates and 20% take rates. Menu Upsell drops to -3 with no plans to implement because the whole prescribe-and-add workflow falls apart without frictionless payment. Classic Upsell drops to -2. Anchor Upsell is the most forgiving here (+1 even with no plans) because the psychology works regardless of payment friction — if someone is sold on the value contrast, they'll re-enter their card.",
+      "if_unknown": "Ask: 'When a customer buys from you, do you store their payment info so they can buy again with one click? Or would they need to re-enter their credit card for any additional purchase?'"
+    },
+    "q5_product_modularity": {
+      "agent_context": "This determines whether you can create the premium tier that Anchor Upsell demands. 'Not possible' hard-disqualifies Anchor Upsell (-5) because the entire strategy requires presenting a legitimate 5-10x premium version first. 'Already have premium' and 'can create easily' score +4 for both Anchor and Rollover because pre-existing tiers mean the upgrade path is already built. Classic Upsell is the most forgiving — 'can create easily' scores highest (+4) because even a simple bonus product counts. If someone says premium versions aren't possible for their business, steer them firmly toward Classic Upsell.",
+      "if_unknown": "Ask: 'Could you create a VIP or premium version of what you sell that's worth 5 to 10 times more? Think about adding personal access, faster delivery, done-for-you components, or exclusive bonuses.'"
+    },
+    "q6_customer_tracking": {
+      "agent_context": "Purchase history tracking is a hard disqualifier for Rollover Upsell — 'no tracking' scores -5 and is explicitly disqualified because the entire strategy depends on knowing exactly what each customer has paid you previously so you can credit it toward the upgrade. Menu Upsell also heavily rewards full tracking (+4) because prescribing the right next product requires knowing what they've already bought. Classic Upsell is remarkably tracking-agnostic (+1 to +3) because you're just adding something at checkout — you don't need historical data.",
+      "if_unknown": "Ask: 'Do you know what every customer has bought from you and when? Like if I named a customer right now, could you pull up their complete purchase history?' If they hesitate, that's likely partial or no tracking."
+    },
+    "q7_primary_upsell_goal": {
+      "agent_context": "This maps directly to which strategy solves their actual problem. 'Maximize immediate profit' points strongly to Classic (+4) and Anchor (+4) — both are designed for same-session revenue. 'Increase LTV' points to Menu Upsell (+4) because the prescriptive approach builds long-term trust and repeat purchasing. 'Re-engage past customers' and 'steal competitor customers' both point to Rollover (+4 each) because purchase-credit psychology works specifically on people with sunk costs or switching costs. This question often reveals whether they need a tactical fix (Classic/Anchor) or a strategic system (Menu/Rollover).",
+      "if_unknown": "Ask: 'What's the ONE thing you most want from adding an upsell? More money per sale right now? Longer customer relationships? Winning back people who left? Or pulling customers away from competitors?'"
+    },
+    "q8_customer_sophistication": {
+      "agent_context": "Sophistication determines which sales psychology will land and which will backfire. Very sophisticated customers score highest for Menu (+4) and Anchor (+4) because they appreciate expert guidance and can recognize legitimate premium value — they won't feel manipulated by anchoring because they understand tiered value. Price shoppers score lowest for Anchor (-2) because they'll just pick the cheapest option regardless of the anchor, and lowest for Menu (0) because they don't value prescriptive guidance — they want the deal. Beginners favor Classic (+3) because simple add-on offers don't require them to evaluate complex options.",
+      "if_unknown": "Ask: 'How knowledgeable are your customers about your industry? Do they shop around and compare options carefully, or are they mostly new to this and looking for guidance?'"
+    },
+    "q9_sales_channel": {
+      "agent_context": "The sales channel determines what's physically possible. Menu Upsell peaks on sales calls (+4) because prescribing and unselling require real-time conversation — you need to read the customer's reaction and adjust. Anchor Upsell also peaks on sales calls (+4) because you need to present the premium, watch for 'the gasp', and then rescue with the main offer — that sequence is hard to replicate in an automated funnel. Classic Upsell works everywhere (+3 to +4) because 'want this too?' is channel-agnostic. Rollover Upsell is the most channel-flexible (+3 to +4 across all channels) because purchase-credit offers work in email, calls, or automated sequences.",
+      "if_unknown": "Ask: 'How do your customers actually buy from you? Through a website checkout, on a sales call, via email, or some combination?'"
+    },
+    "q10_current_upsell_situation": {
+      "agent_context": "This reveals whether they need to build something new or fix something broken. 'No upsell currently' scores highest for Classic (+4) because it's the fastest to implement — get something working first, optimize later. 'Have upsell not working' scores highest for Menu (+4) and Anchor (+4) because a failing upsell usually means the approach is wrong, not the concept — these more sophisticated strategies can replace what's broken. 'Upset customers' scores highest for Rollover (+4) because purchase-credit psychology is specifically designed to rescue damaged relationships. If they have upset customers, do NOT recommend Classic or Anchor — those are new-sale strategies, not relationship repair.",
+      "if_unknown": "Ask: 'Do you currently offer anything additional after the main purchase? If so, how is it performing? And do you have any customers who are unhappy or have stopped buying from you?'"
+    }
+  },
+  "outcomes": {
+    "classic_upsell": {
+      "best_for": "Any business wanting immediate profit boost with minimal setup, especially those new to upselling or with a simple product lineup.",
+      "tell_the_user": "The Classic Upsell is the fastest path to more revenue per customer. You present something free or heavily discounted right after purchase — 'You don't want this too?' — and aim for 80%+ take rates. It works because the customer is already in buying mode with their card out. Start here even if you plan to add more sophisticated strategies later, because it generates immediate data on what your customers want more of."
+    },
+    "menu_upsell": {
+      "best_for": "Businesses with 4+ products selling through sales calls or live interactions, where building long-term customer relationships matters more than one-time revenue.",
+      "tell_the_user": "The Menu Upsell is Hormozi's favorite because it builds trust while increasing revenue. Instead of pushing products, you prescribe them — like a doctor diagnosing and recommending. The four tactics (Unsell what they don't need, Prescribe what they do, offer A/B choices, use card-on-file) transform your sales from transactional to consultative. This requires a real product catalog to prescribe from, but the payoff is dramatically higher lifetime value because customers trust your recommendations."
+    },
+    "anchor_upsell": {
+      "best_for": "Higher-ticket businesses ($200+) that can create legitimate premium tiers and sell primarily through conversations where they can gauge customer reactions.",
+      "tell_the_user": "The Anchor Upsell uses price psychology to make your main offer feel like a bargain. You present the premium version first at 5-10x the price, wait for the reaction, then 'rescue' them with your standard offer. The key is your premium must be genuinely valuable — not a fake tier. Some customers (5-15%) will actually buy the premium, which is bonus profit, and everyone else buys your main offer feeling like they got a deal. This works best on sales calls where you can read the room."
+    },
+    "rollover_upsell": {
+      "best_for": "Established businesses with purchase history tracking that want to re-engage dormant customers, rescue upset customers, or win over competitors' unhappy customers.",
+      "tell_the_user": "The Rollover Upsell credits what customers already paid toward a higher-priced next offer (at least 4x higher). It works in four powerful situations: re-engaging old customers ('your $500 isn't wasted — credit it toward our $2,500 program'), rescuing upset customers ('unhappy? let's credit you toward something better'), stealing competitors' customers ('paid them $X? we'll credit that'), or upgrading current customers. This is Hormozi's most-used upsell because it turns sunk costs into upgrade incentives."
+    }
+  }
+}
