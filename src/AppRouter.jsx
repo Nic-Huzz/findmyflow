@@ -41,7 +41,9 @@ import { preloadMePage, preloadChallenge } from './lib/preloadRoutes'
 import AuthGate from './AuthGate'
 import { AuthProvider, useAuth } from './auth/AuthProvider'
 import LocationAwareErrorBoundary, { ErrorBoundary } from './components/ErrorBoundary'
-import AnimatedOutlet from './components/AnimatedOutlet'
+// AnimatedOutlet removed — the key={location.key} wrapper was forcing
+// full React tree remounts and the page-enter animation made pages
+// invisible during Suspense chunk loading, breaking flow navigation.
 import BottomToolbar from './components/BottomToolbar'
 import { ZarloWidget } from './components/Zarlo'
 import { OnboardingProvider } from './context/OnboardingContext'
@@ -355,7 +357,7 @@ function AppRouter() {
           <PreloadCoreRoutes />
           <LocationAwareErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
-            <AnimatedOutlet><Routes>
+            <Routes>
               {/* Landing Page - Public */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/old-landing-page" element={<Suspense fallback={<LoadingSpinner />}><OldLandingPage /></Suspense>} />
@@ -1006,7 +1008,7 @@ function AppRouter() {
                 <ContentReview />
               </AuthGate>
             } />
-            </Routes></AnimatedOutlet>
+            </Routes>
           </Suspense>
           <ConditionalBottomToolbar />
           <ConditionalZarlo />
