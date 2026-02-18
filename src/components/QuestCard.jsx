@@ -250,9 +250,12 @@ function QuestCard({
               )}
             </div>
           ) : quest.inputType === 'flow' ? (
-            <Link to={quest.flow_route} className="quest-flow-btn">
+            <button
+              className="quest-flow-btn"
+              onClick={() => navigate(quest.flow_route)}
+            >
               Start {quest.name}
-            </Link>
+            </button>
           ) : RECOGNISE_QUEST_IDS.includes(quest.id) || isVoiceQuest(quest.id) ? (
             <RecogniseQuestInput
               quest={quest}
